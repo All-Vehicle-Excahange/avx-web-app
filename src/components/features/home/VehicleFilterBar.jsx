@@ -29,7 +29,7 @@ export default function VehicleFilterBar() {
     <div className="absolute bottom-6 left-0 right-0 z-20 px-4 md:px-8 lg:px-12 xl:px-16">
       <div
         className="
-        relative w-full bg-white/10 backdrop-blur-lg border border-white/20 
+        relative w-full bg-primary  border border-white/20 
         rounded-xl shadow-2xl 
         px-5 md:px-6 
         pt-10 pb-4 
@@ -59,9 +59,9 @@ export default function VehicleFilterBar() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
           {/* Location */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-primary">Location</label>
+            <label className="text-xs font-medium text-secondary">Location</label>
             <CustomSelect
-              variant="transparent"
+              variant="default"
               value={vehicleType}
               onChange={setVehicleType}
               placeholder="Select"
@@ -77,11 +77,11 @@ export default function VehicleFilterBar() {
 
           {/* Vehicle Type */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-primary">
+            <label className="text-xs font-medium text-secondary">
               Vehicle Type
             </label>
             <CustomSelect
-              variant="transparent"
+              variant="default"
               value={vehicleType}
               onChange={setVehicleType}
               options={[
@@ -96,11 +96,11 @@ export default function VehicleFilterBar() {
 
           {/* Fuel Type 1 */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-primary">
+            <label className="text-xs font-medium text-secondary">
               Fuel Type
             </label>
             <CustomSelect
-              variant="transparent"
+              variant="default"
               value={fuelType1}
               onChange={setFuelType1}
               options={[
@@ -114,11 +114,11 @@ export default function VehicleFilterBar() {
 
           {/* Fuel Type 2 */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-primary">
+            <label className="text-xs font-medium text-secondary">
               Fuel Type
             </label>
             <CustomSelect
-              variant="transparent"
+              variant="default"
               value={fuelType2}
               onChange={setFuelType2}
               options={[
@@ -132,9 +132,9 @@ export default function VehicleFilterBar() {
         </div>
 
         {/* Budget Slider */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 mb-4">
+        <div className="grid grid-cols-1 lg:grid-cols-8 gap-3 mb-4">
           <div className="col-span-2 space-y-1">
-            <div className="flex justify-between text-xs font-medium text-primary">
+            <div className="flex justify-between text-xs font-medium text-secondary">
               <span>Min Budget</span>
               <span>Max Budget</span>
             </div>
@@ -145,10 +145,10 @@ export default function VehicleFilterBar() {
               max="10000000"
               value={budget[1]}
               onChange={(e) => setBudget([budget[0], Number(e.target.value)])}
-              className="w-full accent-white"
+              className="w-full accent-black"
             />
 
-            <div className="flex justify-between text-xs text-primary/80">
+            <div className="flex justify-between text-xs text-secondary/80">
               <span>₹{budget[0]}</span>
               <span>₹{budget[1]}</span>
             </div>
@@ -157,7 +157,7 @@ export default function VehicleFilterBar() {
 
         {/* Search Button */}
         <div className="flex justify-end">
-          <Button size="md" variant="ghost" showIcon={false}>
+          <Button size="md" variant="default" showIcon={false}>
             Search
             <ArrowRight className="h-4 w-4" />
           </Button>

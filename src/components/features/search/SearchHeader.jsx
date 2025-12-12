@@ -16,26 +16,27 @@ export default function SearchHeader() {
       <section className="w-full bg-secondary flex flex-col items-center justify-center px-4 font-sans pt-20 pb-6 md:pt-0 md:min-h-[42vh]">
         {/* LEFT-ALIGNED TEXT */}
         <div className="w-full max-w-7xl text-left pl-4 md:pl-2 mb-6">
-          <h2 className="text-white text-2xl md:text-3xl font-bold">
+          <h2 className="text-primary text-2xl md:text-3xl font-bold">
             Browser by Vehicle Type
           </h2>
 
-          <p className="text-white/70 text-sm mt-2">
+          <p className="text-primary/70 text-sm mt-2">
             Select a Category to filter your search
           </p>
         </div>
 
-        {/* CATEGORY BAR */}
+        {/* CATEGORY BAR WITH HORIZONTAL SCROLL ON MOBILE */}
         <div
           className="
             w-full max-w-7xl
             bg-secondary border border-white/40
             rounded-lg
-            flex flex-col
-            md:flex-row
-            md:justify-between
-            gap-3
-            px-4 py-3
+
+            flex flex-row flex-nowrap 
+            overflow-x-auto no-scrollbar
+
+            md:flex-row md:justify-between
+            gap-3 px-4 py-3
           "
         >
           <CategoryTab
