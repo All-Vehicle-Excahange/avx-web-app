@@ -10,7 +10,7 @@ export default function VehicleCard({ data }) {
   return (
     <div className="group relative flex flex-row md:flex-col rounded-2xl overflow-hidden bg-secondary text-primary w-full md:max-w-sm border border-third/40 shadow-lg">
       {/* Image Section */}
-      <div className="relative w-32 sm:w-40 min-h-[160px] md:min-h-0 md:h-48 md:w-full shrink-0 overflow-hidden">
+      <div className="relative w-32 sm:w-40 min-h-40 md:min-h-0 md:h-48 md:w-full shrink-0 overflow-hidden">
         {data.sponsored && <SponsoredRibbon />}
         <Image
           src={data.image}
