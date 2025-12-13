@@ -46,6 +46,48 @@ export default function AutoConsultPicsSection() {
       image: "/cs.png",
       isSponsored: true,
     },
+
+    {
+      id: 1,
+      name: "Adarsh Auto Consultants",
+      location: "Chhapi, Gujarat",
+      rating: 4.5,
+      vehicleCount: 116,
+      image: "/cs.png", // Yellow car placeholder
+      isSponsored: true,
+      priceRange: "1,00,000 - 2,00,000",
+      logo: "/cs.png",
+    },
+    {
+      id: 2,
+      name: "Adarsh Auto Consultants",
+      location: "Chhapi, Gujarat",
+      rating: 5,
+      vehicleCount: 116,
+      image: "/cs.png",
+      priceRange: "1,00,000 - 2,00,000",
+      isSponsored: true,
+    },
+    {
+      id: 3,
+      name: "Adarsh Auto Consultants",
+      location: "Chhapi, Gujarat",
+      rating: 4,
+      vehicleCount: 116,
+      priceRange: "1,00,000 - 2,00,000",
+      image: "/cs.png",
+      isSponsored: true,
+    },
+    {
+      id: 4,
+      name: "Adarsh Auto Consultants",
+      location: "Chhapi, Gujarat",
+      rating: 4.5,
+      priceRange: "1,00,000 - 2,00,000",
+      vehicleCount: 116,
+      image: "/cs.png",
+      isSponsored: true,
+    },
   ];
 
   return (
@@ -66,7 +108,7 @@ export default function AutoConsultPicsSection() {
 
       {/* Bottom Actions */}
       <div className="mt-8 flex justify-end">
-       <Button>See All</Button>
+        <Button>See All</Button>
       </div>
     </div>
   );

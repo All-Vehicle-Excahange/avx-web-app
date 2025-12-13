@@ -1,14 +1,47 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
-import CustomSelect from "@/components/ui/custom-select";
+import { useState, useEffect } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import InputField from "@/components/ui/inputField";
 import Button from "@/components/ui/button";
-import { Search } from "lucide-react";
-import CheckListPanel from "@/components/ui/checkListPanel";
 import ChipGroup from "@/components/ui/chipGroup";
+import PromoCardRow from "./PromoCardRow";
+import Chip from "@/components/ui/chip";
+import { FilterIcon } from "lucide-react";
+
+/* ================= MOBILE DETECTION ================= */
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 1023px)");
+    setIsMobile(media.matches);
+
+    const listener = (e) => setIsMobile(e.matches);
+    media.addEventListener("change", listener);
+
+    return () => media.removeEventListener("change", listener);
+  }, []);
+
+  return isMobile;
+}
 
 export default function SearchWithCard() {
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [activeFilterTab, setActiveFilterTab] = useState("Suggested Filters");
+  const [selectedMobileChips, setSelectedMobileChips] = useState([]);
+  const [avxAssumed, setAvxAssumed] = useState(true);
+
+  const isMobile = useIsMobile();
+
+  const toggleMobileChip = (chip) => {
+    setSelectedMobileChips((prev) =>
+      prev.includes(chip) ? prev.filter((c) => c !== chip) : [...prev, chip]
+    );
+  };
+
+  /* ================= DATA ================= */
   const cardData = {
     id: "featured-1",
     title: "BMW 8-serie 2-door",
@@ -88,161 +121,61 @@ export default function SearchWithCard() {
     { value: "convertible", label: "Convertible" },
   ];
 
-  return (
-    <div className="w-full min-h-screen flex flex-col lg:flex-row bg-white text-slate-900 font-sans">
-      <aside
-        className="
-    relative
-    w-full lg:w-[340px]
-    bg-secondary/90
-    border-b lg:border-b-0 lg:border-r border-slate-200
-    p-6
-    flex flex-col gap-6
-    overflow-y-auto
-    shrink-0
-  "
-      >
-        {/* BACKGROUND IMAGE BEHIND CONTENT */}
-        <div
-          className="
-      absolute inset-0
-      bg-[url('/bg_blur.jpg')]
-      bg-cover bg-fit
-      opacity-40
-      blur-lg
-      pointer-events-none
-      z-0
-    "
-        ></div>
+  const mobileFilterMap = {
+    "Suggested Filters": [
+      "⭐ 4 & Up",
+      "Under ₹5L",
+      "₹5L - ₹10L",
+      "SUV",
+      "Diesel",
+    ],
+    Brand: brands.map((b) => b.label),
+    Model: models.map((m) => m.label),
+    "Fuel Type": fuelTypes.map((f) => f.label),
+    Transmission: transmissionTypes.map((t) => t.label),
+    Variant: variants.map((v) => v.label),
+    "Vehicle Type": vehicleTypes.map((v) => v.label),
+  };
 
-        {/* CONTENT (NOW ABOVE BACKGROUND) */}
+  return (
+    <div className="w-full min-h-screen flex flex-col lg:flex-row bg-primary text-secondary font-sans">
+      {/* ================= DESKTOP SIDEBAR ================= */}
+      <aside className="hidden lg:flex relative w-[340px] bg-secondary/90 border-r border-third/40 p-6 flex-col gap-6 overflow-y-auto shrink-0 rounded-2xl">
+        <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover opacity-40 blur-lg z-0" />
         <div className="relative z-10">
-          <h2 className="text-2xl font-bold text-primary ">
+          <h2 className="text-2xl font-bold text-primary mb-4">
             Filter Your Result
           </h2>
 
-          {/* Location */}
-          <div className="flex flex-col my-4">
-            <label className="text-primary text-md mb-2 font-semibold">
-              Location
-            </label>
-            <InputField
-              type="text"
-              variant="colored"
-              placeholder={"Enter your location"}
-            />
-          </div>
+          <div className="flex flex-col gap-4">
+            <InputField placeholder="Enter your location" variant="colored" />
 
-          {/* Brand */}
-          <div className="flex flex-col gap-2">
-            <ChipGroup
-              title="Brand"
-              items={brands}
-              variant="outline"
-              showMore={true}
-              searchable={true}
-              limit={6}
-            />
-          </div>
+            <div className="hidden lg:flex items-center justify-between px-4 py-3 rounded-xl border border-white/20 backdrop-blur-md bg-transparent">
+              <span className="text-primary font-semibold text-sm">
+                AVX Assumed
+              </span>
 
-          {/* Model */}
-          <div className="flex flex-col gap-2">
-            <ChipGroup
-              title="Model"
-              items={models}
-              variant="outline"
-              showMore={true}
-              searchable={true}
-              limit={6}
-            />
-          </div>
-
-          {/* Price Range */}
-          <div className="flex flex-col gap-2">
-            <label className="text-primary text-sm font-semibold">
-              Price Range
-            </label>
-            <input type="range" className="w-full accent-primary" />
-            <div className="flex justify-between text-primary/70 text-xs">
-              <span>₹0</span>
-              <span>₹1,00,00,000</span>
+              <button
+                onClick={() => setAvxAssumed(!avxAssumed)}
+                className={`relative w-12 h-6 rounded-full transition ${
+                  avxAssumed ? "bg-primary/90" : "bg-white/20"
+                }`}
+              >
+                <span
+                  className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-secondary transition-transform ${
+                    avxAssumed ? "translate-x-6" : "translate-x-0"
+                  }`}
+                />
+              </button>
             </div>
-          </div>
 
-          {/* Model Year */}
-          <div className="flex flex-col gap-2">
-            <label className="text-primary text-sm font-semibold">
-              Model Year
-            </label>
-            <input type="range" className="w-full accent-white" />
-            <div className="flex justify-between text-primary/70 text-xs">
-              <span>2000</span>
-              <span>2025</span>
-            </div>
-          </div>
+            <ChipGroup title="Brand" items={brands} showMore searchable />
+            <ChipGroup title="Model" items={models} showMore searchable />
+            <ChipGroup title="Fuel Type" items={fuelTypes} />
+            <ChipGroup title="Transmission" items={transmissionTypes} />
+            <ChipGroup title="Variant" items={variants} />
+            <ChipGroup title="Vehicle Type" items={vehicleTypes} />
 
-          {/* Fuel Type */}
-          <div className="flex flex-col gap-2">
-            <ChipGroup
-              title="Fuel Type"
-              items={fuelTypes}
-              variant="outline"
-              showMore={true}
-              searchable={true}
-              limit={6}
-            />
-          </div>
-
-          {/* KM Driven */}
-          <div className="flex flex-col gap-2">
-            <label className="text-primary text-sm font-semibold">
-              Km Driven
-            </label>
-            <input type="range" className="w-full accent-white" />
-            <div className="flex justify-between text-primary/70 text-xs">
-              <span>10,000</span>
-              <span>3,50,00,000</span>
-            </div>
-          </div>
-
-          {/* Transmission */}
-          <div className="flex flex-col gap-2">
-            <ChipGroup
-              title="Transmission"
-              items={transmissionTypes}
-              variant="outline"
-              showMore={true}
-              searchable={true}
-              limit={6}
-            />
-          </div>
-
-          {/* Variant */}
-          <div className="flex flex-col gap-2">
-            <ChipGroup
-              title="Variant"
-              items={variants}
-              variant="outline"
-              showMore={true}
-              searchable={true}
-              limit={6}
-            />
-          </div>
-
-          {/* Vehicle Type */}
-          <div className="flex flex-col gap-2">
-            <ChipGroup
-              title="Vehicle Type"
-              items={vehicleTypes}
-              variant="outline"
-              showMore={true}
-              searchable={true}
-              limit={6}
-            />
-          </div>
-
-          {/* Apply Filter */}
-          <div className="flex flex-col justify-end gap-2 mt-4">
             <Button variant="outline" showIcon={false}>
               Apply filter
             </Button>
@@ -250,26 +183,128 @@ export default function SearchWithCard() {
         </div>
       </aside>
 
-      <main
-        className="
-          flex-1
-          sm:p-5
-          grid
-          grid-cols-1
-          lg:grid-cols-2
-          xl:grid-cols-3
-          gap-4 sm:gap-5
-          auto-rows-max
-          bg-gray-50
-        "
-      >
-        {Array.from({ length: 9 }).map((_, i) => (
-          <div key={i} className="h-max">
-            {" "}
-            <VehicleCard data={cardData} />
+      {/* ================= MAIN CONTENT ================= */}
+      <main className="flex-1 bg-primary">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 auto-rows-max sm:px-5 lg:px-6 py-4 sm:py-5 lg:py-0">
+        
+        
+          <div className="col-span-full  relative bottom-8 sm:top-2">
+            <PromoCardRow />
           </div>
-        ))}
+
+          {/* MOBILE FILTER BAR */}
+          <div className="col-span-full">
+            <div className="flex lg:hidden items-center gap-3 overflow-x-auto scrollbar-hide">
+              <Button
+                variant="default"
+                showIcon={false}
+                className="gap-2 shrink-0"
+                onClick={() => setMobileFilterOpen(true)}
+              >
+                <FilterIcon className="h-4 w-4" />
+                Filter
+              </Button>
+
+              {/* ✅ AVX TOGGLE — MOBILE ONLY */}
+              <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-third/40 shrink-0">
+                <span className="text-sm font-semibold">AVX Assumed</span>
+                <button
+                  onClick={() => setAvxAssumed(!avxAssumed)}
+                  className={`relative w-10 h-5 rounded-full transition ${
+                    avxAssumed ? "bg-secondary" : "bg-third/40"
+                  }`}
+                >
+                  <span
+                    className={`absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-primary transition-transform ${
+                      avxAssumed ? "translate-x-5" : "translate-x-0"
+                    }`}
+                  />
+                </button>
+              </div>
+
+              {["Under ₹5L", "SUV", "Diesel", "⭐ 4+"].map((chip) => (
+                <Chip
+                  key={chip}
+                  label={chip}
+                  selected={selectedMobileChips.includes(chip)}
+                  variant={isMobile ? "outlineDark" : "outline"}
+                  onClick={() => toggleMobileChip(chip)}
+                />
+              ))}
+            </div>
+          </div>
+
+          {Array.from({ length: 9 }).map((_, i) => (
+            <VehicleCard key={i} data={cardData} />
+          ))}
+        </div>
       </main>
+
+      {/* MOBILE FILTER DRAWER (unchanged) */}
+      {mobileFilterOpen && (
+        <div className="fixed inset-0 z-50 bg-primary lg:hidden">
+          {/* HEADER */}
+          <div className="flex items-center justify-between px-4 py-3 border-b border-third/40">
+            <h2 className="text-lg font-semibold">Filters</h2>
+            <Button
+              variant="ghost"
+              showIcon={false}
+              onClick={() => setMobileFilterOpen(false)}
+            >
+              ✕
+            </Button>
+          </div>
+
+          {/* BODY */}
+          <div className="flex h-[calc(100vh-120px)]">
+            {/* LEFT PANEL */}
+            <div className="w-[40%] border-r border-third/40 overflow-y-auto">
+              {Object.keys(mobileFilterMap).map((item) => (
+                <div
+                  key={item}
+                  onClick={() => setActiveFilterTab(item)}
+                  className={`px-4 py-3 cursor-pointer text-sm ${
+                    activeFilterTab === item
+                      ? "bg-secondary/10 font-semibold"
+                      : "hover:bg-secondary/5"
+                  }`}
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+
+            {/* RIGHT PANEL */}
+            <div className="flex-1 p-4 overflow-y-auto">
+              <h3 className="text-sm font-semibold mb-3">{activeFilterTab}</h3>
+
+              <div className="flex flex-wrap gap-3">
+                {(mobileFilterMap[activeFilterTab] || []).map((chip) => (
+                  <Chip
+                    key={chip}
+                    label={chip}
+                    selected={selectedMobileChips.includes(chip)}
+                    variant={isMobile ? "outlineDark" : "outline"}
+                    onClick={() => toggleMobileChip(chip)}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* FOOTER */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-third/40 bg-primary">
+            <Button
+              variant="default"
+              showIcon={false}
+              className="w-full"
+              onClick={() => setMobileFilterOpen(false)}
+            >
+              Show results
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
