@@ -135,9 +135,22 @@ export default function TopPicsSection() {
       </div>
 
       {/* Grid Layout */}
-      <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 gap-4 pb-1">
+      {/* Grid Layout */}
+      <div
+        className="
+    flex-1 min-h-0
+    grid
+    grid-cols-1
+    md:grid-cols-2
+    lg:grid-cols-4
+    lg:grid-rows-2
+    2xl:grid-cols-5
+    gap-4
+    pb-1
+  "
+      >
         {/* Featured Vehicle */}
-        <div className="lg:col-span-2 lg:row-span-2 h-full">
+        <div className="lg:col-span-2 lg:row-span-2 2xl:col-span-2 h-full">
           <FeaturedVehicleCard data={featuredCar} />
         </div>
 
@@ -151,7 +164,7 @@ export default function TopPicsSection() {
 
       {/* Bottom Button */}
       <div className="mt-8 flex justify-end">
-        <Button  size="md">See All</Button>
+        <Button size="md">See All</Button>
       </div>
     </div>
   );

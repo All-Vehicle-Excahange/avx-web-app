@@ -1,9 +1,8 @@
 import React from "react";
-import { MapPin, Star, ArrowUpRight, ArrowRight } from "lucide-react";
 import ConsultantCard from "@/components/ui/const/ConsultCard";
 import Button from "@/components/ui/button";
 
-export default function AutoConsultPicsSection() {
+export default function AutoConsultPicsSection({ limit }) {
   const consultants = [
     {
       id: 1,
@@ -11,7 +10,7 @@ export default function AutoConsultPicsSection() {
       location: "Chhapi, Gujarat",
       rating: 4.5,
       vehicleCount: 116,
-      image: "/cs.png", // Yellow car placeholder
+      image: "/cs.png",
       isSponsored: true,
       priceRange: "1,00,000 - 2,00,000",
       logo: "/cs.png",
@@ -46,40 +45,38 @@ export default function AutoConsultPicsSection() {
       image: "/cs.png",
       isSponsored: true,
     },
-
     {
-      id: 1,
+      id: 5,
+      name: "Adarsh Auto Consultants",
+      location: "Chhapi, Gujarat",
+      rating: 4.2,
+      vehicleCount: 90,
+      image: "/cs.png",
+      isSponsored: false,
+      priceRange: "80,000 - 1,50,000",
+    },
+    {
+      id: 6,
       name: "Adarsh Auto Consultants",
       location: "Chhapi, Gujarat",
       rating: 4.5,
-      vehicleCount: 116,
-      image: "/cs.png", // Yellow car placeholder
-      isSponsored: true,
       priceRange: "1,00,000 - 2,00,000",
-      logo: "/cs.png",
-    },
-    {
-      id: 2,
-      name: "Adarsh Auto Consultants",
-      location: "Chhapi, Gujarat",
-      rating: 5,
       vehicleCount: 116,
       image: "/cs.png",
-      priceRange: "1,00,000 - 2,00,000",
       isSponsored: true,
     },
     {
-      id: 3,
+      id: 7,
       name: "Adarsh Auto Consultants",
       location: "Chhapi, Gujarat",
-      rating: 4,
-      vehicleCount: 116,
-      priceRange: "1,00,000 - 2,00,000",
+      rating: 4.2,
+      vehicleCount: 90,
       image: "/cs.png",
-      isSponsored: true,
+      isSponsored: false,
+      priceRange: "80,000 - 1,50,000",
     },
     {
-      id: 4,
+      id: 8,
       name: "Adarsh Auto Consultants",
       location: "Chhapi, Gujarat",
       rating: 4.5,
@@ -90,23 +87,26 @@ export default function AutoConsultPicsSection() {
     },
   ];
 
+  // ✅ Apply limit ONLY if provided
+  const visibleConsultants = limit ? consultants.slice(0, limit) : consultants;
+
   return (
     <div className="w-full bg-primary">
-      {/* Header Section */}
+      {/* Header */}
       <div className="flex justify-between items-end mb-6">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
           Top Auto Consultants Picks For You
         </h2>
       </div>
 
-      {/* Grid Layout */}
+      {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {consultants.map((consultant) => (
+        {visibleConsultants.map((consultant) => (
           <ConsultantCard key={consultant.id} {...consultant} />
         ))}
       </div>
 
-      {/* Bottom Actions */}
+      {/* Bottom Action */}
       <div className="mt-8 flex justify-end">
         <Button>See All</Button>
       </div>

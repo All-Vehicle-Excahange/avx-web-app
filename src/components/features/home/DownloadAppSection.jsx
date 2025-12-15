@@ -66,7 +66,7 @@ const GooglePlayLogo = ({ className }) => (
 
 export default function DownloadAppSection() {
   return (
-    <div className="w-full pt-20">
+    <div className="w-full py-24  ">
       <div className="w-full bg-secondary overflow-visible flex flex-col md:flex-row relative min-h-[300px]">
         {/* LEFT CONTENT */}
         <div className="flex-1 p-8 md:p-16 flex flex-col justify-center z-10 relative">

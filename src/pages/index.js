@@ -17,7 +17,7 @@ export default function Home() {
         <TopPicsSection />
       </Layout>
       <Layout>
-        <AutoConsultPicsSection />
+        <AutoConsultPicsSection limit={8} />
       </Layout>
       <ConsultBanner fullWidth />
       <Layout>
@@ -27,9 +27,8 @@ export default function Home() {
       <Layout>
         <StatsSection />
       </Layout>
-      <Layout>
-        <DownloadAppSection />
-      </Layout>
+
+      <DownloadAppSection />
 
       <Footer />
     </>

@@ -19,12 +19,10 @@ export default function index() {
         <ReletedCar />
       </Layout>
       <Layout>
-        <AutoConsultPicsSection />
+        <AutoConsultPicsSection limit={4} />
       </Layout>
 
-      <Layout>
-        <DownloadAppSection />
-      </Layout>
+      <DownloadAppSection />
 
       <Footer />
     </>

@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 function ReletedCar() {
   const scrollRef = useRef(null);
 
-  const cars = Array.from({ length: 6 });
+  const cars = Array.from({ length: 8 });
   const enableScroll = cars.length > 4;
 
   const scroll = (direction) => {
@@ -40,7 +40,7 @@ function ReletedCar() {
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-          Top Auto Consultants Picks For You
+          Top Releted Vehicle Picks For You
         </h2>
 
         {/* ✅ TOP RIGHT BUTTONS */}
@@ -83,21 +83,22 @@ function ReletedCar() {
         className={
           enableScroll
             ? `
-              flex gap-6
-              overflow-x-auto
-              scrollbar-hide
-            `
+      flex gap-6
+      overflow-x-auto
+      scrollbar-hide
+    `
             : `
-              grid
-              grid-cols-1
-              md:grid-cols-2
-              lg:grid-cols-4
-              gap-6
-            `
+      grid
+      grid-cols-1
+      md:grid-cols-2
+      lg:grid-cols-3
+      2xl:grid-cols-4
+      gap-6
+    `
         }
       >
         {cars.map((_, i) => (
-          <div key={i} className={enableScroll ? "flex-none w-[300px]" : ""}>
+          <div key={i} className={enableScroll ? "flex-none w-[380px]" : ""}>
             <VehicleCard data={cardData} />
           </div>
         ))}

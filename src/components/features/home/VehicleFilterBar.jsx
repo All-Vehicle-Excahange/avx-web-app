@@ -43,7 +43,7 @@ export default function VehicleFilterBar() {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-3 py-1 rounded-full text-sm ${
+                className={`px-3 py-1 rounded-full text-sm whitespace-nowrap ${
                   selectedCategory === cat.id
                     ? "bg-black text-white font-medium"
                     : "text-black/70 hover:bg-black/10"
@@ -59,7 +59,9 @@ export default function VehicleFilterBar() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
           {/* Location */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-secondary">Location</label>
+            <label className="text-xs font-medium text-secondary">
+              Location
+            </label>
             <CustomSelect
               variant="default"
               value={vehicleType}
