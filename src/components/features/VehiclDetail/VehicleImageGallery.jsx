@@ -29,14 +29,14 @@ export default function VehicleImageGallery() {
           onClick={() =>
             setActive((prev) => (prev === 0 ? images.length - 1 : prev - 1))
           }
-          className="absolute left-3 top-1/2 -translate-y-1/2 bg-secondary text-primary p-2 rounded-full hover:scale-105 transition"
+          className="absolute left-3 top-1/2 -translate-y-1/2 bg-secondary text-primary p-2 rounded-full hover:scale-105 transition cursor-pointer"
         >
           <ChevronLeft />
         </button>
 
         <button
           onClick={() => setActive((prev) => (prev + 1) % images.length)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 bg-secondary text-primary p-2 rounded-full hover:scale-105 transition"
+          className="absolute right-3 top-1/2 -translate-y-1/2 bg-secondary text-primary p-2 rounded-full hover:scale-105 transition cursor-pointer"
         >
           <ChevronRight />
         </button>

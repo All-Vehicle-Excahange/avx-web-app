@@ -2,8 +2,11 @@
 
 import Button from "@/components/ui/button";
 import { Heart, Star, MapPin, Gauge, Fuel, Settings, Car } from "lucide-react";
+import { useState } from "react";
 
 export default function VehicleSummaryRight({ vehicle }) {
+  const [isFavorite, setIsFavorite] = useState(false);
+
   return (
     <aside className="relative bg-secondary/90 text-primary rounded-2xl shadow-xl overflow-hidden">
       {/* Background Blur Layer */}
@@ -35,8 +38,15 @@ export default function VehicleSummaryRight({ vehicle }) {
             </div>
           </div>
 
-          <button className="bg-primary text-secondary p-2 rounded-full hover:scale-105 transition">
-            <Heart size={18} />
+          <button
+            onClick={() => setIsFavorite(!isFavorite)}
+            className="bg-primary text-secondary p-2 rounded-full hover:scale-105 transition cursor-pointer"
+          >
+            <Heart
+              className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${
+                isFavorite ? "fill-red-500 text-red-500" : "text-secondary"
+              }`}
+            />
           </button>
         </div>
 

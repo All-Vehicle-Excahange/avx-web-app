@@ -10,9 +10,15 @@ import {
 import Image from "next/image";
 import { useState } from "react";
 import Button from "@/components/ui/button";
+import { useRouter } from "next/router";
 
 export default function FeaturedVehicleCard({ data }) {
   const [isFavorite, setIsFavorite] = useState(false);
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push("/vehicle/details");
+  };
 
   return (
     <div className="group relative w-full h-full rounded-xl overflow-hidden bg-secondary text-primary border border-third/40 flex flex-col shadow-lg">
@@ -89,7 +95,7 @@ export default function FeaturedVehicleCard({ data }) {
 
           {/* Price Button — NOW USING YOUR COMPONENT */}
           <div className="shrink-0 pl-2">
-            <Button variant="outline" size="md">
+            <Button onClick={handleClick} variant="outline" size="md">
               ₹{data.price}
             </Button>
           </div>

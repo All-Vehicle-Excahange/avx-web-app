@@ -157,7 +157,7 @@ export default function SearchWithCard() {
 
               <button
                 onClick={() => setAvxAssumed(!avxAssumed)}
-                className={`relative w-12 h-6 rounded-full transition ${
+                className={`relative w-12 h-6 rounded-full transition cursor-pointer ${
                   avxAssumed ? "bg-primary/90" : "bg-white/20"
                 }`}
               >

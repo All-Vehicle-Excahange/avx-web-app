@@ -88,14 +88,14 @@ export default function StorySection() {
         <div className="flex gap-3 mt-2">
           <button
             onClick={() => scroll("left")}
-            className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary hover:bg-secondary/80 transition-colors z-10 active:scale-95"
+            className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary hover:bg-secondary/80 transition-colors z-10 active:scale-95 cursor-pointer"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
 
           <button
             onClick={() => scroll("right")}
-            className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary hover:bg-secondary/80 transition-colors z-10 active:scale-95"
+            className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary hover:bg-secondary/80 transition-colors z-10 active:scale-95 cursor-pointer"
           >
             <ChevronRight className="w-5 h-5" />
           </button>

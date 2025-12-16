@@ -5,7 +5,7 @@ import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const baseStyles =
-  "w-full h-10 px-3 flex items-center justify-between rounded-md text-sm transition-all cursor-text";
+  "w-full h-10 px-3 flex items-center justify-between rounded-md text-sm transition-all cursor-text cursor-pointer";
 
 const variants = {
   default: "bg-primary border border-third/40 hover:bg-third/10 text-secondary",
@@ -92,7 +92,7 @@ export default function CustomSelect({
                     setOpen(false);
                   }}
                   className={cn(
-                    "w-full text-left px-3 py-2 text-sm",
+                    "w-full text-left px-3 py-2 text-sm cursor-pointer",
                     variant === "transparent"
                       ? "text-primary hover:bg-white/20"
                       : "text-secondary hover:bg-third/20"

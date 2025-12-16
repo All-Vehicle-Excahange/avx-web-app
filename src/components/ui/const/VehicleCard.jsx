@@ -3,10 +3,15 @@ import SponsoredRibbon from "./SponsoredRibbonMain";
 import { Fuel, Heart, Settings2, Star, Users } from "lucide-react";
 import Button from "../button";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 export default function VehicleCard({ data }) {
   const [isFavorite, setIsFavorite] = useState(false);
+  const router = useRouter();
 
+  const handleClick = () => {
+    router.push("/vehicle/details");
+  };
   return (
     <div className="group relative flex flex-row md:flex-col rounded-2xl overflow-hidden bg-secondary text-primary w-full md:max-w-sm border border-third/40 shadow-lg">
       {/* Image Section */}
@@ -74,6 +79,7 @@ export default function VehicleCard({ data }) {
         {/* Price Button */}
         <div className="flex items-center justify-between pt-1 mt-auto md:mt-0">
           <Button
+            onClick={handleClick}
             variant="outline"
             size="sm"
             className="w-full md:w-auto h-7 md:h-9 text-xs md:text-sm"

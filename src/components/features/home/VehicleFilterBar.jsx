@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { MapPin, ArrowRight } from "lucide-react";
 import Button from "@/components/ui/button";
 import CustomSelect from "@/components/ui/custom-select";
+import { useRouter } from "next/router";
 
 // 🔥 FIX — use stable formatter (avoids hydration mismatch)
 const formatINR = (num) => {
@@ -16,8 +17,12 @@ export default function VehicleFilterBar() {
   const [fuelType1, setFuelType1] = useState("");
   const [fuelType2, setFuelType2] = useState("");
   const [budget, setBudget] = useState([0, 10000000]);
-
+  const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState("4w");
+
+  const handleClick = () => {
+    router.push("/search");
+  };
 
   const categories = [
     { id: "4w", label: "4-Wheelers" },
@@ -43,7 +48,7 @@ export default function VehicleFilterBar() {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-3 py-1 rounded-full text-sm whitespace-nowrap ${
+                className={`px-3 py-1 rounded-full text-sm whitespace-nowrap cursor-pointer ${
                   selectedCategory === cat.id
                     ? "bg-black text-white font-medium"
                     : "text-black/70 hover:bg-black/10"
@@ -147,10 +152,10 @@ export default function VehicleFilterBar() {
               max="10000000"
               value={budget[1]}
               onChange={(e) => setBudget([budget[0], Number(e.target.value)])}
-              className="w-full accent-black"
+              className="w-full accent-black cursor-pointer"
             />
 
-            <div className="flex justify-between text-xs text-secondary/80">
+            <div className="flex justify-between text-xs text-secondary/80 ">
               <span>₹{budget[0]}</span>
               <span>₹{budget[1]}</span>
             </div>
@@ -159,7 +164,12 @@ export default function VehicleFilterBar() {
 
         {/* Search Button */}
         <div className="flex justify-end">
-          <Button size="md" variant="default" showIcon={false}>
+          <Button
+            onClick={handleClick}
+            size="md"
+            variant="default"
+            showIcon={false}
+          >
             Search
             <ArrowRight className="h-4 w-4" />
           </Button>

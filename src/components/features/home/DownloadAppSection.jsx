@@ -80,9 +80,9 @@ export default function DownloadAppSection() {
             day
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-4 ">
             {/* Google Play Button */}
-            <button className="bg-primary rounded-lg px-4 py-2 flex items-center gap-3 hover:bg-third/20 transition-colors">
+            <button className="bg-primary rounded-lg px-4 py-2 flex items-center gap-3 hover:bg-third/20 transition-colors cursor-pointer">
               <GooglePlayLogo className="w-8 h-8" />
               <div className="flex flex-col items-start">
                 <span className="text-[10px] font-bold text-third uppercase leading-none">
@@ -95,7 +95,7 @@ export default function DownloadAppSection() {
             </button>
 
             {/* App Store Button */}
-            <button className="bg-secondary border border-third/40 rounded-lg px-4 py-2 flex items-center gap-3 hover:bg-secondary/80 transition-colors">
+            <button className="bg-secondary border border-third/40 rounded-lg px-4 py-2 flex items-center gap-3 hover:bg-third/80 transition-colors cursor-pointer">
               <AppleLogo className="w-8 h-8 text-primary" />
               <div className="flex flex-col items-start">
                 <span className="text-[10px] font-bold text-third leading-none">

@@ -99,7 +99,7 @@ export default function TopPicsSection() {
           <button
             onClick={() => setActiveType("4-Wheeler")}
             className={cn(
-              "px-4 py-1.5 text-sm font-semibold rounded-md transition-all",
+              "px-4 py-1.5 text-sm font-semibold rounded-md transition-all cursor-pointer",
               activeType === "4-Wheeler"
                 ? "bg-secondary text-primary shadow-sm"
                 : "text-secondary/60 hover:text-secondary"
@@ -111,7 +111,7 @@ export default function TopPicsSection() {
           <button
             onClick={() => setActiveType("2-Wheeler")}
             className={cn(
-              "px-4 py-1.5 text-sm font-semibold rounded-md transition-all",
+              "px-4 py-1.5 text-sm font-semibold rounded-md transition-all cursor-pointer",
               activeType === "2-Wheeler"
                 ? "bg-secondary text-primary shadow-sm"
                 : "text-secondary/60 hover:text-secondary"
@@ -123,7 +123,7 @@ export default function TopPicsSection() {
           <button
             onClick={() => setActiveType("Commercial")}
             className={cn(
-              "px-4 py-1.5 text-sm font-semibold rounded-md transition-all",
+              "px-4 py-1.5 text-sm font-semibold rounded-md transition-all cursor-pointer",
               activeType === "Commercial"
                 ? "bg-secondary text-primary shadow-sm"
                 : "text-secondary/60 hover:text-secondary"
@@ -134,7 +134,6 @@ export default function TopPicsSection() {
         </div>
       </div>
 
-      {/* Grid Layout */}
       {/* Grid Layout */}
       <div
         className="

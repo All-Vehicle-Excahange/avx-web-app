@@ -49,14 +49,14 @@ export default function Testimonials() {
         <div className="flex items-center gap-2">
           <button
             onClick={prev}
-            className="p-1.5 rounded-full bg-secondary/10 hover:bg-secondary/20 transition"
+            className="p-1.5 rounded-full bg-secondary/10 hover:bg-secondary/20 transition cursor-pointer"
           >
             <ChevronLeft size={16} />
           </button>
 
           <button
             onClick={next}
-            className="p-1.5 rounded-full bg-secondary/10 hover:bg-secondary/20 transition"
+            className="p-1.5 rounded-full bg-secondary/10 hover:bg-secondary/20 transition cursor-pointer"
           >
             <ChevronRight size={16} />
           </button>
