@@ -21,7 +21,7 @@ export default function VehicleHeader() {
           Tata Harrier XZ Plus
         </h1>
 
-        <div className="bg-secondary text-primary px-4 py-2 rounded-lg text-right">
+        <div className="bg-secondary text-primary px-4 py-2 rounded-lg text-right  w-fit">
           <p className="text-lg font-semibold">₹13.15 Lakh</p>
         </div>
       </div>
