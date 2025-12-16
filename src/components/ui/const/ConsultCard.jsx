@@ -17,14 +17,14 @@ export default function ConsultantCard({
   return (
     <div className="relative w-full h-[560px] rounded-2xl overflow-hidden border border-third/40 bg-secondary shadow-lg">
       {/* BLURRED BACKGROUND */}
-      <div className="absolute inset-0 z-0 ">
+      <div className="absolute inset-0  border-b-10 border-third/20 h-[492px] rounded-b-2xl ">
         <Image
           src="/bg_blur.jpg"
           alt="blur bg"
           fill
           className="object-cover opacity-40 blur-lg"
         />
-        <div className="absolute inset-0 bg-linear-to-b from-black/10 via-secondary/0 to-secondary " />
+        {/* <div className="absolute inset-0 bg-linear-to-b from-black/10 via-secondary/0 to-secondary " /> */}
       </div>
 
       {/* TOP IMAGE */}
