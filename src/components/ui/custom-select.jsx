@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -25,7 +25,13 @@ export default function CustomSelect({
 
   const wrapperRef = useRef(null);
 
-  // Close dropdown on outside click
+  // 🔹 Find selected option (derived state)
+  const selectedOption = useMemo(
+    () => options.find((o) => o.value === value),
+    [value, options]
+  );
+
+  // 🔹 Close dropdown on outside click
   useEffect(() => {
     const handleClick = (e) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
@@ -37,21 +43,13 @@ export default function CustomSelect({
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  // Sync displayed text when value changes
-  useEffect(() => {
-    const selected = options.find((o) => o.value === value);
-    if (selected && search !== selected.label) {
-      setSearch(selected.label);
-    } 
-  }, [value, options]);
-
   const filteredOptions = options.filter((opt) =>
     opt.label.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="relative w-full" ref={wrapperRef}>
-      {/* Main Input */}
+      {/* Input */}
       <div
         className={cn(baseStyles, variants[variant])}
         onClick={() => setOpen(true)}
@@ -73,7 +71,7 @@ export default function CustomSelect({
         <ChevronDown className="w-4 h-4" />
       </div>
 
-      {/* Dropdown List */}
+      {/* Dropdown */}
       {open && (
         <div className="absolute left-0 right-0 mt-1 z-30">
           <div
@@ -88,9 +86,9 @@ export default function CustomSelect({
               filteredOptions.map((opt) => (
                 <button
                   key={opt.value}
+                  type="button"
                   onClick={() => {
                     onChange(opt.value);
-                    setSearch(opt.label);
                     setOpen(false);
                   }}
                   className={cn(
