@@ -17,7 +17,7 @@ export default function VehicleHeader() {
       </div>
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <h1 className="text-2xl sm:text-3xl 2xl:text-4xl font-bold">
+        <h1 className="text-2xl sm:text-3xl 3xl:text-4xl font-bold">
           Tata Harrier XZ Plus
         </h1>
 

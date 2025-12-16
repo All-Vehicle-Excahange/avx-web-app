@@ -12,7 +12,7 @@ function SpecialOffer() {
           sm:h-[360px]
           lg:h-[220px]
           xl:h-[300px]
-          2xl:h-[340px]
+          3xl:h-[340px]
           rounded-xl
           overflow-hidden
         "
@@ -54,7 +54,7 @@ function SpecialOffer() {
                 sm:text-4xl
                 lg:text-2xl
                 xl:text-4xl
-                2xl:text-5xl 
+                3xl:text-5xl 
               "
             >
               Special Offers{" "}
@@ -76,7 +76,7 @@ function SpecialOffer() {
                   sm:text-4xl
                   lg:text-2xl
                   xl:text-4xl
-                  2xl:text-5xl
+                  3xl:text-5xl
                 "
               >
                 ₹50.15 Lakh

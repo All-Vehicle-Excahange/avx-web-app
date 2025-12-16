@@ -30,7 +30,7 @@ export default function VehicleDetails() {
             <VehicleHeader />
           </section>
 
-          <section className="grid  grid-cols-1 xl:grid-cols-[2.2fr_1fr] 2xl:grid-cols-[2.4fr_1fr]  gap-6 items-start">
+          <section className="grid  grid-cols-1 xl:grid-cols-[2.2fr_1fr] 3xl:grid-cols-[2.4fr_1fr]  gap-6 items-start">
             {/* LEFT */}
             <div className="flex flex-col gap-6 min-w-0">
               <VehicleImageGallery />

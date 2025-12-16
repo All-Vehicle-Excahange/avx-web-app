@@ -11,6 +11,7 @@
   --color-primary: #fffef7;
   --color-secondary: #000;
   --color-third: #bebebe;
+  --breakpoint-3xl: 120rem;
 }
 
 .inverted {

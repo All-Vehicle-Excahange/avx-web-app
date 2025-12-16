@@ -144,13 +144,13 @@ export default function TopPicsSection() {
     md:grid-cols-2
     lg:grid-cols-4
     lg:grid-rows-2
-    2xl:grid-cols-5
+    3xl:grid-cols-5
     gap-4
     pb-1
   "
       >
         {/* Featured Vehicle */}
-        <div className="lg:col-span-2 lg:row-span-2 2xl:col-span-2 h-full">
+        <div className="lg:col-span-2 lg:row-span-2 3xl:col-span-2 h-full">
           <FeaturedVehicleCard data={featuredCar} />
         </div>
 
