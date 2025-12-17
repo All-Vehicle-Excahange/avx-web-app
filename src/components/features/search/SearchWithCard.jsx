@@ -185,7 +185,7 @@ export default function SearchWithCard() {
 
       {/* ================= MAIN CONTENT ================= */}
       <main className="flex-1 bg-primary">
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3  3xl:grid-cols-5 gap-4 sm:gap-5 auto-rows-max sm:px-5 lg:px-6 py-4 sm:py-5 lg:py-0">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3  3xl:grid-cols-4 gap-4 sm:gap-5 auto-rows-max sm:px-5 lg:px-6 py-4 sm:py-5 lg:py-0">
           <div className="col-span-full  relative bottom-8 sm:top-2">
             <PromoCardRow />
           </div>
