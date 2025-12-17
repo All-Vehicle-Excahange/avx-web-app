@@ -15,7 +15,7 @@ export default function ConsultantCard({
   isSponsored = false,
 }) {
   return (
-    <div className="relative w-full h-[560px] rounded-2xl overflow-hidden border border-third/40 bg-secondary shadow-lg">
+    <div className="relative w-full 3xl:max-w-[420px] h-[560px] rounded-2xl overflow-hidden border border-third/40 bg-secondary shadow-lg mx-auto">
       {/* BLURRED BACKGROUND */}
       <div className="absolute inset-0 z-0 ">
         <Image
@@ -47,8 +47,10 @@ export default function ConsultantCard({
         </div>
       </div>
 
+      <div className="bg-primary/10  z-0 rounded-b-4xl h-82 w-full absolute bottom-18  border border-third/40 "></div>
+
       {/* CONTENT */}
-      <div className="relative z-10 pt-10 px-4 pb-4 text-primary flex flex-col h-[calc(100%-160px)]">
+      <div className="relative z-0 pt-10 px-4 pb-4 text-primary flex flex-col h-[calc(100%-160px)]">
         <h3 className="text-base font-semibold leading-snug mb-1">{name}</h3>
 
         <div className="flex items-center gap-1.5 text-xs text-third mb-1">

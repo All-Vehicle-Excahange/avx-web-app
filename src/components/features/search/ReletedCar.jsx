@@ -98,7 +98,7 @@ function ReletedCar() {
         }
       >
         {cars.map((_, i) => (
-          <div key={i} className={enableScroll ? "flex-none w-[380px]" : ""}>
+          <div key={i} className={enableScroll ? "flex-none w-[340px]" : ""}>
             <VehicleCard data={cardData} />
           </div>
         ))}
