@@ -143,7 +143,6 @@ export default function TopPicsSection() {
     md:grid-cols-2
     lg:grid-cols-4
     lg:grid-rows-2
-    3xl:grid-cols-5
     gap-4
     pb-1
   "

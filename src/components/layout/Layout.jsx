@@ -1,8 +1,6 @@
-import Navbar from "./Navbar";
-
 export default function Layout({ children }) {
   return (
-    <div className="px-6 md:px-12 lg:px-10 py-10">
+    <div className="px-6 md:px-6 lg:px-8 py-10 max-w-screen-2xl mx-auto">
       <main>{children}</main>
     </div>
   );

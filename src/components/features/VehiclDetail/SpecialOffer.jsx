@@ -54,7 +54,7 @@ function SpecialOffer() {
                 sm:text-4xl
                 lg:text-2xl
                 xl:text-4xl
-                3xl:text-5xl 
+               
               "
             >
               Special Offers{" "}
@@ -76,7 +76,7 @@ function SpecialOffer() {
                   sm:text-4xl
                   lg:text-2xl
                   xl:text-4xl
-                  3xl:text-5xl
+                  
                 "
               >
                 ₹50.15 Lakh

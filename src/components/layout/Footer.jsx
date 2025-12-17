@@ -10,12 +10,12 @@ import {
 export default function Footer() {
   return (
     <footer className="w-full bg-secondary text-primary pt-16 pb-8">
-      <div className="w-full px-6 md:px-12">
+      {/* CENTERED CONTENT WRAPPER */}
+      <div className="max-w-screen-2xl mx-auto px-6 md:px-12">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-24 mb-16">
-          {/* Column 1: Brand + Description */}
+          {/* Column 1 */}
           <div className="space-y-6">
-            {/* Logo */}
             <div className="flex items-center gap-1 mb-6">
               <div className="text-4xl font-black tracking-tighter italic flex">
                 <span className="text-pink-500">A</span>
@@ -29,7 +29,6 @@ export default function Footer() {
               exchanging premium vehicles across India.
             </p>
 
-            {/* Social Icons */}
             <div className="flex gap-4">
               <a className="bg-primary/10 p-2 rounded hover:bg-primary/20 transition-colors cursor-pointer">
                 <Facebook className="w-5 h-5 text-primary" />
@@ -45,14 +44,13 @@ export default function Footer() {
               </a>
             </div>
 
-            {/* Phone */}
             <div className="flex items-center gap-3 pt-4">
               <Phone className="w-5 h-5 text-primary" />
               <span className="font-medium text-primary">+91 75254 10245</span>
             </div>
           </div>
 
-          {/* Column 2: Newsletter */}
+          {/* Column 2 */}
           <div className="space-y-6">
             <h3 className="text-xl font-bold text-primary">Newsletter</h3>
             <p className="text-third text-sm">
@@ -72,7 +70,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Column 3: Offices */}
+          {/* Column 3 */}
           <div className="space-y-6">
             <h3 className="text-xl font-bold text-primary">Our Offices</h3>
 
@@ -97,18 +95,18 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-third/40 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-third">
           <p>
-            © 2025 Value drive Technologies Private Limited. All rights
+            © 2025 Value Drive Technologies Private Limited. All rights
             reserved.
           </p>
 
           <div className="flex gap-6">
-            <a href="#" className="hover:text-primary transition-colors">
+            <a className="hover:text-primary transition-colors">
               Privacy Policy
             </a>
-            <a href="#" className="hover:text-primary transition-colors">
+            <a className="hover:text-primary transition-colors">
               Terms of Service
             </a>
-            <a href="#" className="hover:text-primary transition-colors">
+            <a className="hover:text-primary transition-colors">
               Cookie Policy
             </a>
           </div>

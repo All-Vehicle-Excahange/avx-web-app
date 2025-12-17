@@ -7,23 +7,20 @@ export default function SearchHeader() {
     <>
       <NavbarDark />
 
-     
+      {/* FULL WIDTH BACKGROUND */}
       <section
         className="
           w-full
           bg-secondary
-          flex flex-col
-          items-center
-          px-4
           font-sans
-          pt-24       
-          pb-6        
+          pt-24
+          pb-6
           md:pt-28
           md:pb-8
         "
       >
-        {/* TEXT CONTENT */}
-        <div className="w-full max-w-full text-left px-6 ">
+        {/* CENTERED CONTENT (AMAZON STYLE) */}
+        <div className="max-w-screen-2xl mx-auto px-6 md:px-8">
           <h2 className="text-primary text-2xl md:text-3xl font-bold">
             Browse by Vehicle Type
           </h2>

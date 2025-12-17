@@ -32,7 +32,7 @@ export default function HeroSection() {
 
               {/* Title */}
               <div className="relative">
-                <h1 className="text-3xl md:text-6xl lg:text-6xl font-bold text-primary leading-tight tracking-tight drop-shadow-2xl">
+                <h1 className="text-2xl md:text-6xl lg:text-6xl font-bold text-primary leading-tight tracking-tight drop-shadow-2xl">
                   Unlocking the Potential of Those
                   <br />
                   <span>Who Advance the World</span>

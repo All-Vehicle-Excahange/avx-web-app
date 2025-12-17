@@ -94,7 +94,7 @@ export default function StatsSection() {
 
           {/* Decorational Chart Line */}
           <div className="absolute z-10 inset-0 flex items-center justify-center opacity-20">
-            <TrendingUp className="w-56 h-56 md:w-66 md:h-66  xl:w-74 xl:h-74 xl:bottom-6 relative 3xl:w-120 3xl:h-120   text-third" />
+            <TrendingUp className="w-56 h-56 md:w-66 md:h-66  xl:w-74 xl:h-74 xl:bottom-6 relative    text-third" />
           </div>
 
           <div className="absolute bottom-0 right-0 p-4 md:p-2 lg:p-4  z-10">
@@ -108,8 +108,7 @@ export default function StatsSection() {
               class="inverted 
             h-[400px] w-[400px]
             md:h-[420px] md:w-[420px]
-            lg:h-[640px] lg:w-[640px]
-            3xl:h-[640px] xl:w-[640px]"
+            lg:h-[640px] lg:w-[640px]"
             ></div>
           </div>
         </div>
@@ -121,7 +120,7 @@ export default function StatsSection() {
             secure more clients
           </p>
 
-          <ArrowUpRight className="absolute top-1/2 right-4  text-third/20 -translate-y-1/2   w-56 h-56 md:w-66 md:h-66  xl:w-74 xl:h-74 xl:bottom-6  3xl:w-120 3xl:h-120" />
+          <ArrowUpRight className="absolute top-1/2 right-4  text-third/20 -translate-y-1/2   w-56 h-56 md:w-66 md:h-66  xl:w-74 xl:h-74 xl:bottom-6 " />
 
           <div className="relative z-10">
             <div className="flex gap-1 mb-2">
