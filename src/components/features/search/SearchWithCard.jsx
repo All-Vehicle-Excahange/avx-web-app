@@ -189,7 +189,6 @@ export default function SearchWithCard() {
           <div className="col-span-full  relative bottom-8 sm:top-2">
             <PromoCardRow />
           </div>
-
           {/* MOBILE FILTER BAR */}
           <div className="col-span-full">
             <div className="flex lg:hidden items-center gap-3 overflow-x-auto scrollbar-hide">

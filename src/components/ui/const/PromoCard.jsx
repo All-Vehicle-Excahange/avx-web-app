@@ -10,7 +10,7 @@ export default function PromoCard({
 }) {
   return (
     <div
-      className="relative min-w-[180px] md:min-w-[320px] h-26 md:h-[140px] 3xl:min-w-[600px] 3xl:h-40
+      className="relative min-w-[180px] md:min-w-[220px] h-26 md:h-[140px]  lg:min-w-[320px]  lg:h-[140px]  3xl:min-w-[480px] 3xl:h-40
                  rounded-xl overflow-hidden group cursor-pointer"
     >
       {/* Background Image */}

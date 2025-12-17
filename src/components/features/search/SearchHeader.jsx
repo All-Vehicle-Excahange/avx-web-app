@@ -23,7 +23,7 @@ export default function SearchHeader() {
         "
       >
         {/* TEXT CONTENT */}
-        <div className="w-full max-w-7xl text-left pl-2 md:pl-0">
+        <div className="w-full max-w-full text-left px-6 ">
           <h2 className="text-primary text-2xl md:text-3xl font-bold">
             Browse by Vehicle Type
           </h2>
