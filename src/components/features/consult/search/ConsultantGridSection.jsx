@@ -2,6 +2,7 @@
 
 import ConsultantCard from "@/components/ui/const/ConsultCard";
 import Button from "@/components/ui/button";
+import { useRouter } from "next/router";
 
 export default function ConsultantGridSection({
   title,
@@ -9,6 +10,11 @@ export default function ConsultantGridSection({
   i = 3,
   showViewAll = false,
 }) {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push("/consult/premium");
+  };
+
   return (
     <section className="w-full mb-8">
       {/* HEADER */}
@@ -18,8 +24,13 @@ export default function ConsultantGridSection({
         </h2>
 
         {showViewAll && (
-          <Button variant="ghost" showIcon={false} className="text-sm">
-            View all
+          <Button
+            onClick={handleClick}
+            variant="ghost"
+            showIcon={false}
+            className="text-sm"
+          >
+            View all Premium Consultants
           </Button>
         )}
       </div>
@@ -39,7 +50,6 @@ export default function ConsultantGridSection({
             isSponsored={c.isSponsored}
           />
         ))}
-      
       </div>
     </section>
   );

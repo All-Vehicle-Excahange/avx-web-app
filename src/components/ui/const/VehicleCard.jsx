@@ -59,11 +59,11 @@ export default function VehicleCard({ data }) {
             {/* Heart Button */}
             <button
               onClick={() => setIsFavorite(!isFavorite)}
-              className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-secondary hover:bg-third/30 transition-colors shrink-0"
+              className="flex items-center justify-center w-8 h-8 rounded-full bg-transparent text-secondary border border-third/60 hover:bg-third/30 transition-colors shrink-0"
             >
               <Heart
                 className={`w-4 h-4 md:w-5 md:h-5 ${
-                  isFavorite ? "fill-red-500 text-red-500" : "text-secondary"
+                  isFavorite ? "fill-red-500 text-red-500" : "text-primary"
                 }`}
               />
             </button>

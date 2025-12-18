@@ -78,7 +78,7 @@ export default function StorySection() {
       <div className="flex flex-row justify-between items-start mb-6">
         {/* Title */}
         <div>
-          <h2 className="text-2xl md:text-4xl font-bold text-secondary leading-tight">
+          <h2 className="text-2xl md:text-4xl font-bold text-primary leading-tight">
             <span className="text-third">Monthly</span> Top Stories From Our
             Users
           </h2>

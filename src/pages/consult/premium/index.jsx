@@ -1,4 +1,4 @@
-import FilterWithCard from "@/components/features/consult/search/FilterWithCard";
+import PremiumFilterWithCard from "@/components/features/consult/premium/PremiumFilterWithCard";
 import DownloadAppSection from "@/components/features/home/DownloadAppSection";
 import SellVehicleBanner from "@/components/features/home/SellVehicleBanner";
 import Footer from "@/components/layout/Footer";
@@ -12,7 +12,7 @@ function index() {
       <NavbarDark />
 
       <Layout>
-        <FilterWithCard />
+        <PremiumFilterWithCard />
       </Layout>
 
       <SellVehicleBanner fullWidth />

@@ -7,8 +7,7 @@ import Button from "@/components/ui/button";
 import ChipGroup from "@/components/ui/chipGroup";
 import Chip from "@/components/ui/chip";
 import { FilterIcon } from "lucide-react";
-import ConsultantGridSection from "./ConsultantGridSection";
-import ConsultantSliderSection from "./ConsultantSliderSection";
+import ConsultantGridSection from "../search/ConsultantGridSection";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
@@ -27,7 +26,7 @@ function useIsMobile() {
   return isMobile;
 }
 
-export default function FilterWithCard() {
+export default function PremiumFilterWithCard() {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [activeFilterTab, setActiveFilterTab] = useState("Vehicle Type");
   const [selectedMobileChips, setSelectedMobileChips] = useState([]);
@@ -115,12 +114,6 @@ export default function FilterWithCard() {
     { value: "all", label: "All" },
   ];
 
-  const consultantTypes = [
-    { value: "premium", label: "Premium Consultant" },
-    { value: "verified", label: "Verified Seller" },
-    { value: "pro", label: "Pro Consultant" },
-  ];
-
   const ratings = [
     { value: "4.5", label: "⭐ 4.5+ Rating" },
     { value: "4.0", label: "⭐ 4.0+ Rating" },
@@ -151,7 +144,6 @@ export default function FilterWithCard() {
 
   const mobileFilterMap = {
     "Vehicle Type": vehicleTypes.map((v) => v.label),
-    "Consultant Type": consultantTypes.map((c) => c.label),
     Rating: ratings.map((r) => r.label),
     "Inventory Size": inventorySizes.map((i) => i.label),
     Services: services.map((s) => s.label),
@@ -190,7 +182,6 @@ export default function FilterWithCard() {
           </div>
 
           <ChipGroup title="Vehicle Type" items={vehicleTypes} />
-          <ChipGroup title="Consultant Type" items={consultantTypes} />
           <ChipGroup title="Rating" items={ratings} />
           <ChipGroup title="Inventory Size" items={inventorySizes} />
           <ChipGroup title="Services Provided" items={services} />
@@ -258,17 +249,6 @@ export default function FilterWithCard() {
 
         <ConsultantGridSection
           title="Featured Premium Consultant"
-          data={consultants}
-          showViewAll
-        />
-
-        <ConsultantSliderSection
-          title="Sponsored Consultant"
-          data={consultants}
-        />
-
-        <ConsultantGridSection
-          title="Consult near you "
           data={consultants}
           i={6}
         />

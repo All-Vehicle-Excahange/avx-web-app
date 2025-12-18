@@ -10,12 +10,12 @@ export default function StatsSection() {
           <h3 className="text-third font-bold text-2xl md:text-3xl mb-2">
             Our focus is simple
           </h3>
-          <h2 className="text-secondary font-bold text-4xl md:text-5xl tracking-tight">
+          <h2 className="text-primary font-bold text-4xl md:text-5xl tracking-tight">
             Design to Convert
           </h2>
         </div>
 
-        <div className="max-w-sm text-secondary text-right md:text-right text-sm md:text-base leading-relaxed">
+        <div className="max-w-sm text-primary text-right md:text-right text-sm md:text-base leading-relaxed">
           We promise to deliver beyond your expectations for your business.
         </div>
       </div>
