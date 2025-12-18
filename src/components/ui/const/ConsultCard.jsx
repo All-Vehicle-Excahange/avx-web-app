@@ -15,7 +15,7 @@ export default function ConsultantCard({
   isSponsored = false,
 }) {
   return (
-    <div className="relative w-full 3xl:max-w-[420px] h-[560px] rounded-2xl overflow-hidden border border-third/40 bg-secondary shadow-lg mx-auto">
+    <div className="relative w-[340px]  h-[568px] rounded-2xl overflow-hidden border border-third/40 bg-secondary shadow-lg mx-auto">
       {/* BLURRED BACKGROUND */}
       <div className="absolute inset-0 z-0 ">
         <Image
@@ -24,8 +24,6 @@ export default function ConsultantCard({
           fill
           className="object-cover opacity-40 blur-lg"
         />
-
-        <div className="absolute inset-0 bg-linear-to-b from-black/10 via-secondary/0 to-secondary " />
       </div>
 
       {/* TOP IMAGE */}
@@ -47,7 +45,7 @@ export default function ConsultantCard({
         </div>
       </div>
 
-      <div className="bg-primary/10  z-0 rounded-b-4xl h-82 w-full absolute bottom-18  border border-third/40 "></div>
+      <div className="bg-secondary/10  z-0 rounded-b-4xl h-86 w-full absolute bottom-16  border border-third/40 "></div>
 
       {/* CONTENT */}
       <div className="relative z-0 pt-10 px-4 pb-4 text-primary flex flex-col h-[calc(100%-160px)]">
@@ -110,9 +108,9 @@ export default function ConsultantCard({
         </div>
 
         {/* GALLERY */}
-        <div className="grid grid-cols-3 gap-2 mb-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="relative h-16 rounded-md overflow-hidden">
+        <div className="grid grid-cols-2 gap-2 mb-4">
+          {[1, 2].map((i) => (
+            <div key={i} className="relative h-20 rounded-md overflow-hidden">
               <Image src={image} alt="vehicle" fill className="object-cover" />
             </div>
           ))}

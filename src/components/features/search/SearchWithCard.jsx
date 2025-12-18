@@ -138,9 +138,9 @@ export default function SearchWithCard() {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col lg:flex-row bg-primary text-secondary font-sans">
+    <div className="w-full min-h-screen flex flex-col lg:flex-row bg-secondary text-secondary font-sans">
       {/* ================= DESKTOP SIDEBAR ================= */}
-      <aside className="hidden lg:flex relative w-[340px] bg-secondary/90 border-r border-third/40 p-6 flex-col gap-6 overflow-y-auto shrink-0 rounded-2xl">
+      <aside className="hidden lg:flex relative w-[340px] bg-secondary/90 border border-third/40 p-6 flex-col gap-6 overflow-y-auto shrink-0 rounded-2xl">
         <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover opacity-40 blur-lg z-0" />
         <div className="relative z-10">
           <h2 className="text-2xl font-bold text-primary mb-4">
@@ -184,7 +184,7 @@ export default function SearchWithCard() {
       </aside>
 
       {/* ================= MAIN CONTENT ================= */}
-      <main className="flex-1 bg-primary">
+      <main className="flex-1 bg-secondary">
         <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3   gap-4 sm:gap-5 auto-rows-max sm:px-5 lg:px-6 py-4 sm:py-5 lg:py-0">
           <div className="col-span-full  relative bottom-8 sm:top-2">
             <PromoCardRow />

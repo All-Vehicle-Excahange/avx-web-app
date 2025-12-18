@@ -81,11 +81,11 @@ export default function TopPicsSection() {
   const [activeType, setActiveType] = useState("4-Wheeler");
 
   return (
-    <div className="w-full h-full flex flex-col bg-primary text-secondary font-sans overflow-hidden">
+    <div className="w-full h-full flex flex-col bg-secondary text-primary font-sans overflow-hidden">
       {/* Header Section */}
       <div className="shrink-0 flex flex-col md:flex-row md:items-end justify-between mb-4 gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-secondary">
+          <h2 className="text-3xl font-bold tracking-tight text-primary">
             Top picks Vehicle for you
           </h2>
 
@@ -162,7 +162,7 @@ export default function TopPicsSection() {
 
       {/* Bottom Button */}
       <div className="mt-8 flex justify-end">
-        <Button size="md">See All</Button>
+        <Button variant="outline" size="md">Explore All Vehicles</Button>
       </div>
     </div>
   );

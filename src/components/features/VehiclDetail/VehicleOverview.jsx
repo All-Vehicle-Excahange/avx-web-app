@@ -14,9 +14,8 @@ import {
 
 export default function VehicleOverview({ vehicle }) {
   return (
-    <section className="relative rounded-2xl overflow-hidden bg-secondary/90 text-primary">
+    <section className="relative rounded-2xl overflow-hidden bg-secondary/90 text-primary border-2 border-third/60">
       {/* 🔥 Blur Background (same as aside) */}
-      <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover bg-center opacity-40 blur-lg z-0" />
 
       {/* CONTENT */}
       <div className="relative z-10 p-6 space-y-6">
@@ -95,6 +94,6 @@ export default function VehicleOverview({ vehicle }) {
 
 function Divider() {
   return (
-    <div className="md:col-span-3 border-t-4 border-dashed border-third/40" />
+    <div className="md:col-span-3 border border-third/40" />
   );
 }

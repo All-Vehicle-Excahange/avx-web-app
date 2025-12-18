@@ -21,7 +21,10 @@ export default function FeaturedVehicleCard({ data }) {
   };
 
   return (
-    <div className="group relative w-full h-full rounded-xl overflow-hidden bg-secondary text-primary border border-third/40 flex flex-col shadow-lg">
+    <div className="group relative w-full h-full rounded-xl overflow-hidden bg-transparent text-primary border-2 border-third/60 flex flex-col shadow-lg">
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover bg-center opacity-40 blur-lg" />
+      </div>
       {/* Image */}
       <div className="relative flex-1 w-full overflow-hidden">
         {data.sponsored && <SponsoredRibbon />}
@@ -35,7 +38,7 @@ export default function FeaturedVehicleCard({ data }) {
       </div>
 
       {/* Content */}
-      <div className="p-5 bg-secondary z-10 flex flex-col shrink-0">
+      <div className="p-5 bg-transparent z-10 flex flex-col shrink-0">
         {/* Title + Heart */}
         <div className="flex justify-between items-start mb-4">
           <div className="space-y-1 pr-4">
@@ -49,11 +52,11 @@ export default function FeaturedVehicleCard({ data }) {
           {/* Heart Button */}
           <button
             onClick={() => setIsFavorite(!isFavorite)}
-            className="shrink-0 flex items-center justify-center w-9 h-9 rounded-full bg-primary text-secondary hover:bg-third/30 transition-colors"
+            className="shrink-0 flex items-center justify-center w-9 h-9 rounded-full bg-transparent border-2 border-third/60 text-primary hover:bg-third/30 transition-colors"
           >
             <Heart
               className={`w-5 h-5 transition-colors ${
-                isFavorite ? "fill-red-500 text-red-500" : "text-secondary"
+                isFavorite ? "fill-red-500 text-red-500" : "text-primary"
               }`}
             />
           </button>

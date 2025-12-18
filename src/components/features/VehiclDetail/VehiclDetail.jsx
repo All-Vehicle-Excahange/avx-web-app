@@ -24,7 +24,7 @@ export default function VehicleDetails() {
     <>
       <NavbarDark />
 
-      <main className="bg-primary text-secondary w-full">
+      <main className="bg-secondary text-secondary w-full">
         <div className="w-full py-6">
           <section className="w-full space-y-4 mb-6">
             <VehicleHeader />

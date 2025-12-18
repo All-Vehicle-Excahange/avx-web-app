@@ -91,10 +91,10 @@ export default function AutoConsultPicsSection({ limit }) {
   const visibleConsultants = limit ? consultants.slice(0, limit) : consultants;
 
   return (
-    <div className="w-full bg-primary">
+    <div className="w-full bg-secondary">
       {/* Header */}
       <div className="flex justify-between items-end mb-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+        <h2 className="text-2xl md:text-3xl font-bold text-primary">
           Top Auto Consultants Picks For You
         </h2>
       </div>
