@@ -14,7 +14,7 @@ import {
 
 export default function VehicleOverview({ vehicle }) {
   return (
-    <section className="relative rounded-2xl overflow-hidden bg-secondary/90 text-primary border-2 border-third/60">
+    <section className="relative rounded-2xl overflow-hidden bg-secondary/90 text-primary border border-third/60">
       {/* 🔥 Blur Background (same as aside) */}
 
       {/* CONTENT */}

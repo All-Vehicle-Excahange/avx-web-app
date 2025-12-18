@@ -6,9 +6,9 @@ import { CheckCircle, Wrench, Settings, Disc } from "lucide-react";
 
 export default function VehicleCondition() {
   return (
-    <section className="relative rounded-2xl overflow-hidden bg-secondary/90 text-primary">
+    <section className="relative rounded-2xl overflow-hidden bg-secondary/90 text-primary border border-third/60">
       {/* 🔥 Blur background */}
-      <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover bg-center opacity-40 blur-lg z-0" />
+      {/* <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover bg-center opacity-40 blur-lg z-0" /> */}
 
       <div className="relative z-10 p-6 space-y-8">
         {/* ================= CAR CONDITION ================= */}

@@ -16,7 +16,7 @@ export default function VehicleImageGallery() {
   const [active, setActive] = useState(0);
 
   return (
-    <section className="w-full bg-white rounded-xl p-4 shadow border border-third ">
+    <section className="w-full bg-white  rounded-xl p-4 shadow border border-third ">
       <div className="relative w-full aspect-video bg-black/5 rounded-lg overflow-hidden">
         <Image
           src={images[active]}

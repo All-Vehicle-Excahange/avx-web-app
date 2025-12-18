@@ -13,11 +13,11 @@ export default function VehicleHeader() {
       {/* Rating */}
       <div className="flex items-center gap-2">
         <Star className="text-yellow-400" size={16} />
-        <span className="text-sm font-medium">CAR RATE 4.5</span>
+        <span className="text-sm text-primary font-medium">CAR RATE 4.5</span>
       </div>
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <h1 className="text-2xl sm:text-3xl 3xl:text-4xl font-bold">
+        <h1 className="text-2xl text-primary sm:text-3xl 3xl:text-4xl font-bold">
           Tata Harrier XZ Plus
         </h1>
 

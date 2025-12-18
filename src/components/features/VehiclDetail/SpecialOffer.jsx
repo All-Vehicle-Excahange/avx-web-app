@@ -12,10 +12,11 @@ function SpecialOffer() {
           sm:h-[360px]
           lg:h-[220px]
           xl:h-[300px]
-          3xl:h-[340px]
           rounded-xl
           overflow-hidden
-        "
+         border
+          border-third/60
+         "
       >
         {/* Background Image */}
         <Image

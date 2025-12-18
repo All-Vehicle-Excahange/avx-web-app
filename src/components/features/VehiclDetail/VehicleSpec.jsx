@@ -7,8 +7,8 @@ import { Gauge, ArrowUpDown, Briefcase, Cpu, Check } from "lucide-react";
 
 export default function VehicleSpec({ vehicle }) {
   return (
-    <section className="relative rounded-2xl overflow-hidden bg-secondary/90 text-primary">
-      <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover bg-center opacity-40 blur-lg z-0" />
+    <section className="relative rounded-2xl overflow-hidden bg-secondary/90 text-primary border border-third/60">
+      {/* <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover bg-center opacity-40 blur-lg z-0" /> */}
 
       <div className="relative z-10 p-6 space-y-8">
         <div className="space-y-4">
@@ -41,7 +41,7 @@ export default function VehicleSpec({ vehicle }) {
           </div>
         </div>
 
-        <div className="md:col-span-3 border-t-4 border-dashed border-third/40" />
+        <div className="md:col-span-3 border-t border border-third/40" />
 
         {/* ================= AVX INSPECTION REPORT ================= */}
         <div className="space-y-6">

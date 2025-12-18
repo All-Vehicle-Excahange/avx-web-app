@@ -8,7 +8,7 @@ export default function VehicleSummaryRight({ vehicle }) {
   const [isFavorite, setIsFavorite] = useState(false);
 
   return (
-    <aside className="relative bg-secondary/90 text-primary rounded-2xl shadow-xl overflow-hidden">
+    <aside className="relative bg-secondary/90 text-primary rounded-2xl shadow-xl overflow-hidden border border-third/60">
       {/* Background Blur Layer */}
       <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover bg-center opacity-40 blur-lg z-0" />
 

@@ -1,17 +1,20 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { useState } from "react";
 
 const testimonials = [
   {
     text: `Lorem ipsum dolor sit amet consectetur. Gravida lacus volutpat orci vitae sed urna egestas. Eget sit adipiscing eleifend odio at libero ullamcorper non. Platea neque.`,
+    rating: 5,
   },
   {
     text: `Excellent service and smooth experience. The dealer was very transparent and helpful throughout the process.`,
+    rating: 4,
   },
   {
     text: `Car condition was exactly as promised. Home test drive was a big plus.`,
+    rating: 5,
   },
 ];
 
@@ -27,13 +30,29 @@ export default function Testimonials() {
       {/* HEADER */}
       <h3 className="text-lg font-semibold text-secondary">Testimonials</h3>
 
-      {/* CONTENT */}
+      {/* REVIEW TEXT */}
       <p className="text-sm text-secondary/80 leading-relaxed">
         {testimonials[active].text}
       </p>
 
+      {/* ⭐ STARS (AFTER REVIEW) */}
+      <div className="flex items-center gap-1">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <Star
+            key={i}
+            size={16}
+            className={
+              i <= testimonials[active].rating
+                ? "fill-yellow-400 text-yellow-400"
+                : "text-secondary/30"
+            }
+          />
+        ))}
+      </div>
+
       {/* FOOTER */}
       <div className="flex items-center justify-between pt-2">
+        {/* DOTS */}
         <div className="flex items-center gap-1">
           {testimonials.map((_, idx) => (
             <span
@@ -46,17 +65,18 @@ export default function Testimonials() {
           ))}
         </div>
 
+        {/* ARROWS */}
         <div className="flex items-center gap-2">
           <button
             onClick={prev}
-            className="p-1.5 rounded-full bg-secondary/10 hover:bg-secondary/20 transition cursor-pointer"
+            className="p-1.5 rounded-full bg-secondary/10 hover:bg-secondary/20 transition"
           >
             <ChevronLeft size={16} />
           </button>
 
           <button
             onClick={next}
-            className="p-1.5 rounded-full bg-secondary/10 hover:bg-secondary/20 transition cursor-pointer"
+            className="p-1.5 rounded-full bg-secondary/10 hover:bg-secondary/20 transition"
           >
             <ChevronRight size={16} />
           </button>
