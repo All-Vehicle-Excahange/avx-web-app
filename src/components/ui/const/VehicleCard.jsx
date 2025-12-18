@@ -7,6 +7,7 @@ import {
   MapPinned,
   Settings2,
   Star,
+  User,
   Users,
 } from "lucide-react";
 import Button from "../button";
@@ -59,8 +60,11 @@ export default function VehicleCard({ data }) {
               <h3 className="text-sm md:text-xl font-bold leading-tight tracking-wide line-clamp-2">
                 {data.title}
               </h3>
-              <p className="text-[10px] md:text-xs text-third mt-1 line-clamp-1">
-                {data.subtitle}
+              <p className="text-[10px] md:text-xs text-primary/90 mt-1 line-clamp-1">
+                <span className="flex items-center gap-1">
+                  <User className="w-3 h-3" />
+                  {data.userName || "Nihal Chaudhary "}
+                </span>
               </p>
               <p className="text-[10px] md:text-xs text-primary/90 mt-1 line-clamp-1">
                 <span className="flex items-center gap-1">
