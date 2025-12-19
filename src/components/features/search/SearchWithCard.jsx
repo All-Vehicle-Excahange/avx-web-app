@@ -140,14 +140,14 @@ export default function SearchWithCard() {
   return (
     <div className="w-full min-h-screen flex flex-col lg:flex-row bg-secondary text-secondary font-sans">
       {/* ================= DESKTOP SIDEBAR ================= */}
-      <aside className="hidden lg:flex relative w-[340px] bg-secondary/90 border border-third/40 p-6 flex-col gap-6 overflow-y-auto shrink-0 rounded-2xl">
+      <aside className="hidden lg:flex relative w-[340px] bg-secondary/90 border border-third/40 p-6 flex-col gap-6 overflow-y-auto shrink-0 rounded-2xl h-fit">
         <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover opacity-40 blur-lg z-0" />
         <div className="relative z-10">
           <h2 className="text-2xl font-bold text-primary mb-4">
             Filter Your Result
           </h2>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
             <InputField placeholder="Enter your location" variant="colored" />
 
             <div className="hidden lg:flex items-center justify-between px-4 py-3 rounded-xl border border-white/20 backdrop-blur-md bg-transparent">
@@ -176,7 +176,7 @@ export default function SearchWithCard() {
             <ChipGroup title="Variant" items={variants} />
             <ChipGroup title="Vehicle Type" items={vehicleTypes} />
 
-            <Button variant="outline" showIcon={false}>
+            <Button className="mt-4" variant="outline" showIcon={false}>
               Apply filter
             </Button>
           </div>
@@ -185,7 +185,7 @@ export default function SearchWithCard() {
 
       {/* ================= MAIN CONTENT ================= */}
       <main className="flex-1 bg-secondary">
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3   gap-4 sm:gap-5 auto-rows-max sm:px-5 lg:px-6 py-4 sm:py-5 lg:py-0">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2  lg:grid-cols-2 xl:grid-cols-3  gap-4 sm:gap-5 auto-rows-max sm:px-5 md:px-0  lg:px-6 py-4 sm:py-5 lg:py-0">
           <div className="col-span-full  relative bottom-8 sm:top-2">
             <PromoCardRow />
           </div>
@@ -193,7 +193,7 @@ export default function SearchWithCard() {
           <div className="col-span-full">
             <div className="flex lg:hidden items-center gap-3 overflow-x-auto scrollbar-hide">
               <Button
-                variant="default"
+                variant="ghost"
                 showIcon={false}
                 className="gap-2 shrink-0"
                 onClick={() => setMobileFilterOpen(true)}
@@ -204,16 +204,18 @@ export default function SearchWithCard() {
 
               {/* ✅ AVX TOGGLE — MOBILE ONLY */}
               <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-third/40 shrink-0">
-                <span className="text-sm font-semibold">AVX Assumed</span>
+                <span className="text-sm text-primary font-semibold">
+                  AVX Assumed
+                </span>
                 <button
                   onClick={() => setAvxAssumed(!avxAssumed)}
-                  className={`relative w-10 h-5 rounded-full transition ${
-                    avxAssumed ? "bg-secondary" : "bg-third/40"
+                  className={`relative w-9 h-5 rounded-full ${
+                    avxAssumed ? "bg-primary" : "bg-white/20"
                   }`}
                 >
                   <span
-                    className={`absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-primary transition-transform ${
-                      avxAssumed ? "translate-x-5" : "translate-x-0"
+                    className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-secondary transition-transform ${
+                      avxAssumed ? "translate-x-4" : ""
                     }`}
                   />
                 </button>
@@ -224,7 +226,7 @@ export default function SearchWithCard() {
                   key={chip}
                   label={chip}
                   selected={selectedMobileChips.includes(chip)}
-                  variant={isMobile ? "outlineDark" : "outline"}
+                  variant="outline"
                   onClick={() => toggleMobileChip(chip)}
                 />
               ))}

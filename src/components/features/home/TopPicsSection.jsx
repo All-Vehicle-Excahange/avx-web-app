@@ -81,7 +81,7 @@ export default function TopPicsSection() {
   const [activeType, setActiveType] = useState("4-Wheeler");
 
   return (
-    <div className="w-full h-full flex flex-col bg-secondary text-primary font-sans overflow-hidden">
+    <div className="w-full h-full   flex flex-col bg-secondary text-primary font-sans overflow-hidden">
       {/* Header Section */}
       <div className="shrink-0 flex flex-col md:flex-row md:items-end justify-between mb-4 gap-4">
         <div>
@@ -95,7 +95,7 @@ export default function TopPicsSection() {
         </div>
 
         {/* Toggle Switch */}
-        <div className="bg-third/20 p-1 rounded-lg flex items-center">
+        <div className="bg-primary p-1 rounded-lg flex items-center">
           <button
             onClick={() => setActiveType("4-Wheeler")}
             className={cn(

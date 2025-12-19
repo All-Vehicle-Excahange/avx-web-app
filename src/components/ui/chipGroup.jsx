@@ -43,7 +43,7 @@ export default function ChipGroup({
     showMore && !expanded ? filteredItems.slice(0, limit) : filteredItems;
 
   return (
-    <div className="flex flex-col mb-4">
+    <div className="flex flex-col mb-2">
       {/* Title */}
       <h3 className="text-lg font-semibold text-primary mb-2">{title}</h3>
 

@@ -1,46 +1,104 @@
 "use client";
 
+import { useRef, useState } from "react";
 import NavbarDark from "@/components/layout/NavbarDark";
 
-// TOP PART
+// TOP
 import VehicleHeader from "./VehicleHeader";
 import VehicleImageGallery from "./VehicleImageGallery";
 
-// LEFT SIDE COMPONENTS
+// LEFT
 import VehicleOverview from "./VehicleOverview";
 import VehicleSpec from "./VehicleSpec";
+import VehicleCondition from "./VehicleCondition";
 
-// RIGHT SIDE COMPONENTS
+// RIGHT
 import VehicleSummaryRight from "./VehicleSummaryRight";
 import Testimonials from "./Testimonials";
-import VehicleCondition from "./VehicleCondition";
 import SimulerVehicle from "./SimulerVehicle";
 import AutoConsultPicsSection from "../home/AutoConsultPicsSection";
 import AvxProcess from "./AvxProcess";
 import SpecialOffer from "./SpecialOffer";
 
 export default function VehicleDetails() {
+  const overviewRef = useRef(null);
+  const specRef = useRef(null);
+  const conditionRef = useRef(null);
+
+  const [activeTab, setActiveTab] = useState("overview");
+
+  const NAVBAR_OFFSET = 96;
+
+  const scrollToSection = (ref, tab) => {
+    setActiveTab(tab);
+
+    if (!ref.current) return;
+
+    const top =
+      ref.current.getBoundingClientRect().top + window.scrollY - NAVBAR_OFFSET;
+
+    window.scrollTo({
+      top,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <>
       <NavbarDark />
 
       <main className="bg-secondary text-secondary w-full">
         <div className="w-full py-6">
-          <section className="w-full space-y-4 mb-6">
+          {/* HEADER */}
+          <section className="mb-6">
             <VehicleHeader />
           </section>
 
-          <section className="grid  grid-cols-1 xl:grid-cols-[2.2fr_1fr] 3xl:grid-cols-[2.4fr_1fr]  gap-6 items-start">
-            {/* LEFT */}
+          <section className="grid grid-cols-1 xl:grid-cols-[2.2fr_1fr] gap-6 items-start">
             <div className="flex flex-col gap-6 min-w-0">
               <VehicleImageGallery />
-              <VehicleOverview />
-              <VehicleSpec />
-              <VehicleCondition />
+
+              <div className="bg-secondary">
+                <div className="flex gap-8 border-b border-third/40">
+                  {[
+                    { id: "overview", label: "Overview", ref: overviewRef },
+                    { id: "spec", label: "Specifications", ref: specRef },
+                    { id: "condition", label: "Condition", ref: conditionRef },
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => scrollToSection(tab.ref, tab.id)}
+                      className={`relative pb-3 text-sm font-medium transition-colors cursor-pointer
+                        ${
+                          activeTab === tab.id
+                            ? "text-primary"
+                            : "text-third hover:text-primary"
+                        }`}
+                    >
+                      {tab.label}
+
+                      {activeTab === tab.id && (
+                        <span className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div ref={overviewRef}>
+                <VehicleOverview />
+              </div>
+
+              <div ref={specRef}>
+                <VehicleSpec />
+              </div>
+
+              <div ref={conditionRef}>
+                <VehicleCondition />
+              </div>
             </div>
 
-            {/* RIGHT (STICKY) */}
-            <aside className="flex flex-col gap-6 min-w-0 lg:sticky lg:top-24 h-fit">
+            <aside className="flex flex-col gap-6 lg:sticky lg:top-24 h-fit">
               <VehicleSummaryRight />
               <Testimonials />
               <SpecialOffer />
@@ -51,7 +109,7 @@ export default function VehicleDetails() {
             <SimulerVehicle />
             <AutoConsultPicsSection limit={4} />
           </section>
-          {/* We need to imrpove this in futue  */}
+
           <AvxProcess />
         </div>
       </main>

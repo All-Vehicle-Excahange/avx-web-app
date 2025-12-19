@@ -22,7 +22,7 @@ function SimulerVehicle() {
     <div className="w-full">
       {/* Header (title only) */}
       <div className="mb-5">
-        <h2 className="text-3xl font-bold text-black">Similar Vehicles</h2>
+        <h2 className="text-3xl font-bold text-primary">Similar Vehicles</h2>
       </div>
 
       {/* Cards Grid */}

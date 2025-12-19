@@ -11,7 +11,7 @@ export default function PromoCard({
   return (
     <div
       className="relative min-w-[180px] md:min-w-[220px] h-26 md:h-[140px]  lg:min-w-[320px]  lg:h-[140px]  
-                 rounded-xl overflow-hidden group cursor-pointer"
+                 rounded-xl overflow-hidden group cursor-pointer border border-third/40"
     >
       {/* Background Image */}
       <Image

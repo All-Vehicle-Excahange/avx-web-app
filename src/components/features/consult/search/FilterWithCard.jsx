@@ -227,7 +227,7 @@ export default function FilterWithCard() {
             <button
               onClick={() => setAvxAssumed(!avxAssumed)}
               className={`relative w-9 h-5 rounded-full ${
-                avxAssumed ? "bg-primary" : "bg-white/20"
+                avxAssumed ? "bg-primary " : "bg-white/20"
               }`}
             >
               <span

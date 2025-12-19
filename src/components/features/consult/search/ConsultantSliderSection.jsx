@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ConsultantCard from "@/components/ui/const/ConsultCard";
+import Button from "@/components/ui/button";
 
 export default function ConsultantSliderSection({ title, data }) {
   const sliderRef = useRef(null);
@@ -23,19 +24,21 @@ export default function ConsultantSliderSection({ title, data }) {
         </h2>
 
         <div className="flex gap-2">
-          <button
+          <Button
             onClick={() => scroll("left")}
-            className="h-9 w-9 rounded-full border bg-primary border-third/40 flex items-center justify-center"
+            variant="roundedOutline"
+            showIcon={false}
           >
             <ChevronLeft size={18} />
-          </button>
+          </Button>
 
-          <button
+          <Button
             onClick={() => scroll("right")}
-            className="h-9 w-9 rounded-full bg-primary border border-third/40 flex items-center justify-center"
+            variant="roundedOutline"
+            showIcon={false}
           >
             <ChevronRight size={18} />
-          </button>
+          </Button>
         </div>
       </div>
 

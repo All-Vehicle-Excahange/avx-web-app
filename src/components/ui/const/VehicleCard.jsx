@@ -28,7 +28,7 @@ export default function VehicleCard({ data }) {
         group relative flex flex-row md:flex-col
         rounded-2xl overflow-hidden
         bg-secondary/90 text-primary
-        md:max-w-sm w-[340px]
+        md:max-w-sm w-[362px]
         border-2 border-third/60
         hover:shadow-[0_20px_60px_rgba(255,255,255,0.25)]
         transition-shadow duration-300
@@ -123,7 +123,7 @@ export default function VehicleCard({ data }) {
 
             <button
               onClick={() => setIsFavorite(!isFavorite)}
-              className="flex items-center justify-center w-8 h-8 rounded-full bg-transparent text-secondary border border-third/60 hover:bg-third/30 transition-colors shrink-0"
+              className="flex items-center justify-center w-8 h-8 rounded-full bg-transparent text-secondary border border-third/60 hover:bg-third/30 transition-colors shrink-0 cursor-pointer"
             >
               <Heart
                 className={`w-4 h-4 md:w-5 md:h-5 ${
