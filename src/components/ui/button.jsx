@@ -31,7 +31,7 @@ export default function Button({
     ),
 
     outlineSecondary:
-      "border border-third text-secondary hover:bg-third rounded-xl",
+      "border border-third text-primary hover:bg-third rounded-xl trasition-all duration-300",
 
     roundedOutline:
       "border border-third text-primary hover:bg-primary hover:text-secondary rounded-full flex items-center justify-center h-10 w-10",
