@@ -69,7 +69,7 @@ body {
 /* container css */
 .container {
   width: 100%;
-  max-width: 1536px;
+  max-width: 1480px;
   margin: 40px auto;
   padding: 0 1rem;
   box-sizing: border-box;
@@ -113,9 +113,9 @@ body {
   }
 }
 
-@media (min-width: 1536px) {
+@media (min-width: 1480px) {
   .container {
-    max-width: 1536px;
+    max-width: 1480px;
     margin: 40px auto;
   }
 }

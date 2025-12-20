@@ -28,7 +28,7 @@ export default function VehicleCard({ data }) {
         group relative flex flex-row md:flex-col
         rounded-2xl overflow-hidden
         bg-secondary/90 text-primary
-        md:max-w-sm w-[362px]
+        md:max-w-sm w-[342px]
         border-2 border-third/60
         hover:shadow-[0_20px_60px_rgba(255,255,255,0.25)]
         transition-shadow duration-300
