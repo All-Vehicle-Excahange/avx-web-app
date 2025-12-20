@@ -105,7 +105,7 @@ export default function Inventory() {
   return (
     <section className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-6">
       {/* VEHICLE GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
         {cardData.map((car) => (
           <VehicleCard key={car.id} data={car} />
         ))}
