@@ -4,10 +4,12 @@ import React, { useState } from "react";
 import { Menu } from "lucide-react";
 import Button from "../ui/button";
 import LoginPopup from "@/components/auth/LoginPopup";
+import SignupPopup from "@/components/auth/SignupPopup";
 import { useRouter } from "next/router";
 
 export default function NavbarDark() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
   const router = useRouter();
 
   return (
@@ -42,7 +44,24 @@ export default function NavbarDark() {
       </nav>
 
       {/* LOGIN POPUP */}
-      <LoginPopup isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+      <LoginPopup
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        onSignup={() => {
+          setIsSignupOpen(true);
+          setIsLoginOpen(false);
+        }}
+      />
+
+      {/* SIGNUP POPUP */}
+      <SignupPopup
+        isOpen={isSignupOpen}
+        onClose={() => setIsSignupOpen(false)}
+        onLogin={() => {
+          setIsLoginOpen(true);
+          setIsSignupOpen(false);
+        }}
+      />
     </>
   );
 }

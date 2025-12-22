@@ -4,9 +4,13 @@ import React, { useState } from "react";
 import { Menu, Search } from "lucide-react";
 import Button from "../ui/button";
 import LoginPopup from "@/components/auth/LoginPopup";
+import SignupPopup from "@/components/auth/SignupPopup";
+import DownloadAppPopup from "../ui/DownloadAppPopup";
 
 export default function Navbar() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
 
   return (
     <>
@@ -56,10 +60,40 @@ export default function Navbar() {
         >
           Sell Your Vehicle
         </Button>
+        {/* <Button
+          onClick={() => setIsDownloadOpen(true)}
+          size="sm"
+          variant="ghost"
+          showIcon={false}
+        >
+          Download App
+        </Button> */}
       </nav>
 
       {/* LOGIN POPUP */}
-      <LoginPopup isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+      <LoginPopup
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        onSignup={() => {
+          setIsSignupOpen(true);
+          setIsLoginOpen(false);
+        }}
+      />
+
+      <DownloadAppPopup
+        isOpen={isDownloadOpen}
+        onClose={() => setIsDownloadOpen(false)}
+      />
+
+      {/* SIGNUP POPUP */}
+      <SignupPopup
+        isOpen={isSignupOpen}
+        onClose={() => setIsSignupOpen(false)}
+        onLogin={() => {
+          setIsLoginOpen(true);
+          setIsSignupOpen(false);
+        }}
+      />
     </>
   );
 }

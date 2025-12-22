@@ -28,7 +28,6 @@ export default function VehicleFilterBar() {
   const categories = [
     { id: "4w", label: "4-Wheelers" },
     { id: "2w", label: "2-Wheelers" },
-    { id: "commercial", label: "Commercial" },
   ];
 
   // === Dual Slider Logic ===
@@ -217,8 +216,8 @@ export default function VehicleFilterBar() {
             </div>
 
             <div className="flex justify-between text-xs text-secondary/80 ">
-              <span>₹{(budget[0])}</span>
-              <span>₹{(budget[1])}</span>
+              <span>₹{budget[0]}</span>
+              <span>₹{budget[1]}</span>
             </div>
           </div>
         </div>

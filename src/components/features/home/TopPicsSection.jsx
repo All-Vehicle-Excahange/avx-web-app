@@ -119,18 +119,6 @@ export default function TopPicsSection() {
           >
             2-Wheeler
           </button>
-
-          <button
-            onClick={() => setActiveType("Commercial")}
-            className={cn(
-              "px-4 py-1.5 text-sm font-semibold rounded-md transition-all cursor-pointer",
-              activeType === "Commercial"
-                ? "bg-secondary text-primary shadow-sm"
-                : "text-secondary/60 hover:text-secondary"
-            )}
-          >
-            Commercial
-          </button>
         </div>
       </div>
 
@@ -162,7 +150,9 @@ export default function TopPicsSection() {
 
       {/* Bottom Button */}
       <div className="mt-8 flex justify-end">
-        <Button variant="outline" size="md">Explore All Vehicles</Button>
+        <Button variant="outline" size="md">
+          Explore All Vehicles
+        </Button>
       </div>
     </div>
   );
