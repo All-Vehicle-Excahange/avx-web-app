@@ -1,64 +1,64 @@
-import { MessageCircle, Navigation, Star, Navigation2 } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { MessageCircle, Navigation } from "lucide-react";
 import Button from "@/components/ui/button";
 
 export default function StoreSummaryAside() {
-  const services = ["Test Drive", "Financing", "Exchange", "Warranty"];
+  const [vehicleType, setVehicleType] = useState(null);
 
-  const highlights = [
-    ["Experience", "10"],
-    ["Vehicle Available", "66"],
-    ["Sold Vehicle", "174"],
+  const vehicleTypes = [
+    { label: "Two Wheelers", value: "2w" },
+    { label: "Four Wheelers", value: "4w" },
+    { label: "Commercial", value: "commercial" },
   ];
 
   return (
-    <div className="bg-primary/10 p-6 space-y-6 rounded-2xl">
-      {/* STORE INFO */}
-      <div className="space-y-3">
-        <div className="pt-2 space-y-2">
+    <aside className="hidden lg:flex h-fit relative w-[340px] bg-secondary/90 border border-third/40 p-6 flex-col gap-6 overflow-y-auto shrink-0 rounded-2xl">
+      {/* 🔥 Blurred background */}
+      <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover opacity-40 blur-lg z-0" />
+
+      {/* CONTENT */}
+      <div className="relative z-10 space-y-6">
+        {/* TITLE */}
+        <h2 className="text-xl font-semibold text-primary">
+          Filter Your Result
+        </h2>
+
+        {/* VEHICLE TYPE */}
+        <div className="space-y-2">
           <p className="text-xs font-semibold uppercase tracking-wider text-third">
-            Categories
+            Vehicle Type
           </p>
 
           <div className="flex flex-wrap gap-2">
-            {services.map((service) => (
-              <span
-                key={service}
-                className="px-2 py-1 rounded-full border border-third/40 text-xs text-primary hover:bg-primary/20 transition"
-              >
-                {service}
-              </span>
-            ))}
+            {vehicleTypes.map((type) => {
+              const isActive = vehicleType === type.value;
+
+              return (
+                <button
+                  key={type.value}
+                  onClick={() => setVehicleType(type.value)}
+                  className={`px-3 py-1.5 rounded-full text-xs border transition ${
+                    isActive
+                      ? "bg-primary text-secondary border-primary"
+                      : "border-third/40 text-primary hover:bg-primary/20"
+                  }`}
+                >
+                  {type.label}
+                </button>
+              );
+            })}
           </div>
         </div>
-        <div className="pt-2 space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-wider text-third">
-            Services
-          </p>
 
-          <div className="flex flex-wrap gap-2">
-            {services.map((service) => (
-              <span
-                key={service}
-                className="px-2 py-1 rounded-full border border-third/40 text-xs text-primary hover:bg-primary/20 transition"
-              >
-                {service}
-              </span>
-            ))}
-          </div>
+        {/* ACTION BUTTONS */}
+        <div className="space-y-3 pt-4">
+          <Button full variant="ghost" showIcon>
+            Apply Filter
+          </Button>
         </div>
       </div>
-
-      <div className="space-y-3">
-        <Button full variant="outlineSecondary" showIcon={false}>
-          <MessageCircle className="w-4 h-4 mr-2" />
-          Chat Now
-        </Button>
-
-        <Button full variant="outlineSecondary" showIcon={false}>
-          <Navigation className="w-4 h-4 mr-2" />
-          Direction
-        </Button>
-      </div>
-    </div>
+    </aside>
   );
 }

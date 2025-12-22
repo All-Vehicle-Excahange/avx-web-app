@@ -8,7 +8,7 @@ export default function WhyBuyHere() {
   ];
 
   return (
-    <section className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-8">
+    <section className="rounded-2xl container  bg-secondary p-6 space-y-8">
       {images.map((src, index) => (
         <div key={index} className="relative w-full overflow-hidden rounded-xl">
           <Image

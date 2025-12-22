@@ -9,7 +9,7 @@ export default function AboutUs() {
   ];
 
   return (
-    <section className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-8">
+    <section className="w-full 3xl:container rounded-2xl  bg-secondary p-6 space-y-8">
       {images.map((src, index) => (
         <div key={index} className="relative w-full overflow-hidden rounded-xl">
           <Image

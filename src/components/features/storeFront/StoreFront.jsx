@@ -11,6 +11,7 @@ import StoreFrontHeroSection from "./StoreFrontHeroSection";
 import Inventory from "./Inventory";
 import AboutUs from "./AboutUs";
 import WhyBuyHere from "./WhyBuyHere";
+import Review from "./Review";
 
 export default function StoreFront() {
   const [activeTab, setActiveTab] = useState("inventory");
@@ -36,7 +37,7 @@ export default function StoreFront() {
             {/* ✅ RIGHT CONTENT → FULL WIDTH */}
             <div className="flex flex-col gap-6 w-full">
               {/* TABS */}
-              <div className="bg-secondary">
+              <div className="bg-secondary 3xl:container">
                 <div className="flex gap-10 border-b border-third/30">
                   {[
                     { id: "inventory", label: "Inventory" },
@@ -68,6 +69,7 @@ export default function StoreFront() {
               {activeTab === "inventory" && <Inventory />}
               {activeTab === "aboutus" && <AboutUs />}
               {activeTab === "whybuyhere" && <WhyBuyHere />}
+              {activeTab === "reviews" && <Review />}
             </div>
           </section>
         </div>
