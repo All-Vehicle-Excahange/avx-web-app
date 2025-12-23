@@ -1,6 +1,7 @@
 import { MapPin, Star } from "lucide-react";
 import Image from "next/image";
 import Button from "@/components/ui/button";
+import { useRouter } from "next/router";
 
 const SERVICES = ["Test Drive", "Financing", "Exchange", "Warranty"];
 
@@ -14,8 +15,22 @@ export default function ConsultantCard({
   priceRange,
   isSponsored = false,
 }) {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push("/store-front");
+  };
   return (
-    <div className="relative w-[340px]  h-[568px] rounded-2xl overflow-hidden border border-third/40 bg-secondary shadow-lg mx-auto">
+    <div
+      className="
+    group/card group-hover/card:scale-110 relative w-[340px] h-[568px]
+    rounded-2xl overflow-hidden
+    border border-third/40
+    bg-secondary/90
+    mx-auto
+    transition-all duration-300
+    hover:shadow-[0_20px_60px_rgba(255,255,255,0.25)]
+  "
+    >
       {/* BLURRED BACKGROUND */}
       <div className="absolute inset-0 z-0 ">
         <Image
@@ -118,7 +133,7 @@ export default function ConsultantCard({
 
         {/* CTA */}
         <div className="mt-auto">
-          <Button full size="sm" variant="outline">
+          <Button onClick={handleClick} full size="sm" variant="outline">
             View Consultant
           </Button>
         </div>

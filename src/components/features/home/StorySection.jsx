@@ -1,3 +1,4 @@
+import Button from "@/components/ui/button";
 import StoryCard from "@/components/ui/const/StoryCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef } from "react";
@@ -86,19 +87,13 @@ export default function StorySection() {
 
         {/* Nav Buttons */}
         <div className="flex gap-3 mt-2">
-          <button
-            onClick={() => scroll("left")}
-            className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary hover:bg-secondary/80 transition-colors z-10 active:scale-95 cursor-pointer"
-          >
+          <Button variant="roundedOutline" onClick={() => scroll("left")}>
             <ChevronLeft className="w-5 h-5" />
-          </button>
+          </Button>
 
-          <button
-            onClick={() => scroll("right")}
-            className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary hover:bg-secondary/80 transition-colors z-10 active:scale-95 cursor-pointer"
-          >
+          <Button variant="roundedOutline" onClick={() => scroll("right")}>
             <ChevronRight className="w-5 h-5" />
-          </button>
+          </Button>
         </div>
       </div>
 

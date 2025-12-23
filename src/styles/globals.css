@@ -71,15 +71,23 @@ body {
   width: 100%;
   max-width: 1480px;
   margin: 40px auto;
+  padding-inline: 1rem;
   padding: 0 1rem;
   box-sizing: border-box;
+  /* border: 2px solid red; */
+}
+
+.container * {
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 @media (max-width: 639px) {
   .container {
     max-width: 100%;
-    padding: 0 2rem;
-    /* 16px padding */
+    padding-inline: 0.5rem;
+    padding: 0 0.5rem;
+    margin: 24px auto;
   }
 }
 

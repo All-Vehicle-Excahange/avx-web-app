@@ -108,7 +108,7 @@ export default function AutoConsultPicsSection({ limit }) {
 
       {/* Bottom Action */}
       <div className="mt-8 flex justify-end">
-        <Button>See All</Button>
+        <Button variant="outlineAnimated">See All</Button>
       </div>
     </div>
   );

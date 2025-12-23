@@ -9,7 +9,7 @@ export default function HeroSection() {
       <section className="px-4 md:px-12 lg:px-6 lg:py-4">
         <main className="relative h-[96vh] w-full overflow-hidden bg-secondary font-sans rounded-sm ">
           {/* Background Image */}
-          <div className="absolute inset-0 z-0">
+          <div className="absolute h-[68vh] inset-0 z-0">
             <Image
               src="/hero_bg.jpg"
               alt="Hero Background"
@@ -33,9 +33,7 @@ export default function HeroSection() {
               {/* Title */}
               <div className="relative">
                 <h1 className="text-2xl md:text-6xl lg:text-6xl font-bold text-primary leading-tight tracking-tight drop-shadow-2xl">
-                  Unlocking the Potential of Those
-                  <br />
-                  <span>Who Advance the World</span>
+                  Pic Your Vehicle
                 </h1>
               </div>
             </div>

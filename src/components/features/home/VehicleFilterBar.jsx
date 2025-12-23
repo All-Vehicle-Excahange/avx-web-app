@@ -50,7 +50,7 @@ export default function VehicleFilterBar() {
     Math.round(((value - minLimit) / (maxLimit - minLimit)) * 100);
 
   return (
-    <div className="absolute max-w-screen-2xl mx-auto bottom-6 left-0 right-0 z-20 px-4 md:px-8 lg:px-8 xl:px-8">
+    <div className="absolute max-w-screen-2xl mx-auto bottom-6 left-0 right-0 z-20 px-4 md:px-8 lg:px-8 xl:px-8 ">
       {/* CSS for Dual Range Slider Thumbs */}
       <style jsx>{`
         .thumb-z-index::-webkit-slider-thumb {
@@ -68,16 +68,17 @@ export default function VehicleFilterBar() {
       {/* 🔥 FIX: Changed className to use backticks {` `} for multiline support */}
       <div
         className={`
-        relative w-full bg-primary border border-white/20 
+        relative w-full bg-transparent backdrop-blur-md border border-white/30 
         rounded-xl shadow-2xl 
         px-5 md:px-6 
         pt-10 pb-4 
         overflow-visible
         `}
       >
+        <div className="absolute inset-0 bg-secondary/80 bg-cover bg-center opacity-40 blur-lg" />
         {/* Category Selector */}
         <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-30">
-          <div className="flex items-center gap-3 bg-white text-black border border-white/20 px-4 py-1.5 rounded-full shadow-md">
+          <div className="flex items-center gap-3 bg-primary  text-black border border-white/20 px-4 py-1.5 rounded-full shadow-md">
             {categories.map((cat) => (
               <button
                 key={cat.id}
@@ -98,11 +99,9 @@ export default function VehicleFilterBar() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
           {/* Location */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-secondary">
-              Location
-            </label>
+            <label className="text-xs font-medium text-primary">Location</label>
             <CustomSelect
-              variant="default"
+              variant="transparent"
               value={vehicleType}
               onChange={setVehicleType}
               placeholder="Select"
@@ -118,11 +117,11 @@ export default function VehicleFilterBar() {
 
           {/* Vehicle Type */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-secondary">
+            <label className="text-xs font-medium text-primary">
               Vehicle Type
             </label>
             <CustomSelect
-              variant="default"
+              variant="transparent"
               value={vehicleType}
               onChange={setVehicleType}
               options={[
@@ -137,11 +136,11 @@ export default function VehicleFilterBar() {
 
           {/* Fuel Type 1 */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-secondary">
+            <label className="text-xs font-medium text-primary">
               Fuel Type
             </label>
             <CustomSelect
-              variant="default"
+              variant="transparent"
               value={fuelType1}
               onChange={setFuelType1}
               options={[
@@ -155,11 +154,11 @@ export default function VehicleFilterBar() {
 
           {/* Fuel Type 2 */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-secondary">
+            <label className="text-xs font-medium text-primary">
               Fuel Type
             </label>
             <CustomSelect
-              variant="default"
+              variant="transparent"
               value={fuelType2}
               onChange={setFuelType2}
               options={[
@@ -175,7 +174,7 @@ export default function VehicleFilterBar() {
         {/* Budget Slider (Dual Range) */}
         <div className="grid grid-cols-1 lg:grid-cols-8 gap-3 mb-4">
           <div className="col-span-2 space-y-1">
-            <div className="flex justify-between text-xs font-medium text-secondary">
+            <div className="flex justify-between text-xs font-medium text-primary">
               <span>Min Budget</span>
               <span>Max Budget</span>
             </div>
@@ -183,11 +182,11 @@ export default function VehicleFilterBar() {
             {/* Range Slider Container */}
             <div className="relative w-full h-6 flex items-center">
               {/* 1. Background Track (Gray) */}
-              <div className="absolute w-full h-1 bg-gray-300 rounded-full z-0"></div>
+              <div className="absolute w-full h-1 bg-third/30 rounded-full z-0"></div>
 
               {/* 2. Active Track (Black - Dynamic Width) */}
               <div
-                className="absolute h-1 bg-black rounded-full z-10"
+                className="absolute h-1 bg-third20 rounded-full z-10"
                 style={{
                   left: `${getPercent(budget[0])}%`,
                   width: `${getPercent(budget[1]) - getPercent(budget[0])}%`,
@@ -201,7 +200,7 @@ export default function VehicleFilterBar() {
                 max={maxLimit}
                 value={budget[0]}
                 onChange={handleMinChange}
-                className="thumb-z-index absolute w-full h-full appearance-none bg-transparent pointer-events-none z-20 accent-black"
+                className="thumb-z-index absolute w-full h-full appearance-none bg-transparent pointer-events-none z-20 accent-third/90"
               />
 
               {/* 4. Max Range Input */}
@@ -211,7 +210,7 @@ export default function VehicleFilterBar() {
                 max={maxLimit}
                 value={budget[1]}
                 onChange={handleMaxChange}
-                className="thumb-z-index absolute w-full h-full appearance-none bg-transparent pointer-events-none z-30 accent-black"
+                className="thumb-z-index absolute w-full h-full appearance-none bg-transparent pointer-events-none z-30 accent-third/90"
               />
             </div>
 
@@ -227,11 +226,10 @@ export default function VehicleFilterBar() {
           <Button
             onClick={handleClick}
             size="md"
-            variant="default"
-            showIcon={false}
+            variant="outlineAnimated"
+            showIcon={true}
           >
             Search
-            <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
       </div>

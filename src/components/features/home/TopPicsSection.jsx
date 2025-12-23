@@ -150,7 +150,7 @@ export default function TopPicsSection() {
 
       {/* Bottom Button */}
       <div className="mt-8 flex justify-end">
-        <Button variant="outline" size="md">
+        <Button variant="outlineAnimated" size="md">
           Explore All Vehicles
         </Button>
       </div>
