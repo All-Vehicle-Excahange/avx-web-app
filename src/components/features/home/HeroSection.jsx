@@ -7,9 +7,9 @@ export default function HeroSection() {
   return (
     <>
       <section className="px-4 md:px-12 lg:px-6 lg:py-4">
-        <main className="relative h-[96vh] w-full overflow-hidden bg-secondary font-sans rounded-sm ">
+          <main className="relative h-[96vh] w-full overflow-visible bg-secondary font-sans rounded-sm ">
           {/* Background Image */}
-          <div className="absolute h-[68vh] inset-0 z-0">
+          <div className="absolute h-[78vh] inset-0 z-0">
             <Image
               src="/hero_bg.jpg"
               alt="Hero Background"
