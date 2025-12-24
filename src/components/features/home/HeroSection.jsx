@@ -33,7 +33,7 @@ export default function HeroSection() {
               {/* Title */}
               <div className="relative">
                 <h1 className="text-2xl md:text-6xl lg:text-6xl font-bold text-primary leading-tight tracking-tight drop-shadow-2xl">
-                  Pic Your Vehicle
+                  Pick Your Vehicle
                 </h1>
               </div>
             </div>

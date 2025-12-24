@@ -1,4 +1,5 @@
 import AutoConsultPicsSection from "@/components/features/home/AutoConsultPicsSection";
+import AvxInspected from "@/components/features/home/AvxInspected";
 import ConsultBanner from "@/components/features/home/ConsultBanner";
 import DownloadAppSection from "@/components/features/home/DownloadAppSection";
 import HeroSection from "@/components/features/home/HeroSection";
@@ -17,6 +18,9 @@ export default function Home() {
         <TopPicsSection />
       </Layout>
       <Layout>
+        <AvxInspected />
+      </Layout>
+      <Layout>
         <AutoConsultPicsSection limit={8} />
       </Layout>
       <ConsultBanner fullWidth />
@@ -27,9 +31,7 @@ export default function Home() {
       <Layout>
         <StatsSection />
       </Layout>
-
       <DownloadAppSection />
-
       <Footer />
     </>
   );
