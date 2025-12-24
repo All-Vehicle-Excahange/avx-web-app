@@ -1,6 +1,6 @@
+import ConsultantCard from "@/components/ui/const/ConsultCard";
 import VehicleCard from "@/components/ui/const/VehicleCard";
-import { ChevronDown, SlidersHorizontal } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 
 function Wishlist() {
   const cardData = [
@@ -44,7 +44,7 @@ function Wishlist() {
       image: "/big_card_car.jpg",
     },
     {
-      id: "3",
+      id: "4",
       title: "Mercedes C-Class",
       subtitle: "Premium driving experience",
       year: "2020",
@@ -58,16 +58,78 @@ function Wishlist() {
     },
   ];
 
+  const consultants = [
+    {
+      id: 1,
+      name: "Adarsh Auto Consultants",
+      location: "Chhapi, Gujarat",
+      rating: 4.5,
+      vehicleCount: 116,
+      image: "/cs.png",
+      priceRange: "10L - 18L",
+      isSponsored: false,
+    },
+    {
+      id: 2,
+      name: "Shree Motors",
+      location: "Ahmedabad, Gujarat",
+      rating: 4.2,
+      vehicleCount: 90,
+      image: "/cs.png",
+      priceRange: "80K - 1.5L",
+      isSponsored: true,
+    },
+    {
+      id: 3,
+      name: "Prime Auto Hub",
+      location: "Mehsana, Gujarat",
+      rating: 4.6,
+      vehicleCount: 140,
+      image: "/cs.png",
+      priceRange: "5L - 20L",
+      isSponsored: false,
+    },
+    {
+      id: 4,
+      name: "Adarsh Auto Consultants",
+      location: "Chhapi, Gujarat",
+      rating: 4.5,
+      vehicleCount: 116,
+      image: "/cs.png",
+      priceRange: "10L - 18L",
+      isSponsored: false,
+    },
+  ];
+
   return (
     <>
-      <section className="w-full container rounded-2xl bg-secondary p-6 space-y-6">
+      <section className="w-full container rounded-2xl bg-secondary p-6 space-y-12">
         <div>
-          <h1>WishList</h1>
+          <h1 className="text-3xl font-extrabold mb-6">Vehicle Wishlist</h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+            {cardData.map((car, index) => (
+              <VehicleCard key={`${car.id}-${index}`} data={car} />
+            ))}
+          </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-          {cardData.map((car, index) => (
-            <VehicleCard key={`${car.id}-${index}`} data={car} />
-          ))}
+
+        {/* CONSULTANT WISHLIST */}
+        <div>
+          <h1 className="text-3xl font-extrabold mb-6">Consultant Wishlist</h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {consultants.map((item) => (
+              <ConsultantCard
+                key={item.id}
+                image={item.image}
+                name={item.name}
+                location={item.location}
+                rating={item.rating}
+                vehicleCount={item.vehicleCount}
+                priceRange={item.priceRange}
+                isSponsored={item.isSponsored}
+              />
+            ))}
+          </div>
         </div>
       </section>
     </>

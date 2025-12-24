@@ -6,7 +6,6 @@ import Inquiries from "./Inquiries";
 import Inspection from "./Inspection";
 import Wishlist from "./WishList";
 
-
 function UserDetails() {
   const [activeTab, setActiveTab] = useState("myvehicle");
 
@@ -18,7 +17,7 @@ function UserDetails() {
           <section className="w-full">
             <div className="flex flex-col  w-full">
               <div className="bg-secondary 3xl:container">
-                <div className="flex gap-10 border-b border-third/30">
+                <div className="flex gap-10 border-b border-third/30 overflow-x-auto no-scrollbar whitespace-nowrap">
                   {[
                     { id: "myvehicle", label: "My Vehicles" },
                     { id: "inquaries", label: "Inquiries" },
