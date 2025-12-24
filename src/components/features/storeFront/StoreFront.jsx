@@ -4,9 +4,6 @@ import { useState } from "react";
 import NavbarDark from "@/components/layout/NavbarDark";
 import StoreFrontHeroSection from "./StoreFrontHeroSection";
 
-// LEFT (COMMENTED)
-// import StoreSummaryAside from "./StoreSummaryAside";
-
 // RIGHT CONTENT
 import Inventory from "./Inventory";
 import AboutUs from "./AboutUs";
