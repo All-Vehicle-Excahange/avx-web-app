@@ -141,7 +141,7 @@ export default function UserVehicleCard({
               <button
                 onClick={() => setIsFavorite(!isFavorite)}
                 aria-label={isFavorite ? "Remove favorite" : "Add to favorites"}
-                className="w-8 h-8 border border-third/60 rounded-full flex items-center justify-center"
+                className="w-8 h-8   flex items-center justify-center"
               >
                 <Heart
                   className={

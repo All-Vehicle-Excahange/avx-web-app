@@ -1,8 +1,15 @@
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Button from "../button";
+import { useRouter } from "next/router";
 
 export default function Banner({ title, description, buttonText }) {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push("/consult");
+  };
+
   return (
     // Height and layout classes removed/adjusted to fit parent
     <div className="relative w-full h-full 3xl:max-w-screen-2xl mx-auto flex items-center">
@@ -20,7 +27,7 @@ export default function Banner({ title, description, buttonText }) {
           </p>
         </div>
 
-        <Button variant="ghost">{buttonText}</Button>
+        <Button onClick={handleClick} variant="ghost">{buttonText}</Button>
       </div>
     </div>
   );
