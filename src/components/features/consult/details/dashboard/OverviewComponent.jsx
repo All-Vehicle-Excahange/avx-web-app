@@ -52,21 +52,21 @@ export default function OverviewComponent() {
       <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-5">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>
-            <h3 className="font-semibold text-lg">Weekly Plan</h3>
+            <h3 className="font-semibold text-lg">Complete this steps</h3>
             <p className="text-sm text-third">
-              Set your business up for success by completing recommended tasks.
+              Set your business up for success by completing recommended steps.
             </p>
           </div>
 
           <button className="rounded-xl border border-third/30 px-4 py-2 text-sm hover:bg-primary/10 transition">
-            See full plan
+            See full step
           </button>
         </div>
 
         {/* PROGRESS */}
         <div className="space-y-2">
           <p className="text-sm font-medium">
-            Complete at least 5 tasks to finish this plan.
+            Complete this 5 steps to finish this plan.
           </p>
           <div className="w-full h-2 rounded-full bg-third/30 overflow-hidden">
             <div className="h-full bg-primary w-[42%]" />

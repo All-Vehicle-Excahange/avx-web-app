@@ -71,7 +71,7 @@ export default function VehicleCard({ data }) {
               </p>
             </div>
 
-            <h3 className="text-xs md:text-xl font-bold leading-tight">
+            <h3 className="text-xs md:text-xl whitespace-nowrap   font-bold leading-tight">
               ₹ {data.price}
             </h3>
           </div>

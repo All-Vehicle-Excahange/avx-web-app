@@ -6,7 +6,7 @@ export default function Button({
   variant = "default",
   size = "md",
   full = false,
-  showIcon = true,
+  showIcon = false,
   className = "",
   ...props
 }) {

@@ -34,18 +34,21 @@ export default function Sidebar() {
       <h1 className="text-xl font-bold mt-4 mb-4">AVX Dashboard</h1>
 
       {menu.map((m, i) => {
-        const isActive = router.pathname === m.href;
+        const isActive =
+          router.pathname === m.href ||
+          (router.pathname === "/consult/dashboard" &&
+            m.href === "/consult/dashboard/overview");
 
         return (
           <Link
             key={i}
             href={m.href}
             className={`flex items-center gap-3 p-3 rounded-xl transition
-              ${
-                isActive
-                  ? "bg-primary text-secondary shadow-lg"
-                  : "hover:bg-primary/10 text-primary"
-              }`}
+        ${
+          isActive
+            ? "bg-primary text-secondary shadow-lg"
+            : "hover:bg-primary/10 text-primary"
+        }`}
           >
             <m.icon size={18} />
             {m.label}
