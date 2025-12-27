@@ -15,6 +15,12 @@ export default function InquiriesComponent() {
     { id: "closed", label: "Closed" },
   ];
 
+  const topVehicles = [
+    { name: "BMW X1" },
+    { name: "Fortuner" },
+    { name: "Honda City" },
+  ];
+
   return (
     <section className="w-full space-y-8">
       {/* TITLE */}
@@ -79,6 +85,26 @@ export default function InquiriesComponent() {
         {(activeType === "all" || activeType === "closed") && (
           <InquiryCard status="closed" />
         )}
+      </div>
+
+      <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-4">
+        <div className="flex items-center gap-2">
+          <TrendingUp className="text-primary" size={18} />
+          <h3 className="font-semibold">Tips For Better Conversations</h3>
+        </div>
+
+        {topVehicles.map((v) => (
+          <div
+            key={v.rank}
+            className="flex justify-between items-center bg-secondary/50 rounded-xl p-4"
+          >
+            <div className="flex items-center gap-4">
+              <ul className="list-disc list-inside">
+                <li>{v.name}</li>
+              </ul>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );

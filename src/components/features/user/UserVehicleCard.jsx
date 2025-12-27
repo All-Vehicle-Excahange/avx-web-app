@@ -16,7 +16,7 @@ import Image from "next/image";
 
 export default function UserVehicleCard({
   data,
-  status = "live", // live | sold | draft
+  status = "live", // live | sold | draft | underinspection
   avxInspected = false,
   inquiries = 0,
   chats = 0,
@@ -28,6 +28,7 @@ export default function UserVehicleCard({
     live: "bg-green-600",
     sold: "bg-gray-600",
     draft: "bg-[#F4CE14]",
+    underinspection: "bg-[#FF9900]",
   };
 
   return (
@@ -154,7 +155,7 @@ export default function UserVehicleCard({
             {status === "live" && (
               <div className="flex gap-2">
                 <Button variant="ghost" showIcon={false} size="sm">
-                  <Pencil size={14}  className="mr-2"/> Edit
+                  <Pencil size={14} className="mr-2" /> Edit
                 </Button>
                 <Button variant="ghost" showIcon={false} size="sm">
                   <CheckCircle size={14} className="mr-2" /> Mark as Sold

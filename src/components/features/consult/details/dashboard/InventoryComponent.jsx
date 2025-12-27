@@ -8,6 +8,7 @@ import {
   ChevronDown,
   Smartphone,
   TrendingUp,
+  MessageSquare,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 
@@ -67,6 +68,20 @@ export default function InventoryComponent() {
       inquiries: 8,
       chats: 1,
     },
+    {
+      id: "4",
+      title: "Range Rover Evoque",
+      year: "2022",
+      transmission: "Automatic",
+      fuel: "Diesel",
+      seats: "5",
+      rating: "4.6",
+      price: "8,95,000",
+      image: "/big_card_car.jpg",
+      status: "underinspection",
+      inquiries: 8,
+      chats: 1,
+    },
   ];
 
   const vehicleTypes = [
@@ -74,8 +89,14 @@ export default function InventoryComponent() {
     { id: "draft", label: "Draft" },
     { id: "live", label: "Live" },
     { id: "sold", label: "Sold" },
+    { id: "underinspection", label: "Under Inspection" },
   ];
 
+  const topVehicles = [
+    { rank: 1, name: "BMW X1", inquiries: 12 },
+    { rank: 2, name: "Fortuner", inquiries: 9 },
+    { rank: 3, name: "Honda City", inquiries: 8 },
+  ];
   const [activeType, setActiveType] = useState("all");
   const filtered =
     activeType === "all"
@@ -93,7 +114,7 @@ export default function InventoryComponent() {
           </p>
         </div>
 
-        <Button className="" variant="ghost" showIcon={false}> 
+        <Button className="" variant="ghost" showIcon={false}>
           <Smartphone className="mr-3" size={16} />
           Add Vehicle
         </Button>
@@ -112,7 +133,7 @@ export default function InventoryComponent() {
       <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-5">
         <div className="flex items-center gap-2">
           <TrendingUp className="text-primary" size={18} />
-          <h3 className="font-semibold">Top Performing Vehicles</h3>
+          <h3 className="font-semibold">Top Vehicles</h3>
           <span className="px-3 py-1 rounded-full bg-primary/10 text-xs">
             Auto-generated
           </span>
@@ -179,6 +200,34 @@ export default function InventoryComponent() {
             chats={car.chats}
             soldDate={car.soldDate}
           />
+        ))}
+      </div>
+
+      <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-4">
+        <div className="flex items-center gap-2">
+          <TrendingUp className="text-primary" size={18} />
+          <h3 className="font-semibold">Top Performing Vehicles</h3>
+          <span className="px-3 py-1 rounded-full bg-primary/10 text-xs">
+            Auto-generated
+          </span>
+        </div>
+
+        {topVehicles.map((v) => (
+          <div
+            key={v.rank}
+            className="flex justify-between items-center bg-secondary/50 rounded-xl p-4"
+          >
+            <div className="flex items-center gap-4">
+              <span className="w-10 h-10 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center">
+                #{v.rank}
+              </span>
+              <span className="font-medium">{v.name}</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-third">
+              <MessageSquare size={14} />
+              {v.inquiries} inquiries
+            </div>
+          </div>
         ))}
       </div>
     </section>

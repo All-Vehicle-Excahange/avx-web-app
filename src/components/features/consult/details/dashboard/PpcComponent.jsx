@@ -3,12 +3,8 @@
 import { useState } from "react";
 import {
   TrendingUp,
-  DollarSign,
   MousePointerClick,
-  Percent,
   Eye,
-  Pause,
-  Settings,
   Plus,
   SlidersHorizontal,
   X,
@@ -19,6 +15,7 @@ import {
   Heart,
   Clock,
   CircleDollarSign,
+  CheckCircle,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import CustomSelect from "@/components/ui/custom-select";
@@ -31,6 +28,8 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useRouter } from "next/navigation";
+import StatCard from "./components/StateCard";
 
 // --- Mock Data ---
 const audienceData = [
@@ -64,6 +63,12 @@ export default function PpcComponent() {
     videos: false,
   });
 
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push("/consult/dashboard/ads/create");
+  };
+
   const rangeOptions = [
     { label: "Last 7 days", value: "7" },
     { label: "Last 30 days", value: "30" },
@@ -82,7 +87,7 @@ export default function PpcComponent() {
           <h1 className="text-2xl font-bold">PPC & Visibility Boosts</h1>
           <p className="text-third text-sm">Dominance with guardrails</p>
         </div>
-        <Button variant="ghost">
+        <Button onClick={handleClick} variant="ghost">
           <Plus size={16} /> Create New Boost
         </Button>
       </div>
@@ -118,21 +123,22 @@ export default function PpcComponent() {
 
         {/* METRICS */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-          {metrics.views && (
-            <Summary title="Views" value="61,064" change="-60.6%" down />
-          )}
-          {metrics.viewers && (
-            <Summary title="Viewers" value="35,986" change="-40.2%" down />
-          )}
-          {metrics.postEngagements && (
-            <Summary
-              title="Post Engagements"
-              value="17,302"
-              change="+100%"
-              up
-            />
-          )}
-          {metrics.clicks && <Summary title="Link Clicks" value="45" />}
+          <StatCard
+            icon={<TrendingUp size={20} />}
+            label="Active Campaigns"
+            value="12"
+          />
+          <StatCard icon={<Eye size={20} />} label="Speed Today" value="9" />
+          <StatCard
+            icon={<MousePointerClick size={20} />}
+            label="Total Clicks"
+            value="8"
+          />
+          <StatCard
+            icon={<CheckCircle size={20} />}
+            label="Avg.CPC"
+            value="6"
+          />
         </div>
       </div>
 
@@ -199,6 +205,94 @@ export default function PpcComponent() {
         </div>
       </div>
 
+      {/* AI CAMPAIGN PERFORMANCE */}
+      <div className="rounded-2xl border border-third/30 bg-secondary p-6 space-y-6">
+        <h3 className="font-semibold text-lg">
+          Campaign Performance (Last 7 Days)
+        </h3>
+
+        {/* Metric Cards */}
+        <div className="grid md:grid-cols-3 gap-6">
+          <div className="rounded-xl bg-purple-500/10 p-5 space-y-1">
+            <div className="flex items-center justify-between text-purple-300">
+              <span className="text-sm">Total Impressions</span>
+              <Eye size={16} />
+            </div>
+            <p className="text-2xl font-bold text-white">12,450</p>
+            <p className="text-xs text-purple-300">+18% from last week</p>
+          </div>
+
+          <div className="rounded-xl bg-blue-500/10 p-5 space-y-1">
+            <div className="flex items-center justify-between text-blue-300">
+              <span className="text-sm">Total Clicks</span>
+              <MousePointerClick size={16} />
+            </div>
+            <p className="text-2xl font-bold text-white">486</p>
+            <p className="text-xs text-blue-300">+12% from last week</p>
+          </div>
+
+          <div className="rounded-xl bg-green-500/10 p-5 space-y-1">
+            <div className="flex items-center justify-between text-green-300">
+              <span className="text-sm">Click-through Rate</span>
+              <TrendingUp size={16} />
+            </div>
+            <p className="text-2xl font-bold text-white">3.9%</p>
+            <p className="text-xs text-green-300">Above industry avg</p>
+          </div>
+        </div>
+
+        {/* BOOST RECOMMENDATIONS */}
+        <div className="rounded-xl bg-blue-500/10 border border-blue-500/20 p-6 space-y-4">
+          <h4 className="font-semibold text-blue-300 flex items-center gap-2">
+            💡 Boost Recommendations
+          </h4>
+
+          <div className="space-y-4 text-sm text-blue-100">
+            <div className="flex gap-3">
+              <span className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold">
+                1
+              </span>
+              <div>
+                <p>
+                  Your <b>BMW X1</b> campaign is performing well
+                </p>
+                <p className="text-xs text-blue-300">
+                  Consider increasing daily budget to ₹750 for maximum reach
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <span className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold">
+                2
+              </span>
+              <div>
+                <p>
+                  Weekend traffic is <b>23% higher</b>
+                </p>
+                <p className="text-xs text-blue-300">
+                  Schedule boosts for Friday–Sunday for better ROI
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <span className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold">
+                3
+              </span>
+              <div>
+                <p>
+                  Feature your <b>Mercedes C-Class</b>
+                </p>
+                <p className="text-xs text-blue-300">
+                  Luxury vehicles convert 1.8× better when boosted
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* CUSTOMIZE MODAL */}
       {openCustomize && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
@@ -254,25 +348,6 @@ export default function PpcComponent() {
 /* -------------------------------------------------------------------------- */
 /* SUB COMPONENTS                              */
 /* -------------------------------------------------------------------------- */
-
-function Summary({ title, value, change, up, down }) {
-  return (
-    <div className="rounded-2xl border border-third/30 bg-secondary p-5 space-y-2">
-      <div className="flex justify-between text-sm text-third">
-        <span>{title}</span>
-        {change && (
-          <span className={up ? "text-green-400" : down ? "text-red-400" : ""}>
-            {change}
-          </span>
-        )}
-      </div>
-      <p className="text-2xl font-bold">{value}</p>
-      <Button variant="outlineSecondary" className="mt-2 text-xs" full>
-        See more
-      </Button>
-    </div>
-  );
-}
 
 function RecentAdCard({ paused, onOpenResults }) {
   return (
