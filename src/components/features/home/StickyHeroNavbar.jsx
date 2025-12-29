@@ -2,34 +2,31 @@
 import { useEffect, useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 
-export default function StickyHeroNavbar() {
+export default function StickyHeroNavbar({ onScrollChange }) {
   const [scrolled, setScrolled] = useState(false);
-  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    window.addEventListener("scroll", onScroll);
+    let ticking = false;
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const s = window.scrollY > 80;
+          setScrolled(s);
+          onScrollChange?.(s);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = expanded ? "hidden" : "auto";
-  }, [expanded]);
+  }, [onScrollChange]);
 
   return (
-    <>
-      <div className="fixed top-0 inset-x-0 z-[1000]">
-        <Navbar
-          heroMode
-          scrolled={scrolled}
-          expanded={expanded}
-          setExpanded={setExpanded}
-        />
-      </div>
-
-      {expanded && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[999]" />
-      )}
-    </>
+    <div className="fixed top-0 inset-x-0 z-[1000]">
+      <Navbar heroMode scrolled={scrolled} />
+    </div>
   );
 }
