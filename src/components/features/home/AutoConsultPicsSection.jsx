@@ -100,7 +100,7 @@ export default function AutoConsultPicsSection({ limit }) {
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  gap-6">
+      <div className="grid sm:items-center  grid-cols-1 md:grid-cols-2 lg:grid-cols-4  gap-6">
         {visibleConsultants.map((consultant) => (
           <ConsultantCard key={consultant.id} {...consultant} />
         ))}

@@ -2,128 +2,192 @@
 @import "tw-animate-css";
 
 :root {
-  --color-primary: #fff;
-  --color-secondary: #000;
-  --color-third: #bebebe;
+    --color-primary: #fff;
+    --color-secondary: #000;
+    --color-third: #bebebe;
 }
 
 @theme {
-  --color-primary: #fffef7;
-  --color-secondary: #000;
-  --color-third: #bebebe;
-  --breakpoint-3xl: 120rem;
+    --color-primary: #fffef7;
+    --color-secondary: #000;
+    --color-third: #bebebe;
+    --breakpoint-3xl: 120rem;
 
-  --animate-spin-slow: spin 3s linear infinite;
+    --animate-spin-slow: spin 3s linear infinite;
 }
 
 body {
-  background-color: var(--color-secondary);
-  color: var(--color-primary);
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
 }
 
 .inverted {
-  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cpath%20d%3D%22M20%2C0H100A0%2C0%200%2C0%2C1%20100%2C0V65A10%2C10%200%2C0%2C1%2090%2C75H79A10%2C10%200%2C0%2C0%2069%2C85V90A10%2C10%200%2C0%2C1%2059%2C100H10A10%2C10%200%2C0%2C1%200%2C90V20A20%2C20%200%2C0%2C1%2020%2C0Z%22%20fill%3D%22%23fff%22%20%2F%3E%3C%2Fsvg%3E")
-    no-repeat center / contain;
-  mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cpath%20d%3D%22M20%2C0H100A0%2C0%200%2C0%2C1%20100%2C0V65A10%2C10%200%2C0%2C1%2090%2C75H79A10%2C10%200%2C0%2C0%2069%2C85V90A10%2C10%200%2C0%2C1%2059%2C100H10A10%2C10%200%2C0%2C1%200%2C90V20A20%2C20%200%2C0%2C1%2020%2C0Z%22%20fill%3D%22%23fff%22%20%2F%3E%3C%2Fsvg%3E")
-    no-repeat center / contain;
-  background-color: var(--color-secondary);
-  aspect-ratio: 1 / 1;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cpath%20d%3D%22M20%2C0H100A0%2C0%200%2C0%2C1%20100%2C0V65A10%2C10%200%2C0%2C1%2090%2C75H79A10%2C10%200%2C0%2C0%2069%2C85V90A10%2C10%200%2C0%2C1%2059%2C100H10A10%2C10%200%2C0%2C1%200%2C90V20A20%2C20%200%2C0%2C1%2020%2C0Z%22%20fill%3D%22%23fff%22%20%2F%3E%3C%2Fsvg%3E")
+        no-repeat center / contain;
+    mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cpath%20d%3D%22M20%2C0H100A0%2C0%200%2C0%2C1%20100%2C0V65A10%2C10%200%2C0%2C1%2090%2C75H79A10%2C10%200%2C0%2C0%2069%2C85V90A10%2C10%200%2C0%2C1%2059%2C100H10A10%2C10%200%2C0%2C1%200%2C90V20A20%2C20%200%2C0%2C1%2020%2C0Z%22%20fill%3D%22%23fff%22%20%2F%3E%3C%2Fsvg%3E")
+        no-repeat center / contain;
+    background-color: var(--color-secondary);
+    aspect-ratio: 1 / 1;
 }
 
 .animated-letters {
-  display: inline-block;
-  white-space: pre-wrap;
+    display: inline-block;
+    white-space: pre-wrap;
 }
 
 .animated-letter {
-  display: inline-block;
-  opacity: 0;
-  transform: translateX(-6px);
-  animation: letterFade 0.06s forwards;
+    display: inline-block;
+    opacity: 0;
+    transform: translateX(-6px);
+    animation: letterFade 0.06s forwards;
 }
 
 @keyframes letterFade {
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .no-scrollbar::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 .no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 .scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 /* container css */
 .container {
-  width: 100%;
-  max-width: 1480px;
-  margin: 40px auto;
-  padding-inline: 1rem;
-  padding: 0 1rem;
-  box-sizing: border-box;
-  /* border: 2px solid red; */
+    width: 100%;
+    max-width: 1480px;
+    margin: 40px auto;
+    padding-inline: 1rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    /* border: 2px solid red; */
 }
 
 .container * {
-  box-sizing: border-box;
-  max-width: 100%;
+    box-sizing: border-box;
+    max-width: 100%;
 }
 
 @media (max-width: 639px) {
-  .container {
-    max-width: 100%;
-    padding-inline: 0.5rem;
-    padding: 0 0.5rem;
-    margin: 24px auto;
-  }
+    .container {
+        max-width: 100%;
+        padding-inline: 0.5rem;
+        padding: 0 0.5rem;
+        margin: 24px auto;
+    }
 }
 
 @media (min-width: 640px) and (max-width: 767px) {
-  .container {
-    max-width: 640px;
-    padding: 0 1.25rem;
-    /* 20px padding */
-  }
+    .container {
+        max-width: 640px;
+        padding: 0 1.25rem;
+        /* 20px padding */
+    }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
-  .container {
-    max-width: 768px;
-    padding: 0 0rem;
-    /* 24px padding */
-  }
+    .container {
+        max-width: 768px;
+        padding: 0 0rem;
+        /* 24px padding */
+    }
 }
 
 @media (min-width: 1024px) and (max-width: 1279px) {
-  .container {
-    max-width: 1024px;
-    padding: 0 2rem;
-    /* 32px padding */
-  }
+    .container {
+        max-width: 1024px;
+        padding: 0 2rem;
+        /* 32px padding */
+    }
 }
 
 @media (min-width: 1280px) and (max-width: 1399px) {
-  .container {
-    max-width: 1280px;
-  }
+    .container {
+        max-width: 1280px;
+    }
 }
 
 @media (min-width: 1480px) {
-  .container {
-    max-width: 1480px;
-    margin: 40px auto;
-  }
+    .container {
+        max-width: 1480px;
+        margin: 40px auto;
+    }
+}
+
+.animated-gradient-border {
+    position: relative;
+    border-radius: 9999px;
+    z-index: 10;
+    overflow: visible;
+    padding: 3px; /* border thickness */
+}
+
+/* Rotating gradient border */
+.animated-gradient-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background: linear-gradient(
+        90deg,
+        #4f46e5,
+        #3b82f6,
+        #06b6d4,
+        #10b981,
+        #facc15,
+        #f472b6,
+        #4f46e5
+    );
+    background-size: 400% 400%;
+    z-index: -1;
+    animation: rotateGradient 6s linear infinite;
+}
+
+/* The inner container definition.
+   Note: We removed background-color: #000 here.
+   We handle the image via the absolute div inside the JSX
+   to allow for proper layering and blurring.
+*/
+.animated-gradient-border .inner-container {
+    border-radius: 9999px;
+    position: relative;
+    z-index: 20;
+    overflow: hidden; /* Clips the image to the pill shape */
+}
+
+@keyframes rotateGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

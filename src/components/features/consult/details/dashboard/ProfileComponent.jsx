@@ -109,7 +109,7 @@ export default function ProfileComponent() {
 
 /* ================= SUB ================= */
 
-function ProfileItem({ label, value }) {
+export function ProfileItem({ label, value }) {
   return (
     <div className="flex flex-col gap-1">
       <span className="text-xs text-third">{label}</span>

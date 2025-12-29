@@ -6,9 +6,23 @@ import DropzoneUpload from "@/components/ui/DropzoneUpload";
 import { Star, MapPin, Pencil, X } from "lucide-react";
 import Image from "next/image";
 import StorefrontEditor from "./components/StorefrontEditor";
+import { ProfileItem } from "./ProfileComponent";
 
 export default function StoreFrontComponent() {
   const [openEditor, setOpenEditor] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const [profile, setProfile] = useState({
+    businessName: "Adarsh Auto Consultants",
+    ownerName: "Adarsh Patel",
+    email: "adarsh@adarshautoconsultants.com",
+    phone: "+91 98765 43210",
+    city: "Ahmedabad, Gujarat",
+    businessType: "Pre-owned Vehicle Consultant",
+    aadhaar: "1234 1234 1234",
+    pan: "ABCDE1234F",
+    gst: "27ABCDE1234F1Z5",
+  });
 
   const [data, setData] = useState({
     name: "Adarsh Auto Consultants",
@@ -78,6 +92,54 @@ export default function StoreFrontComponent() {
         </div>
       </div>
 
+      {/* PROFILE CARD */}
+      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 className="font-semibold">Business Profile</h2>
+          {!isEditing && (
+            <Button variant="ghost" onClick={() => setIsEditing(true)}>
+              Update Profile
+            </Button>
+          )}
+        </div>
+
+        {/* VIEW MODE */}
+        {!isEditing && (
+          <div className="grid md:grid-cols-2 gap-6 text-sm">
+            <ProfileItem label="Business Name" value={profile.businessName} />
+            <ProfileItem label="Owner Name" value={profile.ownerName} />
+            <ProfileItem label="Email" value={profile.email} />
+            <ProfileItem label="Phone" value={profile.phone} />
+            <ProfileItem label="City" value={profile.city} />
+            <ProfileItem label="Business Type" value={profile.businessType} />
+          </div>
+        )}
+
+        {/* EDIT MODE */}
+        {isEditing && (
+          <div className="grid md:grid-cols-2 gap-6">
+            <InputField label="Business Name" variant="colored" />
+            <InputField label="Owner Name" variant="colored" />
+            <InputField label="Email" variant="colored" type="email" />
+            <ProfileItem label="Phone" value={profile.phone} />
+            <InputField label="City" variant="colored" />
+            <InputField label="Business Type" variant="colored" />
+          </div>
+        )}
+
+        {isEditing && (
+          <div className="flex justify-end gap-4">
+            <Button
+              variant="outlineSecondary"
+              onClick={() => setIsEditing(false)}
+            >
+              Cancel
+            </Button>
+            <Button variant="ghost">Save Changes</Button>
+          </div>
+        )}
+      </div>
+
       {/* STACKED CONTENT SECTIONS */}
       <Content title="About Us" text={data.about} img={data.aboutImage} />
       <Content title="Why Choose Us" text={data.why} img={data.whyImage} />
@@ -116,5 +178,3 @@ function Content({ title, text, img }) {
     </div>
   );
 }
-
-

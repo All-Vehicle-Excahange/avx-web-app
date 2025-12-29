@@ -1,99 +1,65 @@
 "use client";
-
-import React, { useState } from "react";
 import { Menu, Search } from "lucide-react";
 import Button from "../ui/button";
-import LoginPopup from "@/components/auth/LoginPopup";
-import SignupPopup from "@/components/auth/SignupPopup";
-import DownloadAppPopup from "../ui/DownloadAppPopup";
 
-export default function Navbar() {
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isDownloadOpen, setIsDownloadOpen] = useState(false);
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
-
+export default function Navbar({ heroMode = false, scrolled = false }) {
   return (
-    <>
-      <nav className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 md:px-12">
-        {/* LEFT — Logo Box */}
-        <div className="flex items-center gap-4">
-          <div className="bg-primary px-3 py-1.5 rounded shadow-md flex items-center gap-4 border border-third/40">
-            <div className="font-black text-xl tracking-tighter italic text-secondary cursor-pointer">
-              <Menu className="w-5 h-5" />
-            </div>
-            <div className="font-black text-xl tracking-tighter italic text-secondary">
-              AVX
-            </div>
-          </div>
+    <nav
+      className={`
+        w-full transition-all duration-300
+        ${
+          heroMode
+            ? scrolled
+              ? "bg-white text-black shadow-xl backdrop-blur-lg h-16"
+              : "bg-primary text-secondary h-24"
+            : "bg-primary text-secondary h-16"
+        }
+      `}
+    >
+      <div className="w-full px-8 mx-auto h-full flex items-center justify-between ">
+        {/* LEFT */}
+        <div className="flex items-center h-10 px-4  gap-3 bg-secondary text-primary">
+          <Menu className="w-5 h-5" />
+          <span className="font-black italic">AVX</span>
         </div>
 
-        {/* CENTER — Search Bar (Desktop only) */}
-        <div className="hidden md:flex flex-1 max-w-md mx-8">
-          <div className="relative w-full">
-            {/* Search Icon */}
-            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-              <Search className="h-4 w-4 text-third" />
+        {heroMode && (
+          <div className="hidden md:flex flex-1 justify-center">
+            <div
+              className={`relative flex items-center h-12 w-[520px] rounded-full px-6 transition-all duration-300
+              ${
+                scrolled
+                  ? "bg-secondary/10  border border-gray-200"
+                  : "bg-secondary/5 backdrop-blur-lg border border-white/20"
+              }
+            `}
+            >
+              <Search
+                className={`w-4 h-4 mr-3 ${scrolled ? "text-gray-600" : "text-third"}`}
+              />
+
+              <input
+                type="text"
+                placeholder="Search destination"
+                className={`w-full bg-transparent placeholder:text-sm focus:outline-none
+                ${scrolled ? "text-black placeholder:text-gray-400" : "text-white placeholder:text-third"}
+                `}
+              />
+
+              <div
+                className={`ml-auto p-2 rounded-full transition
+                ${scrolled ? "bg-primary text-secondary" : "bg-white/20 text-secondary"}
+                `}
+              >
+                <Search size={14} />
+              </div>
             </div>
-
-            <input
-              type="text"
-              placeholder="Search..."
-              className="
-                w-full bg-secondary/20 
-                backdrop-blur-md 
-                border border-third/40 
-                rounded-md py-2 pl-10 pr-4
-                text-primary placeholder:text-third
-                focus:outline-none focus:ring-2 focus:ring-third/40 
-                transition-all
-              "
-            />
           </div>
-        </div>
+        )}
 
-        {/* RIGHT — CTA Button using YOUR BUTTON COMPONENT */}
-        <Button
-          onClick={() => setIsLoginOpen(true)}
-          size="sm"
-          variant="ghost"
-          showIcon={false}
-        >
-          Sell Your Vehicle
-        </Button>
-        {/* <Button
-          onClick={() => setIsDownloadOpen(true)}
-          size="sm"
-          variant="ghost"
-          showIcon={false}
-        >
-          Download App
-        </Button> */}
-      </nav>
-
-      {/* LOGIN POPUP */}
-      <LoginPopup
-        isOpen={isLoginOpen}
-        onClose={() => setIsLoginOpen(false)}
-        onSignup={() => {
-          setIsSignupOpen(true);
-          setIsLoginOpen(false);
-        }}
-      />
-
-      <DownloadAppPopup
-        isOpen={isDownloadOpen}
-        onClose={() => setIsDownloadOpen(false)}
-      />
-
-      {/* SIGNUP POPUP */}
-      <SignupPopup
-        isOpen={isSignupOpen}
-        onClose={() => setIsSignupOpen(false)}
-        onLogin={() => {
-          setIsLoginOpen(true);
-          setIsSignupOpen(false);
-        }}
-      />
-    </>
+        {/* RIGHT CTA */}
+        <Button size="sm">Sell Your Vehicle</Button>
+      </div>
+    </nav>
   );
 }

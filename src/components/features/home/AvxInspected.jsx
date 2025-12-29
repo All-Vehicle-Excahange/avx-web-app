@@ -102,7 +102,7 @@ export default function AvxInspected() {
               "px-4 py-1.5 text-sm font-semibold rounded-md transition-all cursor-pointer",
               activeType === "4-Wheeler"
                 ? "bg-secondary text-primary shadow-sm"
-                : "text-secondary/60 hover:text-secondary"
+                : "text-secondary/60 hover:text-secondary",
             )}
           >
             4-Wheeler
@@ -114,7 +114,7 @@ export default function AvxInspected() {
               "px-4 py-1.5 text-sm font-semibold rounded-md transition-all cursor-pointer",
               activeType === "2-Wheeler"
                 ? "bg-secondary text-primary shadow-sm"
-                : "text-secondary/60 hover:text-secondary"
+                : "text-secondary/60 hover:text-secondary",
             )}
           >
             2-Wheeler
@@ -127,6 +127,7 @@ export default function AvxInspected() {
         className="
     flex-1 min-h-0
     grid
+    sm:items-center
     grid-cols-1
     md:grid-cols-2
     lg:grid-cols-4
