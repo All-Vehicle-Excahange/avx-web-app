@@ -26,7 +26,7 @@ export default function Testimonials() {
   const next = () => setActive((p) => (p + 1) % testimonials.length);
 
   return (
-    <div className="w-full bg-third/90 rounded-xl p-5 space-y-4">
+    <div className="w-full bg-primary rounded-xl p-5 space-y-4">
       {/* HEADER */}
       <h3 className="text-lg font-semibold text-secondary">Testimonials</h3>
 

@@ -12,7 +12,7 @@ export default function HeroSection() {
 
       {/* GPU BASED COLLAPSE LAYER */}
       <div
-        className={`absolute inset-0 bg-primary transition-transform duration-450 ease-[cubic-bezier(.4,0,.2,1)]
+        className={`absolute inset-0 bg-primary transition-transform duration-450 ease-in-out
         ${collapsed ? "-translate-y-full" : "translate-y-0"}
       `}
       >
