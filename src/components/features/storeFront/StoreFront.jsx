@@ -32,7 +32,7 @@ export default function StoreFront() {
             */}
 
             {/* ✅ RIGHT CONTENT → FULL WIDTH */}
-            <div className="flex flex-col gap-6 w-full">
+            <div className="flex flex-col gap-6 w-full  3xl:max-w-[1480px] 3xl:mx-auto ">
               {/* TABS */}
               <div className="bg-secondary 3xl:container">
                 <div className="flex gap-10 border-b border-third/30">

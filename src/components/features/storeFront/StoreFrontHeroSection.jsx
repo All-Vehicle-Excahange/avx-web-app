@@ -15,7 +15,7 @@ export default function StoreFrontHeroSection({
   backgroundImage = "./sfBg.png",
 }) {
   return (
-    <section className="w-full bg-secondary">
+    <section className="w-full bg-secondary 3xl:max-w-[1480px] 3xl:mx-auto">
       {/* COVER */}
       <div
         className="relative w-full h-80 bg-cover bg-center"
