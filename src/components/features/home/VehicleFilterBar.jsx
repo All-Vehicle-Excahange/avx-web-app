@@ -128,7 +128,7 @@ export default function VehicleFilterBar() {
             {/* BACKGROUND IMAGE INSIDE SEARCH BAR */}
             <div className="absolute inset-0 z-0">
               <div className="absolute inset-0 bg-[url('/bg_blur_2.jpg')] bg-cover bg-center bg-no-repeat" />
-              <div className="absolute backdrop-blur-xl inset-0 bg-black/50" />
+              <div className="absolute backdrop-blur-xl inset-0 bg-primary" />
             </div>
 
             {/* CONTENT (Relative + z-10 to sit ON TOP of the image) */}
@@ -140,7 +140,7 @@ export default function VehicleFilterBar() {
                 }`}
                 onClick={() => setActiveTab("location")}
               >
-                <div className="text-lg font-bold text-white tracking-wide">
+                <div className="text-lg font-bold text-secondary tracking-wide">
                   Location
                 </div>
                 <input
@@ -196,7 +196,7 @@ export default function VehicleFilterBar() {
                 }`}
                 onClick={() => setActiveTab("vehicle")}
               >
-                <div className="text-lg font-bold text-white tracking-wide">
+                <div className="text-lg font-bold text-secondary tracking-wide">
                   Vehicle Type
                 </div>
                 <div
@@ -248,7 +248,7 @@ export default function VehicleFilterBar() {
                 }`}
                 onClick={() => setActiveTab("fuel")}
               >
-                <div className="text-lg font-bold text-white tracking-wide">
+                <div className="text-lg font-bold text-secondary tracking-wide">
                   Fuel Type
                 </div>
                 <div
@@ -290,7 +290,7 @@ export default function VehicleFilterBar() {
                 }`}
                 onClick={() => setActiveTab("brand")}
               >
-                <div className="text-lg font-bold text-white tracking-wide">
+                <div className="text-lg font-bold text-secondary tracking-wide">
                   Brand
                 </div>
                 <div
@@ -332,7 +332,7 @@ export default function VehicleFilterBar() {
                 }`}
                 onClick={() => setActiveTab("budget")}
               >
-                <div className="text-lg font-bold text-white tracking-wide">
+                <div className="text-lg font-bold text-secondary tracking-wide">
                   Budget
                 </div>
                 <div className="text-sm font-medium text-gray-400 truncate">
