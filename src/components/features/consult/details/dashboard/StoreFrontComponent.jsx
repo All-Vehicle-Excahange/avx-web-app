@@ -3,9 +3,11 @@ import { useState } from "react";
 import Button from "@/components/ui/button";
 import { Star, MapPin, Pencil } from "lucide-react";
 import Image from "next/image";
+import CreateStoreFront from "./CreateStoreFront";
 
 export default function StoreFrontComponent() {
   const [editor, setEditor] = useState(null); // about | why | mission | vision | store
+  const HAS_STOREFRONT = false; // false = first time seller
 
   const [data, setData] = useState({
     name: "Adarsh Auto Consultants",
@@ -25,6 +27,10 @@ export default function StoreFrontComponent() {
     missionImage: "/about3.png",
     visionImage: "/about4.png",
   });
+
+  if (!HAS_STOREFRONT) {
+    return <CreateStoreFront />; 
+  }
 
   return (
     <section className="space-y-10">
