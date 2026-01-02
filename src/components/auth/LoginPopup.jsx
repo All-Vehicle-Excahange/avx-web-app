@@ -57,7 +57,7 @@ function LoginPopup({
         {/* CLOSE */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 p-2 rounded-full hover:opacity-70 text-text-black"
+          className="absolute top-4 right-4 z-20 p-2 rounded-full hover:opacity-70 text-primary"
         >
           <X size={20} />
         </button>
@@ -78,13 +78,13 @@ function LoginPopup({
         {/* RIGHT FORM */}
         <div className="w-full md:w-7/12 p-8 md:p-12 bg-secondary">
           {/* ACCOUNT TYPE */}
-          <div className="flex border rounded-lg p-1 mb-8 w-fit border-accent-gray">
+          <div className="flex border rounded-lg p-1 mb-8 w-fit border-accent-primary">
             <button
               onClick={() => setAccountType("personal")}
               className={`px-6 py-2 text-sm font-semibold rounded-md ${
                 accountType === "personal"
                   ? "bg-primary text-secondary"
-                  : "text-text-black"
+                  : "text-primary"
               }`}
             >
               PERSONAL ACCOUNT
@@ -94,24 +94,24 @@ function LoginPopup({
               className={`px-6 py-2 text-sm font-semibold rounded-md ${
                 accountType === "consultant"
                   ? "bg-primary text-secondary"
-                  : "text-text-black"
+                  : "text-primary"
               }`}
             >
               CONSULTANT ACCOUNT
             </button>
           </div>
 
-          <h3 className="text-2xl font-bold mb-6 text-text-black">
+          <h3 className="text-2xl font-bold mb-6 text-primary">
             Log in to <br /> continue
           </h3>
 
           {/* MOBILE INPUT (ALWAYS VISIBLE) */}
           <div className="mb-4">
-            <label className="block text-sm mb-2 text-text-black/70">
+            <label className="block text-sm mb-2 text-primary/70">
               Mobile number
             </label>
-            <div className="flex items-center border rounded-md border-accent-gray">
-              <span className="pl-4 pr-2 text-text-black/60">+91-</span>
+            <div className="flex items-center border rounded-md border-accent-primary">
+              <span className="pl-4 pr-2 text-primary/60">+91-</span>
               <input
                 type="tel"
                 maxLength={10}
@@ -120,7 +120,7 @@ function LoginPopup({
                   setMobile(e.target.value.replace(/\D/g, ""))
                 }
                 placeholder="9999999999"
-                className="w-full py-3 px-2 outline-none bg-transparent"
+                className="w-full text-primary py-3 px-2 outline-none bg-transparent"
               />
             </div>
           </div>
@@ -128,7 +128,7 @@ function LoginPopup({
           {/* OTP BOXES */}
           {otpSent && (
             <>
-              <p className="text-sm text-text-black/70 mb-3">
+              <p className="text-sm text-primary/70 mb-3">
                 Enter the 6-digit OTP
               </p>
 
@@ -145,7 +145,7 @@ function LoginPopup({
                       handleOtpChange(index, e.target.value)
                     }
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                    className="w-12 h-12 text-center text-lg font-bold border rounded-md border-accent-gray outline-none focus:border-primary"
+                    className="w-12 h-12 text-center text-primary text-lg font-bold border rounded-md border-accent-gray outline-none focus:border-primary"
                   />
                 ))}
               </div>
@@ -172,7 +172,7 @@ function LoginPopup({
           )}
 
           {/* SIGNUP SWITCH */}
-          <div className="mt-4 text-center text-sm text-text-black/70">
+          <div className="mt-4 text-center text-sm text-primary/70">
             Don’t have an account?{" "}
             <button
               onClick={() => {
@@ -186,7 +186,7 @@ function LoginPopup({
           </div>
 
           {/* TERMS */}
-          <div className="text-[10px] text-text-black/50 mt-6 text-center">
+          <div className="text-[10px] text-primary/50 mt-6 text-center">
             By logging in, you agree to AVXs Privacy Policy & Terms
           </div>
         </div>
