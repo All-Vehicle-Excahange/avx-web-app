@@ -4,12 +4,10 @@ import React, { useState, useRef } from "react";
 import { X } from "lucide-react";
 import Image from "next/image";
 import Button from "@/components/ui/button";
+import { getOtp, signup } from "@/services/auth.service";
+import { toast } from "react-toastify";
 
-export default function SignupPopup({
-  isOpen,
-  onClose,
-  onLogin = () => {}, // ✅ SAFE DEFAULT
-}) {
+export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -31,10 +29,23 @@ export default function SignupPopup({
   const isFormValid =
     form.firstName && form.lastName && form.email && form.phone.length === 10;
 
-  const handleSendOtp = () => {
-    if (!isFormValid) return;
-    setOtpSent(true);
-    setTimeout(() => otpRefs.current[0]?.focus(), 100);
+  const handleSendOtp = async () => {
+    try {
+      const res = await getOtp({
+        phoneNumber: form.phone,
+        countryCode: "+91",
+        requestType: "SIGNUP",
+      });
+
+      console.log("OTP RES:", res);
+
+      if (res?.success || res?.status) {
+        setOtpSent(true);
+        setTimeout(() => otpRefs.current[0]?.focus(), 100);
+      }
+    } catch (e) {
+      alert("Failed to send OTP");
+    }
   };
 
   const handleOtpChange = (index, value) => {
@@ -55,13 +66,39 @@ export default function SignupPopup({
     }
   };
 
-  const handleValidateOtp = () => {
+  // const handleValidateOtp = () => {
+  //   const finalOtp = otp.join("");
+  //   if (finalOtp.length !== 6) return;
+
+  //   // 🔥 API CALL HERE
+  //   console.log("Signup Data:", form);
+  //   console.log("OTP:", finalOtp);
+  // };
+
+  const handleValidateOtp = async () => {
     const finalOtp = otp.join("");
     if (finalOtp.length !== 6) return;
 
-    // 🔥 API CALL HERE
-    console.log("Signup Data:", form);
-    console.log("OTP:", finalOtp);
+    try {
+      const res = await signup({
+        firstname: form.firstName,
+        lastname: form.lastName,
+        email: form.email,
+        phoneNumber: form.phone,
+        countryCode: "+91",
+        isApplyForConsultation: false,
+        otp: finalOtp,
+      });
+
+      if (res.success) {
+        toast.success("Signup Successful 🎉");
+        onClose();
+      } else {
+      toast.error(res.message || "Signup failed");
+      }
+    } catch (e) {
+    toast.error("Something went wrong");
+    }
   };
 
   return (
@@ -124,7 +161,9 @@ export default function SignupPopup({
               />
 
               <div className="flex items-center text-primary border rounded-md border-accent-gray mb-6">
-                <span className=" text-primary  pl-4 pr-2 text-text-black/60">+91-</span>
+                <span className=" text-primary  pl-4 pr-2 text-text-black/60">
+                  +91-
+                </span>
                 <input
                   name="phone"
                   type="tel"
