@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react";
 import { X } from "lucide-react";
 import Image from "next/image";
 import Button from "@/components/ui/button";
+import { getOtp, login } from "@/services/auth.service";
 
 function LoginPopup({
   isOpen,
@@ -18,11 +19,32 @@ function LoginPopup({
 
   if (!isOpen) return null;
 
-  const handleSendOtp = () => {
-    if (mobile.length !== 10) return;
-    setOtpSent(true);
-    setTimeout(() => otpRefs.current[0]?.focus(), 100);
-  };
+  const handleSendOtp = async () => {
+  if (mobile.length !== 10) {
+    alert("Enter valid mobile number");
+    return;
+  }
+
+  try {
+    const res = await getOtp({
+      phoneNumber: mobile,     
+      countryCode: "+91",
+      requestType: "LOGIN",     
+    });
+
+    console.log("LOGIN OTP RES:", res);
+
+    if (res?.success || res?.status) {
+      setOtpSent(true);
+      setTimeout(() => otpRefs.current[0]?.focus(), 100);
+    } else {
+      alert(res.message || "Failed to send OTP");
+    }
+  } catch (e) {
+    alert("Failed to send OTP");
+  }
+};
+
 
   const handleOtpChange = (index, value) => {
     if (!/^\d?$/.test(value)) return;
@@ -42,14 +64,29 @@ function LoginPopup({
     }
   };
 
-  const handleValidateOtp = () => {
-    const finalOtp = otp.join("");
-    if (finalOtp.length !== 6) return;
 
-    console.log("Account Type:", accountType);
-    console.log("Mobile:", mobile);
-    console.log("OTP:", finalOtp);
-  };
+const handleValidateOtp = async () => {
+  const finalOtp = otp.join("");
+  if (finalOtp.length !== 6) return;
+
+  try {
+    const res = await login({
+      phoneNumber: mobile,
+      countryCode: "+91",
+      otp: finalOtp,
+    });
+
+    if (res.success) {
+      alert("Login Successful 🎉");
+      onClose();
+    } else {
+      alert(res.message || "Invalid OTP");
+    }
+  } catch (e) {
+    alert("Login failed");
+  }
+};
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">

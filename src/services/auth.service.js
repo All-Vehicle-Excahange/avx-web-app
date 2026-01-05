@@ -3,6 +3,7 @@ import axiosInstance from "@/lib/axiosInstance";
 const ENDPOINT = {
   getOtp: "/auth/get-otp",
   signup: "/auth/signup",
+  login: "/auth/login",
 };
 
 // 🔹 STEP 1: SEND OTP
@@ -36,3 +37,14 @@ export const signup = async ({
   });
   return res.data;
 };
+
+
+export const login = async ({ phoneNumber, countryCode, otp }) => {
+  const res = await axiosInstance.post("/auth/login", {
+    phoneNumber,
+    countryCode,
+    otp,
+  });
+  return res.data;
+};
+

@@ -66,14 +66,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
     }
   };
 
-  // const handleValidateOtp = () => {
-  //   const finalOtp = otp.join("");
-  //   if (finalOtp.length !== 6) return;
-
-  //   // 🔥 API CALL HERE
-  //   console.log("Signup Data:", form);
-  //   console.log("OTP:", finalOtp);
-  // };
+ 
 
   const handleValidateOtp = async () => {
     const finalOtp = otp.join("");
