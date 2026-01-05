@@ -1,40 +1,30 @@
 "use client";
 import { useState } from "react";
-import { CheckCircle2 } from "lucide-react";
 import Image from "next/image";
+import { CheckCircle2 } from "lucide-react";
 import PreviewPopup from "./components/PreviewPopup";
-import { useRouter } from "next/navigation";
-
-const THEMES = [
-  { id: "dark", name: "Dark Classic", preview: "/home3.jpg" },
-  { id: "light", name: "Light Clean", preview: "/themes/light.png" },
-  { id: "dealer", name: "Auto Dealer", preview: "/themes/dealer.png" },
-  { id: "luxury", name: "Luxury Black", preview: "/themes/luxury.png" },
-  { id: "minimal", name: "Minimal White", preview: "/themes/minimal.png" },
-  { id: "sport", name: "Sport Red", preview: "/themes/sport.png" },
-  { id: "modern", name: "Modern Grid", preview: "/themes/modern.png" },
-  { id: "bold", name: "Bold Contrast", preview: "/themes/bold.png" },
-  { id: "neo", name: "Neo Glass", preview: "/themes/neo.png" },
-];
+import { THEME_STORE } from "@/core/engine/themeStore";
+import { useRouter } from "next/router";
 
 export default function ThemeListing() {
-  const [active, setActive] = useState(null);
   const [previewTheme, setPreviewTheme] = useState(null);
+  const router = useRouter();
 
+  const handleSelect = (theme) => {
+    router.push(
+      `/consult/dashboard/storefront/theme/create?theme=${theme.id}`
+    );
+  };
   return (
     <>
       <section className="space-y-4">
-        {/* HEADER */}
-        <div>
-          <h1 className="text-2xl font-bold">Select Theme to Continue</h1>
-          <p className="text-third text-sm">
-            Choose how your public storefront will look
-          </p>
-        </div>
+        <h1 className="text-2xl font-bold">Select Theme to Continue</h1>
+        <p className="text-third text-sm">
+          Choose how your public storefront will look
+        </p>
 
-        {/* GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {THEMES.map((theme) => (
+          {THEME_STORE.map((theme) => (
             <div
               key={theme.id}
               onClick={() => setPreviewTheme(theme)}
@@ -42,7 +32,7 @@ export default function ThemeListing() {
             >
               <div className="relative h-[170px]">
                 <Image
-                  src={theme.preview}
+                  src={theme.thumbnail}
                   alt={theme.name}
                   fill
                   className="object-cover"
@@ -63,7 +53,7 @@ export default function ThemeListing() {
         <PreviewPopup
           theme={previewTheme}
           onClose={() => setPreviewTheme(null)}
-          onSelect={() => setActive(previewTheme.id)}
+          onSelect={() => handleSelect(previewTheme)}
         />
       )}
     </>
