@@ -1,66 +1,126 @@
 import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Clock, TrendingUp } from "lucide-react";
-
-// Card Component
-function RecentlyVisitedCard({ data }) {
-  return (
-    <div className="group relative bg-white rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex-shrink-0 w-[220px]">
-      {/* Quick View Badge */}
-      <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-        <span className="bg-secondary text-white text-xs px-2 py-1 rounded-full">Quick View</span>
-      </div>
-      
-      {/* Image Container */}
-      <div className="relative h-40 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
-        <img
-          src={data.image}
-          alt={data.title}
-          className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-300"
-        />
-      </div>
-      
-      {/* Content */}
-      <div className="p-3">
-        <h4 className="font-semibold text-primary text-sm mb-1 truncate transition-colors">
-          {data.title}
-        </h4>
-        <div className="flex items-center justify-between">
-          <span className="text-lg font-bold text-secondary">₹{data.price}</span>
-          {data.badge && (
-            <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
-              {data.badge}
-            </span>
-          )}
-        </div>
-      
-      </div>
-      
-      {/* Hover Action */}
-      <div className="absolute inset-0 bg-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-    </div>
-  );
-}
+import RecentlyVisitedFixedCard from "./RecentlyVisitedFixedCard";
+import Button from "@/components/ui/button";
+import RecentlyVisitedCard from "./RecentlyVisitedCardScroll";
 
 export default function ShowcaseSection() {
   const data = {
     leftFixed: [
-      { id: "lf1", title: "Hyundai Creta", price: "11,25,000", image: "/Car.png", badge: "Popular", rating: 4.5, reviews: 234 },
-      { id: "lf2", title: "Kia Seltos", price: "12,10,000", image: "/Car.png", badge: "Trending", rating: 4.3, reviews: 189 },
-      { id: "lf3", title: "Tata Harrier", price: "14,80,000", image: "/Car.png", rating: 4.6, reviews: 312 },
-      { id: "lf4", title: "XUV700", price: "16,50,000", image: "/Car.png", badge: "New", rating: 4.7, reviews: 156 },
+      {
+        id: "lf1",
+        title: "Maruti Suzuki Baleno ZXI ",
+        price: "11,25,000",
+        image: "/small_car.jpg",
+        badge: "Popular",
+        rating: 4.5,
+        reviews: 234,
+      },
+      {
+        id: "lf2",
+        title: "Kia Seltos",
+        price: "12,10,000",
+        image: "/small_car.jpg",
+        badge: "Trending",
+        rating: 4.3,
+        reviews: 189,
+      },
+      {
+        id: "lf3",
+        title: "Tata Harrier",
+        price: "14,80,000",
+        image: "/small_car.jpg",
+        rating: 4.6,
+        reviews: 312,
+      },
+      {
+        id: "lf4",
+        title: "XUV700",
+        price: "16,50,000",
+        image: "/small_car.jpg",
+        badge: "New",
+        rating: 4.7,
+        reviews: 156,
+      },
     ],
     leftScroll: [
-      { id: "ls1", title: "Maruti Swift", price: "6,50,000", image: "/Car.png", rating: 4.2, reviews: 567 },
-      { id: "ls2", title: "Honda Amaze", price: "7,80,000", image: "/Car.png", rating: 4.4, reviews: 423 },
-      { id: "ls3", title: "Venue", price: "9,20,000", image: "/Car.png", badge: "Hot", rating: 4.3, reviews: 298 },
-      { id: "ls4", title: "Nexon", price: "8,90,000", image: "/Car.png", rating: 4.5, reviews: 389 },
+      {
+        id: "ls1",
+        title: "Maruti Swift",
+        price: "6,50,000",
+        image: "/small_car.jpg",
+        rating: 4.2,
+        reviews: 567,
+      },
+      {
+        id: "ls2",
+        title: "Honda Amaze",
+        price: "7,80,000",
+        image: "/small_car.jpg",
+        rating: 4.4,
+        reviews: 423,
+      },
+      {
+        id: "ls3",
+        title: "Venue",
+        price: "9,20,000",
+        image: "/small_car.jpg",
+        badge: "Hot",
+        rating: 4.3,
+        reviews: 298,
+      },
+      {
+        id: "ls4",
+        title: "Nexon",
+        price: "8,90,000",
+        image: "/small_car.jpg",
+        rating: 4.5,
+        reviews: 389,
+      },
     ],
     rightScroll: [
-      { id: "rs1", title: "Fortuner", price: "32,10,000", image: "/Car.png", badge: "Premium", rating: 4.8, reviews: 201 },
-      { id: "rs2", title: "Honda City", price: "12,75,000", image: "/Car.png", rating: 4.4, reviews: 445 },
-      { id: "rs3", title: "Verna", price: "13,20,000", image: "/Car.png", badge: "Popular", rating: 4.3, reviews: 356 },
-      { id: "rs4", title: "Slavia", price: "14,10,000", image: "/Car.png", rating: 4.5, reviews: 234 },
-      { id: "rs5", title: "Compass", price: "19,50,000", image: "/Car.png", rating: 4.6, reviews: 178 },
+      {
+        id: "rs1",
+        title: "Fortuner",
+        price: "32,10,000",
+        image: "/small_car.jpg",
+        badge: "Premium",
+        rating: 4.8,
+        reviews: 201,
+      },
+      {
+        id: "rs2",
+        title: "Honda City",
+        price: "12,75,000",
+        image: "/small_car.jpg",
+        rating: 4.4,
+        reviews: 445,
+      },
+      {
+        id: "rs3",
+        title: "Verna",
+        price: "13,20,000",
+        image: "/small_car.jpg",
+        badge: "Popular",
+        rating: 4.3,
+        reviews: 356,
+      },
+      {
+        id: "rs4",
+        title: "Slavia",
+        price: "14,10,000",
+        image: "/small_car.jpg",
+        rating: 4.5,
+        reviews: 234,
+      },
+      {
+        id: "rs5",
+        title: "Compass",
+        price: "19,50,000",
+        image: "/small_car.jpg",
+        rating: 4.6,
+        reviews: 178,
+      },
     ],
   };
 
@@ -92,63 +152,54 @@ export default function ShowcaseSection() {
     return { ref, canLeft, canRight, scroll, update };
   };
 
+  const handleClick = () => {
+    router.push("/vehicle/details");
+  };
+
   const leftScroll = useHorizontalScroll();
   const rightScroll = useHorizontalScroll();
 
   return (
-    <section className="w-full px-4 md:px-10 py-8 bg-gradient-to-b from-gray-50 to-white">
+    <section className="w-full px-4 md:px-10 py-8 bg-secondary">
       <div className="max-w-[1400px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6  ">
           {/* LEFT SIDE */}
-          <div className="lg:col-span-5 flex flex-col gap-6">
-            
-            {/* Section Header */}
-            <div className="flex items-center gap-2 mb-2">
-              <Clock className="w-5 h-5 text-secondary" />
-              <h2 className="text-xl font-bold text-secondary">Recently Visited</h2>
-              <span className="ml-auto text-sm text-secondary cursor-pointer hover:underline">View All</span>
+          <div className="lg:col-span-5 p-6 flex flex-col gap-6 h-full bg-primary/20 rounded-3xl relative overflow-hidden">
+            {/* BLUR BACKGROUND (NO INTERACTION) */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+              <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover bg-center opacity-40 blur-lg" />
             </div>
 
-            {/* FIXED 4 CARDS GRID */}
-            <div className="grid grid-cols-2 gap-4">
-              {data.leftFixed.map((item) => (
-                <div key={item.id} className="group relative bg-primary rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100">
-                  {item.badge && (
-                    <div className="absolute top-2 left-2 z-10">
-                      {/* <span className="bg-secondary text-primary text-xs px-2 py-1 rounded-full font-medium">
-                        {item.badge}
-                      </span> */}
-                    </div>
-                  )}
-                  
-                  <div className="relative h-32 bg-gradient-to-br from-blue-50 to-gray-50 overflow-hidden">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-contain p-3 group-hover:scale-110 transition-transform duration-300"
-                    />
-                  </div>
-                  
-                  <div className="p-3">
-                    <h4 className="font-semibold text-secondary text-sm mb-1 truncate group-hover:text-blue-600 transition-colors">
-                      {item.title}
-                    </h4>
-                    <div className="text-lg font-bold text-secondary mb-2">₹{item.price}</div>
-                   
-                  </div>
-                  
-                  <div className="absolute inset-0 bg-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-                </div>
-              ))}
-            </div>
+            {/* ACTUAL CONTENT */}
+            <div className="relative z-10 flex flex-col gap-6">
+              {/* Header */}
+              <div className="flex items-center gap-2">
+                <Clock className="w-5 h-5 text-primary" />
+                <h2 className="text-xl font-bold text-primary">
+                  Recently Visited
+                </h2>
 
-           
+                <Button
+                  onClick={handleClick}
+                  variant="outline"
+                  size="sm"
+                  className="ml-auto relative z-20 pointer-events-auto"
+                >
+                  View More
+                </Button>
+              </div>
+
+              {/* FIXED GRID */}
+              <div className="grid grid-cols-2 gap-6">
+                {data.leftFixed.map((item) => (
+                  <RecentlyVisitedFixedCard key={item.id} data={item} />
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* RIGHT SIDE */}
-          <div className="lg:col-span-7 flex flex-col gap-6">
-
+          <div className="lg:col-span-7 flex flex-col gap-6 h-full">
             {/* BANNER */}
             <div className="relative h-48 rounded-xl overflow-hidden shadow-lg group cursor-pointer">
               <img
@@ -157,55 +208,71 @@ export default function ShowcaseSection() {
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent flex flex-col justify-center px-8 text-primary">
-                <span className="text-sm font-medium text-primary transition-colors duration-300 mb-1">SPECIAL OFFER</span>
+                <span className="text-sm font-medium text-primary transition-colors duration-300 mb-1">
+                  SPECIAL OFFER
+                </span>
                 <h3 className="text-3xl font-bold mb-2">Best Deals Near You</h3>
-                <p className="text-sm text-gray-200 mb-4">Up to 30% off on premium vehicles</p>
-                <button className="bg-secondary  text-primary px-6 py-2 rounded-lg font-medium w-fit transition-colors cursor-pointer">
-                  Explore Now
-                </button>
+                <p className="text-sm text-gray-200 mb-4">
+                  Up to 30% off on premium vehicles
+                </p>
+                <div>
+                  <button className="bg-secondary  text-primary px-6 py-2 rounded-lg font-medium w-fit transition-colors cursor-pointer relative z-20 pointer-events-auto">
+                    Explore Now
+                  </button>
+                </div>
               </div>
             </div>
 
             {/* TRENDING SECTION */}
-            <div className="relative bg-primary rounded-xl p-4 shadow-sm border border-gray-100">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-secondary" />
-                  <h3 className="font-semibold text-secondary">Trending Vehicles</h3>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => rightScroll.scroll("left")}
-                    disabled={!rightScroll.canLeft}
-                    className="h-8 w-8 rounded-full bg-secondary/50 hover:bg-secondary/20 hover:text-secondary disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-all"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => rightScroll.scroll("right")}
-                    disabled={!rightScroll.canRight}
-                    className="h-8 w-8 rounded-full bg-secondary/50 hover:bg-secondary/20 hover:text-secondary disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-all"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
+            <div className="relative bg-primary/20 rounded-3xl p-4 shadow-sm overflow-hidden">
+              {/* BLUR BACKGROUND */}
+              <div className="absolute inset-0 z-0 pointer-events-none">
+                <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover bg-center opacity-40 blur-lg" />
               </div>
 
-              <div
-                ref={rightScroll.ref}
-                onScroll={rightScroll.update}
-                className="flex gap-4 overflow-x-auto scrollbar-hide pb-2"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-              >
-                {data.rightScroll.map((item) => (
-                  <RecentlyVisitedCard key={item.id} data={item} />
-                ))}
+              {/* ACTUAL CONTENT */}
+              <div className="relative z-10">
+                {/* HEADER */}
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-primary" />
+                    <h3 className="font-semibold text-primary">
+                      Trending Vehicles
+                    </h3>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => rightScroll.scroll("left")}
+                      disabled={!rightScroll.canLeft}
+                      className="h-8 w-8 rounded-full bg-secondary/50 hover:bg-secondary/20 disabled:opacity-40 flex items-center justify-center"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+
+                    <button
+                      onClick={() => rightScroll.scroll("right")}
+                      disabled={!rightScroll.canRight}
+                      className="h-8 w-8 rounded-full bg-secondary/50 hover:bg-secondary/20 disabled:opacity-40 flex items-center justify-center"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* SCROLLABLE CARDS */}
+                <div
+                  ref={rightScroll.ref}
+                  onScroll={rightScroll.update}
+                  className="flex gap-4 overflow-x-auto scrollbar-hide pb-2"
+                >
+                  {data.rightScroll.map((item) => (
+                    <RecentlyVisitedCard key={item.id} data={item} />
+                  ))}
+                </div>
               </div>
             </div>
-
-            
           </div>
-
         </div>
       </div>
 

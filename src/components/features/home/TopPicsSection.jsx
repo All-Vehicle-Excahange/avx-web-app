@@ -18,7 +18,7 @@ const featuredCar = {
   drivetrain: "Front Wheel Drive",
   rating: "4.3",
   price: "6,75,998",
-  image: "/big_card_car.jpg",
+  image: "/small_car.jpg",
   sponsored: false,
 };
 
@@ -81,7 +81,7 @@ export default function TopPicsSection() {
   const [activeType, setActiveType] = useState("4-Wheeler");
 
   return (
-    <div className="w-full h-full   flex flex-col bg-secondary text-primary font-sans overflow-hidden">
+    <div className="w-full h-full flex flex-col bg-secondary text-primary font-sans overflow-hidden">
       {/* Header Section */}
       <div className="shrink-0 flex flex-col md:flex-row md:items-end justify-between mb-4 gap-4">
         <div>
