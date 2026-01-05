@@ -4,12 +4,10 @@ import React, { useState, useRef } from "react";
 import { X } from "lucide-react";
 import Image from "next/image";
 import Button from "@/components/ui/button";
+import { getOtp, signup } from "@/services/auth.service";
+import { toast } from "react-toastify";
 
-export default function SignupPopup({
-  isOpen,
-  onClose,
-  onLogin = () => {}, // ✅ SAFE DEFAULT
-}) {
+export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -31,10 +29,23 @@ export default function SignupPopup({
   const isFormValid =
     form.firstName && form.lastName && form.email && form.phone.length === 10;
 
-  const handleSendOtp = () => {
-    if (!isFormValid) return;
-    setOtpSent(true);
-    setTimeout(() => otpRefs.current[0]?.focus(), 100);
+  const handleSendOtp = async () => {
+    try {
+      const res = await getOtp({
+        phoneNumber: form.phone,
+        countryCode: "+91",
+        requestType: "SIGNUP",
+      });
+
+      console.log("OTP RES:", res);
+
+      if (res?.success || res?.status) {
+        setOtpSent(true);
+        setTimeout(() => otpRefs.current[0]?.focus(), 100);
+      }
+    } catch (e) {
+      alert("Failed to send OTP");
+    }
   };
 
   const handleOtpChange = (index, value) => {
@@ -55,13 +66,39 @@ export default function SignupPopup({
     }
   };
 
-  const handleValidateOtp = () => {
+  // const handleValidateOtp = () => {
+  //   const finalOtp = otp.join("");
+  //   if (finalOtp.length !== 6) return;
+
+  //   // 🔥 API CALL HERE
+  //   console.log("Signup Data:", form);
+  //   console.log("OTP:", finalOtp);
+  // };
+
+  const handleValidateOtp = async () => {
     const finalOtp = otp.join("");
     if (finalOtp.length !== 6) return;
 
-    // 🔥 API CALL HERE
-    console.log("Signup Data:", form);
-    console.log("OTP:", finalOtp);
+    try {
+      const res = await signup({
+        firstname: form.firstName,
+        lastname: form.lastName,
+        email: form.email,
+        phoneNumber: form.phone,
+        countryCode: "+91",
+        isApplyForConsultation: false,
+        otp: finalOtp,
+      });
+
+      if (res.success) {
+        toast.success("Signup Successful 🎉");
+        onClose();
+      } else {
+      toast.error(res.message || "Signup failed");
+      }
+    } catch (e) {
+    toast.error("Something went wrong");
+    }
   };
 
   return (
@@ -90,7 +127,7 @@ export default function SignupPopup({
 
         {/* RIGHT FORM */}
         <div className="w-full md:w-7/12 p-8 md:p-12 bg-secondary">
-          <h3 className="text-2xl font-bold mb-6 text-text-black">
+          <h3 className="text-2xl font-bold mb-6 text-primary">
             Create your <br /> account
           </h3>
 
@@ -103,14 +140,14 @@ export default function SignupPopup({
                   value={form.firstName}
                   onChange={handleChange}
                   placeholder="First Name"
-                  className="w-full py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
+                  className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
                 />
                 <input
                   name="lastName"
                   value={form.lastName}
                   onChange={handleChange}
                   placeholder="Last Name"
-                  className="w-full py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
+                  className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
                 />
               </div>
 
@@ -120,11 +157,13 @@ export default function SignupPopup({
                 value={form.email}
                 onChange={handleChange}
                 placeholder="Email address"
-                className="w-full py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none mb-4"
+                className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none mb-4"
               />
 
-              <div className="flex items-center border rounded-md border-accent-gray mb-6">
-                <span className="pl-4 pr-2 text-text-black/60">+91-</span>
+              <div className="flex items-center text-primary border rounded-md border-accent-gray mb-6">
+                <span className=" text-primary  pl-4 pr-2 text-text-black/60">
+                  +91-
+                </span>
                 <input
                   name="phone"
                   type="tel"
@@ -137,7 +176,7 @@ export default function SignupPopup({
                     }))
                   }
                   placeholder="9999999999"
-                  className="w-full py-3 px-2 outline-none bg-transparent"
+                  className="w-full text-primary border py-3 px-2 outline-none bg-transparent"
                 />
               </div>
             </>
@@ -161,7 +200,7 @@ export default function SignupPopup({
                     value={digit}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                    className="w-12 h-12 text-center text-lg font-bold border rounded-md border-accent-gray bg-transparent outline-none focus:border-primary"
+                    className="w-12 h-12 text-center text-lg font-bold border rounded-md border-accent-gray bg-transparent outline-none focus:border-primary text-primary"
                   />
                 ))}
               </div>
@@ -174,7 +213,7 @@ export default function SignupPopup({
               variant="ghost"
               disabled={!isFormValid}
               onClick={handleSendOtp}
-              className="w-full h-11 text-sm font-bold disabled:opacity-40"
+              className="text-primary w-full h-11 text-sm font-bold disabled:opacity-40 "
             >
               GET OTP
             </Button>
@@ -182,14 +221,14 @@ export default function SignupPopup({
             <Button
               variant="ghost"
               onClick={handleValidateOtp}
-              className="w-full h-11 text-sm font-bold"
+              className="text-primary w-full h-11 text-sm font-bold"
             >
               VALIDATE OTP
             </Button>
           )}
 
           {/* SWITCH TO LOGIN */}
-          <div className="mt-4 text-center text-sm text-text-black/70">
+          <div className="mt-4 text-primary text-center text-sm text-text-black/70">
             Already have an account?{" "}
             <button
               onClick={() => {
@@ -203,7 +242,7 @@ export default function SignupPopup({
           </div>
 
           {/* TERMS */}
-          <div className="text-[10px] text-text-black/50 mt-6 leading-tight text-center">
+          <div className="text-[10px] text-primary  mt-6 leading-tight text-center">
             By signing up, you agree to AVXs Privacy Policy & Terms
           </div>
         </div>
