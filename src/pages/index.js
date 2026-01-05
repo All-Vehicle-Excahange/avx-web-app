@@ -18,7 +18,7 @@ export default function Home() {
       <HeroSection fullWidth />
 
       {/* <RecentlyVisitedSection /> */}
-      <ShowcaseSection />
+        <ShowcaseSection />
 
       <Layout>
         <TopPicsSection />
