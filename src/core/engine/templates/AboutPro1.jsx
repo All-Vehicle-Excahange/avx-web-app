@@ -1,3 +1,4 @@
+import Button from "@/components/ui/button";
 import EditorInput from "../atoms/EditorInput";
 import { ImageUploader } from "../atoms/ImageUploader ";
 import RichTextEditor from "../atoms/RichTextEditor";
@@ -29,7 +30,6 @@ function AboutPro1({ data, isEditing, onUpdate }) {
     updateField(array, copy);
   };
 
- 
   if (isEditing) {
     return (
       <div className="bg-secondary p-8 rounded-xl border border-third/30 w-full max-w-[1480px] mx-auto space-y-12 shadow-xl">
@@ -193,7 +193,7 @@ function AboutPro1({ data, isEditing, onUpdate }) {
               </button>
             </div>
           ))}
-          <button
+          <Button
             onClick={() =>
               addArrayItem("services", {
                 icon: "★",
@@ -201,10 +201,11 @@ function AboutPro1({ data, isEditing, onUpdate }) {
                 desc: "Description",
               })
             }
-            className="flex items-center gap-2 text-sm text-third hover:text-primary"
+            variant="ghost"
+            
           >
             <Plus size={16} /> Add Service
-          </button>
+          </Button>
         </div>
       </div>
     );
@@ -241,10 +242,7 @@ function AboutPro1({ data, isEditing, onUpdate }) {
           {/* Left: Stats Grid */}
           <div className="grid grid-cols-2 gap-y-12 gap-x-8">
             {data.stats.map((s, i) => (
-              <div
-                key={i}
-                className="flex flex-col  pl-6"
-              >
+              <div key={i} className="flex flex-col  pl-6">
                 <h3 className="text-4xl md:text-4xl font-bold mb-2 text-primary">
                   {s.number}
                 </h3>
@@ -338,11 +336,13 @@ function AboutPro1({ data, isEditing, onUpdate }) {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-fr items-start">
             {data.services?.map((s, i) => (
               <div
                 key={i}
-                className="bg-primary/5 p-10 group hover:bg-primary hover:text-secondary transition-all duration-300 border border-primary/10 rounded-xl"
+                className={`bg-primary/5 p-10 border border-primary/10 rounded-xl
+                hover:bg-primary/15 hover:text-secondary transition-colors duration-300
+              ${i % 4 === 1 || i % 4 === 3 ? "lg:mt-10" : ""}`}
               >
                 <div className="text-5xl mb-6 text-primary group-hover:text-secondary transition-colors duration-300">
                   {s.icon}
