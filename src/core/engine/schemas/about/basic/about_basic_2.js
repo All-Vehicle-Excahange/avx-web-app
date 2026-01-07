@@ -1,7 +1,7 @@
-export const ABOUT_BASIC_1 = [
+export const ABOUT_BASIC_2 = [
   {
-    id: "about_basic_1",
-    type: "about_us_theme_basic_1",
+    id: "about_basic_2",
+    type: "about_us_theme_basic_2",
     data: {
       headline: "LOREM IPSUM DOLOR SIT AMET CONSUR. NAM VULPUTATE",
 
@@ -16,7 +16,8 @@ export const ABOUT_BASIC_1 = [
       `,
 
       // Stats Cards
-      statsDescription: "<p>Write your stats section paragraph here. Lorem ipsum dolor sit amet consectetur.loremWrite your stats section paragraph here. Lorem ipsum dolor sit amet consectetur.loremWrite your stats section paragraph here. Lorem ipsum dolor sit amet consectetur.loremWrite your stats section paragraph here. Lorem ipsum dolor sit amet consectetur.lorem </p>",
+      statsDescription:
+        "<p>Write your stats section paragraph here. Lorem ipsum dolor sit amet consectetur.loremWrite your stats section paragraph here. Lorem ipsum dolor sit amet consectetur.loremWrite your stats section paragraph here. Lorem ipsum dolor sit amet consectetur.loremWrite your stats section paragraph here. Lorem ipsum dolor sit amet consectetur.lorem </p>",
       stats: [
         { number: "200+", label: "Happy Customers" },
         { number: "456+", label: "Working Hours" },

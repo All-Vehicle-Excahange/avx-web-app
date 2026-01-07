@@ -4,7 +4,7 @@ import { Star, Eye, Target } from "lucide-react";
 import EditorInput from "../atoms/EditorInput";
 import Image from "next/image";
 
-function AboutBasic1({ data, isEditing, onUpdate }) {
+function AboutBasic2({ data, isEditing, onUpdate }) {
   if (!data) return null;
 
   const updateField = (field, value) => onUpdate({ ...data, [field]: value });
@@ -162,8 +162,9 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
   }
 
   /* ================= FRONT ================= */
+
   return (
-    <div className="bg-secondary text-primary py-24 px-4">
+    <div className="bg-primary text-secondary py-14 px-4">
       <div className="max-w-[1480px] mx-auto space-y-32">
         {/* HERO */}
         <section className="text-center max-w-4xl mx-auto">
@@ -171,7 +172,7 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
             {data.headline}
           </h1>
           <div
-            className="text-third prose prose-invert"
+            className="text-secondary/70 prose prose-invert"
             dangerouslySetInnerHTML={{ __html: data.subHeadline }}
           />
         </section>
@@ -180,9 +181,12 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
         <section className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="grid grid-cols-2 gap-8">
             {data.stats.map((stat, i) => (
-              <div key={i} className="bg-secondary rounded-3xl p-2 text-center">
+              <div
+                key={i}
+                className="bg-primary rounded-3xl p-2 text-center "
+              >
                 <h2 className="text-4xl font-extrabold">{stat.number}</h2>
-                <p className="text-third uppercase tracking-widest text-sm mt-3">
+                <p className="text-secondary/70 uppercase tracking-widest text-sm mt-3">
                   {stat.label}
                 </p>
               </div>
@@ -190,7 +194,7 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
           </div>
 
           <div
-            className="text-third prose prose-invert"
+            className="text-secondary/70 prose prose-invert"
             dangerouslySetInnerHTML={{ __html: data.statsDescription }}
           />
         </section>
@@ -202,9 +206,9 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
           </h2>
 
           <div className="grid md:grid-cols-2 gap-10">
-            <div className="bg-secondary p-12 rounded-3xl border border-secondary/10">
+            <div className="bg-secondary/10 p-12 rounded-3xl border border-secondary/20">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 rounded-full border border-primary flex items-center justify-center">
+                <div className="w-14 h-14 rounded-full border border-secondary flex items-center justify-center">
                   <Target size={22} />
                 </div>
                 <h3 className="text-2xl font-bold uppercase tracking-widest">
@@ -212,14 +216,14 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
                 </h3>
               </div>
               <div
-                className="text-third"
+                className="text-secondary/70"
                 dangerouslySetInnerHTML={{ __html: data.missionDescription }}
               />
             </div>
 
-            <div className="bg-secondary p-12 rounded-3xl border border-primary/10">
+            <div className="bg-secondary/10 p-12 rounded-3xl border border-secondary/20">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 rounded-full border border-primary flex items-center justify-center">
+                <div className="w-14 h-14 rounded-full border border-secondary flex items-center justify-center">
                   <Eye size={22} />
                 </div>
                 <h3 className="text-2xl font-bold uppercase tracking-widest">
@@ -227,7 +231,7 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
                 </h3>
               </div>
               <div
-                className="text-third"
+                className="text-secondary/70"
                 dangerouslySetInnerHTML={{ __html: data.visionDescription }}
               />
             </div>
@@ -236,24 +240,22 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
 
         {/* SERVICES */}
         <section className="px-6">
-          <div className="max-w-[1480px] mx-auto text-center mb-16">
-            <h2 className="text-4xl font-bold text-primary mb-4">
-              {data.servicesTitle}
-            </h2>
-            <p className="text-third">{data.servicesSubtitle}</p>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">{data.servicesTitle}</h2>
+            <p className="text-secondary/70">{data.servicesSubtitle}</p>
           </div>
 
-          <div className="max-w-[1480px] mx-auto grid md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
             {data.services.map((s, i) => (
               <div
                 key={i}
-                className={`bg-primary/5 p-10 border border-primary/10 rounded-xl `}
+                className="bg-secondary/10 p-10 border border-secondary/20 rounded-xl"
               >
-                <div className="text-5xl mb-6 text-primary">{s.icon}</div>
+                <div className="text-5xl mb-6">{s.icon}</div>
                 <h3 className="text-xl font-bold mb-4 uppercase tracking-wide">
                   {s.title}
                 </h3>
-                <p className="text-third text-sm">{s.desc}</p>
+                <p className="text-secondary/70 text-sm">{s.desc}</p>
               </div>
             ))}
           </div>
@@ -263,4 +265,4 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
   );
 }
 
-export default AboutBasic1;
+export default AboutBasic2;
