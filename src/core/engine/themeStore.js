@@ -1,8 +1,36 @@
+import { ABOUT_BASIC_1 } from "./schemas";
+import { ABOUT_BASIC_2 } from "./schemas/about/basic/about_basic_2";
+import { ABOUT_BASIC_3 } from "./schemas/about/basic/about_basic_3";
 import { ABOUT_PRO_1 } from "./schemas/about/pro/about_pro_1";
 import { ABOUT_PRO_2 } from "./schemas/about/pro/about_pro_2";
 import { ABOUT_PRO_3 } from "./schemas/about/pro/about_pro_3";
 
 export const THEME_STORE = [
+  {
+    id: "about_basic_1",
+    name: "Basic About Theme 1",
+    category: "about",
+    thumbnail: "/About us-basic-1.webp",
+    preview: "/About us-basic-1.webp",
+    schema: ABOUT_BASIC_1,
+  },
+  {
+    id: "about_basic_2",
+    name: "Basic About Theme 2",
+    category: "about",
+    thumbnail: "/About us-basic-1.webp",
+    preview: "/About us-basic-1.webp",
+    schema: ABOUT_BASIC_2,
+  },
+  {
+    id: "about_basic_3",
+    name: "Basic About Theme 3",
+    category: "about",
+    thumbnail: "/About us-basic-1.webp",
+    preview: "/About us-basic-1.webp",
+    schema: ABOUT_BASIC_3,
+  },
+
   {
     id: "about_pro_1",
     name: "Premium About Theme",

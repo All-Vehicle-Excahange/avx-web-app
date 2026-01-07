@@ -1,4 +1,6 @@
 export * from "./about/basic/about_basic_1";
+export * from "./about/basic/about_basic_2";
+export * from "./about/basic/about_basic_3";
 export * from "./about/pro/about_pro_1";
 export * from "./about/pro/about_pro_2";
 export * from "./about/pro/about_pro_3";

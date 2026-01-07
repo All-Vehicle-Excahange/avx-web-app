@@ -4,7 +4,7 @@ import { Star, Eye, Target } from "lucide-react";
 import EditorInput from "../atoms/EditorInput";
 import Image from "next/image";
 
-function AboutBasic1({ data, isEditing, onUpdate }) {
+function AboutBasic3({ data, isEditing, onUpdate }) {
   if (!data) return null;
 
   const updateField = (field, value) => onUpdate({ ...data, [field]: value });
@@ -162,27 +162,31 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
   }
 
   /* ================= FRONT ================= */
+
   return (
-    <div className="bg-secondary text-primary py-24 px-4">
-      <div className="max-w-[1480px] mx-auto space-y-32">
+    <div className="bg-secondary text-primary py-14">
+      <div className="max-w-[1480px] mx-auto space-y-16">
         {/* HERO */}
-        <section className="text-center max-w-4xl mx-auto">
+        <section className="text-center py-10 w-full mx-auto">
           <h1 className="text-4xl md:text-6xl font-bold uppercase mb-6">
             {data.headline}
           </h1>
           <div
-            className="text-third prose prose-invert"
+            className="text-primary/70 prose prose-invert max-w-5xl mx-auto"
             dangerouslySetInnerHTML={{ __html: data.subHeadline }}
           />
         </section>
 
         {/* STATS + PARA */}
-        <section className="grid lg:grid-cols-2 gap-16 items-center">
+        <section className="px-4 w-full py-16 bg-primary grid lg:grid-cols-2 gap-16 items-center">
           <div className="grid grid-cols-2 gap-8">
             {data.stats.map((stat, i) => (
-              <div key={i} className="bg-secondary rounded-3xl p-2 text-center">
+              <div
+                key={i}
+                className="bg-primary rounded-3xl p-2 text-center text-secondary "
+              >
                 <h2 className="text-4xl font-extrabold">{stat.number}</h2>
-                <p className="text-third uppercase tracking-widest text-sm mt-3">
+                <p className="text-secondary/70 uppercase tracking-widest text-sm mt-3">
                   {stat.label}
                 </p>
               </div>
@@ -190,19 +194,19 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
           </div>
 
           <div
-            className="text-third prose prose-invert"
+            className="text-secondary/70 prose prose-invert"
             dangerouslySetInnerHTML={{ __html: data.statsDescription }}
           />
         </section>
 
         {/* MISSION & VISION */}
-        <section>
+        <section className="w-full py-16 px-4">
           <h2 className="text-center text-4xl font-bold tracking-widest mb-16">
             MISSION & VISION
           </h2>
 
           <div className="grid md:grid-cols-2 gap-10">
-            <div className="bg-secondary p-12 rounded-3xl border border-secondary/10">
+            <div className="bg-primary/5 p-12 rounded-3xl border border-primary/10">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-14 h-14 rounded-full border border-primary flex items-center justify-center">
                   <Target size={22} />
@@ -217,7 +221,7 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
               />
             </div>
 
-            <div className="bg-secondary p-12 rounded-3xl border border-primary/10">
+            <div className="bg-primary/5 p-12 rounded-3xl border border-primary/10">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-14 h-14 rounded-full border border-primary flex items-center justify-center">
                   <Eye size={22} />
@@ -235,25 +239,23 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
         </section>
 
         {/* SERVICES */}
-        <section className="px-6">
-          <div className="max-w-[1480px] mx-auto text-center mb-16">
-            <h2 className="text-4xl font-bold text-primary mb-4">
-              {data.servicesTitle}
-            </h2>
-            <p className="text-third">{data.servicesSubtitle}</p>
+        <section className="bg-primary w-full py-12 px-6 text-secondary">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">{data.servicesTitle}</h2>
+            <p className="text-secondary/70">{data.servicesSubtitle}</p>
           </div>
 
-          <div className="max-w-[1480px] mx-auto grid md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
             {data.services.map((s, i) => (
               <div
                 key={i}
-                className={`bg-primary/5 p-10 border border-primary/10 rounded-xl `}
+                className="bg-secondary/10 p-10 border border-secondary/20 rounded-xl"
               >
-                <div className="text-5xl mb-6 text-primary">{s.icon}</div>
+                <div className="text-5xl mb-6">{s.icon}</div>
                 <h3 className="text-xl font-bold mb-4 uppercase tracking-wide">
                   {s.title}
                 </h3>
-                <p className="text-third text-sm">{s.desc}</p>
+                <p className="text-secondary/70 text-sm">{s.desc}</p>
               </div>
             ))}
           </div>
@@ -263,4 +265,4 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
   );
 }
 
-export default AboutBasic1;
+export default AboutBasic3;
