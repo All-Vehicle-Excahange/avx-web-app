@@ -1,19 +1,34 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { CheckCircle2 } from "lucide-react";
 import PreviewPopup from "./components/PreviewPopup";
 import { THEME_STORE } from "@/core/engine/themeStore";
 import { useRouter } from "next/router";
+import { getThemeListing } from "@/services/theme.service";
 
 export default function ThemeListing() {
   const [previewTheme, setPreviewTheme] = useState(null);
+  const [themes, setThemes] = useState([]);
   const router = useRouter();
 
+  // call the API to get themes in frist load
+
+  useEffect(() => {
+    const fetchThemes = async () => {
+      try {
+        const data = await getThemeListing();
+        setThemes(data.data  || []);
+      } catch (error) {
+        console.error("Failed to fetch themes:", error);
+      }
+    };
+
+    fetchThemes();
+  }, []);
+
   const handleSelect = (theme) => {
-    router.push(
-      `/consult/dashboard/storefront/theme/create?theme=${theme.id}`
-    );
+    router.push(`/consult/dashboard/storefront/theme/create?theme=${theme.id}`);
   };
   return (
     <>
@@ -24,7 +39,7 @@ export default function ThemeListing() {
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {THEME_STORE.map((theme) => (
+          {themes.map((theme) => (
             <div
               key={theme.id}
               onClick={() => setPreviewTheme(theme)}
