@@ -28,7 +28,12 @@ export default function ThemeListing() {
   }, []);
 
   const handleSelect = (theme) => {
-    router.push(`/consult/dashboard/storefront/theme/create?theme=${theme.themeId}`);
+    
+    // !This is for APi must be uncommented when API will be integrated
+    // router.push(`/consult/dashboard/storefront/theme/create?theme=${theme.themeId}`);
+    
+    //  This is for local themes must be removed when API will be integrated
+    router.push(`/consult/dashboard/storefront/theme/create?theme=${theme.id}`);
   };
   return (
     <>
@@ -39,7 +44,8 @@ export default function ThemeListing() {
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {themes.map((theme) => (
+          {/* TODO: Fetch themes from API right now we are using local just replace it with theme  */}
+          {THEME_STORE.map((theme) => (
             <div
               key={theme.id}
               onClick={() => setPreviewTheme(theme)}
