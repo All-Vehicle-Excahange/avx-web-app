@@ -28,7 +28,7 @@ export default function ThemeListing() {
   }, []);
 
   const handleSelect = (theme) => {
-    router.push(`/consult/dashboard/storefront/theme/create?theme=${theme.id}`);
+    router.push(`/consult/dashboard/storefront/theme/create?theme=${theme.themeId}`);
   };
   return (
     <>

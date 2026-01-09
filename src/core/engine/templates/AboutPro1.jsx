@@ -37,6 +37,7 @@ function AboutPro1({ data, isEditing, onUpdate }) {
         <div className="grid grid-cols-2 gap-6">
           <ImageUploader
             label="Hero Image"
+            fieldKey="hero"
             src={data.heroImage}
             onChange={(v) => updateField("heroImage", v)}
           />
@@ -104,6 +105,7 @@ function AboutPro1({ data, isEditing, onUpdate }) {
           <ImageUploader
             label="Mission Circular Image"
             src={data.missionImage}
+            fieldKey={"mission"}
             onChange={(v) => updateField("missionImage", v)}
           />
           <div className="space-y-2">
@@ -136,6 +138,7 @@ function AboutPro1({ data, isEditing, onUpdate }) {
           </div>
           <ImageUploader
             label="Vision Circular Image"
+            fieldKey={"vision"}
             src={data.visionImage}
             onChange={(v) => updateField("visionImage", v)}
           />
@@ -202,7 +205,6 @@ function AboutPro1({ data, isEditing, onUpdate }) {
               })
             }
             variant="ghost"
-            
           >
             <Plus size={16} /> Add Service
           </Button>

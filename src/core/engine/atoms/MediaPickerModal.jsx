@@ -1,11 +1,49 @@
-import React, { useState } from "react";
-import Image from "next/image";
-import { X, Upload, ImageIcon } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import NextImage from "next/image";
+import { X, Upload, Image as LucideImage, Lock } from "lucide-react";
+import {
+  checkIsEligibleToUpload,
+  getThemeImages,
+} from "@/services/theme.service";
 
-const demoImages = ["/demo/1.jpg", "/demo/2.jpg", "/demo/3.jpg", "/demo/4.jpg"];
-
-export default function MediaPickerModal({ open, onClose, onSelect }) {
+export default function MediaPickerModal({ open, onClose, onSelect, type }) {
   const [tab, setTab] = useState("library");
+  const [images, setImages] = useState([]);
+  const [isEligibleToUpload, setIsEligibleToUpload] = useState(false);
+
+  //  Call api with type to get images in useEffect
+
+  useEffect(() => {
+    if (!open || tab !== "library") return;
+
+    const fetchImages = async () => {
+      try {
+        const data = await getThemeImages(type);
+        setImages(data.data || []);
+      } catch (error) {
+        console.error("Failed to fetch images:", error);
+      }
+    };
+
+    fetchImages();
+  }, [open, tab, type]);
+
+  useEffect(() => {
+    if (!open || tab !== "upload") return;
+
+    const check = async () => {
+      try {
+        const res = await checkIsEligibleToUpload();
+        setIsEligibleToUpload(res.data);
+      } catch (err) {
+        console.error("Eligibility check failed", err);
+        setIsEligibleToUpload(false);
+      }
+    };
+
+    check();
+  }, [open, tab, type]);
+
   if (!open) return null;
 
   return (
@@ -45,46 +83,93 @@ export default function MediaPickerModal({ open, onClose, onSelect }) {
         {/* TAB CONTENT */}
         {tab === "library" && (
           <div className="grid grid-cols-4 gap-6">
-            {demoImages.map((img, i) => (
+            {images.length === 0 && (
+              <p className="text-center text-third col-span-4">
+                No images found in library.
+              </p>
+            )}
+            {images.map((img, i) => (
               <div
                 key={i}
-                onClick={() => onSelect(img)}
-                className="relative h-44 rounded-2xl overflow-hidden border border-third/30 hover:border-primary cursor-pointer group"
+                onClick={() => img.isEligible && onSelect(img)}
+                className={`relative h-44 rounded-2xl overflow-hidden border transition group
+             ${
+               img.isEligible
+                 ? "border-third/30 hover:border-primary cursor-pointer"
+                 : "border-dashed border-yellow-400 opacity-70 cursor-not-allowed"
+             }`}
               >
-                <Image
-                  src={img}
+                <NextImage
+                  src={img.imageUrl}
                   alt="Media"
                   fill
-                  className="object-cover group-hover:scale-105 transition"
+                  className={`object-cover transition ${
+                    img.isEligible ? "group-hover:scale-105" : "grayscale"
+                  }`}
                 />
+
+                {!img.isEligible && (
+                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
+                    <div className="flex flex-col items-center gap-2 text-primary-400">
+                      <Lock className="w-6 h-6" />
+                      <span className="text-xs uppercase tracking-widest font-bold">
+                        Locked
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
         )}
 
         {tab === "upload" && (
-          <label className="relative block border-2 border-dashed border-primary rounded-3xl p-20 text-center cursor-pointer hover:bg-primary/10 transition">
-            <div className="flex flex-col items-center justify-center gap-4 text-primary">
-              <div className="w-16 h-16 bg-primary text-secondary rounded-2xl flex items-center justify-center">
-                <ImageIcon className="w-8 h-8" />
+          <div className="relative">
+            {/* LOCK OVERLAY */}
+            {!isEligibleToUpload && (
+              <div className="absolute inset-0 z-20 bg-black/70 flex items-center justify-center rounded-3xl">
+                <div className="flex flex-col items-center gap-2 text-primary-400">
+                  <Lock className="w-8 h-8" />
+                  <span className="text-xs uppercase tracking-widest font-bold">
+                    Upgrade to unlock uploads
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* REAL UPLOAD ZONE */}
+            <label
+              className={`relative block border-2 border-dashed rounded-3xl p-20 text-center transition
+        ${
+          isEligibleToUpload
+            ? "border-primary cursor-pointer hover:bg-primary/10"
+            : "border-primary-400 opacity-40 cursor-not-allowed"
+        }`}
+            >
+              <div className="flex flex-col items-center justify-center gap-4 text-primary">
+                <div className="w-16 h-16 bg-primary text-secondary rounded-2xl flex items-center justify-center">
+                  <LucideImage className="w-8 h-8" />
+                </div>
+
+                <h3 className="text-xl font-bold">Drag & Drop Image</h3>
+                <p className="text-third text-sm">
+                  or click to select from device
+                </p>
               </div>
 
-              <h3 className="text-xl font-bold">Drag & Drop Image</h3>
-              <p className="text-third text-sm">
-                or click to select from device
-              </p>
-            </div>
-
-            <input
-              type="file"
-              className="hidden"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files[0];
-                if (file) onSelect(URL.createObjectURL(file));
-              }}
-            />
-          </label>
+              <input
+                type="file"
+                className="hidden"
+                accept="image/*"
+                disabled={!isEligibleToUpload}
+                onChange={(e) => {
+                  if (!isEligibleToUpload) return;
+                  const file = e.target.files[0];
+                  if (file) onSelect(URL.createObjectURL(file));
+                }}
+              />
+            </label>
+          </div>
         )}
       </div>
     </div>

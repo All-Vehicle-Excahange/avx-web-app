@@ -9,6 +9,7 @@ export default function CreateTheme() {
   const themeId = params.get("theme");
 
   const theme = THEME_STORE.find((t) => t.id === themeId) || THEME_STORE[0];
+  console.log(theme)
   const [sections, setSections] = useState(theme.schema);
   const [mode, setMode] = useState("editor");
 

@@ -1,11 +1,27 @@
 import React, { useState } from "react";
-import Image from "next/image";
-import { ImageIcon } from "lucide-react";
-import MediaPickerModal from "./MediaPickerModal";
+import NextImage from "next/image";
+import { Image as LucideImage } from "lucide-react";import MediaPickerModal from "./MediaPickerModal";
 
-export const ImageUploader = ({ label, src, onChange, sizeText = "Image" }) => {
+const detectType = (key = "") => {
+  const k = key.toLowerCase();
+
+  if (k.includes("hero") || k.includes("header")) return "HEADER";
+  if (k.includes("mission")) return "MISSION";
+  if (k.includes("vision")) return "VISION";
+
+  return "HEADER";
+};
+
+export const ImageUploader = ({
+  label,
+  src,
+  onChange,
+  fieldKey,
+  sizeText = "Image",
+}) => {
   const [open, setOpen] = useState(false);
 
+  const type = detectType(fieldKey);
   return (
     <>
       <div className="flex flex-col gap-1 w-full h-full">
@@ -21,7 +37,7 @@ export const ImageUploader = ({ label, src, onChange, sizeText = "Image" }) => {
         >
           {src ? (
             <>
-              <Image
+              <NextImage
                 src={src}
                 alt="Selected"
                 fill
@@ -39,7 +55,7 @@ export const ImageUploader = ({ label, src, onChange, sizeText = "Image" }) => {
           ) : (
             <div className="h-full w-full flex flex-col items-center justify-center text-center p-4">
               <div className="mb-2 w-12 h-12 bg-primary text-secondary rounded-xl flex items-center justify-center">
-                <ImageIcon className="w-6 h-6" />
+                <LucideImage className="w-6 h-6" />
               </div>
               <p className="text-primary font-bold text-lg">{sizeText}</p>
               <p className="text-third text-xs">Click to choose image</p>
@@ -50,6 +66,7 @@ export const ImageUploader = ({ label, src, onChange, sizeText = "Image" }) => {
 
       <MediaPickerModal
         open={open}
+        type={type}
         onClose={() => setOpen(false)}
         onSelect={(img) => {
           onChange(img);
