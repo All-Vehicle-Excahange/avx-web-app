@@ -1,4 +1,5 @@
-import { ABOUT_BASIC_1 } from "./schemas";
+import { ABOUT_BASIC_1 } from "./schemas/about/premium/about_premium_1";
+import { ABOUT_PREMIUM_2 } from "./schemas/about/premium/about_premium_2";
 import { ABOUT_BASIC_2 } from "./schemas/about/basic/about_basic_2";
 import { ABOUT_BASIC_3 } from "./schemas/about/basic/about_basic_3";
 import { ABOUT_PREMIUM_1 } from "./schemas/about/premium/about_premium_1";
@@ -70,5 +71,14 @@ export const THEME_STORE = [
     thumbnail: "/themes/premium/thumb.webp",
     preview: "/themes/premium/full.webp",
     schema: ABOUT_PREMIUM_1,
+  },
+  {
+    id: "about_premium_2",
+    name: "Premium About Theme",
+    type: "about_us_theme_premium_1",
+    category: "about",
+    thumbnail: "/themes/premium/thumb.webp",
+    preview: "/themes/premium/full.webp",
+    schema: ABOUT_PREMIUM_2,
   },
 ];

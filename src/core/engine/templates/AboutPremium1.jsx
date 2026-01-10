@@ -4,6 +4,7 @@ import { ImageUploader } from "../atoms/ImageUploader ";
 import RichTextEditor from "../atoms/RichTextEditor";
 import Image from "next/image";
 import { BarChart3, Target, TrendingUp } from "lucide-react";
+import * as Icons from "lucide-react";
 
 function AboutPremium1({ data, isEditing, onUpdate }) {
   if (!data) return null;
@@ -148,6 +149,54 @@ function AboutPremium1({ data, isEditing, onUpdate }) {
             </div>
           </div>
         </div>
+
+        <hr className="border-third/30" />
+        <h3 className="text-primary font-bold text-xl">Our Services</h3>
+
+        <EditorInput
+          bold
+          value={data.servicesTitle}
+          onChange={(e) => update("servicesTitle", e.target.value)}
+        />
+
+        <EditorInput
+          value={data.servicesSubtitle}
+          onChange={(e) => update("servicesSubtitle", e.target.value)}
+        />
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+          {data.services.map((s, i) => (
+            <div
+              key={i}
+              className="bg-primary/5 border border-third/20 rounded-2xl p-6 space-y-4"
+            >
+              <EditorInput
+                label="Lucide Icon Name (e.g. Rocket, Shield, Code)"
+                center
+                value={s.icon}
+                onChange={(e) =>
+                  updateArrayItem("services", i, "icon", e.target.value)
+                }
+              />
+              <EditorInput
+                bold
+                center
+                value={s.title}
+                onChange={(e) =>
+                  updateArrayItem("services", i, "title", e.target.value)
+                }
+              />
+              <EditorInput
+                center
+                size="sm"
+                value={s.desc}
+                onChange={(e) =>
+                  updateArrayItem("services", i, "desc", e.target.value)
+                }
+              />
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -199,10 +248,10 @@ function AboutPremium1({ data, isEditing, onUpdate }) {
       </div>
 
       <section className="bg-secondary py-18 ">
-        <div className="max-w-[1480px] mx-auto grid lg:grid-cols-2 gap-24 items-start">
+        <div className="max-w-[1480px] mx-auto grid lg:grid-cols-2 gap-24 items-center">
           {/* LEFT STORY */}
           <div
-            className="text-third text-lg leading-relaxed max-w-xl"
+            className="text-third text-xl leading-relaxed text-center flex items-center justify-center"
             dangerouslySetInnerHTML={{ __html: data.aboutText }}
           />
 
@@ -243,8 +292,8 @@ function AboutPremium1({ data, isEditing, onUpdate }) {
           </div>
 
           {/* RIGHT CONTENT - Redesigned Alignment */}
-          <div className="space-y-16">
-            <div className="space-y-6">
+          <div className="space-y-10">
+            <div className="space-y-6 rounded-2xl  border border-third/20 bg-primary/5 px-4  py-4">
               <div className="flex items-center justify-between gap-6">
                 {/* Icon */}
                 <Target strokeWidth={1.5} className="w-16 h-16 text-primary" />
@@ -262,13 +311,13 @@ function AboutPremium1({ data, isEditing, onUpdate }) {
 
               {/* Description */}
               <div
-                className="text-third text-xl leading-relaxed max-w-xl"
+                className="text-third text-xl leading-relaxed px-4  py-4"
                 dangerouslySetInnerHTML={{ __html: data.missionText }}
               />
             </div>
 
-            <div className="space-y-6">
-              <div className="flex items-center justify-between ">
+            <div className="space-y-6 rounded-2xl  border border-third/20 bg-primary/5">
+              <div className="flex items-center justify-between rounded-3xl px-4  py-4 backdrop-blur-xl">
                 {/* Stacked Text */}
                 <div className="flex flex-col">
                   <span className="text-4xl font-semibold text-primary leading-none">
@@ -288,10 +337,40 @@ function AboutPremium1({ data, isEditing, onUpdate }) {
 
               {/* Description */}
               <div
-                className="text-third text-xl leading-relaxed max-w-xl"
+                className="text-third text-xl leading-relaxed px-4  py-4"
                 dangerouslySetInnerHTML={{ __html: data.visionText }}
               />
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-secondary py-8">
+        <div className="max-w-[1480px] mx-auto space-y-20">
+          {/* Title */}
+          <div className="max-w-xl">
+            <h2 className="text-5xl font-extrabold text-primary mb-4">
+              {data.servicesTitle}
+            </h2>
+            <p className="text-third text-lg">{data.servicesSubtitle}</p>
+          </div>
+
+          {/* Services Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
+            {data.services.map((s, i) => {
+              const Icon = Icons[s.icon] || Icons.Star;
+
+              return (
+                <div
+                  key={i}
+                  className="bg-primary/5 border border-third/20 rounded-3xl p-10 space-y-6 hover:bg-primary/10 transition-all"
+                >
+                  <Icon size={36} className="text-primary" />
+                  <h3 className="text-xl font-bold text-primary">{s.title}</h3>
+                  <p className="text-third text-sm leading-relaxed">{s.desc}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
