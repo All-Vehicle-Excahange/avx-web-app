@@ -4,4 +4,5 @@ export * from "./about/basic/about_basic_3";
 export * from "./about/pro/about_pro_1";
 export * from "./about/pro/about_pro_2";
 export * from "./about/pro/about_pro_3";
-
+export * from "./about/premium/about_premium_1";
+export * from "./about/premium/about_premium_2";

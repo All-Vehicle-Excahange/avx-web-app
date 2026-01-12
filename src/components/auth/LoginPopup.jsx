@@ -20,10 +20,11 @@ function LoginPopup({
   if (!isOpen) return null;
 
   const handleSendOtp = async () => {
-  if (mobile.length !== 10) {
-    alert("Enter valid mobile number");
-    return;
-  }
+ 
+  //   if (mobile.length !== 10) {
+  //   alert("Enter valid mobile number");
+  //   return;
+  // }
 
   try {
     const res = await getOtp({
