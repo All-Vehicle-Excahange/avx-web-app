@@ -6,23 +6,23 @@ import { checkIsEligibleToCreate } from "@/services/theme.service";
 import { useEffect, useState } from "react";
 
 export default function PreviewPopup({ theme, onClose, onSelect }) {
-  
+
   // TODO Change default value to false when API will be integrated
-  const [isEligible, setIsEligible] = useState(true);
+  const [isEligible, setIsEligible] = useState(false);
 
   // TODO Make API call to check eligibility of theme right now we using static value JUST UNCOMMNET IT WHEN needed from DB
 
-  // useEffect(() => {
-  //   const fetchEligibility = async () => {
-  //     try {
-  //       const isEligible = await checkIsEligibleToCreate(theme.id);
-  //       setIsEligible(isEligible.data);
-  //     } catch (error) {
-  //       console.error("Failed to fetch eligibility:", error);
-  //     }
-  //   };
-  //   fetchEligibility();
-  // }, [theme.id]);
+  useEffect(() => {
+    const fetchEligibility = async () => {
+      try {
+        const isEligible = await checkIsEligibleToCreate(theme.id);
+        setIsEligible(isEligible.data);
+      } catch (error) {
+        console.error("Failed to fetch eligibility:", error);
+      }
+    };
+    fetchEligibility();
+  }, [theme.id]);
 
   return (
     <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex flex-col">
@@ -33,11 +33,10 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
           <Button
             variant="ghost"
             onClick={isEligible ? onSelect : undefined}
-            className={`transition-all ${
-              !isEligible
-                ? "opacity-50 cursor-not-allowed text-gray-400 border border-dashed border-gray-500 pointer-events-none"
-                : " hover:text-secondary"
-            }`}
+            className={`transition-all ${!isEligible
+              ? "opacity-50 cursor-not-allowed text-gray-400 border border-dashed border-gray-500 pointer-events-none"
+              : " hover:text-secondary"
+              }`}
           >
             Use This Theme
             {!isEligible && <LockIcon className="ml-2" />}

@@ -5,11 +5,12 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import Button from "@/components/ui/button";
 import { getOtp, login } from "@/services/auth.service";
+import { toast } from "react-toastify";
 
 function LoginPopup({
   isOpen,
   onClose,
-  onSignup = () => {}, // ✅ SAFE DEFAULT
+  onSignup = () => { }, // ✅ SAFE DEFAULT
 }) {
   const [accountType, setAccountType] = useState("personal");
   const [mobile, setMobile] = useState("");
@@ -20,31 +21,30 @@ function LoginPopup({
   if (!isOpen) return null;
 
   const handleSendOtp = async () => {
- 
-  //   if (mobile.length !== 10) {
-  //   alert("Enter valid mobile number");
-  //   return;
-  // }
 
-  try {
-    const res = await getOtp({
-      phoneNumber: mobile,     
-      countryCode: "+91",
-      requestType: "LOGIN",     
-    });
+    //   if (mobile.length !== 10) {
+    //   alert("Enter valid mobile number");
+    //   return;
+    // }
 
-    console.log("LOGIN OTP RES:", res);
+    try {
+      const res = await getOtp({
+        phoneNumber: mobile,
+        countryCode: "+91",
+        requestType: "LOGIN",
+      });
 
-    if (res?.success || res?.status) {
-      setOtpSent(true);
-      setTimeout(() => otpRefs.current[0]?.focus(), 100);
-    } else {
-      alert(res.message || "Failed to send OTP");
+      if (res?.success || res?.status) {
+        setOtpSent(true);
+        setTimeout(() => otpRefs.current[0]?.focus(), 100);
+        toast.success("OTP sent successfully");
+      } else {
+        toast.error(res.message || "Failed to send OTP");
+      }
+    } catch (e) {
+      toast.error("Failed to send OTP");
     }
-  } catch (e) {
-    alert("Failed to send OTP");
-  }
-};
+  };
 
 
   const handleOtpChange = (index, value) => {
@@ -66,27 +66,25 @@ function LoginPopup({
   };
 
 
-const handleValidateOtp = async () => {
-  const finalOtp = otp.join("");
-  if (finalOtp.length !== 6) return;
+  const handleValidateOtp = async () => {
+    const finalOtp = otp.join("");
+    if (finalOtp.length !== 6) return;
 
-  try {
-    const res = await login({
-      phoneNumber: mobile,
-      countryCode: "+91",
-      otp: finalOtp,
-    });
+    try {
+      const res = await login({
+        phoneNumber: mobile,
+        countryCode: "+91",
+        otp: finalOtp,
+      });
 
-    if (res.success) {
-      alert("Login Successful 🎉");
-      onClose();
-    } else {
-      alert(res.message || "Invalid OTP");
+      if (res.success) {
+        toast.success("Login Successful");
+        onClose();
+      }
+    } catch (e) {
+      toast.error("Login failed");
     }
-  } catch (e) {
-    alert("Login failed");
-  }
-};
+  };
 
 
   return (
@@ -119,21 +117,19 @@ const handleValidateOtp = async () => {
           <div className="flex border rounded-lg p-1 mb-8 w-fit border-accent-primary">
             <button
               onClick={() => setAccountType("personal")}
-              className={`px-6 py-2 text-sm font-semibold rounded-md ${
-                accountType === "personal"
-                  ? "bg-primary text-secondary"
-                  : "text-primary"
-              }`}
+              className={`px-6 py-2 text-sm font-semibold rounded-md ${accountType === "personal"
+                ? "bg-primary text-secondary"
+                : "text-primary"
+                }`}
             >
               PERSONAL ACCOUNT
             </button>
             <button
               onClick={() => setAccountType("consultant")}
-              className={`px-6 py-2 text-sm font-semibold rounded-md ${
-                accountType === "consultant"
-                  ? "bg-primary text-secondary"
-                  : "text-primary"
-              }`}
+              className={`px-6 py-2 text-sm font-semibold rounded-md ${accountType === "consultant"
+                ? "bg-primary text-secondary"
+                : "text-primary"
+                }`}
             >
               CONSULTANT ACCOUNT
             </button>
