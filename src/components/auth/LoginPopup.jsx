@@ -77,10 +77,15 @@ function LoginPopup({
         otp: finalOtp,
       });
 
-      if (res.success) {
+      if (res?.success || res?.status) {
         toast.success("Login Successful");
-        onClose();
+        setTimeout(() => {
+          onClose();
+        }, 300);
+
+        return;
       }
+
     } catch (e) {
       const msg =
         e?.response?.data?.message ||
