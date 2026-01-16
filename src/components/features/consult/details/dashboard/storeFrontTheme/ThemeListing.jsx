@@ -6,7 +6,6 @@ import PreviewPopup from "./components/PreviewPopup";
 import { THEME_STORE } from "@/core/engine/themeStore";
 import { useRouter } from "next/router";
 import { getThemeListing } from "@/services/theme.service";
-import toast from "react-hot-toast";
 
 export default function ThemeListing() {
   const [previewTheme, setPreviewTheme] = useState(null);
@@ -20,7 +19,6 @@ export default function ThemeListing() {
       try {
         const data = await getThemeListing();
         setThemes(data.data || []);
-        toast.success("Themes fetched successfully");
       } catch (error) {
         console.error("Failed to fetch themes:", error);
       }
@@ -39,6 +37,7 @@ export default function ThemeListing() {
   };
   return (
     <>
+
       <section className="space-y-4">
         <h1 className="text-2xl font-bold">Select Theme to Continue</h1>
         <p className="text-third text-sm">

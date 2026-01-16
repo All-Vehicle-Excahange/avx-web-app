@@ -5,6 +5,8 @@ const ENDPOINT = {
   getOtp: "/auth/get-otp",
   signup: "/auth/signup",
   login: "/auth/login",
+  refresh: "/auth/refresh",
+
 };
 
 export const getOtp = async ({ phoneNumber, countryCode, requestType }) => {
@@ -53,3 +55,8 @@ export const login = async ({ phoneNumber, countryCode, otp }) => {
   return res.data;
 };
 
+
+export const refreshToken = async () => {
+  const res = await axiosInstance.post(ENDPOINT.refresh);
+  return res.data;
+};
