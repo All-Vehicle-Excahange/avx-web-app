@@ -26,105 +26,91 @@ export default function VehicleCard({ data }) {
       className="
         group/card relative flex flex-row md:flex-col
         rounded-2xl overflow-hidden
-        bg-secondary/90 text-primary
-        md:max-w-sm w-[392px]
+        bg-secondary/15 text-primary
+        md:max-w-sm w-full sm:w-[392px]
         border-2 border-third/60
         hover:shadow-[0_20px_60px_rgba(255,255,255,0.25)]
         transition-shadow duration-300
       "
     >
-      {/* 🔥 BLURRED BACKGROUND */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover bg-center opacity-40 blur-lg" />
-      </div>
-
-      {/* ================= CONTENT ================= */}
       <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
-        {/* Image Section - Height reduced from md:h-62 to md:h-48 */}
-        <div className="relative w-32 sm:w-40 min-h-32 md:min-h-0 md:h-48 md:w-full shrink-0 overflow-hidden">
-          {data.sponsored && <SponsoredRibbon />}
-          <Image
-            src={data.image}
-            alt={data.title}
-            fill
-            className="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-110"
-          />
+        <div className="relative w-32 sm:w-40 min-h-40 md:min-h-0 md:h-62 md:w-full shrink-0 p-2">
+          <div className="relative w-full h-full overflow-hidden rounded-xl">
+            {data.sponsored && <SponsoredRibbon />}
+
+            <Image
+              src={data.image}
+              alt={data.title}
+              fill
+              className="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-110"
+            />
+          </div>
         </div>
 
-        {/* Content Section - Reduced padding and spacing */}
-        <div className="flex flex-col flex-1 p-2 md:p-3.5 space-y-1 md:space-y-2.5 justify-between">
-          {/* Title + Price - Font size reduced to text-lg */}
+        {/* ================= CONTENT SECTION ================= */}
+        <div className="flex flex-col flex-1 p-2.5 md:p-4 space-y-2 md:space-y-4 justify-between">
+          {/* Title Section */}
           <div className="flex justify-between items-start gap-2">
-            <div className="min-w-0">
-              <h3 className="text-xs md:text-lg font-bold leading-tight tracking-wide line-clamp-1">
-                {data.title}
-              </h3>
+            <div className="min-w-0 w-full">
+              {/* 👉 TITLE + WISHLIST IN SAME LINE */}
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-secondary md:text-xl font-bold leading-tight tracking-wide line-clamp-2">
+                  {data.title}
+                </h3>
 
-              {/* Combined Owner & Address Row */}
-              <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1 text-[9px] md:text-[11px] text-primary/80">
-                <p className="flex items-center gap-1 line-clamp-1">
-                  <User className="w-3 h-3" />
-                  {data.userName || "Nihal Chaudhary"}
-                </p>
-                <span className="hidden md:inline text-primary/30">|</span>
-                <p className="flex items-center gap-1 line-clamp-1">
-                  <MapPinned className="w-3 h-3" />
-                  {data.location || "Chhapi, Gujarat"}
-                </p>
+                {/* 👉 MOVED HEART HERE */}
+                <button
+                  onClick={() => setIsFavorite(!isFavorite)}
+                  className="ml-2 flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 hover:bg-primary/20 transition-all cursor-pointer"
+                >
+                  <Heart
+                    className={`w-5 h-5 transition-colors ${
+                      isFavorite ? "fill-red-500 text-red-500" : "text-primary"
+                    }`}
+                  />
+                </button>
               </div>
-            </div>
 
-            <h3 className="text-xs md:text-lg whitespace-nowrap font-bold leading-tight">
-              ₹ {data.price}
-            </h3>
+              <p className="text-xs md:text-sm text-primary/90 mt-1 flex items-center gap-1.5">
+                Listed By: {data.userName || "Nihal Chaudhary"}
+              </p>
+
+              <p className="text-xs md:text-sm text-primary/90 mt-1 flex items-center gap-1.5">
+                <MapPinned className="w-3.5 h-3.5" />
+                {data.location || "Chhapi, Gujarat"}
+              </p>
+            </div>
           </div>
 
-          {/* Specs */}
-          <div className="flex flex-wrap items-center gap-x-1.5 md:gap-x-3 gap-y-0.5 md:gap-y-1 text-[10px] md:text-[11px] text-primary/70 font-medium">
+          {/* ---- SPECS ---- */}
+          <div className="flex flex-wrap items-center gap-x-2 md:gap-x-4 gap-y-1 text-xs md:text-sm text-primary/80 font-medium">
             <span>{data.year}</span>
 
             <span className="flex items-center gap-1">
-              <Settings2 className="w-3 h-3" />
-              {data.transmission}
+              <Settings2 className="w-4 h-4" /> {data.transmission}
             </span>
 
             <span className="flex items-center gap-1">
-              <Fuel className="w-3 h-3" />
-              {data.fuel}
+              <Fuel className="w-4 h-4" /> {data.fuel}
             </span>
 
             <span className="flex items-center gap-1">
-              <Users className="w-3 h-3" />
-              {data.seats}
+              <Users className="w-4 h-4" /> {data.seats}
             </span>
 
             <span className="flex items-center gap-1">
-              <Star className="w-3 h-3 fill-primary text-primary" />
+              <Star className="w-4 h-4 fill-primary text-primary" />
               {data.rating}
             </span>
           </div>
 
-          {/* CTA */}
-          <div className="flex items-center justify-between">
-            <Button
-              onClick={handleClick}
-              variant="outline"
-              size="sm"
-              className="w-full md:w-auto h-6 md:h-8 text-[10px] md:text-xs"
-            >
-              View More
-            </Button>
+          {/* ================= BOTTOM SECTION ================= */}
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="text-sm md:text-xl font-bold">₹ {data.price}</h3>
 
-            <button
-              onClick={() => setIsFavorite(!isFavorite)}
-              className="flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-transparent text-secondary border border-third/60 hover:bg-third/30 transition-colors shrink-0 cursor-pointer ml-2"
-            >
-              <Heart
-                className={`w-4 h-4 md:w-5 md:h-5 ${
-                  isFavorite ? "fill-red-500 text-red-500" : "text-primary"
-                }`}
-              />
-            </button>
+            <Button onClick={handleClick} variant="outline" size="sm">
+              View Details
+            </Button>
           </div>
         </div>
       </div>

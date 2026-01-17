@@ -6,22 +6,6 @@ import Button from "@/components/ui/button";
 // --- Utility for Tailwind classes ---
 const cn = (...classes) => classes.filter(Boolean).join(" ");
 
-// --- Mock Data ---
-const featuredCar = {
-  id: "featured-1",
-  title: "BMW 8-serie 2-door coupe grey",
-  subtitle: "35 D6 Powerful lorem isump",
-  year: "2022",
-  transmission: "Manual",
-  fuel: "Diesel",
-  seats: "5",
-  drivetrain: "Front Wheel Drive",
-  rating: "4.3",
-  price: "6,75,998",
-  image: "/big_card_car.jpg",
-  sponsored: false,
-};
-
 const smallCars = [
   {
     id: "1",
@@ -33,7 +17,7 @@ const smallCars = [
     seats: "5",
     rating: "4.3",
     price: "6,75,998",
-    image: "/small_car.jpg",
+    image: "/olx1.png",
     sponsored: false,
   },
   {
@@ -46,7 +30,7 @@ const smallCars = [
     seats: "5",
     rating: "4.3",
     price: "6,75,998",
-    image: "/small_car.jpg",
+    image: "/olx2.png",
     sponsored: false,
   },
   {
@@ -59,7 +43,7 @@ const smallCars = [
     seats: "5",
     rating: "4.3",
     price: "6,75,998",
-    image: "/small_car.jpg",
+    image: "/olx3.png",
     sponsored: false,
   },
   {
@@ -72,7 +56,59 @@ const smallCars = [
     seats: "5",
     rating: "4.3",
     price: "6,75,998",
-    image: "/small_car.jpg",
+    image: "/olx4.png",
+    sponsored: false,
+  },
+  {
+    id: "4",
+    title: "Maruti Fronx",
+    subtitle: "35 D6 Powerful lorem isump",
+    year: "2022",
+    transmission: "Manual",
+    fuel: "Diesel",
+    seats: "5",
+    rating: "4.3",
+    price: "6,75,998",
+    image: "/olx2.png",
+    sponsored: false,
+  },
+  {
+    id: "4",
+    title: "Maruti Fronx",
+    subtitle: "35 D6 Powerful lorem isump",
+    year: "2022",
+    transmission: "Manual",
+    fuel: "Diesel",
+    seats: "5",
+    rating: "4.3",
+    price: "6,75,998",
+    image: "/olx1.png",
+    sponsored: false,
+  },
+  {
+    id: "4",
+    title: "Maruti Fronx",
+    subtitle: "35 D6 Powerful lorem isump",
+    year: "2022",
+    transmission: "Manual",
+    fuel: "Diesel",
+    seats: "5",
+    rating: "4.3",
+    price: "6,75,998",
+    image: "/olx4.png",
+    sponsored: false,
+  },
+  {
+    id: "4",
+    title: "Maruti Fronx",
+    subtitle: "35 D6 Powerful lorem isump",
+    year: "2022",
+    transmission: "Manual",
+    fuel: "Diesel",
+    seats: "5",
+    rating: "4.3",
+    price: "6,75,998",
+    image: "/olx3.png",
     sponsored: false,
   },
 ];
@@ -102,7 +138,7 @@ export default function AvxInspected() {
               "px-4 py-1.5 text-sm font-semibold rounded-md transition-all cursor-pointer",
               activeType === "4-Wheeler"
                 ? "bg-secondary text-primary shadow-sm"
-                : "text-secondary/60 hover:text-secondary",
+                : "text-secondary/60 hover:text-secondary"
             )}
           >
             4-Wheeler
@@ -114,7 +150,7 @@ export default function AvxInspected() {
               "px-4 py-1.5 text-sm font-semibold rounded-md transition-all cursor-pointer",
               activeType === "2-Wheeler"
                 ? "bg-secondary text-primary shadow-sm"
-                : "text-secondary/60 hover:text-secondary",
+                : "text-secondary/60 hover:text-secondary"
             )}
           >
             2-Wheeler
@@ -125,22 +161,17 @@ export default function AvxInspected() {
       {/* Grid Layout */}
       <div
         className="
-    flex-1 min-h-0
-    grid
-    sm:items-center
-    grid-cols-1
-    md:grid-cols-2
-    lg:grid-cols-4
-    lg:grid-rows-2
-    gap-4
-    pb-1
-  "
+       flex-1 min-h-0
+       grid
+       sm:items-center
+       grid-cols-1
+       md:grid-cols-2
+       lg:grid-cols-4
+       lg:grid-rows-[1.05fr_0.95fr]
+       gap-4
+       pb-1
+     "
       >
-        {/* Featured Vehicle */}
-        <div className="lg:col-span-2 lg:row-span-2 3xl:col-span-2 h-full">
-          <FeaturedVehicleCard data={featuredCar} />
-        </div>
-
         {/* Small Vehicles */}
         {smallCars.map((car) => (
           <div key={car.id} className="lg:col-span-1 lg:row-span-1 h-full">
