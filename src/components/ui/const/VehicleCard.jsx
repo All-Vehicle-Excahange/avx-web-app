@@ -40,8 +40,8 @@ export default function VehicleCard({ data }) {
 
       {/* ================= CONTENT ================= */}
       <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
-        {/* Image Section */}
-        <div className="relative w-32 sm:w-40 min-h-40 md:min-h-0 md:h-62 md:w-full shrink-0 overflow-hidden">
+        {/* Image Section - Height reduced from md:h-62 to md:h-48 */}
+        <div className="relative w-32 sm:w-40 min-h-32 md:min-h-0 md:h-48 md:w-full shrink-0 overflow-hidden">
           {data.sponsored && <SponsoredRibbon />}
           <Image
             src={data.image}
@@ -51,33 +51,36 @@ export default function VehicleCard({ data }) {
           />
         </div>
 
-        {/* Content Section */}
-        <div className="flex flex-col flex-1 p-2.5 md:p-4 space-y-1.5 md:space-y-4 justify-between">
-          {/* Title + Price */}
+        {/* Content Section - Reduced padding and spacing */}
+        <div className="flex flex-col flex-1 p-2 md:p-3.5 space-y-1 md:space-y-2.5 justify-between">
+          {/* Title + Price - Font size reduced to text-lg */}
           <div className="flex justify-between items-start gap-2">
             <div className="min-w-0">
-              <h3 className="text-xs md:text-xl font-bold leading-tight tracking-wide line-clamp-2">
+              <h3 className="text-xs md:text-lg font-bold leading-tight tracking-wide line-clamp-1">
                 {data.title}
               </h3>
 
-              <p className="text-[9px] md:text-xs text-primary/90 mt-0.5 line-clamp-1 flex items-center gap-1">
-                <User className="w-3 h-3" />
-                {data.userName || "Nihal Chaudhary"}
-              </p>
-
-              <p className="text-[9px] md:text-xs text-primary/90 mt-0.5 line-clamp-1 flex items-center gap-1">
-                <MapPinned className="w-3 h-3" />
-                {data.location || "Chhapi, Gujarat"}
-              </p>
+              {/* Combined Owner & Address Row */}
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1 text-[9px] md:text-[11px] text-primary/80">
+                <p className="flex items-center gap-1 line-clamp-1">
+                  <User className="w-3 h-3" />
+                  {data.userName || "Nihal Chaudhary"}
+                </p>
+                <span className="hidden md:inline text-primary/30">|</span>
+                <p className="flex items-center gap-1 line-clamp-1">
+                  <MapPinned className="w-3 h-3" />
+                  {data.location || "Chhapi, Gujarat"}
+                </p>
+              </div>
             </div>
 
-            <h3 className="text-xs md:text-xl whitespace-nowrap   font-bold leading-tight">
+            <h3 className="text-xs md:text-lg whitespace-nowrap font-bold leading-tight">
               ₹ {data.price}
             </h3>
           </div>
 
           {/* Specs */}
-          <div className="flex flex-wrap items-center gap-x-1.5 md:gap-x-4 gap-y-0.5 md:gap-y-2 text-[10px] md:text-[11px] text-primary/70 font-medium">
+          <div className="flex flex-wrap items-center gap-x-1.5 md:gap-x-3 gap-y-0.5 md:gap-y-1 text-[10px] md:text-[11px] text-primary/70 font-medium">
             <span>{data.year}</span>
 
             <span className="flex items-center gap-1">
@@ -107,14 +110,14 @@ export default function VehicleCard({ data }) {
               onClick={handleClick}
               variant="outline"
               size="sm"
-              className="w-full md:w-auto h-6 md:h-9 text-[10px] md:text-sm"
+              className="w-full md:w-auto h-6 md:h-8 text-[10px] md:text-xs"
             >
               View More
             </Button>
 
             <button
               onClick={() => setIsFavorite(!isFavorite)}
-              className="flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-transparent text-secondary border border-third/60 hover:bg-third/30 transition-colors shrink-0 cursor-pointer"
+              className="flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-transparent text-secondary border border-third/60 hover:bg-third/30 transition-colors shrink-0 cursor-pointer ml-2"
             >
               <Heart
                 className={`w-4 h-4 md:w-5 md:h-5 ${
