@@ -1,10 +1,10 @@
 import axiosInstance from "@/lib/axiosInstance";
 
 const ENDPOINT = {
-  getThemeListing: "/consultation/store/themes",
-  checkIsEligibleToCreate: "consultation/store/eligible/theme",
-  getThemeImages: "/consultation/store/templates",
-  checkIsEligibleToUpload: "/consultation/store/eligible/image/upload",
+  getThemeListing: "/consultation/owner/store/themes",
+  checkIsEligibleToCreate: "consultation/owner/store/themes/",
+  getThemeImages: "/consultation/owner/store/templates",
+  checkIsEligibleToUpload: "/consultation/owner/store/images/upload/eligible",
 };
 
 export const getThemeListing = async () => {
@@ -19,7 +19,7 @@ export const getThemeListing = async () => {
 export const checkIsEligibleToCreate = async (themeId) => {
   try {
     const res = await axiosInstance.get(
-      `${ENDPOINT.checkIsEligibleToCreate}/${themeId}`
+      `${ENDPOINT.checkIsEligibleToCreate}/${themeId}/eligible`
     );
     return res.data;
   } catch (error) {

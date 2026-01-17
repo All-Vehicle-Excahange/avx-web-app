@@ -18,7 +18,7 @@ export default function ThemeListing() {
     const fetchThemes = async () => {
       try {
         const data = await getThemeListing();
-        setThemes(data.data  || []);
+        setThemes(data.data || []);
       } catch (error) {
         console.error("Failed to fetch themes:", error);
       }
@@ -28,15 +28,16 @@ export default function ThemeListing() {
   }, []);
 
   const handleSelect = (theme) => {
-    
+
     // !This is for APi must be uncommented when API will be integrated
-    // router.push(`/consult/dashboard/storefront/theme/create?theme=${theme.themeId}`);
-    
+    router.push(`/consult/dashboard/storefront/theme/create?theme=${theme.themeId}`);
+
     //  This is for local themes must be removed when API will be integrated
-    router.push(`/consult/dashboard/storefront/theme/create?theme=${theme.id}`);
+    // router.push(`/consult/dashboard/storefront/theme/create?theme=${theme.id}`);
   };
   return (
     <>
+
       <section className="space-y-4">
         <h1 className="text-2xl font-bold">Select Theme to Continue</h1>
         <p className="text-third text-sm">
@@ -45,7 +46,7 @@ export default function ThemeListing() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* TODO: Fetch themes from API right now we are using local just replace it with theme  */}
-          {THEME_STORE.map((theme) => (
+          {themes.map((theme) => (
             <div
               key={theme.id}
               onClick={() => setPreviewTheme(theme)}

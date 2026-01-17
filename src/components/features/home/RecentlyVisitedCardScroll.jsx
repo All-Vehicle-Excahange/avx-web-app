@@ -1,5 +1,8 @@
 "use client";
 
+import Image from "next/image";
+import { Heart } from "lucide-react";
+
 export default function RecentlyVisitedCard({ data }) {
   return (
     <div
@@ -11,34 +14,43 @@ export default function RecentlyVisitedCard({ data }) {
         transition-all duration-300
         overflow-hidden
         border border-primary/20
-        flex-shrink-0
+       shrink-0
         w-[220px]
       "
     >
-      {/* IMAGE */}
-      <div className="relative h-38 overflow-hidden">
-        <img
-          src={data.image}
-          alt={data.title}
-          className="
-            w-full h-full object-cover
-            transition-transform duration-500 hover:scale-110
-          "
-        />
+      {/* IMAGE WITH PADDING */}
+      <div className="p-2">
+        <div className="relative h-[140px] rounded-md overflow-hidden">
+          <Image
+            src={data.image}
+            alt={data.title}
+            fill
+            className="
+              object-cover
+              transition-transform duration-500
+              hover:scale-105
+            "
+          />
+        </div>
       </div>
 
       {/* CONTENT */}
-      <div className="p-2">
-        <h3 className="text-xs md:text-[15px] font-bold leading-tight tracking-wide line-clamp-2 mb-1">
-          {data.title}
-        </h3>
+      <div className="px-3 pb-3">
+        {/* TITLE + HEART */}
+        <div className="flex items-start justify-between gap-2 mb-1">
+          <h3 className="text-xs md:text-[15px] font-bold leading-tight tracking-wide line-clamp-2">
+            {data.title}
+          </h3>
 
+          {/* WISHLIST ICON */}
+          <button className="text-primary hover:text-red-500 transition-colors">
+            <Heart className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* PRICE */}
         <div className="flex items-center justify-between">
-          <div className="text-sm font-bold text-primary">
-            ₹{data.price}
-          </div>
-          
-          
+          <div className="text-sm font-bold text-primary">₹{data.price}</div>
         </div>
       </div>
 
