@@ -1,14 +1,18 @@
-"use client";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
-export default function DropzoneUpload({ label }) {
+export default function DropzoneUpload({ label, onChange }) {
   const inputRef = useRef();
   const [file, setFile] = useState(null);
 
   const handleFile = (f) => {
     if (!f) return;
+
     setFile(f);
+
+    if (onChange) {
+      onChange(f);
+    }
   };
 
   return (
@@ -30,7 +34,6 @@ export default function DropzoneUpload({ label }) {
           </div>
         ) : (
           <div className="flex flex-col items-center gap-3">
-            {/* PREVIEW BOX */}
             <div className="relative w-full max-w-xs aspect-4/3">
               <Image
                 src={URL.createObjectURL(file)}

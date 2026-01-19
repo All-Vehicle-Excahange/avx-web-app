@@ -16,7 +16,7 @@ const smallCars = [
     fuel: "Diesel",
     seats: "5",
     rating: "4.3",
-    price: "6,75,998",
+    price: 675998,
     image: "/olx1.png",
     sponsored: false,
   },
@@ -29,7 +29,7 @@ const smallCars = [
     fuel: "Diesel",
     seats: "5",
     rating: "4.3",
-    price: "6,75,998",
+    price: 675998,
     image: "/olx2.png",
     sponsored: false,
   },
@@ -42,7 +42,7 @@ const smallCars = [
     fuel: "Diesel",
     seats: "5",
     rating: "4.3",
-    price: "6,75,998",
+    price: 675998,
     image: "/olx3.png",
     sponsored: false,
   },
@@ -55,7 +55,7 @@ const smallCars = [
     fuel: "Diesel",
     seats: "5",
     rating: "4.3",
-    price: "6,75,998",
+    price: 675998,
     image: "/olx4.png",
     sponsored: false,
   },
@@ -68,7 +68,7 @@ const smallCars = [
     fuel: "Diesel",
     seats: "5",
     rating: "4.3",
-    price: "6,75,998",
+    price: 675998,
     image: "/olx2.png",
     sponsored: false,
   },
@@ -81,7 +81,7 @@ const smallCars = [
     fuel: "Diesel",
     seats: "5",
     rating: "4.3",
-    price: "6,75,998",
+    price: 675998,
     image: "/olx1.png",
     sponsored: false,
   },
@@ -94,7 +94,7 @@ const smallCars = [
     fuel: "Diesel",
     seats: "5",
     rating: "4.3",
-    price: "6,75,998",
+    price: 675998,
     image: "/olx4.png",
     sponsored: false,
   },
@@ -107,7 +107,7 @@ const smallCars = [
     fuel: "Diesel",
     seats: "5",
     rating: "4.3",
-    price: "6,75,998",
+    price: 675998,
     image: "/olx3.png",
     sponsored: false,
   },
@@ -138,7 +138,7 @@ export default function AvxInspected() {
               "px-4 py-1.5 text-sm font-semibold rounded-md transition-all cursor-pointer",
               activeType === "4-Wheeler"
                 ? "bg-secondary text-primary shadow-sm"
-                : "text-secondary/60 hover:text-secondary"
+                : "text-secondary/60 hover:text-secondary",
             )}
           >
             4-Wheeler
@@ -150,7 +150,7 @@ export default function AvxInspected() {
               "px-4 py-1.5 text-sm font-semibold rounded-md transition-all cursor-pointer",
               activeType === "2-Wheeler"
                 ? "bg-secondary text-primary shadow-sm"
-                : "text-secondary/60 hover:text-secondary"
+                : "text-secondary/60 hover:text-secondary",
             )}
           >
             2-Wheeler
