@@ -74,3 +74,4 @@ export default function DropzoneUpload({ label, onChange, preview }) {
     </div>
   );
 }
+ 
