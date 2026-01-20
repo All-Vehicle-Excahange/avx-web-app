@@ -21,6 +21,41 @@ export default function VehicleCard({ data }) {
     router.push("/vehicle/details");
   };
 
+  const mapped = {
+    // ----- IMAGE -----
+    image: data.thumbnailUrl || data.image,
+
+    // ----- TITLE -----
+    title: data.makerName
+      ? `${data.makerName} ${data.modelName} ${data.variantName}`
+      : data.title,
+
+    // ----- BASIC -----
+    year: data.yearOfMfg || data.year,
+    transmission: data.transmissionType || data.transmission,
+    fuel: data.fuelType || data.fuel,
+    seats: data.ownership || data.seats,
+
+    // ----- RATING -----
+    rating: data.rating || "-",
+
+    // ----- USER NAME -----
+    userName: data.vehicleCardOwner
+      ? `${data.vehicleCardOwner.firstname} ${data.vehicleCardOwner.lastname}`
+      : data.userName,
+
+    // ----- LOCATION -----
+    location: data.vehicleCardAddress
+      ? `${data.vehicleCardAddress.city}, ${data.vehicleCardAddress.country}`
+      : data.location,
+
+    // ----- PRICE -----
+    price: data.price ? Number(data.price).toLocaleString("en-IN") : data.price,
+
+    // ----- EXTRA -----
+    sponsored: data.sponsored || false,
+  };
+
   return (
     <div
       className="
@@ -31,16 +66,17 @@ export default function VehicleCard({ data }) {
         border-2 border-third/60
         hover:shadow-[0_20px_60px_rgba(255,255,255,0.25)]
         transition-shadow duration-300
+        h-full
       "
     >
       <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
         <div className="relative w-32 sm:w-40 min-h-40 md:min-h-0 md:h-62 md:w-full shrink-0 p-2">
           <div className="relative w-full h-full overflow-hidden rounded-xl">
-            {data.sponsored && <SponsoredRibbon />}
+            {mapped.sponsored && <SponsoredRibbon />}
 
             <Image
-              src={data.image}
-              alt={data.title}
+              src={mapped.image}
+              alt={mapped.title}
               fill
               className="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-110"
             />
@@ -48,17 +84,22 @@ export default function VehicleCard({ data }) {
         </div>
 
         {/* ================= CONTENT SECTION ================= */}
-        <div className="flex flex-col flex-1 p-2.5 md:p-4 space-y-2 md:space-y-4 justify-between">
+        <div className="flex flex-col flex-1 p-2.5 md:p-4 space-y-2 md:space-y-4 justify-between h-full">
           {/* Title Section */}
           <div className="flex justify-between items-start gap-2">
             <div className="min-w-0 w-full">
-              {/* 👉 TITLE + WISHLIST IN SAME LINE */}
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-secondary md:text-xl font-bold leading-tight tracking-wide line-clamp-2">
-                  {data.title}
+                <h3
+                  className="
+                  text-sm font-secondary md:text-xl font-bold 
+                  leading-tight tracking-wide 
+                  line-clamp-2 
+                  min-h-[38px] md:min-h-14
+                "
+                >
+                  {mapped.title}
                 </h3>
 
-                {/* 👉 MOVED HEART HERE */}
                 <button
                   onClick={() => setIsFavorite(!isFavorite)}
                   className="ml-2 flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 hover:bg-primary/20 transition-all cursor-pointer"
@@ -72,41 +113,41 @@ export default function VehicleCard({ data }) {
               </div>
 
               <p className="text-xs md:text-sm text-primary/90 mt-1 flex items-center gap-1.5">
-                Listed By: {data.userName || "Nihal Chaudhary"}
+                Listed By: {mapped.userName || "Nihal Chaudhary"}
               </p>
 
               <p className="text-xs md:text-sm text-primary/90 mt-1 flex items-center gap-1.5">
                 <MapPinned className="w-3.5 h-3.5" />
-                {data.location || "Chhapi, Gujarat"}
+                {mapped.location || "Chhapi, Gujarat"}
               </p>
             </div>
           </div>
 
           {/* ---- SPECS ---- */}
           <div className="flex flex-wrap items-center gap-x-2 md:gap-x-4 gap-y-1 text-xs md:text-sm text-primary/80 font-medium">
-            <span>{data.year}</span>
+            <span>{mapped.year}</span>
 
             <span className="flex items-center gap-1">
-              <Settings2 className="w-4 h-4" /> {data.transmission}
+              <Settings2 className="w-4 h-4" /> {mapped.transmission}
             </span>
 
             <span className="flex items-center gap-1">
-              <Fuel className="w-4 h-4" /> {data.fuel}
+              <Fuel className="w-4 h-4" /> {mapped.fuel}
             </span>
 
             <span className="flex items-center gap-1">
-              <Users className="w-4 h-4" /> {data.seats}
+              <Users className="w-4 h-4" /> {mapped.seats}
             </span>
 
             <span className="flex items-center gap-1">
               <Star className="w-4 h-4 fill-primary text-primary" />
-              {data.rating}
+              {mapped.rating}
             </span>
           </div>
 
           {/* ================= BOTTOM SECTION ================= */}
           <div className="flex items-center justify-between gap-2">
-            <h3 className="text-sm md:text-xl font-bold">₹ {data.price}</h3>
+            <h3 className="text-sm md:text-xl font-bold">₹ {mapped.price}</h3>
 
             <Button onClick={handleClick} variant="outline" size="sm">
               View Details

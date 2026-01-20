@@ -4,6 +4,8 @@ function InputField({
   required,
   type = "text",
   variant = "default",
+  onChange,
+  value,
 }) {
   const baseStyle =
     "w-full rounded-lg outline-none placeholder:text-gray-400 transition";
@@ -35,6 +37,8 @@ function InputField({
       <input
         type={type}
         placeholder={placeholder}
+        value={value}
+        onChange={onChange}
         className={`${baseStyle} ${sizeVariants[variant]} ${styleVariants[variant]}`}
       />
     </div>

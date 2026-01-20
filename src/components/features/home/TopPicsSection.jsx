@@ -1,122 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
+import { getUserHomeFeed } from "@/services/user.service";
 
 // --- Utility for Tailwind classes ---
 const cn = (...classes) => classes.filter(Boolean).join(" ");
 
-const smallCars = [
-  {
-    id: "1",
-    title: "Maruti Fronx",
-    subtitle: "35 D6 Powerful lorem isump",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/olx1.png",
-    sponsored: false,
-  },
-  {
-    id: "2",
-    title: "Maruti Fronx",
-    subtitle: "35 D6 Powerful lorem isump",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/olx2.png",
-    sponsored: false,
-  },
-  {
-    id: "3",
-    title: "Maruti Fronx",
-    subtitle: "35 D6 Powerful lorem isump",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/olx3.png",
-    sponsored: false,
-  },
-  {
-    id: "4",
-    title: "Maruti Fronx",
-    subtitle: "35 D6 Powerful lorem isump",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/olx4.png",
-    sponsored: false,
-  },
-  {
-    id: "4",
-    title: "Maruti Fronx",
-    subtitle: "35 D6 Powerful lorem isump",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/olx2.png",
-    sponsored: false,
-  },
-  {
-    id: "4",
-    title: "Maruti Fronx",
-    subtitle: "35 D6 Powerful lorem isump",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/olx1.png",
-    sponsored: false,
-  },
-  {
-    id: "4",
-    title: "Maruti Fronx",
-    subtitle: "35 D6 Powerful lorem isump",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/olx4.png",
-    sponsored: false,
-  },
-  {
-    id: "4",
-    title: "Maruti Fronx",
-    subtitle: "35 D6 Powerful lorem isump",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/olx3.png",
-    sponsored: false,
-  },
-];
-
 export default function TopPicsSection() {
   const [activeType, setActiveType] = useState("4-Wheeler");
+  const [cardData, setCardData] = useState([]);
+
+  //  on useEffect le's first call api and grab a data
+
+  useEffect(() => {
+    const fetchHomeFeed = async () => {
+      try {
+        const res = await getUserHomeFeed({ pageNo: 1, size: 8 });
+        if (res.success) {
+          setCardData(res.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch themes:", error);
+      }
+    };
+
+    fetchHomeFeed();
+  }, []);
 
   return (
-    <div className="w-full h-full flex flex-col bg-secondary text-primary font-sans overflow-hidden">
+    <div className="w-full h-full flex flex-col bg-secondary text-primary font-sans">
       {/* Header Section */}
       <div className="shrink-0 flex flex-col md:flex-row md:items-end justify-between mb-4 gap-4">
         <div>
@@ -137,7 +49,7 @@ export default function TopPicsSection() {
               "px-4 py-1.5 text-sm font-semibold rounded-md transition-all cursor-pointer",
               activeType === "4-Wheeler"
                 ? "bg-secondary text-primary shadow-sm"
-                : "text-secondary/60 hover:text-secondary"
+                : "text-secondary/60 hover:text-secondary",
             )}
           >
             4-Wheeler
@@ -149,7 +61,7 @@ export default function TopPicsSection() {
               "px-4 py-1.5 text-sm font-semibold rounded-md transition-all cursor-pointer",
               activeType === "2-Wheeler"
                 ? "bg-secondary text-primary shadow-sm"
-                : "text-secondary/60 hover:text-secondary"
+                : "text-secondary/60 hover:text-secondary",
             )}
           >
             2-Wheeler
@@ -166,20 +78,17 @@ export default function TopPicsSection() {
     grid-cols-1
     md:grid-cols-2
     lg:grid-cols-4
-    lg:grid-rows-[1.05fr_0.95fr]
     gap-4
     pb-1
   "
       >
-        {/* Small Vehicles */}
-        {smallCars.map((car) => (
-          <div key={car.id} className="lg:col-span-1 lg:row-span-1 h-full">
-            <VehicleCard data={car} />
+        {cardData.map((vehicle) => (
+          <div key={vehicle.id} className="lg:col-span-1 lg:row-span-1 h-full">
+            <VehicleCard data={vehicle} />
           </div>
         ))}
       </div>
 
-      {/* Bottom Button */}
       <div className="mt-8 flex justify-end">
         <Button variant="outlineAnimated" size="md">
           Explore All Vehicles
