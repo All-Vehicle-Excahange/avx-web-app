@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import InputField from "@/components/ui/inputField";
 import ChipGroup from "@/components/ui/chipGroup";
@@ -9,20 +9,21 @@ import DropzoneUpload from "@/components/ui/DropzoneUpload";
 export default function Step1Business({ onChange, initialData }) {
   const logoRef = useRef();
 
-  const [logo, setLogo] = useState(null);
-  const [bannerPreview, setBannerPreview] = useState(null);
+  // ✅ Initialize state directly from initialData to avoid useEffect cascading renders
+  const [logo, setLogo] = useState(initialData?.logoUrl || null);
+  const [bannerPreview, setBannerPreview] = useState(
+    initialData?.bannerUrl || null,
+  );
 
   const [form, setForm] = useState({
     logo: null,
     banner: null,
-
-    consultationName: "",
-    ownerName: "",
-    email: "",
-    establishmentYear: "",
-
-    vehicleTypes: [],
-    services: [],
+    consultationName: initialData?.consultationName || "",
+    ownerName: initialData?.ownerName || "",
+    email: initialData?.companyEmail || "",
+    establishmentYear: initialData?.establishmentYear || "",
+    vehicleTypes: initialData?.vehicleTypes || [],
+    services: initialData?.services || [],
   });
 
   const handleInput = (key, value) => {
@@ -32,9 +33,8 @@ export default function Step1Business({ onChange, initialData }) {
     }));
   };
 
-  const createPayload = () => {
+  const createPayload = useCallback(() => {
     const payload = new FormData();
-
     if (form.logo) payload.append("logo", form.logo);
     if (form.banner) payload.append("banner", form.banner);
 
@@ -50,39 +50,13 @@ export default function Step1Business({ onChange, initialData }) {
     form.services.forEach((s, i) => payload.append(`services[${i}]`, s));
 
     return payload;
-  };
-
-  // send to parent
-  useEffect(() => {
-    onChange && onChange(createPayload());
   }, [form]);
 
-  // ===== AUTOFILL FROM API =====
   useEffect(() => {
-    if (!initialData) return;
-
-    setForm({
-      logo: null,
-      banner: null,
-
-      consultationName: initialData.consultationName || "",
-      ownerName: initialData.ownerName || "",
-      email: initialData.companyEmail || "",
-      establishmentYear: initialData.establishmentYear || "",
-
-      vehicleTypes: initialData.vehicleTypes || [],
-      services: initialData.services || [],
-    });
-
-    // SHOW EXISTING IMAGES
-    if (initialData?.logoUrl) {
-      setLogo(initialData.logoUrl);
+    if (onChange) {
+      onChange(createPayload(), false);
     }
-
-    if (initialData?.bannerUrl) {
-      setBannerPreview(initialData.bannerUrl);
-    }
-  }, [initialData]);
+  }, [createPayload, onChange]);
 
   return (
     <div className="space-y-6">
@@ -121,8 +95,10 @@ export default function Step1Business({ onChange, initialData }) {
             hidden
             onChange={(e) => {
               const file = e.target.files[0];
-              setLogo(file);
-              handleInput("logo", file);
+              if (file) {
+                setLogo(file);
+                handleInput("logo", file);
+              }
             }}
           />
         </div>
@@ -134,10 +110,12 @@ export default function Step1Business({ onChange, initialData }) {
         preview={bannerPreview}
         onChange={(file) => {
           const f = Array.isArray(file) ? file[0] : file;
-
-          setBannerPreview(typeof f === "string" ? f : URL.createObjectURL(f));
-
-          handleInput("banner", f);
+          if (f) {
+            setBannerPreview(
+              typeof f === "string" ? f : URL.createObjectURL(f),
+            );
+            handleInput("banner", f);
+          }
         }}
       />
 
@@ -178,6 +156,7 @@ export default function Step1Business({ onChange, initialData }) {
           { label: "Four Wheelers", value: "FOUR_WHEELER" },
           { label: "Other", value: "OTHER" },
         ]}
+        value={form.vehicleTypes} // Ensure ChipGroup receives current value
         onChange={(v) => handleInput("vehicleTypes", v)}
       />
 
@@ -189,6 +168,7 @@ export default function Step1Business({ onChange, initialData }) {
           { label: "Exchange", value: "EXCHANGE" },
           { label: "Finance", value: "FINANCE" },
         ]}
+        value={form.services} // Ensure ChipGroup receives current value
         onChange={(v) => handleInput("services", v)}
       />
     </div>

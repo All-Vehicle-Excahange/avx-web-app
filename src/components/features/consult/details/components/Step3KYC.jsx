@@ -1,52 +1,26 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import InputField from "@/components/ui/inputField";
 import DropzoneUpload from "@/components/ui/DropzoneUpload";
 
 export default function Step3KYC({ onChange, initialData }) {
-  // previews for existing images
-  const [panPreview, setPanPreview] = useState(null);
-  const [aadharFrontPreview, setAadharFrontPreview] = useState(null);
-  const [aadharBackPreview, setAadharBackPreview] = useState(null);
-
+  const [panPreview, setPanPreview] = useState(
+    initialData?.panCardFrontUrl || null,
+  );
+  const [aadharFrontPreview, setAadharFrontPreview] = useState(
+    initialData?.aadharCardFrontUrl || null,
+  );
+  const [aadharBackPreview, setAadharBackPreview] = useState(
+    initialData?.aadharCardBackUrl || null,
+  );
   const [form, setForm] = useState({
-    gstNumber: "",
-    panNumber: "",
+    gstNumber: initialData?.gstNumber || "",
+    panNumber: initialData?.panCardNumber || "",
     panPhoto: null,
-
-    aadharNumber: "",
+    aadharNumber: initialData?.aadharCardNumber || "",
     aadharFront: null,
     aadharBack: null,
   });
-
-  // ===== PREFILL FROM API =====
-  useEffect(() => {
-    if (!initialData) return;
-
-    setForm({
-      gstNumber: initialData.gstNumber || "",
-      panNumber: initialData.panCardNumber || "",
-      aadharNumber: initialData.aadharCardNumber || "",
-
-      // files cannot be prefilled
-      panPhoto: null,
-      aadharFront: null,
-      aadharBack: null,
-    });
-
-    // SHOW EXISTING IMAGES
-    if (initialData?.panCardFrontUrl) {
-      setPanPreview(initialData.panCardFrontUrl);
-    }
-
-    if (initialData?.aadharCardFrontUrl) {
-      setAadharFrontPreview(initialData.aadharCardFrontUrl);
-    }
-
-    if (initialData?.aadharCardBackUrl) {
-      setAadharBackPreview(initialData.aadharCardBackUrl);
-    }
-  }, [initialData]);
 
   const handleInput = (key, value) => {
     setForm((prev) => ({
@@ -55,8 +29,7 @@ export default function Step3KYC({ onChange, initialData }) {
     }));
   };
 
-  // ----- CREATE FORM DATA PAYLOAD -----
-  const createPayload = () => {
+  const createPayload = useCallback(() => {
     const payload = new FormData();
 
     payload.append("gstNumber", form.gstNumber);
@@ -76,11 +49,13 @@ export default function Step3KYC({ onChange, initialData }) {
     }
 
     return payload;
-  };
+  }, [form]);
 
   useEffect(() => {
-    onChange && onChange(createPayload());
-  }, [form]);
+    if (onChange) {
+      onChange(createPayload(), false);
+    }
+  }, [createPayload, onChange]);
 
   return (
     <div className="space-y-6">
@@ -103,10 +78,10 @@ export default function Step3KYC({ onChange, initialData }) {
         preview={panPreview}
         onChange={(file) => {
           const f = Array.isArray(file) ? file[0] : file;
-
-          setPanPreview(typeof f === "string" ? f : URL.createObjectURL(f));
-
-          handleInput("panPhoto", f);
+          if (f) {
+            setPanPreview(typeof f === "string" ? f : URL.createObjectURL(f));
+            handleInput("panPhoto", f);
+          }
         }}
       />
 
@@ -122,12 +97,12 @@ export default function Step3KYC({ onChange, initialData }) {
         preview={aadharFrontPreview}
         onChange={(file) => {
           const f = Array.isArray(file) ? file[0] : file;
-
-          setAadharFrontPreview(
-            typeof f === "string" ? f : URL.createObjectURL(f),
-          );
-
-          handleInput("aadharFront", f);
+          if (f) {
+            setAadharFrontPreview(
+              typeof f === "string" ? f : URL.createObjectURL(f),
+            );
+            handleInput("aadharFront", f);
+          }
         }}
       />
 
@@ -136,12 +111,12 @@ export default function Step3KYC({ onChange, initialData }) {
         preview={aadharBackPreview}
         onChange={(file) => {
           const f = Array.isArray(file) ? file[0] : file;
-
-          setAadharBackPreview(
-            typeof f === "string" ? f : URL.createObjectURL(f),
-          );
-
-          handleInput("aadharBack", f);
+          if (f) {
+            setAadharBackPreview(
+              typeof f === "string" ? f : URL.createObjectURL(f),
+            );
+            handleInput("aadharBack", f);
+          }
         }}
       />
     </div>
