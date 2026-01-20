@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react"; // Added useCallback
 import Step1Business from "./components/Step1Business";
 import Step2Address from "./components/Step2Address";
 import Step3KYC from "./components/Step3KYC";
@@ -47,10 +47,25 @@ export default function KycForm() {
   });
 
   const [loading, setLoading] = useState(false);
-
   const [showPreview, setShowPreview] = useState(false);
 
   const progress = ((step - 1) / (steps.length - 1)) * 100;
+
+  // ===== MEMOIZED HANDLERS TO PREVENT INFINITE LOOPS =====
+  const handleBusinessChange = useCallback((data, isChanged) => {
+    setForm((p) => ({ ...p, business: data }));
+    setChanged((p) => ({ ...p, business: isChanged }));
+  }, []);
+
+  const handleAddressChange = useCallback((data, isChanged) => {
+    setForm((p) => ({ ...p, address: data }));
+    setChanged((p) => ({ ...p, address: isChanged }));
+  }, []);
+
+  const handleKycChange = useCallback((data, isChanged) => {
+    setForm((p) => ({ ...p, kyc: data }));
+    setChanged((p) => ({ ...p, kyc: isChanged }));
+  }, []);
 
   useEffect(() => {
     const check = async () => {
@@ -59,68 +74,51 @@ export default function KycForm() {
         let aData = null;
         let kData = null;
 
-        // ----- STEP 1 -----
         try {
           const basic = await getBaiscDetails();
-          if (basic?.data) {
-            bData = basic.data;
-          }
+          if (basic?.data) bData = basic.data;
         } catch (err) {
           if (err?.response?.status !== 404) throw err;
         }
 
-        // ----- STEP 2 -----
         try {
           const address = await getAddressDetails();
-          if (address?.data) {
-            aData = address.data;
-          }
+          if (address?.data) aData = address.data;
         } catch (err) {
           if (err?.response?.status !== 404) throw err;
         }
 
-        // ----- STEP 3 -----
         try {
           const kyc = await getKycDocs();
-          if (kyc?.data) {
-            kData = kyc.data;
-          }
+          if (kyc?.data) kData = kyc.data;
         } catch (err) {
           if (err?.response?.status !== 404) throw err;
         }
 
-        // Save to state
         setExisting({
           business: bData,
           address: aData,
           kyc: kData,
         });
 
-        // ===================== STEP DECISION =====================
-
-        // 🔥 PRIORITY 1 → IF VERIFICATION REQUESTED
         if (bData?.verificationStatus === "REQUESTED") {
           setStep(4);
           return;
         }
 
-        // 🔥 PRIORITY 2 → ALL DATA COMPLETE
         if (bData && aData && kData) {
           setStep(4);
           return;
         }
 
-        // 🔥 NORMAL FLOW
         if (!bData) {
           setStep(1);
           return;
         }
-
         if (!aData) {
           setStep(2);
           return;
         }
-
         if (!kData) {
           setStep(3);
           return;
@@ -134,86 +132,68 @@ export default function KycForm() {
     check();
   }, []);
 
-  // ======================================================
-  // NEXT HANDLER (CREATE / UPDATE)
-  // ======================================================
   const handleNext = async () => {
     try {
       setLoading(true);
 
-      // ===== STEP 1 =====
       if (step === 1) {
         if (existing.business) {
           if (!changed.business) {
             setStep(2);
             return;
           }
-
           const res = await updatebasicDetials(form.business);
-
           if (res.data) {
-            toast.success("Details updated successfully");
+            toast.success("Details updated");
             setStep(2);
           }
           return;
         }
-
         const res = await postbasicDetials(form.business);
-
         if (res.data) {
-          toast.success("Details submitted successfully");
+          toast.success("Details submitted");
           setStep(2);
         }
         return;
       }
 
-      // ===== STEP 2 =====
       if (step === 2) {
         if (existing.address) {
           if (!changed.address) {
             setStep(3);
             return;
           }
-
           const res = await updateAddressDetials(form.address);
-
           if (res.data) {
-            toast.success("Address updated successfully");
+            toast.success("Address updated");
             setStep(3);
           }
           return;
         }
-
         const res = await postAddressDetials(form.address);
-
         if (res.data) {
-          toast.success("Address submitted successfully");
+          toast.success("Address submitted");
           setStep(3);
         }
         return;
       }
 
-      // ===== STEP 3 =====
       if (step === 3) {
         if (existing.kyc) {
           if (!changed.kyc) {
             setStep(4);
             return;
           }
-
           const res = await updateKycDetials(form.kyc);
-
           if (res.data) {
-            toast.success("KYC updated successfully");
+            toast.success("KYC updated");
             setStep(4);
           }
           return;
         }
-
         const res = await postKycDetials(form.kyc);
-
         if (res.data) {
-          toast.success("KYC submitted successfully");
+          toast.success("KYC submitted");
           setStep(4);
         }
         return;
@@ -257,39 +237,32 @@ export default function KycForm() {
               </div>
             </div>
 
-            {/* ===== STEPS ===== */}
+            {/* ===== STEPS WITH KEYS TO TRIGGER RE-MOUNT ON DATA LOAD ===== */}
 
             {step === 1 && (
               <Step1Business
+                key={existing.business ? "existing-biz" : "new-biz"}
                 initialData={existing.business}
-                onChange={(data, isChanged) => {
-                  setForm((p) => ({ ...p, business: data }));
-                  setChanged((p) => ({ ...p, business: isChanged }));
-                }}
+                onChange={handleBusinessChange}
               />
             )}
 
             {step === 2 && (
               <Step2Address
+                key={existing.address ? "existing-addr" : "new-addr"}
                 initialData={existing.address}
-                onChange={(data, isChanged) => {
-                  setForm((p) => ({ ...p, address: data }));
-                  setChanged((p) => ({ ...p, address: isChanged }));
-                }}
+                onChange={handleAddressChange}
               />
             )}
 
             {step === 3 && (
               <Step3KYC
+                key={existing.kyc ? "existing-kyc" : "new-kyc"}
                 initialData={existing.kyc}
-                onChange={(data, isChanged) => {
-                  setForm((p) => ({ ...p, kyc: data }));
-                  setChanged((p) => ({ ...p, kyc: isChanged }));
-                }}
+                onChange={handleKycChange}
               />
             )}
 
-            {/* ===== STEP 4 LOGIC ===== */}
             {step === 4 && !showPreview && (
               <Step4Verification
                 existing={existing}

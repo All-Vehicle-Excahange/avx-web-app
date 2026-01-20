@@ -1,23 +1,27 @@
 "use client";
 import Image from "next/image";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useMemo } from "react";
 
 export default function DropzoneUpload({ label, onChange, preview }) {
   const inputRef = useRef();
-  const [file, setFile] = useState(null);
+  const [localFile, setLocalFile] = useState(null);
 
-  // show existing preview from parent
-  useEffect(() => {
-    if (preview) {
-      setFile(preview);
-    }
-  }, [preview]);
+  // ✅ Derived State: Use local selection if it exists, otherwise use parent preview
+  const currentFile = localFile || preview;
+
+  // ✅ Memoize the display URL to prevent unnecessary re-creations
+  const displayUrl = useMemo(() => {
+    if (!currentFile) return null;
+    if (typeof currentFile === "string") return currentFile;
+    return URL.createObjectURL(currentFile);
+  }, [currentFile]);
 
   const handleFile = (f) => {
     if (!f) return;
-
-    setFile(f);
-    onChange && onChange(f);
+    setLocalFile(f);
+    if (onChange) {
+      onChange(f);
+    }
   };
 
   return (
@@ -30,7 +34,7 @@ export default function DropzoneUpload({ label, onChange, preview }) {
         onClick={() => inputRef.current.click()}
         className="cursor-pointer rounded-xl border-2 border-dashed border-third/40 bg-primary/5 hover:border-primary transition p-6 text-center"
       >
-        {!file ? (
+        {!currentFile ? (
           <div className="space-y-2">
             <p className="text-third text-sm uppercase tracking-wide">
               Drop your image here, or browse (required)
@@ -41,9 +45,7 @@ export default function DropzoneUpload({ label, onChange, preview }) {
           <div className="flex flex-col items-center gap-3">
             <div className="relative w-full max-w-xs aspect-4/3">
               <Image
-                src={
-                  typeof file === "string" ? file : URL.createObjectURL(file)
-                }
+                src={displayUrl}
                 alt="preview"
                 fill
                 className="object-cover"
@@ -52,7 +54,9 @@ export default function DropzoneUpload({ label, onChange, preview }) {
             </div>
 
             <p className="text-xs text-primary">
-              {typeof file === "string" ? "Existing Image" : file.name}
+              {typeof currentFile === "string"
+                ? "Existing Image"
+                : currentFile.name}
             </p>
 
             <p className="text-xs text-third">Click to change</p>
