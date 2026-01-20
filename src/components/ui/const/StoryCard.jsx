@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function StoryCard({ image, title, description }) {
   return (
-    <div className="relative w-full h-full aspect-3/4 rounded-2xl overflow-hidden group cursor-pointer border border-gray-100">
+    <div className="relative w-full h-full aspect-3/5 rounded-2xl overflow-hidden group cursor-pointer border border-gray-100">
       {/* Background Image */}
       <Image
         src={image}

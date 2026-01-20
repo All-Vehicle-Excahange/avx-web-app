@@ -3,6 +3,7 @@ import AvxInspected from "@/components/features/home/AvxInspected";
 import ConsultBanner from "@/components/features/home/ConsultBanner";
 import DownloadAppSection from "@/components/features/home/DownloadAppSection";
 import HeroSection from "@/components/features/home/HeroSection";
+import SayHello from "@/components/features/home/SayHello";
 // import RecentlyVisitedSection from "@/components/features/home/RecentlyVisitedSection";
 import SellVehicleBanner from "@/components/features/home/SellVehicleBanner";
 import ShowcaseSection from "@/components/features/home/ShowcaseSection";
@@ -18,7 +19,7 @@ export default function Home() {
       <HeroSection fullWidth />
 
       {/* <RecentlyVisitedSection /> */}
-        <ShowcaseSection />
+      <ShowcaseSection />
 
       <Layout>
         <TopPicsSection />
@@ -33,6 +34,9 @@ export default function Home() {
       <Layout>
         <StorySection />
       </Layout>
+      {/* <Layout> */}
+        <SayHello />
+      {/* </Layout> */}
       <SellVehicleBanner fullWidth />
       <Layout>
         <StatsSection />
