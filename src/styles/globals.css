@@ -22,10 +22,8 @@ body {
 }
 
 .inverted {
-  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cpath%20d%3D%22M20%2C0H100A0%2C0%200%2C0%2C1%20100%2C0V65A10%2C10%200%2C0%2C1%2090%2C75H79A10%2C10%200%2C0%2C0%2069%2C85V90A10%2C10%200%2C0%2C1%2059%2C100H10A10%2C10%200%2C0%2C1%200%2C90V20A20%2C20%200%2C0%2C1%2020%2C0Z%22%20fill%3D%22%23fff%22%20%2F%3E%3C%2Fsvg%3E")
-    no-repeat center / contain;
-  mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cpath%20d%3D%22M20%2C0H100A0%2C0%200%2C0%2C1%20100%2C0V65A10%2C10%200%2C0%2C1%2090%2C75H79A10%2C10%200%2C0%2C0%2069%2C85V90A10%2C10%200%2C0%2C1%2059%2C100H10A10%2C10%200%2C0%2C1%200%2C90V20A20%2C20%200%2C0%2C1%2020%2C0Z%22%20fill%3D%22%23fff%22%20%2F%3E%3C%2Fsvg%3E")
-    no-repeat center / contain;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cpath%20d%3D%22M20%2C0H100A0%2C0%200%2C0%2C1%20100%2C0V65A10%2C10%200%2C0%2C1%2090%2C75H79A10%2C10%200%2C0%2C0%2069%2C85V90A10%2C10%200%2C0%2C1%2059%2C100H10A10%2C10%200%2C0%2C1%200%2C90V20A20%2C20%200%2C0%2C1%2020%2C0Z%22%20fill%3D%22%23fff%22%20%2F%3E%3C%2Fsvg%3E") no-repeat center / contain;
+  mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cpath%20d%3D%22M20%2C0H100A0%2C0%200%2C0%2C1%20100%2C0V65A10%2C10%200%2C0%2C1%2090%2C75H79A10%2C10%200%2C0%2C0%2069%2C85V90A10%2C10%200%2C0%2C1%2059%2C100H10A10%2C10%200%2C0%2C1%200%2C90V20A20%2C20%200%2C0%2C1%2020%2C0Z%22%20fill%3D%22%23fff%22%20%2F%3E%3C%2Fsvg%3E") no-repeat center / contain;
   background-color: var(--color-secondary);
   aspect-ratio: 1 / 1;
 }
@@ -61,6 +59,7 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -133,7 +132,8 @@ body {
   border-radius: 9999px;
   z-index: 10;
   overflow: visible;
-  padding: 3px; /* border thickness */
+  padding: 3px;
+  /* border thickness */
 }
 
 /* Rotating gradient border */
@@ -142,16 +142,14 @@ body {
   position: absolute;
   inset: 0;
   border-radius: 9999px;
-  background: linear-gradient(
-    90deg,
-    #4f46e5,
-    #3b82f6,
-    #06b6d4,
-    #10b981,
-    #facc15,
-    #f472b6,
-    #4f46e5
-  );
+  background: linear-gradient(90deg,
+      #4f46e5,
+      #3b82f6,
+      #06b6d4,
+      #10b981,
+      #facc15,
+      #f472b6,
+      #4f46e5);
   background-size: 400% 400%;
   z-index: -1;
   animation: rotateGradient 6s linear infinite;
@@ -166,16 +164,19 @@ body {
   border-radius: 9999px;
   position: relative;
   z-index: 20;
-  overflow: hidden; /* Clips the image to the pill shape */
+  overflow: hidden;
+  /* Clips the image to the pill shape */
 }
 
 @keyframes rotateGradient {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
@@ -186,6 +187,7 @@ body {
     opacity: 0;
     transform: translateY(12px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -202,11 +204,17 @@ body {
 } */
 
 .inverted-service {
-  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20340%20232%22%3E%3Cpath%20d%3D%22M0%2C0H340A0%2C0%200%2C0%2C1%20340%2C0V170A12%2C12%200%2C0%2C1%20328%2C182H302A12%2C12%200%2C0%2C0%20290%2C194V220A12%2C12%200%2C0%2C1%20278%2C232H0A0%2C0%200%2C0%2C1%200%2C232V62A12%2C12%200%2C0%2C1%2012%2C50H38A12%2C12%200%2C0%2C0%2050%2C38V12A12%2C12%200%2C0%2C1%2062%2C0%22%20fill%3D%22%23fff%22%20%2F%3E%3C%2Fsvg%3E")
-    no-repeat center / contain;
-  mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20340%20232%22%3E%3Cpath%20d%3D%22M0%2C0H340A0%2C0%200%2C0%2C1%20340%2C0V170A12%2C12%200%2C0%2C1%20328%2C182H302A12%2C12%200%2C0%2C0%20290%2C194V220A12%2C12%200%2C0%2C1%20278%2C232H0A0%2C0%200%2C0%2C1%200%2C232V62A12%2C12%200%2C0%2C1%2012%2C50H38A12%2C12%200%2C0%2C0%2050%2C38V12A12%2C12%200%2C0%2C1%2062%2C0%22%20fill%3D%22%23fff%22%20%2F%3E%3C%2Fsvg%3E")
-    no-repeat center / contain;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20340%20232%22%3E%3Cpath%20d%3D%22M0%2C0H340A0%2C0%200%2C0%2C1%20340%2C0V170A12%2C12%200%2C0%2C1%20328%2C182H302A12%2C12%200%2C0%2C0%20290%2C194V220A12%2C12%200%2C0%2C1%20278%2C232H0A0%2C0%200%2C0%2C1%200%2C232V62A12%2C12%200%2C0%2C1%2012%2C50H38A12%2C12%200%2C0%2C0%2050%2C38V12A12%2C12%200%2C0%2C1%2062%2C0%22%20fill%3D%22%23fff%22%20%2F%3E%3C%2Fsvg%3E") no-repeat center / contain;
+  mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20340%20232%22%3E%3Cpath%20d%3D%22M0%2C0H340A0%2C0%200%2C0%2C1%20340%2C0V170A12%2C12%200%2C0%2C1%20328%2C182H302A12%2C12%200%2C0%2C0%20290%2C194V220A12%2C12%200%2C0%2C1%20278%2C232H0A0%2C0%200%2C0%2C1%200%2C232V62A12%2C12%200%2C0%2C1%2012%2C50H38A12%2C12%200%2C0%2C0%2050%2C38V12A12%2C12%200%2C0%2C1%2062%2C0%22%20fill%3D%22%23fff%22%20%2F%3E%3C%2Fsvg%3E") no-repeat center / contain;
   width: 340px;
   background-color: #1f1f1f;
   aspect-ratio: 85 / 58;
+}
+
+
+.clip-slanted {
+  clip-path: polygon(0 0,
+      90% 0,
+      100% 100%,
+      0 100%);
 }
