@@ -1,7 +1,7 @@
 import Button from "@/components/ui/button";
 import StoryCard from "@/components/ui/const/StoryCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 
@@ -10,6 +10,7 @@ import "swiper/css";
 export default function StorySection() {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
+  const swiperRef = useRef(null);
 
   const stories = [
     {
@@ -70,6 +71,18 @@ export default function StorySection() {
     },
   ];
 
+  useEffect(() => {
+    if (!swiperRef.current) return;
+
+    const swiper = swiperRef.current;
+
+    swiper.params.navigation.prevEl = prevRef.current;
+    swiper.params.navigation.nextEl = nextRef.current;
+
+    swiper.navigation.init();
+    swiper.navigation.update();
+  }, []);
+
   return (
     <section>
       {/* Header & Nav */}
@@ -98,15 +111,10 @@ export default function StorySection() {
       <Swiper
         modules={[Navigation]}
         spaceBetween={16}
-        grabCursor={true}
+        grabCursor
         slidesPerView={1}
-        onBeforeInit={(swiper) => {
-          swiper.params.navigation.prevEl = prevRef.current;
-          swiper.params.navigation.nextEl = nextRef.current;
-        }}
-        navigation={{
-          prevEl: prevRef.current,
-          nextEl: nextRef.current,
+        onSwiper={(swiper) => {
+          swiperRef.current = swiper;
         }}
         breakpoints={{
           640: { slidesPerView: 1 },
@@ -114,7 +122,6 @@ export default function StorySection() {
           1024: { slidesPerView: 5 },
           1280: { slidesPerView: 5 },
         }}
-        className="lg:col-span-5"
       >
         {stories.map((story) => (
           <SwiperSlide key={story.id}>
