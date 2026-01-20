@@ -26,7 +26,7 @@ export default function VehicleCard({ data }) {
       className="
         group/card relative flex flex-row md:flex-col
         rounded-2xl overflow-hidden
-        bg-secondary/15 text-primary
+        bg-secondary text-primary
         md:max-w-sm w-full sm:w-[392px]
         border-2 border-third/60
         hover:shadow-[0_20px_60px_rgba(255,255,255,0.25)]

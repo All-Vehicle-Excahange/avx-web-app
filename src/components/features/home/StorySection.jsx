@@ -2,17 +2,14 @@ import Button from "@/components/ui/button";
 import StoryCard from "@/components/ui/const/StoryCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+
+import "swiper/css";
 
 export default function StorySection() {
-  const scrollContainerRef = useRef(null);
-
-  const scroll = (direction) => {
-    if (scrollContainerRef.current) {
-      const { current } = scrollContainerRef;
-      const scrollAmount = direction === "left" ? -320 : 320;
-      current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-    }
-  };
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
 
   const stories = [
     {
@@ -87,34 +84,48 @@ export default function StorySection() {
 
         {/* Nav Buttons */}
         <div className="flex gap-3 mt-2">
-          <Button variant="roundedOutline" onClick={() => scroll("left")}>
+          <Button variant="roundedOutline" ref={prevRef}>
             <ChevronLeft className="w-5 h-5" />
           </Button>
 
-          <Button variant="roundedOutline" onClick={() => scroll("right")}>
+          <Button variant="roundedOutline" ref={nextRef}>
             <ChevronRight className="w-5 h-5" />
           </Button>
         </div>
       </div>
 
       {/* Stories Scroll Container */}
-      <div
-        ref={scrollContainerRef}
-        className="flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+      <Swiper
+        modules={[Navigation]}
+        spaceBetween={16}
+        grabCursor={true}
+        slidesPerView={1}
+        onBeforeInit={(swiper) => {
+          swiper.params.navigation.prevEl = prevRef.current;
+          swiper.params.navigation.nextEl = nextRef.current;
+        }}
+        navigation={{
+          prevEl: prevRef.current,
+          nextEl: nextRef.current,
+        }}
+        breakpoints={{
+          640: { slidesPerView: 1 },
+          768: { slidesPerView: 2 },
+          1024: { slidesPerView: 5 },
+          1280: { slidesPerView: 5 },
+        }}
+        className="lg:col-span-5"
       >
         {stories.map((story) => (
-          <div
-            key={story.id}
-            className="shrink-0 w-[85%] sm:w-[45%] lg:w-[calc(25%-12px)] snap-start"
-          >
+          <SwiperSlide key={story.id}>
             <StoryCard
               title={story.title}
               description={story.description}
               image={story.image}
             />
-          </div>
+          </SwiperSlide>
         ))}
-      </div>
+      </Swiper>
     </section>
   );
 }

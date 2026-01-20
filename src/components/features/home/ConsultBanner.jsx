@@ -3,9 +3,9 @@ import Banner from "@/components/ui/const/Banner";
 export default function ConsultBanner() {
   return (
     <>
-      <div className="w-full my-12  3xl:max-w-screen-2xl mx-auto">
+      <div className="w-full my-12  3xl:max-w-screen-2xl mx-auto container">
         <div
-          className="w-full h-[250px] md:h-[200px] overflow-hidden bg-cover bg-center relative"
+          className="w-full h-[250px] md:h-[200px] overflow-hidden bg-cover bg-center rounded-lg relative"
           style={{
             backgroundImage:
               "url('/banner_que.jpg')",
