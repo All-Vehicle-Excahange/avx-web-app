@@ -1,18 +1,23 @@
+"use client";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
-export default function DropzoneUpload({ label, onChange }) {
+export default function DropzoneUpload({ label, onChange, preview }) {
   const inputRef = useRef();
   const [file, setFile] = useState(null);
+
+  // show existing preview from parent
+  useEffect(() => {
+    if (preview) {
+      setFile(preview);
+    }
+  }, [preview]);
 
   const handleFile = (f) => {
     if (!f) return;
 
     setFile(f);
-
-    if (onChange) {
-      onChange(f);
-    }
+    onChange && onChange(f);
   };
 
   return (
@@ -36,15 +41,20 @@ export default function DropzoneUpload({ label, onChange }) {
           <div className="flex flex-col items-center gap-3">
             <div className="relative w-full max-w-xs aspect-4/3">
               <Image
-                src={URL.createObjectURL(file)}
-                alt="Preview"
+                src={
+                  typeof file === "string" ? file : URL.createObjectURL(file)
+                }
+                alt="preview"
                 fill
-                className="rounded-lg object-contain"
+                className="object-cover"
                 unoptimized
               />
             </div>
 
-            <p className="text-xs text-primary">{file.name}</p>
+            <p className="text-xs text-primary">
+              {typeof file === "string" ? "Existing Image" : file.name}
+            </p>
+
             <p className="text-xs text-third">Click to change</p>
           </div>
         )}

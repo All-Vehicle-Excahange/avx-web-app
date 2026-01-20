@@ -5,7 +5,7 @@ import InputField from "@/components/ui/inputField";
 import { ChevronDown } from "lucide-react";
 import { getState, getCities } from "@/services/user.service";
 
-export default function Step2Address({ onChange }) {
+export default function Step2Address({ onChange, initialData }) {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
 
@@ -17,11 +17,12 @@ export default function Step2Address({ onChange }) {
 
   const [form, setForm] = useState({
     address: "",
-    cityId: "",
-    cityName: "",
-    stateId: "",
-    stateName: "",
-    country: "",
+    cityId: null,
+    stateId: null,
+    countryId: 101,
+    // right  now we are passing dummy coordinates
+    latitude: 12.12,
+    longitude: 12.12,
   });
 
   // ===== Fetch States =====
@@ -82,6 +83,40 @@ export default function Step2Address({ onChange }) {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  useEffect(() => {
+    if (!onChange) return;
+
+    const payload = {
+      address: form.address,
+      cityId: form.cityId,
+      stateId: form.stateId,
+      countryId: form.countryId,
+      latitude: form.latitude,
+      longitude: form.longitude,
+    };
+
+    onChange(payload);
+  }, [form]);
+
+  // ===== PREFILL FROM API =====
+  useEffect(() => {
+    if (!initialData) return;
+
+    setForm((prev) => ({
+      ...prev,
+      address: initialData.address || "",
+      cityId: initialData.cityId || null,
+      stateId: initialData.stateId || null,
+      countryId: initialData.countryId || 101,
+      latitude: initialData.latitude || 12.12,
+      longitude: initialData.longitude || 12.12,
+
+      // UI only fields
+      stateName: initialData.stateName || "",
+      cityName: initialData.cityName || "",
+    }));
+  }, [initialData]);
+
   return (
     <div className="space-y-6">
       <InputField
@@ -121,8 +156,6 @@ export default function Step2Address({ onChange }) {
                     ...form,
                     stateId: s.value,
                     stateName: s.label,
-
-                    // reset city
                     cityId: "",
                     cityName: "",
                   };
@@ -186,19 +219,6 @@ export default function Step2Address({ onChange }) {
           </div>
         )}
       </div>
-
-      <InputField
-        label="Country"
-        variant="colored"
-        value={form.country}
-        onChange={(e) =>
-          setForm((p) => {
-            const updated = { ...p, country: e.target.value };
-            onChange && onChange(updated);
-            return updated;
-          })
-        }
-      />
     </div>
   );
 }

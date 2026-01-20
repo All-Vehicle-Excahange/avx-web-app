@@ -6,9 +6,12 @@ import ChipGroup from "@/components/ui/chipGroup";
 import { Camera } from "lucide-react";
 import DropzoneUpload from "@/components/ui/DropzoneUpload";
 
-export default function Step1Business({ onChange }) {
+export default function Step1Business({ onChange, initialData }) {
   const logoRef = useRef();
+
   const [logo, setLogo] = useState(null);
+  const [bannerPreview, setBannerPreview] = useState(null);
+
   const [form, setForm] = useState({
     logo: null,
     banner: null,
@@ -32,38 +35,58 @@ export default function Step1Business({ onChange }) {
   const createPayload = () => {
     const payload = new FormData();
 
-    if (form.logo) {
-      payload.append("logo", form.logo);
-    }
-
-    if (form.banner) {
-      payload.append("banner", form.banner);
-    }
+    if (form.logo) payload.append("logo", form.logo);
+    if (form.banner) payload.append("banner", form.banner);
 
     payload.append("consultationName", form.consultationName);
     payload.append("ownerName", form.ownerName);
     payload.append("companyEmail", form.email);
     payload.append("establishmentYear", form.establishmentYear);
 
-    form.vehicleTypes.forEach((type, index) => {
-      payload.append(`vehicleTypes[${index}]`, type);
-    });
+    form.vehicleTypes.forEach((type, i) =>
+      payload.append(`vehicleTypes[${i}]`, type),
+    );
 
-    form.services.forEach((service, index) => {
-      payload.append(`services[${index}]`, service);
-    });
+    form.services.forEach((s, i) => payload.append(`services[${i}]`, s));
 
     return payload;
   };
 
+  // send to parent
   useEffect(() => {
-    if (onChange) {
-      onChange(createPayload());
-    }
+    onChange && onChange(createPayload());
   }, [form]);
+
+  // ===== AUTOFILL FROM API =====
+  useEffect(() => {
+    if (!initialData) return;
+
+    setForm({
+      logo: null,
+      banner: null,
+
+      consultationName: initialData.consultationName || "",
+      ownerName: initialData.ownerName || "",
+      email: initialData.companyEmail || "",
+      establishmentYear: initialData.establishmentYear || "",
+
+      vehicleTypes: initialData.vehicleTypes || [],
+      services: initialData.services || [],
+    });
+
+    // SHOW EXISTING IMAGES
+    if (initialData?.logoUrl) {
+      setLogo(initialData.logoUrl);
+    }
+
+    if (initialData?.bannerUrl) {
+      setBannerPreview(initialData.bannerUrl);
+    }
+  }, [initialData]);
 
   return (
     <div className="space-y-6">
+      {/* ===== LOGO ===== */}
       <div className="flex justify-center">
         <div className="relative">
           <div
@@ -76,8 +99,10 @@ export default function Step1Business({ onChange }) {
               </span>
             ) : (
               <Image
-                src={URL.createObjectURL(logo)}
-                alt="Logo"
+                src={
+                  typeof logo === "string" ? logo : URL.createObjectURL(logo)
+                }
+                alt="logo"
                 fill
                 className="object-cover"
                 unoptimized
@@ -85,8 +110,7 @@ export default function Step1Business({ onChange }) {
             )}
           </div>
 
-          {/* CAMERA ICON */}
-          <div className="absolute bottom-1 right-1 bg-secondary p-2 rounded-full border border-secondary cursor-pointer">
+          <div className="absolute bottom-1 right-1 bg-secondary p-2 rounded-full border cursor-pointer">
             <Camera />
           </div>
 
@@ -96,21 +120,28 @@ export default function Step1Business({ onChange }) {
             accept="image/*"
             hidden
             onChange={(e) => {
-              setLogo(e.target.files[0]);
-              handleInput("logo", e.target.files[0]);
+              const file = e.target.files[0];
+              setLogo(file);
+              handleInput("logo", file);
             }}
           />
         </div>
       </div>
+
+      {/* ===== BANNER ===== */}
       <DropzoneUpload
         label="Banner Image"
+        preview={bannerPreview}
         onChange={(file) => {
-          const bannerFile = Array.isArray(file) ? file[0] : file;
-          handleInput("banner", bannerFile);
+          const f = Array.isArray(file) ? file[0] : file;
+
+          setBannerPreview(typeof f === "string" ? f : URL.createObjectURL(f));
+
+          handleInput("banner", f);
         }}
       />
 
-      {/* OTHER FIELDS */}
+      {/* ===== FIELDS ===== */}
       <InputField
         label="Consultation Name"
         variant="colored"
@@ -147,7 +178,7 @@ export default function Step1Business({ onChange }) {
           { label: "Four Wheelers", value: "FOUR_WHEELER" },
           { label: "Other", value: "OTHER" },
         ]}
-        onChange={(val) => handleInput("vehicleTypes", val)}
+        onChange={(v) => handleInput("vehicleTypes", v)}
       />
 
       <ChipGroup
@@ -158,7 +189,7 @@ export default function Step1Business({ onChange }) {
           { label: "Exchange", value: "EXCHANGE" },
           { label: "Finance", value: "FINANCE" },
         ]}
-        onChange={(val) => handleInput("services", val)}
+        onChange={(v) => handleInput("services", v)}
       />
     </div>
   );
