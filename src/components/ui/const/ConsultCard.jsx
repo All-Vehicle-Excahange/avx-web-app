@@ -1,7 +1,6 @@
 import { MapPin, Star } from "lucide-react";
 import Image from "next/image";
 import Button from "@/components/ui/button";
-import { useRouter } from "next/router";
 
 const SERVICES = ["Test Drive", "Financing", "Exchange", "Warranty"];
 
@@ -15,10 +14,6 @@ export default function ConsultantCard({
   priceRange,
   isSponsored = false,
 }) {
-  const router = useRouter();
-  const handleClick = () => {
-    router.push("/store-front");
-  };
   return (
     <div
       className="
@@ -133,7 +128,7 @@ export default function ConsultantCard({
 
         {/* CTA */}
         <div className="mt-auto">
-          <Button onClick={handleClick} full size="sm" variant="outline">
+          <Button href="/store-front" full size="sm" variant="outline">
             View Consultant
           </Button>
         </div>

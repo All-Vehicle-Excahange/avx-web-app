@@ -214,7 +214,7 @@ function AboutPro1({ data, isEditing, onUpdate }) {
   }
 
   return (
-    <div className="bg-secondary text-primary font-sans overflow-hidden">
+    <div className="bg-secondary text-primary overflow-hidden">
       {/* 1. HERO SECTION */}
       <section className="w-full max-w-[1480px] mx-auto grid lg:grid-cols-2 gap-12 items-center py-10 px-6">
         <div className="relative overflow-hidden group">

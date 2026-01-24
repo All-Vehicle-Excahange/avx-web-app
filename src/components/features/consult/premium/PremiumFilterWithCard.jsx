@@ -151,7 +151,7 @@ export default function PremiumFilterWithCard() {
   };
 
   return (
-    <div className="w-ful pt-12 md:pt-20 md:pb-8 min-h-screen flex flex-col lg:flex-row bg-secondary text-secondary font-sans">
+    <div className="w-ful pt-12 md:pt-20 md:pb-8 min-h-screen flex flex-col lg:flex-row bg-secondary text-secondary">
       {/* ================= DESKTOP SIDEBAR ================= */}
       <aside className="hidden lg:flex h-fit relative w-[340px] bg-secondary/90 border border-third/40 p-6 flex-col gap-6 overflow-y-auto shrink-0 rounded-2xl">
         <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover opacity-40 blur-lg z-0" />

@@ -117,22 +117,18 @@ export default function VehicleFilterBar() {
     <>
     
 
-      {/* =========================================================
-          DESKTOP SEARCH BAR
-          Fixed: Added 'absolute', 'bottom-8', 'left-0 right-0' and 'justify-center'
-         ========================================================= */}
-      <div className="hidden md:flex absolute bottom-8 left-0 right-0 z-30 justify-center items-center px-4">
+      <div className="hidden md:flex absolute bottom-[20vh] left-0 right-0 z-30 justify-center items-center px-4">
         {/* Wrapper for Width Constraint */}
         <div className="w-full max-w-6xl animated-gradient-border shadow-2xl">
           <div ref={containerRef} className="inner-container w-full h-16">
             {/* BACKGROUND IMAGE INSIDE SEARCH BAR */}
             <div className="absolute inset-0 z-0">
               <div className="absolute inset-0 bg-[url('/bg_blur_2.jpg')] bg-cover bg-center bg-no-repeat" />
-              <div className="absolute backdrop-blur-xl inset-0 bg-primary" />
+              <div className="absolute backdrop-blur-xl inset-0 bg-secondary" />
             </div>
 
             {/* CONTENT (Relative + z-10 to sit ON TOP of the image) */}
-            <div className="relative z-10 flex items-center w-full h-full p-2 text-white">
+            <div className="relative z-10 flex items-center w-full h-full p-2 text-primary">
               {/* ----- SECTION 1: LOCATION ----- */}
               <div
                 className={`flex-1 relative px-4 py-3 rounded-full transition-colors cursor-pointer ${
@@ -140,7 +136,7 @@ export default function VehicleFilterBar() {
                 }`}
                 onClick={() => setActiveTab("location")}
               >
-                <div className="text-lg font-bold text-secondary tracking-wide">
+                <div className="text-lg font-bold text-primary tracking-wide">
                   Location
                 </div>
                 <input
@@ -196,7 +192,7 @@ export default function VehicleFilterBar() {
                 }`}
                 onClick={() => setActiveTab("vehicle")}
               >
-                <div className="text-lg font-bold text-secondary tracking-wide">
+                <div className="text-lg font-bold text-primary tracking-wide">
                   Vehicle Type
                 </div>
                 <div
@@ -248,7 +244,7 @@ export default function VehicleFilterBar() {
                 }`}
                 onClick={() => setActiveTab("fuel")}
               >
-                <div className="text-lg font-bold text-secondary tracking-wide">
+                <div className="text-lg font-bold text-primary tracking-wide">
                   Fuel Type
                 </div>
                 <div
@@ -290,7 +286,7 @@ export default function VehicleFilterBar() {
                 }`}
                 onClick={() => setActiveTab("brand")}
               >
-                <div className="text-lg font-bold text-secondary tracking-wide">
+                <div className="text-lg font-bold text-primary tracking-wide">
                   Brand
                 </div>
                 <div
@@ -332,7 +328,7 @@ export default function VehicleFilterBar() {
                 }`}
                 onClick={() => setActiveTab("budget")}
               >
-                <div className="text-lg font-bold text-secondary tracking-wide">
+                <div className="text-lg font-bold text-primary tracking-wide">
                   Budget
                 </div>
                 <div className="text-sm font-medium text-gray-400 truncate">

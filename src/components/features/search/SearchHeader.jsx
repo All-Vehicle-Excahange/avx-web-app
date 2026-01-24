@@ -12,7 +12,6 @@ export default function SearchHeader() {
         className="
           w-full
           bg-secondary
-          font-sans
           pt-24
           pb-6
           md:pt-28
@@ -20,7 +19,7 @@ export default function SearchHeader() {
         "
       >
         {/* CENTERED CONTENT (AMAZON STYLE) */}
-        <div className="max-w-screen-2xl mx-auto px-6 md:px-8">
+        <div className="container px-6 md:px-8">
           <h2 className="text-primary text-2xl md:text-3xl font-bold">
             Browse by Vehicle Type
           </h2>

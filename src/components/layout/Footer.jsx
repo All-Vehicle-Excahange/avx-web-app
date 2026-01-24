@@ -6,6 +6,7 @@ import {
   Phone,
   Twitch,
 } from "lucide-react";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -30,23 +31,23 @@ export default function Footer() {
             </p>
 
             <div className="flex gap-4">
-              <a className="bg-primary/10 p-2 rounded hover:bg-primary/20 transition-colors cursor-pointer">
+              <Link href="/facebook" className="bg-primary/10 p-2 rounded hover:bg-primary/20 transition-colors cursor-pointer">
                 <Facebook className="w-5 h-5 text-primary" />
-              </a>
-              <a className="bg-primary/10 p-2 rounded hover:bg-primary/20 transition-colors cursor-pointer">
+              </Link>
+              <Link href="/twitch" className="bg-primary/10 p-2 rounded hover:bg-primary/20 transition-colors cursor-pointer">
                 <Twitch className="w-5 h-5 text-primary" />
-              </a>
-              <a className="bg-primary/10 p-2 rounded hover:bg-primary/20 transition-colors cursor-pointer">
+              </Link>
+              <Link href="/linkedin" className="bg-primary/10 p-2 rounded hover:bg-primary/20 transition-colors cursor-pointer">
                 <Linkedin className="w-5 h-5 text-primary" />
-              </a>
-              <a className="bg-primary/10 p-2 rounded hover:bg-primary/20 transition-colors cursor-pointer">
+              </Link>
+              <Link href="/instagram" className="bg-primary/10 p-2 rounded hover:bg-primary/20 transition-colors cursor-pointer">
                 <Instagram className="w-5 h-5 text-primary" />
-              </a>
+              </Link>
             </div>
 
             <div className="flex items-center gap-3 pt-4">
               <Phone className="w-5 h-5 text-primary" />
-              <span className="font-medium text-primary">+91 75254 10245</span>
+              <Link href="tel:07525410245" className="font-medium text-primary">+91 75254 10245</Link>
             </div>
           </div>
 
@@ -100,15 +101,15 @@ export default function Footer() {
           </p>
 
           <div className="flex gap-6">
-            <a className="hover:text-primary transition-colors">
+            <Link href="/privacy-policy" className="hover:text-primary transition-colors">
               Privacy Policy
-            </a>
-            <a className="hover:text-primary transition-colors">
+            </Link>
+            <Link href="/terms-of-service" className="hover:text-primary transition-colors">
               Terms of Service
-            </a>
-            <a className="hover:text-primary transition-colors">
+            </Link>
+            <Link href="/cookie-policy" className="hover:text-primary transition-colors">
               Cookie Policy
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,40 +1,105 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Button from "@/components/ui/button";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+
+import "swiper/css";
 
 function ReletedCar() {
-  const scrollRef = useRef(null);
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+  const swiperRef = useRef(null);
 
-  const cars = Array.from({ length: 8 });
-  const enableScroll = cars.length > 4;
+  useEffect(() => {
+    if (!swiperRef.current) return;
 
-  const scroll = (direction) => {
-    if (!scrollRef.current) return;
+    const swiper = swiperRef.current;
 
-    const scrollAmount = 320;
-    scrollRef.current.scrollBy({
-      left: direction === "left" ? -scrollAmount : scrollAmount,
-      behavior: "smooth",
-    });
-  };
+    // Attach navigation AFTER mount
+    swiper.params.navigation.prevEl = prevRef.current;
+    swiper.params.navigation.nextEl = nextRef.current;
 
-  const cardData = {
-    id: "featured-1",
-    title: "BMW 8-serie 2-door",
-    subtitle: "35 D6 Powerful lorem isump",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    drivetrain: "Front Wheel Drive",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/big_card_car.jpg",
-    sponsored: false,
-  };
+    swiper.navigation.init();
+    swiper.navigation.update();
+  }, []);
+
+
+  const cardData = [
+    {
+      id: "featured-1",
+      title: "BMW 8-serie 2-door",
+      subtitle: "35 D6 Powerful lorem isump",
+      year: "2022",
+      transmission: "Manual",
+      fuel: "Diesel",
+      seats: "5",
+      drivetrain: "Front Wheel Drive",
+      rating: "4.3",
+      price: "6,75,998",
+      image: "/big_card_car.jpg",
+      sponsored: false,
+    },
+    {
+      id: "featured-1",
+      title: "BMW 8-serie 2-door",
+      subtitle: "35 D6 Powerful lorem isump",
+      year: "2022",
+      transmission: "Manual",
+      fuel: "Diesel",
+      seats: "5",
+      drivetrain: "Front Wheel Drive",
+      rating: "4.3",
+      price: "6,75,998",
+      image: "/big_card_car.jpg",
+      sponsored: false,
+    },
+    {
+      id: "featured-1",
+      title: "BMW 8-serie 2-door",
+      subtitle: "35 D6 Powerful lorem isump",
+      year: "2022",
+      transmission: "Manual",
+      fuel: "Diesel",
+      seats: "5",
+      drivetrain: "Front Wheel Drive",
+      rating: "4.3",
+      price: "6,75,998",
+      image: "/big_card_car.jpg",
+      sponsored: false,
+    },
+    {
+      id: "featured-1",
+      title: "BMW 8-serie 2-door",
+      subtitle: "35 D6 Powerful lorem isump",
+      year: "2022",
+      transmission: "Manual",
+      fuel: "Diesel",
+      seats: "5",
+      drivetrain: "Front Wheel Drive",
+      rating: "4.3",
+      price: "6,75,998",
+      image: "/big_card_car.jpg",
+      sponsored: false,
+    },
+    {
+      id: "featured-1",
+      title: "BMW 8-serie 2-door",
+      subtitle: "35 D6 Powerful lorem isump",
+      year: "2022",
+      transmission: "Manual",
+      fuel: "Diesel",
+      seats: "5",
+      drivetrain: "Front Wheel Drive",
+      rating: "4.3",
+      price: "6,75,998",
+      image: "/big_card_car.jpg",
+      sponsored: false,
+    },
+  ]
 
   return (
     <div className="w-full bg-secondary relative">
@@ -45,52 +110,50 @@ function ReletedCar() {
         </h2>
 
         {/* ✅ TOP RIGHT BUTTONS */}
-        {enableScroll && (
-          <div className="flex gap-2">
-            <Button
-              onClick={() => scroll("left")}
-              showIcon={false}
-              variant="roundedOutline"
-            >
-              <ChevronLeft size={18} />
-            </Button>
+        <div className="flex gap-3">
+          <Button variant="roundedOutline" ref={prevRef}>
+            <ChevronLeft className="w-5 h-5 text-secondary" />
+          </Button>
 
-            <Button
-              onClick={() => scroll("right")}
-              showIcon={false}
-              variant="roundedOutline"
-            >
-              <ChevronRight size={18} />
-            </Button>
-          </div>
-        )}
+          <Button variant="roundedOutline" ref={nextRef}>
+            <ChevronRight className="w-5 h-5 text-secondary" />
+          </Button>
+        </div>
       </div>
 
       {/* CAR CONTAINER */}
-      <div
-        ref={scrollRef}
-        className={
-          enableScroll
-            ? `
-      flex gap-6
-      overflow-x-auto
-      scrollbar-hide
-    `
-            : `
-      grid
-      grid-cols-1
-      md:grid-cols-2
-      lg:grid-cols-3
-      3xl:grid-cols-4
-      gap-6
-    `
-        }
-      >
-        {cars.map((_, i) => (
-          <div key={i} className={enableScroll ? "flex-none w-[360px]" : ""}>
-            <VehicleCard data={cardData} />
-          </div>
-        ))}
+      <div className="w-full h-full pb-6 overflow-visible">
+        <Swiper
+          modules={[Navigation]}
+          spaceBetween={16}
+          grabCursor
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper;
+          }}
+          breakpoints={{
+            0: {
+              slidesPerView: 1,
+            },
+            640: {
+              slidesPerView: 1,
+            },
+            768: {
+              slidesPerView: 2,
+            },
+            1024: {
+              slidesPerView: 3,
+            },
+            1280: {
+              slidesPerView: 4, // ✅ GUARANTEED 4 on big screens
+            },
+          }}
+        >
+          {cardData.map((card, i) => (
+            <SwiperSlide key={i}>
+              <VehicleCard data={card} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
     </div>
   );

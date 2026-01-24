@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "@/components/ui/button";
-import { MessageCircle, Navigation2 } from "lucide-react";
+import { MapPin, MessageCircle, Navigation2 } from "lucide-react";
 import {
   Star,
   Users,
@@ -47,7 +47,7 @@ export default function StoreFrontHeroSection({
 
                 {/* LOCATION */}
                 <p className="flex items-center gap-1 text-sm text-third">
-                  <Navigation2 className="w-4 h-4 shrink-0" />
+                  <MapPin className="w-4 h-4 shrink-0" />
                   Chaapi, Gujarat
                 </p>
 
@@ -96,12 +96,12 @@ export default function StoreFrontHeroSection({
 
                 {/* ACTION BUTTONS */}
                 <div className="flex gap-3 pt-1">
-                  <Button size="sm" showIcon={false} variant="ghost">
+                  <Button size="md" showIcon={false} variant="ghost">
                     Chat <MessageCircle className="w-5 h-5 ml-2" />
                   </Button>
-                  <Button size="sm" showIcon={false} variant="ghost">
+                  <Button size="md" showIcon={false} variant="ghost">
                     Direction
-                    <CornerUpRight className="w-5 h-5 ml-2" />
+                    <CornerUpRight className="w-5 h-5 ml-2 rounded-full" />
                   </Button>
                 </div>
               </div>

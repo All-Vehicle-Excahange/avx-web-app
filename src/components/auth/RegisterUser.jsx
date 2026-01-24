@@ -43,7 +43,7 @@ export default function RegisterUser() {
   }, [text]);
 
   return (
-    <div className="relative w-full min-h-screen font-sans bg-secondary flex flex-col">
+    <div className="relative w-full min-h-screen bg-secondary flex flex-col">
       <div className="absolute inset-0 z-0">
         <Image
           src="/bg.jpg"

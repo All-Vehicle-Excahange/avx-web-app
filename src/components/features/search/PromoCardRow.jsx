@@ -12,14 +12,14 @@ export default function PromoCardRow() {
       <div
         ref={scrollRef}
         className="
-          flex gap-2 sm:gap-4
+          flex gap-3 sm:gap-6
           items-center
           overflow-x-auto
           snap-x snap-mandatory
           scrollbar-hide
 
-          justify-start
-          lg:justify-center
+          justify-between
+          lg:justify-between
         "
       >
         <PromoCard
