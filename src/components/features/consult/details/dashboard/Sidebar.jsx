@@ -9,12 +9,14 @@ import {
   Zap,
   User,
   CreditCard,
+  InspectIcon,
 } from "lucide-react";
 
 const menu = [
   { label: "Overview", icon: LayoutGrid, href: "/consult/dashboard/overview" },
   { label: "Storefront", icon: Store, href: "/consult/dashboard/storefront" },
   { label: "Inventory", icon: Box, href: "/consult/dashboard/inventory" },
+  { label: "Inspection", icon: InspectIcon, href: "/consult/dashboard/inspection" },
   {
     label: "Inquiries",
     icon: MessageSquare,
