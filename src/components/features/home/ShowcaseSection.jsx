@@ -68,7 +68,7 @@ const ShowcaseSection = () => {
       </div>
       <div className=" flex-1 min-h-0 grid sm:items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-3">
         {smallCars.map((car) => (
-          <VehicleCard data={car} />
+          <VehicleCard data={car} key={car.id} />
         ))}
       </div>
       <div className="mt-2 mb-3 mr-3 flex justify-end">

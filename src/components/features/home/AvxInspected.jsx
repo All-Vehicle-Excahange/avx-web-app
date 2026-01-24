@@ -106,7 +106,7 @@ export default function AvxInspected() {
       {/* Grid Layout */}
       <div className=" flex-1 min-h-0 grid sm:items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-3">
         {smallCars.map((car) => (
-          <VehicleCard data={car} className="lg:col-span-3" />
+          <VehicleCard key={car.id} data={car} className="lg:col-span-3" />
         ))}
       </div>
 
