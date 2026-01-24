@@ -19,43 +19,61 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
+let refreshAttempts = 0;
+
 axiosInstance.interceptors.response.use(
   (response) => response,
 
   async (error) => {
     const originalRequest = error.config;
 
-    // Check if error is 401 AND we haven't retried yet
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true; // Prevent infinite loop
+    if (error.response?.status === 401) {
+      if (refreshAttempts >= 2) {
+        console.log("❌ Refresh limit reached. Logging out...");
 
-      try {
-        console.log("🔄 Token expired. Attempting refresh...");
-
-        const user = useAuthStore.getState().user;
-
-        const res = await axiosInstance.post("/auth/refresh", {
-          refreshToken: user?.refreshToken,
-        });
-
-        if (res.data?.data && res.data.data?.accessToken) {
-          useAuthStore
-            .getState()
-            .login(res.data.data, res.data.data.accessToken);
-        }
-
-        console.log("✅ Token refreshed. Retrying original request...");
-
-        return axiosInstance(originalRequest);
-      } catch (refreshError) {
-        console.log("❌ Refresh failed. Logging out...");
         useAuthStore.getState().logout();
 
         if (typeof window !== "undefined") {
           window.location.href = "/";
         }
 
-        return Promise.reject(refreshError);
+        return Promise.reject(error);
+      }
+
+      
+      if (!originalRequest._retry) {
+        originalRequest._retry = true;
+        refreshAttempts++;
+
+        try {
+          console.log(
+            `🔄 Token expired. Refresh attempt ${refreshAttempts}...`,
+          );
+
+          const user = useAuthStore.getState().user;
+
+          const res = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
+            {
+              refreshToken: user?.refreshToken,
+            },
+            { withCredentials: true },
+          );
+
+          if (res.data?.data?.accessToken) {
+            useAuthStore
+              .getState()
+              .login(res.data.data, res.data.data.accessToken);
+          }
+
+          console.log("✅ Token refreshed. Retrying original request...");
+
+          return axiosInstance(originalRequest);
+        } catch (refreshError) {
+          console.log("❌ Refresh failed.");
+
+          return Promise.reject(refreshError);
+        }
       }
     }
 
