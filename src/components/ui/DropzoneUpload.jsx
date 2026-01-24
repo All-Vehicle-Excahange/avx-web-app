@@ -51,7 +51,7 @@ export default function DropzoneUpload({ label, onChange, preview }) {
                 className="object-cover"
                 unoptimized
               />
-            </div>
+            </div> 
 
             <p className="text-xs text-primary">
               {typeof currentFile === "string"
