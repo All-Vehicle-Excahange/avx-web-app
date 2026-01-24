@@ -1,17 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
 :root {
   --color-primary: #fff;
-  --color-secondary: #000;
+  --color-secondary: #121212;
   --color-third: #bebebe;
+  --primary-font: "Montserrat", sans-serif;
+  --secondary-font: "Poppins", sans-serif;
 }
 
 @theme {
   --color-primary: #fffef7;
-  --color-secondary: #000;
+  --color-secondary: #121212;
   --color-third: #bebebe;
   --breakpoint-3xl: 120rem;
+  --primary: "Montserrat", sans-serif;
+  --secondary: "Poppins", sans-serif;
 
   --animate-spin-slow: spin 3s linear infinite;
 }
@@ -19,6 +24,13 @@
 body {
   background-color: var(--color-secondary);
   color: var(--color-primary);
+  font-family: var(--secondary-font);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--primary-font);
 }
 
 .inverted {
@@ -142,18 +154,26 @@ body {
   position: absolute;
   inset: 0;
   border-radius: 9999px;
-  background: linear-gradient(90deg,
-      #4f46e5,
-      #3b82f6,
-      #06b6d4,
-      #10b981,
-      #facc15,
-      #f472b6,
-      #4f46e5);
-  background-size: 400% 400%;
+
+  /* 🔥 SILVER / CHROME METALLIC GRADIENT */
+  background: linear-gradient(120deg,
+      #0b0b0b 0%,
+      #2a2a2a 10%,
+      #8f8f8f 20%,
+      #e5e5e5 30%,
+      #ffffff 40%,
+      #bdbdbd 50%,
+      #3a3a3a 60%,
+      #000000 70%,
+      #5a5a5a 80%,
+      #e0e0e0 90%,
+      #0b0b0b 100%);
+
+  background-size: 300% 300%;
+  animation: rotateGradient 8s linear infinite;
   z-index: -1;
-  animation: rotateGradient 6s linear infinite;
 }
+
 
 /* The inner container definition.
    Note: We removed background-color: #000 here.

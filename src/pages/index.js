@@ -19,8 +19,9 @@ export default function Home() {
       <HeroSection fullWidth />
 
       {/* <RecentlyVisitedSection /> */}
-      <ShowcaseSection />
-
+      <Layout>
+        <ShowcaseSection />
+      </Layout>
       <Layout>
         <TopPicsSection />
       </Layout>
@@ -35,7 +36,7 @@ export default function Home() {
         <StorySection />
       </Layout>
       {/* <Layout> */}
-        <SayHello />
+      <SayHello />
       {/* </Layout> */}
       <SellVehicleBanner fullWidth />
       <Layout>

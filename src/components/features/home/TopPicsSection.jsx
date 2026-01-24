@@ -28,11 +28,11 @@ export default function TopPicsSection() {
   }, []);
 
   return (
-    <div className="w-full h-full flex flex-col bg-secondary text-primary font-sans">
+    <div className="w-full h-full flex flex-col bg-secondary text-primary">
       {/* Header Section */}
       <div className="shrink-0 flex flex-col md:flex-row md:items-end justify-between mb-4 gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-primary">
+          <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
             Top picks Vehicle for you
           </h2>
 
@@ -90,7 +90,7 @@ export default function TopPicsSection() {
       </div>
 
       <div className="mt-8 flex justify-end">
-        <Button variant="outlineAnimated" size="md">
+        <Button href="/" variant="outlineAnimated" size="md">
           Explore All Vehicles
         </Button>
       </div>

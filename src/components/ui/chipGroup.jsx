@@ -45,7 +45,7 @@ export default function ChipGroup({
   return (
     <div className="flex flex-col mb-2">
       {/* Title */}
-      <h3 className="text-lg font-semibold text-primary mb-2">{title}</h3>
+      <h3 className="text-md font-semibold text-primary mb-2">{title}</h3>
 
       {/* ⭐ Search Input */}
       {searchable && (
@@ -81,7 +81,7 @@ export default function ChipGroup({
       {showMore && filteredItems.length > limit && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="mt-3 text-third font-medium text-sm underline hover:text-primary/70 self-end"
+          className="mt-3 text-third cursor-pointer font-medium text-sm underline hover:text-primary/70 self-end"
         >
           {expanded ? "View Less" : "View More"}
         </button>

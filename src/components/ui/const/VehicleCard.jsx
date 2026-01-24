@@ -88,13 +88,12 @@ export default function VehicleCard({ data }) {
           {/* Title Section */}
           <div className="flex justify-between items-start gap-2">
             <div className="min-w-0 w-full">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between pb-3">
                 <h3
                   className="
                   text-sm font-secondary md:text-xl font-bold 
                   leading-tight tracking-wide 
                   line-clamp-2 
-                  min-h-[38px] md:min-h-14
                 "
                 >
                   {mapped.title}
@@ -149,7 +148,7 @@ export default function VehicleCard({ data }) {
           <div className="flex items-center justify-between gap-2">
             <h3 className="text-sm md:text-xl font-bold">₹ {mapped.price}</h3>
 
-            <Button onClick={handleClick} variant="outline" size="sm">
+            <Button href="/vehicle/details" variant="outline" size="sm">
               View Details
             </Button>
           </div>

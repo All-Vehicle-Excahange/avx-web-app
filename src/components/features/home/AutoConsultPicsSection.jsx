@@ -44,47 +44,7 @@ export default function AutoConsultPicsSection({ limit }) {
       vehicleCount: 116,
       image: "/cs.png",
       isSponsored: true,
-    },
-    {
-      id: 5,
-      name: "Adarsh Auto Consultants",
-      location: "Chhapi, Gujarat",
-      rating: 4.2,
-      vehicleCount: 90,
-      image: "/cs.png",
-      isSponsored: false,
-      priceRange: "80K - 1.50L",
-    },
-    {
-      id: 6,
-      name: "Adarsh Auto Consultants",
-      location: "Chhapi, Gujarat",
-      rating: 4.5,
-      priceRange: "1L - 2.5L",
-      vehicleCount: 116,
-      image: "/cs.png",
-      isSponsored: true,
-    },
-    {
-      id: 7,
-      name: "Adarsh Auto Consultants",
-      location: "Chhapi, Gujarat",
-      rating: 4.2,
-      vehicleCount: 90,
-      image: "/cs.png",
-      isSponsored: false,
-      priceRange: "80K - 1.5L",
-    },
-    {
-      id: 8,
-      name: "Adarsh Auto Consultants",
-      location: "Chhapi, Gujarat",
-      rating: 4.5,
-      priceRange: "1L - 2.5L",
-      vehicleCount: 116,
-      image: "/cs.png",
-      isSponsored: true,
-    },
+    }
   ];
 
   // ✅ Apply limit ONLY if provided
@@ -108,7 +68,7 @@ export default function AutoConsultPicsSection({ limit }) {
 
       {/* Bottom Action */}
       <div className="mt-8 flex justify-end">
-        <Button variant="outlineAnimated">See All</Button>
+        <Button href="/" variant="outlineAnimated">See All</Button>
       </div>
     </div>
   );

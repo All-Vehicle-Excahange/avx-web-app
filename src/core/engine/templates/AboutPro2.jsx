@@ -343,7 +343,7 @@ function AboutPro2({ data, isEditing, onUpdate }) {
 
   /* ================== LIVE PREVIEW ================== */
   return (
-    <div className="bg-black text-white w-full font-sans overflow-hidden">
+    <div className="bg-black text-white w-full overflow-hidden">
       {/* 1. HERO */}
       <section className="w-full max-w-[1480px] mx-auto grid lg:grid-cols-2 gap-16 py-10 px-6 items-center">
         <div className="order-2 lg:order-1">
