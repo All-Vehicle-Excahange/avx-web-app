@@ -28,6 +28,12 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
 
     if (error.response?.status === 401) {
+      const { user, isLoggedIn } = useAuthStore.getState();
+
+      if (!isLoggedIn || !user?.refreshToken) {
+        return Promise.reject(error);
+      }
+
       if (refreshAttempts >= 2) {
         console.log("❌ Refresh limit reached. Logging out...");
 
@@ -40,7 +46,6 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(error);
       }
 
-      
       if (!originalRequest._retry) {
         originalRequest._retry = true;
         refreshAttempts++;
@@ -50,12 +55,10 @@ axiosInstance.interceptors.response.use(
             `🔄 Token expired. Refresh attempt ${refreshAttempts}...`,
           );
 
-          const user = useAuthStore.getState().user;
-
           const res = await axios.post(
             `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
             {
-              refreshToken: user?.refreshToken,
+              refreshToken: user.refreshToken,
             },
             { withCredentials: true },
           );
@@ -66,11 +69,11 @@ axiosInstance.interceptors.response.use(
               .login(res.data.data, res.data.data.accessToken);
           }
 
-          console.log("✅ Token refreshed. Retrying original request...");
-
           return axiosInstance(originalRequest);
         } catch (refreshError) {
-          console.log("❌ Refresh failed.");
+          console.log("❌ Refresh failed. Logging out...");
+
+          useAuthStore.getState().logout();
 
           return Promise.reject(refreshError);
         }
