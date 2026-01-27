@@ -1,7 +1,8 @@
 import ConsultantCard from "@/components/ui/const/ConsultCard";
 import VehicleCard from "@/components/ui/const/VehicleCard";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Button from "@/components/ui/button";
+import { getWishList } from "@/services/user.service";
 
 function Wishlist() {
   const [prefs, setPrefs] = useState({
@@ -10,63 +11,28 @@ function Wishlist() {
     ahmedabad: true,
   });
   const [editMode, setEditMode] = useState(false);
+  const [cardData, setCardData] = useState([]);
 
   const toggle = (key) => setPrefs({ ...prefs, [key]: !prefs[key] });
 
-  const cardData = [
-    {
-      id: "1",
-      title: "BMW 8-2-Door",
-      subtitle: "35 D6 Powerful lorem isump",
-      year: "2022",
-      transmission: "Manual",
-      fuel: "Diesel",
-      seats: "5",
-      drivetrain: "Front Wheel Drive",
-      rating: "4.3",
-      price: "6,75,998",
-      image: "/big_card_car.jpg",
-    },
-    {
-      id: "2",
-      title: "Audi A6 Sedan",
-      subtitle: "Luxury comfort performance",
-      year: "2021",
-      transmission: "Automatic",
-      fuel: "Petrol",
-      seats: "5",
-      drivetrain: "All Wheel Drive",
-      rating: "4.5",
-      price: "5,40,000",
-      image: "/big_card_car.jpg",
-    },
-    {
-      id: "3",
-      title: "Mercedes C-Class",
-      subtitle: "Premium driving experience",
-      year: "2020",
-      transmission: "Automatic",
-      fuel: "Diesel",
-      seats: "5",
-      drivetrain: "Rear Wheel Drive",
-      rating: "4.2",
-      price: "4,95,000",
-      image: "/big_card_car.jpg",
-    },
-    {
-      id: "4",
-      title: "Mercedes C-Class",
-      subtitle: "Premium driving experience",
-      year: "2020",
-      transmission: "Automatic",
-      fuel: "Diesel",
-      seats: "5",
-      drivetrain: "Rear Wheel Drive",
-      rating: "4.2",
-      price: "4,95,000",
-      image: "/big_card_car.jpg",
-    },
-  ];
+  const fetchWishList = useCallback(async () => {
+    try {
+      const res = await getWishList({ pageNo: 1, size: 10 });
+      if (res.success) {
+        setCardData(res.data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch wishlist:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    const initialize = async () => {
+      await fetchWishList();
+    };
+
+    initialize();
+  }, [fetchWishList]);
 
   const consultants = [
     {
@@ -118,8 +84,13 @@ function Wishlist() {
         <div>
           <h1 className="text-3xl font-extrabold mb-6">Vehicle Wishlist</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-            {cardData.map((car, index) => (
-              <VehicleCard key={`${car.id}-${index}`} data={car} />
+            {cardData.map((vehicle) => (
+              <div
+                key={vehicle.id}
+                className="lg:col-span-1 lg:row-span-1 h-full"
+              >
+                <VehicleCard data={vehicle} onWishlistChange={fetchWishList} />
+              </div>
             ))}
           </div>
         </div>

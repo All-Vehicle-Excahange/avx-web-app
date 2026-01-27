@@ -4,6 +4,8 @@ const ENDPOINT = {
   getHomeFeed: "/homefeed/vehicles",
   getState: "/util/address/states/101",
   getCities: "util/address/cities",
+  addWishList: "/vehicle/wishlist",
+  getWishList: "/vehicle/wishlist",
 };
 
 export const getUserHomeFeed = async (data) => {
@@ -32,6 +34,42 @@ export const getState = async () => {
 export const getCities = async (id) => {
   try {
     const res = await axiosInstance.get(`${ENDPOINT.getCities}/${id}`);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addWishList = async (vehicleId) => {
+  try {
+    const res = await axiosInstance.post(
+      `${ENDPOINT.addWishList}/${vehicleId}`,
+    );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const removeWishList = async (vehicleId) => {
+  try {
+    const res = await axiosInstance.delete(
+      `${ENDPOINT.addWishList}/${vehicleId}`,
+    );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getWishList = async (data) => {
+  try {
+    const { pageNo, size } = data;
+
+    const res = await axiosInstance.get(ENDPOINT.getWishList, {
+      params: { pageNo, size },
+    });
+
     return handleResponse(res);
   } catch (error) {
     throw error;

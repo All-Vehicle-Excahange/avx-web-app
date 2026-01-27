@@ -6,18 +6,23 @@ const ENDPOINT = {
   signup: "/auth/signup",
   login: "/auth/login",
   refresh: "/auth/refresh",
-
+  logout: "/auth/logout",
 };
 
-export const getOtp = async ({ phoneNumber, countryCode, requestType }) => {
+export const getOtp = async ({
+  phoneNumber,
+  countryCode,
+  requestType,
+  email,
+}) => {
   const res = await axiosInstance.post(ENDPOINT.getOtp, {
     phoneNumber,
     countryCode,
     requestType,
+    email,
   });
   return res.data;
 };
-
 
 export const signup = async ({
   firstname,
@@ -37,26 +42,38 @@ export const signup = async ({
     isApplyForConsultation,
     otp,
   });
+
+  if (res.data?.data && res.data.data?.accessToken) {
+    useAuthStore
+      .getState()
+      .login(
+        { userMaster: user, refreshToken: user.refreshToken },
+        res.data.data.accessToken,
+      );
+  }
   return res.data;
 };
 
-
 export const login = async ({ phoneNumber, countryCode, otp }) => {
-  const res = await axiosInstance.post("/auth/login", {
+  const res = await axiosInstance.post(ENDPOINT.login, {
     phoneNumber,
     countryCode,
     otp,
   });
 
-  if (res.data?.data && res.data.data?.accessToken) {
+  if (res.data?.data?.accessToken) {
     useAuthStore.getState().login(res.data.data, res.data.data.accessToken);
   }
 
   return res.data;
 };
 
-
 export const refreshToken = async () => {
   const res = await axiosInstance.post(ENDPOINT.refresh);
+  return res.data;
+};
+
+export const logoutUser = async () => {
+  const res = await axiosInstance.post(ENDPOINT.logout);
   return res.data;
 };

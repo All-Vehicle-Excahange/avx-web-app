@@ -2,67 +2,66 @@
 import { create } from "zustand";
 
 export const useAuthStore = create((set) => ({
-    // 🧩 State
-    user: null,
-    token: null,
-    isLoggedIn: false,
-    authInitialized: false, // Track if auth check is complete
+  user: null,
+  token: null,
+  isLoggedIn: false,
+  authInitialized: false,
 
-    // 🧠 Actions
-    login: (userData, token) => {
-        // Save in Zustand
+  login: (userData, token) => {
+    // ✅ Store userMaster + refreshToken together
+    const userWithRefresh = {
+      ...userData.userMaster,
+      refreshToken: userData.refreshToken,
+    };
+
+    set({
+      user: userWithRefresh,
+      token,
+      isLoggedIn: true,
+      authInitialized: true,
+    });
+
+    // ✅ Persist correct full user object
+    if (typeof window !== "undefined") {
+      localStorage.setItem("user", JSON.stringify(userWithRefresh)); // ✅ FIXED
+      localStorage.setItem("token", token);
+    }
+  },
+
+  logout: () => {
+    set({
+      user: null,
+      token: null,
+      isLoggedIn: false,
+      authInitialized: true,
+    });
+
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+    }
+  },
+
+  initializeAuth: () => {
+    if (typeof window !== "undefined") {
+      const savedUser = localStorage.getItem("user");
+      const savedToken = localStorage.getItem("token");
+
+      if (savedUser && savedToken) {
         set({
-            user: userData,
-            token: token,
-            isLoggedIn: true,
-            authInitialized: true,
+          user: JSON.parse(savedUser),
+          token: savedToken,
+          isLoggedIn: true,
+          authInitialized: true,
         });
-
-        // Persist to localStorage
-        if (typeof window !== "undefined") {
-            localStorage.setItem("user", JSON.stringify(userData));
-            localStorage.setItem("token", token);
-        }
-    },
-
-    logout: () => {
-        // Clear Zustand state
+      } else {
         set({
-            user: null,
-            token: null,
-            isLoggedIn: false,
-            authInitialized: true,
+          user: null,
+          token: null,
+          isLoggedIn: false,
+          authInitialized: true,
         });
-
-        // Clear localStorage
-        if (typeof window !== "undefined") {
-            localStorage.removeItem("user");
-            localStorage.removeItem("token");
-        }
-    },
-
-    // 🔁 Initialize from localStorage (called on app start)
-    initializeAuth: () => {
-        if (typeof window !== "undefined") {
-            const savedUser = localStorage.getItem("user");
-            const savedToken = localStorage.getItem("token");
-
-            if (savedUser && savedToken) {
-                set({
-                    user: JSON.parse(savedUser),
-                    token: savedToken,
-                    isLoggedIn: true,
-                    authInitialized: true,
-                });
-            } else {
-                // User is not logged in
-                set({
-                    user: null,
-                    token: null,
-                    isLoggedIn: false,
-                    authInitialized: true,
-                });
-            }
-        }
-    },
+      }
+    }
+  },
 }));
