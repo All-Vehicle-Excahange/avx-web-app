@@ -1,25 +1,18 @@
 "use client";
 
-import NavbarDark from "../../layout/NavbarDark";
+import Navbar from "@/components/layout/Navbar";
 
 export default function SearchHeader() {
   return (
     <>
-      <NavbarDark />
+      <div className="fixed top-0 inset-x-0 z-[1000]">
+        <Navbar heroMode scrolled={true} />
+      </div>
 
       {/* FULL WIDTH BACKGROUND */}
-      <section
-        className="
-          w-full
-          bg-secondary
-          pt-24
-          pb-6
-          md:pt-28
-          md:pb-8
-        "
-      >
+      <section className="w-full bg-[url('/promo_bg.png')] bg-cover pt-24 pb-6 md:pt-28 md:pb-8">
         {/* CENTERED CONTENT (AMAZON STYLE) */}
-        <div className="container px-6 md:px-8">
+        <div className="container">
           <h2 className="text-primary text-2xl md:text-3xl font-bold">
             Browse by Vehicle Type
           </h2>

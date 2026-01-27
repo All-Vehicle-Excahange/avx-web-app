@@ -141,7 +141,7 @@ export default function SearchWithCard() {
     <div className="w-full min-h-screen flex flex-col lg:flex-row bg-secondary text-secondary">
       {/* ================= DESKTOP SIDEBAR ================= */}
       <aside className="hidden lg:flex relative w-[340px] bg-secondary/90 border border-third/40 p-4 flex-col gap-6 overflow-y-auto shrink-0 rounded-xl h-fit">
-        <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover opacity-40 blur-lg z-0" />
+        {/* <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover opacity-40 blur-lg z-0" /> */}
         <div className="relative z-10">
           <h2 className="text-xl font-bold text-primary mb-4">
             Filter Your Result

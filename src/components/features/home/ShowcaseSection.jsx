@@ -43,7 +43,7 @@ const smallCars = [
     sponsored: false,
   },
   {
-    id: "1",
+    id: "4",
     title: "Maruti Fronx",
     subtitle: "35 D6 Powerful lorem isump",
     year: "2022",
@@ -66,7 +66,7 @@ const ShowcaseSection = () => {
           Continue where you left off
         </h2>
       </div>
-      <div className=" flex-1 min-h-0 grid sm:items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-3">
+      <div className=" flex-1 min-h-0 grid sm:items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {smallCars.map((car) => (
           <VehicleCard data={car} key={car.id} />
         ))}

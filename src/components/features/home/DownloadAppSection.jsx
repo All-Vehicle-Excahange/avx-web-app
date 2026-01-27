@@ -1,68 +1,4 @@
-import { MoveLeft, PanelLeftDashed } from "lucide-react";
 import Image from "next/image";
-
-const AppleLogo = ({ className }) => (
-  <svg viewBox="0 0 384 512" fill="currentColor" className={className}>
-    <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" />
-  </svg>
-);
-
-const GooglePlayLogo = ({ className }) => (
-  <svg viewBox="0 0 512 512" className={className}>
-    <path
-      fill="#fbbd00"
-      d="M407 236.4L137.9 36.6C123.6 26.3 103.4 35.8 103.4 53.4v405.2c0 17.6 20.2 27.1 34.5 16.8L407 275.6c11.3-8.3 11.3-30.9 0-39.2z"
-    />
-    <path
-      fill="#ea4335"
-      d="M407 236.4L137.9 36.6C123.6 26.3 103.4 35.8 103.4 53.4v405.2c0 17.6 20.2 27.1 34.5 16.8L407 275.6c11.3-8.3 11.3-30.9 0-39.2z"
-    />
-    <path
-      fill="#34a853"
-      d="M103.4 53.4v405.2c0 17.6 20.2 27.1 34.5 16.8L407 275.6c11.3-8.3 11.3-30.9 0-39.2L103.4 53.4z"
-    />
-    <path
-      fill="#4285f4"
-      d="M137.9 36.6L407 236.4c11.3 8.3 11.3 30.9 0 39.2L137.9 475.4C123.6 485.7 103.4 476.2 103.4 458.6V53.4c0-17.6 20.2-27.1 34.5-16.8z"
-    />
-    <defs>
-      {/* Simplified for single path usage if needed, but keeping full colored structure for accuracy */}
-    </defs>
-    {/* Re-drawing strictly as the triangular shape for simple use cases */}
-    <path
-      fill="currentColor"
-      d="M32.5 24.3v463.4L376 256 32.5 24.3z"
-      style={{ fill: "none" }}
-    />{" "}
-    {/* Invisible bound */}
-    <g>
-      <path fill="#2196F3" d="M32.5 24.3l258.1 211.3L347.9 292 32.5 487.7z" />
-      <path
-        fill="#FFC107"
-        d="M449.6 215.9l-101.7 56.4L290.6 235.6 449.6 215.9z"
-      />
-      <path fill="#4CAF50" d="M347.9 292l-57.3-36.4-258.1-231.3 315.4 267.7z" />
-      <path fill="#F44336" d="M32.5 24.3v463.4L347.9 292 32.5 24.3z" />
-      {/* Correct composite shape for Play Store */}
-      <path
-        d="M5.3 4.2C3.1 6.5 2 9.8 2 13.9v484.2c0 4.2 1.1 7.6 3.2 9.8L8.6 512l253.9-253.3L8.6 0 5.3 4.2z"
-        fill="#2196F3"
-      />
-      <path
-        d="M262.5 258.7L392.6 388c5.1 5.1 8.3 11.9 8.3 20.3 0 7.8-2.8 14.8-7.2 20.3L262.5 258.7z"
-        fill="#34A853"
-      />
-      <path
-        d="M393.7 103.7c4.4 5.5 7.2 12.5 7.2 20.3 0 8.4-3.2 15.2-8.3 20.3L262.5 253.3 8.6 512l18.4 10.4L393.7 103.7z"
-        fill="#FCC934"
-      />
-      <path
-        d="M262.5 253.3L8.6 0l22.6 12.8 362.5 206.1-131.2 34.4z"
-        fill="#F44336"
-      />
-    </g>
-  </svg>
-);
 
 export default function DownloadAppSection() {
   return (
@@ -80,10 +16,10 @@ export default function DownloadAppSection() {
             day
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 ">
+          <div className="flex flex-col sm:flex-row gap-4">
             {/* Google Play Button */}
-            <button type="button" class="flex items-center justify-center px-4 py-2 text-secondary bg-primary rounded-lg hover:bg-third/20 hover:text-primary transition-all duration-300 cursor-pointer">
-              <div class="mr-3">
+            <button type="button" className="flex items-center justify-center px-6 py-2 text-secondary bg-primary rounded-lg hover:bg-third/20 hover:text-primary transition-all duration-300 cursor-pointer">
+              <div className="mr-3">
                 <svg viewBox="30 336.7 120.9 129.2" width="25">
                   <path fill="#FFD400" d="M119.2,421.2c15.3-8.4,27-14.8,28-15.3c3.2-1.7,6.5-6.2,0-9.7  c-2.1-1.1-13.4-7.3-28-15.3l-20.1,20.2L119.2,421.2z">
                   </path>
@@ -96,28 +32,28 @@ export default function DownloadAppSection() {
                 </svg>
               </div>
               <div className="text-left">
-                <div class="text-[10px] font-bold">
+                <div className="text-[10px] font-bold">
                   GET IT ON
                 </div>
-                <div class="text-lg font-bold leading-none">
+                <div className="text-lg font-bold leading-none">
                   Google Play
                 </div>
               </div>
             </button>
 
             {/* App Store Button */}
-            <button type="button" class="px-4 py-2 flex items-center justify-center text-primary bg-transparent border border-primary hover:bg-primary hover:text-secondary transition-all duration-300 rounded-lg cursor-pointer">
-              <div class="mr-3">
-                <svg viewBox="0 0 384 512" width="25">
+            <button type="button" className="px-6 py-2 flex items-center justify-center text-primary bg-transparent border border-primary hover:bg-primary hover:text-secondary transition-all duration-300 rounded-lg cursor-pointer">
+              <div className="mr-3">
+                <svg viewBox="0 0 384 512" width="23">
                   <path fill="currentColor" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z">
                   </path>
                 </svg>
               </div>
               <div className="text-left">
-                <div class="text-[10px] font-bold">
+                <div className="text-[10px] font-bold">
                   Download on the
                 </div>
-                <div class="text-lg font-bold leading-none">
+                <div className="text-lg font-bold leading-none">
                   App Store
                 </div>
               </div>

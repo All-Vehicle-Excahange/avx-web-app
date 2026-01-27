@@ -25,9 +25,9 @@ export default function Home() {
       <Layout>
         <TopPicsSection />
       </Layout>
-      <Layout>
-        <AvxInspected />
-      </Layout>
+      {/* <Layout> */}
+      <AvxInspected />
+      {/* </Layout> */}
       <Layout>
         <AutoConsultPicsSection limit={8} />
       </Layout>
@@ -35,9 +35,7 @@ export default function Home() {
       <Layout>
         <StorySection />
       </Layout>
-      {/* <Layout> */}
       <SayHello />
-      {/* </Layout> */}
       <SellVehicleBanner fullWidth />
       <Layout>
         <StatsSection />
