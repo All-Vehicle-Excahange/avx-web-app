@@ -90,8 +90,7 @@ export default function StorySection() {
         {/* Title */}
         <div>
           <h2 className="text-2xl md:text-4xl font-bold text-primary leading-tight">
-            <span className="text-third">Monthly</span> Top Stories From Our
-            Users
+            Monthly Top Stories From Our Users
           </h2>
         </div>
 

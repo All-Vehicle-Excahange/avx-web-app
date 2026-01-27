@@ -112,11 +112,11 @@ function ReletedCar() {
         {/* ✅ TOP RIGHT BUTTONS */}
         <div className="flex gap-3">
           <Button variant="roundedOutline" ref={prevRef}>
-            <ChevronLeft className="w-5 h-5 text-secondary" />
+            <ChevronLeft className="w-5 h-5 text-primary hover:text-secondary" />
           </Button>
 
           <Button variant="roundedOutline" ref={nextRef}>
-            <ChevronRight className="w-5 h-5 text-secondary" />
+            <ChevronRight className="w-5 h-5 text-primary hover:text-secondary" />
           </Button>
         </div>
       </div>

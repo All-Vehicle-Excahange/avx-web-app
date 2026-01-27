@@ -4,10 +4,10 @@ import { useState } from "react";
 import Button from "../ui/button";
 import HamburgerDrawer from "../features/home/HamburgerDrawer";
 import AccountPopup from "../features/home/AccountPopup";
+import Link from "next/link";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function Navbar({ heroMode = false, scrolled = false }) {
-  const [active, setActive] = useState("Vehicles");
   const [menuOpen, setMenuOpen] = useState(false);
   const userRole = "guest";
   const [accountOpen, setAccountOpen] = useState(false);
@@ -29,13 +29,15 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
       >
         <div className="relative w-full px-8 mx-auto h-full flex items-center justify-between">
           {/* LEFT */}
-          <div
+          <Link href="/"
             className="flex items-center h-10 px-4 gap-3 bg-secondary text-primary cursor-pointer"
-            onClick={() => setMenuOpen(true)}
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-5 h-5" onClick={(e) => {
+              e.preventDefault();
+              setMenuOpen(true);
+            }} />
             <span className="font-black italic">AVX</span>
-          </div>
+          </Link>
 
           {/* TRUE CENTER */}
           {heroMode && (

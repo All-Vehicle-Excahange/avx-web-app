@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
+import { Bike, Car } from "lucide-react";
 import { getUserHomeFeed } from "@/services/user.service";
 
 // --- Utility for Tailwind classes ---
@@ -15,7 +16,7 @@ export default function TopPicsSection() {
   useEffect(() => {
     const fetchHomeFeed = async () => {
       try {
-        const res = await getUserHomeFeed({ pageNo: 1, size: 8 });
+        const res = await getUserHomeFeed({ pageNo: 1, size: 4 });
         if (res.success) {
           setCardData(res.data);
         }
@@ -42,29 +43,28 @@ export default function TopPicsSection() {
         </div>
 
         {/* Toggle Switch */}
-        <div className="bg-primary p-1 rounded-lg flex items-center">
+        <div className="w-[300px] flex gap-2 mt-auto">
           <button
             onClick={() => setActiveType("4-Wheeler")}
             className={cn(
-              "px-4 py-1.5 text-sm font-semibold rounded-md transition-all cursor-pointer",
+              "w-full py-2 text-sm font-semibold rounded-[24px] border-2 border-primary cursor-pointer flex items-center justify-center gap-2 transition-all",
               activeType === "4-Wheeler"
-                ? "bg-secondary text-primary shadow-sm"
-                : "text-secondary/60 hover:text-secondary",
+                ? "bg-primary text-secondary shadow-sm"
+                : "text-primary"
             )}
           >
-            4-Wheeler
+            <Car size={18} /> 4-Wheeler
           </button>
-
           <button
             onClick={() => setActiveType("2-Wheeler")}
             className={cn(
-              "px-4 py-1.5 text-sm font-semibold rounded-md transition-all cursor-pointer",
+              "w-full py-2 text-sm font-semibold rounded-[24px] border-2 border-primary cursor-pointer flex items-center justify-center gap-2 transition-all",
               activeType === "2-Wheeler"
-                ? "bg-secondary text-primary shadow-sm"
-                : "text-secondary/60 hover:text-secondary",
+                ? "bg-primary text-secondary shadow-sm"
+                : "text-primary"
             )}
           >
-            2-Wheeler
+            <Bike size={18} /> 2-Wheeler
           </button>
         </div>
       </div>

@@ -49,7 +49,7 @@ const smallCars = [
     sponsored: false,
   },
   {
-    id: "1",
+    id: "4",
     title: "Maruti Fronx",
     subtitle: "35 D6 Powerful lorem isump",
     year: "2022",
@@ -67,54 +67,59 @@ export default function AvxInspected() {
   const [activeType, setActiveType] = useState("4-Wheeler");
 
   return (
-    <div className="w-full h-full flex flex-col bg-primary text-secondary rounded-lg">
+    <div className="w-full h-full flex flex-col bg-primary text-secondary">
       {/* Header Section */}
-      <div className="shrink-0 flex flex-col md:flex-row items-center justify-between mb-4 gap-4 pt-3 pr-3">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight bg-secondary text-primary p-3 pr-12 inline-block clip-slanted">
-            AVX Inspected Vehicles
-          </h2>
+      <div className="container">
+        <div className="shrink-0 flex flex-col md:flex-row items-center justify-between mb-4 gap-4 pt-3 pr-3">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold text-secondary">
+              AVX Inspected Vehicles
+            </h2>
+            <p className="text-secondary mt-1">
+              Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
+            </p>
+          </div>
+
+          <div className="w-[300px] flex gap-2 mt-auto">
+            <button
+              onClick={() => setActiveType("4-Wheeler")}
+              className={cn(
+                "w-full py-2 text-sm font-semibold rounded-[24px] border-2 border-secondary cursor-pointer flex items-center justify-center gap-2 transition-all",
+                activeType === "4-Wheeler"
+                  ? "bg-secondary text-primary shadow-sm"
+                  : "text-secondary"
+              )}
+            >
+              <Car size={18} /> 4-Wheeler
+            </button>
+            <button
+              onClick={() => setActiveType("2-Wheeler")}
+              className={cn(
+                "w-full py-2 text-sm font-semibold rounded-[24px] border-2 border-secondary cursor-pointer flex items-center justify-center gap-2 transition-all",
+                activeType === "2-Wheeler"
+                  ? "bg-secondary text-primary shadow-sm"
+                  : "text-secondary"
+              )}
+            >
+              <Bike size={18} /> 2-Wheeler
+            </button>
+          </div>
+
         </div>
-        <div className="bg-secondary p-[4px] rounded-[20px] w-[300px] flex gap-1 mt-auto">
-          <button
-            onClick={() => setActiveType("4-Wheeler")}
-            className={cn(
-              "w-full py-2 text-sm font-semibold rounded-[24px] cursor-pointer flex items-center justify-center gap-2 transition-all",
-              activeType === "4-Wheeler"
-                ? "bg-primary text-secondary shadow-sm"
-                : "text-primary/60 hover:text-primary"
-            )}
-          >
-            <Car size={18} /> 4-Wheeler
-          </button>
 
-          <button
-            onClick={() => setActiveType("2-Wheeler")}
-            className={cn(
-              "w-full py-2 text-sm font-semibold rounded-[24px] cursor-pointer flex items-center justify-center gap-2 transition-all",
-              activeType === "2-Wheeler"
-                ? "bg-primary text-secondary shadow-sm"
-                : "text-primary/60 hover:text-primary"
-            )}
-          >
-            <Bike size={18} /> 2-Wheeler
-          </button>
+        {/* Grid Layout */}
+        <div className=" flex-1 min-h-0 grid sm:items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {smallCars.map((car) => (
+            <VehicleCard key={car.id} data={car} className="lg:col-span-3" />
+          ))}
         </div>
 
-      </div>
-
-      {/* Grid Layout */}
-      <div className=" flex-1 min-h-0 grid sm:items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-3">
-        {smallCars.map((car) => (
-          <VehicleCard key={car.id} data={car} className="lg:col-span-3" />
-        ))}
-      </div>
-
-      {/* Bottom Button */}
-      <div className="mt-2 mb-3 mr-3 flex justify-end">
-        <Button href="/" variant="outlineAnimated" size="md">
-          Explore All Vehicles
-        </Button>
+        {/* Bottom Button */}
+        <div className="mt-2 mb-3 mr-3 flex justify-end">
+          <Button href="/" variant="outlineAnimated" size="md">
+            Explore All Vehicles
+          </Button>
+        </div>
       </div>
     </div>
   );

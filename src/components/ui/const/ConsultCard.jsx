@@ -26,15 +26,6 @@ export default function ConsultantCard({
     hover:shadow-[0_20px_60px_rgba(255,255,255,0.25)]
   "
     >
-      {/* BLURRED BACKGROUND */}
-      <div className="absolute inset-0 z-0 ">
-        <Image
-          src="/bg_blur.jpg"
-          alt="blur bg"
-          fill
-          className="object-cover opacity-40 blur-lg"
-        />
-      </div>
 
       {/* TOP IMAGE */}
       <div className="relative z-10 h-40 w-full">
