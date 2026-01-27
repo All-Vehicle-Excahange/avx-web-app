@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { X } from "lucide-react";
 import Image from "next/image";
 import Button from "@/components/ui/button";
@@ -13,17 +13,39 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
     handleSubmit,
     setError,
     getValues,
+    reset,
     formState: { errors },
   } = useForm();
 
-  // ✅ Account Type State (Personal Default)
+  // ✅ Account Type State
   const [accountType, setAccountType] = useState("personal");
 
   const [otp, setOtp] = useState(Array(6).fill(""));
   const [otpSent, setOtpSent] = useState(false);
   const otpRefs = useRef([]);
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
+
+  // ✅ Proper Close Popup + Reset Everything
+  const handleClosePopup = () => {
+    reset(); // ✅ Clear form fields
+    setOtp(Array(6).fill("")); // ✅ Clear OTP
+    setOtpSent(false); // ✅ Reset OTP screen
+    setAccountType("personal"); // ✅ Reset account type
+    onClose(); // ✅ Close popup
+  };
 
   // ✅ OTP Change
   const handleOtpChange = (index, value) => {
@@ -94,15 +116,12 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
         email: values.email,
         phoneNumber: values.phone,
         countryCode: "+91",
-
-        // ✅ Send True/False Based on Radio Selection
         isApplyForConsultation: accountType === "consultant",
-
         otp: finalOtp,
       });
 
       if (res?.success || res?.status) {
-        setTimeout(() => onClose(), 500);
+        setTimeout(() => handleClosePopup(), 500); // ✅ Close + Reset
       }
     } catch (err) {
       const api = err?.response?.data;
@@ -124,10 +143,17 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="relative flex w-full max-w-[900px] overflow-hidden rounded-2xl shadow-2xl bg-primary-white">
-        {/* CLOSE */}
         <button
-          onClick={onClose}
-          className="absolute top-4 right-4 z-20 p-2 rounded-full hover:opacity-70 text-text-black"
+          onClick={handleClosePopup}
+          className="
+    absolute top-4 right-4 z-999
+    flex items-center justify-center
+    w-10 h-10
+    rounded-full
+    bg-black/30 hover:bg-black/50
+    text-white
+    transition
+  "
         >
           <X size={20} />
         </button>
@@ -144,7 +170,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
             Create your <br /> account
           </h3>
 
-          {/* ✅ GENERAL ERROR */}
+          {/* GENERAL ERROR */}
           {errors.root?.message && (
             <p className="text-red-500 text-sm mb-4 text-center">
               {errors.root.message}
@@ -212,39 +238,28 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
                 className="w-full text-primary border py-3 px-2 outline-none bg-transparent"
               />
             </div>
-            {errors.phone && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.phone.message}
-              </p>
-            )}
           </div>
 
-          {/* ✅ ACCOUNT TYPE RADIO (Simple Clean) */}
+          {/* ACCOUNT TYPE RADIO */}
           <div className="flex items-center gap-8 mb-6 text-sm text-primary">
-            {/* Personal */}
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="radio"
-                name="accountType"
-                value="personal"
                 checked={accountType === "personal"}
                 onChange={() => setAccountType("personal")}
                 className="w-4 h-4 accent-primary"
               />
-              <span className="font-medium">Personal Account</span>
+              Personal Account
             </label>
 
-            {/* Consultant */}
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="radio"
-                name="accountType"
-                value="consultant"
                 checked={accountType === "consultant"}
                 onChange={() => setAccountType("consultant")}
                 className="w-4 h-4 accent-primary"
               />
-              <span className="font-medium">Consultant Account</span>
+              Consultant Account
             </label>
           </div>
 
@@ -290,12 +305,12 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
             </>
           )}
 
-          {/* LOGIN */}
+          {/* LOGIN LINK */}
           <div className="mt-4 text-primary text-center text-sm text-text-black/70">
             Already have an account?{" "}
             <button
               onClick={() => {
-                onClose();
+                handleClosePopup();
                 setTimeout(() => onLogin(), 100);
               }}
               className="font-semibold text-primary hover:underline"

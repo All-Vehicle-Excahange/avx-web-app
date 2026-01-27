@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { X } from "lucide-react";
 import Image from "next/image";
 import Button from "@/components/ui/button";
@@ -20,14 +20,24 @@ function LoginPopup({ isOpen, onClose, onSignup = () => {} }) {
   const [otp, setOtp] = useState(Array(6).fill(""));
   const [otpSent, setOtpSent] = useState(false);
 
-  // ✅ OTP Error shown below OTP inputs
   const [otpError, setOtpError] = useState("");
 
   const otpRefs = useRef([]);
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
-  // ✅ Proper Reset When Popup Closes
   const handleClose = () => {
     reset();
     setOtp(Array(6).fill(""));
@@ -36,11 +46,10 @@ function LoginPopup({ isOpen, onClose, onSignup = () => {} }) {
     onClose();
   };
 
-  // ✅ OTP Change
   const handleOtpChange = (index, value) => {
     if (!/^\d?$/.test(value)) return;
 
-    setOtpError(""); // clear error when typing
+    setOtpError("");
 
     const newOtp = [...otp];
     newOtp[index] = value;
@@ -51,14 +60,12 @@ function LoginPopup({ isOpen, onClose, onSignup = () => {} }) {
     }
   };
 
-  // ✅ OTP Backspace
   const handleOtpKeyDown = (index, e) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       otpRefs.current[index - 1]?.focus();
     }
   };
 
-  // ✅ SEND OTP
   const onSendOtp = async () => {
     try {
       const phone = getValues("phoneNumber");
@@ -84,7 +91,6 @@ function LoginPopup({ isOpen, onClose, onSignup = () => {} }) {
     }
   };
 
-  // ✅ VALIDATE OTP + LOGIN
   const onValidateOtp = async () => {
     const finalOtp = otp.join("");
 
@@ -103,13 +109,13 @@ function LoginPopup({ isOpen, onClose, onSignup = () => {} }) {
       });
 
       if (res?.success || res?.status) {
-        handleClose(); // ✅ Reset + Close popup
+        handleClose();
       }
     } catch (err) {
       const api = err?.response?.data;
       const msg = api?.message || "Invalid or expired OTP";
 
-      // ✅ Show error below OTP boxes
+      
       setOtpError(msg);
     }
   };
@@ -167,7 +173,6 @@ function LoginPopup({ isOpen, onClose, onSignup = () => {} }) {
               />
             </div>
 
-            {/* ✅ Phone Field Error */}
             {errors.phoneNumber && (
               <p className="text-red-500 text-xs mt-1">
                 {errors.phoneNumber.message}
@@ -175,7 +180,6 @@ function LoginPopup({ isOpen, onClose, onSignup = () => {} }) {
             )}
           </div>
 
-          {/* ✅ OTP BOX */}
           {otpSent && (
             <>
               <p className="text-sm text-primary/70 mb-3">
