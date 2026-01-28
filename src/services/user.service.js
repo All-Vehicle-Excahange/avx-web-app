@@ -6,6 +6,12 @@ const ENDPOINT = {
   getCities: "util/address/cities",
   addWishList: "/vehicle/wishlist",
   getWishList: "/vehicle/wishlist",
+  getuserProfile: "/users/profile",
+  getuserProfileMeta: "/users/metadata",
+  updateuserProfile: "/users/profile",
+  updateuserProfileMeta: "/users/metadata",
+  checkIsMetaExist: "/users/metadata/exists",
+  createUserMeta: "/users/metadata",
 };
 
 export const getUserHomeFeed = async (data) => {
@@ -70,6 +76,62 @@ export const getWishList = async (data) => {
       params: { pageNo, size },
     });
 
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getuserProfile = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getuserProfile);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getuserProfileMeta = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getuserProfileMeta);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateuserProfile = async (payload) => {
+  try {
+    const res = await axiosInstance.put(ENDPOINT.updateuserProfile, payload);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+export const updateuserProfileMeta = async (payload) => {
+  try {
+    const res = await axiosInstance.put(
+      ENDPOINT.updateuserProfileMeta,
+      payload,
+    );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const checkIsMetaExist = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.checkIsMetaExist);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createUserMeta = async (payload) => {
+  try {
+    const res = await axiosInstance.post(ENDPOINT.createUserMeta, payload);
     return handleResponse(res);
   } catch (error) {
     throw error;

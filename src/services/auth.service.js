@@ -1,4 +1,4 @@
-import axiosInstance from "@/lib/axiosInstance";
+import axiosInstance, { handleResponse } from "@/lib/axiosInstance";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 const ENDPOINT = {
@@ -23,7 +23,6 @@ export const getOtp = async ({
   });
   return res.data;
 };
-
 export const signup = async ({
   firstname,
   lastname,
@@ -43,15 +42,20 @@ export const signup = async ({
     otp,
   });
 
-  if (res.data?.data && res.data.data?.accessToken) {
-    useAuthStore
-      .getState()
-      .login(
-        { userMaster: user, refreshToken: user.refreshToken },
-        res.data.data.accessToken,
-      );
+  const normalizedResponse = handleResponse(res);
+
+  if (normalizedResponse.success && normalizedResponse.data?.accessToken) {
+    const user = normalizedResponse.data.userMaster || normalizedResponse.data;
+    useAuthStore.getState().login(
+      {
+        userMaster: user,
+        refreshToken: normalizedResponse.data.refreshToken,
+      },
+      normalizedResponse.data.accessToken,
+    );
   }
-  return res.data;
+
+  return normalizedResponse;
 };
 
 export const login = async ({ phoneNumber, countryCode, otp }) => {
