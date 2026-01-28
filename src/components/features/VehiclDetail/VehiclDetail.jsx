@@ -1,8 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import NavbarDark from "@/components/layout/NavbarDark";
-
 // TOP
 import VehicleHeader from "./VehicleHeader";
 import VehicleImageGallery from "./VehicleImageGallery";
@@ -19,6 +17,7 @@ import SimulerVehicle from "./SimulerVehicle";
 import AutoConsultPicsSection from "../home/AutoConsultPicsSection";
 import AvxProcess from "./AvxProcess";
 import SpecialOffer from "./SpecialOffer";
+import Navbar from "@/components/layout/Navbar";
 
 export default function VehicleDetails() {
   const overviewRef = useRef(null);
@@ -45,7 +44,9 @@ export default function VehicleDetails() {
 
   return (
     <>
-      <NavbarDark />
+      <div className="fixed top-0 inset-x-0 z-[1000]">
+        <Navbar heroMode scrolled={true} />
+      </div>
 
       <main className="bg-secondary text-secondary w-full">
         <div className="w-full py-6">
@@ -58,7 +59,7 @@ export default function VehicleDetails() {
             <div className="flex flex-col gap-6 min-w-0">
               <VehicleImageGallery />
 
-              <div className="bg-secondary">
+              {/* <div className="bg-secondary">
                 <div className="flex gap-8 border-b border-third/40">
                   {[
                     { id: "overview", label: "Overview", ref: overviewRef },
@@ -69,10 +70,9 @@ export default function VehicleDetails() {
                       key={tab.id}
                       onClick={() => scrollToSection(tab.ref, tab.id)}
                       className={`relative pb-3 text-sm font-medium transition-colors cursor-pointer
-                        ${
-                          activeTab === tab.id
-                            ? "text-primary"
-                            : "text-third hover:text-primary"
+                        ${activeTab === tab.id
+                          ? "text-primary"
+                          : "text-third hover:text-primary"
                         }`}
                     >
                       {tab.label}
@@ -83,18 +83,18 @@ export default function VehicleDetails() {
                     </button>
                   ))}
                 </div>
-              </div>
+              </div> */}
 
               <div ref={overviewRef}>
                 <VehicleOverview />
               </div>
 
-              <div ref={specRef}>
-                <VehicleSpec />
-              </div>
 
               <div ref={conditionRef}>
                 <VehicleCondition />
+              </div>
+              <div ref={specRef}>
+                <VehicleSpec />
               </div>
             </div>
 

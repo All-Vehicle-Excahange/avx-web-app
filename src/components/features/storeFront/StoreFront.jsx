@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import NavbarDark from "@/components/layout/NavbarDark";
 import StoreFrontHeroSection from "./StoreFrontHeroSection";
 
 // RIGHT CONTENT
@@ -9,13 +8,16 @@ import Inventory from "./Inventory";
 import AboutUs from "./AboutUs";
 import WhyBuyHere from "./WhyBuyHere";
 import Review from "./Review";
+import Navbar from "@/components/layout/Navbar";
 
 export default function StoreFront() {
   const [activeTab, setActiveTab] = useState("inventory");
 
   return (
     <>
-      <NavbarDark />
+      <div className="fixed top-0 inset-x-0 z-[1000]">
+        <Navbar heroMode scrolled={true} />
+      </div>
 
       <main className="bg-secondary text-primary pt-12">
         {/* HERO */}
@@ -46,10 +48,9 @@ export default function StoreFront() {
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
                       className={`relative py-4 text-sm font-medium transition
-                        ${
-                          activeTab === tab.id
-                            ? "text-primary"
-                            : "text-third hover:text-primary"
+                        ${activeTab === tab.id
+                          ? "text-primary"
+                          : "text-third hover:text-primary"
                         }`}
                     >
                       {tab.label}

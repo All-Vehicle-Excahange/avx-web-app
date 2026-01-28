@@ -20,15 +20,7 @@ export default function VehicleOverview({ vehicle }) {
       {/* CONTENT */}
       <div className="relative z-10 p-6 space-y-6">
         {/* HEADER */}
-        <div className="space-y-2">
-          <h3 className="text-xl font-semibold">Vehicle overview</h3>
-          <p className="text-sm text-third leading-relaxed max-w-5xl">
-            Lorem ipsum dolor sit amet consectetur. Elementum enim eget hac
-            aliquet eu. Ornare risus habitant etiam urna augue venenatis vel
-            sit. Sit auctor adipiscing sollicitudin convallis. Elementum enim
-            eget hac aliquet eu. Ornare risus habitant etiam urna augue.
-          </p>
-        </div>
+        <h3 className="text-xl font-semibold">Vehicle overview</h3>
 
         {/* GRID */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 text-sm">

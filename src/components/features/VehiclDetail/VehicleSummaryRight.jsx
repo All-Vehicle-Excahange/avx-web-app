@@ -9,8 +9,6 @@ export default function VehicleSummaryRight({ vehicle }) {
 
   return (
     <aside className="relative bg-secondary/90 text-primary rounded-2xl shadow-xl overflow-hidden border border-third/60">
-      {/* Background Blur Layer */}
-      <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover bg-center opacity-40 blur-lg z-0" />
 
       <div className="relative z-10 p-6 space-y-5">
         {/* HEADER */}
@@ -104,7 +102,7 @@ export default function VehicleSummaryRight({ vehicle }) {
 
         {/* ACTION BUTTONS */}
         <div className="grid grid-cols-2 gap-3 pt-2">
-          <Button variant="ghost" size="md" showIcon={false}>
+          <Button variant="ghost" size="md" showIcon={false} className="rounded-full">
             Book NOW
           </Button>
 
