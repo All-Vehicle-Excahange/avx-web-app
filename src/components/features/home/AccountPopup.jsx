@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { logoutUser } from "@/services/auth.service";
 
-export default function AccountPopup({ open }) {
+export default function AccountPopup({ open, onClosePopup }) {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
 
@@ -58,7 +58,10 @@ export default function AccountPopup({ open }) {
                 variant="ghost"
                 full
                 size="sm"
-                onClick={() => setIsLoginOpen(true)}
+                onClick={() => {
+                  setIsLoginOpen(true);
+                  onClosePopup();
+                }}
               >
                 Sign in
               </Button>
@@ -69,6 +72,7 @@ export default function AccountPopup({ open }) {
                   onClick={() => {
                     setIsSignupOpen(true);
                     setIsLoginOpen(false);
+                    onClosePopup();
                   }}
                   className="text-third hover:underline cursor-pointer"
                 >
@@ -83,7 +87,6 @@ export default function AccountPopup({ open }) {
           )}
         </div>
 
-        {/* ✅ CONTENT */}
         <div className="grid grid-cols-2 gap-6 px-5 py-4 text-[13px] leading-7">
           <div>
             <p className="font-bold mb-2 text-primary">Your Lists</p>
@@ -135,14 +138,13 @@ export default function AccountPopup({ open }) {
           </div>
         </div>
 
-        {/* ✅ LOGOUT BUTTON */}
         {isLoggedIn && (
           <div className="p-4 border-t border-white/10">
             <Button
               variant="ghost"
               full
               size="sm"
-              onClick={() => setShowLogoutConfirm(true)} // ✅ Open Confirm Popup
+              onClick={() => setShowLogoutConfirm(true)}
               className="text-red-500 font-semibold hover:bg-red-500/10"
             >
               Logout
@@ -151,7 +153,6 @@ export default function AccountPopup({ open }) {
         )}
       </div>
 
-      {/* ✅ LOGOUT CONFIRMATION DIALOG */}
       {showLogoutConfirm && (
         <div className="fixed inset-0 z-999 flex items-center justify-center bg-secondary/50 backdrop-blur-sm">
           <div className="w-[440px] rounded-xl bg-secondary border border-white/10 shadow-2xl p-6 text-center">
@@ -190,7 +191,6 @@ export default function AccountPopup({ open }) {
         </div>
       )}
 
-      {/* ✅ LOGIN POPUP */}
       <LoginPopup
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
@@ -200,7 +200,6 @@ export default function AccountPopup({ open }) {
         }}
       />
 
-      {/* ✅ SIGNUP POPUP */}
       <SignupPopup
         isOpen={isSignupOpen}
         onClose={() => setIsSignupOpen(false)}

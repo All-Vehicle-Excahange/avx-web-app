@@ -29,13 +29,17 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
       >
         <div className="relative w-full px-8 mx-auto h-full flex items-center justify-between">
           {/* LEFT */}
-          <Link href="/"
+          <Link
+            href="/"
             className="flex items-center h-10 px-4 gap-3 bg-secondary text-primary cursor-pointer"
           >
-            <Menu className="w-5 h-5" onClick={(e) => {
-              e.preventDefault();
-              setMenuOpen(true);
-            }} />
+            <Menu
+              className="w-5 h-5"
+              onClick={(e) => {
+                e.preventDefault();
+                setMenuOpen(true);
+              }}
+            />
             <span className="font-black italic">AVX</span>
           </Link>
 
@@ -103,7 +107,10 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                 </span>
               </button>
 
-              <AccountPopup open={accountOpen} />
+              <AccountPopup
+                open={accountOpen}
+                onClosePopup={() => setAccountOpen(false)}
+              />
             </div>
           </div>
         </div>
