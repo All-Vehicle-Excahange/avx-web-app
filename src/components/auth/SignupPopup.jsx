@@ -17,7 +17,6 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
     formState: { errors },
   } = useForm();
 
-  // ✅ Account Type State
   const [accountType, setAccountType] = useState("personal");
 
   const [otp, setOtp] = useState(Array(6).fill(""));
@@ -30,7 +29,6 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
     } else {
       document.body.style.overflow = "auto";
     }
-
     return () => {
       document.body.style.overflow = "auto";
     };
@@ -38,33 +36,27 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
 
   if (!isOpen) return null;
 
-  // ✅ Proper Close Popup + Reset Everything
   const handleClosePopup = () => {
-    reset(); // ✅ Clear form fields
-    setOtp(Array(6).fill("")); // ✅ Clear OTP
-    setOtpSent(false); // ✅ Reset OTP screen
-    setAccountType("personal"); // ✅ Reset account type
-    onClose(); // ✅ Close popup
+    reset();
+    setOtp(Array(6).fill(""));
+    setOtpSent(false);
+    setAccountType("personal");
+    onClose();
   };
 
-  // ✅ OTP Change
   const handleOtpChange = (index, value) => {
     if (!/^\d?$/.test(value)) return;
-
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-
     if (value && index < 5) otpRefs.current[index + 1]?.focus();
   };
 
-  // ✅ OTP Backspace
   const handleOtpKeyDown = (index, e) => {
     if (e.key === "Backspace" && !otp[index] && index > 0)
       otpRefs.current[index - 1]?.focus();
   };
 
-  // ✅ SEND OTP
   const onSendOtp = async () => {
     try {
       const phone = getValues("phone");
@@ -77,9 +69,23 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
         requestType: "SIGNUP",
       });
 
-      if (res?.success || res?.status) {
+      // Check error flag first, then success
+      if (!res?.error && (res?.success || res?.status)) {
         setOtpSent(true);
         setTimeout(() => otpRefs.current[0]?.focus(), 200);
+      } else if (res?.error) {
+        // Handle API errors returned in response
+        const msg = res?.message?.toLowerCase();
+        if (msg?.includes("email")) {
+          setError("email", { type: "server", message: res.message });
+        } else if (msg?.includes("phone")) {
+          setError("phone", { type: "server", message: res.message });
+        } else {
+          setError("root", {
+            type: "server",
+            message: res?.message || "Failed to send OTP",
+          });
+        }
       }
     } catch (err) {
       const api = err?.response?.data;
@@ -98,7 +104,6 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
     }
   };
 
-  // ✅ VALIDATE OTP + SIGNUP
   const onValidateOtp = async () => {
     const finalOtp = otp.join("");
 
@@ -120,8 +125,20 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
         otp: finalOtp,
       });
 
-      if (res?.success || res?.status) {
-        setTimeout(() => handleClosePopup(), 500); // ✅ Close + Reset
+      if (!res?.error && (res?.success || res?.status)) {
+        setTimeout(() => handleClosePopup(), 500);
+      } else if (res?.error) {
+        const msg = res?.message?.toLowerCase();
+        if (msg?.includes("email")) {
+          setError("email", { type: "server", message: res.message });
+        } else if (msg?.includes("phone")) {
+          setError("phone", { type: "server", message: res.message });
+        } else {
+          setError("root", {
+            type: "server",
+            message: res?.message || "Signup failed",
+          });
+        }
       }
     } catch (err) {
       const api = err?.response?.data;
@@ -145,15 +162,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
       <div className="relative flex w-full max-w-[900px] overflow-hidden rounded-2xl shadow-2xl bg-primary-white">
         <button
           onClick={handleClosePopup}
-          className="
-    absolute top-4 right-4 z-999
-    flex items-center justify-center
-    w-10 h-10
-    rounded-full
-    bg-black/30 hover:bg-black/50
-    text-white
-    transition
-  "
+          className="absolute top-4 right-4 z-60 flex items-center justify-center w-10 h-10 rounded-full bg-black/30 hover:bg-black/50 text-white transition"
         >
           <X size={20} />
         </button>
@@ -170,16 +179,48 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
             Create your <br /> account
           </h3>
 
-          {/* GENERAL ERROR */}
+          <div className="flex justify-center gap-10 mb-8 border-b border-accent-gray/20">
+            <button
+              type="button"
+              onClick={() => setAccountType("personal")}
+              className={`flex items-center gap-2 pb-3 transition-all relative ${
+                accountType === "personal"
+                  ? "text-primary font-bold"
+                  : "text-primary/40 hover:text-primary/70"
+              }`}
+            >
+              <span className="text-sm uppercase tracking-wide">Personal</span>
+              {accountType === "personal" && (
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-full" />
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setAccountType("consultant")}
+              className={`flex items-center gap-2 pb-3 transition-all relative ${
+                accountType === "consultant"
+                  ? "text-primary font-bold"
+                  : "text-primary/40 hover:text-primary/70"
+              }`}
+            >
+              <span className="text-sm uppercase tracking-wide">
+                Consultant
+              </span>
+              {accountType === "consultant" && (
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-full" />
+              )}
+            </button>
+          </div>
+
           {errors.root?.message && (
             <p className="text-red-500 text-sm mb-4 text-center">
               {errors.root.message}
             </p>
           )}
 
-          {/* FORM */}
+          {/* FORM FIELDS */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            {/* First Name */}
             <div>
               <input
                 placeholder="First Name"
@@ -194,14 +235,10 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
                 </p>
               )}
             </div>
-
-            {/* Last Name */}
             <div>
               <input
                 placeholder="Last Name"
-                {...register("lastName", {
-                  required: "Last Name is required",
-                })}
+                {...register("lastName", { required: "Last Name is required" })}
                 className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
               />
               {errors.lastName && (
@@ -212,7 +249,6 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
             </div>
           </div>
 
-          {/* Email */}
           <div className="mb-4">
             <input
               type="email"
@@ -227,7 +263,6 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
             )}
           </div>
 
-          {/* Phone */}
           <div className="mb-4">
             <div className="flex items-center text-primary border rounded-md border-accent-gray">
               <span className="pl-4 pr-2 text-text-black/60">+91-</span>
@@ -238,29 +273,11 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
                 className="w-full text-primary border py-3 px-2 outline-none bg-transparent"
               />
             </div>
-          </div>
-
-          {/* ACCOUNT TYPE RADIO */}
-          <div className="flex items-center gap-8 mb-6 text-sm text-primary">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="radio"
-                checked={accountType === "personal"}
-                onChange={() => setAccountType("personal")}
-                className="w-4 h-4 accent-primary"
-              />
-              Personal Account
-            </label>
-
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="radio"
-                checked={accountType === "consultant"}
-                onChange={() => setAccountType("consultant")}
-                className="w-4 h-4 accent-primary"
-              />
-              Consultant Account
-            </label>
+            {errors.phone && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.phone.message}
+              </p>
+            )}
           </div>
 
           {/* OTP SEND BUTTON */}
