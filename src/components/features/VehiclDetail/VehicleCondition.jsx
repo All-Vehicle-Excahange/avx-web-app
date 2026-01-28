@@ -1,12 +1,9 @@
 "use client";
 import { useState } from "react";
-import Button from "@/components/ui/button";
 import ChipGroup from "@/components/ui/chipGroup";
-import Item from "@/components/ui/Item";
-import { CheckCircle, Wrench, Settings, Disc, ChevronDown, ArrowUpDown, Briefcase, Cpu, Gauge } from "lucide-react";
+import { CheckCircle, Wrench, Settings, Disc, ChevronDown } from "lucide-react";
 
-export default function VehicleCondition({ vehicle }) {
-  const [open, setOpen] = useState(true);
+export default function VehicleCondition({ open, setOpen }) {
   return (
     <section className="relative rounded-2xl overflow-hidden bg-secondary/90 text-primary border border-third/60">
       {/* 🔥 Blur background */}
@@ -25,33 +22,8 @@ export default function VehicleCondition({ vehicle }) {
           </div>
         </div>
 
-        <div className={`${open ? "block" : "hidden"} mt-3 space-y-6 px-6 transition-all duration-500 ease-in-out`}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-sm">
-            <Item
-              icon={<Gauge />}
-              label="Mileage (ARAI)"
-              value={`${vehicle?.mileage || "16.3"} kmpl`}
-            />
+        <div className={`${open ? "block" : "hidden"} mt-3 pb-6 space-y-6 px-6 transition-all duration-500 ease-in-out`}>
 
-            <Item
-              icon={<ArrowUpDown />}
-              label="Ground clearance"
-              value={`${vehicle?.groundClearance || "205"} mm`}
-            />
-
-            <Item
-              icon={<Briefcase />}
-              label="Boot space"
-              value={`${vehicle?.bootSpace || "425"} liters`}
-            />
-
-            <Item
-              icon={<Cpu />}
-              label="Displacement"
-              value={`${vehicle?.displacement || "1956"} cc`}
-            />
-          </div>
-          <div className="md:col-span-3 border-t border border-third/40" />
 
 
           <div>
@@ -145,13 +117,6 @@ export default function VehicleCondition({ vehicle }) {
             <p className="text-xs text-third">
               (whichever comes first post delivery)
             </p>
-          </div>
-
-          {/* ================= BUTTON ================= */}
-          <div className="flex justify-end pb-6">
-            <Button variant="outline" showIcon={true}>
-              View Full Report
-            </Button>
           </div>
         </div>
       </div>

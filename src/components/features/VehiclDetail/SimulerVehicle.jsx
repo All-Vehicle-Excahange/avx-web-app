@@ -42,7 +42,7 @@ function SimulerVehicle() {
 
       {/* Bottom Right Button */}
       <div className="mt-6 flex justify-end">
-        <Button size="sm">View More</Button>
+        <Button size="sm" variant="outlineAnimated">View More</Button>
       </div>
     </div>
   );

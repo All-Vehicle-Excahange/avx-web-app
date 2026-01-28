@@ -10,6 +10,8 @@ import {
   User,
   Key,
   Hash,
+  ArrowUpDown,
+  Briefcase,
 } from "lucide-react";
 
 export default function VehicleOverview({ vehicle }) {
@@ -20,7 +22,7 @@ export default function VehicleOverview({ vehicle }) {
       {/* CONTENT */}
       <div className="relative z-10 p-6 space-y-6">
         {/* HEADER */}
-        <h3 className="text-xl font-semibold">Vehicle overview</h3>
+        <h3 className="text-xl font-semibold">Vehicle Specification</h3>
 
         {/* GRID */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 text-sm">
@@ -77,6 +79,32 @@ export default function VehicleOverview({ vehicle }) {
             icon={<Hash />}
             label="Reg number"
             value={vehicle?.regNumber || "GJ08BH6585"}
+          />
+        </div>
+        <div className="md:col-span-3 border-t border border-third/40" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-sm">
+          <Item
+            icon={<Gauge />}
+            label="Mileage (ARAI)"
+            value={`${vehicle?.mileage || "16.3"} kmpl`}
+          />
+
+          <Item
+            icon={<ArrowUpDown />}
+            label="Ground clearance"
+            value={`${vehicle?.groundClearance || "205"} mm`}
+          />
+
+          <Item
+            icon={<Briefcase />}
+            label="Boot space"
+            value={`${vehicle?.bootSpace || "425"} liters`}
+          />
+
+          <Item
+            icon={<Cpu />}
+            label="Displacement"
+            value={`${vehicle?.displacement || "1956"} cc`}
           />
         </div>
       </div>
