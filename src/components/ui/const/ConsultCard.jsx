@@ -23,7 +23,7 @@ export default function ConsultantCard({
     bg-secondary/90
     mx-auto
     transition-all duration-300
-    hover:shadow-[0_20px_60px_rgba(255,255,255,0.25)]
+    hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]
   "
     >
 

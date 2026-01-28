@@ -6,7 +6,7 @@ export default function AvxProcess() {
     <div className="w-full">
       {/* Header */}
       <div className="mb-5">
-        <h2 className="text-3xl font-bold text-black">AVX Process</h2>
+        <h2 className="text-3xl font-bold text-primary">AVX Process</h2>
       </div>
 
       {/* Image Wrapper */}

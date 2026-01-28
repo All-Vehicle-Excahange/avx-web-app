@@ -1,19 +1,19 @@
 "use client";
 
-import { Star } from "lucide-react";
+import { ChevronRight, Star } from "lucide-react";
 
 export default function VehicleHeader() {
   return (
     <header className="w-full space-y-3 pt-6">
       {/* Breadcrumb */}
-      <p className="text-xs sm:text-sm text-third">
-        HOME › USED CARS IN AHMEDABAD › TATA CARS › USED 2021 TATA HARRIER
+      <p className="text-xs sm:text-sm text-third flex items-center gap-1">
+        HOME <ChevronRight size={16} /> USED CARS IN AHMEDABAD <ChevronRight size={16} /> TATA CARS <ChevronRight size={16} /> USED 2021 TATA HARRIER
       </p>
 
       {/* Rating */}
       <div className="flex items-center gap-2">
         <Star className="text-yellow-400" size={16} />
-        <span className="text-sm text-primary font-medium">CAR RATE 4.5</span>
+        <span className="text-sm text-primary font-medium">Inspection Rating 4.5</span>
       </div>
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

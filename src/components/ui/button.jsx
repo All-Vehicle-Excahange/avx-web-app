@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Lock } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 export default function Button({
@@ -9,6 +9,7 @@ export default function Button({
   size = "md",
   full = false,
   showIcon = false,
+  locked = false,
   className = "",
   ...props
 }) {
@@ -26,7 +27,10 @@ export default function Button({
     outline: cn(
       "text-third transition-colors duration-300",
       "rounded-full border border-third hover:border-none",
-      "hover:text-white"
+      "hover:text-white",
+      !locked && "hover:text-white hover:border-none",
+      locked &&
+      "opacity-50 cursor-not-allowed pointer-events-none"
     ),
 
     outlineAnimated: cn(
@@ -85,8 +89,9 @@ export default function Button({
       )}
 
       <span className="relative z-10 flex items-center">
+        {locked && <Lock className="h-4 w-4 mr-2" />}
         {children}
-        {showIcon && !isRounded && (
+        {showIcon && !isRounded && !locked && (
           <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />
         )}
       </span>
@@ -94,7 +99,7 @@ export default function Button({
   );
 
   // 👉 If href exists → Link
-  if (href) {
+  if (href && !locked) {
     return (
       <Link href={href} className={classes}>
         {Content}
@@ -104,7 +109,7 @@ export default function Button({
 
   // 👉 Default → Button
   return (
-    <button {...props} className={classes}>
+    <button {...props} className={classes} disabled={locked}>
       {Content}
     </button>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+
 // TOP
 import VehicleHeader from "./VehicleHeader";
 import VehicleImageGallery from "./VehicleImageGallery";
@@ -20,17 +21,23 @@ import SpecialOffer from "./SpecialOffer";
 import Navbar from "@/components/layout/Navbar";
 
 export default function VehicleDetails() {
-  const overviewRef = useRef(null);
-  const specRef = useRef(null);
+  const specificationRef = useRef(null);
   const conditionRef = useRef(null);
+  const inspectionRef = useRef(null);
+  const [isConditionOpen, setIsConditionOpen] = useState(false);
+  const [isInspectionOpen, setIsInspectionOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("specification");
 
-  const [activeTab, setActiveTab] = useState("overview");
-
-  const NAVBAR_OFFSET = 96;
+  const NAVBAR_OFFSET = 210;
 
   const scrollToSection = (ref, tab) => {
     setActiveTab(tab);
-
+    if (tab === "condition") {
+      setIsConditionOpen(true);
+    }
+    if (tab === "inspection") {
+      setIsInspectionOpen(true);
+    }
     if (!ref.current) return;
 
     const top =
@@ -51,20 +58,20 @@ export default function VehicleDetails() {
       <main className="bg-secondary text-secondary w-full">
         <div className="w-full py-6">
           {/* HEADER */}
-          <section className="mb-6">
+          <div className="sticky top-[64px] pb-4 z-40 bg-secondary">
             <VehicleHeader />
-          </section>
+          </div>
 
           <section className="grid grid-cols-1 xl:grid-cols-[2.2fr_1fr] gap-6 items-start">
             <div className="flex flex-col gap-6 min-w-0">
               <VehicleImageGallery />
 
-              {/* <div className="bg-secondary">
+              <div className="bg-secondary">
                 <div className="flex gap-8 border-b border-third/40">
                   {[
-                    { id: "overview", label: "Overview", ref: overviewRef },
-                    { id: "spec", label: "Specifications", ref: specRef },
+                    { id: "specification", label: "Specifications", ref: specificationRef },
                     { id: "condition", label: "Condition", ref: conditionRef },
+                    { id: "inspection", label: "Inspection", ref: inspectionRef },
                   ].map((tab) => (
                     <button
                       key={tab.id}
@@ -83,22 +90,26 @@ export default function VehicleDetails() {
                     </button>
                   ))}
                 </div>
-              </div> */}
+              </div>
 
-              <div ref={overviewRef}>
+              <div ref={specificationRef}>
                 <VehicleOverview />
               </div>
 
-
               <div ref={conditionRef}>
-                <VehicleCondition />
+                <VehicleCondition
+                  open={isConditionOpen}
+                  setOpen={setIsConditionOpen}
+                />
               </div>
-              <div ref={specRef}>
-                <VehicleSpec />
+
+              <div ref={inspectionRef}>
+                <VehicleSpec open={isInspectionOpen} setOpen={setIsInspectionOpen} />
               </div>
+
             </div>
 
-            <aside className="flex flex-col gap-6 lg:sticky lg:top-24 h-fit">
+            <aside className="flex flex-col gap-6 lg:sticky lg:top-[215px] h-fit">
               <VehicleSummaryRight />
               <Testimonials />
               <SpecialOffer />
