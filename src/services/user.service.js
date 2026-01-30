@@ -12,6 +12,7 @@ const ENDPOINT = {
   updateuserProfileMeta: "/users/metadata",
   checkIsMetaExist: "/users/metadata/exists",
   createUserMeta: "/users/metadata",
+  addUserPefrence: "/users/preference",
 };
 
 export const getUserHomeFeed = async (data) => {
@@ -132,6 +133,15 @@ export const checkIsMetaExist = async () => {
 export const createUserMeta = async (payload) => {
   try {
     const res = await axiosInstance.post(ENDPOINT.createUserMeta, payload);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addUserPefrence = async (payload) => {
+  try {
+    const res = await axiosInstance.post(ENDPOINT.addUserPefrence, payload);
     return handleResponse(res);
   } catch (error) {
     throw error;

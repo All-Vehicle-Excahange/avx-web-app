@@ -6,43 +6,76 @@ import ChipGroup from "@/components/ui/chipGroup";
 import Button from "@/components/ui/button";
 
 import { getMakers, getModelByMakerId } from "@/services/preference.service";
+import { addUserPefrence, getCities, getState } from "@/services/user.service";
 
 function PreferencesPopup({ isOpen, onClose }) {
-  // ✅ Location States
   const [selectedStates, setSelectedStates] = useState([]);
   const [selectedCities, setSelectedCities] = useState([]);
 
-  // ✅ Brand Selection
   const [selectedBrands, setSelectedBrands] = useState([]);
 
-  // ✅ Budget
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
 
-  // ✅ Popup Scroll Lock
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+
+  const [stateSearch, setStateSearch] = useState("");
+  const [citySearch, setCitySearch] = useState("");
+
+  const [makers, setMakers] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loadingMakers, setLoadingMakers] = useState(false);
+
+  const [models, setModels] = useState([]);
+  const [loadingModels, setLoadingModels] = useState(false);
+
+  const [showCityDropdown, setShowCityDropdown] = useState(false);
+  const [showStateDropdown, setShowStateDropdown] = useState(false);
+
+  const [selectedFuelTypes, setSelectedFuelTypes] = useState([]);
+  const [selectedTransmissionTypes, setSelectedTransmissionTypes] = useState(
+    [],
+  );
+  const [selectedVehicleTypes, setSelectedVehicleTypes] = useState([]);
+  const [selectedVariants, setSelectedVariants] = useState([]);
+
+  const [selectedModels, setSelectedModels] = useState([]);
+
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
+    const close = () => {
+      setShowStateDropdown(false);
+      setShowCityDropdown(false);
+    };
+
+    window.addEventListener("click", close);
+    return () => window.removeEventListener("click", close);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "unset";
 
     return () => {
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
-  // ✅ Makers Pagination State
-  const [makers, setMakers] = useState([]);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [loadingMakers, setLoadingMakers] = useState(false);
+  useEffect(() => {
+    if (!isOpen) return;
 
-  // ✅ Models State
-  const [models, setModels] = useState([]);
-  const [loadingModels, setLoadingModels] = useState(false);
+    const fetchStates = async () => {
+      try {
+        const response = await getState();
+        setStates(response.data);
+      } catch (error) {
+        console.log("Failed to fetch states", error);
+      }
+    };
 
-  // ✅ Fetch Makers API (Pagination)
+    fetchStates();
+  }, [isOpen]);
+
   const fetchMakers = async (pageNumber = 1) => {
     try {
       setLoadingMakers(true);
@@ -52,10 +85,7 @@ function PreferencesPopup({ isOpen, onClose }) {
         limit: 10,
       });
 
-      // ✅ Append Makers Data
       setMakers((prev) => [...prev, ...response.data]);
-
-      // ✅ Save Total Pages
       setTotalPages(response.meta.totalPages);
     } catch (error) {
       console.error("Failed to fetch makers:", error);
@@ -64,7 +94,6 @@ function PreferencesPopup({ isOpen, onClose }) {
     }
   };
 
-  // ✅ Load Makers on Popup Open
   useEffect(() => {
     if (isOpen) {
       setMakers([]);
@@ -73,7 +102,6 @@ function PreferencesPopup({ isOpen, onClose }) {
     }
   }, [isOpen]);
 
-  // ✅ Load More Makers Button
   const loadMoreMakers = () => {
     if (page < totalPages && !loadingMakers) {
       const nextPage = page + 1;
@@ -82,7 +110,6 @@ function PreferencesPopup({ isOpen, onClose }) {
     }
   };
 
-  // ✅ Fetch Models Based on Selected Brands
   useEffect(() => {
     if (selectedBrands.length === 0) {
       setModels([]);
@@ -96,7 +123,6 @@ function PreferencesPopup({ isOpen, onClose }) {
 
         let allModels = [];
 
-        // ✅ Fetch Models One Brand at a Time
         for (let makerId of selectedBrands) {
           const response = await getModelByMakerId({
             makerId,
@@ -107,7 +133,6 @@ function PreferencesPopup({ isOpen, onClose }) {
           allModels = [...allModels, ...response.data];
         }
 
-        // ✅ Remove Duplicate Models
         const uniqueModels = Array.from(
           new Map(allModels.map((m) => [m.modelId, m])).values(),
         );
@@ -125,103 +150,124 @@ function PreferencesPopup({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  // ✅ Convert Makers to Chip Items
   const brandItems = makers.map((maker) => ({
     value: maker.makeId,
     label: maker.makeDisplay,
   }));
 
-  // ✅ Convert Models to Chip Items
   const modelItems = models.map((model) => ({
     value: model.modelId,
     label: model.modelName,
   }));
 
-  // ✅ Static Filters
   const fuelTypes = [
-    { value: "petrol", label: "Petrol" },
-    { value: "diesel", label: "Diesel" },
-    { value: "electric", label: "Electric" },
-    { value: "cng", label: "CNG" },
-    { value: "hybrid", label: "Hybrid" },
+    { value: "PETROL", label: "Petrol" },
+    { value: "DIESEL", label: "Diesel" },
+    { value: "CNG", label: "CNG" },
+    { value: "ELECTRIC", label: "Electric" },
+    { value: "HYBRID", label: "Hybrid" },
   ];
 
   const transmissionTypes = [
-    { value: "manual", label: "Manual" },
-    { value: "automatic", label: "Automatic" },
-    { value: "amt", label: "AMT" },
-    { value: "cvt", label: "CVT" },
-    { value: "dct", label: "DCT" },
+    { value: "MANUAL", label: "Manual" },
+    { value: "AUTOMATIC", label: "Automatic" },
   ];
 
   const variants = [
-    { value: "base", label: "Base" },
-    { value: "mid", label: "Mid Variant" },
-    { value: "top", label: "Top Variant" },
-    { value: "sports", label: "Sports Edition" },
-    { value: "premium", label: "Premium" },
-    { value: "limited", label: "Limited Edition" },
+    { value: "BASE", label: "Base" },
+    { value: "MID", label: "Mid Variant" },
+    { value: "TOP", label: "Top Variant" },
   ];
 
   const vehicleTypes = [
-    { value: "suv", label: "SUV" },
-    { value: "sedan", label: "Sedan" },
-    { value: "hatchback", label: "Hatchback" },
-    { value: "muv", label: "MUV" },
-    { value: "truck", label: "Truck" },
-    { value: "coupe", label: "Coupe" },
-    { value: "convertible", label: "Convertible" },
-  ];
+    { value: "OTHER", label: "Other" },
+    { value: "COMMERCIAL", label: "Commercial" },
+    { value: "TWO_WHEELER", label: "Two Wheeler" },
+    { value: "FOUR_WHEELER", label: "Four Wheeler" },
+  ];  
 
-  // ✅ Location Data
-  const states = [
-    { value: "gujarat", label: "Gujarat" },
-    { value: "maharashtra", label: "Maharashtra" },
-    { value: "rajasthan", label: "Rajasthan" },
-    { value: "delhi", label: "Delhi (NCT)" },
-    { value: "punjab", label: "Punjab" },
-    { value: "haryana", label: "Haryana" },
-  ];
+  // ✅ Select State + Fetch Cities (MERGE FIX)
+  const handleSelectState = async (e) => {
+    const stateId = e.target.value;
 
-  const cities = [
-    { value: "ahmedabad", label: "Ahmedabad" },
-    { value: "surat", label: "Surat" },
-    { value: "vadodara", label: "Vadodara" },
-    { value: "mumbai", label: "Mumbai" },
-    { value: "pune", label: "Pune" },
-    { value: "delhi", label: "New Delhi" },
-  ];
+    if (!stateId) return;
 
-  // ✅ Location Handlers
-  const handleSelectState = (e) => {
-    const val = e.target.value;
-    if (val && !selectedStates.includes(val)) {
-      setSelectedStates([...selectedStates, val]);
+    if (!selectedStates.includes(stateId)) {
+      setSelectedStates([...selectedStates, stateId]);
     }
+
+    try {
+      const response = await getCities(stateId);
+
+      // ✅ Merge Cities Instead of Replace
+      setCities((prev) => {
+        const merged = [...prev, ...response.data];
+
+        return Array.from(new Map(merged.map((c) => [c.id, c])).values());
+      });
+    } catch (error) {
+      console.log("Failed to fetch cities", error);
+    }
+
+    setStateSearch("");
     e.target.value = "";
   };
 
-  const handleSelectCity = (e) => {
-    const val = e.target.value;
-    if (val && !selectedCities.includes(val)) {
-      setSelectedCities([...selectedCities, val]);
-    }
-    e.target.value = "";
-  };
-
-  const removeChip = (value, type) => {
+  // ✅ Remove Chips
+  const removeChip = (id, type) => {
     if (type === "state") {
-      setSelectedStates(selectedStates.filter((s) => s !== value));
+      setSelectedStates(selectedStates.filter((s) => s !== id));
     }
+
     if (type === "city") {
-      setSelectedCities(selectedCities.filter((c) => c !== value));
+      setSelectedCities(selectedCities.filter((c) => c !== id));
+    }
+  };
+
+  const handleApplyPreferences = async () => {
+    const payload = {
+      vehicleTypes: selectedVehicleTypes,
+      vehicleSubTypes: selectedVariants,
+      fuelTypes: selectedFuelTypes,
+      transmissionTypes: selectedTransmissionTypes,
+
+      makerDetails: selectedBrands.map((id) => {
+        const maker = makers.find((m) => m.makeId === id);
+        return {
+          makerId: id,
+          makerName: maker?.makeDisplay || "",
+        };
+      }),
+
+      modelDetails: selectedModels.map((id) => {
+        const model = models.find((m) => m.modelId === id);
+        return {
+          modelId: id,
+          modelName: model?.modelName || "",
+        };
+      }),
+
+      minPrice: minPrice ? Number(minPrice) : null,
+      maxPrice: maxPrice ? Number(maxPrice) : null,
+
+      cityIds: selectedCities.map(Number),
+      stateIds: selectedStates.map(Number),
+    };
+
+    console.log("Final Payload ✅", payload);
+
+    try {
+      await addUserPefrence(payload);
+      alert("Preferences Saved ✅");
+      onClose();
+    } catch (error) {
+      console.error("Failed to save preferences", error);
     }
   };
 
   return (
     <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
       <div className="w-full max-w-3xl rounded-2xl bg-secondary border border-third/30 shadow-2xl flex flex-col max-h-[90vh]">
-        {/* ✅ Header */}
         <div className="flex items-center justify-between p-6 border-b border-third/10">
           <h2 className="text-xl font-bold text-primary">User Preferences</h2>
 
@@ -235,7 +281,7 @@ function PreferencesPopup({ isOpen, onClose }) {
 
         {/* ✅ Content */}
         <div className="overflow-y-auto p-6 space-y-8 custom-scrollbar">
-          <div className="flex flex-col gap-8 pb-10">
+          <div className="flex flex-col gap-8 pb-30">
             {/* ✅ Brand */}
             <ChipGroup
               title="Brand"
@@ -251,101 +297,211 @@ function PreferencesPopup({ isOpen, onClose }) {
               <p className="text-sm text-primary/50">Loading models...</p>
             )}
 
-            <ChipGroup title="Model" items={modelItems} showMore searchable />
+            <ChipGroup
+              title="Model"
+              items={modelItems}
+              showMore
+              searchable
+              onChange={(values) => setSelectedModels(values)}
+            />
 
             {/* ✅ Others */}
-            <ChipGroup title="Fuel Type" items={fuelTypes} />
-            <ChipGroup title="Transmission" items={transmissionTypes} />
-            <ChipGroup title="Variant" items={variants} showMore />
-            <ChipGroup title="Vehicle Type" items={vehicleTypes} />
+            <ChipGroup
+              title="Fuel Type"
+              items={fuelTypes}
+              onChange={(values) => setSelectedFuelTypes(values)}
+            />
+            <ChipGroup
+              title="Transmission"
+              items={transmissionTypes}
+              onChange={(values) => setSelectedTransmissionTypes(values)}
+            />
+            <ChipGroup
+              title="Variant"
+              items={variants}
+              showMore
+              onChange={(values) => setSelectedVariants(values)}
+            />
+            <ChipGroup
+              title="Vehicle Type"
+              items={vehicleTypes}
+              onChange={(values) => setSelectedVehicleTypes(values)}
+            />
 
-            {/* ✅ Location Section */}
+            {/* ✅ Location */}
             <div className="space-y-6">
               <h3 className="text-lg font-semibold text-primary">Location</h3>
 
               {/* ✅ State */}
               <div className="space-y-2">
-                <label className="text-xs font-medium uppercase tracking-wider text-primary/50">
+                <label className="text-xs font-medium uppercase text-primary/50">
                   Select State
                 </label>
 
-                <div className="relative w-full">
-                  <select
-                    onChange={handleSelectState}
-                    defaultValue=""
-                    className="w-full appearance-none px-4 py-2.5 text-sm rounded-xl bg-secondary border border-third/30 text-primary"
-                  >
-                    <option value="" disabled>
-                      Choose a state...
-                    </option>
-                    {states.map((item) => (
-                      <option key={item.value} value={item.label}>
-                        {item.label}
-                      </option>
-                    ))}
-                  </select>
-
-                  <ChevronDown
-                    size={16}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-primary/50"
+                {/* ✅ Custom Search Dropdown Wrapper */}
+                <div className="relative" onClick={(e) => e.stopPropagation()}>
+                  {/* ✅ Input */}
+                  <input
+                    type="text"
+                    placeholder="Search & Select State..."
+                    value={stateSearch}
+                    onFocus={() => setShowStateDropdown(true)}
+                    onChange={(e) => {
+                      setStateSearch(e.target.value);
+                      setShowStateDropdown(true);
+                    }}
+                    className="w-full px-4 py-2.5 text-sm rounded-xl bg-secondary border border-third/30"
                   />
+
+                  {/* ✅ Dropdown INSIDE Popup */}
+                  {showStateDropdown && (
+                    <div className="absolute z-50 mt-2 w-full max-h-52 overflow-y-auto rounded-xl border border-third/20 bg-secondary shadow-lg">
+                      {states.filter((s) =>
+                        s.name
+                          .toLowerCase()
+                          .includes(stateSearch.toLowerCase()),
+                      ).length === 0 ? (
+                        <p className="p-3 text-sm text-primary/40">
+                          No state found...
+                        </p>
+                      ) : (
+                        states
+                          .filter((s) =>
+                            s.name
+                              .toLowerCase()
+                              .includes(stateSearch.toLowerCase()),
+                          )
+                          .map((state) => (
+                            <div
+                              key={state.id}
+                              onClick={() => {
+                                if (!selectedStates.includes(state.id)) {
+                                  setSelectedStates([
+                                    ...selectedStates,
+                                    state.id,
+                                  ]);
+                                }
+
+                                // ✅ Fetch Cities When State Selected
+                                handleSelectState({
+                                  target: { value: state.id },
+                                });
+
+                                setStateSearch("");
+                                setShowStateDropdown(false);
+                              }}
+                              className="px-4 py-2 text-sm cursor-pointer hover:bg-primary/10 transition"
+                            >
+                              {state.name}
+                            </div>
+                          ))
+                      )}
+                    </div>
+                  )}
                 </div>
 
-                {/* ✅ Selected States */}
+                {/* ✅ Selected States Chips */}
                 <div className="flex flex-wrap gap-2 mt-3">
-                  {selectedStates.map((state) => (
-                    <div
-                      key={state}
-                      onClick={() => removeChip(state, "state")}
-                      className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/20 cursor-pointer"
-                    >
-                      {state}
-                      <X size={14} />
-                    </div>
-                  ))}
+                  {selectedStates.map((stateId) => {
+                    const stateObj = states.find(
+                      (s) => s.id === Number(stateId),
+                    );
+
+                    return (
+                      <div
+                        key={stateId}
+                        onClick={() => removeChip(stateId, "state")}
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-xl
+          bg-primary/10 border border-primary/20 text-sm font-medium
+          hover:bg-primary/20 transition cursor-pointer"
+                      >
+                        {stateObj?.name}
+                        <X size={14} />
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* ✅ City */}
               <div className="space-y-2">
-                <label className="text-xs font-medium uppercase tracking-wider text-primary/50">
+                <label className="text-xs font-medium uppercase text-primary/50">
                   Select City
                 </label>
 
-                <div className="relative w-full">
-                  <select
-                    onChange={handleSelectCity}
-                    defaultValue=""
-                    className="w-full appearance-none px-4 py-2.5 text-sm rounded-xl bg-secondary border border-third/30 text-primary"
-                  >
-                    <option value="" disabled>
-                      Choose a city...
-                    </option>
-                    {cities.map((item) => (
-                      <option key={item.value} value={item.label}>
-                        {item.label}
-                      </option>
-                    ))}
-                  </select>
-
-                  <ChevronDown
-                    size={16}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-primary/50"
+                {/* ✅ Custom Search Dropdown Wrapper */}
+                <div className="relative" onClick={(e) => e.stopPropagation()}>
+                  {/* ✅ Input */}
+                  <input
+                    type="text"
+                    placeholder="Search & Select City..."
+                    value={citySearch}
+                    onFocus={() => setShowCityDropdown(true)}
+                    onChange={(e) => {
+                      setCitySearch(e.target.value);
+                      setShowCityDropdown(true);
+                    }}
+                    className="w-full px-4 py-2.5 text-sm rounded-xl bg-secondary border border-third/30"
                   />
+
+                  {/* ✅ Dropdown INSIDE Popup */}
+                  {showCityDropdown && (
+                    <div className="absolute z-50 mt-2 w-full max-h-52 overflow-y-auto rounded-xl border border-third/20 bg-secondary shadow-lg">
+                      {cities.filter((c) =>
+                        c.name.toLowerCase().includes(citySearch.toLowerCase()),
+                      ).length === 0 ? (
+                        <p className="p-3 text-sm text-primary/40">
+                          No city found...
+                        </p>
+                      ) : (
+                        cities
+                          .filter((c) =>
+                            c.name
+                              .toLowerCase()
+                              .includes(citySearch.toLowerCase()),
+                          )
+                          .map((city) => (
+                            <div
+                              key={city.id}
+                              onClick={() => {
+                                if (!selectedCities.includes(city.id)) {
+                                  setSelectedCities([
+                                    ...selectedCities,
+                                    city.id,
+                                  ]);
+                                }
+
+                                setCitySearch("");
+                                setShowCityDropdown(false);
+                              }}
+                              className="px-4 py-2 text-sm cursor-pointer hover:bg-primary/10 transition"
+                            >
+                              {city.name}
+                            </div>
+                          ))
+                      )}
+                    </div>
+                  )}
                 </div>
 
-                {/* ✅ Selected Cities */}
+                {/* ✅ Selected Cities Chips */}
                 <div className="flex flex-wrap gap-2 mt-3">
-                  {selectedCities.map((city) => (
-                    <div
-                      key={city}
-                      onClick={() => removeChip(city, "city")}
-                      className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/20 cursor-pointer"
-                    >
-                      {city}
-                      <X size={14} />
-                    </div>
-                  ))}
+                  {selectedCities.map((cityId) => {
+                    const cityObj = cities.find((c) => c.id === Number(cityId));
+
+                    return (
+                      <div
+                        key={cityId}
+                        onClick={() => removeChip(cityId, "city")}
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-xl
+          bg-primary/10 border border-primary/20 text-sm font-medium
+          hover:bg-primary/20 transition cursor-pointer"
+                      >
+                        {cityObj?.name}
+                        <X size={14} />
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -382,7 +538,9 @@ function PreferencesPopup({ isOpen, onClose }) {
           <Button onClick={onClose} variant="outlineSecondary">
             Cancel
           </Button>
-          <Button variant="ghost">Apply Preferences</Button>
+          <Button variant="ghost" onClick={handleApplyPreferences}>
+            Apply Preferences
+          </Button>
         </div>
       </div>
     </div>
