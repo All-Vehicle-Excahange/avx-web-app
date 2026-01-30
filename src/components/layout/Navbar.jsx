@@ -6,11 +6,13 @@ import HamburgerDrawer from "../features/home/HamburgerDrawer";
 import AccountPopup from "../features/home/AccountPopup";
 import Link from "next/link";
 import { useAuthStore } from "@/stores/useAuthStore";
+import PreferencesPopup from "../features/user/PreferencesPopup";
 
 export default function Navbar({ heroMode = false, scrolled = false }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const userRole = "guest";
   const [accountOpen, setAccountOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const { user, isLoggedIn } = useAuthStore();
 
@@ -63,7 +65,9 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
           {/* RIGHT SIDE */}
           <div className="flex items-center gap-4">
-            <Button size="sm">Sell Your Vehicle</Button>
+            <Button onClick={() => setOpen(true)} size="sm">
+              Sell Your Vehicle
+            </Button>
 
             <div
               className="relative z-[110]"
@@ -125,6 +129,8 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
         onClose={() => setMenuOpen(false)}
         role={userRole}
       />
+
+      <PreferencesPopup isOpen={open} onClose={() => setOpen(false)} />
     </>
   );
 }

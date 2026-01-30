@@ -11,6 +11,15 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
+export const axiosNodeInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_NODE_API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
+});
+
+
 axiosInstance.interceptors.request.use((config) => {
   const token = useAuthStore.getState().token;
   if (token) {

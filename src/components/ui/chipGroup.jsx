@@ -10,8 +10,11 @@ export default function ChipGroup({
   variant = "outline",
   allowMultiple = true,
   showMore = false,
-  searchable = false, // ⭐ NEW
+  searchable = false,
   limit = 6,
+  serverPagination = false,
+  hasMore = false,
+  onLoadMore,
   onChange,
 }) {
   const [selected, setSelected] = useState([]);
@@ -35,7 +38,7 @@ export default function ChipGroup({
 
   // ⭐ Filter items based on search
   const filteredItems = items.filter((item) =>
-    item.label.toLowerCase().includes(search.toLowerCase())
+    item.label.toLowerCase().includes(search.toLowerCase()),
   );
 
   // ⭐ Apply limit logic AFTER filtering
@@ -78,12 +81,23 @@ export default function ChipGroup({
       </div>
 
       {/* View More Toggle */}
-      {showMore && filteredItems.length > limit && (
+      {/* ✅ Normal View More Toggle (Local Expand) */}
+      {showMore && !serverPagination && filteredItems.length > limit && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="mt-3 text-third cursor-pointer font-medium text-sm underline hover:text-primary/70 self-end"
+          className="mt-3 text-third font-medium text-sm underline hover:text-primary/70 self-end"
         >
           {expanded ? "View Less" : "View More"}
+        </button>
+      )}
+
+      {/* ✅ Server Pagination View More Button */}
+      {serverPagination && hasMore && (
+        <button
+          onClick={onLoadMore}
+          className="mt-3 text-third font-medium text-sm underline hover:text-primary/70 self-end"
+        >
+          View More
         </button>
       )}
     </div>
