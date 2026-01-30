@@ -1,44 +1,45 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
 /* ===== DATA ===== */
-const photos = ["/cd.png", "/small_car.jpg", "/cd.png", "/small_car.jpg"];
-
-const videos = ["/sample-video.mp4", "/sample-video-2.mp4"];
+const media = [
+  { type: "image", src: "/cd.png" },
+  { type: "image", src: "/small_car.jpg" },
+  { type: "video", src: "/sample-video.mp4" },
+  { type: "video", src: "/sample-video-2.mp4" },
+];
 
 export default function VehicleImageGallery() {
-  const [mode, setMode] = useState("photos"); // photos | videos
   const [active, setActive] = useState(0);
 
-  const items = mode === "photos" ? photos : videos;
-  const isPhotoMode = mode === "photos";
+  const prev = () =>
+    setActive((p) => (p === 0 ? media.length - 1 : p - 1));
 
-  const prev = () => setActive((p) => (p === 0 ? items.length - 1 : p - 1));
+  const next = () =>
+    setActive((p) => (p + 1) % media.length);
 
-  const next = () => setActive((p) => (p + 1) % items.length);
-
+  const current = media[active];
   return (
     <section className="w-full bg-primary/80 rounded-xl p-4 shadow border border-third">
       {/* ===== MAIN PREVIEW ===== */}
       <div className="relative w-full aspect-video bg-black/5 rounded-lg overflow-hidden">
-        {isPhotoMode ? (
+        {current.type === "image" ? (
           <Image
-            src={items[active]}
+            src={current.src}
             alt="Vehicle"
             fill
             className="object-contain"
           />
         ) : (
           <video
-            src={items[active]}
+            src={current.src}
             controls
             className="w-full h-full object-contain bg-black"
           />
         )}
-
         {/* NAV BUTTONS */}
         <button
           onClick={prev}
@@ -54,53 +55,36 @@ export default function VehicleImageGallery() {
           <ChevronRight />
         </button>
 
-        {/* ===== TOGGLE (BOTTOM RIGHT) ===== */}
-        <div className="absolute bottom-3 right-3 flex items-center gap-2 px-3 py-2 rounded-xl border border-third/40 bg-secondary/90">
-          <span className="text-sm text-primary font-semibold">
-            {isPhotoMode ? "Photos" : "Videos"}
-          </span>
-
-          <button
-            onClick={() => {
-              setMode(isPhotoMode ? "videos" : "photos");
-              setActive(0);
-            }}
-            className={`relative w-9 h-5 rounded-full transition ${
-              isPhotoMode ? "bg-white/30" : "bg-primary"
-            }`}
-          >
-            <span
-              className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-secondary transition-transform ${
-                !isPhotoMode ? "translate-x-4" : ""
-              }`}
-            />
-          </button>
-        </div>
       </div>
 
       {/* ===== THUMBNAILS ===== */}
       <div className="flex gap-3 mt-4 overflow-x-auto">
-        {items.map((item, idx) => (
+        {media.map((item, idx) => (
           <button
             key={idx}
             onClick={() => setActive(idx)}
-            className={`shrink-0 border rounded-md overflow-hidden transition
+            className={`
+              relative shrink-0 border rounded-md overflow-hidden transition cursor-pointer
               ${active === idx ? "border-secondary" : "border-third/40"}
             `}
           >
             <div className="w-20 h-14 sm:w-24 sm:h-16 bg-black/5 flex items-center justify-center">
-              {isPhotoMode ? (
+              {item.type === "image" ? (
                 <Image
-                  src={item}
+                  src={item.src}
                   width={100}
                   height={100}
                   alt={`thumb-${idx}`}
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <span className="text-xs text-primary font-medium">
-                  Video {idx + 1}
-                </span>
+                <>
+                  <div className="absolute inset-0 bg-black/30" />
+                  <Play
+                    size={18}
+                    className="absolute text-white"
+                  />
+                </>
               )}
             </div>
           </button>
