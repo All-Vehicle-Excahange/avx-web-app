@@ -1,18 +1,32 @@
 "use client";
 import { useState } from "react";
 import FeatureGroup from "@/components/ui/FeatureGroup";
-import { ChevronDown, X } from "lucide-react";
+import { Calendar, ChevronDown, Clock, X } from "lucide-react";
 import Button from "@/components/ui/button";
 
 export default function VehicleSpec({ open, setOpen }) {
   const [showModal, setShowModal] = useState(false);
   const [animateModal, setAnimateModal] = useState(false);
-  const [inspectionType, setInspectionType] = useState("video");
+  const [inspectionType, setInspectionType] = useState("report");
+  const [inspectionDate, setInspectionDate] = useState("");
+  const [inspectionTime, setInspectionTime] = useState("");
   const inspectionAvailable = true;
 
   const closeModal = () => {
     setAnimateModal(false);
     setTimeout(() => setShowModal(false), 300); // match duration
+  };
+
+  const handleConfirm = () => {
+    const payload = {
+      inspectionType,
+      ...(inspectionType === "video" && {
+        inspectionDate,
+        inspectionTime,
+      }),
+    };
+
+    console.log(payload);
   };
   return (
     <section className="relative rounded-2xl overflow-hidden bg-secondary/90 text-primary border border-third/60">
@@ -56,19 +70,8 @@ export default function VehicleSpec({ open, setOpen }) {
                   </Button>
                 </div>
                 <div className="md:col-span-3 border-t border border-third/40" />
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h3 className="text-xl font-semibold">AVX Inspection Avialable</h3>
-                  </div>
-                  <div>
-                    <Button variant="outline" size="md" showIcon={false}
-                      onClick={() => {
-                        setShowModal(true);
-                        setTimeout(() => setAnimateModal(true), 10);
-                      }}>
-                      Request New AVX Inspection
-                    </Button>
-                  </div>
+                <div>
+                  <h3 className="text-xl font-semibold">AVX Inspection Avialable</h3>
                 </div>
                 <div>
                   <h3 className="text-lg font-normal">Want extra assurance before booking?</h3>
@@ -80,36 +83,6 @@ export default function VehicleSpec({ open, setOpen }) {
                   <p className="text-sm font-medium">Choose inspection type</p>
 
                   <div className="space-y-3">
-                    {/* Video Call + Report */}
-                    <label
-                      className={`
-        flex items-start gap-3 p-4 rounded-xl border cursor-pointer
-        transition-all
-        ${inspectionType === "video"
-                          ? "border-primary bg-primary/5"
-                          : "border-third/40 hover:bg-secondary/80"}
-      `}
-                    >
-                      <input
-                        type="radio"
-                        name="inspection"
-                        value="video"
-                        checked={inspectionType === "video"}
-                        onChange={() => setInspectionType("video")}
-                        className="mt-1 accent-primary"
-                      />
-
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold">
-                          Personalize Video Call + Inspection Report
-                        </p>
-                        <p className="text-xs text-third mt-0.5">
-                          Live video walkthrough with inspector + detailed digital report
-                        </p>
-                        <p className="text-sm font-medium mt-1">₹1,999</p>
-                      </div>
-                    </label>
-
                     {/* Only Report */}
                     <label
                       className={`
@@ -139,9 +112,49 @@ export default function VehicleSpec({ open, setOpen }) {
                         <p className="text-sm font-medium mt-1">₹1,499</p>
                       </div>
                     </label>
+                    {/* Video Call + Report */}
+                    <label
+                      className={`
+        flex items-start gap-3 p-4 rounded-xl border cursor-pointer
+        transition-all
+        ${inspectionType === "video"
+                          ? "border-primary bg-primary/5"
+                          : "border-third/40 hover:bg-secondary/80"}
+      `}
+                    >
+                      <input
+                        type="radio"
+                        name="inspection"
+                        value="video"
+                        checked={inspectionType === "video"}
+                        onChange={() => setInspectionType("video")}
+                        className="mt-1 accent-primary"
+                      />
+
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold">
+                          Personalize Video Call + Inspection Report
+                        </p>
+                        <p className="text-xs text-third mt-0.5">
+                          Live video walkthrough with inspector + detailed digital report
+                        </p>
+                        <p className="text-sm font-medium mt-1">₹1,999</p>
+                      </div>
+                    </label>
                   </div>
                 </div>
-                <p className="text-sm text-primary font-normal mt-1">Recommended for high-value vehicles</p>
+                <div className="flex justify-between items-center">
+                  <p className="text-sm text-primary font-normal mt-1">Recommended for high-value vehicles</p>
+                  <div>
+                    <Button variant="outline" size="md" showIcon={false}
+                      onClick={() => {
+                        setShowModal(true);
+                        setTimeout(() => setAnimateModal(true), 10);
+                      }}>
+                      Request New AVX Inspection
+                    </Button>
+                  </div>
+                </div>
               </>
             ) : (
               <div className="space-y-3">
@@ -226,7 +239,7 @@ export default function VehicleSpec({ open, setOpen }) {
     relative z-50 w-[60%] max-w-md md:flex rounded-2xl
     bg-secondary overflow-hidden text-primary
     border border-third/50 shadow-2xl
-    transition-all duration-300 ease-out
+    transition-all duration-300 ease-out max-h-[60%]
     ${animateModal
                 ? "opacity-100 scale-100 translate-y-0"
                 : "opacity-0 scale-95 translate-y-4"}
@@ -238,7 +251,7 @@ export default function VehicleSpec({ open, setOpen }) {
             >
               <X size={20} />
             </div>
-            <div className="p-6 space-y-5 md:w-[50%]">
+            <div className="p-6 space-y-5 md:w-[50%] overflow-y-scroll custom-scrollbar">
               {/* Header */}
               <h2 className="text-xl font-semibold">
                 Request Fresh AVX Inspection
@@ -267,36 +280,6 @@ export default function VehicleSpec({ open, setOpen }) {
                 <p className="text-sm font-medium">Choose inspection type</p>
 
                 <div className="space-y-3">
-                  {/* Video Call + Report */}
-                  <label
-                    className={`
-        flex items-start gap-3 p-4 rounded-xl border cursor-pointer
-        transition-all
-        ${inspectionType === "video"
-                        ? "border-primary bg-primary/5"
-                        : "border-third/40 hover:bg-secondary/80"}
-      `}
-                  >
-                    <input
-                      type="radio"
-                      name="inspection"
-                      value="video"
-                      checked={inspectionType === "video"}
-                      onChange={() => setInspectionType("video")}
-                      className="mt-1 accent-primary"
-                    />
-
-                    <div className="flex-1">
-                      <p className="text-sm font-semibold">
-                        Personalize Video Call + Inspection Report
-                      </p>
-                      <p className="text-xs text-third mt-0.5">
-                        Live video walkthrough with inspector + detailed digital report
-                      </p>
-                      <p className="text-sm font-medium mt-1">₹1,999</p>
-                    </div>
-                  </label>
-
                   {/* Only Report */}
                   <label
                     className={`
@@ -326,12 +309,120 @@ export default function VehicleSpec({ open, setOpen }) {
                       <p className="text-sm font-medium mt-1">₹1,499</p>
                     </div>
                   </label>
+                  {/* Video Call + Report */}
+                  <label
+                    className={`
+        flex items-start gap-3 p-4 rounded-xl border cursor-pointer
+        transition-all
+        ${inspectionType === "video"
+                        ? "border-primary bg-primary/5"
+                        : "border-third/40 hover:bg-secondary/80"}
+      `}
+                  >
+                    <input
+                      type="radio"
+                      name="inspection"
+                      value="video"
+                      checked={inspectionType === "video"}
+                      onChange={() => setInspectionType("video")}
+                      className="mt-1 accent-primary"
+                    />
+
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold">
+                        Personalize Video Call + Inspection Report
+                      </p>
+                      <p className="text-xs text-third mt-0.5">
+                        Live video walkthrough with inspector + detailed digital report
+                      </p>
+                      <p className="text-sm font-medium mt-1">₹1,999</p>
+                    </div>
+                  </label>
                 </div>
               </div>
 
+              {/* Schedule Video Inspection */}
+              {inspectionType === "video" && (
+                <div
+                  className="
+      mt-5 rounded-xl border border-third/40
+      bg-secondary/60 p-4 space-y-4
+    "
+                >
+                  {/* Header */}
+                  <div className="flex items-center gap-2">
+                    <Calendar size={16} className="text-primary" />
+                    <p className="text-sm font-semibold">
+                      Schedule Video Inspection
+                    </p>
+                  </div>
+
+                  {/* Inputs */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Date */}
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-medium text-third">
+                        Preferred Date
+                      </label>
+
+                      <div
+                        className="
+            flex items-center gap-2 px-3 py-2 rounded-lg
+            border border-third/40 bg-secondary
+            focus-within:border-primary
+          "
+                      >
+                        <Calendar size={14} className="text-third" />
+                        <input
+                          type="date"
+                          value={inspectionDate}
+                          onChange={(e) => setInspectionDate(e.target.value)}
+                          min={new Date().toISOString().split("T")[0]}
+                          className="
+              w-full text-sm bg-transparent
+              focus:outline-none
+            "
+                        />
+                      </div>
+                    </div>
+
+                    {/* Time */}
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-medium text-third">
+                        Preferred Time
+                      </label>
+
+                      <div
+                        className="
+            flex items-center gap-2 px-3 py-2 rounded-lg
+            border border-third/40 bg-secondary
+            focus-within:border-primary
+          "
+                      >
+                        <Clock size={14} className="text-third" />
+                        <input
+                          type="time"
+                          value={inspectionTime}
+                          onChange={(e) => setInspectionTime(e.target.value)}
+                          className="
+              w-full text-sm bg-transparent
+              focus:outline-none
+            "
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Helper text */}
+                  <p className="text-xs text-third leading-relaxed">
+                    Our inspector will confirm the exact slot based on availability.
+                  </p>
+                </div>
+              )}
+
               {/* Actions */}
               <div className="flex justify-end gap-3">
-                <Button variant="outline" size="md" showIcon={false}>
+                <Button variant="outline" size="md" onClick={handleConfirm} showIcon={false}>
                   Confirm & Proceed
                 </Button>
               </div>
