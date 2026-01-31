@@ -2,6 +2,7 @@ import axiosInstance, { handleResponse } from "@/lib/axiosInstance";
 
 const ENDPOINT = {
   getHomeFeed: "/homefeed/vehicles",
+  getHomeFeedConsult: "/homefeed/consultations",
   getState: "/util/address/states/101",
   getCities: "util/address/cities",
   addWishList: "/vehicle/wishlist",
@@ -13,6 +14,8 @@ const ENDPOINT = {
   checkIsMetaExist: "/users/metadata/exists",
   createUserMeta: "/users/metadata",
   addUserPefrence: "/users/preference",
+  followConsultant: "/consultation/follow",
+  unFollowConsultant: "/consultation/follow",
 };
 
 export const getUserHomeFeed = async (data) => {
@@ -22,6 +25,30 @@ export const getUserHomeFeed = async (data) => {
     const res = await axiosInstance.get(ENDPOINT.getHomeFeed, {
       params: { pageNo, size },
     });
+
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getHomeFeedConsult = async (data) => {
+  try {
+    const { pageNo, size } = data;
+
+    const res = await axiosInstance.get(ENDPOINT.getHomeFeedConsult, {
+      params: { pageNo, size },
+    });
+
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getComsultDetailsById = async (id) => {
+  try {
+    const res = await axiosInstance.get(`${ENDPOINT.getHomeFeedConsult}/${id}`);
 
     return handleResponse(res);
   } catch (error) {
@@ -142,6 +169,26 @@ export const createUserMeta = async (payload) => {
 export const addUserPefrence = async (payload) => {
   try {
     const res = await axiosInstance.post(ENDPOINT.addUserPefrence, payload);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const followConsultant = async (id) => {
+  try {
+    const res = await axiosInstance.post(`${ENDPOINT.followConsultant}/${id}`);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const unFollowConsultant = async (id) => {
+  try {
+    const res = await axiosInstance.delete(
+      `${ENDPOINT.unFollowConsultant}/${id}`,
+    );
     return handleResponse(res);
   } catch (error) {
     throw error;

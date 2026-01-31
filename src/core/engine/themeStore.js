@@ -1,4 +1,4 @@
-import { ABOUT_BASIC_1 } from "./schemas/about/premium/about_premium_1";
+import { ABOUT_BASIC_1 } from "./schemas/about/basic/about_basic_1";
 import { ABOUT_PREMIUM_2 } from "./schemas/about/premium/about_premium_2";
 import { ABOUT_BASIC_2 } from "./schemas/about/basic/about_basic_2";
 import { ABOUT_BASIC_3 } from "./schemas/about/basic/about_basic_3";

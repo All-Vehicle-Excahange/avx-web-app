@@ -15,7 +15,7 @@ export default function StoreFront() {
 
   return (
     <>
-      <div className="fixed top-0 inset-x-0 z-[1000]">
+      <div className="fixed top-0 inset-x-0 z-1000">
         <Navbar heroMode scrolled={true} />
       </div>
 
@@ -48,9 +48,10 @@ export default function StoreFront() {
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
                       className={`relative py-4 text-sm font-medium transition
-                        ${activeTab === tab.id
-                          ? "text-primary"
-                          : "text-third hover:text-primary"
+                        ${
+                          activeTab === tab.id
+                            ? "text-primary"
+                            : "text-third hover:text-primary"
                         }`}
                     >
                       {tab.label}
