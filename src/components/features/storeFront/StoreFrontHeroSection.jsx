@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@/components/ui/button";
 import { MapPin, MessageCircle, Navigation2 } from "lucide-react";
 import {
@@ -10,59 +10,147 @@ import {
   IndianRupee,
   CornerUpRight,
 } from "lucide-react";
+import { useParams } from "next/navigation";
+import {
+  followConsultant,
+  getComsultDetailsById,
+  unFollowConsultant,
+} from "@/services/user.service";
+import Image from "next/image";
 
-export default function StoreFrontHeroSection({
-  backgroundImage = "./sfBg.png",
-}) {
+export default function StoreFrontHeroSection() {
+  const id = useParams()?.id;
+
+  const [comsultDetails, setComsultDetails] = useState({});
+  const [isFollower, setIsFollower] = useState(false);
+
+  useEffect(() => {
+    const getComsultDetails = async () => {
+      const res = await getComsultDetailsById(id);
+      setComsultDetails(res.data);
+      setIsFollower(res.data.isFollower);
+    };
+    getComsultDetails();
+  }, [id]);
+
+  const handleFollowToggle = async () => {
+    try {
+      if (isFollower) {
+        await unFollowConsultant(id);
+
+        setIsFollower(false);
+        setComsultDetails((prev) => ({
+          ...prev,
+          followersCount: prev.followersCount - 1,
+        }));
+      } else {
+        await followConsultant(id);
+
+        setIsFollower(true);
+        setComsultDetails((prev) => ({
+          ...prev,
+          followersCount: prev.followersCount + 1,
+        }));
+      }
+    } catch (error) {
+      console.log("Follow toggle error:", error);
+    }
+  };
+
+  const formatServiceName = (service) => {
+    return service
+      .toLowerCase()
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   return (
     <section className="w-full bg-secondary 3xl:max-w-[1480px] 3xl:mx-auto">
-      {/* COVER */}
       <div
         className="relative w-full h-80 bg-cover bg-center"
-        style={{ backgroundImage: `url(${backgroundImage})` }}
+        style={{
+          backgroundImage: `url(${comsultDetails.bannerUrl || "https://www.shutterstock.com/image-vector/car-rental-logo-vector-template-260nw-2589285967.jpg"} )`,
+        }}
       />
 
-      {/* HERO CONTENT WRAPPER */}
       <div className="relative 3xl:container border-b border-third/30 overflow-hidden">
-        {/* 🔥 BLURRED BACKGROUND (same as aside) */}
         <div className="absolute z-10 inset-0 bg-[url('/bg_blur.jpg')] bg-cover opacity-40 blur-lg " />
 
-        {/* CONTENT */}
         <div className="relative z-10 bg-transparent">
           <div className="px-4 md:px-10 lg:px-14">
             <div className="flex items-start py-4">
-              {/* LOGO */}
               <div className="relative z-10">
-                <div className="relative w-50 h-50 rounded-full mt-4 ml-10 bg-primary flex items-center justify-center text-secondary font-black text-2xl">
-                  AVX
+                <div className="relative overflow-hidden    w-50 h-50 rounded-full mt-4 ml-10 bg-primary flex items-center justify-center text-secondary font-black text-2xl">
+                  <Image
+                    className="object-cover"
+                    fill
+                    src={comsultDetails.logoUrl}
+                    alt="AVX"
+                  />
                 </div>
               </div>
 
-              {/* CONTENT */}
               <div className="flex-1 ml-16 space-y-3">
-                {/* TITLE */}
                 <h1 className="text-2xl font-semibold text-primary">
-                  Adarsh Vehicles Consultants
+                  {comsultDetails.consultationName ||
+                    " Adarsh Vehicles Consultants"}
                 </h1>
 
-                {/* LOCATION */}
                 <p className="flex items-center gap-1 text-sm text-third">
                   <MapPin className="w-4 h-4 shrink-0" />
-                  Chaapi, Gujarat
+
+                  {comsultDetails?.address?.address ||
+                  comsultDetails?.address?.city ||
+                  comsultDetails?.address?.state ||
+                  comsultDetails?.address?.country
+                    ? [
+                        comsultDetails.address.address,
+                        comsultDetails.address.city,
+                        comsultDetails.address.state,
+                        comsultDetails.address.country,
+                      ]
+                        .filter(Boolean)
+                        .join(", ")
+                    : "N/A"}
                 </p>
 
                 {/* STATS */}
                 <div className="flex gap-6 text-sm flex-wrap">
                   {[
-                    { label: "Rating", value: "4.5", icon: Star },
-                    { label: "Subscribers", value: "100+", icon: Users },
-                    { label: "Experience", value: "10 Yrs", icon: Briefcase },
-                    { label: "Vehicle Available", value: "66", icon: Car },
-                    { label: "Sold Vehicle", value: "174", icon: CheckCircle },
+                    {
+                      label: "Rating",
+                      value: comsultDetails.averageRating || 0,
+                      icon: Star,
+                    },
+                    {
+                      label: "Subscribers",
+                      value: comsultDetails.followersCount || 0,
+                      icon: Users,
+                    },
+                    {
+                      label: "Vehicle Available",
+                      value: comsultDetails.availableVehicles || 0,
+                      icon: Car,
+                    },
+                    {
+                      label: "Sold Vehicle",
+                      value: comsultDetails.soldVehiclesCount || 0,
+                      icon: CheckCircle,
+                    },
                     {
                       label: "Price Range",
-                      value: "1.5l-2.5l",
+                      value:
+                        comsultDetails.minVehiclePrice &&
+                        comsultDetails.maxVehiclePrice
+                          ? `${comsultDetails.minVehiclePrice} - ${comsultDetails.maxVehiclePrice}`
+                          : "0 - 0",
                       icon: IndianRupee,
+                    },
+                    {
+                      label: "Tier",
+                      value: comsultDetails.tierTitle || "",
+                      icon: Briefcase,
                     },
                   ].map(({ label, value, icon: Icon }) => (
                     <div key={label} className="flex items-center gap-2">
@@ -80,16 +168,21 @@ export default function StoreFrontHeroSection({
                   <p className="text-[11px] uppercase tracking-wide text-third">
                     Services
                   </p>
+
                   <div className="flex flex-wrap gap-1.5">
-                    {["Test Drive", "Financing", "Exchange", "Warranty"].map(
-                      (item) => (
+                    {comsultDetails?.services?.length > 0 ? (
+                      comsultDetails.services.map((service) => (
                         <span
-                          key={item}
+                          key={service}
                           className="px-3 py-1 text-xs border border-third rounded-full text-primary"
                         >
-                          {item}
+                          {formatServiceName(service)}
                         </span>
-                      ),
+                      ))
+                    ) : (
+                      <span className="px-3 py-1 text-xs border border-third rounded-full text-third">
+                        N/A
+                      </span>
                     )}
                   </div>
                 </div>
@@ -106,10 +199,14 @@ export default function StoreFrontHeroSection({
                 </div>
               </div>
 
-              {/* SUBSCRIBE */}
               <div className="flex items-center mt-1 ml-8">
-                <Button size="sm" variant="outline" showIcon={false}>
-                  Subscribe
+                <Button
+                  onClick={handleFollowToggle}
+                  size="sm"
+                  variant="outline"
+                  showIcon={false}
+                >
+                  {isFollower ? "Unsubscribe" : "Subscribe"}
                 </Button>
               </div>
             </div>

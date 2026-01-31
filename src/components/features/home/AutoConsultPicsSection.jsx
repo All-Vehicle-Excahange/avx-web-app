@@ -1,9 +1,12 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import ConsultantCard from "@/components/ui/const/ConsultCard";
 import Button from "@/components/ui/button";
+import { getHomeFeedConsult } from "@/services/user.service";
 
 export default function AutoConsultPicsSection({ limit }) {
-  const consultants = [
+  const consultantsDmy = [
     {
       id: 1,
       name: "Adarsh Auto Consultants",
@@ -11,47 +14,105 @@ export default function AutoConsultPicsSection({ limit }) {
       rating: 4.5,
       vehicleCount: 116,
       image: "/cs.png",
+      logo: "/cs.png",
       isSponsored: true,
       priceRange: "1L - 2L",
-      logo: "/cs.png",
     },
     {
       id: 2,
-      name: "Adarsh Auto Consultants",
-      location: "Chhapi, Gujarat",
+      name: "Premium Auto Hub",
+      location: "Ahmedabad, Gujarat",
       rating: 5,
-      vehicleCount: 116,
+      vehicleCount: 80,
       image: "/cs.png",
-      priceRange: "1L - 2L",
+      logo: "/cs.png",
       isSponsored: false,
+      priceRange: "2L - 5L",
     },
     {
       id: 3,
-      name: "Adarsh Auto Consultants",
-      location: "Chhapi, Gujarat",
-      rating: 4,
-      vehicleCount: 116,
-      priceRange: "1L - 2L",
+      name: "PRO Auto Hub",
+      location: "Ahmedabad, Gujarat",
+      rating: 5,
+      vehicleCount: 80,
       image: "/cs.png",
-      isSponsored: true,
+      logo: "/cs.png",
+      isSponsored: false,
+      priceRange: "2L - 5L",
     },
     {
       id: 4,
-      name: "Adarsh Auto Consultants",
-      location: "Chhapi, Gujarat",
-      rating: 4.5,
-      priceRange: "1L - 2L",
-      vehicleCount: 116,
+      name: "Helllo Auto Hub",
+      location: "Ahmedabad, Gujarat",
+      rating: 5,
+      vehicleCount: 80,
       image: "/cs.png",
-      isSponsored: true,
-    }
+      logo: "/cs.png",
+      isSponsored: false,
+      priceRange: "2L - 5L",
+    },
   ];
 
-  // ✅ Apply limit ONLY if provided
-  const visibleConsultants = limit ? consultants.slice(0, limit) : consultants;
+  const [consultants, setConsultants] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchConsultants = async () => {
+      try {
+        const res = await getHomeFeedConsult({ pageNo: 1, size: 4 });
+
+        if (res?.data?.length > 0) {
+          const formatted = res.data.map((item) => ({
+            id: item.id,
+
+            name: item.consultationName,
+            image: item.bannerUrl || "/cs.png",
+            logo: item.logoUrl || "/cs.png",
+
+            rating: item.averageRating,
+            reviews: item.totalReviews,
+
+            vehicleCount: item.availableVehicles,
+
+            location: item.address?.city
+              ? `${item.address.city}, ${item.address.country}`
+              : "Location not available",
+
+            priceRange:
+              item.minVehiclePrice && item.maxVehiclePrice
+                ? `₹${item.minVehiclePrice} - ₹${item.maxVehiclePrice}`
+                : "Not disclosed",
+
+            vehicleTypes: item.vehicleTypes,
+            services: item.services,
+
+            tierTitle: item.tierTitle,
+            tierBadgeUrl: item.tierBadgeUrl,
+
+            isSponsored: item.isActiveTier,
+          }));
+
+          setConsultants(formatted);
+        }
+      } catch (error) {
+        console.error("Failed to fetch consultants:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchConsultants();
+  }, []);
+
+  const finalConsultants =
+    consultants.length > 0 ? consultants : consultantsDmy;
+
+  const visibleConsultants = limit
+    ? finalConsultants.slice(0, limit)
+    : finalConsultants;
 
   return (
-    <div className="w-full bg-secondary">
+    <div className="w-full bg-secondary py-10 px-4">
       {/* Header */}
       <div className="flex justify-between items-end mb-6">
         <h2 className="text-2xl md:text-3xl font-bold text-primary">
@@ -59,16 +120,21 @@ export default function AutoConsultPicsSection({ limit }) {
         </h2>
       </div>
 
+      {loading && consultants.length === 0 && (
+        <p className="text-third text-sm">Loading consultants...</p>
+      )}
+
       {/* Grid */}
-      <div className="grid sm:items-center  grid-cols-1 md:grid-cols-2 lg:grid-cols-4  gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {visibleConsultants.map((consultant) => (
           <ConsultantCard key={consultant.id} {...consultant} />
         ))}
       </div>
 
-      {/* Bottom Action */}
       <div className="mt-8 flex justify-end">
-        <Button href="/" variant="outlineAnimated">See All</Button>
+        <Button href="/consultants" variant="outlineAnimated">
+          See All
+        </Button>
       </div>
     </div>
   );
