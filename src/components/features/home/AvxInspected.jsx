@@ -115,7 +115,7 @@ export default function AvxInspected() {
         </div>
 
         {/* Bottom Button */}
-        <div className="mt-2 mb-3 mr-3 flex justify-end">
+        <div className="mt-2 flex justify-end">
           <Button href="/" variant="outlineAnimated" size="md">
             Explore All Vehicles
           </Button>

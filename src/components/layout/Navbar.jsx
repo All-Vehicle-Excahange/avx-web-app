@@ -19,7 +19,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
   return (
     <>
       <nav
-        className={`fixed top-0 inset-x-0 z-10 transition-all duration-300
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300
   3xl:max-w-[1480px] 3xl:mx-auto
   ${
     heroMode
