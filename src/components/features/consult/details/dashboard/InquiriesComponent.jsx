@@ -3,22 +3,117 @@
 import { useState } from "react";
 import InquiryCard from "@/components/ui/InquiryCard";
 import StatCard from "./components/StateCard";
-import { CheckCircle, Eye, MousePointerClick, TrendingUp } from "lucide-react";
+import { AlertTriangle, EyeOff, Flame, TrendingUp } from "lucide-react";
 
 export default function InquiriesComponent() {
   const [activeType, setActiveType] = useState("all");
 
+  // ✅ Dummy Inquiries Data (Replace with API later)
+  const [inquiries, setInquiries] = useState([
+    {
+      id: 1,
+      inquiryStatus: "APPROVED",
+      inquiryVehicleResponse: {
+        makerName: "BMW",
+        modelName: "X1",
+        variantName: "Sport",
+        yearOfMfg: 2022,
+      },
+      inquirer: {
+        firstname: "Nihu",
+        lastname: "Chaudhary",
+      },
+      isInspected: true,
+      createdAt: new Date(),
+    },
+    {
+      id: 2,
+      inquiryStatus: "APPROVED",
+      inquiryVehicleResponse: {
+        makerName: "Toyota",
+        modelName: "Fortuner",
+        variantName: "Legender",
+        yearOfMfg: 2023,
+      },
+      inquirer: {
+        firstname: "Rahul",
+        lastname: "Sharma",
+      },
+      isInspected: true,
+      createdAt: new Date(),
+    },
+    {
+      id: 2,
+      inquiryStatus: "APPROVED",
+      inquiryVehicleResponse: {
+        makerName: "Toyota",
+        modelName: "Fortuner",
+        variantName: "Legender",
+        yearOfMfg: 2023,
+      },
+      inquirer: {
+        firstname: "Rahul",
+        lastname: "Sharma",
+      },
+      isInspected: false,
+      createdAt: new Date(),
+    },
+    {
+      id: 2,
+      inquiryStatus: "CLOSED_BY_VEHICLE_OWNER",
+      inquiryVehicleResponse: {
+        makerName: "Toyota",
+        modelName: "Fortuner",
+        variantName: "Legender",
+        yearOfMfg: 2023,
+      },
+      inquirer: {
+        firstname: "Rahul",
+        lastname: "Sharma",
+      },
+      isInspected: false,
+      createdAt: new Date(),
+    },
+  ]);
+
+  // ✅ Status Update Callback
+  const handleStatusChange = (id, newStatus) => {
+    setInquiries((prev) =>
+      prev.map((inq) =>
+        inq.id === id ? { ...inq, inquiryStatus: newStatus } : inq,
+      ),
+    );
+  };
+
+  // ✅ Filter Logic
+
+  const filteredInquiries = inquiries.filter((inq) => {
+    if (activeType === "all") return true;
+
+    if (activeType === "pending") {
+      return inq.inquiryStatus === "PENDING";
+    }
+
+    if (activeType === "approved") {
+      return inq.inquiryStatus === "APPROVED";
+    }
+
+    if (activeType === "closed") {
+      return (
+        inq.inquiryStatus === "CLOSED_BY_VEHICLE_OWNER" ||
+        inq.inquiryStatus === "CLOSED_BY_INQUIRER"
+      );
+    }
+
+    return true;
+  });
+
+  // ✅ Filter Tabs
   const inquiryTypes = [
     { id: "all", label: "All" },
     { id: "pending", label: "Pending" },
-    { id: "accepted", label: "Accepted" },
+    { id: "approved", label: "Approved" },
     { id: "closed", label: "Closed" },
-  ];
-
-  const topVehicles = [
-    { name: "BMW X1" },
-    { name: "Fortuner" },
-    { name: "Honda City" },
   ];
 
   return (
@@ -31,28 +126,56 @@ export default function InquiriesComponent() {
         </p>
       </div>
 
+      <div className="rounded-2xl p-2 space-y-2">
+        <p className="text-sm text-green-600">
+          Avg response time: 18 mins (Good) .
+        </p>
+        <p className="text-sm">Fast responses increase chances of closing.</p>
+      </div>
       <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <StatCard
-            icon={<TrendingUp size={20} />}
-            label="All"
-            value="12 inquiries"
-          />
-          <StatCard
-            icon={<Eye size={20} />}
-            label="Pending"
-            value="9 inquiries"
-          />
-          <StatCard
-            icon={<MousePointerClick size={20} />}
-            label="Accepted"
-            value="8 inquiries"
-          />
-          <StatCard
-            icon={<CheckCircle size={20} />}
-            label="Closed"
-            value="6 inquiries"
-          />
+          <div
+            onClick={() => handleSnapshotClick("high")}
+            className="cursor-pointer"
+          >
+            <StatCard
+              icon={<Flame className="text-primary" size={20} />}
+              label="All Inquiries "
+              value="12 inquiries"
+            />
+          </div>
+          <div
+            onClick={() => handleSnapshotClick("high")}
+            className="cursor-pointer"
+          >
+            <StatCard
+              icon={<Flame className="text-green-500" size={20} />}
+              label="Accepted Inquiries"
+              value="6 inquiries"
+            />
+          </div>
+
+          <div
+            onClick={() => handleSnapshotClick("low")}
+            className="cursor-pointer"
+          >
+            <StatCard
+              icon={<EyeOff className="text-yellow-500" size={20} />}
+              label="Pending Inquiries"
+              value="3 inquiries"
+            />
+          </div>
+
+          <div
+            onClick={() => handleSnapshotClick("attention")}
+            className="cursor-pointer"
+          >
+            <StatCard
+              icon={<AlertTriangle className="text-red-500" size={20} />}
+              label="Closed Inquiries"
+              value="3 inquiries"
+            />
+          </div>
         </div>
       </div>
 
@@ -74,37 +197,64 @@ export default function InquiriesComponent() {
         ))}
       </div>
 
-      {/* INQUIRY CARDS */}
+      {/* ✅ INQUIRY LIST */}
       <div className="grid grid-cols-1 gap-6">
-        {(activeType === "all" || activeType === "pending") && (
-          <InquiryCard status="pending" />
-        )}
-        {(activeType === "all" || activeType === "accepted") && (
-          <InquiryCard status="accepted" />
-        )}
-        {(activeType === "all" || activeType === "closed") && (
-          <InquiryCard status="closed" />
-        )}
-      </div>
+        {filteredInquiries.length === 0 ? (
+          <div className="rounded-2xl border border-third/30 bg-secondary p-10 text-center space-y-3">
+            {/* ✅ Pending Empty */}
+            {activeType === "pending" && (
+              <>
+                <p className="text-lg font-semibold text-primary">
+                  No pending inquiries 🎉
+                </p>
+                <p className="text-sm text-third">
+                  Responding quickly improves your ranking.
+                </p>
+              </>
+            )}
 
-      <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-4">
-        <div className="flex items-center gap-2">
-          <TrendingUp className="text-primary" size={18} />
-          <h3 className="font-semibold">Tips For Better Conversations</h3>
-        </div>
+            {/* ✅ Approved Empty */}
+            {activeType === "approved" && (
+              <>
+                <p className="text-lg font-semibold text-primary">
+                  No active chats yet
+                </p>
+                <p className="text-sm text-third">
+                  Accept inquiries to start conversations.
+                </p>
+              </>
+            )}
 
-        {topVehicles.map((v) => (
-          <div
-            key={v.rank}
-            className="flex justify-between items-center bg-secondary/50 rounded-xl p-4"
-          >
-            <div className="flex items-center gap-4">
-              <ul className="list-disc list-inside">
-                <li>{v.name}</li>
-              </ul>
-            </div>
+            {/* ✅ Closed Empty */}
+            {activeType === "closed" && (
+              <>
+                <p className="text-lg font-semibold text-primary">
+                  No closed inquiries yet
+                </p>
+                <p className="text-sm text-third">Your first deal is coming.</p>
+              </>
+            )}
+
+            {activeType === "all" && (
+              <>
+                <p className="text-lg font-semibold text-primary">
+                  No inquiries found
+                </p>
+                <p className="text-sm text-third">
+                  Once buyers contact you, they will appear here.
+                </p>
+              </>
+            )}
           </div>
-        ))}
+        ) : (
+          filteredInquiries.map((inq) => (
+            <InquiryCard
+              key={inq.id}
+              inquiry={inq}
+              onStatusChange={handleStatusChange}
+            />
+          ))
+        )}
       </div>
     </section>
   );

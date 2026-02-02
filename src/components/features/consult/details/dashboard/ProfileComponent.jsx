@@ -3,7 +3,14 @@
 import React, { useState } from "react";
 import Button from "@/components/ui/button";
 import InputField from "@/components/ui/inputField";
-import { ShieldCheck, FileText, BadgeCheck } from "lucide-react";
+import {
+  ShieldCheck,
+  FileText,
+  BadgeCheck,
+  CheckCircle2,
+  AlertTriangle,
+  Info,
+} from "lucide-react";
 
 export default function ProfileComponent() {
   const [isEditing, setIsEditing] = useState(false);
@@ -25,7 +32,48 @@ export default function ProfileComponent() {
       {/* HEADER */}
       <div>
         <h1 className="text-2xl font-bold">Profile & Verification</h1>
-        <p className="text-third text-sm">Transparency + compliance</p>
+        <p className="text-third text-sm">
+          Manage identity, verification & storefront credibility
+        </p>
+      </div>
+
+      {/* ✅ PROFILE STRENGTH */}
+      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-4">
+        {/* Top Line */}
+        <div className="flex items-center justify-between">
+          <p className="font-semibold text-primary">
+            Profile Strength:{" "}
+            <span className="text-green-400 font-bold">82%</span>
+          </p>
+
+          <span className="flex items-center gap-2 text-sm text-green-400 font-semibold">
+            <span className="w-2.5 h-2.5 rounded-full bg-green-400"></span>
+            Strong
+          </span>
+        </div>
+
+        {/* Checklist */}
+        <div className="space-y-2 text-sm">
+          <p className="flex items-center gap-2 text-green-400">
+            <CheckCircle2 size={16} />
+            Verified business
+          </p>
+
+          <p className="flex items-center gap-2 text-green-400">
+            <CheckCircle2 size={16} />
+            KYC complete
+          </p>
+
+          <p className="flex items-center gap-2 text-green-400">
+            <CheckCircle2 size={16} />
+            Logo & cover uploaded
+          </p>
+
+          <p className="flex items-center gap-2 text-yellow-400">
+            <AlertTriangle size={16} />
+            About Us missing
+          </p>
+        </div>
       </div>
 
       {/* PROFILE CARD */}
@@ -74,6 +122,13 @@ export default function ProfileComponent() {
             <Button variant="ghost">Save Changes</Button>
           </div>
         )}
+        {/* ✅ Buyer Visibility Note */}
+        <div className="mt-4 rounded-xl bg-primary/5 border border-third/20 px-4 py-3">
+          <p className="text-xs text-third flex items-center gap-2">
+            <Info size={14} className="text-primary/70" />
+            This information is visible to buyers
+          </p>
+        </div>
       </div>
 
       {/* VERIFICATION STATUS */}
