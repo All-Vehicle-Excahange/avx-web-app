@@ -1,5 +1,7 @@
+import AboutSection from "@/components/features/home/AboutSection";
 import AutoConsultPicsSection from "@/components/features/home/AutoConsultPicsSection";
 import AvxInspected from "@/components/features/home/AvxInspected";
+import CategoriesSections from "@/components/features/home/CategoriesSections";
 import ConsultBanner from "@/components/features/home/ConsultBanner";
 import DownloadAppSection from "@/components/features/home/DownloadAppSection";
 import HeroSection from "@/components/features/home/HeroSection";
@@ -22,9 +24,11 @@ export default function Home() {
       <Layout>
         <ShowcaseSection />
       </Layout>
+      <CategoriesSections />
       <Layout>
         <TopPicsSection />
       </Layout>
+      <SellVehicleBanner fullWidth />
       {/* <Layout> */}
       <AvxInspected />
       {/* </Layout> */}
@@ -36,9 +40,9 @@ export default function Home() {
         <StorySection />
       </Layout>
       <SayHello />
-      <SellVehicleBanner fullWidth />
       <Layout>
-        <StatsSection />
+        {/* <StatsSection /> */}
+        <AboutSection />
       </Layout>
       <DownloadAppSection />
       <Footer />
