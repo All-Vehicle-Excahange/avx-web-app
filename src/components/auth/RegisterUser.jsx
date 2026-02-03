@@ -5,8 +5,8 @@ import Image from "next/image";
 import Button from "@/components/ui/button";
 import CustomSelect from "@/components/ui/custom-select";
 import { Camera } from "lucide-react";
-import NavbarDark from "@/components/layout/NavbarDark";
 import InputField from "../ui/inputField";
+import Navbar from "../layout/Navbar";
 
 export default function RegisterUser() {
   const [gender, setGender] = useState("");
@@ -56,7 +56,7 @@ export default function RegisterUser() {
 
       {/* NAVBAR */}
       <div className="relative z-10">
-        <NavbarDark />
+        <Navbar heroMode scrolled />
       </div>
 
       <div className="relative mt-12 z-10 flex items-center justify-center flex-1 px-4 py-10">

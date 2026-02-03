@@ -126,10 +126,10 @@ const smallCars = [
 const CategoriesSections = () => {
     const [active, setActive] = useState("city");
     return (
-        <section className="w-full h-full flex flex-col bg-primary text-secondary">
+        <section className="w-full h-full flex flex-col bg-secondary text-primary">
             <div className="container">
                 <div>
-                    <h2 className="text-2xl md:text-3xl font-bold text-secondary">
+                    <h2 className="text-2xl md:text-3xl font-bold text-primary">
                         Not sure what to buy? Start here
                     </h2>
                     <p className="text-sm font-normal">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sequi, nam.</p>
@@ -146,10 +146,10 @@ const CategoriesSections = () => {
                                     onClick={() => setActive(cat.id)}
                                     key={cat.id}
                                     className={cn(
-                                        "w-full py-2 text-sm font-semibold rounded-[24px] border-2 border-secondary cursor-pointer flex items-center justify-center gap-2 transition-all",
+                                        "w-full py-2 text-sm font-semibold rounded-[24px] border-2 border-primary cursor-pointer flex items-center justify-center gap-2 transition-all",
                                         isActive
-                                            ? "bg-secondary text-primary shadow-sm"
-                                            : "text-secondary"
+                                            ? "bg-primary text-secondary shadow-sm"
+                                            : "text-primary"
                                     )}
                                 >
                                     {cat.icon && <cat.icon size={16} />}
