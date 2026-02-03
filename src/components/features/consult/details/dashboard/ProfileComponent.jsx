@@ -10,10 +10,21 @@ import {
   CheckCircle2,
   AlertTriangle,
   Info,
+  MapPin,
+  MessageCircle,
+  Eye,
+  Store,
+  CalendarDays,
+  Crown,
+  UserCog,
+  Smartphone,
+  XCircle,
+  Headphones,
 } from "lucide-react";
 
 export default function ProfileComponent() {
   const [isEditing, setIsEditing] = useState(false);
+  const [isEditingLocation, setIsEditingLocation] = useState(false);
 
   const [profile, setProfile] = useState({
     businessName: "Adarsh Auto Consultants",
@@ -37,8 +48,7 @@ export default function ProfileComponent() {
         </p>
       </div>
 
-      {/* ✅ PROFILE STRENGTH */}
-      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-4">
+      <div className="w-full lg:w-1/2 rounded-2xl border border-third/40 bg-secondary p-6 space-y-4">
         {/* Top Line */}
         <div className="flex items-center justify-between">
           <p className="font-semibold text-primary">
@@ -74,6 +84,8 @@ export default function ProfileComponent() {
             About Us missing
           </p>
         </div>
+
+        <Button variant="outlineSecondary">Improve Profile</Button>
       </div>
 
       {/* PROFILE CARD */}
@@ -122,7 +134,7 @@ export default function ProfileComponent() {
             <Button variant="ghost">Save Changes</Button>
           </div>
         )}
-        {/* ✅ Buyer Visibility Note */}
+
         <div className="mt-4 rounded-xl bg-primary/5 border border-third/20 px-4 py-3">
           <p className="text-xs text-third flex items-center gap-2">
             <Info size={14} className="text-primary/70" />
@@ -154,9 +166,275 @@ export default function ProfileComponent() {
       <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-4">
         <h2 className="font-semibold">KYC Documents</h2>
 
-        <KycRow title="PAN" status="Verified on 10 July 2024" />
-        <KycRow title="Aadhaar" status="Verified on 10 July 2024" />
-        <KycRow title="GST" status="Verified on 11 July 2024" />
+        {/* ⚠ Pending Banner */}
+        <div className="rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 space-y-1">
+          <p className="flex items-center gap-2 text-yellow-400 font-medium text-sm">
+            <AlertTriangle size={16} />
+            Verification Pending
+          </p>
+
+          <p className="text-xs text-third">
+            Missing:{" "}
+            <span className="text-primary font-medium">
+              GST / Address Proof
+            </span>
+          </p>
+
+          <Button variant="outlineSecondary" className="mt-2">
+            Complete Verification
+          </Button>
+        </div>
+
+        {/* ✅ Verified */}
+        <KycRow
+          title="PAN"
+          status="Verified on 10 July 2024"
+          state="verified"
+        />
+
+        {/* ✅ Verified */}
+        <KycRow
+          title="Aadhaar"
+          status="Verified on 10 July 2024"
+          state="verified"
+        />
+
+        {/* ⚠ Pending */}
+        <KycRow title="GST" status="Not Uploaded Yet" state="pending" />
+
+        {/* ❌ Rejected */}
+        <KycRow
+          title="Address Proof"
+          status="Verification Failed"
+          state="rejected"
+          reason="Image unclear"
+        />
+      </div>
+
+      {/* BUSINESS LOCATION & MAP (TRUST BOOST) */}
+      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-6">
+        {/* Header */}
+        <div className="flex justify-between items-center">
+          <h2 className="font-semibold">Business Location & Map</h2>
+
+          {!isEditingLocation && (
+            <Button variant="ghost" onClick={() => setIsEditingLocation(true)}>
+              Edit Address
+            </Button>
+          )}
+        </div>
+
+        {/* VIEW MODE */}
+        {!isEditingLocation && (
+          <div className="space-y-4 text-sm">
+            {/* Address */}
+            <div>
+              <p className="text-xs text-third">Business Address</p>
+              <p className="font-medium">Chaapi, Ahmedabad, Gujarat</p>
+            </div>
+
+            {/* Map Preview */}
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                profile.address + " " + profile.city,
+              )}`}
+              target="_blank"
+              className="block rounded-xl border border-third/30 bg-primary/5 px-4 py-4 hover:bg-primary/10 transition"
+            >
+              <p className="flex items-center gap-2 font-medium text-primary">
+                <MapPin size={16} className="text-primary" />
+                Map Preview (Click to Open)
+              </p>
+
+              <p className="text-xs text-third mt-1">
+                Read-only preview — opens directly in Google Maps
+              </p>
+            </a>
+
+            {/* Service Area */}
+            <p className="text-xs text-third">
+              Service Area:{" "}
+              <span className="font-medium text-primary">Ahmedabad + 30km</span>
+            </p>
+
+            {/* Trust Note */}
+            <div className="rounded-xl bg-green-500/10 border border-green-500/20 px-4 py-3">
+              <p className="text-xs text-green-400 flex items-center gap-2">
+                <CheckCircle2 size={14} />
+                This reassures buyers that your business is verified & real.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* EDIT MODE */}
+        {isEditingLocation && (
+          <div className="space-y-4">
+            <InputField label="Full Address" variant="colored" />
+            <InputField label="City" variant="colored" />
+
+            <div className="flex justify-end gap-4">
+              <Button
+                variant="outlineSecondary"
+                onClick={() => setIsEditingLocation(false)}
+              >
+                Cancel
+              </Button>
+              <Button variant="ghost">Save Location</Button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ACCOUNT & ROLE DETAILS (ADMIN-FRIENDLY) */}
+      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-6">
+        {/* Header */}
+        <div>
+          <h2 className="font-semibold">Account & Role Details</h2>
+          <p className="text-xs text-third">
+            Administrative account information & storefront status
+          </p>
+        </div>
+
+        {/* Details Grid */}
+        <div className="grid md:grid-cols-2 gap-6 text-sm">
+          {/* Account Type */}
+          <div className="flex items-start gap-3">
+            <UserCog className="text-primary" size={18} />
+            <div>
+              <p className="text-xs text-third">Account Type</p>
+              <p className="font-semibold">Consultant</p>
+            </div>
+          </div>
+
+          {/* Tier */}
+          <div className="flex items-start gap-3">
+            <Crown className="text-yellow-400" size={18} />
+            <div>
+              <p className="text-xs text-third">Tier</p>
+              <p className="font-semibold">Premium Partner</p>
+            </div>
+          </div>
+
+          {/* Joined On */}
+          <div className="flex items-start gap-3">
+            <CalendarDays className="text-primary" size={18} />
+            <div>
+              <p className="text-xs text-third">Joined On</p>
+              <p className="font-semibold">05 June 2024</p>
+            </div>
+          </div>
+
+          {/* Storefront Status */}
+          <div className="flex items-start gap-3">
+            <Store className="text-green-400" size={18} />
+            <div>
+              <p className="text-xs text-third">Storefront Status</p>
+              <span className="inline-flex items-center px-3 py-1 mt-1 rounded-full bg-green-500/20 text-green-400 text-xs font-medium">
+                Live
+              </span>
+            </div>
+          </div>
+
+          {/* Inventory Visibility */}
+          <div className="flex items-start gap-3">
+            <Eye className="text-primary" size={18} />
+            <div>
+              <p className="text-xs text-third">Inventory Visibility</p>
+              <span className="inline-flex items-center px-3 py-1 mt-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
+                Active
+              </span>
+            </div>
+          </div>
+
+          {/* Chat Enabled */}
+          <div className="flex items-start gap-3">
+            <MessageCircle className="text-primary" size={18} />
+            <div>
+              <p className="text-xs text-third">Chat Enabled</p>
+              <p className="font-semibold">
+                Yes <span className="text-xs text-third">(Mobile App)</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* RESTRICTIONS & PLATFORM RULES (TRANSPARENCY) */}
+      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-6">
+        {/* Header */}
+        <div>
+          <h2 className="font-semibold">Restrictions & Platform Rules</h2>
+          <p className="text-xs text-third">
+            This avoids confusion later by clearly defining platform
+            capabilities.
+          </p>
+        </div>
+
+        {/* Capabilities List */}
+        <div className="space-y-3 text-sm">
+          {/* Allowed */}
+          <p className="flex items-center gap-2 text-green-400">
+            <CheckCircle2 size={16} />
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam
+            dignissimos repellendus{" "}
+          </p>
+
+          <p className="flex items-center gap-2 text-green-400">
+            <CheckCircle2 size={16} />
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam
+            dignissimos repellendus{" "}
+          </p>
+
+          {/* Restricted */}
+          <p className="flex items-center gap-2 text-red-400">
+            <XCircle size={16} />
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam
+            dignissimos repellendus{" "}
+          </p>
+
+          <p className="flex items-center gap-2 text-red-400">
+            <XCircle size={16} />
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam
+            dignissimos repellendus{" "}
+          </p>
+        </div>
+
+        {/* CTA */}
+        <div className="pt-2">
+          <Button variant="ghost" className="flex items-center gap-2">
+            <Smartphone size={16} />
+            Open Mobile App
+          </Button>
+        </div>
+      </div>
+      {/* FOOTER ACTIONS (CONTEXTUAL) */}
+      <div className="rounded-2xl border border-third/30 bg-primary/5 p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        {/* Text */}
+        <div>
+          <p className="font-medium text-sm">
+            Need help updating your profile?
+          </p>
+          <p className="text-xs text-third">
+            Contact AVX Support or view platform guidelines for assistance.
+          </p>
+        </div>
+
+        {/* Actions */}
+        <div className="flex gap-3">
+          <Button
+            variant="outlineSecondary"
+            className="flex items-center gap-2"
+          >
+            <Headphones size={16} />
+            Contact Support
+          </Button>
+
+          <Button variant="ghost" className="flex items-center gap-2">
+            <FileText size={16} />
+            View Guidelines
+          </Button>
+        </div>
       </div>
     </section>
   );
@@ -197,19 +475,44 @@ function StatusCard({ title, value, icon, green }) {
   );
 }
 
-function KycRow({ title, status }) {
+function KycRow({ title, status, state, reason }) {
   return (
     <div className="flex justify-between items-center rounded-xl border border-third/30 bg-primary/5 p-4">
+      {/* Left Info */}
       <div className="flex items-center gap-3">
         <FileText className="text-primary" size={18} />
+
         <div>
           <p className="font-medium">{title}</p>
+
+          {/* Status Text */}
           <p className="text-xs text-third">{status}</p>
+
+          {/* ❌ Rejection Reason */}
+          {state === "rejected" && reason && (
+            <p className="text-xs text-red-400 mt-1">Reason: {reason}</p>
+          )}
         </div>
       </div>
-      <span className="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs">
-        Verified
-      </span>
+
+      {/* Right Badge */}
+      {state === "verified" && (
+        <span className="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs">
+          Verified
+        </span>
+      )}
+
+      {state === "pending" && (
+        <span className="px-3 py-1 rounded-full bg-yellow-500/20 text-yellow-400 text-xs">
+          Pending
+        </span>
+      )}
+
+      {state === "rejected" && (
+        <span className="px-3 py-1 rounded-full bg-red-500/20 text-red-400 text-xs">
+          Rejected
+        </span>
+      )}
     </div>
   );
 }

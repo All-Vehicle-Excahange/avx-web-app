@@ -16,7 +16,11 @@ const menu = [
   { label: "Overview", icon: LayoutGrid, href: "/consult/dashboard/overview" },
   { label: "Storefront", icon: Store, href: "/consult/dashboard/storefront" },
   { label: "Inventory", icon: Box, href: "/consult/dashboard/inventory" },
-  { label: "Inspection", icon: InspectIcon, href: "/consult/dashboard/inspection" },
+  {
+    label: "Inspection",
+    icon: InspectIcon,
+    href: "/consult/dashboard/inspection",
+  },
   {
     label: "Inquiries",
     icon: MessageSquare,
@@ -25,7 +29,11 @@ const menu = [
   { label: "Analytics", icon: BarChart3, href: "/consult/dashboard/analytics" },
   { label: "PPC & Boost", icon: Zap, href: "/consult/dashboard/ppc" },
   { label: "Profile", icon: User, href: "/consult/dashboard/profile" },
-  { label: "Billing", icon: CreditCard, href: "/consult/dashboard/billing" },
+  {
+    label: "Wallet & Billing",
+    icon: CreditCard,
+    href: "/consult/dashboard/billing",
+  },
 ];
 
 export default function Sidebar() {
