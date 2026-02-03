@@ -60,7 +60,7 @@ const smallCars = [
     },
 ];
 
-const PromotedCars = () => {
+const SponsoredCars = () => {
     const prevRef = useRef(null);
     const nextRef = useRef(null);
     const swiperRef = useRef(null);
@@ -109,24 +109,14 @@ const PromotedCars = () => {
                     1280: { slidesPerView: 3 },
                 }}
             >
-                {/* {smallCars.map((car) => (
-                    <VehicleCard data={car} key={car.id} />
-                ))} */}
-
                 {smallCars.map((story) => (
                     <SwiperSlide key={story.id}>
                         <VehicleCard data={story} />
                     </SwiperSlide>
                 ))}
             </Swiper>
-            <div className="mt-4 flex justify-end">
-                <Button href="/" variant="outlineAnimated" size="md">
-                    Explore All Vehicles
-                </Button>
-            </div>
-
-        </div >
+        </div>
     )
 }
 
-export default PromotedCars
+export default SponsoredCars;

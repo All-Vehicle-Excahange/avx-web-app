@@ -3,13 +3,13 @@ import DownloadAppSection from "@/components/features/home/DownloadAppSection";
 import SellVehicleBanner from "@/components/features/home/SellVehicleBanner";
 import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
-import NavbarDark from "@/components/layout/NavbarDark";
+import Navbar from "@/components/layout/Navbar";
 import React from "react";
 
 function index() {
   return (
     <>
-      <NavbarDark />
+      <Navbar heroMode scrolled />
 
       <Layout>
         <PremiumFilterWithCard />

@@ -1,11 +1,11 @@
 import UserDetails from "@/components/features/user/UserDetails";
-import NavbarDark from "@/components/layout/NavbarDark";
+import Navbar from "@/components/layout/Navbar";
 import React from "react";
 
 function index() {
   return (
     <>
-      <NavbarDark />
+      <Navbar heroMode scrolled />
       <UserDetails />
     </>
   );

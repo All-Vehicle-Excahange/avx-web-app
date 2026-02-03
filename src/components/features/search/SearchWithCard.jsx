@@ -8,8 +8,8 @@ import Button from "@/components/ui/button";
 import ChipGroup from "@/components/ui/chipGroup";
 import PromoCardRow from "./PromoCardRow";
 import Chip from "@/components/ui/chip";
-import { FilterIcon } from "lucide-react";
-import PromotedCars from "./PromotedCars";
+import { ChevronLeft, ChevronRight, FilterIcon } from "lucide-react";
+import SponsoredCars from "./SponsoredCars";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
@@ -138,8 +138,20 @@ export default function SearchWithCard() {
     "Vehicle Type": vehicleTypes.map((v) => v.label),
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 20; // change later from API
+
+  const handlePageChange = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+
+    // optional: scroll to top of cards on page change
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <div className="w-full min-h-screen flex flex-col lg:flex-row bg-secondary text-secondary">
+    <div className="w-full min-h-screen flex flex-col lg:flex-row bg-secondary text-secondary mt-[100px]">
+     
       {/* ================= DESKTOP SIDEBAR ================= */}
       <aside className="hidden lg:flex relative w-[340px] bg-secondary/90 border border-third/40 p-4 flex-col gap-6 overflow-y-auto shrink-0 rounded-xl h-fit">
         {/* <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover opacity-40 blur-lg z-0" /> */}
@@ -230,7 +242,7 @@ export default function SearchWithCard() {
             </div>
           </div>
           <div className="col-span-full">
-            <PromotedCars />
+            <SponsoredCars />
           </div>
           <div className="col-span-full">
             <h2 className="text-2xl md:text-3xl font-bold text-primary">Top Maruti Fronx Near You</h2>
@@ -238,6 +250,87 @@ export default function SearchWithCard() {
           {Array.from({ length: 9 }).map((_, i) => (
             <VehicleCard key={i} data={cardData} />
           ))}
+          <div className="col-span-full">
+            <div className="mt-4">
+              <ul className="flex flex-wrap items-center justify-end">
+                {/* PREVIOUS */}
+                <li>
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    className="grid place-content-center cursor-pointer mr-2 text-white hover:text-black rounded-full w-8 h-8 sm:w-10 sm:h-10 border-[1.5px] border-white transition-colors hover:bg-primary hover:border-primary disabled:cursor-not-allowed disabled:text-gray-500 disabled:border-gray-500 disabled:hover:bg-transparent"
+                    disabled={currentPage === 1}
+                    aria-label="Previous page"
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+                </li>
+
+                {/* FIRST PAGE */}
+                {currentPage > 3 && (
+                  <li
+                    className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-white text-sm sm:text-lg font-medium cursor-pointer hover:bg-primary hover:text-black"
+                    onClick={() => handlePageChange(1)}
+                  >
+                    1
+                  </li>
+                )}
+
+                {/* DOTS */}
+                {currentPage > 4 && (
+                  <li className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-white mx-1">
+                    ...
+                  </li>
+                )}
+
+                {/* MIDDLE PAGES */}
+                {[currentPage - 2, currentPage - 1, currentPage, currentPage + 1, currentPage + 2]
+                  .filter((page) => page > 0 && page <= totalPages)
+                  .map((page) => (
+                    <li
+                      key={page}
+                      onClick={() => handlePageChange(page)}
+                      className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-sm sm:text-lg font-medium cursor-pointer transition-all
+              ${currentPage === page
+                          ? "bg-primary text-black"
+                          : "text-white hover:bg-primary hover:text-black"
+                        }`}
+                    >
+                      {page}
+                    </li>
+                  ))}
+
+                {/* DOTS */}
+                {currentPage < totalPages - 3 && (
+                  <li className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-white mx-1">
+                    ...
+                  </li>
+                )}
+
+                {/* LAST PAGE */}
+                {currentPage < totalPages - 2 && (
+                  <li
+                    className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-white text-sm sm:text-lg font-medium cursor-pointer hover:bg-primary hover:text-black"
+                    onClick={() => handlePageChange(totalPages)}
+                  >
+                    {totalPages}
+                  </li>
+                )}
+
+                {/* NEXT */}
+                <li>
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    className="grid place-content-center cursor-pointer text-white ml-2 hover:text-black rounded-full w-8 h-8 sm:w-10 sm:h-10 border-[1.5px] border-white hover:border-primary transition-colors hover:bg-primary disabled:cursor-not-allowed disabled:text-gray-500 disabled:border-gray-500 disabled:hover:bg-transparent"
+                    disabled={currentPage === totalPages}
+                    aria-label="Next page"
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+
         </div>
       </main>
 
