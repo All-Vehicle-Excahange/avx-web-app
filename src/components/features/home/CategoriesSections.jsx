@@ -144,6 +144,7 @@ const CategoriesSections = () => {
                             return (
                                 <button
                                     onClick={() => setActive(cat.id)}
+                                    key={cat.id}
                                     className={cn(
                                         "w-full py-2 text-sm font-semibold rounded-[24px] border-2 border-secondary cursor-pointer flex items-center justify-center gap-2 transition-all",
                                         isActive

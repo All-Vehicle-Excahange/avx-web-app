@@ -106,7 +106,7 @@ function ReletedCar() {
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl md:text-3xl font-bold ">
-          Top Releted Vehicle Picks For You
+          Top Releted Vehicles For You
         </h2>
 
         {/* ✅ TOP RIGHT BUTTONS */}
