@@ -24,7 +24,7 @@ export default function ConsultantCard({
   isSponsored = false,
 }) {
   return (
-    <div className="group/card relative w-[340px] h-[502px] rounded-2xl overflow-hidden border border-third/40 bg-secondary/90 mx-auto transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]">
+    <div className="group/card relative w-[340px] h-[514px] rounded-2xl overflow-hidden border border-third/40 bg-secondary/90 mx-auto transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]">
       <div className="relative z-10 h-40 w-full">
         <Image src={image} alt={name} fill className="object-cover" />
 
@@ -45,6 +45,8 @@ export default function ConsultantCard({
           )}
         </div>
       </div>
+      
+      <div className="bg-secondary/10  z-0 rounded-b-4xl h-188 w-full absolute bottom-16  border border-third/40 "></div>
 
       <div className="relative pt-10 px-4 pb-4 text-primary flex flex-col h-[calc(100%-160px)]">
         <h3 className="text-base font-semibold mb-1">{name}</h3>

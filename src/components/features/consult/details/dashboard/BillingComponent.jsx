@@ -9,6 +9,7 @@ import {
   Download,
   TrendingUp,
   IndianRupee,
+  Info,
 } from "lucide-react";
 import CustomSelect from "@/components/ui/custom-select";
 
@@ -22,46 +23,118 @@ export default function BillingComponent() {
     { label: "Last 90 days", value: "90" },
   ];
 
+  const tier = "PREMIUM"; // BASIC | PRO | PREMIUM
+  const isProOrPremium = tier === "PRO" || tier === "PREMIUM";
+  const isBasic = tier === "BASIC";
+
   return (
     <section className="w-full space-y-10">
       {/* HEADER */}
       <div>
         <h1 className="text-2xl font-bold">Subscription & Billing</h1>
-        <p className="text-third text-sm">Reinforce premium status</p>
+        <p className="text-third text-sm">
+          Control your balance, subscriptions, and payments in one place
+        </p>
       </div>
 
-      {/* PREMIUM PLAN */}
-      <div className="relative overflow-hidden rounded-2xl border border-primary/40 bg-primary/10 backdrop-blur-xl p-8 space-y-6 shadow-2xl">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <Crown className="text-yellow-300" />
-            <div>
-              <p className="text-xs uppercase tracking-wider">
-                Premium Consultant
-              </p>
-              <p className="text-lg font-semibold">Annual Subscription</p>
+      {/* PREMIUM + WALLET ROW */}
+
+      {/* PREMIUM + WALLET ROW */}
+      <div
+        className={`grid gap-6 ${
+          isBasic ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2"
+        }`}
+      >
+        {/* PREMIUM PLAN (Always Visible) */}
+        <div className="relative overflow-hidden rounded-2xl border border-primary/40 bg-primary/5 backdrop-blur-xl p-8 shadow-2xl flex flex-col">
+          {/* Top */}
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <Crown className="text-yellow-300" />
+              <div>
+                <p className="text-xs uppercase tracking-wider">
+                  Premium Consultant
+                </p>
+                <p className="text-lg font-semibold">Annual Subscription</p>
+              </div>
+            </div>
+
+            <span className="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs">
+              Active
+            </span>
+          </div>
+
+          {/* Middle */}
+          <div className="grid md:grid-cols-2 gap-6 mt-6">
+            <div className="bg-white/10 rounded-xl p-4">
+              <p className="text-xs opacity-70">Plan Value</p>
+              <p className="font-semibold">₹9,999 / year</p>
+            </div>
+
+            <div className="bg-white/10 rounded-xl p-4">
+              <p className="text-xs opacity-70">Next Renewal</p>
+              <p className="font-semibold">12 Oct 2024</p>
             </div>
           </div>
-          <span className="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs">
-            Active
-          </span>
-        </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-white/10 rounded-xl p-4">
-            <p className="text-xs opacity-70">Plan Value</p>
-            <p className="font-semibold">₹9,999 / year</p>
-          </div>
-          <div className="bg-white/10 rounded-xl p-4">
-            <p className="text-xs opacity-70">Next Renewal</p>
-            <p className="font-semibold">12 Oct 2024</p>
+          {/* Bottom */}
+          <div className="flex justify-between items-center mt-auto pt-6">
+            <span className="text-xs opacity-90">Auto-renewal enabled</span>
+            <Button variant="ghost">Manage Subscription</Button>
           </div>
         </div>
 
-        <div className="flex justify-between items-center">
-          <span className="text-xs opacity-90">Auto-renewal enabled</span>
-          <Button variant="ghost">Manage Subscription</Button>
-        </div>
+        {/* ✅ WALLET (Only for PRO/PREMIUM) */}
+        {isProOrPremium && (
+          <div className="relative rounded-2xl border border-third/40 bg-linear-to-r from-primary/5 to-secondary/20 p-6 overflow-hidden">
+            {/* Status Pill */}
+            <div className="absolute top-4 right-4">
+              <span className="px-4 py-1 rounded-full bg-green-500/20 text-green-400 text-xs font-medium backdrop-blur-md">
+                Active
+              </span>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 font-semibold">
+                <CreditCard size={16} />
+                AVX Wallet
+              </div>
+
+              <p className="text-xs text-third">Available Balance</p>
+              <p className="text-3xl font-bold">₹ 3,420.00</p>
+            </div>
+
+            {/* Auto Recharge */}
+            <div className="mt-4 rounded-xl border border-third/30 bg-primary/5 px-4 py-3 space-y-1">
+              <p className="flex items-center gap-2 text-sm font-medium text-primary">
+                <Info size={15} className="text-primary/70" />
+                Auto-Recharge:{" "}
+                <span className="text-green-400 font-semibold">ENABLED</span>
+              </p>
+
+              <p className="text-xs text-third">
+                When balance falls below{" "}
+                <span className="font-medium text-primary">₹500</span>
+              </p>
+
+              <p className="text-xs text-third">
+                Recharge{" "}
+                <span className="font-medium text-primary">₹2,000</span>{" "}
+                automatically
+              </p>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-3 mt-6">
+              <Button size="md" variant="ghost">
+                + Add Money
+              </Button>
+              <Button size="sm" variant="outlineSecondary">
+                Auto-Recharge Settings
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* BENEFITS */}
@@ -106,36 +179,6 @@ export default function BillingComponent() {
               </p>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* AVX WALLET */}
-      <div className="relative rounded-2xl border border-third/40 bg-linear-to-r from-primary/5 to-secondary/20 p-6 overflow-hidden">
-        {/* Status Pill */}
-        <div className="absolute top-4 right-4">
-          <span className="px-4 py-1 rounded-full bg-green-500/20 text-green-400 text-xs font-medium backdrop-blur-md">
-            Active
-          </span>
-        </div>
-
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 font-semibold">
-            <CreditCard size={16} />
-            AVX Wallet
-          </div>
-
-          <p className="text-xs text-third">Available Balance</p>
-          <p className="text-3xl font-bold">₹ 3,420.00</p>
-        </div>
-
-        {/* Buttons */}
-        <div className="flex gap-3 mt-6">
-          <Button size="md" variant="ghost">
-            + Add Money
-          </Button>
-          <Button size="sm" variant="outlineSecondary">
-            Auto-Recharge Settings
-          </Button>
         </div>
       </div>
 
