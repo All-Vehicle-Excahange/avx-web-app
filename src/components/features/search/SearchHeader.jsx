@@ -10,7 +10,7 @@ export default function SearchHeader() {
       </div>
 
       {/* FULL WIDTH BACKGROUND */}
-      <section className="w-full bg-[url('/promo_bg.png')] bg-cover pt-24 pb-6 md:pt-28 md:pb-8">
+      <section className="w-full bg-[url('/search-banner1.jpg')] bg-cover h-[300px] flex justify-center items-center">
         {/* CENTERED CONTENT (AMAZON STYLE) */}
         <div className="container">
           <h2 className="text-primary text-2xl md:text-3xl font-bold">

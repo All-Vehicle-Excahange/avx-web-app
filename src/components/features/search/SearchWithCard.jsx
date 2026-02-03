@@ -9,6 +9,7 @@ import ChipGroup from "@/components/ui/chipGroup";
 import PromoCardRow from "./PromoCardRow";
 import Chip from "@/components/ui/chip";
 import { FilterIcon } from "lucide-react";
+import PromotedCars from "./PromotedCars";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
@@ -157,14 +158,12 @@ export default function SearchWithCard() {
 
               <button
                 onClick={() => setAvxAssumed(!avxAssumed)}
-                className={`relative w-12 h-6 rounded-full transition cursor-pointer ${
-                  avxAssumed ? "bg-primary/90" : "bg-white/20"
-                }`}
+                className={`relative w-12 h-6 rounded-full transition cursor-pointer ${avxAssumed ? "bg-primary/90" : "bg-white/20"
+                  }`}
               >
                 <span
-                  className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-secondary transition-transform ${
-                    avxAssumed ? "translate-x-6" : "translate-x-0"
-                  }`}
+                  className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-secondary transition-transform ${avxAssumed ? "translate-x-6" : "translate-x-0"
+                    }`}
                 />
               </button>
             </div>
@@ -209,14 +208,12 @@ export default function SearchWithCard() {
                 </span>
                 <button
                   onClick={() => setAvxAssumed(!avxAssumed)}
-                  className={`relative w-9 h-5 rounded-full ${
-                    avxAssumed ? "bg-primary" : "bg-white/20"
-                  }`}
+                  className={`relative w-9 h-5 rounded-full ${avxAssumed ? "bg-primary" : "bg-white/20"
+                    }`}
                 >
                   <span
-                    className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-secondary transition-transform ${
-                      avxAssumed ? "translate-x-4" : ""
-                    }`}
+                    className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-secondary transition-transform ${avxAssumed ? "translate-x-4" : ""
+                      }`}
                   />
                 </button>
               </div>
@@ -232,7 +229,12 @@ export default function SearchWithCard() {
               ))}
             </div>
           </div>
-
+          <div className="col-span-full">
+            <PromotedCars />
+          </div>
+          <div className="col-span-full">
+            <h2 className="text-2xl md:text-3xl font-bold text-primary">Top Maruti Fronx Near You</h2>
+          </div>
           {Array.from({ length: 9 }).map((_, i) => (
             <VehicleCard key={i} data={cardData} />
           ))}
@@ -262,11 +264,10 @@ export default function SearchWithCard() {
                 <div
                   key={item}
                   onClick={() => setActiveFilterTab(item)}
-                  className={`px-4 py-3 cursor-pointer text-sm ${
-                    activeFilterTab === item
-                      ? "bg-secondary/10 font-semibold"
-                      : "hover:bg-secondary/5"
-                  }`}
+                  className={`px-4 py-3 cursor-pointer text-sm ${activeFilterTab === item
+                    ? "bg-secondary/10 font-semibold"
+                    : "hover:bg-secondary/5"
+                    }`}
                 >
                   {item}
                 </div>
