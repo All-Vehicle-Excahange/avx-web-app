@@ -19,7 +19,6 @@ export const axiosNodeInstance = axios.create({
   withCredentials: true,
 });
 
-
 axiosInstance.interceptors.request.use((config) => {
   const token = useAuthStore.getState().token;
   if (token) {
@@ -47,6 +46,7 @@ axiosInstance.interceptors.response.use(
         console.log("❌ Refresh limit reached. Logging out...");
 
         useAuthStore.getState().logout();
+        useAuthStore.getState().openLoginPopup();
 
         if (typeof window !== "undefined") {
           window.location.href = "/";
