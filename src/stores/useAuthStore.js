@@ -1,14 +1,29 @@
 "use client";
+
 import { create } from "zustand";
 
 export const useAuthStore = create((set) => ({
+  // ✅ AUTH DATA
   user: null,
   token: null,
   isLoggedIn: false,
   authInitialized: false,
 
+  // ✅ LOGIN POPUP CONTROL
+  isLoginPopupOpen: false,
+
+  openLoginPopup: () =>
+    set({
+      isLoginPopupOpen: true,
+    }),
+
+  closeLoginPopup: () =>
+    set({
+      isLoginPopupOpen: false,
+    }),
+
+  // ✅ LOGIN FUNCTION
   login: (userData, token) => {
-    // ✅ Store userMaster + refreshToken together
     const userWithRefresh = {
       ...userData.userMaster,
       refreshToken: userData.refreshToken,
@@ -19,21 +34,28 @@ export const useAuthStore = create((set) => ({
       token,
       isLoggedIn: true,
       authInitialized: true,
+
+      // ✅ Close popup automatically after login
+      isLoginPopupOpen: false,
     });
 
-    // ✅ Persist correct full user object
+    // ✅ Persist in LocalStorage
     if (typeof window !== "undefined") {
-      localStorage.setItem("user", JSON.stringify(userWithRefresh)); // ✅ FIXED
+      localStorage.setItem("user", JSON.stringify(userWithRefresh));
       localStorage.setItem("token", token);
     }
   },
 
+  // ✅ LOGOUT FUNCTION
   logout: () => {
     set({
       user: null,
       token: null,
       isLoggedIn: false,
       authInitialized: true,
+
+      // ✅ Open popup after logout (optional)
+      isLoginPopupOpen: true,
     });
 
     if (typeof window !== "undefined") {
@@ -42,6 +64,7 @@ export const useAuthStore = create((set) => ({
     }
   },
 
+  // ✅ INITIALIZE AUTH ON APP LOAD
   initializeAuth: () => {
     if (typeof window !== "undefined") {
       const savedUser = localStorage.getItem("user");

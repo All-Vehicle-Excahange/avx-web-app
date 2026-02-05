@@ -1,16 +1,32 @@
-import Button from "@/components/ui/button";
-import StoryCard from "@/components/ui/const/StoryCard";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef, useEffect } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import { ArrowLeft, ArrowRight, Quote, TvIcon } from "lucide-react";
+import { useRef, useEffect, useState } from "react";
 
-import "swiper/css";
+// Story Card Component (replacing Review Card)
+const StoryCard = ({ story }) => {
+  return (
+    <div className="relative rounded-2xl overflow-hidden h-[400px] group cursor-pointer">
+      {/* Background Image */}
+      <img
+        src={story.image}
+        alt={story.title}
+        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+      />
+
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+
+      {/* Content */}
+      <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+        <h3 className="text-2xl font-bold mb-2">{story.title}</h3>
+        <p className="text-white/90 text-sm">{story.description}</p>
+      </div>
+    </div>
+  );
+};
 
 export default function StorySection() {
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
-  const swiperRef = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [slidesPerView, setSlidesPerView] = useState(3);
 
   const stories = [
     {
@@ -71,67 +87,148 @@ export default function StorySection() {
     },
   ];
 
+  // Handle responsive slides per view
   useEffect(() => {
-    if (!swiperRef.current) return;
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setSlidesPerView(1);
+      } else if (window.innerWidth < 1024) {
+        setSlidesPerView(2);
+      } else {
+        setSlidesPerView(3);
+      }
+    };
 
-    const swiper = swiperRef.current;
-
-    swiper.params.navigation.prevEl = prevRef.current;
-    swiper.params.navigation.nextEl = nextRef.current;
-
-    swiper.navigation.init();
-    swiper.navigation.update();
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const handlePrev = () => {
+    setCurrentIndex((prev) => Math.max(0, prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) =>
+      Math.min(stories.length - slidesPerView, prev + 1),
+    );
+  };
+
   return (
-    <section>
-      {/* Header & Nav */}
-      <div className="flex flex-row justify-between items-start mb-6">
-        {/* Title */}
-        <div>
-          <h2 className="text-2xl md:text-4xl font-bold text-primary leading-tight">
-            Monthly Top Stories From Our Users
+    <section className="w-full  mx-auto bg-primary">
+      {/* OUTER WHITE CARD */}
+      <div className="w-full max-w-[1440px] mx-auto   p-8 md:p-12 ">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+            Read reviews,
+            <br />
+            buy with <span className="text-fourth">confidence</span>.
           </h2>
+
+          {/* Trustpilot Badge */}
+          <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
+            <span className="text-2xl md:text-3xl font-bold text-gray-900">
+              4.2/5
+            </span>
+            <div className="flex items-center gap-2  px-4 py-2 rounded-lg">
+              <button
+                type="button"
+                className="flex items-center justify-center px-6 py-2 text-primary bg-secondary rounded-lg hover:bg-third/20 hover:text-primary transition-all duration-300 cursor-pointer"
+              >
+                <div className="mr-3">
+                  <svg viewBox="30 336.7 120.9 129.2" width="25">
+                    <path
+                      fill="#FFD400"
+                      d="M119.2,421.2c15.3-8.4,27-14.8,28-15.3c3.2-1.7,6.5-6.2,0-9.7  c-2.1-1.1-13.4-7.3-28-15.3l-20.1,20.2L119.2,421.2z"
+                    ></path>
+                    <path
+                      fill="#FF3333"
+                      d="M99.1,401.1l-64.2,64.7c1.5,0.2,3.2-0.2,5.2-1.3  c4.2-2.3,48.8-26.7,79.1-43.3L99.1,401.1L99.1,401.1z"
+                    ></path>
+                    <path
+                      fill="#48FF48"
+                      d="M99.1,401.1l20.1-20.2c0,0-74.6-40.7-79.1-43.1  c-1.7-1-3.6-1.3-5.3-1L99.1,401.1z"
+                    ></path>
+                    <path
+                      fill="#3BCCFF"
+                      d="M99.1,401.1l-64.3-64.3c-2.6,0.6-4.8,2.9-4.8,7.6  c0,7.5,0,107.5,0,113.8c0,4.3,1.7,7.4,4.9,7.7L99.1,401.1z"
+                    ></path>
+                  </svg>
+                </div>
+                <div className="text-left">
+                  <div className="text-[10px] font-bold">GET IT ON</div>
+                  <div className="text-lg font-bold leading-none">
+                    Google Play
+                  </div>
+                </div>
+              </button>
+            </div>
+            <span className="text-gray-600 text-sm md:text-base">
+              Based on 5210 reviews
+            </span>
+          </div>
         </div>
 
-        {/* Nav Buttons */}
-        <div className="flex gap-3 mt-2">
-          <Button variant="roundedOutline" ref={prevRef}>
-            <ChevronLeft className="w-5 h-5" />
-          </Button>
+        {/* CONTENT ROW */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          {/* LEFT SIDE */}
+          <div className="lg:col-span-3 flex flex-col items-start lg:mt-[88px]">
+            <div className="max-w-xs">
+              <div className="mb-2">
+                <Quote
+                  size={120}
+                  strokeWidth={1.5}
+                  className="text-gray-200 rotate-180"
+                />
+              </div>
 
-          <Button variant="roundedOutline" ref={nextRef}>
-            <ChevronRight className="w-5 h-5" />
-          </Button>
+              <h3 className="mt-6 text-3xl md:text-4xl font-bold text-gray-900 mb-8 leading-tight">
+                What our <span className="text-fourth">customers</span> are saying
+              </h3>
+            </div>
+          </div>
+
+          {/* RIGHT SIDE (STORY CARDS) */}
+          <div className="lg:col-span-9 overflow-hidden">
+            <div className="flex justify-end gap-2 mb-4">
+              <button
+                onClick={handlePrev}
+                disabled={currentIndex === 0}
+                className="w-14 h-14 rounded-full bg-fourth border-2 border-third flex items-center justify-center hover:border-gray-900 hover:bg-primary hover:text-secondary transition-all duration-300 disabled:opacity-30"
+              >
+                <ArrowLeft size={24} />
+              </button>
+
+              <button
+                onClick={handleNext}
+                disabled={currentIndex >= stories.length - slidesPerView}
+                className="w-14 h-14 rounded-full bg-fourth border-2 border-gray-300 flex items-center justify-center hover:border-gray-900 hover:bg-primary hover:text-secondary transition-all duration-300 disabled:opacity-30"
+              >
+                <ArrowRight size={24} />
+              </button>
+            </div>
+
+            <div
+              className="flex gap-6 transition-transform duration-500 ease-out"
+              style={{
+                transform: `translateX(-${currentIndex * (100 / slidesPerView + 2)}%)`,
+              }}
+            >
+              {stories.map((story) => (
+                <div
+                  key={story.id}
+                  className="flex-shrink-0"
+                  style={{
+                    width: `calc(${100 / slidesPerView}% - ${((slidesPerView - 1) * 24) / slidesPerView}px)`,
+                  }}
+                >
+                  <StoryCard story={story} />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-
-      {/* Stories Scroll Container */}
-      <Swiper
-        modules={[Navigation]}
-        spaceBetween={16}
-        grabCursor
-        slidesPerView={1}
-        onSwiper={(swiper) => {
-          swiperRef.current = swiper;
-        }}
-        breakpoints={{
-          640: { slidesPerView: 1 },
-          768: { slidesPerView: 2 },
-          1024: { slidesPerView: 5 },
-          1280: { slidesPerView: 5 },
-        }}
-      >
-        {stories.map((story) => (
-          <SwiperSlide key={story.id}>
-            <StoryCard
-              title={story.title}
-              description={story.description}
-              image={story.image}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
     </section>
   );
 }

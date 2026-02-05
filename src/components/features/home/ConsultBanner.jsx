@@ -3,13 +3,10 @@ import Banner from "@/components/ui/const/Banner";
 export default function ConsultBanner() {
   return (
     <>
-      <div className="w-full my-12  3xl:max-w-screen-2xl mx-auto container">
+      <div className="w-full   3xl:max-w-full mx-auto ">
         <div
-          className="w-full h-[250px] md:h-[200px] overflow-hidden bg-cover bg-center rounded-lg relative"
-          style={{
-            backgroundImage:
-              "url('/banner_que.jpg')",
-          }}
+          className="w-full h-[250px] md:h-[320px] overflow-hidden bg-cover bg-center rounded-lg relative bg-[#007bff]"
+          
         >
           <Banner
             title="Are you a consultant? List your cars"

@@ -2,8 +2,8 @@ import Image from "next/image";
 
 export default function DownloadAppSection() {
   return (
-    <div className="w-full pt-36">
-      <div className="w-full 3xl:max-w-screen-2xl mx-auto  bg-secondary overflow-visible flex flex-col md:flex-row relative min-h-[300px]">
+    <div className="w-full pt-36 bg-fourth">
+      <div className="w-full 3xl:max-w-screen-2xl mx-auto   overflow-visible flex flex-col md:flex-row relative min-h-[300px]">
         {/* LEFT CONTENT */}
         <div className="flex-1 p-8 md:p-16 flex flex-col justify-center z-10 relative">
           <h2 className="text-2xl md:text-4xl font-bold text-primary mb-4 leading-tight">
@@ -42,7 +42,7 @@ export default function DownloadAppSection() {
             </button>
 
             {/* App Store Button */}
-            <button type="button" className="px-6 py-2 flex items-center justify-center text-primary bg-transparent border border-primary hover:bg-primary hover:text-secondary transition-all duration-300 rounded-lg cursor-pointer">
+            <button type="button" className="px-6 py-2 flex items-center justify-center bg-secondary text-primary  border border-primary hover:bg-primary hover:text-secondary transition-all duration-300 rounded-lg cursor-pointer">
               <div className="mr-3">
                 <svg viewBox="0 0 384 512" width="23">
                   <path fill="currentColor" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z">
@@ -65,7 +65,7 @@ export default function DownloadAppSection() {
         {/* RIGHT IMAGE AREA */}
         <div className="relative md:absolute md:bottom-0 md:right-0 w-full md:w-1/2 lg:w-[45%] flex items-end justify-center md:justify-end h-[300px] md:h-auto overflow-hidden md:overflow-visible z-20">
           {/* Decorative Circle */}
-          <div className="absolute md:relative bg-third/30 h-[340px] w-[340px] md:w-full rounded-t-full bottom-0 md:bottom-auto left-1/2 md:left-auto -translate-x-1/2 md:translate-x-0 md:right-10"></div>
+          <div className="absolute md:relative bg-primary h-[340px] w-[340px] md:w-full rounded-t-full bottom-0 md:bottom-auto left-1/2 md:left-auto -translate-x-1/2 md:translate-x-0 md:right-10"></div>
 
           {/* Phone Mockup */}
           <div className="absolute z-10 w-[280px] md:w-[350px] lg:w-[400px] md:-mb-12 md:mr-8 lg:mr-18 right-18">

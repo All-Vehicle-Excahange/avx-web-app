@@ -16,6 +16,9 @@ const ENDPOINT = {
   addUserPefrence: "/users/preference",
   followConsultant: "/consultation/follow",
   unFollowConsultant: "/consultation/follow",
+  checkIsEligibleToCreateReview: "/consultation/review/eligible",
+  getAllReview: "/consultation/review/all",
+  addNewReview: "/consultation/review",
 };
 
 export const getUserHomeFeed = async (data) => {
@@ -189,6 +192,46 @@ export const unFollowConsultant = async (id) => {
     const res = await axiosInstance.delete(
       `${ENDPOINT.unFollowConsultant}/${id}`,
     );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const checkIsEligibleToCreateReview = async (id) => {
+  try {
+    const res = await axiosInstance.get(
+      `${ENDPOINT.checkIsEligibleToCreateReview}/${id}`,
+    );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllReview = async (id, data) => {
+  try {
+    const res = await axiosInstance.get(`${ENDPOINT.getAllReview}/${id}`, {
+      params: { pageNo: data.pageNo, size: data.size },
+    });
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addNewReview = async (id, formData) => {
+  try {
+    const res = await axiosInstance.post(
+      `${ENDPOINT.addNewReview}/${id}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
+    );
+
     return handleResponse(res);
   } catch (error) {
     throw error;

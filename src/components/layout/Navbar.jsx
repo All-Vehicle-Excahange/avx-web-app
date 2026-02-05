@@ -20,7 +20,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
     <>
       <nav
         className={`fixed top-0 inset-x-0 z-50 transition-all duration-300
-  3xl:max-w-[1480px] 3xl:mx-auto
+  3xl:max-w-full 3xl:mx-auto
   ${
     heroMode
       ? scrolled

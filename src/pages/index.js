@@ -5,6 +5,7 @@ import CategoriesSections from "@/components/features/home/CategoriesSections";
 import ConsultBanner from "@/components/features/home/ConsultBanner";
 import DownloadAppSection from "@/components/features/home/DownloadAppSection";
 import HeroSection from "@/components/features/home/HeroSection";
+import RecentrlySold from "@/components/features/home/RecentrlySold";
 import SayHello from "@/components/features/home/SayHello";
 // import RecentlyVisitedSection from "@/components/features/home/RecentlyVisitedSection";
 import SellVehicleBanner from "@/components/features/home/SellVehicleBanner";
@@ -19,10 +20,12 @@ export default function Home() {
   return (
     <>
       <HeroSection fullWidth />
-
       {/* <RecentlyVisitedSection /> */}
       <Layout>
         <ShowcaseSection />
+      </Layout>
+      <Layout>
+        <RecentrlySold />
       </Layout>
       <CategoriesSections />
       <Layout>
@@ -36,9 +39,8 @@ export default function Home() {
         <AutoConsultPicsSection limit={8} />
       </Layout>
       <ConsultBanner fullWidth />
-      <Layout>
-        <StorySection />
-      </Layout>
+      <StorySection fullWidth />
+
       <SayHello />
       <Layout>
         {/* <StatsSection /> */}

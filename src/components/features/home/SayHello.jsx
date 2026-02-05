@@ -36,7 +36,7 @@ const SayHello = () => {
                 <div className="flex flex-col justify-between items-start mb-16">
                     <div className="text-center w-fit">
                         <h2 className="text-3xl md:text-5xl text-secondary font-extrabold leading-tight">
-                            Say <span className="text-purple-600 text-5xl">hello</span> to the seller
+                            Say <span className="text-fourth text-5xl">hello</span> to the seller
                             <br />
                             <span className="ml-0">before you buy!</span>
                         </h2>
@@ -78,7 +78,7 @@ const SayHello = () => {
                                             relative z-10 rounded-full
                                             transition-all duration-300 ease-out
                                             ${isActive
-                                                    ? "w-3 h-3 bg-purple-600 scale-110"
+                                                    ? "w-3 h-3 bg-fourth scale-110"
                                                     : "w-3 h-3 bg-gray-300 scale-100"}
                                         `}
                                         />
@@ -89,7 +89,7 @@ const SayHello = () => {
                                             text-md font-bold
                                             transition-all duration-300 ease-out
                                             ${isActive
-                                                    ? "text-purple-600 translate-x-1"
+                                                    ? "text-fourth translate-x-1"
                                                     : "text-black"}
                                         `}
                                         >

@@ -67,44 +67,56 @@ export default function AvxInspected() {
   const [activeType, setActiveType] = useState("4-Wheeler");
 
   return (
-    <div className="w-full h-full flex flex-col bg-primary text-secondary">
+    <div className="w-full h-full flex flex-col  text-secondary">
       {/* Header Section */}
       <div className="container">
         <div className="shrink-0 flex flex-col md:flex-row items-center justify-between mb-4 gap-4 pt-3 pr-3">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-secondary">
-              AVX Inspected Vehicles
-            </h2>
-            <p className="text-secondary mt-1">
-              Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
-            </p>
+          <div className="flex items-start gap-4">
+            {/* VERTICAL ACCENT LINE */}
+            <span className="w-2 h-[52px] rounded-full bg-gradient-to-b from-blue-500 to-white-400" />
+
+            {/* TEXT */}
+            <div>
+              <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
+                AVX Inspected Vehicles
+              </h2>
+
+              <p className="text-third mt-1">
+                Lorem ipsum dolor sit amet consectetur dolor sit amet
+                consectetur..
+              </p>
+            </div>
           </div>
 
           <div className="w-[300px] flex gap-2 mt-auto">
+            {/* 4-Wheeler */}
             <button
               onClick={() => setActiveType("4-Wheeler")}
               className={cn(
-                "w-full py-2 text-sm font-semibold rounded-[24px] border-2 border-secondary cursor-pointer flex items-center justify-center gap-2 transition-all",
+                "w-full py-2 text-sm font-semibold rounded-[24px] border-2 cursor-pointer flex items-center justify-center gap-2 transition-all",
+
                 activeType === "4-Wheeler"
-                  ? "bg-secondary text-primary shadow-sm"
-                  : "text-secondary"
+                  ? "bg-fourth text-primary border-fourth shadow-sm"
+                  : "text-primary border-primary bg-transparent",
               )}
             >
               <Car size={18} /> 4-Wheeler
             </button>
+
+            {/* 2-Wheeler */}
             <button
               onClick={() => setActiveType("2-Wheeler")}
               className={cn(
-                "w-full py-2 text-sm font-semibold rounded-[24px] border-2 border-secondary cursor-pointer flex items-center justify-center gap-2 transition-all",
+                "w-full py-2 text-sm font-semibold rounded-[24px] border-2 cursor-pointer flex items-center justify-center gap-2 transition-all",
+
                 activeType === "2-Wheeler"
-                  ? "bg-secondary text-primary shadow-sm"
-                  : "text-secondary"
+                  ? "bg-fourth text-primary border-fourth shadow-sm"
+                  : "text-primary border-primary bg-transparent",
               )}
             >
               <Bike size={18} /> 2-Wheeler
             </button>
           </div>
-
         </div>
 
         {/* Grid Layout */}
