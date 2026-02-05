@@ -57,7 +57,7 @@ const smallCars = [
   },
 ];
 
-const ShowcaseSection = () => {
+const RecentrlySold = () => {
   return (
     <div className="w-full ">
       {/* Header */}
@@ -69,7 +69,7 @@ const ShowcaseSection = () => {
           {/* TEXT */}
           <div>
             <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
-              Top picks Vehicle for you
+              Recentrly Sold on AVX
             </h2>
 
             <p className="text-third mt-1">
@@ -94,4 +94,4 @@ const ShowcaseSection = () => {
   );
 };
 
-export default ShowcaseSection;
+export default RecentrlySold;

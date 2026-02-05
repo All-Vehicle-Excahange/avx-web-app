@@ -112,12 +112,25 @@ export default function AutoConsultPicsSection({ limit }) {
     : finalConsultants;
 
   return (
-    <div className="w-full bg-secondary py-10 px-4">
+    <div className="w-full  py-10 px-4">
       {/* Header */}
       <div className="flex justify-between items-end mb-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-primary">
-          Top Auto Consultants Picks For You
-        </h2>
+        <div className="flex items-start gap-4">
+          {/* VERTICAL ACCENT LINE */}
+          <span className="w-2 h-[52px] rounded-full bg-gradient-to-b from-blue-500 to-white-400" />
+
+          {/* TEXT */}
+          <div>
+            <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
+              Top Auto Consultants Picks For You
+            </h2>
+
+            <p className="text-third mt-1">
+              Lorem ipsum dolor sit amet consectetur dolor sit amet
+              consectetur..
+            </p>
+          </div>
+        </div>
       </div>
 
       {loading && consultants.length === 0 && (

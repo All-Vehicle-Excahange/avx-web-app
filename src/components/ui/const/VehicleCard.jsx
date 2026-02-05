@@ -72,7 +72,7 @@ export default function VehicleCard({ data, onWishlistChange }) {
       className="
         group/card relative flex flex-row md:flex-col
         rounded-2xl overflow-hidden
-        bg-secondary text-primary
+         text-primary
         md:max-w-sm w-full sm:w-[392px]
         border-2 border-third/60
         hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]

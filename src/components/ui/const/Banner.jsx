@@ -14,7 +14,7 @@ export default function Banner({ title, description, buttonText }) {
     // Height and layout classes removed/adjusted to fit parent
     <div className="relative w-full h-full 3xl:max-w-screen-2xl mx-auto flex items-center">
       {/* Dark Overlay for text readability - Kept here to ensure text pops */}
-      <div className="absolute inset-0 bg-black/60" />
+      {/* <div className="absolute inset-0 bg-black/60" /> */}
 
       {/* Content Container */}
       <div className="relative z-10 w-full px-6 md:px-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">

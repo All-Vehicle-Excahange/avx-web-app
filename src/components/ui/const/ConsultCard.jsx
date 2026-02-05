@@ -1,111 +1,100 @@
-import { MapPin, Star } from "lucide-react";
 import Image from "next/image";
 import Button from "@/components/ui/button";
+import { BadgeCheck } from "lucide-react";
 
-export default function ConsultantCard({
-  image,
-  logo,
-  name,
-  location,
-  id,
-
-  rating,
-  reviews,
-
-  vehicleCount,
-  priceRange,
-
-  vehicleTypes = [],
-  services = [],
-
-  tierTitle,
-  tierBadgeUrl,
-
-  isSponsored = false,
-}) {
+export default function ConsultantCard() {
   return (
-    <div className="group/card relative w-[340px] h-[514px] rounded-2xl overflow-hidden border border-third/40 bg-secondary/90 mx-auto transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]">
-      <div className="relative z-10 h-40 w-full">
-        <Image src={image} alt={name} fill className="object-cover" />
-
-        {isSponsored && (
-          <div className="absolute top-3 left-3 flex items-center gap-2 bg-primary text-secondary text-[11px] font-semibold px-3 py-1 rounded-full">
-            {tierBadgeUrl && (
-              <img src={tierBadgeUrl} alt="tier" className="w-4 h-4" />
-            )}
-            {tierTitle || "Premium Consultant"}
-          </div>
-        )}
-
-        <div className="absolute -bottom-7 left-4 w-14 h-14 rounded-full bg-primary border border-third/40 flex items-center justify-center shadow-md overflow-hidden">
-          {logo ? (
-            <Image src={logo} alt="logo" fill className="object-contain p-2" />
-          ) : (
-            <span className="text-xs font-bold text-secondary">LOGO</span>
-          )}
-        </div>
+    <div className="w-[360px] rounded-2xl overflow-hidden border border-third/40  shadow-lg mx-auto">
+      {/* ✅ Cover Image */}
+      <div className="relative h-[150px] w-full">
+        <Image
+          src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1"
+          alt="cover"
+          fill
+          className="object-cover"
+        />
       </div>
-      
-      <div className="bg-secondary/10  z-0 rounded-b-4xl h-188 w-full absolute bottom-16  border border-third/40 "></div>
 
-      <div className="relative pt-10 px-4 pb-4 text-primary flex flex-col h-[calc(100%-160px)]">
-        <h3 className="text-base font-semibold mb-1">{name}</h3>
-
-        <div className="flex items-center gap-1.5 text-xs text-third mb-1">
-          <MapPin className="w-3.5 h-3.5" />
-          <span>{location}</span>
+      {/* ✅ Profile Section */}
+      <div className="px-5 pb-5 pt-0 relative">
+        {/* ✅ Avatar (Only this overlaps image) */}
+        <div className="absolute -top-8 left-5">
+          <div className="w-16 h-16 rounded-full border-4 border-secondary overflow-hidden bg-primary">
+            <Image
+              src="https://i.pravatar.cc/150?img=32"
+              alt="profile"
+              width={64}
+              height={64}
+              className="object-cover"
+            />
+          </div>
         </div>
 
-        <div className="flex items-center gap-1.5 mb-3">
-          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-          <span className="text-xs font-medium">
-            {rating} • {reviews} Reviews
-          </span>
+        {/* ✅ Title Content (Now stays below image) */}
+        <div className="pl-20">
+          <h3 className="flex items-center gap-2 text-lg font-semibold text-primary">
+         Adarsh Consultants
+            {/* <BadgeCheck className="w-5 h-5 text-primary" /> */}
+          </h3>
+
+          <p className="text-sm text-third mt-1">Chhapi, Gujarat</p>
+          <p className="text-sm text-third">4.5 • Reviews</p>
         </div>
 
-        <div className="grid grid-cols-3 gap-3 text-xs border-y border-third/30 py-3 mb-3 text-center">
+        {/* ✅ Categories + Vehicles + Price Row (Same Line) */}
+        <div className="flex justify-between mt-4 text-center">
           <div>
-            <p className="text-third">Categories</p>
-            <p className="font-medium text-[11px]">
-              {vehicleTypes.length > 0
-                ? vehicleTypes.join(", ")
-                : "Not available"}
-            </p>
+            <p className="text-xs text-third">Categories</p>
+            <p className="text-sm font-semibold text-primary">Not available</p>
           </div>
 
           <div>
-            <p className="text-third ">Available Vehicles</p>
-            <p className="font-medium">{vehicleCount}</p>
+            <p className="text-xs text-third">Available Vehicles</p>
+            <p className="text-sm font-semibold text-primary">116</p>
           </div>
 
           <div>
-            <p className="text-third">Price</p>
-            <p className="font-medium text-[11px]">{priceRange}</p>
+            <p className="text-xs text-third">Price</p>
+            <p className="text-sm font-semibold text-primary">1L - 2L</p>
           </div>
         </div>
 
-        <div className="mb-3">
-          <p className="text-[11px] uppercase text-third mb-1">Services</p>
+        {/* ✅ Services Chips (3 Per Row) */}
+        <div className="mt-6 border-t border-third/30 pt-4">
+          <p className="text-sm font-semibold text-primary mb-3">Services</p>
 
-          <div className="flex flex-wrap gap-2">
-            {services.length > 0 ? (
-              services.slice(0, 4).map((service) => (
-                <span
-                  key={service}
-                  className="text-[10px] border border-third/40 px-2 py-1 rounded-full"
-                >
-                  {service.replaceAll("_", " ")}
-                </span>
-              ))
-            ) : (
-              <span className="text-[10px] text-third">No services listed</span>
-            )}
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              "Test Drive",
+              "Financing",
+              "Warranty",
+              "Exchange",
+              "Insurance",
+              "Support",
+            ].map((service, index) => (
+              <span
+                key={index}
+                className="
+            text-xs
+            px-3 py-1
+            rounded-full
+            border border-third/40
+            bg-primary/5
+            text-third
+            text-center
+            font-medium
+          "
+              >
+                {service}
+              </span>
+            ))}
           </div>
         </div>
 
-        <div className="mt-auto">
-          <Button href={`/store-front/${id}`} full size="sm" variant="outline">
-            View Consultant
+        {/* ✅ Buttons */}
+        <div className="flex justify-end  gap-3 mt-6">
+          <Button variant="outline" size="sm" >
+            View StoreFront
           </Button>
         </div>
       </div>
