@@ -128,7 +128,7 @@ const CategoriesSections = () => {
       <div className="container">
         <div className="flex items-start gap-4">
           {/* VERTICAL ACCENT LINE */}
-          <span className="w-2 h-[52px] rounded-full bg-gradient-to-b from-blue-500 to-white-400" />
+          <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
 
           {/* TEXT */}
           <div>
@@ -144,7 +144,7 @@ const CategoriesSections = () => {
         </div>
 
         <div className="w-full my-6">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 mt-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 mt-auto">
             {categories.map((cat) => {
               const isActive = active === cat.id;
 
@@ -159,7 +159,7 @@ const CategoriesSections = () => {
                       : "text-primary",
                   )}
                 >
-                  {cat.icon && <cat.icon size={16} />}
+                  {cat.icon && <cat.icon size={18} />}
                   {cat.label}
                 </button>
               );

@@ -19,11 +19,13 @@ import AutoConsultPicsSection from "../home/AutoConsultPicsSection";
 import AvxProcess from "./AvxProcess";
 import SpecialOffer from "./SpecialOffer";
 import Navbar from "@/components/layout/Navbar";
+import overview from "@/pages/consult/dashboard/overview";
 
 export default function VehicleDetails() {
   const specificationRef = useRef(null);
   const conditionRef = useRef(null);
   const inspectionRef = useRef(null);
+  const overviewRef = useRef(null);
   const [isConditionOpen, setIsConditionOpen] = useState(false);
   const [isInspectionOpen, setIsInspectionOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("specification");
@@ -51,14 +53,14 @@ export default function VehicleDetails() {
 
   return (
     <>
-      <div className="fixed top-0 inset-x-0 z-[1000]">
+      <div className="fixed top-0 inset-x-0 z-1000">
         <Navbar heroMode scrolled={true} />
       </div>
 
-      <main className="bg-secondary text-secondary w-full">
+      <main className=" text-secondary w-full">
         <div className="w-full py-6">
           {/* HEADER */}
-          <div className="sticky top-[64px] pb-4 z-40 bg-secondary">
+          <div className=" top-16 pb-4 z-40 ">
             <VehicleHeader />
           </div>
 
@@ -66,20 +68,34 @@ export default function VehicleDetails() {
             <div className="flex flex-col gap-6 min-w-0">
               <VehicleImageGallery />
 
-              <div className="bg-secondary">
+              <div className="">
                 <div className="flex gap-8 border-b border-third/40">
                   {[
-                    { id: "specification", label: "Specifications", ref: specificationRef },
+                    {
+                      id: "overview",
+                      label: "Overview",
+                      ref: overviewRef,
+                    },
+                    {
+                      id: "specification",
+                      label: "Specifications",
+                      ref: specificationRef,
+                    },
                     { id: "condition", label: "Condition", ref: conditionRef },
-                    { id: "inspection", label: "Inspection", ref: inspectionRef },
+                    {
+                      id: "inspection",
+                      label: "Inspection",
+                      ref: inspectionRef,
+                    },
                   ].map((tab) => (
                     <button
                       key={tab.id}
                       onClick={() => scrollToSection(tab.ref, tab.id)}
                       className={`relative pb-3 text-sm font-medium transition-colors cursor-pointer
-                        ${activeTab === tab.id
-                          ? "text-primary"
-                          : "text-third hover:text-primary"
+                        ${
+                          activeTab === tab.id
+                            ? "text-primary"
+                            : "text-third hover:text-primary"
                         }`}
                     >
                       {tab.label}
@@ -90,6 +106,10 @@ export default function VehicleDetails() {
                     </button>
                   ))}
                 </div>
+              </div>
+
+              <div ref={overviewRef}>
+                <VehicleOverview />
               </div>
 
               <div ref={specificationRef}>
@@ -104,9 +124,11 @@ export default function VehicleDetails() {
               </div>
 
               <div ref={inspectionRef}>
-                <VehicleSpec open={isInspectionOpen} setOpen={setIsInspectionOpen} />
+                <VehicleSpec
+                  open={isInspectionOpen}
+                  setOpen={setIsInspectionOpen}
+                />
               </div>
-
             </div>
 
             <aside className="flex flex-col gap-6 lg:sticky lg:top-[215px] h-fit">

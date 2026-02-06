@@ -29,27 +29,39 @@ export default function VehicleSpec({ open, setOpen }) {
     console.log(payload);
   };
   return (
-    <section className="relative rounded-2xl overflow-hidden bg-secondary/90 text-primary border border-third/60">
+    <section className="relative rounded-2xl overflow-hidden  text-primary border border-third/60">
       {/* <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover bg-center opacity-40 blur-lg z-0" /> */}
 
       <div className="relative z-10">
-
-        <div className="flex justify-between items-center px-6 py-3 text-primary cursor-pointer" onClick={() => setOpen((prev) => !prev)}>
+        <div
+          className="flex justify-between items-center px-6 py-3 text-primary cursor-pointer"
+          onClick={() => setOpen((prev) => !prev)}
+        >
           <h3 className="text-xl font-semibold">AVX Inspection Report</h3>
           <div className="text-xl">
-            <ChevronDown size={20} className={`transition-transform duration-300 ${open ? "rotate-180" : "rotate-0"
-              }`} />
+            <ChevronDown
+              size={20}
+              className={`transition-transform duration-300 ${
+                open ? "rotate-180" : "rotate-0"
+              }`}
+            />
           </div>
         </div>
-        <div className={`${open ? "block" : "hidden"} mt-3 space-y-8 transition-all duration-500 ease-in-out`}>
-
+        <div
+          className={`${open ? "block" : "hidden"} mt-3 space-y-8 transition-all duration-500 ease-in-out`}
+        >
           {/* ================= AVX INSPECTION REPORT ================= */}
           <div className="space-y-6 px-6 pb-6">
             {inspectionAvailable ? (
               <>
-                <p className="text-xs text-third font-normal mt-1">AVX Inspection Available Last verified on: 12 Jan 2025</p>
+                <p className="text-xs text-third font-normal mt-1">
+                  AVX Inspection Available Last verified on: 12 Jan 2025
+                </p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
-                  <FeatureGroup title="SAFETY" items={["Side airbags", "Airbags"]} />
+                  <FeatureGroup
+                    title="SAFETY"
+                    items={["Side airbags", "Airbags"]}
+                  />
 
                   <FeatureGroup
                     title="COMFORT & CONVENIENCE"
@@ -71,12 +83,18 @@ export default function VehicleSpec({ open, setOpen }) {
                 </div>
                 <div className="md:col-span-3 border-t border border-third/40" />
                 <div>
-                  <h3 className="text-xl font-semibold">AVX Inspection Avialable</h3>
+                  <h3 className="text-xl font-semibold">
+                    AVX Inspection Avialable
+                  </h3>
                 </div>
                 <div>
-                  <h3 className="text-lg font-normal">Want extra assurance before booking?</h3>
-                  <p className="text-sm text-primary font-normal mt-1">You can request a fresh inspection or a live video walkthrough
-                    for added confidence.</p>
+                  <h3 className="text-lg font-normal">
+                    Want extra assurance before booking?
+                  </h3>
+                  <p className="text-sm text-primary font-normal mt-1">
+                    You can request a fresh inspection or a live video
+                    walkthrough for added confidence.
+                  </p>
                 </div>
                 {/* Inspection Type */}
                 <div className="space-y-3">
@@ -88,9 +106,11 @@ export default function VehicleSpec({ open, setOpen }) {
                       className={`
         flex items-start gap-3 p-4 rounded-xl border cursor-pointer
         transition-all
-        ${inspectionType === "report"
-                          ? "border-primary bg-primary/5"
-                          : "border-third/40 hover:bg-secondary/80"}
+        ${
+          inspectionType === "report"
+            ? "border-primary bg-primary/5"
+            : "border-third/40 hover:bg-secondary/80"
+        }
       `}
                     >
                       <input
@@ -117,9 +137,11 @@ export default function VehicleSpec({ open, setOpen }) {
                       className={`
         flex items-start gap-3 p-4 rounded-xl border cursor-pointer
         transition-all
-        ${inspectionType === "video"
-                          ? "border-primary bg-primary/5"
-                          : "border-third/40 hover:bg-secondary/80"}
+        ${
+          inspectionType === "video"
+            ? "border-primary bg-primary/5"
+            : "border-third/40 hover:bg-secondary/80"
+        }
       `}
                     >
                       <input
@@ -136,7 +158,8 @@ export default function VehicleSpec({ open, setOpen }) {
                           Personalize Video Call + Inspection Report
                         </p>
                         <p className="text-xs text-third mt-0.5">
-                          Live video walkthrough with inspector + detailed digital report
+                          Live video walkthrough with inspector + detailed
+                          digital report
                         </p>
                         <p className="text-sm font-medium mt-1">₹1,999</p>
                       </div>
@@ -144,13 +167,19 @@ export default function VehicleSpec({ open, setOpen }) {
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
-                  <p className="text-sm text-primary font-normal mt-1">Recommended for high-value vehicles</p>
+                  <p className="text-sm text-primary font-normal mt-1">
+                    Recommended for high-value vehicles
+                  </p>
                   <div>
-                    <Button variant="outline" size="md" showIcon={false}
+                    <Button
+                      variant="outline"
+                      size="md"
+                      showIcon={false}
                       onClick={() => {
                         setShowModal(true);
                         setTimeout(() => setAnimateModal(true), 10);
-                      }}>
+                      }}
+                    >
                       Request New AVX Inspection
                     </Button>
                   </div>
@@ -158,7 +187,6 @@ export default function VehicleSpec({ open, setOpen }) {
               </>
             ) : (
               <div className="space-y-3">
-
                 {/* Status */}
                 <div className="flex items-center gap-2 text-sm">
                   <span className="px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400 font-medium">
@@ -175,7 +203,8 @@ export default function VehicleSpec({ open, setOpen }) {
                     Want deeper verification before deciding?
                   </p>
                   <p className="text-sm text-third mt-1">
-                    Request a fresh AVX inspection to get a complete picture of the vehicle’s condition.
+                    Request a fresh AVX inspection to get a complete picture of
+                    the vehicle’s condition.
                   </p>
                 </div>
 
@@ -192,7 +221,8 @@ export default function VehicleSpec({ open, setOpen }) {
                 {/* Turnaround */}
                 <div className="flex items-center justify-between text-sm">
                   <p className="font-medium text-primary">
-                    Inspection within <span className="font-semibold">24–48 hours</span>
+                    Inspection within{" "}
+                    <span className="font-semibold">24–48 hours</span>
                   </p>
                   <p className="text-third text-xs">
                     Fee adjusted if you purchase
@@ -214,9 +244,7 @@ export default function VehicleSpec({ open, setOpen }) {
                   </Button>
                 </div>
               </div>
-
             )}
-
           </div>
         </div>
       </div>
@@ -240,13 +268,15 @@ export default function VehicleSpec({ open, setOpen }) {
     bg-secondary overflow-hidden text-primary
     border border-third/50 shadow-2xl
     transition-all duration-300 ease-out max-h-[60%]
-    ${animateModal
-                ? "opacity-100 scale-100 translate-y-0"
-                : "opacity-0 scale-95 translate-y-4"}
+    ${
+      animateModal
+        ? "opacity-100 scale-100 translate-y-0"
+        : "opacity-0 scale-95 translate-y-4"
+    }
   `}
           >
             <div
-              className="absolute right-3 top-3 cursor-pointer bg-secondary w-[40px] h-[40px] rounded-full flex items-center justify-center"
+              className="absolute right-3 top-3 cursor-pointer bg-secondary w-10 h-10 rounded-full flex items-center justify-center"
               onClick={closeModal}
             >
               <X size={20} />
@@ -285,9 +315,11 @@ export default function VehicleSpec({ open, setOpen }) {
                     className={`
         flex items-start gap-3 p-4 rounded-xl border cursor-pointer
         transition-all
-        ${inspectionType === "report"
-                        ? "border-primary bg-primary/5"
-                        : "border-third/40 hover:bg-secondary/80"}
+        ${
+          inspectionType === "report"
+            ? "border-primary bg-primary/5"
+            : "border-third/40 hover:bg-secondary/80"
+        }
       `}
                   >
                     <input
@@ -314,9 +346,11 @@ export default function VehicleSpec({ open, setOpen }) {
                     className={`
         flex items-start gap-3 p-4 rounded-xl border cursor-pointer
         transition-all
-        ${inspectionType === "video"
-                        ? "border-primary bg-primary/5"
-                        : "border-third/40 hover:bg-secondary/80"}
+        ${
+          inspectionType === "video"
+            ? "border-primary bg-primary/5"
+            : "border-third/40 hover:bg-secondary/80"
+        }
       `}
                   >
                     <input
@@ -333,7 +367,8 @@ export default function VehicleSpec({ open, setOpen }) {
                         Personalize Video Call + Inspection Report
                       </p>
                       <p className="text-xs text-third mt-0.5">
-                        Live video walkthrough with inspector + detailed digital report
+                        Live video walkthrough with inspector + detailed digital
+                        report
                       </p>
                       <p className="text-sm font-medium mt-1">₹1,999</p>
                     </div>
@@ -415,20 +450,30 @@ export default function VehicleSpec({ open, setOpen }) {
 
                   {/* Helper text */}
                   <p className="text-xs text-third leading-relaxed">
-                    Our inspector will confirm the exact slot based on availability.
+                    Our inspector will confirm the exact slot based on
+                    availability.
                   </p>
                 </div>
               )}
 
               {/* Actions */}
               <div className="flex justify-end gap-3">
-                <Button variant="outline" size="md" onClick={handleConfirm} showIcon={false}>
+                <Button
+                  variant="outline"
+                  size="md"
+                  onClick={handleConfirm}
+                  showIcon={false}
+                >
                   Confirm & Proceed
                 </Button>
               </div>
             </div>
             <div className="md:w-[50%]">
-              <img src="/bg.jpg" alt="avx-payment" className="w-full h-full object-cover" />
+              <img
+                src="/bg.jpg"
+                alt="avx-payment"
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
         </div>

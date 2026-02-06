@@ -5,7 +5,7 @@ import { CheckCircle, Wrench, Settings, Disc, ChevronDown } from "lucide-react";
 
 export default function VehicleCondition({ open, setOpen }) {
   return (
-    <section className="relative rounded-2xl overflow-hidden bg-secondary/90 text-primary border border-third/60">
+    <section className="relative rounded-2xl overflow-hidden  text-primary border border-third/60">
       {/* 🔥 Blur background */}
       {/* <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover bg-center opacity-40 blur-lg z-0" /> */}
 
