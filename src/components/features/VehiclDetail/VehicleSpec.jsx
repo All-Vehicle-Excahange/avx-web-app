@@ -3,6 +3,7 @@ import { useState } from "react";
 import FeatureGroup from "@/components/ui/FeatureGroup";
 import { Calendar, ChevronDown, Clock, X } from "lucide-react";
 import Button from "@/components/ui/button";
+import Image from "next/image";
 
 export default function VehicleSpec({ open, setOpen }) {
   const [showModal, setShowModal] = useState(false);
@@ -469,7 +470,7 @@ export default function VehicleSpec({ open, setOpen }) {
               </div>
             </div>
             <div className="md:w-[50%]">
-              <img
+              <Image
                 src="/bg.jpg"
                 alt="avx-payment"
                 className="w-full h-full object-cover"

@@ -20,6 +20,7 @@ import AvxProcess from "./AvxProcess";
 import SpecialOffer from "./SpecialOffer";
 import Navbar from "@/components/layout/Navbar";
 import overview from "@/pages/consult/dashboard/overview";
+import VehicleOverviewMain from "./VehicleOverviewMain";
 
 export default function VehicleDetails() {
   const specificationRef = useRef(null);
@@ -27,14 +28,15 @@ export default function VehicleDetails() {
   const inspectionRef = useRef(null);
   const overviewRef = useRef(null);
   const [isConditionOpen, setIsConditionOpen] = useState(false);
+  const [isSpecOpen, setIsSpecOpen] = useState(false);
   const [isInspectionOpen, setIsInspectionOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("specification");
+  const [activeTab, setActiveTab] = useState("overview");
 
   const NAVBAR_OFFSET = 210;
 
   const scrollToSection = (ref, tab) => {
     setActiveTab(tab);
-    if (tab === "condition") {
+    if (tab === "overview") {
       setIsConditionOpen(true);
     }
     if (tab === "inspection") {
@@ -109,11 +111,11 @@ export default function VehicleDetails() {
               </div>
 
               <div ref={overviewRef}>
-                <VehicleOverview />
+                <VehicleOverviewMain />
               </div>
 
               <div ref={specificationRef}>
-                <VehicleOverview />
+                <VehicleOverview open={isSpecOpen} setOpen={setIsSpecOpen} />
               </div>
 
               <div ref={conditionRef}>
@@ -138,12 +140,10 @@ export default function VehicleDetails() {
             </aside>
           </section>
 
-          <section className="py-12 flex flex-col gap-12">
+          <section className="pt-12 flex flex-col gap-12">
             <SimulerVehicle />
             <AutoConsultPicsSection limit={4} />
           </section>
-
-          <AvxProcess />
         </div>
       </main>
     </>

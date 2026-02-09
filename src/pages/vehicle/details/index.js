@@ -1,4 +1,5 @@
 import DownloadAppSection from "@/components/features/home/DownloadAppSection";
+import AvxProcess from "@/components/features/VehiclDetail/AvxProcess";
 import VehiclDetail from "@/components/features/VehiclDetail/VehiclDetail";
 import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
@@ -10,6 +11,8 @@ function index() {
       <Layout>
         <VehiclDetail />
       </Layout>
+
+      <AvxProcess fullWidth />
       <DownloadAppSection fullWidth />
       <Footer fullWidth />
     </>
