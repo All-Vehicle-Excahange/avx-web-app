@@ -292,3 +292,46 @@ html {
 .scroll-indicator {
   animation: scrollIndicatorBounce 2s ease-in-out infinite;
 }
+
+.dual-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  background: transparent; /* Changed from gray to transparent */
+  outline: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* ENABLE DRAG */
+.dual-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #3b82f6; /* Use your primary hex or var(--primary) */
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 20;
+  position: relative;
+}
+
+.dual-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #3b82f6;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.cursive-text {
+  font-family: cursive;
+}

@@ -64,12 +64,12 @@ const ShowcaseSection = () => {
       <div className="flex justify-between items-end mb-6">
         <div className="flex items-start gap-4">
           {/* VERTICAL ACCENT LINE */}
-          <span className="w-2 h-[52px] rounded-full bg-gradient-to-b from-blue-500 to-white-400" />
+          <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
 
           {/* TEXT */}
           <div>
             <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
-              Top picks Vehicle for you
+              Contiue Where you Left Off
             </h2>
 
             <p className="text-third mt-1">

@@ -10,6 +10,7 @@ import PromoCardRow from "./PromoCardRow";
 import Chip from "@/components/ui/chip";
 import { ChevronLeft, ChevronRight, FilterIcon } from "lucide-react";
 import SponsoredCars from "./SponsoredCars";
+import FilterSection from "./FilterSection";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
@@ -33,12 +34,19 @@ export default function SearchWithCard() {
   const [activeFilterTab, setActiveFilterTab] = useState("Suggested Filters");
   const [selectedMobileChips, setSelectedMobileChips] = useState([]);
   const [avxAssumed, setAvxAssumed] = useState(true);
+  const [minPrice, setMinPrice] = useState(100000);
+  const [maxPrice, setMaxPrice] = useState(1000000);
+  const [kmDistance, setKmDistance] = useState(0);
+
+  const MIN = 50000;
+  const MAX = 2000000;
+  const MAX_KM = 200000;
 
   const isMobile = useIsMobile();
 
   const toggleMobileChip = (chip) => {
     setSelectedMobileChips((prev) =>
-      prev.includes(chip) ? prev.filter((c) => c !== chip) : [...prev, chip]
+      prev.includes(chip) ? prev.filter((c) => c !== chip) : [...prev, chip],
     );
   };
 
@@ -122,6 +130,11 @@ export default function SearchWithCard() {
     { value: "convertible", label: "Convertible" },
   ];
 
+  const ratings = [
+    { value: "4.5", label: "⭐ 4.5+ Rating" },
+    { value: "4.0", label: "⭐ 4.0+ Rating" },
+  ];
+
   const mobileFilterMap = {
     "Suggested Filters": [
       "⭐ 4 & Up",
@@ -150,10 +163,25 @@ export default function SearchWithCard() {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col lg:flex-row bg-secondary text-secondary mt-[100px]">
-     
+    <div className="w-full min-h-screen flex flex-col lg:flex-row  text-secondary mt-[60px]">
       {/* ================= DESKTOP SIDEBAR ================= */}
-      <aside className="hidden lg:flex relative w-[340px] bg-secondary/90 border border-third/40 p-4 flex-col gap-6 overflow-y-auto shrink-0 rounded-xl h-fit">
+      <aside
+        className="
+    hidden lg:flex
+    w-[340px]
+    border border-third/40
+    p-4
+    flex-col
+    gap-6
+    shrink-0
+    rounded-xl
+    h-fit
+
+    sticky
+    top-[84px]
+    self-start
+  "
+      >
         {/* <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover opacity-40 blur-lg z-0" /> */}
         <div className="relative z-10">
           <h2 className="text-xl font-bold text-primary mb-4">
@@ -165,37 +193,137 @@ export default function SearchWithCard() {
 
             <div className="hidden lg:flex items-center justify-between px-4 py-3 rounded-xl border border-white/20 backdrop-blur-md bg-transparent">
               <span className="text-primary font-semibold text-sm">
-                AVX Assumed
+                AVX Inspected
               </span>
 
               <button
                 onClick={() => setAvxAssumed(!avxAssumed)}
-                className={`relative w-12 h-6 rounded-full transition cursor-pointer ${avxAssumed ? "bg-primary/90" : "bg-white/20"
-                  }`}
+                className={`relative w-12 h-6 rounded-full transition cursor-pointer ${
+                  avxAssumed ? "bg-primary/90" : "bg-white/20"
+                }`}
               >
                 <span
-                  className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-secondary transition-transform ${avxAssumed ? "translate-x-6" : "translate-x-0"
-                    }`}
+                  className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-secondary transition-transform ${
+                    avxAssumed ? "translate-x-6" : "translate-x-0"
+                  }`}
                 />
               </button>
             </div>
 
-            <ChipGroup title="Brand" items={brands} showMore searchable />
-            <ChipGroup title="Model" items={models} showMore searchable />
-            <ChipGroup title="Fuel Type" items={fuelTypes} />
-            <ChipGroup title="Transmission" items={transmissionTypes} />
-            <ChipGroup title="Variant" items={variants} />
-            <ChipGroup title="Vehicle Type" items={vehicleTypes} />
+            <FilterSection title="Brand">
+              <ChipGroup title={""} items={brands} showMore searchable />
+            </FilterSection>
 
-            <Button className="mt-4" variant="outline" showIcon={false}>
-              Apply filter
-            </Button>
+            <FilterSection title="Budget" defaultOpen={true}>
+              <div className="flex flex-col gap-2 mt-3">
+                <div className="flex justify-between text-xs text-primary/70 mb-1">
+                  <span>Min Price</span>
+                  <span>Max Price</span>
+                </div>
+
+                <div className="relative h-6 flex items-center">
+                  <div className="absolute w-full h-1.5 bg-gray-200 rounded-full"></div>
+
+                  <input
+                    type="range"
+                    min={MIN}
+                    max={MAX}
+                    step={50000}
+                    value={minPrice}
+                    onChange={(e) =>
+                      setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
+                    }
+                    className="dual-range z-30"
+                  />
+
+                  <input
+                    type="range"
+                    min={MIN}
+                    max={MAX}
+                    step={50000}
+                    value={maxPrice}
+                    onChange={(e) =>
+                      setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
+                    }
+                    className="dual-range z-40"
+                  />
+                </div>
+
+                <div className="flex justify-between text-xs text-primary/70 mb-1">
+                  <span>₹{minPrice}</span>
+                  <span>₹{maxPrice}</span>
+                </div>
+              </div>
+            </FilterSection>
+
+            <FilterSection title=" KM Driven" defaultOpen={true}>
+              <div className="flex flex-col gap-2 mt-3">
+                <div className="relative h-6 flex items-center">
+                  {/* Gray Background Track */}
+                  <div className="absolute w-full h-1.5 bg-gray-200 rounded-full"></div>
+
+                  <input
+                    type="range"
+                    min={0}
+                    max={MAX_KM}
+                    step={5000}
+                    value={kmDistance}
+                    onChange={(e) => setKmDistance(Number(e.target.value))}
+                    className="dual-range z-30"
+                  />
+                </div>
+
+                <div className="flex justify-between text-xs text-primary/70 mb-1">
+                  <span>
+                    <strong className="text-primary/60">{kmDistance} km</strong>
+                  </span>
+                </div>
+              </div>
+            </FilterSection>
+
+            <FilterSection title="Model">
+              <ChipGroup title="" items={models} showMore searchable />
+            </FilterSection>
+
+            <FilterSection title="Fuel Type">
+              <ChipGroup title="" items={fuelTypes} />
+            </FilterSection>
+
+            <FilterSection title="Transmission">
+              <ChipGroup title="" items={transmissionTypes} />
+            </FilterSection>
+
+            <FilterSection title="Variant">
+              <ChipGroup title="" items={variants} />
+            </FilterSection>
+
+            <FilterSection title="Rating">
+              <ChipGroup title="" items={ratings} />
+            </FilterSection>
+
+            <FilterSection title="Vehicle Type">
+              <ChipGroup title="" items={vehicleTypes} />
+            </FilterSection>
+
+            <div className="mt-4 flex items-center justify-between gap-3">
+              <Button variant="outline" showIcon={false} className="flex-1">
+                Apply filter
+              </Button>
+
+              <Button
+                variant="ghost"
+                showIcon={false}
+                className="text-primary/70 hover:text-primary rounded-3xl"
+              >
+                Clear filters
+              </Button>
+            </div>
           </div>
         </div>
       </aside>
 
       {/* ================= MAIN CONTENT ================= */}
-      <main className="flex-1 bg-secondary">
+      <main className="flex-1 ">
         <div className="w-full grid grid-cols-1 md:grid-cols-2  lg:grid-cols-2 xl:grid-cols-3  gap-4 sm:gap-5 auto-rows-max sm:px-5 md:px-0  lg:px-6 py-4 sm:py-5 lg:py-0">
           <div className="col-span-full">
             <PromoCardRow />
@@ -220,12 +348,14 @@ export default function SearchWithCard() {
                 </span>
                 <button
                   onClick={() => setAvxAssumed(!avxAssumed)}
-                  className={`relative w-9 h-5 rounded-full ${avxAssumed ? "bg-primary" : "bg-white/20"
-                    }`}
+                  className={`relative w-9 h-5 rounded-full ${
+                    avxAssumed ? "bg-primary" : "bg-white/20"
+                  }`}
                 >
                   <span
-                    className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-secondary transition-transform ${avxAssumed ? "translate-x-4" : ""
-                      }`}
+                    className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-secondary transition-transform ${
+                      avxAssumed ? "translate-x-4" : ""
+                    }`}
                   />
                 </button>
               </div>
@@ -245,92 +375,98 @@ export default function SearchWithCard() {
             <SponsoredCars />
           </div>
           <div className="col-span-full">
-            <h2 className="text-2xl md:text-3xl font-bold text-primary">Top Maruti Fronx Near You</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary">
+              Top Maruti Fronx Near You
+            </h2>
           </div>
           {Array.from({ length: 9 }).map((_, i) => (
             <VehicleCard key={i} data={cardData} />
           ))}
+
           <div className="col-span-full">
             <div className="mt-4">
-              <ul className="flex flex-wrap items-center justify-end">
-                {/* PREVIOUS */}
-                <li>
+              <div className="flex items-center justify-between w-full">
+                {/* LEFT – PREVIOUS */}
+                <div>
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
-                    className="grid place-content-center cursor-pointer mr-2 text-white hover:text-black rounded-full w-8 h-8 sm:w-10 sm:h-10 border-[1.5px] border-white transition-colors hover:bg-primary hover:border-primary disabled:cursor-not-allowed disabled:text-gray-500 disabled:border-gray-500 disabled:hover:bg-transparent"
+                    className="grid place-content-center cursor-pointer text-white hover:text-black rounded-full w-8 h-8 sm:w-10 sm:h-10 border-[1.5px] border-white transition-colors hover:bg-primary hover:border-primary disabled:cursor-not-allowed disabled:text-gray-500 disabled:border-gray-500 disabled:hover:bg-transparent"
                     disabled={currentPage === 1}
                     aria-label="Previous page"
                   >
                     <ChevronLeft size={18} />
                   </button>
-                </li>
+                </div>
 
-                {/* FIRST PAGE */}
-                {currentPage > 3 && (
-                  <li
-                    className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-white text-sm sm:text-lg font-medium cursor-pointer hover:bg-primary hover:text-black"
-                    onClick={() => handlePageChange(1)}
-                  >
-                    1
-                  </li>
-                )}
-
-                {/* DOTS */}
-                {currentPage > 4 && (
-                  <li className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-white mx-1">
-                    ...
-                  </li>
-                )}
-
-                {/* MIDDLE PAGES */}
-                {[currentPage - 2, currentPage - 1, currentPage, currentPage + 1, currentPage + 2]
-                  .filter((page) => page > 0 && page <= totalPages)
-                  .map((page) => (
+                {/* CENTER – PAGE NUMBERS */}
+                <ul className="flex items-center">
+                  {/* FIRST PAGE */}
+                  {currentPage > 3 && (
                     <li
-                      key={page}
-                      onClick={() => handlePageChange(page)}
-                      className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-sm sm:text-lg font-medium cursor-pointer transition-all
-              ${currentPage === page
-                          ? "bg-primary text-black"
-                          : "text-white hover:bg-primary hover:text-black"
-                        }`}
+                      className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-white text-sm sm:text-lg font-medium cursor-pointer hover:bg-primary hover:text-black"
+                      onClick={() => handlePageChange(1)}
                     >
-                      {page}
+                      1
                     </li>
-                  ))}
+                  )}
 
-                {/* DOTS */}
-                {currentPage < totalPages - 3 && (
-                  <li className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-white mx-1">
-                    ...
-                  </li>
-                )}
+                  {/* DOTS */}
+                  {currentPage > 4 && <li className="mx-1 text-white">…</li>}
 
-                {/* LAST PAGE */}
-                {currentPage < totalPages - 2 && (
-                  <li
-                    className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-white text-sm sm:text-lg font-medium cursor-pointer hover:bg-primary hover:text-black"
-                    onClick={() => handlePageChange(totalPages)}
-                  >
-                    {totalPages}
-                  </li>
-                )}
+                  {/* MIDDLE PAGES */}
+                  {[
+                    currentPage - 2,
+                    currentPage - 1,
+                    currentPage,
+                    currentPage + 1,
+                    currentPage + 2,
+                  ]
+                    .filter((page) => page > 0 && page <= totalPages)
+                    .map((page) => (
+                      <li
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-sm sm:text-lg font-medium cursor-pointer transition-all
+                ${
+                  currentPage === page
+                    ? "bg-primary text-black"
+                    : "text-white hover:bg-primary hover:text-black"
+                }`}
+                      >
+                        {page}
+                      </li>
+                    ))}
 
-                {/* NEXT */}
-                <li>
+                  {/* DOTS */}
+                  {currentPage < totalPages - 3 && (
+                    <li className="mx-1 text-white">…</li>
+                  )}
+
+                  {/* LAST PAGE */}
+                  {currentPage < totalPages - 2 && (
+                    <li
+                      className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-white text-sm sm:text-lg font-medium cursor-pointer hover:bg-primary hover:text-black"
+                      onClick={() => handlePageChange(totalPages)}
+                    >
+                      {totalPages}
+                    </li>
+                  )}
+                </ul>
+
+                {/* RIGHT – NEXT */}
+                <div>
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
-                    className="grid place-content-center cursor-pointer text-white ml-2 hover:text-black rounded-full w-8 h-8 sm:w-10 sm:h-10 border-[1.5px] border-white hover:border-primary transition-colors hover:bg-primary disabled:cursor-not-allowed disabled:text-gray-500 disabled:border-gray-500 disabled:hover:bg-transparent"
+                    className="grid place-content-center cursor-pointer text-white hover:text-black rounded-full w-8 h-8 sm:w-10 sm:h-10 border-[1.5px] border-white hover:border-primary transition-colors hover:bg-primary disabled:cursor-not-allowed disabled:text-gray-500 disabled:border-gray-500 disabled:hover:bg-transparent"
                     disabled={currentPage === totalPages}
                     aria-label="Next page"
                   >
                     <ChevronRight size={18} />
                   </button>
-                </li>
-              </ul>
+                </div>
+              </div>
             </div>
           </div>
-
         </div>
       </main>
 
@@ -357,10 +493,11 @@ export default function SearchWithCard() {
                 <div
                   key={item}
                   onClick={() => setActiveFilterTab(item)}
-                  className={`px-4 py-3 cursor-pointer text-sm ${activeFilterTab === item
-                    ? "bg-secondary/10 font-semibold"
-                    : "hover:bg-secondary/5"
-                    }`}
+                  className={`px-4 py-3 cursor-pointer text-sm ${
+                    activeFilterTab === item
+                      ? "bg-secondary/10 font-semibold"
+                      : "hover:bg-secondary/5"
+                  }`}
                 >
                   {item}
                 </div>

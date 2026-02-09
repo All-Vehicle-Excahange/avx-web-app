@@ -8,7 +8,7 @@ export default function VehicleSummaryRight({ vehicle }) {
   const [isFavorite, setIsFavorite] = useState(false);
 
   return (
-    <aside className="relative bg-secondary/90 text-primary rounded-2xl shadow-xl overflow-hidden border border-third/60">
+    <aside className="relative  text-primary rounded-2xl shadow-xl overflow-hidden border border-third/60">
 
       <div className="relative z-10 p-6 space-y-5">
         {/* HEADER */}

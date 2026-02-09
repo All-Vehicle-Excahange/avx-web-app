@@ -1,44 +1,49 @@
 "use client";
 
-import { useRef } from "react";
-import PromoCard from "@/components/ui/const/PromoCard";
+import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
 
-export default function PromoCardRow() {
-  const scrollRef = useRef(null);
+import "swiper/css";
 
+export default function PromoBanner() {
   return (
-    <div className="relative w-full">
-      {/* SCROLL AREA */}
-      <div
-        ref={scrollRef}
-        className="
-          flex gap-3 sm:gap-6
-          items-center
-          overflow-x-auto
-          snap-x snap-mandatory
-          scrollbar-hide
-
-          justify-between
-          lg:justify-between
-        "
+    <div className="w-full h-60 sm:h-[280px] rounded-xl overflow-hidden relative">
+      <Swiper
+        modules={[Autoplay]}
+        autoplay={{ delay: 3000, disableOnInteraction: false }}
+        loop
+        className="w-full h-full"
       >
-        <PromoCard
-          image="/promo_bg.png"
-          title="Best Cars Available At AVX"
-          description="Premium & verified listings"
-        />
+        <SwiperSlide>
+          <BannerImage src="/banner_Basic.jpeg" />
+        </SwiperSlide>
 
-        <PromoCard
-          image="/promo_bg.png"
-          title="Luxury Cars Starting Today"
-          description="Drive your dream ride"
-        />
+        <SwiperSlide>
+          <BannerImage src="/about2.png" />
+        </SwiperSlide>
 
-        <PromoCard
-          image="/promo_bg.png"
-          title="Top Deals On Used Cars"
-          description="Limited time offers"
-        />
+        <SwiperSlide>
+          <BannerImage src="/about3.png" />
+        </SwiperSlide>
+      </Swiper>
+    </div>
+  );
+}
+
+/* Banner Content */
+function BannerImage({ src, title, desc }) {
+  return (
+    <div className="relative w-full h-full">
+      <Image src={src} alt={title} fill className="object-cover" priority />
+
+    
+      <div className="absolute inset-0 bg-black/20" />
+
+      {/* Text */}
+      <div className="absolute inset-0 p-4 flex flex-col justify-end text-white">
+        <h3 className="text-base sm:text-lg font-semibold">{title}</h3>
+        <p className="text-xs sm:text-sm text-white/80">{desc}</p>
       </div>
     </div>
   );
