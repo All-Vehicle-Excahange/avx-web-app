@@ -14,7 +14,7 @@ export default function StoreSummaryAside() {
   ];
 
   return (
-    <aside className="hidden lg:flex h-fit relative w-[340px] bg-secondary/90 border border-third/40 p-6 flex-col gap-6 overflow-y-auto shrink-0 rounded-2xl">
+    <aside className="hidden lg:flex h-fit relative w-[340px]  border border-third/40 p-6 flex-col gap-6 overflow-y-auto shrink-0 rounded-2xl">
       {/* 🔥 Blurred background */}
       <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover opacity-40 blur-lg z-0" />
 

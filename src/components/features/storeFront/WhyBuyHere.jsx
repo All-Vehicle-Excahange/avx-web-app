@@ -1,14 +1,10 @@
 import Image from "next/image";
 
 export default function WhyBuyHere() {
-  const images = [
-    "/about2.png",
-    "/whowe.png",
-    "/about4.png",
-  ];
+  const images = ["/about2.png", "/whowe.png", "/about4.png"];
 
   return (
-    <section className="rounded-2xl container  bg-secondary p-6 space-y-8">
+    <section className="rounded-2xl container   p-6 space-y-8">
       {images.map((src, index) => (
         <div key={index} className="relative w-full overflow-hidden rounded-xl">
           <Image

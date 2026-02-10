@@ -2,7 +2,7 @@ import Image from "next/image";
 import Button from "@/components/ui/button";
 import { BadgeCheck } from "lucide-react";
 
-export default function ConsultantCard() {
+export default function ConsultantCard({ data, id }) {
   return (
     <div className="w-[360px] rounded-2xl overflow-hidden border border-third/40  shadow-lg mx-auto">
       {/* ✅ Cover Image */}
@@ -33,7 +33,7 @@ export default function ConsultantCard() {
         {/* ✅ Title Content (Now stays below image) */}
         <div className="pl-20">
           <h3 className="flex items-center gap-2 text-lg font-semibold text-primary">
-         Adarsh Consultants
+            Adarsh Consultants
             {/* <BadgeCheck className="w-5 h-5 text-primary" /> */}
           </h3>
 
@@ -93,7 +93,7 @@ export default function ConsultantCard() {
 
         {/* ✅ Buttons */}
         <div className="flex justify-end  gap-3 mt-6">
-          <Button variant="outline" size="sm" >
+          <Button href={`/store-front/${id}`} variant="outline" size="sm">
             View StoreFront
           </Button>
         </div>

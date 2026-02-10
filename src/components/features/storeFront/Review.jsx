@@ -6,7 +6,7 @@ import {
   checkIsEligibleToCreateReview,
   getAllReview,
 } from "@/services/user.service";
-import { Star, Camera, Info, Lock } from "lucide-react";
+import { Star, Camera, Info, Lock, Plus } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -112,7 +112,7 @@ export default function Review() {
   };
 
   return (
-    <section className="container bg-secondary text-primary py-10">
+    <section className="container  text-primary py-10">
       <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_2.1fr] gap-10">
         {/* ================= LEFT ================= */}
         <div className="space-y-6 sticky top-24 h-fit">
@@ -213,7 +213,7 @@ export default function Review() {
               placeholder="What should other customers know?"
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
-              className="w-full min-h-[120px] bg-secondary border border-third/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary"
+              className="w-full min-h-[120px]  border border-third/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary"
             />
 
             {/* 🏷️ TITLE */}
@@ -221,7 +221,7 @@ export default function Review() {
               placeholder="What's most important to know?"
               value={reviewTitle}
               onChange={(e) => setReviewTitle(e.target.value)}
-              className="w-full mt-3 bg-secondary border border-third/40 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-primary"
+              className="w-full mt-3  border border-third/40 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-primary"
             />
 
             {/* 📷 MULTI IMAGE INPUTS (OLD DESIGN STYLE) */}
@@ -261,12 +261,12 @@ export default function Review() {
                 onClick={addMoreImageInput}
                 className="text-sm text-primary font-medium"
               >
-                + Add another image
+                <Plus className="w-4 mr-1 h-4" /> Add Media
               </Button>
             </div>
 
             {!isEligibleToCreateReview && (
-              <div className="mt-4 flex gap-3 rounded-xl border border-third/40 bg-primary/5 px-4 py-3">
+              <div className="mt-4 flex gap-3 rounded-xl border border-third/40  px-4 py-3">
                 <Info size={16} className="text-primary mt-2px" />
 
                 <p className="text-xs leading-relaxed text-third">

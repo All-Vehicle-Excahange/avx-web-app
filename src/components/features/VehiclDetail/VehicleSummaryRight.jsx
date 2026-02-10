@@ -1,7 +1,16 @@
 "use client";
 
 import Button from "@/components/ui/button";
-import { Heart, Star, MapPin, Gauge, Fuel, Settings, Car } from "lucide-react";
+import {
+  Heart,
+  Star,
+  MapPin,
+  Gauge,
+  Fuel,
+  Settings,
+  Car,
+  CheckCircle,
+} from "lucide-react";
 import { useState } from "react";
 
 export default function VehicleSummaryRight({ vehicle }) {
@@ -9,7 +18,6 @@ export default function VehicleSummaryRight({ vehicle }) {
 
   return (
     <aside className="relative  text-primary rounded-2xl shadow-xl overflow-hidden border border-third/60">
-
       <div className="relative z-10 p-6 space-y-5">
         {/* HEADER */}
         <div className="flex items-start justify-between">
@@ -22,27 +30,15 @@ export default function VehicleSummaryRight({ vehicle }) {
               {vehicle?.makerName || "Tata"}{" "}
               {vehicle?.modelName || "Harrier XZ Plus"}
             </h2>
-
-            <div className="flex flex-wrap items-center gap-4 text-sm text-third mt-3">
-              <span className="flex items-center gap-1">
-                <Gauge size={14} /> {vehicle?.kmsDriven || "25K"} km
-              </span>
-              <span className="flex items-center gap-1">
-                <Fuel size={14} /> {vehicle?.fuelType || "Diesel"}
-              </span>
-              <span className="flex items-center gap-1">
-                <Settings size={14} /> {vehicle?.transmission || "Manual"}
-              </span>
-            </div>
           </div>
 
           <button
             onClick={() => setIsFavorite(!isFavorite)}
-            className="bg-primary text-secondary p-2 rounded-full hover:scale-105 transition cursor-pointer"
+            className=" text-primary p-2 rounded-full hover:scale-105 transition cursor-pointer border"
           >
             <Heart
               className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${
-                isFavorite ? "fill-red-500 text-red-500" : "text-secondary"
+                isFavorite ? "fill-red-500 text-red-500" : "text-primary"
               }`}
             />
           </button>
@@ -54,7 +50,7 @@ export default function VehicleSummaryRight({ vehicle }) {
         <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
           {/* LEFT CONTENT */}
           <div className="space-y-2">
-            <h3 className="text-lg font-semibold">
+            <h3 className="text-md font-semibold">
               {vehicle?.dealerName || "Adarsh Auto Consultants"}
             </h3>
 
@@ -69,9 +65,33 @@ export default function VehicleSummaryRight({ vehicle }) {
               AVX Park, Ahmedabad
             </p>
 
-            <p className="text-sm text-third">
-              Home Test Drive: <span className="text-primary"> Available</span>
-            </p>
+            <div className="space-y-2 mt-4">
+              <p className="text-sm font-medium text-primary">
+                What’s Included
+              </p>
+
+              <ul className="text-sm text-third">
+                <li className="flex items-center gap-2">
+                  <CheckCircle size={14} className="text-green-500" />
+                  Price Negotiable
+                </li>
+
+                <li className="flex items-center gap-2">
+                  <CheckCircle size={14} className="text-green-500" />
+                  Loan Assistance
+                </li>
+
+                <li className="flex items-center gap-2">
+                  <CheckCircle size={14} className="text-green-500" />
+                  Exchange Accepted
+                </li>
+
+                <li className="flex items-center gap-2">
+                  <CheckCircle size={14} className="text-green-500" />
+                  Test Drive Available
+                </li>
+              </ul>
+            </div>
           </div>
 
           {/* RIGHT BUTTON */}
@@ -102,7 +122,12 @@ export default function VehicleSummaryRight({ vehicle }) {
 
         {/* ACTION BUTTONS */}
         <div className="grid grid-cols-2 gap-3 pt-2">
-          <Button variant="ghost" size="md" showIcon={false} className="rounded-full">
+          <Button
+            variant="ghost"
+            size="md"
+            showIcon={false}
+            className="rounded-full"
+          >
             Book NOW
           </Button>
 
