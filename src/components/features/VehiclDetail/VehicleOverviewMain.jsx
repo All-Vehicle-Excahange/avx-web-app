@@ -17,8 +17,10 @@ import {
   ShieldCheck,
   CheckCircle,
   AlertCircle,
+  Info,
 } from "lucide-react";
 import { FileDoc, CarProfile } from "@phosphor-icons/react";
+import Image from "next/image";
 export default function VehicleOverview({ vehicle }) {
   return (
     <section className="relative rounded-2xl overflow-hidden  text-primary border border-third/60">
@@ -38,28 +40,46 @@ export default function VehicleOverview({ vehicle }) {
             value={vehicle?.regYear || "Mar 2018"}
           />
 
-          <Item
-            icon={<BadgeCheck />}
-            label="Reg number"
-            value={vehicle?.regNumber || "GJ08BH6585"}
-          />
+          <div className="relative group">
+            {/* KM Driven Item */}
+            <Item
+              icon={<Gauge />}
+              label="KM driven"
+              value={`${vehicle?.kmsDriven || "25,125"} km`}
+            />
+
+            {/* Info Icon */}
+            <div className="absolute top-1 right-44 text-muted-foreground hover:text-primary cursor-pointer">
+              <Info size={12} />
+            </div>
+
+            {/* Hover Image Preview */}
+            <div className="absolute right-0 top-8 z-50 hidden group-hover:block">
+              <div className="rounded-lg border bg-background shadow-lg p-2 w-40">
+                <div className="relative w-full h-24">
+                  <Image
+                    src="https://images.pexels.com/photos/6730469/pexels-photo-6730469.jpeg"
+                    alt="Odometer preview"
+                    fill
+                    className="rounded-md object-cover"
+                  />
+                </div>
+
+                <p className="mt-1 text-xs text-muted-foreground text-center">
+                  Odometer reading
+                </p>
+              </div>
+            </div>
+          </div>
 
           <Item
-            icon={<MapPin />}
-            label="Registered State"
-            value={vehicle?.registeredState || "Gujarat"}
+            icon={<Fuel />}
+            label="Fuel"
+            value={vehicle?.fuelType || "Petrol"}
           />
-
           <Divider />
 
           {/* ROW 2 */}
-
-          <Item
-            icon={<Gauge />}
-            label="KM driven"
-            value={`${vehicle?.kmsDriven || "25,125"} km`}
-          />
-
           <Item
             icon={<Users />}
             label="Ownership"
@@ -69,6 +89,11 @@ export default function VehicleOverview({ vehicle }) {
             icon={<Settings />}
             label="Transmission"
             value={vehicle?.transmission || "Manual"}
+          />
+          <Item
+            icon={<BadgeCheck />}
+            label="Reg number"
+            value={vehicle?.regNumber || "GJ08BH6585"}
           />
 
           <Divider />
@@ -90,6 +115,21 @@ export default function VehicleOverview({ vehicle }) {
             label="Insurance Type"
             value={vehicle?.insuranceType || "Third Party"}
           />
+          <Item
+            icon={<MapPin />}
+            label="Registered State"
+            value={vehicle?.registeredState || "Gujarat"}
+          />
+
+          <Divider />
+
+          {/* ROW 4 */}
+
+          <Item
+            icon={<Key />}
+            label="Spare key"
+            value={vehicle?.spareKey || "NO"}
+          />
 
           <Item
             icon={
@@ -102,21 +142,7 @@ export default function VehicleOverview({ vehicle }) {
             label="Challan Status"
             value={vehicle?.challanStatus || "Clear"}
           />
-          <Divider />
 
-          {/* ROW 4 */}
-
-          <Item
-            icon={<Key />}
-            label="Spare key"
-            value={vehicle?.spareKey || "NO"}
-          />
-
-          <Item
-            icon={<Fuel />}
-            label="Fuel"
-            value={vehicle?.fuelType || "Petrol"}
-          />
           <Item
             icon={<Truck />}
             label="Commercial Vehicle"

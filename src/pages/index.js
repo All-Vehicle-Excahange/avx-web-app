@@ -24,9 +24,7 @@ export default function Home() {
       <Layout>
         <ShowcaseSection />
       </Layout>
-      <Layout>
-        <RecentrlySold />
-      </Layout>
+
       <CategoriesSections />
       <Layout>
         <TopPicsSection />
@@ -37,6 +35,9 @@ export default function Home() {
       {/* </Layout> */}
       <Layout>
         <AutoConsultPicsSection limit={8} />
+      </Layout>
+      <Layout>
+        <RecentrlySold />
       </Layout>
       <ConsultBanner fullWidth />
       <StorySection fullWidth />

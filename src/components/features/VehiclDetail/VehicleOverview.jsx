@@ -113,7 +113,7 @@ export default function VehicleOverview({ vehicle, open, setOpen }) {
                 showIcon={true}
                 variant="outline"
               >
-                View full report
+                View Full Specification
               </Button>
             </div>
           </div>

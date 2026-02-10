@@ -2,8 +2,11 @@
 
 import ChipGroup from "@/components/ui/chipGroup";
 import { CheckCircle, Wrench, Settings, Disc, ChevronDown } from "lucide-react";
+import { useState } from "react";
 
 export default function VehicleCondition({ open, setOpen }) {
+  const [isInspection, setIsInspection] = useState(false);
+
   return (
     <section className="relative rounded-2xl overflow-hidden text-primary border border-third/60">
       <div className="relative z-10">
@@ -30,28 +33,32 @@ export default function VehicleCondition({ open, setOpen }) {
           className={`${open ? "block" : "hidden"} mt-3 pb-6 space-y-8 px-6`}
         >
           {/* ================= INSPECTION SUMMARY ================= */}
-          <div className="space-y-3">
-            <p className="text-sm text-third">Based on 200-point inspection</p>
 
-            <ChipGroup
-              title=""
-              variant="outline"
-              items={[
-                { label: "Core structure intact", value: "core" },
-                { label: "Non-tampered odometer", value: "odo" },
-                { label: "Non flooded", value: "flood" },
-                { label: "Engine", value: "engine" },
-                { label: "Drivetrain", value: "drive" },
-                { label: "Body structure", value: "body" },
-                { label: "Interior", value: "interior" },
-                { label: "Minor scratches", value: "scratches" },
-                { label: "Minor dent", value: "dent" },
-                { label: "Moisture ingress", value: "moisture" },
-              ]}
-            />
-          </div>
+          {isInspection && (
+            <div className="space-y-3">
+              <p className="text-sm text-third">
+                Based on 200-point inspection
+              </p>
 
-          <div className="border-t border-third/30" />
+              <ChipGroup
+                title=""
+                variant="outline"
+                items={[
+                  { label: "Core structure intact", value: "core" },
+                  { label: "Non-tampered odometer", value: "odo" },
+                  { label: "Non flooded", value: "flood" },
+                  { label: "Engine", value: "engine" },
+                  { label: "Drivetrain", value: "drive" },
+                  { label: "Body structure", value: "body" },
+                  { label: "Interior", value: "interior" },
+                  { label: "Minor scratches", value: "scratches" },
+                  { label: "Minor dent", value: "dent" },
+                  { label: "Moisture ingress", value: "moisture" },
+                ]}
+              />
+            </div>
+          )}
+          {isInspection && <div className="border-t border-third/30" />}
 
           {/* ================= BLOCK 1 — EXTERIOR SUMMARY ================= */}
           <div className="space-y-3">
@@ -73,9 +80,7 @@ export default function VehicleCondition({ open, setOpen }) {
               </p>
             </div>
           </div>
-
           <div className="border-t border-third/30" />
-
           {/* ================= BLOCK 2 — MECHANICAL HEALTH ================= */}
           <div className="space-y-3">
             <h3 className="text-lg font-semibold">Mechanical Health</h3>
@@ -98,18 +103,18 @@ export default function VehicleCondition({ open, setOpen }) {
               </p>
             </div>
           </div>
-
           <div className="border-t border-third/30" />
-
           {/* ================= BLOCK 3 — CONSUMABLES ================= */}
           <div className="space-y-4 text-sm">
             {/* ===== TYRE LIFE ===== */}
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <Disc size={18} />
-                <h3 className="text-lg font-semibold">Tyre Life Remaining</h3>
+                <h3 className="text-lg font-semibold">Consumables</h3>
               </div>
-
+              <div className="flex items-center gap-2">
+                <Disc size={16} />
+                <h3 className="text-md font-semibold">Tyre Life Remaining</h3>
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <p className="text-third">Front</p>
@@ -144,9 +149,7 @@ export default function VehicleCondition({ open, setOpen }) {
               <div />
             </div>
           </div>
-
           <div className="border-t border-third/30" />
-
           {/* ================= BLOCK 4 — MODIFICATIONS ================= */}
           <div className="space-y-3">
             <h3 className="text-lg font-semibold">Modifications</h3>
@@ -165,9 +168,7 @@ export default function VehicleCondition({ open, setOpen }) {
               */}
             </div>
           </div>
-
           <div className="border-t border-third/30" />
-
           {/* ================= BLOCK 5 — FIXES DONE ================= */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
@@ -175,7 +176,7 @@ export default function VehicleCondition({ open, setOpen }) {
               <h3 className="text-lg font-semibold">Fixes Done</h3>
             </div>
 
-            <div className="text-sm space-y-1">
+            <div className="text-sm  grid grid-cols-1 sm:grid-cols-3 space-y-1">
               <p>
                 <span className="text-third">Repaired & Repainted:</span> Rear
                 door
@@ -185,23 +186,6 @@ export default function VehicleCondition({ open, setOpen }) {
                 (2024)
               </p>
             </div>
-          </div>
-
-          <div className="border-t border-third/30" />
-
-          {/* ================= TIRE LIFE ================= */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <Disc size={18} />
-              <h3 className="text-lg font-semibold">Tyre Life Remaining</h3>
-            </div>
-
-            <p className="text-sm text-green-400">
-              Next service due after 12 months or 15,000 km
-            </p>
-            <p className="text-xs text-third">
-              (whichever comes first post delivery)
-            </p>
           </div>
         </div>
       </div>

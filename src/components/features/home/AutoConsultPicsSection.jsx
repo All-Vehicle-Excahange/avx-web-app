@@ -117,7 +117,7 @@ export default function AutoConsultPicsSection({ limit }) {
       <div className="flex justify-between items-end mb-6">
         <div className="flex items-start gap-4">
           {/* VERTICAL ACCENT LINE */}
-          <span className="w-2 h-[52px] rounded-full bg-gradient-to-b from-blue-500 to-white-400" />
+          <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
 
           {/* TEXT */}
           <div>

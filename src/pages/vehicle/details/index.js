@@ -11,8 +11,9 @@ function index() {
       <Layout>
         <VehiclDetail />
       </Layout>
-
-      <AvxProcess fullWidth />
+      <Layout>
+        <AvxProcess />
+      </Layout>
       <DownloadAppSection fullWidth />
       <Footer fullWidth />
     </>

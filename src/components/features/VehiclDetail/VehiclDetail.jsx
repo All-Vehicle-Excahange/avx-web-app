@@ -36,12 +36,29 @@ export default function VehicleDetails() {
 
   const scrollToSection = (ref, tab) => {
     setActiveTab(tab);
-    if (tab === "overview") {
-      setIsConditionOpen(true);
+    if (tab === "specification") {
+      setIsSpecOpen(true);
+      setIsConditionOpen(false);
+      setIsInspectionOpen(false);
     }
     if (tab === "inspection") {
       setIsInspectionOpen(true);
+      setIsSpecOpen(false);
+      setIsConditionOpen(false);
     }
+
+    if (tab === "condition") {
+      setIsConditionOpen(true);
+      setIsSpecOpen(false);
+      setIsInspectionOpen(false);
+    }
+
+    if (tab === "overview") {
+      setIsConditionOpen(false);
+      setIsSpecOpen(false);
+      setIsInspectionOpen(false);
+    }
+
     if (!ref.current) return;
 
     const top =
@@ -62,7 +79,7 @@ export default function VehicleDetails() {
       <main className=" text-secondary w-full">
         <div className="w-full py-6">
           {/* HEADER */}
-          <div className=" top-16 pb-4 z-40 ">
+          <div className="top-16 pb-4 z-40 ">
             <VehicleHeader />
           </div>
 
@@ -133,7 +150,7 @@ export default function VehicleDetails() {
               </div>
             </div>
 
-            <aside className="flex flex-col gap-6 lg:sticky lg:top-[215px] h-fit">
+            <aside className="flex flex-col gap-6 lg:sticky lg:top-[102px] h-fit">
               <VehicleSummaryRight />
               <Testimonials />
               <SpecialOffer />

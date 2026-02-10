@@ -66,7 +66,7 @@ export default function StoreFrontHeroSection() {
   };
 
   return (
-    <section className="w-full bg-secondary 3xl:max-w-[1480px] 3xl:mx-auto">
+    <section className="w-full  3xl:max-w-[1480px] 3xl:mx-auto">
       <div
         className="relative w-full h-80 bg-cover bg-center"
         style={{
@@ -75,8 +75,6 @@ export default function StoreFrontHeroSection() {
       />
 
       <div className="relative 3xl:container border-b border-third/30 overflow-hidden">
-        <div className="absolute z-10 inset-0 bg-[url('/bg_blur.jpg')] bg-cover opacity-40 blur-lg " />
-
         <div className="relative z-10 bg-transparent">
           <div className="px-4 md:px-10 lg:px-14">
             <div className="flex items-start py-4">
@@ -85,7 +83,10 @@ export default function StoreFrontHeroSection() {
                   <Image
                     className="object-cover"
                     fill
-                    src={comsultDetails.logoUrl}
+                    src={
+                      comsultDetails.logoUrl ||
+                      "https://images.pexels.com/photos/168938/pexels-photo-168938.jpeg"
+                    }
                     alt="AVX"
                   />
                 </div>

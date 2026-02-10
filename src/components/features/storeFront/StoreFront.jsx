@@ -19,7 +19,7 @@ export default function StoreFront() {
         <Navbar heroMode scrolled={true} />
       </div>
 
-      <main className="bg-secondary text-primary pt-12">
+      <main className=" text-primary pt-12">
         {/* HERO */}
         <StoreFrontHeroSection />
 
@@ -36,7 +36,7 @@ export default function StoreFront() {
             {/* ✅ RIGHT CONTENT → FULL WIDTH */}
             <div className="flex flex-col gap-6 w-full  3xl:max-w-[1480px] 3xl:mx-auto ">
               {/* TABS */}
-              <div className="bg-secondary 3xl:container">
+              <div className=" 3xl:container">
                 <div className="flex gap-10 border-b border-third/30">
                   {[
                     { id: "inventory", label: "Inventory" },
