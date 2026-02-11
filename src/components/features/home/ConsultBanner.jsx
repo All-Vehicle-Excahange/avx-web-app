@@ -5,7 +5,7 @@ export default function ConsultBanner() {
     <>
       <div className="w-full   3xl:max-w-full mx-auto ">
         <div
-          className="w-full h-[250px] md:h-[320px] overflow-hidden bg-cover bg-center rounded-lg relative bg-[#007bff]"
+          className="w-full h-[250px] md:h-80 overflow-hidden bg-cover bg-center rounded-lg relative bg-fourth"
           
         >
           <Banner

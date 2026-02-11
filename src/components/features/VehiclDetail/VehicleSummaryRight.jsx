@@ -96,7 +96,7 @@ export default function VehicleSummaryRight({ vehicle }) {
 
           {/* RIGHT BUTTON */}
           <div className="shrink-0">
-            <Button variant="outline" showIcon={true}>
+            <Button href={`/store-front/1`} variant="outline" showIcon={true}>
               View Storefront
             </Button>
           </div>

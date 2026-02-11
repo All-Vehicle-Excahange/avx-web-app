@@ -27,7 +27,7 @@ export default function Banner({ title, description, buttonText }) {
           </p>
         </div>
 
-        <Button href="/" onClick={handleClick} variant="ghost">{buttonText}</Button>
+        <Button href="/consult" onClick={handleClick} variant="ghost">{buttonText}</Button>
       </div>
     </div>
   );
