@@ -171,7 +171,7 @@ export default function AvxProcess() {
 
         <div className="relative">
           {/* Central Background Track */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 w-[1px] h-full bg-gray-200" />
+          <div className="absolute left-1/2 transform -translate-x-1/2 w-px h-full bg-gray-200" />
 
           {/* Animated Filling Line */}
           <motion.div

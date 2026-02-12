@@ -11,6 +11,7 @@ import Chip from "@/components/ui/chip";
 import { ChevronLeft, ChevronRight, FilterIcon } from "lucide-react";
 import SponsoredCars from "./SponsoredCars";
 import FilterSection from "./FilterSection";
+import PriceBased from "./PriceBased";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
@@ -323,9 +324,9 @@ export default function SearchWithCard() {
       </aside>
 
       {/* ================= MAIN CONTENT ================= */}
-      <main className="flex-1 ">
+      <main className="flex-1  ">
         <div className="w-full grid grid-cols-1 md:grid-cols-2  lg:grid-cols-2 xl:grid-cols-3  gap-4 sm:gap-5 auto-rows-max sm:px-5 md:px-0  lg:px-6 py-4 sm:py-5 lg:py-0">
-          <div className="col-span-full">
+          <div className="col-span-full mb-10 ">
             <PromoCardRow />
           </div>
           {/* MOBILE FILTER BAR */}
@@ -371,12 +372,15 @@ export default function SearchWithCard() {
               ))}
             </div>
           </div>
-          <div className="col-span-full">
+          <div className="col-span-full mb-10 ">
             <SponsoredCars />
+          </div>
+          <div className="col-span-full mb-10">
+            <PriceBased />
           </div>
           <div className="col-span-full">
             <h2 className="text-2xl md:text-3xl font-bold text-primary">
-              Top Maruti Fronx Near You
+              Top Vehicle Near You
             </h2>
           </div>
           {Array.from({ length: 9 }).map((_, i) => (
@@ -385,7 +389,7 @@ export default function SearchWithCard() {
 
           <div className="col-span-full">
             <div className="mt-4">
-              <div className="flex items-center justify-between w-full">
+              <div className="flex items-center justify-center gap-4 w-full">
                 {/* LEFT – PREVIOUS */}
                 <div>
                   <button
@@ -438,19 +442,10 @@ export default function SearchWithCard() {
                     ))}
 
                   {/* DOTS */}
-                  {currentPage < totalPages - 3 && (
-                    <li className="mx-1 text-white">…</li>
-                  )}
+                  
 
                   {/* LAST PAGE */}
-                  {currentPage < totalPages - 2 && (
-                    <li
-                      className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-white text-sm sm:text-lg font-medium cursor-pointer hover:bg-primary hover:text-black"
-                      onClick={() => handlePageChange(totalPages)}
-                    >
-                      {totalPages}
-                    </li>
-                  )}
+                  
                 </ul>
 
                 {/* RIGHT – NEXT */}

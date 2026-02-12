@@ -4,7 +4,7 @@ import { ChevronRight, Star } from "lucide-react";
 
 export default function VehicleHeader() {
   return (
-    <header className=" w-full bg-linear-to-r space-y-3 pt-6">
+    <header className="w-full space-y-3 pt-6 bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)]">
       {/* Breadcrumb */}
       <p className="text-xs sm:text-sm text-third flex items-center gap-1">
         HOME <ChevronRight size={16} /> USED CARS IN AHMEDABAD{" "}

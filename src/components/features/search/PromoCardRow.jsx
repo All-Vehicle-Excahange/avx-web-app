@@ -12,7 +12,7 @@ export default function PromoBanner() {
       <Swiper
         modules={[Autoplay]}
         autoplay={{ delay: 3000, disableOnInteraction: false }}
-        loop
+        loopz
         className="w-full h-full"
       >
         <SwiperSlide>

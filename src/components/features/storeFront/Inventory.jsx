@@ -70,8 +70,8 @@ export default function Inventory() {
   ];
 
   return (
-    <section className="w-full container rounded-2xl  p-6 space-y-6">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+    <section className="w-full  container rounded-2xl  p-6 space-y-6">
+      <div className="flex flex-col  lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="flex  flex-wrap gap-2">
           {vehicleTypes.map((type) => (
             <button

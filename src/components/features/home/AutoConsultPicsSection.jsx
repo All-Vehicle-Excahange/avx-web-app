@@ -5,10 +5,14 @@ import ConsultantCard from "@/components/ui/const/ConsultCard";
 import Button from "@/components/ui/button";
 import { getHomeFeedConsult } from "@/services/user.service";
 
-export default function AutoConsultPicsSection({ limit }) {
+export default function AutoConsultPicsSection(props) {
+  // ✅ HARD SAFE DEFAULT
+  const safeLimit = typeof props.limit === "number" ? props.limit : 4;
+  console.log("limit prop:", props.limit, "safeLimit:", safeLimit);
+
   const consultantsDmy = [
     {
-      id: 1,
+      id: "d1",
       name: "Adarsh Auto Consultants",
       location: "Chhapi, Gujarat",
       rating: 4.5,
@@ -19,7 +23,7 @@ export default function AutoConsultPicsSection({ limit }) {
       priceRange: "1L - 2L",
     },
     {
-      id: 2,
+      id: "d2",
       name: "Premium Auto Hub",
       location: "Ahmedabad, Gujarat",
       rating: 5,
@@ -30,7 +34,7 @@ export default function AutoConsultPicsSection({ limit }) {
       priceRange: "2L - 5L",
     },
     {
-      id: 3,
+      id: "d3",
       name: "PRO Auto Hub",
       location: "Ahmedabad, Gujarat",
       rating: 5,
@@ -41,8 +45,51 @@ export default function AutoConsultPicsSection({ limit }) {
       priceRange: "2L - 5L",
     },
     {
-      id: 4,
-      name: "Helllo Auto Hub",
+      id: "d4",
+      name: "Hello Auto Hub",
+      location: "Ahmedabad, Gujarat",
+      rating: 5,
+      vehicleCount: 80,
+      image: "/cs.png",
+      logo: "/cs.png",
+      isSponsored: false,
+      priceRange: "2L - 5L",
+    },{
+      id: "d1",
+      name: "Adarsh Auto Consultants",
+      location: "Chhapi, Gujarat",
+      rating: 4.5,
+      vehicleCount: 116,
+      image: "/cs.png",
+      logo: "/cs.png",
+      isSponsored: true,
+      priceRange: "1L - 2L",
+    },
+    {
+      id: "d2",
+      name: "Premium Auto Hub",
+      location: "Ahmedabad, Gujarat",
+      rating: 5,
+      vehicleCount: 80,
+      image: "/cs.png",
+      logo: "/cs.png",
+      isSponsored: false,
+      priceRange: "2L - 5L",
+    },
+    {
+      id: "d3",
+      name: "PRO Auto Hub",
+      location: "Ahmedabad, Gujarat",
+      rating: 5,
+      vehicleCount: 80,
+      image: "/cs.png",
+      logo: "/cs.png",
+      isSponsored: false,
+      priceRange: "2L - 5L",
+    },
+    {
+      id: "d4",
+      name: "Hello Auto Hub",
       location: "Ahmedabad, Gujarat",
       rating: 5,
       vehicleCount: 80,
@@ -57,89 +104,70 @@ export default function AutoConsultPicsSection({ limit }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
+
     const fetchConsultants = async () => {
       try {
-        const res = await getHomeFeedConsult({ pageNo: 1, size: 4 });
+        const res = await getHomeFeedConsult({
+          pageNo: 1,
+          size: safeLimit, // ✅ ALWAYS NUMBER
+        });
 
-        if (res?.data?.length > 0) {
-          const formatted = res.data.map((item) => ({
-            id: item.id,
-
-            name: item.consultationName,
-            image: item.bannerUrl || "/cs.png",
-            logo: item.logoUrl || "/cs.png",
-
-            rating: item.averageRating,
-            reviews: item.totalReviews,
-
-            vehicleCount: item.availableVehicles,
-
-            location: item.address?.city
-              ? `${item.address.city}, ${item.address.country}`
-              : "Location not available",
-
-            priceRange:
-              item.minVehiclePrice && item.maxVehiclePrice
-                ? `₹${item.minVehiclePrice} - ₹${item.maxVehiclePrice}`
-                : "Not disclosed",
-
-            vehicleTypes: item.vehicleTypes,
-            services: item.services,
-
-            tierTitle: item.tierTitle,
-            tierBadgeUrl: item.tierBadgeUrl,
-
-            isSponsored: item.isActiveTier,
-          }));
-
-          setConsultants(formatted);
+        if (mounted && Array.isArray(res?.data) && res.data.length > 0) {
+          setConsultants(
+            res.data.map((item) => ({
+              id: item.id,
+              name: item.consultationName,
+              image: item.bannerUrl || "/cs.png",
+              logo: item.logoUrl || "/cs.png",
+              rating: item.averageRating,
+              reviews: item.totalReviews,
+              vehicleCount: item.availableVehicles,
+              location: item.address?.city
+                ? `${item.address.city}, ${item.address.country}`
+                : "Location not available",
+              priceRange:
+                item.minVehiclePrice && item.maxVehiclePrice
+                  ? `₹${item.minVehiclePrice} - ₹${item.maxVehiclePrice}`
+                  : "Not disclosed",
+              isSponsored: item.isActiveTier,
+            })),
+          );
         }
-      } catch (error) {
-        console.error("Failed to fetch consultants:", error);
+      } catch (err) {
+        console.error("Consultant fetch failed:", err);
       } finally {
-        setLoading(false);
+        mounted && setLoading(false);
       }
     };
 
     fetchConsultants();
-  }, []);
+    return () => (mounted = false);
+  }, [safeLimit]);
 
+  // ✅ FINAL DATA SOURCE
   const finalConsultants =
     consultants.length > 0 ? consultants : consultantsDmy;
 
-  const visibleConsultants = limit
-    ? finalConsultants.slice(0, limit)
-    : finalConsultants;
-
   return (
-    <div className="w-full  py-10 px-4">
+    <div className="w-full py-10 px-4">
       {/* Header */}
-      <div className="flex justify-between items-end mb-6">
-        <div className="flex items-start gap-4">
-          {/* VERTICAL ACCENT LINE */}
-          <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
-
-          {/* TEXT */}
-          <div>
-            <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
-              Top Auto Consultants Picks For You
-            </h2>
-
-            <p className="text-third mt-1">
-              Lorem ipsum dolor sit amet consectetur dolor sit amet
-              consectetur..
-            </p>
-          </div>
-        </div>
+      <div className="mb-6">
+        <h2 className="text-3xl font-bold text-primary">
+          Top Auto Consultants Picks For You
+        </h2>
+        <p className="text-third mt-1">
+          Discover trusted consultants curated for you.
+        </p>
       </div>
 
-      {loading && consultants.length === 0 && (
-        <p className="text-third text-sm">Loading consultants...</p>
+      {loading && (
+        <p className="text-sm text-third mb-4">Loading consultants...</p>
       )}
 
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {visibleConsultants.map((consultant) => (
+        {finalConsultants.slice(0, safeLimit).map((consultant) => (
           <ConsultantCard key={consultant.id} {...consultant} />
         ))}
       </div>
