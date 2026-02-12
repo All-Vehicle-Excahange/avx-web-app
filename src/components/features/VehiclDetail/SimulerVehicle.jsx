@@ -3,7 +3,7 @@ import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
 
 function SimulerVehicle() {
-  const vehicles = Array.from({ length: 4 }, (_, i) => ({
+  const vehicles = Array.from({ length: 8 }, (_, i) => ({
     id: i + 1,
     title: "BMW 8-serie 2-door",
     subtitle: "35 D6 Powerful lorem isump",

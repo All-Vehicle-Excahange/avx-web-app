@@ -10,6 +10,7 @@ import WhyBuyHere from "./WhyBuyHere";
 import Review from "./Review";
 import Navbar from "@/components/layout/Navbar";
 
+
 export default function StoreFront() {
   const [activeTab, setActiveTab] = useState("inventory");
 
@@ -24,19 +25,16 @@ export default function StoreFront() {
         <StoreFrontHeroSection />
 
         <div className="px-4 md:px-6 py-6">
-          {/* ❌ GRID REMOVED */}
           <section className="w-full">
-            {/* ❌ LEFT ASIDE REMOVED */}
-            {/*
+            {/*             
             <aside className="flex flex-col gap-6 xl:sticky xl:top-24 h-fit">
               <StoreSummaryAside />
             </aside>
             */}
 
-            {/* ✅ RIGHT CONTENT → FULL WIDTH */}
-            <div className="flex flex-col gap-6 w-full  3xl:max-w-[1480px] 3xl:mx-auto ">
+            <div className="flex flex-col gap-6 3xl:max-w-[1480px] 3xl:mx-auto ">
               {/* TABS */}
-              <div className=" 3xl:container">
+              <div className="w-[1480px] px-2 mx-auto 3xl:container ">
                 <div className="flex gap-10 border-b border-third/30">
                   {[
                     { id: "inventory", label: "Inventory" },

@@ -442,19 +442,10 @@ export default function SearchWithCard() {
                     ))}
 
                   {/* DOTS */}
-                  {currentPage < totalPages - 3 && (
-                    <li className="mx-1 text-white">…</li>
-                  )}
+                  
 
                   {/* LAST PAGE */}
-                  {currentPage < totalPages - 2 && (
-                    <li
-                      className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-white text-sm sm:text-lg font-medium cursor-pointer hover:bg-primary hover:text-black"
-                      onClick={() => handlePageChange(totalPages)}
-                    >
-                      {totalPages}
-                    </li>
-                  )}
+                  
                 </ul>
 
                 {/* RIGHT – NEXT */}

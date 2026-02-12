@@ -1,6 +1,8 @@
 import PremiumFilterWithCard from "@/components/features/consult/premium/PremiumFilterWithCard";
+import SearchWithHeader from "@/components/features/consult/search/SearchWithHeader";
 import DownloadAppSection from "@/components/features/home/DownloadAppSection";
 import SellVehicleBanner from "@/components/features/home/SellVehicleBanner";
+import AvxProcess from "@/components/features/VehiclDetail/AvxProcess";
 import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
 import Navbar from "@/components/layout/Navbar";
@@ -9,14 +11,16 @@ import React from "react";
 function index() {
   return (
     <>
-      <Navbar heroMode scrolled />
-
+      <SearchWithHeader />
+      
       <Layout>
         <PremiumFilterWithCard />
       </Layout>
 
       <SellVehicleBanner fullWidth />
-
+      <Layout>
+        <AvxProcess />
+      </Layout>
       <DownloadAppSection />
 
       <Footer />

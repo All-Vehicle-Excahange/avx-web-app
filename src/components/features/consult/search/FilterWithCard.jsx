@@ -9,6 +9,7 @@ import Chip from "@/components/ui/chip";
 import { FilterIcon } from "lucide-react";
 import ConsultantGridSection from "./ConsultantGridSection";
 import ConsultantSliderSection from "./ConsultantSliderSection";
+import FilterSection from "../../search/FilterSection";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
@@ -37,7 +38,7 @@ export default function FilterWithCard() {
 
   const toggleMobileChip = (chip) => {
     setSelectedMobileChips((prev) =>
-      prev.includes(chip) ? prev.filter((c) => c !== chip) : [...prev, chip]
+      prev.includes(chip) ? prev.filter((c) => c !== chip) : [...prev, chip],
     );
   };
 
@@ -159,10 +160,25 @@ export default function FilterWithCard() {
   };
 
   return (
-    <div className="w-ful pt-12 md:pt-20 md:pb-8 min-h-screen flex flex-col lg:flex-row bg-secondary text-secondary">
+    <div className="w-ful pt-12 md:pt-20 md:pb-8 min-h-screen flex flex-col lg:flex-row  text-secondary">
       {/* ================= DESKTOP SIDEBAR ================= */}
-      <aside className="hidden lg:flex h-fit relative w-[340px] bg-secondary/90 border border-third/40 p-6 flex-col gap-6 overflow-y-auto shrink-0 rounded-2xl">
-        <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover opacity-40 blur-lg z-0" />
+      <aside
+        className="
+    hidden lg:flex
+    w-[340px]
+    border border-third/40
+    p-4
+    flex-col
+    gap-6
+    shrink-0
+    rounded-xl
+    h-fit
+
+    sticky
+    top-[84px]
+    self-start
+  "
+      >
         <div className="relative z-10">
           <h2 className="text-2xl font-bold text-primary mb-4">
             Filter Your Result
@@ -171,7 +187,7 @@ export default function FilterWithCard() {
           <InputField placeholder="Enter your location" variant="colored" />
 
           {/* Desktop AVX Toggle */}
-          <div className="flex items-center justify-between px-4 py-3 rounded-xl border border-white/20">
+          <div className="flex my-6 items-center justify-between px-4 py-3 rounded-xl border border-white/20">
             <span className="text-primary font-semibold text-sm">
               AVX Premium Consultants
             </span>
@@ -189,23 +205,50 @@ export default function FilterWithCard() {
             </button>
           </div>
 
-          <ChipGroup title="Vehicle Type" items={vehicleTypes} />
-          <ChipGroup title="Consultant Type" items={consultantTypes} />
-          <ChipGroup title="Rating" items={ratings} />
-          <ChipGroup title="Inventory Size" items={inventorySizes} />
-          <ChipGroup title="Services Provided" items={services} />
-          <ChipGroup title="Distance" items={distances} />
+          <div className="space-y-4">
+            <FilterSection title={"Distance"}>
+              <ChipGroup title="" items={distances} />
+            </FilterSection>
+            
+            <FilterSection title="Inventory Size">
+              <ChipGroup title="" items={inventorySizes} />
+            </FilterSection>
 
-          <div className="mt-10">
-            <Button variant="outline" full showIcon={true}>
+            <FilterSection title="Vehicle Type">
+              <ChipGroup title="" items={vehicleTypes} />
+            </FilterSection>
+
+            <FilterSection title="Consultant Type">
+              <ChipGroup title="" items={consultantTypes} />
+            </FilterSection>
+
+            <FilterSection title="Rating">
+              <ChipGroup title="" items={ratings} />
+            </FilterSection>
+
+            <FilterSection title={"Services Provided"}>
+              <ChipGroup title="" items={services} />
+            </FilterSection>
+          </div>
+
+          <div className="mt-4 flex items-center justify-between gap-3">
+            <Button variant="outline" showIcon={false} className="flex-1">
               Apply filter
+            </Button>
+
+            <Button
+              variant="ghost"
+              showIcon={false}
+              className="text-primary/70 hover:text-primary rounded-3xl"
+            >
+              Clear filters
             </Button>
           </div>
         </div>
       </aside>
 
       {/* ================= MAIN CONTENT ================= */}
-      <main className="flex-1 bg-secondary lg:pl-6 min-w-0">
+      <main className="flex-1  lg:pl-6 min-w-0">
         {/* MOBILE FILTER BAR (With Horizontal Scroll & AVX Toggle) */}
         <div className="flex lg:hidden items-center gap-3 mb-4 overflow-x-auto scrollbar-hide pb-2">
           {/* 1. Filter Button */}

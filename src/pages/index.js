@@ -36,10 +36,10 @@ export default function Home() {
       <Layout>
         <AutoConsultPicsSection limit={8} />
       </Layout>
+      <ConsultBanner fullWidth />
       <Layout>
         <RecentrlySold />
       </Layout>
-      <ConsultBanner fullWidth />
       <StorySection fullWidth />
 
       <SayHello />
