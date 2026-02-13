@@ -275,7 +275,7 @@ function MyProfile() {
   };
 
   return (
-    <section className="w-full py-12 rounded-2xl bg-secondary space-y-10">
+    <section className="w-full py-12 rounded-2xl  space-y-10">
       {/* ✅ PROFILE INFO SECTION */}
       <div className="rounded-2xl border border-third/40 px-6 pb-6">
         <div className="flex justify-between py-6">

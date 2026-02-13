@@ -151,7 +151,7 @@ export default function TopPicsSection() {
       </div>
 
       <div className="mt-8 flex justify-end">
-        <Button href="/" variant="outlineAnimated" size="md">
+        <Button href="/search" variant="outlineAnimated" size="md">
           Explore All Vehicles
         </Button>
       </div>

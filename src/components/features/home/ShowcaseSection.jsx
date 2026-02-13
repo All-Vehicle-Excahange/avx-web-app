@@ -86,7 +86,7 @@ const ShowcaseSection = () => {
         ))}
       </div>
       <div className="mt-4 flex justify-end">
-        <Button href="/" variant="outlineAnimated" size="md">
+        <Button href="/search" variant="outlineAnimated" size="md">
           Explore All Vehicles
         </Button>
       </div>

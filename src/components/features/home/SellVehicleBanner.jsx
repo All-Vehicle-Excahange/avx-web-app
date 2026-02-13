@@ -12,6 +12,7 @@ export default function SellVehicleBanner() {
             title="Sell Your Vehicles"
             description="Easily showcase your available cars and reach more clients instantly. Manage listings, inquiries, and bookings all in one place."
             buttonText="Sell Your Vehicles"
+            navigationPath={"/user/details"}
           />
         </div>
       </div>

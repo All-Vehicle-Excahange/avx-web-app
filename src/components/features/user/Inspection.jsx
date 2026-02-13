@@ -6,7 +6,7 @@ import React from "react";
 function Inspection() {
   return (
     <>
-      <section className="w-full container rounded-2xl bg-secondary p-6 space-y-6">
+      <section className="w-full container rounded-2xl  p-6 space-y-6">
         <div className="relative w-full overflow-hidden rounded-xl">
           <Image
             src={"/about2.png"}

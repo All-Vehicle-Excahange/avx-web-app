@@ -40,7 +40,7 @@ export default function Sidebar() {
   const router = useRouter();
 
   return (
-    <aside className="w-62 min-h-fit bg-primary/6 border-r border-third/30 p-5 space-y-4">
+    <aside className="w-62 min-h-fit  border-r border-third/30 p-5 space-y-4">
       <h1 className="text-xl font-bold mt-4 mb-4">AVX Dashboard</h1>
 
       {menu.map((m, i) => {

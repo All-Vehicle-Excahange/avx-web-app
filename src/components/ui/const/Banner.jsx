@@ -3,7 +3,7 @@ import Image from "next/image";
 import Button from "../button";
 import { useRouter } from "next/router";
 
-export default function Banner({ title, description, buttonText }) {
+export default function Banner({ title, description, buttonText, navigationPath }) {
   const router = useRouter();
 
   const handleClick = () => {
@@ -27,7 +27,7 @@ export default function Banner({ title, description, buttonText }) {
           </p>
         </div>
 
-        <Button href="/consult" onClick={handleClick} variant="ghost">{buttonText}</Button>
+        <Button href={`${navigationPath}`} onClick={handleClick} variant="ghost">{buttonText}</Button>
       </div>
     </div>
   );

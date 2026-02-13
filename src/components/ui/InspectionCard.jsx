@@ -7,7 +7,7 @@ export default function InspectionCard({ status = "processing" }) {
   const isProcessing = status === "processing";
 
   return (
-    <div className="rounded-2xl border border-third/40 bg-secondary px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-6 min-h-34">
+    <div className="rounded-2xl border border-third/40  px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-6 min-h-34">
       {/* LEFT INFO */}
       <div className="space-y-2">
         <p className="text-sm text-third">

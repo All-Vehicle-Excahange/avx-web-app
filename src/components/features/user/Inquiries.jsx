@@ -41,7 +41,7 @@ function Inquiries() {
   };
 
   return (
-    <section className="w-full container rounded-2xl bg-secondary p-6 space-y-6">
+    <section className="w-full container rounded-2xl  p-6 space-y-6">
       {/* FILTER */}
       <div className="flex flex-wrap gap-2">
         {vehicleTypes.map((type) => (

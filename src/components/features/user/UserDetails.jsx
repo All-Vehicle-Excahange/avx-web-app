@@ -16,7 +16,7 @@ function UserDetails() {
           <h1 className="text-2xl  font-bold">Manage Your Activities</h1>
           <section className="w-full">
             <div className="flex flex-col  w-full">
-              <div className="bg-secondary 3xl:container">
+              <div className=" 3xl:container">
                 <div className="flex gap-10 border-b border-third/30 overflow-x-auto no-scrollbar whitespace-nowrap">
                   {[
                     { id: "myvehicle", label: "My Vehicles" },
