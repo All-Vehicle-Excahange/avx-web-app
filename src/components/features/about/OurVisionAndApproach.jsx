@@ -30,19 +30,19 @@ const VisionAndApproach = () => {
   return (
     <section className="py-10  text-[var(--color-primary)]">
       <div className="max-w-6xl  mx-auto grid md:grid-cols-2 gap-10">
-        <Card
-          isVision={true}
-          title="Our"
-          highlight="Vision"
-          description="To build India’s most accountable and performance-driven automotive marketplace — where credibility, not just listings, defines visibility."
-        />
+        {/*<Card*/}
+        {/*  isVision={true}*/}
+        {/*  title="Our"*/}
+        {/*  highlight="Vision"*/}
+        {/*  description="To build India’s most accountable and performance-driven automotive marketplace — where credibility, not just listings, defines visibility."*/}
+        {/*/>*/}
 
-        <Card
-          isVision={false}
-          title="Our"
-          highlight="Approach"
-          description="AVX does not replace consultants. It empowers them with visibility, structure, and measurable performance signals — while giving buyers the confidence of verified identity and inspection clarity."
-        />
+        {/*<Card*/}
+        {/*  isVision={false}*/}
+        {/*  title="Our"*/}
+        {/*  highlight="Approach"*/}
+        {/*  description="AVX does not replace consultants. It empowers them with visibility, structure, and measurable performance signals — while giving buyers the confidence of verified identity and inspection clarity."*/}
+        {/*/>*/}
       </div>
 
       <div className="max-w-4xl mx-auto text-center mt-12">

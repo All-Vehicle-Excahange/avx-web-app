@@ -64,7 +64,7 @@ const ProblemWeAreSolve = () => {
 
             <p className="text-[var(--color-third)] text-sm md:text-base leading-relaxed">
               No performance visibility for consultants, creating a marketplace
-              where quality and service aren't measurable.
+              where quality and service arent measurable.
             </p>
           </div>
         </div>
