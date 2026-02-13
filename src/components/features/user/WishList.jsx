@@ -79,7 +79,7 @@ function Wishlist() {
 
   return (
     <>
-      <section className="w-full container rounded-2xl bg-secondary p-6 space-y-12">
+      <section className="w-full container rounded-2xl  p-6 space-y-12">
         {/* VEHICLE WISHLIST */}
         <div>
           <h1 className="text-3xl font-extrabold mb-6">Vehicle Wishlist</h1>

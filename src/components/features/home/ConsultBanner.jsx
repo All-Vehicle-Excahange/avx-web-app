@@ -12,6 +12,7 @@ export default function ConsultBanner() {
             title="Are you a consultant? List your cars"
             description="Easily showcase your available cars and reach more clients instantly. Manage listings, inquiries, and bookings all in one place."
             buttonText="Become a Consultant"
+            navigationPath={"/consult"}
           />
         </div>
       </div>
