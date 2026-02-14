@@ -93,7 +93,7 @@ export default function Cta() {
               text-white
               underline underline-offset-8
               decoration-white/40
-              group-hover:decoration-[var(--color-fourth)]
+              group-hover:decoration-fourth
               transition
             "
             >
@@ -164,7 +164,7 @@ export default function Cta() {
               text-white
               underline underline-offset-8
               decoration-white/40
-              group-hover:decoration-[var(--color-fourth)]
+              group-hover:decoration-fourth
               transition
             "
             >

@@ -180,14 +180,14 @@ export default function ConsultantsAndBuyers() {
 function StickyBlock({ label, titleTop, titleBottom, desc, cta }) {
   return (
     <div className="lg:sticky lg:top-32 h-fit">
-      <p className="mb-8 inline-block text-sm tracking-[0.4em] uppercase text-[var(--color-third)] font-semibold relative">
+      <p className="mb-8 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
         {label}
-        <span className="absolute left-0 -bottom-3 h-[2px] w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+        <span className="absolute left-0 -bottom-3 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
       </p>
 
       <h2 className="text-4xl sm:text-5xl xl:text-5xl font-medium leading-[1.15] text-white font-[Montserrat]">
         {titleTop}
-        <span className="block  text-[var(--color-fourth)] mt-2">
+        <span className="block  text-fourth mt-2">
           {titleBottom}
         </span>
       </h2>
@@ -211,7 +211,7 @@ function StickyBlock({ label, titleTop, titleBottom, desc, cta }) {
 function Capability({ title, desc, icon }) {
   return (
     <div className="border-l border-neutral-700 pl-10 flex gap-6">
-      <div className="mt-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[var(--color-fourth)] text-[var(--color-fourth)]">
+      <div className="mt-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-fourth text-fourth">
         {icon}
       </div>
 

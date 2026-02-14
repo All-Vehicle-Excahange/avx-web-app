@@ -13,7 +13,7 @@ export default function HeroSection() {
         <div className="flex flex-col  lg:flex-row items-center gap-0 lg:gap-4 ">
           {/* LEFT TEXT */}
           <div className="w-full  lg:w-[40%]">
-            <p className="text-sm tracking-[0.4em] uppercase text-[var(--color-third)] font-semibold mb-6">
+            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-6">
               About AVX
             </p>
 
@@ -22,7 +22,7 @@ export default function HeroSection() {
               text-4xl sm:text-5xl xl:text-6xl
               font-semibold
               leading-[1.05]
-              text-[var(--color-primary)]
+              text-primary
               font-[Montserrat]
             "
             >
@@ -31,7 +31,7 @@ export default function HeroSection() {
               <span className="text-white/70">Pre-Owned Vehicle Platform</span>
             </h1>
 
-            <p className="mt-8 text-lg text-[var(--color-third)] max-w-lg leading-relaxed">
+            <p className="mt-8 text-lg text-third max-w-lg leading-relaxed">
               AVX brings structure, performance visibility, and trust into the
               used vehicle ecosystem — connecting serious buyers with verified
               consultants and inspected inventory.

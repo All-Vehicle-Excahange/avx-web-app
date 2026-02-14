@@ -29,7 +29,7 @@ export default function WhyAvxDifferent() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className=" mb-28">
-          <p className="mb-6 text-sm tracking-[0.4em] uppercase text-[var(--color-third)] font-semibold ">
+          <p className="mb-6 text-sm tracking-[0.4em] uppercase text-third font-semibold ">
             Why AVX
           </p>
 
@@ -37,7 +37,7 @@ export default function WhyAvxDifferent() {
             Not another <span className=" text-fourth"> listing platform</span>
           </h2>
 
-          <p className="mt-8 text-xl text-[var(--color-third)]  leading-relaxed">
+          <p className="mt-8 text-xl text-third  leading-relaxed">
             AVX is engineered to remove ambiguity from the used-vehicle market
             by introducing structure, accountability, and measurable trust.
           </p>
@@ -59,17 +59,17 @@ export default function WhyAvxDifferent() {
                 <div
                   className={`absolute top-1/2 -translate-y-1/2 text-[10rem] font-bold select-none pointer-events-none transition-colors duration-300
           ${isLeftContent ? "md:right-0 md:left-auto" : "md:left-0 md:right-auto"}
-          text-white/15 group-hover:text-[var(--color-fourth)]/30`}
+          text-white/15 group-hover:text-fourth/30`}
                 >
                   {item.id}
                 </div>
 
                 {/* Content */}
-                <div className="relative max-w-xl border rounded-2xl border-transparent p-6 transition-colors duration-300 group-hover:border-[var(--color-fourth)]">
-                  <h3 className="text-2xl md:text-3xl font-semibold text-[var(--color-primary)]">
+                <div className="relative max-w-xl border rounded-2xl border-transparent p-6 transition-colors duration-300 group-hover:border-fourth">
+                  <h3 className="text-2xl md:text-3xl font-semibold text-primary">
                     {item.title}
                   </h3>
-                  <p className="mt-4 text-lg text-[var(--color-third)] leading-relaxed">
+                  <p className="mt-4 text-lg text-third leading-relaxed">
                     {item.desc}
                   </p>
                 </div>
@@ -78,7 +78,7 @@ export default function WhyAvxDifferent() {
                 <div
                   className={`hidden md:block h-px flex-1 transition-colors duration-300
           ${isLeftContent ? "bg-neutral-700" : "bg-neutral-700"}
-          group-hover:bg-[var(--color-fourth)]/60`}
+          group-hover:bg-fourth/60`}
                 />
               </div>
             );
