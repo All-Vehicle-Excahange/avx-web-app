@@ -5,13 +5,12 @@ import VehicleCard from "@/components/ui/const/VehicleCard";
 import { SlidersHorizontal, ChevronDown } from "lucide-react";
 
 export default function Inventory() {
-  const [activeType, setActiveType] = useState("cars");
+  const [activeType, setActiveType] = useState("all");
 
   const vehicleTypes = [
-    { id: "cars", label: "Cars" },
-    { id: "bikes", label: "Bikes" },
-    { id: "scooters", label: "Scooters" },
-    { id: "commercial", label: "Commercial" },
+    { id: "all", label: "All" },
+    { id: "two_wheelers", label: "Two Wheelers" },
+    { id: "four_wheelers", label: "Four Wheels" },
   ];
 
   const cardData = [

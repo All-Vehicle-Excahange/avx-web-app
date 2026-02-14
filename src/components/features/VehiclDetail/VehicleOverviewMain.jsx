@@ -19,16 +19,38 @@ import {
   AlertCircle,
   Info,
 } from "lucide-react";
-import { FileDoc, CarProfile } from "@phosphor-icons/react";
 import Image from "next/image";
+import {useParams} from "next/navigation";
+import {getVehicleOverview} from "@/services/vehicle.service";
+import {useEffect, useState} from "react";
+
+
 export default function VehicleOverview({ vehicle }) {
+  const params = useParams();
+  const id = params.id;
+  const [vehicleOverview, setVehicleOverview] = useState({});
+
+  useEffect(() => {
+    const  fetchOverview = async () => {
+      try {
+        const  res = await  getVehicleOverview(id)
+        setVehicleOverview(res.data)
+      }catch (error) {
+        console.log(error);
+      }
+    }
+    fetchOverview();
+  }, [id])
+
+  const isInsuranceActive =
+      vehicleOverview.vehicleDocument?.insurance ?? false;
+  const hasSpareKey = vehicleOverview?.spareKey ?? false;
+
   return (
     <section className="relative rounded-2xl overflow-hidden  text-primary border border-third/60">
-      {/* 🔥 Blur Background (same as aside) */}
 
-      {/* CONTENT */}
       <div className="relative z-10 p-6 space-y-6">
-        {/* HEADER */}
+
         <h3 className="text-xl font-semibold">Vehicle Overview</h3>
 
         {/* GRID */}
@@ -37,7 +59,7 @@ export default function VehicleOverview({ vehicle }) {
           <Item
             icon={<Calendar />}
             label="Reg. year"
-            value={vehicle?.regYear || "Mar 2018"}
+            value={vehicleOverview?.yearOfMfg || "Mar 2018"}
           />
 
           <div className="relative group">
@@ -45,7 +67,7 @@ export default function VehicleOverview({ vehicle }) {
             <Item
               icon={<Gauge />}
               label="KM driven"
-              value={`${vehicle?.kmsDriven || "25,125"} km`}
+              value={`${vehicleOverview?.kmDriven || "25,125"} km`}
             />
 
             {/* Info Icon */}
@@ -75,7 +97,7 @@ export default function VehicleOverview({ vehicle }) {
           <Item
             icon={<Fuel />}
             label="Fuel"
-            value={vehicle?.fuelType || "Petrol"}
+            value={vehicleOverview?.fuelType || "CNG"}
           />
           <Divider />
 
@@ -83,42 +105,36 @@ export default function VehicleOverview({ vehicle }) {
           <Item
             icon={<Users />}
             label="Ownership"
-            value={vehicle?.ownership || "1st"}
+            value={vehicleOverview?.ownership || "1st"}
           />
           <Item
             icon={<Settings />}
             label="Transmission"
-            value={vehicle?.transmission || "Manual"}
+            value={vehicleOverview?.transmissionType || "NA"}
           />
           <Item
             icon={<BadgeCheck />}
             label="Reg number"
-            value={vehicle?.regNumber || "GJ08BH6585"}
+            value={vehicleOverview.vehicleDocument?.regNumber || "NA"}
           />
 
           <Divider />
 
           {/* ROW 3 */}
           <Item
-            icon={
-              vehicle?.insuranceStatus === "Active" ? (
-                <ShieldCheck />
-              ) : (
-                <ShieldX />
-              )
-            }
-            label="Insurance Status"
-            value={vehicle?.insuranceStatus || "Expired"}
+              icon={isInsuranceActive ? <ShieldCheck /> : <ShieldX />}
+              label="Insurance Status"
+              value={isInsuranceActive ? "Active" : "Expired"}
           />
           <Item
             icon={<FileText />}
             label="Insurance Type"
-            value={vehicle?.insuranceType || "Third Party"}
+            value={vehicleOverview.vehicleDocument?.typeOfInsurance || "NA"}
           />
           <Item
             icon={<MapPin />}
             label="Registered State"
-            value={vehicle?.registeredState || "Gujarat"}
+            value={vehicleOverview.vehicleDocument?.regState || "-"}
           />
 
           <Divider />
@@ -126,9 +142,9 @@ export default function VehicleOverview({ vehicle }) {
           {/* ROW 4 */}
 
           <Item
-            icon={<Key />}
-            label="Spare key"
-            value={vehicle?.spareKey || "NO"}
+              icon={<Key />}
+              label="Spare key"
+              value={hasSpareKey ? "Available" : "Not Available"}
           />
 
           <Item
@@ -146,7 +162,7 @@ export default function VehicleOverview({ vehicle }) {
           <Item
             icon={<Truck />}
             label="Commercial Vehicle"
-            value={vehicle?.isCommercial ? "Yes" : "No"}
+            value={vehicleOverview?.isCommercialVehicle ? "Yes" : "No"}
           />
         </div>
       </div>

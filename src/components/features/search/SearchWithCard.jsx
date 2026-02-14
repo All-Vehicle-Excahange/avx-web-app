@@ -50,6 +50,32 @@ export default function SearchWithCard() {
       prev.includes(chip) ? prev.filter((c) => c !== chip) : [...prev, chip],
     );
   };
+  const getTrackBackground = () => {
+    const minPercent = ((minPrice - MIN) / (MAX - MIN)) * 100;
+    const maxPercent = ((maxPrice - MIN) / (MAX - MIN)) * 100;
+
+    return `linear-gradient(
+    to right,
+    #e5e7eb 0%,
+    #e5e7eb ${minPercent}%,
+    var(--color-fourth) ${minPercent}%,
+    var(--color-fourth) ${maxPercent}%,
+    #e5e7eb ${maxPercent}%,
+    #e5e7eb 100%
+  )`;
+  };
+
+  const getKmTrackBackground = () => {
+    const percent = (kmDistance / MAX_KM) * 100;
+
+    return `linear-gradient(
+    to right,
+    var(--color-fourth) 0%,
+    var(--color-fourth) ${percent}%,
+    #e5e7eb ${percent}%,
+    #e5e7eb 100%
+  )`;
+  };
 
   /* ================= DATA ================= */
   const cardData = {
@@ -70,10 +96,16 @@ export default function SearchWithCard() {
   const brands = [
     { value: "toyota", label: "Toyota" },
     { value: "maruti", label: "Maruti" },
-    { value: "kia", label: "Kia" },
+    {
+      value: "kia",
+      label: "Kia",
+    },
     { value: "bmw", label: "BMW" },
     { value: "tata", label: "Tata" },
-    { value: "mahindra", label: "Mahindra" },
+    {
+      value: "mahindra",
+      label: "Mahindra",
+    },
     { value: "honda", label: "Honda" },
     { value: "hyundai", label: "Hyundai" },
   ];
@@ -81,14 +113,20 @@ export default function SearchWithCard() {
   const fuelTypes = [
     { value: "petrol", label: "Petrol" },
     { value: "diesel", label: "Diesel" },
-    { value: "electric", label: "Electric" },
+    {
+      value: "electric",
+      label: "Electric",
+    },
     { value: "cng", label: "CNG" },
     { value: "hybrid", label: "Hybrid" },
   ];
 
   const transmissionTypes = [
     { value: "manual", label: "Manual" },
-    { value: "automatic", label: "Automatic" },
+    {
+      value: "automatic",
+      label: "Automatic",
+    },
     { value: "amt", label: "AMT" },
     { value: "cvt", label: "CVT" },
     { value: "dct", label: "DCT" },
@@ -97,16 +135,28 @@ export default function SearchWithCard() {
   const models = [
     { value: "fortuner", label: "Fortuner" },
     { value: "corolla", label: "Corolla" },
-    { value: "fronx", label: "Fronx" },
+    {
+      value: "fronx",
+      label: "Fronx",
+    },
     { value: "creta", label: "Creta" },
     { value: "harrier", label: "Harrier" },
-    { value: "seltos", label: "Seltos" },
+    {
+      value: "seltos",
+      label: "Seltos",
+    },
     { value: "innova", label: "Innova" },
     { value: "swift", label: "Swift" },
-    { value: "baleno", label: "Baleno" },
+    {
+      value: "baleno",
+      label: "Baleno",
+    },
     { value: "hector", label: "Hector" },
     { value: "venue", label: "Venue" },
-    { value: "sonet", label: "Sonet" },
+    {
+      value: "sonet",
+      label: "Sonet",
+    },
     { value: "xuv700", label: "XUV700" },
     { value: "thar", label: "Thar" },
     { value: "glanza", label: "Glanza" },
@@ -115,19 +165,31 @@ export default function SearchWithCard() {
   const variants = [
     { value: "base", label: "Base" },
     { value: "mid", label: "Mid Variant" },
-    { value: "top", label: "Top Variant" },
+    {
+      value: "top",
+      label: "Top Variant",
+    },
     { value: "sports", label: "Sports Edition" },
     { value: "premium", label: "Premium" },
-    { value: "limited", label: "Limited Edition" },
+    {
+      value: "limited",
+      label: "Limited Edition",
+    },
   ];
 
   const vehicleTypes = [
     { value: "suv", label: "SUV" },
     { value: "sedan", label: "Sedan" },
-    { value: "hatchback", label: "Hatchback" },
+    {
+      value: "hatchback",
+      label: "Hatchback",
+    },
     { value: "muv", label: "MUV" },
     { value: "truck", label: "Truck" },
-    { value: "coupe", label: "Coupe" },
+    {
+      value: "coupe",
+      label: "Coupe",
+    },
     { value: "convertible", label: "Convertible" },
   ];
 
@@ -199,14 +261,10 @@ export default function SearchWithCard() {
 
               <button
                 onClick={() => setAvxAssumed(!avxAssumed)}
-                className={`relative w-12 h-6 rounded-full transition cursor-pointer ${
-                  avxAssumed ? "bg-primary/90" : "bg-white/20"
-                }`}
+                className={`relative w-12 h-6 rounded-full transition cursor-pointer ${avxAssumed ? "bg-primary/90" : "bg-white/20"}`}
               >
                 <span
-                  className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-secondary transition-transform ${
-                    avxAssumed ? "translate-x-6" : "translate-x-0"
-                  }`}
+                  className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-secondary transition-transform ${avxAssumed ? "translate-x-6" : "translate-x-0"}`}
                 />
               </button>
             </div>
@@ -223,7 +281,10 @@ export default function SearchWithCard() {
                 </div>
 
                 <div className="relative h-6 flex items-center">
-                  <div className="absolute w-full h-1.5 bg-gray-200 rounded-full"></div>
+                  <div
+                    className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
+                    style={{ background: getTrackBackground() }}
+                  />
 
                   <input
                     type="range"
@@ -260,8 +321,11 @@ export default function SearchWithCard() {
             <FilterSection title=" KM Driven" defaultOpen={true}>
               <div className="flex flex-col gap-2 mt-3">
                 <div className="relative h-6 flex items-center">
-                  {/* Gray Background Track */}
-                  <div className="absolute w-full h-1.5 bg-gray-200 rounded-full"></div>
+                  {/* Animated Track */}
+                  <div
+                    className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
+                    style={{ background: getKmTrackBackground() }}
+                  />
 
                   <input
                     type="range"
@@ -276,7 +340,9 @@ export default function SearchWithCard() {
 
                 <div className="flex justify-between text-xs text-primary/70 mb-1">
                   <span>
-                    <strong className="text-primary/60">{kmDistance} km</strong>
+                    <strong className="text-primary/60">
+                      {kmDistance.toLocaleString()} km
+                    </strong>
                   </span>
                 </div>
               </div>
@@ -349,14 +415,10 @@ export default function SearchWithCard() {
                 </span>
                 <button
                   onClick={() => setAvxAssumed(!avxAssumed)}
-                  className={`relative w-9 h-5 rounded-full ${
-                    avxAssumed ? "bg-primary" : "bg-white/20"
-                  }`}
+                  className={`relative w-9 h-5 rounded-full ${avxAssumed ? "bg-primary" : "bg-white/20"}`}
                 >
                   <span
-                    className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-secondary transition-transform ${
-                      avxAssumed ? "translate-x-4" : ""
-                    }`}
+                    className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-secondary transition-transform ${avxAssumed ? "translate-x-4" : ""}`}
                   />
                 </button>
               </div>
@@ -431,21 +493,15 @@ export default function SearchWithCard() {
                         key={page}
                         onClick={() => handlePageChange(page)}
                         className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-sm sm:text-lg font-medium cursor-pointer transition-all
-                ${
-                  currentPage === page
-                    ? "bg-primary text-black"
-                    : "text-white hover:bg-primary hover:text-black"
-                }`}
+                ${currentPage === page ? "bg-primary text-black" : "text-white hover:bg-primary hover:text-black"}`}
                       >
                         {page}
                       </li>
                     ))}
 
                   {/* DOTS */}
-                  
 
                   {/* LAST PAGE */}
-                  
                 </ul>
 
                 {/* RIGHT – NEXT */}
@@ -488,11 +544,7 @@ export default function SearchWithCard() {
                 <div
                   key={item}
                   onClick={() => setActiveFilterTab(item)}
-                  className={`px-4 py-3 cursor-pointer text-sm ${
-                    activeFilterTab === item
-                      ? "bg-secondary/10 font-semibold"
-                      : "hover:bg-secondary/5"
-                  }`}
+                  className={`px-4 py-3 cursor-pointer text-sm ${activeFilterTab === item ? "bg-secondary/10 font-semibold" : "hover:bg-secondary/5"}`}
                 >
                   {item}
                 </div>

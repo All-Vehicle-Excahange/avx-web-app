@@ -114,7 +114,7 @@ export default function ConsultantsAndBuyers() {
 
   return (
     <section className="">
-      <div className="mx-auto max-w-7xl px-6 py-10">
+      <div className="mx-auto w-full py-10">
         {/* ===================== */}
         {/* TOGGLE */}
         {/* ===================== */}

@@ -142,7 +142,7 @@ export default function TopPicsSection() {
     pb-1
   "
       >
-        {smallCars.map((vehicle) => (
+        {cardData.map((vehicle) => (
           // TODO : REPLACE THIS SMALL CARDS WITH API DATA
           <div key={vehicle.id} className="lg:col-span-1 lg:row-span-1 h-full">
             <VehicleCard data={vehicle} />
