@@ -21,6 +21,7 @@ import SpecialOffer from "./SpecialOffer";
 import Navbar from "@/components/layout/Navbar";
 import overview from "@/pages/consult/dashboard/overview";
 import VehicleOverviewMain from "./VehicleOverviewMain";
+import {useParams} from "next/navigation";
 
 export default function VehicleDetails() {
   const specificationRef = useRef(null);

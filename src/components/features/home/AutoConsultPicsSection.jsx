@@ -8,7 +8,6 @@ import { getHomeFeedConsult } from "@/services/user.service";
 export default function AutoConsultPicsSection(props) {
   // ✅ HARD SAFE DEFAULT
   const safeLimit = typeof props.limit === "number" ? props.limit : 4;
-  console.log("limit prop:", props.limit, "safeLimit:", safeLimit);
 
   const consultantsDmy = [
     {

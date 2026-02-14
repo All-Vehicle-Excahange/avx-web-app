@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   MapPin,
   MessageCircle,
@@ -101,29 +101,22 @@ export default function StoreFrontHeroSection() {
 
             {/* Subscriber Count Card */}
 
-            <div className="mt-4 w-full bg-primary/5 rounded-xl px-3 py-2 border border-third/20 flex items-center justify-between">
-              {/* Left: Icon + Label */}
+            <div className="mt-6 w-full flex flex-col items-center gap-3">
+              {/* First Row — Centered Followers Count */}
               <div className="flex items-center gap-2">
                 <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
                   <Users className="w-4 h-4 text-primary" />
                 </div>
 
-                <p className="text-[10px] uppercase font-semibold text-third tracking-wider">
-                  Subscribers
+                <p className="text-base font-bold text-primary leading-none">
+                  {comsultDetails.followersCount?.toLocaleString() || "0"}
                 </p>
               </div>
 
-              {/* Right: Count */}
-              <p className="text-base font-bold text-primary leading-none">
-                {comsultDetails.followersCount?.toLocaleString() || "0"}
-              </p>
-            </div>
-
-            {/* Subscribe Button */}
-            <div className="mt-4 w-full">
+              {/* Second Row — Full Width Button */}
               <Button
                 onClick={handleFollowToggle}
-                size="md"
+                size="sm"
                 variant="outline"
                 full
               >

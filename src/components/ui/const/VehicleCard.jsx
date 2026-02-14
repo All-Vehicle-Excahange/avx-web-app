@@ -163,7 +163,7 @@ export default function VehicleCard({ data, onWishlistChange }) {
           <div className="flex items-center justify-between gap-2">
             <h3 className="text-sm md:text-xl font-bold">₹ {mapped.price}</h3>
 
-            <Button href="/vehicle/details" variant="outline" size="sm">
+            <Button href={`/vehicle/details/${data.id}`} variant="outline" size="sm">
               View Details
             </Button>
           </div>
