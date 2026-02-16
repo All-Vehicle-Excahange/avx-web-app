@@ -2,6 +2,8 @@
 import { useAuthStore } from "@/stores/useAuthStore";
 import axios from "axios";
 import toast from "react-hot-toast";
+import {setupGuestUser} from "@/lib/guest.util";
+
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -19,13 +21,29 @@ export const axiosNodeInstance = axios.create({
   withCredentials: true,
 });
 
-axiosInstance.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().token;
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+axiosInstance.interceptors.request.use(
+    async (config) => {
+      const token = useAuthStore.getState().token;
+
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+
+      try {
+        const guestId = await setupGuestUser();
+
+        if (guestId) {
+          config.headers["guestId"] = guestId;
+        }
+      } catch (err) {
+        console.error("Failed to attach guestId:", err);
+      }
+
+      return config;
+    },
+    (error) => Promise.reject(error)
+);
+
 
 let refreshAttempts = 0;
 

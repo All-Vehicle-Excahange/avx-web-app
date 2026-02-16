@@ -109,29 +109,34 @@ export default function AutoConsultPicsSection(props) {
       try {
         const res = await getHomeFeedConsult({
           pageNo: 1,
-          size: safeLimit, // ✅ ALWAYS NUMBER
+          size: safeLimit,
         });
 
         if (mounted && Array.isArray(res?.data) && res.data.length > 0) {
           setConsultants(
-            res.data.map((item) => ({
-              id: item.id,
-              name: item.consultationName,
-              image: item.bannerUrl || "/cs.png",
-              logo: item.logoUrl || "/cs.png",
-              rating: item.averageRating,
-              reviews: item.totalReviews,
-              vehicleCount: item.availableVehicles,
-              location: item.address?.city
-                ? `${item.address.city}, ${item.address.country}`
-                : "Location not available",
-              priceRange:
-                item.minVehiclePrice && item.maxVehiclePrice
-                  ? `₹${item.minVehiclePrice} - ₹${item.maxVehiclePrice}`
-                  : "Not disclosed",
-              isSponsored: item.isActiveTier,
-            })),
+              res.data.map((item) => ({
+                id: item.id,
+                username: item.username,
+                name: item.consultationName || "-",
+                image: item.bannerUrl || "/cs.png",
+                logo: item.logoUrl || "/cs.png",
+                rating: item.averageRating ?? 0,
+                reviews: item.totalReviews ?? 0,
+                vehicleCount: item.availableVehicles ?? 0,
+                services: item.services || [],
+                vehicleTypes: item.vehicleTypes || [],
+                location:
+                    item.address?.city && item.address?.country
+                        ? `${item.address.city}, ${item.address.country}`
+                        : "-",
+                priceRange:
+                    item.minVehiclePrice && item.maxVehiclePrice
+                        ? `₹${Number(item.minVehiclePrice).toLocaleString()} - ₹${Number(item.maxVehiclePrice).toLocaleString()}`
+                        : "-",
+                isSponsored: item.isActiveTier || false,
+              }))
           );
+
         }
       } catch (err) {
         console.error("Consultant fetch failed:", err);
