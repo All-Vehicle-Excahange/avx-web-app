@@ -5,6 +5,10 @@ const ENDPOINT = {
     getWhereYouLeftOff: "/homefeed/vehicles/history",
     getRecentlySold: "/homefeed/vehicles/recently-sold",
     getHomeFeedConsult: "/homefeed/consultations",
+    getAvxIsnpectedTwoWheel: "/homefeed/vehicles/avx-inspected/two-wheeler",
+    getAvxIsnpectedFourWheel: "/homefeed/vehicles/avx-inspected/four-wheeler",
+    getTopPicsFour: "/homefeed/vehicles/four-wheeler",
+    getTopPicsTwo: "/homefeed/vehicles/two-wheeler",
     getState: "/util/address/states/101",
     getCities: "util/address/cities",
     addWishList: "/vehicle/wishlist",
@@ -22,6 +26,7 @@ const ENDPOINT = {
     checkIsEligibleToCreateReview: "/consultation/review/eligible",
     getAllReview: "/consultation/review/all",
     addNewReview: "/consultation/review",
+    getSimularVehicles: "/vehicle/detail-page"
 };
 
 export const getUserHomeFeed = async (data) => {
@@ -56,6 +61,78 @@ export const getRecentlySold = async (data) => {
         const {pageNo, size} = data;
 
         const res = await axiosInstance.get(ENDPOINT.getRecentlySold, {
+            params: {pageNo, size},
+        });
+
+        return handleResponse(res);
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getAvxIsnpectedTwoWheel = async (data) => {
+    try {
+        const {pageNo, size} = data;
+
+        const res = await axiosInstance.get(ENDPOINT.getAvxIsnpectedTwoWheel, {
+            params: {pageNo, size},
+        });
+
+        return handleResponse(res);
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getAvxIsnpectedFourWheel = async (data) => {
+    try {
+        const {pageNo, size} = data;
+
+        const res = await axiosInstance.get(ENDPOINT.getAvxIsnpectedFourWheel, {
+            params: {pageNo, size},
+        });
+
+        return handleResponse(res);
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getTopPicsFour = async (data) => {
+    try {
+        const {pageNo, size} = data;
+
+        const res = await axiosInstance.get(ENDPOINT.getTopPicsFour, {
+            params: {pageNo, size},
+        });
+
+        return handleResponse(res);
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getTopPicsTwo = async (data) => {
+    try {
+        const {pageNo, size} = data;
+
+        const res = await axiosInstance.get(ENDPOINT.getTopPicsTwo, {
+            params: {pageNo, size},
+        });
+
+        return handleResponse(res);
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+
+export const getSimularVehicles = async (data) => {
+    try {
+        const {pageNo, size ,  id} = data;
+
+        const res = await axiosInstance.get(`${ENDPOINT.getSimularVehicles}/${id}/similar`, {
             params: {pageNo, size},
         });
 

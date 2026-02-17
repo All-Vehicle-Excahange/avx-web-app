@@ -7,32 +7,42 @@ import {
     MapPin,
     CheckCircle,
 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { addWishList, removeWishList } from "@/services/user.service";
+import {useEffect, useState} from "react";
+import {addWishList, removeWishList} from "@/services/user.service";
 
-export default function VehicleSummaryRight({ vehicle, summary }) {
+import {useAuthStore} from "@/stores/useAuthStore";
+import LoginPopup from "@/components/auth/LoginPopup";
+
+
+export default function VehicleSummaryRight({vehicle, summary}) {
     const vehicleId = vehicle?.id;
 
-    // ✅ Initialize from backend value
     const [isFavorite, setIsFavorite] = useState(
         vehicle?.isWishlisted || false
     );
+    const [isLoginOpen, setIsLoginOpen] = useState(false);
 
     const [loading, setLoading] = useState(false);
 
-    // ✅ Keep in sync if vehicle changes
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+
+
     useEffect(() => {
         setIsFavorite(vehicle?.isWishlisted || false);
     }, [vehicle?.isWishlisted]);
 
-    // ✅ Wishlist Toggle Handler
+
     const handleWishlistToggle = async () => {
+        if (!isLoggedIn) {
+            setIsLoginOpen(true);
+            return;
+        }
+
         if (!vehicleId || loading) return;
 
         try {
             setLoading(true);
 
-            // Optimistic UI update
             const newValue = !isFavorite;
             setIsFavorite(newValue);
 
@@ -43,15 +53,15 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
             }
         } catch (error) {
             console.error("Wishlist error:", error);
-
-            // Revert if API fails
             setIsFavorite((prev) => !prev);
         } finally {
             setLoading(false);
         }
     };
 
+
     return (
+        <>
         <aside className="relative text-primary rounded-2xl shadow-xl overflow-hidden border border-third/60">
             <div className="relative z-10 p-6 space-y-5">
                 {/* HEADER */}
@@ -83,7 +93,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
                     </button>
                 </div>
 
-                <div className="border-t border-third/40" />
+                <div className="border-t border-third/40"/>
 
                 {/* DEALER INFO */}
                 <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
@@ -94,7 +104,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
                         </h3>
 
                         <div className="flex items-center gap-2 text-sm">
-                            <Star className="text-yellow-400" size={16} />
+                            <Star className="text-yellow-400" size={16}/>
                             <span className="font-medium text-primary">
                 {summary?.averageRating || 0}
               </span>
@@ -104,7 +114,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
                         </div>
 
                         <p className="flex items-center gap-2 text-sm text-third">
-                            <MapPin size={14} />
+                            <MapPin size={14}/>
                             {summary?.address
                                 ? `${summary.address.city}, ${summary.address.state}, ${summary.address.country}`
                                 : "Location not available"}
@@ -153,7 +163,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
                     </div>
                 </div>
 
-                <div className="border-t border-third/40" />
+                <div className="border-t border-third/40"/>
 
                 {/* INQUIRY STATUS */}
                 <div className="space-y-2">
@@ -186,7 +196,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
                                 <div className="w-full h-2 bg-third/30 rounded-full overflow-hidden">
                                     <div
                                         className="h-full bg-primary rounded-full transition-all duration-500"
-                                        style={{ width: `${percentage}%` }}
+                                        style={{width: `${percentage}%`}}
                                     />
                                 </div>
 
@@ -204,7 +214,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
                     })()}
                 </div>
 
-                <div className="border-t border-third/40" />
+                <div className="border-t border-third/40"/>
 
                 {/* ACTION BUTTONS */}
                 <div className="grid grid-cols-2 gap-3 pt-2">
@@ -223,5 +233,11 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
                 </div>
             </div>
         </aside>
+            <LoginPopup
+                isOpen={isLoginOpen}
+                onClose={() => setIsLoginOpen(false)}
+                onSignup={() => setIsLoginOpen(false)}
+            />
+        </>
     );
 }

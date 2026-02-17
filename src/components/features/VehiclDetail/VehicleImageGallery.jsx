@@ -6,21 +6,39 @@ import { useMemo, useState } from "react";
 
 export default function VehicleImageGallery({ vehicle }) {
 
-  const media = useMemo(() => {
-    if (!vehicle?.vehicleImages?.length) return [];
 
-    return [...vehicle.vehicleImages]
-        .sort((a, b) => a.displayOrder - b.displayOrder)
-        .map((item) => ({
-          type: item.isVideo ? "video" : "image",
-          src: item.imageUrl, // video url or image url
-          thumbnail: item.isVideo
-              ? item.videoThumbnailUrl
-              : item.imageUrl,
-        }));
-  }, [vehicle]);
+    const media = useMemo(() => {
+        const items = [];
 
-  const [active, setActive] = useState(0);
+
+        if (vehicle?.thumbnailUrl) {
+            items.push({
+                type: "image",
+                src: vehicle.thumbnailUrl,
+                thumbnail: vehicle.thumbnailUrl,
+            });
+        }
+
+        if (vehicle?.vehicleImages?.length) {
+            const sorted = [...vehicle.vehicleImages]
+                .sort((a, b) => a.displayOrder - b.displayOrder)
+                .map((item) => ({
+                    type: item.isVideo ? "video" : "image",
+                    src: item.imageUrl,
+                    thumbnail: item.isVideo
+                        ? item.videoThumbnailUrl
+                        : item.imageUrl,
+                }));
+
+            items.push(...sorted);
+        }
+
+        return items;
+    }, [vehicle]);
+
+
+
+    const [active, setActive] = useState(0);
 
   const prev = () =>
       setActive((p) => (p === 0 ? media.length - 1 : p - 1));

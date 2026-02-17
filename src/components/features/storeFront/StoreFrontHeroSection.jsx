@@ -1,261 +1,283 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
-  MapPin,
-  MessageCircle,
-  Star,
-  Users,
-  Briefcase,
-  Car,
-  CheckCircle,
-  IndianRupee,
-  CornerUpRight,
+    MapPin,
+    MessageCircle,
+    Star,
+    Users,
+    Briefcase,
+    Car,
+    CheckCircle,
+    IndianRupee,
+    CornerUpRight,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import {useParams} from "next/navigation";
 import {followConsultant, getStoreFrontByUsername, unFollowConsultant} from "@/services/user.service";
+import LoginPopup from "@/components/auth/LoginPopup";
+import {useAuthStore} from "@/stores/useAuthStore";
 
 
 export default function StoreFrontHeroSection() {
-  const params = useParams();
-  const id = params.id;
+    const params = useParams();
+    const id = params.id;
 
-  const [comsultDetails, setComsultDetails] = useState(null);
-  const [isFollower, setIsFollower] = useState(false);
+    const [comsultDetails, setComsultDetails] = useState(null);
+    const [isFollower, setIsFollower] = useState(false);
+    const [isLoginOpen, setIsLoginOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchStoreFront = async () => {
-      try {
-        const res = await getStoreFrontByUsername(id);
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
-        if (res?.data) {
-          setComsultDetails(res.data);
-          setIsFollower(res.data.isFollower || false);
+
+    useEffect(() => {
+        const fetchStoreFront = async () => {
+            try {
+                const res = await getStoreFrontByUsername(id);
+
+                if (res?.data) {
+                    setComsultDetails(res.data);
+                    setIsFollower(res.data.isFollower || false);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        if (id) fetchStoreFront();
+    }, [id]);
+
+    if (!comsultDetails) return null;
+
+    const formatServiceName = (service) =>
+        service
+            ?.toLowerCase()
+            ?.split("_")
+            ?.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            ?.join(" ");
+
+    const formattedPrice =
+        comsultDetails.minVehiclePrice &&
+        comsultDetails.maxVehiclePrice
+            ? `₹${Number(
+                comsultDetails.minVehiclePrice
+            ).toLocaleString()} - ₹${Number(
+                comsultDetails.maxVehiclePrice
+            ).toLocaleString()}`
+            : "-";
+
+    const handleFollowToggle = async () => {
+        if (!comsultDetails?.id) return;
+
+        if (!isLoggedIn) {
+            setIsLoginOpen(true);
+            return;
         }
-      } catch (error) {
-        console.log(error);
-      }
+
+
+        const previousState = isFollower;
+
+        try {
+            // Optimistic update
+            setIsFollower(!previousState);
+            setComsultDetails((prev) => ({
+                ...prev,
+                followersCount: previousState
+                    ? (prev.followersCount || 1) - 1
+                    : (prev.followersCount || 0) + 1,
+            }));
+
+            if (previousState) {
+                // Currently following → Unfollow
+                await unFollowConsultant(comsultDetails.id);
+            } else {
+                // Currently not following → Follow
+                await followConsultant(comsultDetails.id);
+            }
+        } catch (error) {
+            console.log("Follow/Unfollow error:", error);
+
+            // Revert if API fails
+            setIsFollower(previousState);
+            setComsultDetails((prev) => ({
+                ...prev,
+                followersCount: previousState
+                    ? (prev.followersCount || 0) + 1
+                    : (prev.followersCount || 1) - 1,
+            }));
+        }
     };
 
-    if (id) fetchStoreFront();
-  }, [id]);
 
-  if (!comsultDetails) return null;
+    return (
+        <>
+            <section
+                className="w-full max-w-[1480px] mt-10 mx-auto border border-third/40 rounded-[2.5rem] overflow-hidden shadow-sm">
 
-  const formatServiceName = (service) =>
-      service
-          ?.toLowerCase()
-          ?.split("_")
-          ?.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          ?.join(" ");
-
-  const formattedPrice =
-      comsultDetails.minVehiclePrice &&
-      comsultDetails.maxVehiclePrice
-          ? `₹${Number(
-              comsultDetails.minVehiclePrice
-          ).toLocaleString()} - ₹${Number(
-              comsultDetails.maxVehiclePrice
-          ).toLocaleString()}`
-          : "-";
-
-  const handleFollowToggle = async () => {
-    if (!comsultDetails?.id) return;
-
-    const previousState = isFollower;
-
-    try {
-      // Optimistic update
-      setIsFollower(!previousState);
-      setComsultDetails((prev) => ({
-        ...prev,
-        followersCount: previousState
-            ? (prev.followersCount || 1) - 1
-            : (prev.followersCount || 0) + 1,
-      }));
-
-      if (previousState) {
-        // Currently following → Unfollow
-        await unFollowConsultant(comsultDetails.id);
-      } else {
-        // Currently not following → Follow
-        await followConsultant(comsultDetails.id);
-      }
-    } catch (error) {
-      console.log("Follow/Unfollow error:", error);
-
-      // Revert if API fails
-      setIsFollower(previousState);
-      setComsultDetails((prev) => ({
-        ...prev,
-        followersCount: previousState
-            ? (prev.followersCount || 0) + 1
-            : (prev.followersCount || 1) - 1,
-      }));
-    }
-  };
-
-
-  return (
-      <section className="w-full max-w-[1480px] mt-10 mx-auto border border-third/40 rounded-[2.5rem] overflow-hidden shadow-sm">
-
-        {/* ================= BANNER ================= */}
-        <div
-            className="w-full h-80 bg-cover bg-center"
-            style={{
-              backgroundImage: `url(${comsultDetails.bannerUrl})`,
-            }}
-        />
-
-        {/* ================= CONTENT AREA ================= */}
-        <div className="px-6 md:px-10 py-4 relative">
-          <div className="flex flex-col lg:flex-row gap-8">
-
-            {/* LEFT COLUMN */}
-            <div className="flex flex-col items-center -mt-20 z-30 w-full lg:w-48 shrink-0">
-
-              <div className="relative w-42 h-42 rounded-full overflow-hidden bg-primary border-4 border-white shadow-xl">
-                <Image
-                    src={comsultDetails.logoUrl}
-                    alt="Consultant Logo"
-                    fill
-                    className="object-cover"
-                    priority
+                {/* ================= BANNER ================= */}
+                <div
+                    className="w-full h-80 bg-cover bg-center"
+                    style={{
+                        backgroundImage: `url(${comsultDetails.bannerUrl})`,
+                    }}
                 />
-              </div>
 
-              <div className="mt-6 w-full flex flex-col items-center gap-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Users className="w-4 h-4 text-primary" />
-                  </div>
+                {/* ================= CONTENT AREA ================= */}
+                <div className="px-6 md:px-10 py-4 relative">
+                    <div className="flex flex-col lg:flex-row gap-8">
 
-                  <p className="text-base font-bold text-primary leading-none">
-                    {comsultDetails.followersCount?.toLocaleString() || "0"}
-                  </p>
-                </div>
+                        {/* LEFT COLUMN */}
+                        <div className="flex flex-col items-center -mt-20 z-30 w-full lg:w-48 shrink-0">
 
-                <Button
-                    onClick={handleFollowToggle}
-                    size="sm"
-                    variant="outline"
-                    full
-                >
-                  {isFollower ? "Unsubscribe" : "Subscribe"}
-                </Button>
-              </div>
-            </div>
+                            <div
+                                className="relative w-42 h-42 rounded-full overflow-hidden bg-primary border-4 border-white shadow-xl">
+                                <Image
+                                    src={comsultDetails.logoUrl}
+                                    alt="Consultant Logo"
+                                    fill
+                                    className="object-cover"
+                                    priority
+                                />
+                            </div>
 
-            {/* CENTER COLUMN */}
-            <div className="flex-1 space-y-4 pt-2">
-              <div>
-                <h1 className="text-3xl font-semibold text-primary">
-                  {comsultDetails.consultationName}
-                </h1>
+                            <div className="mt-6 w-full flex flex-col items-center gap-3">
+                                <div className="flex items-center gap-2">
+                                    <div
+                                        className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
+                                        <Users className="w-4 h-4 text-primary"/>
+                                    </div>
 
-                <p className="flex items-center gap-1.5 text-third mt-1">
-                  <MapPin className="w-4 h-4 shrink-0" />
-                  <span className="text-sm">
+                                    <p className="text-base font-bold text-primary leading-none">
+                                        {comsultDetails.followersCount?.toLocaleString() || "0"}
+                                    </p>
+                                </div>
+
+                                <Button
+                                    onClick={handleFollowToggle}
+                                    size="sm"
+                                    variant="outline"
+                                    full
+                                >
+                                    {isFollower ? "Unsubscribe" : "Subscribe"}
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* CENTER COLUMN */}
+                        <div className="flex-1 space-y-4 pt-2">
+                            <div>
+                                <h1 className="text-3xl font-semibold text-primary">
+                                    {comsultDetails.consultationName}
+                                </h1>
+
+                                <p className="flex items-center gap-1.5 text-third mt-1">
+                                    <MapPin className="w-4 h-4 shrink-0"/>
+                                    <span className="text-sm">
                   {[
-                    comsultDetails?.address?.address,
-                    comsultDetails?.address?.city,
-                    comsultDetails?.address?.state,
-                    comsultDetails?.address?.country,
+                      comsultDetails?.address?.address,
+                      comsultDetails?.address?.city,
+                      comsultDetails?.address?.state,
+                      comsultDetails?.address?.country,
                   ]
                       .filter(Boolean)
                       .join(", ") || "N/A"}
                 </span>
-                </p>
-              </div>
+                                </p>
+                            </div>
 
-              {/* STATS GRID */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-5 gap-x-6 py-4">
-                {[
-                  {
-                    label: "Rating",
-                    value: comsultDetails.averageRating ?? 0,
-                    icon: Star,
-                  },
-                  {
-                    label: "Available Vehicles",
-                    value: comsultDetails.availableVehicles ?? 0,
-                    icon: Car,
-                  },
-                  {
-                    label: "Sold Vehicles",
-                    value: comsultDetails.soldVehiclesCount ?? 0,
-                    icon: CheckCircle,
-                  },
-                  {
-                    label: "Price Range",
-                    value: formattedPrice,
-                    icon: IndianRupee,
-                  },
-                  {
-                    label: "Since",
-                    value: comsultDetails.establishmentYear || "N/A",
-                    icon: Briefcase,
-                  },
-                ].map(({ label, value, icon: Icon }) => (
-                    <div key={label} className="flex items-center gap-3">
-                      <div className="p-2 bg-primary/5 rounded-lg border border-primary/10">
-                        <Icon className="w-4 h-4 text-third" />
-                      </div>
-                      <div>
-                        <p className="text-[10px] uppercase text-third font-semibold leading-none mb-1">
-                          {label}
-                        </p>
-                        <p className="text-sm font-semibold text-primary leading-none">
-                          {value}
-                        </p>
-                      </div>
-                    </div>
-                ))}
-              </div>
-            </div>
+                            {/* STATS GRID */}
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-5 gap-x-6 py-4">
+                                {[
+                                    {
+                                        label: "Rating",
+                                        value: comsultDetails.averageRating ?? 0,
+                                        icon: Star,
+                                    },
+                                    {
+                                        label: "Available Vehicles",
+                                        value: comsultDetails.availableVehicles ?? 0,
+                                        icon: Car,
+                                    },
+                                    {
+                                        label: "Sold Vehicles",
+                                        value: comsultDetails.soldVehiclesCount ?? 0,
+                                        icon: CheckCircle,
+                                    },
+                                    {
+                                        label: "Price Range",
+                                        value: formattedPrice,
+                                        icon: IndianRupee,
+                                    },
+                                    {
+                                        label: "Since",
+                                        value: comsultDetails.establishmentYear || "N/A",
+                                        icon: Briefcase,
+                                    },
+                                ].map(({label, value, icon: Icon}) => (
+                                    <div key={label} className="flex items-center gap-3">
+                                        <div className="p-2 bg-primary/5 rounded-lg border border-primary/10">
+                                            <Icon className="w-4 h-4 text-third"/>
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] uppercase text-third font-semibold leading-none mb-1">
+                                                {label}
+                                            </p>
+                                            <p className="text-sm font-semibold text-primary leading-none">
+                                                {value}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
 
-            {/* RIGHT COLUMN */}
-            <div className="w-full lg:w-80 space-y-6 pt-2">
+                        {/* RIGHT COLUMN */}
+                        <div className="w-full lg:w-80 space-y-6 pt-2">
 
-              <div className="space-y-3">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-third">
-                  Services Provided
-                </p>
+                            <div className="space-y-3">
+                                <p className="text-[11px] font-bold uppercase tracking-wider text-third">
+                                    Services Provided
+                                </p>
 
-                <div className="flex flex-wrap gap-2">
-                  {comsultDetails?.services?.length > 0 ? (
-                      comsultDetails.services.map((service) => (
-                          <span
-                              key={service}
-                              className="px-3 py-1.5 text-[11px] font-medium border border-third rounded-full text-primary hover:bg-primary/5 transition-colors cursor-default"
-                          >
+                                <div className="flex flex-wrap gap-2">
+                                    {comsultDetails?.services?.length > 0 ? (
+                                        comsultDetails.services.map((service) => (
+                                            <span
+                                                key={service}
+                                                className="px-3 py-1.5 text-[11px] font-medium border border-third rounded-full text-primary hover:bg-primary/5 transition-colors cursor-default"
+                                            >
                       {formatServiceName(service)}
                     </span>
-                      ))
-                  ) : (
-                      <span className="text-xs text-third italic">
+                                        ))
+                                    ) : (
+                                        <span className="text-xs text-third italic">
                     No services listed
                   </span>
-                  )}
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="flex gap-3 pt-6">
+                                <Button size="sm" variant="ghost">
+                                    Start Chat
+                                    <MessageCircle className="ml-2 w-4 h-4"/>
+                                </Button>
+
+                                <Button size="sm" variant="ghost">
+                                    Get Directions
+                                    <CornerUpRight className="ml-2 w-4 h-4"/>
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-
-              <div className="flex gap-3 pt-6">
-                <Button size="sm" variant="ghost">
-                  Start Chat
-                  <MessageCircle className="ml-2 w-4 h-4" />
-                </Button>
-
-                <Button size="sm" variant="ghost">
-                  Get Directions
-                  <CornerUpRight className="ml-2 w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-  );
+            </section>
+            <LoginPopup
+                isOpen={isLoginOpen}
+                onClose={() => setIsLoginOpen(false)}
+                onSignup={() => setIsLoginOpen(false)}
+            />
+        </>
+    );
 }

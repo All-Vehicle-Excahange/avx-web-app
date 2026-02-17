@@ -8,7 +8,7 @@ export default function Testimonials({ summary }) {
 
   const [active, setActive] = useState(0);
 
-  // Ensure active index is always valid
+  // Ensure active tab is always valid
   const safeActive =
       reviews.length === 0
           ? 0

@@ -202,7 +202,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
           {/* ✅ Rejected Section */}
           {isRejected && (
             <p className="text-sm text-red-400 font-semibold pt-2">
-              Inquiry Rejected ❌
+              Inquiry Rejected
             </p>
           )}
         </div>

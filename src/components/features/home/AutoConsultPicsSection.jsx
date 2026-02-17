@@ -9,95 +9,6 @@ export default function AutoConsultPicsSection(props) {
   // ✅ HARD SAFE DEFAULT
   const safeLimit = typeof props.limit === "number" ? props.limit : 4;
 
-  const consultantsDmy = [
-    {
-      id: "d1",
-      name: "Adarsh Auto Consultants",
-      location: "Chhapi, Gujarat",
-      rating: 4.5,
-      vehicleCount: 116,
-      image: "/cs.png",
-      logo: "/cs.png",
-      isSponsored: true,
-      priceRange: "1L - 2L",
-    },
-    {
-      id: "d2",
-      name: "Premium Auto Hub",
-      location: "Ahmedabad, Gujarat",
-      rating: 5,
-      vehicleCount: 80,
-      image: "/cs.png",
-      logo: "/cs.png",
-      isSponsored: false,
-      priceRange: "2L - 5L",
-    },
-    {
-      id: "d3",
-      name: "PRO Auto Hub",
-      location: "Ahmedabad, Gujarat",
-      rating: 5,
-      vehicleCount: 80,
-      image: "/cs.png",
-      logo: "/cs.png",
-      isSponsored: false,
-      priceRange: "2L - 5L",
-    },
-    {
-      id: "d4",
-      name: "Hello Auto Hub",
-      location: "Ahmedabad, Gujarat",
-      rating: 5,
-      vehicleCount: 80,
-      image: "/cs.png",
-      logo: "/cs.png",
-      isSponsored: false,
-      priceRange: "2L - 5L",
-    },{
-      id: "d1",
-      name: "Adarsh Auto Consultants",
-      location: "Chhapi, Gujarat",
-      rating: 4.5,
-      vehicleCount: 116,
-      image: "/cs.png",
-      logo: "/cs.png",
-      isSponsored: true,
-      priceRange: "1L - 2L",
-    },
-    {
-      id: "d2",
-      name: "Premium Auto Hub",
-      location: "Ahmedabad, Gujarat",
-      rating: 5,
-      vehicleCount: 80,
-      image: "/cs.png",
-      logo: "/cs.png",
-      isSponsored: false,
-      priceRange: "2L - 5L",
-    },
-    {
-      id: "d3",
-      name: "PRO Auto Hub",
-      location: "Ahmedabad, Gujarat",
-      rating: 5,
-      vehicleCount: 80,
-      image: "/cs.png",
-      logo: "/cs.png",
-      isSponsored: false,
-      priceRange: "2L - 5L",
-    },
-    {
-      id: "d4",
-      name: "Hello Auto Hub",
-      location: "Ahmedabad, Gujarat",
-      rating: 5,
-      vehicleCount: 80,
-      image: "/cs.png",
-      logo: "/cs.png",
-      isSponsored: false,
-      priceRange: "2L - 5L",
-    },
-  ];
 
   const [consultants, setConsultants] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -151,7 +62,7 @@ export default function AutoConsultPicsSection(props) {
 
   // ✅ FINAL DATA SOURCE
   const finalConsultants =
-    consultants.length > 0 ? consultants : consultantsDmy;
+ consultants
 
   return (
     <div className="w-full py-10 px-4">

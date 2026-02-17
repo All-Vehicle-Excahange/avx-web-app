@@ -33,7 +33,7 @@ axiosInstance.interceptors.request.use(
         const guestId = await setupGuestUser();
 
         if (guestId) {
-          config.headers["guestId"] = guestId;
+          config.headers["X-Guest-Id"] = guestId;
         }
       } catch (err) {
         console.error("Failed to attach guestId:", err);
