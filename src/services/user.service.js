@@ -26,7 +26,8 @@ const ENDPOINT = {
     checkIsEligibleToCreateReview: "/consultation/review/eligible",
     getAllReview: "/consultation/review/all",
     addNewReview: "/consultation/review",
-    getSimularVehicles: "/vehicle/detail-page"
+    getSimularVehicles: "/vehicle/detail-page",
+    getConsualtInventory: "/consultation/detail-page/inventory"
 };
 
 export const getUserHomeFeed = async (data) => {
@@ -354,3 +355,18 @@ export const getStoreFrontByUsername = async (username) => {
         throw error;
     }
 }
+
+
+export const getConsualtInventory = async (data) => {
+    try {
+        const {pageNo, size, sortBy, direction, id} = data;
+
+        const res = await axiosInstance.get(`${ENDPOINT.getConsualtInventory}/${id}`, {
+            params: {pageNo, size, sortBy , direction},
+        });
+
+        return handleResponse(res);
+    } catch (error) {
+        throw error;
+    }
+};
