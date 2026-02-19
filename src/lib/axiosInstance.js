@@ -1,45 +1,48 @@
 "use client";
-import { useAuthStore } from "@/stores/useAuthStore";
+import {useAuthStore} from "@/stores/useAuthStore";
 import axios from "axios";
 import toast from "react-hot-toast";
 import {setupGuestUser} from "@/lib/guest.util";
 
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-  withCredentials: true,
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    headers: {
+        "Content-Type": "application/json",
+    },
+    withCredentials: true,
 });
 
 export const axiosNodeInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_NODE_API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-  withCredentials: true,
+    baseURL: process.env.NEXT_PUBLIC_NODE_API_URL,
+    headers: {
+        "Content-Type": "application/json",
+    },
+    withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(
     async (config) => {
-      const token = useAuthStore.getState().token;
+        const token = useAuthStore.getState().token;
 
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-
-      try {
-        const guestId = await setupGuestUser();
-
-        if (guestId) {
-          config.headers["X-Guest-Id"] = guestId;
+        if (
+            token &&
+            !config.url?.includes("/auth/refresh")
+        ) {
+            config.headers.Authorization = `Bearer ${token}`;
         }
-      } catch (err) {
-        console.error("Failed to attach guestId:", err);
-      }
 
-      return config;
+        try {
+            const guestId = await setupGuestUser();
+
+            if (guestId) {
+                config.headers["X-Guest-Id"] = guestId;
+            }
+        } catch (err) {
+            console.error("Failed to attach guestId:", err);
+        }
+
+        return config;
     },
     (error) => Promise.reject(error)
 );
@@ -48,116 +51,116 @@ axiosInstance.interceptors.request.use(
 let refreshAttempts = 0;
 
 axiosInstance.interceptors.response.use(
-  (response) => response,
+    (response) => response,
 
-  async (error) => {
-    const originalRequest = error.config;
+    async (error) => {
+        const originalRequest = error.config;
 
-    if (error.response?.status === 401) {
-      const { user, isLoggedIn } = useAuthStore.getState();
+        if (error.response?.status === 401) {
+            const {user, isLoggedIn} = useAuthStore.getState();
 
-      if (!isLoggedIn || !user?.refreshToken) {
-        return Promise.reject(error);
-      }
+            if (!isLoggedIn || !user?.refreshToken) {
+                return Promise.reject(error);
+            }
 
-      if (refreshAttempts >= 2) {
-        console.log("❌ Refresh limit reached. Logging out...");
+            if (refreshAttempts >= 2) {
+                console.log("❌ Refresh limit reached. Logging out...");
 
-        useAuthStore.getState().logout();
-        useAuthStore.getState().openLoginPopup();
+                useAuthStore.getState().logout();
+                useAuthStore.getState().openLoginPopup();
 
-        if (typeof window !== "undefined") {
-          window.location.href = "/";
+                if (typeof window !== "undefined") {
+                    window.location.href = "/";
+                }
+
+                return Promise.reject(error);
+            }
+
+            if (!originalRequest._retry) {
+                originalRequest._retry = true;
+                refreshAttempts++;
+
+                try {
+                    console.log(
+                        `🔄 Token expired. Refresh attempt ${refreshAttempts}...`,
+                    );
+
+                    const res = await axios.post(
+                        `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
+                        {
+                            refreshToken: user.refreshToken,
+                        },
+                        {withCredentials: true},
+                    );
+
+                    if (res.data?.data?.accessToken) {
+                        useAuthStore
+                            .getState()
+                            .login(res.data.data, res.data.data.accessToken);
+                    }
+
+                    return axiosInstance(originalRequest);
+                } catch (refreshError) {
+                    console.log("❌ Refresh failed. Logging out...");
+
+                    useAuthStore.getState().logout();
+
+                    return Promise.reject(refreshError);
+                }
+            }
         }
 
         return Promise.reject(error);
-      }
-
-      if (!originalRequest._retry) {
-        originalRequest._retry = true;
-        refreshAttempts++;
-
-        try {
-          console.log(
-            `🔄 Token expired. Refresh attempt ${refreshAttempts}...`,
-          );
-
-          const res = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
-            {
-              refreshToken: user.refreshToken,
-            },
-            { withCredentials: true },
-          );
-
-          if (res.data?.data?.accessToken) {
-            useAuthStore
-              .getState()
-              .login(res.data.data, res.data.data.accessToken);
-          }
-
-          return axiosInstance(originalRequest);
-        } catch (refreshError) {
-          console.log("❌ Refresh failed. Logging out...");
-
-          useAuthStore.getState().logout();
-
-          return Promise.reject(refreshError);
-        }
-      }
-    }
-
-    return Promise.reject(error);
-  },
+    },
 );
 
 export const handleResponse = (response) => {
-  const api = response.data;
+    const api = response.data;
 
-  return {
-    success: !api.error,
-    message: api.message,
-    data: api.data,
-    pagination: api.pageResponse || null,
-    status: api.status,
-    statusCode: api.statusCode,
-    timestamp: api.timestamp,
-  };
+    return {
+        success: !api.error,
+        message: api.message,
+        data: api.data,
+        pagination: api.pageResponse || null,
+        status: api.status,
+        statusCode: api.statusCode,
+        timestamp: api.timestamp,
+    };
 };
 
 export const handleError = (error) => {
-  const api = error?.response?.data;
+    const api = error?.response?.data;
 
-  return {
-    success: false,
-    message: api?.message || "Something went wrong",
-    data: api?.data || null,
-    pagination: null,
-    status: api?.status || "ERROR",
-    statusCode: api?.statusCode || 500,
-  };
+    return {
+        success: false,
+        message: api?.message || "Something went wrong",
+        data: api?.data || null,
+        pagination: null,
+        status: api?.status || "ERROR",
+        statusCode: api?.statusCode || 500,
+    };
 };
 
 export const showBackendError = (error) => {
-  const api = error?.response?.data;
+    const api = error?.response?.data;
 
-  if (!api) {
-    toast.error("Something went wrong");
-    return;
-  }
+    if (!api) {
+        toast.error("Something went wrong");
+        return;
+    }
 
-  // If validation errors exist
-  if (api?.data?.validationErrors) {
-    const errors = api.data.validationErrors;
+    // If validation errors exist
+    if (api?.data?.validationErrors) {
+        const errors = api.data.validationErrors;
 
-    // Show first error
-    const firstMessage = Object.values(errors)[0];
-    toast.error(firstMessage);
-    return;
-  }
+        // Show first error
+        const firstMessage = Object.values(errors)[0];
+        toast.error(firstMessage);
+        return;
+    }
 
-  // Normal message
-  toast.error(api?.message || "Request failed");
+    // Normal message
+    toast.error(api?.message || "Request failed");
 };
 
 export default axiosInstance;

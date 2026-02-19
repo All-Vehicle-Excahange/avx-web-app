@@ -36,9 +36,27 @@ function MyProfile() {
 
   const [stateOpen, setStateOpen] = useState(false);
   const [cityOpen, setCityOpen] = useState(false);
+  const [genderOpen, setGenderOpen] = useState(false);
 
   const stateRef = useRef(null);
   const cityRef = useRef(null);
+  const genderRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (stateRef.current && !stateRef.current.contains(e.target))
+        setStateOpen(false);
+      if (cityRef.current && !cityRef.current.contains(e.target))
+        setCityOpen(false);
+      // Add this gender check
+      if (genderRef.current && !genderRef.current.contains(e.target))
+        setGenderOpen(false);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
 
   useEffect(() => {
     const loadData = async () => {
@@ -416,14 +434,35 @@ function MyProfile() {
                 }
               />
 
-              <InputField
-                label="Gender"
-                variant="colored"
-                value={metaForm.gender || ""}
-                onChange={(e) =>
-                  setMetaForm({ ...metaForm, gender: e.target.value })
-                }
-              />
+              {/* ✅ GENDER DROPDOWN */}
+              <div ref={genderRef} className="relative">
+                <label className="text-xs text-third">Gender</label>
+
+                <div
+                    onClick={() => setGenderOpen(!genderOpen)}
+                    className="h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-secondary text-primary cursor-pointer"
+                >
+                  <span>{metaForm.gender || "Select Gender"}</span>
+                  <ChevronDown size={16} />
+                </div>
+
+                {genderOpen && (
+                    <div className="absolute z-[9999] mt-1 w-full border border-primary rounded-md bg-secondary text-primary shadow-lg overflow-hidden">
+                      {["MALE", "FEMALE"].map((genderOption) => (
+                          <div
+                              key={genderOption}
+                              onClick={() => {
+                                setMetaForm((prev) => ({ ...prev, gender: genderOption }));
+                                setGenderOpen(false);
+                              }}
+                              className="px-3 py-2 hover:bg-primary/20 cursor-pointer"
+                          >
+                            {genderOption}
+                          </div>
+                      ))}
+                    </div>
+                )}
+              </div>
 
               <InputField
                 label="Profession"

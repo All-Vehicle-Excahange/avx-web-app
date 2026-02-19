@@ -2,13 +2,13 @@
 
 import {ChevronRight, Star} from "lucide-react";
 
-export default function VehicleHeader({vehicle,ratting}) {
+export default function VehicleHeader({vehicle, ratting}) {
     return (
         <header className="w-full space-y-3 pt-6 bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)]">
             {/* Breadcrumb */}
             <p className="text-xs sm:text-sm text-third flex items-center gap-1">
                 HOME <ChevronRight size={16}/> USED CARS IN AHMEDABAD{" "}
-                <ChevronRight size={16}/> TATA CARS <ChevronRight size={16}/>  {vehicle?.makerName || "Tata"}{" "}
+                <ChevronRight size={16}/> TATA CARS <ChevronRight size={16}/> {vehicle?.makerName || "Tata"}{" "}
                 {vehicle?.modelName || "Harrier XZ Plus"}{" "}
                 {vehicle?.variantName || "Harrier XZ Plus"}
             </p>
@@ -30,7 +30,9 @@ export default function VehicleHeader({vehicle,ratting}) {
                 </h1>
 
                 <div className="bg-primary text-secondary px-4 py-2 rounded-lg text-right  w-fit">
-                    <p className="text-lg font-semibold">₹13.15 Lakh</p>
+                    <p className="text-lg font-semibold">
+                        ₹{(vehicle?.price / 100000).toFixed(2)} Lakh
+                    </p>
                 </div>
             </div>
         </header>

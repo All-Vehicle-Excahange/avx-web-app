@@ -27,7 +27,7 @@ function CloseInqPopup({ onClose, onConfirm }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
       {/* ✅ Popup Box */}
-      <div className="w-full max-w-lg rounded-2xl bg-secondary border border-third/30 p-6 shadow-lg space-y-5">
+      <div className=" w-lg rounded-2xl bg-secondary border border-third/30 p-6 shadow-lg space-y-5">
         {/* ✅ Header */}
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-semibold text-primary">Close Inquiry</h2>

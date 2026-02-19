@@ -59,7 +59,17 @@ export default function VehicleOverview({ vehicle }) {
           <Item
             icon={<Calendar />}
             label="Reg. year"
-            value={vehicleOverview?.yearOfMfg || "Mar 2018"}
+            value={
+              vehicleOverview.vehicleDocument?.regDate
+                  ? new Date(vehicleOverview.vehicleDocument.regDate)
+                      .toLocaleDateString("en-US", {
+                        month: "short",
+                        year: "numeric",
+                      })
+                      .replace(" ", "-")
+                  : "-"
+            }
+
           />
 
           <div className="relative group">

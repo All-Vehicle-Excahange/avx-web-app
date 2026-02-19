@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 import SponsoredRibbon from "./SponsoredRibbonMain";
-import {Fuel, Heart, MapPinned, Settings2, Star, Users} from "lucide-react";
+import {Fuel, Heart, MapPinned, Settings2, Star, User, Users} from "lucide-react";
 import Button from "../button";
 import Image from "next/image";
 import {useRouter} from "next/router";
@@ -67,9 +67,10 @@ export default function VehicleCard({data, onWishlistChange}) {
 
         rating: data.rating || "-",
 
-        userName: data.vehicleCardOwner
-            ? `${data.vehicleCardOwner.firstname} ${data.vehicleCardOwner.lastname}`
+        userName: data.vehicleOwner
+            ? `${data.vehicleOwner.firstname ?? ""} ${data.vehicleOwner.lastname ?? ""}`.trim()
             : data.userName,
+
 
         location: data.vehicleCardAddress
             ? `${data.vehicleCardAddress.city}, ${data.vehicleCardAddress.country}`
@@ -79,6 +80,10 @@ export default function VehicleCard({data, onWishlistChange}) {
 
         sponsored: data.sponsored || false,
     };
+
+    const handleCardClick = () => {
+        router.push(`/vehicle/details/${data.id}`);
+    }
 
     return (
         <>
@@ -96,7 +101,7 @@ export default function VehicleCard({data, onWishlistChange}) {
             >
                 <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
                     {/* IMAGE */}
-                    <div className="relative w-32 sm:w-40 min-h-40 md:min-h-0 md:h-62 md:w-full shrink-0 p-2">
+                    <div  onClick={handleCardClick}  className="relative w-32 sm:w-40 min-h-40 md:min-h-0 md:h-62 md:w-full shrink-0 p-2 hover:cursor-pointer">
                         <div className="relative w-full h-full overflow-hidden rounded-xl">
                             {mapped.sponsored && <SponsoredRibbon/>}
 
@@ -140,7 +145,7 @@ export default function VehicleCard({data, onWishlistChange}) {
 
                                 {/* USER */}
                                 <p className="text-xs md:text-sm text-primary/90 mt-1 flex items-center gap-1.5">
-                                    Listed By: {mapped.userName || "Nihal Chaudhary"}
+                                    <User className="w-3.5 h-3.5"/> {mapped.userName || "Nihal Chaudhary"}
                                 </p>
 
                                 {/* LOCATION */}
