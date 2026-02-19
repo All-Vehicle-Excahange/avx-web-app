@@ -2,49 +2,53 @@
 
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
+import { Autoplay, Pagination } from "swiper/modules";
 
 import "swiper/css";
+import "swiper/css/pagination";
 
 export default function PromoBanner() {
-  return (
-    <div className="w-full h-60 sm:h-[280px] rounded-xl overflow-hidden relative">
-      <Swiper
-        modules={[Autoplay]}
-        autoplay={{ delay: 3000, disableOnInteraction: false }}
-        loopz
-        className="w-full h-full"
-      >
-        <SwiperSlide>
-          <BannerImage src="/banner_Basic.jpeg" />
-        </SwiperSlide>
+    return (
+        <div className="relative w-full h-60 sm:h-[280px] rounded-xl overflow-hidden">
+            <Swiper
+                modules={[Autoplay, Pagination]}
+                autoplay={{ delay: 3000, disableOnInteraction: false }}
+                pagination={{
+                    clickable: true,
+                    dynamicBullets: false,
+                }}
+                loop={true}
+                className="w-full h-full promo-swiper"
+            >
+                <SwiperSlide>
+                    <BannerImage src="/banner_Basic.jpeg" />
+                </SwiperSlide>
 
-        <SwiperSlide>
-          <BannerImage src="/about2.png" />
-        </SwiperSlide>
+                <SwiperSlide>
+                    <BannerImage src="/about2.png" />
+                </SwiperSlide>
 
-        <SwiperSlide>
-          <BannerImage src="/about3.png" />
-        </SwiperSlide>
-      </Swiper>
-    </div>
-  );
+                <SwiperSlide>
+                    <BannerImage src="/about3.png" />
+                </SwiperSlide>
+            </Swiper>
+        </div>
+    );
 }
 
-/* Banner Content */
-function BannerImage({ src, title, desc }) {
-  return (
-    <div className="relative w-full h-full">
-      <Image src={src} alt={title} fill className="object-cover" priority />
+function BannerImage({ src }) {
+    return (
+        <div className="relative w-full h-full">
+            <Image
+                src={src}
+                alt="banner"
+                fill
+                className="object-cover"
+                priority
+            />
 
-    
-      <div className="absolute inset-0 bg-black/20" />
-
-      {/* Text */}
-      <div className="absolute inset-0 p-4 flex flex-col justify-end text-white">
-        <h3 className="text-base sm:text-lg font-semibold">{title}</h3>
-        <p className="text-xs sm:text-sm text-white/80">{desc}</p>
-      </div>
-    </div>
-  );
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-black/20 z-10" />
+        </div>
+    );
 }

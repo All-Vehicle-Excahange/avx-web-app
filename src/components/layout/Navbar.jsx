@@ -1,6 +1,6 @@
 "use client";
 import { Menu, Search, Car, Bike, User2, User } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "../ui/button";
 import HamburgerDrawer from "../features/home/HamburgerDrawer";
 import AccountPopup from "../features/home/AccountPopup";
@@ -15,6 +15,13 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
   const [open, setOpen] = useState(false);
 
   const { user, isLoggedIn } = useAuthStore();
+
+  // if a signup dialog opens anywhere, make sure the account hover menu is closed
+  useEffect(() => {
+    const handler = () => setAccountOpen(false);
+    document.addEventListener("signuppopup:open", handler);
+    return () => document.removeEventListener("signuppopup:open", handler);
+  }, []);
 
   return (
     <>

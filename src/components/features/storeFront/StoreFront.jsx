@@ -26,7 +26,7 @@ export default function StoreFront() {
 
         <div className="px-4 md:px-6 py-6">
           <section className="w-full">
-            {/*             
+              {/*
             <aside className="flex flex-col gap-6 xl:sticky xl:top-24 h-fit">
               <StoreSummaryAside />
             </aside>

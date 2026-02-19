@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
-import { ChevronDown } from "lucide-react";
+import {ArrowUpDown, ChevronDown} from "lucide-react";
 
 /* ================= SORT OPTIONS ================= */
 const sortOptions = [
@@ -43,7 +43,7 @@ export default function SearchHeader() {
           <div className="flex items-center justify-between gap-4">
             {/* LEFT */}
             <div className="flex items-center gap-3 flex-wrap">
-              <h2 className="text-primary text-base md:text-lg font-bold">
+              <h2 className="text-primary text-base md:text-lg ">
                 Diesel SUVs in Ahmedabad
               </h2>
               <span className="text-primary/80 text-sm">
@@ -68,7 +68,11 @@ export default function SearchHeader() {
                   hover:border-secondary/50
                 "
               >
-                <span>Sort By: {selected.label}</span>
+                <div className="flex items-center gap-2">
+                  <ArrowUpDown size={14} className="text-secondary/70" />
+                  <span>{selected.label}</span>
+                </div>
+
                 <ChevronDown
                   size={14}
                   className={`transition-transform ${open ? "rotate-180" : ""}`}

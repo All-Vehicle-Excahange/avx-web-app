@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import Image from "next/image";
 import Button from "@/components/ui/button";
@@ -23,14 +24,55 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
   const [otpSent, setOtpSent] = useState(false);
   const otpRefs = useRef([]);
 
+  // scroll position preserving and scroll-lock logic
+  const scrollY = useRef(0);
+
   useEffect(() => {
+    const scrollContainer =
+      document.scrollingElement || document.documentElement || document.body;
+
+    const preventScroll = (e) => {
+      if (isOpen) e.preventDefault();
+    };
+
     if (isOpen) {
+      // broadcast to any listeners that signup just opened
+      document.dispatchEvent(new Event("signuppopup:open"));
+
+      scrollY.current = scrollContainer.scrollTop || window.scrollY;
+
+      scrollContainer.style.position = "fixed";
+      scrollContainer.style.top = `-${scrollY.current}px`;
+      scrollContainer.style.left = "0";
+      scrollContainer.style.right = "0";
+      scrollContainer.style.overflow = "hidden";
+
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+
+      document.addEventListener("wheel", preventScroll, { passive: false });
+      document.addEventListener("touchmove", preventScroll, { passive: false });
     } else {
+      scrollContainer.style.position = "";
+      scrollContainer.style.top = "";
+      scrollContainer.style.left = "";
+      scrollContainer.style.right = "";
+      scrollContainer.style.overflow = "";
       document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
+      window.scrollTo(0, scrollY.current);
     }
+
     return () => {
+      scrollContainer.style.position = "";
+      scrollContainer.style.top = "";
+      scrollContainer.style.left = "";
+      scrollContainer.style.right = "";
+      scrollContainer.style.overflow = "";
       document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
+      document.removeEventListener("wheel", preventScroll);
+      document.removeEventListener("touchmove", preventScroll);
     };
   }, [isOpen]);
 
@@ -157,7 +199,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
     }
   };
 
-  return (
+  const modalContent = (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="relative flex w-full max-w-[900px] overflow-hidden rounded-2xl shadow-2xl bg-primary-white">
         <button
@@ -344,4 +386,8 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
       </div>
     </div>
   );
+
+  return typeof document !== "undefined"
+    ? createPortal(modalContent, document.body)
+    : null;
 }

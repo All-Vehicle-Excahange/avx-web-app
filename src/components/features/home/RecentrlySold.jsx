@@ -1,6 +1,7 @@
-import React from "react";
+import {useState , useEffect} from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
+import {getRecentlySold} from "@/services/user.service";
 
 const smallCars = [
   {
@@ -57,7 +58,28 @@ const smallCars = [
   },
 ];
 
+
+
 const RecentrlySold = () => {
+  const [vehicle, setVehicle] = useState([])
+
+  useEffect(() => {
+    const fetchVehicles = async () => {
+      try {
+        const data = {
+          pageNo: 1, size: 4
+        }
+        const res = await getRecentlySold(data)
+        setVehicle(res.data)
+      } catch (error) {
+        throw error;
+      }
+    }
+    fetchVehicles()
+  }, [])
+
+  if (!vehicle.length) return null;
+
   return (
     <div className="w-full ">
       {/* Header */}
@@ -81,7 +103,7 @@ const RecentrlySold = () => {
       </div>
 
       <div className=" flex-1 min-h-0 grid sm:items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {smallCars.map((car) => (
+        {vehicle.map((car) => (
           <VehicleCard data={car} key={car.id} />
         ))}
       </div>

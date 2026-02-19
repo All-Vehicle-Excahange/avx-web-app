@@ -9,95 +9,6 @@ export default function AutoConsultPicsSection(props) {
   // ✅ HARD SAFE DEFAULT
   const safeLimit = typeof props.limit === "number" ? props.limit : 4;
 
-  const consultantsDmy = [
-    {
-      id: "d1",
-      name: "Adarsh Auto Consultants",
-      location: "Chhapi, Gujarat",
-      rating: 4.5,
-      vehicleCount: 116,
-      image: "/cs.png",
-      logo: "/cs.png",
-      isSponsored: true,
-      priceRange: "1L - 2L",
-    },
-    {
-      id: "d2",
-      name: "Premium Auto Hub",
-      location: "Ahmedabad, Gujarat",
-      rating: 5,
-      vehicleCount: 80,
-      image: "/cs.png",
-      logo: "/cs.png",
-      isSponsored: false,
-      priceRange: "2L - 5L",
-    },
-    {
-      id: "d3",
-      name: "PRO Auto Hub",
-      location: "Ahmedabad, Gujarat",
-      rating: 5,
-      vehicleCount: 80,
-      image: "/cs.png",
-      logo: "/cs.png",
-      isSponsored: false,
-      priceRange: "2L - 5L",
-    },
-    {
-      id: "d4",
-      name: "Hello Auto Hub",
-      location: "Ahmedabad, Gujarat",
-      rating: 5,
-      vehicleCount: 80,
-      image: "/cs.png",
-      logo: "/cs.png",
-      isSponsored: false,
-      priceRange: "2L - 5L",
-    },{
-      id: "d1",
-      name: "Adarsh Auto Consultants",
-      location: "Chhapi, Gujarat",
-      rating: 4.5,
-      vehicleCount: 116,
-      image: "/cs.png",
-      logo: "/cs.png",
-      isSponsored: true,
-      priceRange: "1L - 2L",
-    },
-    {
-      id: "d2",
-      name: "Premium Auto Hub",
-      location: "Ahmedabad, Gujarat",
-      rating: 5,
-      vehicleCount: 80,
-      image: "/cs.png",
-      logo: "/cs.png",
-      isSponsored: false,
-      priceRange: "2L - 5L",
-    },
-    {
-      id: "d3",
-      name: "PRO Auto Hub",
-      location: "Ahmedabad, Gujarat",
-      rating: 5,
-      vehicleCount: 80,
-      image: "/cs.png",
-      logo: "/cs.png",
-      isSponsored: false,
-      priceRange: "2L - 5L",
-    },
-    {
-      id: "d4",
-      name: "Hello Auto Hub",
-      location: "Ahmedabad, Gujarat",
-      rating: 5,
-      vehicleCount: 80,
-      image: "/cs.png",
-      logo: "/cs.png",
-      isSponsored: false,
-      priceRange: "2L - 5L",
-    },
-  ];
 
   const [consultants, setConsultants] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -109,29 +20,34 @@ export default function AutoConsultPicsSection(props) {
       try {
         const res = await getHomeFeedConsult({
           pageNo: 1,
-          size: safeLimit, // ✅ ALWAYS NUMBER
+          size: safeLimit,
         });
 
         if (mounted && Array.isArray(res?.data) && res.data.length > 0) {
           setConsultants(
-            res.data.map((item) => ({
-              id: item.id,
-              name: item.consultationName,
-              image: item.bannerUrl || "/cs.png",
-              logo: item.logoUrl || "/cs.png",
-              rating: item.averageRating,
-              reviews: item.totalReviews,
-              vehicleCount: item.availableVehicles,
-              location: item.address?.city
-                ? `${item.address.city}, ${item.address.country}`
-                : "Location not available",
-              priceRange:
-                item.minVehiclePrice && item.maxVehiclePrice
-                  ? `₹${item.minVehiclePrice} - ₹${item.maxVehiclePrice}`
-                  : "Not disclosed",
-              isSponsored: item.isActiveTier,
-            })),
+              res.data.map((item) => ({
+                id: item.id,
+                username: item.username,
+                name: item.consultationName || "-",
+                image: item.bannerUrl || "/cs.png",
+                logo: item.logoUrl || "/cs.png",
+                rating: item.averageRating ?? 0,
+                reviews: item.totalReviews ?? 0,
+                vehicleCount: item.availableVehicles ?? 0,
+                services: item.services || [],
+                vehicleTypes: item.vehicleTypes || [],
+                location:
+                    item.address?.city && item.address?.country
+                        ? `${item.address.city}, ${item.address.country}`
+                        : "-",
+                priceRange:
+                    item.minVehiclePrice && item.maxVehiclePrice
+                        ? `₹${Number(item.minVehiclePrice).toLocaleString()} - ₹${Number(item.maxVehiclePrice).toLocaleString()}`
+                        : "-",
+                isSponsored: item.isActiveTier || false,
+              }))
           );
+
         }
       } catch (err) {
         console.error("Consultant fetch failed:", err);
@@ -146,7 +62,7 @@ export default function AutoConsultPicsSection(props) {
 
   // ✅ FINAL DATA SOURCE
   const finalConsultants =
-    consultants.length > 0 ? consultants : consultantsDmy;
+ consultants
 
   return (
     <div className="w-full py-10 px-4">

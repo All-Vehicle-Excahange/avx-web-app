@@ -1,61 +1,59 @@
-import React, { useState } from "react";
+"use client";
 
+import React, { useState } from "react";
 import MyVehicle from "./MyVehicle";
 import MyProfile from "./MyProfile";
 import Inquiries from "./Inquiries";
 import Inspection from "./Inspection";
 import Wishlist from "./WishList";
+import { useParams } from "next/navigation";
 
 function UserDetails() {
-  const [activeTab, setActiveTab] = useState("myvehicle");
+  const params = useParams();
+  const getTab = params?.id || null;
+
+  const [manualTab, setManualTab] = useState(null);
+
+  // If user manually clicks, use that.
+  const activeTab = manualTab || getTab || "myvehicle";
 
   return (
-    <>
       <section className="pt-12">
-        <div>
-          <h1 className="text-2xl  font-bold">Manage Your Activities</h1>
-          <section className="w-full">
-            <div className="flex flex-col  w-full">
-              <div className=" 3xl:container">
-                <div className="flex gap-10 border-b border-third/30 overflow-x-auto no-scrollbar whitespace-nowrap">
-                  {[
-                    { id: "myvehicle", label: "My Vehicles" },
-                    { id: "inquaries", label: "Inquiries" },
-                    { id: "inspections", label: "AVX Inspections" },
-                    { id: "wishlist", label: "WishList" },
-                    { id: "myprofile", label: "My Profile" },
-                  ].map((tab) => (
-                    <button
-                      key={tab.id}
-                      onClick={() => setActiveTab(tab.id)}
-                      className={`relative py-4 text-sm font-medium transition
-                               ${
-                                 activeTab === tab.id
-                                   ? "text-primary"
-                                   : "text-third hover:text-primary"
-                               }`}
-                    >
-                      {tab.label}
+        <h1 className="text-2xl font-bold">Manage Your Activities</h1>
 
-                      {activeTab === tab.id && (
-                        <span className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
+        <div className="flex gap-10 border-b border-third/30 overflow-x-auto no-scrollbar whitespace-nowrap">
+          {[
+            { id: "myvehicle", label: "My Vehicles" },
+            { id: "inquaries", label: "Inquiries" },
+            { id: "inspections", label: "AVX Inspections" },
+            { id: "wishlist", label: "My Activity & Preference" },
+            { id: "myprofile", label: "My Profile" },
+          ].map((tab) => (
+              <button
+                  key={tab.id}
+                  onClick={() => setManualTab(tab.id)}
+                  className={`relative py-4 text-sm font-medium transition ${
+                      activeTab === tab.id
+                          ? "text-primary"
+                          : "text-third hover:text-primary"
+                  }`}
+              >
+                {tab.label}
 
-              {/* TAB CONTENT */}
-              {activeTab === "myvehicle" && <MyVehicle />}
-              {activeTab === "inquaries" && <Inquiries />}
-              {activeTab === "inspections" && <Inspection />}
-              {activeTab === "wishlist" && <Wishlist />}
-              {activeTab === "myprofile" && <MyProfile />}
-            </div>
-          </section>
+                {activeTab === tab.id && (
+                    <span className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full" />
+                )}
+              </button>
+          ))}
         </div>
+
+        {/* TAB CONTENT */}
+        {activeTab === "myvehicle" && <MyVehicle />}
+        {activeTab === "inquaries" && <Inquiries />}
+        {activeTab === "inspections" && <Inspection />}
+        {activeTab === "wishlist" && <Wishlist />}
+        {activeTab === "myprofile" && <MyProfile />}
       </section>
-    </>
   );
 }
 

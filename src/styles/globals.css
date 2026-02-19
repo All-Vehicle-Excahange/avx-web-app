@@ -349,3 +349,19 @@ html {
   font-family: cursive;
 }
 
+
+.promo-swiper .swiper-pagination {
+  bottom: 14px !important;
+  z-index: 20;
+}
+
+.promo-swiper .swiper-pagination-bullet {
+  background: white !important;
+  opacity: 0.6;
+  width: 8px;
+  height: 8px;
+}
+
+.promo-swiper .swiper-pagination-bullet-active {
+  opacity: 1;
+}

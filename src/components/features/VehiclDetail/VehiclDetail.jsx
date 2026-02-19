@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 
 // TOP
 import VehicleHeader from "./VehicleHeader";
@@ -21,7 +21,10 @@ import SpecialOffer from "./SpecialOffer";
 import Navbar from "@/components/layout/Navbar";
 import overview from "@/pages/consult/dashboard/overview";
 import VehicleOverviewMain from "./VehicleOverviewMain";
+
+
 import {useParams} from "next/navigation";
+import {getVehicleOverview, getVehicleSummary} from "@/services/vehicle.service";
 
 export default function VehicleDetails() {
   const specificationRef = useRef(null);
@@ -70,6 +73,37 @@ export default function VehicleDetails() {
       behavior: "smooth",
     });
   };
+  const params = useParams();
+  const id = params.id;
+  const [vehicleOverview, setVehicleOverview] = useState({});
+  const  [vehicleSummary, setVehicleSummary] = useState({});
+
+  useEffect(() => {
+    const  fetchOverview = async () => {
+      try {
+        const  res = await  getVehicleOverview(id)
+        setVehicleOverview(res.data)
+      }catch (error) {
+        console.log(error);
+      }
+    }
+    fetchOverview();
+  }, [id])
+
+  useEffect(() => {
+    const  fetchSummary = async () => {
+      try {
+        const  res = await  getVehicleSummary(id)
+        setVehicleSummary(res.data)
+      }catch (error) {
+        console.log(error);
+      }
+    }
+    if (id) {
+      fetchSummary();
+    }
+  }, [id])
+
 
   return (
     <>
@@ -82,12 +116,12 @@ export default function VehicleDetails() {
           {/* HEADER */}
           <section className="relative">
             <div className="sticky top-16 pb-4 z-40 ">
-              <VehicleHeader />
+              <VehicleHeader vehicle={vehicleOverview} />
             </div>
 
             <section className="grid grid-cols-1 xl:grid-cols-[2.2fr_1fr] gap-6 items-start">
               <div className="flex flex-col gap-6 min-w-0">
-                <VehicleImageGallery />
+                <VehicleImageGallery vehicle={vehicleOverview} />
 
                 <div className="">
                   <div className="flex gap-8 border-b border-third/40">
@@ -134,7 +168,7 @@ export default function VehicleDetails() {
                 </div>
 
                 <div ref={overviewRef}>
-                  <VehicleOverviewMain />
+                  <VehicleOverviewMain vehicle={vehicleOverview} />
                 </div>
 
                 <div ref={specificationRef}>
@@ -157,8 +191,8 @@ export default function VehicleDetails() {
               </div>
 
               <aside className="flex flex-col gap-6 lg:sticky lg:top-[102px] h-fit">
-                <VehicleSummaryRight />
-                <Testimonials />
+                <VehicleSummaryRight vehicle={vehicleOverview} summary={vehicleSummary} />
+                <Testimonials summary={vehicleSummary}  />
                 <SpecialOffer />
               </aside>
             </section>
