@@ -147,7 +147,7 @@ export default function AccountPopup({open, onClosePopup}) {
                             <>
                                 <Section title="Your Activity">
                                     <Item onClick={() => navigate("/user/details/wishlist")}>Saved Vehicles</Item>
-                                    <Item onClick={() => navigate("/")}>Recently Viewed</Item>
+                                    {/*<Item onClick={() => navigate("/")}>Recently Viewed</Item>*/}
                                     <Item onClick={() => navigate("/compare")}>Compare List</Item>
                                     <Item onClick={() => navigate("/user/details/inquaries")}>My Inquiries</Item>
                                     <Item onClick={() => navigate("/user/details/inspections")}>Inspection

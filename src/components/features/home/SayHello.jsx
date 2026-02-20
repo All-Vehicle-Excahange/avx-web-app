@@ -101,7 +101,7 @@ const SayHello = () => {
                         </div>
                     </div>
 
-                    <div className="flex-shrink-0 relative w-[300px] h-[550px] top-8 ">
+                    <div className="hidden md:flex flex-shrink-0 relative w-[300px] h-[550px] top-8 ">
                         <img
                             key={activeTab}
                             src={images[activeTab]}

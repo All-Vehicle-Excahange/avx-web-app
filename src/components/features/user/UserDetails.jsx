@@ -21,7 +21,7 @@ function UserDetails() {
       <section className="pt-12">
         <h1 className="text-2xl font-bold">Manage Your Activities</h1>
 
-        <div className="flex gap-10 border-b border-third/30 overflow-x-auto no-scrollbar whitespace-nowrap">
+        <div className="flex  gap-10 border-b border-third/30 overflow-x-auto no-scrollbar whitespace-nowrap">
           {[
             { id: "myvehicle", label: "My Vehicles" },
             { id: "inquaries", label: "Inquiries" },
@@ -32,7 +32,7 @@ function UserDetails() {
               <button
                   key={tab.id}
                   onClick={() => setManualTab(tab.id)}
-                  className={`relative py-4 text-sm font-medium transition ${
+                  className={`relative py-4 text-sm font-medium transition hover:cursor-pointer ${
                       activeTab === tab.id
                           ? "text-primary"
                           : "text-third hover:text-primary"
