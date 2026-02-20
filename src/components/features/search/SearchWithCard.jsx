@@ -478,8 +478,6 @@ export default function SearchWithCard() {
 
                   {/* DOTS */}
                   {currentPage > 4 && <li className="mx-1 text-white">…</li>}
-
-                  {/* MIDDLE PAGES */}
                   {[
                     currentPage - 2,
                     currentPage - 1,
@@ -498,10 +496,6 @@ export default function SearchWithCard() {
                         {page}
                       </li>
                     ))}
-
-                  {/* DOTS */}
-
-                  {/* LAST PAGE */}
                 </ul>
 
                 {/* RIGHT – NEXT */}

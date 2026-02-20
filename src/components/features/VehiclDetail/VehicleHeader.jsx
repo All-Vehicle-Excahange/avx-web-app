@@ -29,7 +29,7 @@ export default function VehicleHeader({vehicle, ratting}) {
 
                 </h1>
 
-                <div className="bg-primary text-secondary px-4 py-2 rounded-lg text-right  w-fit">
+                <div className="bg-primary text-secondary px-4 py-2 rounded-lg text-right    w-fit">
                     <p className="text-lg font-semibold">
                         ₹{(vehicle?.price / 100000).toFixed(2)} Lakh
                     </p>
