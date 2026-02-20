@@ -81,11 +81,21 @@ export default function AutoConsultPicsSection(props) {
       )}
 
       {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {finalConsultants.slice(0, safeLimit).map((consultant) => (
-          <ConsultantCard key={consultant.id} {...consultant} />
-        ))}
-      </div>
+
+        {/* Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {finalConsultants.length === 0 ? (
+                <div className="col-span-full flex justify-center py-16">
+                    <h3 className="text-lg font-semibold text-primary/40">
+                        No auto consult found
+                    </h3>
+                </div>
+            ) : (
+                finalConsultants.slice(0, safeLimit).map((consultant) => (
+                    <ConsultantCard key={consultant.id} {...consultant} />
+                ))
+            )}
+        </div>
 
       <div className="mt-8 flex justify-end">
         <Button href="/consultants" variant="outlineAnimated">

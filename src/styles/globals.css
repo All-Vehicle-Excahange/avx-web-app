@@ -365,3 +365,11 @@ html {
 .promo-swiper .swiper-pagination-bullet-active {
   opacity: 1;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

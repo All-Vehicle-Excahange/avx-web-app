@@ -8,8 +8,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 export default function PromoBanner() {
+
     return (
-        <div className="relative w-full h-60 sm:h-[280px] rounded-xl overflow-hidden">
+        <div className="relative w-full  h-48 sm:h-[280px]  rounded-xl overflow-hidden">
             <Swiper
                 modules={[Autoplay, Pagination]}
                 autoplay={{ delay: 3000, disableOnInteraction: false }}

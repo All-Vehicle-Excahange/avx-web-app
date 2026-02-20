@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
-import {ArrowUpDown, ChevronDown} from "lucide-react";
+import { ArrowUpDown, ChevronDown } from "lucide-react";
 
 /* ================= SORT OPTIONS ================= */
 const sortOptions = [
@@ -31,60 +31,62 @@ export default function SearchHeader() {
   }, []);
 
   return (
-    <>
-      {/* NAVBAR */}
-      <div className="fixed top-0 inset-x-0 z-1000">
-        <Navbar heroMode scrolled />
-      </div>
+      <>
+        {/* NAVBAR */}
+        <div className="fixed top-0 inset-x-0 z-1000">
+          <Navbar heroMode scrolled />
+        </div>
 
-      {/* HEADER */}
-      <section className="w-full h-[106px] bg-fourth flex items-center pt-16">
-        <div className="max-w-screen-2xl w-full mx-auto px-4 md:px-8">
-          <div className="flex items-center justify-between gap-4">
-            {/* LEFT */}
-            <div className="flex items-center gap-3 flex-wrap">
-              <h2 className="text-primary text-base md:text-lg ">
-                Diesel SUVs in Ahmedabad
-              </h2>
-              <span className="text-primary/80 text-sm">
+        {/* HEADER */}
+        {/* Changed height to h-auto on mobile, increased mobile pt-24 to clear navbar, added pb-4 for bottom spacing */}
+        <section className=" w-full h-auto md:h-[106px] bg-fourth flex items-center pt-24 md:pt-16 pb-4 md:pb-0">
+          <div className="max-w-screen-2xl w-full mx-auto px-4 md:px-8">
+            <div className="flex items-center justify-between gap-4">
+              {/* LEFT */}
+              <div className="flex items-center gap-3 flex-wrap">
+                <h2 className="text-primary text-base md:text-lg ">
+                  Diesel SUVs in Ahmedabad
+                </h2>
+                <span className="text-primary/80 text-sm">
                 • 82 Results • 37 AVX Inspected • Updated Today
               </span>
-            </div>
+              </div>
 
-            <div ref={dropdownRef} className="relative z-100">
-              <button
-                onClick={() => setOpen((p) => !p)}
-                className="
+              <div ref={dropdownRef} className="relative z-100">
+                <button
+                    onClick={() => setOpen((p) => !p)}
+                    className="
                   flex items-center justify-between gap-2
                   bg-white
                   border border-primary/25
                   rounded-lg
-                  px-3
+                  px-2 sm:px-3
                   h-[30px]
-                  min-w-[180px]
+                  w-auto sm:min-w-[180px]
                   text-[12px]
                   font-medium
                   text-secondary
                   hover:border-secondary/50
                 "
-              >
-                <div className="flex items-center gap-2">
-                  <ArrowUpDown size={14} className="text-secondary/70" />
-                  <span>{selected.label}</span>
-                </div>
+                >
+                  <div className="flex items-center gap-2">
+                    <ArrowUpDown size={14} className="text-secondary/70" />
+                    {/* Hidden on mobile, inline-block on screens sm and up */}
+                    <span className="hidden sm:inline-block">{selected.label}</span>
+                  </div>
 
-                <ChevronDown
-                  size={14}
-                  className={`transition-transform ${open ? "rotate-180" : ""}`}
-                />
-              </button>
+                  <ChevronDown
+                      size={14}
+                      className={`transition-transform ${open ? "rotate-180" : ""}`}
+                  />
+                </button>
 
-              {/* DROPDOWN */}
-              {open && (
-                <div
-                  className="
+                {/* DROPDOWN */}
+                {open && (
+                    <div
+                        className="
                     absolute right-0 mt-2
-                    w-full
+                    w-[180px] sm:w-full
                     bg-white
                     text-secondary
                     border border-primary/20
@@ -92,34 +94,34 @@ export default function SearchHeader() {
                     shadow-lg
                     overflow-hidden
                   "
-                >
-                  {sortOptions.map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => {
-                        setSelected(option);
-                        setOpen(false);
-                      }}
-                      className={`
+                    >
+                      {sortOptions.map((option) => (
+                          <button
+                              key={option.value}
+                              onClick={() => {
+                                setSelected(option);
+                                setOpen(false);
+                              }}
+                              className={`
                         w-full text-left px-3 py-2
                         text-[12px]
                         hover:bg-secondary/10
                         ${
-                          selected.value === option.value
-                            ? "bg-primary/10 font-semibold"
-                            : ""
-                        }
+                                  selected.value === option.value
+                                      ? "bg-primary/10 font-semibold"
+                                      : ""
+                              }
                       `}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              )}
+                          >
+                            {option.label}
+                          </button>
+                      ))}
+                    </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-    </>
+        </section>
+      </>
   );
 }

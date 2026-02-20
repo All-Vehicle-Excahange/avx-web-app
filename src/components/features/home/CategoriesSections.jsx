@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Car, Bike } from "lucide-react";
+import React, {useEffect, useState} from "react";
+import {Car, Bike} from "lucide-react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
-import { getFourWheelWithTag, getTwoWheelWithTag } from "@/services/user.service";
+import {getFourWheelWithTag, getTwoWheelWithTag} from "@/services/user.service";
 
 const cn = (...classes) => classes.filter(Boolean).join(" ");
 
@@ -31,20 +31,20 @@ const vehicleTagMap = {
 
 const categoriesByType = {
     "4-Wheeler": [
-        { id: "urban-rides", label: "Urban Rides", icon: Car },
-        { id: "city-compact", label: "City Compact", icon: Car },
-        { id: "comfort-sedans", label: "Comfort Sedans", icon: Car },
-        { id: "compact-suvs", label: "Compact SUVs", icon: Car },
-        { id: "fullsize-suvs-muvs", label: "Full-Size SUVs & MUVs", icon: Car },
-        { id: "premium-luxury", label: "Premium & Luxury", icon: Car },
+        {id: "urban-rides", label: "Urban Rides", icon: Car},
+        {id: "city-compact", label: "City Compact", icon: Car},
+        {id: "comfort-sedans", label: "Comfort Sedans", icon: Car},
+        {id: "compact-suvs", label: "Compact SUVs", icon: Car},
+        {id: "fullsize-suvs-muvs", label: "Full-Size SUVs & MUVs", icon: Car},
+        {id: "premium-luxury", label: "Premium & Luxury", icon: Car},
     ],
     "2-Wheeler": [
-        { id: "scooters", label: "Scooters", icon: Bike },
-        { id: "commuter-bikes", label: "Commuter Bikes", icon: Bike },
-        { id: "sports-bikes", label: "Sports Bikes", icon: Bike },
-        { id: "cruiser-retro", label: "Cruiser & Retro", icon: Bike },
-        { id: "adventure-touring", label: "Adventure & Touring", icon: Bike },
-        { id: "electric-2w", label: "Electric 2W", icon: Bike },
+        {id: "scooters", label: "Scooters", icon: Bike},
+        {id: "commuter-bikes", label: "Commuter Bikes", icon: Bike},
+        {id: "sports-bikes", label: "Sports Bikes", icon: Bike},
+        {id: "cruiser-retro", label: "Cruiser & Retro", icon: Bike},
+        {id: "adventure-touring", label: "Adventure & Touring", icon: Bike},
+        {id: "electric-2w", label: "Electric 2W", icon: Bike},
     ],
 };
 
@@ -87,7 +87,7 @@ const CategoriesSections = () => {
             <div className="container">
                 <div className="shrink-0 flex flex-col md:flex-row md:items-end justify-between mb-4 gap-4">
                     <div className="flex items-start gap-4">
-                        <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
+                        <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400"/>
 
                         <div>
                             <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
@@ -102,20 +102,20 @@ const CategoriesSections = () => {
                     </div>
 
                     {/* Toggle Switch */}
-                    <div className="w-[300px] flex gap-2 mt-auto">
+                    <div className="flex gap-1 sm:gap-2 mt-auto justify-end w-full sm:w-fit">
                         <button
                             onClick={() => {
                                 setActiveType("4-Wheeler");
                                 setActive("urban-rides");
                             }}
                             className={cn(
-                                "w-full py-2 text-sm font-semibold rounded-3xl border-2 cursor-pointer flex items-center justify-center gap-2 transition-all",
+                                "px-3 py-1 text-xs sm:text-sm font-medium rounded-full border cursor-pointer flex items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0",
                                 activeType === "4-Wheeler"
                                     ? "bg-fourth text-primary border-fourth shadow-sm"
                                     : "text-primary"
                             )}
                         >
-                            <Car size={18} /> 4-Wheeler
+                            <Car size={16}/> 4-Wheeler
                         </button>
 
                         <button
@@ -124,20 +124,22 @@ const CategoriesSections = () => {
                                 setActive("scooters");
                             }}
                             className={cn(
-                                "w-full py-2 text-sm font-semibold rounded-3xl border-2 cursor-pointer flex items-center justify-center gap-2 transition-all",
+                                "px-3 py-1 text-xs sm:text-sm font-medium rounded-full border cursor-pointer flex items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0",
                                 activeType === "2-Wheeler"
                                     ? "bg-fourth text-primary border-fourth shadow-sm"
                                     : "text-primary"
                             )}
                         >
-                            <Bike size={18} /> 2-Wheeler
+                            <Bike size={16}/> 2-Wheeler
                         </button>
                     </div>
+
                 </div>
 
                 {/* Categories */}
                 <div className="w-full my-6">
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 mt-auto">
+                    <div
+                        className="flex sm:flex md:grid md:grid-cols-4 lg:grid-cols-6 gap-4 overflow-x-auto md:overflow-visible no-scrollbar">
                         {categoriesByType[activeType].map((cat) => {
                             const isActive = active === cat.id;
 
@@ -146,13 +148,13 @@ const CategoriesSections = () => {
                                     onClick={() => setActive(cat.id)}
                                     key={cat.id}
                                     className={cn(
-                                        "w-full py-2 text-sm font-semibold rounded-3xl border-2 cursor-pointer flex items-center justify-center gap-2 transition-all",
+                                        "shrink-0 px-4 py-2 text-sm font-semibold rounded-3xl border-2 cursor-pointer flex items-center justify-center gap-2 transition-all whitespace-nowrap",
                                         isActive
                                             ? "bg-fourth text-primary border-fourth shadow-sm"
                                             : "text-primary"
                                     )}
                                 >
-                                    {cat.icon && <cat.icon size={18} />}
+                                    {cat.icon && <cat.icon size={18}/>}
                                     {cat.label}
                                 </button>
                             );

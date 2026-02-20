@@ -56,14 +56,14 @@ export default function TopPicsSection() {
                 </div>
 
                 {/* Toggle Switch */}
-                <div className="w-[300px] flex gap-2 mt-auto">
+                <div className="flex gap-1 sm:gap-2 mt-auto justify-end w-full sm:w-fit">
                     <button
                         onClick={() => setActiveType("4-Wheeler")}
                         className={cn(
-                            "w-full py-2 text-sm font-semibold rounded-[24px] border-2  cursor-pointer flex items-center justify-center gap-2 transition-all",
+                            "px-3 py-1 text-xs sm:text-sm font-medium rounded-full border cursor-pointer flex items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0",
                             activeType === "4-Wheeler"
                                 ? "bg-fourth text-primary border-fourth shadow-sm"
-                                : "text-primary",
+                                : "text-primary"
                         )}
                     >
                         <Car size={18}/> 4-Wheeler
@@ -71,10 +71,10 @@ export default function TopPicsSection() {
                     <button
                         onClick={() => setActiveType("2-Wheeler")}
                         className={cn(
-                            "w-full py-2 text-sm font-semibold rounded-3xl border-2  cursor-pointer flex items-center justify-center gap-2 transition-all",
+                            "px-3 py-1 text-xs sm:text-sm font-medium rounded-full border cursor-pointer flex items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0",
                             activeType === "2-Wheeler"
                                 ? "bg-fourth text-primary border-fourth shadow-sm"
-                                : "text-primary",
+                                : "text-primary"
                         )}
                     >
                         <Bike size={18}/> 2-Wheeler
