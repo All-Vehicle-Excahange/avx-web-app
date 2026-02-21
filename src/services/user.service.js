@@ -31,6 +31,7 @@ const ENDPOINT = {
     getConsualtInventory: "/consultation/detail-page/inventory",
     getFourWheelWithTag: "/homefeed/vehicles/four-wheeler/with-tag",
     getTwoWheelWithTag: "/homefeed/vehicles/two-wheeler/with-tag",
+    getSellerInventory: "/vehicle/seller/my-vehicles"
 
 };
 
@@ -418,4 +419,18 @@ export const getTwoWheelWithTag = async (data) => {
     }
 };
 
+
+export const getSellerInventory = async (data) => {
+    try {
+        const {pageNo, size , listingStatus } = data;
+
+        const res = await axiosInstance.get(ENDPOINT.getSellerInventory, {
+            params: {pageNo, size, listingStatus },
+        });
+
+        return handleResponse(res);
+    } catch (error) {
+        throw error;
+    }
+};
 
