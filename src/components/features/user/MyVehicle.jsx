@@ -1,63 +1,12 @@
-import React, { useState } from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import UserVehicleCard from "./UserVehicleCard";
+import { getSellerInventory } from "@/services/user.service";
 
 function MyVehicle() {
-  const cardData = [
-    {
-      id: "1",
-      title: "BMW 8-2-Door",
-      year: "2022",
-      transmission: "Manual",
-      fuel: "Diesel",
-      seats: "5",
-      rating: "4.3",
-      price: "6,75,998",
-      image: "/big_card_car.jpg",
-      status: "live",
-      inquiries: 12,
-      chats: 3,
-      avxInspected: true,
-    },
-    {
-      id: "2",
-      title: "Audi A6 Sedan",
-      year: "2021",
-      transmission: "Automatic",
-      fuel: "Petrol",
-      seats: "5",
-      rating: "4.5",
-      price: "5,40,000",
-      image: "/big_card_car.jpg",
-      status: "draft",
-    },
-    {
-      id: "3",
-      title: "Mercedes C-Class",
-      year: "2020",
-      transmission: "Automatic",
-      fuel: "Diesel",
-      seats: "5",
-      rating: "4.2",
-      price: "4,95,000",
-      image: "/big_card_car.jpg",
-      status: "sold",
-      soldDate: "12 Aug 2025",
-    },
-    {
-      id: "4",
-      title: "Range Rover Evoque",
-      year: "2022",
-      transmission: "Automatic",
-      fuel: "Diesel",
-      seats: "5",
-      rating: "4.6",
-      price: "8,95,000",
-      image: "/big_card_car.jpg",
-      status: "live",
-      inquiries: 8,
-      chats: 1,
-    },
-  ];
+  const [vehicles, setVehicles] = useState([]);
+  const [activeType, setActiveType] = useState("all");
 
   const vehicleTypes = [
     { id: "all", label: "All" },
@@ -66,48 +15,88 @@ function MyVehicle() {
     { id: "sold", label: "Sold" },
   ];
 
-  const [activeType, setActiveType] = useState("all");
+  useEffect(() => {
+    const fetchVehicles = async () => {
+      try {
+        const payload = {
+          pageNo: 1,
+          size: 10,
+          listingStatus : "LIVE",
+        };
+
+        const res = await getSellerInventory(payload);
+        setVehicles(res?.data || []);
+      } catch (error) {
+        console.error("Error fetching vehicles:", error);
+      }
+    };
+
+    fetchVehicles();
+  }, []);
+
+  // ✅ Map API → Card Structure
+  const mappedVehicles = vehicles.map((v) => ({
+    id: v.id,
+    title: `${v.makerName || "-"} ${v.modelName || "-"} ${
+        v.variantName || ""
+    }`,
+    year: v.yearOfMfg || "-",
+    transmission: v.transmissionType || "-",
+    fuel: v.fuelType || "-",
+    seats: "-",
+    rating: "-",
+    price: v.price
+        ? new Intl.NumberFormat("en-IN").format(v.price)
+        : "-",
+    image: v.thumbnailUrl || "/big_card_car.jpg",
+    status: v.listingStatus?.toLowerCase() || "draft",
+    inquiries: v.totalInquiries ?? 0,
+    chats: v.approvedInquiries ?? 0,
+    avxInspected: v.inspectionStatus === "AVX_INSPECTED",
+    soldDate: v.closingPrice ? "-" : undefined,
+    location: `${v.address?.city || "-"}, ${v.address?.state || "-"}`,
+  }));
 
   const filtered =
-    activeType === "all"
-      ? cardData
-      : cardData.filter((v) => v.status === activeType);
+      activeType === "all"
+          ? mappedVehicles
+          : mappedVehicles.filter((v) => v.status === activeType);
 
   return (
-    <section className="w-full container rounded-2xl  p-6 space-y-6">
-      {/* FILTER */}
-      <div className="flex flex-wrap gap-2">
-        {vehicleTypes.map((type) => (
-          <button
-            key={type.id}
-            onClick={() => setActiveType(type.id)}
-            className={`px-4 py-2 rounded-full border border-third/50 text-sm font-medium transition
+      <section className="w-full container rounded-2xl p-6 space-y-6">
+        {/* FILTER */}
+        <div className="flex flex-wrap gap-2">
+          {vehicleTypes.map((type) => (
+              <button
+                  key={type.id}
+                  onClick={() => setActiveType(type.id)}
+                  className={`px-4 py-2 rounded-full border border-third/50 text-sm font-medium transition
               ${
-                activeType === type.id
-                  ? "bg-primary text-secondary"
-                  : "bg-third/10 text-primary hover:bg-third/20"
-              }`}
-          >
-            {type.label}
-          </button>
-        ))}
-      </div>
+                      activeType === type.id
+                          ? "bg-primary text-secondary"
+                          : "bg-third/10 text-primary hover:bg-third/20"
+                  }`}
+              >
+                {type.label}
+              </button>
+          ))}
+        </div>
 
-      {/* GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-        {filtered.map((car) => (
-          <UserVehicleCard
-            key={car.id}
-            data={car}
-            status={car.status}
-            avxInspected={car.avxInspected}
-            inquiries={car.inquiries}
-            chats={car.chats}
-            soldDate={car.soldDate}
-          />
-        ))}
-      </div>
-    </section>
+        {/* GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+          {filtered.map((car) => (
+              <UserVehicleCard
+                  key={car.id}
+                  data={car}
+                  status={car.status}
+                  avxInspected={car.avxInspected}
+                  inquiries={car.inquiries}
+                  chats={car.chats}
+                  soldDate={car.soldDate}
+              />
+          ))}
+        </div>
+      </section>
   );
 }
 
