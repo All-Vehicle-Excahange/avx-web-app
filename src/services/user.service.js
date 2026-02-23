@@ -31,7 +31,8 @@ const ENDPOINT = {
     getConsualtInventory: "/consultation/detail-page/inventory",
     getFourWheelWithTag: "/homefeed/vehicles/four-wheeler/with-tag",
     getTwoWheelWithTag: "/homefeed/vehicles/two-wheeler/with-tag",
-    getSellerInventory: "/vehicle/seller/my-vehicles"
+    getSellerInventory: "/vehicle/seller/my-vehicles",
+    postBecameSeller: "/users/seller"
 
 };
 
@@ -393,7 +394,7 @@ export const getFollowedConsultant = async (data) => {
 
 export const getFourWheelWithTag = async (data) => {
     try {
-        const {pageNo, size, vehicleTag } = data;
+        const {pageNo, size, vehicleTag} = data;
 
         const res = await axiosInstance.get(ENDPOINT.getFourWheelWithTag, {
             params: {pageNo, size, vehicleTag},
@@ -407,7 +408,7 @@ export const getFourWheelWithTag = async (data) => {
 
 export const getTwoWheelWithTag = async (data) => {
     try {
-        const {pageNo, size, vehicleTag } = data;
+        const {pageNo, size, vehicleTag} = data;
 
         const res = await axiosInstance.get(ENDPOINT.getTwoWheelWithTag, {
             params: {pageNo, size, vehicleTag},
@@ -422,10 +423,10 @@ export const getTwoWheelWithTag = async (data) => {
 
 export const getSellerInventory = async (data) => {
     try {
-        const {pageNo, size , listingStatus } = data;
+        const {pageNo, size, listingStatus} = data;
 
         const res = await axiosInstance.get(ENDPOINT.getSellerInventory, {
-            params: {pageNo, size, listingStatus },
+            params: {pageNo, size, listingStatus},
         });
 
         return handleResponse(res);
@@ -434,3 +435,16 @@ export const getSellerInventory = async (data) => {
     }
 };
 
+export const postBecameSeller = async (payload) => {
+    try {
+        const res = await axiosInstance.post(ENDPOINT.postBecameSeller, payload, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+
+        return handleResponse(res);
+    } catch (error) {
+        throw error;
+    }
+}
