@@ -2,6 +2,8 @@ import Image from "next/image";
 import Button from "@/components/ui/button";
 import {useState} from "react";
 import DetailsFromPopup from "@/components/features/userSeller/DetailsFromPopup";
+import {useAuthStore} from "@/stores/useAuthStore";
+import LoginPopup from "@/components/auth/LoginPopup";
 
 
 // 2. Feature Card Component for "Why Sell on AVX" section
@@ -121,6 +123,18 @@ function Landing() {
         answer: "No, GST registration is not required for individuals selling their personal, used vehicles."
     }];
 
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+
+    const [loginPopup, setLoginPopup] = useState(false)
+
+    const handleStartSelling = () => {
+        if (!isLoggedIn) {
+            setLoginPopup(true);
+        } else {
+            setOpen(true);
+        }
+    };
+
     return (<>
             <section className="flex mt-20 flex-col lg:flex-row w-full h-[84vh]  overflow-hidden">
 
@@ -140,8 +154,7 @@ function Landing() {
                     </p>
 
                     <div>
-                        <Button variant="ghost" onClick={() => setOpen(true)}>
-                            Start Selling
+                        <Button variant="ghost" onClick={handleStartSelling}>                            Start Selling
                             <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7"/>
@@ -371,7 +384,10 @@ function Landing() {
                 isOpen={open}
                 onClose={() => setOpen(false)}
             />
-
+        <LoginPopup
+            isOpen={loginPopup}
+            onClose={() => setLoginPopup(false)}
+        />
         </>);
 }
 

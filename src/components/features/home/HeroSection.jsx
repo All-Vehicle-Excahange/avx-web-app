@@ -94,7 +94,7 @@ export default function HeroSection() {
           Pick Your Vehicle
         </h1>
 
-        <div className="mt-[20vh] flex gap-6">
+        <div className="mt-[20vh] flex gap-6 relative bottom-2 ">
           {/* Vehicles Tab */}
           <button
             onClick={() => setActiveTab("vehicles")}
@@ -122,7 +122,7 @@ export default function HeroSection() {
       </div>
 
       {/* Filter Bar – sticks to bottom INSIDE hero */}
-      <div className="absolute bottom-8 left-0 right-0 z-20">
+      <div className="absolute bottom-2 left-0 right-0 z-20">
         <VehicleFilterBar />
       </div>
 
