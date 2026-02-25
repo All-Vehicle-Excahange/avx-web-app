@@ -51,6 +51,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const [bodyType, setBodyType] = useState("");
   const [fuelType, setFuelType] = useState("");
   const [brand, setBrand] = useState("");
+  const [makerId, setMakerId] = useState(null);
   const [budget, setBudget] = useState("");
   const [brandOptions, setBrandOptions] = useState([]);
   const [brandSearch, setBrandSearch] = useState("");
@@ -136,7 +137,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     handleActiveTabChange(null);
   };
 
-useEffect(() => {
+  useEffect(() => {
     if (activeTab !== null) {
       const scrollY = window.scrollY;
       document.body.style.position = "fixed";
@@ -155,7 +156,7 @@ useEffect(() => {
       ...(vehicleType && { vehicleType }),
       ...(activeType === "consult"
         ? { priceRange, service, availability }
-        : { bodyType, fuelType, brand, budget }),
+        : { bodyType, fuelType, brand, makerId, budget }),
     }).toString();
     setActiveTab(null);
     setMobileOpen(false);
@@ -381,6 +382,7 @@ useEffect(() => {
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setBrand(b.makeName);
+                                setMakerId(b.makeId);
                                 setBrandSearch("");
                                 openNextAvailableTab("brand");
                               }}

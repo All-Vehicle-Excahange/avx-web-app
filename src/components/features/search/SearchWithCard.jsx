@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import InputField from "@/components/ui/inputField";
 import Button from "@/components/ui/button";
@@ -12,6 +12,15 @@ import { ChevronLeft, ChevronRight, FilterIcon } from "lucide-react";
 import SponsoredCars from "./SponsoredCars";
 import FilterSection from "./FilterSection";
 import PriceBased from "./PriceBased";
+import { useSearchParams } from "next/navigation";
+import {
+  getAndSearchMakers,
+  getAndSearchModel,
+  getFilteredVehicles,
+  getFuelTypeByModelId,
+  getTransmissionTypeByModelId,
+  getAndSearchVariant,
+} from "@/services/filter";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
@@ -38,18 +47,440 @@ export default function SearchWithCard() {
   const [minPrice, setMinPrice] = useState(100000);
   const [maxPrice, setMaxPrice] = useState(1000000);
   const [kmDistance, setKmDistance] = useState(0);
+  const [vehicles, setVehicles] = useState([]);
+
+  // ── Brand states ──
+  const [brands, setBrands] = useState([]);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [brandSearch, setBrandSearch] = useState("");
+  const [brandPage, setBrandPage] = useState(1);
+  const [brandHasMore, setBrandHasMore] = useState(true);
+  const [brandLoading, setBrandLoading] = useState(false);
+
+  // ── Model states ──
+  const [models, setModels] = useState([]);
+  const [selectedModels, setSelectedModels] = useState([]);
+  const [modelSearch, setModelSearch] = useState("");
+  const [modelPage, setModelPage] = useState(1);
+  const [modelHasMore, setModelHasMore] = useState(true);
+  const [modelLoading, setModelLoading] = useState(false);
+
+  // ── Fuel Type states ──
+  const [fuelTypes, setFuelTypes] = useState([
+    { value: "Petrol", label: "Petrol" },
+    { value: "Diesel", label: "Diesel" },
+    { value: "Electric", label: "Electric" },
+    { value: "Hybrid", label: "Hybrid" },
+    { value: "LPG", label: "LPG" },
+    { value: "CNG", label: "CNG" },
+  ]);
+  const [fuelLoading, setFuelLoading] = useState(false);
+  const [selectedFuelTypes, setSelectedFuelTypes] = useState([]); // ← yeh zaroori tha
+
+  // ── Transmission Type states ──
+  const [transmissionTypes, setTransmissionTypes] = useState([
+    { value: "automatic", label: "Automatic" },
+    { value: "manual", label: "Manual" },
+  ]);
+  const [transmissionLoading, setTransmissionLoading] = useState(false);
+
+  // ── Variant states ──
+  const [variants, setVariants] = useState([]);
+  const [variantSearch, setVariantSearch] = useState("");
+  const [variantPage, setVariantPage] = useState(1);
+  const [variantHasMore, setVariantHasMore] = useState(false);
+  const [variantLoading, setVariantLoading] = useState(false);
+
+  // Debounce refs
+  const brandSearchTimeoutRef = useRef(null);
+  const modelSearchTimeoutRef = useRef(null);
+  const variantSearchTimeoutRef = useRef(null);
 
   const MIN = 50000;
   const MAX = 2000000;
   const MAX_KM = 200000;
 
   const isMobile = useIsMobile();
+  const searchParams = useSearchParams();
+
+  const vehicleType = searchParams.get("vehicleType");
+  const bodyType = searchParams.get("bodyType");
+  const fuelType = searchParams.get("fuelType");
+  const brand = searchParams.get("brand");
+  const makerId = searchParams.get("makerId");
+  const budget = searchParams.get("budget");
+
+  let mPrice = 0;
+  let mxPrice = 0;
+  let budgetMid = 0;
+  if (budget) {
+    const [min, max] = budget.replace(/\s/g, "").split("-");
+
+    mPrice = parseFloat(min) * 100000;
+    mxPrice = parseFloat(max) * 100000;
+
+    budgetMid = (mPrice + mxPrice) / 2;
+  }
+
+  // Fetch vehicles (unchanged)
+  useEffect(() => {
+    const fetchVehicles = async () => {
+      try {
+        const payload = {
+          fuelType: "PETROL",
+          minPrice: 300000,
+          maxPrice: 800000,
+          budgetMid: 550000,
+        };
+        const response = await getFilteredVehicles(payload);
+        setVehicles(response.data);
+      } catch (error) {
+        console.error("Error fetching vehicles:", error);
+      }
+    };
+
+    fetchVehicles();
+  }, [fuelType, makerId]);
+
+  // ── Load Brands ──
+  const loadBrands = async (page = 1, searchTerm = brandSearch) => {
+    if (brandLoading) return;
+    setBrandLoading(true);
+
+    try {
+      const res = await getAndSearchMakers({
+        searchTerm: searchTerm.trim() || undefined,
+        page,
+        limit: 10,
+      });
+
+      if (!res.success) return;
+
+      const newBrands = res.data.map((item) => ({
+        value: item.makeId.toString(),
+        label: item.makeDisplay || item.makeName,
+      }));
+
+      setBrands((prev) => (page === 1 ? newBrands : [...prev, ...newBrands]));
+      const meta = res.pagination;
+      setBrandHasMore(meta ? page < meta.totalPages : false);
+      setBrandPage(page);
+    } catch (err) {
+      console.error("Brands error:", err);
+      setBrandHasMore(false);
+    } finally {
+      setBrandLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (brandSearchTimeoutRef.current)
+      clearTimeout(brandSearchTimeoutRef.current);
+
+    brandSearchTimeoutRef.current = setTimeout(() => {
+      setBrands([]);
+      setBrandPage(1);
+      setBrandHasMore(true);
+      loadBrands(1, brandSearch);
+    }, 400);
+
+    return () => clearTimeout(brandSearchTimeoutRef.current);
+  }, [brandSearch]);
+
+  useEffect(() => {
+    loadBrands(1, "");
+  }, []);
+
+  const handleLoadMoreBrands = () => {
+    if (brandLoading || !brandHasMore) return;
+    loadBrands(brandPage + 1, brandSearch);
+  };
+
+  const handleBrandChange = (values) => {
+    setSelectedBrands(values.length > 0 ? [values[values.length - 1]] : []);
+  };
+
+  // ── Load Models ──
+  const loadModels = async (page = 1, searchTerm = modelSearch) => {
+    if (modelLoading) return;
+    setModelLoading(true);
+
+    try {
+      const payload = {
+        searchTerm: searchTerm.trim() || undefined,
+        page,
+        limit: 10,
+      };
+
+      if (selectedBrands.length > 0) {
+        payload.maker_id = selectedBrands[0];
+      }
+
+      const res = await getAndSearchModel(payload);
+
+      if (!res.success) return;
+
+      const newModels = res.data.map((item) => ({
+        value: item.modelId.toString(),
+        label: item.modelDisplayName || item.modelName,
+      }));
+
+      setModels((prev) => (page === 1 ? newModels : [...prev, ...newModels]));
+      const meta = res.pagination;
+      setModelHasMore(meta ? page < meta.totalPages : false);
+      setModelPage(page);
+    } catch (err) {
+      console.error("Models error:", err);
+      setModelHasMore(false);
+    } finally {
+      setModelLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (modelSearchTimeoutRef.current)
+      clearTimeout(modelSearchTimeoutRef.current);
+
+    modelSearchTimeoutRef.current = setTimeout(() => {
+      setModels([]);
+      setModelPage(1);
+      setModelHasMore(true);
+      loadModels(1, modelSearch);
+    }, 400);
+
+    return () => clearTimeout(modelSearchTimeoutRef.current);
+  }, [modelSearch, selectedBrands]);
+
+  useEffect(() => {
+    setModels([]);
+    setModelPage(1);
+    setModelHasMore(true);
+    loadModels(1, modelSearch);
+  }, [selectedBrands]);
+
+  const handleLoadMoreModels = () => {
+    if (modelLoading || !modelHasMore) return;
+    loadModels(modelPage + 1, modelSearch);
+  };
+
+  const handleModelChange = (values) => {
+    setSelectedModels(values.length > 0 ? [values[values.length - 1]] : []);
+  };
+
+  // ── Load Fuel Types ──
+
+  // 2. loadFuelTypes function mein real data aate waqt standardize kar do
+  const loadFuelTypes = async () => {
+    if (fuelLoading) return;
+    setFuelLoading(true);
+
+    try {
+      if (selectedModels.length > 0) {
+        const modelId = selectedModels[0];
+
+        const res = await getFuelTypeByModelId(modelId);
+
+        if (res.success && Array.isArray(res.data)) {
+          const realFuelTypes = res.data.map((fuel) => {
+            // Standardize: First letter capital, rest lowercase
+            const standardized =
+              fuel.charAt(0).toUpperCase() + fuel.slice(1).toLowerCase();
+            return {
+              value: standardized,
+              label: standardized,
+            };
+          });
+          setFuelTypes(realFuelTypes);
+        } else {
+          // fallback dummy (already title case)
+          setFuelTypes([
+            { value: "Petrol", label: "Petrol" },
+            { value: "Diesel", label: "Diesel" },
+            { value: "Electric", label: "Electric" },
+            { value: "Hybrid", label: "Hybrid" },
+            { value: "LPG", label: "LPG" },
+            { value: "CNG", label: "CNG" },
+          ]);
+        }
+      } else {
+        // no model → dummy
+        setFuelTypes([
+          { value: "Petrol", label: "Petrol" },
+          { value: "Diesel", label: "Diesel" },
+          { value: "Electric", label: "Electric" },
+          { value: "Hybrid", label: "Hybrid" },
+          { value: "LPG", label: "LPG" },
+          { value: "CNG", label: "CNG" },
+        ]);
+      }
+    } catch (err) {
+      console.error("Fuel types error:", err);
+      setFuelTypes([
+        { value: "Petrol", label: "Petrol" },
+        { value: "Diesel", label: "Diesel" },
+        { value: "Electric", label: "Electric" },
+        { value: "Hybrid", label: "Hybrid" },
+        { value: "LPG", label: "LPG" },
+        { value: "CNG", label: "CNG" },
+      ]);
+    } finally {
+      setFuelLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadFuelTypes();
+  }, [selectedModels]);
+
+  const handleFuelChange = (values) => {
+    setSelectedFuelTypes(values);
+  };
+
+  // ── Load Transmission Types ──
+  const loadTransmissionTypes = async () => {
+    if (transmissionLoading) return;
+    setTransmissionLoading(true);
+
+    try {
+      if (selectedModels.length > 0) {
+        const modelId = selectedModels[0];
+
+        const res = await getTransmissionTypeByModelId(modelId);
+
+        if (res.success && Array.isArray(res.data)) {
+          const realTransmissions = res.data.map((type) => {
+            let label = type;
+            let value = type.toLowerCase();
+
+            if (type === "AT") {
+              label = "Automatic";
+              value = "automatic";
+            } else if (type === "MT") {
+              label = "Manual";
+              value = "manual";
+            }
+
+            return { value, label };
+          });
+
+          setTransmissionTypes(realTransmissions);
+        } else {
+          setTransmissionTypes([
+            { value: "automatic", label: "Automatic" },
+            { value: "manual", label: "Manual" },
+          ]);
+        }
+      } else {
+        setTransmissionTypes([
+          { value: "automatic", label: "Automatic" },
+          { value: "manual", label: "Manual" },
+        ]);
+      }
+    } catch (err) {
+      console.error("Transmission types error:", err);
+      setTransmissionTypes([
+        { value: "automatic", label: "Automatic" },
+        { value: "manual", label: "Manual" },
+      ]);
+    } finally {
+      setTransmissionLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadTransmissionTypes();
+  }, [selectedModels]);
+
+  // ── Load Variants ──
+  const loadVariants = async (page = 1, searchTerm = variantSearch) => {
+    if (variantLoading) return;
+    setVariantLoading(true);
+
+    try {
+      // Check if both model and fuel are selected
+      if (selectedModels.length === 0 || selectedFuelTypes.length === 0) {
+        setVariants([]);
+        setVariantHasMore(false);
+        setVariantPage(1);
+        setVariantLoading(false);
+        return;
+      }
+      // Standardize fuel type before sending to API
+      let fuelTypeToSend = selectedFuelTypes[0];
+      fuelTypeToSend =
+        fuelTypeToSend.charAt(0).toUpperCase() +
+        fuelTypeToSend.slice(1).toLowerCase();
+
+      const payload = {
+        searchTerm: searchTerm.trim() || undefined,
+        page,
+        limit: 10,
+        modelId: selectedModels[0], // only latest model
+        fuelType: fuelTypeToSend, // only latest fuel
+      };
+
+      const res = await getAndSearchVariant(payload);
+
+      if (!res.success) {
+        setVariants([]);
+        setVariantHasMore(false);
+        return;
+      }
+
+      const newVariants = res.data.map((item) => ({
+        value: item.variantId.toString(),
+        label: item.variantDisplayName || item.variantName,
+      }));
+
+      setVariants((prev) =>
+        page === 1 ? newVariants : [...prev, ...newVariants],
+      );
+      const meta = res.meta || res.pagination;
+      setVariantHasMore(meta ? page < meta.totalPages : false);
+      setVariantPage(page);
+    } catch (err) {
+      console.error("Variants error:", err);
+      setVariants([]);
+      setVariantHasMore(false);
+    } finally {
+      setVariantLoading(false);
+    }
+  };
+
+  // Variant search debounce
+  useEffect(() => {
+    if (variantSearchTimeoutRef.current)
+      clearTimeout(variantSearchTimeoutRef.current);
+
+    variantSearchTimeoutRef.current = setTimeout(() => {
+      setVariants([]);
+      setVariantPage(1);
+      setVariantHasMore(true);
+      loadVariants(1, variantSearch);
+    }, 400);
+
+    return () => clearTimeout(variantSearchTimeoutRef.current);
+  }, [variantSearch, selectedModels, selectedFuelTypes]);
+
+  // Reload variants when model or fuel changes
+  useEffect(() => {
+    setVariants([]);
+    setVariantPage(1);
+    setVariantHasMore(true);
+    loadVariants(1, variantSearch);
+  }, [selectedModels, selectedFuelTypes]);
+
+  const handleLoadMoreVariants = () => {
+    if (variantLoading || !variantHasMore) return;
+    loadVariants(variantPage + 1, variantSearch);
+  };
 
   const toggleMobileChip = (chip) => {
     setSelectedMobileChips((prev) =>
       prev.includes(chip) ? prev.filter((c) => c !== chip) : [...prev, chip],
     );
   };
+
   const getTrackBackground = () => {
     const minPercent = ((minPrice - MIN) / (MAX - MIN)) * 100;
     const maxPercent = ((maxPrice - MIN) / (MAX - MIN)) * 100;
@@ -77,119 +508,13 @@ export default function SearchWithCard() {
   )`;
   };
 
-  /* ================= DATA ================= */
-  const cardData = {
-    id: "featured-1",
-    title: "BMW 8-serie 2-door",
-    subtitle: "35 D6 Powerful lorem isump",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    drivetrain: "Front Wheel Drive",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/big_card_car.jpg",
-    sponsored: false,
-  };
-
-  const brands = [
-    { value: "toyota", label: "Toyota" },
-    { value: "maruti", label: "Maruti" },
-    {
-      value: "kia",
-      label: "Kia",
-    },
-    { value: "bmw", label: "BMW" },
-    { value: "tata", label: "Tata" },
-    {
-      value: "mahindra",
-      label: "Mahindra",
-    },
-    { value: "honda", label: "Honda" },
-    { value: "hyundai", label: "Hyundai" },
-  ];
-
-  const fuelTypes = [
-    { value: "petrol", label: "Petrol" },
-    { value: "diesel", label: "Diesel" },
-    {
-      value: "electric",
-      label: "Electric",
-    },
-    { value: "cng", label: "CNG" },
-    { value: "hybrid", label: "Hybrid" },
-  ];
-
-  const transmissionTypes = [
-    { value: "manual", label: "Manual" },
-    {
-      value: "automatic",
-      label: "Automatic",
-    },
-    { value: "amt", label: "AMT" },
-    { value: "cvt", label: "CVT" },
-    { value: "dct", label: "DCT" },
-  ];
-
-  const models = [
-    { value: "fortuner", label: "Fortuner" },
-    { value: "corolla", label: "Corolla" },
-    {
-      value: "fronx",
-      label: "Fronx",
-    },
-    { value: "creta", label: "Creta" },
-    { value: "harrier", label: "Harrier" },
-    {
-      value: "seltos",
-      label: "Seltos",
-    },
-    { value: "innova", label: "Innova" },
-    { value: "swift", label: "Swift" },
-    {
-      value: "baleno",
-      label: "Baleno",
-    },
-    { value: "hector", label: "Hector" },
-    { value: "venue", label: "Venue" },
-    {
-      value: "sonet",
-      label: "Sonet",
-    },
-    { value: "xuv700", label: "XUV700" },
-    { value: "thar", label: "Thar" },
-    { value: "glanza", label: "Glanza" },
-  ];
-
-  const variants = [
-    { value: "base", label: "Base" },
-    { value: "mid", label: "Mid Variant" },
-    {
-      value: "top",
-      label: "Top Variant",
-    },
-    { value: "sports", label: "Sports Edition" },
-    { value: "premium", label: "Premium" },
-    {
-      value: "limited",
-      label: "Limited Edition",
-    },
-  ];
-
   const vehicleTypes = [
     { value: "suv", label: "SUV" },
     { value: "sedan", label: "Sedan" },
-    {
-      value: "hatchback",
-      label: "Hatchback",
-    },
+    { value: "hatchback", label: "Hatchback" },
     { value: "muv", label: "MUV" },
     { value: "truck", label: "Truck" },
-    {
-      value: "coupe",
-      label: "Coupe",
-    },
+    { value: "coupe", label: "Coupe" },
     { value: "convertible", label: "Convertible" },
   ];
 
@@ -220,32 +545,28 @@ export default function SearchWithCard() {
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
-
-    // optional: scroll to top of cards on page change
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col lg:flex-row  text-secondary mt-[60px]">
+    <div className="w-full min-h-screen flex flex-col lg:flex-row text-secondary mt-[60px]">
       {/* ================= DESKTOP SIDEBAR ================= */}
       <aside
         className="
-    hidden lg:flex
-    w-[340px]
-    border border-third/40
-    p-4
-    flex-col
-    gap-6
-    shrink-0
-    rounded-xl
-    h-fit
-
-    sticky
-    top-[84px]
-    self-start
-  "
+          hidden lg:flex
+          w-[340px]
+          border border-third/40
+          p-4
+          flex-col
+          gap-6
+          shrink-0
+          rounded-xl
+          h-fit
+          sticky
+          top-[84px]
+          self-start
+        "
       >
-        {/* <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover opacity-40 blur-lg z-0" /> */}
         <div className="relative z-10">
           <h2 className="text-xl font-bold text-primary mb-4">
             Filter Your Result
@@ -270,7 +591,75 @@ export default function SearchWithCard() {
             </div>
 
             <FilterSection title="Brand">
-              <ChipGroup title={""} items={brands} showMore searchable />
+              <ChipGroup
+                title=""
+                items={brands}
+                showMore={false}
+                searchable={true}
+                serverPagination={true}
+                hasMore={brandHasMore}
+                onLoadMore={handleLoadMoreBrands}
+                onChange={handleBrandChange}
+                searchValue={brandSearch}
+                onSearchChange={setBrandSearch}
+                isLoading={brandLoading}
+                allowMultiple={false}
+              />
+            </FilterSection>
+
+            <FilterSection title="Model">
+              <ChipGroup
+                title=""
+                items={models}
+                showMore={false}
+                searchable={true}
+                serverPagination={true}
+                hasMore={modelHasMore}
+                onLoadMore={handleLoadMoreModels}
+                onChange={handleModelChange}
+                searchValue={modelSearch}
+                onSearchChange={setModelSearch}
+                isLoading={modelLoading}
+                allowMultiple={false}
+              />
+            </FilterSection>
+
+            <FilterSection title="Fuel Type">
+              <ChipGroup
+                title=""
+                items={fuelTypes}
+                onChange={handleFuelChange}
+                isLoading={fuelLoading}
+              />
+            </FilterSection>
+
+            <FilterSection title="Transmission">
+              <ChipGroup
+                title=""
+                items={transmissionTypes}
+                isLoading={transmissionLoading}
+              />
+            </FilterSection>
+
+            <FilterSection title="Variant">
+              <ChipGroup
+                title=""
+                items={variants}
+                showMore={false}
+                searchable={true}
+                serverPagination={true}
+                hasMore={variantHasMore}
+                onLoadMore={handleLoadMoreVariants}
+                searchValue={variantSearch}
+                onSearchChange={setVariantSearch}
+                isLoading={variantLoading}
+                // Yeh message tab dikhega jab model ya fuel select nahi hai
+                customEmptyMessage={
+                  selectedModels.length === 0 || selectedFuelTypes.length === 0
+                    ? "Please first select Model and Fuel Type"
+                    : undefined
+                }
+              />
             </FilterSection>
 
             <FilterSection title="Budget" defaultOpen={true}>
@@ -321,7 +710,6 @@ export default function SearchWithCard() {
             <FilterSection title=" KM Driven" defaultOpen={true}>
               <div className="flex flex-col gap-2 mt-3">
                 <div className="relative h-6 flex items-center">
-                  {/* Animated Track */}
                   <div
                     className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
                     style={{ background: getKmTrackBackground() }}
@@ -348,28 +736,12 @@ export default function SearchWithCard() {
               </div>
             </FilterSection>
 
-            <FilterSection title="Model">
-              <ChipGroup title="" items={models} showMore searchable />
-            </FilterSection>
-
-            <FilterSection title="Fuel Type">
-              <ChipGroup title="" items={fuelTypes} />
-            </FilterSection>
-
-            <FilterSection title="Transmission">
-              <ChipGroup title="" items={transmissionTypes} />
-            </FilterSection>
-
-            <FilterSection title="Variant">
-              <ChipGroup title="" items={variants} />
+            <FilterSection title="Vehicle Type">
+              <ChipGroup title="" items={vehicleTypes} />
             </FilterSection>
 
             <FilterSection title="Rating">
               <ChipGroup title="" items={ratings} />
-            </FilterSection>
-
-            <FilterSection title="Vehicle Type">
-              <ChipGroup title="" items={vehicleTypes} />
             </FilterSection>
 
             <div className="mt-4 flex items-center justify-between gap-3">
@@ -408,7 +780,6 @@ export default function SearchWithCard() {
                 Filter
               </Button>
 
-              {/* ✅ AVX TOGGLE — MOBILE ONLY */}
               <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-third/40 shrink-0">
                 <span className="text-sm text-primary font-semibold">
                   AVX Assumed
@@ -445,8 +816,8 @@ export default function SearchWithCard() {
               Top Vehicle Near You
             </h2>
           </div>
-          {Array.from({ length: 9 }).map((_, i) => (
-            <VehicleCard key={i} data={cardData} />
+          {vehicles.map((vehicle) => (
+            <VehicleCard key={vehicle.id} data={vehicle} />
           ))}
 
           <div className="col-span-full">
