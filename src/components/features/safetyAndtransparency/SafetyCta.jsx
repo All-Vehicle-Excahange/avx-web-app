@@ -102,7 +102,7 @@ export default function SafetyCta() {
 
           {/* ================= RIGHT ================= */}
           <a
-            href="/inspection-process"
+           
             className="
               group
               flex-1
