@@ -447,7 +447,7 @@ function MyProfile() {
                 </div>
 
                 {genderOpen && (
-                    <div className="absolute z-[9999] mt-1 w-full border border-primary rounded-md bg-secondary text-primary shadow-lg overflow-hidden">
+                    <div className="absolute z-9999 mt-1 w-full border border-primary rounded-md bg-secondary text-primary shadow-lg overflow-hidden">
                       {["MALE", "FEMALE"].map((genderOption) => (
                           <div
                               key={genderOption}

@@ -128,6 +128,20 @@ export const handleResponse = (response) => {
     };
 };
 
+export const handleNodeResponse = (response) => {
+    const api = response.data;
+
+    return {
+        success: api.success,
+        message: api.message,
+        data: api.data,
+        pagination: api.meta || null,
+        status: api.success ? "OK" : "ERROR",
+        statusCode: api.statusCode,
+        timestamp: api.timestamp || null,
+    };
+};
+
 export const handleError = (error) => {
     const api = error?.response?.data;
 

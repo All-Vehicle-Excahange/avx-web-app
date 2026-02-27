@@ -109,12 +109,12 @@ export default function HeroSection() {
 
           {/* Users Tab */}
           <button
-            onClick={() => setActiveTab("users")}
+            onClick={() => setActiveTab("consult")}
             className="relative flex cursor-pointer flex-col items-center text-primary"
           >
             <User2 size={18} />
             <span className="mt-1 text-sm font-medium">Consultant</span>
-            {activeTab === "users" && (
+            {activeTab === "consult" && (
               <span className="absolute -bottom-2 h-0.5 w-full bg-primary rounded-full" />
             )}
           </button>
@@ -123,7 +123,7 @@ export default function HeroSection() {
 
       {/* Filter Bar – sticks to bottom INSIDE hero */}
       <div className="absolute bottom-2 left-0 right-0 z-20">
-        <VehicleFilterBar />
+        <VehicleFilterBar activeType={activeTab} />
       </div>
 
       {/* Scroll Indicator - hints user to scroll */}
