@@ -1,2 +1,16 @@
 {
+    "workbench.colorCustomizations": {
+        "import": "my_theme.json",
+        "statusBar.debuggingForeground": "#FDFBFD",
+        "statusBar.noFolderForeground": "#FDFBFD",
+        "activityBar.background": "#411F4F",
+        "titleBar.activeBackground": "#5B2B6F",
+        "titleBar.activeForeground": "#FDFBFD",
+        "titleBar.inactiveBackground": "#411F4F",
+        "titleBar.inactiveForeground": "#FDFBFD",
+        "statusBar.background": "#411F4F",
+        "statusBar.foreground": "#FDFBFD",
+        "statusBar.debuggingBackground": "#411F4F",
+        "statusBar.noFolderBackground": "#411F4F"
+    }
 }

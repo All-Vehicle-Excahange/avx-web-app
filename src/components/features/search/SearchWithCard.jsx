@@ -75,7 +75,7 @@ export default function SearchWithCard() {
     { value: "CNG", label: "CNG" },
   ]);
   const [fuelLoading, setFuelLoading] = useState(false);
-  const [selectedFuelTypes, setSelectedFuelTypes] = useState([]); // ← yeh zaroori tha
+  const [selectedFuelTypes, setSelectedFuelTypes] = useState([]);
 
   // ── Transmission Type states ──
   const [transmissionTypes, setTransmissionTypes] = useState([
@@ -106,7 +106,7 @@ export default function SearchWithCard() {
   const vehicleType = searchParams.get("vehicleType");
   const bodyType = searchParams.get("bodyType");
   const fuelType = searchParams.get("fuelType");
-  const brand = searchParams.get("brand");
+  const brandParam = searchParams.get("brand");
   const makerId = searchParams.get("makerId");
   const budget = searchParams.get("budget");
 
@@ -142,7 +142,7 @@ export default function SearchWithCard() {
     fetchVehicles();
   }, [fuelType, makerId]);
 
-  // ── Load Brands ──
+  // ── Load Brands with search ──
   const loadBrands = async (page = 1, searchTerm = brandSearch) => {
     if (brandLoading) return;
     setBrandLoading(true);
@@ -200,7 +200,7 @@ export default function SearchWithCard() {
     setSelectedBrands(values.length > 0 ? [values[values.length - 1]] : []);
   };
 
-  // ── Load Models ──
+  // ── Load Models with search ──
   const loadModels = async (page = 1, searchTerm = modelSearch) => {
     if (modelLoading) return;
     setModelLoading(true);
@@ -267,9 +267,7 @@ export default function SearchWithCard() {
     setSelectedModels(values.length > 0 ? [values[values.length - 1]] : []);
   };
 
-  // ── Load Fuel Types ──
-
-  // 2. loadFuelTypes function mein real data aate waqt standardize kar do
+  // ── Load Fuel Types ── (unchanged)
   const loadFuelTypes = async () => {
     if (fuelLoading) return;
     setFuelLoading(true);
@@ -282,7 +280,6 @@ export default function SearchWithCard() {
 
         if (res.success && Array.isArray(res.data)) {
           const realFuelTypes = res.data.map((fuel) => {
-            // Standardize: First letter capital, rest lowercase
             const standardized =
               fuel.charAt(0).toUpperCase() + fuel.slice(1).toLowerCase();
             return {
@@ -292,7 +289,6 @@ export default function SearchWithCard() {
           });
           setFuelTypes(realFuelTypes);
         } else {
-          // fallback dummy (already title case)
           setFuelTypes([
             { value: "Petrol", label: "Petrol" },
             { value: "Diesel", label: "Diesel" },
@@ -303,7 +299,6 @@ export default function SearchWithCard() {
           ]);
         }
       } else {
-        // no model → dummy
         setFuelTypes([
           { value: "Petrol", label: "Petrol" },
           { value: "Diesel", label: "Diesel" },
@@ -336,7 +331,7 @@ export default function SearchWithCard() {
     setSelectedFuelTypes(values);
   };
 
-  // ── Load Transmission Types ──
+  // ── Load Transmission Types ── (unchanged)
   const loadTransmissionTypes = async () => {
     if (transmissionLoading) return;
     setTransmissionLoading(true);
@@ -391,13 +386,12 @@ export default function SearchWithCard() {
     loadTransmissionTypes();
   }, [selectedModels]);
 
-  // ── Load Variants ──
+  // ── Load Variants with search ──
   const loadVariants = async (page = 1, searchTerm = variantSearch) => {
     if (variantLoading) return;
     setVariantLoading(true);
 
     try {
-      // Check if both model and fuel are selected
       if (selectedModels.length === 0 || selectedFuelTypes.length === 0) {
         setVariants([]);
         setVariantHasMore(false);
@@ -405,7 +399,8 @@ export default function SearchWithCard() {
         setVariantLoading(false);
         return;
       }
-      // Standardize fuel type before sending to API
+
+      // Standardize fuel type (first letter capital)
       let fuelTypeToSend = selectedFuelTypes[0];
       fuelTypeToSend =
         fuelTypeToSend.charAt(0).toUpperCase() +
@@ -415,8 +410,8 @@ export default function SearchWithCard() {
         searchTerm: searchTerm.trim() || undefined,
         page,
         limit: 10,
-        modelId: selectedModels[0], // only latest model
-        fuelType: fuelTypeToSend, // only latest fuel
+        modelId: selectedModels[0],
+        fuelType: fuelTypeToSend,
       };
 
       const res = await getAndSearchVariant(payload);
@@ -447,7 +442,6 @@ export default function SearchWithCard() {
     }
   };
 
-  // Variant search debounce
   useEffect(() => {
     if (variantSearchTimeoutRef.current)
       clearTimeout(variantSearchTimeoutRef.current);
@@ -462,7 +456,6 @@ export default function SearchWithCard() {
     return () => clearTimeout(variantSearchTimeoutRef.current);
   }, [variantSearch, selectedModels, selectedFuelTypes]);
 
-  // Reload variants when model or fuel changes
   useEffect(() => {
     setVariants([]);
     setVariantPage(1);
@@ -601,7 +594,10 @@ export default function SearchWithCard() {
                 onLoadMore={handleLoadMoreBrands}
                 onChange={handleBrandChange}
                 searchValue={brandSearch}
-                onSearchChange={setBrandSearch}
+                onSearchChange={(val) => {
+                  console.log("Brand search input:", val);
+                  setBrandSearch(val);
+                }}
                 isLoading={brandLoading}
                 allowMultiple={false}
               />
@@ -653,7 +649,6 @@ export default function SearchWithCard() {
                 searchValue={variantSearch}
                 onSearchChange={setVariantSearch}
                 isLoading={variantLoading}
-                // Yeh message tab dikhega jab model ya fuel select nahi hai
                 customEmptyMessage={
                   selectedModels.length === 0 || selectedFuelTypes.length === 0
                     ? "Please first select Model and Fuel Type"
@@ -762,11 +757,12 @@ export default function SearchWithCard() {
       </aside>
 
       {/* ================= MAIN CONTENT ================= */}
-      <main className="flex-1  ">
-        <div className="w-full grid grid-cols-1 md:grid-cols-2  lg:grid-cols-2 xl:grid-cols-3  gap-4 sm:gap-5 auto-rows-max sm:px-5 md:px-0  lg:px-6 py-4 sm:py-5 lg:py-0">
-          <div className="col-span-full mb-10 ">
+      <main className="flex-1">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 auto-rows-max sm:px-5 md:px-0 lg:px-6 py-4 sm:py-5 lg:py-0">
+          <div className="col-span-full mb-10">
             <PromoCardRow />
           </div>
+
           {/* MOBILE FILTER BAR */}
           <div className="col-span-full lg:hidden">
             <div className="flex lg:hidden items-center gap-3 overflow-x-auto scrollbar-hide">
@@ -805,17 +801,21 @@ export default function SearchWithCard() {
               ))}
             </div>
           </div>
-          <div className="col-span-full mb-10 ">
+
+          <div className="col-span-full mb-10">
             <SponsoredCars />
           </div>
+
           <div className="col-span-full mb-10">
             <PriceBased />
           </div>
+
           <div className="col-span-full">
             <h2 className="text-2xl md:text-3xl font-bold text-primary">
               Top Vehicle Near You
             </h2>
           </div>
+
           {vehicles.map((vehicle) => (
             <VehicleCard key={vehicle.id} data={vehicle} />
           ))}
@@ -823,7 +823,6 @@ export default function SearchWithCard() {
           <div className="col-span-full">
             <div className="mt-4">
               <div className="flex items-center justify-center gap-4 w-full">
-                {/* LEFT – PREVIOUS */}
                 <div>
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
@@ -835,9 +834,7 @@ export default function SearchWithCard() {
                   </button>
                 </div>
 
-                {/* CENTER – PAGE NUMBERS */}
                 <ul className="flex items-center">
-                  {/* FIRST PAGE */}
                   {currentPage > 3 && (
                     <li
                       className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-white text-sm sm:text-lg font-medium cursor-pointer hover:bg-primary hover:text-black"
@@ -847,8 +844,8 @@ export default function SearchWithCard() {
                     </li>
                   )}
 
-                  {/* DOTS */}
                   {currentPage > 4 && <li className="mx-1 text-white">…</li>}
+
                   {[
                     currentPage - 2,
                     currentPage - 1,
@@ -861,15 +858,17 @@ export default function SearchWithCard() {
                       <li
                         key={page}
                         onClick={() => handlePageChange(page)}
-                        className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-sm sm:text-lg font-medium cursor-pointer transition-all
-                ${currentPage === page ? "bg-primary text-black" : "text-white hover:bg-primary hover:text-black"}`}
+                        className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-sm sm:text-lg font-medium cursor-pointer transition-all ${
+                          currentPage === page
+                            ? "bg-primary text-black"
+                            : "text-white hover:bg-primary hover:text-black"
+                        }`}
                       >
                         {page}
                       </li>
                     ))}
                 </ul>
 
-                {/* RIGHT – NEXT */}
                 <div>
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
@@ -886,10 +885,9 @@ export default function SearchWithCard() {
         </div>
       </main>
 
-      {/* MOBILE FILTER DRAWER (unchanged) */}
+      {/* MOBILE FILTER DRAWER — unchanged */}
       {mobileFilterOpen && (
         <div className="fixed inset-0 z-50 bg-primary lg:hidden">
-          {/* HEADER */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-third/40">
             <h2 className="text-lg font-semibold">Filters</h2>
             <Button
@@ -901,22 +899,23 @@ export default function SearchWithCard() {
             </Button>
           </div>
 
-          {/* BODY */}
           <div className="flex h-[calc(100vh-120px)]">
-            {/* LEFT PANEL */}
             <div className="w-[40%] border-r border-third/40 overflow-y-auto">
               {Object.keys(mobileFilterMap).map((item) => (
                 <div
                   key={item}
                   onClick={() => setActiveFilterTab(item)}
-                  className={`px-4 py-3 cursor-pointer text-sm ${activeFilterTab === item ? "bg-secondary/10 font-semibold" : "hover:bg-secondary/5"}`}
+                  className={`px-4 py-3 cursor-pointer text-sm ${
+                    activeFilterTab === item
+                      ? "bg-secondary/10 font-semibold"
+                      : "hover:bg-secondary/5"
+                  }`}
                 >
                   {item}
                 </div>
               ))}
             </div>
 
-            {/* RIGHT PANEL */}
             <div className="flex-1 p-4 overflow-y-auto">
               <h3 className="text-sm font-semibold mb-3">{activeFilterTab}</h3>
 
@@ -934,7 +933,6 @@ export default function SearchWithCard() {
             </div>
           </div>
 
-          {/* FOOTER */}
           <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-third/40 bg-primary">
             <Button
               variant="default"

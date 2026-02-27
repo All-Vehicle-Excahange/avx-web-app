@@ -16,10 +16,14 @@ export default function ChipGroup({
   hasMore = false,
   onLoadMore,
   onChange,
+  searchValue, // ← new prop from parent
+  onSearchChange, // ← new prop from parent
+  isLoading = false,
+  customEmptyMessage, // optional for variant error message
 }) {
   const [selected, setSelected] = useState([]);
   const [expanded, setExpanded] = useState(false);
-  const [search, setSearch] = useState(""); // ⭐ NEW
+  const [search, setSearch] = useState(""); // local fallback
 
   const toggleSelect = (val) => {
     let updated;
@@ -36,12 +40,13 @@ export default function ChipGroup({
     if (onChange) onChange(updated);
   };
 
-  // ⭐ Filter items based on search
+  // Use parent's search value if provided, else local
+  const currentSearch = searchValue ?? search;
+
   const filteredItems = items.filter((item) =>
-    item.label.toLowerCase().includes(search.toLowerCase()),
+    item.label.toLowerCase().includes(currentSearch.toLowerCase()),
   );
 
-  // ⭐ Apply limit logic AFTER filtering
   const visibleItems =
     showMore && !expanded ? filteredItems.slice(0, limit) : filteredItems;
 
@@ -50,14 +55,21 @@ export default function ChipGroup({
       {/* Title */}
       <h3 className="text-md font-semibold text-primary mb-2">{title}</h3>
 
-      {/* ⭐ Search Input */}
+      {/* Search Input - now controlled by parent */}
       {searchable && (
         <div className="mb-4">
           <InputField
             variant="colored"
             placeholder={`Search ${title.toLowerCase()}...`}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={currentSearch}
+            onChange={(e) => {
+              const newVal = e.target.value;
+              if (onSearchChange) {
+                onSearchChange(newVal); // ← This calls setBrandSearch / setModelSearch etc.
+              } else {
+                setSearch(newVal);
+              }
+            }}
           />
         </div>
       )}
@@ -74,14 +86,17 @@ export default function ChipGroup({
           />
         ))}
 
-        {/* When no results */}
+        {/* No results / loading / custom message */}
         {visibleItems.length === 0 && (
-          <p className="text-xs text-gray-400 mt-1">No results found</p>
+          <p className="text-xs text-gray-400 mt-1">
+            {isLoading
+              ? "Loading..."
+              : customEmptyMessage || "No results found"}
+          </p>
         )}
       </div>
 
       {/* View More Toggle */}
-      {/* ✅ Normal View More Toggle (Local Expand) */}
       {showMore && !serverPagination && filteredItems.length > limit && (
         <button
           onClick={() => setExpanded(!expanded)}
@@ -91,13 +106,14 @@ export default function ChipGroup({
         </button>
       )}
 
-      {/* ✅ Server Pagination View More Button */}
+      {/* Server Pagination View More */}
       {serverPagination && hasMore && (
         <button
           onClick={onLoadMore}
-          className="mt-3 text-third font-medium text-sm underline hover:text-primary/70 self-end"
+          disabled={isLoading}
+          className="mt-3 text-third font-medium text-sm underline hover:text-primary/70 self-end disabled:opacity-50"
         >
-          View More
+          {isLoading ? "Loading..." : "View More"}
         </button>
       )}
     </div>

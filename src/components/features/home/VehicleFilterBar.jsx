@@ -229,7 +229,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   {vehicleType || "Add type"}
                 </div>
                 {activeTab === "vehicle" && (
-                  <div className="absolute top-[110%] left-0 z-50 w-[240px] bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                  <div className="absolute top-[110%] left-0 z-50 w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
                     {VEHICLE_TYPES.map((type) => (
                       <button
                         key={type.id}
@@ -305,7 +305,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       {bodyType || "Add type"}
                     </div>
                     {activeTab === "bodyType" && (
-                      <div className="absolute top-[110%] left-0 z-50 w-[240px] bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800 max-h-[250px] overflow-y-auto custom-scrollbar">
+                      <div className="absolute top-[110%] left-0 z-50 w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800 max-h-[250px] overflow-y-auto custom-scrollbar">
                         {(vehicleType === "4 Wheeler"
                           ? FOUR_WHEELER_TYPES
                           : TWO_WHEELER_TYPES
@@ -338,7 +338,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       {fuelType || "Select fuel"}
                     </div>
                     {activeTab === "fuel" && (
-                      <div className="absolute top-[110%] left-0 z-50 w-[240px] bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                      <div className="absolute top-[110%] left-0 z-50 w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
                         {FUEL_TYPES.map((f) => (
                           <button
                             key={f}
@@ -408,7 +408,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       {budget || "Select budget"}
                     </div>
                     {activeTab === "budget" && (
-                      <div className="absolute top-[110%] left-0 z-50 w-[240px] bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                      <div className="absolute top-[110%] left-0 z-50 w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
                         {BUDGET_RANGE.map((range) => (
                           <button
                             key={range}

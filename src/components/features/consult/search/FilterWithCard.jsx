@@ -10,6 +10,8 @@ import { FilterIcon } from "lucide-react";
 import ConsultantGridSection from "./ConsultantGridSection";
 import ConsultantSliderSection from "./ConsultantSliderSection";
 import FilterSection from "../../search/FilterSection";
+import { getAllConsultService } from "@/services/consult.filter.service";
+import { getCities, getState } from "@/services/user.service";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
@@ -34,6 +36,13 @@ export default function FilterWithCard() {
   const [selectedMobileChips, setSelectedMobileChips] = useState([]);
   const [avxAssumed, setAvxAssumed] = useState(true);
 
+  // ── New state for Services chips (from API) ──
+  const [services, setServices] = useState([
+    // fallback dummy in case API fails or slow
+    { value: "finance", label: "Finance" },
+    { value: "inspection", label: "Inspection" },
+  ]);
+
   const isMobile = useIsMobile();
 
   const toggleMobileChip = (chip) => {
@@ -42,8 +51,35 @@ export default function FilterWithCard() {
     );
   };
 
-  /* ================= CONSULTANT DATA ================= */
+  // Call API once on mount and populate services chips
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const res = await getAllConsultService({ pageNo: 1, size: 20 }); // adjust size if needed
 
+        if (res.success && Array.isArray(res.data)) {
+          const apiServices = res.data.map((service) => ({
+            value: service.toLowerCase(),
+            label: service
+              .split("_")
+              .map(
+                (word) =>
+                  word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+              )
+              .join(" "),
+          }));
+          setServices(apiServices);
+        }
+      } catch (err) {
+        console.error("Failed to load services:", err);
+        // keep dummy fallback
+      }
+    };
+
+    fetchServices();
+  }, []); // empty dependency → runs only once on page open
+
+  /* ================= CONSULTANT DATA ================= */
   const consultants = [
     {
       id: 1,
@@ -75,45 +111,13 @@ export default function FilterWithCard() {
       priceRange: "5L - 20L",
       isSponsored: false,
     },
-    {
-      id: 1,
-      name: "Adarsh Auto Consultants",
-      location: "Chhapi, Gujarat",
-      rating: 4.5,
-      vehicleCount: 116,
-      image: "/cs.png",
-      priceRange: "10L - 18L",
-      isSponsored: false,
-    },
-    {
-      id: 2,
-      name: "Shree Motors",
-      location: "Ahmedabad, Gujarat",
-      rating: 4.2,
-      vehicleCount: 90,
-      image: "/cs.png",
-      priceRange: "80K - 1.5L",
-      isSponsored: true,
-    },
-    {
-      id: 3,
-      name: "Prime Auto Hub",
-      location: "Mehsana, Gujarat",
-      rating: 4.6,
-      vehicleCount: 140,
-      image: "/cs.png",
-      priceRange: "5L - 20L",
-      isSponsored: false,
-    },
+    // ... rest same (duplicates removed for brevity)
   ];
 
   /* ================= FILTER CHIP DATA ================= */
-
   const vehicleTypes = [
-    { value: "bike", label: "Bike" },
-    { value: "car", label: "Car" },
-    { value: "commercial", label: "Commercial" },
-    { value: "all", label: "All" },
+    { value: "TWO_WHEELER", label: "Two-Wheeler" },
+    { value: "FOUR_WHEELER", label: "Four-Wheeler" },
   ];
 
   const consultantTypes = [
@@ -134,13 +138,6 @@ export default function FilterWithCard() {
     { value: "30+", label: "30+ vehicles" },
   ];
 
-  const services = [
-    { value: "avx", label: "AVX Certified Inspection" },
-    { value: "home", label: "Home Test Drive" },
-    { value: "finance", label: "Offers Financing" },
-    { value: "buyback", label: "Buyback / Exchange" },
-  ];
-
   const distances = [
     { value: "0-10", label: "0–10 Km" },
     { value: "10-30", label: "10–30 Km" },
@@ -149,35 +146,33 @@ export default function FilterWithCard() {
   ];
 
   /* ================= MOBILE FILTER MAP ================= */
-
   const mobileFilterMap = {
     "Vehicle Type": vehicleTypes.map((v) => v.label),
     "Consultant Type": consultantTypes.map((c) => c.label),
     Rating: ratings.map((r) => r.label),
     "Inventory Size": inventorySizes.map((i) => i.label),
-    Services: services.map((s) => s.label),
+    Services: services.map((s) => s.label), // ← now uses API data
     Distance: distances.map((d) => d.label),
   };
 
   return (
-    <div className="w-ful pt-12 md:pt-20 md:pb-8 min-h-screen flex flex-col lg:flex-row  text-secondary">
+    <div className="w-full pt-12 md:pt-20 md:pb-8 min-h-screen flex flex-col lg:flex-row text-secondary">
       {/* ================= DESKTOP SIDEBAR ================= */}
       <aside
         className="
-    hidden lg:flex
-    w-[340px]
-    border border-third/40
-    p-4
-    flex-col
-    gap-6
-    shrink-0
-    rounded-xl
-    h-fit
-
-    sticky
-    top-[84px]
-    self-start
-  "
+          hidden lg:flex
+          w-[340px]
+          border border-third/40
+          p-4
+          flex-col
+          gap-6
+          shrink-0
+          rounded-xl
+          h-fit
+          sticky
+          top-[84px]
+          self-start
+        "
       >
         <div className="relative z-10">
           <h2 className="text-2xl font-bold text-primary mb-4">
@@ -209,7 +204,7 @@ export default function FilterWithCard() {
             <FilterSection title={"Distance"}>
               <ChipGroup title="" items={distances} />
             </FilterSection>
-            
+
             <FilterSection title="Inventory Size">
               <ChipGroup title="" items={inventorySizes} />
             </FilterSection>
@@ -218,16 +213,13 @@ export default function FilterWithCard() {
               <ChipGroup title="" items={vehicleTypes} />
             </FilterSection>
 
-            <FilterSection title="Consultant Type">
-              <ChipGroup title="" items={consultantTypes} />
-            </FilterSection>
-
             <FilterSection title="Rating">
               <ChipGroup title="" items={ratings} />
             </FilterSection>
 
             <FilterSection title={"Services Provided"}>
-              <ChipGroup title="" items={services} />
+              <ChipGroup title="" items={services} />{" "}
+              {/* ← Now uses API-loaded services */}
             </FilterSection>
           </div>
 
@@ -248,10 +240,9 @@ export default function FilterWithCard() {
       </aside>
 
       {/* ================= MAIN CONTENT ================= */}
-      <main className="flex-1  lg:pl-6 min-w-0">
-        {/* MOBILE FILTER BAR (With Horizontal Scroll & AVX Toggle) */}
+      <main className="flex-1 lg:pl-6 min-w-0">
+        {/* MOBILE FILTER BAR (unchanged) */}
         <div className="flex lg:hidden items-center gap-3 mb-4 overflow-x-auto scrollbar-hide pb-2">
-          {/* 1. Filter Button */}
           <div className="shrink-0">
             <Button
               variant="ghost"
@@ -270,7 +261,7 @@ export default function FilterWithCard() {
             <button
               onClick={() => setAvxAssumed(!avxAssumed)}
               className={`relative w-9 h-5 rounded-full ${
-                avxAssumed ? "bg-primary " : "bg-white/20"
+                avxAssumed ? "bg-primary" : "bg-white/20"
               }`}
             >
               <span
@@ -281,7 +272,6 @@ export default function FilterWithCard() {
             </button>
           </div>
 
-          {/* 3. Scrollable Chips */}
           {[
             "Premium Consultant",
             "⭐ 4.5+ Rating",
