@@ -882,6 +882,7 @@ export default function SearchWithCard() {
               </div>
             </div>
           </div>
+          
         </div>
       </main>
 
