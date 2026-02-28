@@ -2,16 +2,15 @@
 
 import { useState, useRef, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
-import { ChevronDown, FilterIcon } from "lucide-react";
+import { ArrowUpDown, ChevronDown, FilterIcon } from "lucide-react";
 
 /* ================= SORT OPTIONS ================= */
 const sortOptions = [
   { value: "recommended", label: "Recommended" },
   { value: "price_low_high", label: "Price Low → High" },
   { value: "price_high_low", label: "Price High → Low" },
-  { value: "newest", label: "Newest Listed" },
-  { value: "most_inquired", label: "Most Inquired" },
-  { value: "best_rated", label: "Best Rated Seller" },
+  { value: "subscribers_low_high", label: "Subscribers Low → High" },
+  { value: "subscribers_high_low", label: "Subscribers High → Low" },
 ];
 
 export default function SearchWithHeader() {
@@ -68,7 +67,13 @@ export default function SearchWithHeader() {
                   hover:border-secondary/50
                 "
               >
-                <span>Sort By: {selected.label}</span>
+                <div className="flex items-center gap-2">
+                  <ArrowUpDown size={14} className="text-secondary/70" />
+                  <span className="hidden sm:inline-block">
+                    {selected.label}
+                  </span>
+                </div>
+
                 <ChevronDown
                   size={14}
                   className={`transition-transform ${open ? "rotate-180" : ""}`}
