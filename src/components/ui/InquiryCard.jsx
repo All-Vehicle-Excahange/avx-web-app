@@ -40,7 +40,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
   }`;
 
   const vehicleImage =
-      inquiryVehicleResponse.image ||
+      inquiryVehicleResponse.thumbnailUrl ||
       "https://images.pexels.com/photos/831475/pexels-photo-831475.jpeg";
 
   // ✅ Handlers

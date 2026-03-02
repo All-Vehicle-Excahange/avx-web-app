@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import Router from "next/router";
 
 import Layout from "@/components/layout/Layout";
@@ -37,6 +37,36 @@ export default function App({ Component, pageProps }) {
             Router.events.off("routeChangeStart", handleStart);
             Router.events.off("routeChangeComplete", handleStop);
             Router.events.off("routeChangeError", handleStop);
+        };
+    }, []);
+
+    // ---- scroll position restoration on refresh/back ----
+    useLayoutEffect(() => {
+        if (typeof window === "undefined") return;
+
+        // store scroll position before unload
+        const save = () => {
+            sessionStorage.setItem("scrollPos", String(window.scrollY));
+        };
+
+        const restore = () => {
+            const pos = sessionStorage.getItem("scrollPos");
+            if (pos !== null) {
+                window.scrollTo(0, Number(pos) || 0);
+                sessionStorage.removeItem("scrollPos");
+            }
+        };
+
+        window.addEventListener("beforeunload", save);
+        Router.events.on("routeChangeStart", save);
+        Router.events.on("routeChangeComplete", restore);
+
+        restore();
+
+        return () => {
+            window.removeEventListener("beforeunload", save);
+            Router.events.off("routeChangeStart", save);
+            Router.events.off("routeChangeComplete", restore);
         };
     }, []);
 

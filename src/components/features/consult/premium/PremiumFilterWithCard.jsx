@@ -345,13 +345,27 @@ export default function FilterWithCard() {
   };
 
   const handleClearFilters = async () => {
+    // Reset filter states
     setSelectedDistance([]);
     setSelectedInventory([]);
     setSelectedVehicleTypes([]);
     setSelectedRating([]);
     setSelectedServices([]);
+
+    // Reset location filters
+    setSelectedStateId(null);
+    setSelectedStateName("");
+    setSelectedCityId(null);
+    setSelectedCityName("");
+
+    // Reset mobile chips
+    setSelectedMobileChips([]);
+
+    // Reset pagination
     setCurrentPage(1);
-    await fetchConsultants(1, {}); // fetch default again
+
+    // Fetch default results
+    await fetchConsultants(1, {});
   };
 
   const handlePageChange = (newPage) => {
@@ -624,14 +638,13 @@ export default function FilterWithCard() {
               Apply filter
             </Button>
 
-            <Button
-              variant="ghost"
+            <button
               showIcon={false}
-              className="text-primary/70 hover:text-primary rounded-3xl"
+              className="text-primary/70 hover:text-primary rounded-3xl underline hover:cursor-pointer"
               onClick={handleClearFilters}
             >
               Clear filters
-            </Button>
+            </button>
           </div>
         </div>
       </aside>

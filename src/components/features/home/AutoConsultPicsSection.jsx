@@ -9,7 +9,6 @@ export default function AutoConsultPicsSection(props) {
   // ✅ HARD SAFE DEFAULT
   const safeLimit = typeof props.limit === "number" ? props.limit : 4;
 
-
   const [consultants, setConsultants] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,29 +24,28 @@ export default function AutoConsultPicsSection(props) {
 
         if (mounted && Array.isArray(res?.data) && res.data.length > 0) {
           setConsultants(
-              res.data.map((item) => ({
-                id: item.id,
-                username: item.username,
-                name: item.consultationName || "-",
-                image: item.bannerUrl || "/cs.png",
-                logo: item.logoUrl || "/cs.png",
-                rating: item.averageRating ?? 0,
-                reviews: item.totalReviews ?? 0,
-                vehicleCount: item.availableVehicles ?? 0,
-                services: item.services || [],
-                vehicleTypes: item.vehicleTypes || [],
-                location:
-                    item.address?.city && item.address?.country
-                        ? `${item.address.city}, ${item.address.country}`
-                        : "-",
-                priceRange:
-                    item.minVehiclePrice && item.maxVehiclePrice
-                        ? `₹${Number(item.minVehiclePrice).toLocaleString()} - ₹${Number(item.maxVehiclePrice).toLocaleString()}`
-                        : "-",
-                isSponsored: item.isActiveTier || false,
-              }))
+            res.data.map((item) => ({
+              id: item.id,
+              username: item.username,
+              name: item.consultationName || "-",
+              image: item.bannerUrl || "/cs.png",
+              logo: item.logoUrl || "/cs.png",
+              rating: item.averageRating ?? 0,
+              reviews: item.totalReviews ?? 0,
+              vehicleCount: item.availableVehicles ?? 0,
+              services: item.services || [],
+              vehicleTypes: item.vehicleTypes || [],
+              location:
+                item.address?.city && item.address?.country
+                  ? `${item.address.city}, ${item.address.country}`
+                  : "-",
+              priceRange:
+                item.minVehiclePrice && item.maxVehiclePrice
+                  ? `₹${Number(item.minVehiclePrice).toLocaleString()} - ₹${Number(item.maxVehiclePrice).toLocaleString()}`
+                  : "-",
+              isSponsored: item.isActiveTier || false,
+            })),
           );
-
         }
       } catch (err) {
         console.error("Consultant fetch failed:", err);
@@ -61,8 +59,7 @@ export default function AutoConsultPicsSection(props) {
   }, [safeLimit]);
 
   // ✅ FINAL DATA SOURCE
-  const finalConsultants =
- consultants
+  const finalConsultants = consultants;
 
   return (
     <div className="w-full py-10 px-4">
@@ -82,23 +79,25 @@ export default function AutoConsultPicsSection(props) {
 
       {/* Grid */}
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {finalConsultants.length === 0 ? (
-                <div className="col-span-full flex justify-center py-16">
-                    <h3 className="text-lg font-semibold text-primary/40">
-                        No auto consult found
-                    </h3>
-                </div>
-            ) : (
-                finalConsultants.slice(0, safeLimit).map((consultant) => (
-                    <ConsultantCard key={consultant.id} {...consultant} />
-                ))
-            )}
-        </div>
+      {/* Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {finalConsultants.length === 0 ? (
+          <div className="col-span-full flex justify-center py-16">
+            <h3 className="text-lg font-semibold text-primary/40">
+              No auto consult found
+            </h3>
+          </div>
+        ) : (
+          finalConsultants
+            .slice(0, safeLimit)
+            .map((consultant) => (
+              <ConsultantCard key={consultant.id} {...consultant} />
+            ))
+        )}
+      </div>
 
       <div className="mt-8 flex justify-end">
-        <Button href="/consultants" variant="outlineAnimated">
+        <Button href="/consult/discovery" variant="outlineAnimated">
           See All
         </Button>
       </div>

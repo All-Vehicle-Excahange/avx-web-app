@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import HeroGraph from "./HeroGraph";
 
 function CountUp({ end, suffix = "" }) {
@@ -72,13 +73,21 @@ export default function HeroSection() {
                         <div className="w-24 h-0.5 bg-fourth rounded-full" />
 
                         <div className="flex flex-col sm:flex-row gap-4 pt-3">
-                            <a href="/vehicles" className="relative group inline-flex items-center justify-center px-7 py-3.5 rounded-xl text-sm font-semibold text-primary bg-linear-to-r from-[#044596] to-fourth shadow-lg shadow-blue-900/40 transition duration-300 hover:shadow-blue-600/40 hover:-translate-y-px">
+                            <Link
+                              href="/vehicles"
+                              scroll={false}
+                              className="relative group inline-flex items-center justify-center px-7 py-3.5 rounded-xl text-sm font-semibold text-primary bg-linear-to-r from-[#044596] to-fourth shadow-lg shadow-blue-900/40 transition duration-300 hover:shadow-blue-600/40 hover:-translate-y-px"
+                            >
                                 Browse Vehicles
-                            </a>
+                            </Link>
 
-                            <a href="/consultant" className="px-7 py-3.5 rounded-xl text-sm font-semibold border-[#374151] border-2 text-primary bg-[#111318] transition duration-300 hover:border-fourth hover:text-fourth hover:bg-[#151922] hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]">
+                            <Link
+                              href="/consultant"
+                              scroll={false}
+                              className="px-7 py-3.5 rounded-xl text-sm font-semibold border-[#374151] border-2 text-primary bg-[#111318] transition duration-300 hover:border-fourth hover:text-fourth hover:bg-[#151922] hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]"
+                            >
                                 Become a Consultant
-                            </a>
+                            </Link>
                         </div>
                     </div>
 

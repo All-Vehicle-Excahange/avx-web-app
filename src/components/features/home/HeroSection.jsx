@@ -7,62 +7,9 @@ import { Car, User2, ChevronDown } from "lucide-react";
 export default function HeroSection() {
   const [collapsed, setCollapsed] = useState(false);
   const [activeTab, setActiveTab] = useState("vehicles");
-  const heroRef = useRef(null);
-  const hasScrolledPast = useRef(false);
-
-  useEffect(() => {
-    let isScrolling = false;
-
-    const handleWheel = (e) => {
-      // Only trigger if we're at the top of the page and scrolling down
-      if (
-        window.scrollY < 100 &&
-        e.deltaY > 0 &&
-        !hasScrolledPast.current &&
-        !isScrolling
-      ) {
-        isScrolling = true;
-        hasScrolledPast.current = true;
-
-        // Smooth scroll to just past the hero section
-        const heroHeight = heroRef.current?.offsetHeight || window.innerHeight;
-
-        window.scrollTo({
-          top: heroHeight,
-          behavior: "smooth",
-        });
-
-        // Reset scrolling flag after animation completes
-        setTimeout(() => {
-          isScrolling = false;
-        }, 800);
-      }
-
-      // Reset when user scrolls back to top
-      if (window.scrollY < 50) {
-        hasScrolledPast.current = false;
-      }
-    };
-
-    // Also handle scroll event to reset flag when at top
-    const handleScroll = () => {
-      if (window.scrollY < 50) {
-        hasScrolledPast.current = false;
-      }
-    };
-
-    window.addEventListener("wheel", handleWheel, { passive: true });
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("wheel", handleWheel);
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   return (
     <section
-      ref={heroRef}
       className="relative h-screen bg-cover bg-center"
       style={{
         backgroundImage: "url(/hero-section-bg.png)",

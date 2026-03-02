@@ -541,6 +541,56 @@ export default function SearchWithCard() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handleClearFilters = async () => {
+    // Reset brand & model
+    setSelectedBrands([]);
+    setSelectedModels([]);
+    setBrandSearch("");
+    setModelSearch("");
+    setBrands([]);
+    setModels([]);
+    setBrandPage(1);
+    setModelPage(1);
+    setBrandHasMore(true);
+    setModelHasMore(true);
+
+    // Reset fuel & transmission
+    setSelectedFuelTypes([]);
+    setTransmissionTypes([
+      { value: "automatic", label: "Automatic" },
+      { value: "manual", label: "Manual" },
+    ]);
+
+    // Reset variants
+    setVariants([]);
+    setVariantSearch("");
+    setVariantPage(1);
+    setVariantHasMore(false);
+
+    // Reset price & km
+    setMinPrice(100000);
+    setMaxPrice(1000000);
+    setKmDistance(0);
+
+    // Reset mobile chips
+    setSelectedMobileChips([]);
+
+    // Reset pagination
+    setCurrentPage(1);
+
+    // Reload default data
+    try {
+      const response = await getFilteredVehicles({});
+      setVehicles(response.data || []);
+    } catch (error) {
+      console.error("Error resetting vehicles:", error);
+      setVehicles([]);
+    }
+
+    // Reload brands again
+    loadBrands(1, "");
+  };
+
   return (
     <div className="w-full min-h-screen flex flex-col lg:flex-row text-secondary mt-[60px]">
       {/* ================= DESKTOP SIDEBAR ================= */}
@@ -744,13 +794,13 @@ export default function SearchWithCard() {
                 Apply filter
               </Button>
 
-              <Button
-                variant="ghost"
+              <button
                 showIcon={false}
-                className="text-primary/70 hover:text-primary rounded-3xl"
+                className="text-primary/70 hover:text-primary rounded-3xl underline hover:cursor-pointer"
+                onClick={handleClearFilters}
               >
                 Clear filters
-              </Button>
+              </button>
             </div>
           </div>
         </div>
@@ -882,7 +932,6 @@ export default function SearchWithCard() {
               </div>
             </div>
           </div>
-          
         </div>
       </main>
 
