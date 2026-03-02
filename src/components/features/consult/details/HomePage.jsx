@@ -121,7 +121,7 @@ export default function ConsultantProgramPage() {
         <div className="absolute inset-0 bg-secondary/80" />
 
         {/* Content */}
-        <div className="relative z-10 w-full px-6 md:px-12">
+        <div className="relative z-10 w-full ">
           <div className="max-w-[1480px] mx-auto flex justify-center">
             <div className="max-w-2xl space-y-8 text-center">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary leading-tight">
@@ -157,7 +157,7 @@ export default function ConsultantProgramPage() {
       {/* SECTION 1 — WHO THIS IS FOR */}
       {/* ══════════════════════════════════════════════ */}
       <section className="relative py-20">
-        <div className="max-w-[1480px] mx-auto px-6 md:px-6">
+        <div className="max-w-[1480px] mx-auto ">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-stretch">
             {/* LEFT — IMAGE */}
             <div className="relative w-full h-[420px] lg:h-auto rounded-2xl overflow-hidden">
