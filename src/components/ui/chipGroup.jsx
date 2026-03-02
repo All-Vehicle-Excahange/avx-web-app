@@ -7,6 +7,7 @@ import InputField from "@/components/ui/inputField";
 export default function ChipGroup({
   title,
   items = [],
+  selected = [],
   variant = "outline",
   allowMultiple = true,
   showMore = false,
@@ -21,7 +22,6 @@ export default function ChipGroup({
   isLoading = false,
   customEmptyMessage, // optional for variant error message
 }) {
-  const [selected, setSelected] = useState([]);
   const [expanded, setExpanded] = useState(false);
   const [search, setSearch] = useState(""); // local fallback
 
@@ -36,10 +36,8 @@ export default function ChipGroup({
       updated = selected.includes(val) ? [] : [val];
     }
 
-    setSelected(updated);
     if (onChange) onChange(updated);
   };
-
   // Use parent's search value if provided, else local
   const currentSearch = searchValue ?? search;
 

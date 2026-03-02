@@ -51,6 +51,13 @@ export default function VehicleOverview({ vehicle }) {
       .replace(/-/g, " ")
       .replace(/\b\w/g, (char) => char.toUpperCase());
   };
+
+  const speedometerImage =
+    vehicleOverview?.vehicleImages?.find(
+      (img) => img.imageKey?.toLowerCase() === "speedometer",
+    )?.imageUrl || "https://images.pexels.com/photos/6730469/pexels-photo-6730469.jpeg";
+
+
   return (
     <section className="relative rounded-2xl overflow-hidden text-primary border border-third/60">
       {/* Reduced padding on mobile (p-4) and normal on desktop (md:p-6) */}
@@ -93,7 +100,7 @@ export default function VehicleOverview({ vehicle }) {
               <div className="rounded-lg border bg-background shadow-lg p-2 w-40">
                 <div className="relative w-full h-24">
                   <Image
-                    src="https://images.pexels.com/photos/6730469/pexels-photo-6730469.jpeg"
+                    src={speedometerImage}
                     alt="Odometer preview"
                     fill
                     className="rounded-md object-cover"
