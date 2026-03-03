@@ -307,8 +307,8 @@ export default function FAQSections() {
   useEffect(() => () => clearTimeout(timerRef.current), []);
 
   return (
-    <section className="relative overflow-hidden flex flex-col font-primary">
-      <div className="relative z-10 flex flex-col flex-1  mx-auto w-full   py-12 sm:py-16">
+    <section className="relative overflow-hidden flex flex-col font-primary px-4 sm:px-6 lg:px-12">
+      <div className="relative z-10 flex flex-col flex-1 max-w-7xl mx-auto w-full py-12 sm:py-16">
         {/* TOP: TITLE + META */}
         <div className="flex items-end justify-between mb-8 sm:mb-10">
           <div>

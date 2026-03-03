@@ -1,4 +1,3 @@
-// app/avx-help-center/page.jsx
 "use client";
 
 import { useState } from "react";
@@ -17,7 +16,7 @@ export default function CategoryPage() {
   );
 
   return (
-    <section className="relative py-10 overflow-hidden font-primary text-primary">
+    <section className="relative py-10 overflow-hidden font-primary text-primary px-4 sm:px-6 lg:px-12">
       <div className="max-w-7xl mx-auto relative">
 
         {/* ── HEADER ─────────────────────────────────────────── */}
@@ -97,7 +96,7 @@ export default function CategoryPage() {
             return (
               <Link
                 key={article.id}
-                href={`/avx-help-center/${article.slug}`}
+                href={`/help/${article.slug}`}
                 onMouseEnter={() => setHoveredId(article.id)}
                 onMouseLeave={() => setHoveredId(null)}
                 className="group relative flex items-start gap-4 sm:gap-6 py-5 sm:py-6 border-primary/5 transition-[padding] duration-300 ease-out"
@@ -108,9 +107,8 @@ export default function CategoryPage() {
                 }}
               >
                 {/* Number */}
-                <span className={`shrink-0 font-black tabular-nums leading-none text-[11px] pt-1 min-w-7 transition-colors duration-300 ${
-                  isHovered ? "text-fourth/50" : "text-third/20"
-                }`}>
+                <span className={`shrink-0 font-black tabular-nums leading-none text-[11px] pt-1 min-w-7 transition-colors duration-300 ${isHovered ? "text-fourth/50" : "text-third/20"
+                  }`}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
 
@@ -128,23 +126,20 @@ export default function CategoryPage() {
                     </span>
                   </div>
 
-                  <h3 className={`font-semibold text-sm sm:text-base leading-snug mb-1.5 transition-colors duration-200 font-secondary ${
-                    isHovered ? "text-primary" : "text-primary/75"
-                  }`}>
+                  <h3 className={`font-semibold text-sm sm:text-base leading-snug mb-1.5 transition-colors duration-200 font-secondary ${isHovered ? "text-primary" : "text-primary/75"
+                    }`}>
                     {article.question}
                   </h3>
 
-                  <p className={`text-[12px] sm:text-[13px] leading-relaxed line-clamp-2 transition-all duration-350 text-third/40 ${
-                    isHovered ? "opacity-100 max-h-16" : "opacity-0 max-h-0"
-                  }`}>
+                  <p className={`text-[12px] sm:text-[13px] leading-relaxed line-clamp-2 transition-all duration-350 text-third/40 ${isHovered ? "opacity-100 max-h-16" : "opacity-0 max-h-0"
+                    }`}>
                     {article.excerpt}
                   </p>
                 </div>
 
                 {/* Arrow */}
-                <div className={`shrink-0 flex items-center justify-center w-8 h-8 rounded-xl transition-all duration-300 mt-0.5 ${
-                  isHovered ? "bg-fourth/15 text-fourth" : "bg-primary/5 text-third/20"
-                }`}>
+                <div className={`shrink-0 flex items-center justify-center w-8 h-8 rounded-xl transition-all duration-300 mt-0.5 ${isHovered ? "bg-fourth/15 text-fourth" : "bg-primary/5 text-third/20"
+                  }`}>
                   <ArrowUpRight
                     size={14}
                     className={`transition-transform duration-200 ${isHovered ? "translate-x-0.5 -translate-y-0.5" : ""}`}

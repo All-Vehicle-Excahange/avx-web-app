@@ -88,13 +88,13 @@ export default function SupportRequests({
       prev.map((t) =>
         t.id === ticketId
           ? {
-              ...t,
-              updated: "Just now",
-              messages: [
-                ...t.messages,
-                { from: "You", time: "Just now", text, mine: true },
-              ],
-            }
+            ...t,
+            updated: "Just now",
+            messages: [
+              ...t.messages,
+              { from: "You", time: "Just now", text, mine: true },
+            ],
+          }
           : t,
       ),
     );
@@ -102,7 +102,7 @@ export default function SupportRequests({
   };
 
   return (
-    <section className="relative py-10  overflow-hidden font-secondary text-primary flex flex-col justify-center bg-transparent">
+    <section className="relative overflow-hidden font-secondary text-primary flex flex-col justify-center bg-transparent">
       {/* Ambient Glow */}
       <div className="absolute inset-0 pointer-events-none " />
 
@@ -126,8 +126,7 @@ export default function SupportRequests({
         </div>
 
         {/* Panel */}
-        <div className="relative border border-primary/10 rounded-2xl sm:rounded-3xl overflow-hidden ">
-          {" "}
+        <div className="relative">
           {/* Top Top Edge highlight */}
           <div className="absolute top-0 left-0 right-0 h-px " />
           {/* Toolbar */}
@@ -151,11 +150,10 @@ export default function SupportRequests({
                 <button
                   key={f}
                   onClick={() => setActiveFilter(f)}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-[0.15em] transition-all duration-200 border ${
-                    activeFilter === f
+                  className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-[0.15em] transition-all duration-200 border ${activeFilter === f
                       ? "bg-fourth/15 text-fourth border-fourth/25"
                       : "text-third/40 hover:text-third/70 border-transparent"
-                  }`}
+                    }`}
                 >
                   {f}
                   {counts[f] > 0 && (
@@ -204,13 +202,12 @@ export default function SupportRequests({
               return (
                 <div key={ticket.id}>
                   <div
-                    className={`relative px-6 sm:px-8 py-4 sm:py-5 cursor-pointer transition-all duration-200 ${
-                      isActive
+                    className={`relative px-6 sm:px-8 py-4 sm:py-5 cursor-pointer transition-all duration-200 ${isActive
                         ? "bg-fourth/5"
                         : isHovered
                           ? "bg-primary/5"
                           : "bg-transparent"
-                    }`}
+                      }`}
                     onMouseEnter={() => setHoveredRow(ticket.id)}
                     onMouseLeave={() => setHoveredRow(null)}
                     onClick={() => setActiveTicket(isActive ? null : ticket.id)}
@@ -285,11 +282,10 @@ export default function SupportRequests({
                               </span>
                             </div>
                             <div
-                              className={`px-4 py-2.5 rounded-xl text-sm text-primary/80 max-w-md leading-relaxed border ${
-                                msg.mine
+                              className={`px-4 py-2.5 rounded-xl text-sm text-primary/80 max-w-md leading-relaxed border ${msg.mine
                                   ? "bg-fourth/15 border-fourth/20"
                                   : "bg-primary/5 border-primary/10"
-                              }`}
+                                }`}
                             >
                               {msg.text}
                             </div>
