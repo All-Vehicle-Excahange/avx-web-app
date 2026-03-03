@@ -100,7 +100,7 @@ export default function PopularTopicsGrid() {
             </p>
             <Link
               href="/help#faq"
-              className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.2em] font-primary text-fourth hover:gap-2.5 transition-all duration-200"
+              className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.2em] font-primary text-primary hover:gap-2.5 transition-all duration-200"
             >
               Browse all FAQs <ChevronRight size={11} />
             </Link>

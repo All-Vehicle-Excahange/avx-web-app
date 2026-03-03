@@ -22,7 +22,7 @@ export default function SupportFlowModal({ onClose }) {
     return (
         <div
             className="fixed inset-0 z-[999] p-4 sm:p-6 md:p-12 flex items-center justify-center"
-            style={{ background: "rgba(0,0,0,0.85)", backdropFilter: "blur(8px)" }}
+
         >
             <div
                 className="relative w-full max-w-5xl bg-[#0a0a0f] border border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col"

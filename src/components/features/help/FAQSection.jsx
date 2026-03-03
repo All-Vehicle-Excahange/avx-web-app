@@ -282,7 +282,7 @@ function QRow({ item, isOpen, onToggle }) {
         <div className="flex-1 min-w-0">
           <span
             className="text-[14px] sm:text-[15px] font-semibold leading-snug transition-colors duration-200 font-secondary"
-            style={{ color: isOpen ? "#007bff" : "rgba(255,255,255,0.65)" }}
+            style={{ color: isOpen ? "" : "rgba(255,255,255,0.65)" }}
           >
             {item.q}
           </span>
@@ -300,7 +300,7 @@ function QRow({ item, isOpen, onToggle }) {
           }}
         >
           {isOpen ? (
-            <Minus size={11} className="text-fourth" />
+            <Minus size={11} className="text-primary" />
           ) : (
             <Plus size={11} style={{ color: "rgba(255,255,255,0.3)" }} />
           )}
@@ -363,7 +363,7 @@ export default function FAQSections() {
             </h2>
           </div>
           <div className="flex flex-col items-start sm:items-end gap-1">
-            <span className="font-primary font-black text-[clamp(2rem,4vw,3rem)] leading-none text-fourth/40">
+            <span className="font-primary font-black text-[clamp(2rem,4vw,3rem)] leading-none text-primary/40">
               {String(items.length).padStart(2, "0")}
             </span>
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary/25 font-primary">

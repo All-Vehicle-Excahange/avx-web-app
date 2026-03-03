@@ -69,14 +69,14 @@ export default function CategoryPage() {
               className="self-start sm:self-auto flex items-center gap-3 px-5 py-3 rounded-2xl border border-white/8"
               style={{ background: "rgba(255,255,255,0.03)" }}
             >
-              <span className="font-primary font-black text-3xl leading-none text-fourth">
+              <span className="font-primary font-black text-3xl leading-none text-primary">
                 {articles.length}
               </span>
               <div>
-                <div className="text-[9px] uppercase tracking-widest font-black text-primary/30 font-primary">
+                <div className="text-[9px] uppercase tracking-widest font-black text-primary/40 font-primary">
                   Articles
                 </div>
-                <div className="text-[9px] uppercase tracking-widest text-primary/20 font-primary">
+                <div className="text-[9px] uppercase tracking-widest text-primary/40 font-primary">
                   Available
                 </div>
               </div>
@@ -154,7 +154,7 @@ export default function CategoryPage() {
               >
                 {/* Left accent bar on hover */}
                 {isHovered && (
-                  <div className="absolute left-0 top-4 bottom-4 w-[2px] rounded-full bg-fourth" />
+                  <div className="absolute left-0 top-4 bottom-4 w-[2px] rounded-full bg-primary/50" />
                 )}
 
                 {/* Number */}
@@ -162,7 +162,7 @@ export default function CategoryPage() {
                   className="shrink-0 font-black tabular-nums leading-none text-[11px] pt-1 min-w-7 transition-colors duration-300 font-primary"
                   style={{
                     color: isHovered
-                      ? "rgba(0,123,255,0.6)"
+                      ? ""
                       : "rgba(255,255,255,0.12)",
                   }}
                 >

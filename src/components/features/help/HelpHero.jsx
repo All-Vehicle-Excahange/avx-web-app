@@ -230,13 +230,7 @@ export default function HelpHero() {
                         ⌘ K
                       </span>
                     )}
-                    <button
-                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-[0.18em] font-primary text-primary transition-all duration-200 hover:-translate-y-0.5"
-                      style={{
-                        background: "#007bff",
-                        boxShadow: "0 6px 24px rgba(0,123,255,0.35)",
-                      }}
-                    >
+                    <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-[0.18em] font-primary text-secondary bg-primary transition-all duration-200 hover:-translate-y-0.5">
                       <Zap size={11} />
                       Search
                     </button>
@@ -267,7 +261,7 @@ export default function HelpHero() {
                             <div className="flex items-center gap-3">
                               <Search
                                 size={11}
-                                className="text-fourth/40 shrink-0"
+                                className="text-primary/40 shrink-0"
                               />
                               <span className="text-sm text-primary/65 group-hover:text-primary transition-colors font-secondary">
                                 {item.label}
@@ -356,7 +350,7 @@ export default function HelpHero() {
                     </span>
                     <Link
                       href="/help"
-                      className="text-[10px] font-black uppercase tracking-widest text-fourth/60 hover:text-fourth transition-colors font-primary flex items-center gap-1"
+                      className="text-[10px] font-black uppercase tracking-widest text-primary/60 hover:text-primary/90 transition-colors font-primary flex items-center gap-1"
                     >
                       View all <ChevronRight size={10} />
                     </Link>
@@ -381,7 +375,7 @@ export default function HelpHero() {
                         </div>
                         <ArrowUpRight
                           size={12}
-                          className="text-primary/20 group-hover:text-fourth transition-colors shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-200"
+                          className="text-primary/20 group-hover:text-primary transition-colors shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-200"
                         />
                       </Link>
                     ))}
