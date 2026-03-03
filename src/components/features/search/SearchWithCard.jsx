@@ -8,7 +8,13 @@ import Button from "@/components/ui/button";
 import ChipGroup from "@/components/ui/chipGroup";
 import PromoCardRow from "./PromoCardRow";
 import Chip from "@/components/ui/chip";
-import { ChevronLeft, ChevronRight, FilterIcon } from "lucide-react";
+import {
+  ChevronDownIcon,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUpIcon,
+  FilterIcon,
+} from "lucide-react";
 import SponsoredCars from "./SponsoredCars";
 import FilterSection from "./FilterSection";
 import PriceBased from "./PriceBased";
@@ -21,6 +27,8 @@ import {
   getTransmissionTypeByModelId,
   getAndSearchVariant,
 } from "@/services/filter";
+import { getState, getCities } from "@/services/user.service";
+import { getUserCityAndStateByLatLong } from "@/services/consult.filter.service";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
@@ -64,6 +72,26 @@ export default function SearchWithCard() {
   const [modelPage, setModelPage] = useState(1);
   const [modelHasMore, setModelHasMore] = useState(true);
   const [modelLoading, setModelLoading] = useState(false);
+
+  // ── State & City states ──
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [selectedStateId, setSelectedStateId] = useState(null);
+  const [selectedStateName, setSelectedStateName] = useState("");
+  const [selectedCityId, setSelectedCityId] = useState(null);
+  const [selectedCityName, setSelectedCityName] = useState("");
+
+  const [stateOpen, setStateOpen] = useState(false);
+  const [cityOpen, setCityOpen] = useState(false);
+
+  const [stateSearch, setStateSearch] = useState("");
+  const [citySearch, setCitySearch] = useState("");
+
+  const stateRef = useRef(null);
+  const cityRef = useRef(null);
+
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
 
   // ── Fuel Type states ──
   const [fuelTypes, setFuelTypes] = useState([
@@ -109,6 +137,7 @@ export default function SearchWithCard() {
   const brandParam = searchParams.get("brand");
   const makerId = searchParams.get("makerId");
   const budget = searchParams.get("budget");
+  const sort = searchParams.get("sort");
 
   let mPrice = 0;
   let mxPrice = 0;
@@ -127,7 +156,7 @@ export default function SearchWithCard() {
     const fetchVehicles = async () => {
       try {
         const payload = {
-          fuelType: "PETROL",
+          fuelType: fuelType,
           minPrice: 300000,
           maxPrice: 800000,
           budgetMid: 550000,
@@ -140,7 +169,7 @@ export default function SearchWithCard() {
     };
 
     fetchVehicles();
-  }, [fuelType, makerId]);
+  }, [fuelType, makerId, sort]);
 
   // ── Load Brands with search ──
   const loadBrands = async (page = 1, searchTerm = brandSearch) => {
@@ -189,6 +218,95 @@ export default function SearchWithCard() {
 
   useEffect(() => {
     loadBrands(1, "");
+  }, []);
+
+  useEffect(() => {
+    const fetchStates = async () => {
+      try {
+        const res = await getState();
+        if (res?.data) {
+          setStates(
+            res.data.map((s) => ({
+              label: s.name,
+              value: s.id,
+            })),
+          );
+        }
+      } catch (err) {
+        console.error("Failed to load states:", err);
+      }
+    };
+
+    fetchStates();
+  }, []);
+
+  useEffect(() => {
+    const fetchCities = async () => {
+      if (!selectedStateId) {
+        setCities([]);
+        return;
+      }
+
+      try {
+        const res = await getCities(selectedStateId);
+        if (res?.data) {
+          setCities(
+            res.data.map((c) => ({
+              label: c.name,
+              value: c.id,
+            })),
+          );
+        }
+      } catch (err) {
+        console.error("Failed to load cities:", err);
+        setCities([]);
+      }
+    };
+
+    fetchCities();
+  }, [selectedStateId]);
+
+  useEffect(() => {
+    const autoDetectLocation = async () => {
+      if (!navigator.geolocation) {
+        console.warn("Geolocation not supported");
+        return;
+      }
+
+      try {
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 8000,
+            maximumAge: 0,
+          });
+        });
+
+        const { latitude: lat, longitude: lon } = position.coords;
+
+        setLatitude(lat);
+        setLongitude(lon);
+
+        // 🔥 Call reverse location API
+        const res = await getUserCityAndStateByLatLong({
+          latitude: lat,
+          longitude: lon,
+        });
+
+        if (res?.status === "OK" && res?.data) {
+          const { stateId, stateName, cityId, cityName } = res.data;
+
+          setSelectedStateId(stateId);
+          setSelectedStateName(stateName);
+          setSelectedCityId(cityId);
+          setSelectedCityName(cityName);
+        }
+      } catch (err) {
+        console.error("Geolocation error:", err);
+      }
+    };
+
+    autoDetectLocation();
   }, []);
 
   const handleLoadMoreBrands = () => {
@@ -616,7 +734,149 @@ export default function SearchWithCard() {
           </h2>
 
           <div className="flex flex-col gap-2">
-            <InputField placeholder="Enter your location" variant="colored" />
+            {/* ================= STATE & CITY SELECTOR ================= */}
+            <div className="space-y-4">
+              {/* ---------- STATE DROPDOWN ---------- */}
+              <div ref={stateRef} className="relative">
+                <label className="text-xs text-third block mb-1">State</label>
+
+                {stateOpen ? (
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={stateSearch}
+                      onChange={(e) => setStateSearch(e.target.value)}
+                      placeholder={
+                        selectedStateName || "Search or select state..."
+                      }
+                      className="w-full pl-3 pr-10 py-2.5 bg-transparent border border-primary/60 rounded-md text-primary placeholder:text-primary/60 focus:outline-none focus:border-primary text-sm"
+                      autoFocus
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setStateOpen(false)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-primary/70"
+                    >
+                      <ChevronUpIcon />
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => setStateOpen(true)}
+                    className="h-10 px-3 flex items-center justify-between rounded-md border border-primary/60 bg-transparent text-primary cursor-pointer backdrop-blur-sm"
+                  >
+                    <span className="truncate">
+                      {selectedStateName || "Select State"}
+                    </span>
+                    <span>
+                      <ChevronDownIcon />
+                    </span>
+                  </div>
+                )}
+
+                {stateOpen && (
+                  <div className="absolute z-50 mt-1 w-full border border-primary/60 rounded-md bg-black/40 backdrop-blur-md text-primary shadow-xl max-h-64 overflow-hidden">
+                    <div className="max-h-52 overflow-y-auto pt-1">
+                      {states
+                        .filter((s) =>
+                          s.label
+                            .toLowerCase()
+                            .includes(stateSearch.toLowerCase()),
+                        )
+                        .map((s) => (
+                          <div
+                            key={s.value}
+                            onClick={() => {
+                              setSelectedStateId(s.value);
+                              setSelectedStateName(s.label);
+                              setSelectedCityId(null);
+                              setSelectedCityName("");
+                              setStateSearch("");
+                              setStateOpen(false);
+                            }}
+                            className="px-4 py-2.5 hover:bg-primary/20 cursor-pointer text-sm"
+                          >
+                            {s.label}
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* ---------- CITY DROPDOWN ---------- */}
+              <div ref={cityRef} className="relative">
+                <label className="text-xs text-third block mb-1">City</label>
+
+                {cityOpen && selectedStateId ? (
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={citySearch}
+                      onChange={(e) => setCitySearch(e.target.value)}
+                      placeholder={
+                        selectedCityName || "Search or select city..."
+                      }
+                      className="w-full pl-3 pr-10 py-2.5 bg-transparent border border-primary/60 rounded-md text-primary placeholder:text-primary/60 focus:outline-none focus:border-primary text-sm"
+                      autoFocus
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setCityOpen(false)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-primary/70"
+                    >
+                      <ChevronUpIcon />
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => selectedStateId && setCityOpen(true)}
+                    className={`h-10 px-3 flex items-center justify-between rounded-md border border-primary/60 bg-transparent text-primary ${
+                      !selectedStateId
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-pointer"
+                    } backdrop-blur-sm`}
+                  >
+                    <span className="truncate">
+                      {selectedCityName ||
+                        (selectedStateId
+                          ? "Select City"
+                          : "Select state first")}
+                    </span>
+                    <span>
+                      <ChevronDownIcon />
+                    </span>
+                  </div>
+                )}
+
+                {cityOpen && selectedStateId && (
+                  <div className="absolute z-50 mt-1 w-full border border-primary/60 rounded-md bg-black/40 backdrop-blur-md text-primary shadow-xl max-h-64 overflow-hidden">
+                    <div className="max-h-52 overflow-y-auto pt-1">
+                      {cities
+                        .filter((c) =>
+                          c.label
+                            .toLowerCase()
+                            .includes(citySearch.toLowerCase()),
+                        )
+                        .map((c) => (
+                          <div
+                            key={c.value}
+                            onClick={() => {
+                              setSelectedCityId(c.value);
+                              setSelectedCityName(c.label);
+                              setCitySearch("");
+                              setCityOpen(false);
+                            }}
+                            className="px-4 py-2.5 hover:bg-primary/20 cursor-pointer text-sm"
+                          >
+                            {c.label}
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
 
             <div className="hidden lg:flex items-center justify-between px-4 py-3 rounded-xl border border-white/20 backdrop-blur-md bg-transparent">
               <span className="text-primary font-semibold text-sm">
