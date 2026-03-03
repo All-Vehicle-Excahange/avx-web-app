@@ -21,6 +21,7 @@ import {
 } from "@/services/consult.filter.service";
 import { getCities, getState } from "@/services/user.service";
 import ConsultantGridSection from "../search/ConsultantGridSection";
+import { useSearchParams } from "next/navigation";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
@@ -84,6 +85,29 @@ export default function FilterWithCard() {
   // Add these two lines
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+
+  const searchParams = useSearchParams();
+  const sort = searchParams.get("sort");
+
+  const getSortConfig = (sortValue) => {
+    switch (sortValue) {
+      case "price_low_high":
+        return { sortBy: "minVehiclePrice", direction: "asc" };
+
+      case "price_high_low":
+        return { sortBy: "minVehiclePrice", direction: "desc" };
+
+      case "subscribers_low_high":
+        return { sortBy: "followersCount", direction: "asc" };
+
+      case "subscribers_high_low":
+        return { sortBy: "followersCount", direction: "desc" };
+
+      case "recommended":
+      default:
+        return { sortBy: "minVehiclePrice", direction: "desc" };
+    }
+  };
 
   // ── Transform API data to match what ConsultantCard expects ──
   const mapToCardFormat = (items = []) => {
@@ -253,10 +277,16 @@ export default function FilterWithCard() {
   // ── Fetch both APIs ──
   const fetchConsultants = async (page = currentPage, payload = {}) => {
     try {
-      const premiumRes = await getPremiumConsult(
-        { pageNo: page, size: itemsPerPage },
-        payload,
-      );
+      const { sortBy, direction } = getSortConfig(sort);
+
+      const requestData = {
+        pageNo: page,
+        size: itemsPerPage,
+        sortBy,
+        direction,
+      };
+
+      const premiumRes = await getPremiumConsult(requestData, payload);
 
       const premiumData =
         premiumRes?.success && Array.isArray(premiumRes?.data)
@@ -272,8 +302,8 @@ export default function FilterWithCard() {
 
   // Initial fetch on mount (empty payload = default results)
   useEffect(() => {
-    fetchConsultants(1, {});
-  }, []);
+    fetchConsultants(currentPage);
+  }, [currentPage, sort]);
 
   const buildPayload = () => {
     const payload = {};

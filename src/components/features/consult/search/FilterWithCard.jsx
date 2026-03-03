@@ -23,6 +23,7 @@ import {
   getPremiumConsult,
 } from "@/services/consult.filter.service";
 import { getCities, getState } from "@/services/user.service";
+import { useSearchParams } from "next/navigation";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
@@ -46,6 +47,28 @@ export default function FilterWithCard() {
   const [activeFilterTab, setActiveFilterTab] = useState("Vehicle Type");
   const [selectedMobileChips, setSelectedMobileChips] = useState([]);
   const [avxAssumed, setAvxAssumed] = useState(true);
+  const searchParams = useSearchParams();
+  const sort = searchParams.get("sort");
+
+  const getSortConfig = (sortValue) => {
+    switch (sortValue) {
+      case "price_low_high":
+        return { sortBy: "minVehiclePrice", direction: "asc" };
+
+      case "price_high_low":
+        return { sortBy: "minVehiclePrice", direction: "desc" };
+
+      case "subscribers_low_high":
+        return { sortBy: "followersCount", direction: "asc" };
+
+      case "subscribers_high_low":
+        return { sortBy: "followersCount", direction: "desc" };
+
+      case "recommended":
+      default:
+        return { sortBy: "minVehiclePrice", direction: "desc" };
+    }
+  };
 
   // ── Services chips (from API) ──
   const [services, setServices] = useState([]);
@@ -256,12 +279,21 @@ export default function FilterWithCard() {
   // ── Fetch both APIs ──
   const fetchConsultants = async (page = currentPage, payload = {}) => {
     try {
+      // 🔥 Get sorting config from URL
+      const { sortBy, direction } = getSortConfig(sort);
+
+      const requestData = {
+        pageNo: page,
+        size: itemsPerPage,
+        sortBy,
+        direction,
+      };
+
       const [filteredRes, premiumRes] = await Promise.all([
-        getFilteredConsult({ pageNo: page, size: itemsPerPage }, payload),
-        getPremiumConsult({ pageNo: page, size: itemsPerPage }, payload),
+        getFilteredConsult(requestData, payload),
+        getPremiumConsult(requestData, payload),
       ]);
 
-      // ── Extract Safe Data ──
       const filteredData =
         filteredRes?.success && Array.isArray(filteredRes?.data)
           ? filteredRes.data
@@ -355,6 +387,12 @@ export default function FilterWithCard() {
     await fetchConsultants(1, payload);
   };
 
+  useEffect(() => {
+    const payload = buildPayload();
+    setCurrentPage(1);
+    fetchConsultants(1, payload);
+  }, [sort]);
+
   const handlePageChange = (newPage) => {
     if (newPage >= 1) {
       setCurrentPage(newPage);
@@ -375,7 +413,6 @@ export default function FilterWithCard() {
     setSelectedCityId(null);
     setSelectedCityName("");
 
-   
     // Reset mobile chips
     setSelectedMobileChips([]);
 

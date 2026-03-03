@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import { ArrowUpDown, ChevronDown, FilterIcon } from "lucide-react";
-
+import { useRouter, useSearchParams } from "next/navigation";
 /* ================= SORT OPTIONS ================= */
 const sortOptions = [
   { value: "recommended", label: "Recommended" },
@@ -17,6 +17,8 @@ export default function SearchWithHeader() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(sortOptions[0]);
   const dropdownRef = useRef(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   /* Close on outside click */
   useEffect(() => {
@@ -100,6 +102,13 @@ export default function SearchWithHeader() {
                       onClick={() => {
                         setSelected(option);
                         setOpen(false);
+
+                        const params = new URLSearchParams(
+                          searchParams.toString(),
+                        );
+                        params.set("sort", option.value);
+
+                        router.push(`?${params.toString()}`);
                       }}
                       className={`
                         w-full text-left px-3 py-2

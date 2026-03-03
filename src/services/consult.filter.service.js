@@ -36,14 +36,14 @@ export const getUserCityAndStateByLatLong = async (data) => {
 
 export const getFilteredConsult = async (data, payload) => {
   try {
-    const { pageNo, size } = data;
+    const { pageNo, size, sortBy, direction } = data;
 
     const res = await axiosInstance.post(ENDPOINT.getFilteredConsult, payload, {
       params: {
         pageNo,
         size,
-        sortBy: "minVehiclePrice",
-        direction: "desc",
+        sortBy: sortBy || "minVehiclePrice",
+        direction: direction || "desc",
       },
     });
 
