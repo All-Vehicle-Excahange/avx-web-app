@@ -76,15 +76,14 @@ export default function HelpHero() {
 
       {/* Content wrapper */}
       <div
-        className={`relative z-10 w-full max-w-2xl transition-all duration-700 ease-out ${
-          mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-        }`}
+        className={`relative z-10 w-full max-w-2xl transition-all duration-700 ease-out ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          }`}
       >
         {/* Label */}
         <div className="flex items-center justify-center gap-2 mb-6">
           <div className="h-px w-10 bg-linear-to-r from-transparent to-blue-500/50" />
           <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-            Help Hero
+            AVX Help Center
           </span>
           <div className="h-px w-10 bg-linear-to-l from-transparent to-blue-500/50" />
         </div>
@@ -103,18 +102,16 @@ export default function HelpHero() {
         <div className="relative">
           {/* Outer glow */}
           <div
-            className={`absolute -inset-0.5 rounded-[18px] pointer-events-none transition-opacity duration-300 bg-linear-to-br from-blue-500/40 to-blue-800/20 ${
-              focused ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute -inset-0.5 rounded-[18px] pointer-events-none transition-opacity duration-300 bg-linear-to-br from-blue-500/40 to-blue-800/20 ${focused ? "opacity-100" : "opacity-0"
+              }`}
           />
 
           {/* Inner bar */}
           <div
-            className={`relative z-10 flex items-center gap-3.5 px-5 py-4 rounded-2xl backdrop-blur-md transition-all duration-300 border ${
-              focused
+            className={`relative z-10 flex items-center gap-3.5 px-5 py-4 rounded-2xl backdrop-blur-md transition-all duration-300 border ${focused
                 ? "border-blue-500/35 bg-[#000514]/75"
                 : "border-primary/10 bg-black/45"
-            }`}
+              }`}
           >
             <Search
               size={18}
@@ -164,9 +161,8 @@ export default function HelpHero() {
                       setQuery(s);
                       setFocused(false);
                     }}
-                    className={`flex items-center gap-3 w-full px-4 py-3 bg-transparent text-primary/70 hover:bg-blue-500/10 hover:text-primary text-[0.85rem] font-secondary text-left transition-all duration-150 ${
-                      i < filtered.length - 1 ? "border-b border-primary/3" : ""
-                    }`}
+                    className={`flex items-center gap-3 w-full px-4 py-3 bg-transparent text-primary/70 hover:bg-blue-500/10 hover:text-primary text-[0.85rem] font-secondary text-left transition-all duration-150 ${i < filtered.length - 1 ? "border-b border-primary/3" : ""
+                      }`}
                   >
                     <Search size={12} className="shrink-0 text-blue-500/40" />
                     {s}
@@ -193,15 +189,13 @@ export default function HelpHero() {
               <button
                 key={tag}
                 onClick={() => handleTag(tag)}
-                className={`px-3.5 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-[0.15em] font-primary transition-all duration-200 ${
-                  mounted
+                className={`px-3.5 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-[0.15em] font-primary transition-all duration-200 ${mounted
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-2"
-                } ${
-                  isActive
+                  } ${isActive
                     ? "border-blue-500/50 bg-blue-500/10 text-blue-500/90"
                     : "border-primary/10 bg-primary/5 text-primary/50 hover:border-primary/20 hover:text-primary/80 hover:bg-primary/10"
-                } border`}
+                  } border`}
                 style={{ transitionDelay: `${0.1 + i * 0.06}s` }}
               >
                 {tag}

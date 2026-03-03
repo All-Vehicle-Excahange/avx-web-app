@@ -66,19 +66,21 @@ export default function SupportBridge() {
   const handleBackToRequests = () => setView("requests");
 
   return (
-    <div className="min-h-screen bg-secondary">
-      {view === "flow" ? (
-        <SupportFlow
-          onTicketCreated={handleTicketCreated}
-          onBack={handleBackToRequests}
-        />
-      ) : (
-        <SupportRequests
-          tickets={tickets}
-          setTickets={setTickets}
-          onNewRequest={handleNewRequest}
-        />
-      )}
+    <div className="min-h-screen bg-secondary px-4 sm:px-6 lg:px-12">
+      <div className="max-w-7xl mx-auto">
+        {view === "flow" ? (
+          <SupportFlow
+            onTicketCreated={handleTicketCreated}
+            onBack={handleBackToRequests}
+          />
+        ) : (
+          <SupportRequests
+            tickets={tickets}
+            setTickets={setTickets}
+            onNewRequest={handleNewRequest}
+          />
+        )}
+      </div>
     </div>
   );
 }

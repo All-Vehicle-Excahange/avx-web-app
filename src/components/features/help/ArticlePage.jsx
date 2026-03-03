@@ -1,8 +1,5 @@
-// app/avx-help-center/[slug]/page.jsx
-"use client";
-
 import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -18,7 +15,7 @@ import {
 import {
   articles,
   tagStyles,
-} from "@/app/components/avx-help-center/Articles.data";
+} from "./Articles.data";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -126,19 +123,22 @@ function SupportFlow({ onClose }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ArticleDetailPage() {
-  const { slug } = useParams();
+  const router = useRouter();
+  const { slug } = router.query || {};
   const [feedback, setFeedback] = useState(null);
   const [supportOpen, setSupportOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-   
+
     const timer = setTimeout(() => {
       setMounted(true);
     }, 0);
 
     return () => clearTimeout(timer); // Cleanup on unmount
   }, []);
+  if (!router.isReady) return null;
+
   const article = articles.find((a) => a.slug === slug);
   const articleIndex = articles.findIndex((a) => a.slug === slug);
   const prevArticle = articleIndex > 0 ? articles[articleIndex - 1] : null;
@@ -154,7 +154,7 @@ export default function ArticleDetailPage() {
           </p>
           <p className="text-sm mb-6 text-third/40">Article not found.</p>
           <Link
-            href="/avx-help-center"
+            href="/help"
             className="text-[11px] uppercase tracking-[0.25em] font-bold text-fourth font-primary"
           >
             ← Back to AVX Help Center
@@ -255,11 +255,10 @@ export default function ArticleDetailPage() {
                       setFeedback("no");
                       setSupportOpen(true);
                     }}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] uppercase tracking-[0.15em] font-bold transition-all duration-200 border font-primary ${
-                      feedback === "no"
-                        ? "bg-warning/10 border-warning/30 text-warning"
-                        : "bg-primary/5 border-primary/10 text-third/50 hover:text-warning hover:border-warning/25"
-                    }`}
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] uppercase tracking-[0.15em] font-bold transition-all duration-200 border font-primary ${feedback === "no"
+                      ? "bg-warning/10 border-warning/30 text-warning"
+                      : "bg-primary/5 border-primary/10 text-third/50 hover:text-warning hover:border-warning/25"
+                      }`}
                   >
                     <ThumbsDown size={12} /> No
                   </button>
@@ -316,7 +315,7 @@ export default function ArticleDetailPage() {
             <div className="grid grid-cols-2 gap-3">
               {prevArticle ? (
                 <Link
-                  href={`/avx-help-center/${prevArticle.slug}`}
+                  href={`/help/${prevArticle.slug}`}
                   className="group flex flex-col gap-1.5 p-4 rounded-xl transition-all duration-200 bg-primary/5 border border-primary/10 hover:bg-primary/10 hover:border-primary/20"
                 >
                   <span className="text-[9px] uppercase tracking-[0.25em] font-bold flex items-center gap-1 text-third/30 font-primary">
@@ -332,7 +331,7 @@ export default function ArticleDetailPage() {
 
               {nextArticle ? (
                 <Link
-                  href={`/avx-help-center/${nextArticle.slug}`}
+                  href={`/help/${nextArticle.slug}`}
                   className="group flex flex-col gap-1.5 p-4 rounded-xl transition-all duration-200 bg-primary/5 border border-primary/10 hover:bg-primary/10 hover:border-primary/20 text-right"
                 >
                   <span className="text-[9px] uppercase tracking-[0.25em] font-bold flex items-center justify-end gap-1 text-third/30 font-primary">
