@@ -1,7 +1,17 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Car, Tag, UserCheck, CreditCard, Zap, User, Flag } from "lucide-react";
+import {
+  Car,
+  Tag,
+  UserCheck,
+  CreditCard,
+  Zap,
+  User,
+  Flag,
+  Plus,
+  Minus,
+} from "lucide-react";
 
 const categories = [
   { id: "buying", number: "01", icon: Car, label: "Buying", tag: "For Buyers" },
@@ -56,11 +66,11 @@ const faqData = {
       a: "Open the vehicle listing and click Inquire. Your inquiry is sent directly to the verified consultant managing that listing. AVX records the interaction for transparency but does not participate in negotiation or pricing.",
     },
     {
-      q: "Can I chat with consultant on web?",
+      q: "Can I chat with a consultant on web?",
       a: "Yes. Web chat is available for initial inquiries. Continued engagement may require the mobile app for secure and real-time messaging.",
     },
     {
-      q: "Why am I asked to download mobile app?",
+      q: "Why am I asked to download the mobile app?",
       a: "The mobile app enables secure messaging, inspection tracking, and notification alerts. Some features are optimized for mobile use.",
     },
     {
@@ -74,10 +84,6 @@ const faqData = {
     {
       q: "Can I request inspection before buying?",
       a: "Yes. If inspection is not already available, you may request one through the platform.",
-    },
-    {
-      q: "Can I chat with multiple consultants?",
-      a: "Yes. Each conversation remains independent and transparent within your account.",
     },
     {
       q: "Are vehicle prices negotiable?",
@@ -98,7 +104,7 @@ const faqData = {
       a: "Inspection requirements vary by tier or category. It increases credibility and visibility.",
     },
     {
-      q: "Can I edit listing after submission?",
+      q: "Can I edit a listing after submission?",
       a: "Yes. Listings can be updated unless marked sold or under dispute.",
     },
     {
@@ -107,14 +113,14 @@ const faqData = {
     },
     {
       q: "Can I mark vehicle as sold?",
-      a: "Yes. Once transaction is completed externally, mark it as sold.",
+      a: "Yes. Once the transaction is completed externally, mark it as sold.",
     },
     {
       q: "How do I track inquiries?",
       a: "All inquiries are visible in your dashboard with timestamps and engagement history.",
     },
     {
-      q: "Can I relist vehicle later?",
+      q: "Can I relist a vehicle later?",
       a: "Yes. Relisting is subject to current policies.",
     },
     {
@@ -132,7 +138,7 @@ const faqData = {
       a: "Tax compliance depends on applicable local regulations.",
     },
     {
-      q: "How to apply as consultant?",
+      q: "How do I apply as a consultant?",
       a: "Submit identity verification and required documentation for review.",
     },
     {
@@ -140,11 +146,11 @@ const faqData = {
       a: "Verification typically completes within a few working days.",
     },
     {
-      q: "When does storefront go live?",
+      q: "When does my storefront go live?",
       a: "After verification approval and subscription activation.",
     },
     {
-      q: "Can I upgrade tier later?",
+      q: "Can I upgrade my tier later?",
       a: "Yes. Tier upgrades are available anytime.",
     },
     {
@@ -152,29 +158,21 @@ const faqData = {
       a: "Downgrades are processed at the end of billing cycle.",
     },
     {
-      q: "What happens if subscription expires?",
+      q: "What happens if my subscription expires?",
       a: "Visibility may reduce or listings may be temporarily suspended.",
-    },
-    {
-      q: "Can I use WhatsApp integration?",
-      a: "Integration availability depends on compliance and platform policy.",
-    },
-    {
-      q: "Can I request inspection for vehicles?",
-      a: "Yes. Consultants may request inspections to enhance credibility.",
     },
   ],
   billing: [
     {
-      q: "How do I upgrade tier?",
+      q: "How do I upgrade my tier?",
       a: "Access dashboard → subscription settings → select upgrade.",
     },
     {
-      q: "When will subscription renew?",
+      q: "When will my subscription renew?",
       a: "Subscriptions renew automatically unless cancelled.",
     },
     {
-      q: "Can I cancel subscription?",
+      q: "Can I cancel my subscription?",
       a: "Yes. Cancellation must be initiated before renewal date.",
     },
     {
@@ -190,7 +188,7 @@ const faqData = {
       a: "Yes. PPC campaigns are available as add-ons.",
     },
     {
-      q: "Can I get refund on inspection?",
+      q: "Can I get a refund on inspection?",
       a: "Inspection fees are non-refundable once service begins.",
     },
   ],
@@ -212,7 +210,7 @@ const faqData = {
       a: "Budget is deducted based on click or engagement metrics.",
     },
     {
-      q: "Can I pause campaign?",
+      q: "Can I pause a campaign?",
       a: "Yes. Campaigns can be paused or adjusted anytime.",
     },
     {
@@ -220,7 +218,7 @@ const faqData = {
       a: "Real-time campaign analytics are available in dashboard.",
     },
     {
-      q: "Can I target city/category?",
+      q: "Can I target by city/category?",
       a: "Targeting options depend on campaign configuration.",
     },
   ],
@@ -234,7 +232,7 @@ const faqData = {
       a: "Login is required for inquiries, saving vehicles, and listing.",
     },
     {
-      q: "How to reset password?",
+      q: "How do I reset my password?",
       a: "Use Forgot Password option to receive reset link.",
     },
     {
@@ -242,25 +240,25 @@ const faqData = {
       a: "Social login availability depends on configuration.",
     },
     {
-      q: "How to delete account?",
+      q: "How do I delete my account?",
       a: "Account deletion requests can be submitted through settings.",
     },
   ],
   disputes: [
     {
-      q: "How do I report listing issue?",
+      q: "How do I report a listing issue?",
       a: "Use Report Listing option available on vehicle page.",
     },
     {
-      q: "How do I raise complaint?",
+      q: "How do I raise a complaint?",
       a: "Complaints can be submitted via dashboard dispute section.",
     },
     {
-      q: "What happens after complaint?",
+      q: "What happens after a complaint?",
       a: "Platform reviews documentation and interaction history.",
     },
     {
-      q: "Can AVX suspend consultant?",
+      q: "Can AVX suspend a consultant?",
       a: "Yes. Accounts violating policy may be restricted or suspended.",
     },
     {
@@ -274,269 +272,38 @@ const faqData = {
   ],
 };
 
-export default function FAQSections() {
-  const [activeCat, setActiveCat] = useState(0);
-  const [openQ, setOpenQ] = useState(null);
-  const [dir, setDir] = useState(1);
-  const [animating, setAnimating] = useState(false);
-  const tabsRef = useRef(null);
-  const timerRef = useRef(null);
-
-  const cat = categories[activeCat];
-  const items = faqData[cat.id] || [];
-
-  const switchCat = (idx) => {
-    if (idx === activeCat || animating) return;
-    setDir(idx > activeCat ? 1 : -1);
-    setAnimating(true);
-    clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => {
-      setActiveCat(idx);
-      setOpenQ(null);
-      setAnimating(false);
-    }, 260);
-
-    const tabEl = tabsRef.current?.children[idx];
-    tabEl?.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-      inline: "center",
-    });
-  };
-
-  useEffect(() => () => clearTimeout(timerRef.current), []);
-
+function QRow({ item, isOpen, onToggle }) {
   return (
-    <section className="relative overflow-hidden flex flex-col font-primary px-4 sm:px-6 lg:px-12">
-      <div className="relative z-10 flex flex-col flex-1 max-w-7xl mx-auto w-full py-12 sm:py-16">
-        {/* TOP: TITLE + META */}
-        <div className="flex items-end justify-between mb-8 sm:mb-10">
-          <div>
-            <p className="text-sm tracking-[0.4em] uppercase text-third/60 font-semibold mb-2">
-              AVX · Help Center
-            </p>
-            <h2 className="font-black uppercase leading-none tracking-tight text-primary text-[clamp(2rem,6vw,4.5rem)]">
-              FAQ
-            </h2>
-          </div>
-
-          <div className="flex flex-col items-end gap-0.5 transition-all duration-300">
-            <span className="font-black leading-none text-[clamp(2rem,5vw,3.5rem)] text-fourth/50 transition-colors duration-400">
-              {String(items.length).padStart(2, "0")}
-            </span>
-            <span className="text-[12px] text-third/40 uppercase tracking-[0.3em] font-bold">
-              Questions
-            </span>
-          </div>
-        </div>
-
-        {/* HORIZONTAL CATEGORY TAB STRIP */}
-        <div className="relative border-y border-primary/10">
-          <div
-            className="absolute bottom-0 h-0.5 bg-fourth transition-all duration-400 ease-[cubic-bezier(0.65,0,0.35,1)]"
-            style={{
-              width: `${100 / categories.length}%`,
-              left: `${(activeCat / categories.length) * 100}%`,
-            }}
-          />
-
-          <div ref={tabsRef} className="flex overflow-x-auto no-scrollbar">
-            {categories.map((c, idx) => {
-              const Icon = c.icon;
-              const isCurrent = activeCat === idx;
-              return (
-                <button
-                  key={c.id}
-                  onClick={() => switchCat(idx)}
-                  className="flex-1 min-w-25 sm:min-w-0 flex flex-col items-center gap-1.5 py-4 sm:py-5 px-2 sm:px-4 transition-all duration-250 relative outline-none group"
-                >
-                  <Icon
-                    size={16}
-                    className={`transition-colors duration-250 ${isCurrent ? "text-fourth" : "text-third/20"}`}
-                  />
-                  <span
-                    className={`font-black uppercase text-[10px] sm:text-[13px] tracking-wider whitespace-nowrap transition-colors duration-250 ${isCurrent ? "text-fourth" : "text-third/25"}`}
-                  >
-                    {c.label}
-                  </span>
-                  <span
-                    className={`text-[15px] tabular-nums transition-colors duration-250 ${isCurrent ? "text-fourth/50" : "text-third/10"}`}
-                  >
-                    {c.number}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* MAIN: TWO-COLUMN QUESTION LIST */}
-        <div
-          className="flex-1 mt-8 sm:mt-10 transition-all duration-260"
-          style={{
-            opacity: animating ? 0 : 1,
-            transform: animating
-              ? `translateY(${dir > 0 ? "18px" : "-18px"})`
-              : "translateY(0)",
-          }}
-        >
-          <div className="flex items-center gap-4 mb-7 sm:mb-9">
-            <span className="font-black text-5xl sm:text-7xl leading-none select-none text-fourth/10">
-              {cat.number}
-            </span>
-
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-4 h-px bg-fourth/60" />
-                <span className="text-[10px] tracking-[0.45em] uppercase font-semibold text-fourth/60">
-                  {cat.tag}
-                </span>
-              </div>
-              <h3 className="font-black uppercase leading-none tracking-tight text-primary text-[clamp(1.6rem,3vw,3rem)]">
-                {cat.label}
-              </h3>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-x-12 xl:gap-x-20">
-            <div>
-              {items
-                .filter((_, i) => i % 2 === 0)
-                .map((item, colIdx) => {
-                  const globalIdx = colIdx * 2;
-                  return (
-                    <QRow
-                      key={`${cat.id}-L-${colIdx}`}
-                      item={item}
-                      index={globalIdx}
-                      isOpen={openQ === globalIdx}
-                      onToggle={() =>
-                        setOpenQ(openQ === globalIdx ? null : globalIdx)
-                      }
-                      delay={colIdx * 0.06}
-                    />
-                  );
-                })}
-            </div>
-            <div>
-              {items
-                .filter((_, i) => i % 2 === 1)
-                .map((item, colIdx) => {
-                  const globalIdx = colIdx * 2 + 1;
-                  return (
-                    <QRow
-                      key={`${cat.id}-R-${colIdx}`}
-                      item={item}
-                      index={globalIdx}
-                      isOpen={openQ === globalIdx}
-                      onToggle={() =>
-                        setOpenQ(openQ === globalIdx ? null : globalIdx)
-                      }
-                      delay={0.03 + colIdx * 0.06}
-                    />
-                  );
-                })}
-            </div>
-          </div>
-        </div>
-
-        {/* BOTTOM NAV */}
-        <div className="flex items-center justify-between pt-8 mt-6 border-t border-primary/5">
-          <button
-            onClick={() => switchCat(Math.max(0, activeCat - 1))}
-            disabled={activeCat === 0}
-            className="flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] font-bold transition-all duration-200 disabled:opacity-10 text-third/30 hover:text-primary"
-          >
-            <span className="text-base">←</span>
-            <span className="hidden sm:inline">
-              {activeCat > 0 ? categories[activeCat - 1].label : "—"}
-            </span>
-          </button>
-
-          <div className="flex items-center gap-2">
-            {categories.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => switchCat(i)}
-                className={`h-1 rounded-full transition-all duration-350 ${activeCat === i ? "w-7 bg-fourth" : "w-1.5 bg-primary/10"}`}
-              />
-            ))}
-          </div>
-
-          <button
-            onClick={() =>
-              switchCat(Math.min(categories.length - 1, activeCat + 1))
-            }
-            disabled={activeCat === categories.length - 1}
-            className="flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] font-bold transition-all duration-200 disabled:opacity-10 text-third/30 hover:text-primary"
-          >
-            <span className="hidden sm:inline">
-              {activeCat < categories.length - 1
-                ? categories[activeCat + 1].label
-                : "—"}
-            </span>
-            <span className="text-base">→</span>
-          </button>
-        </div>
-      </div>
-
-      <style jsx>{`
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        @keyframes qRowIn {
-          from {
-            opacity: 0;
-            transform: translateX(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-      `}</style>
-    </section>
-  );
-}
-
-function QRow({ item, index, isOpen, onToggle, delay }) {
-  return (
-    <div
-      className="relative border-b border-primary/5 transition-colors duration-200"
-      style={{
-        animation: `qRowIn 0.4s ${delay}s cubic-bezier(0.22,1,0.36,1) both`,
-      }}
-    >
-      <div
-        className={`absolute left-0 top-0 bottom-0 w-[2.5px] bg-fourth rounded-full transition-transform duration-320 origin-top ${isOpen ? "scale-y-100" : "scale-y-0"}`}
-      />
-
+    <div className="border-b border-white/5 transition-colors duration-200">
       <button
         onClick={onToggle}
-        className="w-full flex items-start gap-4 text-left py-5 pl-4 pr-2 group"
+        className="w-full flex items-start gap-4 text-left py-5 px-5 group transition-colors duration-200 hover:bg-white/2 rounded-xl"
       >
-        <span
-          className={`font-black text-xs shrink-0 mt-0.5 w-6 text-right tabular-nums transition-colors duration-200 ${isOpen ? "text-fourth/60" : "text-primary/10"}`}
-        >
-          {String(index + 1).padStart(2, "0")}
-        </span>
-
-        <span
-          className={`flex-1 text-[14px] sm:text-[15px] font-semibold leading-snug transition-colors duration-200 font-secondary ${isOpen ? "text-fourth" : "text-primary/60"}`}
-        >
-          {item.q}
-        </span>
-
-        <div
-          className={`shrink-0 mt-0.5 w-5 h-5 rounded-md flex items-center justify-center transition-all duration-250 ${isOpen ? "bg-fourth/15 text-fourth" : "bg-primary/5 text-third/20"}`}
-        >
-          <span className="text-m font-light leading-none">
-            {isOpen ? "−" : "+"}
+        <div className="flex-1 min-w-0">
+          <span
+            className="text-[14px] sm:text-[15px] font-semibold leading-snug transition-colors duration-200 font-secondary"
+            style={{ color: isOpen ? "#007bff" : "rgba(255,255,255,0.65)" }}
+          >
+            {item.q}
           </span>
+        </div>
+        <div
+          className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 mt-0.5 transition-all duration-250"
+          style={{
+            background: isOpen
+              ? "rgba(0,123,255,0.15)"
+              : "rgba(255,255,255,0.05)",
+            border: "1px solid",
+            borderColor: isOpen
+              ? "rgba(0,123,255,0.3)"
+              : "rgba(255,255,255,0.08)",
+          }}
+        >
+          {isOpen ? (
+            <Minus size={11} className="text-fourth" />
+          ) : (
+            <Plus size={11} style={{ color: "rgba(255,255,255,0.3)" }} />
+          )}
         </div>
       </button>
 
@@ -544,10 +311,231 @@ function QRow({ item, index, isOpen, onToggle, delay }) {
         className="overflow-hidden transition-[max-height] duration-380 ease-[cubic-bezier(0.22,1,0.36,1)]"
         style={{ maxHeight: isOpen ? "260px" : "0" }}
       >
-        <p className="pl-10 pr-4 pb-5 text-sm sm:text-[15px] leading-relaxed text-third/50 font-secondary">
+        <p className="px-5 pb-5 text-sm sm:text-[15px] leading-relaxed text-primary/45 font-secondary">
           {item.a}
         </p>
       </div>
     </div>
+  );
+}
+
+export default function FAQSections() {
+  const [activeCat, setActiveCat] = useState(0);
+  const [openQ, setOpenQ] = useState(null);
+  const [animating, setAnimating] = useState(false);
+  const timerRef = useRef(null);
+
+  const cat = categories[activeCat];
+  const items = faqData[cat.id] || [];
+
+  const switchCat = (idx) => {
+    if (idx === activeCat || animating) return;
+    setAnimating(true);
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      setActiveCat(idx);
+      setOpenQ(null);
+      setAnimating(false);
+    }, 220);
+  };
+
+  useEffect(() => () => clearTimeout(timerRef.current), []);
+
+  return (
+    <section
+      id="faq"
+      className="relative py-20 px-4 sm:px-8 lg:px-16 overflow-hidden"
+    >
+      <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/5 to-transparent" />
+
+      <div className="max-w-7xl mx-auto">
+        {/* ── HEADER ── */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="h-px w-6 bg-fourth/50" />
+              <p className="text-[10px] tracking-[0.4em] uppercase font-black font-primary text-fourth/70">
+                AVX · Help Center
+              </p>
+            </div>
+            <h2 className="font-primary font-black uppercase leading-none tracking-tight text-primary text-[clamp(2.2rem,6vw,4.5rem)]">
+              FAQ
+            </h2>
+          </div>
+          <div className="flex flex-col items-start sm:items-end gap-1">
+            <span className="font-primary font-black text-[clamp(2rem,4vw,3rem)] leading-none text-fourth/40">
+              {String(items.length).padStart(2, "0")}
+            </span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary/25 font-primary">
+              Questions
+            </span>
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-[280px_1fr] gap-8 lg:gap-12 items-start">
+          {/* ── SIDEBAR CATEGORY TABS ── */}
+          <div className="lg:sticky lg:top-8">
+            <div
+              className="rounded-2xl overflow-hidden border border-white/6"
+              style={{ background: "rgba(255,255,255,0.02)" }}
+            >
+              <div className="px-5 py-4 border-b border-white/5">
+                <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary/25 font-primary">
+                  Categories
+                </p>
+              </div>
+              <div className="p-2 space-y-0.5">
+                {categories.map((c, idx) => {
+                  const Icon = c.icon;
+                  const isCurrent = activeCat === idx;
+                  return (
+                    <button
+                      key={c.id}
+                      onClick={() => switchCat(idx)}
+                      className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left transition-all duration-250 outline-none group"
+                      style={{
+                        background: isCurrent
+                          ? "rgba(0,123,255,0.1)"
+                          : "transparent",
+                        border: "1px solid",
+                        borderColor: isCurrent
+                          ? "rgba(0,123,255,0.2)"
+                          : "transparent",
+                      }}
+                    >
+                      <div
+                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-250"
+                        style={{
+                          background: isCurrent
+                            ? "rgba(0,123,255,0.15)"
+                            : "rgba(255,255,255,0.04)",
+                        }}
+                      >
+                        <Icon
+                          size={14}
+                          className={`transition-colors duration-250 ${isCurrent ? "text-fourth" : "text-primary/25"}`}
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p
+                          className={`text-[12px] font-black uppercase tracking-wide transition-colors duration-250 font-primary ${isCurrent ? "text-fourth" : "text-primary/40 group-hover:text-primary/60"}`}
+                        >
+                          {c.label}
+                        </p>
+                        <p className="text-[10px] text-primary/20 font-secondary mt-0.5">
+                          {c.tag}
+                        </p>
+                      </div>
+                      <span
+                        className="text-[11px] font-black font-primary tabular-nums transition-colors duration-250"
+                        style={{
+                          color: isCurrent
+                            ? "rgba(0,123,255,0.6)"
+                            : "rgba(255,255,255,0.1)",
+                        }}
+                      >
+                        {c.number}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* ── FAQ CONTENT ── */}
+          <div>
+            {/* Category heading */}
+            <div className="flex items-center gap-4 mb-8">
+              <span
+                className="font-black text-6xl leading-none select-none font-primary"
+                style={{ color: "rgba(0,123,255,0.08)" }}
+              >
+                {cat.number}
+              </span>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="w-4 h-px bg-fourth/50" />
+                  <span className="text-[9px] tracking-[0.45em] uppercase font-black text-fourth/60 font-primary">
+                    {cat.tag}
+                  </span>
+                </div>
+                <h3 className="font-black uppercase leading-none tracking-tight text-primary font-primary text-[clamp(1.6rem,3vw,2.8rem)]">
+                  {cat.label}
+                </h3>
+              </div>
+            </div>
+
+            {/* Accordion list */}
+            <div
+              className="transition-all duration-220 rounded-2xl overflow-hidden border border-white/6"
+              style={{
+                opacity: animating ? 0 : 1,
+                transform: animating ? "translateY(10px)" : "translateY(0)",
+                background: "rgba(255,255,255,0.015)",
+              }}
+            >
+              {items.map((item, idx) => (
+                <QRow
+                  key={`${cat.id}-${idx}`}
+                  item={item}
+                  isOpen={openQ === idx}
+                  onToggle={() => setOpenQ(openQ === idx ? null : idx)}
+                />
+              ))}
+            </div>
+
+            {/* Bottom pagination dots */}
+            <div className="flex items-center justify-between mt-8 pt-6 border-t border-white/5">
+              <button
+                onClick={() => switchCat(Math.max(0, activeCat - 1))}
+                disabled={activeCat === 0}
+                className="flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] font-black font-primary transition-all duration-200 disabled:opacity-15 text-primary/30 hover:text-primary"
+              >
+                <span>←</span>
+                <span className="hidden sm:inline">
+                  {activeCat > 0 ? categories[activeCat - 1].label : "—"}
+                </span>
+              </button>
+
+              <div className="flex items-center gap-1.5">
+                {categories.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => switchCat(i)}
+                    className="h-1 rounded-full transition-all duration-350"
+                    style={{
+                      width: activeCat === i ? "28px" : "6px",
+                      background:
+                        activeCat === i ? "#007bff" : "rgba(255,255,255,0.1)",
+                    }}
+                  />
+                ))}
+              </div>
+
+              <button
+                onClick={() =>
+                  switchCat(Math.min(categories.length - 1, activeCat + 1))
+                }
+                disabled={activeCat === categories.length - 1}
+                className="flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] font-black font-primary transition-all duration-200 disabled:opacity-15 text-primary/30 hover:text-primary"
+              >
+                <span className="hidden sm:inline">
+                  {activeCat < categories.length - 1
+                    ? categories[activeCat + 1].label
+                    : "—"}
+                </span>
+                <span>→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+    </section>
   );
 }

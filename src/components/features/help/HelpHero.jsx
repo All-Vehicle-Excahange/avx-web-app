@@ -1,232 +1,423 @@
-"use client";
-
 import { useState, useRef, useEffect } from "react";
-import { Search, Zap, X } from "lucide-react";
+import {
+  Search,
+  X,
+  ArrowUpRight,
+  Shield,
+  Zap,
+  Clock,
+  BookOpen,
+  MessageSquare,
+  ChevronRight,
+} from "lucide-react";
+import Link from "next/link";
+import SupportFlowModal from "./SupportFlowModal";
 
-const TAGS = [
-  "Inspection",
-  "Listing",
-  "PPC",
-  "Subscription",
-  "Inquiry",
-  "Storefront",
+const QUICK_LINKS = [
+  {
+    label: "AVX Inspection Process",
+    href: "/help/what-is-avx-inspection",
+    tag: "Popular",
+  },
+  {
+    label: "How to list a vehicle",
+    href: "/help/how-to-list-your-vehicle",
+    tag: "Guide",
+  },
+  {
+    label: "Subscription & billing",
+    href: "/help/subscription-tiers-explained",
+    tag: "Billing",
+  },
+  {
+    label: "Apply as a Consultant",
+    href: "/help/how-to-become-a-consultant",
+    tag: "Consultant",
+  },
+  {
+    label: "PPC campaign setup",
+    href: "/help/how-ppc-vehicle-boost-works",
+    tag: "Boost",
+  },
+  {
+    label: "Request an inspection",
+    href: "/help/how-to-request-inspection",
+    tag: "Inspection",
+  },
 ];
 
-const SUGGESTIONS = [
-  "How to schedule a vehicle inspection?",
-  "Why is my listing not showing up?",
-  "How do I upgrade my consultant tier?",
-  "Request a refund for subscription",
-  "PPC campaign setup guide",
-  "Storefront customization options",
+const STATS = [
+  {
+    value: "500+",
+    label: "Help Articles",
+    icon: BookOpen,
+    color: "text-fourth",
+  },
+  {
+    value: "24 / 7",
+    label: "Live Support",
+    icon: MessageSquare,
+    color: "text-green-400",
+  },
+  {
+    value: "< 4 hrs",
+    label: "Avg Response",
+    icon: Clock,
+    color: "text-amber-400",
+  },
+  { value: "98%", label: "Resolved", icon: Shield, color: "text-fourth" },
+];
+
+const CATEGORIES = [
+  { label: "Inspection", color: "bg-fourth/10 text-fourth border-fourth/20" },
+  { label: "Listing", color: "bg-primary/5 text-primary/60 border-primary/10" },
+  { label: "Billing", color: "bg-primary/5 text-primary/60 border-primary/10" },
+  {
+    label: "Consultant",
+    color: "bg-primary/5 text-primary/60 border-primary/10",
+  },
+  { label: "PPC", color: "bg-primary/5 text-primary/60 border-primary/10" },
+  { label: "Account", color: "bg-primary/5 text-primary/60 border-primary/10" },
 ];
 
 export default function HelpHero() {
   const [query, setQuery] = useState("");
   const [focused, setFocused] = useState(false);
-  const [activeTag, setActiveTag] = useState(null);
   const [mounted, setMounted] = useState(false);
   const inputRef = useRef(null);
+  const [supportOpen, setSupportOpen] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setMounted(true);
-    }, 10);
-
-    return () => clearTimeout(timer);
+    const t = setTimeout(() => setMounted(true), 50);
+    return () => clearTimeout(t);
   }, []);
 
   const filtered =
     query.length > 0
-      ? SUGGESTIONS.filter((s) => s.toLowerCase().includes(query.toLowerCase()))
-      : SUGGESTIONS;
+      ? QUICK_LINKS.filter((l) =>
+          l.label.toLowerCase().includes(query.toLowerCase()),
+        )
+      : QUICK_LINKS;
 
-  const handleTag = (tag) => {
-    setActiveTag(activeTag === tag ? null : tag);
-    setQuery(tag);
-    inputRef.current?.focus();
-  };
-
-  const clearQuery = () => {
+  const clear = () => {
     setQuery("");
-    setActiveTag(null);
     inputRef.current?.focus();
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-2  py-16 overflow-hidden font-secondary">
-      {/* Background grid */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-40"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
-
-      {/* Radial ambient */}
-      <div
-        className="absolute inset-0 pointer-events-none"
+    <>
+      <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
+        {/* Ambient radial glows */}
+        {/* <div
+        className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse 65% 55% at 50% 40%, rgba(0,123,255,0.06) 0%, transparent 70%)",
+            "radial-gradient(circle, rgba(0,123,255,0.08) 0%, transparent 70%)",
         }}
       />
+       */}
 
-      {/* Content wrapper */}
-      <div
-        className={`relative z-10 w-full max-w-2xl transition-all duration-700 ease-out ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-          }`}
-      >
-        {/* Label */}
-        <div className="flex items-center justify-center gap-2 mb-6">
-          <div className="h-px w-10 bg-linear-to-r from-transparent to-blue-500/50" />
-          <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-            AVX Help Center
-          </span>
-          <div className="h-px w-10 bg-linear-to-l from-transparent to-blue-500/50" />
-        </div>
+        <div
+          className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(0,123,255,0.05) 0%, transparent 70%)",
+          }}
+        />
 
-        {/* Main Title */}
-        <h1 className="font-primary text-3xl sm:text-4xl lg:text-5xl font-black text-center uppercase leading-[1.1] text-primary tracking-tight mb-2">
-          How can we <span className="inline-block text-fourth">help</span> you
-          today?
-        </h1>
+        {/* Fine grid overlay */}
+        {/* <div
+        className="absolute inset-0 pointer-events-none opacity-[0.035]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
+          backgroundSize: "72px 72px",
+        }}
+      /> */}
 
-        <p className="text-center text-m mb-8 text-primary/40 tracking-wide">
-          Search articles, guides, and support resources across AVX.
-        </p>
+        {/* Top edge glow line */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-fourth/40 to-transparent" />
 
-        {/* Search Box */}
-        <div className="relative">
-          {/* Outer glow */}
-          <div
-            className={`absolute -inset-0.5 rounded-[18px] pointer-events-none transition-opacity duration-300 bg-linear-to-br from-blue-500/40 to-blue-800/20 ${focused ? "opacity-100" : "opacity-0"
-              }`}
-          />
-
-          {/* Inner bar */}
-          <div
-            className={`relative z-10 flex items-center gap-3.5 px-5 py-4 rounded-2xl backdrop-blur-md transition-all duration-300 border ${focused
-                ? "border-blue-500/35 bg-[#000514]/75"
-                : "border-primary/10 bg-black/45"
-              }`}
-          >
-            <Search
-              size={18}
-              className={`shrink-0 transition-colors duration-300 ${focused ? "text-blue-500/80" : "text-primary/30"}`}
-            />
-
-            <input
-              ref={inputRef}
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onFocus={() => setFocused(true)}
-              onBlur={() => setTimeout(() => setFocused(false), 200)}
-              placeholder='Try "inspection", "listing issue", "tier upgrade", "refund"'
-              className="flex-1 min-w-0 bg-transparent border-none outline-none text-primary text-[0.92rem] font-secondary tracking-wide placeholder:text-primary/20 placeholder:tracking-[0.08em]"
-            />
-
-            {query && (
-              <button
-                onClick={clearQuery}
-                className="flex items-center shrink-0 bg-transparent text-primary/40 hover:text-primary/60 transition-colors"
-              >
-                <X size={14} />
-              </button>
-            )}
-
-            <button className="shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-[10px] bg-blue-600 text-primary border-none cursor-pointer text-[11px] font-bold uppercase font-primary tracking-[0.15em] transition-all duration-200 hover:-translate-y-0.5 shadow-[0_4px_20px_rgba(0,123,255,0.25)] hover:shadow-[0_6px_28px_rgba(0,123,255,0.45)]">
-              <Zap size={11} />
-              Search
-            </button>
-          </div>
-
-          {/* Dropdown */}
-          {focused && (
-            <div className="absolute top-[calc(100%+8px)] left-0 right-0 z-50 rounded-[14px] overflow-scroll h-53.5 backdrop-blur-xl border border-blue-500/15 bg-[#0a0a14]/95 shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.04)]">
-              <div className="px-4 pt-2.5 pb-2 text-[9px] tracking-[0.35em] uppercase font-bold font-primary text-primary/30 border-b border-primary/5 sticky top-0 bg-[#0a0a14]/95 z-10">
-                {query ? "Results" : "Suggested"}
-              </div>
-
-              {filtered.length > 0 ? (
-                filtered.map((s, i) => (
-                  <button
-                    key={i}
-                    // CHANGED: Use onMouseDown to prevent the input's onBlur from hiding the menu before click
-                    onMouseDown={(e) => {
-                      e.preventDefault(); // Prevents input from losing focus immediately
-                      setQuery(s);
-                      setFocused(false);
-                    }}
-                    className={`flex items-center gap-3 w-full px-4 py-3 bg-transparent text-primary/70 hover:bg-blue-500/10 hover:text-primary text-[0.85rem] font-secondary text-left transition-all duration-150 ${i < filtered.length - 1 ? "border-b border-primary/3" : ""
-                      }`}
-                  >
-                    <Search size={12} className="shrink-0 text-blue-500/40" />
-                    {s}
-                  </button>
-                ))
-              ) : (
-                <div className="px-4 py-4 text-[0.83rem] text-center text-primary/30">
-                  No results for {query}
+        {/* ── CONTENT ── */}
+        <div
+          className={`relative z-10 w-full px-4 sm:px-8 lg:px-16 py-24 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+        >
+          <div className="max-w-7xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+              {/* ── LEFT COLUMN ── */}
+              <div className="flex flex-col gap-8">
+                {/* Eyebrow badge */}
+                <div className="flex items-center gap-3 self-start">
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-[0.35em] font-primary text-primary">
+                      AVX Help Center
+                    </span>
+                  </div>
+                  <div className="h-px w-8 bg-fourth/30" />
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-primary/25 font-primary">
+                    Support Hub
+                  </span>
                 </div>
-              )}
-            </div>
-          )}
-        </div>
 
-        {/* Popular Tags */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
-          <span className="text-[10px] tracking-[0.35em] uppercase font-bold font-primary mr-1 text-primary/40">
-            Popular:
-          </span>
+                {/* Headline */}
+                <div className="space-y-2">
+                  <h1 className="font-primary font-black uppercase leading-[0.95] tracking-tight text-[clamp(3rem,7vw,5.5rem)] text-primary">
+                    How can
+                  </h1>
+                  <h1
+                    className="font-primary font-black uppercase leading-[0.95] tracking-tight text-[clamp(3rem,7vw,5.5rem)]"
+                    style={{
+                      WebkitTextStroke: "1.5px rgba(255,255,255,0.15)",
+                      color: "transparent",
+                    }}
+                  >
+                    we help
+                  </h1>
+                  <h1 className="font-primary font-black uppercase leading-[0.95] tracking-tight text-[clamp(3rem,7vw,5.5rem)] text-fourth">
+                    you today?
+                  </h1>
+                </div>
 
-          {TAGS.map((tag, i) => {
-            const isActive = activeTag === tag;
-            return (
-              <button
-                key={tag}
-                onClick={() => handleTag(tag)}
-                className={`px-3.5 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-[0.15em] font-primary transition-all duration-200 ${mounted
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-2"
-                  } ${isActive
-                    ? "border-blue-500/50 bg-blue-500/10 text-blue-500/90"
-                    : "border-primary/10 bg-primary/5 text-primary/50 hover:border-primary/20 hover:text-primary/80 hover:bg-primary/10"
-                  } border`}
-                style={{ transitionDelay: `${0.1 + i * 0.06}s` }}
-              >
-                {tag}
-              </button>
-            );
-          })}
-        </div>
+                {/* Sub */}
+                <p className="text-base leading-relaxed text-primary/40 font-secondary max-w-md">
+                  Search 500+ articles, guides, and tutorials — or jump straight
+                  to our support team.
+                </p>
 
-        {/* Bottom Stats */}
-        <div className="mt-14 flex items-center justify-center">
-          {[
-            { value: "500+", label: "Articles" },
-            { value: "24/7", label: "Support" },
-            { value: "98%", label: "Resolved" },
-          ].map((stat, i) => (
-            <div
-              key={i}
-              className={`px-10 text-center ${i > 0 ? "border-l border-primary/10" : "border-none"}`}
-            >
-              <div
-                className={`font-primary font-black text-2xl leading-none tracking-[1px] ${i === 1 ? "text-blue-500" : "text-primary"}`}
-              >
-                {stat.value}
+                {/* ── SEARCH BAR ── */}
+                <div className="relative">
+                  {/* Glow ring on focus */}
+                  <div
+                    className={`absolute -inset-0.5 rounded-2xl transition-opacity duration-300 pointer-events-none ${focused ? "opacity-100" : "opacity-0"}`}
+                    style={{
+                      background:
+                        "linear-gradient(135deg, rgba(0,123,255,0.5), rgba(0,123,255,0.1))",
+                      filter: "blur(6px)",
+                    }}
+                  />
+
+                  <div
+                    className={`relative flex items-center gap-3 px-5 py-4 rounded-2xl border transition-all duration-300 ${focused ? "border-fourth/40 bg-[#0d1117]" : "border-white/8 bg-white/4"}`}
+                    style={{
+                      background: focused
+                        ? "rgba(13,17,23,0.95)"
+                        : "rgba(255,255,255,0.03)",
+                    }}
+                  >
+                    <Search
+                      size={18}
+                      className={`shrink-0 transition-colors duration-300 ${focused ? "text-fourth" : "text-primary/25"}`}
+                    />
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      onFocus={() => setFocused(true)}
+                      onBlur={() => setTimeout(() => setFocused(false), 200)}
+                      placeholder='Try "inspection", "listing", "refund"…'
+                      className="flex-1 bg-transparent border-none outline-none text-primary text-sm font-secondary placeholder:text-primary/20"
+                    />
+                    {query ? (
+                      <button
+                        onClick={clear}
+                        className="text-primary/30 hover:text-primary/60 transition-colors"
+                      >
+                        <X size={14} />
+                      </button>
+                    ) : (
+                      <span className="text-[10px] px-2 py-1 rounded-md border border-primary/10 text-primary/25 font-primary tracking-widest hidden sm:block">
+                        ⌘ K
+                      </span>
+                    )}
+                    <button
+                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-[0.18em] font-primary text-primary transition-all duration-200 hover:-translate-y-0.5"
+                      style={{
+                        background: "#007bff",
+                        boxShadow: "0 6px 24px rgba(0,123,255,0.35)",
+                      }}
+                    >
+                      <Zap size={11} />
+                      Search
+                    </button>
+                  </div>
+
+                  {/* Dropdown */}
+                  {focused && (
+                    <div
+                      className="absolute top-[calc(100%+8px)] left-0 right-0 z-50 rounded-2xl overflow-hidden border border-white/8"
+                      style={{
+                        background: "rgba(10,10,18,0.98)",
+                        boxShadow:
+                          "0 24px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04)",
+                      }}
+                    >
+                      <div className="px-4 pt-3 pb-2 text-[9px] tracking-[0.4em] uppercase font-black font-primary text-primary/25 border-b border-white/5">
+                        {query ? `Results for "${query}"` : "Quick Links"}
+                      </div>
+                      {filtered.length > 0 ? (
+                        filtered.map((item, i) => (
+                          <Link
+                            key={i}
+                            href={item.href}
+                            onMouseDown={(e) => e.preventDefault()}
+                            className="flex items-center justify-between px-4 py-3.5 hover:bg-fourth/8 transition-colors group border-b border-white/4 last:border-0"
+                            style={{ background: "transparent" }}
+                          >
+                            <div className="flex items-center gap-3">
+                              <Search
+                                size={11}
+                                className="text-fourth/40 shrink-0"
+                              />
+                              <span className="text-sm text-primary/65 group-hover:text-primary transition-colors font-secondary">
+                                {item.label}
+                              </span>
+                            </div>
+                            <span
+                              className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md font-primary"
+                              style={{
+                                background: "rgba(0,123,255,0.12)",
+                                color: "rgba(0,123,255,0.9)",
+                              }}
+                            >
+                              {item.tag}
+                            </span>
+                          </Link>
+                        ))
+                      ) : (
+                        <div className="px-4 py-6 text-center text-sm text-primary/30">
+                          No results for {query}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Category filter chips */}
+                <div className="flex flex-wrap gap-2">
+                  <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary/30 font-primary self-center mr-1">
+                    Browse:
+                  </span>
+                  {CATEGORIES.map((cat) => (
+                    <button
+                      key={cat.label}
+                      className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-[0.15em] font-primary border transition-all duration-200 hover:-translate-y-0.5 ${cat.color}`}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="text-[9px] tracking-[0.3em] uppercase font-semibold mt-1 text-primary/30">
-                {stat.label}
+
+              {/* ── RIGHT COLUMN ── */}
+              <div className="flex flex-col gap-5">
+                {/* Stats grid */}
+                <div className="grid grid-cols-2 gap-3">
+                  {STATS.map((stat, i) => {
+                    const Icon = stat.icon;
+                    return (
+                      <div
+                        key={i}
+                        className="relative group p-5 rounded-2xl border border-white/6 overflow-hidden transition-all duration-300 "
+                        style={{ background: "rgba(255,255,255,0.02)" }}
+                      >
+                        <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />
+                        <div className="flex items-start gap-3">
+                          <div
+                            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                            style={{ background: "rgba(0,123,255,0.1)" }}
+                          >
+                            <Icon size={15} className={stat.color} />
+                          </div>
+                          <div>
+                            <div
+                              className={`font-primary font-black text-2xl leading-none ${stat.color}`}
+                            >
+                              {stat.value}
+                            </div>
+                            <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-primary/30 mt-1 font-primary">
+                              {stat.label}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Quick nav card */}
+                <div
+                  className="rounded-2xl border border-white/6 overflow-hidden"
+                  style={{ background: "rgba(255,255,255,0.02)" }}
+                >
+                  <div className="px-5 py-4 border-b border-white/5 flex items-center justify-between">
+                    <span className="text-[10px] font-black uppercase tracking-[0.35em] text-primary/30 font-primary">
+                      Top Articles
+                    </span>
+                    <Link
+                      href="/help"
+                      className="text-[10px] font-black uppercase tracking-widest text-fourth/60 hover:text-fourth transition-colors font-primary flex items-center gap-1"
+                    >
+                      View all <ChevronRight size={10} />
+                    </Link>
+                  </div>
+                  <div className="divide-y divide-white/4">
+                    {QUICK_LINKS.slice(0, 4).map((link, i) => (
+                      <Link
+                        key={i}
+                        href={link.href}
+                        className="flex items-center justify-between px-5 py-3.5 group hover:bg-white/2 transition-colors"
+                      >
+                        <div className="flex items-center gap-3">
+                          <span
+                            className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 text-[9px] font-black font-primary text-primary/25"
+                            style={{ background: "rgba(255,255,255,0.04)" }}
+                          >
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                          <span className="text-sm text-primary/60 group-hover:text-primary transition-colors font-secondary leading-snug">
+                            {link.label}
+                          </span>
+                        </div>
+                        <ArrowUpRight
+                          size={12}
+                          className="text-primary/20 group-hover:text-fourth transition-colors shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-200"
+                        />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {/* CTA Strip */}
+                <div className="flex gap-3">
+                  <Link
+                    href="/help"
+                    className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-[11px] font-black uppercase tracking-[0.18em] font-primary text-primary transition-all duration-200 hover:-translate-y-0.5"
+                    style={{
+                      background: "#007bff",
+                      boxShadow: "0 8px 28px rgba(0,123,255,0.3)",
+                    }}
+                  >
+                    Browse All Articles <ArrowUpRight size={12} />
+                  </Link>
+                  <Link
+                    href="/help#support"
+                    className="flex items-center gap-2 px-5 py-3.5 rounded-xl text-[11px] font-black uppercase tracking-[0.18em] font-primary text-primary/50 border border-white/8 hover:border-white/15 hover:text-primary transition-all duration-200"
+                    onClick={() => setSupportOpen(true)}
+                    style={{ background: "rgba(255,255,255,0.03)" }}
+                  >
+                    <MessageSquare size={12} /> Contact
+                  </Link>
+                </div>
               </div>
             </div>
-          ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {supportOpen && (
+        <SupportFlowModal onClose={() => setSupportOpen(false)} />
+      )}
+    </>
   );
 }

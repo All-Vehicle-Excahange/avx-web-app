@@ -1,8 +1,8 @@
-// app/components/support/SupportBridge.jsx
 "use client";
 
-import { useState, useRef } from "react";
-import SupportFlow from "./SupportFlow";
+import { useState } from "react";
+import { X } from "lucide-react";
+import SupportFlowModal from "./SupportFlowModal";
 import SupportRequests from "./SupportRequests";
 
 const SEED_TICKETS = [
@@ -53,32 +53,24 @@ const SEED_TICKETS = [
 
 export default function SupportBridge() {
   const [tickets, setTickets] = useState(SEED_TICKETS);
-  const [view, setView] = useState("requests"); // "requests" | "flow"
+  const [view, setView] = useState("requests");
 
   const handleTicketCreated = (newTicket) => {
     setTickets((prev) => [newTicket, ...prev]);
-    setTimeout(() => {
-      setView("requests");
-    }, 1800);
+    setTimeout(() => { setView("requests"); }, 1800);
   };
 
-  const handleNewRequest = () => setView("flow");
-  const handleBackToRequests = () => setView("requests");
-
   return (
-    <div className="min-h-screen bg-secondary px-4 sm:px-6 lg:px-12">
+    <div className="px-4 sm:px-8 lg:px-16">
       <div className="max-w-7xl mx-auto">
-        {view === "flow" ? (
-          <SupportFlow
-            onTicketCreated={handleTicketCreated}
-            onBack={handleBackToRequests}
-          />
-        ) : (
-          <SupportRequests
-            tickets={tickets}
-            setTickets={setTickets}
-            onNewRequest={handleNewRequest}
-          />
+        <SupportRequests
+          tickets={tickets}
+          setTickets={setTickets}
+          onNewRequest={() => setView("flow")}
+        />
+
+        {view === "flow" && (
+          <SupportFlowModal onClose={() => setView("requests")} />
         )}
       </div>
     </div>
