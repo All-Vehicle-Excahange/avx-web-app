@@ -12,6 +12,7 @@ import {
   Search,
   ChevronRight,
   ChevronLeft,
+  MapPin,
 } from "lucide-react";
 import FilterSection from "../../search/FilterSection";
 import {
@@ -117,9 +118,8 @@ export default function FilterWithCard() {
       name: item.consultationName || "Unknown Consultant",
 
       location: item.address
-        ? `${item.address.city || ""}${
-            item.address.city && item.address.state ? ", " : ""
-          }${item.address.state || ""}`
+        ? `${item.address.city || ""}${item.address.city && item.address.state ? ", " : ""
+        }${item.address.state || ""}`
         : "-",
 
       rating: item.averageRating || 0,
@@ -182,46 +182,61 @@ export default function FilterWithCard() {
 
   // Auto-detect location on mount
   useEffect(() => {
-    const autoDetectLocation = async () => {
-      if (!navigator.geolocation) {
-        console.warn("Geolocation is not supported by this browser.");
-        return;
-      }
-
-      try {
-        const position = await new Promise((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject, {
-            enableHighAccuracy: true,
-            timeout: 8000,
-            maximumAge: 0,
-          });
-        });
-
-        const { latitude: lat, longitude: lon } = position.coords;
-
-        setLatitude(lat);
-        setLongitude(lon);
-
-        const res = await getUserCityAndStateByLatLong({
-          latitude: lat,
-          longitude: lon,
-        });
-
-        if (res?.status === "OK" && res?.data) {
-          const { cityId, cityName, stateId, stateName } = res.data;
-
+    // On mount: only check localStorage for saved location
+    try {
+      const saved = localStorage.getItem("avx_saved_location");
+      if (saved) {
+        const { stateId, stateName, cityId, cityName } = JSON.parse(saved);
+        if (stateId && stateName) {
           setSelectedStateId(stateId);
           setSelectedStateName(stateName);
-          setSelectedCityId(cityId);
-          setSelectedCityName(cityName);
+          setSelectedCityId(cityId || null);
+          setSelectedCityName(cityName || "");
         }
-      } catch (err) {
-        console.error("Geolocation error:", err);
       }
-    };
-
-    autoDetectLocation();
+    } catch (e) {
+      console.warn("Failed to read saved location:", e);
+    }
   }, []);
+
+  // Detect location via geolocation — only when user clicks the icon
+  const handleDetectLocation = async () => {
+    if (!navigator.geolocation) {
+      console.warn("Geolocation is not supported by this browser.");
+      return;
+    }
+
+    try {
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 8000,
+          maximumAge: 0,
+        });
+      });
+
+      const { latitude: lat, longitude: lon } = position.coords;
+
+      setLatitude(lat);
+      setLongitude(lon);
+
+      const res = await getUserCityAndStateByLatLong({
+        latitude: lat,
+        longitude: lon,
+      });
+
+      if (res?.status === "OK" && res?.data) {
+        const { cityId, cityName, stateId, stateName } = res.data;
+
+        setSelectedStateId(stateId);
+        setSelectedStateName(stateName);
+        setSelectedCityId(cityId);
+        setSelectedCityName(cityName);
+      }
+    } catch (err) {
+      console.error("Geolocation error:", err);
+    }
+  };
 
   // Load cities when state changes
   useEffect(() => {
@@ -369,12 +384,26 @@ export default function FilterWithCard() {
     fetchConsultants(currentPage, payload);
   }, [currentPage]);
   const handleApplyFilter = async () => {
+    // Save/overwrite selected location to localStorage
+    if (selectedStateId && selectedStateName) {
+      const locationData = {
+        stateId: selectedStateId,
+        stateName: selectedStateName,
+        cityId: selectedCityId,
+        cityName: selectedCityName,
+      };
+      localStorage.setItem("avx_saved_location", JSON.stringify(locationData));
+    }
+
     const payload = buildPayload();
     setCurrentPage(1); // reset to page 1 when applying new filters
     await fetchConsultants(1, payload);
   };
 
   const handleClearFilters = async () => {
+    // Remove saved location from localStorage
+    localStorage.removeItem("avx_saved_location");
+
     // Reset filter states
     setSelectedDistance([]);
     setSelectedInventory([]);
@@ -472,7 +501,18 @@ export default function FilterWithCard() {
           <div className="space-y-4 mb-6">
             {/* State Dropdown */}
             <div ref={stateRef} className="relative">
-              <label className="text-xs text-third block mb-1">State</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs text-third">State</label>
+                <button
+                  type="button"
+                  onClick={handleDetectLocation}
+                  className="flex items-center gap-1 text-xs text-primary/70 hover:text-primary cursor-pointer transition-colors"
+                  title="Use my current location"
+                >
+                  <MapPin size={14} />
+                  <span>Detect</span>
+                </button>
+              </div>
 
               {stateOpen ? (
                 <div className="relative">
@@ -565,11 +605,10 @@ export default function FilterWithCard() {
               ) : (
                 <div
                   onClick={() => selectedStateId && setCityOpen(true)}
-                  className={`h-10 px-3 flex items-center justify-between rounded-md border border-primary/60 bg-transparent text-primary ${
-                    !selectedStateId
-                      ? "opacity-50 cursor-not-allowed"
-                      : "cursor-pointer"
-                  } backdrop-blur-sm`}
+                  className={`h-10 px-3 flex items-center justify-between rounded-md border border-primary/60 bg-transparent text-primary ${!selectedStateId
+                    ? "opacity-50 cursor-not-allowed"
+                    : "cursor-pointer"
+                    } backdrop-blur-sm`}
                 >
                   <span className="truncate">
                     {selectedCityName ||
@@ -699,14 +738,12 @@ export default function FilterWithCard() {
             </span>
             <button
               onClick={() => setAvxAssumed(!avxAssumed)}
-              className={`relative w-9 h-5 rounded-full ${
-                avxAssumed ? "bg-primary" : "bg-white/20"
-              }`}
+              className={`relative w-9 h-5 rounded-full ${avxAssumed ? "bg-primary" : "bg-white/20"
+                }`}
             >
               <span
-                className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-secondary transition-transform ${
-                  avxAssumed ? "translate-x-4" : ""
-                }`}
+                className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-secondary transition-transform ${avxAssumed ? "translate-x-4" : ""
+                  }`}
               />
             </button>
           </div>
@@ -784,11 +821,10 @@ export default function FilterWithCard() {
                 <div
                   key={item}
                   onClick={() => setActiveFilterTab(item)}
-                  className={`px-4 py-3 text-sm cursor-pointer ${
-                    activeFilterTab === item
-                      ? "bg-secondary/10 font-semibold"
-                      : ""
-                  }`}
+                  className={`px-4 py-3 text-sm cursor-pointer ${activeFilterTab === item
+                    ? "bg-secondary/10 font-semibold"
+                    : ""
+                    }`}
                 >
                   {item}
                 </div>

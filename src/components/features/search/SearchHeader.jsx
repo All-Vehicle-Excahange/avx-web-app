@@ -12,7 +12,6 @@ const sortOptions = [
   { value: "price_high_low", label: "Price High → Low" },
   { value: "newest", label: "Newest Listed" },
   { value: "most_inquired", label: "Most Inquired" },
-  { value: "best_rated", label: "Best Rated Seller" },
 ];
 
 export default function SearchHeader() {
@@ -21,6 +20,14 @@ export default function SearchHeader() {
   const dropdownRef = useRef(null);
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const vehicleType = searchParams.get("vehicleType");
+  const bodyType = searchParams.get("bodyType");
+  const fuelType = searchParams.get("fuelType");
+  const brandParam = searchParams.get("brand");
+  const makerId = searchParams.get("makerId");
+  const budget = searchParams.get("budget");
+  const sort = searchParams.get("sort");
 
   /* Close on outside click */
   useEffect(() => {
@@ -48,7 +55,8 @@ export default function SearchHeader() {
             {/* LEFT */}
             <div className="flex items-center gap-3 flex-wrap">
               <h2 className="text-primary text-base md:text-lg ">
-                Diesel SUVs in Ahmedabad
+                {vehicleType} {bodyType} {fuelType} {brandParam}
+                {budget}
               </h2>
               <span className="text-primary/80 text-sm">
                 • 82 Results • 37 AVX Inspected • Updated Today
