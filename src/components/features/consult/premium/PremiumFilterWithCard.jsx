@@ -79,6 +79,12 @@ export default function FilterWithCard() {
   const [selectedRating, setSelectedRating] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
 
+  // ── Price range slider ──
+  const [minPrice, setMinPrice] = useState(100000);
+  const [maxPrice, setMaxPrice] = useState(1000000);
+  const MIN = 50000;
+  const MAX = 2000000;
+
   // ── Pagination ──
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
@@ -378,7 +384,25 @@ export default function FilterWithCard() {
       payload.services = selectedServices;
     }
 
+    // Price range
+    payload.minPrice = minPrice;
+    payload.maxPrice = maxPrice;
+
     return payload;
+  };
+
+  const getTrackBackground = () => {
+    const minPercent = ((minPrice - MIN) / (MAX - MIN)) * 100;
+    const maxPercent = ((maxPrice - MIN) / (MAX - MIN)) * 100;
+    return `linear-gradient(
+      to right,
+      #e5e7eb 0%,
+      #e5e7eb ${minPercent}%,
+      var(--color-fourth) ${minPercent}%,
+      var(--color-fourth) ${maxPercent}%,
+      #e5e7eb ${maxPercent}%,
+      #e5e7eb 100%
+    )`;
   };
 
   // Re-fetch when page changes
@@ -413,6 +437,10 @@ export default function FilterWithCard() {
     setSelectedVehicleTypes([]);
     setSelectedRating([]);
     setSelectedServices([]);
+
+    // Reset price range
+    setMinPrice(100000);
+    setMaxPrice(1000000);
 
     // Reset location filters
     setSelectedStateId(null);
@@ -772,6 +800,51 @@ export default function FilterWithCard() {
               />
             </FilterSection>
           </div>
+
+          <FilterSection title="Budget" defaultOpen={true}>
+            <div className="flex flex-col gap-2 mt-3">
+              <div className="flex justify-between text-xs text-primary/70 mb-1">
+                <span>Min Price</span>
+                <span>Max Price</span>
+              </div>
+
+              <div className="relative h-6 flex items-center">
+                <div
+                  className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
+                  style={{ background: getTrackBackground() }}
+                />
+
+                <input
+                  type="range"
+                  min={MIN}
+                  max={MAX}
+                  step={50000}
+                  value={minPrice}
+                  onChange={(e) =>
+                    setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
+                  }
+                  className="dual-range z-30"
+                />
+
+                <input
+                  type="range"
+                  min={MIN}
+                  max={MAX}
+                  step={50000}
+                  value={maxPrice}
+                  onChange={(e) =>
+                    setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
+                  }
+                  className="dual-range z-40"
+                />
+              </div>
+
+              <div className="flex justify-between text-xs text-primary/70 mb-1">
+                <span>₹{minPrice.toLocaleString()}</span>
+                <span>₹{maxPrice.toLocaleString()}</span>
+              </div>
+            </div>
+          </FilterSection>
 
           <div className="mt-4 flex items-center justify-between gap-3">
             <Button
