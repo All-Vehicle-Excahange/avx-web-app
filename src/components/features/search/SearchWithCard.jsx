@@ -83,6 +83,8 @@ export default function SearchWithCard() {
   const [selectedCityId, setSelectedCityId] = useState(null);
   const [selectedCityName, setSelectedCityName] = useState("");
   const [selectedYear, setSelectedYear] = useState([]);
+  const [years, setYears] = useState([]);
+  const [yearLoading, setYearLoading] = useState(false);
   const [selectedBodyType, setSelectedBodyType] = useState([]);
   const [selectedRating, setSelectedRating] = useState([]);
   const [selectedSellerType, setSelectedSellerType] = useState([]);
@@ -412,6 +414,48 @@ export default function SearchWithCard() {
 
   const handleModelChange = (values) => {
     setSelectedModels(values.length > 0 ? [values[values.length - 1]] : []);
+    // Reset year when model changes
+    setSelectedYear([]);
+    setYears([]);
+  };
+
+  // ── Load Years by Model ──
+  const loadYears = async () => {
+    if (yearLoading) return;
+
+    if (selectedModels.length === 0) {
+      setYears([]);
+      return;
+    }
+
+    setYearLoading(true);
+    try {
+      const modelId = selectedModels[0];
+      const res = await getYearByModelId(modelId);
+
+      if (res.success && Array.isArray(res.data)) {
+        const yearItems = res.data.map((y) => ({
+          value: y.toString(),
+          label: y.toString(),
+        }));
+        setYears(yearItems);
+      } else {
+        setYears([]);
+      }
+    } catch (err) {
+      console.error("Years error:", err);
+      setYears([]);
+    } finally {
+      setYearLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadYears();
+  }, [selectedModels]);
+
+  const handleYearChange = (values) => {
+    setSelectedYear(values.length > 0 ? [values[values.length - 1]] : []);
   };
 
   // ── Load Fuel Types ── (unchanged)
@@ -559,6 +603,7 @@ export default function SearchWithCard() {
         limit: 10,
         modelId: selectedModels[0],
         fuelType: fuelTypeToSend,
+        year: selectedYear.length > 0 ? selectedYear[0] : undefined,
       };
 
       const res = await getAndSearchVariant(payload);
@@ -601,14 +646,14 @@ export default function SearchWithCard() {
     }, 400);
 
     return () => clearTimeout(variantSearchTimeoutRef.current);
-  }, [variantSearch, selectedModels, selectedFuelTypes]);
+  }, [variantSearch, selectedModels, selectedFuelTypes, selectedYear]);
 
   useEffect(() => {
     setVariants([]);
     setVariantPage(1);
     setVariantHasMore(true);
     loadVariants(1, variantSearch);
-  }, [selectedModels, selectedFuelTypes]);
+  }, [selectedModels, selectedFuelTypes, selectedYear]);
 
   const handleLoadMoreVariants = () => {
     if (variantLoading || !variantHasMore) return;
@@ -668,12 +713,7 @@ export default function SearchWithCard() {
     { value: "individual", label: "Individual" },
   ];
 
-  const year = [
-    { value: "2023", label: "2023" },
-    { value: "2022", label: "2022" },
-    { value: "2021", label: "2021" },
-    { value: "2020", label: "2020" },
-  ];
+  // year data is now fetched dynamically via getYearByModelId
 
   const handleTransmissionChange = (values) => {
     setSelectedTransmissionTypes(values);
@@ -759,6 +799,10 @@ export default function SearchWithCard() {
       { value: "automatic", label: "Automatic" },
       { value: "manual", label: "Manual" },
     ]);
+
+    // Reset year
+    setSelectedYear([]);
+    setYears([]);
 
     // Reset variants
     setVariants([]);
@@ -1216,10 +1260,16 @@ export default function SearchWithCard() {
             <FilterSection title="Year">
               <ChipGroup
                 title=""
-                items={year}
+                items={years}
                 selected={selectedYear}
-                onChange={setSelectedYear}
+                onChange={handleYearChange}
                 allowMultiple={false}
+                isLoading={yearLoading}
+                customEmptyMessage={
+                  selectedModels.length === 0
+                    ? "Please first select a Model"
+                    : undefined
+                }
               />
             </FilterSection>
 

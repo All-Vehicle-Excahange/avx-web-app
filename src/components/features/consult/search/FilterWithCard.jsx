@@ -90,6 +90,8 @@ export default function FilterWithCard() {
 
   const stateRef = useRef(null);
   const cityRef = useRef(null);
+  const prevPageRef = useRef(1);
+  const prevSortRef = useRef(sort);
 
   const [highlightedStateIndex, setHighlightedStateIndex] = useState(-1);
   const [highlightedCityIndex, setHighlightedCityIndex] = useState(-1);
@@ -403,7 +405,11 @@ export default function FilterWithCard() {
     // }
 
     fetchConsultants(1, initialPayload);
+    console.log("Initial Payload ", initialPayload);
+
   }, []);
+
+
 
   const buildPayload = () => {
     const payload = {};
@@ -460,18 +466,25 @@ export default function FilterWithCard() {
       payload.services = selectedServices;
     }
 
-    if (priceRange) {
-      payload.priceRange = priceRange;
-    }
+    // if (priceRange) {
+    //   payload.priceRange = priceRange;
+    // }
 
     return payload;
   };
 
-  // Re-fetch when page changes
+  // Re-fetch when page ACTUALLY changes (skips on mount because prevPageRef starts equal to currentPage)
   useEffect(() => {
+    if (prevPageRef.current === currentPage) return;
+    prevPageRef.current = currentPage;
     const payload = buildPayload();
+    console.log("API HEAT AFTER CHANGE ");
+
     fetchConsultants(currentPage, payload);
   }, [currentPage]);
+
+
+
   const handleApplyFilter = async () => {
     // Save/overwrite selected location to localStorage
     if (selectedStateId && selectedStateName) {
@@ -490,6 +503,8 @@ export default function FilterWithCard() {
   };
 
   useEffect(() => {
+    if (prevSortRef.current === sort) return;
+    prevSortRef.current = sort;
     const payload = buildPayload();
     setCurrentPage(1);
     fetchConsultants(1, payload);
