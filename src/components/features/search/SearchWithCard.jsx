@@ -27,6 +27,7 @@ import {
   getFuelTypeByModelId,
   getTransmissionTypeByModelId,
   getAndSearchVariant,
+  getYearByModelId,
 } from "@/services/filter";
 import { getState, getCities } from "@/services/user.service";
 import { getUserCityAndStateByLatLong } from "@/services/consult.filter.service";

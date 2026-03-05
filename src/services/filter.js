@@ -12,6 +12,7 @@ const ENDPOINT = {
   getFuelTypeByModelId: "/search/fuel-types",
   getTransmissionTypeByModelId: "/search/transmission-types",
   getAndSearchVariant: "/search/variants",
+  getYearByModelId: "/search/model-years"
 };
 
 export const getMakersByFuelOrBodyType = async (data) => {
@@ -104,11 +105,28 @@ export const getTransmissionTypeByModelId = async (model_id) => {
   }
 };
 
+export const getYearByModelId = async (model_id) => {
+  try {
+    const res = await axiosNodeInstance.get(
+      ENDPOINT.getYearByModelId,
+      {
+        params: {
+          modelId: model_id,
+        },
+      },
+    );
+    return handleNodeResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 
 
 export const getAndSearchVariant = async (data) => {
   try {
-    const { searchTerm, page, limit, modelId, fuelType } = data;
+    const { searchTerm, page, limit, modelId, fuelType, year } = data;
 
     const res = await axiosNodeInstance.get(ENDPOINT.getAndSearchVariant, {
       params: {
@@ -117,6 +135,7 @@ export const getAndSearchVariant = async (data) => {
         limit,
         modelId: modelId,
         fuelType: fuelType,
+        year: year
       },
     });
     return handleNodeResponse(res);

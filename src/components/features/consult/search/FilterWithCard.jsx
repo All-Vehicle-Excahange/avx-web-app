@@ -91,6 +91,9 @@ export default function FilterWithCard() {
   const stateRef = useRef(null);
   const cityRef = useRef(null);
 
+  const [highlightedStateIndex, setHighlightedStateIndex] = useState(-1);
+  const [highlightedCityIndex, setHighlightedCityIndex] = useState(-1);
+
   const isMobile = useIsMobile();
 
   // ── Filter values ──
@@ -99,6 +102,9 @@ export default function FilterWithCard() {
   const [selectedVehicleTypes, setSelectedVehicleTypes] = useState([]);
   const [selectedRating, setSelectedRating] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
+
+  // ── Price range from URL ──
+  const [priceRange, setPriceRange] = useState("");
 
   // ── Pagination ──
   const [currentPage, setCurrentPage] = useState(1);
@@ -328,9 +334,75 @@ export default function FilterWithCard() {
     }
   };
 
-  // Initial fetch on mount (empty payload = default results)
+  // Initial fetch on mount — read URL params and apply as filters
   useEffect(() => {
-    fetchConsultants(1, {});
+    const vehicleTypeParam = searchParams.get("vehicleType");
+    const serviceParam = searchParams.get("service");
+    const availabilityParam = searchParams.get("availability");
+    const priceRangeParam = searchParams.get("priceRange");
+
+    // Map vehicleType: "2 Wheeler" → "TWO_WHEELER", "4 Wheeler" → "FOUR_WHEELER"
+    if (vehicleTypeParam) {
+      if (vehicleTypeParam === "2 Wheeler") {
+        setSelectedVehicleTypes(["TWO_WHEELER"]);
+      } else if (vehicleTypeParam === "4 Wheeler") {
+        setSelectedVehicleTypes(["FOUR_WHEELER"]);
+      }
+    }
+
+    // Map service directly to selectedServices
+    if (serviceParam) {
+      setSelectedServices([serviceParam]);
+    }
+
+    // Map availability to inventory size
+    if (availabilityParam) {
+      const availabilityMap = {
+        "1 - 10": "1-10",
+        "10 - 25": "10-30",
+        "25 - 50": "30+",
+        "50+": "30+",
+      };
+      const mapped = availabilityMap[availabilityParam];
+      if (mapped) setSelectedInventory([mapped]);
+    }
+
+    // Store price range from URL
+    if (priceRangeParam) {
+      setPriceRange(priceRangeParam);
+    }
+
+    // Build initial payload from URL params and fetch
+    const initialPayload = {};
+
+    if (vehicleTypeParam) {
+      if (vehicleTypeParam === "2 Wheeler") {
+        initialPayload.vehicleTypes = ["TWO_WHEELER"];
+      } else if (vehicleTypeParam === "4 Wheeler") {
+        initialPayload.vehicleTypes = ["FOUR_WHEELER"];
+      }
+    }
+
+    if (serviceParam) {
+      initialPayload.services = [serviceParam];
+    }
+
+    if (availabilityParam) {
+      const availabilityMap = {
+        "1 - 10": { minInventory: 1, maxInventory: 10 },
+        "10 - 25": { minInventory: 10, maxInventory: 30 },
+        "25 - 50": { minInventory: 30 },
+        "50+": { minInventory: 30 },
+      };
+      const mapped = availabilityMap[availabilityParam];
+      if (mapped) Object.assign(initialPayload, mapped);
+    }
+
+    // if (priceRangeParam) {
+    //   initialPayload.priceRange = priceRangeParam;
+    // }
+
+    fetchConsultants(1, initialPayload);
   }, []);
 
   const buildPayload = () => {
@@ -386,6 +458,10 @@ export default function FilterWithCard() {
 
     if (selectedServices.length > 0) {
       payload.services = selectedServices;
+    }
+
+    if (priceRange) {
+      payload.priceRange = priceRange;
     }
 
     return payload;
@@ -492,6 +568,65 @@ export default function FilterWithCard() {
   const filteredCities = cities.filter((c) =>
     c.label.toLowerCase().includes(citySearch.toLowerCase()),
   );
+
+  const handleStateKeyDown = (e) => {
+    if (!filteredStates.length) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightedStateIndex((prev) =>
+        prev < filteredStates.length - 1 ? prev + 1 : prev,
+      );
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightedStateIndex((prev) => (prev > 0 ? prev - 1 : 0));
+    }
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (highlightedStateIndex >= 0) {
+        const selected = filteredStates[highlightedStateIndex];
+        setSelectedStateId(selected.value);
+        setSelectedStateName(selected.label);
+        setSelectedCityId(null);
+        setSelectedCityName("");
+        setStateSearch("");
+        setStateOpen(false);
+        setHighlightedStateIndex(-1);
+      }
+    }
+  };
+
+  const handleCityKeyDown = (e) => {
+    if (!filteredCities.length) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightedCityIndex((prev) =>
+        prev < filteredCities.length - 1 ? prev + 1 : prev,
+      );
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightedCityIndex((prev) => (prev > 0 ? prev - 1 : 0));
+    }
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (highlightedCityIndex >= 0) {
+        const selected = filteredCities[highlightedCityIndex];
+        setSelectedCityId(selected.value);
+        setSelectedCityName(selected.label);
+        setCitySearch("");
+        setCityOpen(false);
+        setHighlightedCityIndex(-1);
+      }
+    }
+  };
+
   return (
     <div className="w-full pt-12 md:pt-20 md:pb-8 min-h-screen flex flex-col lg:flex-row text-secondary">
       {/* ================= DESKTOP SIDEBAR ================= */}
@@ -542,7 +677,11 @@ export default function FilterWithCard() {
                   <input
                     type="text"
                     value={stateSearch}
-                    onChange={(e) => setStateSearch(e.target.value)}
+                    onKeyDown={handleStateKeyDown}
+                    onChange={(e) => {
+                      setStateSearch(e.target.value);
+                      setHighlightedStateIndex(0);
+                    }}
                     placeholder={
                       selectedStateName || "Search or select state..."
                     }
@@ -571,7 +710,7 @@ export default function FilterWithCard() {
                 <div className="absolute z-50 mt-1 w-full border border-primary/60 rounded-md bg-black/40 backdrop-blur-md text-primary shadow-xl max-h-64 overflow-hidden">
                   <div className="max-h-52 overflow-y-auto pt-1">
                     {filteredStates.length > 0 ? (
-                      filteredStates.map((s) => (
+                      filteredStates.map((s, index) => (
                         <div
                           key={s.value}
                           onClick={() => {
@@ -582,7 +721,10 @@ export default function FilterWithCard() {
                             setStateSearch("");
                             setStateOpen(false);
                           }}
-                          className="px-4 py-2.5 hover:bg-primary/20 cursor-pointer text-sm"
+                          className={`px-4 py-2.5 cursor-pointer text-sm ${highlightedStateIndex === index
+                            ? "bg-primary/30"
+                            : "hover:bg-primary/20"
+                            }`}
                         >
                           {s.label}
                         </div>
@@ -610,7 +752,11 @@ export default function FilterWithCard() {
                   <input
                     type="text"
                     value={citySearch}
-                    onChange={(e) => setCitySearch(e.target.value)}
+                    onKeyDown={handleCityKeyDown}
+                    onChange={(e) => {
+                      setCitySearch(e.target.value);
+                      setHighlightedCityIndex(0);
+                    }}
                     placeholder={selectedCityName || "Search or select city..."}
                     className="w-full pl-10 pr-10 py-2.5 bg-transparent border border-primary/60 rounded-md text-primary placeholder:text-primary/60 focus:outline-none focus:border-primary text-sm"
                     autoFocus
@@ -641,7 +787,7 @@ export default function FilterWithCard() {
                 <div className="absolute z-50 mt-1 w-full border border-primary/60 rounded-md bg-black/40 backdrop-blur-md text-primary shadow-xl max-h-64 overflow-hidden">
                   <div className="max-h-52 overflow-y-auto pt-1">
                     {filteredCities.length > 0 ? (
-                      filteredCities.map((c) => (
+                      filteredCities.map((c, index) => (
                         <div
                           key={c.value}
                           onClick={() => {
@@ -650,7 +796,10 @@ export default function FilterWithCard() {
                             setCitySearch("");
                             setCityOpen(false);
                           }}
-                          className="px-4 py-2.5 hover:bg-primary/20 cursor-pointer text-sm"
+                          className={`px-4 py-2.5 cursor-pointer text-sm ${highlightedCityIndex === index
+                            ? "bg-primary/30"
+                            : "hover:bg-primary/20"
+                            }`}
                         >
                           {c.label}
                         </div>
