@@ -67,6 +67,9 @@ export default function FilterWithCard() {
   const stateRef = useRef(null);
   const cityRef = useRef(null);
 
+  const [highlightedStateIndex, setHighlightedStateIndex] = useState(-1);
+  const [highlightedCityIndex, setHighlightedCityIndex] = useState(-1);
+
   const isMobile = useIsMobile();
 
   // ── Filter values ──
@@ -75,6 +78,12 @@ export default function FilterWithCard() {
   const [selectedVehicleTypes, setSelectedVehicleTypes] = useState([]);
   const [selectedRating, setSelectedRating] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
+
+  // ── Price range slider ──
+  const [minPrice, setMinPrice] = useState(100000);
+  const [maxPrice, setMaxPrice] = useState(1000000);
+  const MIN = 50000;
+  const MAX = 2000000;
 
   // ── Pagination ──
   const [currentPage, setCurrentPage] = useState(1);
@@ -375,7 +384,25 @@ export default function FilterWithCard() {
       payload.services = selectedServices;
     }
 
+    // Price range
+    payload.minPrice = minPrice;
+    payload.maxPrice = maxPrice;
+
     return payload;
+  };
+
+  const getTrackBackground = () => {
+    const minPercent = ((minPrice - MIN) / (MAX - MIN)) * 100;
+    const maxPercent = ((maxPrice - MIN) / (MAX - MIN)) * 100;
+    return `linear-gradient(
+      to right,
+      #e5e7eb 0%,
+      #e5e7eb ${minPercent}%,
+      var(--color-fourth) ${minPercent}%,
+      var(--color-fourth) ${maxPercent}%,
+      #e5e7eb ${maxPercent}%,
+      #e5e7eb 100%
+    )`;
   };
 
   // Re-fetch when page changes
@@ -410,6 +437,10 @@ export default function FilterWithCard() {
     setSelectedVehicleTypes([]);
     setSelectedRating([]);
     setSelectedServices([]);
+
+    // Reset price range
+    setMinPrice(100000);
+    setMaxPrice(1000000);
 
     // Reset location filters
     setSelectedStateId(null);
@@ -473,6 +504,65 @@ export default function FilterWithCard() {
   const filteredCities = cities.filter((c) =>
     c.label.toLowerCase().includes(citySearch.toLowerCase()),
   );
+
+  const handleStateKeyDown = (e) => {
+    if (!filteredStates.length) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightedStateIndex((prev) =>
+        prev < filteredStates.length - 1 ? prev + 1 : prev,
+      );
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightedStateIndex((prev) => (prev > 0 ? prev - 1 : 0));
+    }
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (highlightedStateIndex >= 0) {
+        const selected = filteredStates[highlightedStateIndex];
+        setSelectedStateId(selected.value);
+        setSelectedStateName(selected.label);
+        setSelectedCityId(null);
+        setSelectedCityName("");
+        setStateSearch("");
+        setStateOpen(false);
+        setHighlightedStateIndex(-1);
+      }
+    }
+  };
+
+  const handleCityKeyDown = (e) => {
+    if (!filteredCities.length) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightedCityIndex((prev) =>
+        prev < filteredCities.length - 1 ? prev + 1 : prev,
+      );
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightedCityIndex((prev) => (prev > 0 ? prev - 1 : 0));
+    }
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (highlightedCityIndex >= 0) {
+        const selected = filteredCities[highlightedCityIndex];
+        setSelectedCityId(selected.value);
+        setSelectedCityName(selected.label);
+        setCitySearch("");
+        setCityOpen(false);
+        setHighlightedCityIndex(-1);
+      }
+    }
+  };
+
   return (
     <div className="w-full pt-12 md:pt-20 md:pb-8 min-h-screen flex flex-col lg:flex-row text-secondary">
       {/* ================= DESKTOP SIDEBAR ================= */}
@@ -523,7 +613,11 @@ export default function FilterWithCard() {
                   <input
                     type="text"
                     value={stateSearch}
-                    onChange={(e) => setStateSearch(e.target.value)}
+                    onKeyDown={handleStateKeyDown}
+                    onChange={(e) => {
+                      setStateSearch(e.target.value);
+                      setHighlightedStateIndex(0);
+                    }}
                     placeholder={
                       selectedStateName || "Search or select state..."
                     }
@@ -552,7 +646,7 @@ export default function FilterWithCard() {
                 <div className="absolute z-50 mt-1 w-full border border-primary/60 rounded-md bg-black/40 backdrop-blur-md text-primary shadow-xl max-h-64 overflow-hidden">
                   <div className="max-h-52 overflow-y-auto pt-1">
                     {filteredStates.length > 0 ? (
-                      filteredStates.map((s) => (
+                      filteredStates.map((s, index) => (
                         <div
                           key={s.value}
                           onClick={() => {
@@ -563,7 +657,10 @@ export default function FilterWithCard() {
                             setStateSearch("");
                             setStateOpen(false);
                           }}
-                          className="px-4 py-2.5 hover:bg-primary/20 cursor-pointer text-sm"
+                          className={`px-4 py-2.5 cursor-pointer text-sm ${highlightedStateIndex === index
+                            ? "bg-primary/30"
+                            : "hover:bg-primary/20"
+                            }`}
                         >
                           {s.label}
                         </div>
@@ -591,7 +688,11 @@ export default function FilterWithCard() {
                   <input
                     type="text"
                     value={citySearch}
-                    onChange={(e) => setCitySearch(e.target.value)}
+                    onKeyDown={handleCityKeyDown}
+                    onChange={(e) => {
+                      setCitySearch(e.target.value);
+                      setHighlightedCityIndex(0);
+                    }}
                     placeholder={selectedCityName || "Search or select city..."}
                     className="w-full pl-10 pr-10 py-2.5 bg-transparent border border-primary/60 rounded-md text-primary placeholder:text-primary/60 focus:outline-none focus:border-primary text-sm"
                     autoFocus
@@ -622,7 +723,7 @@ export default function FilterWithCard() {
                 <div className="absolute z-50 mt-1 w-full border border-primary/60 rounded-md bg-black/40 backdrop-blur-md text-primary shadow-xl max-h-64 overflow-hidden">
                   <div className="max-h-52 overflow-y-auto pt-1">
                     {filteredCities.length > 0 ? (
-                      filteredCities.map((c) => (
+                      filteredCities.map((c, index) => (
                         <div
                           key={c.value}
                           onClick={() => {
@@ -631,7 +732,10 @@ export default function FilterWithCard() {
                             setCitySearch("");
                             setCityOpen(false);
                           }}
-                          className="px-4 py-2.5 hover:bg-primary/20 cursor-pointer text-sm"
+                          className={`px-4 py-2.5 cursor-pointer text-sm ${highlightedCityIndex === index
+                            ? "bg-primary/30"
+                            : "hover:bg-primary/20"
+                            }`}
                         >
                           {c.label}
                         </div>
@@ -696,6 +800,51 @@ export default function FilterWithCard() {
               />
             </FilterSection>
           </div>
+
+          <FilterSection title="Budget" defaultOpen={true}>
+            <div className="flex flex-col gap-2 mt-3">
+              <div className="flex justify-between text-xs text-primary/70 mb-1">
+                <span>Min Price</span>
+                <span>Max Price</span>
+              </div>
+
+              <div className="relative h-6 flex items-center">
+                <div
+                  className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
+                  style={{ background: getTrackBackground() }}
+                />
+
+                <input
+                  type="range"
+                  min={MIN}
+                  max={MAX}
+                  step={50000}
+                  value={minPrice}
+                  onChange={(e) =>
+                    setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
+                  }
+                  className="dual-range z-30"
+                />
+
+                <input
+                  type="range"
+                  min={MIN}
+                  max={MAX}
+                  step={50000}
+                  value={maxPrice}
+                  onChange={(e) =>
+                    setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
+                  }
+                  className="dual-range z-40"
+                />
+              </div>
+
+              <div className="flex justify-between text-xs text-primary/70 mb-1">
+                <span>₹{minPrice.toLocaleString()}</span>
+                <span>₹{maxPrice.toLocaleString()}</span>
+              </div>
+            </div>
+          </FilterSection>
 
           <div className="mt-4 flex items-center justify-between gap-3">
             <Button

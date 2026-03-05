@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Search, X } from "lucide-react";
 import { useRouter } from "next/router";
 import { getMakersByFuelOrBodyType } from "@/services/filter";
-
+import { getAllConsultService } from "@/services/consult.filter.service";
 /* ================= MOCK DATA ================= */
 const LOCATION_SUGGESTIONS = [
   { id: 1, city: "Mumbai, Maharashtra", subtitle: "For luxury & premium cars" },
@@ -41,6 +41,21 @@ const BUDGET_RANGE = [
   "5 L - Above",
 ];
 
+const CONSULT_PRICE_RANGE = [
+  "0 - 1 L",
+  "1 L - 2 L",
+  "2 L - 3 L",
+  "4 L - 5 L",
+  "5 L - Above",
+];
+
+const AVAILABILITY_OPTIONS = [
+  { label: "1 - 10", value: "1-10" },
+  { label: "10 - 25", value: "10-25" },
+  { label: "25 - 50", value: "25-50" },
+  { label: "50+", value: "50+" },
+];
+
 export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const router = useRouter();
 
@@ -59,6 +74,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const [priceRange, setPriceRange] = useState("");
   const [service, setService] = useState("");
   const [availability, setAvailability] = useState("");
+  const [serviceOptions, setServiceOptions] = useState([]);
 
   const containerRef = useRef(null);
   const brandInputRef = useRef(null);
@@ -93,6 +109,30 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       const b = forceBody || bodyType;
       fetchBrands(f, b);
       setTimeout(() => brandInputRef.current?.focus(), 100);
+    }
+    if (tabName === "service" && serviceOptions.length === 0) {
+      fetchServices();
+    }
+  };
+
+  const fetchServices = async () => {
+    try {
+      const res = await getAllConsultService({ pageNo: 1, size: 20 });
+      if (res.success && Array.isArray(res.data)) {
+        const apiServices = res.data.map((svc) => ({
+          value: svc,
+          label: svc
+            .split("_")
+            .map(
+              (word) =>
+                word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+            )
+            .join(" "),
+        }));
+        setServiceOptions(apiServices);
+      }
+    } catch (err) {
+      console.error("Failed to load services:", err);
     }
   };
 
@@ -151,16 +191,31 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   }, [activeTab]);
 
   const handleSearch = () => {
-    const query = new URLSearchParams({
-      ...(location && { location }),
-      ...(vehicleType && { vehicleType }),
-      ...(activeType === "consult"
-        ? { priceRange, service, availability }
-        : { bodyType, fuelType, brand, makerId, budget }),
-    }).toString();
-    setActiveTab(null);
-    setMobileOpen(false);
-    router.push(`/search?${query}`);
+    if (activeType === "consult") {
+      const query = new URLSearchParams({
+        ...(location && { location }),
+        ...(vehicleType && { vehicleType }),
+        ...(priceRange && { priceRange }),
+        ...(service && { service }),
+        ...(availability && { availability }),
+      }).toString();
+      setActiveTab(null);
+      setMobileOpen(false);
+      router.push(`/consult/discovery${query ? `?${query}` : ""}`);
+    } else {
+      const query = new URLSearchParams({
+        ...(location && { location }),
+        ...(vehicleType && { vehicleType }),
+        ...(bodyType && { bodyType }),
+        ...(fuelType && { fuelType }),
+        ...(brand && { brand }),
+        ...(makerId && { makerId }),
+        ...(budget && { budget }),
+      }).toString();
+      setActiveTab(null);
+      setMobileOpen(false);
+      router.push(`/search?${query}`);
+    }
   };
 
   return (
@@ -263,6 +318,23 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     <div className="text-sm font-medium text-gray-400 truncate">
                       {priceRange || "Select price"}
                     </div>
+                    {activeTab === "priceRange" && (
+                      <div className="absolute top-[110%] left-0 z-50 w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                        {CONSULT_PRICE_RANGE.map((range) => (
+                          <button
+                            key={range}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setPriceRange(range);
+                              openNextAvailableTab("priceRange");
+                            }}
+                            className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold"
+                          >
+                            {range}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <div className="w-px h-8 bg-white/30 my-auto mx-1" />
                   {/* SERVICE */}
@@ -276,6 +348,31 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     <div className="text-sm font-medium text-gray-400 truncate">
                       {service || "Select service"}
                     </div>
+                    {activeTab === "service" && (
+                      <div className="absolute top-[110%] left-0 z-50 w-[280px] bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                        <div className="flex flex-col max-h-[250px] overflow-y-auto custom-scrollbar">
+                          {serviceOptions.length > 0 ? (
+                            serviceOptions.map((svc) => (
+                              <button
+                                key={svc.value}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setService(svc.value);
+                                  openNextAvailableTab("service");
+                                }}
+                                className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold"
+                              >
+                                {svc.label}
+                              </button>
+                            ))
+                          ) : (
+                            <div className="py-3 px-3 text-sm text-gray-400 text-center">
+                              Loading...
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div className="w-px h-8 bg-white/30 my-auto mx-1" />
                   {/* AVAILABILITY */}
@@ -289,6 +386,23 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     <div className="text-sm font-medium text-gray-400 truncate">
                       {availability || "Select availability"}
                     </div>
+                    {activeTab === "availability" && (
+                      <div className="absolute top-[110%] left-0 z-50 w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                        {AVAILABILITY_OPTIONS.map((opt) => (
+                          <button
+                            key={opt.value}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setAvailability(opt.label);
+                              openNextAvailableTab("availability");
+                            }}
+                            className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold"
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </>
               ) : (
