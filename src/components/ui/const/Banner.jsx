@@ -3,7 +3,13 @@ import Image from "next/image";
 import Button from "../button";
 import { useRouter } from "next/router";
 
-export default function Banner({ title, description, buttonText, navigationPath }) {
+export default function Banner({
+  title,
+  description,
+  buttonText,
+  navigationPath,
+  onClick,
+}) {
   const router = useRouter();
 
   const handleClick = () => {
@@ -12,7 +18,7 @@ export default function Banner({ title, description, buttonText, navigationPath 
 
   return (
     // Height and layout classes removed/adjusted to fit parent
-    <div className="relative w-full h-full 3xl:max-w-screen-2xl mx-auto flex items-center">
+    <div className="relative  w-full h-full 3xl:max-w-screen-2xl mx-auto flex items-center">
       {/* Dark Overlay for text readability - Kept here to ensure text pops */}
       {/* <div className="absolute inset-0 bg-black/60" /> */}
 
@@ -27,7 +33,13 @@ export default function Banner({ title, description, buttonText, navigationPath 
           </p>
         </div>
 
-        <Button href={`${navigationPath}`} onClick={handleClick} variant="ghost">{buttonText}</Button>
+        <Button
+          href={navigationPath ? `${navigationPath}` : undefined}
+          onClick={onClick || handleClick}
+          variant="ghost"
+        >
+          {buttonText}
+        </Button>
       </div>
     </div>
   );

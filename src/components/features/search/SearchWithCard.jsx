@@ -14,6 +14,7 @@ import {
   ChevronRight,
   ChevronUpIcon,
   FilterIcon,
+  MapPin,
 } from "lucide-react";
 import SponsoredCars from "./SponsoredCars";
 import FilterSection from "./FilterSection";
@@ -80,6 +81,10 @@ export default function SearchWithCard() {
   const [selectedStateName, setSelectedStateName] = useState("");
   const [selectedCityId, setSelectedCityId] = useState(null);
   const [selectedCityName, setSelectedCityName] = useState("");
+  const [selectedYear, setSelectedYear] = useState([]);
+  const [selectedBodyType, setSelectedBodyType] = useState([]);
+  const [selectedRating, setSelectedRating] = useState([]);
+  const [selectedSellerType, setSelectedSellerType] = useState([]);
 
   const [stateOpen, setStateOpen] = useState(false);
   const [cityOpen, setCityOpen] = useState(false);
@@ -92,6 +97,15 @@ export default function SearchWithCard() {
 
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+
+  const [highlightedStateIndex, setHighlightedStateIndex] = useState(-1);
+  const [highlightedCityIndex, setHighlightedCityIndex] = useState(-1);
+
+  // ── Add these ──
+  const [selectedTransmissionTypes, setSelectedTransmissionTypes] = useState(
+    [],
+  );
+  const [selectedVariants, setSelectedVariants] = useState([]);
 
   // ── Fuel Type states ──
   const [fuelTypes, setFuelTypes] = useState([
@@ -267,47 +281,61 @@ export default function SearchWithCard() {
   }, [selectedStateId]);
 
   useEffect(() => {
-    const autoDetectLocation = async () => {
-      if (!navigator.geolocation) {
-        console.warn("Geolocation not supported");
-        return;
-      }
-
-      try {
-        const position = await new Promise((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject, {
-            enableHighAccuracy: true,
-            timeout: 8000,
-            maximumAge: 0,
-          });
-        });
-
-        const { latitude: lat, longitude: lon } = position.coords;
-
-        setLatitude(lat);
-        setLongitude(lon);
-
-        // 🔥 Call reverse location API
-        const res = await getUserCityAndStateByLatLong({
-          latitude: lat,
-          longitude: lon,
-        });
-
-        if (res?.status === "OK" && res?.data) {
-          const { stateId, stateName, cityId, cityName } = res.data;
-
+    // On mount: only check localStorage for saved location
+    try {
+      const saved = localStorage.getItem("avx_saved_location");
+      if (saved) {
+        const { stateId, stateName, cityId, cityName } = JSON.parse(saved);
+        if (stateId && stateName) {
           setSelectedStateId(stateId);
           setSelectedStateName(stateName);
-          setSelectedCityId(cityId);
-          setSelectedCityName(cityName);
+          setSelectedCityId(cityId || null);
+          setSelectedCityName(cityName || "");
         }
-      } catch (err) {
-        console.error("Geolocation error:", err);
       }
-    };
-
-    autoDetectLocation();
+    } catch (e) {
+      console.warn("Failed to read saved location:", e);
+    }
   }, []);
+
+  // Detect location via geolocation — only when user clicks the icon
+  const handleDetectLocation = async () => {
+    if (!navigator.geolocation) {
+      console.warn("Geolocation not supported");
+      return;
+    }
+
+    try {
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 8000,
+          maximumAge: 0,
+        });
+      });
+
+      const { latitude: lat, longitude: lon } = position.coords;
+
+      setLatitude(lat);
+      setLongitude(lon);
+
+      const res = await getUserCityAndStateByLatLong({
+        latitude: lat,
+        longitude: lon,
+      });
+
+      if (res?.status === "OK" && res?.data) {
+        const { stateId, stateName, cityId, cityName } = res.data;
+
+        setSelectedStateId(stateId);
+        setSelectedStateName(stateName);
+        setSelectedCityId(cityId);
+        setSelectedCityName(cityName);
+      }
+    } catch (err) {
+      console.error("Geolocation error:", err);
+    }
+  };
 
   const handleLoadMoreBrands = () => {
     if (brandLoading || !brandHasMore) return;
@@ -634,6 +662,26 @@ export default function SearchWithCard() {
     { value: "4.0", label: "⭐ 4.0+ Rating" },
   ];
 
+  const sellerType = [
+    { value: "consultant", label: "Consultant" },
+    { value: "individual", label: "Individual" },
+  ];
+
+  const year = [
+    { value: "2023", label: "2023" },
+    { value: "2022", label: "2022" },
+    { value: "2021", label: "2021" },
+    { value: "2020", label: "2020" },
+  ];
+
+  const handleTransmissionChange = (values) => {
+    setSelectedTransmissionTypes(values);
+  };
+
+  const handleVariantChange = (values) => {
+    setSelectedVariants(values);
+  };
+
   const mobileFilterMap = {
     "Suggested Filters": [
       "⭐ 4 & Up",
@@ -659,7 +707,22 @@ export default function SearchWithCard() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Save/overwrite selected location to localStorage on Apply
+  const handleApplyFilter = () => {
+    if (selectedStateId && selectedStateName) {
+      const locationData = {
+        stateId: selectedStateId,
+        stateName: selectedStateName,
+        cityId: selectedCityId,
+        cityName: selectedCityName,
+      };
+      localStorage.setItem("avx_saved_location", JSON.stringify(locationData));
+    }
+  };
+
   const handleClearFilters = async () => {
+    // Remove saved location from localStorage
+    localStorage.removeItem("avx_saved_location");
     // Reset brand & model
     setSelectedBrands([]);
     setSelectedModels([]);
@@ -671,6 +734,23 @@ export default function SearchWithCard() {
     setModelPage(1);
     setBrandHasMore(true);
     setModelHasMore(true);
+
+    // Reset state & city
+    setSelectedStateId(null);
+    setSelectedStateName("");
+    setSelectedCityId(null);
+    setSelectedCityName("");
+
+    setStateSearch("");
+    setCitySearch("");
+
+    setStateOpen(false);
+    setCityOpen(false);
+
+    setHighlightedStateIndex(-1);
+    setHighlightedCityIndex(-1);
+
+    setCities([]);
 
     // Reset fuel & transmission
     setSelectedFuelTypes([]);
@@ -696,7 +776,7 @@ export default function SearchWithCard() {
     // Reset pagination
     setCurrentPage(1);
 
-    // Reload default data
+    // Reload vehicles
     try {
       const response = await getFilteredVehicles({});
       setVehicles(response.data || []);
@@ -705,8 +785,80 @@ export default function SearchWithCard() {
       setVehicles([]);
     }
 
-    // Reload brands again
+    // Reload brands
     loadBrands(1, "");
+  };
+
+  const filteredStates = states.filter((s) =>
+    s.label.toLowerCase().includes(stateSearch.toLowerCase()),
+  );
+
+  const filteredCities = cities.filter((c) =>
+    c.label.toLowerCase().includes(citySearch.toLowerCase()),
+  );
+
+  const handleStateKeyDown = (e) => {
+    if (!filteredStates.length) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightedStateIndex((prev) =>
+        prev < filteredStates.length - 1 ? prev + 1 : prev,
+      );
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightedStateIndex((prev) => (prev > 0 ? prev - 1 : 0));
+    }
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+
+      if (highlightedStateIndex >= 0) {
+        const selected = filteredStates[highlightedStateIndex];
+
+        setSelectedStateId(selected.value);
+        setSelectedStateName(selected.label);
+        setSelectedCityId(null);
+        setSelectedCityName("");
+
+        setStateSearch("");
+        setStateOpen(false);
+        setHighlightedStateIndex(-1);
+      }
+    }
+  };
+
+  const handleCityKeyDown = (e) => {
+    if (!filteredCities.length) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightedCityIndex((prev) =>
+        prev < filteredCities.length - 1 ? prev + 1 : prev,
+      );
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightedCityIndex((prev) => (prev > 0 ? prev - 1 : 0));
+    }
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+
+      if (highlightedCityIndex >= 0) {
+        const selected = filteredCities[highlightedCityIndex];
+
+        setSelectedCityId(selected.value);
+        setSelectedCityName(selected.label);
+
+        setCitySearch("");
+        setCityOpen(false);
+        setHighlightedCityIndex(-1);
+      }
+    }
   };
 
   return (
@@ -738,14 +890,29 @@ export default function SearchWithCard() {
             <div className="space-y-4">
               {/* ---------- STATE DROPDOWN ---------- */}
               <div ref={stateRef} className="relative">
-                <label className="text-xs text-third block mb-1">State</label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs text-third">State</label>
+                  <button
+                    type="button"
+                    onClick={handleDetectLocation}
+                    className="flex items-center gap-1 text-xs text-primary/70 hover:text-primary cursor-pointer transition-colors"
+                    title="Use my current location"
+                  >
+                    <MapPin size={14} />
+                    <span>Detect</span>
+                  </button>
+                </div>
 
                 {stateOpen ? (
                   <div className="relative">
                     <input
                       type="text"
                       value={stateSearch}
-                      onChange={(e) => setStateSearch(e.target.value)}
+                      onKeyDown={handleStateKeyDown}
+                      onChange={(e) => {
+                        setStateSearch(e.target.value);
+                        setHighlightedStateIndex(0);
+                      }}
                       placeholder={
                         selectedStateName || "Search or select state..."
                       }
@@ -777,28 +944,25 @@ export default function SearchWithCard() {
                 {stateOpen && (
                   <div className="absolute z-50 mt-1 w-full border border-primary/60 rounded-md bg-black/40 backdrop-blur-md text-primary shadow-xl max-h-64 overflow-hidden">
                     <div className="max-h-52 overflow-y-auto pt-1">
-                      {states
-                        .filter((s) =>
-                          s.label
-                            .toLowerCase()
-                            .includes(stateSearch.toLowerCase()),
-                        )
-                        .map((s) => (
-                          <div
-                            key={s.value}
-                            onClick={() => {
-                              setSelectedStateId(s.value);
-                              setSelectedStateName(s.label);
-                              setSelectedCityId(null);
-                              setSelectedCityName("");
-                              setStateSearch("");
-                              setStateOpen(false);
-                            }}
-                            className="px-4 py-2.5 hover:bg-primary/20 cursor-pointer text-sm"
-                          >
-                            {s.label}
-                          </div>
-                        ))}
+                      {filteredStates.map((s, index) => (
+                        <div
+                          key={s.value}
+                          onClick={() => {
+                            setSelectedStateId(s.value);
+                            setSelectedStateName(s.label);
+                            setSelectedCityId(null);
+                            setSelectedCityName("");
+                            setStateSearch("");
+                            setStateOpen(false);
+                          }}
+                          className={`px-4 py-2.5 cursor-pointer text-sm ${highlightedStateIndex === index
+                            ? "bg-primary/30"
+                            : "hover:bg-primary/20"
+                            }`}
+                        >
+                          {s.label}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
@@ -813,7 +977,11 @@ export default function SearchWithCard() {
                     <input
                       type="text"
                       value={citySearch}
-                      onChange={(e) => setCitySearch(e.target.value)}
+                      onKeyDown={handleCityKeyDown}
+                      onChange={(e) => {
+                        setCitySearch(e.target.value);
+                        setHighlightedCityIndex(0);
+                      }}
                       placeholder={
                         selectedCityName || "Search or select city..."
                       }
@@ -831,11 +999,10 @@ export default function SearchWithCard() {
                 ) : (
                   <div
                     onClick={() => selectedStateId && setCityOpen(true)}
-                    className={`h-10 px-3 flex items-center justify-between rounded-md border border-primary/60 bg-transparent text-primary ${
-                      !selectedStateId
-                        ? "opacity-50 cursor-not-allowed"
-                        : "cursor-pointer"
-                    } backdrop-blur-sm`}
+                    className={`h-10 px-3 flex items-center justify-between rounded-md border border-primary/60 bg-transparent text-primary ${!selectedStateId
+                      ? "opacity-50 cursor-not-allowed"
+                      : "cursor-pointer"
+                      } backdrop-blur-sm`}
                   >
                     <span className="truncate">
                       {selectedCityName ||
@@ -852,26 +1019,23 @@ export default function SearchWithCard() {
                 {cityOpen && selectedStateId && (
                   <div className="absolute z-50 mt-1 w-full border border-primary/60 rounded-md bg-black/40 backdrop-blur-md text-primary shadow-xl max-h-64 overflow-hidden">
                     <div className="max-h-52 overflow-y-auto pt-1">
-                      {cities
-                        .filter((c) =>
-                          c.label
-                            .toLowerCase()
-                            .includes(citySearch.toLowerCase()),
-                        )
-                        .map((c) => (
-                          <div
-                            key={c.value}
-                            onClick={() => {
-                              setSelectedCityId(c.value);
-                              setSelectedCityName(c.label);
-                              setCitySearch("");
-                              setCityOpen(false);
-                            }}
-                            className="px-4 py-2.5 hover:bg-primary/20 cursor-pointer text-sm"
-                          >
-                            {c.label}
-                          </div>
-                        ))}
+                      {filteredCities.map((c, index) => (
+                        <div
+                          key={c.value}
+                          onClick={() => {
+                            setSelectedCityId(c.value);
+                            setSelectedCityName(c.label);
+                            setCitySearch("");
+                            setCityOpen(false);
+                          }}
+                          className={`px-4 py-2.5 cursor-pointer text-sm ${highlightedCityIndex === index
+                            ? "bg-primary/30"
+                            : "hover:bg-primary/20"
+                            }`}
+                        >
+                          {c.label}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
@@ -897,6 +1061,7 @@ export default function SearchWithCard() {
               <ChipGroup
                 title=""
                 items={brands}
+                selected={selectedBrands}
                 showMore={false}
                 searchable={true}
                 serverPagination={true}
@@ -917,6 +1082,7 @@ export default function SearchWithCard() {
               <ChipGroup
                 title=""
                 items={models}
+                selected={selectedModels}
                 showMore={false}
                 searchable={true}
                 serverPagination={true}
@@ -933,6 +1099,7 @@ export default function SearchWithCard() {
             <FilterSection title="Fuel Type">
               <ChipGroup
                 title=""
+                selected={selectedFuelTypes}
                 items={fuelTypes}
                 onChange={handleFuelChange}
                 isLoading={fuelLoading}
@@ -943,6 +1110,8 @@ export default function SearchWithCard() {
               <ChipGroup
                 title=""
                 items={transmissionTypes}
+                selected={selectedTransmissionTypes}
+                onChange={handleTransmissionChange}
                 isLoading={transmissionLoading}
               />
             </FilterSection>
@@ -951,6 +1120,8 @@ export default function SearchWithCard() {
               <ChipGroup
                 title=""
                 items={variants}
+                selected={selectedVariants}
+                onChange={handleVariantChange}
                 showMore={false}
                 searchable={true}
                 serverPagination={true}
@@ -1041,16 +1212,47 @@ export default function SearchWithCard() {
               </div>
             </FilterSection>
 
-            <FilterSection title="Vehicle Type">
-              <ChipGroup title="" items={vehicleTypes} />
+            <FilterSection title="Year">
+              <ChipGroup
+                title=""
+                items={year}
+                selected={selectedYear}
+                onChange={setSelectedYear}
+                allowMultiple={false}
+              />
             </FilterSection>
 
-            <FilterSection title="Rating">
-              <ChipGroup title="" items={ratings} />
+            <FilterSection title="Body Type">
+              <ChipGroup
+                title=""
+                items={vehicleTypes}
+                selected={selectedBodyType}
+                onChange={setSelectedBodyType}
+              />
+            </FilterSection>
+
+            <FilterSection title="Inspection Rating">
+              <ChipGroup
+                title=""
+                items={ratings}
+                selected={selectedRating}
+                onChange={setSelectedRating}
+                allowMultiple={false}
+              />
+            </FilterSection>
+
+            <FilterSection title="Seller Type">
+              <ChipGroup
+                title=""
+                items={sellerType}
+                selected={selectedSellerType}
+                onChange={setSelectedSellerType}
+                allowMultiple={false}
+              />
             </FilterSection>
 
             <div className="mt-4 flex items-center justify-between gap-3">
-              <Button variant="outline" showIcon={false} className="flex-1">
+              <Button variant="outline" showIcon={false} className="flex-1" onClick={handleApplyFilter}>
                 Apply filter
               </Button>
 
@@ -1168,11 +1370,10 @@ export default function SearchWithCard() {
                       <li
                         key={page}
                         onClick={() => handlePageChange(page)}
-                        className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-sm sm:text-lg font-medium cursor-pointer transition-all ${
-                          currentPage === page
-                            ? "bg-primary text-black"
-                            : "text-white hover:bg-primary hover:text-black"
-                        }`}
+                        className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-sm sm:text-lg font-medium cursor-pointer transition-all ${currentPage === page
+                          ? "bg-primary text-black"
+                          : "text-white hover:bg-primary hover:text-black"
+                          }`}
                       >
                         {page}
                       </li>
@@ -1215,11 +1416,10 @@ export default function SearchWithCard() {
                 <div
                   key={item}
                   onClick={() => setActiveFilterTab(item)}
-                  className={`px-4 py-3 cursor-pointer text-sm ${
-                    activeFilterTab === item
-                      ? "bg-secondary/10 font-semibold"
-                      : "hover:bg-secondary/5"
-                  }`}
+                  className={`px-4 py-3 cursor-pointer text-sm ${activeFilterTab === item
+                    ? "bg-secondary/10 font-semibold"
+                    : "hover:bg-secondary/5"
+                    }`}
                 >
                   {item}
                 </div>
