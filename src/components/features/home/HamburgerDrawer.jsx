@@ -17,7 +17,7 @@ export default function HamburgerDrawer({ open, onClose, role }) {
       aria-hidden={!open}
       className={`
         fixed inset-0 z-[999] bg-secondary text-primary
-        transform transition-all duration-500 ease-out 3xl:max-w-[1480px] 3xl:mx-auto
+        transform transition-all duration-500 ease-out 3xl:max-w-full 3xl:mx-auto
         ${open ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"}
       `}
     >
@@ -101,9 +101,8 @@ const MenuGroup = ({ title, children }) => (
 const MenuItem = ({ children, disabled }) => (
   <button
     disabled={disabled}
-    className={`block text-left w-full transition ${
-      disabled ? "text-third cursor-not-allowed" : "hover:text-third"
-    }`}
+    className={`block text-left w-full transition ${disabled ? "text-third cursor-not-allowed" : "hover:text-third"
+      }`}
   >
     {children}
   </button>
