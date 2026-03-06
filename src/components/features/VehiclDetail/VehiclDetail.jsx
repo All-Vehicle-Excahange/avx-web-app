@@ -1,6 +1,6 @@
 "use client";
 
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 
 // TOP
 import VehicleHeader from "./VehicleHeader";
@@ -23,8 +23,8 @@ import overview from "@/pages/consult/dashboard/overview";
 import VehicleOverviewMain from "./VehicleOverviewMain";
 
 
-import {useParams} from "next/navigation";
-import {getVehicleOverview, getVehicleSummary} from "@/services/vehicle.service";
+import { useParams } from "next/navigation";
+import { getVehicleOverview, getVehicleSummary } from "@/services/vehicle.service";
 
 export default function VehicleDetails() {
   const specificationRef = useRef(null);
@@ -64,6 +64,7 @@ export default function VehicleDetails() {
     }
 
     if (!ref.current) return;
+    console.log("10");
 
     const top =
       ref.current.getBoundingClientRect().top + window.scrollY - NAVBAR_OFFSET;
@@ -76,14 +77,14 @@ export default function VehicleDetails() {
   const params = useParams();
   const id = params.id;
   const [vehicleOverview, setVehicleOverview] = useState({});
-  const  [vehicleSummary, setVehicleSummary] = useState({});
+  const [vehicleSummary, setVehicleSummary] = useState({});
 
   useEffect(() => {
-    const  fetchOverview = async () => {
+    const fetchOverview = async () => {
       try {
-        const  res = await  getVehicleOverview(id)
+        const res = await getVehicleOverview(id)
         setVehicleOverview(res.data)
-      }catch (error) {
+      } catch (error) {
         console.log(error);
       }
     }
@@ -91,11 +92,11 @@ export default function VehicleDetails() {
   }, [id])
 
   useEffect(() => {
-    const  fetchSummary = async () => {
+    const fetchSummary = async () => {
       try {
-        const  res = await  getVehicleSummary(id)
+        const res = await getVehicleSummary(id)
         setVehicleSummary(res.data)
-      }catch (error) {
+      } catch (error) {
         console.log(error);
       }
     }
@@ -151,11 +152,10 @@ export default function VehicleDetails() {
                         key={tab.id}
                         onClick={() => scrollToSection(tab.ref, tab.id)}
                         className={`relative pb-3 text-sm font-medium transition-colors cursor-pointer
-                        ${
-                          activeTab === tab.id
+                        ${activeTab === tab.id
                             ? "text-primary"
                             : "text-third hover:text-primary"
-                        }`}
+                          }`}
                       >
                         {tab.label}
 
@@ -192,7 +192,7 @@ export default function VehicleDetails() {
 
               <aside className="flex flex-col gap-6 lg:sticky lg:top-[102px] h-fit">
                 <VehicleSummaryRight vehicle={vehicleOverview} summary={vehicleSummary} />
-                <Testimonials summary={vehicleSummary}  />
+                <Testimonials summary={vehicleSummary} />
                 <SpecialOffer />
               </aside>
             </section>

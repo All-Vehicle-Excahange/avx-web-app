@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+
+
 import React, { useEffect, useState } from "react";
 import { Car, Bike } from "lucide-react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
@@ -55,35 +58,34 @@ const CategoriesSections = () => {
   const [activeType, setActiveType] = useState("4-Wheeler");
   const [active, setActive] = useState("urban-rides");
   const [vehicles, setVehicles] = useState([]);
+  const fetchVehicles = async () => {
+    try {
+      const selectedTag = vehicleTagMap[activeType]?.[active];
+      if (!selectedTag) return;
 
-  useEffect(() => {
-    const fetchVehicles = async () => {
-      try {
-        const selectedTag = vehicleTagMap[activeType]?.[active];
-        if (!selectedTag) return;
+      const data = {
+        pageNo: 1,
+        size: 4,
+        vehicleTag: selectedTag,
+      };
 
-        const data = {
-          pageNo: 1,
-          size: 4,
-          vehicleTag: selectedTag,
-        };
+      let res;
 
-        let res;
-
-        if (activeType === "4-Wheeler") {
-          res = await getFourWheelWithTag(data);
-        } else {
-          res = await getTwoWheelWithTag(data);
-        }
-
-        setVehicles(res.data);
-      } catch (error) {
-        console.error("Error fetching vehicles:", error);
+      if (activeType === "4-Wheeler") {
+        res = await getFourWheelWithTag(data);
+      } else {
+        res = await getTwoWheelWithTag(data);
       }
-    };
 
+      setVehicles(res.data);
+      console.log(res.data);
+    } catch (error) {
+      console.error("Error fetching vehicles:", error);
+    }
+  };
+  useEffect(() => {
     fetchVehicles();
-  }, [activeType, active]);
+  }, [active]);
 
   return (
     <section className="w-full h-full flex flex-col text-primary">
@@ -107,9 +109,11 @@ const CategoriesSections = () => {
           {/* Toggle Switch */}
           <div className="flex gap-1 sm:gap-2 mt-auto justify-end w-full sm:w-fit">
             <button
+              type="button"
               onClick={() => {
                 setActiveType("4-Wheeler");
                 setActive("urban-rides");
+                fetchVehicles();
               }}
               className={cn(
                 "px-3 py-1 text-xs sm:text-sm font-medium rounded-full border cursor-pointer flex items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0",
@@ -122,9 +126,11 @@ const CategoriesSections = () => {
             </button>
 
             <button
+              type="button"
               onClick={() => {
                 setActiveType("2-Wheeler");
                 setActive("scooters");
+                fetchVehicles();
               }}
               className={cn(
                 "px-3 py-1 text-xs sm:text-sm font-medium rounded-full border cursor-pointer flex items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0",

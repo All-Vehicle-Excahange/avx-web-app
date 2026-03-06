@@ -223,6 +223,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
   useEffect(() => {
     if (activeTab !== null) {
+                console.log("6")
+
       const scrollY = window.scrollY;
       document.body.style.position = "fixed";
       document.body.style.top = `-${scrollY}px`;
@@ -235,6 +237,34 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   }, [activeTab]);
 
   const handleSearch = () => {
+    // Save/overwrite selected location to localStorage
+    if (stateId && cityId && location) {
+      const [cityName, stateName] = location.split(", ").map((str) => str.trim());
+      if (cityName && stateName) {
+        const locationData = {
+          stateId,
+          stateName,
+          cityId,
+          cityName,
+        };
+        localStorage.setItem("avx_saved_location", JSON.stringify(locationData));
+      }
+    } else if (locationSuggestions?.length > 0 && location) {
+      // In case they just typed an exact match but didn't click the dropdown
+      const locMatch = locationSuggestions.find(
+        (l) => `${l.cityName}, ${l.stateName}`.toLowerCase() === location.toLowerCase()
+      );
+      if (locMatch) {
+        const locationData = {
+          stateId: locMatch.stateId,
+          stateName: locMatch.stateName,
+          cityId: locMatch.cityId,
+          cityName: locMatch.cityName,
+        };
+        localStorage.setItem("avx_saved_location", JSON.stringify(locationData));
+      }
+    }
+
     if (activeType === "consult") {
       const query = new URLSearchParams({
         ...(location && { location }),

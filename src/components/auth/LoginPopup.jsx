@@ -8,7 +8,7 @@ import Button from "@/components/ui/button";
 import { getOtp, login } from "@/services/auth.service";
 import { useForm } from "react-hook-form";
 
-function LoginPopup({ isOpen, onClose, onSignup = () => {} }) {
+function LoginPopup({ isOpen, onClose, onSignup = () => { } }) {
   const {
     register,
     handleSubmit,
@@ -65,7 +65,8 @@ function LoginPopup({ isOpen, onClose, onSignup = () => {} }) {
       scrollContainer.style.overflow = "";
       document.body.style.overflow = "auto";
       document.documentElement.style.overflow = "auto";
-      window.scrollTo(0, scrollY.current);
+
+      // window.scrollTo(0, scrollY.current);
     }
 
     return () => {
@@ -162,7 +163,7 @@ function LoginPopup({ isOpen, onClose, onSignup = () => {} }) {
       const api = err?.response?.data;
       const msg = api?.message || "Invalid or expired OTP";
 
-      
+
       setOtpError(msg);
     }
   };

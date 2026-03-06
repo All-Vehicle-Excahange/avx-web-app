@@ -8,7 +8,7 @@ import Button from "@/components/ui/button";
 import { getOtp, signup } from "@/services/auth.service";
 import { useForm } from "react-hook-form";
 
-export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
+export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
   const {
     register,
     handleSubmit,
@@ -38,7 +38,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
     if (isOpen) {
       // broadcast to any listeners that signup just opened
       document.dispatchEvent(new Event("signuppopup:open"));
-
+      console.log("3")
       scrollY.current = scrollContainer.scrollTop || window.scrollY;
 
       scrollContainer.style.position = "fixed";
@@ -60,6 +60,8 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
       scrollContainer.style.overflow = "";
       document.body.style.overflow = "auto";
       document.documentElement.style.overflow = "auto";
+            console.log("4")
+
       window.scrollTo(0, scrollY.current);
     }
 
@@ -225,11 +227,10 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
             <button
               type="button"
               onClick={() => setAccountType("personal")}
-              className={`flex items-center gap-2 pb-3 transition-all relative ${
-                accountType === "personal"
-                  ? "text-primary font-bold"
-                  : "text-primary/40 hover:text-primary/70"
-              }`}
+              className={`flex items-center gap-2 pb-3 transition-all relative ${accountType === "personal"
+                ? "text-primary font-bold"
+                : "text-primary/40 hover:text-primary/70"
+                }`}
             >
               <span className="text-sm uppercase tracking-wide">Personal</span>
               {accountType === "personal" && (
@@ -240,11 +241,10 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => {} }) {
             <button
               type="button"
               onClick={() => setAccountType("consultant")}
-              className={`flex items-center gap-2 pb-3 transition-all relative ${
-                accountType === "consultant"
-                  ? "text-primary font-bold"
-                  : "text-primary/40 hover:text-primary/70"
-              }`}
+              className={`flex items-center gap-2 pb-3 transition-all relative ${accountType === "consultant"
+                ? "text-primary font-bold"
+                : "text-primary/40 hover:text-primary/70"
+                }`}
             >
               <span className="text-sm uppercase tracking-wide">
                 Consultant

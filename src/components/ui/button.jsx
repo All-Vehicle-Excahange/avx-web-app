@@ -100,7 +100,7 @@ export default function Button({
   // 👉 If href exists → Link
   if (href && !locked) {
     return (
-      <Link href={href} className={classes}>
+      <Link href={href} scroll={false} className={classes}>
         {Content}
       </Link>
     );

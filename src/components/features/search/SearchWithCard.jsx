@@ -852,6 +852,8 @@ export default function SearchWithCard({ onPageResponseChange }) {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
     fetchVehicles(page);
+              console.log("7")
+
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -1546,6 +1548,9 @@ export default function SearchWithCard({ onPageResponseChange }) {
 
             </div>
           </div>
+
+
+
         </div>
       </main>
 

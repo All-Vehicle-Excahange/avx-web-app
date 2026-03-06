@@ -1,15 +1,15 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import SponsoredRibbon from "./SponsoredRibbonMain";
-import {Fuel, Heart, MapPinned, Settings2, Star, User, Users} from "lucide-react";
+import { Fuel, Heart, MapPinned, Settings2, Star, User, Users } from "lucide-react";
 import Button from "../button";
 import Image from "next/image";
-import {useRouter} from "next/router";
-import {addWishList, removeWishList} from "@/services/user.service";
-import {useAuthStore} from "@/stores/useAuthStore";
+import { useRouter } from "next/router";
+import { addWishList, removeWishList } from "@/services/user.service";
+import { useAuthStore } from "@/stores/useAuthStore";
 import LoginPopup from "@/components/auth/LoginPopup";
 
 
-export default function VehicleCard({data, onWishlistChange}) {
+export default function VehicleCard({ data, onWishlistChange }) {
     const router = useRouter();
 
     // ✅ Initial Favorite State From Backend
@@ -82,7 +82,7 @@ export default function VehicleCard({data, onWishlistChange}) {
     };
 
     const handleCardClick = () => {
-        router.push(`/vehicle/details/${data.id}`);
+        router.push(`/vehicle/details/${data.id}`, undefined, { scroll: false });
     }
 
     return (
@@ -101,9 +101,9 @@ export default function VehicleCard({data, onWishlistChange}) {
             >
                 <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
                     {/* IMAGE */}
-                    <div  onClick={handleCardClick}  className="relative w-32 sm:w-40 min-h-40 md:min-h-0 md:h-62 md:w-full shrink-0 p-2 hover:cursor-pointer">
+                    <div onClick={handleCardClick} className="relative w-32 sm:w-40 min-h-40 md:min-h-0 md:h-62 md:w-full shrink-0 p-2 hover:cursor-pointer">
                         <div className="relative w-full h-full overflow-hidden rounded-xl">
-                            {mapped.sponsored && <SponsoredRibbon/>}
+                            {mapped.sponsored && <SponsoredRibbon />}
 
                             <Image
                                 src={mapped.image}
@@ -136,21 +136,20 @@ export default function VehicleCard({data, onWishlistChange}) {
                                         className="ml-2 absolute top-50 right-6 flex items-center justify-center w-8 h-8 rounded-full bg-black/50 transition-all cursor-pointer"
                                     >
                                         <Heart
-                                            className={`w-5 h-5 transition-colors ${
-                                                isFavorite ? "fill-red-500 text-red-500" : "text-primary"
-                                            }`}
+                                            className={`w-5 h-5 transition-colors ${isFavorite ? "fill-red-500 text-red-500" : "text-primary"
+                                                }`}
                                         />
                                     </button>
                                 </div>
 
                                 {/* USER */}
                                 <p className="text-xs md:text-sm text-primary/90 mt-1 flex items-center gap-1.5">
-                                    <User className="w-3.5 h-3.5"/> {mapped.userName || "Nihal Chaudhary"}
+                                    <User className="w-3.5 h-3.5" /> {mapped.userName || "Nihal Chaudhary"}
                                 </p>
 
                                 {/* LOCATION */}
                                 <p className="text-xs md:text-sm text-primary/90 mt-1 flex items-center gap-1.5">
-                                    <MapPinned className="w-3.5 h-3.5"/>
+                                    <MapPinned className="w-3.5 h-3.5" />
                                     {mapped.location || "Chhapi, Gujarat"}
                                 </p>
                             </div>
@@ -162,21 +161,21 @@ export default function VehicleCard({data, onWishlistChange}) {
                             <span>{mapped.year}</span>
 
                             <span className="flex items-center gap-1">
-              <Settings2 className="w-4 h-4"/> {mapped.transmission}
-            </span>
+                                <Settings2 className="w-4 h-4" /> {mapped.transmission}
+                            </span>
 
                             <span className="flex items-center gap-1">
-              <Fuel className="w-4 h-4"/> {mapped.fuel}
-            </span>
+                                <Fuel className="w-4 h-4" /> {mapped.fuel}
+                            </span>
 
                             <span className="flex items-center gap-1">
-              <Users className="w-4 h-4"/> {mapped.seats}
-            </span>
+                                <Users className="w-4 h-4" /> {mapped.seats}
+                            </span>
 
                             <span className="flex items-center gap-1">
-              <Star className="w-4 h-4 fill-primary text-primary"/>
+                                <Star className="w-4 h-4 fill-primary text-primary" />
                                 {mapped.rating}
-            </span>
+                            </span>
                         </div>
 
                         {/* PRICE + BUTTON */}
