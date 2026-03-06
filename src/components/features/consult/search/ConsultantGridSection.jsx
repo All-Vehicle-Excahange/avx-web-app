@@ -21,22 +21,30 @@ export default function ConsultantGridSection({
     <section className="w-full mb-8">
       {/* HEADER */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl md:text-2xl lg:4xl  font-bold text-primary">
-          {title}
-          {showIsSponsored && (
-            <div className="flex items-center gap-1 mt-1 text-xs text-third">
-              <span>Sponsored</span>
+        <div className="flex items-start gap-4">
+          <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
 
-              <button
-                type="button"
-                className="w-4 h-4 flex items-center justify-center rounded-full border border-third/40 hover:bg-third/10 transition"
-                aria-label="Sponsored info"
-              >
-                <Info className="w-3 h-3" />
-              </button>
-            </div>
-          )}
-        </h2>
+          <div>
+            <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
+              {title}
+              {showIsSponsored && (
+                <div className="flex items-center gap-1 mt-1 text-xs text-third">
+                  <span>Sponsored</span>
+
+                  <button
+                    type="button"
+                    className="w-4 h-4 flex items-center justify-center rounded-full border border-third/40 hover:bg-third/10 transition"
+                    aria-label="Sponsored info"
+                  >
+                    <Info className="w-3 h-3" />
+                  </button>
+                </div>
+              )}
+            </h2>
+          </div>
+        </div>
+
+
 
         {showViewAll && (
           <Button

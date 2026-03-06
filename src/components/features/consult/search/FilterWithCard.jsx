@@ -1018,21 +1018,25 @@ export default function FilterWithCard() {
           <div className="mt-4 flex items-center justify-between gap-3">
             <Button
               variant="outline"
+              className="text-primary px-5 py-2"
               showIcon={false}
-              className="flex-1"
               onClick={handleApplyFilter}
             >
-              Apply filter
+              Apply Filter
             </Button>
 
             <button
-              showIcon={false}
-              className="text-primary/70 hover:text-primary rounded-3xl underline hover:cursor-pointer"
+              className="flex items-center gap-2 px-2 py-2 underline
+             text-sm font-semibold
+             text-primary/60 hover:text-primary
+             transition-all duration-200
+             cursor-pointer"
               onClick={handleClearFilters}
             >
-              Clear filters
+              Clear All
             </button>
           </div>
+
         </div>
       </aside>
 

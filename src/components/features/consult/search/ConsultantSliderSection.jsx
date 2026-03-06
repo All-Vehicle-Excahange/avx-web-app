@@ -19,10 +19,15 @@ export default function ConsultantSliderSection({ title, data }) {
     <section className="w-full mb-8 overflow-hidden">
       {/* HEADER */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl md:text-2xl lg:4xl  font-bold text-primary">
-          {title}
-        </h2>
+        <div className="flex items-start gap-4">
+          <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
 
+          <div>
+            <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
+              {title}
+            </h2>
+          </div>
+        </div>
         <div className="flex gap-2">
           <Button
             onClick={() => scroll("left")}
