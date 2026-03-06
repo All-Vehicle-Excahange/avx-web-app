@@ -133,7 +133,7 @@ export default function VehicleCard({data, onWishlistChange}) {
                                     {/* ✅ Wishlist Button */}
                                     <button
                                         onClick={handleWishlist}
-                                        className="ml-2 flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 hover:bg-primary/20 transition-all cursor-pointer"
+                                        className="ml-2 absolute top-50 right-6 flex items-center justify-center w-8 h-8 rounded-full bg-black/50 transition-all cursor-pointer"
                                     >
                                         <Heart
                                             className={`w-5 h-5 transition-colors ${

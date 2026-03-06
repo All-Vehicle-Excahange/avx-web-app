@@ -25,12 +25,11 @@ export default function Button({
     ghost: "bg-primary text-secondary hover:bg-third rounded-xl",
 
     outline: cn(
-      "text-third transition-colors duration-300",
-      "rounded-full border border-third hover:border-none",
+      "text-third rounded-full border border-third",
+      "transition-all duration-300",
       "hover:text-white",
-      !locked && "hover:text-white hover:border-none",
-      locked &&
-      "opacity-50 cursor-not-allowed pointer-events-none"
+      !locked && "hover:text-white",
+      locked && "opacity-50 cursor-not-allowed pointer-events-none"
     ),
 
     outlineAnimated: cn(
@@ -79,7 +78,7 @@ export default function Button({
           {/* Inner Mask */}
           <span
             className={cn(
-              "absolute inset-0.5 rounded-full bg-[#171618]",
+              "absolute inset-0.5 rounded-full bg-[#292929]",
               isOutline
                 ? "opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 : "opacity-100"
@@ -114,3 +113,4 @@ export default function Button({
     </button>
   );
 }
+

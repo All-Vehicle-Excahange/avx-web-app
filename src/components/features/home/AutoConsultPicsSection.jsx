@@ -62,15 +62,19 @@ export default function AutoConsultPicsSection(props) {
   const finalConsultants = consultants;
 
   return (
-    <div className="w-full py-10 px-4">
+    <div className="w-full py-10 ">
       {/* Header */}
-      <div className="mb-6">
-        <h2 className="text-3xl font-bold text-primary">
-          Top Auto Consultants Picks For You
-        </h2>
-        <p className="text-third mt-1">
-          Discover trusted consultants curated for you.
-        </p>
+      <div className="flex items-start gap-4 mb-6">
+        <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
+
+        <div>
+          <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
+            Top Auto Consultants Picks For You
+          </h2>
+          <p className="text-third mt-1">
+            Discover trusted consultants curated for you.
+          </p>
+        </div>
       </div>
 
       {loading && (
@@ -80,7 +84,7 @@ export default function AutoConsultPicsSection(props) {
       {/* Grid */}
 
       {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
         {finalConsultants.length === 0 ? (
           <div className="col-span-full flex justify-center py-16">
             <h3 className="text-lg font-semibold text-primary/40">

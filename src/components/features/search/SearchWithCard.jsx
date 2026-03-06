@@ -1011,7 +1011,7 @@ export default function SearchWithCard({ onPageResponseChange }) {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col lg:flex-row text-secondary mt-[60px]">
+    <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-[60px]">
       {/* ================= DESKTOP SIDEBAR ================= */}
       <aside
         className="
@@ -1412,16 +1412,24 @@ export default function SearchWithCard({ onPageResponseChange }) {
             </FilterSection>
 
             <div className="mt-4 flex items-center justify-between gap-3">
-              <Button variant="outline" showIcon={false} className="flex-1" onClick={handleApplyFilter}>
-                Apply filter
+              <Button
+                variant="outline"
+                className="text-primary px-5 py-2"
+                showIcon={false}
+                onClick={handleApplyFilter}
+              >
+                Apply Filter
               </Button>
 
               <button
-                showIcon={false}
-                className="text-primary/70 hover:text-primary rounded-3xl underline hover:cursor-pointer"
+                className="flex items-center gap-2 px-2 py-2 underline
+    text-sm font-semibold
+    text-primary/60 hover:text-primary
+    transition-all duration-200
+    cursor-pointer"
                 onClick={handleClearFilters}
               >
-                Clear filters
+                Clear All
               </button>
             </div>
           </div>
@@ -1483,74 +1491,59 @@ export default function SearchWithCard({ onPageResponseChange }) {
           </div>
 
           <div className="col-span-full">
-            <h2 className="text-2xl md:text-3xl font-bold text-primary">
+            <div className="flex items-start gap-4">
+          <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
+
+          <div>
+            <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
               Top Vehicle Near You
             </h2>
+            <p className="text-third mt-1">
+              Lorem ipsum dolor sit amet consectetur dolor sit amet
+              consectetur..
+            </p>
+          </div>
+        </div>
           </div>
 
           {vehicles.map((vehicle) => (
             <VehicleCard key={vehicle.id} data={vehicle} />
           ))}
 
-          <div className="col-span-full">
-            <div className="mt-4">
-              <div className="flex items-center justify-center gap-4 w-full">
-                <div>
-                  <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    className="grid place-content-center cursor-pointer text-white hover:text-black rounded-full w-8 h-8 sm:w-10 sm:h-10 border-[1.5px] border-white transition-colors hover:bg-primary hover:border-primary disabled:cursor-not-allowed disabled:text-gray-500 disabled:border-gray-500 disabled:hover:bg-transparent"
-                    disabled={currentPage === 1}
-                    aria-label="Previous page"
-                  >
-                    <ChevronLeft size={18} />
-                  </button>
-                </div>
+          <div className="col-span-full flex justify-center mt-6">
+            <div className="flex items-center gap-4 bg-transparent border border-white/20 rounded-full px-1 py-1 shadow-lg">
 
-                <ul className="flex items-center">
-                  {currentPage > 3 && (
-                    <li
-                      className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-white text-sm sm:text-lg font-medium cursor-pointer hover:bg-primary hover:text-black"
-                      onClick={() => handlePageChange(1)}
-                    >
-                      1
-                    </li>
-                  )}
+              {/* Previous */}
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`flex items-center cursor-pointer justify-center w-10 h-10 rounded-full transition-all duration-200 border
+      ${currentPage === 1
+                    ? "bg-transparent text-gray-500 border-gray-600 cursor-not-allowed"
+                    : "bg-transparent text-white border-white/30 hover:bg-white hover:text-black"
+                  }`}
+              >
+                <ChevronLeft size={18} />
+              </button>
 
-                  {currentPage > 4 && <li className="mx-1 text-white">…</li>}
+              {/* Page Info */}
+              <span className="text-white font-medium text-sm sm:text-base min-w-[80px] text-center">
+                {currentPage} of {totalPages}
+              </span>
 
-                  {[
-                    currentPage - 2,
-                    currentPage - 1,
-                    currentPage,
-                    currentPage + 1,
-                    currentPage + 2,
-                  ]
-                    .filter((page) => page > 0 && page <= totalPages)
-                    .map((page) => (
-                      <li
-                        key={page}
-                        onClick={() => handlePageChange(page)}
-                        className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full mx-1 text-sm sm:text-lg font-medium cursor-pointer transition-all ${currentPage === page
-                          ? "bg-primary text-black"
-                          : "text-white hover:bg-primary hover:text-black"
-                          }`}
-                      >
-                        {page}
-                      </li>
-                    ))}
-                </ul>
+              {/* Next */}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`flex items-center cursor-pointer justify-center w-10 h-10 rounded-full transition-all duration-200 border
+      ${currentPage === totalPages
+                    ? "bg-black text-gray-500 border-gray-600 cursor-not-allowed"
+                    : "bg-white text-black border-white hover:bg-transparent hover:text-white hover:border-white/30"
+                  }`}
+              >
+                <ChevronRight size={18} />
+              </button>
 
-                <div>
-                  <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    className="grid place-content-center cursor-pointer text-white hover:text-black rounded-full w-8 h-8 sm:w-10 sm:h-10 border-[1.5px] border-white hover:border-primary transition-colors hover:bg-primary disabled:cursor-not-allowed disabled:text-gray-500 disabled:border-gray-500 disabled:hover:bg-transparent"
-                    disabled={currentPage === totalPages}
-                    aria-label="Next page"
-                  >
-                    <ChevronRight size={18} />
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
         </div>
