@@ -24,6 +24,7 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
     if (!isOpen) return;
 
     // Save current scroll position
+    console.log("8")
     const scrollY = window.scrollY;
 
     // Lock body
@@ -50,6 +51,7 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
       document.body.style.left = "";
       document.body.style.right = "";
       document.body.style.width = "";
+          console.log("9")
 
       window.scrollTo(0, parseInt(storedScrollY || "0") * -1);
 
