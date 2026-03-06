@@ -198,7 +198,25 @@ export default function FilterWithCard() {
 
   // Auto-detect location on mount
   useEffect(() => {
-    // On mount: only check localStorage for saved location
+    // Priority 1: Read location from URL query params (from homepage filter bar)
+    const qCityId = searchParams.get("cityId");
+    const qStateId = searchParams.get("stateId");
+    const qLocation = searchParams.get("location");
+
+    if (qCityId && qStateId) {
+      setSelectedCityId(Number(qCityId));
+      setSelectedStateId(Number(qStateId));
+
+      // Parse "cityName, stateName" from location param
+      if (qLocation) {
+        const parts = qLocation.split(",").map((s) => s.trim());
+        setSelectedCityName(parts[0] || "");
+        setSelectedStateName(parts[1] || "");
+      }
+      return; // skip localStorage fallback
+    }
+
+    // Priority 2: Fallback to localStorage
     try {
       const saved = localStorage.getItem("avx_saved_location");
       if (saved) {
@@ -375,13 +393,40 @@ export default function FilterWithCard() {
       if (mapped) setSelectedInventory([mapped]);
     }
 
-    // Store price range from URL
+    // Store price range from URL and parse to numeric values
     if (priceRangeParam) {
       setPriceRange(priceRangeParam);
+      // Parse "1L-2L" style price range to actual numbers
+      const parsePriceValue = (val) => {
+        if (!val) return null;
+        val = val.trim().toUpperCase();
+        if (val.endsWith("L")) {
+          return parseFloat(val.replace("L", "")) * 100000;
+        } else if (val.endsWith("CR")) {
+          return parseFloat(val.replace("CR", "")) * 10000000;
+        } else if (val.endsWith("K")) {
+          return parseFloat(val.replace("K", "")) * 1000;
+        }
+        return parseFloat(val) || null;
+      };
+
+      const parts = priceRangeParam.split("-").map((p) => p.trim());
+      if (parts.length === 2) {
+        const parsedMin = parsePriceValue(parts[0]);
+        const parsedMax = parsePriceValue(parts[1]);
+        if (parsedMin !== null) setMinPrice(parsedMin);
+        if (parsedMax !== null) setMaxPrice(parsedMax);
+      }
     }
 
     // Build initial payload from URL params and fetch
     const initialPayload = {};
+
+    // Include location from URL
+    const qCityId = searchParams.get("cityId");
+    const qStateId = searchParams.get("stateId");
+    if (qCityId) initialPayload.cityId = Number(qCityId);
+    if (qStateId) initialPayload.stateId = Number(qStateId);
 
     if (vehicleTypeParam) {
       if (vehicleTypeParam === "2 Wheeler") {
@@ -406,9 +451,24 @@ export default function FilterWithCard() {
       if (mapped) Object.assign(initialPayload, mapped);
     }
 
-    // if (priceRangeParam) {
-    //   initialPayload.priceRange = priceRangeParam;
-    // }
+    // Parse priceRange from URL into minVehiclePrice / maxVehiclePrice
+    if (priceRangeParam) {
+      const parsePriceValue = (val) => {
+        if (!val) return null;
+        val = val.trim().toUpperCase();
+        if (val.endsWith("L")) return parseFloat(val.replace("L", "")) * 100000;
+        if (val.endsWith("CR")) return parseFloat(val.replace("CR", "")) * 10000000;
+        if (val.endsWith("K")) return parseFloat(val.replace("K", "")) * 1000;
+        return parseFloat(val) || null;
+      };
+      const parts = priceRangeParam.split("-").map((p) => p.trim());
+      if (parts.length === 2) {
+        const parsedMin = parsePriceValue(parts[0]);
+        const parsedMax = parsePriceValue(parts[1]);
+        if (parsedMin !== null) initialPayload.minVehiclePrice = parsedMin;
+        if (parsedMax !== null) initialPayload.maxVehiclePrice = parsedMax;
+      }
+    }
 
     fetchConsultants(1, initialPayload);
     console.log("Initial Payload ", initialPayload);
@@ -465,16 +525,18 @@ export default function FilterWithCard() {
       const val = selectedRating[0];
       if (val === "4.5") payload.minAvgRating = 4.5;
       if (val === "4.0") payload.minAvgRating = 4.0;
-      if (val === "unrated") payload.includeUnrated = true;
+      if (val === "3.0") payload.minAvgRating = 3.0;
     }
 
     if (selectedServices.length > 0) {
       payload.services = selectedServices;
     }
 
-    // Price range
-    payload.minPrice = minPrice;
-    payload.maxPrice = maxPrice;
+    // Price range (vehicle price) — only include when not at full range
+    if (minPrice !== MIN || maxPrice !== MAX) {
+      payload.minVehiclePrice = minPrice;
+      payload.maxVehiclePrice = maxPrice;
+    }
 
     // if (priceRange) {
     //   payload.priceRange = priceRange;
@@ -551,9 +613,9 @@ export default function FilterWithCard() {
     setSelectedRating([]);
     setSelectedServices([]);
 
-    // Reset price range
-    setMinPrice(100000);
-    setMaxPrice(1000000);
+    // Reset price range to full range
+    setMinPrice(MIN);
+    setMaxPrice(MAX);
 
     // Reset location filters
     setSelectedStateId(null);
@@ -593,7 +655,7 @@ export default function FilterWithCard() {
   const ratings = [
     { value: "4.5", label: "⭐ 4.5+ Rating" },
     { value: "4.0", label: "⭐ 4.0+ Rating" },
-    { value: "unrated", label: "Unrated Vendors" },
+    { value: "3.0", label: "⭐ 3.0+ Rating" },
   ];
 
   const mobileFilterMap = {
@@ -908,7 +970,7 @@ export default function FilterWithCard() {
             </FilterSection>
           </div>
 
-          <FilterSection title="Budget" defaultOpen={true}>
+          <FilterSection title="Price Range" defaultOpen={true}>
             <div className="flex flex-col gap-2 mt-3">
               <div className="flex justify-between text-xs text-primary/70 mb-1">
                 <span>Min Price</span>
