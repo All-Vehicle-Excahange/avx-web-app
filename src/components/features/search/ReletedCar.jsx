@@ -8,24 +8,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 
 import "swiper/css";
+import CommonSwiper from "@/components/ui/CommonSwiper";
 
 function ReletedCar() {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-  const swiperRef = useRef(null);
-
-  useEffect(() => {
-    if (!swiperRef.current) return;
-
-    const swiper = swiperRef.current;
-
-    // Attach navigation AFTER mount
-    swiper.params.navigation.prevEl = prevRef.current;
-    swiper.params.navigation.nextEl = nextRef.current;
-
-    swiper.navigation.init();
-    swiper.navigation.update();
-  }, []);
 
 
   const cardData = [
@@ -105,56 +92,39 @@ function ReletedCar() {
     <div className="w-full  relative">
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl md:text-3xl font-bold ">
-          Top Releted Vehicles For You
-        </h2>
+        <div className="flex items-start gap-4">
+          <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
+
+          <div>
+            <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
+              Top Releted Vehicles For You
+            </h2>
+            <p className="text-third mt-1">
+              Lorem ipsum dolor sit amet consectetur dolor sit amet
+              consectetur..
+            </p>
+          </div>
+        </div>
 
         {/* ✅ TOP RIGHT BUTTONS */}
         <div className="flex gap-3">
           <Button variant="roundedOutline" ref={prevRef}>
-            <ChevronLeft className="w-5 h-5 text-primary hover:text-secondary" />
+            <ChevronLeft className="w-5 h-5" />
           </Button>
 
           <Button variant="roundedOutline" ref={nextRef}>
-            <ChevronRight className="w-5 h-5 text-primary hover:text-secondary" />
+            <ChevronRight className="w-5 h-5" />
           </Button>
         </div>
       </div>
 
-      {/* CAR CONTAINER */}
-      <div className="w-full h-full pb-6 overflow-visible">
-        <Swiper
-          modules={[Navigation]}
-          spaceBetween={16}
-          grabCursor
-          onSwiper={(swiper) => {
-            swiperRef.current = swiper;
-          }}
-          breakpoints={{
-            0: {
-              slidesPerView: 1,
-            },
-            640: {
-              slidesPerView: 1,
-            },
-            768: {
-              slidesPerView: 2,
-            },
-            1024: {
-              slidesPerView: 3,
-            },
-            1280: {
-              slidesPerView: 4, // ✅ GUARANTEED 4 on big screens
-            },
-          }}
-        >
-          {cardData.map((card, i) => (
-            <SwiperSlide key={i}>
-              <VehicleCard data={card} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+      {/* Swiper */}
+      <CommonSwiper
+        data={cardData}
+        CardComponent={VehicleCard}
+        prevRef={prevRef}
+        nextRef={nextRef}
+      />
     </div>
   );
 }

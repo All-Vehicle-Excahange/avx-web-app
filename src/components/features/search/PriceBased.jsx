@@ -1,9 +1,8 @@
 import Button from "@/components/ui/button";
 import VehicleCard from "@/components/ui/const/VehicleCard";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { ChevronLeft, ChevronRight, Info } from "lucide-react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import CommonSwiper from "@/components/ui/CommonSwiper";
 
 const smallCars = [
   {
@@ -63,33 +62,27 @@ const smallCars = [
 const PriceBased = () => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-  const swiperRef = useRef(null);
-
-  useEffect(() => {
-    if (!swiperRef.current) return;
-
-    const swiper = swiperRef.current;
-
-    swiper.params.navigation.prevEl = prevRef.current;
-    swiper.params.navigation.nextEl = nextRef.current;
-
-    swiper.navigation.init();
-    swiper.navigation.update();
-  }, []);
 
   return (
     <div className="">
       {/* Header */}
       <div className="flex justify-between items-end mb-6">
-        {/* Title + Sponsored line */}
-        <div className="flex flex-col">
-          <h2 className="text-2xl md:text-3xl font-bold text-primary">
-            SUVs Between ₹8L – ₹12L
-          </h2>
+
+        <div className="flex items-start gap-4">
+          <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
+
+          <div>
+            <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
+              SUVs Between ₹8L – ₹12L
+            </h2>
+            <p className="text-third mt-1">
+              Lorem ipsum dolor sit amet consectetur dolor sit amet
+              consectetur..
+            </p>
+          </div>
         </div>
 
-        {/* Navigation buttons */}
-        <div className="flex gap-3 mt-2">
+        <div className="flex gap-3">
           <Button variant="roundedOutline" ref={prevRef}>
             <ChevronLeft className="w-5 h-5" />
           </Button>
@@ -100,27 +93,13 @@ const PriceBased = () => {
         </div>
       </div>
 
-      <Swiper
-        modules={[Navigation]}
-        spaceBetween={16}
-        grabCursor
-        slidesPerView={1}
-        onSwiper={(swiper) => {
-          swiperRef.current = swiper;
-        }}
-        breakpoints={{
-          640: { slidesPerView: 1 },
-          768: { slidesPerView: 2 },
-          1024: { slidesPerView: 3 },
-          1280: { slidesPerView: 3 },
-        }}
-      >
-        {smallCars.map((story) => (
-          <SwiperSlide key={story.id}>
-            <VehicleCard data={story} />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+      {/* Swiper */}
+      <CommonSwiper
+        data={smallCars}
+        CardComponent={VehicleCard}
+        prevRef={prevRef}
+        nextRef={nextRef}
+      />
     </div>
   );
 };
