@@ -31,6 +31,13 @@ export default function SearchWithHeader() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  const vehicleTypeParam = searchParams.get("vehicleType");
+  const serviceParam = searchParams.get("service");
+  const availabilityParam = searchParams.get("availability");
+  const priceRangeParam = searchParams.get("priceRange");
+  const location = searchParams.get("location");
+
+
   return (
     <>
       {/* NAVBAR */}
@@ -44,8 +51,8 @@ export default function SearchWithHeader() {
           <div className="flex items-center justify-between gap-4">
             {/* LEFT */}
             <div className="flex items-center gap-3 flex-wrap">
-              <h2 className="text-primary text-base md:text-lg font-bold">
-                Diesel SUVs in Ahmedabad
+              <h2 className="text-primary text-base md:text-lg ">
+                {vehicleTypeParam} {serviceParam} {availabilityParam} {priceRangeParam} in {location}
               </h2>
               <span className="text-primary/80 text-sm">
                 • 82 Results • 37 AVX Inspected • Updated Today
@@ -114,10 +121,9 @@ export default function SearchWithHeader() {
                         w-full text-left px-3 py-2
                         text-[12px]
                         hover:bg-secondary/10
-                        ${
-                          selected.value === option.value
-                            ? "bg-primary/10 font-semibold"
-                            : ""
+                        ${selected.value === option.value
+                          ? "bg-primary/10 font-semibold"
+                          : ""
                         }
                       `}
                     >

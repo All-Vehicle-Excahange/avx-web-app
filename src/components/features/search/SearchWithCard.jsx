@@ -49,7 +49,7 @@ function useIsMobile() {
   return isMobile;
 }
 
-export default function SearchWithCard() {
+export default function SearchWithCard({ onPageResponseChange }) {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [activeFilterTab, setActiveFilterTab] = useState("Suggested Filters");
   const [selectedMobileChips, setSelectedMobileChips] = useState([]);
@@ -168,25 +168,113 @@ export default function SearchWithCard() {
     budgetMid = (mPrice + mxPrice) / 2;
   }
 
-  // Fetch vehicles (unchanged)
-  useEffect(() => {
-    const fetchVehicles = async () => {
-      try {
-        const payload = {
-          fuelType: fuelType,
-          minPrice: 300000,
-          maxPrice: 800000,
-          budgetMid: 550000,
-        };
-        const response = await getFilteredVehicles(payload);
-        setVehicles(response.data);
-      } catch (error) {
-        console.error("Error fetching vehicles:", error);
-      }
-    };
+  /* ================= BUILD PAYLOAD ================= */
+  const buildPayload = () => {
+    const payload = {};
 
-    fetchVehicles();
-  }, [fuelType, makerId, sort]);
+    if (selectedCityId) payload.cityId = selectedCityId;
+    if (selectedStateId) payload.stateId = selectedStateId;
+
+    if (selectedBodyType.length > 0) payload.vehicleSubTypes = selectedBodyType;
+
+    if (selectedBrands.length > 0)
+      payload.makerIds = selectedBrands.map(Number);
+
+    if (selectedModels.length > 0)
+      payload.modelIds = selectedModels.map(Number);
+
+    if (selectedVariants.length > 0)
+      payload.variantIds = selectedVariants.map(Number);
+
+    if (selectedFuelTypes.length > 0)
+      payload.fuelTypes = selectedFuelTypes.map((f) => f.toUpperCase());
+
+    if (selectedTransmissionTypes.length > 0)
+      payload.transmissionTypes = selectedTransmissionTypes.map((t) =>
+        t.toUpperCase(),
+      );
+
+    if (minPrice > MIN) payload.minPrice = minPrice;
+    if (maxPrice < MAX) payload.maxPrice = maxPrice;
+
+    if (selectedYear.length > 0) payload.mfgYear = Number(selectedYear[0]);
+
+    if (kmDistance > 0) {
+      payload.minKmDriven = 0;
+      payload.maxKmDriven = kmDistance;
+    }
+
+    if (selectedSellerType.length > 0)
+      payload.sellerType = selectedSellerType[0].toUpperCase();
+
+    if (selectedRating.length > 0)
+      payload.minInspectionRating = parseFloat(selectedRating[0]);
+
+    if (avxAssumed) payload.avxInspected = true;
+
+    return payload;
+  };
+
+  /* ================= FETCH VEHICLES ================= */
+  const fetchVehicles = async (page = currentPage, payload = null) => {
+    try {
+      const body = payload ?? buildPayload();
+      const params = {
+        pageNo: page,
+        size: 6,
+        sortBy: sort || "listingDate",
+        direction: sort === "price_low_high" ? "asc" : "desc",
+      };
+      const response = await getFilteredVehicles(body, params);
+      setVehicles(response.data || []);
+
+      // Update page response for header display
+      if (response.pagination) {
+        if (onPageResponseChange) onPageResponseChange(response.pagination);
+        setTotalPages(response.pagination.totalPages || 0);
+      }
+    } catch (error) {
+      console.error("Error fetching vehicles:", error);
+      setVehicles([]);
+    }
+  };
+
+  /* ================= INITIAL FETCH FROM URL PARAMS ================= */
+  useEffect(() => {
+    const initialPayload = {};
+
+    // Location from URL
+    const qCityId = searchParams.get("cityId");
+    const qStateId = searchParams.get("stateId");
+    if (qCityId) initialPayload.cityId = Number(qCityId);
+    if (qStateId) initialPayload.stateId = Number(qStateId);
+
+    // Body type from URL
+    if (bodyType) initialPayload.vehicleSubTypes = [bodyType];
+
+    // Brand / maker from URL
+    if (makerId) initialPayload.makerIds = [Number(makerId)];
+
+    // Fuel type from URL
+    if (fuelType) initialPayload.fuelTypes = [fuelType.toUpperCase()];
+
+    // Budget from URL
+    if (budget) {
+      if (mPrice > 0) initialPayload.minPrice = mPrice;
+      if (mxPrice > 0) initialPayload.maxPrice = mxPrice;
+    }
+
+    fetchVehicles(1, initialPayload);
+  }, []);
+
+  /* ================= RE-FETCH ON SORT CHANGE ================= */
+  const prevSortRef = useRef(sort);
+  useEffect(() => {
+    if (prevSortRef.current === sort) return;
+    prevSortRef.current = sort;
+    setCurrentPage(1);
+    fetchVehicles(1);
+  }, [sort]);
 
   // ── Load Brands with search ──
   const loadBrands = async (page = 1, searchTerm = brandSearch) => {
@@ -284,7 +372,25 @@ export default function SearchWithCard() {
   }, [selectedStateId]);
 
   useEffect(() => {
-    // On mount: only check localStorage for saved location
+    // Priority 1: Read location from URL query params (from homepage filter bar)
+    const qCityId = searchParams.get("cityId");
+    const qStateId = searchParams.get("stateId");
+    const qLocation = searchParams.get("location");
+
+    if (qCityId && qStateId) {
+      setSelectedCityId(Number(qCityId));
+      setSelectedStateId(Number(qStateId));
+
+      // Parse "cityName, stateName" from location param
+      if (qLocation) {
+        const parts = qLocation.split(",").map((s) => s.trim());
+        setSelectedCityName(parts[0] || "");
+        setSelectedStateName(parts[1] || "");
+      }
+      return; // skip localStorage fallback
+    }
+
+    // Priority 2: Fallback to localStorage
     try {
       const saved = localStorage.getItem("avx_saved_location");
       if (saved) {
@@ -709,8 +815,8 @@ export default function SearchWithCard() {
   ];
 
   const sellerType = [
-    { value: "consultant", label: "Consultant" },
-    { value: "individual", label: "Individual" },
+    { value: "CONSULTANT", label: "Consultant" },
+    { value: "USER_SELLER", label: "Individual" },
   ];
 
   // year data is now fetched dynamically via getYearByModelId
@@ -740,16 +846,17 @@ export default function SearchWithCard() {
   };
 
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 20; // change later from API
+  const [totalPages, setTotalPages] = useState(0);
 
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
+    fetchVehicles(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // Save/overwrite selected location to localStorage on Apply
-  const handleApplyFilter = () => {
+  const handleApplyFilter = async () => {
     if (selectedStateId && selectedStateName) {
       const locationData = {
         stateId: selectedStateId,
@@ -759,6 +866,9 @@ export default function SearchWithCard() {
       };
       localStorage.setItem("avx_saved_location", JSON.stringify(locationData));
     }
+
+    setCurrentPage(1);
+    await fetchVehicles(1);
   };
 
   const handleClearFilters = async () => {
@@ -821,14 +931,8 @@ export default function SearchWithCard() {
     // Reset pagination
     setCurrentPage(1);
 
-    // Reload vehicles
-    try {
-      const response = await getFilteredVehicles({});
-      setVehicles(response.data || []);
-    } catch (error) {
-      console.error("Error resetting vehicles:", error);
-      setVehicles([]);
-    }
+    // Reload vehicles with empty payload
+    await fetchVehicles(1, {});
 
     // Reload brands
     loadBrands(1, "");
@@ -1102,6 +1206,53 @@ export default function SearchWithCard() {
               </button>
             </div>
 
+
+            <FilterSection title="Budget" defaultOpen={true}>
+              <div className="flex flex-col gap-2 mt-3">
+                <div className="flex justify-between text-xs text-primary/70 mb-1">
+                  <span>Min Price</span>
+                  <span>Max Price</span>
+                </div>
+
+                <div className="relative h-6 flex items-center">
+                  <div
+                    className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
+                    style={{ background: getTrackBackground() }}
+                  />
+
+                  <input
+                    type="range"
+                    min={MIN}
+                    max={MAX}
+                    step={50000}
+                    value={minPrice}
+                    onChange={(e) =>
+                      setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
+                    }
+                    className="dual-range z-30"
+                  />
+
+                  <input
+                    type="range"
+                    min={MIN}
+                    max={MAX}
+                    step={50000}
+                    value={maxPrice}
+                    onChange={(e) =>
+                      setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
+                    }
+                    className="dual-range z-40"
+                  />
+                </div>
+
+                <div className="flex justify-between text-xs text-primary/70 mb-1">
+                  <span>₹{minPrice}</span>
+                  <span>₹{maxPrice}</span>
+                </div>
+              </div>
+            </FilterSection>
+
+
             <FilterSection title="Brand">
               <ChipGroup
                 title=""
@@ -1161,6 +1312,22 @@ export default function SearchWithCard() {
               />
             </FilterSection>
 
+            <FilterSection title="Year">
+              <ChipGroup
+                title=""
+                items={years}
+                selected={selectedYear}
+                onChange={handleYearChange}
+                allowMultiple={false}
+                isLoading={yearLoading}
+                customEmptyMessage={
+                  selectedModels.length === 0
+                    ? "Please first select a Model"
+                    : undefined
+                }
+              />
+            </FilterSection>
+
             <FilterSection title="Variant">
               <ChipGroup
                 title=""
@@ -1183,50 +1350,6 @@ export default function SearchWithCard() {
               />
             </FilterSection>
 
-            <FilterSection title="Budget" defaultOpen={true}>
-              <div className="flex flex-col gap-2 mt-3">
-                <div className="flex justify-between text-xs text-primary/70 mb-1">
-                  <span>Min Price</span>
-                  <span>Max Price</span>
-                </div>
-
-                <div className="relative h-6 flex items-center">
-                  <div
-                    className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
-                    style={{ background: getTrackBackground() }}
-                  />
-
-                  <input
-                    type="range"
-                    min={MIN}
-                    max={MAX}
-                    step={50000}
-                    value={minPrice}
-                    onChange={(e) =>
-                      setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
-                    }
-                    className="dual-range z-30"
-                  />
-
-                  <input
-                    type="range"
-                    min={MIN}
-                    max={MAX}
-                    step={50000}
-                    value={maxPrice}
-                    onChange={(e) =>
-                      setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
-                    }
-                    className="dual-range z-40"
-                  />
-                </div>
-
-                <div className="flex justify-between text-xs text-primary/70 mb-1">
-                  <span>₹{minPrice}</span>
-                  <span>₹{maxPrice}</span>
-                </div>
-              </div>
-            </FilterSection>
 
             <FilterSection title=" KM Driven" defaultOpen={true}>
               <div className="flex flex-col gap-2 mt-3">
@@ -1257,21 +1380,7 @@ export default function SearchWithCard() {
               </div>
             </FilterSection>
 
-            <FilterSection title="Year">
-              <ChipGroup
-                title=""
-                items={years}
-                selected={selectedYear}
-                onChange={handleYearChange}
-                allowMultiple={false}
-                isLoading={yearLoading}
-                customEmptyMessage={
-                  selectedModels.length === 0
-                    ? "Please first select a Model"
-                    : undefined
-                }
-              />
-            </FilterSection>
+
 
             <FilterSection title="Body Type">
               <ChipGroup

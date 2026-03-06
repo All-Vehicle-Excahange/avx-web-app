@@ -1,17 +1,13 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Search, X } from "lucide-react";
 import { useRouter } from "next/router";
-import { getMakersByFuelOrBodyType } from "@/services/filter";
+import { getMakersByFuelOrBodyType, SearchCityAndState, getPopularCityAndState } from "@/services/filter";
 import { getAllConsultService } from "@/services/consult.filter.service";
-/* ================= MOCK DATA ================= */
-const LOCATION_SUGGESTIONS = [
-  { id: 1, city: "Mumbai, Maharashtra", subtitle: "For luxury & premium cars" },
-  { id: 2, city: "Delhi NCR", subtitle: "Largest used-car market" },
-  { id: 3, city: "Bangalore, Karnataka", subtitle: "EV-friendly city" },
-  { id: 4, city: "Pune, Maharashtra", subtitle: "Two-wheeler hub" },
-];
+
+/* ================= CONSTANTS ================= */
 
 const VEHICLE_TYPES = [
   { id: "two-wheeler", label: "2 Wheeler" },
@@ -62,6 +58,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   /* ================= SHARED STATE ================= */
   const [activeTab, setActiveTab] = useState(null);
   const [location, setLocation] = useState("");
+  const [cityId, setCityId] = useState(null);
+  const [stateId, setStateId] = useState(null);
+  const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [vehicleType, setVehicleType] = useState("");
   const [bodyType, setBodyType] = useState("");
   const [fuelType, setFuelType] = useState("");
@@ -78,6 +77,51 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
   const containerRef = useRef(null);
   const brandInputRef = useRef(null);
+  const searchTimerRef = useRef(null);
+
+  /* ================= CITY / STATE API ================= */
+  const fetchPopularCities = async () => {
+    try {
+      const res = await getPopularCityAndState();
+      if (res?.data && Array.isArray(res.data)) {
+        setLocationSuggestions(res.data);
+      }
+    } catch (err) {
+      console.error("Error fetching popular cities:", err);
+    }
+  };
+
+  const searchCities = async (term) => {
+    if (!term || term.trim().length < 2) {
+      fetchPopularCities();
+      return;
+    }
+    try {
+      const res = await SearchCityAndState({ searchTerm: term.trim() });
+      if (res?.data && Array.isArray(res.data)) {
+        setLocationSuggestions(res.data);
+      }
+    } catch (err) {
+      console.error("Error searching cities:", err);
+    }
+  };
+
+  const handleLocationChange = (e) => {
+    const val = e.target.value;
+    setLocation(val);
+    setCityId(null);
+    setStateId(null);
+
+    if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+    searchTimerRef.current = setTimeout(() => searchCities(val), 350);
+  };
+
+  useEffect(() => {
+    fetchPopularCities();
+    return () => {
+      if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+    };
+  }, []);
 
   /* ================= LOGIC HELPERS ================= */
   const fetchBrands = async (
@@ -194,6 +238,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     if (activeType === "consult") {
       const query = new URLSearchParams({
         ...(location && { location }),
+        ...(cityId && { cityId }),
+        ...(stateId && { stateId }),
         ...(vehicleType && { vehicleType }),
         ...(priceRange && { priceRange }),
         ...(service && { service }),
@@ -205,6 +251,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     } else {
       const query = new URLSearchParams({
         ...(location && { location }),
+        ...(cityId && { cityId }),
+        ...(stateId && { stateId }),
         ...(vehicleType && { vehicleType }),
         ...(bodyType && { bodyType }),
         ...(fuelType && { fuelType }),
@@ -245,26 +293,33 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   placeholder="Search destinations"
                   className="w-full bg-transparent border-none outline-none text-sm text-gray-200 placeholder-gray-400 font-medium text-left truncate"
                   value={location}
-                  onChange={(e) => setLocation(e.target.value)}
+                  onChange={handleLocationChange}
                 />
                 {activeTab === "location" && (
-                  <div className="absolute top-[110%] left-0 z-50 w-[320px] bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
-                    <div className="flex flex-col gap-1 max-h-[250px] overflow-y-auto custom-scrollbar">
-                      {LOCATION_SUGGESTIONS.filter((i) =>
-                        i.city.toLowerCase().includes(location.toLowerCase()),
-                      ).map((item) => (
-                        <button
-                          key={item.id}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setLocation(item.city);
-                            openNextAvailableTab("location");
-                          }}
-                          className="flex items-center gap-4 py-2 px-3 hover:bg-neutral-800 rounded-lg text-left"
-                        >
-                          {item.city}
-                        </button>
-                      ))}
+                  <div className="absolute top-[110%] left-0 z-50 w-[360px] bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                    <div className="flex flex-col gap-1 max-h-[300px] overflow-y-auto custom-scrollbar">
+                      {locationSuggestions.length > 0 ? (
+                        locationSuggestions.map((item) => (
+                          <button
+                            key={item.cityId}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setLocation(`${item.cityName}, ${item.stateName}`);
+                              setCityId(item.cityId);
+                              setStateId(item.stateId);
+                              openNextAvailableTab("location");
+                            }}
+                            className="flex items-center justify-between gap-4 py-2 px-3 hover:bg-neutral-800 rounded-lg text-left"
+                          >
+                            <span className="text-sm font-semibold text-white">{item.cityName}</span>
+                            <span className="text-xs text-gray-400">{item.stateName}</span>
+                          </button>
+                        ))
+                      ) : (
+                        <div className="py-3 px-3 text-sm text-gray-400 text-center">
+                          {location.length > 0 ? "No cities found" : "Loading..."}
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}

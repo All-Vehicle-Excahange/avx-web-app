@@ -377,16 +377,18 @@ export default function FilterWithCard() {
       const val = selectedRating[0];
       if (val === "4.5") payload.minAvgRating = 4.5;
       if (val === "4.0") payload.minAvgRating = 4.0;
-      if (val === "unrated") payload.includeUnrated = true;
+      if (val === "3.0") payload.minAvgRating = 3.0;
     }
 
     if (selectedServices.length > 0) {
       payload.services = selectedServices;
     }
 
-    // Price range
-    payload.minPrice = minPrice;
-    payload.maxPrice = maxPrice;
+    // Price range (vehicle price) — only include when not at full range
+    if (minPrice !== MIN || maxPrice !== MAX) {
+      payload.minVehiclePrice = minPrice;
+      payload.maxVehiclePrice = maxPrice;
+    }
 
     return payload;
   };
@@ -438,9 +440,9 @@ export default function FilterWithCard() {
     setSelectedRating([]);
     setSelectedServices([]);
 
-    // Reset price range
-    setMinPrice(100000);
-    setMaxPrice(1000000);
+    // Reset price range to full range
+    setMinPrice(MIN);
+    setMaxPrice(MAX);
 
     // Reset location filters
     setSelectedStateId(null);
@@ -486,7 +488,7 @@ export default function FilterWithCard() {
   const ratings = [
     { value: "4.5", label: "⭐ 4.5+ Rating" },
     { value: "4.0", label: "⭐ 4.0+ Rating" },
-    { value: "unrated", label: "Unrated Vendors" },
+    { value: "3.0", label: "⭐ 3.0+ Rating" },
   ];
 
   const mobileFilterMap = {

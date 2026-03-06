@@ -14,7 +14,7 @@ const sortOptions = [
   { value: "most_inquired", label: "Most Inquired" },
 ];
 
-export default function SearchHeader() {
+export default function SearchHeader({ pageResponse = {} }) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(sortOptions[0]);
   const dropdownRef = useRef(null);
@@ -28,6 +28,8 @@ export default function SearchHeader() {
   const makerId = searchParams.get("makerId");
   const budget = searchParams.get("budget");
   const sort = searchParams.get("sort");
+  const location = searchParams.get("location");
+
 
   /* Close on outside click */
   useEffect(() => {
@@ -56,10 +58,10 @@ export default function SearchHeader() {
             <div className="flex items-center gap-3 flex-wrap">
               <h2 className="text-primary text-base md:text-lg ">
                 {vehicleType} {bodyType} {fuelType} {brandParam}
-                {budget}
+                {budget} in {location}
               </h2>
               <span className="text-primary/80 text-sm">
-                • 82 Results • 37 AVX Inspected • Updated Today
+                • {pageResponse.totalElements ?? 0} Results • Page {pageResponse.currentPage ?? 1} of {pageResponse.totalPages ?? 0}
               </span>
             </div>
 
@@ -126,10 +128,9 @@ export default function SearchHeader() {
                         w-full text-left px-3 py-2
                         text-[12px]
                         hover:bg-secondary/10
-                        ${
-                          selected.value === option.value
-                            ? "bg-primary/10 font-semibold"
-                            : ""
+                        ${selected.value === option.value
+                          ? "bg-primary/10 font-semibold"
+                          : ""
                         }
                       `}
                     >

@@ -12,7 +12,9 @@ const ENDPOINT = {
   getFuelTypeByModelId: "/search/fuel-types",
   getTransmissionTypeByModelId: "/search/transmission-types",
   getAndSearchVariant: "/search/variants",
-  getYearByModelId: "/search/model-years"
+  getYearByModelId: "/search/model-years",
+  getPopularCityAndState: "/util/address/popular-cities-states",
+  SearchCityAndState: "/util/address/search-cities-states"
 };
 
 export const getMakersByFuelOrBodyType = async (data) => {
@@ -31,9 +33,17 @@ export const getMakersByFuelOrBodyType = async (data) => {
   }
 };
 
-export const getFilteredVehicles = async (data) => {
+export const getFilteredVehicles = async (data, params = {}) => {
   try {
-    const res = await axiosInstance.post(ENDPOINT.getFilteredVehicles, data);
+    const res = await axiosInstance.post(ENDPOINT.getFilteredVehicles, data, {
+      params: {
+        pageNo: params.pageNo ?? 1,
+        size: params.size ?? 6,
+        sortBy: params.sortBy ?? "listingDate",
+        direction: params.direction ?? "desc",
+        ...params,
+      },
+    });
     return handleResponse(res);
   } catch (error) {
     throw error;
@@ -139,6 +149,30 @@ export const getAndSearchVariant = async (data) => {
       },
     });
     return handleNodeResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getPopularCityAndState = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getPopularCityAndState);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const SearchCityAndState = async (data) => {
+  try {
+    const { searchTerm } = data;
+    const res = await axiosInstance.get(ENDPOINT.SearchCityAndState, {
+      params: {
+        searchText: searchTerm,
+      },
+    });
+    return handleResponse(res);
   } catch (error) {
     throw error;
   }
