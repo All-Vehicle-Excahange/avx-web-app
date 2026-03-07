@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
-import {Bike, Car} from "lucide-react";
-import {getTopPicsFour, getTopPicsTwo, getUserHomeFeed} from "@/services/user.service";
+import { Bike, Car } from "lucide-react";
+import { getTopPicsFour, getTopPicsTwo, getUserHomeFeed } from "@/services/user.service";
 
 // --- Utility for Tailwind classes ---
 const cn = (...classes) => classes.filter(Boolean).join(" ");
@@ -40,7 +40,7 @@ export default function TopPicsSection() {
             <div className="shrink-0 flex flex-col md:flex-row md:items-end justify-between mb-4 gap-4">
                 <div className="flex items-start gap-4">
                     {/* VERTICAL ACCENT LINE */}
-                    <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400"/>
+                    <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
 
                     {/* TEXT */}
                     <div>
@@ -66,7 +66,7 @@ export default function TopPicsSection() {
                                 : "text-primary"
                         )}
                     >
-                        <Car size={18}/> 4-Wheeler
+                        <Car size={18} /> 4-Wheeler
                     </button>
                     <button
                         onClick={() => setActiveType("2-Wheeler")}
@@ -77,27 +77,17 @@ export default function TopPicsSection() {
                                 : "text-primary"
                         )}
                     >
-                        <Bike size={18}/> 2-Wheeler
+                        <Bike size={18} /> 2-Wheeler
                     </button>
                 </div>
             </div>
 
             {/* Grid Layout */}
             <div
-                className="
-    flex-1 min-h-0
-    grid
-    sm:items-center
-    grid-cols-1
-    md:grid-cols-2
-    lg:grid-cols-4
-    gap-4
-    pb-1
-  "
-            >
+                className="flex-1 min-h-0 grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-1">
                 {cardData.map((vehicle) => (
                     <div key={vehicle.id} className="lg:col-span-1 lg:row-span-1 h-full">
-                        <VehicleCard data={vehicle}/>
+                        <VehicleCard data={vehicle} />
                     </div>
                 ))}
             </div>

@@ -34,7 +34,7 @@ export default function HamburgerDrawer({ open, onClose, role }) {
         {/* LEFT COLUMN */}
         <div
           className={`
-            overflow-y-auto px-10 py-10 space-y-10 border-r border-white/10
+            overflow-y-auto no-scrollbar px-10 py-10 space-y-10 border-r border-white/10
             transform transition-all duration-700 ease-out delay-100
             ${open ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"}
           `}
