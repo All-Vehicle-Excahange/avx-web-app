@@ -630,7 +630,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
               <div className="pl-2 pr-2">
                 <button
                   onClick={handleSearch}
-                  className="bg-white hover:bg-gray-200 text-black p-3 rounded-full shadow-lg transition-all hover:scale-105 active:scale-95"
+                  className="bg-white cursor-pointer hover:bg-gray-200 text-black p-3 rounded-full shadow-lg transition-all hover:scale-105 active:scale-95"
                 >
                   <Search size={20} strokeWidth={3} />
                 </button>

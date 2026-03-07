@@ -1,5 +1,6 @@
-import { ArrowLeft, ArrowRight, Quote, TvIcon } from "lucide-react";
-import { useRef, useEffect, useState } from "react";
+import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
+import { useRef } from "react";
+import CommonSwiper from "@/components/ui/CommonSwiper";
 
 // Story Card Component (replacing Review Card)
 const StoryCard = ({ story }) => {
@@ -25,8 +26,8 @@ const StoryCard = ({ story }) => {
 };
 
 export default function StorySection() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [slidesPerView, setSlidesPerView] = useState(3);
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
 
   const stories = [
     {
@@ -87,37 +88,10 @@ export default function StorySection() {
     },
   ];
 
-  // Handle responsive slides per view
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 640) {
-        setSlidesPerView(1);
-      } else if (window.innerWidth < 1024) {
-        setSlidesPerView(2);
-      } else {
-        setSlidesPerView(3);
-      }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => Math.max(0, prev - 1));
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prev) =>
-      Math.min(stories.length - slidesPerView, prev + 1),
-    );
-  };
-
   return (
-    <section className="w-full  mx-auto bg-primary">
+    <section className="w-full mx-auto bg-primary">
       {/* OUTER WHITE CARD */}
-      <div className="w-full max-w-[1440px] mx-auto   p-8 md:p-12 ">
+      <div className="w-full max-w-[1440px] mx-auto p-8 md:p-12">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
             Read reviews,
@@ -130,7 +104,8 @@ export default function StorySection() {
             <span className="text-2xl md:text-3xl font-bold text-gray-900">
               4.2/5
             </span>
-            <div className="flex items-center gap-2  px-4 py-2 rounded-lg">
+
+            <div className="flex items-center gap-2 px-4 py-2 rounded-lg">
               <button
                 type="button"
                 className="flex items-center justify-center px-6 py-2 text-primary bg-secondary rounded-lg hover:bg-third/20 hover:text-primary transition-all duration-300 cursor-pointer"
@@ -140,21 +115,22 @@ export default function StorySection() {
                     <path
                       fill="#FFD400"
                       d="M119.2,421.2c15.3-8.4,27-14.8,28-15.3c3.2-1.7,6.5-6.2,0-9.7  c-2.1-1.1-13.4-7.3-28-15.3l-20.1,20.2L119.2,421.2z"
-                    ></path>
+                    />
                     <path
                       fill="#FF3333"
                       d="M99.1,401.1l-64.2,64.7c1.5,0.2,3.2-0.2,5.2-1.3  c4.2-2.3,48.8-26.7,79.1-43.3L99.1,401.1L99.1,401.1z"
-                    ></path>
+                    />
                     <path
                       fill="#48FF48"
                       d="M99.1,401.1l20.1-20.2c0,0-74.6-40.7-79.1-43.1  c-1.7-1-3.6-1.3-5.3-1L99.1,401.1z"
-                    ></path>
+                    />
                     <path
                       fill="#3BCCFF"
                       d="M99.1,401.1l-64.3-64.3c-2.6,0.6-4.8,2.9-4.8,7.6  c0,7.5,0,107.5,0,113.8c0,4.3,1.7,7.4,4.9,7.7L99.1,401.1z"
-                    ></path>
+                    />
                   </svg>
                 </div>
+
                 <div className="text-left">
                   <div className="text-[10px] font-bold">GET IT ON</div>
                   <div className="text-lg font-bold leading-none">
@@ -163,6 +139,7 @@ export default function StorySection() {
                 </div>
               </button>
             </div>
+
             <span className="text-gray-600 text-sm md:text-base">
               Based on 5210 reviews
             </span>
@@ -183,49 +160,38 @@ export default function StorySection() {
               </div>
 
               <h3 className="mt-6 text-3xl md:text-4xl font-bold text-gray-900 mb-8 leading-tight">
-                What our <span className="text-fourth">customers</span> are saying
+                What our <span className="text-fourth">customers</span> are
+                saying
               </h3>
             </div>
           </div>
 
-          {/* RIGHT SIDE (STORY CARDS) */}
+          {/* RIGHT SIDE */}
           <div className="lg:col-span-9 overflow-hidden">
+            {/* Navigation */}
             <div className="flex justify-end gap-2 mb-4">
               <button
-                onClick={handlePrev}
-                disabled={currentIndex === 0}
-                className="w-14 h-14 rounded-full bg-fourth border-2 border-third flex items-center justify-center hover:border-gray-900 hover:bg-primary hover:text-secondary transition-all duration-300 disabled:opacity-30"
+                ref={prevRef}
+                className="w-14 h-14  cursor-pointer rounded-full bg-fourth border-2 border-third flex items-center justify-center hover:border-gray-900 hover:bg-primary hover:text-secondary transition-all duration-300"
               >
                 <ArrowLeft size={24} />
               </button>
 
               <button
-                onClick={handleNext}
-                disabled={currentIndex >= stories.length - slidesPerView}
-                className="w-14 h-14 rounded-full bg-fourth border-2 border-gray-300 flex items-center justify-center hover:border-gray-900 hover:bg-primary hover:text-secondary transition-all duration-300 disabled:opacity-30"
+                ref={nextRef}
+                className="w-14 h-14 cursor-pointer rounded-full bg-fourth border-2 border-gray-300 flex items-center justify-center hover:border-gray-900 hover:bg-primary hover:text-secondary transition-all duration-300"
               >
                 <ArrowRight size={24} />
               </button>
             </div>
 
-            <div
-              className="flex gap-6 transition-transform duration-500 ease-out"
-              style={{
-                transform: `translateX(-${currentIndex * (100 / slidesPerView + 2)}%)`,
-              }}
-            >
-              {stories.map((story) => (
-                <div
-                  key={story.id}
-                  className="flex-shrink-0"
-                  style={{
-                    width: `calc(${100 / slidesPerView}% - ${((slidesPerView - 1) * 24) / slidesPerView}px)`,
-                  }}
-                >
-                  <StoryCard story={story} />
-                </div>
-              ))}
-            </div>
+            {/* Swiper */}
+            <CommonSwiper
+              data={stories}
+              CardComponent={({ data }) => <StoryCard story={data} />}
+              prevRef={prevRef}
+              nextRef={nextRef}
+            />
           </div>
         </div>
       </div>
