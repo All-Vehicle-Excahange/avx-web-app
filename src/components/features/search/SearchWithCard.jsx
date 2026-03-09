@@ -141,6 +141,8 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
   const brandSearchTimeoutRef = useRef(null);
   const modelSearchTimeoutRef = useRef(null);
   const variantSearchTimeoutRef = useRef(null);
+  const autoFetchTimerRef = useRef(null);
+  const hasMountedForAutoFetch = useRef(false);
 
   const MIN = 50000;
   const MAX = 2000000;
@@ -222,7 +224,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
       const body = payload ?? buildPayload();
       const params = {
         pageNo: page,
-        size: 6,
+        size: 9,
         sortBy: sort || "listingDate",
         direction: sort === "price_low_high" ? "asc" : "desc",
       };
@@ -251,13 +253,22 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
     if (qStateId) initialPayload.stateId = Number(qStateId);
 
     // Body type from URL
-    if (bodyType) initialPayload.vehicleSubTypes = [bodyType];
+    if (bodyType) {
+      initialPayload.vehicleSubTypes = [bodyType];
+      setSelectedBodyType([bodyType]);
+    }
 
     // Brand / maker from URL
-    if (makerId) initialPayload.makerIds = [Number(makerId)];
+    if (makerId) {
+      initialPayload.makerIds = [Number(makerId)];
+      setSelectedBrands([makerId]);
+    }
 
     // Fuel type from URL
-    if (fuelType) initialPayload.fuelTypes = [fuelType.toUpperCase()];
+    if (fuelType) {
+      initialPayload.fuelTypes = [fuelType.toUpperCase()];
+      setSelectedFuelTypes([fuelType]);
+    }
 
     // Budget from URL
     if (budget) {
@@ -453,7 +464,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
   };
 
   const handleBrandChange = (values) => {
-    setSelectedBrands(values.length > 0 ? [values[values.length - 1]] : []);
+    setSelectedBrands(values);
   };
 
   // ── Load Models with search ──
@@ -520,7 +531,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
   };
 
   const handleModelChange = (values) => {
-    setSelectedModels(values.length > 0 ? [values[values.length - 1]] : []);
+    setSelectedModels(values);
     // Reset year when model changes
     setSelectedYear([]);
     setYears([]);
@@ -562,7 +573,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
   }, [selectedModels]);
 
   const handleYearChange = (values) => {
-    setSelectedYear(values.length > 0 ? [values[values.length - 1]] : []);
+    setSelectedYear(values);
   };
 
   // ── Load Fuel Types ── (unchanged)
@@ -888,6 +899,28 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // ── Auto-fetch when any filter changes ──
+  useEffect(() => {
+    // Skip the very first render (initial fetch already handles it)
+    if (!hasMountedForAutoFetch.current) {
+      hasMountedForAutoFetch.current = true;
+      return;
+    }
+    if (autoFetchTimerRef.current) clearTimeout(autoFetchTimerRef.current);
+    autoFetchTimerRef.current = setTimeout(() => {
+      setCurrentPage(1);
+      fetchVehicles(1);
+    }, 300);
+    return () => { if (autoFetchTimerRef.current) clearTimeout(autoFetchTimerRef.current); };
+  }, [
+    selectedBrands, selectedModels, selectedVariants, selectedFuelTypes,
+    selectedTransmissionTypes, selectedBodyType, selectedYear,
+    selectedCityId, selectedStateId,
+    minPrice, maxPrice, kmDistance,
+    selectedRating, selectedSellerType, avxAssumed,
+  ]);
+
+
   // Save/overwrite selected location to localStorage on Apply
   const handleApplyFilter = async () => {
     if (selectedStateId && selectedStateName) {
@@ -938,10 +971,17 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
 
     // Reset fuel & transmission
     setSelectedFuelTypes([]);
+    setSelectedTransmissionTypes([]);
     setTransmissionTypes([
       { value: "automatic", label: "Automatic" },
       { value: "manual", label: "Manual" },
     ]);
+
+    // Reset body type, rating, seller type
+    setSelectedBodyType([]);
+    setSelectedRating([]);
+    setSelectedSellerType([]);
+    setAvxAssumed(false);
 
     // Reset year
     setSelectedYear([]);
@@ -964,8 +1004,9 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
     // Reset pagination
     setCurrentPage(1);
 
-    // Reload vehicles with empty payload
+    // Reload vehicles with empty payload and scroll to top
     await fetchVehicles(1, {});
+    window.scrollTo({ top: 0, behavior: "smooth" });
 
     // Reload brands
     loadBrands(1, "");
@@ -1299,11 +1340,10 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
                 onChange={handleBrandChange}
                 searchValue={brandSearch}
                 onSearchChange={(val) => {
-                  console.log("Brand search input:", val);
                   setBrandSearch(val);
                 }}
                 isLoading={brandLoading}
-                allowMultiple={false}
+                allowMultiple={true}
               />
             </FilterSection>
 
@@ -1321,7 +1361,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
                 searchValue={modelSearch}
                 onSearchChange={setModelSearch}
                 isLoading={modelLoading}
-                allowMultiple={false}
+                allowMultiple={true}
               />
             </FilterSection>
 
@@ -1351,7 +1391,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
                 items={years}
                 selected={selectedYear}
                 onChange={handleYearChange}
-                allowMultiple={false}
+                allowMultiple={true}
                 isLoading={yearLoading}
                 customEmptyMessage={
                   selectedModels.length === 0
@@ -1430,7 +1470,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
                 items={ratings}
                 selected={selectedRating}
                 onChange={setSelectedRating}
-                allowMultiple={false}
+                allowMultiple={true}
               />
             </FilterSection>
 
@@ -1440,7 +1480,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
                 items={sellerType}
                 selected={selectedSellerType}
                 onChange={setSelectedSellerType}
-                allowMultiple={false}
+                allowMultiple={true}
               />
             </FilterSection>
 
