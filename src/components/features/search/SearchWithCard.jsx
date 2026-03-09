@@ -852,7 +852,7 @@ export default function SearchWithCard({ onPageResponseChange }) {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
     fetchVehicles(page);
-              console.log("7")
+    console.log("7")
 
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -1013,7 +1013,7 @@ export default function SearchWithCard({ onPageResponseChange }) {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-[60px]">
+    <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-[20px]">
       {/* ================= DESKTOP SIDEBAR ================= */}
       <aside
         className="
@@ -1494,18 +1494,18 @@ export default function SearchWithCard({ onPageResponseChange }) {
 
           <div className="col-span-full">
             <div className="flex items-start gap-4">
-          <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
+              <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
 
-          <div>
-            <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
-              Top Vehicle Near You
-            </h2>
-            <p className="text-third mt-1">
-              Lorem ipsum dolor sit amet consectetur dolor sit amet
-              consectetur..
-            </p>
-          </div>
-        </div>
+              <div>
+                <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
+                  Top Vehicle Near You
+                </h2>
+                <p className="text-third mt-1">
+                  Lorem ipsum dolor sit amet consectetur dolor sit amet
+                  consectetur..
+                </p>
+              </div>
+            </div>
           </div>
 
           {vehicles.map((vehicle) => (
@@ -1554,65 +1554,67 @@ export default function SearchWithCard({ onPageResponseChange }) {
         </div>
       </main>
 
-      {/* MOBILE FILTER DRAWER — unchanged */}
-      {mobileFilterOpen && (
-        <div className="fixed inset-0 z-50 bg-primary lg:hidden">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-third/40">
-            <h2 className="text-lg font-semibold">Filters</h2>
-            <Button
-              variant="ghost"
-              showIcon={false}
-              onClick={() => setMobileFilterOpen(false)}
-            >
-              ✕
-            </Button>
+      {/* MOBILE FILTER DRAWER */}
+      <div
+        className={`fixed top-[64px] inset-x-0 bottom-0 z-[100] bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${mobileFilterOpen ? "translate-y-0" : "translate-y-full"
+          }`}
+      >
+        <div className="flex items-center justify-between px-4 py-3 border-b border-third/40 shrink-0">
+          <h2 className="text-lg font-semibold">Filters</h2>
+          <Button
+            variant="ghost"
+            showIcon={false}
+            onClick={() => setMobileFilterOpen(false)}
+            className="text-secondary text-xl font-bold p-2"
+          >
+            ✕
+          </Button>
+        </div>
+
+        <div className="flex flex-1 overflow-hidden">
+          <div className="w-[40%] border-r border-third/40 overflow-y-auto">
+            {Object.keys(mobileFilterMap).map((item) => (
+              <div
+                key={item}
+                onClick={() => setActiveFilterTab(item)}
+                className={`px-4 py-3 cursor-pointer text-sm ${activeFilterTab === item
+                  ? "bg-secondary/10 font-semibold"
+                  : "hover:bg-secondary/5"
+                  }`}
+              >
+                {item}
+              </div>
+            ))}
           </div>
 
-          <div className="flex h-[calc(100vh-120px)]">
-            <div className="w-[40%] border-r border-third/40 overflow-y-auto">
-              {Object.keys(mobileFilterMap).map((item) => (
-                <div
-                  key={item}
-                  onClick={() => setActiveFilterTab(item)}
-                  className={`px-4 py-3 cursor-pointer text-sm ${activeFilterTab === item
-                    ? "bg-secondary/10 font-semibold"
-                    : "hover:bg-secondary/5"
-                    }`}
-                >
-                  {item}
-                </div>
+          <div className="flex-1 p-4 overflow-y-auto">
+            <h3 className="text-sm font-semibold mb-3">{activeFilterTab}</h3>
+
+            <div className="flex flex-wrap gap-3">
+              {(mobileFilterMap[activeFilterTab] || []).map((chip) => (
+                <Chip
+                  key={chip}
+                  label={chip}
+                  selected={selectedMobileChips.includes(chip)}
+                  variant={isMobile ? "outlineDark" : "outline"}
+                  onClick={() => toggleMobileChip(chip)}
+                />
               ))}
             </div>
-
-            <div className="flex-1 p-4 overflow-y-auto">
-              <h3 className="text-sm font-semibold mb-3">{activeFilterTab}</h3>
-
-              <div className="flex flex-wrap gap-3">
-                {(mobileFilterMap[activeFilterTab] || []).map((chip) => (
-                  <Chip
-                    key={chip}
-                    label={chip}
-                    selected={selectedMobileChips.includes(chip)}
-                    variant={isMobile ? "outlineDark" : "outline"}
-                    onClick={() => toggleMobileChip(chip)}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-third/40 bg-primary">
-            <Button
-              variant="default"
-              showIcon={false}
-              className="w-full"
-              onClick={() => setMobileFilterOpen(false)}
-            >
-              Show results
-            </Button>
           </div>
         </div>
-      )}
+
+        <div className="w-full p-4 border-t border-third/40 bg-primary shrink-0">
+          <Button
+            variant="default"
+            showIcon={false}
+            className="w-full"
+            onClick={() => setMobileFilterOpen(false)}
+          >
+            Show results
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

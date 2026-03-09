@@ -45,15 +45,16 @@ export default function SearchWithHeader() {
       </div>
 
       {/* HEADER */}
-      <section className="w-full h-[106px] bg-fourth flex items-center pt-16">
+      <section className="w-full h-[130px] bg-fourth flex items-center pt-16">
         <div className="max-w-screen-2xl w-full mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between gap-4">
             {/* LEFT */}
-            <div className="flex items-center gap-3 flex-wrap">
-              <h2 className="text-primary text-base md:text-lg ">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+              <h2 className="text-primary text-base md:text-lg leading-snug">
                 {vehicleTypeParam} {serviceParam} {availabilityParam} {priceRangeParam} in {location}
               </h2>
-              <span className="text-primary/80 text-sm">
+
+              <span className="text-primary/80 text-xs sm:text-sm">
                 • 82 Results • 37 AVX Inspected • Updated Today
               </span>
             </div>
