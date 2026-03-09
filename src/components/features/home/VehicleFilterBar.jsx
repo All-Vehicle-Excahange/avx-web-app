@@ -188,6 +188,10 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
+      // Do not close tabs if the user is interacting with the mobile proper box modal
+      if (document.getElementById("mobile-drawer")?.contains(e.target)) {
+        return;
+      }
       if (containerRef.current && !containerRef.current.contains(e.target)) {
         setActiveTab(null);
       }
@@ -223,7 +227,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
   useEffect(() => {
     if (activeTab !== null) {
-                console.log("6")
+      console.log("6")
 
       const scrollY = window.scrollY;
       document.body.style.position = "fixed";
@@ -648,6 +652,302 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           <Search size={18} className="text-white" />
           <span className="font-medium text-white">Start your search</span>
         </button>
+      </div>
+
+      {/* MOBILE FULLSCREEN DRAWER -> NOW A PROPER MODAL BOX */}
+      <div
+        className={`md:hidden fixed inset-0 z-[100] flex items-end sm:items-center justify-center transition-opacity duration-300 ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+      >
+        {/* Backdrop for click-outside to close */}
+        <div
+          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+          onClick={() => {
+            setMobileOpen(false);
+            setActiveTab(null);
+          }}
+        />
+
+        {/* Proper Box */}
+        <div
+          id="mobile-drawer"
+          className={`relative w-full sm:w-[90%] max-w-md bg-secondary rounded-t-3xl sm:rounded-3xl flex flex-col transition-transform duration-300 ${mobileOpen ? 'translate-y-0' : 'translate-y-full sm:scale-95'} max-h-[85vh]`}
+        >
+          {/* Header */}
+          <div className="p-4 border-b border-neutral-800 flex justify-between items-center bg-secondary rounded-t-3xl sm:rounded-3xl shrink-0">
+            <h2 className="text-xl font-bold text-primary">Search Filters</h2>
+            <button onClick={() => { setMobileOpen(false); setActiveTab(null); }} className="p-2 text-primary hover:bg-neutral-800 rounded-full">
+              <X size={24} />
+            </button>
+          </div>
+
+          <div className="p-4 space-y-3 overflow-y-auto flex-1 text-primary custom-scrollbar pb-6">
+            {/* Location */}
+            <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "location" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
+              <button
+                onClick={() => handleActiveTabChange(activeTab === "location" ? null : "location")}
+                className="w-full flex items-center justify-between p-4 text-left"
+              >
+                <div className="flex flex-col items-start w-full">
+                  <span className="text-xs font-semibold text-primary">Location</span>
+                  <span className={`font-medium text-sm mt-1 truncate w-full ${location ? "text-white" : "text-gray-500"}`}>{location || "Search destinations"}</span>
+                </div>
+              </button>
+              {activeTab === "location" && (
+                <div className="p-4 pt-0 border-t border-neutral-800 border-opacity-50">
+                  <input
+                    type="text"
+                    placeholder="Search destinations"
+                    className="w-full bg-neutral-800 outline-none text-white py-3 px-4 rounded-xl mt-3 text-sm"
+                    value={location}
+                    onChange={handleLocationChange}
+                    autoFocus
+                  />
+                  {locationSuggestions.length > 0 && location && (
+                    <div className="mt-2 bg-neutral-800 rounded-xl overflow-hidden border border-neutral-700">
+                      {locationSuggestions.map((item) => (
+                        <button
+                          key={item.cityId}
+                          onClick={() => {
+                            setLocation(`${item.cityName}, ${item.stateName}`);
+                            setCityId(item.cityId);
+                            setStateId(item.stateId);
+                            setLocationSuggestions([]);
+                            openNextAvailableTab("location");
+                          }}
+                          className="w-full flex items-center justify-between gap-4 py-3 px-4 border-b border-neutral-700 last:border-0 hover:bg-neutral-700 text-left"
+                        >
+                          <span className="text-sm font-semibold text-white">{item.cityName}</span>
+                          <span className="text-xs text-gray-400">{item.stateName}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Vehicle Type */}
+            <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "vehicle" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
+              <button
+                onClick={() => handleActiveTabChange(activeTab === "vehicle" ? null : "vehicle")}
+                className="w-full flex items-center justify-between p-4 text-left"
+              >
+                <div className="flex flex-col items-start w-full">
+                  <span className="text-xs font-semibold text-primary">Vehicle Type</span>
+                  <span className={`font-medium text-sm mt-1 truncate w-full ${vehicleType ? "text-white" : "text-gray-500"}`}>{vehicleType || "Add type"}</span>
+                </div>
+              </button>
+              {activeTab === "vehicle" && (
+                <div className="p-4 pt-0 border-t border-neutral-800 border-opacity-50 flex gap-2">
+                  {VEHICLE_TYPES.map((type) => (
+                    <button
+                      key={type.id}
+                      onClick={() => { setVehicleType(type.label); openNextAvailableTab("vehicle"); }}
+                      className={`flex-1 mt-3 py-3 text-sm font-bold rounded-lg transition-colors ${vehicleType === type.label ? 'bg-white text-black' : 'bg-neutral-800 text-gray-400 hover:text-white'}`}
+                    >
+                      {type.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {activeType === "consult" ? (
+              <>
+                {/* Price Range */}
+                <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "priceRange" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
+                  <button onClick={() => handleActiveTabChange(activeTab === "priceRange" ? null : "priceRange")} className="w-full flex items-center justify-between p-4 text-left">
+                    <div className="flex flex-col items-start w-full">
+                      <span className="text-xs font-semibold text-gray-400">Price Range</span>
+                      <span className={`font-medium text-sm mt-1 truncate w-full ${priceRange ? "text-white" : "text-gray-500"}`}>{priceRange || "Select price"}</span>
+                    </div>
+                  </button>
+                  {activeTab === "priceRange" && (
+                    <div className="p-2 border-t border-neutral-800 border-opacity-50">
+                      {CONSULT_PRICE_RANGE.map(range => (
+                        <button
+                          key={range}
+                          onClick={() => { setPriceRange(range); openNextAvailableTab("priceRange"); }}
+                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 ${priceRange === range ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
+                        >
+                          {range}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Service */}
+                <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "service" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
+                  <button onClick={() => handleActiveTabChange(activeTab === "service" ? null : "service")} className="w-full flex items-center justify-between p-4 text-left">
+                    <div className="flex flex-col items-start w-full">
+                      <span className="text-xs font-semibold text-gray-400">Service</span>
+                      <span className={`font-medium text-sm mt-1 truncate w-full ${service ? "text-white" : "text-gray-500"}`}>{service || "Select service"}</span>
+                    </div>
+                  </button>
+                  {activeTab === "service" && (
+                    <div className="p-2 border-t border-neutral-800 border-opacity-50 max-h-64 overflow-y-auto">
+                      {serviceOptions.length > 0 ? serviceOptions.map(opt => (
+                        <button
+                          key={opt.value}
+                          onClick={() => { setService(opt.value); openNextAvailableTab("service"); }}
+                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 ${service === opt.value ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
+                        >
+                          {opt.label}
+                        </button>
+                      )) : <div className="p-4 text-sm text-center text-gray-400">Loading...</div>}
+                    </div>
+                  )}
+                </div>
+
+                {/* Availability */}
+                <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "availability" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
+                  <button onClick={() => handleActiveTabChange(activeTab === "availability" ? null : "availability")} className="w-full flex items-center justify-between p-4 text-left">
+                    <div className="flex flex-col items-start w-full">
+                      <span className="text-xs font-semibold text-gray-400">Availability</span>
+                      <span className={`font-medium text-sm mt-1 truncate w-full ${availability ? "text-white" : "text-gray-500"}`}>{availability || "Select availability"}</span>
+                    </div>
+                  </button>
+                  {activeTab === "availability" && (
+                    <div className="p-2 border-t border-neutral-800 border-opacity-50">
+                      {AVAILABILITY_OPTIONS.map(opt => (
+                        <button
+                          key={opt.value}
+                          onClick={() => { setAvailability(opt.label); openNextAvailableTab("availability"); }}
+                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 ${availability === opt.label ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Body Type */}
+                <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "bodyType" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
+                  <button onClick={() => handleActiveTabChange(activeTab === "bodyType" ? null : "bodyType")} className="w-full flex items-center justify-between p-4 text-left">
+                    <div className="flex flex-col items-start w-full">
+                      <span className="text-xs font-semibold text-primary">Body Type</span>
+                      <span className={`font-medium text-sm mt-1 truncate w-full ${bodyType ? "text-white" : "text-gray-500"}`}>{bodyType || "Add type"}</span>
+                    </div>
+                  </button>
+                  {activeTab === "bodyType" && (
+                    <div className="p-2 border-t border-neutral-800 border-opacity-50 max-h-64 overflow-y-auto custom-scrollbar">
+                      {(vehicleType === "4 Wheeler" ? FOUR_WHEELER_TYPES : TWO_WHEELER_TYPES).map(type => (
+                        <button
+                          key={type.key}
+                          onClick={() => { setBodyType(type.label); openNextAvailableTab("bodyType", type.label); }}
+                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 ${bodyType === type.label ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
+                        >
+                          {type.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Fuel Type */}
+                <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "fuel" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
+                  <button onClick={() => handleActiveTabChange(activeTab === "fuel" ? null : "fuel")} className="w-full flex items-center justify-between p-4 text-left">
+                    <div className="flex flex-col items-start w-full">
+                      <span className="text-xs font-semibold text-primary">Fuel Type</span>
+                      <span className={`font-medium text-sm mt-1 truncate w-full ${fuelType ? "text-white" : "text-gray-500"}`}>{fuelType || "Select fuel"}</span>
+                    </div>
+                  </button>
+                  {activeTab === "fuel" && (
+                    <div className="p-2 border-t border-neutral-800 border-opacity-50">
+                      {FUEL_TYPES.map(fuel => (
+                        <button
+                          key={fuel}
+                          onClick={() => { setFuelType(fuel); openNextAvailableTab("fuel", fuel); }}
+                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 ${fuelType === fuel ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
+                        >
+                          {fuel}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Brand Search */}
+                <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "brand" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
+                  <button onClick={() => handleActiveTabChange(activeTab === "brand" ? null : "brand")} className="w-full flex items-center justify-between p-4 text-left">
+                    <div className="flex flex-col items-start w-full">
+                      <span className="text-xs font-semibold text-primary">Brand</span>
+                      <span className={`font-medium text-sm mt-1 truncate w-full ${brand ? "text-white" : "text-gray-500"}`}>{brand || "Search brand"}</span>
+                    </div>
+                  </button>
+                  {activeTab === "brand" && (
+                    <div className="p-4 pt-0 border-t border-neutral-800 border-opacity-50 flex flex-col items-center">
+                      <input
+                        type="text"
+                        placeholder="Search brand"
+                        className="w-full bg-neutral-800 outline-none text-white py-3 px-4 rounded-xl mt-3 text-sm"
+                        value={brandSearch || brand}
+                        onChange={(e) => {
+                          setBrandSearch(e.target.value);
+                          if (!e.target.value) { setBrand(''); setMakerId(null); }
+                        }}
+                      />
+                      <div className="mt-2 w-full max-h-48 overflow-y-auto rounded-xl">
+                        {filteredBrands.map(b => (
+                          <button
+                            key={b.makeId}
+                            onClick={() => {
+                              setBrand(b.makeName);
+                              setMakerId(b.makeId);
+                              setBrandSearch("");
+                              openNextAvailableTab("brand");
+                            }}
+                            className={`w-full py-3 px-4 border-b border-neutral-700 last:border-none text-left text-sm font-semibold text-white ${brand === b.makeName ? 'bg-white text-black' : 'hover:bg-neutral-800'}`}
+                          >
+                            {b.makeDisplay}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Budget */}
+                <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "budget" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
+                  <button onClick={() => handleActiveTabChange(activeTab === "budget" ? null : "budget")} className="w-full flex items-center justify-between p-4 text-left">
+                    <div className="flex flex-col items-start w-full">
+                      <span className="text-xs font-semibold text-primary">Budget</span>
+                      <span className={`font-medium text-sm mt-1 truncate w-full ${budget ? "text-white" : "text-gray-500"}`}>{budget || "Select budget"}</span>
+                    </div>
+                  </button>
+                  {activeTab === "budget" && (
+                    <div className="p-2 border-t border-neutral-800 border-opacity-50">
+                      {BUDGET_RANGE.map(range => (
+                        <button
+                          key={range}
+                          onClick={() => { setBudget(range); openNextAvailableTab("budget"); }}
+                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 ${budget === range ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
+                        >
+                          {range}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Bottom Search Button inside the proper box */}
+          <div className="p-4 border-t border-neutral-800 shrink-0 bg-secondary sm:rounded-b-3xl">
+            <button
+              onClick={handleSearch}
+              className="w-full bg-primary text-secondary font-bold text-lg py-4 rounded-full flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-95 transition-transform"
+            >
+              <Search size={20} />
+              Search Vehicles
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );

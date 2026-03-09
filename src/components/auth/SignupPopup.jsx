@@ -176,7 +176,17 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
         </div>
 
         {/* RIGHT FORM */}
-        <div className="w-full md:w-7/12 p-8 md:p-12 bg-secondary">
+        <form
+          className="w-full md:w-7/12 p-8 md:p-12 bg-secondary"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!otpSent) {
+              handleSubmit(onSendOtp)();
+            } else {
+              onValidateOtp();
+            }
+          }}
+        >
           <h3 className="text-2xl font-bold mb-6 text-primary">
             Create your <br /> account
           </h3>
@@ -283,6 +293,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
           {/* OTP SEND BUTTON */}
           {!otpSent && (
             <Button
+              type="submit"
               variant="ghost"
               onClick={() => handleSubmit(onSendOtp)()}
               className="text-primary w-full h-11 text-sm font-bold"
@@ -306,13 +317,13 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
                     maxLength={1}
                     value={digit}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
-                    onKeyDown={(e) => handleOtpKeyDown(index, e)}
                     className="w-12 h-12 text-center text-lg font-bold border rounded-md border-accent-gray bg-transparent outline-none focus:border-primary text-primary"
                   />
                 ))}
               </div>
 
               <Button
+                type="submit"
                 variant="ghost"
                 onClick={onValidateOtp}
                 className="text-primary w-full h-11 text-sm font-bold"
@@ -326,6 +337,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
           <div className="mt-4 text-primary text-center text-sm text-text-black/70">
             Already have an account?{" "}
             <button
+              type="button"
               onClick={() => {
                 handleClosePopup();
                 setTimeout(() => onLogin(), 100);
@@ -340,7 +352,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
           <div className="text-[10px] text-primary mt-6 leading-tight text-center">
             By signing up, you agree to AVXs Privacy Policy & Terms
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

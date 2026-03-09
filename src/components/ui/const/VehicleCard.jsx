@@ -111,15 +111,28 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
                                 fill
                                 className="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-110"
                             />
+
+                            {/* ✅ Wishlist Button (Bottom-Right of Image) */}
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation(); // prevent card click
+                                    handleWishlist();
+                                }}
+                                className="absolute bottom-2 right-2 shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-black/50 transition-all cursor-pointer z-20 hover:bg-black/70"
+                            >
+                                <Heart
+                                    className={`w-5 h-5 transition-colors ${isFavorite ? "fill-red-500 text-red-500" : "text-primary"}`}
+                                />
+                            </button>
                         </div>
                     </div>
 
                     {/* CONTENT */}
-                    <div className="flex flex-col flex-1 p-2.5 md:p-4 space-y-2 md:space-y-4 justify-between h-full">
+                    <div className="flex flex-col flex-1 p-2.5 md:p-4 space-y-2 md:space-y-4 justify-between h-full relative">
                         {/* TITLE + HEART */}
                         <div className="flex justify-between items-start gap-2">
-                            <div className="min-w-0 w-full">
-                                <div className="flex items-center justify-between pb-3">
+                            <div className="min-w-0 flex-1">
+                                <div className="flex items-start justify-between pb-3 gap-2">
                                     <h3
                                         className="
                     text-sm font-secondary md:text-xl font-bold 
@@ -129,17 +142,6 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
                                     >
                                         {mapped.title}
                                     </h3>
-
-                                    {/* ✅ Wishlist Button */}
-                                    <button
-                                        onClick={handleWishlist}
-                                        className="ml-2 absolute top-50 right-6 flex items-center justify-center w-8 h-8 rounded-full bg-black/50 transition-all cursor-pointer"
-                                    >
-                                        <Heart
-                                            className={`w-5 h-5 transition-colors ${isFavorite ? "fill-red-500 text-red-500" : "text-primary"
-                                                }`}
-                                        />
-                                    </button>
                                 </div>
 
                                 {/* USER */}

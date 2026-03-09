@@ -141,7 +141,17 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { } }) {
         </div>
 
         {/* RIGHT FORM */}
-        <div className="w-full md:w-7/12 p-8 md:p-12 bg-secondary">
+        <form
+          className="w-full md:w-7/12 p-8 md:p-12 bg-secondary"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!otpSent) {
+              handleSubmit(onSendOtp)();
+            } else {
+              onValidateOtp();
+            }
+          }}
+        >
           <h3 className="text-2xl font-bold mb-6 text-primary">
             Log in to <br /> continue
           </h3>
@@ -208,6 +218,7 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { } }) {
           {/* ✅ BUTTON */}
           {!otpSent ? (
             <Button
+              type="submit"
               variant="ghost"
               className="w-full h-11 text-sm font-bold"
               onClick={() => handleSubmit(onSendOtp)()} // ✅ FIXED
@@ -216,6 +227,7 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { } }) {
             </Button>
           ) : (
             <Button
+              type="submit"
               variant="ghost"
               className="w-full h-11 text-sm font-bold"
               onClick={onValidateOtp}
@@ -228,6 +240,7 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { } }) {
           <div className="mt-4 text-center text-sm text-primary/70">
             Don’t have an account?{" "}
             <button
+              type="button"
               onClick={() => {
                 handleClose();
                 setTimeout(() => onSignup(), 100);
@@ -242,7 +255,7 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { } }) {
           <div className="text-[10px] text-primary/50 mt-6 text-center">
             By logging in, you agree to AVXs Privacy Policy & Terms
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
