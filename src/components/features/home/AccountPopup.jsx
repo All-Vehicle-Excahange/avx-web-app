@@ -16,6 +16,24 @@ export default function AccountPopup({ open, onClosePopup }) {
     const role = "BUYER"; // Change dynamically later BUYER/CONSULTANT
 
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+    const [isLogoutClosing, setIsLogoutClosing] = useState(false);
+
+    const handleCloseLogout = () => {
+        setIsLogoutClosing(true);
+        setTimeout(() => {
+            setIsLogoutClosing(false);
+            setShowLogoutConfirm(false);
+        }, 250);
+    };
+
+    const handleCancelLogout = () => {
+        setIsLogoutClosing(true);
+        setTimeout(() => {
+            setIsLogoutClosing(false);
+            setShowLogoutConfirm(false);
+            onClosePopup(); // Close the main AccountPopup as requested
+        }, 250);
+    };
 
     const user = useAuthStore((state) => state.user);
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -36,13 +54,14 @@ export default function AccountPopup({ open, onClosePopup }) {
         }
 
         logout();
-        setShowLogoutConfirm(false);
+        handleCloseLogout();
     };
 
     return (
         <>
             <div
-                className={`fixed top-[65px] right-6 w-[380px]
+                className={`fixed top-[65px] left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 w-[95vw] sm:w-[380px]
+        max-h-[calc(100vh-80px)] flex flex-col
         bg-secondary text-primary
         rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.45)]
         border border-white/10
@@ -53,10 +72,10 @@ export default function AccountPopup({ open, onClosePopup }) {
                     }`}
             >
                 <div
-                    className="absolute -top-2 right-10 w-4 h-4 rotate-45 bg-secondary border-l border-t border-white/10" />
+                    className="hidden sm:block absolute -top-2 right-10 w-4 h-4 rotate-45 bg-secondary border-l border-t border-white/10" />
 
                 {/* HEADER */}
-                <div className="p-4 border-b border-white/10 text-center">
+                <div className="p-4 border-b border-white/10 text-center shrink-0">
                     {!isLoggedIn ? (
                         <>
                             <Button
@@ -93,133 +112,135 @@ export default function AccountPopup({ open, onClosePopup }) {
                 </div>
 
                 {/* ================= CONTENT ================= */}
+                <div className="overflow-y-auto custom-scrollbar">
 
-                {/* NOT LOGGED IN */}
-                {!isLoggedIn && (
-                    <div className="px-5 py-4 text-[13px] leading-7 grid grid-cols-2 gap-6">
-                        <Section title="Buyer Tools">
-                            <Item onClick={() => {
-                                setIsLoginOpen(true);
-                                onClosePopup();
-                            }}>Saved Vehicles</Item>
-                            <Item onClick={() => {
-                                setIsLoginOpen(true);
-                                onClosePopup();
-                            }}>Compare Vehicles</Item>
-                            <Item onClick={() => navigate("/")}>Recently Viewed</Item>
-                            <Item onClick={() => {
-                                setIsLoginOpen(true);
-                                onClosePopup();
-                            }}  >My Inquiries</Item>
-                        </Section>
+                    {/* NOT LOGGED IN */}
+                    {!isLoggedIn && (
+                        <div className="px-4 sm:px-5 py-4 text-[13px] leading-7 grid grid-cols-2 gap-4 sm:gap-6">
+                            <Section title="Buyer Tools">
+                                <Item onClick={() => {
+                                    setIsLoginOpen(true);
+                                    onClosePopup();
+                                }}>Saved Vehicles</Item>
+                                <Item onClick={() => {
+                                    setIsLoginOpen(true);
+                                    onClosePopup();
+                                }}>Compare Vehicles</Item>
+                                <Item onClick={() => navigate("/")}>Recently Viewed</Item>
+                                <Item onClick={() => {
+                                    setIsLoginOpen(true);
+                                    onClosePopup();
+                                }}  >My Inquiries</Item>
+                            </Section>
 
-                        <Section title="Sell & Earn">
-                            <Item onClick={() => {
-                                setIsLoginOpen(true);
-                                onClosePopup();
-                            }}>Sell Your Vehicle</Item>
-                            <Item onClick={() => {
-                                setIsLoginOpen(true);
-                                onClosePopup();
-                            }} >Track Your Listing</Item>
-                            <Item onClick={() => {
-                                setIsLoginOpen(true);
-                                onClosePopup();
-                            }} >Request AVX Inspection</Item>
-                        </Section>
+                            <Section title="Sell & Earn">
+                                <Item onClick={() => {
+                                    setIsLoginOpen(true);
+                                    onClosePopup();
+                                }}>Sell Your Vehicle</Item>
+                                <Item onClick={() => {
+                                    setIsLoginOpen(true);
+                                    onClosePopup();
+                                }} >Track Your Listing</Item>
+                                <Item onClick={() => {
+                                    setIsLoginOpen(true);
+                                    onClosePopup();
+                                }} >Request AVX Inspection</Item>
+                            </Section>
 
-                        <Section title="Business">
-                            <Item onClick={() => navigate("/consult")}>Become a Consultant</Item>
-                            <Item onClick={() => navigate("/consult")}>Consultant Pricing</Item>
-                        </Section>
+                            <Section title="Business">
+                                <Item onClick={() => navigate("/consult")}>Become a Consultant</Item>
+                                <Item onClick={() => navigate("/consult")}>Consultant Pricing</Item>
+                            </Section>
 
-                        <Section title="Support">
-                            <Item onClick={() => navigate("/help")}>Help Center</Item>
-                            <Item onClick={() => navigate("/contact")}>Contact AVX</Item>
-                        </Section>
-                    </div>
-                )}
+                            <Section title="Support">
+                                <Item onClick={() => navigate("/help")}>Help Center</Item>
+                                <Item onClick={() => navigate("/contact")}>Contact AVX</Item>
+                            </Section>
+                        </div>
+                    )}
 
-                {/* LOGGED IN */}
-                {isLoggedIn && (
-                    <div className="px-5 py-4 text-[13px] leading-7 grid grid-cols-2 gap-6">
-                        {role === "BUYER" && (
-                            <>
-                                <Section title="Your Activity">
-                                    <Item onClick={() => navigate("/user/details/wishlist")}>Saved Vehicles</Item>
-                                    {/*<Item onClick={() => navigate("/")}>Recently Viewed</Item>*/}
-                                    <Item onClick={() => navigate("/compare")}>Compare List</Item>
-                                    <Item onClick={() => navigate("/user/details/inquaries")}>My Inquiries</Item>
-                                    <Item onClick={() => navigate("/user/details/inspections")}>Inspection
-                                        Requests</Item>
-                                </Section>
+                    {/* LOGGED IN */}
+                    {isLoggedIn && (
+                        <div className="px-4 sm:px-5 py-4 text-[13px] leading-7 grid grid-cols-2 gap-4 sm:gap-6">
+                            {role === "BUYER" && (
+                                <>
+                                    <Section title="Your Activity">
+                                        <Item onClick={() => navigate("/user/details/wishlist")}>Saved Vehicles</Item>
+                                        {/*<Item onClick={() => navigate("/")}>Recently Viewed</Item>*/}
+                                        <Item onClick={() => navigate("/compare")}>Compare List</Item>
+                                        <Item onClick={() => navigate("/user/details/inquaries")}>My Inquiries</Item>
+                                        <Item onClick={() => navigate("/user/details/inspections")}>Inspection
+                                            Requests</Item>
+                                    </Section>
 
-                                <Section title="Buying Tools">
-                                    <Item onClick={() => navigate("/inspection-request")}>Request AVX Inspection</Item>
-                                    <Item onClick={() => navigate("/track-bookings")}>Track Bookings</Item>
-                                </Section>
+                                    <Section title="Buying Tools">
+                                        <Item onClick={() => navigate("/inspection-request")}>Request AVX Inspection</Item>
+                                        <Item onClick={() => navigate("/track-bookings")}>Track Bookings</Item>
+                                    </Section>
 
-                                <Section title="Selling">
-                                    <Item onClick={() => navigate("/user/details/myvehicle")}>Sell Your Vehicle (MY
-                                        Garage)</Item>
-                                    <Item onClick={() => navigate("/user/details/myvehicle")}>My Listing</Item>
-                                </Section>
+                                    <Section title="Selling">
+                                        <Item onClick={() => navigate("/user/details/myvehicle")}>Sell Your Vehicle (MY
+                                            Garage)</Item>
+                                        <Item onClick={() => navigate("/user/details/myvehicle")}>My Listing</Item>
+                                    </Section>
 
-                                <Section title="Subscriptions">
-                                    <Item onClick={() => navigate("/user/details/wishlist")}>Followed Consultants</Item>
-                                </Section>
+                                    <Section title="Subscriptions">
+                                        <Item onClick={() => navigate("/user/details/wishlist")}>Followed Consultants</Item>
+                                    </Section>
 
-                                <Section title="Support">
-                                    <Item onClick={() => navigate("/help")}>Help Center</Item>
-                                    <Item onClick={() => navigate("/contact")}>Contact AVX</Item>
-                                </Section>
-                            </>
-                        )}
+                                    <Section title="Support">
+                                        <Item onClick={() => navigate("/help")}>Help Center</Item>
+                                        <Item onClick={() => navigate("/contact")}>Contact AVX</Item>
+                                    </Section>
+                                </>
+                            )}
 
-                        {role === "CONSULTANT" && (
-                            <>
-                                <Section title="Dashboard">
-                                    <Item onClick={() => navigate("/consult/dashboard")}>Overview</Item>
-                                    <Item onClick={() => navigate("/consult/dashboard/inventory")}>Inventory</Item>
-                                    <Item onClick={() => navigate("/consult/dashboard/inquiries")}>Inquiries</Item>
-                                    <Item onClick={() => navigate("/consult/dashboard/inspections")}>Inspections</Item>
-                                    <Item onClick={() => navigate("/consult/dashboard/analytics")}>Analytics</Item>
-                                    <Item onClick={() => navigate("/consult/dashboard/ppt")}>PPC & Boost</Item>
-                                </Section>
+                            {role === "CONSULTANT" && (
+                                <>
+                                    <Section title="Dashboard">
+                                        <Item onClick={() => navigate("/consult/dashboard")}>Overview</Item>
+                                        <Item onClick={() => navigate("/consult/dashboard/inventory")}>Inventory</Item>
+                                        <Item onClick={() => navigate("/consult/dashboard/inquiries")}>Inquiries</Item>
+                                        <Item onClick={() => navigate("/consult/dashboard/inspections")}>Inspections</Item>
+                                        <Item onClick={() => navigate("/consult/dashboard/analytics")}>Analytics</Item>
+                                        <Item onClick={() => navigate("/consult/dashboard/ppt")}>PPC & Boost</Item>
+                                    </Section>
 
-                                <Section title="Storefront">
-                                    <Item onClick={() => navigate("/store-front")}>View Storefront</Item>
-                                    <Item onClick={() => navigate("/consult/dashboard/storefront")}>Edit
-                                        Storefront</Item>
-                                    <Item onClick={() => navigate("/consult/dashboard/storefront")}>Theme
-                                        Settings</Item>
-                                </Section>
+                                    <Section title="Storefront">
+                                        <Item onClick={() => navigate("/store-front")}>View Storefront</Item>
+                                        <Item onClick={() => navigate("/consult/dashboard/storefront")}>Edit
+                                            Storefront</Item>
+                                        <Item onClick={() => navigate("/consult/dashboard/storefront")}>Theme
+                                            Settings</Item>
+                                    </Section>
 
-                                <Section title="Billing">
-                                    <Item onClick={() => navigate("/consult/dashboard/billing")}>Wallet</Item>
-                                    <Item onClick={() => navigate("/consult/dashboard/billing")}>Subscription
-                                        Plan</Item>
-                                    <Item onClick={() => navigate("/consult/dashboard/billing")}>Transaction
-                                        History</Item>
-                                </Section>
+                                    <Section title="Billing">
+                                        <Item onClick={() => navigate("/consult/dashboard/billing")}>Wallet</Item>
+                                        <Item onClick={() => navigate("/consult/dashboard/billing")}>Subscription
+                                            Plan</Item>
+                                        <Item onClick={() => navigate("/consult/dashboard/billing")}>Transaction
+                                            History</Item>
+                                    </Section>
 
-                                {/*<Section title="Performance">*/}
-                                {/*  <Item onClick={() => navigate("/ranking-insights")}>Ranking Insights</Item>*/}
-                                {/*  <Item onClick={() => navigate("/profile-strength")}>Profile Strength</Item>*/}
-                                {/*</Section>*/}
+                                    {/*<Section title="Performance">*/}
+                                    {/*  <Item onClick={() => navigate("/ranking-insights")}>Ranking Insights</Item>*/}
+                                    {/*  <Item onClick={() => navigate("/profile-strength")}>Profile Strength</Item>*/}
+                                    {/*</Section>*/}
 
-                                <Section title="Support">
-                                    <Item onClick={() => navigate("/consultant-help")}>Consultant Help</Item>
-                                    <Item onClick={() => navigate("/raise-ticket")}>Raise Ticket</Item>
-                                </Section>
-                            </>
-                        )}
-                    </div>
-                )}
+                                    <Section title="Support">
+                                        <Item onClick={() => navigate("/consultant-help")}>Consultant Help</Item>
+                                        <Item onClick={() => navigate("/raise-ticket")}>Raise Ticket</Item>
+                                    </Section>
+                                </>
+                            )}
+                        </div>
+                    )}
+                </div>
 
                 {/* Logout */}
                 {isLoggedIn && (
-                    <div className="p-4 border-t border-white/10">
+                    <div className="p-4 border-t border-white/10 shrink-0">
                         <Button
                             variant="ghost"
                             full
@@ -234,11 +255,16 @@ export default function AccountPopup({ open, onClosePopup }) {
             </div>
 
             {/* Logout Confirmation */}
-            {showLogoutConfirm && typeof document !== "undefined" && createPortal(
-                <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={() => setShowLogoutConfirm(false)}>
+            {(showLogoutConfirm || isLogoutClosing) && typeof document !== "undefined" && createPortal(
+                <div
+                    className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+                    onClick={handleCloseLogout}
+                    style={{ animation: isLogoutClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}
+                >
                     <div
                         className="w-[90%] max-w-[440px] rounded-xl bg-secondary border border-white/10 shadow-2xl p-6 text-center"
                         onClick={(e) => e.stopPropagation()}
+                        style={{ animation: isLogoutClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}
                     >
                         <h2 className="text-lg font-bold text-primary mb-2">
                             Confirm Logout
@@ -253,7 +279,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                                 variant="default"
                                 full
                                 size="sm"
-                                onClick={() => setShowLogoutConfirm(false)}
+                                onClick={handleCancelLogout}
                                 className="border border-white/10"
                             >
                                 Cancel

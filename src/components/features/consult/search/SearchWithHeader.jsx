@@ -45,7 +45,7 @@ export default function SearchWithHeader({ activeFilters = [], pageResponse = {}
       </div>
 
       {/* HEADER */}
-      <section className="w-full h-[106px] bg-fourth flex items-center pt-16">
+      <section className="w-full h-[130px] bg-fourth flex items-center pt-16">
         <div className="max-w-screen-2xl w-full mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between gap-4">
             {/* LEFT */}

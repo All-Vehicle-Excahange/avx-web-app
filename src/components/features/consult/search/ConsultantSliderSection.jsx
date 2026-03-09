@@ -26,6 +26,10 @@ export default function ConsultantSliderSection({ title, data }) {
             <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
               {title}
             </h2>
+             <p className="text-third mt-1">
+              Lorem ipsum dolor sit amet consectetur dolor sit amet
+              consectetur..
+            </p>
           </div>
         </div>
         <div className="flex gap-2">

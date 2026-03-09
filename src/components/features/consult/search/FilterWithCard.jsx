@@ -768,7 +768,7 @@ export default function FilterWithCard({ onFilterChange }) {
   };
 
   return (
-    <div className="w-full pt-12 md:pt-20 md:pb-8 min-h-screen flex flex-col lg:flex-row text-secondary">
+    <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-[20px]">
       {/* ================= DESKTOP SIDEBAR ================= */}
       <aside
         className="
@@ -1150,51 +1150,64 @@ export default function FilterWithCard({ onFilterChange }) {
       </main>
 
       {/* ================= MOBILE FILTER DRAWER ================= */}
-      {mobileFilterOpen && (
-        <div className="fixed inset-0 z-50 bg-primary lg:hidden">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-third/40">
-            <h2 className="text-lg font-semibold">Filters</h2>
-            <Button
-              variant="ghost"
-              showIcon={false}
-              onClick={() => setMobileFilterOpen(false)}
-            >
-              ✕
-            </Button>
+      <div
+        className={`fixed top-[64px] inset-x-0 bottom-0 z-[100] bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${mobileFilterOpen ? "translate-y-0" : "translate-y-full"
+          }`}
+      >
+        <div className="flex items-center justify-between px-4 py-3 border-b border-third/40 shrink-0">
+          <h2 className="text-lg font-semibold">Filters</h2>
+          <Button
+            variant="ghost"
+            showIcon={false}
+            onClick={() => setMobileFilterOpen(false)}
+            className="text-secondary text-xl font-bold p-2"
+          >
+            ✕
+          </Button>
+        </div>
+
+        <div className="flex flex-1 overflow-hidden">
+          <div className="w-[40%] border-r border-third/40 overflow-y-auto">
+            {Object.keys(mobileFilterMap).map((item) => (
+              <div
+                key={item}
+                onClick={() => setActiveFilterTab(item)}
+                className={`px-4 py-3 text-sm cursor-pointer ${activeFilterTab === item
+                  ? "bg-secondary/10 font-semibold"
+                  : "hover:bg-secondary/5"
+                  }`}
+              >
+                {item}
+              </div>
+            ))}
           </div>
 
-          <div className="flex h-[calc(100vh-120px)]">
-            <div className="w-[40%] border-r border-third/40">
-              {Object.keys(mobileFilterMap).map((item) => (
-                <div
-                  key={item}
-                  onClick={() => setActiveFilterTab(item)}
-                  className={`px-4 py-3 text-sm cursor-pointer ${activeFilterTab === item
-                    ? "bg-secondary/10 font-semibold"
-                    : ""
-                    }`}
-                >
-                  {item}
-                </div>
+          <div className="flex-1 p-4 overflow-y-auto">
+            <div className="flex flex-wrap gap-3">
+              {mobileFilterMap[activeFilterTab]?.map((chip) => (
+                <Chip
+                  key={chip}
+                  label={chip}
+                  selected={selectedMobileChips.includes(chip)}
+                  variant="outlineDark"
+                  onClick={() => toggleMobileChip(chip)}
+                />
               ))}
-            </div>
-
-            <div className="flex-1 p-4">
-              <div className="flex flex-wrap gap-3">
-                {mobileFilterMap[activeFilterTab]?.map((chip) => (
-                  <Chip
-                    key={chip}
-                    label={chip}
-                    selected={selectedMobileChips.includes(chip)}
-                    variant="outlineDark"
-                    onClick={() => toggleMobileChip(chip)}
-                  />
-                ))}
-              </div>
             </div>
           </div>
         </div>
-      )}
+
+        <div className="w-full p-4 border-t border-third/40 bg-primary shrink-0">
+          <Button
+            variant="default"
+            showIcon={false}
+            className="w-full"
+            onClick={() => setMobileFilterOpen(false)}
+          >
+            Show results
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
