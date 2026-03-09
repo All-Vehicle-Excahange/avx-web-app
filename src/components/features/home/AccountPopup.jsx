@@ -3,13 +3,14 @@
 import LoginPopup from "@/components/auth/LoginPopup";
 import SignupPopup from "@/components/auth/SignupPopup";
 import Button from "@/components/ui/button";
-import {useState} from "react";
-import {useRouter} from "next/navigation";
+import { createPortal } from "react-dom";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-import {useAuthStore} from "@/stores/useAuthStore";
-import {logoutUser} from "@/services/auth.service";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { logoutUser } from "@/services/auth.service";
 
-export default function AccountPopup({open, onClosePopup}) {
+export default function AccountPopup({ open, onClosePopup }) {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isSignupOpen, setIsSignupOpen] = useState(false);
     const role = "BUYER"; // Change dynamically later BUYER/CONSULTANT
@@ -41,19 +42,18 @@ export default function AccountPopup({open, onClosePopup}) {
     return (
         <>
             <div
-                className={`fixed top-[70px] right-6 w-[380px]
+                className={`fixed top-[65px] right-6 w-[380px]
         bg-secondary text-primary
         rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.45)]
         border border-white/10
         transition-all duration-150 ease-out z-50
-        ${
-                    open
+        ${open && !isLoginOpen && !isSignupOpen
                         ? "opacity-100 visible translate-y-0"
                         : "opacity-0 invisible translate-y-1"
-                }`}
+                    }`}
             >
                 <div
-                    className="absolute -top-2 right-10 w-4 h-4 rotate-45 bg-secondary border-l border-t border-white/10"/>
+                    className="absolute -top-2 right-10 w-4 h-4 rotate-45 bg-secondary border-l border-t border-white/10" />
 
                 {/* HEADER */}
                 <div className="p-4 border-b border-white/10 text-center">
@@ -81,8 +81,8 @@ export default function AccountPopup({open, onClosePopup}) {
                                     }}
                                     className="text-third hover:underline cursor-pointer"
                                 >
-                  Start here.
-                </span>
+                                    Start here.
+                                </span>
                             </p>
                         </>
                     ) : (
@@ -234,10 +234,12 @@ export default function AccountPopup({open, onClosePopup}) {
             </div>
 
             {/* Logout Confirmation */}
-            {showLogoutConfirm && (
-                <div className="fixed inset-0 z-999 flex items-center justify-center bg-secondary/50 backdrop-blur-sm">
+            {showLogoutConfirm && typeof document !== "undefined" && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={() => setShowLogoutConfirm(false)}>
                     <div
-                        className="w-[440px] rounded-xl bg-secondary border border-white/10 shadow-2xl p-6 text-center">
+                        className="w-[90%] max-w-[440px] rounded-xl bg-secondary border border-white/10 shadow-2xl p-6 text-center"
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         <h2 className="text-lg font-bold text-primary mb-2">
                             Confirm Logout
                         </h2>
@@ -268,12 +270,16 @@ export default function AccountPopup({open, onClosePopup}) {
                             </Button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             <LoginPopup
                 isOpen={isLoginOpen}
-                onClose={() => setIsLoginOpen(false)}
+                onClose={() => {
+                    setIsLoginOpen(false);
+                    onClosePopup();
+                }}
                 onSignup={() => {
                     setIsSignupOpen(true);
                     setIsLoginOpen(false);
@@ -282,7 +288,10 @@ export default function AccountPopup({open, onClosePopup}) {
 
             <SignupPopup
                 isOpen={isSignupOpen}
-                onClose={() => setIsSignupOpen(false)}
+                onClose={() => {
+                    setIsSignupOpen(false);
+                    onClosePopup();
+                }}
                 onLogin={() => {
                     setIsLoginOpen(true);
                     setIsSignupOpen(false);
@@ -294,7 +303,7 @@ export default function AccountPopup({open, onClosePopup}) {
 
 /* ================= SMALL REUSABLE COMPONENTS ================= */
 
-function Section({title, children}) {
+function Section({ title, children }) {
     return (
         <div>
             <p className="font-bold mb-2 text-primary">{title}</p>
@@ -303,7 +312,7 @@ function Section({title, children}) {
     );
 }
 
-function Item({children, onClick}) {
+function Item({ children, onClick }) {
     return (
         <li
             onClick={onClick}

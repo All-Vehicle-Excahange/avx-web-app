@@ -72,13 +72,12 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
     <>
       <nav
         className={`fixed top-0 inset-x-0 z-50 transition-all duration-300
-        ${
-          heroMode
+        ${heroMode
             ? scrolled
               ? "bg-white text-black shadow-xl backdrop-blur-lg h-16"
               : "bg-transparent text-secondary h-20 md:h-24"
             : "bg-primary text-secondary h-16"
-        }`}
+          }`}
       >
         <div className="relative w-full px-4 md:px-8 mx-auto h-full flex items-center justify-between">
           {/* LEFT */}
@@ -137,7 +136,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
           )}
 
           {/* RIGHT SIDE */}
-          <div className="flex items-center gap-2 md:gap-4 hidden md:flex">
+          <div className="flex items-center gap-2 md:gap-4">
             <Button
               onClick={() => setOpen(true)}
               size="sm"
@@ -153,12 +152,11 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
               onMouseLeave={() => setAccountOpen(false)}
             >
               <button
-                className={`flex items-center gap-1 px-2 py-1 rounded transition text-xs md:text-sm
-                ${
-                  heroMode && !scrolled
+                className={`flex cursor-pointer items-center gap-1 px-2 py-1 rounded transition text-xs md:text-sm
+                ${heroMode && !scrolled
                     ? "text-white hover:outline hover:outline-2 hover:outline-white/40"
                     : "text-black hover:outline hover:outline-2 hover:outline-black/20"
-                }`}
+                  }`}
               >
                 <User className="w-5 h-5 md:w-6 md:h-6" />
 
