@@ -125,7 +125,7 @@ export default function VehicleDetails() {
                 <VehicleImageGallery vehicle={vehicleOverview} />
 
                 <div className="">
-                  <div className="flex gap-8 border-b border-third/40">
+                  <div className="flex gap-8 border-b border-third/40 overflow-x-auto whitespace-nowrap flex-nowrap scrollbar-hide">
                     {[
                       {
                         id: "overview",

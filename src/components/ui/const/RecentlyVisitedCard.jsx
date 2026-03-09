@@ -6,7 +6,7 @@ export default function RecentlyVisitedCard({ data }) {
 
   return (
     <div
-      onClick={() => router.push(`/vehicle/details/${data.id}`)}
+      onClick={() => router.push(`/vehicle/details/${data.id}?source=home`)}
       className="
         cursor-pointer
         min-w-[150px] max-w-[150px]

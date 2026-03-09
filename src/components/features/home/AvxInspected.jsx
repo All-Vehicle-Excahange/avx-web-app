@@ -1,9 +1,9 @@
 "use client"
 
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
-import {Bike, Car} from "lucide-react";
+import { Bike, Car } from "lucide-react";
 
 import "swiper/css";
 import {
@@ -20,7 +20,7 @@ export default function AvxInspected() {
     useEffect(() => {
         const fetchVehicles = async () => {
             try {
-                const data = {pageNo: 1, size: 4};
+                const data = { pageNo: 1, size: 4 };
                 let res;
 
                 if (activeType === "2-Wheeler") {
@@ -45,7 +45,7 @@ export default function AvxInspected() {
                 {/* Header */}
                 <div className="shrink-0 flex flex-col md:flex-row items-center justify-between mb-4 gap-4 pt-3 pr-3">
                     <div className="flex items-start gap-4">
-                        <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400"/>
+                        <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
 
                         <div>
                             <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
@@ -69,7 +69,7 @@ export default function AvxInspected() {
                                     : "text-primary"
                             )}
                         >
-                            <Car size={18}/> 4-Wheeler
+                            <Car size={18} /> 4-Wheeler
                         </button>
 
                         <button
@@ -81,7 +81,7 @@ export default function AvxInspected() {
                                     : "text-primary"
                             )}
                         >
-                            <Bike size={18}/> 2-Wheeler
+                            <Bike size={18} /> 2-Wheeler
                         </button>
                     </div>
                 </div>
@@ -94,6 +94,7 @@ export default function AvxInspected() {
                             <VehicleCard
                                 key={vehicle.id}
                                 data={vehicle}
+                                source="home"
                             />
                         ))
                     ) : (

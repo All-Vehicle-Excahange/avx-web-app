@@ -182,7 +182,7 @@ const CategoriesSections = () => {
             </div>
           ) : (
             vehicles.map((car) => (
-              <VehicleCard key={car.id} data={car} className="lg:col-span-3" />
+              <VehicleCard key={car.id} data={car} className="lg:col-span-3" source="home" />
             ))
           )}
         </div>

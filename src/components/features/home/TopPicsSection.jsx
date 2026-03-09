@@ -87,7 +87,7 @@ export default function TopPicsSection() {
                 className="flex-1 min-h-0 grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-1">
                 {cardData.map((vehicle) => (
                     <div key={vehicle.id} className="lg:col-span-1 lg:row-span-1 h-full">
-                        <VehicleCard data={vehicle} />
+                        <VehicleCard data={vehicle} source="home" />
                     </div>
                 ))}
             </div>

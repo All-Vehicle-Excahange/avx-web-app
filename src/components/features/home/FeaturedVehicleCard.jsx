@@ -17,7 +17,7 @@ export default function FeaturedVehicleCard({ data }) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push("/vehicle/details");
+    router.push("/vehicle/details?source=home");
   };
 
   return (
@@ -55,9 +55,8 @@ export default function FeaturedVehicleCard({ data }) {
             className="shrink-0 flex items-center justify-center w-9 h-9 rounded-full bg-transparent border-2 border-third/60 text-primary hover:bg-third/30 transition-colors"
           >
             <Heart
-              className={`w-5 h-5 transition-colors ${
-                isFavorite ? "fill-red-500 text-red-500" : "text-primary"
-              }`}
+              className={`w-5 h-5 transition-colors ${isFavorite ? "fill-red-500 text-red-500" : "text-primary"
+                }`}
             />
           </button>
         </div>

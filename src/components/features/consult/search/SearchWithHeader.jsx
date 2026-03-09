@@ -13,7 +13,7 @@ const sortOptions = [
   { value: "subscribers_high_low", label: "Subscribers High → Low" },
 ];
 
-export default function SearchWithHeader() {
+export default function SearchWithHeader({ activeFilters = [], pageResponse = {} }) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(sortOptions[0]);
   const dropdownRef = useRef(null);
@@ -49,13 +49,24 @@ export default function SearchWithHeader() {
         <div className="max-w-screen-2xl w-full mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between gap-4">
             {/* LEFT */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-              <h2 className="text-primary text-base md:text-lg leading-snug">
-                {vehicleTypeParam} {serviceParam} {availabilityParam} {priceRangeParam} in {location}
-              </h2>
+            <div className="flex items-center gap-2 flex-wrap text-primary text-sm md:text-base">
+              <span>
+                {vehicleTypeParam} {serviceParam} {availabilityParam}
+                {priceRangeParam && ` ${priceRangeParam}`}
+                {location && ` in ${location}`}
+              </span>
 
-              <span className="text-primary/80 text-xs sm:text-sm">
-                • 82 Results • 37 AVX Inspected • Updated Today
+              {/* Active Filters as plain text */}
+              {activeFilters.length > 0 && (
+                <span className="text-primary font-bold">
+                  {activeFilters.join(" • ")}
+                </span>
+              )}
+
+              {/* Pagination */}
+              <span className="text-primary/70">
+                • {pageResponse.totalElements ?? 0} Results
+                • Page {pageResponse.currentPage ?? 1} of {pageResponse.totalPages ?? 0}
               </span>
             </div>
 

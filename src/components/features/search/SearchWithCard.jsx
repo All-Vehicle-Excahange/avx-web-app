@@ -8,6 +8,7 @@ import Button from "@/components/ui/button";
 import ChipGroup from "@/components/ui/chipGroup";
 import PromoCardRow from "./PromoCardRow";
 import Chip from "@/components/ui/chip";
+import Pagination from "@/components/ui/Pagination";
 import {
   ChevronDownIcon,
   ChevronLeft,
@@ -49,13 +50,13 @@ function useIsMobile() {
   return isMobile;
 }
 
-export default function SearchWithCard({ onPageResponseChange }) {
+export default function SearchWithCard({ onPageResponseChange, onFilterChange }) {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [activeFilterTab, setActiveFilterTab] = useState("Suggested Filters");
   const [selectedMobileChips, setSelectedMobileChips] = useState([]);
-  const [avxAssumed, setAvxAssumed] = useState(true);
-  const [minPrice, setMinPrice] = useState(100000);
-  const [maxPrice, setMaxPrice] = useState(1000000);
+  const [avxAssumed, setAvxAssumed] = useState(false);
+  const [minPrice, setMinPrice] = useState(50000);
+  const [maxPrice, setMaxPrice] = useState(2000000);
   const [kmDistance, setKmDistance] = useState(0);
   const [vehicles, setVehicles] = useState([]);
 
@@ -848,6 +849,36 @@ export default function SearchWithCard({ onPageResponseChange }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
+  // ── Real-time filter tag emission ──
+  useEffect(() => {
+    const tags = [];
+    const brandLabels = brands.filter(b => selectedBrands.includes(b.value)).map(b => b.label);
+    const modelLabels = models.filter(m => selectedModels.includes(m.value)).map(m => m.label);
+    const variantLabels = variants.filter(v => selectedVariants.includes(v.value)).map(v => v.label);
+    if (brandLabels.length > 0) tags.push(...brandLabels);
+    if (modelLabels.length > 0) tags.push(...modelLabels);
+    if (variantLabels.length > 0) tags.push(...variantLabels);
+    if (selectedFuelTypes.length > 0) tags.push(...selectedFuelTypes);
+    if (selectedTransmissionTypes.length > 0) tags.push(...selectedTransmissionTypes);
+    if (selectedBodyType.length > 0) tags.push(...selectedBodyType.map(b => b.charAt(0).toUpperCase() + b.slice(1).toLowerCase()));
+    if (selectedYear.length > 0) tags.push(...selectedYear);
+    // Show both city and state
+    const locationParts = [];
+    if (selectedCityName) locationParts.push(selectedCityName);
+    if (selectedStateName) locationParts.push(selectedStateName);
+    if (locationParts.length > 0) tags.push(locationParts.join(', '));
+    if (minPrice > MIN || maxPrice < MAX) tags.push(`₹${(minPrice / 100000).toFixed(1)}L–₹${(maxPrice / 100000).toFixed(1)}L`);
+    if (kmDistance > 0) tags.push(`≤${kmDistance.toLocaleString()} km`);
+    if (selectedRating.length > 0) tags.push(`${selectedRating[0]}+ ⭐`);
+    if (selectedSellerType.length > 0) tags.push(selectedSellerType[0] === 'CONSULTANT' ? 'Consultant' : 'Individual');
+    onFilterChange?.(tags);
+  }, [
+    selectedBrands, selectedModels, selectedVariants, selectedFuelTypes, selectedTransmissionTypes,
+    selectedBodyType, selectedYear, selectedCityName, selectedStateName,
+    minPrice, maxPrice, kmDistance, selectedRating, selectedSellerType,
+    brands, models, variants
+  ]);
+
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
@@ -923,8 +954,8 @@ export default function SearchWithCard({ onPageResponseChange }) {
     setVariantHasMore(false);
 
     // Reset price & km
-    setMinPrice(100000);
-    setMaxPrice(1000000);
+    setMinPrice(50000);
+    setMaxPrice(2000000);
     setKmDistance(0);
 
     // Reset mobile chips
@@ -1512,45 +1543,11 @@ export default function SearchWithCard({ onPageResponseChange }) {
             <VehicleCard key={vehicle.id} data={vehicle} />
           ))}
 
-          <div className="col-span-full flex justify-center mt-6">
-            <div className="flex items-center gap-4 bg-transparent border border-white/20 rounded-full px-1 py-1 shadow-lg">
-
-              {/* Previous */}
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className={`flex items-center cursor-pointer justify-center w-10 h-10 rounded-full transition-all duration-200 border
-      ${currentPage === 1
-                    ? "bg-transparent text-gray-500 border-gray-600 cursor-not-allowed"
-                    : "bg-transparent text-white border-white/30 hover:bg-white hover:text-black"
-                  }`}
-              >
-                <ChevronLeft size={18} />
-              </button>
-
-              {/* Page Info */}
-              <span className="text-white font-medium text-sm sm:text-base min-w-[80px] text-center">
-                {currentPage} of {totalPages}
-              </span>
-
-              {/* Next */}
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className={`flex items-center cursor-pointer justify-center w-10 h-10 rounded-full transition-all duration-200 border
-      ${currentPage === totalPages
-                    ? "bg-black text-gray-500 border-gray-600 cursor-not-allowed"
-                    : "bg-white text-black border-white hover:bg-transparent hover:text-white hover:border-white/30"
-                  }`}
-              >
-                <ChevronRight size={18} />
-              </button>
-
-            </div>
-          </div>
-
-
-
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
       </main>
 

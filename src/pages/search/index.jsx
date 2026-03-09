@@ -14,13 +14,17 @@ export default function Index() {
     currentPage: 1,
     currentElements: 0,
   });
+  const [activeFilters, setActiveFilters] = useState([]);
 
   return (
     <>
-      <SearchHeader pageResponse={pageResponse} />
+      <SearchHeader pageResponse={pageResponse} activeFilters={activeFilters} />
 
       <Layout>
-        <SearchWithCard onPageResponseChange={setPageResponse} />
+        <SearchWithCard
+          onPageResponseChange={setPageResponse}
+          onFilterChange={setActiveFilters}
+        />
       </Layout>
 
       <Layout>
