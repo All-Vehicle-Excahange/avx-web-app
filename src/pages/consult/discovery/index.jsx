@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+
 import { useState } from "react";
 import FilterWithCard from "@/components/features/consult/search/FilterWithCard";
 import SearchWithHeader from "@/components/features/consult/search/SearchWithHeader";
@@ -8,7 +10,7 @@ import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
 import React from "react";
 
-function index() {
+function Index() {
   const [activeFilters, setActiveFilters] = useState([]);
   const [pageResponse, setPageResponse] = useState({ totalElements: 0, totalPages: 0, currentPage: 1 });
 
@@ -31,7 +33,7 @@ function index() {
   );
 }
 
-export default index;
+export default Index;
 
 
 export function getServerSideProps() {
