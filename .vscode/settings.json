@@ -3,7 +3,7 @@
         "import": "my_theme.json",
         "statusBar.debuggingForeground": "#FDFBFD",
         "statusBar.noFolderForeground": "#FDFBFD",
-        "activityBar.background": "#0fda8f",
+        "activityBar.background": "#3b7779",
         "titleBar.activeBackground": "#3b7779",
         "titleBar.activeForeground": "#FDFBFD",
         "titleBar.inactiveBackground": "#3b7779",
