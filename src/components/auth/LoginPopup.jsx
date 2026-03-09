@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import Image from "next/image";
@@ -24,75 +24,23 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { } }) {
   const [otpError, setOtpError] = useState("");
 
   const otpRefs = useRef([]);
+  const [isClosing, setIsClosing] = useState(false);
 
-  // keep track of where the user scrolled so we can restore it
-  const scrollY = useRef(0);
+  const triggerClose = useCallback(() => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      reset();
+      setOtp(Array(6).fill(""));
+      setOtpSent(false);
+      setOtpError("");
+      onClose();
+    }, 250);
+  }, [onClose, reset]);
 
-  useEffect(() => {
-    const scrollContainer =
-      document.scrollingElement || document.documentElement || document.body;
+  if (!isOpen && !isClosing) return null;
 
-    const preventScroll = (e) => {
-      // block wheel/touchmove when modal is open
-      if (isOpen) {
-        e.preventDefault();
-      }
-    };
-
-    if (isOpen) {
-      // capture current scroll position of the scrolling element
-      scrollY.current = scrollContainer.scrollTop || window.scrollY;
-
-      // lock the scroll container by fixing its position and hiding overflow
-      scrollContainer.style.position = "fixed";
-      scrollContainer.style.top = `-${scrollY.current}px`;
-      scrollContainer.style.left = "0";
-      scrollContainer.style.right = "0";
-      scrollContainer.style.overflow = "hidden";
-
-      // also make sure html/body cannot scroll
-      document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
-
-      document.addEventListener("wheel", preventScroll, { passive: false });
-      document.addEventListener("touchmove", preventScroll, { passive: false });
-    } else {
-      // restore before unmounting or closing
-      scrollContainer.style.position = "";
-      scrollContainer.style.top = "";
-      scrollContainer.style.left = "";
-      scrollContainer.style.right = "";
-      scrollContainer.style.overflow = "";
-      document.body.style.overflow = "auto";
-      document.documentElement.style.overflow = "auto";
-
-      // window.scrollTo(0, scrollY.current);
-    }
-
-    return () => {
-      // cleanup if component unmounts while open
-      scrollContainer.style.position = "";
-      scrollContainer.style.top = "";
-      scrollContainer.style.left = "";
-      scrollContainer.style.right = "";
-      scrollContainer.style.overflow = "";
-      document.body.style.overflow = "auto";
-      document.documentElement.style.overflow = "auto";
-      document.removeEventListener("wheel", preventScroll);
-      document.removeEventListener("touchmove", preventScroll);
-    };
-  }, [isOpen]);
-
-
-  if (!isOpen) return null;
-
-  const handleClose = () => {
-    reset();
-    setOtp(Array(6).fill(""));
-    setOtpSent(false);
-    setOtpError("");
-    onClose();
-  };
+  const handleClose = triggerClose;
 
   const handleOtpChange = (index, value) => {
     if (!/^\d?$/.test(value)) return;
@@ -169,12 +117,12 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { } }) {
   };
 
   const modalContent = (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="relative flex w-full max-w-[900px] overflow-hidden rounded-2xl shadow-2xl bg-primary-white">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={handleClose} style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}>
+      <div className="relative flex w-full max-w-[900px] overflow-hidden rounded-2xl shadow-2xl bg-primary-white" onClick={(e) => e.stopPropagation()} style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}>
         {/* CLOSE */}
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 z-20 p-2 rounded-full hover:opacity-70 text-primary"
+          className="absolute bg-white cursor-pointer top-4 right-4 z-20 p-1 rounded-full hover:opacity-70 text-secondary"
         >
           <X size={20} />
         </button>
@@ -284,7 +232,7 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { } }) {
                 handleClose();
                 setTimeout(() => onSignup(), 100);
               }}
-              className="font-semibold text-primary hover:underline"
+              className="font-semibold text-primary hover:underline cursor-pointer"
             >
               Create
             </button>

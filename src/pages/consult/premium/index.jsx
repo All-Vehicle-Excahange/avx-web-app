@@ -12,7 +12,7 @@ function index() {
   return (
     <>
       <SearchWithHeader />
-      
+
       <Layout>
         <PremiumFilterWithCard />
       </Layout>

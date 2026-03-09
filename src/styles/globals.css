@@ -224,6 +224,50 @@ h3 {
   }
 }
 
+/* Modal popup animations */
+@keyframes modalBackdropIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalCardIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalBackdropOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes modalCardOut {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+}
 
 .inverted-service {
   -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20340%20232%22%3E%3Cpath%20d%3D%22M0%2C0H340A0%2C0%200%2C0%2C1%20340%2C0V170A12%2C12%200%2C0%2C1%20328%2C182H302A12%2C12%200%2C0%2C0%20290%2C194V220A12%2C12%200%2C0%2C1%20278%2C232H0A0%2C0%200%2C0%2C1%200%2C232V62A12%2C12%200%2C0%2C1%2012%2C50H38A12%2C12%200%2C0%2C0%2050%2C38V12A12%2C12%200%2C0%2C1%2062%2C0%22%20fill%3D%22%23fff%22%20%2F%3E%3C%2Fsvg%3E") no-repeat center / contain;
