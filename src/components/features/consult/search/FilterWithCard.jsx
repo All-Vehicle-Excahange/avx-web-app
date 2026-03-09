@@ -93,6 +93,8 @@ export default function FilterWithCard({ onFilterChange }) {
   const cityRef = useRef(null);
   const prevPageRef = useRef(1);
   const prevSortRef = useRef(sort);
+  const autoFetchTimerRef = useRef(null);
+  const hasMountedForAutoFetch = useRef(false);
 
   const [highlightedStateIndex, setHighlightedStateIndex] = useState(-1);
   const [highlightedCityIndex, setHighlightedCityIndex] = useState(-1);
@@ -613,6 +615,27 @@ export default function FilterWithCard({ onFilterChange }) {
     }
   };
 
+  // ── Auto-fetch when any filter changes ──
+  useEffect(() => {
+    if (!hasMountedForAutoFetch.current) {
+      hasMountedForAutoFetch.current = true;
+      return;
+    }
+    if (autoFetchTimerRef.current) clearTimeout(autoFetchTimerRef.current);
+    autoFetchTimerRef.current = setTimeout(() => {
+      const payload = buildPayload();
+      setCurrentPage(1);
+      fetchConsultants(1, payload);
+    }, 300);
+    return () => { if (autoFetchTimerRef.current) clearTimeout(autoFetchTimerRef.current); };
+  }, [
+    selectedVehicleTypes, selectedServices, selectedRating,
+    selectedInventory, selectedDistance,
+    selectedCityId, selectedStateId,
+    minPrice, maxPrice,
+  ]);
+
+
   const handleClearFilters = async () => {
     // Remove saved location from localStorage
     localStorage.removeItem("avx_saved_location");
@@ -640,8 +663,9 @@ export default function FilterWithCard({ onFilterChange }) {
     // Reset pagination
     setCurrentPage(1);
 
-    // Fetch default results
+    // Fetch default results and scroll to top
     await fetchConsultants(1, {});
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   /* ================= FILTER CHIP DATA ================= */

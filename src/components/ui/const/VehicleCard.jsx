@@ -72,8 +72,8 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
             : data.userName,
 
 
-        location: data.vehicleCardAddress
-            ? `${data.vehicleCardAddress.city}, ${data.vehicleCardAddress.country}`
+        location: data.address
+            ? `${data.address.city}, ${data.address.country}`
             : data.location,
 
         price: data.price ? Number(data.price).toLocaleString("en-IN") : data.price,
@@ -183,7 +183,7 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
                             <h3 className="text-sm md:text-xl font-bold">₹ {mapped.price}</h3>
 
                             <div className="hidden md:block">
-                                <Button href={`/vehicle/details/${data.id}?source=${source}`} variant="outline" size="sm">
+                                <Button href={`/vehicle/details/${data.id}?source=${source}`} scroll={false} variant="outline" size="sm">
                                     View Details
                                 </Button>
                             </div>

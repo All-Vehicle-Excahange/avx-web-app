@@ -8,9 +8,19 @@ export default function VehicleHeader({ vehicle, ratting }) {
     const router = useRouter();
     const source = router.query.source; // "home" | "search" | undefined
 
-    const vehicleName = [vehicle?.makerName, vehicle?.modelName, vehicle?.variantName]
+    const vehicleNameBase = [vehicle?.makerName, vehicle?.modelName, vehicle?.variantName]
         .filter(Boolean)
         .join(" ") || "Vehicle";
+    const cityName = vehicle?.address?.city;
+    const vehicleName = cityName ? `${vehicleNameBase} in ${cityName}` : vehicleNameBase;
+
+    // Build the query string for search links
+    const searchQueryParams = new URLSearchParams();
+    if (vehicle?.makerId || vehicle?.makeId) searchQueryParams.set("makerId", vehicle.makerId || vehicle.makeId);
+    if (vehicle?.makerName) searchQueryParams.set("brand", vehicle.makerName);
+    if (vehicle?.address?.stateId) searchQueryParams.set("stateId", vehicle.address.stateId);
+    if (vehicle?.address?.cityId) searchQueryParams.set("cityId", vehicle.address.cityId);
+    const searchUrl = `/search?${searchQueryParams.toString()}`;
 
     return (
         <header className="w-full space-y-3 pt-6 bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)]">
@@ -27,7 +37,7 @@ export default function VehicleHeader({ vehicle, ratting }) {
                     <>
                         <ChevronRight size={14} className="shrink-0" />
                         <Link
-                            href="/search"
+                            href={searchUrl}
                             className="hover:text-primary transition-colors duration-200 cursor-pointer uppercase tracking-wide"
                         >
                             Search
@@ -39,7 +49,7 @@ export default function VehicleHeader({ vehicle, ratting }) {
                     <>
                         <ChevronRight size={14} className="shrink-0" />
                         <Link
-                            href={`/search?maker=${vehicle.makerName}`}
+                            href={searchUrl}
                             className="hover:text-primary transition-colors duration-200 cursor-pointer uppercase tracking-wide"
                         >
                             {vehicle.makerName}
@@ -48,8 +58,19 @@ export default function VehicleHeader({ vehicle, ratting }) {
                 )}
 
                 <ChevronRight size={14} className="shrink-0" />
-                <span className="text-primary font-medium uppercase tracking-wide truncate max-w-[200px] sm:max-w-none">
-                    {vehicleName}
+                <span className="text-primary font-medium uppercase tracking-wide truncate max-w-[200px] sm:max-w-none flex items-center gap-1">
+                    {vehicleNameBase}
+                    {cityName && (
+                        <>
+                            <span className="lowercase normal-case">in</span>
+                            <Link
+                                href={searchUrl}
+                                className="hover:text-primary transition-colors duration-200 cursor-pointer underline decoration-primary/50 underline-offset-2"
+                            >
+                                {cityName}
+                            </Link>
+                        </>
+                    )}
                 </span>
             </nav>
 

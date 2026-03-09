@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useLayoutEffect } from "react";
 
 // TOP
 import VehicleHeader from "./VehicleHeader";
@@ -36,6 +36,13 @@ export default function VehicleDetails() {
   const [isInspectionOpen, setIsInspectionOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
 
+  useLayoutEffect(() => {
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, []);
   const NAVBAR_OFFSET = 210;
 
   const scrollToSection = (ref, tab) => {
@@ -64,8 +71,6 @@ export default function VehicleDetails() {
     }
 
     if (!ref.current) return;
-    console.log("10");
-
     const top =
       ref.current.getBoundingClientRect().top + window.scrollY - NAVBAR_OFFSET;
 
