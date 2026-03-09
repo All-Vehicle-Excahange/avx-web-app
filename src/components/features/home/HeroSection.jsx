@@ -29,9 +29,8 @@ export default function HeroSection() {
 
       {/* Hero Content */}
       <div
-        className={`relative z-10 flex flex-col items-center justify-center h-full transition-opacity duration-300 ${
-          collapsed ? "opacity-0" : "opacity-100"
-        }`}
+        className={`relative z-10 flex flex-col items-center justify-center h-full transition-opacity duration-300 ${collapsed ? "opacity-0" : "opacity-100"
+          }`}
       >
         <p className="text-primary tracking-widest uppercase font-primary">
           Welcome to AVX
@@ -41,7 +40,7 @@ export default function HeroSection() {
           Pick Your Vehicle
         </h1>
 
-        <div className="mt-[20vh] flex gap-6 relative bottom-2 ">
+        <div className="mt-[20vh] flex gap-6 relative bottom-10">
           {/* Vehicles Tab */}
           <button
             onClick={() => setActiveTab("vehicles")}

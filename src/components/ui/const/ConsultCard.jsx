@@ -163,19 +163,22 @@ export default function ConsultantCard(props) {
           </div>
         </div>
         {/* FOOTER */}
-        <div className="flex justify-between items-center gap-3 mt-auto pt-4">
+        <div className="flex justify-between items-center gap-2 mt-auto pt-4">
           <p className="text-xs text-third">
             Available Vehicles:{" "}
             <span className="text-primary">{data?.vehicleCount ?? 0}</span>
           </p>
 
-          <Button
-            href={`/store-front/${username || "#"}`}
-            variant="outline"
-            size="sm"
-          >
-            View StoreFront
-          </Button>
+          <div className="shrink-0">
+            <Button
+              href={`/store-front/${username || "#"}`}
+              variant="outline"
+              size="sm"
+              className="whitespace-nowrap"
+            >
+              View StoreFront
+            </Button>
+          </div>
         </div>
       </div>
     </div>

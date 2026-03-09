@@ -37,7 +37,6 @@ export default function SearchWithHeader() {
   const priceRangeParam = searchParams.get("priceRange");
   const location = searchParams.get("location");
 
-
   return (
     <>
       {/* NAVBAR */}

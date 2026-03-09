@@ -146,19 +146,19 @@ const CategoriesSections = () => {
 
         {/* Categories */}
         <div className="w-full my-6">
-          <div className="flex sm:flex md:grid md:grid-cols-4 lg:grid-cols-6 gap-4 overflow-x-auto md:overflow-visible no-scrollbar">
+          <div className="flex items-center gap-3 overflow-x-auto no-scrollbar whitespace-nowrap">
             {categoriesByType[activeType].map((cat) => {
               const isActive = active === cat.id;
 
               return (
                 <button
-                  onClick={() => setActive(cat.id)}
                   key={cat.id}
+                  onClick={() => setActive(cat.id)}
                   className={cn(
-                    "shrink-0 px-4 py-2 text-sm font-semibold rounded-3xl border-2 cursor-pointer flex items-center justify-center gap-2 transition-all whitespace-nowrap",
+                    "flex items-center gap-2 shrink-0 px-5 py-2 text-sm font-semibold rounded-full border-2 transition-all cursor-pointer",
                     isActive
                       ? "bg-fourth text-primary border-fourth shadow-sm"
-                      : "text-primary",
+                      : "text-primary border-white/50 hover:border-primary"
                   )}
                 >
                   {cat.icon && <cat.icon size={18} />}
@@ -170,8 +170,7 @@ const CategoriesSections = () => {
         </div>
 
         {/* Vehicle Grid */}
-        {/* Vehicle Grid */}
-        <div className="flex-1 min-h-0 grid sm:items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="flex-1 min-h-0 grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {vehicles.length === 0 ? (
             <div className="col-span-full text-center py-10">
               <p className="text-lg font-semibold text-primary">
@@ -189,7 +188,7 @@ const CategoriesSections = () => {
         </div>
 
         {/* Bottom Button */}
-        <div className="mt-2 flex justify-end">
+        <div className="mt-7 flex justify-end">
           <Button href="/search" variant="outlineAnimated" size="md">
             Explore All Vehicles
           </Button>

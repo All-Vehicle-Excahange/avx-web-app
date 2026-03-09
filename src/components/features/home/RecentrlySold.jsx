@@ -1,7 +1,7 @@
-import {useState , useEffect} from "react";
+import { useState, useEffect } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
-import {getRecentlySold} from "@/services/user.service";
+import { getRecentlySold } from "@/services/user.service";
 
 const smallCars = [
   {
@@ -102,7 +102,7 @@ const RecentrlySold = () => {
         </div>
       </div>
 
-      <div className=" flex-1 min-h-0 grid sm:items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="flex-1 min-h-0 grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {vehicle.map((car) => (
           <VehicleCard data={car} key={car.id} />
         ))}
