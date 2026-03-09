@@ -2,7 +2,7 @@ import axiosInstance from "@/lib/axiosInstance";
 
 const ENDPOINT = {
   getThemeListing: "/consultation/owner/store/themes",
-  checkIsEligibleToCreate: "consultation/owner/store/themes/",
+  checkIsEligibleToCreate: "consultation/owner/store/themes",
   getThemeImages: "/consultation/owner/store/templates",
   checkIsEligibleToUpload: "/consultation/owner/store/images/upload/eligible",
 };

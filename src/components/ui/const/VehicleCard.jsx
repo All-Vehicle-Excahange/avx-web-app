@@ -9,7 +9,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import LoginPopup from "@/components/auth/LoginPopup";
 
 
-export default function VehicleCard({ data, onWishlistChange }) {
+export default function VehicleCard({ data, onWishlistChange, source = "search" }) {
     const router = useRouter();
 
     // ✅ Initial Favorite State From Backend
@@ -82,7 +82,7 @@ export default function VehicleCard({ data, onWishlistChange }) {
     };
 
     const handleCardClick = () => {
-        router.push(`/vehicle/details/${data.id}`, undefined, { scroll: false });
+        router.push(`/vehicle/details/${data.id}?source=${source}`, undefined, { scroll: false });
     }
 
     return (
@@ -183,7 +183,7 @@ export default function VehicleCard({ data, onWishlistChange }) {
                             <h3 className="text-sm md:text-xl font-bold">₹ {mapped.price}</h3>
 
                             <div className="hidden md:block">
-                                <Button href={`/vehicle/details/${data.id}`} variant="outline" size="sm">
+                                <Button href={`/vehicle/details/${data.id}?source=${source}`} variant="outline" size="sm">
                                     View Details
                                 </Button>
                             </div>

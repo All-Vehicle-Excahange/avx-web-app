@@ -55,7 +55,7 @@ const ShowcaseSection = () => {
       {/* Vehicle Grid */}
       <div className="flex-1 min-h-0 grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {vehicle.map((car) => (
-          <VehicleCard data={car} key={car.id} />
+          <VehicleCard data={car} key={car.id} source="home" />
         ))}
       </div>
 

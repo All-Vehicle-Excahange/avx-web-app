@@ -25,6 +25,7 @@ import {
 } from "@/services/consult.filter.service";
 import { getCities, getState } from "@/services/user.service";
 import { useSearchParams } from "next/navigation";
+import Pagination from "@/components/ui/Pagination";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
@@ -43,11 +44,11 @@ function useIsMobile() {
   return isMobile;
 }
 
-export default function FilterWithCard() {
+export default function FilterWithCard({ onFilterChange }) {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [activeFilterTab, setActiveFilterTab] = useState("Vehicle Type");
   const [selectedMobileChips, setSelectedMobileChips] = useState([]);
-  const [avxAssumed, setAvxAssumed] = useState(true);
+  const [avxAssumed, setAvxAssumed] = useState(false);
   const searchParams = useSearchParams();
   const sort = searchParams.get("sort");
 
@@ -106,8 +107,8 @@ export default function FilterWithCard() {
   const [selectedServices, setSelectedServices] = useState([]);
 
   // ── Price range slider ──
-  const [minPrice, setMinPrice] = useState(100000);
-  const [maxPrice, setMaxPrice] = useState(1000000);
+  const [minPrice, setMinPrice] = useState(50000);
+  const [maxPrice, setMaxPrice] = useState(2000000);
   const MIN = 50000;
   const MAX = 2000000;
 
@@ -116,7 +117,8 @@ export default function FilterWithCard() {
 
   // ── Pagination ──
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
+  const [totalPages, setTotalPages] = useState(0);
+  const itemsPerPage = 6;
 
   // ── Result data ──
   const [consultants, setConsultants] = useState([]); // from getFilteredConsult
@@ -336,15 +338,24 @@ export default function FilterWithCard() {
         direction,
       };
 
+      const premiumRequestData = {
+        ...requestData,
+        size: 3, // Limit premium consultants to 3
+      };
+
       const [filteredRes, premiumRes] = await Promise.all([
         getFilteredConsult(requestData, payload),
-        getPremiumConsult(requestData, payload),
+        getPremiumConsult(premiumRequestData, payload),
       ]);
 
       const filteredData =
         filteredRes?.success && Array.isArray(filteredRes?.data)
           ? filteredRes.data
           : [];
+
+      if (filteredRes?.pagination?.totalPages) {
+        setTotalPages(filteredRes.pagination.totalPages);
+      }
 
       const premiumData =
         premiumRes?.success && Array.isArray(premiumRes?.data)
@@ -572,7 +583,6 @@ export default function FilterWithCard() {
 
 
   const handleApplyFilter = async () => {
-    // Save/overwrite selected location to localStorage
     if (selectedStateId && selectedStateName) {
       const locationData = {
         stateId: selectedStateId,
@@ -584,7 +594,7 @@ export default function FilterWithCard() {
     }
 
     const payload = buildPayload();
-    setCurrentPage(1); // reset to page 1 when applying new filters
+    setCurrentPage(1);
     await fetchConsultants(1, payload);
   };
 
@@ -597,8 +607,9 @@ export default function FilterWithCard() {
   }, [sort]);
 
   const handlePageChange = (newPage) => {
-    if (newPage >= 1) {
+    if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -666,6 +677,30 @@ export default function FilterWithCard() {
     Services: services.map((s) => s.label),
     Distance: distances.map((d) => d.label),
   };
+
+  // ── Real-time filter tag emission ──
+  useEffect(() => {
+    const tags = [];
+    const vtLabels = { TWO_WHEELER: 'Two-Wheeler', FOUR_WHEELER: 'Four-Wheeler' };
+    if (selectedVehicleTypes.length > 0) tags.push(...selectedVehicleTypes.map(v => vtLabels[v] || v));
+    if (selectedServices.length > 0) tags.push(...selectedServices.map(s => s.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')));
+    if (selectedRating.length > 0) tags.push(`${selectedRating[0]}+ ⭐`);
+    if (selectedInventory.length > 0) tags.push(inventorySizes.find(d => d.value === selectedInventory[0])?.label || selectedInventory[0]);
+    if (selectedDistance.length > 0) tags.push(distances.find(d => d.value === selectedDistance[0])?.label || selectedDistance[0]);
+    if (selectedCityName || selectedStateName) {
+      const locationParts = [];
+      if (selectedCityName) locationParts.push(selectedCityName);
+      if (selectedStateName) locationParts.push(selectedStateName);
+      tags.push(locationParts.join(', '));
+    }
+    if (minPrice !== MIN || maxPrice !== MAX) tags.push(`₹${(minPrice / 100000).toFixed(1)}L–₹${(maxPrice / 100000).toFixed(1)}L`);
+    onFilterChange?.(tags);
+  }, [
+    selectedVehicleTypes, selectedServices, selectedRating,
+    selectedInventory, selectedDistance, selectedCityName, selectedStateName,
+    minPrice, maxPrice
+  ]);
+
   const filteredStates = states.filter((s) =>
     s.label.toLowerCase().includes(stateSearch.toLowerCase()),
   );
@@ -1092,6 +1127,7 @@ export default function FilterWithCard() {
           data={premiumConsultants}
           showIsSponsored={true}
           showViewAll
+          i={3}
         />
 
         <ConsultantSliderSection
@@ -1106,31 +1142,11 @@ export default function FilterWithCard() {
         />
 
         {/* Pagination Controls */}
-        <div className="mt-8 flex justify-center">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="p-2 rounded-full bg-secondary/20 text-white hover:bg-primary disabled:opacity-40 disabled:cursor-not-allowed"
-              aria-label="Previous page"
-            >
-              <ChevronLeft size={20} />
-            </button>
-
-            <span className="text-white text-sm sm:text-base">
-              Page {currentPage} of 20
-            </span>
-
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === 20}
-              className="p-2 rounded-full bg-secondary/20 text-white hover:bg-primary disabled:opacity-40 disabled:cursor-not-allowed"
-              aria-label="Next page"
-            >
-              <ChevronRight size={20} />
-            </button>
-          </div>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </main>
 
       {/* ================= MOBILE FILTER DRAWER ================= */}
