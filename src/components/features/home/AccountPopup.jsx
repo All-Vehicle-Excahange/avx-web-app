@@ -258,7 +258,7 @@ export default function AccountPopup({ open, onClosePopup }) {
             {(showLogoutConfirm || isLogoutClosing) && typeof document !== "undefined" && createPortal(
                 <div
                     className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-                    onClick={handleCloseLogout}
+                    onClick={handleCancelLogout}
                     style={{ animation: isLogoutClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}
                 >
                     <div

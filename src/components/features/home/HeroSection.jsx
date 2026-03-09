@@ -73,9 +73,9 @@ export default function HeroSection() {
       </div>
 
       {/* Scroll Indicator - hints user to scroll */}
-      <div className="absolute bottom-2 left-1/2 scroll-indicator z-20">
+      {/* <div className="absolute bottom-2 left-1/2 scroll-indicator z-20">
         <ChevronDown className="text-primary/70 w-6 h-6" />
-      </div>
+      </div> */}
     </section>
   );
 }
