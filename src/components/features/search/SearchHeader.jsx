@@ -57,16 +57,19 @@ export default function SearchHeader({ pageResponse = {}, activeFilters = [] }) 
 
             {/* LEFT */}
             <div className="flex items-center gap-2 flex-wrap text-primary  text-sm md:text-base">
-              <span>
-                {vehicleType} {bodyType} {fuelType} {brandParam}
-                {budget && ` ${budget}`}
-                {location && ` in ${location}`}
-              </span>
+              {/* Show URL query params only when no filters are selected */}
+              {activeFilters.length === 0 && (
+                <span>
+                  {vehicleType} {bodyType} {fuelType} {brandParam}
+                  {budget && ` ${budget}`}
+                  {location && ` ${location}`}
+                </span>
+              )}
 
               {/* Active Filters as plain text */}
               {activeFilters.length > 0 && (
                 <span className="text-primary font-bold">
-                   {activeFilters.join(" • ")}
+                  {activeFilters.join(" • ")}
                 </span>
               )}
 
