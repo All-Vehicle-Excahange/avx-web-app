@@ -156,6 +156,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
   const fuelType = searchParams.get("fuelType");
   const brandParam = searchParams.get("brand");
   const makerId = searchParams.get("makerId");
+  const modelIdParam = searchParams.get("modelId");
   const budget = searchParams.get("budget");
   const sort = searchParams.get("sort");
 
@@ -262,6 +263,12 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
     if (makerId) {
       initialPayload.makerIds = [Number(makerId)];
       setSelectedBrands([makerId]);
+    }
+
+    // Model from URL (e.g. from VDP navigation)
+    if (modelIdParam) {
+      initialPayload.modelIds = [Number(modelIdParam)];
+      setSelectedModels([modelIdParam]);
     }
 
     // Fuel type from URL
@@ -384,20 +391,26 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
   }, [selectedStateId]);
 
   useEffect(() => {
-    // Priority 1: Read location from URL query params (from homepage filter bar)
+    // Priority 1: Read location from URL query params (from homepage filter bar or VDP)
     const qCityId = searchParams.get("cityId");
     const qStateId = searchParams.get("stateId");
     const qLocation = searchParams.get("location");
+    const qStateName = searchParams.get("stateName");
+    const qCityName = searchParams.get("cityName");
 
-    if (qCityId && qStateId) {
-      setSelectedCityId(Number(qCityId));
+    if (qStateId) {
       setSelectedStateId(Number(qStateId));
+      if (qCityId) setSelectedCityId(Number(qCityId));
 
-      // Parse "cityName, stateName" from location param
+      // Parse "cityName, stateName" from location param (homepage filter bar)
       if (qLocation) {
         const parts = qLocation.split(",").map((s) => s.trim());
         setSelectedCityName(parts[0] || "");
         setSelectedStateName(parts[1] || "");
+      } else {
+        // Fallback: read individual name params (from VDP navigation)
+        if (qStateName) setSelectedStateName(qStateName);
+        if (qCityName) setSelectedCityName(qCityName);
       }
       return; // skip localStorage fallback
     }

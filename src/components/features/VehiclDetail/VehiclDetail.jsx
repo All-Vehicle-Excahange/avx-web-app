@@ -122,7 +122,7 @@ export default function VehicleDetails() {
           {/* HEADER */}
           <section className="relative">
             <div className="sticky top-16 pb-4 z-40 ">
-              <VehicleHeader vehicle={vehicleOverview} />
+              <VehicleHeader vehicle={vehicleOverview} vehicleSummary={vehicleSummary} />
             </div>
 
             <section className="grid grid-cols-1 xl:grid-cols-[2.2fr_1fr] gap-6 items-start">

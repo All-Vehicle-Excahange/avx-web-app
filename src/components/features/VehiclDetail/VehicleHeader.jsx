@@ -4,23 +4,29 @@ import { ChevronRight, Star } from "lucide-react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-export default function VehicleHeader({ vehicle, ratting }) {
+export default function VehicleHeader({ vehicle, ratting, vehicleSummary }) {
     const router = useRouter();
     const source = router.query.source; // "home" | "search" | undefined
 
     const vehicleNameBase = [vehicle?.makerName, vehicle?.modelName, vehicle?.variantName]
         .filter(Boolean)
         .join(" ") || "Vehicle";
-    const cityName = vehicle?.address?.city;
+    const cityName = vehicleSummary?.address?.city;
     const vehicleName = cityName ? `${vehicleNameBase} in ${cityName}` : vehicleNameBase;
 
     // Build the query string for search links
     const searchQueryParams = new URLSearchParams();
     if (vehicle?.makerId || vehicle?.makeId) searchQueryParams.set("makerId", vehicle.makerId || vehicle.makeId);
     if (vehicle?.makerName) searchQueryParams.set("brand", vehicle.makerName);
-    if (vehicle?.address?.stateId) searchQueryParams.set("stateId", vehicle.address.stateId);
-    if (vehicle?.address?.cityId) searchQueryParams.set("cityId", vehicle.address.cityId);
+    if (vehicle?.modelId) searchQueryParams.set("modelId", vehicle.modelId);
+    if (vehicle?.modelName) searchQueryParams.set("modelName", vehicle.modelName);
+    if (vehicleSummary?.address?.stateId) searchQueryParams.set("stateId", vehicleSummary?.address?.stateId);
+    if (vehicleSummary?.address?.cityId) searchQueryParams.set("cityId", vehicleSummary?.address?.cityId);
+    if (vehicleSummary?.address?.state) searchQueryParams.set("stateName", vehicleSummary?.address?.state);
+    if (cityName) searchQueryParams.set("cityName", cityName);
     const searchUrl = `/search?${searchQueryParams.toString()}`;
+
+
 
     return (
         <header className="w-full space-y-3 pt-6 bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)]">
