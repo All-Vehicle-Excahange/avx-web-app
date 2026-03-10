@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
     MapPin,
     MessageCircle,
@@ -14,10 +14,10 @@ import {
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
-import {useParams} from "next/navigation";
-import {followConsultant, getStoreFrontByUsername, unFollowConsultant} from "@/services/user.service";
+import { useParams } from "next/navigation";
+import { followConsultant, getStoreFrontByUsername, unFollowConsultant } from "@/services/user.service";
 import LoginPopup from "@/components/auth/LoginPopup";
-import {useAuthStore} from "@/stores/useAuthStore";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 
 export default function StoreFrontHeroSection() {
@@ -59,7 +59,7 @@ export default function StoreFrontHeroSection() {
 
     const formattedPrice =
         comsultDetails.minVehiclePrice &&
-        comsultDetails.maxVehiclePrice
+            comsultDetails.maxVehiclePrice
             ? `₹${Number(
                 comsultDetails.minVehiclePrice
             ).toLocaleString()} - ₹${Number(
@@ -113,11 +113,11 @@ export default function StoreFrontHeroSection() {
     return (
         <>
             <section
-                className="w-full max-w-[1480px] mt-10 mx-auto border border-third/40 rounded-[2.5rem] overflow-hidden shadow-sm">
+                className="w-full max-w-[1480px] mt-10 mx-auto border border-third/40 rounded-[1rem]  md:rounded-[2.5rem] overflow-hidden shadow-sm">
 
                 {/* ================= BANNER ================= */}
                 <div
-                    className="w-full h-80 bg-cover bg-center"
+                    className="w-full h-54 md:h-80 bg-cover bg-center"
                     style={{
                         backgroundImage: `url(${comsultDetails.bannerUrl})`,
                     }}
@@ -145,7 +145,7 @@ export default function StoreFrontHeroSection() {
                                 <div className="flex items-center gap-2">
                                     <div
                                         className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
-                                        <Users className="w-4 h-4 text-primary"/>
+                                        <Users className="w-4 h-4 text-primary" />
                                     </div>
 
                                     <p className="text-base font-bold text-primary leading-none">
@@ -172,17 +172,17 @@ export default function StoreFrontHeroSection() {
                                 </h1>
 
                                 <p className="flex items-center gap-1.5 text-third mt-1">
-                                    <MapPin className="w-4 h-4 shrink-0"/>
+                                    <MapPin className="w-4 h-4 shrink-0" />
                                     <span className="text-sm">
-                  {[
-                      comsultDetails?.address?.address,
-                      comsultDetails?.address?.city,
-                      comsultDetails?.address?.state,
-                      comsultDetails?.address?.country,
-                  ]
-                      .filter(Boolean)
-                      .join(", ") || "N/A"}
-                </span>
+                                        {[
+                                            comsultDetails?.address?.address,
+                                            comsultDetails?.address?.city,
+                                            comsultDetails?.address?.state,
+                                            comsultDetails?.address?.country,
+                                        ]
+                                            .filter(Boolean)
+                                            .join(", ") || "N/A"}
+                                    </span>
                                 </p>
                             </div>
 
@@ -214,10 +214,10 @@ export default function StoreFrontHeroSection() {
                                         value: comsultDetails.establishmentYear || "N/A",
                                         icon: Briefcase,
                                     },
-                                ].map(({label, value, icon: Icon}) => (
+                                ].map(({ label, value, icon: Icon }) => (
                                     <div key={label} className="flex items-center gap-3">
                                         <div className="p-2 bg-primary/5 rounded-lg border border-primary/10">
-                                            <Icon className="w-4 h-4 text-third"/>
+                                            <Icon className="w-4 h-4 text-third" />
                                         </div>
                                         <div>
                                             <p className="text-[10px] uppercase text-third font-semibold leading-none mb-1">
@@ -247,13 +247,13 @@ export default function StoreFrontHeroSection() {
                                                 key={service}
                                                 className="px-3 py-1.5 text-[11px] font-medium border border-third rounded-full text-primary hover:bg-primary/5 transition-colors cursor-default"
                                             >
-                      {formatServiceName(service)}
-                    </span>
+                                                {formatServiceName(service)}
+                                            </span>
                                         ))
                                     ) : (
                                         <span className="text-xs text-third italic">
-                    No services listed
-                  </span>
+                                            No services listed
+                                        </span>
                                     )}
                                 </div>
                             </div>
@@ -261,12 +261,12 @@ export default function StoreFrontHeroSection() {
                             <div className="flex gap-3 pt-6">
                                 <Button size="sm" variant="ghost">
                                     Start Chat
-                                    <MessageCircle className="ml-2 w-4 h-4"/>
+                                    <MessageCircle className="ml-2 w-4 h-4" />
                                 </Button>
 
                                 <Button size="sm" variant="ghost">
                                     Get Directions
-                                    <CornerUpRight className="ml-2 w-4 h-4"/>
+                                    <CornerUpRight className="ml-2 w-4 h-4" />
                                 </Button>
                             </div>
                         </div>
