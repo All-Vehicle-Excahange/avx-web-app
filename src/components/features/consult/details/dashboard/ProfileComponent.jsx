@@ -409,33 +409,36 @@ export default function ProfileComponent() {
         </div>
       </div>
       {/* FOOTER ACTIONS (CONTEXTUAL) */}
-      <div className="rounded-2xl border border-third/30 bg-primary/5 p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        {/* Text */}
-        <div>
-          <p className="font-medium text-sm">
-            Need help updating your profile?
-          </p>
-          <p className="text-xs text-third">
-            Contact AVX Support or view platform guidelines for assistance.
-          </p>
-        </div>
+    <div className="rounded-2xl border border-third/30 bg-primary/5 p-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+  {/* ✅ Text Section: Centered on mobile, left-aligned on desktop */}
+  <div className="space-y-1 text-left">
+    <p className="font-medium text-sm md:text-base text-primary">
+      Need help updating your profile?
+    </p>
+    <p className="text-xs md:text-sm text-third max-w-md">
+      Contact AVX Support or view platform guidelines for assistance.
+    </p>
+  </div>
 
-        {/* Actions */}
-        <div className="flex gap-3">
-          <Button
-            variant="outlineSecondary"
-            className="flex items-center gap-2"
-          >
-            <Headphones size={16} />
-            Contact Support
-          </Button>
+  {/* ✅ Actions Section: Stacks on mobile, Row on tablet/desktop */}
+  <div className="flex flex-col sm:flex-row gap-3">
+    <Button
+      variant="outlineSecondary"
+      className="flex items-center justify-center gap-2 w-full sm:w-auto px-6"
+    >
+      <Headphones size={16} />
+      <span>Contact Support</span>
+    </Button>
 
-          <Button variant="ghost" className="flex items-center gap-2">
-            <FileText size={16} />
-            View Guidelines
-          </Button>
-        </div>
-      </div>
+    <Button 
+      variant="ghost" 
+      className="flex items-center justify-center gap-2 w-full sm:w-auto px-6"
+    >
+      <FileText size={16} />
+      <span>View Guidelines</span>
+    </Button>
+  </div>
+</div>
     </section>
   );
 }

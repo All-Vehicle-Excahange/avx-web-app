@@ -46,23 +46,31 @@ export default function StoreFrontComponent() {
       </div>
 
       {/* STORE INFO */}
-      <div className="bg-secondary border border-third/30 rounded-3xl p-6 space-y-4">
-        <div className="flex justify-between items-start gap-6">
-          <div className="flex gap-6">
-            <Image
-              src={data.logo}
-              width={100}
-              height={100}
-              className="rounded-xl"
-              alt=""
-            />
+      <div className="bg-secondary border border-third/30 rounded-3xl p-5 md:p-8 space-y-6">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-6">
+          <div className="flex flex-col sm:flex-row gap-6">
+            <div className="relative w-20 h-20 md:w-[100px] md:h-[100px] shrink-0">
+              <Image
+                src={data.logo}
+                fill
+                className="rounded-xl object-cover"
+                alt=""
+              />
+            </div>
             <div>
-              <h2 className="text-xl font-bold">{data.name}</h2>
-              <div className="flex gap-3 text-sm text-third mt-1">
-                <Star size={14} className="text-yellow-400" />
-                {data.rating} ({data.reviews}) <MapPin size={14} /> {data.city}
+              <h2 className="text-xl md:text-2xl font-bold">{data.name}</h2>
+              <div className="flex flex-wrap items-center gap-3 text-xs md:text-sm text-third mt-1">
+                <div className="flex items-center gap-1">
+                  <Star size={14} className="text-yellow-400 fill-yellow-400" />
+                  {data.rating} ({data.reviews})
+                </div>
+                <div className="flex items-center gap-1">
+                  <MapPin size={14} /> {data.city}
+                </div>
               </div>
-              <p className="text-sm mt-3 max-w-3xl">{data.description}</p>
+              <p className="text-sm mt-4 text-primary/80 leading-relaxed max-w-3xl">
+                {data.description}
+              </p>
             </div>
           </div>
 
@@ -70,8 +78,9 @@ export default function StoreFrontComponent() {
             onClick={() => setEditor("store")}
             variant="outlineSecondary"
             size="sm"
+            className="w-full md:w-auto"
           >
-            <Pencil size={13} className="mr-1" /> Edit
+            <Pencil size={13} className="mr-1" /> Edit Storefront
           </Button>
         </div>
       </div>
@@ -108,23 +117,26 @@ export default function StoreFrontComponent() {
 
 function Content({ title, text, img, onEdit }) {
   return (
-    <div className="bg-secondary border border-third/30 rounded-3xl p-6 space-y-4">
-      <div className="flex justify-between items-center">
-        <h3 className="font-semibold text-lg">{title}</h3>
+    <div className="bg-secondary border border-third/30 rounded-3xl p-5 md:p-8 space-y-6">
+      <div className="flex justify-between items-center gap-4">
+        <h3 className="font-semibold text-lg md:text-xl">{title}</h3>
         <Button onClick={onEdit} variant="outlineSecondary" size="sm">
           <Pencil size={13} className="mr-1" /> Edit
         </Button>
       </div>
 
-      <p className="text-sm text-third leading-relaxed">{text}</p>
+      <p className="text-sm md:text-base text-third leading-relaxed">
+        {text}
+      </p>
 
-      <Image
-        src={img}
-        width={1200}
-        height={400}
-        className="rounded-xl w-full object-cover"
-        alt=""
-      />
+      <div className="relative aspect-3/1 w-full overflow-hidden rounded-2xl">
+        <Image
+          src={img}
+          fill
+          className="object-cover"
+          alt=""
+        />
+      </div>
     </div>
   );
 }

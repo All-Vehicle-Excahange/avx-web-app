@@ -40,23 +40,23 @@ function InspectionTab() {
   return (
     <section className="w-full space-y-10">
       {/* ================= HEADER ================= */}
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col md:flex-row sm:items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-xl md:text-2xl font-bold">
             Inspection Tab — Consultant Panel
           </h1>
-          <p className="text-sm text-third">
+          <p className="text-xs md:text-sm text-third">
             Manage vehicle inspections and maintain trust score
           </p>
         </div>
 
         {/* IQI Badge */}
-        <div className="flex items-center gap-2 px-4 py-2 rounded-xl border border-third/30 bg-secondary">
+        <div className="flex items-center gap-2 px-4 py-2 rounded-xl border border-third/30 bg-secondary w-fit">
           <BadgeCheck size={18} className="text-primary" />
-          <p className="text-sm font-medium">
+          <p className="text-xs md:text-sm font-medium">
             IQI: <span className="text-primary font-bold">78%</span>
           </p>
-          <span className="text-third text-sm">Trust Health</span>
+          <span className="text-third text-xs md:text-sm">Trust Health</span>
         </div>
       </div>
 
@@ -67,7 +67,7 @@ function InspectionTab() {
         </h2>
 
         {/* Stat Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
           <StatCard
             icon={<Car className="text-primary" size={20} />}
             label="Vehicles with AVX Inspection"
@@ -101,25 +101,25 @@ function InspectionTab() {
       </div>
 
       {/* ================= TRUST SCORE BANNER ================= */}
-      <div className="rounded-2xl border border-primary/20 bg-primary/5 px-6 py-5 flex items-center justify-between">
+      <div className="rounded-2xl border border-primary/20 bg-primary/5 px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           {/* Circle */}
-          <div className="w-14 h-14 rounded-full bg-primary text-secondary flex items-center justify-center font-bold text-lg">
+          <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 rounded-full bg-primary text-secondary flex items-center justify-center font-bold text-base md:text-lg">
             82%
           </div>
 
           <div>
-            <p className="font-semibold text-sm">
+            <p className="font-semibold text-xs md:text-sm leading-tight">
               Your trust score is{" "}
               <span className="text-primary font-bold">82%</span>
             </p>
-            <p className="text-xs text-third">
+            <p className="text-[11px] md:text-xs text-third mt-0.5">
               Keep inspections updated to improve ranking
             </p>
           </div>
         </div>
 
-        <TrendingUp size={20} className="text-primary" />
+        <TrendingUp size={20} className="text-primary shrink-0 transition-transform sm:rotate-0" />
       </div>
 
       {/* ================= HOW INSPECTION AFFECTS RANKING ================= */}
@@ -171,33 +171,33 @@ function InspectionTab() {
           <table className="w-full text-sm">
             {/* Table Head */}
             <thead className="text-left text-third border-b border-third/30">
-              <tr>
-                <th className="py-3">Vehicle</th>
-                <th>Status</th>
-                <th>Last Inspection</th>
-                <th>Action</th>
+              <tr className="whitespace-nowrap">
+                <th className="py-3 pr-4">Vehicle</th>
+                <th className="pr-4">Status</th>
+                <th className="pr-4">Last Inspection</th>
+                <th className="text-right">Action</th>
               </tr>
             </thead>
 
             {/* Table Body */}
-            <tbody className="divide-y divide-third/20">
+            <tbody className="divide-y divide-third/20 whitespace-nowrap">
               {/* Row 1 */}
               <tr>
-                <td className="py-4 flex items-center gap-2 font-medium">
+                <td className="py-4 pr-4 flex items-center gap-2 font-medium">
                   <Car size={16} className="text-third" />
                   Tata Harrier
                 </td>
 
-                <td>
-                  <span className="px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-medium">
+                <td className="pr-4">
+                  <span className="px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-[11px] font-medium">
                     Expired (45 days)
                   </span>
                 </td>
 
-                <td className="text-third">12 Jan</td>
+                <td className="text-third pr-4">12 Jan</td>
 
-                <td>
-                  <Button variant="ghost" className="px-5">
+                <td className="text-right">
+                  <Button variant="ghost" className="px-5 text-xs h-8">
                     Renew Inspection
                   </Button>
                 </td>
@@ -205,21 +205,21 @@ function InspectionTab() {
 
               {/* Row 2 */}
               <tr className="bg-primary/5">
-                <td className="py-4 flex items-center gap-2 font-medium">
+                <td className="py-4 pr-4 flex items-center gap-2 font-medium">
                   <Car size={16} className="text-third" />
                   BMW X1
                 </td>
 
-                <td>
-                  <span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-xs font-medium">
+                <td className="pr-4">
+                  <span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-[11px] font-medium">
                     Buyer Re-requested
                   </span>
                 </td>
 
-                <td className="text-third">30 days</td>
+                <td className="text-third pr-4">30 days</td>
 
-                <td>
-                  <Button variant="ghost" className="px-5">
+                <td className="text-right">
+                  <Button variant="ghost" className="px-5 text-xs h-8">
                     Approve Re-check
                   </Button>
                 </td>
@@ -227,21 +227,21 @@ function InspectionTab() {
 
               {/* Row 3 */}
               <tr>
-                <td className="py-4 flex items-center gap-2 font-medium">
+                <td className="py-4 pr-4 flex items-center gap-2 font-medium">
                   <Car size={16} className="text-third" />
                   Audi A6
                 </td>
 
-                <td>
-                  <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
+                <td className="pr-4">
+                  <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-[11px] font-medium">
                     Inspection Scheduled
                   </span>
                 </td>
 
-                <td className="text-third">Tomorrow</td>
+                <td className="text-third pr-4">Tomorrow</td>
 
-                <td>
-                  <Button variant="ghost" className="px-5">
+                <td className="text-right">
+                  <Button variant="ghost" className="px-5 text-xs h-8">
                     View Details
                   </Button>
                 </td>
@@ -274,52 +274,52 @@ function InspectionTab() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             {/* Head */}
-            <thead className="text-left text-third border-b border-third/30">
+            <thead className="text-left text-third border-b border-third/30 whitespace-nowrap">
               <tr>
-                <th className="py-3">Vehicle</th>
-                <th>Buyer</th>
-                <th>Type</th>
-                <th>Price</th>
-                <th>Status</th>
+                <th className="py-3 pr-4">Vehicle</th>
+                <th className="pr-4">Buyer</th>
+                <th className="pr-4">Type</th>
+                <th className="pr-4">Price</th>
+                <th className="pr-4">Status</th>
                 <th className="text-right">Action</th>
               </tr>
             </thead>
 
             {/* Body */}
-            <tbody>
+            <tbody className="whitespace-nowrap">
               <tr className="border-b border-third/20">
                 {/* Vehicle */}
-                <td className="py-4 flex items-center gap-2 font-medium">
+                <td className="py-4 pr-4 flex items-center gap-2 font-medium">
                   <Car size={16} className="text-third" />
                   Harrier
                 </td>
 
                 {/* Buyer */}
-                <td className="text-third">Rahul S.</td>
+                <td className="text-third pr-4">Rahul S.</td>
 
                 {/* Type */}
-                <td className="flex items-center gap-2 text-primary font-medium">
+                <td className="flex items-center gap-2 text-primary font-medium pr-4">
                   <Video size={16} className="text-purple-400" />
                   Video + Report
                 </td>
 
                 {/* Price */}
-                <td className="font-semibold">₹1,999</td>
+                <td className="font-semibold pr-4">₹1,999</td>
 
                 {/* Status */}
-                <td>
-                  <span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-xs font-medium">
+                <td className="pr-4">
+                  <span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-[11px] font-medium">
                     Awaiting approval
                   </span>
                 </td>
 
                 {/* Action Buttons */}
                 <td className="flex justify-end gap-3 py-4">
-                  <Button variant="ghost" className="px-6">
+                  <Button variant="ghost" className="px-6 text-xs h-8">
                     Accept
                   </Button>
 
-                  <Button variant="outlineSecondary" className="px-6">
+                  <Button variant="outlineSecondary" className="px-6 text-xs h-8">
                     Decline
                   </Button>
                 </td>
@@ -392,45 +392,45 @@ function InspectionTab() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             {/* Table Head */}
-            <thead className="border-b border-third/30 text-third text-left">
+            <thead className="border-b border-third/30 text-third text-left whitespace-nowrap">
               <tr>
-                <th className="py-3">Vehicle</th>
-                <th>Inspection Date</th>
-                <th>Inspector Name</th>
-                <th>Score</th>
-                <th>Report Version</th>
-                <th>Status</th>
+                <th className="py-3 pr-4">Vehicle</th>
+                <th className="pr-4">Inspection Date</th>
+                <th className="pr-4">Inspector Name</th>
+                <th className="pr-4">Score</th>
+                <th className="pr-4">Report Version</th>
+                <th className="pr-4">Status</th>
                 <th className="text-right">Action</th>
               </tr>
             </thead>
 
             {/* Table Body */}
-            <tbody className="divide-y divide-third/20">
+            <tbody className="divide-y divide-third/20 whitespace-nowrap">
               {/* Row 1 */}
               <tr>
-                <td className="py-4 flex items-center gap-2 font-medium">
+                <td className="py-4 pr-6 flex items-center gap-2 font-medium">
                   <Car size={16} className="text-third" />
                   Mercedes C-Class
                 </td>
-                <td className="text-third">28 Jan 2026</td>
-                <td className="text-third">Amit Verma</td>
+                <td className="text-third pr-6">28 Jan 2026</td>
+                <td className="text-third pr-6">Amit Verma</td>
 
-                <td className="font-semibold flex items-center gap-2">
+                <td className="font-semibold flex items-center gap-2 pr-6">
                   92/100
                   <CheckCircle2 size={16} className="text-green-500" />
                 </td>
 
-                <td className="text-third">v2.1</td>
+                <td className="text-third pr-6">v2.1</td>
 
-                <td>
-                  <span className="px-4 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-medium">
+                <td className="pr-6">
+                  <span className="px-4 py-1 rounded-full bg-green-500/10 text-green-400 text-[11px] font-medium">
                     Passed
                   </span>
                 </td>
 
                 <td className="text-right">
-                  <button className="flex items-center gap-2 text-primary hover:underline ml-auto">
-                    <Download size={16} />
+                  <button className="flex items-center gap-2 text-primary hover:underline ml-auto text-xs">
+                    <Download size={14} />
                     Download
                   </button>
                 </td>
@@ -438,29 +438,29 @@ function InspectionTab() {
 
               {/* Row 2 */}
               <tr>
-                <td className="py-4 flex items-center gap-2 font-medium">
+                <td className="py-4 pr-6 flex items-center gap-2 font-medium">
                   <Car size={16} className="text-third" />
                   Honda City
                 </td>
-                <td className="text-third">25 Jan 2026</td>
-                <td className="text-third">Priya Shah</td>
+                <td className="text-third pr-6">25 Jan 2026</td>
+                <td className="text-third pr-6">Priya Shah</td>
 
-                <td className="font-semibold flex items-center gap-2">
+                <td className="font-semibold flex items-center gap-2 pr-6">
                   85/100
                   <CheckCircle2 size={16} className="text-orange-400" />
                 </td>
 
-                <td className="text-third">v2.0</td>
+                <td className="text-third pr-6">v2.0</td>
 
-                <td>
-                  <span className="px-4 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-medium">
+                <td className="pr-6">
+                  <span className="px-4 py-1 rounded-full bg-green-500/10 text-green-400 text-[11px] font-medium">
                     Passed
                   </span>
                 </td>
 
                 <td className="text-right">
-                  <button className="flex items-center gap-2 text-primary hover:underline ml-auto">
-                    <Download size={16} />
+                  <button className="flex items-center gap-2 text-primary hover:underline ml-auto text-xs">
+                    <Download size={14} />
                     Download
                   </button>
                 </td>
@@ -468,29 +468,29 @@ function InspectionTab() {
 
               {/* Row 3 */}
               <tr>
-                <td className="py-4 flex items-center gap-2 font-medium">
+                <td className="py-4 pr-6 flex items-center gap-2 font-medium">
                   <Car size={16} className="text-third" />
                   Toyota Fortuner
                 </td>
-                <td className="text-third">20 Jan 2026</td>
-                <td className="text-third">Rajesh Kumar</td>
+                <td className="text-third pr-6">20 Jan 2026</td>
+                <td className="text-third pr-6">Rajesh Kumar</td>
 
-                <td className="font-semibold flex items-center gap-2">
+                <td className="font-semibold flex items-center gap-2 pr-6">
                   78/100
                   <CheckCircle2 size={16} className="text-orange-400" />
                 </td>
 
-                <td className="text-third">v2.0</td>
+                <td className="text-third pr-6">v2.0</td>
 
-                <td>
-                  <span className="px-4 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-medium">
+                <td className="pr-6">
+                  <span className="px-4 py-1 rounded-full bg-green-500/10 text-green-400 text-[11px] font-medium">
                     Passed
                   </span>
                 </td>
 
                 <td className="text-right">
-                  <button className="flex items-center gap-2 text-primary hover:underline ml-auto">
-                    <Download size={16} />
+                  <button className="flex items-center gap-2 text-primary hover:underline ml-auto text-xs">
+                    <Download size={14} />
                     Download
                   </button>
                 </td>
@@ -498,29 +498,29 @@ function InspectionTab() {
 
               {/* Row 4 */}
               <tr>
-                <td className="py-4 flex items-center gap-2 font-medium">
+                <td className="py-4 pr-6 flex items-center gap-2 font-medium">
                   <Car size={16} className="text-third" />
                   Hyundai Creta
                 </td>
-                <td className="text-third">15 Jan 2026</td>
-                <td className="text-third">Sneha Patil</td>
+                <td className="text-third pr-6">15 Jan 2026</td>
+                <td className="text-third pr-6">Sneha Patil</td>
 
-                <td className="font-semibold flex items-center gap-2">
+                <td className="font-semibold flex items-center gap-2 pr-6">
                   88/100
                   <CheckCircle2 size={16} className="text-orange-400" />
                 </td>
 
-                <td className="text-third">v1.9</td>
+                <td className="text-third pr-6">v1.9</td>
 
-                <td>
-                  <span className="px-4 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-medium">
+                <td className="pr-6">
+                  <span className="px-4 py-1 rounded-full bg-green-500/10 text-green-400 text-[11px] font-medium">
                     Passed
                   </span>
                 </td>
 
                 <td className="text-right">
-                  <button className="flex items-center gap-2 text-primary hover:underline ml-auto">
-                    <Download size={16} />
+                  <button className="flex items-center gap-2 text-primary hover:underline ml-auto text-xs">
+                    <Download size={14} />
                     Download
                   </button>
                 </td>
@@ -652,44 +652,44 @@ function InspectionTab() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             {/* Head */}
-            <thead className="border-b border-third/30 text-third text-left">
+            <thead className="border-b border-third/30 text-third text-left whitespace-nowrap">
               <tr>
-                <th className="py-3">Vehicle</th>
-                <th>Buyer</th>
-                <th>Issue</th>
-                <th>Status</th>
+                <th className="py-3 pr-4">Vehicle</th>
+                <th className="pr-4">Buyer</th>
+                <th className="pr-4">Issue</th>
+                <th className="pr-4">Status</th>
                 <th className="text-right">Action</th>
               </tr>
             </thead>
 
             {/* Body */}
-            <tbody className="divide-y divide-third/20">
+            <tbody className="divide-y divide-third/20 whitespace-nowrap">
               <tr>
                 {/* Vehicle */}
-                <td className="py-4 flex items-center gap-2 font-medium">
+                <td className="py-4 pr-6 flex items-center gap-2 font-medium">
                   <Car size={16} className="text-third" />
                   Audi A6
                 </td>
 
                 {/* Buyer */}
-                <td className="text-third">Raj P.</td>
+                <td className="text-third pr-6">Raj P.</td>
 
                 {/* Issue */}
-                <td className="flex items-center gap-2 text-third">
+                <td className="flex items-center gap-2 text-third pr-6">
                   <MessageSquare size={16} className="text-third" />
                   Scratch mismatch
                 </td>
 
                 {/* Status */}
-                <td>
-                  <span className="px-4 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-medium">
+                <td className="pr-6">
+                  <span className="px-4 py-1 rounded-full bg-red-500/10 text-red-400 text-[11px] font-medium">
                     Open
                   </span>
                 </td>
 
                 {/* Action */}
                 <td className="text-right">
-                  <Button variant="ghost" className="px-6">
+                  <Button variant="ghost" className="px-6 text-xs h-8">
                     Respond
                   </Button>
                 </td>
@@ -790,9 +790,8 @@ function VehicleScore({ name, score, orange }) {
       {/* Progress Bar */}
       <div className="w-full h-3 rounded-full bg-third/20 overflow-hidden">
         <div
-          className={`h-full rounded-full ${
-            orange ? "bg-orange-400" : "bg-green-500"
-          }`}
+          className={`h-full rounded-full ${orange ? "bg-orange-400" : "bg-green-500"
+            }`}
           style={{ width: `${score}%` }}
         />
       </div>

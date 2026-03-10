@@ -9,8 +9,8 @@ export default function HeroSection() {
       <div className="absolute inset-0 " />
       <div className="absolute right  -[-200px] top-[-200px] w-[600px] h-[600px] rounded-full" />
 
-      <div className="relative  mx-auto w-full pt-10 lg:pt-10 pb-5">
-        <div className="flex flex-col  lg:flex-row items-center gap-0 lg:gap-4 ">
+      <div className="relative  mx-auto w-full pt-14 lg:pt-10 pb-5">
+        <div className="flex flex-col  lg:flex-row items-center gap-6 lg:gap-4 ">
           {/* LEFT TEXT */}
           <div className="w-full  lg:w-[40%]">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-6">

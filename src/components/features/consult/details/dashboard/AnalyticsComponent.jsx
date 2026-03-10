@@ -21,7 +21,7 @@ export default function AnalyticsComponent() {
   const tier = "PREMIUM"; // BASIC | PRO | PREMIUM
   const isProOrPremium = tier === "PRO" || tier === "PREMIUM";
   const isBasic = tier === "BASIC";
-  const isPro = tier === "PRO"; 
+  const isPro = tier === "PRO";
 
   const rangeOptions = [
     { label: "Last 7 days", value: "7" },
@@ -52,7 +52,7 @@ export default function AnalyticsComponent() {
         </div>
       </div>
       {/* Top Stats */}
-      <div className="grid md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           icon={<User size={20} />}
           label="Profile Views"
@@ -83,7 +83,7 @@ export default function AnalyticsComponent() {
         />
       </div>
       {/* Traffic */}
-      <div className="bg-secondary border border-third/30 rounded-2xl p-6 grid md:grid-cols-[1fr_320px] gap-6">
+      <div className="bg-secondary border border-third/30 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="space-y-4">
           <h3 className="font-semibold text-white">Traffic & Conversion</h3>
 

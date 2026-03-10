@@ -82,7 +82,7 @@ export default function PpcComponent() {
   return (
     <section className="w-full space-y-8 relative">
       {/* HEADER */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col lg:flex-row items-start gap-5 justify-between">
         <div>
           <h1 className="text-2xl font-bold">PPC & Visibility Boosts</h1>
           <p className="text-third text-sm">Dominance with guardrails</p>
@@ -348,64 +348,77 @@ export default function PpcComponent() {
 /* -------------------------------------------------------------------------- */
 /* SUB COMPONENTS                              */
 /* -------------------------------------------------------------------------- */
-
 function RecentAdCard({ paused, onOpenResults }) {
   return (
-    <div className="rounded-2xl border border-third/30 bg-secondary p-6 space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="rounded-2xl border border-third/30 bg-secondary p-4 md:p-6 space-y-6">
+      {/* --- HEADER SECTION: Status & Action Buttons --- */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-3">
           <span
-            className={`px-3 py-1 text-xs rounded-full ${
-              paused
-                ? "bg-yellow-500/20 text-yellow-400"
-                : "bg-primary/10 text-primary"
-            }`}
+            className={`px-3 py-1 text-xs rounded-full whitespace-nowrap ${paused
+              ? "bg-yellow-500/20 text-yellow-400"
+              : "bg-primary/10 text-primary"
+              }`}
           >
             {paused ? "Paused" : "Completed"}
           </span>
           <span className="text-xs text-third">Dec 10</span>
         </div>
 
-        <div className="flex gap-3">
+        {/* Buttons: Wrap on very small screens, row on sm+ */}
+        <div className="flex flex-wrap gap-2 sm:gap-3 w-full sm:w-auto">
           {paused ? (
-            <Button variant="outlineSecondary" size="sm">
+            <Button variant="outlineSecondary" size="sm" className="flex-1 sm:flex-none">
               Resume
             </Button>
           ) : (
             <>
-              <Button variant="outlineSecondary" size="sm">
+              <Button variant="outlineSecondary" size="sm" className="flex-1 sm:flex-none">
                 Edit
               </Button>
-              <Button variant="outlineSecondary" size="sm">
+              <Button variant="outlineSecondary" size="sm" className="flex-1 sm:flex-none">
                 Boost again
               </Button>
             </>
           )}
-          <Button variant="outlineSecondary" size="sm" onClick={onOpenResults}>
+          <Button
+            variant="outlineSecondary"
+            size="sm"
+            onClick={onOpenResults}
+            className="flex-1 sm:flex-none"
+          >
             View results
           </Button>
         </div>
       </div>
 
+      {/* --- MAIN CONTENT SECTION --- */}
+      {/* Stacks on mobile/tablet (default), horizontal on Desktop (lg) */}
       <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr_auto] gap-6 items-start">
-        <Image
-          alt="card image"
-          src="/big_card_car.jpg" // Ensure this image exists in your public folder
-          width={80}
-          height={80}
-          className="w-20 h-20 rounded-xl object-cover"
-        />
 
-        <div className="space-y-1">
+        {/* Ad Image */}
+        <div className="flex justify-start">
+          <Image
+            alt="card image"
+            src="/big_card_car.jpg"
+            width={80}
+            height={80}
+            className="w-20 h-20 rounded-xl object-cover shrink-0 border border-third/10"
+          />
+        </div>
+
+        {/* Ad Details & Stats */}
+        <div className="space-y-1 w-full">
           <p className="text-sm text-third">Boosted Instagram reel</p>
-          <h4 className="font-semibold leading-tight">
+          <h4 className="font-semibold leading-tight text-base">
             Boosted Instagram media
           </h4>
-          <p className="text-xs text-third">
+          <p className="text-xs text-third line-clamp-2 lg:line-clamp-none">
             Time to Act: Is Your Clinic Ready for Growth?...
           </p>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 text-sm">
+          {/* Stats Grid: 2 cols on mobile, 4 cols on tablet+ */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 text-sm">
             <StatMini label="Views" value="6,220" />
             <StatMini label="Viewers" value="5,761" />
             <StatMini label="Follows" value="8" />
@@ -413,10 +426,12 @@ function RecentAdCard({ paused, onOpenResults }) {
           </div>
         </div>
 
-        <div className="text-right space-y-1">
-          <p className="text-sm font-semibold">₹82.11</p>
+        {/* Pricing Info: Left aligned on mobile, Right aligned on desktop */}
+        <div className="text-left lg:text-right space-y-1 pt-2 lg:pt-0 border-t lg:border-none border-third/10">
+          <p className="text-lg font-bold lg:font-semibold text-primary lg:text-inherit">₹82.11</p>
           <p className="text-xs text-third">Spent at ₹200/day</p>
         </div>
+
       </div>
     </div>
   );

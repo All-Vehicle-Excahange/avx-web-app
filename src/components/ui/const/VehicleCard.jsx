@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { addWishList, removeWishList } from "@/services/user.service";
 import { useAuthStore } from "@/stores/useAuthStore";
 import LoginPopup from "@/components/auth/LoginPopup";
-
+import SignupPopup from "@/components/auth/SignupPopup";
 
 export default function VehicleCard({ data, onWishlistChange, source = "search" }) {
     const router = useRouter();
@@ -17,6 +17,7 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
         () => data?.isWishlisted || false,
     );
     const [isLoginOpen, setIsLoginOpen] = useState(false);
+    const [isSignupOpen, setIsSignupOpen] = useState(false);
 
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
@@ -196,7 +197,18 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
             <LoginPopup
                 isOpen={isLoginOpen}
                 onClose={() => setIsLoginOpen(false)}
-                onSignup={() => setIsLoginOpen(false)}
+                onSignup={() => {
+                    setIsLoginOpen(false);
+                    setIsSignupOpen(true);
+                }}
+            />
+            <SignupPopup
+                isOpen={isSignupOpen}
+                onClose={() => setIsSignupOpen(false)}
+                onLogin={() => {
+                    setIsSignupOpen(false);
+                    setIsLoginOpen(true);
+                }}
             />
         </>
     );
