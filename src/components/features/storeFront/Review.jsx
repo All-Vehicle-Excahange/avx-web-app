@@ -127,11 +127,10 @@ export default function Review() {
                   {[1, 2, 3, 4, 5].map((i) => (
                     <Star
                       key={i}
-                      className={`w-4 h-4 ${
-                        i <= Math.round(reviewSummary.averageRating)
+                      className={`w-4 h-4 ${i <= Math.round(reviewSummary.averageRating)
                           ? "fill-primary text-primary"
                           : "text-third"
-                      }`}
+                        }`}
                     />
                   ))}
 
@@ -201,9 +200,8 @@ export default function Review() {
                 <Star
                   key={i}
                   onClick={() => setRating(i)}
-                  className={`w-6 h-6 cursor-pointer transition ${
-                    i <= rating ? "fill-primary text-primary" : "text-third"
-                  }`}
+                  className={`w-6 h-6 cursor-pointer transition ${i <= rating ? "fill-primary text-primary" : "text-third"
+                    }`}
                 />
               ))}
             </div>
@@ -213,7 +211,7 @@ export default function Review() {
               placeholder="What should other customers know?"
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
-              className="w-full min-h-[120px]  border border-third/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary"
+              className="w-full min-h-[120px] border border-third/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary resize-none"
             />
 
             {/* 🏷️ TITLE */}
@@ -338,11 +336,10 @@ export default function Review() {
                     {[1, 2, 3, 4, 5].map((i) => (
                       <Star
                         key={i}
-                        className={`w-4 h-4 ${
-                          i <= review.rating
+                        className={`w-4 h-4 ${i <= review.rating
                             ? "fill-primary text-primary"
                             : "text-third"
-                        }`}
+                          }`}
                       />
                     ))}
 

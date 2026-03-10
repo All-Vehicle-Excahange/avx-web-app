@@ -10,9 +10,18 @@ const ENDPOINT = {
   rejectInquiry: "/vehicles/inquiry/reject",
 };
 
-export const getInquiries = async () => {
+export const getInquiries = async (inquiryStatus) => {
   try {
-    const res = await axiosInstance.get(ENDPOINT.getInquiries);
+    const params = {};
+
+    if (inquiryStatus) {
+      params.inquiryStatus = inquiryStatus;
+    }
+
+    const res = await axiosInstance.get(ENDPOINT.getInquiries, {
+      params,
+    });
+
     return handleResponse(res);
   } catch (error) {
     handleError(error);

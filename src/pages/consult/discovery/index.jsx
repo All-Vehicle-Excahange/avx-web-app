@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-
 import { useState } from "react";
 import FilterWithCard from "@/components/features/consult/search/FilterWithCard";
 import SearchWithHeader from "@/components/features/consult/search/SearchWithHeader";
@@ -9,6 +7,7 @@ import AvxProcess from "@/components/features/VehiclDetail/AvxProcess";
 import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
 import React from "react";
+import ScrollDownArrow from "@/components/ui/ScrollDownArrow";
 
 function Index() {
   const [activeFilters, setActiveFilters] = useState([]);
@@ -29,6 +28,8 @@ function Index() {
       <DownloadAppSection />
 
       <Footer />
+
+      <ScrollDownArrow />
     </>
   );
 }

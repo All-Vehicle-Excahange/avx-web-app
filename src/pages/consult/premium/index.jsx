@@ -9,6 +9,7 @@ import AvxProcess from "@/components/features/VehiclDetail/AvxProcess";
 import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
 import React from "react";
+import ScrollDownArrow from "@/components/ui/ScrollDownArrow";
 
 function Index() {
   const [activeFilters, setActiveFilters] = useState([]);
@@ -29,6 +30,8 @@ function Index() {
       <DownloadAppSection />
 
       <Footer />
+
+      <ScrollDownArrow />
     </>
   );
 }

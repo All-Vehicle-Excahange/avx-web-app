@@ -3,13 +3,21 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 export default function Pagination({ currentPage, totalPages, onPageChange }) {
     if (!totalPages || totalPages <= 1) return null;
 
+    const handleClick = (page) => {
+        onPageChange(page);
+        // Delay scroll slightly so it fires after React re-renders
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 100);
+    };
+
     return (
         <div className="col-span-full flex justify-center mt-6">
             <div className="flex items-center gap-4 bg-transparent border border-white/20 rounded-full px-1 py-1 shadow-lg">
 
                 {/* Previous */}
                 <button
-                    onClick={() => onPageChange(currentPage - 1)}
+                    onClick={() => handleClick(currentPage - 1)}
                     disabled={currentPage <= 1}
                     className={`flex items-center cursor-pointer justify-center w-10 h-10 rounded-full transition-all duration-200 border
             ${currentPage <= 1
@@ -28,7 +36,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
 
                 {/* Next */}
                 <button
-                    onClick={() => onPageChange(currentPage + 1)}
+                    onClick={() => handleClick(currentPage + 1)}
                     disabled={currentPage >= totalPages}
                     className={`flex items-center cursor-pointer justify-center w-10 h-10 rounded-full transition-all duration-200 border
             ${currentPage >= totalPages
@@ -44,3 +52,4 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         </div>
     );
 }
+

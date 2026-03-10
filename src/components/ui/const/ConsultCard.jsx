@@ -76,9 +76,9 @@ export default function ConsultantCard(props) {
         <div className="pl-20">
           <h3 className="flex items-center gap-2 text-lg font-semibold text-primary">
             {data?.name || "-"}
-            {data?.isSponsored && (
+            {/* {data?.isSponsored && (
               <BadgeCheck className="w-5 h-5 text-primary" />
-            )}
+            )} */}
           </h3>
 
           <p className="text-sm text-third mt-1">{data?.location || "-"}</p>
