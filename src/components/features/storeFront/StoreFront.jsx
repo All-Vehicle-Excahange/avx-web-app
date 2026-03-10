@@ -20,22 +20,22 @@ export default function StoreFront() {
         <Navbar heroMode scrolled={true} />
       </div>
 
-      <main className=" text-primary pt-12">
+      <main className=" px-4 text-primary pt-12">
         {/* HERO */}
         <StoreFrontHeroSection />
 
-        <div className="px-4 md:px-6 py-6">
+        <div className=" py-6">
           <section className="w-full">
-              {/*
+            {/*
             <aside className="flex flex-col gap-6 xl:sticky xl:top-24 h-fit">
               <StoreSummaryAside />
             </aside>
             */}
 
-            <div className="flex flex-col gap-6 3xl:max-w-[1480px] 3xl:mx-auto ">
+            <div className="flex flex-col gap-6 3xl:max-w-[1480px] 3xl:mx-auto">
               {/* TABS */}
-              <div className="w-[1480px] px-2 mx-auto 3xl:container ">
-                <div className="flex gap-10 border-b border-third/30">
+              <div className="w-full px-2 mx-auto 3xl:container overflow-x-auto no-scrollbar">
+                <div className="flex gap-10 border-b border-third/30 min-w-max">
                   {[
                     { id: "inventory", label: "Inventory" },
                     { id: "aboutus", label: "About Us" },
@@ -45,11 +45,10 @@ export default function StoreFront() {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`relative py-4 text-sm font-medium transition
-                        ${
-                          activeTab === tab.id
-                            ? "text-primary"
-                            : "text-third hover:text-primary"
+                      className={`relative py-4 text-sm font-medium transition whitespace-nowrap
+        ${activeTab === tab.id
+                          ? "text-primary"
+                          : "text-third hover:text-primary"
                         }`}
                     >
                       {tab.label}
