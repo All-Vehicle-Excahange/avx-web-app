@@ -133,7 +133,7 @@ export default function InquiriesComponent() {
         <p className="text-sm">Fast responses increase chances of closing.</p>
       </div>
       <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-5">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           <div
             onClick={() => handleSnapshotClick("high")}
             className="cursor-pointer"
@@ -186,10 +186,9 @@ export default function InquiriesComponent() {
             key={type.id}
             onClick={() => setActiveType(type.id)}
             className={`px-4 py-2 rounded-full text-sm font-medium border transition
-              ${
-                activeType === type.id
-                  ? "bg-primary text-secondary border-primary"
-                  : "border-third/50 text-primary hover:bg-primary/10"
+              ${activeType === type.id
+                ? "bg-primary text-secondary border-primary"
+                : "border-third/50 text-primary hover:bg-primary/10"
               }`}
           >
             {type.label}

@@ -36,11 +36,19 @@ const menu = [
   },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, onClose }) {
   const router = useRouter();
 
   return (
-    <aside className="w-62 min-h-fit  border-r border-third/30 p-5 space-y-4">
+    <aside
+      className={`
+        fixed md:sticky top-16 h-[calc(100vh-64px)] z-40
+        w-64 bg-secondary md:bg-transparent
+        transition-transform duration-300 ease-in-out
+        ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+        border-r border-third/30 p-5 space-y-4 overflow-y-auto custom-scrollbar
+      `}
+    >
       <h1 className="text-xl font-bold mt-4 mb-4">AVX Dashboard</h1>
 
       {menu.map((m, i) => {
@@ -53,6 +61,7 @@ export default function Sidebar() {
           <Link
             key={i}
             href={m.href}
+            onClick={onClose}
             className={`flex items-center gap-3 p-3 rounded-xl transition
         ${
           isActive

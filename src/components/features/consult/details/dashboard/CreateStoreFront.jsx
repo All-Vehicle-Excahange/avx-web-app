@@ -55,44 +55,45 @@ export default function CreateStoreFront() {
       </div>
 
       {/* TIERS */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {TIERS.map((tier) => {
           const isAllowed = USER_TIER === tier.id;
 
           return (
             <div
               key={tier.id}
-              className={`rounded-3xl border p-5 flex flex-col h-[300px]
-              ${
-                isAllowed
+              className={`rounded-3xl border p-6 flex flex-col min-h-[320px] md:h-auto lg:h-[340px]
+              ${isAllowed
                   ? "border-primary ring-2 ring-primary"
                   : "border-third/30 opacity-60"
-              }`}
+                }`}
             >
               {/* Top */}
-              <div className="space-y-5">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-semibold">
-                    {tier.name}{" "}
-                    <span className="text-third">({tier.label})</span>
+              <div className="space-y-6 flex-1">
+                <div className="flex justify-between items-start">
+                  <h3 className="text-xl font-bold leading-tight">
+                    {tier.name}
+                    <div className="text-sm text-third font-normal mt-1">{tier.label} Listing</div>
                   </h3>
                   {isAllowed ? (
-                    <CheckCircle2 className="text-primary" size={18} />
+                    <CheckCircle2 className="text-primary mt-1" size={20} />
                   ) : (
-                    <Lock size={16} className="text-third" />
+                    <Lock size={18} className="text-third mt-1" />
                   )}
                 </div>
 
                 {/* FEATURES */}
                 <ul className="text-sm text-third space-y-3 leading-relaxed">
                   {tier.features.map((f, i) => (
-                    <li key={i}>• {f}</li>
+                    <li key={i} className="flex gap-2">
+                      <span className="text-primary">•</span> {f}
+                    </li>
                   ))}
                 </ul>
               </div>
 
               {/* Bottom fixed */}
-              <div className="mt-auto pt-4">
+              <div className="mt-6 pt-4 border-t border-third/10">
                 {isAllowed ? (
                   <Button
                     onClick={handleClick}
@@ -124,7 +125,7 @@ export default function CreateStoreFront() {
           your dealership as a verified premium seller.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
           <div className="border border-third/20 rounded-2xl p-5 space-y-2">
             <h4 className="font-semibold">Higher Buyer Trust</h4>
             <p className="text-sm text-third">

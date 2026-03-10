@@ -204,7 +204,7 @@ export default function InventoryComponent() {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div
               onClick={() => handleSnapshotClick("high")}
               className="cursor-pointer"
@@ -250,7 +250,7 @@ export default function InventoryComponent() {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <StatCard
               icon={<span className="font-bold text-primary">#1</span>}
               label=""
@@ -277,11 +277,10 @@ export default function InventoryComponent() {
                 key={type.id}
                 onClick={() => setActiveType(type.id)}
                 className={`px-4 py-2 rounded-full border border-third/40 text-sm transition
-                ${
-                  activeType === type.id
+                ${activeType === type.id
                     ? "bg-primary text-secondary"
                     : "hover:bg-primary/10"
-                }`}
+                  }`}
               >
                 {type.label}
               </button>
@@ -300,7 +299,7 @@ export default function InventoryComponent() {
         </div>
 
         {/* 5️⃣ VEHICLE GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 gap-6">
           {filtered.map((car) => (
             <UserVehicleCard
               key={car.id}
@@ -313,7 +312,6 @@ export default function InventoryComponent() {
             />
           ))}
         </div>
-
         <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-4">
           <div className="flex items-center gap-2">
             <TrendingUp className="text-primary" size={18} />

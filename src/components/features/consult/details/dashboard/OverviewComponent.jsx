@@ -13,20 +13,20 @@ export default function OverviewComponent() {
   return (
     <div className="space-y-8">
       {/* HEADER */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-xl lg:text-2xl font-bold">
             Welcome, Adarsh Auto Consultants
           </h1>
-          <div className="flex items-center gap-4 text-sm text-third mt-1">
-            <span className="flex items-center gap-1 text-green-400">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs md:text-sm text-third mt-1">
+            <span className="flex items-center gap-1 text-green-400 font-medium">
               ✓ Verified
             </span>
             <span>📍 City: Ahmedabad</span>
           </div>
         </div>
 
-        <span className="inline-flex items-center px-4 py-1 rounded-full bg-primary text-secondary text-xs font-semibold">
+        <span className="w-fit inline-flex items-center px-4 py-1.5 rounded-full bg-primary text-secondary text-[10px] md:text-xs font-bold tracking-wider">
           PREMIUM PARTNER
         </span>
       </div>
@@ -36,7 +36,7 @@ export default function OverviewComponent() {
         <h3 className="font-semibold mb-5">
           Performance Snapshot (Last 30 Days)
         </h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           <StatCard icon={<Car />} label="Vehicles Live" value="28" />
           <StatCard icon={<MessageCircle />} label="Inquiries" value="86" />
           <StatCard icon={<MessageSquare />} label="Chats Started" value="63" />
