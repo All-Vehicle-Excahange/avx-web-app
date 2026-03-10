@@ -18,8 +18,6 @@ export default function VehicleHeader({ vehicle, ratting, vehicleSummary }) {
     const searchQueryParams = new URLSearchParams();
     if (vehicle?.makerId || vehicle?.makeId) searchQueryParams.set("makerId", vehicle.makerId || vehicle.makeId);
     if (vehicle?.makerName) searchQueryParams.set("brand", vehicle.makerName);
-    if (vehicle?.modelId) searchQueryParams.set("modelId", vehicle.modelId);
-    if (vehicle?.modelName) searchQueryParams.set("modelName", vehicle.modelName);
     if (vehicleSummary?.address?.stateId) searchQueryParams.set("stateId", vehicleSummary?.address?.stateId);
     if (vehicleSummary?.address?.cityId) searchQueryParams.set("cityId", vehicleSummary?.address?.cityId);
     if (vehicleSummary?.address?.state) searchQueryParams.set("stateName", vehicleSummary?.address?.state);

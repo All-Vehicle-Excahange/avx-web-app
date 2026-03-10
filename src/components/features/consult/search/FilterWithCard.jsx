@@ -44,7 +44,7 @@ function useIsMobile() {
   return isMobile;
 }
 
-export default function FilterWithCard({ onFilterChange }) {
+export default function FilterWithCard({ onFilterChange, onPageResponseChange }) {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [activeFilterTab, setActiveFilterTab] = useState("Vehicle Type");
   const [selectedMobileChips, setSelectedMobileChips] = useState([]);
@@ -355,8 +355,15 @@ export default function FilterWithCard({ onFilterChange }) {
           ? filteredRes.data
           : [];
 
-      if (filteredRes?.pagination?.totalPages) {
-        setTotalPages(filteredRes.pagination.totalPages);
+      if (filteredRes?.pagination) {
+        const { totalPages, totalElements, currentPage } = filteredRes.pagination;
+
+        setTotalPages(totalPages);
+        onPageResponseChange?.({
+          totalElements,
+          totalPages,
+          currentPage,
+        });
       }
 
       const premiumData =
@@ -577,7 +584,6 @@ export default function FilterWithCard({ onFilterChange }) {
     if (prevPageRef.current === currentPage) return;
     prevPageRef.current = currentPage;
     const payload = buildPayload();
-    console.log("API HEAT AFTER CHANGE ");
 
     fetchConsultants(currentPage, payload);
   }, [currentPage]);

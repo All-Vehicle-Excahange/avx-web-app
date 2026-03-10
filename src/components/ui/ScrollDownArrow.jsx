@@ -16,7 +16,7 @@ export default function ScrollDownArrow() {
             className="
         fixed bottom-6 right-6 z-50
         flex items-center justify-center
-        w-12 h-12 rounded-full
+        w-10 h-10 rounded-full
         bg-blue-600 hover:bg-blue-700
         text-white shadow-lg
         transition-all duration-300
@@ -25,7 +25,7 @@ export default function ScrollDownArrow() {
         animate-bounce
       "
         >
-            <ChevronDown size={24} />
+            <ChevronDown size={20} />
         </button>
     );
 }
