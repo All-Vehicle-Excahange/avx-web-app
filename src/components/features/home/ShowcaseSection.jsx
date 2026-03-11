@@ -41,7 +41,7 @@ const ShowcaseSection = () => {
 
           {/* Text */}
           <div>
-            <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
+            <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
               Continue Where you Left Off
             </h2>
 

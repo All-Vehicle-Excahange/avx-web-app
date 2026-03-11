@@ -43,12 +43,12 @@ export default function AvxInspected() {
         <div className="w-full h-full flex flex-col text-secondary">
             <div className="container">
                 {/* Header */}
-                <div className="shrink-0 flex flex-col md:flex-row items-center justify-between mb-4 gap-4 pt-3 pr-3">
+                <div className="shrink-0 flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4 pt-3 pr-3">
                     <div className="flex items-start gap-4">
                         <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
 
                         <div>
-                            <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
+                            <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
                                 AVX Inspected Vehicles
                             </h2>
 

@@ -158,7 +158,7 @@ export default function AvxProcess() {
               <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-fourth " />
 
               <div>
-                <h2 className="text-3xl font-bold tracking-tight text-primary">
+                <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-primary">
                   Avx Process
                 </h2>
                 <p className="text-primary/50 mt-1">

@@ -57,14 +57,24 @@ const stats = [
 
 const AboutSection = () => {
   return (
-    <section className="w-full py-8 text-primary relative">
+    <section className="w-full py-5 text-primary relative">
       <div className="mx-auto">
 
         {/* Title */}
         <div className="mb-10 max-w-3xl">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Company Overview
-          </h2>
+          <div className="flex justify-between items-end mb-6">
+            <div className="flex items-start gap-4">
+              {/* VERTICAL ACCENT LINE */}
+              <span className="w-2 h-[52px] rounded-full bg-gradient-to-b from-blue-500 to-white-400" />
+
+              {/* TEXT */}
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
+                  Company Overview
+                </h2>
+              </div>
+            </div>
+          </div>
 
           <p className="text-primary/70 text-lg">
             Our growth reflects our commitment to innovation, global reach,
