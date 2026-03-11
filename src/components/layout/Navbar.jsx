@@ -152,6 +152,10 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
               onMouseLeave={() => setAccountOpen(false)}
             >
               <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setAccountOpen(!accountOpen);
+                }}
                 className={`flex cursor-pointer items-center gap-1 px-2 py-1 rounded transition text-xs md:text-sm
                 ${heroMode && !scrolled
                     ? "text-white hover:outline hover:outline-2 hover:outline-white/40"

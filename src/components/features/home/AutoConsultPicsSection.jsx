@@ -68,7 +68,7 @@ export default function AutoConsultPicsSection(props) {
         <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
 
         <div>
-          <h2 className="text-3xl font-bold font-primary tracking-tight text-primary">
+          <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
             Top Auto Consultants Picks For You
           </h2>
           <p className="text-third mt-1">

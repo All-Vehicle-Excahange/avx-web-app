@@ -183,8 +183,8 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
                         </div>
 
                         {/* PRICE + BUTTON */}
-                        <div className="flex items-center justify-between gap-2">
-                            <h3 className="text-sm md:text-xl font-bold">₹ {mapped.price}</h3>
+                        <div className="flex items-center justify-end md:justify-between gap-2 mt-auto">
+                            <h3 className="text-sm md:text-xl font-bold text-primary">₹ {mapped.price}</h3>
 
                             <div className="hidden md:block">
                                 <Button href={`/vehicle/details/${data.id}?source=${source}`} scroll={false} variant="outline" size="sm">

@@ -40,7 +40,7 @@ export default function HeroSection() {
           Pick Your Vehicle
         </h1>
 
-        <div className="mt-[20vh] hidden md:flex gap-6 relative bottom-10">
+        <div className="mt-[20vh] hidden lg:flex gap-6 relative bottom-10">
           {/* Vehicles Tab */}
           <button
             onClick={() => setActiveTab("vehicles")}

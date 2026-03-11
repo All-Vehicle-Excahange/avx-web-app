@@ -78,6 +78,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const containerRef = useRef(null);
   const brandInputRef = useRef(null);
   const searchTimerRef = useRef(null);
+  const mobileTriggerRef = useRef(null);
 
   /* ================= CITY / STATE API ================= */
   const fetchPopularCities = async () => {
@@ -195,6 +196,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
         setActiveTab(null);
       }
+      if (mobileTriggerRef.current && !mobileTriggerRef.current.contains(e.target)) {
+        setShowTypeDropdown(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -241,19 +245,28 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   };
 
   useEffect(() => {
-    if (activeTab !== null) {
-      console.log("6")
-
-      const scrollY = window.scrollY;
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = "100%";
+    if (activeTab !== null || mobileOpen) {
+      if (typeof window !== "undefined") {
+        const scrollY = window.scrollY;
+        document.body.style.position = "fixed";
+        document.body.style.top = `-${scrollY}px`;
+        document.body.style.width = "100%";
+        document.body.style.overflow = "hidden";
+      }
     } else {
-      const scrollY = document.body.style.top;
-      document.body.style.position = "";
-      if (scrollY) window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      if (typeof window !== "undefined") {
+        const scrollY = document.body.style.top;
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+        document.body.style.overflow = "";
+        if (scrollY) {
+          const top = parseInt(scrollY || "0") * -1;
+          window.scrollTo(0, top);
+        }
+      }
     }
-  }, [activeTab]);
+  }, [activeTab, mobileOpen]);
 
   const handleSearch = () => {
     // Save/overwrite selected location to localStorage
@@ -317,7 +330,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
   return (
     <>
-      <div className="hidden md:flex absolute bottom-[20vh] left-0 right-0 z-30 justify-center items-center px-4">
+      <div className="hidden lg:flex absolute bottom-[20vh] left-0 right-0 z-30 justify-center items-center px-4">
         <div className="w-full max-w-[1400px] animated-gradient-border shadow-2xl relative overflow-visible">
           <div
             ref={containerRef}
@@ -658,8 +671,14 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           </div>
         </div>
       </div>
-      {/* MOBILE TRIGGER */}
-      <div className={`md:hidden fixed z-40 transition-all duration-500 ease-in-out ${isScrolled ? "bottom-4 right-4 w-14" : "bottom-4 left-0 right-0 px-4 w-full"}`}>
+      {/* MOBILE FILTER SEARCH BAR */}
+      <div
+        ref={mobileTriggerRef}
+        className={`lg:hidden fixed z-40 transition-all duration-500 ease-in-out ${isScrolled
+          ? "bottom-4 right-4 w-14"
+          : "bottom-4 left-0 right-0 px-4 w-full md:max-w-md md:left-1/2 md:-translate-x-1/2"
+          }`}
+      >
         <div className="relative">
           {showTypeDropdown && (
             <div className={`absolute bottom-[110%] mb-4 bg-neutral-900 border border-neutral-800 rounded-2xl p-2 shadow-2xl animate-in slide-in-from-bottom-4 duration-300 ${isScrolled ? "right-0 w-[280px]" : "left-0 right-0"}`}>
@@ -692,7 +711,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   <Search size={18} />
                 </div>
                 <div>
-                  <div className="text-white font-bold">Consultation</div>
+                  <div className="text-white font-bold">Search Consultation</div>
                   <div className="text-gray-400 text-xs mt-0.5">Expert advice for your vehicle</div>
                 </div>
               </button>
@@ -713,7 +732,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
       {/* MOBILE FULLSCREEN DRAWER -> NOW A PROPER MODAL BOX */}
       <div
-        className={`md:hidden fixed inset-0 z-[100] flex items-end sm:items-center justify-center transition-opacity duration-300 ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        className={`lg:hidden fixed inset-0 z-[100] flex items-end sm:items-center justify-center transition-opacity duration-300 ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
       >
         {/* Backdrop for click-outside to close */}
         <div
@@ -732,8 +751,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           {/* Header */}
           <div className="p-4 border-b border-neutral-800 flex justify-between items-center bg-secondary rounded-t-3xl sm:rounded-3xl shrink-0">
             <h2 className="text-xl font-bold text-primary">Search Filters</h2>
-            <button onClick={() => { setMobileOpen(false); setActiveTab(null); }} className="p-2 text-primary hover:bg-neutral-800 rounded-full">
-              <X size={24} />
+            <button onClick={() => { setMobileOpen(false); setActiveTab(null); }} className="p-1 bg-white cursor-pointer rounded-full hover:opacity-70 text-secondary">
+              <X size={20} />
             </button>
           </div>
 
@@ -815,7 +834,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "priceRange" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
                   <button onClick={() => handleActiveTabChange(activeTab === "priceRange" ? null : "priceRange")} className="w-full flex items-center justify-between p-4 text-left">
                     <div className="flex flex-col items-start w-full">
-                      <span className="text-xs font-semibold text-gray-400">Price Range</span>
+                      <span className="text-xs font-semibold text-primary">Price Range</span>
                       <span className={`font-medium text-sm mt-1 truncate w-full ${priceRange ? "text-white" : "text-gray-500"}`}>{priceRange || "Select price"}</span>
                     </div>
                   </button>
@@ -838,7 +857,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "service" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
                   <button onClick={() => handleActiveTabChange(activeTab === "service" ? null : "service")} className="w-full flex items-center justify-between p-4 text-left">
                     <div className="flex flex-col items-start w-full">
-                      <span className="text-xs font-semibold text-gray-400">Service</span>
+                      <span className="text-xs font-semibold text-primary">Service</span>
                       <span className={`font-medium text-sm mt-1 truncate w-full ${service ? "text-white" : "text-gray-500"}`}>{service || "Select service"}</span>
                     </div>
                   </button>
@@ -861,7 +880,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "availability" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
                   <button onClick={() => handleActiveTabChange(activeTab === "availability" ? null : "availability")} className="w-full flex items-center justify-between p-4 text-left">
                     <div className="flex flex-col items-start w-full">
-                      <span className="text-xs font-semibold text-gray-400">Availability</span>
+                      <span className="text-xs font-semibold text-primary">Availability</span>
                       <span className={`font-medium text-sm mt-1 truncate w-full ${availability ? "text-white" : "text-gray-500"}`}>{availability || "Select availability"}</span>
                     </div>
                   </button>

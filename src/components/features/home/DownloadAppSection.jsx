@@ -2,10 +2,10 @@ import Image from "next/image";
 
 export default function DownloadAppSection() {
   return (
-    <div className="w-full pt-36 bg-fourth">
+    <div className="w-full md:pt-36 bg-fourth">
       <div className="w-full 3xl:max-w-screen-2xl mx-auto   overflow-visible flex flex-col md:flex-row relative min-h-[300px]">
         {/* LEFT CONTENT */}
-        <div className="flex-1 p-8 md:p-16 flex flex-col justify-center z-10 relative">
+        <div className="flex-1 p-6 md:p-16 flex flex-col justify-center z-10 relative">
           <h2 className="text-2xl md:text-4xl font-bold text-primary mb-4 leading-tight">
             AVX App Download For All Vehicle
             <br className="hidden md:block" /> Sell & Buy
