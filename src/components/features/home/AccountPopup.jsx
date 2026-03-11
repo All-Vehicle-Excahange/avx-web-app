@@ -13,7 +13,6 @@ import { logoutUser } from "@/services/auth.service";
 export default function AccountPopup({ open, onClosePopup }) {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isSignupOpen, setIsSignupOpen] = useState(false);
-    const role = "BUYER"; // Change dynamically later BUYER/CONSULTANT
 
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
     const [isLogoutClosing, setIsLogoutClosing] = useState(false);
@@ -38,6 +37,7 @@ export default function AccountPopup({ open, onClosePopup }) {
     const user = useAuthStore((state) => state.user);
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
     const logout = useAuthStore((state) => state.logout);
+    const isConsultant = ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(user?.userRole);
 
     const router = useRouter();
 
@@ -163,7 +163,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                     {/* LOGGED IN */}
                     {isLoggedIn && (
                         <div className="px-4 sm:px-5 py-4 text-[13px] leading-7 grid grid-cols-2 gap-4 sm:gap-6">
-                            {role === "BUYER" && (
+                            {!isConsultant && (
                                 <>
                                     <Section title="Your Activity">
                                         <Item onClick={() => navigate("/user/details/wishlist")}>Saved Vehicles</Item>
@@ -196,7 +196,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                                 </>
                             )}
 
-                            {role === "CONSULTANT" && (
+                            {isConsultant && (
                                 <>
                                     <Section title="Dashboard">
                                         <Item onClick={() => navigate("/consult/dashboard")}>Overview</Item>
