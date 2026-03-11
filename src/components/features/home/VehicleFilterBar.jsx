@@ -203,9 +203,24 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   /* ================= NAVIGATION LOGIC ================= */
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileTab, setMobileTab] = useState("location");
+  const [showTypeDropdown, setShowTypeDropdown] = useState(false);
+  const [internalActiveType, setInternalActiveType] = useState(activeType);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const TAB_ORDER =
-    activeType === "consult"
+    internalActiveType === "consult"
       ? ["location", "vehicle", "priceRange", "service", "availability"]
       : ["location", "vehicle", "bodyType", "fuel", "brand", "budget"];
 
@@ -269,7 +284,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       }
     }
 
-    if (activeType === "consult") {
+    if (internalActiveType === "consult") {
       const query = new URLSearchParams({
         ...(location && { location }),
         ...(cityId && { cityId }),
@@ -644,14 +659,56 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         </div>
       </div>
       {/* MOBILE TRIGGER */}
-      <div className="md:hidden fixed bottom-4 left-0 right-0 px-4 z-40">
-        <button
-          onClick={() => setMobileOpen(true)}
-          className="w-full bg-neutral-900 border border-neutral-800 rounded-full py-4 flex items-center justify-center gap-2 shadow-lg"
-        >
-          <Search size={18} className="text-white" />
-          <span className="font-medium text-white">Start your search</span>
-        </button>
+      <div className={`md:hidden fixed z-40 transition-all duration-500 ease-in-out ${isScrolled ? "bottom-4 right-4 w-14" : "bottom-4 left-0 right-0 px-4 w-full"}`}>
+        <div className="relative">
+          {showTypeDropdown && (
+            <div className={`absolute bottom-[110%] mb-4 bg-neutral-900 border border-neutral-800 rounded-2xl p-2 shadow-2xl animate-in slide-in-from-bottom-4 duration-300 ${isScrolled ? "right-0 w-[280px]" : "left-0 right-0"}`}>
+              <button
+                onClick={() => {
+                  setInternalActiveType("vehicle");
+                  setMobileOpen(true);
+                  setShowTypeDropdown(false);
+                }}
+                className="w-full flex items-center gap-3 p-4 hover:bg-neutral-800 rounded-xl text-left"
+              >
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-primary">
+                  <Search size={18} />
+                </div>
+                <div>
+                  <div className="text-white font-bold">Buy Vehicle</div>
+                  <div className="text-gray-400 text-xs mt-0.5">Find your dream car or bike</div>
+                </div>
+              </button>
+              <div className="h-px bg-neutral-800 mx-2 my-1" />
+              <button
+                onClick={() => {
+                  setInternalActiveType("consult");
+                  setMobileOpen(true);
+                  setShowTypeDropdown(false);
+                }}
+                className="w-full flex items-center gap-3 p-4 hover:bg-neutral-800 rounded-xl text-left"
+              >
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-primary">
+                  <Search size={18} />
+                </div>
+                <div>
+                  <div className="text-white font-bold">Consultation</div>
+                  <div className="text-gray-400 text-xs mt-0.5">Expert advice for your vehicle</div>
+                </div>
+              </button>
+            </div>
+          )}
+          <button
+            onClick={() => setShowTypeDropdown(!showTypeDropdown)}
+            className={`flex items-center justify-center gap-2 shadow-lg transition-all duration-500 ease-in-out cursor-pointer ${isScrolled
+              ? "w-14 h-14 bg-fourth rounded-full"
+              : "w-full py-4 bg-neutral-900 border border-neutral-800 rounded-full"
+              }`}
+          >
+            <Search size={22} className="text-white" />
+            {!isScrolled && <span className="font-medium text-white transition-opacity duration-300">Start your search</span>}
+          </button>
+        </div>
       </div>
 
       {/* MOBILE FULLSCREEN DRAWER -> NOW A PROPER MODAL BOX */}
@@ -752,7 +809,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
               )}
             </div>
 
-            {activeType === "consult" ? (
+            {internalActiveType === "consult" ? (
               <>
                 {/* Price Range */}
                 <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "priceRange" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>

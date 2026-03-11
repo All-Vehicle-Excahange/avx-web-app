@@ -102,7 +102,7 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
             >
                 <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
                     {/* IMAGE */}
-                    <div onClick={handleCardClick} className="relative w-32 sm:w-40 min-h-40 md:min-h-0 md:h-62 md:w-full shrink-0 p-2 hover:cursor-pointer">
+                    <div onClick={handleCardClick} className="relative w-42 sm:w-40 min-h-45 md:min-h-0 md:h-62 md:w-full shrink-0 p-2 hover:cursor-pointer">
                         <div className="relative w-full h-full overflow-hidden rounded-xl">
                             {mapped.sponsored && <SponsoredRibbon />}
 
@@ -160,7 +160,8 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
 
                         {/* SPECS */}
                         <div
-                            className="flex flex-wrap items-center gap-x-2 md:gap-x-4 gap-y-1 text-xs md:text-sm text-primary/80 font-medium">
+                            className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-x-2 md:gap-x-4 gap-y-1 text-xs md:text-sm text-primary/80 font-medium"
+                        >
                             <span>{mapped.year}</span>
 
                             <span className="flex items-center gap-1">
