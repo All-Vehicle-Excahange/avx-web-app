@@ -89,7 +89,7 @@ export default function SafetyHero() {
                 initial={{ opacity: 0, scale: 0.92 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.1 * i }}
-                className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/4 backdrop-blur-md hover:border-fourth/40 hover:bg-fourth/10 transition-all duration-300"
+                className="flex items-center gap-2 px-4 py-2 rounded-full  border-secondry/50 border-2 bg-white/4 backdrop-blur-md  hover:bg-fourth/10 transition-all duration-300"
               >
                 <span className="font-mono text-[10px] text-third/70">
                   {p.num}

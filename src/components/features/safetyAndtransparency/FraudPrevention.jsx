@@ -37,7 +37,7 @@ export default function FraudPrevention() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <div className="text-left md:text-center max-w-xl mx-auto mb-24">
+          <div className="text-left md:text-left max-w-xl mx-auto mb-24">
             <div className="inline-flex items-center gap-2 mb-4 text-third font-semibold uppercase tracking-[0.35em] text-sm">
               <ShieldAlert className="w-4 h-4 text-red-400" />
               Automated Protection
@@ -47,7 +47,7 @@ export default function FraudPrevention() {
               Prevention Measures
             </h2>
 
-            <p className="text-[16px] text-third leading-relaxed">
+            <p className="text-[16px] text-third leading-relaxed w-[50%] md-[100%]">
               Buyer inquiries and consultant responses occur within the
               platform, creating an activity trail to support dispute review if
               required.
@@ -70,7 +70,7 @@ export default function FraudPrevention() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 + i * 0.1 }}
-              className="group p-6 rounded-2xl  border-2 border-white/10 hover:border-red-500/30 transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]"
+              className="group p-6 rounded-2xl  border-primary/30 border-2  transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
             >
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center shrink-0 group-hover:bg-red-500/20 transition-colors ">

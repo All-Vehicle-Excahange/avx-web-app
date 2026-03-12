@@ -33,11 +33,11 @@ export default function InspectionTransparency() {
   ];
 
   return (
-    <section className="py-10">
+    <section className="py-10" style={{ overflowX: "hidden" }}>
       <div className="w-full mx-auto ">
 
         {/* HEADER */}
-        <div className="text-left md:text-center max-w-xl mx-auto mb-20">
+        <div className="text-left md:text-left max-w-xl mx-auto mb-20">
           <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-4">
             Inspection Transparency
           </p>
@@ -46,7 +46,7 @@ export default function InspectionTransparency() {
             Inspection <span className="text-fourth">Transparency</span>
           </h2>
 
-          <p className="text-[16px] text-third leading-relaxed mt-4">
+          <p className="text-[16px] text-third leading-relaxed mt-4 w-[50%] md-[100%]">
             AVX supports a standardized inspection framework. Vehicles may include
             detailed inspection reports to improve clarity before commitment.
           </p>
@@ -59,7 +59,7 @@ export default function InspectionTransparency() {
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             className="relative"
           >
 
@@ -147,17 +147,17 @@ export default function InspectionTransparency() {
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
           >
 
             <div className="space-y-5">
               {features.map((feature, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-4 p-5 rounded-xl bg-[#0f1117]/70 border border-[#1f2937]"
+                  className="flex items-start gap-4 p-5 rounded-xl bg-[#0f1117]/70 border-2 border-primary/30"
                 >
                   <div className="w-11 h-11 rounded-lg bg-fourth/10 border border-fourth/20 flex items-center justify-center">
-                    <feature.icon className="w-5 h-5 text-fourth" />
+                    <feature.icon className="w-5 h-5 text-primary" />
                   </div>
 
                   <div>

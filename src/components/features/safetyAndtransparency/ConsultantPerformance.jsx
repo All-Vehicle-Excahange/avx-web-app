@@ -66,7 +66,7 @@ export default function ConsultantPerformance() {
     SCROLL_PER_CARD * (cards.length - 1) + CARD_H + TOP + 20;
 
   return (
-    <section className="py-10 md:py-10 px-4 md:px-6 bg-white">
+    <section className="py-10 md:py-10 px-4 md:px-6 bg--color-secondary">
 
       {/* HEADER */}
       <div className="text-left md:text-center max-w-xl mx-auto mb-16 md:mb-24">
@@ -79,7 +79,7 @@ export default function ConsultantPerformance() {
           <span className="text-fourth">Dealing With</span>
         </h2>
 
-        <p className="text-[14px] md:text-[16px] text-third leading-relaxed mt-3">
+        <p className="text-[14px] md:text-[16px] text-third leading-relaxed mt-3 ">
           Each consultant storefront displays verifiable data points so buyers can assess credibility before committing.
         </p>
       </div>

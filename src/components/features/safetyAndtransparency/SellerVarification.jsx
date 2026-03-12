@@ -55,7 +55,7 @@ function HighlightedTitle({ title, highlight, big }) {
   return (
     <h3 className={`font-semibold text-primary mb-2 ${big ? "text-lg" : "text-[20px]"}`}>
       {parts[0]}
-      <span className="text-fourth">
+      <span className="text-fourth/90">
         {highlight}
       </span>
       {parts[1]}
@@ -88,7 +88,7 @@ export default function SellerVerification() {
             </span>
           </h2>
 
-          <p className="mt-5 text-third text-[15px] leading-relaxed">
+          <p className="mt-5 text-third text-[15px] leading-relaxed w-[50%] md-[100%]">
             Consultants on AVX undergo structured verification checks to reduce
             anonymous listings and improve accountability across the marketplace.
           </p>
