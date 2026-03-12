@@ -63,12 +63,12 @@ export default function DownloadAppSection() {
         </div>
 
         {/* RIGHT IMAGE AREA */}
-        <div className="relative md:absolute md:bottom-0 md:right-0 w-full md:w-1/2 lg:w-[45%] flex items-end justify-center md:justify-end h-[300px] md:h-auto overflow-hidden md:overflow-visible z-20">
+        <div className="relative md:absolute md:bottom-0 md:right-0 w-full md:w-1/2 lg:w-[45%] flex items-end justify-center md:justify-end h-[300px] md:h-auto overflow-hidden md:overflow-visible z-2">
           {/* Decorative Circle */}
           <div className="absolute md:relative bg-primary h-[340px] w-[340px] md:w-full rounded-t-full bottom-0 md:bottom-auto left-1/2 md:left-auto -translate-x-1/2 md:translate-x-0 md:right-10"></div>
 
           {/* Phone Mockup */}
-          <div className="absolute z-10 w-[280px] md:w-[350px] lg:w-[400px] md:-mb-12 md:mr-8 lg:mr-18 right-18">
+          <div className="absolute z-2 w-[280px] md:w-[350px] lg:w-[400px] md:-mb-12 md:mr-8 lg:mr-18 right-18">
             <Image
               src="/mobile_CTA_sm.png"
               width={100}

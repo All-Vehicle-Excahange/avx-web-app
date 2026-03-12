@@ -13,8 +13,10 @@ import ShowcaseSection from "@/components/features/home/ShowcaseSection";
 import StatsSection from "@/components/features/home/StateSection";
 import StorySection from "@/components/features/home/StorySection";
 import TopPicsSection from "@/components/features/home/TopPicsSection";
+import FooterLink from "@/components/layout/FooterLink";
 import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
+import BecameBanner from "@/components/features/home/BecameBanner";
 
 export default function Home() {
   return (
@@ -36,7 +38,17 @@ export default function Home() {
       <Layout>
         <AutoConsultPicsSection limit={8} />
       </Layout>
-      <ConsultBanner fullWidth />
+
+
+      {/* <Layout>
+        <BecameBanner />
+      </Layout> */}
+
+
+        <BecameBanner />
+      
+
+
       <Layout>
         <RecentrlySold />
       </Layout>
@@ -48,6 +60,7 @@ export default function Home() {
         <AboutSection />
       </Layout>
       <DownloadAppSection />
+      <FooterLink />
       <Footer />
     </>
   );

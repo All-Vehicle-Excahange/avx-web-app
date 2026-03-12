@@ -9,7 +9,8 @@ import SafetyCta from "@/components/features/safetyAndtransparency/SafetyCta";
 import SafetyHero from "@/components/features/safetyAndtransparency/SafetyHero";
 import SellerVerification from "@/components/features/safetyAndtransparency/SellerVarification";
 import UserResponsibility from "@/components/features/safetyAndtransparency/UserResponsibility";
-import Footer from "@/components/layout/Footer";
+import FooterLink from "@/components/layout/FooterLink";
+import Footer from "@/components/layout/FooterLink";
 import Layout from "@/components/layout/Layout";
 import Navbar from "@/components/layout/Navbar";
 import React from "react";
@@ -33,6 +34,7 @@ function index() {
         <DataPrivacy />
         <SafetyCta />
       </Layout>
+      <FooterLink />
       <Footer />
     </>
   );

@@ -9,7 +9,8 @@ import InspectionNotCovered from "@/components/features/inspection-process/Inspe
 import InspectionReportFormat from "@/components/features/inspection-process/InspectionReportFormat";
 import InspectionWorkFlow from "@/components/features/inspection-process/InspectionWorkFlow";
 import ReInspectionOptions from "@/components/features/inspection-process/ReInspectionOptions";
-import Footer from "@/components/layout/Footer";
+import FooterLink from "@/components/layout/FooterLink";
+import Footer from "@/components/layout/FooterLink";
 import Layout from "@/components/layout/Layout";
 import Navbar from "@/components/layout/Navbar";
 import React from "react";
@@ -31,6 +32,7 @@ function index() {
         <FAQSection />
         <Cta />
       </Layout>
+      <FooterLink />
       <Footer />
     </>
   );

@@ -5,9 +5,10 @@ import SearchWithCard from "@/components/features/search/SearchWithCard";
 import ReletedCar from "@/components/features/search/ReletedCar";
 import AutoConsultPicsSection from "@/components/features/home/AutoConsultPicsSection";
 import DownloadAppSection from "@/components/features/home/DownloadAppSection";
-import Footer from "@/components/layout/Footer";
+import Footer from "@/components/layout/FooterLink";
 import TopPicsSection from "@/components/features/home/TopPicsSection";
 import ScrollDownArrow from "@/components/ui/ScrollDownArrow";
+import FooterLink from "@/components/layout/FooterLink";
 
 export default function Index() {
   const [pageResponse, setPageResponse] = useState({
@@ -38,6 +39,7 @@ export default function Index() {
 
       <DownloadAppSection />
 
+      <FooterLink />
       <Footer />
 
       <ScrollDownArrow />
