@@ -221,7 +221,6 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { } }) {
               type="submit"
               variant="ghost"
               className="w-full h-11 text-sm font-bold"
-              onClick={() => handleSubmit(onSendOtp)()} // ✅ FIXED
             >
               GET OTP
             </Button>
@@ -230,7 +229,6 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { } }) {
               type="submit"
               variant="ghost"
               className="w-full h-11 text-sm font-bold"
-              onClick={onValidateOtp}
             >
               Validate OTP
             </Button>

@@ -175,7 +175,7 @@ function AboutPremium3({ data, isEditing, onUpdate }) {
   /* ================= VIEW ================= */
   return (
     <>
-      <section className="bg-secondary py-10 px-6">
+      <section className=" py-10 px-6">
         <div className="max-w-[1480px] mx-auto space-y-20">
           {/* Title */}
           <div className="text-center max-w-4xl mx-auto space-y-6">
@@ -193,9 +193,8 @@ function AboutPremium3({ data, isEditing, onUpdate }) {
             {data.storyImages.map((img, i) => (
               <div
                 key={i}
-                className={`relative  h-[380px] rounded-3xl overflow-hidden transition-all duration-700 ${
-                  i === 1 || i === 2 ? "mt-18" : ""
-                }`}
+                className={`relative  h-[380px] rounded-3xl overflow-hidden transition-all duration-700 ${i === 1 || i === 2 ? "mt-18" : ""
+                  }`}
               >
                 <Image
                   src={img || "/cs.png"}
@@ -209,7 +208,7 @@ function AboutPremium3({ data, isEditing, onUpdate }) {
         </div>
       </section>
 
-      <section className="bg-secondary py-10">
+      <section className=" py-10">
         <div className="max-w-[1480px] mx-auto text-center space-y-20">
           {/* Description */}
           <div
@@ -233,7 +232,7 @@ function AboutPremium3({ data, isEditing, onUpdate }) {
         </div>
       </section>
 
-      <section className="bg-secondary py-10">
+      <section className=" py-10">
         <div className="max-w-[1480px] w-full mx-auto space-y-12">
           {/* MISSION */}
           <div className="grid lg:grid-cols-2 items-center gap-24">
@@ -281,7 +280,7 @@ function AboutPremium3({ data, isEditing, onUpdate }) {
         </div>
       </section>
 
-      <section className="bg-secondary py-10">
+      <section className=" py-10">
         <div className="max-w-[1480px] mx-auto space-y-20">
           {/* Title */}
           <div className="text-center max-w-3xl mx-auto space-y-4">

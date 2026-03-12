@@ -5,6 +5,7 @@ import axiosInstance, {
 
 const ENDPOINT = {
   getInquiries: "/vehicles/inquiry/received",
+  getMyInquiries: "/vehicles/inquiry/sent",
   approveInquiry: "/vehicles/inquiry/approve",
   closeInquiry: "/vehicles/inquiry/close",
   rejectInquiry: "/vehicles/inquiry/reject",
@@ -19,6 +20,25 @@ export const getInquiries = async (inquiryStatus) => {
     }
 
     const res = await axiosInstance.get(ENDPOINT.getInquiries, {
+      params,
+    });
+
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const getMyInquiries = async (inquiryStatus) => {
+  try {
+    const params = {};
+
+    if (inquiryStatus) {
+      params.inquiryStatus = inquiryStatus;
+    }
+
+    const res = await axiosInstance.get(ENDPOINT.getMyInquiries, {
       params,
     });
 
