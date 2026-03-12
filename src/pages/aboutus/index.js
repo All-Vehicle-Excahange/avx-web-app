@@ -10,6 +10,8 @@ import ConsultantsAndBuyers from "@/components/features/about/ConsultantsAndBuye
 import TrustSignals from "@/components/features/about/TrustSignal";
 import VisionAndApproach from "@/components/features/about/OurVisionAndApproach";
 import ComplianceAndTransparency from "@/components/features/about/ComplianceAndTransparency";
+import FooterLink from "@/components/layout/FooterLink";
+import Footer from "@/components/layout/Footer";
 
 function index() {
     return (
@@ -17,33 +19,36 @@ function index() {
             <Navbar scrolled={true} />
 
             <Layout>
-                <HeroSection/>
+                <HeroSection />
             </Layout>
 
             <Layout>
-                <ProblemWeAreSolve/>
+                <ProblemWeAreSolve />
             </Layout>
             <Layout>
-                <WhyAvxDifferent/>
+                <WhyAvxDifferent />
             </Layout>
             <Layout>
-                <HowAvxWorks/>
+                <HowAvxWorks />
             </Layout>
             <Layout>
-                <ConsultantsAndBuyers/>
+                <ConsultantsAndBuyers />
             </Layout>
             <Layout>
-                <TrustSignals/>
+                <TrustSignals />
             </Layout>
             <Layout>
-                <VisionAndApproach/>
+                <VisionAndApproach />
             </Layout>
             <Layout>
-                <ComplianceAndTransparency/>
+                <ComplianceAndTransparency />
             </Layout>
             <Layout>
-                <Cta/>
+                <Cta />
             </Layout>
+
+            <FooterLink />
+            <Footer />
 
         </>
     );

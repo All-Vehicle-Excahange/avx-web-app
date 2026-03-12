@@ -106,6 +106,20 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
                         <div className="relative w-full h-full overflow-hidden rounded-xl">
                             {mapped.sponsored && <SponsoredRibbon />}
 
+                            {/* Inspection Badge */}
+                            {data?.inspectionBadgeUrl && (
+                                <div className="hidden md:block absolute top-0 left-0 z-20">
+                                    <Image
+                                        src={data.inspectionBadgeUrl}
+                                        alt="Inspection Badge"
+                                        width={40}
+                                        height={40}
+                                        className="object-contain drop-shadow-lg"
+                                    />
+                                </div>
+                            )}
+                            {mapped.sponsored && <SponsoredRibbon />}
+
                             <Image
                                 src={mapped.image}
                                 alt={mapped.title}

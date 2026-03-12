@@ -11,7 +11,6 @@ export default function StickyHeroNavbar({ onScrollChange }) {
     const onScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          console.log("5")
           const s = window.scrollY > 80;
 
           setScrolled(s);

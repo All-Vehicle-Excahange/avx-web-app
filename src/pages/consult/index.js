@@ -9,7 +9,8 @@ import TierStructure from "@/components/features/consult/landing/TierStructure";
 import WhatYouGetSpotlight from "@/components/features/consult/landing/WhatYouGet";
 import WhoItsFor from "@/components/features/consult/landing/WhoItsFor";
 import InspectionAdvantage from "@/components/features/why-choose-us/InspectionAdvantage";
-import Footer from "@/components/layout/Footer";
+import FooterLink from "@/components/layout/FooterLink";
+import Footer from "@/components/layout/FooterLink";
 import Layout from "@/components/layout/Layout";
 import Navbar from "@/components/layout/Navbar";
 import React from "react";
@@ -33,6 +34,7 @@ function index() {
         <AccountabilityTrust />
         <ConsultCta />
       </Layout>
+      <FooterLink />
       <Footer />
     </>
   );

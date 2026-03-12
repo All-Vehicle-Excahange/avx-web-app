@@ -4,7 +4,8 @@ import HelpBanner from "@/components/features/help/HelpBanner";
 import HelpHero from "@/components/features/help/HelpHero";
 import PopularTopicsGrid from "@/components/features/help/PopularTopics";
 import SupportBridge from "@/components/features/help/SupportBridge";
-import Footer from "@/components/layout/Footer";
+import FooterLink from "@/components/layout/FooterLink";
+import Footer from "@/components/layout/FooterLink";
 import Navbar from "@/components/layout/Navbar";
 import React from "react";
 
@@ -18,6 +19,7 @@ function index() {
       <HelpBanner />
       <FAQSections />
       <SupportBridge />
+      <FooterLink />
       <Footer />
     </>
   );

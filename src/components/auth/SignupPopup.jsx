@@ -295,7 +295,6 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
             <Button
               type="submit"
               variant="ghost"
-              onClick={() => handleSubmit(onSendOtp)()}
               className="text-primary w-full h-11 text-sm font-bold"
             >
               GET OTP
@@ -325,7 +324,6 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
               <Button
                 type="submit"
                 variant="ghost"
-                onClick={onValidateOtp}
                 className="text-primary w-full h-11 text-sm font-bold"
               >
                 VALIDATE OTP

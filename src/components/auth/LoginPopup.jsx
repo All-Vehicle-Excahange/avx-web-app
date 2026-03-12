@@ -8,7 +8,7 @@ import Button from "@/components/ui/button";
 import { getOtp, login } from "@/services/auth.service";
 import { useForm } from "react-hook-form";
 
-function LoginPopup({ isOpen, onClose, onSignup = () => { } }) {
+function LoginPopup({ isOpen, onClose, onSignup = () => { }, onSuccess = () => { } }) {
   const {
     register,
     handleSubmit,
@@ -105,6 +105,7 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { } }) {
       });
 
       if (res?.success || res?.status) {
+        onSuccess();
         handleClose();
       }
     } catch (err) {

@@ -65,7 +65,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
   });
 
   return (
-    <div className="rounded-2xl border border-third/40 bg-secondary p-4 lg:px-6 lg:py-5 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 lg:gap-6 shadow-sm hover:shadow-md transition">
+    <div className="rounded-2xl border border-third/40  p-4 lg:px-6 lg:py-5 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 lg:gap-6 shadow-sm hover:shadow-md transition">
 
       {/* ✅ LEFT IMAGE + INFO (Stacks on mobile & tablet, row on desktop) */}
       <div className="flex flex-col lg:flex-row items-start gap-4 lg:gap-5 w-full">
@@ -85,6 +85,16 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
 
           <div className="flex justify-between items-start gap-2">
             <div className="space-y-1">
+              <p className="text-sm text-third">
+                Inquiry Title:{" "}
+                <span className="text-primary font-semibold">{inquiry.inquiryTitle || "N/A"}</span>
+              </p>
+
+              <p className="text-sm text-third">
+                Inquiry Description:{" "}
+                <span className="text-primary font-semibold">{inquiry.inquiryDescription || "N/A"}</span>
+              </p>
+
               <p className="text-sm text-third">
                 Vehicle:{" "}
                 <span className="text-primary font-semibold">{vehicleTitle}</span>
