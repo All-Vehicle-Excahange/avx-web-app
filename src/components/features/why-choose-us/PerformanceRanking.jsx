@@ -54,7 +54,7 @@ export default function RankingDiagram() {
                   className="group flex items-center justify-between p-4 rounded-xl border border-white/5 bg-white/3 hover:bg-white/6 transition-all"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-fourth">{item.icon}</span>
+                    <span className="text-third">{item.icon}</span>
                     <span className="text-xs font-bold uppercase tracking-wider text-primary">
                       {item.label}
                     </span>
@@ -150,7 +150,7 @@ export default function RankingDiagram() {
                 key={i}
                 className={`p-8 transition-all group relative h-full flex flex-col ${
                   def.isPremium
-                    ? "bg-fourth/5 z-10 shadow-[inset_0_0_20px_rgba(0,123,255,0.1)]"
+                    ? "bg-secondary z-10 "
                     : "bg-secondary hover:bg-white/3"
                 }`}
               >
@@ -159,14 +159,14 @@ export default function RankingDiagram() {
                   <div
                     className={`text-[10px] font-black px-2 py-1 rounded-md uppercase tracking-tighter ${
                       def.isPremium
-                        ? "bg-fourth/70 text-primary"
-                        : "bg-white/10 text-third"
+                        ? "bg-primary/10 text-primary/90"
+                        : "bg-primary/10 text-third"
                     }`}
                   >
                     {def.highlight}
                   </div>
                   <div
-                    className={`h-px flex-1 ${def.isPremium ? "bg-fourth/30" : "bg-white/5"}`}
+                    className={`h-px flex-1 ${def.isPremium ? "bg-primary/20" : "bg-primary/5"}`}
                   ></div>
                 </div>
 
@@ -194,7 +194,7 @@ export default function RankingDiagram() {
                   <div className="absolute top-0 right-0 p-2">
                     <Zap
                       size={12}
-                      className="text-fourth "
+                      className="text-third "
                       fill="currentColor"
                     />
                   </div>
@@ -213,7 +213,7 @@ function Result({ score, label, highlight, faded }) {
     <div
       className={`relative p-3 rounded-xl border transition-all duration-500 ${
         highlight
-          ? "border-fourth/50 bg-fourth/5 scale-105 shadow-[0_10px_30px_rgba(0,123,255,0.15)] z-10"
+          ? "border-third/30 bg-fourth/5 scale-105  z-10"
           : "border-white/5 bg-white/5"
       } ${faded ? "opacity-30" : "opacity-100"}`}
     >

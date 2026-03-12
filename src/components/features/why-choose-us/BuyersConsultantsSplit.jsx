@@ -72,7 +72,7 @@ const personas = {
       },
     ],
     index: "02",
-    accent: "blue",
+    accent: "white",
   },
 };
 
@@ -84,7 +84,8 @@ export default function PerspectiveSwitcher() {
   const timerRef = useRef(null);
 
   const data = personas[displayed];
-  const isBlue = displayed === "consultant";
+  // always white/neutral — no blue logic
+  const isBlue = false;
 
   const switchTo = (id) => {
     if (id === active || phase !== "idle") return;
@@ -108,8 +109,7 @@ export default function PerspectiveSwitcher() {
   const headlineStyle = (i) => {
     const base = {
       fontSize: "clamp(1.8rem, 5vw, 3.8rem)",
-      color:
-        i === 1 ? (isBlue ? "#007bff" : "rgba(255,254,247,0.45)") : "#fffef7",
+      color: i === 1 ? "rgba(255,254,247,0.45)" : "#fffef7",
       display: "block",
     };
     if (phase === "exit")
@@ -179,7 +179,7 @@ export default function PerspectiveSwitcher() {
   };
 
   return (
-    <section className="relative py-10  overflow-hidden font-secondary text-primary min-h-screen flex flex-col justify-center">
+    <section className="relative py-10 overflow-hidden font-secondary text-primary min-h-screen flex flex-col justify-center">
       {/* Grid texture */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -190,30 +190,28 @@ export default function PerspectiveSwitcher() {
         }}
       />
 
-      {/* Ambient glow */}
+      {/* Ambient glow — always white */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: isBlue
-            ? "radial-gradient(ellipse 70% 60% at 75% 50%, rgba(0,123,255,0.08) 0%, transparent 70%)"
-            : "radial-gradient(ellipse 60% 60% at 25% 50%, rgba(255,255,255,0.04) 0%, transparent 70%)",
+          background:
+            "radial-gradient(ellipse 60% 60% at 25% 50%, rgba(255,255,255,0.04) 0%, transparent 70%)",
           transition: "background 0.7s ease",
         }}
       />
 
-      {/* Wipe flash overlay */}
+      {/* Wipe flash overlay — always white */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: isBlue
-            ? "linear-gradient(105deg, transparent 40%, rgba(0,123,255,0.04) 100%)"
-            : "linear-gradient(105deg, rgba(255,255,255,0.02) 0%, transparent 60%)",
+          background:
+            "linear-gradient(105deg, rgba(255,255,255,0.02) 0%, transparent 60%)",
           opacity: phase === "enter" ? 1 : 0,
           transition: "opacity 0.5s ease",
         }}
       />
 
-      <div className=" mx-auto w-full relative">
+      <div className="mx-auto w-full relative">
         {/* ── TOP TOGGLE BAR ── */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 sm:gap-0 mb-10 sm:mb-14">
           <div>
@@ -224,12 +222,8 @@ export default function PerspectiveSwitcher() {
               Your{" "}
               <span
                 style={{
-                  ...(isBlue
-                    ? { color: "#007bff" }
-                    : {
-                        WebkitTextStroke: "1px rgba(255,254,247,0.5)",
-                        color: "transparent",
-                      }),
+                  WebkitTextStroke: "1px rgba(255,254,247,0.5)",
+                  color: "transparent",
                   transition:
                     "color 0.5s ease, -webkit-text-stroke-color 0.5s ease",
                   display: "inline-block",
@@ -248,9 +242,7 @@ export default function PerspectiveSwitcher() {
                 onClick={() => switchTo(id)}
                 className={`relative z-10 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] transition-all duration-300 ${
                   active === id
-                    ? id === "consultant"
-                      ? "bg-fourth text-primary shadow-lg shadow-fourth/20"
-                      : "bg-white/15 text-primary"
+                    ? "bg-white/15 text-primary"
                     : "text-third/50 hover:text-third/80"
                 }`}
               >
@@ -264,9 +256,7 @@ export default function PerspectiveSwitcher() {
         <div
           className="relative border rounded-2xl sm:rounded-3xl overflow-hidden backdrop-blur-sm bg-black/10"
           style={{
-            borderColor: isBlue
-              ? "rgba(0,123,255,0.2)"
-              : "rgba(255,255,255,0.07)",
+            borderColor: "rgba(255,255,255,0.07)",
             transition: "border-color 0.6s ease",
           }}
         >
@@ -274,9 +264,8 @@ export default function PerspectiveSwitcher() {
           <div
             className="absolute top-0 left-0 right-0 h-px"
             style={{
-              background: isBlue
-                ? "linear-gradient(90deg, transparent, rgba(0,123,255,0.5), transparent)"
-                : "linear-gradient(90deg, transparent, rgba(255,254,247,0.2), transparent)",
+              background:
+                "linear-gradient(90deg, transparent, rgba(255,254,247,0.2), transparent)",
               transition: "background 0.6s ease",
             }}
           />
@@ -285,10 +274,9 @@ export default function PerspectiveSwitcher() {
           <div
             className="hidden lg:block absolute top-0 bottom-0 w-1/2 pointer-events-none"
             style={{
-              left: isBlue ? "50%" : "0%",
-              background: isBlue
-                ? "linear-gradient(90deg, transparent, rgba(0,123,255,0.04))"
-                : "linear-gradient(90deg, rgba(255,255,255,0.015), transparent)",
+              left: displayed === "consultant" ? "50%" : "0%",
+              background:
+                "linear-gradient(90deg, rgba(255,255,255,0.015), transparent)",
               transition:
                 "left 0.55s cubic-bezier(0.65,0,0.35,1), background 0.55s ease",
             }}
@@ -303,9 +291,7 @@ export default function PerspectiveSwitcher() {
                 className="absolute top-6 right-6 sm:top-8 sm:right-10 font-primary font-black select-none leading-none"
                 style={{
                   fontSize: "clamp(4rem, 12vw, 9rem)",
-                  color: isBlue
-                    ? "rgba(0,123,255,0.06)"
-                    : "rgba(255,254,247,0.04)",
+                  color: "rgba(255,254,247,0.04)",
                   transition: "color 0.5s ease",
                   ...indexStyle(),
                 }}
@@ -317,15 +303,9 @@ export default function PerspectiveSwitcher() {
               <div
                 className="inline-flex items-center gap-2 self-start px-3 py-1.5 rounded-full border text-[10px] uppercase tracking-[0.25em] font-semibold"
                 style={{
-                  borderColor: isBlue
-                    ? "rgba(0,123,255,0.3)"
-                    : "rgba(255,255,255,0.15)",
-                  backgroundColor: isBlue
-                    ? "rgba(0,123,255,0.1)"
-                    : "rgba(255,255,255,0.05)",
-                  color: isBlue
-                    ? "rgba(0,123,255,0.8)"
-                    : "rgba(190,190,190,0.6)",
+                  borderColor: "rgba(255,255,255,0.15)",
+                  backgroundColor: "rgba(255,255,255,0.05)",
+                  color: "rgba(190,190,190,0.6)",
                   transition: "all 0.5s ease",
                   ...leftMetaStyle(),
                 }}
@@ -333,9 +313,7 @@ export default function PerspectiveSwitcher() {
                 <span
                   className="w-1.5 h-1.5 rounded-full"
                   style={{
-                    backgroundColor: isBlue
-                      ? "#007bff"
-                      : "rgba(255,255,255,0.5)",
+                    backgroundColor: "rgba(255,255,255,0.5)",
                     transition: "background-color 0.5s ease",
                   }}
                 />
@@ -364,16 +342,10 @@ export default function PerspectiveSwitcher() {
                 <button
                   className="group flex items-center gap-3 px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl font-primary text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.18em] transition-all duration-300"
                   style={{
-                    backgroundColor: isBlue
-                      ? "#007bff"
-                      : "rgba(255,255,255,0.10)",
+                    backgroundColor: "rgba(255,255,255,0.10)",
                     color: "#fffef7",
-                    border: isBlue
-                      ? "none"
-                      : "1px solid rgba(255,255,255,0.15)",
-                    boxShadow: isBlue
-                      ? "0 8px 30px rgba(0,123,255,0.2)"
-                      : "none",
+                    border: "1px solid rgba(255,255,255,0.15)",
+                    boxShadow: "none",
                     transition: "all 0.4s ease",
                   }}
                 >
@@ -390,9 +362,8 @@ export default function PerspectiveSwitcher() {
             <div
               className="hidden lg:block w-px self-stretch"
               style={{
-                background: isBlue
-                  ? "linear-gradient(to bottom, transparent, rgba(0,123,255,0.25) 30%, rgba(0,123,255,0.25) 70%, transparent)"
-                  : "linear-gradient(to bottom, transparent, rgba(255,255,255,0.08) 30%, rgba(255,255,255,0.08) 70%, transparent)",
+                background:
+                  "linear-gradient(to bottom, transparent, rgba(255,255,255,0.08) 30%, rgba(255,255,255,0.08) 70%, transparent)",
                 transition: "background 0.6s ease",
               }}
             />
@@ -401,9 +372,8 @@ export default function PerspectiveSwitcher() {
             <div
               className="block lg:hidden h-px mx-8 sm:mx-10"
               style={{
-                background: isBlue
-                  ? "linear-gradient(to right, transparent, rgba(0,123,255,0.2), transparent)"
-                  : "linear-gradient(to right, transparent, rgba(255,255,255,0.07), transparent)",
+                background:
+                  "linear-gradient(to right, transparent, rgba(255,255,255,0.07), transparent)",
                 transition: "background 0.6s ease",
               }}
             />
@@ -424,9 +394,7 @@ export default function PerspectiveSwitcher() {
                         i === 0 ? "border-t" : ""
                       }`}
                       style={{
-                        borderColor: isBlue
-                          ? "rgba(0,123,255,0.08)"
-                          : "rgba(255,255,255,0.06)",
+                        borderColor: "rgba(255,255,255,0.06)",
                         transition: "border-color 0.5s ease",
                         ...featureStyle(i),
                       }}
@@ -440,12 +408,8 @@ export default function PerspectiveSwitcher() {
                       <div
                         className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-xl shrink-0 transition-all duration-300"
                         style={{
-                          backgroundColor: isBlue
-                            ? "rgba(0,123,255,0.10)"
-                            : "rgba(255,255,255,0.05)",
-                          color: isBlue
-                            ? "rgba(0,123,255,0.6)"
-                            : "rgba(190,190,190,0.4)",
+                          backgroundColor: "rgba(255,255,255,0.05)",
+                          color: "rgba(190,190,190,0.4)",
                         }}
                       >
                         <Icon size={14} />
@@ -458,16 +422,12 @@ export default function PerspectiveSwitcher() {
                         </p>
                       </div>
 
-                      {/* Note tag — hidden on very small screens */}
+                      {/* Note tag */}
                       <span
                         className="hidden xs:inline-block text-[9px] sm:text-[10px] uppercase tracking-[0.2em] font-bold px-2 py-1 rounded-md shrink-0 transition-all duration-300"
                         style={{
-                          color: isBlue
-                            ? "rgba(0,123,255,0.5)"
-                            : "rgba(190,190,190,0.5)",
-                          backgroundColor: isBlue
-                            ? "rgba(0,123,255,0.06)"
-                            : "rgba(255,255,255,0.03)",
+                          color: "rgba(190,190,190,0.5)",
+                          backgroundColor: "rgba(255,255,255,0.03)",
                         }}
                       >
                         {item.note}
@@ -489,9 +449,7 @@ export default function PerspectiveSwitcher() {
                       width: active === id ? "32px" : "12px",
                       backgroundColor:
                         active === id
-                          ? isBlue
-                            ? "#007bff"
-                            : "rgba(255,255,255,0.4)"
+                          ? "rgba(255,255,255,0.4)"
                           : "rgba(255,255,255,0.08)",
                       transition: "width 0.4s ease, background-color 0.4s ease",
                     }}

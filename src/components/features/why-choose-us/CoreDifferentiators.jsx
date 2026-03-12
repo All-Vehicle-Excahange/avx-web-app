@@ -48,7 +48,7 @@ export default function CoreDifferentiatorsMatrix() {
         <div className="relative border border-white/10 rounded-3xl overflow-hidden">
           {/* Center Label */}
           <div className="hidden md:flex absolute inset-50 items-center justify-center pointer-events-none">
-            <div className="px-8 py-3 border border-fourth/30 text-xs uppercase tracking-[0.3em] text-fourth bg-secondary">
+            <div className="px-8 py-3 border border-third/30 text-xs uppercase tracking-[0.3em] text-fourth bg-secondary">
               AVX SYSTEM CORE
             </div>
           </div>
@@ -57,20 +57,20 @@ export default function CoreDifferentiatorsMatrix() {
             {pillars.map((item, i) => (
               <div
                 key={i}
-                className="p-12 border border-white/5 hover:bg-fourth/5 transition-all duration-500 group"
+                className="p-12 border border-white/5 hover:bg-third/3 transition-all duration-500 group"
               >
                 <div className="flex items-center justify-between mb-6">
                   <span className="text-sm tracking-[0.3em] text-third">
                     {item.id}
                   </span>
-                  <span className="text-fourth">{item.icon}</span>
+                  <span className="text-third">{item.icon}</span>
                 </div>
 
                 <h3 className="text-xl font-bold font-primary uppercase tracking-wide mb-4">
                   {item.title}
                 </h3>
 
-                <div className="h-px bg-white/10 mb-4 group-hover:bg-fourth/30 transition-all"></div>
+                <div className="h-px bg-white/10 mb-4 group-hover:bg-third/30 transition-all"></div>
 
                 <p className="text-sm text-third leading-relaxed">
                   {item.desc}

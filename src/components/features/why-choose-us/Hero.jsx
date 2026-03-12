@@ -41,7 +41,7 @@ export default function AvxHero() {
               listings, and optional inspection assurance.
             </p>
 
-            <div className="mt-8 w-24 h-0.5 bg-linear-to-r from-fourth to-fourth/40" />
+            <div className="mt-8 w-24 h-0.5 bg-linear-to-r from-primary to-primary/40" />
 
             <div className="mt-10 flex flex-col sm:flex-row gap-4">
               <Button variant="ghost">Browse Vehicles</Button>
@@ -72,18 +72,18 @@ export default function AvxHero() {
               <div className="absolute bottom-6 left-6 right-6 bg-secondary/70 backdrop-blur-xl border border-white/10 rounded-xl p-4">
                 <div className="grid grid-cols-3 text-center">
                   <div>
-                    <p className="text-lg font-semibold text-fourth">100+</p>
-                    <p className="text-xs text-third">Consultants</p>
+                    <p className="text-lg font-semibold text-Primary">100+</p>
+                    <p className="text-xs text-third/80">Consultants</p>
                   </div>
 
                   <div>
-                    <p className="text-lg font-semibold text-fourth">500+</p>
-                    <p className="text-xs text-third">Listings</p>
+                    <p className="text-lg font-semibold text-Primary">500+</p>
+                    <p className="text-xs text-third/80">Listings</p>
                   </div>
 
                   <div>
-                    <p className="text-lg font-semibold text-fourth">98%</p>
-                    <p className="text-xs text-third">Transparency</p>
+                    <p className="text-lg font-semibold text-Primary">98%</p>
+                    <p className="text-xs text-third/80">Transparency</p>
                   </div>
                 </div>
               </div>
