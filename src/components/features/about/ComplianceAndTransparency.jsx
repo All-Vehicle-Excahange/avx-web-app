@@ -30,10 +30,10 @@ const ComplianceAndTransparency = () => {
                   relative
                   h-20 w-20
                   rounded-2xl
-                  bg-gradient-to-br
+                 
                   from-fourth/20
                   to-transparent
-                  border border-fourth/30
+                  border border-primary 
                   flex items-center justify-center
                 "
                   >
@@ -43,7 +43,7 @@ const ComplianceAndTransparency = () => {
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        className="text-fourth"
+                        className="text-primary"
                         strokeWidth="1.8"
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -58,11 +58,7 @@ const ComplianceAndTransparency = () => {
                 <div className="flex-1">
                   <h4
                       className="
-                  text-fourth
-                  font-semibold
-                  uppercase
-                  tracking-[0.4em]
-                  text-xs
+                 text-sm tracking-[0.4em] uppercase text-third font-semibold
                   mb-6
                 "
                   >
@@ -78,9 +74,9 @@ const ComplianceAndTransparency = () => {
                   >
                     AVX is a marketplace platform. Transactions, pricing, and
                     negotiation occur{" "}
-                    <span className="text-fourth font-semibold">
+                  
                     directly
-                  </span>{" "}
+               
                     between buyers and consultants. AVX does not hold or process
                     payments between parties.
                   </p>
@@ -88,7 +84,7 @@ const ComplianceAndTransparency = () => {
                   <p
                       className="
                   mt-8
-                  text-fourth
+                  text-third
                   font-semibold
                   uppercase
                   tracking-widest
@@ -104,7 +100,6 @@ const ComplianceAndTransparency = () => {
 
           {/* ===== LEGAL FOOTER ===== */}
           <div className="mt-12 flex items-center justify-center gap-8">
-            <div className="h-px w-24 bg-linear-to-r from-transparent via-fourth/40 to-transparent" />
 
             <span
                 className="
@@ -117,7 +112,6 @@ const ComplianceAndTransparency = () => {
             Legal Independence Verified
           </span>
 
-            <div className="h-px w-24 bg-linear-to-r from-transparent via-fourth/40 to-transparent" />
           </div>
         </div>
       </section>

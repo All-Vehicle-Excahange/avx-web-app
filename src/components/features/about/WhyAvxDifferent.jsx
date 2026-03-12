@@ -33,9 +33,16 @@ export default function WhyAvxDifferent() {
             Why AVX
           </p>
 
-          <h2 className="text-4xl sm:text-5xl xl:text-5xl font-bold">
-            Not another <span className=" text-fourth"> listing platform</span>
-          </h2>
+           <h2 className="font-primary md:text-5xl text-3xl  lg:text-6xl font-black uppercase leading-[0.95] tracking-tight">
+           Not another
+              <br />
+                <span
+                  className="relative inline-block"
+                style={{ WebkitTextStroke: "1.5px rgba(255,254,247,0.25)", color: "transparent" }}
+              >
+        listing platform
+              </span>
+            </h2>
 
           <p className="mt-8 text-xl text-third  leading-relaxed">
             AVX is engineered to remove ambiguity from the used-vehicle market
@@ -59,7 +66,7 @@ export default function WhyAvxDifferent() {
                 <div
                   className={`absolute top-1/2 -translate-y-1/2 text-[10rem] font-bold select-none pointer-events-none transition-colors duration-300
           ${isLeftContent ? "md:right-0 md:left-auto" : "md:left-0 md:right-auto"}
-          text-white/15 group-hover:text-fourth/30`}
+          text-white/15 group-hover:text-fourth/20`}
                 >
                   {item.id}
                 </div>

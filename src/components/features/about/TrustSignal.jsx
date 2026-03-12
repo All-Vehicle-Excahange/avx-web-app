@@ -6,16 +6,20 @@ export default function TrustSignals() {
             {/* LEFT — CONTEXT */}
             <div>
               <p className="mb-6 inline-flex items-center gap-3 text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                <span className="h-0.5 w-10 bg-fourth" />
+             
                 Built for Accountability
               </p>
 
-              <h2 className="text-4xl sm:text-5xl xl:text-5xl font-medium leading-tight text-primary">
-                Trust is built
-                <span className="block text-fourth mt-2">
-                through measurable signals
+             <h2 className="font-primary md:text-5xl text-3xl  lg:text-6xl font-black uppercase leading-[0.95] tracking-tight">
+             Trust is built
+              <br />
+                <span
+                  className="relative inline-block"
+                style={{ WebkitTextStroke: "1.5px rgba(255,254,247,0.25)", color: "transparent" }}
+              >
+             through measurable signals
               </span>
-              </h2>
+            </h2>
 
               <p className="mt-10 max-w-xl text-xl leading-relaxed text-third">
                 AVX doesn’t rely on claims or testimonials. Trust emerges from
@@ -48,7 +52,7 @@ export default function TrustSignals() {
 
               {/* TOP RIGHT */}
               <div className="absolute top-[20%] right-[23%]">
-                <div className="text-2xl font-semibold text-fourth">
+                <div className="text-2xl font-semibold text-primary">
                   100K+
                 </div>
                 <p className="mt-1 text-base text-third">
@@ -58,7 +62,7 @@ export default function TrustSignals() {
 
               {/* TOP LEFT */}
               <div className="absolute top-[20%] left-[12%] text-right">
-                <div className="text-2xl font-semibold text-fourth">
+                <div className="text-2xl font-semibold text-primary">
                   10K+
                 </div>
                 <p className="mt-1 text-base text-third">
@@ -68,7 +72,7 @@ export default function TrustSignals() {
 
               {/* BOTTOM LEFT */}
               <div className="absolute bottom-[20%] left-[17.5%]">
-                <div className="text-2xl font-semibold text-fourth text-end">
+                <div className="text-2xl font-semibold text-primary text-end">
                   Growing
                 </div>
                 <p className="mt-1 text-base text-third">
@@ -78,9 +82,9 @@ export default function TrustSignals() {
 
               {/* BOTTOM RIGHT */}
               <div className="absolute bottom-[20%] right-[18%]">
-                <div className="text-2xl font-semibold text-fourth">
+                <div className="text-2xl font-semibold text-primary">
                   In Progress
-                </div>
+                </div>  
                 <p className="mt-1 text-base text-third">
                   Inspection rollout
                 </p>

@@ -84,8 +84,8 @@ const HowAvxWorks = () => {
               onMouseEnter={() => setActiveStep(index)}
               className={`relative overflow-hidden transition-all duration-500 ease-in-out cursor-pointer rounded-2xl border border-primary/10 
                 ${activeStep === index
-                  ? "flex-3 bg-[#111]"
-                  : "flex-1 bg-[#0a0a0a] hover:bg-[#0f0f0f]"
+                  ? "flex-3 "
+                  : "flex-1  "
                 }`}
             >
               {/* Collapsed Title */}
@@ -105,7 +105,7 @@ const HowAvxWorks = () => {
                   }`}
               >
                 <div>
-                  <div className="text-fourth mb-5 opacity-80">
+                  <div className="text-primary mb-5 opacity-80">
                     {step.icon}
                   </div>
 
@@ -125,7 +125,7 @@ const HowAvxWorks = () => {
                 {/* Progress Bar */}
                 <div className="w-full h-0.5 bg-primary/5 mt-6 overflow-hidden">
                   <div
-                    className="h-full bg-fourth transition-all duration-700 ease-out"
+                    className="h-full bg-primary transition-all duration-700 ease-out"
                     style={{ width: activeStep === index ? "100%" : "0%" }}
                   ></div>
                 </div>
@@ -148,7 +148,7 @@ const HowAvxWorks = () => {
             <div
               key={i}
               className={`h-0.5 rounded-full transition-all duration-300 ${activeStep === i
-                ? "w-14 bg-fourth"
+                ? "w-14 bg-primary"
                 : "w-5 bg-primary/10"
                 }`}
             />
