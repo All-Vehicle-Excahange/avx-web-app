@@ -48,7 +48,7 @@ export default function DisputeReporting() {
   ];
 
   return (
-    <section className="py-10">
+    <section className="py-10" style={{ overflowX: "hidden" }}>
       <div className="w-full mx-auto ">
         {/* HEADER */}
         <motion.div
@@ -58,7 +58,7 @@ export default function DisputeReporting() {
           transition={{ duration: 0.6 }}
           className=" max-w-2xl mx-auto mb-16"
         >
-          <div className="text-left md:text-center max-w-xl mx-auto mb-20">
+          <div className="text-left md:text-left max-w-xl mx-auto mb-20">
             <div className="inline-flex items-center gap-2 mb-4 text-third font-semibold uppercase tracking-[0.35em] text-sm">
               <Flag className="w-4 h-4 text-fourth" />
               Resolution Process
@@ -67,7 +67,7 @@ export default function DisputeReporting() {
               <span className="text-fourth">Dispute </span>Reporting
             </h2>
 
-            <p className="text-[16px] text-third leading-relaxed">
+            <p className="text-[16px] text-third leading-relaxed w-[50%] md-[100%]">
               Buyers can raise concerns through a structured dispute process.
               AVX reviews platform-recorded interactions to ensure fair and
               transparent resolution.
@@ -81,6 +81,7 @@ export default function DisputeReporting() {
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
             <p className="text-xs font-mono uppercase tracking-[0.3em] text-third mb-6">
@@ -91,7 +92,7 @@ export default function DisputeReporting() {
               {reportTypes.map((type, i) => (
                 <div
                   key={i}
-                  className="group p-5 rounded-xl border-primary/10 border-2   transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)] "
+                  className="group p-5 rounded-xl border-primary/30 border-2   transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] "
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-lg bg-fourth/10 border border-fourth/20 flex items-center justify-center text-fourth">
@@ -114,6 +115,7 @@ export default function DisputeReporting() {
           <motion.div
             initial={{ opacity: 0, x: 24 }}
             whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
             <p className="text-xs font-mono uppercase tracking-[0.3em] text-third mb-6">
@@ -124,7 +126,7 @@ export default function DisputeReporting() {
               {resolutions.map((resolution, i) => (
                 <div
                   key={i}
-                  className="group p-5 rounded-xl border-primary/10 border-2  transition-all duration-300"
+                  className="group p-5 rounded-xl border-primary/30 border-2  transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-lg bg-fourth/10 border border-fourth/20 flex items-center justify-center text-fourth">
@@ -148,6 +150,7 @@ export default function DisputeReporting() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ delay: 0.4 }}
           className="mt-14 text-center"
         >

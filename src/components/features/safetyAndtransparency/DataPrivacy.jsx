@@ -35,7 +35,7 @@ function TypewriterLine({ text, delay = 0 }) {
   const [displayed, setDisplayed] = useState("");
   const [started, setStarted] = useState(false);
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true });
+  const inView = useInView(ref, { once: false });
 
   useEffect(() => {
     if (!inView || started) return;
@@ -77,7 +77,7 @@ function Cursor() {
 
 export default function DataPrivacy() {
   return (
-    <section className="py-10">
+    <section className="py-10" style={{ overflowX: "hidden" }}>
       <div className="w-full mx-auto ">
         {/* HEADER */}
         <motion.div
@@ -97,7 +97,7 @@ export default function DataPrivacy() {
               Built to Protect <span className="text-fourth">Every Layer</span>
             </h2>
 
-            <p className="text-[16px] text-third leading-relaxed">
+            <p className="text-[16px] text-third leading-relaxed w-[50%] md-[100%]">
               AVX maintains secure infrastructure covering authentication,
               encryption, document access control, and role-based admin
               permissions to protect sensitive user data.
@@ -116,7 +116,7 @@ export default function DataPrivacy() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.08 }}
                 viewport={{ once: true }}
-                className="group p-6 rounded-2xl bg-secondary/20 border border-primary/10 hover:border-fourth/40 transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]"
+                className="group p-6 rounded-2xl bg-secondary/20 border-2 border-primary/30 transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
               >
                 <h4 className="text-lg font-semibold text-primary mb-2">
                   {m.title.map((word, idx) => (
@@ -139,7 +139,7 @@ export default function DataPrivacy() {
             initial={{ opacity: 0, x: 18 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             className="flex flex-col gap-6"
           >
             {/* TERMINAL */}
@@ -174,7 +174,7 @@ export default function DataPrivacy() {
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ delay: 5 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                 >
                   System status: secure <Cursor />
                 </motion.div>

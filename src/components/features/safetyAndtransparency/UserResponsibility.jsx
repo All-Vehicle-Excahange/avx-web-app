@@ -38,7 +38,7 @@ export default function UserResponsibility() {
           viewport={{ once: true }}
           className="text-center max-w-2xl mx-auto mb-16 "
         >
-          <div className="text-left md:text-center max-w-xl mx-auto mb-15">
+          <div className="text-left md:text-left max-w-xl mx-auto mb-15">
             <div className="inline-flex items-center gap-2 mb-4 text-third font-semibold uppercase tracking-[0.35em] text-sm">
               <Info className="w-4 h-4 text-yellow-400" />
               Informed Participation
@@ -47,7 +47,7 @@ export default function UserResponsibility() {
               User<span className="text-fourth"> Responsibility </span>
             </h2>
 
-            <p className="text-[16px] text-third leading-relaxed">
+            <p className="text-[16px] text-third leading-relaxed w-[50%] md-[100%]">
               AVX encourages all users to take an active role in due diligence.
               Informed decisions lead to safer and more transparent outcomes.
             </p>
@@ -69,7 +69,7 @@ export default function UserResponsibility() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 + i * 0.08 }}
               viewport={{ once: true }}
-              className="group p-6 rounded-2xl bg-secondary/30 border border-primary/10 hover:border-fourth/40 transition-all duration-300 text-center hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]"
+              className="group p-6 rounded-2xl bg-secondary/30 border-2 hover:border-2 border-primary/30 transition-all duration-100 text-center hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
             >
               <div className="w-14 h-14 rounded-2xl bg-fourth/10 border border-fourth/20 flex items-center justify-center mx-auto mb-4 transition-colors">
                 <item.icon className="w-7 h-7 text-fourth" />
