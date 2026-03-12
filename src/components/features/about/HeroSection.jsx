@@ -27,7 +27,7 @@ export default function HeroSection() {
             "
             >
               Indias Premium
-              <br />
+              <br />  
               <span className="text-white/70">Pre-Owned Vehicle Platform</span>
             </h1>
 

@@ -185,12 +185,16 @@ function StickyBlock({ label, titleTop, titleBottom, desc, cta }) {
         <span className="absolute left-0 -bottom-3 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
       </p>
 
-      <h2 className="text-4xl sm:text-5xl xl:text-5xl font-medium leading-[1.15] text-white font-[Montserrat]">
-        {titleTop}
-        <span className="block  text-fourth mt-2">
+      <h2 className="font-primary md:text-5xl text-3xl  lg:text-6xl font-black uppercase leading-[0.95] tracking-tight">
+             {titleTop}
+              <br />
+                <span
+                  className="relative inline-block"
+                style={{ WebkitTextStroke: "1.5px rgba(255,254,247,0.25)", color: "transparent" }}
+              >
           {titleBottom}
-        </span>
-      </h2>
+              </span>
+            </h2>
 
       <p className="mt-12 max-w-xl text-xl leading-relaxed text-neutral-300 ">
         {desc}
@@ -211,7 +215,7 @@ function StickyBlock({ label, titleTop, titleBottom, desc, cta }) {
 function Capability({ title, desc, icon }) {
   return (
     <div className="border-l border-neutral-700 pl-10 flex gap-6">
-      <div className="mt-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-fourth text-fourth">
+      <div className="mt-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-primary text-primary">
         {icon}
       </div>
 

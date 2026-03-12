@@ -10,18 +10,23 @@ const ProblemWeAreSolve = () => {
               The Problem We Fix
             </p>
 
-            <h2 className="text-3xl md:text-5xl font-bold leading-tight text-primary">
-              The Used Vehicle Market <br />
-              <span className="text-third">Needed Structure</span>
+          <h2 className="font-primary md:text-5xl text-3xl  lg:text-6xl font-black uppercase leading-[0.95] tracking-tight">
+             The Used Vehicle Market
+              <br />
+                <span
+                  className="relative inline-block"
+                style={{ WebkitTextStroke: "1.5px rgba(255,254,247,0.25)", color: "transparent" }}
+              >
+            Needed Structure
+              </span>
             </h2>
 
-            <div className="w-14 h-0.5 bg-fourth mt-5 opacity-70"></div>
           </div>
 
           {/* Content Blocks */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Card 1 */}
-            <div className="group p-10 bg-[#141414] rounded-xl border-2 border-third/10 transition-all duration-300 hover:border-third/5 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
+            <div className="group p-10  rounded-xl border-2 border-third/10 transition-all duration-300  hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
               <div className="text-third text-sm tracking-widest mb-6 opacity-70 group-hover:text-fourth transition-colors">
                 ISSUE 01
               </div>
@@ -37,7 +42,7 @@ const ProblemWeAreSolve = () => {
             </div>
 
             {/* Card 2 */}
-            <div className="group p-10 bg-[#141414] rounded-xl border-2 border-third/10 transition-all duration-300 hover:border-third/5 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
+            <div className="group p-10  rounded-xl border-2 border-third/10 transition-all duration-300  hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
               <div className="text-third text-sm tracking-widest mb-6 opacity-70 group-hover:text-fourth transition-colors">
                 ISSUE 02
               </div>
@@ -53,7 +58,7 @@ const ProblemWeAreSolve = () => {
             </div>
 
             {/* Card 3 */}
-            <div className="group p-10 bg-[#141414] rounded-xl border-2 border-third/10 transition-all duration-300 hover:border-third/5 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
+            <div className="group p-10  rounded-xl border-2 border-third/10 transition-all duration-300  hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
               <div className="text-third text-sm tracking-widest mb-6 opacity-70 group-hover:text-fourth transition-colors">
                 ISSUE 03
               </div>

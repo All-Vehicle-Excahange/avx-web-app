@@ -19,10 +19,10 @@ const Card = ({ title, highlight, description }) => (
         </p>
 
         {/* Animated Line */}
-        <div className="absolute bottom-0 left-0 h-[3px] w-0 bg-fourth transition-all duration-500 ease-out group-hover:w-full"></div>
+        <div className="absolute bottom-0 left-0 h-[3px] w-0 bg-primary transition-all duration-500 ease-out group-hover:w-full"></div>
 
         {/* Subtle Glow Effect */}
-        <div className="absolute -inset-px bg-fourth opacity-0 blur-lg transition-opacity duration-500 group-hover:opacity-10 -z-10"></div>
+        <div className="absolute -inset-px bg-fourth opacity-0 blur-lg transition-opacity duration-500 "></div>
     </div>
 );
 
