@@ -7,12 +7,14 @@ import { addWishList, removeWishList } from "@/services/user.service";
 
 import { useAuthStore } from "@/stores/useAuthStore";
 import LoginPopup from "@/components/auth/LoginPopup";
+import SendInquaryPopup from "./SendInquaryPopup";
 
 export default function VehicleSummaryRight({ vehicle, summary }) {
   const vehicleId = vehicle?.id;
   const vehicleOwnerRole = vehicle?.vehicleOwner?.userRole || "USER";
   const [isFavorite, setIsFavorite] = useState(vehicle?.isWishlisted || false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -73,9 +75,8 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
               className="text-primary p-2 rounded-full hover:scale-105 transition cursor-pointer border"
             >
               <Heart
-                className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${
-                  isFavorite ? "fill-red-500 text-red-500" : "text-primary"
-                }`}
+                className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${isFavorite ? "fill-red-500 text-red-500" : "text-primary"
+                  }`}
               />
             </button>
           </div>
@@ -199,12 +200,19 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
               size="md"
               showIcon={false}
               className="rounded-full"
+              onClick={() => {
+                if (!isLoggedIn) {
+                  setIsLoginOpen(true);
+                } else {
+                  setIsPopupOpen(true);
+                }
+              }}
             >
-              Book NOW
+              Request Vehicle
             </Button>
 
             <Button variant="outline" size="md" showIcon={false}>
-              Inquiry Chat
+              Chat with Seller
             </Button>
           </div>
         </div>
@@ -214,6 +222,13 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
         onClose={() => setIsLoginOpen(false)}
         onSignup={() => setIsLoginOpen(false)}
       />
+      {isPopupOpen && (
+        <SendInquaryPopup
+          onClose={() => setIsPopupOpen(false)}
+          consultName={summary?.consultationName}
+          vehicleId={vehicleId}
+        />
+      )}
     </>
   );
 }

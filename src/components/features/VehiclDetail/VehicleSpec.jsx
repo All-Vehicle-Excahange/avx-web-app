@@ -42,9 +42,8 @@ export default function VehicleSpec({ open, setOpen }) {
           <div className="text-xl">
             <ChevronDown
               size={20}
-              className={`transition-transform duration-300 ${
-                open ? "rotate-180" : "rotate-0"
-              }`}
+              className={`transition-transform duration-300 ${open ? "rotate-180" : "rotate-0"
+                }`}
             />
           </div>
         </div>
@@ -107,11 +106,10 @@ export default function VehicleSpec({ open, setOpen }) {
                       className={`
         flex items-start gap-3 p-4 rounded-xl border cursor-pointer
         transition-all
-        ${
-          inspectionType === "report"
-            ? "border-primary bg-primary/5"
-            : "border-third/40 hover:bg-secondary/80"
-        }
+        ${inspectionType === "report"
+                          ? "border-primary bg-primary/5"
+                          : "border-third/40 hover:bg-secondary/80"
+                        }
       `}
                     >
                       <input
@@ -138,11 +136,10 @@ export default function VehicleSpec({ open, setOpen }) {
                       className={`
         flex items-start gap-3 p-4 rounded-xl border cursor-pointer
         transition-all
-        ${
-          inspectionType === "video"
-            ? "border-primary bg-primary/5"
-            : "border-third/40 hover:bg-secondary/80"
-        }
+        ${inspectionType === "video"
+                          ? "border-primary bg-primary/5"
+                          : "border-third/40 hover:bg-secondary/80"
+                        }
       `}
                     >
                       <input
@@ -269,11 +266,10 @@ export default function VehicleSpec({ open, setOpen }) {
     bg-secondary overflow-hidden text-primary
     border border-third/50 shadow-2xl
     transition-all duration-300 ease-out max-h-[60%]
-    ${
-      animateModal
-        ? "opacity-100 scale-100 translate-y-0"
-        : "opacity-0 scale-95 translate-y-4"
-    }
+    ${animateModal
+                ? "opacity-100 scale-100 translate-y-0"
+                : "opacity-0 scale-95 translate-y-4"
+              }
   `}
           >
             <div
@@ -316,11 +312,10 @@ export default function VehicleSpec({ open, setOpen }) {
                     className={`
         flex items-start gap-3 p-4 rounded-xl border cursor-pointer
         transition-all
-        ${
-          inspectionType === "report"
-            ? "border-primary bg-primary/5"
-            : "border-third/40 hover:bg-secondary/80"
-        }
+        ${inspectionType === "report"
+                        ? "border-primary bg-primary/5"
+                        : "border-third/40 hover:bg-secondary/80"
+                      }
       `}
                   >
                     <input
@@ -347,11 +342,10 @@ export default function VehicleSpec({ open, setOpen }) {
                     className={`
         flex items-start gap-3 p-4 rounded-xl border cursor-pointer
         transition-all
-        ${
-          inspectionType === "video"
-            ? "border-primary bg-primary/5"
-            : "border-third/40 hover:bg-secondary/80"
-        }
+        ${inspectionType === "video"
+                        ? "border-primary bg-primary/5"
+                        : "border-third/40 hover:bg-secondary/80"
+                      }
       `}
                   >
                     <input
@@ -471,6 +465,8 @@ export default function VehicleSpec({ open, setOpen }) {
             </div>
             <div className="md:w-[50%]">
               <Image
+                width={500}
+                height={500}
                 src="/bg.jpg"
                 alt="avx-payment"
                 className="w-full h-full object-cover"

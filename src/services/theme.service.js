@@ -1,10 +1,11 @@
-import axiosInstance from "@/lib/axiosInstance";
+import axiosInstance, { handleResponse } from "@/lib/axiosInstance";
 
 const ENDPOINT = {
   getThemeListing: "/consultation/owner/store/themes",
   checkIsEligibleToCreate: "consultation/owner/store/themes",
   getThemeImages: "/consultation/owner/store/templates",
   checkIsEligibleToUpload: "/consultation/owner/store/images/upload/eligible",
+  getStoreFront: "/consultation/owner/store/get-draft"
 };
 
 export const getThemeListing = async () => {
@@ -46,3 +47,12 @@ export const checkIsEligibleToUpload = async () => {
     throw error;
   }
 };
+
+export const getStoreFront = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getStoreFront);
+    return handleResponse(res);
+  } catch (error) {
+    throw error
+  }
+}
