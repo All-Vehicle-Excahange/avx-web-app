@@ -200,7 +200,7 @@ function SendInquaryPopup({ onClose, consultName = "Consultant", vehicleId }) {
                                         </label>
                                         {!title && <span className="text-xs text-third/40">(Optional)</span>}
                                         {title && title !== "Other" && <span className="text-xs text-third/70">(Optional)</span>}
-                                        {title === "Other" && <span className="text-xs text-red-500">* (Required for 'Other')</span>}
+                                        {title === "Other" && <span className="text-xs text-red-500">* (Required for Other)</span>}
                                     </div>
                                     <textarea
                                         value={description}

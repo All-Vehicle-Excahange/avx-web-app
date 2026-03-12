@@ -74,6 +74,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const [service, setService] = useState("");
   const [availability, setAvailability] = useState("");
   const [serviceOptions, setServiceOptions] = useState([]);
+  const [showTypeDropdown, setShowTypeDropdown] = useState(false);
+
 
   const containerRef = useRef(null);
   const brandInputRef = useRef(null);
@@ -207,7 +209,6 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   /* ================= NAVIGATION LOGIC ================= */
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileTab, setMobileTab] = useState("location");
-  const [showTypeDropdown, setShowTypeDropdown] = useState(false);
   const [internalActiveType, setInternalActiveType] = useState(activeType);
   const [isScrolled, setIsScrolled] = useState(false);
 
