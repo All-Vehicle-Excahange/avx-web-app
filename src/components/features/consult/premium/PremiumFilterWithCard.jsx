@@ -977,7 +977,6 @@ export default function FilterWithCard({ onFilterChange }) {
           title="Featured Premium Consultant"
           data={premiumConsultants}
           showIsSponsored={true}
-          showViewAll
           i={itemsPerPage}
         />
 

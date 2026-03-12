@@ -2,7 +2,7 @@
 
 import Button from "@/components/ui/button";
 import { Heart, Star, MapPin, CheckCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { addWishList, removeWishList } from "@/services/user.service";
 
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -17,6 +17,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const [loading, setLoading] = useState(false);
+  const pendingAction = useRef(null);
 
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
@@ -202,6 +203,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
               className="rounded-full"
               onClick={() => {
                 if (!isLoggedIn) {
+                  pendingAction.current = 'request';
                   setIsLoginOpen(true);
                 } else {
                   setIsPopupOpen(true);
@@ -221,6 +223,12 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
         onSignup={() => setIsLoginOpen(false)}
+        onSuccess={() => {
+          if (pendingAction.current === 'request') {
+            pendingAction.current = null;
+            setTimeout(() => setIsPopupOpen(true), 300);
+          }
+        }}
       />
       {isPopupOpen && (
         <SendInquaryPopup

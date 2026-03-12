@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import MyVehicle from "./MyVehicle";
 import MyProfile from "./MyProfile";
 import Inquiries from "./Inquiries";
@@ -8,15 +8,12 @@ import MyInquary from "./MyInquary";
 import Inspection from "./Inspection";
 import Wishlist from "./WishList";
 import { useParams } from "next/navigation";
+import { useRouter } from "next/router";
 
 function UserDetails() {
   const params = useParams();
-  const getTab = params?.id || null;
-
-  const [manualTab, setManualTab] = useState(null);
-
-  // If user manually clicks, use that.
-  const activeTab = manualTab || getTab || "myvehicle";
+  const router = useRouter();
+  const activeTab = params?.id || "myvehicle";
 
   return (
     <section className="pt-12">
@@ -33,7 +30,7 @@ function UserDetails() {
         ].map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setManualTab(tab.id)}
+            onClick={() => router.push(`/user/details/${tab.id}`, undefined, { shallow: true })}
             className={`relative py-4 text-sm font-medium transition hover:cursor-pointer ${activeTab === tab.id
               ? "text-primary"
               : "text-third hover:text-primary"

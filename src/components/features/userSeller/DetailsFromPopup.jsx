@@ -24,9 +24,9 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
     if (!isOpen) return;
 
     // Save current scroll position
-    console.log("8")
     const scrollY = window.scrollY;
-
+    console.log("8")
+    
     // Lock body
     document.body.style.position = "fixed";
     document.body.style.top = `-${scrollY}px`;

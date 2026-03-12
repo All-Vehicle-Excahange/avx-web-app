@@ -1,7 +1,11 @@
 import { getGuestId, saveGuestId } from "./indexdb/guest.db";
 
 const generateGuestId = () => {
-  return `guest_${crypto.randomUUID()}`;
+  try {
+    return `guest_${crypto.randomUUID()}`;
+  } catch {
+    return `guest_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+  }
 };
 
 export const setupGuestUser = async () => {
