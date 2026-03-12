@@ -114,7 +114,7 @@ export default function TrustVerification() {
                 {/* Top active indicator */}
                 <div
                   className={`absolute top-0 left-8 right-8 h-px transition-all duration-500 ${
-                    isHovered ? "bg-fourth opacity-100" : "opacity-0"
+                    isHovered ? "bg-third opacity-100" : "opacity-0"
                   }`}
                 />
 
@@ -126,7 +126,7 @@ export default function TrustVerification() {
                   <span
                     className={`text-[9px] font-bold uppercase tracking-[0.2em] px-2 py-1 rounded-md transition-all duration-300 ${
                       isHovered
-                        ? "bg-fourth/15 text-fourth/80"
+                        ? "bg-third/15 text-primary/80"
                         : "bg-white/4 text-third/30"
                     }`}
                   >
@@ -138,21 +138,14 @@ export default function TrustVerification() {
                 <div
                   className={`relative flex items-center justify-center w-12 h-12 rounded-2xl border transition-all duration-400 ${
                     isHovered
-                      ? "border-fourth/40 bg-fourth/10"
+                      ? "border-third/40 bg-white/10"
                       : "border-white/[0.07] bg-white/3"
                   }`}
                 >
-                  {/* icon glow */}
-                  {isHovered && (
-                    <div
-                      className="absolute inset-0 rounded-2xl blur-md"
-                      style={{ background: "rgba(0,123,255,0.2)" }}
-                    />
-                  )}
                   <Icon
                     size={20}
                     className={`relative z-10 transition-all duration-300 ${
-                      isHovered ? "text-fourth" : "text-third/35"
+                      isHovered ? "text-primary" : "text-third/35"
                     }`}
                   />
                 </div>
@@ -181,10 +174,10 @@ export default function TrustVerification() {
                     isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
                   }`}
                 >
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-fourth/70 font-semibold">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-primary/70 font-semibold">
                     Learn more
                   </span>
-                  <ArrowRight size={11} className="text-fourth/70" />
+                  <ArrowRight size={11} className="text-primary/70" />
                 </div>
               </div>
             );
@@ -206,7 +199,7 @@ export default function TrustVerification() {
               className="px-7 py-5 bg-black/20 flex items-center gap-4"
             >
               <div>
-                <p className="font-primary text-xl font-black text-fourth leading-none mb-0.5">
+                <p className="font-primary text-xl font-black text-primary leading-none mb-0.5">
                   {s.value}
                 </p>
                 <p className="text-[9px] uppercase tracking-[0.22em] text-third/40 font-semibold">

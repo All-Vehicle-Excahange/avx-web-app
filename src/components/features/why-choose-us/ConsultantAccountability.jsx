@@ -48,7 +48,7 @@ export default function ConsultantAccountability() {
             <div className="grid sm:grid-cols-2 gap-4">
               {storefrontFeatures.map((item, i) => (
                 <div key={i} className="group p-4 rounded-xl border border-white/5 bg-white/2 hover:bg-white/5 transition-all">
-                  <div className="flex items-center gap-3 mb-2 text-fourth">
+                  <div className="flex items-center gap-3 mb-2 text-third">
                     {item.icon}
                     <span className="text-[13px] font-bold uppercase tracking-wider text-primary">
                       {item.label}
@@ -71,18 +71,18 @@ export default function ConsultantAccountability() {
                 {/* Store Header */}
                 <div className="flex items-start justify-between mb-8 pb-8 border-b border-white/5">
                   <div className="flex gap-5 items-center">
-                    <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center text-fourth">
+                    <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center text-primary">
                       <Store size={32} />
                     </div>
                     <div>
                       <h4 className="text-lg font-bold text-primary mb-1 uppercase tracking-tight">Verified Consultant</h4>
                       <div className="flex items-center gap-2">
-                        <ShieldCheck size={14} className="text-fourth" />
+                        <ShieldCheck size={14} className="text-third" />
                         <span className="text-[10px] uppercase tracking-widest text-third/60 font-bold">ID: AVX-9920-X</span>
                       </div>
                     </div>
                   </div>
-                  <div className="px-3 py-1 rounded-full bg-fourth/10 border border-fourth/20 text-fourth text-[10px] font-black uppercase tracking-tighter">
+                  <div className="px-3 py-1 rounded-full bg-third/10 border border-third/20 text-third text-[10px] font-black uppercase tracking-tighter">
                     Tier 01 Priority
                   </div>
                 </div>
@@ -98,7 +98,7 @@ export default function ConsultantAccountability() {
                 <div className="p-5 rounded-2xl bg-white/3 border border-white/5">
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-[12px] font-bold uppercase tracking-[0.2em] text-third/50">Visibility Structure</span>
-                    <Trophy size={16} className="text-fourth" />
+                    <Trophy size={16} className="text-third" />
                   </div>
                   <div className="space-y-3">
                     <TierBar level="High Priority" width="w-full" active />
@@ -135,10 +135,10 @@ function TierBar({ level, width, active, faded }) {
     <div className={`space-y-1.5 ${faded ? 'opacity-30' : 'opacity-100'}`}>
       <div className="flex justify-between items-center">
         <span className="text-[11px] uppercase font-bold tracking-widest text-primary/80">{level}</span>
-        {active && <span className="text-[8px] text-fourth font-black uppercase italic">Current Rank</span>}
+        {active && <span className="text-[8px] text-primary/80 font-black uppercase italic">Current Rank</span>}
       </div>
       <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-        <div className={`h-full rounded-full transition-all duration-1000 ${active ? 'bg-fourth shadow-[0_0_8px_rgba(0,123,255,0.5)]' : 'bg-white/20'} ${width}`} />
+        <div className={`h-full rounded-full transition-all duration-1000 ${active ? 'bg-primary/80 shadow-[0_0_8px_rgba(0,123,255,0.5)]' : 'bg-white/20'} ${width}`} />
       </div>
     </div>
   );

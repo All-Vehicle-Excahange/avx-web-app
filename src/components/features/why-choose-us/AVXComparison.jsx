@@ -109,8 +109,8 @@ export default function AVXComparison() {
             </div>
 
             {/* AVX col header */}
-            <div className="px-7 py-5 bg-fourth/5">
-              <div className="inline-flex items-center gap-2 text-[12px] tracking-[0.25em] uppercase text-fourth font-bold">
+            <div className="px-7 py-5 bg-primary/5">
+              <div className="inline-flex items-center gap-2 text-[12px] tracking-[0.25em] uppercase text-primary font-bold">
                 <Check size={13} />
                 AVX Platform
               </div>
@@ -165,16 +165,16 @@ export default function AVXComparison() {
                 <div
                   className={`px-6 md:px-7 py-4 md:py-5.5 
   flex items-center gap-2.5 relative 
-  ${isHovered ? "bg-fourth/10" : "bg-fourth/4"}
+  ${isHovered ? "bg-primary/10" : "bg-primary/4"}
 `}
                 >
                   {/* Active left border indicator */}
                   {isHovered && (
-                    <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-fourth rounded-r-sm" />
+                    <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-primary rounded-r-sm" />
                   )}
                   <span
                     className={`shrink-0 transition-colors duration-200 ${
-                      isHovered ? "text-fourth" : "text-fourth/60"
+                      isHovered ? "text-primary" : "text-primary/60"
                     }`}
                   >
                     {row.avx.icon}
@@ -203,7 +203,7 @@ export default function AVXComparison() {
                 i < stats.length - 1 ? "border-r border-white/5" : ""
               }`}
             >
-              <div className="font-primary text-2xl md:text-3xl font-extrabold text-fourth tracking-tight leading-none mb-1.5">
+              <div className="font-primary text-2xl md:text-3xl font-extrabold text-primary tracking-tight leading-none mb-1.5">
                 {item.stat}
               </div>
               <div className="text-[9px] uppercase tracking-[0.25em] text-third/55 font-semibold">

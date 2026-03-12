@@ -112,15 +112,15 @@ export default function InspectionAdvantage() {
                   <div className="flex items-center w-full gap-0">
                     {/* Circle node */}
                     <div
-                      className={`relative flex items-center justify-center w-10 h-10 rounded-full border-2 shrink-0 transition-all duration-400 ${isAct
-                        ? "border-fourth bg-fourth shadow-lg shadow-fourth/30 scale-110"
+                      className={`relative flex items-center justify-center w-10 h-10 rounded-full border-[1.5] shrink-0 transition-all duration-400 ${isAct
+                        ? "border-white/70 bg-third/10 shadow-lg shadow-third/30 scale-110"
                         : isDone
-                          ? "border-fourth/50 bg-fourth/15"
-                          : "border-white/15 bg-white/4 group-hover:border-white/30"
+                          ? "border-third/50 bg-third/20"
+                          : "border-white/15 bg-white/1 group-hover:border-white/30"
                         }`}
                     >
                       {isDone ? (
-                        <CheckCircle2 size={14} className="text-fourth" />
+                        <CheckCircle2 size={14} className="text-primary" />
                       ) : (
                         <Icon
                           size={15}
@@ -129,7 +129,7 @@ export default function InspectionAdvantage() {
                       )}
                       {/* Pulse ring on active */}
                       {isAct && (
-                        <span className="absolute inset-0 rounded-full border-2 border-fourth/30 animate-ping" />
+                        <span className="absolute inset-0 rounded-full border-2 border-primary/30 animate-ping" />
                       )}
                     </div>
 
@@ -140,7 +140,7 @@ export default function InspectionAdvantage() {
                         {/* Desktop Horizontal Line */}
                         <div className="hidden lg:flex flex-1 h-px mx-3 overflow-hidden rounded-full bg-white/[0.07]">
                           <div
-                            className="h-full bg-fourth/50 rounded-full transition-all duration-500"
+                            className="h-full bg-third/50 rounded-full transition-all duration-500"
                             style={{
                               width: isDone ? "100%" : isAct ? "50%" : "0%",
                             }}
@@ -164,14 +164,14 @@ export default function InspectionAdvantage() {
                   <div className="flex flex-col gap-1 text-left pl-0.5">
                     <div className="flex items-center gap-2">
                       <span
-                        className={`font-primary text-[11px] font-black tracking-[0.3em] transition-colors duration-300 ${isAct ? "text-fourth/70" : "text-white/15"
+                        className={`font-primary text-[11px] font-black tracking-[0.3em] transition-colors duration-300 ${isAct ? "text-primary/70" : "text-white/15"
                           }`}
                       >
                         {s.step}
                       </span>
                       <span
                         className={`text-[10px] uppercase tracking-[0.18em] font-bold px-2 py-0.5 rounded-full border transition-all duration-300 ${isAct && s.tagBlue
-                          ? "border-fourth/30 text-fourth/70 bg-fourth/8"
+                          ? "border-primary/30 text-primary/70 bg-third/8"
                           : isAct
                             ? "border-white/20 text-third/60 bg-white/5"
                             : "border-white/5 text-white/15"
@@ -211,12 +211,12 @@ export default function InspectionAdvantage() {
           {/* Left: content */}
           <div className="relative p-8 lg:p-12 flex flex-col justify-between overflow-hidden">
 
-            {/* Shimmer top */}
+            Shimmer top
             <div
               className="absolute top-0 left-0 right-0 h-px"
               style={{
                 background:
-                  "linear-gradient(90deg, rgba(0,123,255,0.6), rgba(0,123,255,0.15), transparent)",
+                  "linear-gradient(90deg, rgba(255,254,247,0.6), rgba(255,254,247,0.15), transparent)",
               }}
             />
 
@@ -236,18 +236,18 @@ export default function InspectionAdvantage() {
             <div className="relative z-10">
               {/* Icon + tag */}
               <div className="flex items-center gap-3 mb-7">
-                <div className="flex items-center justify-center w-12 h-12 rounded-2xl border border-fourth/25 bg-fourth/9 relative">
+                <div className="flex items-center justify-center w-12 h-12 rounded-2xl border border-primary/25 bg-third/2 relative">
                   <div
                     className="absolute inset-0 rounded-2xl blur-md pointer-events-none"
-                    style={{ background: "rgba(0,123,255,0.18)" }}
+                    style={{ background: "rgba(255,254,247,0.06)" }}
                   />
-                  <CurrentIcon size={20} className="relative z-10 text-fourth" />
+                  <CurrentIcon size={20} className="relative z-10 text-primary" />
                 </div>
                 <div>
                   <span
                     className={`text-[10px] uppercase tracking-[0.28em] font-bold px-2.5 py-1 rounded-full border ${current.tagBlue
-                      ? "border-fourth/25 bg-fourth/[0.07] text-fourth/65"
-                      : "border-white/15 bg-white/4 text-third/55"
+                      ? "border-third/25 bg-primary/[0.07] text-third/95"
+                      :"border-third/25 bg-primary/[0.07] text-third/95"
                       }`}
                   >
                     {current.tag}
@@ -273,10 +273,10 @@ export default function InspectionAdvantage() {
                 return (
                   <div
                     key={pi}
-                    className="flex items-center gap-2 px-3 py-2 rounded-xl border border-fourth/15 bg-fourth/5"
+                    className="flex items-center gap-2 px-3 py-2 rounded-xl border border-third/15 bg-third/5"
                   >
-                    <PIcon size={12} className="text-fourth/60" />
-                    <span className="text-[11px] uppercase tracking-[0.18em] font-bold text-fourth/65">
+                    <PIcon size={12} className="text-third/60" />
+                    <span className="text-[11px] uppercase tracking-[0.18em] font-bold text-third/65">
                       {pr.label}
                     </span>
                   </div>
