@@ -212,6 +212,11 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const [internalActiveType, setInternalActiveType] = useState(activeType);
   const [isScrolled, setIsScrolled] = useState(false);
 
+  // Keep internalActiveType in sync when the parent changes the activeType prop
+  useEffect(() => {
+    setInternalActiveType(activeType);
+  }, [activeType]);
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 100) {
@@ -423,7 +428,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
               <div className="w-px h-8 bg-white/30 my-auto mx-1" />
 
               {/* CONDITIONAL SECTIONS */}
-              {activeType === "consult" ? (
+              {internalActiveType === "consult" ? (
                 <>
                   {/* PRICE RANGE */}
                   <div
