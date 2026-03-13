@@ -52,7 +52,7 @@ function InspectionTab() {
         </div>
 
         {/* IQI Badge */}
-        <div className="flex items-center gap-2 px-4 py-2 rounded-xl border border-third/30 bg-secondary w-fit">
+        <div className="flex items-center gap-2 px-4 py-2 rounded-xl border border-third/30 bg-secondary w-fit shadow-sm transition-colors duration-200 hover:border-third/40">
           <BadgeCheck size={18} className="text-primary" />
           <p className="text-xs md:text-sm font-medium">
             IQI: <span className="text-primary font-bold">78%</span>
@@ -124,7 +124,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= HOW INSPECTION AFFECTS RANKING ================= */}
-      <div className="rounded-2xl border border-third/30  p-6 space-y-4">
+      <div className="rounded-2xl border border-third/30  p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         <h3 className="font-semibold flex items-center gap-2">
           <TrendingUp size={18} className="text-primary" />
           How inspection affects ranking:
@@ -149,7 +149,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= VEHICLES REQUIRING ATTENTION ================= */}
-      <div className="rounded-2xl border border-third/30  p-6 space-y-6">
+      <div className="rounded-2xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div>
@@ -253,7 +253,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= INSPECTION REQUESTS FROM BUYERS ================= */}
-      <div className="rounded-2xl border border-third/30  p-6 space-y-6">
+      <div className="rounded-2xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div>
@@ -345,7 +345,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= INSPECTION HISTORY ================= */}
-      <div className="rounded-2xl border border-third/30  p-6 space-y-6">
+      <div className="rounded-2xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div>
           <h2 className="text-xl font-semibold">Inspection History</h2>
@@ -532,7 +532,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= RE-INSPECTION CONTROL PANEL ================= */}
-      <div className="rounded-2xl border border-third/30  p-6 space-y-6">
+      <div className="rounded-2xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div>
           <h2 className="text-xl font-semibold">Re-Inspection Control Panel</h2>
@@ -635,7 +635,7 @@ function InspectionTab() {
 
 
       {/* ================= DISPUTE & ISSUE CENTER ================= */}
-      <div className="rounded-2xl border border-third/30 bg-secondary p-6 space-y-6">
+      <div className="rounded-2xl border border-third/30 p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div>
@@ -712,7 +712,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= UPGRADE YOUR TRUST VISIBILITY ================= */}
-      <div className="rounded-2xl border border-third/30 bg-secondary p-6 space-y-6">
+      <div className="rounded-2xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div>
           <h2 className="text-xl font-semibold">
@@ -804,7 +804,7 @@ function VehicleScore({ name, score, orange }) {
 
 function PremiumFeatureCard({ icon, title, desc, tag }) {
   return (
-    <div className="rounded-2xl border border-third/30 bg-secondary p-5 space-y-4">
+    <div className="rounded-2xl border border-third/30  p-5 space-y-4">
       {/* Top Row */}
       <div className="flex items-start justify-between">
         {/* Icon + Title */}
@@ -826,9 +826,11 @@ function PremiumFeatureCard({ icon, title, desc, tag }) {
       </div>
 
       {/* CTA Button */}
-      <Button variant="ghost" className="w-full">
-        Add to Inspection
-      </Button>
+      <div className="flex justify-end items-end">
+        <Button variant="ghost" size="sm"  >
+          Add to Inspection
+        </Button>
+      </div>
     </div>
   );
 }

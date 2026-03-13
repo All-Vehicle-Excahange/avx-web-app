@@ -48,7 +48,7 @@ export default function ProfileComponent() {
         </p>
       </div>
 
-      <div className="w-full lg:w-1/2 rounded-2xl border border-third/40 bg-secondary p-6 space-y-4">
+      <div className="w-full lg:w-1/2 rounded-2xl border border-third/40 bg-secondary p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Top Line */}
         <div className="flex items-center justify-between">
           <p className="font-semibold text-primary">
@@ -89,7 +89,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* PROFILE CARD */}
-      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-6">
+      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         <div className="flex justify-between items-center">
           <h2 className="font-semibold">Business Profile</h2>
           {!isEditing && (
@@ -163,7 +163,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* KYC DOCUMENTS */}
-      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-4">
+      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         <h2 className="font-semibold">KYC Documents</h2>
 
         {/* ⚠ Pending Banner */}
@@ -212,7 +212,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* BUSINESS LOCATION & MAP (TRUST BOOST) */}
-      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-6">
+      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div className="flex justify-between items-center">
           <h2 className="font-semibold">Business Location & Map</h2>
@@ -287,7 +287,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* ACCOUNT & ROLE DETAILS (ADMIN-FRIENDLY) */}
-      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-6">
+      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div>
           <h2 className="font-semibold">Account & Role Details</h2>
@@ -361,7 +361,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* RESTRICTIONS & PLATFORM RULES (TRANSPARENCY) */}
-      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-6">
+      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div>
           <h2 className="font-semibold">Restrictions & Platform Rules</h2>
@@ -409,36 +409,36 @@ export default function ProfileComponent() {
         </div>
       </div>
       {/* FOOTER ACTIONS (CONTEXTUAL) */}
-    <div className="rounded-2xl border border-third/30 bg-primary/5 p-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-  {/* ✅ Text Section: Centered on mobile, left-aligned on desktop */}
-  <div className="space-y-1 text-left">
-    <p className="font-medium text-sm md:text-base text-primary">
-      Need help updating your profile?
-    </p>
-    <p className="text-xs md:text-sm text-third max-w-md">
-      Contact AVX Support or view platform guidelines for assistance.
-    </p>
-  </div>
+      <div className="rounded-2xl border border-third/30 bg-primary/5 p-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        {/* ✅ Text Section: Centered on mobile, left-aligned on desktop */}
+        <div className="space-y-1 text-left">
+          <p className="font-medium text-sm md:text-base text-primary">
+            Need help updating your profile?
+          </p>
+          <p className="text-xs md:text-sm text-third max-w-md">
+            Contact AVX Support or view platform guidelines for assistance.
+          </p>
+        </div>
 
-  {/* ✅ Actions Section: Stacks on mobile, Row on tablet/desktop */}
-  <div className="flex flex-col sm:flex-row gap-3">
-    <Button
-      variant="outlineSecondary"
-      className="flex items-center justify-center gap-2 w-full sm:w-auto px-6"
-    >
-      <Headphones size={16} />
-      <span>Contact Support</span>
-    </Button>
+        {/* ✅ Actions Section: Stacks on mobile, Row on tablet/desktop */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Button
+            variant="outlineSecondary"
+            className="flex items-center justify-center gap-2 w-full sm:w-auto px-6"
+          >
+            <Headphones size={16} />
+            <span>Contact Support</span>
+          </Button>
 
-    <Button 
-      variant="ghost" 
-      className="flex items-center justify-center gap-2 w-full sm:w-auto px-6"
-    >
-      <FileText size={16} />
-      <span>View Guidelines</span>
-    </Button>
-  </div>
-</div>
+          <Button
+            variant="ghost"
+            className="flex items-center justify-center gap-2 w-full sm:w-auto px-6"
+          >
+            <FileText size={16} />
+            <span>View Guidelines</span>
+          </Button>
+        </div>
+      </div>
     </section>
   );
 }
@@ -457,16 +457,14 @@ export function ProfileItem({ label, value }) {
 function StatusCard({ title, value, icon, green }) {
   return (
     <div
-      className={`flex items-center gap-4 rounded-2xl p-5 border border-third/30 ${
-        green ? "bg-green-500/10" : "bg-secondary"
-      }`}
+      className={`flex items-center gap-4 rounded-2xl p-5 border border-third/30 ${green ? "bg-green-500/10" : "bg-secondary"
+        }`}
     >
       <div
-        className={`w-10 h-10 rounded-full flex items-center justify-center ${
-          green
+        className={`w-10 h-10 rounded-full flex items-center justify-center ${green
             ? "bg-green-500/20 text-green-400"
             : "bg-primary/10 text-primary"
-        }`}
+          }`}
       >
         {icon}
       </div>
