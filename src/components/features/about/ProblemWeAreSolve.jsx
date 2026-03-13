@@ -10,15 +10,18 @@ const ProblemWeAreSolve = () => {
               The Problem We Fix
             </p>
 
-          <h2 className="font-primary md:text-5xl text-3xl  lg:text-6xl font-black uppercase leading-[0.95] tracking-tight">
-             The Used Vehicle Market
-              <br />
-                <span
-                  className="relative inline-block"
-                style={{ WebkitTextStroke: "1.5px rgba(255,254,247,0.25)", color: "transparent" }}
-              >
-            Needed Structure
-              </span>
+           <h2
+              className="
+             text-3xl sm:text-4xl lg:text-5xl
+              font-semibold
+              leading-[1.05]
+              text-primary
+              font-[Montserrat]
+            "
+            >
+              The Used Vehicle Market
+              <br />  
+              <span className="text-fourth/80">Needed Structure</span>
             </h2>
 
           </div>

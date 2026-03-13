@@ -4,16 +4,20 @@ export default function Cta() {
       <div className="mx-auto w-full pb-10">
         {/* Heading */}
         <div className="text-center">
-          <h2 className="font-primary md:text-5xl text-3xl  lg:text-6xl font-black uppercase leading-[0.95] tracking-tight">
+          <h2
+            className="
+             text-3xl sm:text-4xl lg:text-5xl
+              font-semibold
+              leading-[1.05]
+              text-primary
+              font-[Montserrat]
+            "
+          >
             Ready to explore better
-              <br />
-                <span
-                  className="relative inline-block"
-                style={{ WebkitTextStroke: "1.5px rgba(255,254,247,0.25)", color: "transparent" }}
-              >
-           used vehicles?
-              </span>
-            </h2>
+            <br />
+            <span className="text-fourth/80">used vehicles?
+            </span>
+          </h2>
         </div>
 
         {/* FLEX SPLIT CTA */}

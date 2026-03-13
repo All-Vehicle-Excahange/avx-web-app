@@ -10,15 +10,18 @@ export default function TrustSignals() {
                 Built for Accountability
               </p>
 
-             <h2 className="font-primary md:text-5xl text-3xl  lg:text-6xl font-black uppercase leading-[0.95] tracking-tight">
+            <h2
+              className="
+             text-3xl sm:text-4xl lg:text-5xl
+              font-semibold
+              leading-[1.05]
+              text-primary
+              font-[Montserrat]
+            "
+            >
              Trust is built
-              <br />
-                <span
-                  className="relative inline-block"
-                style={{ WebkitTextStroke: "1.5px rgba(255,254,247,0.25)", color: "transparent" }}
-              >
-             through measurable signals
-              </span>
+              <br />  
+              <span className="text-fourth/80">through measurable signals</span>
             </h2>
 
               <p className="mt-10 max-w-xl text-xl leading-relaxed text-third">
