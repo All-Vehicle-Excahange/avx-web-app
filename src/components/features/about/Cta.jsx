@@ -15,7 +15,7 @@ export default function Cta() {
           >
             Ready to explore better
             <br />
-            <span className="text-white/70">used vehicles?
+            <span className="text-fourth/80">used vehicles?
             </span>
           </h2>
         </div>
