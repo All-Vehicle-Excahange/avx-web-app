@@ -63,7 +63,7 @@ export default function DisputeReporting() {
               Resolution Process
             </div>
             <h2 className="text-[34px] sm:text-[42px] md:text-[48px] font-bold leading-[1.08] text-primary">
-              <span className="text-fourth">Dispute </span>Reporting
+              <span className="text-fourth/80">Dispute </span>Reporting
             </h2>
 
             <p className="text-[16px] text-third leading-relaxed w-[50%] md-[100%]">
@@ -94,7 +94,7 @@ export default function DisputeReporting() {
                   className="group p-5 rounded-xl border-primary/30 border-2   transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] "
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg border border-fourth/20 flex items-center justify-center text-fourth">
+                    <div className="w-10 h-10 rounded-lg border border-fourth/20 flex items-center justify-center text-fourth/80">
                       <type.icon className="w-5 h-5 text-primary" />
                     </div>
 
@@ -153,7 +153,7 @@ export default function DisputeReporting() {
           transition={{ delay: 0.4 }}
           className="mt-14 text-center"
         >
-          <button className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-fourth/10 border border-fourth/30 text-fourth font-medium hover:bg-fourth/20 transition-all duration-300">
+          <button className="inline-flex items-center gap-2 px-7 py-3 rounded-xl   border border-primary/30 text-fourth/80 font-medium  transition-all duration-300">
             <Flag className="w-5 h-5" />
             File a Dispute Report
           </button>

@@ -40,7 +40,7 @@ export default function MarketplaceModel() {
 
             <h2 className="text-[34px] sm:text-[42px] md:text-[50px] font-bold leading-[1.08] text-primary mt-4">
               AVX{" "}
-              <span className="bg-linear-to-r from-fourth via-[#60a5fa] to-fourth bg-clip-text text-transparent">
+              <span className="bg-linear-to-r text-fourth/80 bg-clip-text">
                 Marketplace Model
               </span>
             </h2>

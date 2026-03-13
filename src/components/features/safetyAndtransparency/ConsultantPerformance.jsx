@@ -76,7 +76,7 @@ export default function ConsultantPerformance() {
 
         <h2 className="text-[30px] sm:text-[38px] md:text-[48px] font-bold leading-[1.1] text-primary">
           Evaluate Who Youre{" "}
-          <span className="text-fourth">Dealing With</span>
+          <span className="text-fourth/80">Dealing With</span>
         </h2>
 
         <p className="text-[14px] md:text-[16px] text-third leading-relaxed mt-3 ">

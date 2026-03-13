@@ -43,7 +43,7 @@ export default function CommunicationAccountability() {
               Activity Trail
             </div>
             <h2 className="text-[34px] sm:text-[42px] md:text-[48px] font-bold leading-[1.08] text-primary">
-              Platform-<span className="text-fourth">Recorded </span>
+              Platform-<span className="text-fourth/80">Recorded </span>
               Interaction
             </h2>
 
