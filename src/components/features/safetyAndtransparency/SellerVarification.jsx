@@ -77,18 +77,18 @@ export default function SellerVerification() {
           viewport={{ once: true }}
           className="mb-16 max-w-xl"
         >
-          <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-4 block">
+          <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
             Seller Verification
           </span>
 
-          <h2 className="text-[34px] sm:text-[42px] md:text-[48px] font-bold leading-[1.08] text-primary">
+          <h2 className="text-[34px] sm:text-[42px] md:text-[48px] font-bold leading-[1.08] mt-2 text-primary">
             Verified{" "}
             <span className="text-fourth">
               Consultant Participation
             </span>
           </h2>
 
-          <p className="mt-5 text-third text-[15px] leading-relaxed w-[50%] md-[100%]">
+          <p className="mt-5 text-third text-[15px] leading-relaxed w-full md:w-[50%] md-[100%]">
             Consultants on AVX undergo structured verification checks to reduce
             anonymous listings and improve accountability across the marketplace.
           </p>

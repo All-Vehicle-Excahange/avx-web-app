@@ -38,8 +38,7 @@ export default function FraudPrevention() {
           className="text-center mb-16"
         >
           <div className="text-left md:text-left max-w-xl mx-auto mb-24">
-            <div className="inline-flex items-center gap-2 mb-4 text-third font-semibold uppercase tracking-[0.35em] text-sm">
-              <ShieldAlert className="w-4 h-4 text-red-400" />
+            <div className="inline-flex gap-2 text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2">
               Automated Protection
             </div>
             <h2 className="text-[34px] sm:text-[42px] md:text-[48px] font-bold leading-[1.08] text-primary">
@@ -73,8 +72,8 @@ export default function FraudPrevention() {
               className="group p-6 rounded-2xl  border-primary/30 border-2  transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
             >
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center shrink-0 group-hover:bg-red-500/20 transition-colors ">
-                  <monitor.icon className="w-6 h-6 text-red-400" />
+                <div className="w-12 h-12 rounded-xl  flex items-center justify-center shrink-0  transition-colors ">
+                  <monitor.icon className="w-6 h-6 text-primary" />
                 </div>
                 <div>
                   <h5 className="text-white font-semibold mb-2">

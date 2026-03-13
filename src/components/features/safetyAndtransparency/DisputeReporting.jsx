@@ -59,8 +59,7 @@ export default function DisputeReporting() {
           className=" max-w-2xl mx-auto mb-16"
         >
           <div className="text-left md:text-left max-w-xl mx-auto mb-20">
-            <div className="inline-flex items-center gap-2 mb-4 text-third font-semibold uppercase tracking-[0.35em] text-sm">
-              <Flag className="w-4 h-4 text-fourth" />
+            <div className="inline-flex gap-2 text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2">
               Resolution Process
             </div>
             <h2 className="text-[34px] sm:text-[42px] md:text-[48px] font-bold leading-[1.08] text-primary">
@@ -95,8 +94,8 @@ export default function DisputeReporting() {
                   className="group p-5 rounded-xl border-primary/30 border-2   transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] "
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-fourth/10 border border-fourth/20 flex items-center justify-center text-fourth">
-                      <type.icon className="w-5 h-5 text-red-400" />
+                    <div className="w-10 h-10 rounded-lg border border-fourth/20 flex items-center justify-center text-fourth">
+                      <type.icon className="w-5 h-5 text-primary" />
                     </div>
 
                     <div>
@@ -129,7 +128,7 @@ export default function DisputeReporting() {
                   className="group p-5 rounded-xl border-primary/30 border-2  transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-fourth/10 border border-fourth/20 flex items-center justify-center text-fourth">
+                    <div className="w-10 h-10 rounded-lg  border border-fourth/20 flex items-center justify-center text-primary">
                       <resolution.icon className="w-5 h-5" />
                     </div>
 

@@ -70,7 +70,7 @@ export default function ConsultantPerformance() {
 
       {/* HEADER */}
       <div className="text-left md:text-center max-w-xl mx-auto mb-16 md:mb-24">
-        <p className="text-xs md:text-sm tracking-[0.4em] uppercase text-third font-semibold mb-4">
+        <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2">
           Consultant Performance Visibility
         </p>
 

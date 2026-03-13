@@ -88,8 +88,7 @@ export default function DataPrivacy() {
           className="max-w-2xl mb-16"
         >
           <div className="mb-20 text-left">
-            <div className="inline-flex items-center gap-2 mb-4 text-third font-semibold uppercase tracking-[0.35em] text-sm">
-              <Shield className="w-4 h-4 text-fourth" />
+            <div className="inline-flex gap-2 text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2">
               Data Privacy & Security
             </div>
 

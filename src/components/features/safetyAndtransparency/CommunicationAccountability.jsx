@@ -39,8 +39,7 @@ export default function CommunicationAccountability() {
           className="text-center mb-16"
         >
           <div className="text-left md:text-left max-w-xl mx-auto mb-24">
-            <div className="inline-flex items-center gap-2 mb-4 text-third font-semibold uppercase tracking-[0.35em] text-sm">
-              <History className="w-4 h-4 text-fourth" />
+            <div className="inline-flex gap-2 text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2">
               Activity Trail
             </div>
             <h2 className="text-[34px] sm:text-[42px] md:text-[48px] font-bold leading-[1.08] text-primary">
@@ -79,7 +78,7 @@ export default function CommunicationAccountability() {
               >
                 <div className="p-6 rounded-2xl bg-[#0f1117]/70  border-primary/30 border-2  transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)]">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl  border border-primary/30 flex items-center justify-center shrink-0 text-fourth">
+                    <div className="w-12 h-12 rounded-xl  border border-primary/30 flex items-center justify-center shrink-0 text-fourth/80">
                       <activity.icon className="w-5 h-5" />
                     </div>
 

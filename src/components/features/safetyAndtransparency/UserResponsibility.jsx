@@ -39,8 +39,7 @@ export default function UserResponsibility() {
           className="text-center max-w-2xl mx-auto mb-16 "
         >
           <div className="text-left md:text-left max-w-xl mx-auto mb-15">
-            <div className="inline-flex items-center gap-2 mb-4 text-third font-semibold uppercase tracking-[0.35em] text-sm">
-              <Info className="w-4 h-4 text-yellow-400" />
+            <div className="inline-flex gap-2 text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2">
               Informed Participation
             </div>
             <h2 className="text-[34px] sm:text-[42px] md:text-[48px] font-bold leading-[1.08] text-primary">
@@ -71,8 +70,8 @@ export default function UserResponsibility() {
               viewport={{ once: true }}
               className="group p-6 rounded-2xl bg-secondary/30 border-2 hover:border-2 border-primary/30 transition-all duration-100 text-center hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
             >
-              <div className="w-14 h-14 rounded-2xl bg-fourth/10 border border-fourth/20 flex items-center justify-center mx-auto mb-4 transition-colors">
-                <item.icon className="w-7 h-7 text-fourth" />
+              <div className="w-14 h-14 rounded-2xl  border border-fourth/20 flex items-center justify-center mx-auto mb-4 transition-colors">
+                <item.icon className="w-7 h-7 text-primary" />
               </div>
 
               <h5 className="text-primary font-semibold mb-2">{item.title}</h5>
