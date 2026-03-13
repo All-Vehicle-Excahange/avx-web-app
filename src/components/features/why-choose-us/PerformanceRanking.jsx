@@ -25,8 +25,18 @@ export default function RankingDiagram() {
           <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-3">
             PERFORMANCE & RANKING
           </p>
-          <h2 className="font-primary text-3xl sm:text-4xl lg:text-5xl font-bold uppercase tracking-tight font-primary leading-none mb-6">
-            Visibility <span className="text-fourth">Defined.</span>
+          <h2
+            className="
+              text-4xl sm:text-5xl xl:text-5xl
+              font-semibold
+              leading-[1.05]
+              text-primary
+              font-[Montserrat]
+              mb-6
+            "
+          >
+            Visibility
+            <span className="text-fourth/80"> Defined.</span>
           </h2>
           <p className="text-third text-base opacity-70">
             We dont hide our logic. Here is exactly how we determine which

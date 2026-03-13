@@ -75,16 +75,16 @@ export default function AVXComparison() {
           <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-3">
             Platform Comparison
           </p>
-          <h2 className="font-primary text-3xl sm:text-4xl lg:text-5xl  font-extrabold uppercase leading-none tracking-tight mb-4">
+          <h2 className=" font-[Montserrat] text-4xl sm:text-5xl xl:text-5xl font-semibold leading-[1.05] mb-4">
             Why{" "}
+            AVX{" "}
             <span
-              className="text-fourth pb-0.5"
-              style={{ borderBottom: "3px solid rgba(0,123,255,0.35)" }}
+              className="text-fourth/80 pb-0.5"
             >
-              AVX
-            </span>{" "}
             is Different
+            </span>
           </h2>
+       
           <p className="text-third opacity-70 max-w-120 leading-relaxed text-sm">
             Every feature gap below is a trust problem solved. See exactly where
             generic platforms fall short.

@@ -39,8 +39,19 @@ export default function CoreDifferentiatorsMatrix() {
             CORE DIFFERENTIATORS
           </p>
 
-          <h2 className=" font-primary text-3xl sm:text-4xl lg:text-5xl font-bold uppercase font-primary tracking-tight">
-            Platform <span className="text-fourth">Infrastructure</span>
+
+          <h2
+            className="
+              text-4xl sm:text-5xl xl:text-5xl
+              font-semibold
+              leading-[1.05]
+              text-primary
+              font-[Montserrat]
+              
+            "
+          >
+            Platform
+            <span className="text-fourth/80"> Infrastructure</span>
           </h2>
         </div>
 
@@ -48,7 +59,7 @@ export default function CoreDifferentiatorsMatrix() {
         <div className="relative border border-white/10 rounded-3xl overflow-hidden">
           {/* Center Label */}
           <div className="hidden md:flex absolute inset-50 items-center justify-center pointer-events-none">
-            <div className="px-8 py-3 border border-third/30 text-xs uppercase tracking-[0.3em] text-fourth bg-secondary">
+            <div className="px-8 py-3 border border-third/30 text-xs uppercase tracking-[0.3em] text-third bg-secondary">
               AVX SYSTEM CORE
             </div>
           </div>

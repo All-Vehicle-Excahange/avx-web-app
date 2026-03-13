@@ -67,19 +67,17 @@ export default function TrustVerification() {
               </p>
             </div>
 
-            <h2 className="font-primary md:text-5xl text-3xl  lg:text-6xl font-black uppercase leading-[0.95] tracking-tight">
+            <h2 className="font-[Montserrat] text-4xl sm:text-5xl xl:text-5xl  font-semibold   leading-[1.05] ">
               Built on
               <br />
               <span
-                className="relative inline-block"
-                style={{ WebkitTextStroke: "1.5px rgba(255,254,247,0.25)", color: "transparent" }}
+                className="relative inline-block text-fourth/80"
+
               >
-                Account
-                <span style={{ WebkitTextStroke: "1.5px #007bff", color: "transparent" }}>
-                  ability
-                </span>
+                Accountability
               </span>
             </h2>
+
           </div>
 
           {/* Right statement */}
@@ -113,9 +111,8 @@ export default function TrustVerification() {
               >
                 {/* Top active indicator */}
                 <div
-                  className={`absolute top-0 left-8 right-8 h-px transition-all duration-500 ${
-                    isHovered ? "bg-third opacity-100" : "opacity-0"
-                  }`}
+                  className={`absolute top-0 left-8 right-8 h-px transition-all duration-500 ${isHovered ? "bg-third opacity-100" : "opacity-0"
+                    }`}
                 />
 
                 {/* Index + Tag row */}
@@ -124,11 +121,10 @@ export default function TrustVerification() {
                     {p.id}
                   </span>
                   <span
-                    className={`text-[9px] font-bold uppercase tracking-[0.2em] px-2 py-1 rounded-md transition-all duration-300 ${
-                      isHovered
-                        ? "bg-third/15 text-primary/80"
-                        : "bg-white/4 text-third/30"
-                    }`}
+                    className={`text-[9px] font-bold uppercase tracking-[0.2em] px-2 py-1 rounded-md transition-all duration-300 ${isHovered
+                      ? "bg-third/15 text-primary/80"
+                      : "bg-white/4 text-third/30"
+                      }`}
                   >
                     {p.tag}
                   </span>
@@ -136,33 +132,29 @@ export default function TrustVerification() {
 
                 {/* Icon */}
                 <div
-                  className={`relative flex items-center justify-center w-12 h-12 rounded-2xl border transition-all duration-400 ${
-                    isHovered
-                      ? "border-third/40 bg-white/10"
-                      : "border-white/[0.07] bg-white/3"
-                  }`}
+                  className={`relative flex items-center justify-center w-12 h-12 rounded-2xl border transition-all duration-400 ${isHovered
+                    ? "border-third/40 bg-white/10"
+                    : "border-white/[0.07] bg-white/3"
+                    }`}
                 >
                   <Icon
                     size={20}
-                    className={`relative z-10 transition-all duration-300 ${
-                      isHovered ? "text-primary" : "text-third/35"
-                    }`}
+                    className={`relative z-10 transition-all duration-300 ${isHovered ? "text-primary" : "text-third/35"
+                      }`}
                   />
                 </div>
 
                 {/* Text */}
                 <div className="flex flex-col gap-2 flex-1">
                   <h4
-                    className={`font-primary text-base font-bold uppercase tracking-wide leading-tight transition-colors duration-300 ${
-                      isHovered ? "text-primary" : "text-primary/70"
-                    }`}
+                    className={`font-primary text-base font-bold uppercase tracking-wide leading-tight transition-colors duration-300 ${isHovered ? "text-primary" : "text-primary/70"
+                      }`}
                   >
                     {p.title}
                   </h4>
                   <p
-                    className={`text-[13px] leading-relaxed transition-colors duration-300 ${
-                      isHovered ? "text-third/70" : "text-third/40"
-                    }`}
+                    className={`text-[13px] leading-relaxed transition-colors duration-300 ${isHovered ? "text-third/70" : "text-third/40"
+                      }`}
                   >
                     {p.body}
                   </p>
@@ -170,9 +162,8 @@ export default function TrustVerification() {
 
                 {/* Bottom arrow — slides in on hover */}
                 <div
-                  className={`flex items-center gap-1.5 transition-all duration-300 ${
-                    isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-                  }`}
+                  className={`flex items-center gap-1.5 transition-all duration-300 ${isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                    }`}
                 >
                   <span className="text-[10px] uppercase tracking-[0.2em] text-primary/70 font-semibold">
                     Learn more
@@ -190,7 +181,7 @@ export default function TrustVerification() {
         >
           {[
             { value: "100%", label: "Consultants Verified" },
-            { value: "0",    label: "Anonymous Listings" },
+            { value: "0", label: "Anonymous Listings" },
             { value: "200+", label: "Inspection Checkpoints" },
             { value: "Open", label: "Performance Metrics" },
           ].map((s, i) => (

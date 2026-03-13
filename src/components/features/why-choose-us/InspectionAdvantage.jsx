@@ -78,10 +78,19 @@ export default function InspectionAdvantage() {
               Inspection Advantage
             </span>
           </div>
-          <h2 className="font-primary text-3xl sm:text-4xl lg:text-5xl font-bold uppercase leading-[0.9] tracking-[0.5px] mb-4">
+          <h2
+            className="
+              text-4xl sm:text-5xl xl:text-5xl
+              font-semibold
+              leading-[1.05]
+              text-primary
+              font-[Montserrat]
+              mb-4
+            "
+          >
             Optional
-            <br />
-            <span className="text-fourth">Re-Assurance.</span>
+            <br/>
+            <span className="text-fourth/80"> Re-Assurance.</span>
           </h2>
           <p className="text-third/70 text-m leading-relaxed max-w-sm">
             Confidence should be customizable — choose exactly how much verification you need, before any decision.

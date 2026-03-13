@@ -23,16 +23,25 @@ export default function AvxHero() {
           {/* ================= LEFT ================= */}
 
           <div className="max-w-xl">
-            <p className="text-xs tracking-[0.4em] uppercase text-third font-semibold mb-6">
+            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-6">
               AVX Marketplace
             </p>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-semibold leading-[1.05] text-primary tracking-tight">
+            
+
+            <h2
+              className="
+              text-4xl sm:text-5xl xl:text-5xl
+              font-semibold
+              leading-[1.05]
+              text-primary
+              font-[Montserrat]
+            "
+            >
               A Structured Marketplace
-              <span className="block text-fourth">
-                for Serious Vehicle Buyers
-              </span>
-            </h1>
+              <br />
+              <span className="text-fourth/80">  for Serious Vehicle Buyers</span>
+            </h2>
 
             <p className="mt-6 text-[16px] leading-relaxed text-third max-w-lg">
               AVX is built for clarity, accountability, and performance
