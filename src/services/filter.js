@@ -39,8 +39,8 @@ export const getFilteredVehicles = async (data, params = {}) => {
       params: {
         pageNo: params.pageNo ?? 1,
         size: params.size ?? 6,
-        sortBy: params.sortBy ?? "listingDate",
-        direction: params.direction ?? "desc",
+        sortBy: params.sortBy,
+        direction: params.direction,
         ...params,
       },
     });
