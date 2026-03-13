@@ -31,10 +31,14 @@ export default function Home() {
       <Layout>
         <TopPicsSection />
       </Layout>
-      <SellVehicleBanner fullWidth />
+
+      {/* <SellVehicleBanner fullWidth /> */}
       {/* <Layout> */}
+
       <AvxInspected />
+
       {/* </Layout> */}
+
       <Layout>
         <AutoConsultPicsSection limit={8} />
       </Layout>
@@ -45,8 +49,8 @@ export default function Home() {
       </Layout> */}
 
 
-        <BecameBanner />
-      
+      <BecameBanner />
+
 
 
       <Layout>

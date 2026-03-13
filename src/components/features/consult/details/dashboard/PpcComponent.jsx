@@ -93,7 +93,7 @@ export default function PpcComponent() {
       </div>
 
       {/* AD SUMMARY */}
-      <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-5">
+      <div className="rounded-2xl border border-third/30  p-6 space-y-5">
         <div className="flex justify-between items-center">
           <div>
             <h3 className="font-semibold">Advertising Summary</h3>
@@ -143,7 +143,7 @@ export default function PpcComponent() {
       </div>
 
       {/* RECENT ADS */}
-      <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-6">
+      <div className="rounded-2xl border border-third/30  p-6 space-y-6">
         <h3 className="font-semibold text-lg">Recent Ads</h3>
         {/* Pass the handler to open the modal */}
         <RecentAdCard onOpenResults={() => setShowResults(true)} />
@@ -151,7 +151,7 @@ export default function PpcComponent() {
       </div>
 
       {/* AUDIENCE SECTION */}
-      <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-6">
+      <div className="rounded-2xl border border-third/30  p-6 space-y-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>
             <h3 className="font-semibold text-lg">Audience</h3>
@@ -206,7 +206,7 @@ export default function PpcComponent() {
       </div>
 
       {/* AI CAMPAIGN PERFORMANCE */}
-      <div className="rounded-2xl border border-third/30 bg-secondary p-6 space-y-6">
+      <div className="rounded-2xl border border-third/30 bg-secondary p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         <h3 className="font-semibold text-lg">
           Campaign Performance (Last 7 Days)
         </h3>
@@ -350,7 +350,7 @@ export default function PpcComponent() {
 /* -------------------------------------------------------------------------- */
 function RecentAdCard({ paused, onOpenResults }) {
   return (
-    <div className="rounded-2xl border border-third/30 bg-secondary p-4 md:p-6 space-y-6">
+    <div className="rounded-2xl border border-third/30 bg-secondary p-4 md:p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
       {/* --- HEADER SECTION: Status & Action Buttons --- */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-3">

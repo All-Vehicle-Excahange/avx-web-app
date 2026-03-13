@@ -270,7 +270,7 @@ export default function InventoryComponent() {
         </div>
 
         {/* 4️⃣ FILTER BAR */}
-        <div className="rounded-2xl border border-third/30 bg-secondary p-5 flex flex-col lg:flex-row gap-4 justify-between">
+        <div className="rounded-2xl border border-third/30  p-5 flex flex-col lg:flex-row gap-4 justify-between">
           <div className="flex flex-wrap gap-2">
             {vehicleTypes.map((type) => (
               <button
@@ -316,7 +316,7 @@ export default function InventoryComponent() {
           <div className="flex items-center gap-2">
             <TrendingUp className="text-primary" size={18} />
             <h3 className="font-semibold">Top Performing Vehicles</h3>
-            <span className="px-3 py-1 rounded-full bg-primary/10 text-xs">
+            <span className="px-3 py-1 rounded-full bg-primary text-xs text-secondary">
               Auto-generated
             </span>
           </div>
@@ -324,7 +324,7 @@ export default function InventoryComponent() {
           {topVehicles.map((v) => (
             <div
               key={v.rank}
-              className="flex justify-between items-center bg-secondary/50 rounded-xl p-4"
+              className="flex justify-between items-center border border-primary/30 rounded-xl p-4"
             >
               <div className="flex items-center gap-4">
                 <span className="w-10 h-10 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center">

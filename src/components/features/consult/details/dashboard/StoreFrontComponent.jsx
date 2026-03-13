@@ -29,7 +29,7 @@ export default function StoreFrontComponent() {
   });
 
   if (!HAS_STOREFRONT) {
-    return <CreateStoreFront />; 
+    return <CreateStoreFront />;
   }
 
   return (
@@ -46,7 +46,7 @@ export default function StoreFrontComponent() {
       </div>
 
       {/* STORE INFO */}
-      <div className="bg-secondary border border-third/30 rounded-3xl p-5 md:p-8 space-y-6">
+      <div className="bg-secondary border border-third/30 rounded-3xl p-5 md:p-8 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         <div className="flex flex-col md:flex-row justify-between items-start gap-6">
           <div className="flex flex-col sm:flex-row gap-6">
             <div className="relative w-20 h-20 md:w-[100px] md:h-[100px] shrink-0">
@@ -117,7 +117,7 @@ export default function StoreFrontComponent() {
 
 function Content({ title, text, img, onEdit }) {
   return (
-    <div className="bg-secondary border border-third/30 rounded-3xl p-5 md:p-8 space-y-6">
+    <div className="bg-secondary border border-third/30 rounded-3xl p-5 md:p-8 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
       <div className="flex justify-between items-center gap-4">
         <h3 className="font-semibold text-lg md:text-xl">{title}</h3>
         <Button onClick={onEdit} variant="outlineSecondary" size="sm">
