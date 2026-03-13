@@ -43,7 +43,7 @@ export default function InspectionTransparency() {
           </p>
 
           <h2 className="text-[40px] md:text-[48px] font-bold leading-tight text-primary">
-            Inspection <span className="text-fourth">Transparency</span>
+            Inspection <span className="text-fourth/80">Transparency</span>
           </h2>
 
           <p className="text-[16px] text-third leading-relaxed mt-4 w-full md:w-[50%]">
@@ -79,7 +79,7 @@ export default function InspectionTransparency() {
                   </p>
                 </div>
 
-                <span className="px-3 py-1 rounded-full bg-fourth/10 border border-fourth/20 text-fourth text-xs font-medium">
+                <span className="px-3 py-1 rounded-full bg-fourth/10 border border-fourth/20 text-fourth/80 text-xs font-medium">
                   Verified
                 </span>
               </div>
@@ -134,7 +134,7 @@ export default function InspectionTransparency() {
                   Jan 15, 2024 — 2:34 PM
                 </div>
 
-                <span className="text-fourth font-medium">
+                <span className="text-fourth/80 font-medium">
                   Timestamp Verified
                 </span>
               </div>
@@ -173,11 +173,11 @@ export default function InspectionTransparency() {
             {/* CTA */}
             <div className="mt-8 p-5 rounded-xl bg-fourth/5 border border-fourth/20 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <RefreshCw className="w-5 h-5 text-fourth" />
+                <RefreshCw className="w-5 h-5 text-fourth/80" />
                 <span className="text-primary">Need a fresh inspection?</span>
               </div>
 
-              <button className="px-4 py-2 rounded-lg bg-fourth/20 text-fourth text-sm font-medium hover:bg-fourth/30 transition">
+              <button className="px-4 py-2 rounded-lg bg-fourth/20 text-fourth/80 text-sm font-medium hover:bg-fourth/30 transition">
                 Request Re-inspection
               </button>
             </div>

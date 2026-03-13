@@ -42,23 +42,10 @@ export default function SafetyHero() {
             </h2>
           </div>
           <div className="overflow-visible pb-2">
-            <h2 className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl text-white/70 font-semibold leading-[1.05]">
+            <h2 className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl text-fourth/80 font-semibold leading-[1.05]">
               Visibility & Trust
             </h2>
           </div>
-
-          {/* Body paragraph */}
-          <motion.p
-            className="mt-4 text-sm sm:text-[15px] leading-[1.85] text-third/80 max-w-lg"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.45 }}
-          >
-            At AVX, safety isn;t a feature — it;s the foundation. We eliminate
-            the guesswork from pre-owned vehicle purchases by providing
-            structured verification, real-time inspection data, and a
-            transparent paper trail for every interaction on our platform.
-          </motion.p>
         </div>
 
         {/* BOTTOM ROW */}

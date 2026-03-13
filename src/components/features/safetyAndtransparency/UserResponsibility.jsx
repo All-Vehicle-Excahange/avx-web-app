@@ -43,7 +43,7 @@ export default function UserResponsibility() {
               Informed Participation
             </div>
             <h2 className="text-[34px] sm:text-[42px] md:text-[48px] font-bold leading-[1.08] text-primary">
-              User<span className="text-fourth"> Responsibility </span>
+              User<span className="text-fourth/80"> Responsibility </span>
             </h2>
 
             <p className="text-[16px] text-third leading-relaxed w-[50%] md-[100%]">

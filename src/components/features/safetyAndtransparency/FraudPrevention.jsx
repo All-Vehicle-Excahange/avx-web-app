@@ -42,7 +42,7 @@ export default function FraudPrevention() {
               Automated Protection
             </div>
             <h2 className="text-[34px] sm:text-[42px] md:text-[48px] font-bold leading-[1.08] text-primary">
-              <span className="text-fourth">Fraud </span>
+              <span className="text-fourth/80">Fraud </span>
               Prevention Measures
             </h2>
 

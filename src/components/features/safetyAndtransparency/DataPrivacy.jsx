@@ -93,7 +93,7 @@ export default function DataPrivacy() {
             </div>
 
             <h2 className="text-[34px] sm:text-[42px] md:text-[48px] font-bold leading-[1.08] text-primary">
-              Built to Protect <span className="text-fourth">Every Layer</span>
+              Built to Protect <span className="text-fourth/80">Every Layer</span>
             </h2>
 
             <p className="text-[16px] text-third leading-relaxed w-[50%] md-[100%]">
@@ -121,7 +121,7 @@ export default function DataPrivacy() {
                   {m.title.map((word, idx) => (
                     <span
                       key={idx}
-                      className={idx === m.highlightIndex ? "text-fourth" : ""}
+                      className={idx === m.highlightIndex ? "text-fourth/80" : ""}
                     >
                       {word}{" "}
                     </span>
@@ -169,7 +169,7 @@ export default function DataPrivacy() {
                 <TypewriterLine text="Audit logging → running" delay={4.2} />
 
                 <motion.div
-                  className="text-fourth mt-2 flex items-center"
+                  className="text-fourth/80 mt-2 flex items-center"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ delay: 5 }}
@@ -200,7 +200,7 @@ export default function DataPrivacy() {
                     {badge.map((word, idx) => (
                       <span
                         key={idx}
-                        className={idx === 0 ? "text-fourth" : ""}
+                        className={idx === 0 ? "text-fourth/80" : ""}
                       >
                         {word}{" "}
                       </span>
