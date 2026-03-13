@@ -215,19 +215,14 @@ export default function PerspectiveSwitcher() {
         {/* ── TOP TOGGLE BAR ── */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 sm:gap-0 mb-10 sm:mb-14">
           <div>
-            <p className="text-[11px] sm:text-sm tracking-[0.4em] uppercase text-third font-semibold mb-1">
+            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-1">
               Choose Your Path
             </p>
-            <h2 className="font-primary text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight leading-none text-primary">
+            <h2 className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary">
               Your{" "}
               <span
-                style={{
-                  WebkitTextStroke: "1px rgba(255,254,247,0.5)",
-                  color: "transparent",
-                  transition:
-                    "color 0.5s ease, -webkit-text-stroke-color 0.5s ease",
-                  display: "inline-block",
-                }}
+             
+                className="text-fourth/80"
               >
                 Platform.
               </span>
