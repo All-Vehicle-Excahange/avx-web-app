@@ -180,7 +180,7 @@ export default function InquiriesComponent() {
       </div>
 
       {/* FILTER BAR */}
-      <div className="rounded-2xl border border-third/30 bg-secondary p-5 flex flex-wrap gap-2">
+      <div className="rounded-2xl border border-third/30  p-5 flex flex-wrap gap-2 shadow-sm transition-colors duration-200 hover:border-third/40">
         {inquiryTypes.map((type) => (
           <button
             key={type.id}
@@ -199,7 +199,7 @@ export default function InquiriesComponent() {
       {/* ✅ INQUIRY LIST */}
       <div className="grid grid-cols-1 gap-6">
         {filteredInquiries.length === 0 ? (
-          <div className="rounded-2xl border border-third/30 bg-secondary p-10 text-center space-y-3">
+          <div className="rounded-2xl border border-third/30 bg-secondary p-10 text-center space-y-3 shadow-sm transition-colors duration-200 hover:border-third/40">
             {/* ✅ Pending Empty */}
             {activeType === "pending" && (
               <>

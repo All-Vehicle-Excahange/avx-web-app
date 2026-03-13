@@ -4,6 +4,8 @@ import {
   MessageSquare,
   Eye,
   TrendingUp,
+  MapPin,
+  BadgeCheck,
 } from "lucide-react";
 import StatCard from "./components/StateCard";
 import Activity from "./components/Activity";
@@ -20,9 +22,13 @@ export default function OverviewComponent() {
           </h1>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs md:text-sm text-third mt-1">
             <span className="flex items-center gap-1 text-green-400 font-medium">
-              ✓ Verified
+              <BadgeCheck size={16} />
+              Verified
             </span>
-            <span>📍 City: Ahmedabad</span>
+            <span className="flex items-center gap-2">
+              <MapPin size={16} />
+              City: Ahmedabad
+            </span>
           </div>
         </div>
 

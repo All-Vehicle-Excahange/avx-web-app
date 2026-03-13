@@ -5,7 +5,7 @@ export default function StatCard({ icon, label, value, trend }) {
   const isNegative = trend?.startsWith("-");
 
   return (
-    <div className="flex items-center gap-4 rounded-2xl border border-third/30 bg-secondary p-4">
+    <div className="flex items-center gap-4 rounded-2xl border border-third/30  p-4">
       {/* Icon */}
       <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
         {icon}

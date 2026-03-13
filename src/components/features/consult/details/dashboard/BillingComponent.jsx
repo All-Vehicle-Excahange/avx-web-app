@@ -41,12 +41,11 @@ export default function BillingComponent() {
 
       {/* PREMIUM + WALLET ROW */}
       <div
-        className={`grid gap-6 ${
-          isBasic ? "grid-cols-1" : "grid-cols-1 xl:grid-cols-2"
-        }`}
+        className={`grid gap-6 ${isBasic ? "grid-cols-1" : "grid-cols-1 xl:grid-cols-2"
+          }`}
       >
         {/* PREMIUM PLAN (Always Visible) */}
-        <div className="relative overflow-hidden rounded-2xl border border-primary/40 bg-primary/5 backdrop-blur-xl p-8 shadow-2xl flex flex-col">
+        <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-primary/5 backdrop-blur-xl p-8 shadow-sm flex flex-col transition-colors duration-200 hover:border-primary/40">
           {/* Top */}
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
@@ -86,7 +85,7 @@ export default function BillingComponent() {
 
         {/* ✅ WALLET (Only for PRO/PREMIUM) */}
         {isProOrPremium && (
-          <div className="relative rounded-2xl border border-third/40 bg-linear-to-r from-primary/5 to-secondary/20 p-6 overflow-hidden">
+          <div className="relative rounded-2xl border border-third/20 bg-linear-to-br from-primary/5 to-secondary/40 p-6 overflow-hidden shadow-sm transition-colors duration-200 hover:border-third/40">
             {/* Status Pill */}
             <div className="absolute top-4 right-4">
               <span className="px-4 py-1 rounded-full bg-green-500/20 text-green-400 text-xs font-medium backdrop-blur-md">
@@ -138,7 +137,7 @@ export default function BillingComponent() {
       </div>
 
       {/* BENEFITS */}
-      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-4">
+      <div className="rounded-2xl border border-third/20 bg-secondary p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         <h2 className="font-semibold">Benefits Active</h2>
 
         <div className="grid md:grid-cols-2 gap-4">
@@ -183,7 +182,7 @@ export default function BillingComponent() {
       </div>
 
       {/* WALLET USAGE */}
-      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-4">
+      <div className="rounded-2xl border border-third/20 bg-secondary p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         <div className="flex items-center gap-2 font-semibold">
           <TrendingUp size={16} />
           Wallet Usage (Last 30 Days)
@@ -218,7 +217,7 @@ export default function BillingComponent() {
       </div>
 
       {/* PAYMENT METHOD */}
-      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-4">
+      <div className="rounded-2xl border border-third/20 bg-secondary p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         <div className="flex justify-between items-center">
           <h2 className="font-semibold">Payment Method</h2>
           <Button variant="outlineSecondary">Update</Button>
@@ -237,7 +236,7 @@ export default function BillingComponent() {
       </div>
 
       {/* TRANSACTION HISTORY */}
-      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-4">
+      <div className="rounded-2xl border border-third/20 bg-secondary p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 font-semibold">
@@ -330,7 +329,7 @@ export default function BillingComponent() {
       </div>
 
       {/* PAYMENT HISTORY */}
-      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-4">
+      <div className="rounded-2xl border border-third/20 bg-secondary p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         <h2 className="font-semibold">Payment History</h2>
 
         <table className="w-full text-sm">

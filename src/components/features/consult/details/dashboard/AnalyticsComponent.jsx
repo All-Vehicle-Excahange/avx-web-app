@@ -83,7 +83,7 @@ export default function AnalyticsComponent() {
         />
       </div>
       {/* Traffic */}
-      <div className="bg-secondary border border-third/30 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className=" border border-third/20 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-8 shadow-sm transition-colors duration-200 hover:border-third/40">
         <div className="space-y-4">
           <h3 className="font-semibold text-white">Traffic & Conversion</h3>
 
@@ -137,7 +137,7 @@ export default function AnalyticsComponent() {
         </div>
       </div>
       {isProOrPremium && (
-        <div className="bg-secondary border border-third/30 rounded-2xl p-6 space-y-4">
+        <div className=" border border-third/20 rounded-2xl p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
           <h3 className="font-semibold text-white">Weekly Performance</h3>
 
           {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d, i) => (
@@ -146,7 +146,7 @@ export default function AnalyticsComponent() {
 
               <div className="flex-1 h-3 bg-white/10 rounded-full">
                 <div
-                  className="h-full bg-purple-500 rounded-full"
+                  className="h-full bg-fourth rounded-full"
                   style={{ width: `${[48, 60, 72, 56, 80, 88, 64][i]}%` }}
                 ></div>
               </div>
@@ -174,7 +174,7 @@ export default function AnalyticsComponent() {
       >
         {/* ✅ Left: Demand Breakdown (Hide for BASIC) */}
         {!isBasic && (
-          <div className="bg-secondary border border-third/30 rounded-2xl p-6 space-y-4">
+          <div className=" border border-third/20 rounded-2xl p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
             <h3 className="font-semibold text-white">Demand Breakdown</h3>
 
             {["SUVs", 46, "Sedans", 32, "Luxury", 22].map(
@@ -199,7 +199,7 @@ export default function AnalyticsComponent() {
         )}
 
         {/* ✅ Right: City-wise Demand (Full Width for BASIC) */}
-        <div className="bg-secondary border border-third/30 rounded-2xl p-6 space-y-4">
+        <div className=" border border-third/20 rounded-2xl p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
           <h3 className="font-semibold text-white">City-wise Demand</h3>
 
           {["Ahmedabad", "Surat", "Vadodara"].map((city, i) => (
@@ -220,12 +220,12 @@ export default function AnalyticsComponent() {
         </div>
       </div>
       {/* Insights */}
-      <div className="bg-secondary border border-purple-400/30 rounded-2xl p-7 space-y-5">
-        <h3 className="font-semibold text-lg text-purple-300">Key Insights</h3>
+      <div className=" border border-primary/20 rounded-2xl p-7 space-y-5 shadow-sm transition-colors duration-200 hover:border-fourth/40">
+        <h3 className="font-semibold text-lg text-fourth">Key Insights</h3>
 
         <ul className="grid md:grid-cols-2 gap-4 text-sm">
           <li className="flex items-start gap-3">
-            <TrendingUp className="text-purple-400 mt-0.5" size={18} />
+            <TrendingUp className="text-fourth mt-0.5" size={18} />
             <span>
               <b className="text-white">Featured vehicles</b> perform{" "}
               <b>1.8× better</b> than normal listings.
@@ -233,7 +233,7 @@ export default function AnalyticsComponent() {
           </li>
 
           <li className="flex items-start gap-3">
-            <Zap className="text-purple-400 mt-0.5" size={18} />
+            <Zap className="text-fourth mt-0.5" size={18} />
             <span>
               <b className="text-white">Fast responses</b> significantly improve
               your marketplace ranking.
@@ -241,7 +241,7 @@ export default function AnalyticsComponent() {
           </li>
 
           <li className="flex items-start gap-3">
-            <Calendar className="text-purple-400 mt-0.5" size={18} />
+            <Calendar className="text-fourth mt-0.5" size={18} />
             <span>
               <b className="text-white">Weekend traffic</b> is <b>23% higher</b>{" "}
               — best time to boost listings.
@@ -249,7 +249,7 @@ export default function AnalyticsComponent() {
           </li>
 
           <li className="flex items-start gap-3">
-            <Car className="text-purple-400 mt-0.5" size={18} />
+            <Car className="text-fourth mt-0.5" size={18} />
             <span>
               <b className="text-white">SUV demand</b> is trending upward across
               your city.
@@ -257,7 +257,7 @@ export default function AnalyticsComponent() {
           </li>
 
           <li className="flex items-start gap-3">
-            <MessageCircle className="text-purple-400 mt-0.5" size={18} />
+            <MessageCircle className="text-fourth mt-0.5" size={18} />
             <span>
               <b className="text-white">Chat-enabled listings</b> receive up to{" "}
               <b>35% more inquiries</b>.
@@ -265,7 +265,7 @@ export default function AnalyticsComponent() {
           </li>
 
           <li className="flex items-start gap-3">
-            <Tag className="text-purple-400 mt-0.5" size={18} />
+            <Tag className="text-fourth mt-0.5" size={18} />
             <span>
               <b className="text-white">Competitive pricing</b> improves
               conversions by up to <b>19%</b>.
@@ -275,7 +275,7 @@ export default function AnalyticsComponent() {
       </div>{" "}
       {/* Recommended Actions (Only BASIC Users) */}
       {isBasic && (
-        <div className="bg-secondary border border-blue-400/30 rounded-2xl p-7 space-y-5">
+        <div className=" border border-blue-400/20 rounded-2xl p-7 space-y-5 shadow-sm transition-colors duration-200 hover:border-blue-400/40">
           <h3 className="font-semibold text-lg text-blue-300">
             Recommended Actions
           </h3>
@@ -344,7 +344,7 @@ export default function AnalyticsComponent() {
       )}
       {/* ✅ Recommended Actions (Only PRO + PREMIUM) */}
       {isProOrPremium && (
-        <div className="bg-secondary border border-third/30 rounded-2xl p-7 space-y-5">
+        <div className=" border border-third/20 rounded-2xl p-7 space-y-5 shadow-sm transition-colors duration-200 hover:border-third/40">
           {/* Title */}
           <h3 className="font-semibold text-lg text-primary">
             Recommended Actions

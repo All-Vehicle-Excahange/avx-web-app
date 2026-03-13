@@ -35,10 +35,21 @@ export default function ConsultantAccountability() {
               </p>
             </div>
             
-            <h2 className="font-primary text-3xl sm:text-4xl lg:text-5xl font-bold uppercase tracking-tighter leading-[0.9] mb-8 text-primary">
-              Storefront <br />
-              <span className="text-third/30 italic font-light">Transparency.</span>
-            </h2>
+           
+            <h2
+            className="
+              text-4xl sm:text-5xl xl:text-5xl
+              font-semibold
+              leading-[1.05]
+              text-primary
+              font-[Montserrat]
+              mb-8
+            "
+          >
+            Storefront
+            <br />
+            <span className="text-fourth/80"> Infrastructure</span>
+          </h2>
 
             <p className="text-third/80 text-base leading-relaxed mb-10 max-w-lg">
               We eliminate the hidden middleman. Every consultant operates through a transparent 
