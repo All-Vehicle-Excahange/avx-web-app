@@ -250,8 +250,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     handleActiveTabChange(null);
   };
 
+  // Scroll-lock only for mobile drawer, NOT for desktop dropdown tabs
   useEffect(() => {
-    if (activeTab !== null || mobileOpen) {
+    if (mobileOpen) {
       if (typeof window !== "undefined") {
         const scrollY = window.scrollY;
         document.body.style.position = "fixed";
@@ -272,7 +273,18 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         }
       }
     }
-  }, [activeTab, mobileOpen]);
+  }, [mobileOpen]);
+
+  // Close desktop dropdown tabs when user scrolls
+  useEffect(() => {
+    const handleScrollClose = () => {
+      if (activeTab !== null) {
+        setActiveTab(null);
+      }
+    };
+    window.addEventListener("scroll", handleScrollClose);
+    return () => window.removeEventListener("scroll", handleScrollClose);
+  }, [activeTab]);
 
   const handleSearch = () => {
     // Save/overwrite selected location to localStorage
