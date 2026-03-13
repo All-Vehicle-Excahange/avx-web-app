@@ -38,7 +38,7 @@ export default function InspectionTransparency() {
 
         {/* HEADER */}
         <div className="text-left md:text-left max-w-xl mx-auto mb-20">
-          <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-4">
+          <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2">
             Inspection Transparency
           </p>
 
@@ -46,7 +46,7 @@ export default function InspectionTransparency() {
             Inspection <span className="text-fourth">Transparency</span>
           </h2>
 
-          <p className="text-[16px] text-third leading-relaxed mt-4 w-[50%] md-[100%]">
+          <p className="text-[16px] text-third leading-relaxed mt-4 w-full md:w-[50%]">
             AVX supports a standardized inspection framework. Vehicles may include
             detailed inspection reports to improve clarity before commitment.
           </p>
