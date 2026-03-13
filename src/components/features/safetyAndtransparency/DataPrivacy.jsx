@@ -121,7 +121,7 @@ export default function DataPrivacy() {
                   {m.title.map((word, idx) => (
                     <span
                       key={idx}
-                      className={idx === m.highlightIndex ? "text-fourth/80" : ""}
+                      className={idx === m.highlightIndex ? "text-primary" : ""}
                     >
                       {word}{" "}
                     </span>
