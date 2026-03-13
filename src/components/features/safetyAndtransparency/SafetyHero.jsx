@@ -67,7 +67,7 @@ export default function SafetyHero() {
 
           {/* PILLARS */}
           <motion.div
-            className="flex flex-wrap items-center gap-3"
+            className="grid grid-cols-2 gap-4 max-w-[420px]"
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
@@ -75,13 +75,24 @@ export default function SafetyHero() {
             {pillars.map((p, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, scale: 0.92 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.1 * i + 0.6 }}
-                className="flex items-center gap-2 px-4 py-2 rounded-full border-secondry/50 border-2 bg-white/4 backdrop-blur-md hover:bg-fourth/10 transition-all duration-300"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 * i + 0.6 }}
+                className="group relative p-4 rounded-xl border border-white/10 
+       backdrop-blur-md
+      transition-all duration-300"
               >
-                <span className="font-mono text-[10px] text-third/70">{p.num}</span>
-                <span className="text-[12px] text-primary">{p.label}</span>
+                <div className="flex flex-col gap-2">
+                  <span className="text-[11px] tracking-widest font-mono text-third/60">
+                    {p.num}
+                  </span>
+
+                  <span className="text-[13px] leading-snug text-primary font-medium">
+                    {p.label}
+                  </span>
+                </div>
+
+                <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition pointer-events-none,transparent_70%)]" />
               </motion.div>
             ))}
           </motion.div>

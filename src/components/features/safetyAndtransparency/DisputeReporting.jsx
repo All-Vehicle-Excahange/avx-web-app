@@ -91,7 +91,7 @@ export default function DisputeReporting() {
               {reportTypes.map((type, i) => (
                 <div
                   key={i}
-                  className="group p-5 rounded-xl border-primary/30 border-2   transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] "
+                  className="group p-5 rounded-xl border-primary/20 border   transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] "
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-lg border border-fourth/20 flex items-center justify-center text-fourth/80">
@@ -125,7 +125,7 @@ export default function DisputeReporting() {
               {resolutions.map((resolution, i) => (
                 <div
                   key={i}
-                  className="group p-5 rounded-xl border-primary/30 border-2  transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
+                  className="group p-5 rounded-xl border-primary/20 border  transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-lg  border border-fourth/20 flex items-center justify-center text-primary">
