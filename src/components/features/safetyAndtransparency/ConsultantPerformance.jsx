@@ -70,13 +70,13 @@ export default function ConsultantPerformance() {
 
       {/* HEADER */}
       <div className="text-left md:text-center max-w-xl mx-auto mb-16 md:mb-24">
-        <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2">
+        <p className="text-xs md:text-sm tracking-[0.4em] uppercase text-third font-semibold mb-4">
           Consultant Performance Visibility
         </p>
 
         <h2 className="text-[30px] sm:text-[38px] md:text-[48px] font-bold leading-[1.1] text-primary">
           Evaluate Who Youre{" "}
-          <span className="text-fourth/80">Dealing With</span>
+          <span className="text-fourth">Dealing With</span>
         </h2>
 
         <p className="text-[14px] md:text-[16px] text-third leading-relaxed mt-3 ">

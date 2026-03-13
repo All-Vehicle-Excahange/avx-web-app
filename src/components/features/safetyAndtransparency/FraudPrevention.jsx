@@ -69,7 +69,7 @@ export default function FraudPrevention() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 + i * 0.1 }}
-              className="group p-6 rounded-2xl  border-primary/30 border-2  transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
+              className="group p-6 rounded-2xl  border-primary/20 border  transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
             >
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-xl  flex items-center justify-center shrink-0  transition-colors ">

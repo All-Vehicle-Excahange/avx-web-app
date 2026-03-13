@@ -76,7 +76,7 @@ export default function MarketplaceModel() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
                 viewport={{ once: true }}
-                className="group relative rounded-2xl hover:border-2 border-secondry/50  hover:bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)] p-5 overflow-hidden  hover:bg-[#0d1b2e] hover:cursor-pointer transition-all duration-100"
+                className="group relative rounded-2xl hover:border border-primary/20  hover:bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)] p-5 overflow-hidden  hover:bg-[#0d1b2e] hover:cursor-pointer transition-all duration-100"
               >
                 {/* accent line */}
                
