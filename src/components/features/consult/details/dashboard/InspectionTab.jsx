@@ -17,6 +17,7 @@ import {
   Shield,
   MessageSquare,
   FileText,
+  CheckCircle,
 } from "lucide-react";
 import StatCard from "./components/StateCard";
 import Button from "@/components/ui/button";
@@ -123,7 +124,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= HOW INSPECTION AFFECTS RANKING ================= */}
-      <div className="rounded-2xl border border-third/30 bg-secondary p-6 space-y-4">
+      <div className="rounded-2xl border border-third/30  p-6 space-y-4">
         <h3 className="font-semibold flex items-center gap-2">
           <TrendingUp size={18} className="text-primary" />
           How inspection affects ranking:
@@ -148,7 +149,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= VEHICLES REQUIRING ATTENTION ================= */}
-      <div className="rounded-2xl border border-third/30 bg-secondary p-6 space-y-6">
+      <div className="rounded-2xl border border-third/30  p-6 space-y-6">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div>
@@ -252,7 +253,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= INSPECTION REQUESTS FROM BUYERS ================= */}
-      <div className="rounded-2xl border border-third/30 bg-secondary p-6 space-y-6">
+      <div className="rounded-2xl border border-third/30  p-6 space-y-6">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div>
@@ -344,7 +345,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= INSPECTION HISTORY ================= */}
-      <div className="rounded-2xl border border-third/30 bg-secondary p-6 space-y-6">
+      <div className="rounded-2xl border border-third/30  p-6 space-y-6">
         {/* Header */}
         <div>
           <h2 className="text-xl font-semibold">Inspection History</h2>
@@ -531,7 +532,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= RE-INSPECTION CONTROL PANEL ================= */}
-      <div className="rounded-2xl border border-third/30 bg-secondary p-6 space-y-6">
+      <div className="rounded-2xl border border-third/30  p-6 space-y-6">
         {/* Header */}
         <div>
           <h2 className="text-xl font-semibold">Re-Inspection Control Panel</h2>
@@ -554,7 +555,7 @@ function InspectionTab() {
             <div className="rounded-2xl border border-third/30 bg-yellow-500/5 p-5 space-y-4">
               {/* Current Status */}
               <div className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-yellow-400/70 mt-1"></span>
+                <Clock className="w-6 h-6 text-yellow-400 mt-1" />
                 <div>
                   <p className="font-semibold text-yellow-400">Aging</p>
                   <p className="text-sm text-third">
@@ -567,17 +568,17 @@ function InspectionTab() {
               {/* Legend */}
               <div className="space-y-3 text-sm">
                 <p className="flex items-center gap-2">
-                  <span className="w-4 h-4 rounded-full bg-green-400"></span>
+                  <CheckCircle className="w-4 h-4 text-green-500" />
                   Fresh (0–30 days)
                 </p>
 
                 <p className="flex items-center gap-2">
-                  <span className="w-4 h-4 rounded-full bg-yellow-400"></span>
+                  <Clock className="w-4 h-4 text-yellow-500" />
                   Aging (31–60 days)
                 </p>
 
                 <p className="flex items-center gap-2">
-                  <span className="w-4 h-4 rounded-full bg-red-400"></span>
+                  <AlertTriangle className="w-4 h-4 text-red-500" />
                   Expired (60+ days)
                 </p>
               </div>
@@ -631,6 +632,8 @@ function InspectionTab() {
           </div>
         </div>
       </div>
+
+
       {/* ================= DISPUTE & ISSUE CENTER ================= */}
       <div className="rounded-2xl border border-third/30 bg-secondary p-6 space-y-6">
         {/* Header */}
@@ -780,7 +783,7 @@ function InspectionTab() {
 export default InspectionTab;
 function VehicleScore({ name, score, orange }) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 ">
       {/* Top Line */}
       <div className="flex justify-between text-sm font-medium">
         <span>{name}</span>

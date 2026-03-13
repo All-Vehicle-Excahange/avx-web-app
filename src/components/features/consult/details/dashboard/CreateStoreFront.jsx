@@ -115,7 +115,7 @@ export default function CreateStoreFront() {
       </div>
 
       {/* WHY STOREFRONT MATTERS */}
-      <div className="bg-secondary border border-third/30 rounded-3xl p-8 space-y-6">
+      <div className=" border border-third/30 rounded-3xl p-8 space-y-6">
         <h2 className="text-xl font-semibold">Why your Storefront matters</h2>
 
         <p className="text-third text-sm leading-relaxed max-w-4xl">
