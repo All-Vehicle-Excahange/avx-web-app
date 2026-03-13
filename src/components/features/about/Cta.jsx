@@ -65,7 +65,7 @@ export default function Cta() {
               className="
               text-2xl sm:text-3xl
               font-semibold
-              text-white
+              text-fourth/80
               font-[Montserrat]
             "
             >
@@ -136,7 +136,7 @@ export default function Cta() {
               className="
               text-2xl sm:text-3xl
               font-semibold
-              text-white
+            text-fourth/80
               font-[Montserrat]
             "
             >
