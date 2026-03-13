@@ -5,7 +5,7 @@ const Card = ({ title, highlight, description }) => (
     <div
         className="
         group relative overflow-hidden
-        border-2 border-primary/10
+        border-2 border-primary/20
         rounded-xl p-8 transition-all duration-500 ease-in-out
         hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]
       "
@@ -19,10 +19,8 @@ const Card = ({ title, highlight, description }) => (
         </p>
 
         {/* Animated Line */}
-        <div className="absolute bottom-0 left-0 h-[3px] w-0 bg-primary transition-all duration-500 ease-out group-hover:w-full"></div>
 
         {/* Subtle Glow Effect */}
-        <div className="absolute -inset-px bg-fourth opacity-0 blur-lg transition-opacity duration-500 "></div>
     </div>
 );
 
