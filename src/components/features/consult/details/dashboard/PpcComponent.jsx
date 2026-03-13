@@ -206,7 +206,7 @@ export default function PpcComponent() {
       </div>
 
       {/* AI CAMPAIGN PERFORMANCE */}
-      <div className="rounded-2xl border border-third/30 bg-secondary p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-2xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         <h3 className="font-semibold text-lg">
           Campaign Performance (Last 7 Days)
         </h3>
@@ -350,7 +350,7 @@ export default function PpcComponent() {
 /* -------------------------------------------------------------------------- */
 function RecentAdCard({ paused, onOpenResults }) {
   return (
-    <div className="rounded-2xl border border-third/30 bg-secondary p-4 md:p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+    <div className="rounded-2xl border border-third/30  p-4 md:p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
       {/* --- HEADER SECTION: Status & Action Buttons --- */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-3">
