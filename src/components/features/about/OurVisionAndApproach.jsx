@@ -10,8 +10,8 @@ const Card = ({ title, highlight, description }) => (
         hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]
       "
     >
-        <h2 className="text-3xl font-bold mb-4 text-primary">
-            {title} <span className="text-primary">{highlight}</span>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4  leading-[1.05]  text-primary  font-[Montserrat]">
+            {title} <span className="text-fourth/80">{highlight}</span>
         </h2>
 
         <p className="text-third leading-relaxed relative z-10">
@@ -34,19 +34,19 @@ const VisionAndApproach = () => {
             <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10">
                 {/* Example Usage (Currently Commented) */}
 
-        <Card
-          isVision={true}
-          title="Our"
-          highlight="Vision"
-          description="To build India’s most accountable and performance-driven automotive marketplace — where credibility, not just listings, defines visibility."
-        />
+                <Card
+                    isVision={true}
+                    title="Our"
+                    highlight="Vision"
+                    description="To build India’s most accountable and performance-driven automotive marketplace — where credibility, not just listings, defines visibility."
+                />
 
-        <Card
-          isVision={false}
-          title="Our"
-          highlight="Approach"
-          description="AVX does not replace consultants. It empowers them with visibility, structure, and measurable performance signals — while giving buyers the confidence of verified identity and inspection clarity."
-        />
+                <Card
+                    isVision={false}
+                    title="Our"
+                    highlight="Approach"
+                    description="AVX does not replace consultants. It empowers them with visibility, structure, and measurable performance signals — while giving buyers the confidence of verified identity and inspection clarity."
+                />
 
             </div>
 

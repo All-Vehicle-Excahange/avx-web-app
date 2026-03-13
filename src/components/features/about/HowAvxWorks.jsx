@@ -57,7 +57,7 @@ const HowAvxWorks = () => {
               </span>
             </div>
 
-            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 bg-linear-to-b from-primary to-primary/60 bg-clip-text text-transparent">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold font-[Montserrat] mb-6 from-primary   ">
               How AVX <span className="text-fourth/80">Works</span> 
             </h2>
 
