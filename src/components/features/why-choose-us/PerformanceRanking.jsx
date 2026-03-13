@@ -158,11 +158,7 @@ export default function RankingDiagram() {
             ].map((def, i) => (
               <div
                 key={i}
-                className={`p-8 transition-all group relative h-full flex flex-col ${
-                  def.isPremium
-                    ? "bg-secondary z-10 "
-                    : "bg-secondary hover:bg-white/3"
-                }`}
+                className={`p-8 transition-all group relative h-full flex flex-col hover:bg-white/3`}
               >
                 {/* TOP STATUS BAR */}
                 <div className="flex items-center gap-3 mb-6">
@@ -170,7 +166,7 @@ export default function RankingDiagram() {
                     className={`text-[10px] font-black px-2 py-1 rounded-md uppercase tracking-tighter ${
                       def.isPremium
                         ? "bg-primary/10 text-primary/90"
-                        : "bg-primary/10 text-third"
+                        : "bg-primary/5 text-third"
                     }`}
                   >
                     {def.highlight}
