@@ -11,7 +11,7 @@ const Card = ({ title, highlight, description }) => (
       "
     >
         <h2 className="text-3xl font-bold mb-4 text-primary">
-            {title} <span className="text-fourth">{highlight}</span>
+            {title} <span className="text-primary">{highlight}</span>
         </h2>
 
         <p className="text-third leading-relaxed relative z-10">

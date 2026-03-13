@@ -33,15 +33,18 @@ export default function WhyAvxDifferent() {
             Why AVX
           </p>
 
-           <h2 className="font-primary md:text-5xl text-3xl  lg:text-6xl font-black uppercase leading-[0.95] tracking-tight">
-           Not another
-              <br />
-                <span
-                  className="relative inline-block"
-                style={{ WebkitTextStroke: "1.5px rgba(255,254,247,0.25)", color: "transparent" }}
-              >
-        listing platform
-              </span>
+           <h2
+              className="
+              text-3xl sm:text-4xl lg:text-5xl
+              font-semibold
+              leading-[1.05]
+              text-primary
+              font-[Montserrat]
+            "
+            >
+              Not another listing
+              <br />  
+              <span className="text-fourth/80"> platform</span>
             </h2>
 
           <p className="mt-8 text-xl text-third  leading-relaxed">
@@ -66,13 +69,13 @@ export default function WhyAvxDifferent() {
                 <div
                   className={`absolute top-1/2 -translate-y-1/2 text-[10rem] font-bold select-none pointer-events-none transition-colors duration-300
           ${isLeftContent ? "md:right-0 md:left-auto" : "md:left-0 md:right-auto"}
-          text-white/15 group-hover:text-fourth/20`}
+          text-primary/15 group-hover:text-primary/30`}
                 >
                   {item.id}
                 </div>
 
                 {/* Content */}
-                <div className="relative max-w-xl border rounded-2xl border-transparent p-6 transition-colors duration-300 group-hover:border-fourth">
+                <div className="relative max-w-xl border rounded-2xl border-transparent p-6 transition-colors duration-300 group-hover:border-primary/20">
                   <h3 className="text-2xl md:text-3xl font-semibold text-primary">
                     {item.title}
                   </h3>
@@ -85,7 +88,7 @@ export default function WhyAvxDifferent() {
                 <div
                   className={`hidden md:block h-px flex-1 transition-colors duration-300
           ${isLeftContent ? "bg-neutral-700" : "bg-neutral-700"}
-          group-hover:bg-fourth/60`}
+          group-hover:bg-primary/20`}
                 />
               </div>
             );

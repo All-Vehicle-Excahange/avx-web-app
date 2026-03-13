@@ -17,9 +17,9 @@ export default function HeroSection() {
               About AVX
             </p>
 
-            <h1
+            <h2
               className="
-              text-4xl sm:text-5xl xl:text-6xl
+            text-3xl sm:text-4xl lg:text-5xl
               font-semibold
               leading-[1.05]
               text-primary
@@ -28,8 +28,8 @@ export default function HeroSection() {
             >
               Indias Premium
               <br />  
-              <span className="text-white/70">Pre-Owned Vehicle Platform</span>
-            </h1>
+              <span className="text-fourth/80">Pre-Owned Vehicle Platform</span>
+            </h2>
 
             <p className="mt-8 text-lg text-third max-w-lg leading-relaxed">
               AVX brings structure, performance visibility, and trust into the

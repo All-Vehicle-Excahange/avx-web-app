@@ -52,15 +52,13 @@ const HowAvxWorks = () => {
         <div className="relative mb-10 text-center">
           <div className="relative z-10">
             <div className="inline-flex items-center gap-3 mb-4">
-              <span className="h-px w-8 bg-fourth/50"></span>
               <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
                 The Journey
               </span>
-              <span className="h-px w-8 bg-fourth/50"></span>
             </div>
 
             <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 bg-linear-to-b from-primary to-primary/60 bg-clip-text text-transparent">
-              How AVX Works
+              How AVX <span className="text-fourth/80">Works</span> 
             </h2>
 
             <div className="max-w-2xl mx-auto">

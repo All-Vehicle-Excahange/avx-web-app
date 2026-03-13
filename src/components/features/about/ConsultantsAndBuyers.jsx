@@ -185,15 +185,18 @@ function StickyBlock({ label, titleTop, titleBottom, desc, cta }) {
         <span className="absolute left-0 -bottom-3 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
       </p>
 
-      <h2 className="font-primary md:text-5xl text-3xl  lg:text-6xl font-black uppercase leading-[0.95] tracking-tight">
-             {titleTop}
-              <br />
-                <span
-                  className="relative inline-block"
-                style={{ WebkitTextStroke: "1.5px rgba(255,254,247,0.25)", color: "transparent" }}
-              >
-          {titleBottom}
-              </span>
+       <h2
+              className="
+              text-3xl sm:text-4xl lg:text-5xl
+              font-semibold
+              leading-[1.05]
+              text-primary
+              font-[Montserrat]
+            "
+            >
+              {titleTop}
+              <br />  
+              <span className="text-fourth/80">{titleBottom}</span>
             </h2>
 
       <p className="mt-12 max-w-xl text-xl leading-relaxed text-neutral-300 ">
