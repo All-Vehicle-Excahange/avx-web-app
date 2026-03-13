@@ -48,10 +48,7 @@ export default function TrustVerification() {
 
 
       {/* Blue glow — bottom center */}
-      <div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-175 h-65 pointer-events-none blur-[90px]"
-        style={{ background: "radial-gradient(ellipse, rgba(0,123,255,0.1) 0%, transparent 70%)" }}
-      />
+     
 
       <div className="max-w-7xl mx-auto relative">
 
@@ -187,7 +184,7 @@ export default function TrustVerification() {
           ].map((s, i) => (
             <div
               key={i}
-              className="px-7 py-5 bg-black/20 flex items-center gap-4"
+              className="px-7 py-5 border-t border-white/6 flex items-center gap-4"
             >
               <div>
                 <p className="font-primary text-xl font-black text-primary leading-none mb-0.5">
