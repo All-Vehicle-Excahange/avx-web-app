@@ -75,12 +75,8 @@ export default function ConsultantPerformanceVisibility() {
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-center py-16 px-4 sm:px-8 overflow-hidden bg-secondary">
+    <section className="relative min-h-screen flex flex-col justify-center py-16 px-4 sm:px-8 overflow-hidden ">
       
-      {/* Ambient glows - used inline style only for complex radial gradients */}
-      <div className="absolute pointer-events-none top-[20%] -right-[5%] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(0,123,255,0.07)_0%,transparent_65%)] blur-[60px]" />
-      <div className="absolute pointer-events-none bottom-[10%] -left-[5%] w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(255,255,255,0.025)_0%,transparent_65%)] blur-[60px]" />
-
       <div className="max-w-7xl mx-auto w-full relative">
         {/* ── HEADER ── */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12 sm:mb-16">
