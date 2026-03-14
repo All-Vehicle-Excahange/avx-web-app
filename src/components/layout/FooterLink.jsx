@@ -289,7 +289,7 @@ const FooterLink = () => {
             </p>
           </div>
         </div>
-        <div className="mt-8 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 lg:gap-6 mg:gap-4 gap-2 border-b border-third pb-8">
+        <div className="mt-8 grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 lg:gap-6 mg:gap-4 gap-2 border-b border-third pb-8">
           <div className="flex flex-col gap-2">
             <h2 className="text-lg font-medium">Top Stories</h2>
             <p className="text-primary/60 text-sm flex gap-2">
@@ -307,7 +307,7 @@ const FooterLink = () => {
               magni? Exercitationem, nemo hic.
             </p>
           </div>
-          <div className="flex flex-col gap-2">
+          {/* <div className="flex flex-col gap-2">
             <h2 className="text-lg font-medium">Top Stories</h2>
             <p className="text-primary/60 text-sm flex gap-2">
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -323,7 +323,7 @@ const FooterLink = () => {
               sapiente dolor harum modi, aperiam illum deleniti quas veniam
               magni? Exercitationem, nemo hic.
             </p>
-          </div>
+          </div> */}
           <div className="flex flex-col gap-2">
             <h2 className="text-lg font-medium">Top Stories</h2>
             <p className="text-primary/60 text-sm flex gap-2">
@@ -342,7 +342,7 @@ const FooterLink = () => {
             </p>
           </div>
         </div>
-        <div className="flex items-center justify-between mt-4">
+        {/* <div className="flex items-center justify-between mt-4">
           <p className="text-sm text-primary/60">
             &copy; 2023 CarHub. All rights reserved.
           </p>
@@ -360,7 +360,7 @@ const FooterLink = () => {
               <Image src="/x-logo.webp" alt="x-logo" width={24} height={24} />
             </Link>
           </div>
-        </div>
+        </div> */}
       </div>
     </footer>
   );

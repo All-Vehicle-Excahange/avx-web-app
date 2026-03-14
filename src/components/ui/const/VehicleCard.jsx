@@ -68,14 +68,16 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
 
         rating: data.rating || "-",
 
-        userName: data.vehicleOwner
-            ? `${data.vehicleOwner.firstname ?? ""} ${data.vehicleOwner.lastname ?? ""}`.trim()
-            : data.userName,
+        userName: data.consultantName
+            ? data.consultantName
+            : data.vehicleOwner
+                ? `${data.vehicleOwner.firstname ?? ""} ${data.vehicleOwner.lastname ?? ""}`.trim()
+                : data.userName,
 
 
         location: data.address
-            ? `${data.address.city}, ${data.address.country}`
-            : data.location,
+            ? `${data.address.city ?? ""}${data.address.city && data.address.country ? ", " : ""}${data.address.country ?? ""}`.trim()
+            : data.location || "-",
 
         price: data.price ? Number(data.price).toLocaleString("en-IN") : data.price,
 
