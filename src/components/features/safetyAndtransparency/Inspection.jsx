@@ -63,10 +63,8 @@ export default function InspectionTransparency() {
             className="relative"
           >
 
-            {/* glow */}
-            <div className="absolute inset-0 bg-fourth/10 blur-3xl rounded-3xl opacity-40" />
 
-            <div className="relative bg-[#0f1117]/90 border border-[#1f2937] rounded-3xl p-8 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+            <div className="relative border border-primary/10 rounded-3xl p-8 shadow-[0_10px_40px_-10px_rgba(250,250,250,0.08)]">
 
               {/* HEADER */}
               <div className="flex items-center justify-between mb-6">
@@ -118,7 +116,7 @@ export default function InspectionTransparency() {
 
                     <div className="h-2 rounded-full bg-[#1f2937] overflow-hidden">
                       <div
-                        className="h-full bg-primary/0 rounded-full"
+                        className="h-full bg-primary/80 rounded-full"
                         style={{ width: `${item.score}%` }}
                       />
                     </div>
@@ -154,9 +152,9 @@ export default function InspectionTransparency() {
               {features.map((feature, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-4 p-5 rounded-xl bg-[#0f1117]/70 border border-primary/20"
+                  className="flex items-start gap-4 p-5 rounded-xl  border border-primary/20"
                 >
-                  <div className="w-11 h-11 rounded-lg bg-fourth/10 border border-fourth/20 flex items-center justify-center">
+                  <div className="w-11 h-11 rounded-lg border border-primary/10 flex items-center justify-center">
                     <feature.icon className="w-5 h-5 text-primary" />
                   </div>
 
@@ -171,7 +169,7 @@ export default function InspectionTransparency() {
             </div>
 
             {/* CTA */}
-            <div className="mt-8 p-5 rounded-xl bg-fourth/5 border border-fourth/20 flex items-center justify-between">
+            <div className="mt-8 p-5 rounded-xl border border-primary/10 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <RefreshCw className="w-5 h-5 text-fourth/80" />
                 <span className="text-primary">Need a fresh inspection?</span>
