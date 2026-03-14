@@ -1,6 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
+import {
+  ShieldCheck,
+  MapPin,
+  Phone,
+  FileText,
+  BadgeCheck
+} from "lucide-react";
 
 const cards = [
   {
@@ -8,7 +15,7 @@ const cards = [
     highlight: "Verification",
     desc: "AVX maintains a layered verification process designed to ensure consultants meet identity, operational, and documentation standards before becoming visible to buyers.",
     span: "lg:row-span-5",
-    image: "/verification.jpg",
+    icon: ShieldCheck,
     big: true,
   },
   {
@@ -16,58 +23,57 @@ const cards = [
     highlight: "Address",
     desc: "Registered business locations are verified to ensure operational legitimacy.",
     span: "lg:row-span-3",
-    image: "/business-address.jpg",
+    icon: MapPin,
   },
   {
     title: "Contact Validation",
     highlight: "Validation",
     desc: "Communication channels are authenticated for reliable interaction.",
     span: "lg:row-span-2",
-    image: "/contact-validation.webp",
+    icon: Phone,
   },
   {
     title: "Documentation Submission",
     highlight: "Documentation",
     desc: "Required compliance and business documents are reviewed before activation.",
     span: "lg:row-span-3",
-    image: "/document-confirm.jpg",
+    icon: FileText,
   },
   {
     title: "Identity Verification",
     highlight: "Identity",
     desc: "Consultants complete credential validation to confirm identity.",
     span: "lg:row-span-2",
-    image: "/identity-varification.png",
+    icon: BadgeCheck,
   },
 ];
 
-function HighlightedTitle({ title, highlight, big }) {
-  if (!highlight || !title.includes(highlight)) {
-    return (
-      <h3 className={`font-semibold text-primary mb-2 ${big ? "text-lg" : "text-[20px]"}`}>
-        {title}
-      </h3>
-    );
-  }
+function HighlightedTitle({ title, highlight, big, Icon }) {
 
   const parts = title.split(highlight);
 
   return (
-    <h3 className={`font-semibold text-primary mb-2 ${big ? "text-lg" : "text-[20px]"}`}>
-      {parts[0]}
-      <span className="text-fourth/80">
-        {highlight}
-      </span>
-      {parts[1]}
-    </h3>
+    <div className="flex items-start gap-3 mb-2">
+
+      {/* ICON */}
+      <Icon className="w-5 h-5 text-primary mt-[3px]" />
+
+      {/* TITLE */}
+      <h3 className={`font-semibold text-primary ${big ? "text-lg" : "text-[20px]"}`}>
+        {parts[0]}
+        <span className="text-primary/90">{highlight}</span>
+        {parts[1]}
+      </h3>
+
+    </div>
   );
 }
 
 export default function SellerVerification() {
   return (
-    <section className="py-10 relative overflow-hidden">
+    <section className="py-10 relative overflow-hidden ">
 
-      <div className="w-full mx-auto ">
+      <div className="w-full mx-auto">
 
         {/* HEADER */}
         <motion.div
@@ -83,47 +89,42 @@ export default function SellerVerification() {
 
           <h2 className="text-[34px] sm:text-[42px] md:text-[48px] font-bold leading-[1.08] mt-2 text-primary">
             Verified{" "}
-            <span className="text-fourth">
+            <span className="text-fourth/80">
               Consultant Participation
             </span>
           </h2>
 
-          <p className="mt-5 text-third text-[15px] leading-relaxed w-full md:w-[50%] md-[100%]">
+          <p className="mt-5 text-third text-[15px] leading-relaxed w-full md:w-[50%]">
             Consultants on AVX undergo structured verification checks to reduce
             anonymous listings and improve accountability across the marketplace.
           </p>
         </motion.div>
 
         {/* GRID */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:h-[300]">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-          {cards.map((card, i) => (
-            <motion.div
-              key={i}
-              className={`${card.span} relative rounded-2xl overflow-hidden border border-[#1f2937] hover:cursor-pointer group hover:shadow-[0_10px_40px_-10px_rgba(250,250,250,0.25)]`}
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: i * 0.07 }}
-              viewport={{ once: true }}
-            >
-              {/* IMAGE */}
-              <img
-                src={card.image}
-                alt=""
-                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                // style={{ filter: "grayscale(30%) brightness(0.9) contrast(1.05)" }}
-              />
+          {cards.map((card, i) => {
+            const Icon = card.icon;
 
-              {/* OVERLAY */}
-              <div className="absolute inset-0 bg-[#0b0f17]/70 group-hover:bg-[#0b0f17]/60  transition-colors duration-300" />
-
-              {/* CONTENT */}
-              <div className="relative p-6 flex flex-col h-full">
+            return (
+              <motion.div
+                key={i}
+                className={`${card.span} relative rounded-2xl border border-primary/20 p-6 
+                 
+                hover:border-primary/30
+                hover:shadow-[0_10px_40px_-10px_rgba(250,250,250,0.08)]
+                transition-all duration-300`}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: i * 0.07 }}
+                viewport={{ once: true }}
+              >
 
                 <HighlightedTitle
                   title={card.title}
                   highlight={card.highlight}
                   big={card.big}
+                  Icon={Icon}
                 />
 
                 <p className="text-third text-[15px] leading-relaxed">
@@ -132,16 +133,16 @@ export default function SellerVerification() {
 
                 {card.big && (
                   <>
-                    <div className="mt-auto h-px bg-linear-to-r from-fourth/40 via-[#1f2937] to-transparent" />
-                    <p className="text-primary text-[13px] mt-4">
-                      This helps reduce anonymous listings and improves accountability.
+                    <div className="mt-6 h-px bg-linear-to-r from-primary/40  " />
+                    <p className="text-primary text-[15px] mt-4">
+                This framework strengthens marketplace credibility by ensuring that only verified and accountable consultants participate.
                     </p>
                   </>
                 )}
-              </div>
 
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
 
         </div>
 

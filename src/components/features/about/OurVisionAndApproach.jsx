@@ -5,13 +5,13 @@ const Card = ({ title, highlight, description }) => (
     <div
         className="
         group relative overflow-hidden
-        border-2 border-primary/10
+        border-2 border-primary/20
         rounded-xl p-8 transition-all duration-500 ease-in-out
         hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]
       "
     >
-        <h2 className="text-3xl font-bold mb-4 text-primary">
-            {title} <span className="text-primary">{highlight}</span>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4  leading-[1.05]  text-primary  font-[Montserrat]">
+            {title} <span className="text-fourth/80">{highlight}</span>
         </h2>
 
         <p className="text-third leading-relaxed relative z-10">
@@ -19,10 +19,8 @@ const Card = ({ title, highlight, description }) => (
         </p>
 
         {/* Animated Line */}
-        <div className="absolute bottom-0 left-0 h-[3px] w-0 bg-primary transition-all duration-500 ease-out group-hover:w-full"></div>
 
         {/* Subtle Glow Effect */}
-        <div className="absolute -inset-px bg-fourth opacity-0 blur-lg transition-opacity duration-500 "></div>
     </div>
 );
 
@@ -34,19 +32,19 @@ const VisionAndApproach = () => {
             <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10">
                 {/* Example Usage (Currently Commented) */}
 
-        <Card
-          isVision={true}
-          title="Our"
-          highlight="Vision"
-          description="To build India’s most accountable and performance-driven automotive marketplace — where credibility, not just listings, defines visibility."
-        />
+                <Card
+                    isVision={true}
+                    title="Our"
+                    highlight="Vision"
+                    description="To build India’s most accountable and performance-driven automotive marketplace — where credibility, not just listings, defines visibility."
+                />
 
-        <Card
-          isVision={false}
-          title="Our"
-          highlight="Approach"
-          description="AVX does not replace consultants. It empowers them with visibility, structure, and measurable performance signals — while giving buyers the confidence of verified identity and inspection clarity."
-        />
+                <Card
+                    isVision={false}
+                    title="Our"
+                    highlight="Approach"
+                    description="AVX does not replace consultants. It empowers them with visibility, structure, and measurable performance signals — while giving buyers the confidence of verified identity and inspection clarity."
+                />
 
             </div>
 

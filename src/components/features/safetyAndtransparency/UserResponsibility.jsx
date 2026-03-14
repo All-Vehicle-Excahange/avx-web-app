@@ -68,7 +68,7 @@ export default function UserResponsibility() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 + i * 0.08 }}
               viewport={{ once: true }}
-              className="group p-6 rounded-2xl bg-secondary/30 border-2 hover:border-2 border-primary/30 transition-all duration-100 text-center hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
+              className="group p-6 rounded-2xl border border-primary/20 transition-all duration-100 text-center hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
             >
               <div className="w-14 h-14 rounded-2xl  border border-fourth/20 flex items-center justify-center mx-auto mb-4 transition-colors">
                 <item.icon className="w-7 h-7 text-primary" />

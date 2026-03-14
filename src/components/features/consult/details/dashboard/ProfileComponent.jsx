@@ -48,7 +48,7 @@ export default function ProfileComponent() {
         </p>
       </div>
 
-      <div className="w-full lg:w-1/2 rounded-2xl border border-third/40 bg-secondary p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="w-full lg:w-1/2 rounded-2xl border border-third/40  p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Top Line */}
         <div className="flex items-center justify-between">
           <p className="font-semibold text-primary">
@@ -89,7 +89,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* PROFILE CARD */}
-      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-2xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         <div className="flex justify-between items-center">
           <h2 className="font-semibold">Business Profile</h2>
           {!isEditing && (
@@ -144,7 +144,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* VERIFICATION STATUS */}
-      <div className="rounded-2xl border border-third/40 bg-primary/5 p-6 space-y-4">
+      <div className="rounded-2xl border border-third/40  p-6 space-y-4">
         <h2 className="font-semibold">Verification Status</h2>
 
         <div className="grid md:grid-cols-2 gap-6">
@@ -163,7 +163,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* KYC DOCUMENTS */}
-      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-2xl border border-third/40  p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         <h2 className="font-semibold">KYC Documents</h2>
 
         {/* ⚠ Pending Banner */}
@@ -212,7 +212,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* BUSINESS LOCATION & MAP (TRUST BOOST) */}
-      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-2xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div className="flex justify-between items-center">
           <h2 className="font-semibold">Business Location & Map</h2>
@@ -239,7 +239,7 @@ export default function ProfileComponent() {
                 profile.address + " " + profile.city,
               )}`}
               target="_blank"
-              className="block rounded-xl border border-third/30 bg-primary/5 px-4 py-4 hover:bg-primary/10 transition"
+              className="block rounded-xl border border-third/30  px-4 py-4 hover:bg-primary/10 transition"
             >
               <p className="flex items-center gap-2 font-medium text-primary">
                 <MapPin size={16} className="text-primary" />
@@ -287,7 +287,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* ACCOUNT & ROLE DETAILS (ADMIN-FRIENDLY) */}
-      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-2xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div>
           <h2 className="font-semibold">Account & Role Details</h2>
@@ -361,7 +361,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* RESTRICTIONS & PLATFORM RULES (TRANSPARENCY) */}
-      <div className="rounded-2xl border border-third/40 bg-secondary p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-2xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div>
           <h2 className="font-semibold">Restrictions & Platform Rules</h2>
@@ -462,8 +462,8 @@ function StatusCard({ title, value, icon, green }) {
     >
       <div
         className={`w-10 h-10 rounded-full flex items-center justify-center ${green
-            ? "bg-green-500/20 text-green-400"
-            : "bg-primary/10 text-primary"
+          ? "bg-green-500/20 text-green-400"
+          : "bg-primary/10 text-primary"
           }`}
       >
         {icon}
@@ -478,7 +478,7 @@ function StatusCard({ title, value, icon, green }) {
 
 function KycRow({ title, status, state, reason }) {
   return (
-    <div className="flex justify-between items-center rounded-xl border border-third/30 bg-primary/5 p-4">
+    <div className="flex justify-between items-center rounded-xl border border-third/30  p-4">
       {/* Left Info */}
       <div className="flex items-center gap-3">
         <FileText className="text-primary" size={18} />

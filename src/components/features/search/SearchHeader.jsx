@@ -7,11 +7,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 /* ================= SORT OPTIONS ================= */
 const sortOptions = [
-  { value: "recommended", label: "Recommended" },
-  { value: "price_low_high", label: "Price Low → High" },
-  { value: "price_high_low", label: "Price High → Low" },
-  { value: "newest", label: "Newest Listed" },
-  { value: "most_inquired", label: "Most Inquired" },
+  { sortBy: "",                  direction: "",     label: "Recommended" },
+  { sortBy: "price",             direction: "asc",  label: "Price Low → High" },
+  { sortBy: "price",             direction: "desc", label: "Price High → Low" },
+  { sortBy: "listingDate",       direction: "desc", label: "Newest Listed" },
+  { sortBy: "totalInquiryCount", direction: "desc", label: "Most Inquired" },
 ];
 
 export default function SearchHeader({ pageResponse = {}, activeFilters = [] }) {
@@ -127,7 +127,7 @@ export default function SearchHeader({ pageResponse = {}, activeFilters = [] }) 
                 >
                   {sortOptions.map((option) => (
                     <button
-                      key={option.value}
+                      key={option.label}
                       onClick={() => {
                         setSelected(option);
                         setOpen(false);
@@ -135,7 +135,15 @@ export default function SearchHeader({ pageResponse = {}, activeFilters = [] }) 
                         const params = new URLSearchParams(
                           searchParams.toString(),
                         );
-                        params.set("sort", option.value);
+
+                        if (option.sortBy) {
+                          params.set("sortBy", option.sortBy);
+                          params.set("direction", option.direction);
+                        } else {
+                          params.delete("sortBy");
+                          params.delete("direction");
+                        }
+                        params.delete("sort"); // clean up old param
 
                         router.push(`?${params.toString()}`);
                       }}
@@ -143,7 +151,7 @@ export default function SearchHeader({ pageResponse = {}, activeFilters = [] }) 
                         w-full text-left px-3 py-2
                         text-[12px]
                         hover:bg-secondary/10
-                        ${selected.value === option.value
+                        ${selected.label === option.label
                           ? "bg-primary/10 font-semibold"
                           : ""
                         }

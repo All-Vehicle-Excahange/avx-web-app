@@ -118,7 +118,7 @@ export default function InspectionTransparency() {
 
                     <div className="h-2 rounded-full bg-[#1f2937] overflow-hidden">
                       <div
-                        className="h-full bg-fourth rounded-full"
+                        className="h-full bg-primary/0 rounded-full"
                         style={{ width: `${item.score}%` }}
                       />
                     </div>
@@ -154,7 +154,7 @@ export default function InspectionTransparency() {
               {features.map((feature, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-4 p-5 rounded-xl bg-[#0f1117]/70 border-2 border-primary/30"
+                  className="flex items-start gap-4 p-5 rounded-xl bg-[#0f1117]/70 border border-primary/20"
                 >
                   <div className="w-11 h-11 rounded-lg bg-fourth/10 border border-fourth/20 flex items-center justify-center">
                     <feature.icon className="w-5 h-5 text-primary" />
