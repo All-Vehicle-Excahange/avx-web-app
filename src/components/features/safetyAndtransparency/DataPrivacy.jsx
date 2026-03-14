@@ -115,7 +115,7 @@ export default function DataPrivacy() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.08 }}
                 viewport={{ once: true }}
-                className="group p-6 rounded-2xl bg-secondary/20 border-2 border-primary/30 transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
+                className="group p-6 rounded-2xl  border border-primary/10 transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
               >
                 <h4 className="text-lg font-semibold text-primary mb-2">
                   {m.title.map((word, idx) => (
@@ -142,7 +142,7 @@ export default function DataPrivacy() {
             className="flex flex-col gap-6"
           >
             {/* TERMINAL */}
-            <div className="rounded-2xl overflow-hidden border border-[#1f2937] bg-[#0b0d12] shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]">
+            <div className="rounded-2xl overflow-hidden border border-[#1f2937]  shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]">
               <div className="flex items-center gap-2 px-4 py-3 border-b border-[#1f2937]">
                 <span className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
                 <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
