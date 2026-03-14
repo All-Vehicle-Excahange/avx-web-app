@@ -64,7 +64,7 @@ export default function CommunicationAccountability() {
           className="relative"
         >
           {/* vertical line */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-linear-to-br from-fourth/40 via-[#1f2937] to-transparent hidden lg:block" />
+          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-linear-to-br from-primary/40 via-[#6b6c6d] to-transparent hidden lg:block" />
 
           <div className="grid lg:grid-cols-2 gap-8">
             {activities.map((activity, i) => (

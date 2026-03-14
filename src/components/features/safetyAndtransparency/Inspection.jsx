@@ -91,7 +91,7 @@ export default function InspectionTransparency() {
                   ["Inspector ID", "AVX-INSP-2041"],
                   ["Status", "Completed"],
                 ].map((row, i) => (
-                  <div key={i} className="bg-[#0b0f17] border border-[#1f2937] rounded-xl p-3">
+                  <div key={i} className="border border-primary/20 rounded-xl p-3">
                     <p className="text-third text-xs">{row[0]}</p>
                     <p className="text-primary font-medium text-sm">{row[1]}</p>
                   </div>
