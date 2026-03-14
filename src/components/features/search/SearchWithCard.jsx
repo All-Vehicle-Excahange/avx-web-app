@@ -158,7 +158,8 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
   const makerId = searchParams.get("makerId");
   const modelIdParam = searchParams.get("modelId");
   const budget = searchParams.get("budget");
-  const sort = searchParams.get("sort");
+  const sortBy = searchParams.get("sortBy");
+  const direction = searchParams.get("direction");
 
   let mPrice = 0;
   let mxPrice = 0;
@@ -226,9 +227,12 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
       const params = {
         pageNo: page,
         size: 9,
-        sortBy: sort || "listingDate",
-        direction: sort === "price_low_high" ? "asc" : "desc",
       };
+
+      if (sortBy) {
+        params.sortBy = sortBy;
+        params.direction = direction || "desc";
+      }
       const response = await getFilteredVehicles(body, params);
       setVehicles(response.data || []);
 
@@ -287,13 +291,15 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
   }, []);
 
   /* ================= RE-FETCH ON SORT CHANGE ================= */
-  const prevSortRef = useRef(sort);
+  const prevSortByRef = useRef(sortBy);
+  const prevDirectionRef = useRef(direction);
   useEffect(() => {
-    if (prevSortRef.current === sort) return;
-    prevSortRef.current = sort;
+    if (prevSortByRef.current === sortBy && prevDirectionRef.current === direction) return;
+    prevSortByRef.current = sortBy;
+    prevDirectionRef.current = direction;
     setCurrentPage(1);
     fetchVehicles(1);
-  }, [sort]);
+  }, [sortBy, direction]);
 
   // ── Load Brands with search ──
   const loadBrands = async (page = 1, searchTerm = brandSearch) => {

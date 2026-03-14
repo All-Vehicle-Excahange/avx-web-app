@@ -76,9 +76,9 @@ export default function CommunicationAccountability() {
                 transition={{ delay: 0.3 + i * 0.1 }}
                 className={`relative ${i % 2 === 1 ? "lg:mt-16" : ""}`}
               >
-                <div className="p-6 rounded-2xl bg-[#0f1117]/70  border-primary/30 border-2  transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)]">
+                <div className="p-6 rounded-2xl border-primary/20 border  transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] ">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl  border border-primary/30 flex items-center justify-center shrink-0 text-fourth/80">
+                    <div className="w-12 h-12 rounded-xl  border border-primary/30 flex items-center justify-center shrink-0 text-primary">
                       <activity.icon className="w-5 h-5" />
                     </div>
 
