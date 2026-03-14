@@ -88,7 +88,7 @@ export default function ConsultantPerformanceVisibility() {
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-primary">
               Evaluate Who<br />
-              <span className="text-fourth/80">You;re Dealing With.</span>
+              <span className="text-fourth/80">{"Your'e Dealing With."}</span>
             </h2>
           </div>
 
