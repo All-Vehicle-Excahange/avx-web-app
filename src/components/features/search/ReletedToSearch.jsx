@@ -17,7 +17,7 @@ export default function ReletedToSearch() {
             try {
                 const data = {
                     pageNo: 1,
-                    size: 4,
+                    size: 8,
                 }
                 let res;
                 if (activeType === "4-Wheeler") {
