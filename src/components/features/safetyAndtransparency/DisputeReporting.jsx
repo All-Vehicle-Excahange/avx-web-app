@@ -94,7 +94,7 @@ export default function DisputeReporting() {
                   className="group p-5 rounded-xl border-primary/20 border   transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] "
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg border border-fourth/20 flex items-center justify-center text-fourth/80">
+                    <div className="w-10 h-10 rounded-lg border border-primary/10 flex items-center justify-center text-fourth/80">
                       <type.icon className="w-5 h-5 text-primary" />
                     </div>
 
@@ -128,7 +128,7 @@ export default function DisputeReporting() {
                   className="group p-5 rounded-xl border-primary/20 border  transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg  border border-fourth/20 flex items-center justify-center text-primary">
+                    <div className="w-10 h-10 rounded-lg  border border-primary/10 flex items-center justify-center text-primary">
                       <resolution.icon className="w-5 h-5" />
                     </div>
 
