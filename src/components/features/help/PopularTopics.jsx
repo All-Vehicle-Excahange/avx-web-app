@@ -76,22 +76,31 @@ export default function PopularTopicsGrid() {
   const [hovered, setHovered] = useState(null);
 
   return (
-    <section className="relative py-20 px-4 sm:px-8 lg:px-16 overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/6 to-transparent" />
+    <section className="relative py-20 px-4 sm:px-8 lg:px-0 overflow-hidden">
 
       <div className="max-w-7xl mx-auto">
         {/* HEADER */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <div className="h-px w-6 bg-fourth/50" />
-              <p className="text-[10px] tracking-[0.4em] uppercase font-black font-primary text-fourth/70">
-                Help Center
+              <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                Topics Center
               </p>
             </div>
-            <h2 className="font-primary text-[clamp(2.2rem,5vw,4rem)] font-black uppercase tracking-tight leading-none text-primary">
-              Popular <span className="text-fourth">Topics.</span>
-            </h2>
+           
+               <h2
+                    className="
+             text-3xl sm:text-4xl lg:text-5xl
+              font-semibold
+              leading-[1.05]
+              text-primary
+              font-[Montserrat]
+            "
+                  >
+                    Popular
+                    <span className="text-fourth/80"> Topics.
+                    </span>
+                  </h2>
           </div>
           <div className="flex flex-col gap-2 items-start sm:items-end">
             <p className="text-sm text-primary/40 max-w-xs leading-relaxed font-secondary">

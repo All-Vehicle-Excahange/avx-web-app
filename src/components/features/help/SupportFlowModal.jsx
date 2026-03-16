@@ -20,9 +20,9 @@ export default function SupportFlowModal({ onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-999 p-4 sm:p-6 md:p-12 flex items-center justify-center backdrop-blur-sm ">
+    <div className="  fixed inset-0 z-999 p-4 sm:p-6 md:p-12  lg:px-0 flex items-center justify-center backdrop-blur-sm ">
       <div
-        className="relative w-full max-w-6xl bg-secondary border border-primary/30 rounded-xl shadow-2xl overflow-hidden flex flex-col"
+        className="relative  max-w-7xl mx-auto bg-secondary border border-primary/30 rounded-xl shadow-2xl overflow-hidden flex flex-col"
         style={{ maxHeight: "calc(88vh - 40px)" }}
       >
         {/* Close bar */}

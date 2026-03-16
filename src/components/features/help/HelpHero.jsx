@@ -69,7 +69,7 @@ const STATS = [
 ];
 
 const CATEGORIES = [
-  { label: "Inspection", color: "bg-fourth/10 text-fourth border-fourth/20" },
+  { label: "Inspection", color: "bg-primary/5 text-primary/60 border-primary/10" },
   { label: "Listing", color: "bg-primary/5 text-primary/60 border-primary/10" },
   { label: "Billing", color: "bg-primary/5 text-primary/60 border-primary/10" },
   {
@@ -95,8 +95,8 @@ export default function HelpHero() {
   const filtered =
     query.length > 0
       ? QUICK_LINKS.filter((l) =>
-          l.label.toLowerCase().includes(query.toLowerCase()),
-        )
+        l.label.toLowerCase().includes(query.toLowerCase()),
+      )
       : QUICK_LINKS;
 
   const clear = () => {
@@ -106,7 +106,7 @@ export default function HelpHero() {
 
   return (
     <>
-      <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
+      <section className="relative min-h-[92vh] flex flex-col justify-center overflow-hidden">
         {/* Ambient radial glows */}
         {/* <div
         className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full pointer-events-none"
@@ -140,7 +140,7 @@ export default function HelpHero() {
 
         {/* ── CONTENT ── */}
         <div
-          className={`relative z-10 w-full px-4 sm:px-8 lg:px-16 py-24 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+          className={`relative z-10 w-full px-4 sm:px-8 lg:px-0 py-24 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"} `}
         >
           <div className="max-w-7xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
@@ -149,33 +149,29 @@ export default function HelpHero() {
                 {/* Eyebrow badge */}
                 <div className="flex items-center gap-3 self-start">
                   <div>
-                    <span className="text-[10px] font-black uppercase tracking-[0.35em] font-primary text-primary">
+                    <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
                       AVX Help Center
                     </span>
                   </div>
-                  <div className="h-px w-8 bg-fourth/30" />
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-primary/25 font-primary">
-                    Support Hub
-                  </span>
+
                 </div>
 
                 {/* Headline */}
                 <div className="space-y-2">
-                  <h1 className="font-primary font-black uppercase leading-[0.95] tracking-tight text-[clamp(3rem,7vw,5.5rem)] text-primary">
-                    How can
-                  </h1>
-                  <h1
-                    className="font-primary font-black uppercase leading-[0.95] tracking-tight text-[clamp(3rem,7vw,5.5rem)]"
-                    style={{
-                      WebkitTextStroke: "1.5px rgba(255,255,255,0.15)",
-                      color: "transparent",
-                    }}
+                  <h2
+                    className="
+             text-3xl sm:text-4xl lg:text-5xl
+              font-semibold
+              leading-[1.05]
+              text-primary
+              font-[Montserrat]
+            "
                   >
-                    we help
-                  </h1>
-                  <h1 className="font-primary font-black uppercase leading-[0.95] tracking-tight text-[clamp(3rem,7vw,5.5rem)] text-fourth">
-                    you today?
-                  </h1>
+                    How Can We Help
+                    <br />
+                    <span className="text-fourth/80"> You Today?
+                    </span>
+                  </h2>
                 </div>
 
                 {/* Sub */}
@@ -191,18 +187,14 @@ export default function HelpHero() {
                     className={`absolute -inset-0.5 rounded-2xl transition-opacity duration-300 pointer-events-none ${focused ? "opacity-100" : "opacity-0"}`}
                     style={{
                       background:
-                        "linear-gradient(135deg, rgba(0,123,255,0.5), rgba(0,123,255,0.1))",
+                        "linear-gradient(135deg, rgba(255,254,255,0.01))",
                       filter: "blur(6px)",
                     }}
                   />
 
                   <div
-                    className={`relative flex items-center gap-3 px-5 py-4 rounded-2xl border transition-all duration-300 ${focused ? "border-fourth/40 bg-[#0d1117]" : "border-white/8 bg-white/4"}`}
-                    style={{
-                      background: focused
-                        ? "rgba(13,17,23,0.95)"
-                        : "rgba(255,255,255,0.03)",
-                    }}
+                    className={`relative flex items-center gap-3 px-5 py-4 rounded-2xl border transition-all duration-300 ${focused ? "border-third/10 " : "border-white/8 bg-white/4"}`}
+                   
                   >
                     <Search
                       size={18}
@@ -239,9 +231,9 @@ export default function HelpHero() {
                   {/* Dropdown */}
                   {focused && (
                     <div
-                      className="absolute top-[calc(100%+8px)] left-0 right-0 z-50 rounded-2xl overflow-hidden border border-white/8"
+                      className="absolute top-[calc(100%+8px)] overflow-scroll scrollbar-hide left-0 right-0 z-50 rounded-2xl  border border-white/8"
                       style={{
-                        background: "rgba(10,10,18,0.98)",
+                        background: "#252424",
                         boxShadow:
                           "0 24px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04)",
                       }}
@@ -268,11 +260,8 @@ export default function HelpHero() {
                               </span>
                             </div>
                             <span
-                              className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md font-primary"
-                              style={{
-                                background: "rgba(0,123,255,0.12)",
-                                color: "rgba(0,123,255,0.9)",
-                              }}
+                              className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md font-primary text-primary/80 bg-third/10"
+                            
                             >
                               {item.tag}
                             </span>
@@ -306,7 +295,7 @@ export default function HelpHero() {
               {/* ── RIGHT COLUMN ── */}
               <div className="flex flex-col gap-5">
                 {/* Stats grid */}
-                <div className="grid grid-cols-2 gap-3">
+                {/* <div className="grid grid-cols-2 gap-3">
                   {STATS.map((stat, i) => {
                     const Icon = stat.icon;
                     return (
@@ -337,8 +326,52 @@ export default function HelpHero() {
                       </div>
                     );
                   })}
+                </div> */}
+                <div className="grid grid-cols-2 gap-3">
+                  {STATS.map((stat, i) => {
+                    const Icon = stat.icon;
+                    return (
+                      <div
+                        key={i}
+                        className="relative p-5 rounded-2xl border overflow-hidden"
+                        style={{
+                          background: "rgba(255,255,255,0.03)",
+                          borderColor: "rgba(255,255,255,0.07)",
+                        }}
+                      >
+                        <div
+                          className="absolute top-0 left-0 right-0 h-px"
+                          style={{
+                            background:
+                              "linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent)",
+                          }}
+                        />
+                        <div className="flex items-start gap-3">
+                          <div
+                            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                            style={{ background: "rgba(255,255,255,0.06)" }}
+                          >
+                            <Icon size={15} style={{ color: "rgba(255,255,255,0.5)" }} />
+                          </div>
+                          <div>
+                            <div
+                              className="font-primary font-black text-2xl leading-none"
+                              style={{ color: "#fffef7" }}
+                            >
+                              {stat.value}
+                            </div>
+                            <div
+                              className="text-[10px] font-bold uppercase tracking-[0.25em] mt-1 font-primary"
+                              style={{ color: "rgba(255,254,247,0.28)" }}
+                            >
+                              {stat.label}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-
                 {/* Quick nav card */}
                 <div
                   className="rounded-2xl border border-white/6 overflow-hidden"
@@ -386,10 +419,9 @@ export default function HelpHero() {
                 <div className="flex gap-3">
                   <Link
                     href="/help"
-                    className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-[11px] font-black uppercase tracking-[0.18em] font-primary text-primary transition-all duration-200 hover:-translate-y-0.5"
+                    className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-[11px] font-black uppercase tracking-[0.18em] font-primary text-secondary transition-all duration-200 hover:-translate-y-0.5 bg-primary/90"
                     style={{
-                      background: "#007bff",
-                      boxShadow: "0 8px 28px rgba(0,123,255,0.3)",
+                      // boxShadow: "0 8px 28px rgba(0,123,255,0.3)",
                     }}
                   >
                     Browse All Articles <ArrowUpRight size={12} />
@@ -410,7 +442,7 @@ export default function HelpHero() {
       </section>
 
       {supportOpen && (
-        <SupportFlowModal onClose={() => setSupportOpen(false)} />
+        <SupportFlowModal onClose={() => setSupportOpen(true)} />
       )}
     </>
   );

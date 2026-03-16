@@ -143,7 +143,7 @@ export default function SupportBridge() {
   };
 
   return (
-    <div className="px-4 sm:px-8 lg:px-16">
+    <div className="px-4 sm:px-8 lg:px-0">
       <div className="max-w-7xl mx-auto">
         <SupportRequests
           tickets={tickets}

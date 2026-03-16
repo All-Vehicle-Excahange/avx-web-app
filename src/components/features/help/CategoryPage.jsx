@@ -24,21 +24,15 @@ export default function CategoryPage() {
   );
 
   return (
-    <section className="relative py-16 px-4 sm:px-8 lg:px-16 overflow-hidden">
+    <section className="relative py-16 px-4 sm:px-8 lg:px-0 overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/5 to-transparent" />
 
       <div className="max-w-7xl mx-auto">
         {/* ── HEADER ── */}
         <div className="mb-12">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-[10px] tracking-[0.35em] uppercase font-black mb-5 font-primary">
-            <Link
-              href="/help"
-              className="text-primary/30 hover:text-primary transition-colors"
-            >
-              Help Center
-            </Link>
-            <ChevronRight size={10} className="text-primary/20" />
+          <div className="flex items-center gap-2 text-sm tracking-[0.4em] uppercase text-third font-semibold mb-5">
+
             <span className="text-primary/60">AVX Inspection</span>
           </div>
 
@@ -47,7 +41,7 @@ export default function CategoryPage() {
               <div className="flex items-center gap-3 mb-4">
                 <div
                   className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0"
-                  
+
                 >
                   <Shield size={22} className="text-primary" />
                 </div>
@@ -55,9 +49,20 @@ export default function CategoryPage() {
                   FAQ Category
                 </p>
               </div>
-              <h1 className="font-primary text-[clamp(2.2rem,5vw,4rem)] font-black uppercase leading-none tracking-tight text-primary">
-                AVX <span className="text-fourth">Inspection</span>
-              </h1>
+             
+              <h2
+                className="
+             text-3xl sm:text-4xl lg:text-5xl
+              font-semibold
+              leading-[1.05]
+              text-primary
+              font-[Montserrat]
+            "
+              >
+               AVX
+                <span className="text-fourth/80"> Inspection
+                </span>
+              </h2>
               <p className="mt-3 text-sm leading-relaxed max-w-md text-primary/40 font-secondary">
                 Everything you need to know about our 200-point vehicle
                 inspection — from request to report.
@@ -98,15 +103,11 @@ export default function CategoryPage() {
             placeholder="Search inspection articles…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-11 pr-10 py-3.5 rounded-xl text-sm outline-none transition-all duration-300 font-secondary"
-            style={{
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.07)",
-              color: "rgba(255,255,255,0.8)",
-            }}
+            className="w-full pl-11 pr-10 py-3.5 rounded-xl text-sm outline-none transition-all duration-300 font-secondary text-primary/70 bg-third/5 border border-third/15"
+        
             onFocus={(e) => {
-              e.target.style.borderColor = "rgba(0,123,255,0.4)";
-              e.target.style.background = "rgba(0,123,255,0.04)";
+              e.target.style.borderColor = "rgba(255,254,255,0.1)";
+              e.target.style.background = " rgba(255,254,255,0.07)";
             }}
             onBlur={(e) => {
               e.target.style.borderColor = "rgba(255,255,255,0.07)";
@@ -209,7 +210,7 @@ export default function CategoryPage() {
                 {/* Arrow */}
                 <div
                   className="shrink-0 flex items-center justify-center w-9 h-9 rounded-xl transition-all duration-300 mt-0.5 "
-                  
+
                 >
                   <ArrowUpRight
                     size={18}

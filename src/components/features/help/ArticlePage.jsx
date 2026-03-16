@@ -302,7 +302,7 @@ export default function ArticleDetailPage() {
             />
 
             {/* ── STILL NEED HELP CTA ── */}
-            <div className="relative h-[120px]   overflow-hidden p-6 mb-10  bg-fourth">
+            <div className="relative rounded-2xl  overflow-hidden p-6 mb-10  bg-fourth">
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                   <div>
