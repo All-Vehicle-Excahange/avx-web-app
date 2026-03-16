@@ -65,8 +65,10 @@ export default function VehicleOverview({ vehicle, open, setOpen }) {
         {/* CONTENT */}
         {/* Adjusted outer and inner padding to be smaller on mobile */}
         <div
-            className={`${open ? "block" : "hidden"} mt-3 pb-4 md:pb-6 space-y-4 md:space-y-6 px-4 md:px-6 transition-all duration-500 ease-in-out`}
+            className={`grid transition-all duration-300 ease-in-out ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
         >
+          <div className="overflow-hidden">
+            <div className="mt-3 pb-4 md:pb-6 space-y-4 md:space-y-6 px-4 md:px-6">
           <div className="relative z-10 p-0 sm:p-2 md:p-6 space-y-4 md:space-y-6">
             {/* GRID: Changed to grid-cols-2 for mobile, reduced gaps and text size */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-4 md:gap-x-8 md:gap-y-6 text-xs md:text-sm">
@@ -119,6 +121,8 @@ export default function VehicleOverview({ vehicle, open, setOpen }) {
                   View Full Specification
                 </Button>
               </div>
+            </div>
+          </div>
             </div>
           </div>
         </div>

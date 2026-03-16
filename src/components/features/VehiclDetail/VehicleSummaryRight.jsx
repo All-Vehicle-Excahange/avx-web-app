@@ -203,7 +203,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
           <div className="grid grid-cols-2 gap-3 pt-2">
             <Button
               variant="ghost"
-              size="md"
+              size="sm"
               showIcon={false}
               className="rounded-full"
               onClick={() => {
@@ -218,7 +218,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
               Request Vehicle
             </Button>
 
-            <Button variant="outline" size="md" showIcon={false} onClick={() => setIsDownloadOpen(true)}>
+            <Button variant="outline" size="sm" showIcon={false} onClick={() => setIsDownloadOpen(true)}>
               Chat with Seller
             </Button>
           </div>

@@ -9,10 +9,12 @@ import Inspection from "./Inspection";
 import Wishlist from "./WishList";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 function UserDetails() {
   const params = useParams();
   const router = useRouter();
+  const user = useAuthStore((state) => state.user);
   const activeTab = params?.id || "myvehicle";
 
   return (
@@ -27,7 +29,9 @@ function UserDetails() {
           { id: "inspections", label: "AVX Inspections" },
           { id: "wishlist", label: "My Activity & Preference" },
           { id: "myprofile", label: "My Profile" },
-        ].map((tab) => (
+        ]
+          .filter((tab) => !(tab.id === "inquaries" && user?.userRole === "USER"))
+          .map((tab) => (
           <button
             key={tab.id}
             onClick={() => router.push(`/user/details/${tab.id}`, undefined, { shallow: true })}
