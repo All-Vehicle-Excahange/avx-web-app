@@ -22,8 +22,12 @@ function SimulerVehicle() {
                 console.log(error);
             }
         }
-        fetchVehicles();
-    }, []);
+        
+        if (id) {
+            fetchVehicles();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [id]);
 
     const vehicles = Array.from({length: 8}, (_, i) => ({
         id: i + 1,

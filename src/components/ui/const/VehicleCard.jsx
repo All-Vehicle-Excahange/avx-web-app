@@ -66,7 +66,7 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
         fuel: data.fuelType || data.fuel,
         seats: data.ownership || data.seats,
 
-        rating: data.rating || "-",
+        rating: data.avxInspectionRating || "-",
 
         userName: data.consultantName
             ? data.consultantName

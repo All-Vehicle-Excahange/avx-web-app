@@ -3,62 +3,6 @@ import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
 import { getRecentlySold } from "@/services/user.service";
 
-const smallCars = [
-  {
-    id: "1",
-    title: "Maruti Fronx",
-    subtitle: "35 D6 Powerful lorem isump",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/olx1.png",
-    sponsored: false,
-  },
-  {
-    id: "2",
-    title: "Maruti Fronx",
-    subtitle: "35 D6 Powerful lorem isump",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/olx2.png",
-    sponsored: false,
-  },
-  {
-    id: "3",
-    title: "Maruti Fronx",
-    subtitle: "35 D6 Powerful lorem isump",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/olx3.png",
-    sponsored: false,
-  },
-  {
-    id: "4",
-    title: "Maruti Fronx",
-    subtitle: "35 D6 Powerful lorem isump",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/olx1.png",
-    sponsored: false,
-  },
-];
-
-
 
 const RecentrlySold = () => {
   const [vehicle, setVehicle] = useState([])

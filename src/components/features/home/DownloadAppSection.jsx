@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function DownloadAppSection() {
   return (
-    <div className="w-full md:pt-36 bg-fourth">
+    <div className="hidden md:block w-full md:pt-36 bg-fourth">
       <div className="w-full 3xl:max-w-screen-2xl mx-auto   overflow-visible flex flex-col md:flex-row relative h-[300px]">
         {/* LEFT CONTENT */}
         <div className="flex-1 p-6 md:p-16 flex flex-col justify-center z-10 relative">

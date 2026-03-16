@@ -118,13 +118,14 @@ export default function ConsultantCard(props) {
         <div className="pt-4">
           <p className="text-sm font-semibold text-primary mb-3">Services</p>
 
-          <div ref={containerRef} className="flex gap-2 overflow-hidden">
-            {data?.services?.length > 0 ? (
-              <>
-                {data.services.slice(0, visibleCount).map((service, index) => (
-                  <span
-                    key={index}
-                    className="
+          <div className="flex items-center gap-2 w-full">
+            <div ref={containerRef} className="flex gap-2 overflow-hidden flex-1">
+              {data?.services?.length > 0 ? (
+                <>
+                  {data.services.slice(0, visibleCount).map((service, index) => (
+                    <span
+                      key={index}
+                      className="
               text-xs
               py-1
               rounded-full
@@ -135,30 +136,36 @@ export default function ConsultantCard(props) {
               whitespace-nowrap
               px-3
             "
-                  >
-                    {service
-                      .replaceAll("_", " ")
-                      .toLowerCase()
-                      .replace(/\b\w/g, (c) => c.toUpperCase())}
-                  </span>
-                ))}
+                    >
+                      {service
+                        .replaceAll("_", " ")
+                        .toLowerCase()
+                        .replace(/\b\w/g, (c) => c.toUpperCase())}
+                    </span>
+                  ))}
+                </>
+              ) : (
+                <span className="text-xs text-third">-</span>
+              )}
+            </div>
 
-                {visibleCount < data.services.length && (
-                  <span
-                    className="
+            {data?.services?.length > 0 && visibleCount < data.services.length && (
+              <span
+                className="
               text-xs
               py-1
+              px-2
+              rounded-full
+              border border-third/40
+              bg-primary/5
+              text-third
               font-medium
               whitespace-nowrap
-              px-3
+              shrink-0
             "
-                  >
-                    +{data.services.length - visibleCount} more
-                  </span>
-                )}
-              </>
-            ) : (
-              <span className="text-xs text-third">-</span>
+              >
+                +{data.services.length - visibleCount}
+              </span>
             )}
           </div>
         </div>
