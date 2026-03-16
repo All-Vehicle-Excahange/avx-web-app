@@ -72,12 +72,12 @@ export default function FAQSection() {
                       key={i}
                       className={`
                         rounded-xl
-                        border border-white/10
-                        bg-white/2
+                        border border-primary/10
+                        bg-primary/2
                         transition-all duration-300 ease-in-out
-                        hover:border-white/20 
+                        hover:border-primary/20 
                         
-                        ${isOpen ? "shadow-md bg-white/4" : ""}
+                        ${isOpen ? "shadow-md bg-primary/4" : ""}
                       `}
                     >
                       {/* QUESTION */}
@@ -93,12 +93,12 @@ export default function FAQSection() {
                           className={`
                             flex items-center justify-center
                             w-8 h-8 rounded-full
-                            border border-white/20
+                            border border-primary/20
                             transition-transform duration-300
-                            hover:bg-fourth text-white
+                            hover:bg-fourth text-primary
                             ${
                               isOpen
-                                ? "bg-fourth border-fourth text-white"
+                                ? "bg-fourth border-fourth text-primary"
                                 : "text-third"
                             }
                           `}
