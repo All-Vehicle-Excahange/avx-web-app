@@ -70,7 +70,7 @@ export default function OnboardingProcess() {
 
   return (
     <section className="relative py-24 md:py-28 overflow-hidden">
-      <div className="relative z-10 max-w-6xl mx-auto px-5 md:px-6">
+      <div className="relative z-10 max-w-6xl mx-auto">
         {/* HEADER */}
         <div className="text-center max-w-2xl mx-auto mb-14 md:mb-16">
           <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-4">

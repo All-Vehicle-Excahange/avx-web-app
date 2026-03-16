@@ -1,5 +1,6 @@
 "use client";
 
+import Button from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { FiCheck } from "react-icons/fi";
 
@@ -44,9 +45,9 @@ const tiers = [
 
 export default function TierStructure() {
   return (
-    <section className="py-28 relative overflow-hidden">
+    <section className="py-20 relative overflow-hidden max-w-6xl">
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
+      <div className="relative z-10  mx-auto text-center">
 
         {/* HEADER */}
         <motion.div
@@ -62,9 +63,7 @@ export default function TierStructure() {
 
           <h2 className="text-[34px] sm:text-[42px] md:text-[48px] font-semibold leading-tight text-primary">
             Choose a Tier That Matches{" "}
-            <span className="bg-linear-to-r from-fourth via-[#60a5fa] to-fourth bg-clip-text text-transparent font-bold">
-              Your Scale
-            </span>
+            <span className="text-fourth font-bold">Your Scale</span>
           </h2>
 
           <p className="mt-6 text-third text-[15px] leading-relaxed">
@@ -74,8 +73,7 @@ export default function TierStructure() {
         </motion.div>
 
         {/* CARDS */}
-        <div className="mt-20 grid md:grid-cols-3 gap-8">
-
+        <div className="mt-20 grid md:grid-cols-3 gap-6">
           {tiers.map((tier, i) => (
             <motion.div
               key={i}
@@ -83,66 +81,74 @@ export default function TierStructure() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, delay: i * 0.08 }}
               viewport={{ once: true }}
-              className={`relative rounded-2xl p-8 text-left transition-all duration-300 backdrop-blur-xl ${
+              className={`relative rounded-2xl p-8 text-left transition-all duration-300 ${
                 tier.highlight
-                  ? "bg-linear-to-b from-[#0b2a4a]/70 via-[#0d1b2e]/60 to-transparent border border-fourth/40 shadow-[0_40px_100px_rgba(0,0,0,0.9)] scale-[1.09]"
-                  : "bg-white/4 border border-white/10"
+                  ? "border border-primary/20 bg-primary/[0.04] scale-[1.04] shadow-[0_32px_80px_rgba(0,0,0,0.6)]"
+                  : "border border-white/[0.06] bg-transparent"
               }`}
             >
-
-              {/* glow halo for highlight */}
+              {/* top edge line for highlight */}
               {tier.highlight && (
-                <div className="absolute -inset-0.5 rounded-2xl bg-fourth/10 blur-2xl opacity-40 pointer-events-none" />
+                <div className="absolute top-0 left-8 right-8 h-px bg-linear-to-r from-transparent via-primary/40 to-transparent" />
               )}
 
-              {/* glass inner gradient */}
-              <div className="absolute inset-0 rounded-2xl bg-linear-to-b from-white/6 to-transparent pointer-events-none" />
-
-              {/* highlight badge */}
+              {/* Most Popular badge */}
               {tier.highlight && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-fourth text-[10px] font-semibold px-3 py-1 rounded-full text-white shadow">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary/40 border border-primary/20 text-[10px] font-semibold px-3 py-1 rounded-full text-primary/80 tracking-widest uppercase">
                   Most Popular
                 </div>
               )}
 
               <div className="relative">
 
+                {/* tier index */}
+                <p className="text-[10px] tracking-[0.3em] uppercase text-third mb-4 font-medium">
+                  0{i + 1}
+                </p>
+
                 {/* NAME */}
-                <h3 className="text-xl font-semibold text-primary">
+                <h3 className="text-[22px] font-bold text-primary leading-none mb-1">
                   {tier.name}
                 </h3>
 
-                <p className="text-fourth text-sm mt-1 font-medium">
+                <p className={`text-sm mt-1 font-medium ${tier.highlight ? "text-fourth" : "text-third"}`}>
                   {tier.subtitle}
                 </p>
 
-                <p className="mt-4 text-third text-[14px] leading-relaxed">
+                <p className="mt-4 text-third text-[13px] leading-relaxed">
                   {tier.desc}
                 </p>
 
                 {/* divider */}
-                <div className="my-7 h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />
+                <div className="my-7 h-px bg-white/[0.06]" />
 
                 {/* FEATURES */}
-                <div className="space-y-3">
+                <div className="space-y-3.5">
                   {tier.features.map((f, idx) => (
                     <div key={idx} className="flex items-center gap-3">
-                      <div className="w-5 h-5 rounded-full bg-fourth/10 border border-fourth/20 flex items-center justify-center">
-                        <FiCheck className="text-fourth text-xs" />
+                      <div
+                        className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${
+                          tier.highlight
+                            ? "bg-primary/15 border border-primary/25"
+                            : "bg-white/5 border border-white/10"
+                        }`}
+                      >
+                        <FiCheck
+                          className={`text-[9px] ${tier.highlight ? "text-primary/80" : "text-third"}`}
+                        />
                       </div>
-                      <span className="text-[14px] text-primary/90">
-                        {f}
-                      </span>
+                      <span className="text-[13px] text-primary/80">{f}</span>
                     </div>
                   ))}
                 </div>
 
               </div>
-
             </motion.div>
           ))}
-
         </div>
+
+
+
 
         {/* CTA */}
         <motion.div
@@ -152,12 +158,9 @@ export default function TierStructure() {
           viewport={{ once: true }}
           className="mt-16"
         >
-          <a
-            href="/pricing"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl text-sm font-semibold text-primary bg-linear-to-r from-[#044596] to-fourth shadow-lg shadow-blue-900/40 transition duration-300 hover:shadow-blue-600/40 hover:-translate-y-px"
-          >
-            View Full Pricing →
-          </a>
+        <Button variant="ghost" className="bg-primary/95 text-secondary" >
+           View Full Pricing
+        </Button>
         </motion.div>
 
       </div>
