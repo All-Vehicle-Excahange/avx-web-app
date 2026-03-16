@@ -18,6 +18,7 @@ import { useParams } from "next/navigation";
 import { followConsultant, getStoreFrontByUsername, unFollowConsultant } from "@/services/user.service";
 import LoginPopup from "@/components/auth/LoginPopup";
 import { useAuthStore } from "@/stores/useAuthStore";
+import SignupPopup from "@/components/auth/SignupPopup";
 
 
 export default function StoreFrontHeroSection() {
@@ -27,6 +28,7 @@ export default function StoreFrontHeroSection() {
     const [comsultDetails, setComsultDetails] = useState(null);
     const [isFollower, setIsFollower] = useState(false);
     const [isLoginOpen, setIsLoginOpen] = useState(false);
+    const [isSignupOpen, setIsSignupOpen] = useState(false);
 
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
@@ -276,7 +278,18 @@ export default function StoreFrontHeroSection() {
             <LoginPopup
                 isOpen={isLoginOpen}
                 onClose={() => setIsLoginOpen(false)}
-                onSignup={() => setIsLoginOpen(false)}
+                onSignup={() => {
+                    setIsLoginOpen(false);
+                    setIsSignupOpen(true);
+                }}
+            />
+            <SignupPopup
+                isOpen={isSignupOpen}
+                onClose={() => setIsSignupOpen(false)}
+                onLogin={() => {
+                    setIsSignupOpen(false);
+                    setIsLoginOpen(true);
+                }}
             />
         </>
     );

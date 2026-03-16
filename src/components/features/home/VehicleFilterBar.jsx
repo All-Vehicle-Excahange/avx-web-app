@@ -287,6 +287,15 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   }, [activeTab]);
 
   const handleSearch = () => {
+
+    const isConsult = internalActiveType === "consult";
+    const hasSelection = isConsult
+      ? (location || cityId || stateId || vehicleType || priceRange || service || availability)
+      : (location || cityId || stateId || vehicleType || bodyType || fuelType || brand || makerId || budget);
+
+    if (!hasSelection) return;
+
+
     // Save/overwrite selected location to localStorage
     if (stateId && cityId && location) {
       const [cityName, stateName] = location.split(", ").map((str) => str.trim());
@@ -545,7 +554,13 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   {/* BODY TYPE */}
                   <div
                     className={`flex-1 relative px-6 py-3 rounded-full transition-colors cursor-pointer ${activeTab === "bodyType" ? "bg-white/20" : "hover:bg-white/10"}`}
-                    onClick={() => handleActiveTabChange("bodyType")}
+                    onClick={() => {
+                      if (!vehicleType) {
+                        handleActiveTabChange("vehicle");
+                        return;
+                      }
+                      handleActiveTabChange("bodyType");
+                    }}
                   >
                     <div className="text-md font-semibold text-primary tracking-wide">
                       Body Type

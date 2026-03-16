@@ -12,7 +12,6 @@ function BecameBanner() {
           flex flex-col md:flex-row
           rounded-3xl
           overflow-hidden
-          border border-white/10
         "
                 >
                     <Link

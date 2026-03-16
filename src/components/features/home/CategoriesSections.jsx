@@ -58,6 +58,7 @@ const CategoriesSections = () => {
   const [activeType, setActiveType] = useState("4-Wheeler");
   const [active, setActive] = useState("urban-rides");
   const [vehicles, setVehicles] = useState([]);
+  const checkedCategories = React.useRef(new Set());
   const fetchVehicles = async () => {
     try {
       const selectedTag = vehicleTagMap[activeType]?.[active];
@@ -77,8 +78,26 @@ const CategoriesSections = () => {
         res = await getTwoWheelWithTag(data);
       }
 
-      setVehicles(res.data);
-      console.log(res.data);
+      const fetchedVehicles = res?.data || [];
+      checkedCategories.current.add(selectedTag);
+
+      if (fetchedVehicles.length === 0) {
+        // Find next category
+        const categories = categoriesByType[activeType];
+        const currentIndex = categories.findIndex((c) => c.id === active);
+        const nextCategoryIndex = (currentIndex + 1) % categories.length;
+        const nextCategory = categories[nextCategoryIndex];
+
+        const nextTag = vehicleTagMap[activeType]?.[nextCategory.id];
+
+        // If we haven't checked the next tag yet, switch to it
+        if (!checkedCategories.current.has(nextTag)) {
+          setActive(nextCategory.id);
+          return; // The useEffect will re-trigger fetchVehicles
+        }
+      }
+
+      setVehicles(fetchedVehicles);
     } catch (error) {
       console.error("Error fetching vehicles:", error);
     }
@@ -111,9 +130,11 @@ const CategoriesSections = () => {
             <button
               type="button"
               onClick={() => {
-                setActiveType("4-Wheeler");
-                setActive("urban-rides");
-                fetchVehicles();
+                if (activeType !== "4-Wheeler") {
+                  checkedCategories.current.clear();
+                  setActiveType("4-Wheeler");
+                  setActive("urban-rides");
+                }
               }}
               className={cn(
                 "px-3 py-1 text-xs sm:text-sm font-medium rounded-full border cursor-pointer flex items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0",
@@ -128,9 +149,11 @@ const CategoriesSections = () => {
             <button
               type="button"
               onClick={() => {
-                setActiveType("2-Wheeler");
-                setActive("scooters");
-                fetchVehicles();
+                if (activeType !== "2-Wheeler") {
+                  checkedCategories.current.clear();
+                  setActiveType("2-Wheeler");
+                  setActive("scooters");
+                }
               }}
               className={cn(
                 "px-3 py-1 text-xs sm:text-sm font-medium rounded-full border cursor-pointer flex items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0",

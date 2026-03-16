@@ -8,6 +8,9 @@ import { addWishList, removeWishList } from "@/services/user.service";
 import { useAuthStore } from "@/stores/useAuthStore";
 import LoginPopup from "@/components/auth/LoginPopup";
 import SendInquaryPopup from "./SendInquaryPopup";
+import { checkIsUserEligbleToSendInquary } from "@/services/vehicle.service";
+import SignupPopup from "@/components/auth/SignupPopup";
+import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 
 export default function VehicleSummaryRight({ vehicle, summary }) {
   const vehicleId = vehicle?.id;
@@ -15,6 +18,8 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
   const [isFavorite, setIsFavorite] = useState(vehicle?.isWishlisted || false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const pendingAction = useRef(null);
@@ -198,7 +203,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
           <div className="grid grid-cols-2 gap-3 pt-2">
             <Button
               variant="ghost"
-              size="md"
+              size="sm"
               showIcon={false}
               className="rounded-full"
               onClick={() => {
@@ -213,7 +218,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
               Request Vehicle
             </Button>
 
-            <Button variant="outline" size="md" showIcon={false}>
+            <Button variant="outline" size="sm" showIcon={false} onClick={() => setIsDownloadOpen(true)}>
               Chat with Seller
             </Button>
           </div>
@@ -222,12 +227,23 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
       <LoginPopup
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
-        onSignup={() => setIsLoginOpen(false)}
+        onSignup={() => {
+          setIsLoginOpen(false);
+          setIsSignupOpen(true);
+        }}
         onSuccess={() => {
           if (pendingAction.current === 'request') {
             pendingAction.current = null;
             setTimeout(() => setIsPopupOpen(true), 300);
           }
+        }}
+      />
+      <SignupPopup
+        isOpen={isSignupOpen}
+        onClose={() => setIsSignupOpen(false)}
+        onLogin={() => {
+          setIsSignupOpen(false);
+          setIsLoginOpen(true);
         }}
       />
       {isPopupOpen && (
@@ -237,6 +253,10 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
           vehicleId={vehicleId}
         />
       )}
+      <DownloadAppPopup 
+        isOpen={isDownloadOpen} 
+        onClose={() => setIsDownloadOpen(false)} 
+      />
     </>
   );
 }

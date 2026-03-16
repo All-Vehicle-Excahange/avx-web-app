@@ -48,8 +48,10 @@ export default function VehicleSpec({ open, setOpen }) {
           </div>
         </div>
         <div
-          className={`${open ? "block" : "hidden"} mt-3 space-y-8 transition-all duration-500 ease-in-out`}
+          className={`grid transition-all duration-300 ease-in-out ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
         >
+          <div className="overflow-hidden">
+            <div className="mt-3 space-y-8">
           {/* ================= AVX INSPECTION REPORT ================= */}
           <div className="space-y-6 px-6 pb-6">
             {inspectionAvailable ? (
@@ -243,6 +245,8 @@ export default function VehicleSpec({ open, setOpen }) {
                 </div>
               </div>
             )}
+          </div>
+            </div>
           </div>
         </div>
       </div>

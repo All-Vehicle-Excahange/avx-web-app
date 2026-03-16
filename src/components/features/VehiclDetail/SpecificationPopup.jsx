@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { X, Check } from "lucide-react";
 
 const DATA = {
@@ -23,6 +24,15 @@ const DATA = {
 
 export default function SpecificationPopup({ open, onClose }) {
   const [activeTab, setActiveTab] = useState("Safety");
+  const [isClosing, setIsClosing] = useState(false);
+
+  const handleClose = useCallback(() => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 250);
+  }, [onClose]);
 
   useEffect(() => {
     if (open) {
@@ -40,7 +50,7 @@ export default function SpecificationPopup({ open, onClose }) {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
-        onClose();
+        handleClose();
       }
     };
 
@@ -51,25 +61,32 @@ export default function SpecificationPopup({ open, onClose }) {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [open, onClose]);
+  }, [open, handleClose]);
 
-  if (!open) return null;
+  if (!open && !isClosing) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-secondary/40 backdrop-blur-md">
+  const modalContent = (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-secondary/40 backdrop-blur-md"
+      onClick={handleClose}
+      style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}
+    >
       {/* MODAL */}
-      <div className="w-4xl max-w-4xl h-[65vh] bg-secondary rounded-2xl shadow-2xl overflow-hidden flex border-2 border-primary/40">
+      <div
+        className="w-4xl max-w-4xl h-[65vh] bg-secondary rounded-2xl shadow-2xl overflow-hidden flex border-2 border-primary/40"
+        onClick={(e) => e.stopPropagation()}
+        style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}
+      >
         {/* LEFT TABS */}
         <div className="w-52 border-r border-primary/20 p-4 space-y-1">
           {Object.keys(DATA).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`w-full text-left px-3 py-2 rounded-md text-sm transition ${
-                activeTab === tab
-                  ? "bg-primary/10 text-primary border-l-4 border-primary"
-                  : "text-primary/70 hover:bg-primary/5"
-              }`}
+              className={`w-full text-left cursor-pointer px-3 py-2 rounded-md text-sm transition ${activeTab === tab
+                ? "bg-primary/10 text-primary border-l-4 border-primary"
+                : "text-primary/70 hover:bg-primary/5"
+                }`}
             >
               {tab}
             </button>
@@ -86,9 +103,9 @@ export default function SpecificationPopup({ open, onClose }) {
 
             <button
               onClick={onClose}
-              className="rounded-md p-2 hover:bg-primary/10"
+              className="rounded-full p-2 hover:bg-primary/10 hover:text-primary cursor-pointer bg-primary transition-all duration-300 ease-in-out  text-secondary"
             >
-              <X size={18} className="text-primary" />
+              <X size={18} className=" cursor-pointer" />
             </button>
           </div>
 
@@ -110,4 +127,8 @@ export default function SpecificationPopup({ open, onClose }) {
       </div>
     </div>
   );
+
+  return typeof document !== "undefined"
+    ? createPortal(modalContent, document.body)
+    : null;
 }

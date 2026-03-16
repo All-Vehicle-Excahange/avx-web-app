@@ -67,7 +67,17 @@ function Inquiries() {
             />
           ))
         ) : (
-          <p className="text-third text-sm">No inquiries found.</p>
+          <div className="flex flex-col items-center justify-center py-16 text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5">
+            <h3 className="text-xl font-bold mb-2">No inquiries yet.</h3>
+            <p className="text-third mb-6 max-w-sm">
+              Once buyers show interest in your vehicle,<br />
+              their requests will appear here.
+            </p>
+            <p className="text-sm text-third/70 max-w-sm font-medium">
+              Tip:<br />
+              Listings with more photos receive 3x more inquiries.
+            </p>
+          </div>
         )}
       </div>
     </section>
