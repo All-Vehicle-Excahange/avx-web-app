@@ -39,7 +39,7 @@ export default function AccountabilityTrust() {
   return (
     <section className="relative py-10 md:py-10 overflow-hidden ">
 
-      <div className="relative max-w-7xl mx-auto px-5 md:px-6">
+      <div className="relative max-w-7xl mx-auto">
 
         {/* HEADER */}
         <div className="max-w-xl mb-10">
@@ -67,24 +67,13 @@ export default function AccountabilityTrust() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, delay: i * 0.08 }}
               viewport={{ once: true }}
-              className="group relative rounded-2xl border border-[#1a1f2b] bg-[#0b0e13] p-7 md:p-8 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] hover:-translate-y-1 transition-all duration-300"
+              className="group relative rounded-2xl border border-primary/20 p-7 md:p-8 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] hover:-translate-y-1 transition-all duration-300"
             >
-
-              {/* subtle hover glow */}
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 rounded-2xl"
-                style={{
-                  background: `radial-gradient(circle at top left, ${p.color}15, transparent 60%)`,
-                }}
-              />
-
               <div className="relative">
-
                 {/* ICON */}
                 <div
                   className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 text-lg"
                   style={{
-                    background: `${p.color}18`,
                     color: p.color,
                   }}
                 >

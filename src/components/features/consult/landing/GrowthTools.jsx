@@ -46,13 +46,13 @@ export default function GrowthTools() {
             viewport={{ once: true }}
             className="max-w-xl lg:sticky lg:top-28"
           >
-            <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-4">
+            <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Growth Tools
             </span>
 
-            <h2 className="text-[34px] sm:text-[42px] md:text-[50px] font-bold leading-[1.08] text-primary">
+            <h2 className="text-[34px] sm:text-[42px] md:text-[50px] font-bold leading-[1.08] text-primary mt-5">
               Boost Your{" "}
-              <span className="bg-linear-to-r from-fourth via-[#60a5fa] to-fourth bg-clip-text text-transparent">
+              <span className="text-fourth">
                 Visibility
               </span>
             </h2>
@@ -82,9 +82,9 @@ export default function GrowthTools() {
               ].map(({ val, label }) => (
                 <div
                   key={label}
-                  className="bg-[#0f1117]/80 border border-[#1f2937] rounded-xl p-4"
+                  className=" border border-primary/30 rounded-xl p-4"
                 >
-                  <p className="text-[28px] font-black text-fourth leading-none mb-1">
+                  <p className="text-[28px] font-black text-primary leading-none mb-1">
                     {val}
                   </p>
                   <p className="text-[10px] text-third uppercase tracking-wide">
@@ -104,7 +104,7 @@ export default function GrowthTools() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: i * 0.09 }}
                 viewport={{ once: true }}
-                className="group relative flex items-start gap-4 p-5 rounded-2xl border border-[#1f2937] bg-[#0f1117]/80 backdrop-blur hover:border-[#1e3a5f] hover:bg-[#0d1b2e] transition-all duration-200 overflow-hidden cursor-default"
+                className="group relative flex items-start gap-4 p-5 rounded-2xl border border-primary/20 backdrop-blur  transition-all duration-200 overflow-hidden cursor-default"
               >
                 {/* left color accent */}
                 <div

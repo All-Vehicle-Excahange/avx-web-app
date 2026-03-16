@@ -28,11 +28,11 @@ export default function InspectionFlow() {
       <div className="max-w-[1480px] mx-auto w-full text-center">
 
         {/* HEADER */}
-        <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-4">
+        <p className="text-sm tracking-[0.4em] py-3 uppercase text-third font-semibold">
           Inspection Advantage
         </p>
 
-        <h2 className="mt-4 text-[34px] sm:text-[42px] md:text-[48px] font-semibold leading-tight text-primary">
+        <h2 className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl text-primary font-semibold leading-[1.05]">
           Build Trust with{" "}
           <span className="text-fourth font-bold">
             Inspection Visibility

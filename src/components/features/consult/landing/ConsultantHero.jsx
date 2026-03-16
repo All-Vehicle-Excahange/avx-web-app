@@ -1,5 +1,6 @@
 "use client";
 
+import Button from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
@@ -119,7 +120,7 @@ export default function ConsultantHeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-5">
       <div className="absolute inset-0 bg-linear-to-b from-secondary via-[#0b0e13] to-secondary" />
       <motion.div
         animate={{ y: [0, -25, 0] }}
@@ -132,18 +133,18 @@ export default function ConsultantHeroSection() {
         className="absolute -bottom-40 -right-40 w-150 h-150 bg-fourth/10 blur-[160px] rounded-full"
       />
 
-      <div className="relative z-10 mx-auto   py-20 w-full max-w-[1400px]">
+      <div className="relative z-10 mx-auto py-15 w-full max-w-7xl">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* ── LEFT ── */}
-          <div className="max-w-xl space-y-8">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#60a5fa]/30 text-sm tracking-[0.35em] uppercase text-third font-semibold bg-[#044596]/10 backdrop-blur-md">
+          <div className="max-w-6xl space-y-8 justify-evenly">
+            <span className="text-sm tracking-[0.4em] py-3 uppercase text-third font-semibold">
               Consultant Program
             </span>
             <div className="space-y-3">
-              <h1 className="text-4xl sm:text-5xl lg:text-[58px] font-bold leading-[1.05] text-primary tracking-tight">
+              <h1 className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl text-primary font-semibold leading-[1.05] mt-5">
                 Grow Your Automotive
               </h1>
-              <h1 className="text-4xl sm:text-5xl lg:text-[58px] font-bold leading-[1.05] tracking-tight text-fourth">
+              <h1 className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl text-fourth/80 font-semibold leading-[1.05]">
                 Business on AVX
               </h1>
             </div>
@@ -154,24 +155,18 @@ export default function ConsultantHeroSection() {
             </p>
             <div className="w-24 h-0.5 bg-fourth rounded-full" />
             <div className="flex flex-col sm:flex-row gap-4 pt-3">
-              <a
-                href="/consultant/register"
-                className="relative group inline-flex items-center justify-center px-7 py-3.5 rounded-xl text-sm font-semibold text-primary bg-linear-to-r from-[#044596] to-fourth shadow-lg shadow-blue-900/40 transition duration-300 hover:shadow-blue-600/40 hover:-translate-y-px"
-              >
+              <Button variant="ghost" className="bg-primary/95 text-secondary">
                 Become a Consultant
-              </a>
-              <a
-                href="/pricing"
-                className="px-7 py-3.5 rounded-xl text-center text-sm font-semibold border-[#374151] border-2 text-primary bg-[#111318] transition duration-300 hover:border-fourth hover:text-fourth hover:bg-[#151922] hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]"
-              >
+              </Button>
+              <Button variant="default" className=" border border-primary/80">
                 View Pricing
-              </a>
+              </Button>
             </div>
           </div>
 
           {/* ── RIGHT – interactive panel ── */}
           <div className="relative h-117.5 select-none">
-            <div className="absolute inset-0 bg-linear-to-r from-fourth/10 to-transparent blur-3xl rounded-3xl" />
+            <div className="absolute inset-0 bg-linear-to-r from-primary/5 to-transparent blur-3xl rounded-3xl" />
 
             <motion.div
               initial={{ opacity: 0, y: 28 }}
@@ -224,7 +219,7 @@ export default function ConsultantHeroSection() {
                     {activeTab === i && (
                       <motion.div
                         layoutId="tabBg"
-                        className="absolute inset-0 bg-[#1a2535] border border-fourth/30 rounded-lg"
+                        className="absolute inset-0 bg-[#1a2535] border border-primary/20 rounded-lg"
                         transition={{
                           type: "spring",
                           stiffness: 380,
@@ -257,36 +252,33 @@ export default function ConsultantHeroSection() {
                             suffix: "",
                             l: "Vehicle Views",
                             delta: "+12%",
-                            color: "#3b82f6",
+                            color: "rgba(var(--color-primary), 0.8)",
                           },
                           {
                             v: liveCount,
                             suffix: "",
                             l: "Inquiries",
                             delta: `+${liveCount - 33}`,
-                            color: "#10b981",
+                            color: "rgba(var(--color-primary), 0.8)",
                           },
                           {
                             v: rate,
                             suffix: "%",
                             l: "Response Rate",
                             delta: "↑3pt",
-                            color: "#a78bfa",
+                            color: "rgba(var(--color-primary), 0.8)",
                           },
                         ].map((item, i) => (
                           <motion.div
                             key={i}
                             whileHover={{
                               scale: 1.03,
-                              borderColor: "rgba(59,130,246,0.4)",
+                              borderColor: "rgba(255,255,255,0.2)",
                             }}
                             transition={{ duration: 0.15 }}
                             className="bg-[#0b0e13] border border-[#1f2937] rounded-xl p-3 cursor-default"
                           >
-                            <p
-                              className="text-[22px] font-bold leading-none mb-0.5"
-                              style={{ color: item.color }}
-                            >
+                            <p className="text-[22px] font-bold leading-none mb-0.5 text-primary/80">
                               {item.v}
                               {item.suffix}
                             </p>
@@ -303,7 +295,7 @@ export default function ConsultantHeroSection() {
                       {/* interactive bar chart */}
                       <div className="flex-1 bg-[#0b0e13] border border-[#1f2937] rounded-xl p-3 flex flex-col ">
                         <div className="flex items-center justify-between mb-2 h-5">
-                          <span className="text-[10px] text-third uppercase tracking-wide">
+                          <span className="text-[10px] text-primary uppercase tracking-wide">
                             Monthly Inquiries
                           </span>
                           <AnimatePresence mode="wait">
@@ -313,7 +305,7 @@ export default function ConsultantHeroSection() {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                className="text-[10px] text-fourth font-bold"
+                                className="text-[10px] text-primary/80 font-bold"
                               >
                                 {BARS[hoveredBar].m}: {BARS[hoveredBar].v}{" "}
                                 inquiries
@@ -324,7 +316,7 @@ export default function ConsultantHeroSection() {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                className="text-[10px] text-fourth font-semibold"
+                                className="text-[10px] text-primary/80 font-semibold"
                               >
                                 ↑ 34% vs last month
                               </motion.span>
@@ -345,13 +337,13 @@ export default function ConsultantHeroSection() {
                                   scaleY: 1,
                                   background:
                                     hoveredBar === i
-                                      ? "#3b82f6"
+                                      ? "rgba(255,255,255,0.8)"
                                       : hoveredBar !== null
-                                        ? "#0d1f33"
-                                        : "#1e3a5f",
+                                        ? "rgba(255,255,255,0.08)"
+                                        : "rgba(255,255,255,0.2)",
                                   boxShadow:
                                     hoveredBar === i
-                                      ? "0 0 14px #3b82f680"
+                                      ? "0 0 14px rgba(255,255,255,0.25)"
                                       : "none",
                                 }}
                                 transition={{
@@ -365,9 +357,7 @@ export default function ConsultantHeroSection() {
                                 }}
                                 className="w-full rounded-sm"
                               />
-                              <span
-                                className={`text-[8px] transition-colors duration-100 ${hoveredBar === i ? "text-fourth" : "text-[#374151]"}`}
-                              >
+                              <span className="text-[8px] transition-colors duration-100 text-primary">
                                 {bar.m}
                               </span>
                             </div>
@@ -414,7 +404,7 @@ export default function ConsultantHeroSection() {
                               transition={{ duration: 0.35 }}
                               whileHover={{
                                 x: 3,
-                                borderColor: "rgba(59,130,246,0.4)",
+                                borderColor: "rgba(255,255,255,0.15)",
                               }}
                               className="flex items-center gap-3 bg-[#0b0e13] border border-[#1f2937] rounded-xl p-3 cursor-default group"
                             >
@@ -431,7 +421,7 @@ export default function ConsultantHeroSection() {
                                 <span className="text-[9px] text-[#4b5563]">
                                   {inq.time}
                                 </span>
-                                <span className="text-[9px] bg-fourth/10 text-fourth border border-fourth/20 px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                <span className="text-[9px] bg-primary/10 text-primary/80 border border-primary/20 px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                   Reply →
                                 </span>
                               </div>
@@ -451,7 +441,7 @@ export default function ConsultantHeroSection() {
                             transition={{ duration: 0.15 }}
                             className="bg-[#0b0e13] border border-[#1f2937] rounded-lg p-2.5 text-center cursor-default"
                           >
-                            <p className="text-sm font-bold text-fourth">
+                            <p className="text-sm font-bold text-primary/80">
                               {value}
                             </p>
                             <p className="text-[9px] text-third uppercase">
@@ -492,7 +482,7 @@ export default function ConsultantHeroSection() {
                               cy="40"
                               r="32"
                               fill="none"
-                              stroke="#3b82f6"
+                              stroke="rgba(255,255,255,0.8)"
                               strokeWidth="6"
                               strokeLinecap="round"
                               strokeDasharray={`${2 * Math.PI * 32}`}
@@ -508,7 +498,7 @@ export default function ConsultantHeroSection() {
                             />
                           </svg>
                           <div className="absolute inset-0 flex flex-col items-center justify-center">
-                            <span className="text-xl font-bold text-fourth leading-none">
+                            <span className="text-xl font-bold text-primary/80 leading-none">
                               87
                             </span>
                             <span className="text-[8px] text-third">/100</span>
@@ -521,7 +511,7 @@ export default function ConsultantHeroSection() {
                           <p className="text-[10px] text-third mb-2">
                             Top 8% of consultants on AVX
                           </p>
-                          <span className="text-[9px] bg-fourth/10 text-fourth border border-fourth/20 px-2 py-1 rounded-full">
+                          <span className="text-[9px] bg-primary/10 text-primary/80 border border-primary/20 px-2 py-1 rounded-full">
                             +4 pts this month
                           </span>
                         </div>
@@ -539,10 +529,10 @@ export default function ConsultantHeroSection() {
                             className="group/score cursor-default"
                           >
                             <div className="flex justify-between mb-1">
-                              <span className="text-[11px] text-primary group-hover/score:text-fourth transition-colors duration-150">
+                              <span className="text-[11px] text-primary group-hover/score:text-primary/80 transition-colors duration-150">
                                 {label}
                               </span>
-                              <span className="text-[11px] font-bold text-fourth">
+                              <span className="text-[11px] font-bold text-primary/80">
                                 {pct}%
                               </span>
                             </div>
@@ -555,7 +545,7 @@ export default function ConsultantHeroSection() {
                                   delay: 0.1 + i * 0.12,
                                   ease: "easeOut",
                                 }}
-                                className="h-full rounded-full bg-fourth group-hover/score:brightness-125 transition-all duration-150"
+                                className="h-full rounded-full bg-primary/80 group-hover/score:brightness-125 transition-all duration-150"
                               />
                             </div>
                           </motion.div>

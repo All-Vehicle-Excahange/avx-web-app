@@ -39,7 +39,7 @@ export default function WhoItsFor() {
 
         {/* HEADER */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-[28px] sm:text-[34px] md:text-[40px] lg:text-[44px] font-semibold leading-tight tracking-tight text-primary">
+          <h2 className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl text-primary font-semibold leading-[1.05]">
             Built for{" "}
             <span className="text-fourth font-bold">
               Professional Automotive Consultants
@@ -81,21 +81,21 @@ export default function WhoItsFor() {
                   ${isActive ? "translate-y-0" : "translate-y-full"}
                   lg:group-hover:translate-y-0`}
                 >
-                  <h3 className="text-lg font-semibold text-fourth mb-2">
+                  <h3 className="text-2xl font-semibold text-primary mb-2">
                     {item.title}
                   </h3>
 
-                  <p className="text-[13px] text-third leading-relaxed mb-4">
+                  <p className="text-[15px] text-third leading-relaxed mb-4">
                     {item.desc}
                   </p>
 
-                  <div className="w-12 h-[2] bg-fourth opacity-80" />
+                  <div className="w-12 h-[2] bg-primary opacity-80" />
                 </div>
 
                 {/* DEFAULT TITLE */}
                 <div className="relative h-full p-6 flex flex-col justify-end pointer-events-none">
                   <h3
-                    className={`text-lg font-semibold text-primary transition duration-300
+                    className={`text-2xl font-semibold text-primary transition duration-300
                     ${isActive ? "opacity-0" : "opacity-100"}
                     lg:group-hover:opacity-0`}
                   >
@@ -103,7 +103,7 @@ export default function WhoItsFor() {
                   </h3>
 
                   <div
-                    className={`w-10 h-[2] bg-fourth mt-3 opacity-70 transition duration-300
+                    className={`w-10 h-[2] bg-primary mt-3 opacity-70 transition duration-300
                     ${isActive ? "opacity-0" : "opacity-70"}
                     lg:group-hover:opacity-0`}
                   />

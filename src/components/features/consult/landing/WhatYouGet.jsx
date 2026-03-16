@@ -69,19 +69,15 @@ export default function WhatYouGetSpotlight() {
             What You Get
           </span>
 
-          <h2 className="text-[32px] sm:text-[40px] md:text-[48px] lg:text-[52px] font-semibold leading-[1.08] tracking-tight text-primary max-w-xl mt-5">
+          <h2 className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl text-primary font-semibold leading-[1.05] mt-5">
             Everything you need to{" "}
-            <span className="bg-linear-to-r from-fourth via-[#60a5fa] to-fourth bg-clip-text text-transparent font-bold">
-              dominate
-            </span>{" "}
-            your market.
+            <span className="text-fourth font-bold">dominate</span> your market.
           </h2>
         </motion.div>
 
         {/* MAIN */}
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
           {/* LEFT */}
-          {/* LEFT — Improved Feature Nav */}
           <div className="lg:w-[360] shrink-0">
             <div className="flex flex-col gap-2.5">
               {features.map((f, i) => {
@@ -92,15 +88,15 @@ export default function WhatYouGetSpotlight() {
                     key={i}
                     onClick={() => setActiveFeature(i)}
                     className={`relative group text-left rounded-xl px-5 py-4 transition-all duration-300 border overflow-hidden hover:cursor-pointer
-            ${
-              isActive
-                ? "border-fourth/40 bg-linear-to-r from-[#0d1b2e] to-[#0b1320] shadow-[0_0_0_1px_rgba(59,130,246,0.15),0_10px_30px_rgba(0,0,0,0.4)]"
-                : "border-[#1f2937] bg-[#0f1117]/60 hover:border-[#2d3748] hover:bg-[#0f1117]"
-            }`}
+              ${
+                isActive
+                  ? "border-primary/20 bg-primary/5 shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_10px_30px_rgba(0,0,0,0.4)]"
+                  : "border-transparent bg-transparent hover:border-primary/10 hover:bg-primary/[0.03]"
+              }`}
                   >
                     {/* Active glow accent */}
                     {isActive && (
-                      <div className="absolute left-0 top-0 bottom-0 w-[3] bg-fourth rounded-r-full" />
+                      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-primary/60 rounded-r-full" />
                     )}
 
                     <div className="flex items-center gap-4">
@@ -108,7 +104,7 @@ export default function WhatYouGetSpotlight() {
                       <div className="flex-1">
                         <p
                           className={`text-[14px] font-semibold leading-snug transition-colors
-                ${isActive ? "text-primary" : "text-third group-hover:text-primary/80"}`}
+                    ${isActive ? "text-primary" : "text-third group-hover:text-primary/80"}`}
                         >
                           {f.title}
                         </p>
@@ -117,7 +113,7 @@ export default function WhatYouGetSpotlight() {
                       {/* Icon */}
                       <div
                         className={`transition-all duration-300
-              ${isActive ? "text-fourth scale-105" : "text-[#4b5563] group-hover:text-third"}`}
+                  ${isActive ? "text-primary/80 scale-105" : "text-[#4b5563] group-hover:text-third"}`}
                       >
                         {f.icon}
                       </div>
@@ -135,7 +131,7 @@ export default function WhatYouGetSpotlight() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
             className="flex-1 min-h-[300]"
-       >
+          >
             <div className="relative h-full rounded-2xl border border-[#1f2937] overflow-hidden">
               {/* Dynamic Background */}
               <div
@@ -146,14 +142,12 @@ export default function WhatYouGetSpotlight() {
                 }}
               />
 
-              {/* Overlay */}
-
               {/* Content */}
               <div className="relative p-8 flex flex-col h-full">
-                <div className="h-0.5 w-full bg-linear-to-r from-fourth via-[#60a5fa] to-transparent mb-6" />
+                <div className="h-0.5 w-full bg-linear-to-r from-primary/40 via-primary/10 to-transparent mb-6" />
 
                 <div className="flex items-start justify-between mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-fourth/10 border border-fourth/20 flex items-center justify-center text-fourth">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                     {active.icon}
                   </div>
 
@@ -171,28 +165,28 @@ export default function WhatYouGetSpotlight() {
                 </p>
 
                 {/* Pagination */}
-                <div className="mt-auto flex items-center justify-between">
-                  <div className="flex gap-2 ">
+                <div className="mt-auto flex items-center justify-end">
+                  {/* <div className="flex gap-2">
                     {features.map((_, i) => (
                       <button
                         key={i}
                         onClick={() => setActiveFeature(i)}
-                        className={`rounded-full hover:cursor-pointer ${
+                        className={`rounded-full hover:cursor-pointer transition-all duration-300 ${
                           activeFeature === i
-                            ? "w-6 h-1.5 bg-fourth"
+                            ? "w-6 h-1.5 bg-primary/80"
                             : "w-1.5 h-1.5 bg-[#1f2937]"
                         }`}
                       />
                     ))}
-                  </div>
+                  </div> */}
 
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 text-primary">
                     <button
                       onClick={() =>
                         setActiveFeature((i) => Math.max(0, i - 1))
                       }
                       disabled={activeFeature === 0}
-                      className="w-8 h-8 rounded-lg border border-[#1f2937] flex items-center justify-center hover:cursor-pointer"
+                      className="w-8 h-8 bg-primary/20 rounded-lg border border-[#1f2937] flex items-center justify-center hover:cursor-pointer hover:border-primary/20 transition-colors duration-200 disabled:opacity-30"
                     >
                       <FiChevronLeft />
                     </button>
@@ -204,7 +198,7 @@ export default function WhatYouGetSpotlight() {
                         )
                       }
                       disabled={activeFeature === features.length - 1}
-                      className="w-8 h-8 rounded-lg border border-[#1f2937] flex items-center justify-center hover:cursor-pointer"
+                      className="w-8 h-8 bg-primary/20 rounded-lg border border-[#1f2937] flex items-center justify-center hover:cursor-pointer hover:border-primary/20 transition-colors duration-200 disabled:opacity-30"
                     >
                       <FiChevronRight />
                     </button>
