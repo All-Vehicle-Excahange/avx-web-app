@@ -79,7 +79,7 @@ export default function OnboardingProcess() {
 
           <h2 className="text-[30px] sm:text-[40px] md:text-[48px] font-bold leading-tight text-primary mb-3 mt-5">
             Onboarding in{" "}
-            <span className="bg-linear-to-r from-fourth via-[#60a5fa] to-fourth bg-clip-text text-transparent">
+            <span className="text-fourth">
               5 Simple Steps
             </span>
           </h2>
