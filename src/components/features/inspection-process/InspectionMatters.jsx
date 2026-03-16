@@ -20,7 +20,7 @@ export default function InspectionMatters() {
   ];
 
   return (
-    <section className="relative py-10  overflow-hidden border-t border-white/5">
+    <section className="relative py-10  overflow-hidden border-t border-primary/5">
       <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[40px_40px]" />
 
       <div className="relative mx-auto w-full">
@@ -33,15 +33,16 @@ export default function InspectionMatters() {
                 ANALYSIS MODULE 01
               </div>
 
-              <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-primary mb-6 md:mb-8 leading-[0.95]">
-                Clarity Before <br />
-                <span className="text-third/40 font-light">Commitment</span>
-              </h2>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat mb-8 md:mb-10">
+            Clarity Before       <span className="text-fourth/80">
+               Commitment
+              </span>
+            </h2>
 
               <div className="space-y-5 md:space-y-6 text-third/70 text-sm md:text-lg leading-relaxed max-w-md">
                 <p>
                   Pre-owned vehicles vary in condition. Our system provides a{" "}
-                  <span className="text-primary">structured evaluation</span>{" "}
+                 structured evaluation
                   before you proceed.
                 </p>
 
@@ -53,8 +54,8 @@ export default function InspectionMatters() {
               </div>
 
               {/* Terminal */}
-              <div className="mt-8 md:mt-12 p-3 md:p-4  border border-white/10 rounded-md font-mono text-[12px] md:text-[14px] text-fourth/60">
-                <span className="text-white">SYSTEM_NOTE:</span> Inspection adds
+              <div className="mt-8 md:mt-12 p-3 md:p-4  border border-primary/10 rounded-md font-mono text-[12px] md:text-[14px] text-primary/60">
+                <span className="text-primary">SYSTEM_NOTE:</span> Inspection adds
                 transparency — not guarantees.
               </div>
             </div>
@@ -62,9 +63,8 @@ export default function InspectionMatters() {
 
           {/* RIGHT */}
           <div className="w-full lg:w-1/2">
-            <div className="relative border border-white/10 bg-white/2 rounded-2xl p-5 sm:p-6 md:p-10 lg:p-12 overflow-hidden">
+            <div className="relative border border-primary/10 bg-primary/2 rounded-2xl p-5 sm:p-6 md:p-10 lg:p-12 overflow-hidden">
               {/* HUD line */}
-              <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-fourth/40 to-transparent animate-[pan_3s_linear_infinite]" />
 
               <h3 className="text-[10px] md:text-xs font-bold text-third uppercase tracking-[0.2em] mb-8 md:mb-12 flex items-center gap-2">
                 Inspection Focus Points
@@ -79,14 +79,14 @@ export default function InspectionMatters() {
                     className={`group relative flex items-start md:items-center justify-between p-4 md:p-5 rounded-xl border transition-all duration-500 cursor-pointer
                       ${
                         activeStep === idx
-                          ? "bg-fourth/10 border-fourth/40 md:translate-x-4"
-                          : "bg-black/20 border-white/5 opacity-80 md:opacity-50 md:hover:opacity-100"
+                          ? " border border-primary/20 md:translate-x-4"
+                          : " border-primary/5 opacity-80 md:opacity-50 md:hover:opacity-100"
                       }`}
                   >
                     <div className="flex items-start md:items-center gap-4 md:gap-6">
                       <span
                         className={`font-mono text-xs md:text-sm ${
-                          activeStep === idx ? "text-fourth" : "text-third/30"
+                          activeStep === idx ? "text-primary" : "text-third/50"
                         }`}
                       >
                         0{idx + 1}
@@ -111,14 +111,12 @@ export default function InspectionMatters() {
                       </div>
                     </div>
 
-                    {activeStep === idx && (
-                      <div className="h-2 w-2 bg-fourth rounded-full shadow-[0_0_15px_#007bff] mt-2 md:mt-0" />
-                    )}
+                
                   </div>
                 ))}
 
                 {/* connector */}
-                <div className="absolute -left-3 md:-left-4 top-0 h-full w-px bg-white/10" />
+                <div className="absolute -left-3 md:-left-4 top-0 h-full w-px bg-primary/10" />
               </div>
 
               {/* corner */}

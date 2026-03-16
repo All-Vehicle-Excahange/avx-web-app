@@ -40,37 +40,37 @@ export default function InspectionWorkFlow() {
       title: "Request Submitted",
       desc: "Buyer or consultant selects inspection type.",
       icon: <ClipboardSignature className="w-5 h-5" />,
-      color: "bg-blue-500",
+      color: "bg-primary/10",
     },
     {
       title: "Payment Confirmed",
       desc: "Inspection fee processed.",
       icon: <CreditCard className="w-5 h-5" />,
-      color: "bg-fourth",
+      color: "bg-primary/10",
     },
     {
       title: "Inspector Assigned",
       desc: "City-based inspector scheduled.",
       icon: <UserCheck className="w-5 h-5" />,
-      color: "bg-orange-500",
+      color: "bg-primary/10",
     },
     {
       title: "Physical Evaluation",
       desc: "Vehicle inspected using AVX checklist.",
       icon: <Search className="w-5 h-5" />,
-      color: "bg-slate-500",
+      color: "bg-primary/10",
     },
     {
       title: "Report Uploaded",
       desc: "Media, checklist, summary uploaded.",
       icon: <UploadCloud className="w-5 h-5" />,
-      color: "bg-slate-400",
+      color: "bg-primary/10",
     },
     {
       title: "Report Published",
       desc: "Visible on vehicle listing.",
       icon: <Eye className="w-5 h-5" />,
-      color: "bg-red-500",
+      color: "bg-primary/10",
     },
   ];
 
@@ -93,7 +93,7 @@ export default function InspectionWorkFlow() {
       const cpY = Math.sin(midAngle) * (radius * 1.05);
 
       return (
-        <g key={idx} className="text-fourth/40">
+        <g key={idx} className="text-primary/40">
           <path
             d={`M ${startX} ${startY} Q ${cpX} ${cpY} ${endX} ${endY}`}
             fill="none"
@@ -110,10 +110,10 @@ export default function InspectionWorkFlow() {
   return (
     <section className="relative py-10  overflow-hidden">
       {/* rings */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 md:w-150 h-125 md:h-150 border border-fourth/20 rounded-full animate-[spin_60s_linear_infinite]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 md:w-212.5 h-175 md:h-212.5 border border-fourth/5 rounded-full animate-[spin_90s_linear_infinite_reverse]" />
-      </div>
+      {/* <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 md:w-150 h-125 md:h-150 border border-primary/20 rounded-full animate-[spin_60s_linear_infinite]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 md:w-212.5 h-175 md:h-212.5 border border-primary/5 rounded-full animate-[spin_90s_linear_infinite_reverse]" />
+      </div> */}
 
       <div className="relative z-20 mx-auto  w-full">
         {/* header */}
@@ -121,9 +121,12 @@ export default function InspectionWorkFlow() {
           <p className="text-xs md:text-sm tracking-[0.4em] uppercase text-third font-semibold mb-4">
             System Operation
           </p>
-          <h2 className="text-3xl sm:text-5xl md:text-7xl font-semibold text-primary">
-            Inspection <span className="text-third/40">Workflow</span>
-          </h2>
+         
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat">
+             Inspection        <span className="text-fourth/80">
+              workflow
+              </span>
+            </h2>
         </div>
 
         {/* ===== MOBILE STACK ===== */}
@@ -132,7 +135,7 @@ export default function InspectionWorkFlow() {
             {steps.map((step, idx) => (
               <div
                 key={idx}
-                className="w-full rounded-3xl bg-[#151515] border border-white/5 p-6 flex gap-5"
+                className="w-full rounded-3xl border border-primary/5 p-6 flex gap-5"
               >
                 <div
                   className={`w-14 h-14 rounded-2xl ${step.color} flex items-center justify-center text-primary shrink-0`}
@@ -141,7 +144,7 @@ export default function InspectionWorkFlow() {
                 </div>
 
                 <div>
-                  <p className="text-[11px] text-fourth font-mono mb-1">
+                  <p className="text-[11px] text-primary font-mono mb-1">
                     STEP {String(idx + 1).padStart(2, "0")}
                   </p>
                   <h4 className="text-base font-bold text-primary mb-1">
@@ -158,12 +161,12 @@ export default function InspectionWorkFlow() {
         {!isMobile && (
           <div className="relative flex justify-center items-center min-h-162.5 md:min-h-187.5">
             {/* core */}
-            <div className="absolute z-20 w-44 h-44 md:w-48 md:h-48 rounded-full border-2 border-fourth/30 flex items-center justify-center">
+            <div className="absolute z-20 w-44 h-44 md:w-48 md:h-48 rounded-full border-2 border-primary/30 flex items-center justify-center">
               <div className="text-center">
-                <span className="text-fourth font-mono text-xs block mb-1">
+                <span className="text-primary font-mono text-xs block mb-1">
                   CORE
                 </span>
-                <span className="text-primary font-bold text-2xl md:text-3xl">
+                <span className="text-third font-bold text-2xl md:text-3xl">
                   AVX
                 </span>
               </div>
@@ -193,9 +196,9 @@ export default function InspectionWorkFlow() {
                       top: `calc(50% + ${Math.sin(angle) * radius}px - 110px)`,
                     }}
                   >
-                    {/* ⚠️ YOUR LARGE CARD PRESERVED */}
-                    <div className="relative w-55 h-55 rounded-full bg-[#151515] border border-white/5 backdrop-blur-xl flex flex-col items-center justify-center text-center p-6 transition-all duration-500 group-hover:border-fourth/50 group-hover:shadow-[0_0_30px_rgba(0,123,255,0.12)] group-hover:-translate-y-2">
-                      <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-secondary px-3 py-1 rounded-full border border-white/10 text-[10px] font-mono text-fourth">
+                
+                    <div className="relative w-55 h-55 rounded-full  border border-primary/20 backdrop-blur-xl flex flex-col items-center justify-center text-center p-6 transition-all duration-500 group-hover:border-primary/50  group-hover:-translate-y-2">
+                      <div className="absolute -top-2 left-1/2 -translate-x-1/2  px-3 py-1 rounded-full border border-primary/20 text-[10px] font-mono text-primary">
                         STEP {String(idx + 1).padStart(2, "0")}
                       </div>
 

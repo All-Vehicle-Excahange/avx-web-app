@@ -32,16 +32,12 @@ export default function InspectionReportFormat() {
     Inspection Report Format
   </p>
 
-  <h2 className="
-    text-4xl sm:text-5xl xl:text-6xl 
-    font-semibold 
-    text-primary 
-    leading-tight 
-    mb-6
-  ">
-    Standardized Digital{" "}
-    <span className="text-[#1f6feb]">Report</span>
-  </h2>
+
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat mb-8 md:mb-10">
+            Standardized Digital            <span className="text-fourth/80">
+          Report
+              </span>
+            </h2>
 
   <p className="text-lg text-third/80 leading-relaxed max-w-3xl">
     Every AVX inspection generates a structured digital report built
@@ -55,10 +51,10 @@ export default function InspectionReportFormat() {
           
           {/* LEFT — BIG REPORT MOCK */}
           <div className="lg:col-span-7">
-            <div className="relative rounded-3xl border border-white/10 bg-white/4 backdrop-blur-md overflow-hidden">
+            <div className="relative rounded-3xl border border-primary/10 bg-primary/4 backdrop-blur-md overflow-hidden">
 
               {/* top bar */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/40">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-primary/20 ">
                 <div>
                   <p className="text-[10px] tracking-widest text-third/60 uppercase">
                     AVX Inspection Report
@@ -68,7 +64,7 @@ export default function InspectionReportFormat() {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-fourth/15 text-fourth text-xs font-semibold">
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-fourth/15 text-primary text-xs font-semibold">
                   <Lock className="w-3.5 h-3.5" />
                   Locked
                 </div>
@@ -89,11 +85,11 @@ export default function InspectionReportFormat() {
                 />
 
                 {/* overlay gradient */}
-                <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-secondary/70 via-transparent to-transparent" />
               </div>
 
               {/* bottom meta strip */}
-              <div className="grid grid-cols-3 gap-4 px-6 py-5 border-t border-white/10 text-xs text-third/70">
+              <div className="grid grid-cols-3 gap-4 px-6 py-5 border-t border-primary/20 text-xs text-third/70">
                 <div>
                   <p className="uppercase tracking-wider">Report ID</p>
                   <p className="text-primary font-medium">AVX-IR-20481</p>
@@ -122,16 +118,16 @@ export default function InspectionReportFormat() {
                     group
                     flex items-center gap-4
                     p-4 rounded-xl
-                    border border-white/10
-                    bg-white/3
+                    border border-primary/10
+                    bg-primary/3
                     backdrop-blur-md
                     transition-all duration-300
-                    hover:border-white/20
-                    hover:bg-white/5
+                    hover:border-primary/40
+                   
                   "
                 >
-                  <div className="w-11 h-11 rounded-lg bg-fourth/10 flex items-center justify-center">
-                    <Icon className="w-5 h-5 text-fourth" />
+                  <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Icon className="w-5 h-5 text-primary" />
                   </div>
 
                   <p className="text-sm text-primary/90 leading-relaxed">
@@ -142,7 +138,7 @@ export default function InspectionReportFormat() {
             })}
 
             {/* compliance note */}
-            <div className="mt-6 p-5 rounded-2xl border border-white/10 bg-black/30">
+            <div className="mt-6 p-5 rounded-2xl border border-primary/20 ">
               <p className="text-sm text-third/80 leading-relaxed">
                 Reports are locked after submission. Any updates require a
                 fresh inspection cycle to maintain platform integrity.
