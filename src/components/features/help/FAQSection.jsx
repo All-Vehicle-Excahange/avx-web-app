@@ -311,7 +311,7 @@ function QRow({ item, isOpen, onToggle }) {
         className="overflow-hidden transition-[max-height] duration-380 ease-[cubic-bezier(0.22,1,0.36,1)]"
         style={{ maxHeight: isOpen ? "260px" : "0" }}
       >
-        <p className="px-5 pb-5 text-sm sm:text-[15px] leading-relaxed text-primary/45 font-secondary">
+        <p className="px-5 py-3 text-sm sm:text-[15px] leading-relaxed text-primary/45 font-secondary">
           {item.a}
         </p>
       </div>
@@ -344,7 +344,7 @@ export default function FAQSections() {
   return (
     <section
       id="faq"
-      className="relative py-20 px-4 sm:px-8 lg:px-16 overflow-hidden"
+      className="relative py-20 px-4 sm:px-8 lg:px-0 overflow-hidden"
     >
       <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/5 to-transparent" />
 
@@ -353,13 +353,22 @@ export default function FAQSections() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <div className="h-px w-6 bg-fourth/50" />
-              <p className="text-[10px] tracking-[0.4em] uppercase font-black font-primary text-fourth/70">
-                AVX · Help Center
+              <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                FAQ SECTION
               </p>
             </div>
-            <h2 className="font-primary font-black uppercase leading-none tracking-tight text-primary text-[clamp(2.2rem,6vw,4.5rem)]">
+            <h2
+              className="
+             text-3xl sm:text-4xl lg:text-5xl
+              font-semibold
+              leading-[1.05]
+              text-primary
+              font-[Montserrat]
+            "
+            >
               FAQ
+              <span className="text-fourth/80"> Inspection
+              </span>
             </h2>
           </div>
           <div className="flex flex-col items-start sm:items-end gap-1">
@@ -395,11 +404,11 @@ export default function FAQSections() {
                       className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left transition-all duration-250 outline-none group"
                       style={{
                         background: isCurrent
-                          ? "rgba(0,123,255,0.1)"
+                          ? "rgba(255,254,255,0.04)"
                           : "transparent",
                         border: "1px solid",
                         borderColor: isCurrent
-                          ? "rgba(0,123,255,0.2)"
+                          ? "rgba(255,254,255,0.1)"
                           : "transparent",
                       }}
                     >
@@ -407,18 +416,18 @@ export default function FAQSections() {
                         className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-250"
                         style={{
                           background: isCurrent
-                            ? "rgba(0,123,255,0.15)"
+                            ? "rgba(255,254,255,0.1)"
                             : "rgba(255,255,255,0.04)",
                         }}
                       >
                         <Icon
                           size={14}
-                          className={`transition-colors duration-250 ${isCurrent ? "text-fourth" : "text-primary/25"}`}
+                          className={`transition-colors duration-250 ${isCurrent ? "text-primary" : "text-primary/25"}`}
                         />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p
-                          className={`text-[12px] font-black uppercase tracking-wide transition-colors duration-250 font-primary ${isCurrent ? "text-fourth" : "text-primary/40 group-hover:text-primary/60"}`}
+                          className={`text-[12px] font-black uppercase tracking-wide transition-colors duration-250 font-primary ${isCurrent ? "text-primary" : "text-primary/40 group-hover:text-primary/60"}`}
                         >
                           {c.label}
                         </p>
@@ -430,7 +439,7 @@ export default function FAQSections() {
                         className="text-[11px] font-black font-primary tabular-nums transition-colors duration-250"
                         style={{
                           color: isCurrent
-                            ? "rgba(0,123,255,0.6)"
+                            ? "rgba(255,254,255,1)"
                             : "rgba(255,255,255,0.1)",
                         }}
                       >
@@ -449,14 +458,14 @@ export default function FAQSections() {
             <div className="flex items-center gap-4 mb-8">
               <span
                 className="font-black text-6xl leading-none select-none font-primary"
-                style={{ color: "rgba(0,123,255,0.08)" }}
+                style={{ color: "rgba(255,254,255,0.1)" }}
               >
                 {cat.number}
               </span>
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <div className="w-4 h-px bg-fourth/50" />
-                  <span className="text-[9px] tracking-[0.45em] uppercase font-black text-fourth/60 font-primary">
+                  <div className="w-4 h-px bg-primary/50" />
+                  <span className="text-[9px] tracking-[0.45em] uppercase font-black text-primary/60 font-primary">
                     {cat.tag}
                   </span>
                 </div>

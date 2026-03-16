@@ -96,13 +96,13 @@ export default function SupportRequests({
       prev.map((t) =>
         t.id === ticketId
           ? {
-              ...t,
-              updated: "Just now",
-              messages: [
-                ...t.messages,
-                { from: "You", time: "Just now", text, mine: true },
-              ],
-            }
+            ...t,
+            updated: "Just now",
+            messages: [
+              ...t.messages,
+              { from: "You", time: "Just now", text, mine: true },
+            ],
+          }
           : t,
       ),
     );
@@ -115,13 +115,22 @@ export default function SupportRequests({
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
         <div>
           <div className="flex items-center gap-2 mb-3">
-            <div className="h-px w-6 bg-fourth/50" />
-            <p className="text-[10px] tracking-[0.4em] uppercase font-black font-primary text-fourth/70">
+            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Support Center
             </p>
           </div>
-          <h2 className="font-primary text-[clamp(2.2rem,5vw,4rem)] font-black uppercase tracking-tight leading-none text-primary">
-            My <span className="text-fourth">Requests</span>
+          <h2
+            className="
+             text-3xl sm:text-4xl lg:text-5xl
+              font-semibold
+              leading-[1.05]
+              text-primary
+              font-[Montserrat]
+            "
+          >
+            My
+            <span className="text-fourth/80"> Requests
+            </span>
           </h2>
         </div>
         <button
@@ -247,15 +256,15 @@ export default function SupportRequests({
               style={{
                 border: "1px solid",
                 borderColor: isActive
-                  ? "rgba(0,123,255,0.25)"
+                  ? "rgba(255,254,255,0.1)"
                   : isHovered
                     ? "rgba(255,255,255,0.09)"
                     : "rgba(255,255,255,0.05)",
                 background: isActive
-                  ? "rgba(0,123,255,0.05)"
+                  ? "rgba(255,254,255,0)"
                   : isHovered
                     ? "rgba(255,255,255,0.03)"
-                    : "rgba(255,255,255,0.02)",
+                    : "rgba(255,255,255,0.01)",
               }}
             >
               {/* Row */}
@@ -267,7 +276,7 @@ export default function SupportRequests({
               >
                 {/* Active left bar */}
                 {isActive && (
-                  <div className="absolute left-0 top-3 bottom-3 w-[2.5px] rounded-full bg-fourth" />
+                  <div className="absolute left-0 top-3 bottom-3 w-[2.5px] rounded-full bg-third" />
                 )}
 
                 {/* Desktop grid */}
