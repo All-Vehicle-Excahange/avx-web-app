@@ -41,7 +41,7 @@ function SimulerVehicle() {
                     <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
                         Similar Vehicle                        </h2>
 
-                    <p className="text-third mt-1">
+                    <p className="text-third mt-1 mb-4">
                         Lorem ipsum dolor sit amet consectetur dolor sit amet
                         consectetur..
                     </p>

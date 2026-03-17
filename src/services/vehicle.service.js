@@ -6,7 +6,7 @@ const ENDPOINT = {
     getVehicleOverview: "/vehicle/detail-page",
     getVehicleSummary: "/consultation/detail-page/meta",
     sendInquary: "/vehicles/inquiry/create",
-    checkIsUserEligbleToSendInquary: "/vehicles/inquiry/vehicle"
+    checkIsUserEligbleToSendInquary: "/vehicles/inquiry/latest-by-vehicle"
 };
 
 export const getVehicleOverview = async (id) => {

@@ -19,6 +19,7 @@ import { followConsultant, getStoreFrontByUsername, unFollowConsultant } from "@
 import LoginPopup from "@/components/auth/LoginPopup";
 import { useAuthStore } from "@/stores/useAuthStore";
 import SignupPopup from "@/components/auth/SignupPopup";
+import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 
 
 export default function StoreFrontHeroSection() {
@@ -29,6 +30,7 @@ export default function StoreFrontHeroSection() {
     const [isFollower, setIsFollower] = useState(false);
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isSignupOpen, setIsSignupOpen] = useState(false);
+    const [isDownloadAppOpen, setIsDownloadAppOpen] = useState(false);
 
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
@@ -143,25 +145,20 @@ export default function StoreFrontHeroSection() {
                                 />
                             </div>
 
-                            <div className="mt-6 w-full flex flex-col items-center gap-3">
-                                <div className="flex items-center gap-2">
-                                    <div
-                                        className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
-                                        <Users className="w-4 h-4 text-primary" />
-                                    </div>
-
-                                    <p className="text-base font-bold text-primary leading-none">
-                                        {comsultDetails.followersCount?.toLocaleString() || "0"}
-                                    </p>
-                                </div>
-
+                            <div className="mt-6 w-full">
                                 <Button
                                     onClick={handleFollowToggle}
                                     size="sm"
                                     variant="outline"
                                     full
                                 >
-                                    {isFollower ? "Unsubscribe" : "Subscribe"}
+                                    <div className="flex items-center justify-center gap-2 w-full">
+                                        <Users className="w-4 h-4" />
+                                        <span className="bg-primary/10 px-2 py-0.5 rounded-full text-xs font-bold text-primary">
+                                            {comsultDetails.followersCount?.toLocaleString() || "0"}
+                                        </span>
+                                        <span>{isFollower ? "Unsubscribe" : "Subscribe"}</span>
+                                    </div>
                                 </Button>
                             </div>
                         </div>
@@ -261,7 +258,7 @@ export default function StoreFrontHeroSection() {
                             </div>
 
                             <div className="flex gap-3 pt-6">
-                                <Button size="sm" variant="ghost">
+                                <Button size="sm" variant="ghost" onClick={() => setIsDownloadAppOpen(true)}>
                                     Start Chat
                                     <MessageCircle className="ml-2 w-4 h-4" />
                                 </Button>
@@ -290,6 +287,10 @@ export default function StoreFrontHeroSection() {
                     setIsSignupOpen(false);
                     setIsLoginOpen(true);
                 }}
+            />
+            <DownloadAppPopup 
+                isOpen={isDownloadAppOpen}
+                onClose={() => setIsDownloadAppOpen(false)}
             />
         </>
     );
