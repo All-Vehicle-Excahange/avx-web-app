@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import InquiryCard from "@/components/ui/InquiryCard";
 import { getInquiries } from "@/services/inquiry.service";
+import Button from "@/components/ui/button";
 
 function Inquiries() {
   const [activeType, setActiveType] = useState("all");
   const [inquiries, setInquiries] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(6);
 
   useEffect(() => {
     const fetchInquiries = async () => {
@@ -13,6 +15,7 @@ function Inquiries() {
 
         const res = await getInquiries(status);
         setInquiries(res.data || []);
+        setVisibleCount(6);
       } catch (error) {
         console.log(error);
       }
@@ -59,24 +62,49 @@ function Inquiries() {
       {/* INQUIRIES LIST */}
       <div className="grid grid-cols-1 gap-6">
         {inquiries?.length > 0 ? (
-          inquiries.map((inq) => (
-            <InquiryCard
-              key={inq.id}
-              inquiry={inq}
-              onStatusChange={handleUpdateStatus}
-            />
-          ))
+          <>
+            {inquiries.slice(0, visibleCount).map((inq) => (
+              <InquiryCard
+                key={inq.id}
+                inquiry={inq}
+                onStatusChange={handleUpdateStatus}
+              />
+            ))}
+
+            {visibleCount < inquiries.length && (
+              <div className="flex justify-end mt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setVisibleCount((prev) => prev + 6)}
+                  className="px-6 py-2 rounded-full text-sm font-semibold  shadow-md"
+                >
+                  Load More
+                </Button>
+              </div>
+            )}
+          </>
         ) : (
           <div className="flex flex-col items-center justify-center py-16 text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5">
-            <h3 className="text-xl font-bold mb-2">No inquiries yet.</h3>
-            <p className="text-third mb-6 max-w-sm">
-              Once buyers show interest in your vehicle,<br />
-              their requests will appear here.
-            </p>
-            <p className="text-sm text-third/70 max-w-sm font-medium">
-              Tip:<br />
-              Listings with more photos receive 3x more inquiries.
-            </p>
+            {activeType === "all" ? (
+              <>
+                <h3 className="text-xl font-bold mb-2">No inquiries yet.</h3>
+                <p className="text-third mb-6 max-w-sm">
+                  Once buyers show interest in your vehicle,<br />
+                  their requests will appear here.
+                </p>
+                <p className="text-sm text-third/70 max-w-sm font-medium">
+                  Tip:<br />
+                  Listings with more photos receive 3x more inquiries.
+                </p>
+              </>
+            ) : (
+              <>
+                <h3 className="text-xl font-bold mb-2">No {activeType.toLowerCase()} inquiries found.</h3>
+                <p className="text-third max-w-sm">
+                  There are currently no inquiries with this status.
+                </p>
+              </>
+            )}
           </div>
         )}
       </div>

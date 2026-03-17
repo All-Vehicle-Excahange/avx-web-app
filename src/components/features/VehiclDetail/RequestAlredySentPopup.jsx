@@ -3,9 +3,9 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { X, CheckCircle2 } from "lucide-react";
+import { X, CheckCircle2, Clock, XCircle } from "lucide-react";
 
-function RequestAlredySentPopup({ onClose }) {
+function RequestAlredySentPopup({ onClose, status = "PENDING" }) {
     const [isClosing, setIsClosing] = useState(false);
 
     const handleClose = useCallback(() => {
@@ -22,6 +22,38 @@ function RequestAlredySentPopup({ onClose }) {
             document.body.style.overflow = "auto";
         };
     }, []);
+
+    const getStatusContent = () => {
+        switch (status) {
+            case "APPROVED":
+                return {
+                    icon: <CheckCircle2 className="text-green-500 w-20 h-20" />,
+                    title: "Request Approved",
+                    description: "Your inquiry has been approved by the seller.",
+                    subText1: "The consultant will call you shortly to proceed.",
+                    subText2: "You can continue the conversation in the AVX app."
+                };
+            case "REJECTED":
+                return {
+                    icon: <XCircle className="text-red-500 w-20 h-20" />,
+                    title: "Request Rejected",
+                    description: "Unfortunately, your inquiry was rejected.",
+                    subText1: "The seller is currently not proceeding with this request.",
+                    subText2: "You can explore other vehicles in our marketplace."
+                };
+            case "PENDING":
+            default:
+                return {
+                    icon: <Clock className="text-yellow-500 w-20 h-20" />,
+                    title: "Request Pending",
+                    description: "Your inquiry has already been sent and is pending.",
+                    subText1: "The consultant is reviewing your request.",
+                    subText2: "You will be notified once they respond."
+                };
+        }
+    };
+
+    const content = getStatusContent();
 
     const modalContent = (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={handleClose} style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}>
@@ -52,28 +84,28 @@ function RequestAlredySentPopup({ onClose }) {
                 {/* RIGHT FORM */}
                 <div className="w-full md:w-7/12 p-8 md:p-12 bg-secondary flex flex-col justify-center min-h-[400px]">
                     <div className="flex flex-col items-center justify-center h-full space-y-6">
-                        {/* Success State Icon */}
+                        {/* Status Icon */}
                         <div className="flex items-center justify-center animate-in zoom-in duration-500">
-                            <CheckCircle2 className="text-green-500 w-20 h-20" />
+                            {content.icon}
                         </div>
 
                         {/* Headlines */}
                         <div className="space-y-1 text-center">
                             <h3 className="text-3xl font-bold text-primary tracking-tight">
-                                Request Already Sent
+                                {content.title}
                             </h3>
-                            <p className="text-third max-w-sm mt-2">
-                                Your inquiry is already sent.
+                            <p className="text-third max-w-sm mt-2 mx-auto">
+                                {content.description}
                             </p>
                         </div>
 
                         {/* Details Box */}
-                        <div className="text-center space-y-2 mt-4 max-w-sm w-full">
+                        <div className="text-center space-y-2 mt-4 max-w-sm w-full mx-auto">
                             <p className="text-primary font-medium text-base">
-                                The consultant will call you in a few minutes.
+                                {content.subText1}
                             </p>
                             <p className="text-third text-sm leading-relaxed">
-                                You can also continue the conversation in the AVX app anytime.
+                                {content.subText2}
                             </p>
                         </div>
                     </div>

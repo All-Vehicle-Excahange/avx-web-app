@@ -12,7 +12,7 @@ import {
   updateuserProfile,
   updateuserProfileMeta,
 } from "@/services/user.service";
-import { ChevronDown, Lock } from "lucide-react";
+import { ChevronDown, Lock, Clock } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
 function MyProfile() {
@@ -294,6 +294,16 @@ function MyProfile() {
 
   return (
     <section className="w-full py-12 rounded-2xl  space-y-10">
+      {/* APPLICATION STATUS WARNING */}
+      {profile.role === "USER_SELLER_APPLICANT" && (
+        <div className="bg-yellow-500/10 border border-yellow-500/30 text-yellow-600 p-4 rounded-xl flex items-center gap-3 shadow-sm">
+          <Clock className="w-5 h-5 text-yellow-600 shrink-0" />
+          <p className="text-sm font-semibold">
+            You have applied to become a user seller. Please wait until we process your application.
+          </p>
+        </div>
+      )}
+
       {/* ✅ PROFILE INFO SECTION */}
       <div className="rounded-2xl border border-third/40 px-6 pb-6">
         <div className="flex justify-between py-6">
@@ -378,7 +388,7 @@ function MyProfile() {
                   ${
                     !isProfileFormValid
                       ? "bg-gray-400 cursor-not-allowed text-white"
-                      : "bg-primary text-white hover:opacity-90"
+                      : "bg-primary text-secondary hover:opacity-90"
                   }`}
               >
                 {!isProfileFormValid ? (

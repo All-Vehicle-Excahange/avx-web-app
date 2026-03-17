@@ -22,6 +22,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isAlreadySentOpen, setIsAlreadySentOpen] = useState(false);
+  const [inquiryStatus, setInquiryStatus] = useState(null);
   const [isCheckingInquiry, setIsCheckingInquiry] = useState(false);
 
   const [loading, setLoading] = useState(false);
@@ -39,7 +40,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
     try {
       setIsCheckingInquiry(true);
       const res = await checkIsUserEligbleToSendInquary(vehicleId);
-      
+
       if (
         res?.data === null ||
         res?.data?.inquiryStatus === "CLOSED_BY_VEHICLE_OWNER" ||
@@ -47,6 +48,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
       ) {
         setIsPopupOpen(true);
       } else {
+        setInquiryStatus(res?.data?.inquiryStatus || "PENDING");
         setIsAlreadySentOpen(true);
       }
     } catch (error) {
@@ -185,7 +187,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
           <div className="space-y-2">
             {(() => {
               const MAX_INQUIRIES = 15;
-              const inquiries = vehicle?.activeInquiryCount || 0;
+              const inquiries = vehicle?.totalInquiryCount || 0;
 
               const safeValue = Math.min(inquiries, MAX_INQUIRIES);
               let percentage = (safeValue / MAX_INQUIRIES) * 100;
@@ -284,11 +286,12 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
       {isAlreadySentOpen && (
         <RequestAlredySentPopup
           onClose={() => setIsAlreadySentOpen(false)}
+          status={inquiryStatus}
         />
       )}
-      <DownloadAppPopup 
-        isOpen={isDownloadOpen} 
-        onClose={() => setIsDownloadOpen(false)} 
+      <DownloadAppPopup
+        isOpen={isDownloadOpen}
+        onClose={() => setIsDownloadOpen(false)}
       />
     </>
   );
