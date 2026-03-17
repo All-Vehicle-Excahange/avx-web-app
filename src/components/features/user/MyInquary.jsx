@@ -88,7 +88,7 @@ function MyInquary() {
           <div className="flex flex-col items-center justify-center py-16 text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5">
             {activeType === "all" ? (
               <>
-                <h3 className="text-xl font-bold mb-2">You haven't contacted any sellers yet.</h3>
+                <h3 className="text-xl font-bold mb-2">You havent contacted any sellers yet.</h3>
                 <p className="text-third mb-6 max-w-sm">
                   Start exploring vehicles and send inquiries.
                 </p>
