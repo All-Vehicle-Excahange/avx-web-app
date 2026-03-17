@@ -2,20 +2,13 @@ import Image from "next/image";
 
 export default function DownloadAppSection() {
     return (
-        <div className="hidden md:block w-full md:pt-36 bg-fourth">
+        <div className="hidden lg:block w-full md:pt-36 bg-fourth">
             <div className="w-full 3xl:max-w-screen-2xl mx-auto   overflow-visible flex flex-col md:flex-row relative h-[300px]">
                 {/* LEFT CONTENT */}
-                <div className="flex-1 p-6 md:p-16 md:mb-30 flex flex-col justify-center z-10 relative">
-                    <h2 className="text-2xl md:text-4xl font-bold text-primary mb-4 leading-tight">
+                <div className="flex-1 p-6 md:p-8 md:mb-30 flex flex-col justify-center z-10 relative">
+                    <h2 className="text-2xl max-w-2xl xl:max-w-4xl  md:text-4xl font-bold text-primary mb-4 leading-tight">
                         Reecomm App Download For
-                        <br className="block lg:hidden" />
-
-                        <span className="lg:inline mr-2">
-                            {" "}All Vehicle
-                        </span>
-
-                        <br className="hidden lg:block" />
-
+                        All Vehicle
                         Sell & Buy
                     </h2>
 
@@ -76,7 +69,16 @@ export default function DownloadAppSection() {
                     <div className="absolute md:relative bg-primary h-[340px] w-[340px] md:w-full rounded-t-full bottom-0 md:bottom-auto left-1/2 md:left-auto -translate-x-1/2 md:translate-x-0 md:right-10"></div>
 
                     {/* Phone Mockup */}
-                    <div className="absolute z-2 w-[280px] md:w-[350px] lg:w-[400px] md:-mb-12 md:mr-8 lg:mr-18 right-18">
+                    <div className="
+  absolute 
+  z-10 
+  w-[280px] md:w-[350px] lg:w-[400px]
+  right-[-50px] 
+  md:left-[40px] 
+  lg:left-[12px]
+  xl:left-[122px]
+  md:-mb-12 md:mr-8 lg:mr-18
+">
                         <Image
                             src="/moblie_app_banner.gif"
                             width={100}
