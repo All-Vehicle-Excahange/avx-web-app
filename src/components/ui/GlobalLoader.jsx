@@ -10,12 +10,10 @@ export default function GlobalLoader({ isLoading }) {
       `}
         >
             {/* Spinner */}
-            <div className="flex flex-col items-center gap-6">
-                <div className="h-16 w-16 rounded-full border-4 border-fourth border-t-transparent animate-spin"></div>
+            <div className="loader">
+                {/* <div className="h-16 w-16 rounded-full border-4 border-fourth border-t-transparent animate-spin"></div> */}
 
-                <p className="text-md tracking-[0.3em] uppercase text-primary">
-                    Loading
-                </p>
+
             </div>
         </div>
     );
