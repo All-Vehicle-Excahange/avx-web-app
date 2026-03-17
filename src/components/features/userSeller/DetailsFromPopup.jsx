@@ -16,6 +16,8 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
     aadharCardBackImage: null,
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [validationErrors, setValidationErrors] = useState({});
   const [preview, setPreview] = useState({
     pan: null,
     aadhaarFront: null,
@@ -28,6 +30,8 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
     setIsClosing(true);
     setTimeout(() => {
       setIsClosing(false);
+      setError("");
+      setValidationErrors({});
       onClose();
     }, 250);
   }, [onClose]);
@@ -58,18 +62,29 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
   if (!isOpen && !isClosing) return null;
 
   const handleInput = (key, value) => {
+    setError("");
+    setValidationErrors((prev) => ({ ...prev, [key]: undefined }));
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSubmit = async () => {
     try {
       setLoading(true);
+      setError("");
 
       await postBecameSeller(form);
 
       onClose(); // close only if success
-    } catch (error) {
-      console.error("Seller verification failed:", error);
+    } catch (err) {
+      console.error("Seller verification failed:", err);
+      const api = err?.response?.data;
+
+      if (api?.data?.validationErrors) {
+        setValidationErrors(api.data.validationErrors);
+      }
+
+      const msg = api?.message || "Failed to submit verification.";
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -117,67 +132,91 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
           <h3 className="text-2xl font-bold mb-6 text-primary">Document Verification</h3>
 
           <div className="space-y-5">
-            <InputField
-              label="PAN Card Number"
-              variant="colored"
-              value={form.panCardNumber}
-              onChange={(e) => handleInput("panCardNumber", e.target.value)}
-            />
+            <div>
+              <InputField
+                label="PAN Card Number"
+                variant="colored"
+                value={form.panCardNumber}
+                onChange={(e) => handleInput("panCardNumber", e.target.value)}
+              />
+              {validationErrors.panCardNumber && (
+                <p className="text-red-500 text-xs mt-1">{validationErrors.panCardNumber}</p>
+              )}
+            </div>
 
-            <DropzoneUpload
-              label="PAN Card Front Image"
-              preview={preview.pan}
-              onChange={(file) => {
-                const f = Array.isArray(file) ? file[0] : file;
-                if (f) {
-                  setPreview((p) => ({
-                    ...p,
-                    pan: typeof f === "string" ? f : URL.createObjectURL(f),
-                  }));
-                  handleInput("panCardFrontImage", f);
-                }
-              }}
-            />
+            <div>
+              <DropzoneUpload
+                label="PAN Card Front Image"
+                preview={preview.pan}
+                onChange={(file) => {
+                  const f = Array.isArray(file) ? file[0] : file;
+                  if (f) {
+                    setPreview((p) => ({
+                      ...p,
+                      pan: typeof f === "string" ? f : URL.createObjectURL(f),
+                    }));
+                    handleInput("panCardFrontImage", f);
+                  }
+                }}
+              />
+              {validationErrors.panCardFrontImage && (
+                <p className="text-red-500 text-xs mt-1">{validationErrors.panCardFrontImage}</p>
+              )}
+            </div>
 
-            <InputField
-              label="Aadhaar Card Number"
-              variant="colored"
-              value={form.aadharCardNumber}
-              onChange={(e) => handleInput("aadharCardNumber", e.target.value)}
-            />
+            <div>
+              <InputField
+                label="Aadhaar Card Number"
+                variant="colored"
+                value={form.aadharCardNumber}
+                onChange={(e) => handleInput("aadharCardNumber", e.target.value)}
+              />
+              {validationErrors.aadharCardNumber && (
+                <p className="text-red-500 text-xs mt-1">{validationErrors.aadharCardNumber}</p>
+              )}
+            </div>
 
-            <DropzoneUpload
-              label="Aadhaar Front Image"
-              preview={preview.aadhaarFront}
-              onChange={(file) => {
-                const f = Array.isArray(file) ? file[0] : file;
-                if (f) {
-                  setPreview((p) => ({
-                    ...p,
-                    aadhaarFront:
-                      typeof f === "string" ? f : URL.createObjectURL(f),
-                  }));
-                  handleInput("aadharCardFrontImage", f);
-                }
-              }}
-            />
+            <div>
+              <DropzoneUpload
+                label="Aadhaar Front Image"
+                preview={preview.aadhaarFront}
+                onChange={(file) => {
+                  const f = Array.isArray(file) ? file[0] : file;
+                  if (f) {
+                    setPreview((p) => ({
+                      ...p,
+                      aadhaarFront:
+                        typeof f === "string" ? f : URL.createObjectURL(f),
+                    }));
+                    handleInput("aadharCardFrontImage", f);
+                  }
+                }}
+              />
+              {validationErrors.aadharCardFrontImage && (
+                <p className="text-red-500 text-xs mt-1">{validationErrors.aadharCardFrontImage}</p>
+              )}
+            </div>
 
-            <DropzoneUpload
-              label="Aadhaar Back Image"
-              preview={preview.aadhaarBack}
-              onChange={(file) => {
-                const f = Array.isArray(file) ? file[0] : file;
-                if (f) {
-                  setPreview((p) => ({
-                    ...p,
-                    aadhaarBack:
-                      typeof f === "string" ? f : URL.createObjectURL(f),
-                  }));
-                  handleInput("aadharCardBackImage", f);
-                }
-              }}
-            />
-
+            <div>
+              <DropzoneUpload
+                label="Aadhaar Back Image"
+                preview={preview.aadhaarBack}
+                onChange={(file) => {
+                  const f = Array.isArray(file) ? file[0] : file;
+                  if (f) {
+                    setPreview((p) => ({
+                      ...p,
+                      aadhaarBack:
+                        typeof f === "string" ? f : URL.createObjectURL(f),
+                    }));
+                    handleInput("aadharCardBackImage", f);
+                  }
+                }}
+              />
+              {validationErrors.aadharCardBackImage && (
+                <p className="text-red-500 text-xs mt-1">{validationErrors.aadharCardBackImage}</p>
+              )}
+            </div>
             {/* 🔥 Buttons */}
             <div className="flex justify-end gap-4 pt-6">
               <button

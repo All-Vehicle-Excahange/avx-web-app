@@ -71,6 +71,16 @@ export default function StoreFrontHeroSection() {
             ).toLocaleString()}`
             : "-";
 
+    const formatFollowerCount = (count) => {
+        if (!count) return "0";
+        if (count >= 1000) {
+            // Using toFixed(1) means 1100 -> 1.1, 1000 -> 1.0
+            // We can replace ".0" with nothing so 1000 -> 1K
+            return (count / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+        }
+        return count.toString();
+    };
+
     const handleFollowToggle = async () => {
         if (!comsultDetails?.id) return;
 
@@ -155,9 +165,14 @@ export default function StoreFrontHeroSection() {
                                     <div className="flex items-center justify-center gap-2 w-full">
                                         <Users className="w-4 h-4" />
                                         <span className="bg-primary/10 px-2 py-0.5 rounded-full text-xs font-bold text-primary">
-                                            {comsultDetails.followersCount?.toLocaleString() || "0"}
+                                            {formatFollowerCount(comsultDetails.followersCount)}
                                         </span>
-                                        <span>{isFollower ? "Unsubscribe" : "Subscribe"}</span>
+                                        <span
+                                            className={`${isFollower ? "text-primary/70" : "text-fourth"
+                                                }`}
+                                        >
+                                            {isFollower ? "Unsubscribe" : "Subscribe"}
+                                        </span>
                                     </div>
                                 </Button>
                             </div>
@@ -288,7 +303,7 @@ export default function StoreFrontHeroSection() {
                     setIsLoginOpen(true);
                 }}
             />
-            <DownloadAppPopup 
+            <DownloadAppPopup
                 isOpen={isDownloadAppOpen}
                 onClose={() => setIsDownloadAppOpen(false)}
             />

@@ -153,13 +153,8 @@ export default function ConsultantCard(props) {
               <span
                 className="
               text-xs
-              py-1
-              px-2
-              rounded-full
-              border border-third/40
-              bg-primary/5
-              text-third
-              font-medium
+              text-primary
+              font-semibold
               whitespace-nowrap
               shrink-0
             "

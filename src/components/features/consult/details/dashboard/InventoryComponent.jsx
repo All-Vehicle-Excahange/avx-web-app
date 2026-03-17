@@ -113,7 +113,7 @@ export default function InventoryComponent() {
       rating: "4.6",
       price: "8,95,000",
       image: "/big_card_car.jpg",
-      status: "underinspection",
+      status: "draft",
       inquiries: 8,
       chats: 1,
     },
@@ -124,7 +124,7 @@ export default function InventoryComponent() {
     { id: "draft", label: "Draft" },
     { id: "live", label: "Live" },
     { id: "sold", label: "Sold" },
-    { id: "underinspection", label: "Under Inspection" },
+    // { id: "underinspection", label: "Under Inspection" },
   ];
 
   const topVehicles = [
