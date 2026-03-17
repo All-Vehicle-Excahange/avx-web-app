@@ -166,7 +166,7 @@ function MyVehicle() {
               <>
                 <h3 className="text-xl font-bold mb-2">No {activeType.toLowerCase()} vehicles found.</h3>
                 <p className="text-third max-w-sm">
-                  You don't have any vehicles with this status.
+                  You dont have any vehicles with this status.
                 </p>
               </>
             )}
