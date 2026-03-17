@@ -6,6 +6,7 @@ import { Search, X } from "lucide-react";
 import { useRouter } from "next/router";
 import { getMakersByFuelOrBodyType, SearchCityAndState, getPopularCityAndState } from "@/services/filter";
 import { getAllConsultService } from "@/services/consult.filter.service";
+import { useUIStore } from "@/stores/useUIStore";
 
 /* ================= CONSTANTS ================= */
 
@@ -250,9 +251,13 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     handleActiveTabChange(null);
   };
 
+  const { setMobileBannerTempHidden } = useUIStore();
+
   // Scroll-lock only for mobile drawer, NOT for desktop dropdown tabs
+  // Also hide the mobile app download banner temporarily while drawer is open
   useEffect(() => {
     if (mobileOpen) {
+      setMobileBannerTempHidden(true);
       if (typeof window !== "undefined") {
         const scrollY = window.scrollY;
         document.body.style.position = "fixed";
@@ -261,6 +266,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         document.body.style.overflow = "hidden";
       }
     } else {
+      setMobileBannerTempHidden(false);
       if (typeof window !== "undefined") {
         const scrollY = document.body.style.top;
         document.body.style.position = "";
@@ -273,7 +279,10 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         }
       }
     }
-  }, [mobileOpen]);
+    
+    // Cleanup to ensure banner comes back if unmounted unexpectedly
+    return () => setMobileBannerTempHidden(false);
+  }, [mobileOpen, setMobileBannerTempHidden]);
 
   // Close desktop dropdown tabs when user scrolls
   useEffect(() => {

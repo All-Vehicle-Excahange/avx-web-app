@@ -29,7 +29,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
   const searchRef = useRef(null);
 
   /* ================= BANNER STATES ================= */
-  const { isMobileBannerVisible, hideMobileBanner } = useUIStore();
+  const { isMobileBannerVisible, hideMobileBanner, isMobileBannerTempHidden } = useUIStore();
   const [scrollY, setScrollY] = useState(0);
   const [bannerHeight, setBannerHeight] = useState(0);
   const bannerRef = useRef(null);
@@ -51,7 +51,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
   /* ================= BANNER HEIGHT ================= */
   useEffect(() => {
     const updateHeight = () => {
-      if (bannerRef.current && isMobileBannerVisible) {
+      if (bannerRef.current && isMobileBannerVisible && !isMobileBannerTempHidden) {
         setBannerHeight(bannerRef.current.offsetHeight);
       } else {
         setBannerHeight(0);
@@ -61,7 +61,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
     updateHeight();
     window.addEventListener("resize", updateHeight);
     return () => window.removeEventListener("resize", updateHeight);
-  }, [isMobileBannerVisible]);
+  }, [isMobileBannerVisible, isMobileBannerTempHidden]);
 
   /* ================= BANNER TRANSFORM ================= */
   // const transformY =
@@ -116,7 +116,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
         className="fixed top-0 inset-x-0 z-[1100] transition-transform duration-300 pointer-events-none"
         // style={{ transform: `translateY(${transformY}px)` }}
       >
-        {isMobileBannerVisible && atTop && (
+        {isMobileBannerVisible && !isMobileBannerTempHidden && atTop && (
           <div ref={bannerRef} className="pointer-events-auto">
             <MobileAppDownloadBanner onClose={hideMobileBanner} />
           </div>
