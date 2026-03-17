@@ -93,14 +93,14 @@ export default function StorySection() {
       {/* OUTER WHITE CARD */}
       <div className="w-full max-w-[1440px] mx-auto p-8 md:p-12">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+          <h2 className="font-secondary text-4xl md:text-5xl lg:text-6xl font-bold  text-gray-900 leading-tight">
             Read reviews,
             <br />
             buy with <span className="text-fourth">confidence</span>.
           </h2>
 
           {/* Trustpilot Badge */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
+          <div className="flex flex-wrap items-center justify-center  gap-3 mt-8">
             <span className="text-2xl md:text-3xl font-bold text-gray-900">
               4.2/5
             </span>
@@ -172,14 +172,14 @@ export default function StorySection() {
             <div className="flex justify-end gap-2 mb-4">
               <button
                 ref={prevRef}
-                className="w-14 h-14  cursor-pointer rounded-full bg-fourth border-2 border-third flex items-center justify-center hover:border-gray-900 hover:bg-primary hover:text-secondary transition-all duration-300"
+                className="w-12 h-12  cursor-pointer rounded-full bg-fourth border-2 border-third flex items-center justify-center hover:border-gray-900 hover:bg-primary hover:text-secondary transition-all duration-300"
               >
                 <ArrowLeft size={24} />
               </button>
 
               <button
                 ref={nextRef}
-                className="w-14 h-14 cursor-pointer rounded-full bg-fourth border-2 border-gray-300 flex items-center justify-center hover:border-gray-900 hover:bg-primary hover:text-secondary transition-all duration-300"
+                className="w-12 h-12 cursor-pointer rounded-full bg-fourth border-2 border-gray-300 flex items-center justify-center hover:border-gray-900 hover:bg-primary hover:text-secondary transition-all duration-300"
               >
                 <ArrowRight size={24} />
               </button>

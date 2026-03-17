@@ -11,6 +11,7 @@ import SendInquaryPopup from "./SendInquaryPopup";
 import { checkIsUserEligbleToSendInquary } from "@/services/vehicle.service";
 import SignupPopup from "@/components/auth/SignupPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
+import RequestAlredySentPopup from "./RequestAlredySentPopup";
 
 export default function VehicleSummaryRight({ vehicle, summary }) {
   const vehicleId = vehicle?.id;
@@ -20,6 +21,8 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+  const [isAlreadySentOpen, setIsAlreadySentOpen] = useState(false);
+  const [isCheckingInquiry, setIsCheckingInquiry] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const pendingAction = useRef(null);
@@ -29,6 +32,30 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
   useEffect(() => {
     setIsFavorite(vehicle?.isWishlisted || false);
   }, [vehicle?.isWishlisted]);
+
+  const handleRequestInquiry = async () => {
+    if (!vehicleId || isCheckingInquiry) return;
+
+    try {
+      setIsCheckingInquiry(true);
+      const res = await checkIsUserEligbleToSendInquary(vehicleId);
+      
+      if (
+        res?.data === null ||
+        res?.data?.inquiryStatus === "CLOSED_BY_VEHICLE_OWNER" ||
+        res?.data?.inquiryStatus === "CLOSED_BY_INQUIRER"
+      ) {
+        setIsPopupOpen(true);
+      } else {
+        setIsAlreadySentOpen(true);
+      }
+    } catch (error) {
+      console.error("Error checking inquiry eligibility:", error);
+      setIsPopupOpen(true); // Fallback
+    } finally {
+      setIsCheckingInquiry(false);
+    }
+  };
 
   const handleWishlistToggle = async () => {
     if (!isLoggedIn) {
@@ -206,16 +233,17 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
               size="sm"
               showIcon={false}
               className="rounded-full"
+              disabled={loading || isCheckingInquiry}
               onClick={() => {
                 if (!isLoggedIn) {
                   pendingAction.current = 'request';
                   setIsLoginOpen(true);
                 } else {
-                  setIsPopupOpen(true);
+                  handleRequestInquiry();
                 }
               }}
             >
-              Request Vehicle
+              {isCheckingInquiry ? "Please wait..." : "Request Vehicle"}
             </Button>
 
             <Button variant="outline" size="sm" showIcon={false} onClick={() => setIsDownloadOpen(true)}>
@@ -234,7 +262,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
         onSuccess={() => {
           if (pendingAction.current === 'request') {
             pendingAction.current = null;
-            setTimeout(() => setIsPopupOpen(true), 300);
+            setTimeout(() => handleRequestInquiry(), 300);
           }
         }}
       />
@@ -251,6 +279,11 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
           onClose={() => setIsPopupOpen(false)}
           consultName={summary?.consultationName}
           vehicleId={vehicleId}
+        />
+      )}
+      {isAlreadySentOpen && (
+        <RequestAlredySentPopup
+          onClose={() => setIsAlreadySentOpen(false)}
         />
       )}
       <DownloadAppPopup 
