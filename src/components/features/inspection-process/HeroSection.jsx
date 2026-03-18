@@ -19,7 +19,7 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-linear-to-t from-secondary via-transparent to-secondary/40 md:to-secondary/30" />
       </div>
 
-      <div className="relative z-20 mx-auto max-w-[1480px] px-4 sm:px-6 w-full">
+      <div className="relative z-20 mx-auto w-full max-w-[1480px] px-3 sm:px-4 md:px-6 lg:px-10 xl:px-12 my-21 ">
         <div className="grid lg:grid-cols-12 gap-10 md:gap-16 items-center">
           
           {/* LEFT */}
