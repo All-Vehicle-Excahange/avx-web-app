@@ -310,12 +310,12 @@ export default function InspectionAdvantage() {
                     <div
                       key={si}
                       className={`flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-all duration-300 ${unlocked
-                        ? "border-fourth/20 bg-fourth/6"
+                        ? "border-primary/30 "
                         : "border-white/4 bg-transparent opacity-35"
                         }`}
                     >
                       <div
-                        className={`flex items-center justify-center w-6 h-6 rounded-lg shrink-0 ${unlocked ? "bg-fourth/20 text-fourth" : "bg-white/20 text-third/80"
+                        className={`flex items-center justify-center w-6 h-6 rounded-lg shrink-0 ${unlocked ? " text-third/80" : "bg-white/20 text-third/80"
                           }`}
                       >
                         {unlocked ? (
@@ -338,7 +338,7 @@ export default function InspectionAdvantage() {
 
             {/* Score bar */}
             <div className="px-6 py-5 flex-1 flex flex-col justify-center gap-4">
-              <p className="text-[11px] uppercase tracking-[0.3em] text-third/35 font-semibold">
+              <p className="text-[11px] uppercase tracking-[0.3em] text-primary font-semibold">
                 Confidence Meter
               </p>
               <div className="flex flex-col gap-3">
@@ -346,15 +346,14 @@ export default function InspectionAdvantage() {
                   const filled = li <= active;
                   return (
                     <div key={li} className="flex items-center gap-3">
-                      <span className="text-[11px] text-third/35 w-16 shrink-0 uppercase tracking-wider font-medium">
+                      <span className="text-[11px] text-primary/80 w-16 shrink-0 uppercase tracking-wider font-medium">
                         {lbl}
                       </span>
                       <div className="flex-1 h-1.5 rounded-full bg-white/6 overflow-hidden">
                         <div
-                          className="h-full rounded-full transition-all duration-700"
+                          className="h-full rounded-full transition-all duration-700 bg-primary/30"
                           style={{
                             width: filled ? "100%" : "0%",
-                            background: "rgba(0,123,255,0.7)",
                             boxShadow: filled ? "0 0 8px rgba(0,123,255,0.35)" : "none",
                           }}
                         />
@@ -369,21 +368,21 @@ export default function InspectionAdvantage() {
             {active < steps.length - 1 && (
               <button
                 onClick={() => setActive(active + 1)}
-                className="mx-5 mb-5 flex items-center justify-between px-4 py-3 rounded-xl border border-fourth/20 bg-fourth/6 hover:bg-fourth/12 hover:border-fourth/35 transition-all duration-250 group"
+                className="mx-5 mb-5 flex items-center justify-between px-4 py-3 rounded-xl border border-primary/20 bg-fourth/6 hover:bg-primary/12 hover:border-fourth/35 transition-all duration-250 group"
               >
-                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-fourth/65">
+                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-primary">
                   Next Level
                 </span>
                 <ChevronRight
                   size={13}
-                  className="text-fourth/50 group-hover:translate-x-0.5 transition-transform duration-200"
+                  className="text-primary/80 group-hover:translate-x-0.5 transition-transform duration-200"
                 />
               </button>
             )}
             {active === steps.length - 1 && (
               <div className="mx-5 mb-5 flex items-center gap-2 px-4 py-3 rounded-xl border border-fourth/25 bg-fourth/8">
-                <CheckCircle2 size={13} className="text-fourth" />
-                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-fourth/70">
+                <CheckCircle2 size={13} className="text-primary/80" />
+                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-primary">
                   Maximum confidence
                 </span>
               </div>
