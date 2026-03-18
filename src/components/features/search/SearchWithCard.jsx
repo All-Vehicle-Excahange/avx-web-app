@@ -20,7 +20,7 @@ import {
 import SponsoredCars from "./SponsoredCars";
 import FilterSection from "./FilterSection";
 import PriceBased from "./PriceBased";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import {
   getAndSearchMakers,
   getAndSearchModel,
@@ -150,6 +150,8 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
 
   const isMobile = useIsMobile();
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const vehicleType = searchParams.get("vehicleType");
   const bodyType = searchParams.get("bodyType");
@@ -157,6 +159,8 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
   const brandParam = searchParams.get("brand");
   const makerId = searchParams.get("makerId");
   const modelIdParam = searchParams.get("modelId");
+  const variantIdParam = searchParams.get("variantId");
+  const variantParam = searchParams.get("variant");
   const budget = searchParams.get("budget");
   const sortBy = searchParams.get("sortBy");
   const direction = searchParams.get("direction");
@@ -260,19 +264,41 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
     // Body type from URL
     if (bodyType) {
       initialPayload.vehicleSubTypes = [bodyType];
-      setSelectedBodyType([bodyType]);
+      setSelectedBodyType([bodyType.toLowerCase()]);
     }
 
     // Brand / maker from URL
     if (makerId) {
       initialPayload.makerIds = [Number(makerId)];
       setSelectedBrands([makerId]);
+      if (brandParam) {
+        setBrands(prev => {
+          if (!prev.find(b => b.value === makerId)) {
+            return [{ value: makerId, label: brandParam }, ...prev];
+          }
+          return prev;
+        });
+      }
     }
 
     // Model from URL (e.g. from VDP navigation)
     if (modelIdParam) {
       initialPayload.modelIds = [Number(modelIdParam)];
       setSelectedModels([modelIdParam]);
+    }
+
+    // Variant from URL
+    if (variantIdParam) {
+      initialPayload.variantIds = [Number(variantIdParam)];
+      setSelectedVariants([variantIdParam]);
+      if (variantParam) {
+        setVariants(prev => {
+          if (!prev.find(v => v.value === variantIdParam)) {
+            return [{ value: variantIdParam, label: variantParam }, ...prev];
+          }
+          return prev;
+        });
+      }
     }
 
     // Fuel type from URL
@@ -283,8 +309,14 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
 
     // Budget from URL
     if (budget) {
-      if (mPrice > 0) initialPayload.minPrice = mPrice;
-      if (mxPrice > 0) initialPayload.maxPrice = mxPrice;
+      if (mPrice > 0) {
+        initialPayload.minPrice = mPrice;
+        setMinPrice(mPrice);
+      }
+      if (mxPrice > 0) {
+        initialPayload.maxPrice = mxPrice;
+        setMaxPrice(mxPrice);
+      }
     }
 
     fetchVehicles(1, initialPayload);
@@ -956,6 +988,9 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
   };
 
   const handleClearFilters = async () => {
+    // Remove query parameters from URL to clear top search bar
+    router.replace(pathname, { scroll: false });
+
     // Remove saved location from localStorage
     localStorage.removeItem("avx_saved_location");
     // Reset brand & model
@@ -1122,9 +1157,23 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
         "
       >
         <div className="relative z-10">
-          <h2 className="text-xl font-bold text-primary mb-4">
-            Filter Your Result
-          </h2>
+
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-bold text-primary mb-4">
+              Filter Your Result
+            </h2>
+
+            <button
+              className="flex items-center gap-2 mb-4 px-2 py-2 underline
+    text-sm font-semibold
+    text-primary/60 hover:text-primary
+    transition-all duration-200
+    cursor-pointer"
+              onClick={handleClearFilters}
+            >
+              Clear All
+            </button>
+          </div>
 
           <div className="flex flex-col gap-2">
             {/* ================= STATE & CITY SELECTOR ================= */}
@@ -1322,12 +1371,12 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
                       setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
                     }
                     onMouseUp={() => {
-                        setCurrentPage(1);
-                        fetchVehicles(1);
+                      setCurrentPage(1);
+                      fetchVehicles(1);
                     }}
                     onTouchEnd={() => {
-                        setCurrentPage(1);
-                        fetchVehicles(1);
+                      setCurrentPage(1);
+                      fetchVehicles(1);
                     }}
                     className="dual-range z-30"
                   />
@@ -1342,12 +1391,12 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
                       setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
                     }
                     onMouseUp={() => {
-                        setCurrentPage(1);
-                        fetchVehicles(1);
+                      setCurrentPage(1);
+                      fetchVehicles(1);
                     }}
                     onTouchEnd={() => {
-                        setCurrentPage(1);
-                        fetchVehicles(1);
+                      setCurrentPage(1);
+                      fetchVehicles(1);
                     }}
                     className="dual-range z-40"
                   />
@@ -1474,12 +1523,12 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
                     value={kmDistance}
                     onChange={(e) => setKmDistance(Number(e.target.value))}
                     onMouseUp={() => {
-                        setCurrentPage(1);
-                        fetchVehicles(1);
+                      setCurrentPage(1);
+                      fetchVehicles(1);
                     }}
                     onTouchEnd={() => {
-                        setCurrentPage(1);
-                        fetchVehicles(1);
+                      setCurrentPage(1);
+                      fetchVehicles(1);
                     }}
                     className="dual-range z-30"
                   />
@@ -1536,16 +1585,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
                 Apply Filter
               </Button>
 
-              <button
-                className="flex items-center gap-2 px-2 py-2 underline
-    text-sm font-semibold
-    text-primary/60 hover:text-primary
-    transition-all duration-200
-    cursor-pointer"
-                onClick={handleClearFilters}
-              >
-                Clear All
-              </button>
+
             </div>
           </div>
         </div>

@@ -35,7 +35,7 @@ export default function StoreFront() {
             <div className="flex flex-col gap-6 3xl:max-w-[1480px] 3xl:mx-auto">
               {/* TABS */}
               <div className="w-full px-2 mx-auto 3xl:container overflow-x-auto no-scrollbar">
-                <div className="flex gap-10 border-b border-third/30 min-w-max">
+                <div className="flex  gap-10 border-b border-third/30 min-w-max">
                   {[
                     { id: "inventory", label: "Inventory" },
                     { id: "aboutus", label: "About Us" },
@@ -45,7 +45,7 @@ export default function StoreFront() {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`relative py-4 text-sm font-medium transition whitespace-nowrap
+                      className={`hover:cursor-pointer relative py-4 text-sm font-medium transition whitespace-nowrap
         ${activeTab === tab.id
                           ? "text-primary"
                           : "text-third hover:text-primary"

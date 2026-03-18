@@ -112,7 +112,7 @@ export default function Review() {
   };
 
   return (
-    <section className="container  text-primary py-10">
+    <section className="container mt-2!  text-primary py-10">
       <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_2.1fr] gap-10">
         {/* ================= LEFT ================= */}
         <div className="space-y-6 sticky top-24 h-fit">

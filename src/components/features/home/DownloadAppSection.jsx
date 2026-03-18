@@ -6,9 +6,9 @@ export default function DownloadAppSection() {
             <div className="w-full 3xl:max-w-screen-2xl mx-auto   overflow-visible flex flex-col md:flex-row relative h-[300px]">
                 {/* LEFT CONTENT */}
                 <div className="flex-1 p-6 md:p-8 md:mb-30 flex flex-col justify-center z-10 relative">
-                    <h2 className="text-2xl max-w-2xl xl:max-w-4xl  md:text-4xl font-bold text-primary mb-4 leading-tight">
+                    <h2 className="text-2xl max-w-2xl xl:max-w-3xl  md:text-4xl font-bold text-primary mb-4 leading-tight">
                         Reecomm App Download For
-                        All Vehicle
+                        All Vehicle <br />
                         Sell & Buy
                     </h2>
 
