@@ -25,6 +25,7 @@ import VehicleOverviewMain from "./VehicleOverviewMain";
 
 import { useParams } from "next/navigation";
 import { getVehicleOverview, getVehicleSummary } from "@/services/vehicle.service";
+import ReletedConsualt from "./ReletedConsualt";
 
 export default function VehicleDetails() {
   const specificationRef = useRef(null);
@@ -203,8 +204,8 @@ export default function VehicleDetails() {
             </section>
           </section>
           <section className="pt-12 flex flex-col gap-12">
-            <SimulerVehicle />
-            <AutoConsultPicsSection limit={4} />
+            <SimulerVehicle vehicleOverview={vehicleOverview} />
+            <ReletedConsualt limit={4} vehicleOverview={vehicleOverview} vehicleSummary={vehicleSummary} />
           </section>
         </div>
       </main>

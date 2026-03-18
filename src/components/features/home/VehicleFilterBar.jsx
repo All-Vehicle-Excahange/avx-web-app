@@ -4,7 +4,7 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Search, X } from "lucide-react";
 import { useRouter } from "next/router";
-import { getMakersByFuelOrBodyType, SearchCityAndState, getPopularCityAndState } from "@/services/filter";
+import { getMakersByFuelOrBodyType, getAndSearchMakers, SearchCityAndState, getPopularCityAndState } from "@/services/filter";
 import { getAllConsultService } from "@/services/consult.filter.service";
 import { useUIStore } from "@/stores/useUIStore";
 
@@ -132,15 +132,23 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     currentFuel = fuelType,
     currentBody = bodyType,
   ) => {
-    if (!currentFuel || !currentBody) return;
     try {
-      const res = await getMakersByFuelOrBodyType({
-        fuelType: currentFuel,
-        bodyType: currentBody,
-        page: 1,
-        limit: 100,
-      });
-      setBrandOptions(res.data || []);
+      if (currentFuel && currentBody) {
+        const res = await getMakersByFuelOrBodyType({
+          fuelType: currentFuel,
+          bodyType: currentBody,
+          page: 1,
+          limit: 100,
+        });
+        setBrandOptions(res.data || []);
+      } else {
+        const res = await getAndSearchMakers({
+          searchTerm: "",
+          page: 1,
+          limit: 100,
+        });
+        setBrandOptions(res.data || []);
+      }
     } catch (error) {
       console.error("Error fetching brands:", error);
     }

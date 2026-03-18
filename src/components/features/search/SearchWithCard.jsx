@@ -157,6 +157,8 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
   const brandParam = searchParams.get("brand");
   const makerId = searchParams.get("makerId");
   const modelIdParam = searchParams.get("modelId");
+  const variantIdParam = searchParams.get("variantId");
+  const variantParam = searchParams.get("variant");
   const budget = searchParams.get("budget");
   const sortBy = searchParams.get("sortBy");
   const direction = searchParams.get("direction");
@@ -260,19 +262,41 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
     // Body type from URL
     if (bodyType) {
       initialPayload.vehicleSubTypes = [bodyType];
-      setSelectedBodyType([bodyType]);
+      setSelectedBodyType([bodyType.toLowerCase()]);
     }
 
     // Brand / maker from URL
     if (makerId) {
       initialPayload.makerIds = [Number(makerId)];
       setSelectedBrands([makerId]);
+      if (brandParam) {
+        setBrands(prev => {
+          if (!prev.find(b => b.value === makerId)) {
+            return [{ value: makerId, label: brandParam }, ...prev];
+          }
+          return prev;
+        });
+      }
     }
 
     // Model from URL (e.g. from VDP navigation)
     if (modelIdParam) {
       initialPayload.modelIds = [Number(modelIdParam)];
       setSelectedModels([modelIdParam]);
+    }
+
+    // Variant from URL
+    if (variantIdParam) {
+      initialPayload.variantIds = [Number(variantIdParam)];
+      setSelectedVariants([variantIdParam]);
+      if (variantParam) {
+        setVariants(prev => {
+          if (!prev.find(v => v.value === variantIdParam)) {
+            return [{ value: variantIdParam, label: variantParam }, ...prev];
+          }
+          return prev;
+        });
+      }
     }
 
     // Fuel type from URL
@@ -283,8 +307,14 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
 
     // Budget from URL
     if (budget) {
-      if (mPrice > 0) initialPayload.minPrice = mPrice;
-      if (mxPrice > 0) initialPayload.maxPrice = mxPrice;
+      if (mPrice > 0) {
+        initialPayload.minPrice = mPrice;
+        setMinPrice(mPrice);
+      }
+      if (mxPrice > 0) {
+        initialPayload.maxPrice = mxPrice;
+        setMaxPrice(mxPrice);
+      }
     }
 
     fetchVehicles(1, initialPayload);
