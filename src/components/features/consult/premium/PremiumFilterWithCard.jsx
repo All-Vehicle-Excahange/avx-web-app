@@ -639,9 +639,23 @@ export default function FilterWithCard({ onFilterChange }) {
         "
       >
         <div className="relative z-10">
-          <h2 className="text-2xl font-bold text-primary mb-4">
-            Filter Your Result
-          </h2>
+
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-bold text-primary mb-4">
+              Filter Your Result
+            </h2>
+
+            <button
+              className="flex items-center gap-2 mb-4 px-2 py-2 underline
+    text-sm font-semibold
+    text-primary/60 hover:text-primary
+    transition-all duration-200
+    cursor-pointer"
+              onClick={handleClearFilters}
+            >
+              Clear All
+            </button>
+          </div>
 
           {/* State & City Dropdowns */}
           <div className="space-y-4 mb-6">
@@ -911,17 +925,6 @@ export default function FilterWithCard({ onFilterChange }) {
             >
               Apply Filter
             </Button>
-
-            <button
-              className="flex items-center gap-2 px-2 py-2 underline
-            text-sm font-semibold
-            text-primary/60 hover:text-primary
-            transition-all duration-200
-            cursor-pointer"
-              onClick={handleClearFilters}
-            >
-              Clear All
-            </button>
           </div>
         </div>
       </aside>

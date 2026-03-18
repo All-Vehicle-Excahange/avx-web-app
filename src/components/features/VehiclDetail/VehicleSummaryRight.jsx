@@ -22,17 +22,23 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isAlreadySentOpen, setIsAlreadySentOpen] = useState(false);
-  const [inquiryStatus, setInquiryStatus] = useState(null);
+   const [inquiryStatus, setInquiryStatus] = useState(null);
   const [isCheckingInquiry, setIsCheckingInquiry] = useState(false);
+  const [localInquiryCount, setLocalInquiryCount] = useState(vehicle?.totalInquiryCount || 0);
 
   const [loading, setLoading] = useState(false);
   const pendingAction = useRef(null);
 
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
-  useEffect(() => {
+   useEffect(() => {
     setIsFavorite(vehicle?.isWishlisted || false);
-  }, [vehicle?.isWishlisted]);
+    setLocalInquiryCount(vehicle?.totalInquiryCount || 0);
+  }, [vehicle?.isWishlisted, vehicle?.totalInquiryCount]);
+
+  const handleInquirySuccess = () => {
+    setLocalInquiryCount(prev => prev + 1);
+  };
 
   const handleRequestInquiry = async () => {
     if (!vehicleId || isCheckingInquiry) return;
@@ -183,11 +189,10 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
 
           <div className="border-t border-third/40" />
 
-          {/* INQUIRY STATUS */}
           <div className="space-y-2">
             {(() => {
               const MAX_INQUIRIES = 15;
-              const inquiries = vehicle?.totalInquiryCount || 0;
+              const inquiries = localInquiryCount;
 
               const safeValue = Math.min(inquiries, MAX_INQUIRIES);
               let percentage = (safeValue / MAX_INQUIRIES) * 100;
@@ -281,6 +286,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
           onClose={() => setIsPopupOpen(false)}
           consultName={summary?.consultationName}
           vehicleId={vehicleId}
+          onSuccess={handleInquirySuccess}
         />
       )}
       {isAlreadySentOpen && (

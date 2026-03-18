@@ -1122,9 +1122,23 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
         "
       >
         <div className="relative z-10">
-          <h2 className="text-xl font-bold text-primary mb-4">
-            Filter Your Result
-          </h2>
+
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-bold text-primary mb-4">
+              Filter Your Result
+            </h2>
+
+            <button
+              className="flex items-center gap-2 mb-4 px-2 py-2 underline
+    text-sm font-semibold
+    text-primary/60 hover:text-primary
+    transition-all duration-200
+    cursor-pointer"
+              onClick={handleClearFilters}
+            >
+              Clear All
+            </button>
+          </div>
 
           <div className="flex flex-col gap-2">
             {/* ================= STATE & CITY SELECTOR ================= */}
@@ -1322,12 +1336,12 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
                       setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
                     }
                     onMouseUp={() => {
-                        setCurrentPage(1);
-                        fetchVehicles(1);
+                      setCurrentPage(1);
+                      fetchVehicles(1);
                     }}
                     onTouchEnd={() => {
-                        setCurrentPage(1);
-                        fetchVehicles(1);
+                      setCurrentPage(1);
+                      fetchVehicles(1);
                     }}
                     className="dual-range z-30"
                   />
@@ -1342,12 +1356,12 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
                       setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
                     }
                     onMouseUp={() => {
-                        setCurrentPage(1);
-                        fetchVehicles(1);
+                      setCurrentPage(1);
+                      fetchVehicles(1);
                     }}
                     onTouchEnd={() => {
-                        setCurrentPage(1);
-                        fetchVehicles(1);
+                      setCurrentPage(1);
+                      fetchVehicles(1);
                     }}
                     className="dual-range z-40"
                   />
@@ -1474,12 +1488,12 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
                     value={kmDistance}
                     onChange={(e) => setKmDistance(Number(e.target.value))}
                     onMouseUp={() => {
-                        setCurrentPage(1);
-                        fetchVehicles(1);
+                      setCurrentPage(1);
+                      fetchVehicles(1);
                     }}
                     onTouchEnd={() => {
-                        setCurrentPage(1);
-                        fetchVehicles(1);
+                      setCurrentPage(1);
+                      fetchVehicles(1);
                     }}
                     className="dual-range z-30"
                   />
@@ -1536,16 +1550,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
                 Apply Filter
               </Button>
 
-              <button
-                className="flex items-center gap-2 px-2 py-2 underline
-    text-sm font-semibold
-    text-primary/60 hover:text-primary
-    transition-all duration-200
-    cursor-pointer"
-                onClick={handleClearFilters}
-              >
-                Clear All
-              </button>
+
             </div>
           </div>
         </div>

@@ -366,12 +366,12 @@ export const getStoreFrontByUsername = async (username) => {
 
 export const getConsualtInventory = async (data) => {
   try {
-    const { pageNo, size, sortBy, direction, id } = data;
+    const { pageNo, size, sortBy, direction, id, vehicleType } = data;
 
     const res = await axiosInstance.get(
       `${ENDPOINT.getConsualtInventory}/${id}`,
       {
-        params: { pageNo, size, sortBy, direction },
+        params: { pageNo, size, sortBy, direction, vehicleType },
       },
     );
 

@@ -168,8 +168,7 @@ export default function StoreFrontHeroSection() {
                                             {formatFollowerCount(comsultDetails.followersCount)}
                                         </span>
                                         <span
-                                            className={`${isFollower ? "text-primary/70" : "text-fourth"
-                                                }`}
+
                                         >
                                             {isFollower ? "Unsubscribe" : "Subscribe"}
                                         </span>
