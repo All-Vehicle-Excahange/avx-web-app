@@ -6,6 +6,7 @@ import { Search, X } from "lucide-react";
 import { useRouter } from "next/router";
 import { getMakersByFuelOrBodyType, SearchCityAndState, getPopularCityAndState } from "@/services/filter";
 import { getAllConsultService } from "@/services/consult.filter.service";
+import { useUIStore } from "@/stores/useUIStore";
 
 /* ================= CONSTANTS ================= */
 
@@ -250,9 +251,13 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     handleActiveTabChange(null);
   };
 
+  const { setMobileBannerTempHidden } = useUIStore();
+
   // Scroll-lock only for mobile drawer, NOT for desktop dropdown tabs
+  // Also hide the mobile app download banner temporarily while drawer is open
   useEffect(() => {
     if (mobileOpen) {
+      setMobileBannerTempHidden(true);
       if (typeof window !== "undefined") {
         const scrollY = window.scrollY;
         document.body.style.position = "fixed";
@@ -261,6 +266,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         document.body.style.overflow = "hidden";
       }
     } else {
+      setMobileBannerTempHidden(false);
       if (typeof window !== "undefined") {
         const scrollY = document.body.style.top;
         document.body.style.position = "";
@@ -273,7 +279,10 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         }
       }
     }
-  }, [mobileOpen]);
+    
+    // Cleanup to ensure banner comes back if unmounted unexpectedly
+    return () => setMobileBannerTempHidden(false);
+  }, [mobileOpen, setMobileBannerTempHidden]);
 
   // Close desktop dropdown tabs when user scrolls
   useEffect(() => {
@@ -287,6 +296,15 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   }, [activeTab]);
 
   const handleSearch = () => {
+
+    const isConsult = internalActiveType === "consult";
+    const hasSelection = isConsult
+      ? (location || cityId || stateId || vehicleType || priceRange || service || availability)
+      : (location || cityId || stateId || vehicleType || bodyType || fuelType || brand || makerId || budget);
+
+    if (!hasSelection) return;
+
+
     // Save/overwrite selected location to localStorage
     if (stateId && cityId && location) {
       const [cityName, stateName] = location.split(", ").map((str) => str.trim());
@@ -545,7 +563,13 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   {/* BODY TYPE */}
                   <div
                     className={`flex-1 relative px-6 py-3 rounded-full transition-colors cursor-pointer ${activeTab === "bodyType" ? "bg-white/20" : "hover:bg-white/10"}`}
-                    onClick={() => handleActiveTabChange("bodyType")}
+                    onClick={() => {
+                      if (!vehicleType) {
+                        handleActiveTabChange("vehicle");
+                        return;
+                      }
+                      handleActiveTabChange("bodyType");
+                    }}
                   >
                     <div className="text-md font-semibold text-primary tracking-wide">
                       Body Type

@@ -43,19 +43,23 @@ export default function ReInspectionOptions() {
       <div className="absolute top-0 left-0 w-full h-px bg-fourth/20 opacity-30" />
 
       <div className="relative w-full mx-auto F">
-        <div className="flex flex-col lg:flex-row border border-white/20 rounded-4xl  backdrop-blur-md overflow-hidden">
+        <div className="flex flex-col lg:flex-row border border-primary/20 rounded-4xl  backdrop-blur-md overflow-hidden">
           {/* LEFT PANEL */}
-          <div className="lg:w-1/2 p-6 md:p-10 xl:p-14 lg:border-r border-white/10">
+          <div className="lg:w-1/2 p-6 md:p-10 xl:p-14 lg:border-r border-primary/20">
             <div className="flex items-center gap-3 mb-8 md:mb-10">
-              <Zap className="w-4 h-4 text-fourth" />
+              <Zap className="w-4 h-4 text-primary" />
               <span className="text-xs md:text-sm tracking-[0.35em] uppercase text-third font-semibold">
                 Buyer Protocols
               </span>
             </div>
 
-            <h2 className="text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-semibold text-primary leading-tight mb-8 md:mb-10">
-              Existing Report <br />
-              <span className="text-fourth">Upgrades</span>
+           
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat mb-8 md:mb-10">
+            Existing Report 
+              <br />
+              <span className="text-fourth/80">
+         Upgrades
+              </span>
             </h2>
 
             <div className="space-y-3">
@@ -67,15 +71,15 @@ export default function ReInspectionOptions() {
                   className={`w-full text-left p-4 md:p-5 rounded-xl transition-all duration-300 flex items-center justify-between group
                     ${
                       activeTab === i
-                        ? "bg-fourth/10 border border-fourth/30"
-                        : "hover:bg-white/5 border border-transparent"
+                        ? " border border-primary/20"
+                        : " border border-transparent"
                     }
                   `}
                 >
                   <div className="flex items-center gap-4 md:gap-5">
                     <div
                       className={`transition-colors duration-300 ${
-                        activeTab === i ? "text-fourth" : "text-third"
+                        activeTab === i ? "text-primary" : "text-third"
                       }`}
                     >
                       {opt.icon}
@@ -93,7 +97,7 @@ export default function ReInspectionOptions() {
                   <ChevronRight
                     className={`w-4 h-4 transition-all duration-300 ${
                       activeTab === i
-                        ? "text-fourth translate-x-0 opacity-100"
+                        ? "text-primary translate-x-0 opacity-100"
                         : "opacity-0 -translate-x-3"
                     }`}
                   />
@@ -103,10 +107,10 @@ export default function ReInspectionOptions() {
           </div>
 
           {/* RIGHT PANEL */}
-          <div className="lg:w-1/2 p-6 md:p-10 xl:p-14 bg-linear-to-br from-transparent to-fourth/5 flex flex-col justify-center relative">
+          <div className="lg:w-1/2 p-6 md:p-10 xl:p-14 bg-linear-to-br from-transparent to-primary/5 flex flex-col justify-center relative">
             <div className="relative z-10 transition-all duration-500">
-              <div className="mb-5 md:mb-6 inline-flex items-center gap-3 px-3 md:px-4 py-1.5 rounded-full bg-fourth/10 border border-fourth/20">
-                <div className="w-1.5 h-1.5 rounded-full bg-fourth animate-pulse" />
+              <div className="mb-5 md:mb-6 inline-flex items-center gap-3 px-3 md:px-4 py-1.5 rounded-full  border border-primary/20">
+     
                 <span className="text-[10px] md:text-sm tracking-[0.35em] uppercase text-third font-semibold">
                   {options[activeTab].visual}
                 </span>
@@ -122,8 +126,8 @@ export default function ReInspectionOptions() {
 
               {/* ✅ responsive stats */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="p-4 md:p-6 rounded-xl bg-white/3 border border-white/10">
-                  <MonitorPlay className="w-4 h-4 text-fourth mb-2" />
+                <div className="p-4 md:p-6 rounded-xl  border border-primary/10">
+                  <MonitorPlay className="w-4 h-4 text-primary mb-2" />
                   <p className="text-[11px] md:text-[12px] text-third uppercase tracking-widest font-semibold">
                     Priority Status
                   </p>
@@ -132,8 +136,8 @@ export default function ReInspectionOptions() {
                   </p>
                 </div>
 
-                <div className="p-4 md:p-6 rounded-xl bg-white/3 border border-white/10">
-                  <ClipboardCheck className="w-4 h-4 text-fourth mb-2" />
+                <div className="p-4 md:p-6 rounded-xl  border border-primary/10">
+                  <ClipboardCheck className="w-4 h-4 text-primary mb-2" />
                   <p className="text-[11px] md:text-[12px] text-third uppercase tracking-widest font-semibold">
                     Verification
                   </p>
@@ -148,7 +152,7 @@ export default function ReInspectionOptions() {
 
         {/* bottom note */}
         <div className="mt-8 md:mt-10 text-center px-2">
-          <p className="text-[10px] md:text-[11px] text-third/40 uppercase tracking-[0.22em]">
+          <p className="text-[10px] md:text-[11px] text-third/50 uppercase tracking-[0.22em]">
             Re-inspection facilitates risk mitigation closer to transaction
             finalized date
           </p>

@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import InputField from "@/components/ui/inputField";
 import DropzoneUpload from "@/components/ui/DropzoneUpload";
 import { postBecameSeller } from "@/services/user.service";
 import Button from "@/components/ui/button";
+import Image from "next/image";
+import { X } from "lucide-react";
 
 function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
   const [form, setForm] = useState({
@@ -13,31 +16,37 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
     aadharCardBackImage: null,
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [validationErrors, setValidationErrors] = useState({});
   const [preview, setPreview] = useState({
     pan: null,
     aadhaarFront: null,
     aadhaarBack: null,
   });
 
-  // 🔒 PROPER SCROLL LOCK + ESC
+  const [isClosing, setIsClosing] = useState(false);
+
+  const handleClose = useCallback(() => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      setError("");
+      setValidationErrors({});
+      onClose();
+    }, 250);
+  }, [onClose]);
+
+  // 🔒 SIMPLE OVERFLOW HIDDEN + ESC
   useEffect(() => {
     if (!isOpen) return;
 
-    // Save current scroll position
-    const scrollY = window.scrollY;
-    console.log("8")
-    
     // Lock body
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.left = "0";
-    document.body.style.right = "0";
-    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden";
 
     // ESC key handler
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
-        onClose();
+        handleClose();
       }
     };
 
@@ -45,130 +54,173 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
 
     return () => {
       // Restore scroll
-      const storedScrollY = document.body.style.top;
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.left = "";
-      document.body.style.right = "";
-      document.body.style.width = "";
-          console.log("9")
-
-      window.scrollTo(0, parseInt(storedScrollY || "0") * -1);
-
+      document.body.style.overflow = "";
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, handleClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen && !isClosing) return null;
 
   const handleInput = (key, value) => {
+    setError("");
+    setValidationErrors((prev) => ({ ...prev, [key]: undefined }));
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSubmit = async () => {
     try {
       setLoading(true);
+      setError("");
 
       await postBecameSeller(form);
 
       onClose(); // close only if success
-    } catch (error) {
-      console.error("Seller verification failed:", error);
+    } catch (err) {
+      console.error("Seller verification failed:", err);
+      const api = err?.response?.data;
+
+      if (api?.data?.validationErrors) {
+        setValidationErrors(api.data.validationErrors);
+      }
+
+      const msg = api?.message || "Failed to submit verification.";
+      setError(msg);
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <>
-      {/* Overlay */}
+  const modalContent = (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60  backdrop-blur-sm p-4"
+      onClick={handleClose}
+      style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}
+    >
       <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-md z-9998"
-        onClick={onClose}
-      />
-
-      {/* Modal */}
-      <div className="fixed inset-0 z-9999 flex items-center justify-center p-4">
-        <div
-          className="relative bg-secondary w-2xl  max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl p-8"
-          onClick={(e) => e.stopPropagation()}
+        className="relative flex w-full max-w-[1200px] max-h-[70vh] overflow-hidden rounded-2xl shadow-2xl bg-primary-white"
+        onClick={(e) => e.stopPropagation()}
+        style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}
+      >
+        {/* ❌ Close Button */}
+        <button
+          onClick={handleClose}
+          className="absolute bg-white cursor-pointer top-4 right-4 z-20 p-1 rounded-full hover:opacity-70 text-secondary"
         >
-          {/* ❌ Close Button */}
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 text-xl font-bold text-primary hover:text-black"
-          >
-            ✕
-          </button>
+          <X size={20} />
+        </button>
 
-          <h2 className="text-2xl font-semibold mb-6">Document Verification</h2>
+        {/* LEFT IMAGE */}
+        <div className="hidden md:block w-5/12 relative bg-black shrink-0">
+          <Image
+            src="/cs.png"
+            alt="Document Verification"
+            fill
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
+          <div className="absolute bottom-8 left-8">
+            <h2 className="text-4xl font-bold text-white leading-tight">
+              Become a
+              <br />
+              Seller
+            </h2>
+          </div>
+        </div>
+
+        {/* RIGHT CONTENT (FORM) */}
+        <div className="w-full md:w-7/12 p-8 md:p-12 bg-secondary overflow-y-auto custom-scrollbar">
+          <h3 className="text-2xl font-bold mb-6 text-primary">Document Verification</h3>
 
           <div className="space-y-5">
-            <InputField
-              label="PAN Card Number"
-              variant="colored"
-              value={form.panCardNumber}
-              onChange={(e) => handleInput("panCardNumber", e.target.value)}
-            />
+            <div>
+              <InputField
+                label="PAN Card Number"
+                variant="colored"
+                value={form.panCardNumber}
+                onChange={(e) => handleInput("panCardNumber", e.target.value)}
+              />
+              {validationErrors.panCardNumber && (
+                <p className="text-red-500 text-xs mt-1">{validationErrors.panCardNumber}</p>
+              )}
+            </div>
 
-            <DropzoneUpload
-              label="PAN Card Front Image"
-              preview={preview.pan}
-              onChange={(file) => {
-                const f = Array.isArray(file) ? file[0] : file;
-                if (f) {
-                  setPreview((p) => ({
-                    ...p,
-                    pan: typeof f === "string" ? f : URL.createObjectURL(f),
-                  }));
-                  handleInput("panCardFrontImage", f);
-                }
-              }}
-            />
+            <div>
+              <DropzoneUpload
+                label="PAN Card Front Image"
+                preview={preview.pan}
+                onChange={(file) => {
+                  const f = Array.isArray(file) ? file[0] : file;
+                  if (f) {
+                    setPreview((p) => ({
+                      ...p,
+                      pan: typeof f === "string" ? f : URL.createObjectURL(f),
+                    }));
+                    handleInput("panCardFrontImage", f);
+                  }
+                }}
+              />
+              {validationErrors.panCardFrontImage && (
+                <p className="text-red-500 text-xs mt-1">{validationErrors.panCardFrontImage}</p>
+              )}
+            </div>
 
-            <InputField
-              label="Aadhaar Card Number"
-              variant="colored"
-              value={form.aadharCardNumber}
-              onChange={(e) => handleInput("aadharCardNumber", e.target.value)}
-            />
+            <div>
+              <InputField
+                label="Aadhaar Card Number"
+                variant="colored"
+                value={form.aadharCardNumber}
+                onChange={(e) => handleInput("aadharCardNumber", e.target.value)}
+              />
+              {validationErrors.aadharCardNumber && (
+                <p className="text-red-500 text-xs mt-1">{validationErrors.aadharCardNumber}</p>
+              )}
+            </div>
 
-            <DropzoneUpload
-              label="Aadhaar Front Image"
-              preview={preview.aadhaarFront}
-              onChange={(file) => {
-                const f = Array.isArray(file) ? file[0] : file;
-                if (f) {
-                  setPreview((p) => ({
-                    ...p,
-                    aadhaarFront:
-                      typeof f === "string" ? f : URL.createObjectURL(f),
-                  }));
-                  handleInput("aadharCardFrontImage", f);
-                }
-              }}
-            />
+            <div>
+              <DropzoneUpload
+                label="Aadhaar Front Image"
+                preview={preview.aadhaarFront}
+                onChange={(file) => {
+                  const f = Array.isArray(file) ? file[0] : file;
+                  if (f) {
+                    setPreview((p) => ({
+                      ...p,
+                      aadhaarFront:
+                        typeof f === "string" ? f : URL.createObjectURL(f),
+                    }));
+                    handleInput("aadharCardFrontImage", f);
+                  }
+                }}
+              />
+              {validationErrors.aadharCardFrontImage && (
+                <p className="text-red-500 text-xs mt-1">{validationErrors.aadharCardFrontImage}</p>
+              )}
+            </div>
 
-            <DropzoneUpload
-              label="Aadhaar Back Image"
-              preview={preview.aadhaarBack}
-              onChange={(file) => {
-                const f = Array.isArray(file) ? file[0] : file;
-                if (f) {
-                  setPreview((p) => ({
-                    ...p,
-                    aadhaarBack:
-                      typeof f === "string" ? f : URL.createObjectURL(f),
-                  }));
-                  handleInput("aadharCardBackImage", f);
-                }
-              }}
-            />
-
+            <div>
+              <DropzoneUpload
+                label="Aadhaar Back Image"
+                preview={preview.aadhaarBack}
+                onChange={(file) => {
+                  const f = Array.isArray(file) ? file[0] : file;
+                  if (f) {
+                    setPreview((p) => ({
+                      ...p,
+                      aadhaarBack:
+                        typeof f === "string" ? f : URL.createObjectURL(f),
+                    }));
+                    handleInput("aadharCardBackImage", f);
+                  }
+                }}
+              />
+              {validationErrors.aadharCardBackImage && (
+                <p className="text-red-500 text-xs mt-1">{validationErrors.aadharCardBackImage}</p>
+              )}
+            </div>
             {/* 🔥 Buttons */}
             <div className="flex justify-end gap-4 pt-6">
               <button
-                onClick={onClose}
+                onClick={handleClose}
                 className="px-6 h-11 rounded-xl border border-gray-300"
               >
                 Cancel
@@ -181,8 +233,12 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
+
+  return typeof document !== "undefined"
+    ? createPortal(modalContent, document.body)
+    : null;
 }
 
 export default DetailsFromPopup;

@@ -55,7 +55,7 @@ export default function VehicleOverview({ vehicle }) {
   const speedometerImage =
     vehicleOverview?.vehicleImages?.find(
       (img) => img.imageKey?.toLowerCase() === "speedometer",
-    )?.imageUrl || "https://images.pexels.com/photos/6730469/pexels-photo-6730469.jpeg";
+    )?.imageUrl || "";
 
 
   return (
@@ -73,11 +73,11 @@ export default function VehicleOverview({ vehicle }) {
             value={
               vehicleOverview.vehicleDocument?.regDate
                 ? new Date(vehicleOverview.vehicleDocument.regDate)
-                    .toLocaleDateString("en-US", {
-                      month: "short",
-                      year: "numeric",
-                    })
-                    .replace(" ", "-")
+                  .toLocaleDateString("en-US", {
+                    month: "short",
+                    year: "numeric",
+                  })
+                  .replace(" ", "-")
                 : "-"
             }
           />
@@ -95,23 +95,24 @@ export default function VehicleOverview({ vehicle }) {
               <Info size={12} />
             </div>
 
-            {/* Hover Image Preview */}
-            <div className="absolute right-0 top-8 z-50 hidden group-hover:block">
-              <div className="rounded-lg border bg-background shadow-lg p-2 w-40">
-                <div className="relative w-full h-24">
-                  <Image
-                    src={speedometerImage}
-                    alt="Odometer preview"
-                    fill
-                    className="rounded-md object-cover"
-                  />
+            {/* Hover Image Preview (Only if image provided) */}
+            {speedometerImage?.trim() && (
+              <div className="absolute right-0 top-8 z-50 hidden group-hover:block">
+                <div className="rounded-lg border bg-background shadow-lg p-2 w-40">
+                  <div className="relative w-full h-24">
+                    <Image
+                      src={speedometerImage}
+                      alt="Odometer preview"
+                      fill
+                      className="rounded-md object-cover"
+                    />
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground text-center">
+                    Odometer reading
+                  </p>
                 </div>
-
-                <p className="mt-1 text-xs text-muted-foreground text-center">
-                  Odometer reading
-                </p>
               </div>
-            </div>
+            )}
           </div>
 
           <Item

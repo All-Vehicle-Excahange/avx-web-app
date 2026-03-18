@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import Image from "next/image";
 import Button from "@/components/ui/button";
@@ -13,18 +14,45 @@ const AppleLogo = ({ className }) => (
 );
 
 export default function DownloadAppPopup({ isOpen, onClose }) {
+  const [isClosing, setIsClosing] = useState(false);
+
+  const handleClose = useCallback(() => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 250);
+  }, [onClose]);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+  const modalContent = (
+    <div 
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      onClick={handleClose}
+      style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}
+    >
       {/* CONTAINER */}
-      <div className="relative flex w-full max-w-[1050px] min-h-[450px] overflow-hidden rounded-2xl shadow-2xl bg-secondary border border-third/20">
+      <div 
+        className="relative flex w-full max-w-[1050px] min-h-[450px] overflow-hidden rounded-2xl shadow-2xl bg-secondary border border-third/20"
+        onClick={(e) => e.stopPropagation()}
+        style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}
+      >
         {/* CLOSE */}
         <button
-          onClick={onClose}
-          className="absolute top-5 right-5 z-20 p-2 rounded-full bg-black/20 text-primary hover:opacity-70"
+          onClick={handleClose}
+          className="absolute bg-white cursor-pointer top-4 right-4 z-20 p-1 rounded-full hover:opacity-70 text-secondary"
         >
-          <X size={22} />
+          <X size={20} />
         </button>
 
         {/* LEFT IMAGE */}
@@ -106,4 +134,8 @@ export default function DownloadAppPopup({ isOpen, onClose }) {
       </div>
     </div>
   );
+
+  return typeof document !== "undefined"
+    ? createPortal(modalContent, document.body)
+    : null;
 }

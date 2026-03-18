@@ -5,14 +5,13 @@ import Link from "next/link";
 function BecameBanner() {
     return (
         <section className="bg-fourth">
-            <div className="mx-auto w-full h-auto min-h-[400px] pb-12">
+            <div className="mx-auto w-full h-auto">
                 <div
                     className="
           mt-12
           flex flex-col md:flex-row
           rounded-3xl
           overflow-hidden
-          border border-white/10
         "
                 >
                     <Link
@@ -25,7 +24,7 @@ function BecameBanner() {
               hover:flex-[1.3]
               px-10 py-16 lg:py-20
               text-center
-              border-b md:border-b-0 md:border-r border-white/80
+              border-b md:border-b-0 md:border-r border-primary
             ">
                         <p className="mb-6">
                             <span
@@ -42,11 +41,11 @@ function BecameBanner() {
                             </span>
                         </p>
 
-                        <p className="text-2xl sm:text-3xl font-semibold text-white font-[Montserrat]">
+                        <p className="text-2xl font-bold font-primary  sm:text-3xl  text-primary ">
                             Become a Consultant
                         </p>
 
-                        <p className="mt-4 text-base text-white/90 max-w-sm mx-auto leading-relaxed">
+                        <p className="mt-4 text-base text-primary/80 max-w-sm mx-auto leading-relaxed ">
                             List vehicles, manage inquiries, and grow your visibility on a
                             trusted marketplace.
                         </p>
@@ -93,11 +92,11 @@ function BecameBanner() {
                             </span>
                         </p>
 
-                        <p className="text-2xl sm:text-3xl font-semibold text-white font-[Montserrat]">
+                        <p className="text-2xl sm:text-3xl font-bold font-primary text-primary ">
                             Sell Your Vehicles
                         </p>
 
-                        <p className="mt-4 text-base text-white/90 max-w-sm mx-auto leading-relaxed">
+                        <p className="mt-4 text-base text-primary/80 max-w-sm mx-auto leading-relaxed">
                             Showcase your vehicles to thousands of buyers and manage
                             everything in one place.
                         </p>
@@ -115,6 +114,7 @@ function BecameBanner() {
                             <Button variant="ghost">Become Seller </Button>
                         </span>
                     </Link>
+
                 </div>
             </div>
         </section>

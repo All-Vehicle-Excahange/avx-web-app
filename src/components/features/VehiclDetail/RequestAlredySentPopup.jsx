@@ -1,0 +1,122 @@
+"use client";
+
+import React, { useEffect, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
+import Image from "next/image";
+import { X, CheckCircle2, Clock, XCircle } from "lucide-react";
+
+function RequestAlredySentPopup({ onClose, status = "PENDING" }) {
+    const [isClosing, setIsClosing] = useState(false);
+
+    const handleClose = useCallback(() => {
+        setIsClosing(true);
+        setTimeout(() => {
+            setIsClosing(false);
+            if (onClose) onClose();
+        }, 250);
+    }, [onClose]);
+
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, []);
+
+    const getStatusContent = () => {
+        switch (status) {
+            case "APPROVED":
+                return {
+                    icon: <CheckCircle2 className="text-green-500 w-20 h-20" />,
+                    title: "Request Approved",
+                    description: "Your inquiry has been approved by the seller.",
+                    subText1: "The consultant will call you shortly to proceed.",
+                    subText2: "You can continue the conversation in the AVX app."
+                };
+            case "REJECTED":
+                return {
+                    icon: <XCircle className="text-red-500 w-20 h-20" />,
+                    title: "Request Rejected",
+                    description: "Unfortunately, your inquiry was rejected.",
+                    subText1: "The seller is currently not proceeding with this request.",
+                    subText2: "You can explore other vehicles in our marketplace."
+                };
+            case "PENDING":
+            default:
+                return {
+                    icon: <Clock className="text-yellow-500 w-20 h-20" />,
+                    title: "Request Pending",
+                    description: "Your inquiry has already been sent and is pending.",
+                    subText1: "The consultant is reviewing your request.",
+                    subText2: "You will be notified once they respond."
+                };
+        }
+    };
+
+    const content = getStatusContent();
+
+    const modalContent = (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={handleClose} style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}>
+            {/* Popup Box */}
+            <div className="relative flex w-full max-w-[900px] overflow-hidden rounded-2xl shadow-2xl bg-secondary" onClick={(e) => e.stopPropagation()} style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}>
+
+                {/* CLOSE */}
+                <button
+                    onClick={handleClose}
+                    className="absolute bg-white cursor-pointer top-4 right-4 z-20 p-1 rounded-full hover:opacity-70 text-secondary"
+                >
+                    <X size={20} />
+                </button>
+
+                {/* LEFT IMAGE */}
+                <div className="hidden md:block w-5/12 relative min-h-[400px]">
+                    <Image src="/cs.png" alt="Cars" fill className="object-cover" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
+                    <div className="absolute bottom-8 left-8 pr-4">
+                        <h2 className="text-3xl font-bold text-primary leading-tight">
+                            Find your
+                            <br />
+                            dream car
+                        </h2>
+                    </div>
+                </div>
+
+                {/* RIGHT FORM */}
+                <div className="w-full md:w-7/12 p-8 md:p-12 bg-secondary flex flex-col justify-center min-h-[400px]">
+                    <div className="flex flex-col items-center justify-center h-full space-y-6">
+                        {/* Status Icon */}
+                        <div className="flex items-center justify-center animate-in zoom-in duration-500">
+                            {content.icon}
+                        </div>
+
+                        {/* Headlines */}
+                        <div className="space-y-1 text-center">
+                            <h3 className="text-3xl font-bold text-primary tracking-tight">
+                                {content.title}
+                            </h3>
+                            <p className="text-third max-w-sm mt-2 mx-auto">
+                                {content.description}
+                            </p>
+                        </div>
+
+                        {/* Details Box */}
+                        <div className="text-center space-y-2 mt-4 max-w-sm w-full mx-auto">
+                            <p className="text-primary font-medium text-base">
+                                {content.subText1}
+                            </p>
+                            <p className="text-third text-sm leading-relaxed">
+                                {content.subText2}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+
+    return typeof document !== "undefined"
+        ? createPortal(modalContent, document.body)
+        : null;
+}
+
+export default RequestAlredySentPopup;

@@ -935,7 +935,6 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
     selectedBrands, selectedModels, selectedVariants, selectedFuelTypes,
     selectedTransmissionTypes, selectedBodyType, selectedYear,
     selectedCityId, selectedStateId,
-    minPrice, maxPrice, kmDistance,
     selectedRating, selectedSellerType, avxAssumed,
   ]);
 
@@ -1317,11 +1316,19 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
                     type="range"
                     min={MIN}
                     max={MAX}
-                    step={50000}
+                    step={1}
                     value={minPrice}
                     onChange={(e) =>
                       setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
                     }
+                    onMouseUp={() => {
+                        setCurrentPage(1);
+                        fetchVehicles(1);
+                    }}
+                    onTouchEnd={() => {
+                        setCurrentPage(1);
+                        fetchVehicles(1);
+                    }}
                     className="dual-range z-30"
                   />
 
@@ -1329,11 +1336,19 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
                     type="range"
                     min={MIN}
                     max={MAX}
-                    step={50000}
+                    step={1}
                     value={maxPrice}
                     onChange={(e) =>
                       setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
                     }
+                    onMouseUp={() => {
+                        setCurrentPage(1);
+                        fetchVehicles(1);
+                    }}
+                    onTouchEnd={() => {
+                        setCurrentPage(1);
+                        fetchVehicles(1);
+                    }}
                     className="dual-range z-40"
                   />
                 </div>
@@ -1455,9 +1470,17 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
                     type="range"
                     min={0}
                     max={MAX_KM}
-                    step={5000}
+                    step={1}
                     value={kmDistance}
                     onChange={(e) => setKmDistance(Number(e.target.value))}
+                    onMouseUp={() => {
+                        setCurrentPage(1);
+                        fetchVehicles(1);
+                    }}
+                    onTouchEnd={() => {
+                        setCurrentPage(1);
+                        fetchVehicles(1);
+                    }}
                     className="dual-range z-30"
                   />
                 </div>

@@ -5,7 +5,8 @@ import axiosInstance, {
 const ENDPOINT = {
     getVehicleOverview: "/vehicle/detail-page",
     getVehicleSummary: "/consultation/detail-page/meta",
-    sendInquary: "/vehicles/inquiry/create"
+    sendInquary: "/vehicles/inquiry/create",
+    checkIsUserEligbleToSendInquary: "/vehicles/inquiry/latest-by-vehicle"
 };
 
 export const getVehicleOverview = async (id) => {
@@ -29,6 +30,15 @@ export const getVehicleSummary = async (id) => {
 export const sendInquary = async (vehicleId, data) => {
     try {
         const res = await axiosInstance.post(`${ENDPOINT.sendInquary}/${vehicleId}`, data)
+        return handleResponse(res);
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const checkIsUserEligbleToSendInquary = async (vehicleId) => {
+    try {
+        const res = await axiosInstance.get(`${ENDPOINT.checkIsUserEligbleToSendInquary}/${vehicleId}`)
         return handleResponse(res);
     } catch (error) {
         throw error;

@@ -6,6 +6,14 @@ import Button from "@/components/ui/button";
 import { getWishList, getFollowedConsultant } from "@/services/user.service";
 
 function Wishlist() {
+  const [activeTab, setActiveTab] = useState("wishlist");
+
+  const tabs = [
+    { id: "wishlist", label: "Wishlist" },
+    { id: "subscribed", label: "Subscribed Consultants" },
+    { id: "preference", label: "Preferences" },
+  ];
+
   const [prefs, setPrefs] = useState({
     suvUnder15: true,
     avx: true,
@@ -88,14 +96,14 @@ function Wishlist() {
   }, []);
 
   useEffect(() => {
-    fetchWishList(1);
-    setWishlistPage(1);
-  }, [fetchWishList]);
-
-  useEffect(() => {
-    fetchFollowedConsultant(1);
-    setConsultantPage(1);
-  }, [fetchFollowedConsultant]);
+    if (activeTab === "wishlist") {
+      fetchWishList(1);
+      setWishlistPage(1);
+    } else if (activeTab === "subscribed") {
+      fetchFollowedConsultant(1);
+      setConsultantPage(1);
+    }
+  }, [activeTab, fetchWishList, fetchFollowedConsultant]);
 
   const handleLoadMoreWishlist = () => {
     const nextPage = wishlistPage + 1;
@@ -113,10 +121,28 @@ function Wishlist() {
 
   return (
     <>
-      <section className="w-full container rounded-2xl  p-6 space-y-12">
+      <section className="w-full container rounded-2xl p-6 space-y-6">
+        {/* TABS */}
+        <div className="flex flex-wrap gap-2">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-4 py-2 rounded-full text-sm font-medium border transition
+                ${activeTab === tab.id
+                  ? "bg-primary text-secondary border-primary"
+                  : "border-third/50 text-primary hover:bg-third/20"
+                }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
         {/* VEHICLE WISHLIST */}
+        {activeTab === "wishlist" && (
         <div>
-          <h1 className="text-3xl font-extrabold mb-6">Vehicle Wishlist</h1>
+          <h1 className="text-3xl font-extrabold mb-6 hidden">Vehicle Wishlist</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
             {cardData.length > 0 ? (
               cardData.map((vehicle) => (
@@ -139,10 +165,12 @@ function Wishlist() {
             </div>
           )}
         </div>
+        )}
 
         {/* CONSULTANT WISHLIST */}
+        {activeTab === "subscribed" && (
         <div>
-          <h1 className="text-3xl font-extrabold mb-6">
+          <h1 className="text-3xl font-extrabold mb-6 hidden">
             Subscribed Consultant
           </h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -165,10 +193,12 @@ function Wishlist() {
             </div>
           )}
         </div>
+        )}
 
         {/* 🔔 NOTIFICATION PREFERENCES */}
+        {activeTab === "preference" && (
         <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 max-w-xl">
-          <h2 className="text-xl font-bold mb-4">Notification Preferences</h2>
+          <h2 className="text-xl font-bold mb-4 hidden">Notification Preferences</h2>
           <p className="text-third text-sm mb-4">Notify me for:</p>
 
           <div className="space-y-4 text-sm">
@@ -225,6 +255,7 @@ function Wishlist() {
             )}
           </div>
         </div>
+        )}
       </section>
     </>
   );

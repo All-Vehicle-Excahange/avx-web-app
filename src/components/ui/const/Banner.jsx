@@ -37,6 +37,7 @@ export default function Banner({
           href={navigationPath ? `${navigationPath}` : undefined}
           onClick={onClick || handleClick}
           variant="ghost"
+          size="sm"
         >
           {buttonText}
         </Button>

@@ -32,7 +32,9 @@ export default function Home() {
         <TopPicsSection />
       </Layout>
 
-      {/* <SellVehicleBanner fullWidth /> */}
+      <div className="block md:hidden">
+        <SellVehicleBanner fullWidth />
+      </div>
       {/* <Layout> */}
 
       <AvxInspected />
@@ -49,8 +51,12 @@ export default function Home() {
       </Layout> */}
 
 
-      <BecameBanner />
-
+      <div className="hidden md:block">
+        <BecameBanner />
+      </div>
+      <div className="block md:hidden">
+        <ConsultBanner />
+      </div>
 
 
       <Layout>

@@ -38,9 +38,11 @@ export default function InspectionInitiated() {
       <div className="relative w-full mx-auto ">
         {/* HEADER */}
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-4xl md:text-5xl font-semibold text-primary leading-tight">
-            Inspection Initiated
-          </h2>
+         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat">
+            Inspection       <span className="text-fourth/80">
+               Initiated
+              </span>
+            </h2>
 
           <p className="mt-5 text-third/70 text-lg">
             A precision-driven pipeline that activates once trust is requested.
@@ -60,15 +62,15 @@ export default function InspectionInitiated() {
                 group
                 px-6 py-3
                 rounded-full
-                bg-white/4
-                border border-white/10
+               
+                border border-primary/10
                 backdrop-blur-md
                 flex items-center gap-3
-                hover:border-fourth/40
+                hover:border-primary/40
                 transition-all duration-300
               "
             >
-              <div className="text-fourth">{item.icon}</div>
+              <div className="text-primary">{item.icon}</div>
               <span className="text-sm font-medium text-primary">
                 {item.label}
               </span>
@@ -79,7 +81,7 @@ export default function InspectionInitiated() {
         {/* ===== UNIQUE HORIZONTAL FLOW ===== */}
         <div className="relative">
           {/* pipeline line */}
-          <div className="absolute top-8 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/20 to-transparent" />
+          <div className="absolute top-8 left-0 right-0 h-px bg-linear-to-r from-transparent via-primary/20 to-transparent" />
 
           <div className="grid md:grid-cols-3 gap-10 relative">
             {steps.map((step, idx) => (
@@ -90,10 +92,11 @@ export default function InspectionInitiated() {
                   mx-auto mb-6
                   w-16 h-16
                   rounded-2xl
-                  bg-[#151515]
-                  border border-white/10
+                 
+                  border border-primary/20
                   flex items-center justify-center
-                  text-fourth
+                  text-primary
+                  backdrop-blur-xl
                   group-hover:bg-fourth
                   group-hover:text-primary
                   transition-all duration-500
@@ -119,8 +122,8 @@ export default function InspectionInitiated() {
 
         {/* TRUST STATEMENT */}
         <div className="mt-24 text-center max-w-2xl mx-auto">
-          <div className="inline-flex items-start gap-3 px-6 py-4 rounded-2xl bg-white/3 border border-white/10">
-            <Zap className="text-fourth w-5 h-5 mt-1 shrink-0" />
+          <div className="inline-flex items-start gap-3 px-6 py-4 rounded-2xl bg-primary/3 border border-primary/10">
+            <Zap className="text-primary w-5 h-5 mt-1 shrink-0" />
             <p className="text-sm text-primary/80 italic leading-relaxed">
               AVX inspected vehicles consistently convert faster and build
               stronger buyer confidence across the marketplace.

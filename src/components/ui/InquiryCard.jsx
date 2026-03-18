@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Button from "@/components/ui/button";
 import {
   approveInquiry,
@@ -71,14 +72,17 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
       <div className="flex flex-col lg:flex-row items-start gap-4 lg:gap-5 w-full">
 
         {/* ✅ Vehicle Image (Full width on mobile/tablet, fixed on desktop) */}
-        <div className="w-full lg:w-48 h-48 lg:h-42 rounded-xl overflow-hidden border border-third/30 bg-primary/5 shrink-0 relative">
+        <Link 
+          href={`/vehicle/details/${inquiryVehicleResponse.id}`}
+          className="w-full lg:w-48 h-48 lg:h-42 rounded-xl overflow-hidden border border-third/30 bg-primary/5 shrink-0 relative block cursor-pointer transition hover:opacity-90"
+        >
           <Image
             src={vehicleImage}
             alt="Vehicle"
             fill
             className="object-cover"
           />
-        </div>
+        </Link>
 
         {/* ✅ Content */}
         <div className="space-y-2 w-full flex-1">

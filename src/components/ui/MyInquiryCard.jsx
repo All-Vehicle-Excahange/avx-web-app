@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Button from "@/components/ui/button";
 import { closeInquiry } from "@/services/inquiry.service";
 import { Lock, MessageCircle, Clock, BadgeCheck } from "lucide-react";
@@ -56,14 +57,17 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
       <div className="flex flex-col lg:flex-row items-start gap-4 lg:gap-5 w-full">
 
         {/* ✅ Vehicle Image */}
-        <div className="w-full lg:w-48 h-48 lg:h-42 rounded-xl overflow-hidden border border-third/30 bg-primary/5 shrink-0 relative">
+        <Link 
+          href={`/vehicle/details/${inquiryVehicleResponse.id}`}
+          className="w-full lg:w-48 h-48 lg:h-42 rounded-xl overflow-hidden border border-third/30 bg-primary/5 shrink-0 relative block cursor-pointer transition hover:opacity-90"
+        >
           <Image
             src={vehicleImage}
             alt="Vehicle"
             fill
             className="object-cover"
           />
-        </div>
+        </Link>
 
         {/* ✅ Content */}
         <div className="space-y-2 w-full flex-1">
@@ -76,7 +80,7 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
               </p>
 
               <p className="text-sm text-third">
-                Inquiry Description
+                Inquiry Description:{" "}
                 <span className="text-primary font-semibold">{inquiry.inquiryDescription || "N/A"}</span>
               </p>
 

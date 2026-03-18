@@ -38,9 +38,11 @@ export default function DisputeHandling() {
             Dispute Handling
           </p>
 
-          <h2 className="text-4xl sm:text-5xl xl:text-6xl font-semibold text-primary leading-[1.05] mb-5">
-            Structured Review Protocol
-          </h2>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat mb-8 md:mb-10">
+           Structured Review 
+              <span className="text-fourth/80">       Protocol
+              </span>
+            </h2>
 
           <p className="text-lg text-third leading-relaxed">
             AVX maintains a defined review workflow to address inspection-related
@@ -49,16 +51,16 @@ export default function DisputeHandling() {
         </div>
 
         {/* MAIN CONSOLE */}
-        <div className="relative rounded-3xl border border-white/10 bg-white/[0.035] backdrop-blur-md overflow-hidden">
+        <div className="relative rounded-3xl border border-primary/20  backdrop-blur-md overflow-hidden">
           
           {/* top strip — calmer */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/25">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-primary/10 ">
             <p className="text-xs tracking-widest uppercase text-third/70">
               Dispute Review Flow
             </p>
 
             <div className="flex items-center gap-2 text-xs text-third/70">
-              <ShieldCheck className="w-4 h-4 text-fourth" />
+              <ShieldCheck className="w-4 h-4 text-primary" />
               Audit Protected
             </div>
           </div>
@@ -75,12 +77,12 @@ export default function DisputeHandling() {
                     relative
                     group
                     rounded-2xl
-                    border border-white/10
-                    bg-black/25
+                    border border-primary/10
+                    
                     p-6
                     transition-all duration-300
-                    hover:border-white/20
-                    hover:bg-white/5
+                    hover:border-primary/40
+                   
                   "
                 >
                   {/* step number */}
@@ -89,8 +91,8 @@ export default function DisputeHandling() {
                   </div>
 
                   {/* icon */}
-                  <div className="w-11 h-11 rounded-xl bg-fourth/10 flex items-center justify-center mb-4">
-                    <Icon className="w-5 h-5 text-fourth" />
+                  <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+                    <Icon className="w-5 h-5 text-primary" />
                   </div>
 
                   <h3 className="text-base md:text-lg font-semibold text-primary mb-2">
@@ -124,7 +126,7 @@ export default function DisputeHandling() {
 
           {/* RIGHT VISUAL */}
           <div className="lg:col-span-6">
-            <div className="relative rounded-2xl overflow-hidden border border-white/10">
+            <div className="relative rounded-2xl overflow-hidden border border-primary/10">
               <img
                 src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1600&auto=format&fit=crop"
                 alt="AVX audit trail and inspection data review dashboard"

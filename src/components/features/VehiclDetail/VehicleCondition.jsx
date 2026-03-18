@@ -30,8 +30,10 @@ export default function VehicleCondition({ open, setOpen }) {
 
         {/* ================= CONTENT ================= */}
         <div
-          className={`${open ? "block" : "hidden"} mt-3 pb-6 space-y-8 px-6`}
+          className={`grid transition-all duration-300 ease-in-out ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
         >
+          <div className="overflow-hidden">
+            <div className="mt-3 pb-6 space-y-8 px-6">
           {/* ================= INSPECTION SUMMARY ================= */}
 
           {isInspection && (
@@ -186,6 +188,8 @@ export default function VehicleCondition({ open, setOpen }) {
                 (2024)
               </p>
             </div>
+          </div>
+        </div>
           </div>
         </div>
       </div>

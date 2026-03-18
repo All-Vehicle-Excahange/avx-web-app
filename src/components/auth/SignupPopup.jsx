@@ -24,6 +24,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
   const [otpSent, setOtpSent] = useState(false);
   const otpRefs = useRef([]);
   const [isClosing, setIsClosing] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -263,7 +264,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
             <input
               type="email"
               placeholder="Email address"
-              {...register("email", { required: "Email is required" })}
+              {...register("email")}
               className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
             />
             {errors.email && (
@@ -290,12 +291,33 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
             )}
           </div>
 
+          <div className="flex items-start gap-2 mb-4">
+            <input
+              type="checkbox"
+              id="termsCheckbox"
+              className="mt-1 cursor-pointer"
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+            />
+            <label htmlFor="termsCheckbox" className="text-sm text-primary/60 cursor-pointer">
+              I agree to the{" "}
+              <a href="/terms" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                Terms and Conditions
+              </a>{" "}
+              and{" "}
+              <a href="/privacy" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                Privacy Policy
+              </a>
+            </label>
+          </div>
+
           {/* OTP SEND BUTTON */}
           {!otpSent && (
             <Button
               type="submit"
               variant="ghost"
-              className="text-primary w-full h-11 text-sm font-bold"
+              disabled={!acceptedTerms}
+              className={`text-primary w-full h-11 text-sm font-bold ${!acceptedTerms ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               GET OTP
             </Button>
@@ -332,7 +354,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
           )}
 
           {/* LOGIN LINK */}
-          <div className="mt-4 text-primary text-center text-sm text-text-black/70">
+          <div className="mt-4 text-primary/60 text-center text-sm text-text-black/70">
             Already have an account?{" "}
             <button
               type="button"
@@ -346,10 +368,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
             </button>
           </div>
 
-          {/* TERMS */}
-          <div className="text-[10px] text-primary mt-6 leading-tight text-center">
-            By signing up, you agree to AVXs Privacy Policy & Terms
-          </div>
+          {/* REMOVED OLD TERMS TEXT */}
         </form>
       </div>
     </div>

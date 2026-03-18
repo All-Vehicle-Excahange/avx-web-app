@@ -18,6 +18,8 @@ import { useParams } from "next/navigation";
 import { followConsultant, getStoreFrontByUsername, unFollowConsultant } from "@/services/user.service";
 import LoginPopup from "@/components/auth/LoginPopup";
 import { useAuthStore } from "@/stores/useAuthStore";
+import SignupPopup from "@/components/auth/SignupPopup";
+import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 
 
 export default function StoreFrontHeroSection() {
@@ -27,6 +29,8 @@ export default function StoreFrontHeroSection() {
     const [comsultDetails, setComsultDetails] = useState(null);
     const [isFollower, setIsFollower] = useState(false);
     const [isLoginOpen, setIsLoginOpen] = useState(false);
+    const [isSignupOpen, setIsSignupOpen] = useState(false);
+    const [isDownloadAppOpen, setIsDownloadAppOpen] = useState(false);
 
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
@@ -66,6 +70,16 @@ export default function StoreFrontHeroSection() {
                 comsultDetails.maxVehiclePrice
             ).toLocaleString()}`
             : "-";
+
+    const formatFollowerCount = (count) => {
+        if (!count) return "0";
+        if (count >= 1000) {
+            // Using toFixed(1) means 1100 -> 1.1, 1000 -> 1.0
+            // We can replace ".0" with nothing so 1000 -> 1K
+            return (count / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+        }
+        return count.toString();
+    };
 
     const handleFollowToggle = async () => {
         if (!comsultDetails?.id) return;
@@ -141,25 +155,25 @@ export default function StoreFrontHeroSection() {
                                 />
                             </div>
 
-                            <div className="mt-6 w-full flex flex-col items-center gap-3">
-                                <div className="flex items-center gap-2">
-                                    <div
-                                        className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
-                                        <Users className="w-4 h-4 text-primary" />
-                                    </div>
-
-                                    <p className="text-base font-bold text-primary leading-none">
-                                        {comsultDetails.followersCount?.toLocaleString() || "0"}
-                                    </p>
-                                </div>
-
+                            <div className="mt-6 w-full">
                                 <Button
                                     onClick={handleFollowToggle}
                                     size="sm"
                                     variant="outline"
                                     full
                                 >
-                                    {isFollower ? "Unsubscribe" : "Subscribe"}
+                                    <div className="flex items-center justify-center gap-2 w-full">
+                                        <Users className="w-4 h-4" />
+                                        <span className="bg-primary/10 px-2 py-0.5 rounded-full text-xs font-bold text-primary">
+                                            {formatFollowerCount(comsultDetails.followersCount)}
+                                        </span>
+                                        <span
+                                            className={`${isFollower ? "text-primary/70" : "text-fourth"
+                                                }`}
+                                        >
+                                            {isFollower ? "Unsubscribe" : "Subscribe"}
+                                        </span>
+                                    </div>
                                 </Button>
                             </div>
                         </div>
@@ -259,7 +273,7 @@ export default function StoreFrontHeroSection() {
                             </div>
 
                             <div className="flex gap-3 pt-6">
-                                <Button size="sm" variant="ghost">
+                                <Button size="sm" variant="ghost" onClick={() => setIsDownloadAppOpen(true)}>
                                     Start Chat
                                     <MessageCircle className="ml-2 w-4 h-4" />
                                 </Button>
@@ -276,7 +290,22 @@ export default function StoreFrontHeroSection() {
             <LoginPopup
                 isOpen={isLoginOpen}
                 onClose={() => setIsLoginOpen(false)}
-                onSignup={() => setIsLoginOpen(false)}
+                onSignup={() => {
+                    setIsLoginOpen(false);
+                    setIsSignupOpen(true);
+                }}
+            />
+            <SignupPopup
+                isOpen={isSignupOpen}
+                onClose={() => setIsSignupOpen(false)}
+                onLogin={() => {
+                    setIsSignupOpen(false);
+                    setIsLoginOpen(true);
+                }}
+            />
+            <DownloadAppPopup
+                isOpen={isDownloadAppOpen}
+                onClose={() => setIsDownloadAppOpen(false)}
             />
         </>
     );
