@@ -4,7 +4,7 @@ import Button from "@/components/ui/button";
 
 export default function AvxHero() {
   return (
-    <section className="relative min-h-[92vh] flex items-center  overflow-hidden">
+    <section className="relative min-h-[92vh] my-24  flex items-center  overflow-hidden">
       {/* glow */}
       <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-fourth/10 blur-[160px] rounded-full" />
 
