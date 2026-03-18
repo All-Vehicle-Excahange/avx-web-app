@@ -20,7 +20,7 @@ import {
 import SponsoredCars from "./SponsoredCars";
 import FilterSection from "./FilterSection";
 import PriceBased from "./PriceBased";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import {
   getAndSearchMakers,
   getAndSearchModel,
@@ -150,6 +150,8 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
 
   const isMobile = useIsMobile();
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const vehicleType = searchParams.get("vehicleType");
   const bodyType = searchParams.get("bodyType");
@@ -986,6 +988,9 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
   };
 
   const handleClearFilters = async () => {
+    // Remove query parameters from URL to clear top search bar
+    router.replace(pathname, { scroll: false });
+
     // Remove saved location from localStorage
     localStorage.removeItem("avx_saved_location");
     // Reset brand & model

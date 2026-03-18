@@ -22,7 +22,7 @@ import {
 } from "@/services/consult.filter.service";
 import { getCities, getState } from "@/services/user.service";
 import ConsultantGridSection from "../search/ConsultantGridSection";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Pagination from "@/components/ui/Pagination";
 
 /* ================= MOBILE DETECTION ================= */
@@ -101,6 +101,8 @@ export default function FilterWithCard({ onFilterChange }) {
   const [longitude, setLongitude] = useState(null);
 
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const sort = searchParams.get("sort");
 
   const getSortConfig = (sortValue) => {
@@ -437,6 +439,9 @@ export default function FilterWithCard({ onFilterChange }) {
   };
 
   const handleClearFilters = async () => {
+    // Remove query parameters from URL to clear top search bar
+    router.replace(pathname, { scroll: false });
+
     // Remove saved location from localStorage
     localStorage.removeItem("avx_saved_location");
 

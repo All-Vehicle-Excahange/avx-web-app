@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+
 "use client";
 
-import { useState , useEffect } from "react";
+import { useState, useEffect } from "react";
 import Chip from "./chip";
 import InputField from "@/components/ui/inputField";
 
@@ -54,7 +56,7 @@ export default function ChipGroup({
 
     if (onChange) onChange(updated);
   };
-  
+
   // Use parent's search value if provided, else local
   const currentSearch = searchValue ?? search;
 
