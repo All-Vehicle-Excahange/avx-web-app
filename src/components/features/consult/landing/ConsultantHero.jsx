@@ -121,11 +121,11 @@ export default function ConsultantHeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-5">
-      <div className="absolute inset-0 bg-linear-to-b from-secondary via-[#0b0e13] to-secondary" />
+      <div className="absolute inset-0" />
       <motion.div
         animate={{ y: [0, -25, 0] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -top-40 -left-40 w-150 h-150 bg-fourth/10 blur-[160px] rounded-full"
+        className="absolute -top-40 -left-40 w-150 h-150  rounded-full"
       />
       <motion.div
         animate={{ y: [0, 20, 0] }}
