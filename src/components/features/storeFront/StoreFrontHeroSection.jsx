@@ -11,6 +11,7 @@ import {
     CheckCircle,
     IndianRupee,
     CornerUpRight,
+    ExternalLink,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
@@ -20,6 +21,7 @@ import LoginPopup from "@/components/auth/LoginPopup";
 import { useAuthStore } from "@/stores/useAuthStore";
 import SignupPopup from "@/components/auth/SignupPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
+import SharePopup from "@/components/ui/SharePopup";
 
 
 export default function StoreFrontHeroSection() {
@@ -31,7 +33,8 @@ export default function StoreFrontHeroSection() {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isSignupOpen, setIsSignupOpen] = useState(false);
     const [isDownloadAppOpen, setIsDownloadAppOpen] = useState(false);
-
+    const [isShareOpen, setIsShareOpen] = useState(false);
+    const [currentUrl, setCurrentUrl] = useState("");
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
 
@@ -155,35 +158,51 @@ export default function StoreFrontHeroSection() {
                                 />
                             </div>
 
+                            {/* subscribe btn */}
                             <div className="mt-6 w-full">
-                                <Button
+                                <button
                                     onClick={handleFollowToggle}
-                                    size="sm"
-                                    variant="outline"
-                                    full
+                                    type="button"
+                                    className={`group w-full rounded-full px-4 py-2 border flex items-center justify-center gap-2 font-medium cursor-pointer transition-all duration-300 ease-in-out ${isFollower
+                                        ? "bg-fourth text-primary border-fourth hover:bg-transparent hover:text-fourth"
+                                        : "bg-primary text-secondary border-primary hover:bg-transparent hover:text-primary"
+                                        }`}
                                 >
-                                    <div className="flex items-center justify-center gap-2 w-full">
-                                        <Users className="w-4 h-4" />
-                                        <span className="bg-primary/10 px-2 py-0.5 rounded-full text-xs font-bold text-primary">
-                                            {formatFollowerCount(comsultDetails.followersCount)}
-                                        </span>
-                                        <span
-                                            className={`${isFollower ? "text-primary/70" : "text-fourth"
-                                                }`}
-                                        >
-                                            {isFollower ? "Unsubscribe" : "Subscribe"}
-                                        </span>
-                                    </div>
-                                </Button>
+                                    <span className="transition-colors duration-300">
+                                        {isFollower ? "Unsubscribe" : "Subscribe"}
+                                    </span>
+
+                                    <span
+                                        className={`px-2.5 py-0.5 rounded-full text-xs font-semibold transition-all duration-300 ${isFollower
+                                            ? "bg-primary/10 text-primary group-hover:bg-fourth/10 group-hover:text-primary"
+                                            : "bg-secondary/10 text-secondary group-hover:bg-primary/10 group-hover:text-primary"
+                                            }`}
+                                    >
+                                        {formatFollowerCount(comsultDetails.followersCount)}
+                                    </span>
+                                </button>
                             </div>
                         </div>
 
                         {/* CENTER COLUMN */}
                         <div className="flex-1 space-y-4 pt-2">
                             <div>
-                                <h1 className="text-3xl font-semibold text-primary">
-                                    {comsultDetails.consultationName}
-                                </h1>
+                                <div className="flex items-center justify-between">
+                                    <h1 className="text-3xl font-semibold text-primary">
+                                        {comsultDetails.consultationName}
+                                    </h1>
+                                    <div className="">
+                                        <Button
+                                            onClick={() => setIsShareOpen(true)}
+                                            size="sm"
+                                            // variant="ghost"
+                                            className="flex text-primary items-center gap-2"
+                                        >
+                                            {/* <span>Share</span> */}
+                                            <ExternalLink className="h-5 w-5" />
+                                        </Button>
+                                    </div>
+                                </div>
 
                                 <p className="flex items-center gap-1.5 text-third mt-1">
                                     <MapPin className="w-4 h-4 shrink-0" />
@@ -270,6 +289,7 @@ export default function StoreFrontHeroSection() {
                                         </span>
                                     )}
                                 </div>
+
                             </div>
 
                             <div className="flex gap-3 pt-6">
@@ -306,6 +326,12 @@ export default function StoreFrontHeroSection() {
             <DownloadAppPopup
                 isOpen={isDownloadAppOpen}
                 onClose={() => setIsDownloadAppOpen(false)}
+            />
+            <SharePopup
+                isOpen={isShareOpen}
+                onClose={() => setIsShareOpen(false)}
+                shareUrl={currentUrl}
+                title={comsultDetails?.consultationName || "Check this store"}
             />
         </>
     );
