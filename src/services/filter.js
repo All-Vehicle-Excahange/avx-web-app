@@ -6,7 +6,7 @@ import axiosInstance, {
 
 const ENDPOINT = {
   getMakersByFuelOrBodyType: "/search/fuelTypesandbodyTypesmakers",
-  getFilteredVehicles: "/vehicle/filter/four-wheeler",
+  getFilteredVehicles: "/vehicle/filter/sections/four-wheeler",
   getAndSearchMakers: "/search/makers",
   getAndSearchModel: "/search/models",
   getFuelTypeByModelId: "/search/fuel-types",
@@ -14,7 +14,8 @@ const ENDPOINT = {
   getAndSearchVariant: "/search/variants",
   getYearByModelId: "/search/model-years",
   getPopularCityAndState: "/util/address/popular-cities-states",
-  SearchCityAndState: "/util/address/search-cities-states"
+  SearchCityAndState: "/util/address/search-cities-states",
+  getFilterConsualt: "/consultation/filter/based-on-vehicles-filter"
 };
 
 export const getMakersByFuelOrBodyType = async (data) => {
@@ -172,6 +173,15 @@ export const SearchCityAndState = async (data) => {
         searchText: searchTerm,
       },
     });
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getFilterConsualt = async (data) => {
+  try {
+    const res = await axiosInstance.post(ENDPOINT.getFilterConsualt, data);
     return handleResponse(res);
   } catch (error) {
     throw error;

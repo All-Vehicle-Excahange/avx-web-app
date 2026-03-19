@@ -453,7 +453,7 @@ export const postBecameSeller = async (payload) => {
 
 export const getGlobalSearch = async (query) => {
   try {
-    const res = await axiosInstance.post(ENDPOINT.getGlobalSearch, {query});
+    const res = await axiosInstance.post(ENDPOINT.getGlobalSearch, { query });
 
     return handleResponse(res);
   } catch (error) {

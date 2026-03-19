@@ -22,6 +22,12 @@
   --animate-spin-slow: spin 3s linear infinite;
 }
 
+/* body {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  font-family: var(--secondary-font);
+} */
+
 body {
   background: linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%);
   color: var(--color-primary);
