@@ -11,7 +11,7 @@ export default function InspectionAdvantage() {
 
         {/* LABEL */}
         <motion.p
-          className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-12"
+          className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-8"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -43,7 +43,7 @@ export default function InspectionAdvantage() {
 
             {/* floating stat badge — sits over the image */}
             <motion.div
-              className="absolute flex gap-2 bottom-8 left-8 border border-white/10 rounded-2xl px-5 py-4 bg-black/60 backdrop-blur-md"
+              className="absolute flex gap-2 bottom-8 left-8 border border-primary/20 rounded-2xl px-5 py-4 bg-black/60 backdrop-blur-md"
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
@@ -69,7 +69,7 @@ export default function InspectionAdvantage() {
             <div>
               <div className="overflow-hidden">
                 <motion.h2
-                  className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-semibold text-blue-400 leading-[1.06]"
+                  className="text-[30px] sm:text-[40px] md:text-[48px] font-bold leading-tight text-primary"
                   initial={{ y: "100%" }}
                   whileInView={{ y: 0 }}
                   transition={{ duration: 0.7, delay: 0.2 }}
@@ -80,7 +80,7 @@ export default function InspectionAdvantage() {
               </div>
               <div className="overflow-hidden pb-1">
                 <motion.h2
-                  className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-semibold text-white leading-[1.06]"
+                  className="text-[30px] sm:text-[40px] md:text-[48px] font-bold leading-tight text-fourth mb-3"
                   initial={{ y: "100%" }}
                   whileInView={{ y: 0 }}
                   transition={{ duration: 0.7, delay: 0.3 }}
@@ -116,13 +116,13 @@ export default function InspectionAdvantage() {
               ].map((item, i) => (
                 <motion.div
                   key={i}
-                  className="flex items-center gap-5 py-3 border-t border-white/8 last:border-b group"
+                  className="flex items-center gap-5 py-3 border-t border-primary/20 last:border-b group"
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 + i * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <span className="font-mono text-[10px] text-third/30 shrink-0">
+                  <span className="font-mono text-[10px] text-primary/90 shrink-0">
                     {item.num}
                   </span>
                   <span className="text-sm text-primary/70 group-hover:text-primary transition-colors duration-300">

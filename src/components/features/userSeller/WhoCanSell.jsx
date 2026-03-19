@@ -26,7 +26,7 @@ export default function WhoCanSell() {
     <section className="relative overflow-hidden py-4 lg:py-10 px-0">
       <div className="relative z-10 mx-auto w-full">
         {/* TOP ROW — asymmetric */}
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10 mb-10 lg:mb-12">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10 mb-10 lg:mb-10">
           {/* LEFT — label + heading */}
           <div>
             <motion.p
@@ -40,13 +40,13 @@ export default function WhoCanSell() {
 
             <div className="overflow-hidden pb-1">
               <motion.h2
-                className="font-[Montserrat] text-3xl sm:text-4xl lg:text-6xl font-semibold leading-[1.06]"
+                className="text-[30px] sm:text-[40px] md:text-[48px] font-bold leading-tight text-primary"
                 initial={{ y: "100%" }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 0.7 }}
                 viewport={{ once: true }}
               >
-                <span className="text-white/75">Who Can </span>
+                <span>Who Can </span>
                 <span className="text-blue-400">Sell?</span>
               </motion.h2>
             </div>
@@ -59,7 +59,7 @@ export default function WhoCanSell() {
             transition={{ delay: 0.35 }}
             viewport={{ once: true }}
           >
-            <div className="border border-white/10 rounded-2xl px-6 py-5">
+            <div className="border border-primary/20 rounded-2xl px-6 py-5">
               <p className="text-[11px] tracking-[0.3em] uppercase text-tprimary mb-3">
                 Important Note
               </p>
@@ -79,7 +79,7 @@ export default function WhoCanSell() {
           {sellerTypes.map((s, i) => (
             <motion.div
               key={i}
-              className="group grid grid-cols-[40px_1fr] lg:grid-cols-[80px_1fr_1.2fr] items-start lg:items-center gap-3 lg:gap-7 py-5 lg:py-7 border-t border-white/8 last:border-b cursor-default"
+              className="group grid grid-cols-[40px_1fr] lg:grid-cols-[80px_1fr_1.2fr] items-start lg:items-center gap-3 lg:gap-7 py-5 lg:py-7 border-t border-primary/20 last:border-b cursor-default"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.12, duration: 0.6 }}
@@ -110,13 +110,13 @@ export default function WhoCanSell() {
 
         {/* BOTTOM — CTA strip */}
         <motion.div
-          className="mt-8 lg:mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6"
+          className="mt-8 lg:mt-10"
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
           viewport={{ once: true }}
         >
-          <p className="text-[15px] text-third/60 max-w-md leading-relaxed">
+          <p className="text-[15px] text-center text-third/60 max-w-md leading-relaxed">
             All seller types go through the same verification process — ensuring
             every listing on AVX meets our standards of trust and transparency.
           </p>
