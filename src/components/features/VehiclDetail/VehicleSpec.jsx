@@ -4,13 +4,30 @@ import FeatureGroup from "@/components/ui/FeatureGroup";
 import { Calendar, ChevronDown, Clock, X } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import Select from "react-select";
 
 export default function VehicleSpec({ open, setOpen }) {
   const [showModal, setShowModal] = useState(false);
   const [animateModal, setAnimateModal] = useState(false);
   const [inspectionType, setInspectionType] = useState("report");
-  const [inspectionDate, setInspectionDate] = useState("");
-  const [inspectionTime, setInspectionTime] = useState("");
+  const [inspectionDate, setInspectionDate] = useState(null);
+  const [inspectionTime, setInspectionTime] = useState(null);
+
+  const generateTimeSlots = () => {
+    const slots = [];
+    for (let hour = 9; hour <= 21; hour++) {
+      for (let min of ["00", "30"]) {
+        const h = hour > 12 ? hour - 12 : hour;
+        const ampm = hour >= 12 ? "PM" : "AM";
+        const label = `${h}:${min} ${ampm}`;
+        slots.push({ value: label, label: label });
+      }
+    }
+    return slots;
+  };
+  const timeOptions = generateTimeSlots();
   const inspectionAvailable = true;
 
   const closeModal = () => {
@@ -22,8 +39,8 @@ export default function VehicleSpec({ open, setOpen }) {
     const payload = {
       inspectionType,
       ...(inspectionType === "video" && {
-        inspectionDate,
-        inspectionTime,
+        inspectionDate: inspectionDate ? inspectionDate.toLocaleDateString() : "",
+        inspectionTime: inspectionTime ? inspectionTime.value : "",
       }),
     };
 
@@ -393,8 +410,8 @@ export default function VehicleSpec({ open, setOpen }) {
 
                   {/* Inputs */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Date */}
-                    <div className="space-y-1.5">
+                    {/* Date Picker */}
+                    <div className="space-y-1.5 text-primary">
                       <label className="text-xs font-medium text-third">
                         Preferred Date
                       </label>
@@ -407,41 +424,88 @@ export default function VehicleSpec({ open, setOpen }) {
           "
                       >
                         <Calendar size={14} className="text-third" />
-                        <input
-                          type="date"
-                          value={inspectionDate}
-                          onChange={(e) => setInspectionDate(e.target.value)}
-                          min={new Date().toISOString().split("T")[0]}
-                          className="
-              w-full text-sm bg-transparent
-              focus:outline-none
-            "
+                        <DatePicker
+                          selected={inspectionDate}
+                          onChange={(date) => setInspectionDate(date)}
+                          dateFormat="MMMM d, yyyy"
+                          minDate={new Date()}
+                          placeholderText="Select Date"
+                          className="w-full text-sm bg-transparent focus:outline-none text-primary cursor-pointer"
+                          calendarClassName="dark-datepicker"
                         />
                       </div>
                     </div>
 
-                    {/* Time */}
-                    <div className="space-y-1.5">
+                    {/* Time Picker */}
+                    <div className="space-y-1.5 text-primary">
                       <label className="text-xs font-medium text-third">
                         Preferred Time
                       </label>
 
                       <div
                         className="
-            flex items-center gap-2 px-3 py-2 rounded-lg
+            flex items-center gap-2 px-3 py-1 rounded-lg
             border border-third/40 bg-secondary
             focus-within:border-primary
           "
                       >
                         <Clock size={14} className="text-third" />
-                        <input
-                          type="time"
+                        <Select
+                          options={timeOptions}
                           value={inspectionTime}
-                          onChange={(e) => setInspectionTime(e.target.value)}
-                          className="
-              w-full text-sm bg-transparent
-              focus:outline-none
-            "
+                          onChange={(option) => setInspectionTime(option)}
+                          placeholder="Select Time"
+                          className="w-full text-sm"
+                          styles={{
+                            control: (base, state) => ({
+                              ...base,
+                              backgroundColor: "transparent",
+                              border: "none",
+                              boxShadow: "none",
+                              minHeight: "auto",
+                            }),
+                            singleValue: (base) => ({
+                              ...base,
+                              color: "#ffffff",
+                            }),
+                            placeholder: (base) => ({
+                              ...base,
+                              color: "#bebebe",
+                            }),
+                            menu: (base) => ({
+                              ...base,
+                              backgroundColor: "#121212",
+                              borderRadius: "12px",
+                              border: "1px solid #2f2e2e",
+                              zIndex: 100,
+                            }),
+                            menuList: (base) => ({
+                              ...base,
+                              padding: "0",
+                              "&::-webkit-scrollbar": {
+                                display: "none",
+                              },
+                              msOverflowStyle: "none",
+                              scrollbarWidth: "none",
+                            }),
+                            option: (base, state) => ({
+                              ...base,
+                              backgroundColor: state.isFocused
+                                ? "rgba(255,255,255,0.1)"
+                                : state.isSelected
+                                  ? "rgba(255,255,255,0.2)"
+                                  : "transparent",
+                              color: "#ffffff",
+                              cursor: "pointer",
+                            }),
+                            indicatorSeparator: () => ({ display: "none" }),
+                            dropdownIndicator: (base) => ({
+                              ...base,
+                              color: "#bebebe",
+                              padding: "0 4px",
+                              "&:hover": { color: "#ffffff" },
+                            }),
+                          }}
                         />
                       </div>
                     </div>

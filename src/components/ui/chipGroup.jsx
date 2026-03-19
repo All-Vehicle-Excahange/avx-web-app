@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Chip from "./chip";
 import InputField from "@/components/ui/inputField";
 
@@ -24,6 +26,22 @@ export default function ChipGroup({
 }) {
   const [expanded, setExpanded] = useState(false);
   const [search, setSearch] = useState(""); // local fallback
+  const [knownSelectedItems, setKnownSelectedItems] = useState([]);
+
+  // Cache selected items so they don't disappear when items list changes (e.g. search cleared)
+  useEffect(() => {
+    setKnownSelectedItems((prev) => {
+      const newKnown = items.filter((i) => selected.includes(i.value));
+      const merged = [...prev];
+      newKnown.forEach((nk) => {
+        if (!merged.some((m) => m.value === nk.value)) {
+          merged.push(nk);
+        }
+      });
+      // Only keep the ones that are STILL selected
+      return merged.filter((m) => selected.includes(m.value));
+    });
+  }, [selected, items]);
 
   const toggleSelect = (val) => {
     let updated;
@@ -38,10 +56,17 @@ export default function ChipGroup({
 
     if (onChange) onChange(updated);
   };
+
   // Use parent's search value if provided, else local
   const currentSearch = searchValue ?? search;
 
-  const filteredItems = items.filter((item) =>
+  // Render known selected items first, then the rest
+  const combinedItems = [
+    ...knownSelectedItems,
+    ...items.filter((i) => !knownSelectedItems.some((k) => k.value === i.value)),
+  ];
+
+  const filteredItems = combinedItems.filter((item) =>
     item.label.toLowerCase().includes(currentSearch.toLowerCase()),
   );
 

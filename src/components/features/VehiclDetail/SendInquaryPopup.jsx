@@ -8,7 +8,7 @@ import Button from "@/components/ui/button";
 import { X, CheckCircle2 } from "lucide-react";
 import { sendInquary } from "@/services/vehicle.service";
 
-function SendInquaryPopup({ onClose, consultName = "Consultant", vehicleId }) {
+function SendInquaryPopup({ onClose, consultName = "Consultant", vehicleId, onSuccess }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
@@ -46,6 +46,7 @@ function SendInquaryPopup({ onClose, consultName = "Consultant", vehicleId }) {
             if (description.trim()) payload.inquiryDescription = description.trim();
             await sendInquary(vehicleId, payload);
             setIsSuccess(true);
+            if (onSuccess) onSuccess();
             setTimeout(() => handleClose(), 60000);
         } catch (error) {
             console.error("Send inquiry error:", error);
@@ -55,7 +56,7 @@ function SendInquaryPopup({ onClose, consultName = "Consultant", vehicleId }) {
     };
 
     const modalContent = (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={handleClose} style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}>
+        <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={handleClose} style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}>
             {/* Popup Box */}
             <div className="relative flex w-full max-w-[900px] overflow-hidden rounded-2xl shadow-2xl bg-secondary" onClick={(e) => e.stopPropagation()} style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}>
 

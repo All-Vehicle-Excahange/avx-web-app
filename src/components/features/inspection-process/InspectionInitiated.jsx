@@ -33,7 +33,7 @@ export default function InspectionInitiated() {
   return (
     <section className="relative py-20  overflow-hidden">
       {/* ambient glow */}
-      <div className="absolute left-1/2 top-0 -translate-x-1/2 w-175 h-100 bg-fourth/5 blur-3xl rounded-full pointer-events-none" />
+      <div className="absolute left-1/2 top-0 -translate-x-1/2 w-175 h-100  blur-3xl rounded-full pointer-events-none" />
 
       <div className="relative w-full mx-auto ">
         {/* HEADER */}

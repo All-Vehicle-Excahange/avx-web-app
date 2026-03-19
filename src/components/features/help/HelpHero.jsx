@@ -119,10 +119,7 @@ export default function HelpHero() {
 
         <div
           className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(0,123,255,0.05) 0%, transparent 70%)",
-          }}
+         
         />
 
         {/* Fine grid overlay */}
@@ -136,7 +133,6 @@ export default function HelpHero() {
       /> */}
 
         {/* Top edge glow line */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-fourth/40 to-transparent" />
 
         {/* ── CONTENT ── */}
         <div

@@ -112,8 +112,10 @@ export default function OnboardingProcess() {
                         ? step.color
                         : isDone
                           ? "#10b981"
-                          : "#1f2937",
-                      background: isActive ? `${step.color}20` : "#0f1117",
+                          : "var(--color-primary/30)",
+                      background: isActive
+                          ? "#10b981" // solid green when done
+                          : "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)",
                       color: isActive
                         ? step.color
                         : isDone
@@ -162,12 +164,12 @@ export default function OnboardingProcess() {
                       style={{
                         background: isDone
                           ? "#10b981" // solid green when done
-                          : "#0f1117", // always dark otherwise
+                          : "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)", // always dark otherwise
                         borderColor: isDone
                           ? "#10b981"
                           : isActive
                             ? step.color
-                            : "#1f2937",
+                            : "var(--color-primary/30)",
                         color: isDone
                           ? "#ffffff" // white icon when done
                           : isActive
@@ -201,7 +203,7 @@ export default function OnboardingProcess() {
           </div>
 
           {/* RIGHT MAIN CARD */}
-          <div className="rounded-2xl border border-[#1f2937] bg-[#0f1117]/90 backdrop-blur-xl shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] overflow-hidden">
+          <div className="rounded-2xl border border-primary/30 bg-transparent shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] overflow-hidden">
             <div className="grid lg:grid-cols-[1fr_260px]">
               {/* LEFT */}
               <div className="p-6 md:p-8 space-y-5">
