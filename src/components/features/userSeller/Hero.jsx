@@ -23,7 +23,7 @@ function Hero() {
   return (
     <>
       <section 
-        className="relative w-full min-h-screen flex items-center overflow-hidden pt-16"
+        className="relative w-full min-h-[90vh] flex items-center overflow-hidden pt-16"
       >
         {/* Subtle Background Detail (Minimalist Fourth Color) */}
 

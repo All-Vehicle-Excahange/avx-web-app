@@ -55,12 +55,12 @@ export default function FAQSection() {
 
                             <div className="space-y-8">
                                 <p className="text-third/50 text-lg font-[Poppins]">
-                                    Can't find the answer you're looking for? Our consultants are here to help.
+                                    {"  Can't find the answer you're looking for? Our consultants are here to help."}
                                 </p>
                                 <Link href="/help">
-                                <Button variant="ghost" className="flex items-center justify-center gap-20 px-7 py-3 bg-primary  text-secondary rounded-full hover:bg-third hover:text-secondary transition-all text-sm font-black tracking-widest uppercase">
-                                    Get in touch
-                                </Button>
+                                    <Button variant="ghost" className="flex items-center justify-center gap-20 px-7 py-3 bg-primary  text-secondary rounded-full hover:bg-third hover:text-secondary transition-all text-sm font-black tracking-widest uppercase">
+                                        Get in touch
+                                    </Button>
                                 </Link>
                             </div>
                         </div>
