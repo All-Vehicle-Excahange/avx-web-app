@@ -59,10 +59,24 @@ const SayHello = () => {
                             ${leftOffset[activeTab]}
                         `}
                         />
+                    </div>
 
+                    <div className="hidden md:flex shrink-0 relative w-[300px] h-[550px] top-8 ">
+                        <img
+                            key={activeTab}
+                            src={images[activeTab]}
+                            alt=""
+                            className="
+                                absolute inset-0
+                                rounded-3xl shadow-2xl
+                                w-[300px] h-auto
+                                animate-fade-slide
+                            "
+                        />
+                    </div>
+
+                    <div className="flex flex-col items-start gap-12 pt-16">
                         <div className="relative pl-5 flex flex-col gap-4">
-                            <div className="absolute left-[25px] top-3 bottom-3 border-l-2 border-dashed border-gray-300" />
-
                             {navigation.map((item, index) => {
                                 const isActive = activeTab === item;
 
@@ -71,11 +85,26 @@ const SayHello = () => {
                                         key={item}
                                         onClick={() => setActiveTab(item)}
                                         className="relative flex items-center gap-3 text-left cursor-pointer group transition-all duration-300"
+                                        style={{ marginLeft: `${index * 1.5}rem` }}
                                     >
+                                        {/* L-shaped connecting line for stairs effect */}
+                                        {index < navigation.length - 1 && (
+                                            <div
+                                                className="absolute border-l-2 border-b-2 border-dashed border-gray-300 rounded-bl-lg pointer-events-none"
+                                                style={{
+                                                    top: "calc(50% + 6px)", 
+                                                    left: "5px",
+                                                    width: "calc(1.5rem + 6px)",
+                                                    height: "calc(100% + 10px)",
+                                                    zIndex: 0
+                                                }}
+                                            />
+                                        )}
+
                                         {/* Dot */}
                                         <span
                                             className={`
-                                            relative z-10 rounded-full
+                                            relative z-10 rounded-full shrink-0
                                             transition-all duration-300 ease-out
                                             ${isActive
                                                     ? "w-3 h-3 bg-fourth scale-110"
@@ -99,23 +128,7 @@ const SayHello = () => {
                                 );
                             })}
                         </div>
-                    </div>
 
-                    <div className="hidden md:flex flex-shrink-0 relative w-[300px] h-[550px] top-8 ">
-                        <img
-                            key={activeTab}
-                            src={images[activeTab]}
-                            alt=""
-                            className="
-                                absolute inset-0
-                                rounded-3xl shadow-2xl
-                                w-[300px] h-auto
-                                animate-fade-slide
-                            "
-                        />
-                    </div>
-
-                    <div className="pt-36">
                         <img
                             src="https://a.hwstatic.com/image/upload/f_auto,h_480,w_320,q_50/v1644506518/pwa/chat/chat-image-2.jpg"
                             alt=""
