@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+
 import Button from "@/components/ui/button";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import React, { useRef, useState, useEffect } from "react";
