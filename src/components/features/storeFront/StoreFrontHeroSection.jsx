@@ -184,24 +184,21 @@ export default function StoreFrontHeroSection() {
                             </div>
                         </div>
 
-                        {/* CENTER COLUMN */}
+                        {/* CENTER COLUMN */}   
                         <div className="flex-1 space-y-4 pt-2">
                             <div>
-                                <div className="flex items-center justify-between">
-                                    <h1 className="text-3xl font-semibold text-primary">
+                                <div className="flex items-center gap-2">
+                                    <h1 className="text-3xl font-semibold text-primary leading-tight">
                                         {comsultDetails.consultationName}
                                     </h1>
-                                    <div className="">
-                                        <Button
-                                            onClick={() => setIsShareOpen(true)}
-                                            size="sm"
-                                            // variant="ghost"
-                                            className="flex text-primary items-center gap-2"
-                                        >
-                                            {/* <span>Share</span> */}
-                                            <ExternalLink className="h-5 w-5" />
-                                        </Button>
-                                    </div>
+
+                                    <Button
+                                        onClick={() => setIsShareOpen(true)}
+                                        size="sm"
+                                        className="flex h-9 w-9 items-center justify-center rounded-full p-0 text-primary !bg-transparent"
+                                    >
+                                        <ExternalLink className="h-5 w-5" />
+                                    </Button>
                                 </div>
 
                                 <p className="flex items-center gap-1.5 text-third mt-1">
@@ -220,7 +217,7 @@ export default function StoreFrontHeroSection() {
                             </div>
 
                             {/* STATS GRID */}
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-5 gap-x-6 py-4">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 gap-y-5 gap-x-6 py-4">
                                 {[
                                     {
                                         label: "Rating",
@@ -292,7 +289,7 @@ export default function StoreFrontHeroSection() {
 
                             </div>
 
-                            <div className="flex gap-3 pt-6">
+                            <div className="flex gap-3 pt-15">
                                 <Button size="sm" variant="ghost" onClick={() => setIsDownloadAppOpen(true)}>
                                     Start Chat
                                     <MessageCircle className="ml-2 w-4 h-4" />
