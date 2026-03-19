@@ -138,7 +138,7 @@ export default function ReletedConsualt(props) {
 
             <div className="mt-8 flex justify-end">
                 <Button onClick={handleViewMore} variant="outlineAnimated">
-                    See All
+                    Explore All 
                 </Button>
             </div>
         </div>

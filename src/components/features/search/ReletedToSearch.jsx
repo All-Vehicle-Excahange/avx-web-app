@@ -8,36 +8,21 @@ import CommonSwiper from "@/components/ui/CommonSwiper";
 // --- Utility for Tailwind classes ---
 const cn = (...classes) => classes.filter(Boolean).join(" ");
 
-export default function ReletedToSearch() {
-    const [activeType, setActiveType] = useState("4-Wheeler");
-    const [cardData, setCardData] = useState([]);
-    const prevRef = useRef(null);
-    const nextRef = useRef(null);
+export default function ReletedToSearch({ data }) {
+  const [cardData, setCardData] = useState(data || []);
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
 
-    useEffect(() => {
-        const fetchHomeFeed = async () => {
-            try {
-                const data = {
-                    pageNo: 1,
-                    size: 8,
-                }
-                let res;
-                if (activeType === "4-Wheeler") {
-                    res = await getTopPicsFour(data)
-                } else {
-                    res = await getTopPicsTwo(data)
-                }
-                setCardData(res.data)
-            } catch (error) {
-                console.error("Failed to fetch themes:", error);
-            }
-        };
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setCardData(data);
+    }
+  }, [data]);
 
-        fetchHomeFeed();
-    }, [activeType]);
 
-    return (
-        <div className="">
+
+  return (
+    <div className="">
       <div className="flex justify-between items-end mb-6">
 
         <div className="flex items-start gap-4">
@@ -53,25 +38,24 @@ export default function ReletedToSearch() {
             </p>
           </div>
         </div>
+      </div>
 
-        <div className="flex gap-3">
-          <Button variant="roundedOutline" ref={prevRef}>
-            <ChevronLeft className="w-5 h-5" />
-          </Button>
-
-          <Button variant="roundedOutline" ref={nextRef}>
-            <ChevronRight className="w-5 h-5" />
-          </Button>
-        </div>
+      <div
+        className="flex-1 min-h-0 grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-1">
+        {cardData.map((vehicle) => (
+          <div key={vehicle.id} className="lg:col-span-1 lg:row-span-1 h-full">
+            <VehicleCard data={vehicle} source="home" />
+          </div>
+        ))}
       </div>
 
       {/* Common Swiper */}
-      <CommonSwiper
+      {/* <CommonSwiper
         data={cardData}
         CardComponent={VehicleCard}
         prevRef={prevRef}
         nextRef={nextRef}
-      />
+      /> */}
     </div>
   );
 }

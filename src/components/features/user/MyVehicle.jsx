@@ -29,12 +29,9 @@ function MyVehicle() {
       try {
         const payload = {
           pageNo: 1,
-          size: 100, // fetching a larger batch to handle frontend pagination/tabs
+          size: 100,
+          listingStatus: activeType === "all" ? null : activeType.toUpperCase(),
         };
-
-        if (activeType !== "all") {
-          payload.listingStatus = activeType.toUpperCase();
-        }
 
         const res = await getSellerInventory(payload);
         setVehicles(res?.data || []);
@@ -45,35 +42,31 @@ function MyVehicle() {
     };
 
     fetchVehicles();
-  }, []);
+  }, [activeType]);
 
   // ✅ Map API → Card Structure
   const mappedVehicles = vehicles.map((v) => ({
     id: v.id,
-    title: `${v.makerName || "-"} ${v.modelName || "-"} ${
-        v.variantName || ""
-    }`,
+    title: `${v.makerName || "-"} ${v.modelName || "-"} ${v.variantName || ""}`,
     year: v.yearOfMfg || "-",
     transmission: v.transmissionType || "-",
     fuel: v.fuelType || "-",
-    seats: "-",
-    rating: "-",
-    price: v.price
-        ? new Intl.NumberFormat("en-IN").format(v.price)
-        : "-",
+    ownership: v.ownership ? `${v.ownership}${v.ownership === 1 ? "st" : v.ownership === 2 ? "nd" : "rd"} Owner` : "-",
+    price: v.price ? new Intl.NumberFormat("en-IN").format(v.price) : "-",
+    closingPrice: v.closingPrice ? new Intl.NumberFormat("en-IN").format(v.closingPrice) : null,
     image: v.thumbnailUrl || "/big_card_car.jpg",
+    inspectionBadgeUrl: v.inspectionBadgeUrl || null,
     status: v.listingStatus?.toLowerCase() || "draft",
+    verificationStatus: v.verificationStatus || null,
+    inspectionStatus: v.inspectionStatus || null,
     inquiries: v.totalInquiries ?? 0,
     chats: v.approvedInquiries ?? 0,
     avxInspected: v.inspectionStatus === "AVX_INSPECTED",
-    soldDate: v.closingPrice ? "-" : undefined,
-    location: `${v.address?.city || "-"}, ${v.address?.state || "-"}`,
+    consultantName: v.consultantName || null,
+    location: v.address?.city ? `${v.address.city}, ${v.address.state}` : "Location not set",
   }));
 
-  const filtered =
-      activeType === "all"
-          ? mappedVehicles
-          : mappedVehicles.filter((v) => v.status === activeType);
+  const filtered = mappedVehicles;
 
   return (
       <section className="w-full container rounded-2xl p-6 space-y-6">
@@ -119,7 +112,6 @@ function MyVehicle() {
                       avxInspected={car.avxInspected}
                       inquiries={car.inquiries}
                       chats={car.chats}
-                      soldDate={car.soldDate}
                   />
               ))}
             </div>

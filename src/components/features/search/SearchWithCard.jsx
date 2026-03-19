@@ -29,6 +29,7 @@ import {
   getTransmissionTypeByModelId,
   getAndSearchVariant,
   getYearByModelId,
+  getFilterConsualt,
 } from "@/services/filter";
 import { getState, getCities } from "@/services/user.service";
 import { getUserCityAndStateByLatLong } from "@/services/consult.filter.service";
@@ -50,7 +51,7 @@ function useIsMobile() {
   return isMobile;
 }
 
-export default function SearchWithCard({ onPageResponseChange, onFilterChange }) {
+export default function SearchWithCard({ onPageResponseChange, onFilterChange, onRelatedChange, onConsultChange }) {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [activeFilterTab, setActiveFilterTab] = useState("Suggested Filters");
   const [selectedMobileChips, setSelectedMobileChips] = useState([]);
@@ -59,6 +60,9 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
   const [maxPrice, setMaxPrice] = useState(2000000);
   const [kmDistance, setKmDistance] = useState(0);
   const [vehicles, setVehicles] = useState([]);
+  const [relatedVehicles, setRelatedVehicles] = useState([]);
+  const [priceBasedVehicles, setPriceBasedVehicles] = useState([]);
+  const [topPicksPageResponse, setTopPicksPageResponse] = useState(null);
 
   // ── Brand states ──
   const [brands, setBrands] = useState([]);
@@ -224,6 +228,30 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
     return payload;
   };
 
+  /* ================= BUILD CONSULT PAYLOAD ================= */
+  const buildConsultPayload = () => {
+    const payload = {};
+    if (selectedCityId) payload.cityId = selectedCityId;
+    if (selectedStateId) payload.stateId = selectedStateId;
+    if (selectedBodyType.length > 0) payload.vehicleSubTypes = selectedBodyType.map(b => b.toUpperCase());
+    if (selectedBrands.length > 0) payload.makerIds = selectedBrands.map(Number);
+    if (selectedModels.length > 0) payload.modelIds = selectedModels.map(Number);
+    if (minPrice > MIN) payload.minPrice = minPrice;
+    if (maxPrice < MAX) payload.maxPrice = maxPrice;
+    return payload;
+  };
+
+  /* ================= FETCH CONSULTANTS ================= */
+  const fetchConsultants = async () => {
+    try {
+      const payload = buildConsultPayload();
+      const res = await getFilterConsualt(payload);
+      if (onConsultChange) onConsultChange(res?.data || []);
+    } catch (err) {
+      console.error("Error fetching consultants:", err);
+    }
+  };
+
   /* ================= FETCH VEHICLES ================= */
   const fetchVehicles = async (page = currentPage, payload = null) => {
     try {
@@ -238,13 +266,37 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
         params.direction = direction || "desc";
       }
       const response = await getFilteredVehicles(body, params);
-      setVehicles(response.data || []);
+      setVehicles(response.data.topPicksVehicles.vehicles || []);
 
-      // Update page response for header display
-      if (response.pagination) {
-        if (onPageResponseChange) onPageResponseChange(response.pagination);
-        setTotalPages(response.pagination.totalPages || 0);
-      }
+      const similar = response.data.similarVehicles || [];
+      setRelatedVehicles(similar);
+      if (onRelatedChange) onRelatedChange(similar);
+
+      const priceBased = response.data.priceMatchVehicles || [];
+      setPriceBasedVehicles(priceBased);
+
+      // Capture topPicks pageResponse for pagination
+      const topPicksPR = response.data.topPicksVehicles.pageResponse || {};
+      setTopPicksPageResponse(topPicksPR);
+      setTotalPages(topPicksPR.totalPages || 0);
+      setCurrentPage(topPicksPR.currentPage || page);
+
+      // Combined total = priceMatch + topPicks totalElements + similar
+      const combinedTotal =
+        (priceBased.length || 0) +
+        (topPicksPR.totalElements || 0) +
+        (similar.length || 0);
+
+      const combinedPageResponse = {
+        ...topPicksPR,
+        totalElements: combinedTotal,
+      };
+
+      if (onPageResponseChange) onPageResponseChange(combinedPageResponse);
+
+      // Also fetch filtered consultants in parallel
+      fetchConsultants();
+
     } catch (error) {
       console.error("Error fetching vehicles:", error);
       setVehicles([]);
@@ -961,6 +1013,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
     autoFetchTimerRef.current = setTimeout(() => {
       setCurrentPage(1);
       fetchVehicles(1);
+      fetchConsultants();
     }, 300);
     return () => { if (autoFetchTimerRef.current) clearTimeout(autoFetchTimerRef.current); };
   }, [
@@ -1642,34 +1695,82 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange })
           </div>
 
           <div className="col-span-full mb-10">
-            <PriceBased />
+            {(() => {
+              // --- Price range label ---
+              const userSetPrice = minPrice > MIN || maxPrice < MAX;
+              let priceMin = minPrice;
+              let priceMax = maxPrice;
+
+              if (!userSetPrice && priceBasedVehicles.length > 0) {
+                const prices = priceBasedVehicles.map((v) => v.price).filter(Boolean);
+                priceMin = Math.min(...prices);
+                priceMax = Math.max(...prices);
+              }
+
+              const toL = (v) => `₹${(v / 100000).toFixed(0)}L`;
+              const priceLabel = `Between ${toL(priceMin)} – ${toL(priceMax)}`;
+
+              // --- Subject label ---
+              // Resolve brand label from selected brand id
+              const brandLabel = selectedBrands.length > 0
+                ? (brands.find((b) => b.value === selectedBrands[0])?.label || "")
+                : "";
+
+              // Resolve model label from selected model id
+              const modelLabel = selectedModels.length > 0
+                ? (models.find((m) => m.value === selectedModels[0])?.label || "")
+                : "";
+
+              // Resolve body type label (capitalise first letter)
+              const bodyTypeLabel = selectedBodyType.length > 0
+                ? selectedBodyType[0].charAt(0).toUpperCase() + selectedBodyType[0].slice(1).toLowerCase()
+                : "";
+
+              let subject = "Vehicles";
+              if (bodyTypeLabel) {
+                subject = `${bodyTypeLabel}s`;
+              } else if (brandLabel && modelLabel) {
+                subject = `${brandLabel} ${modelLabel}`;
+              } else if (brandLabel) {
+                subject = `${brandLabel} Cars`;
+              }
+
+              const dynamicTitle = `${subject} ${priceLabel}`;
+
+              return <PriceBased data={priceBasedVehicles} title={dynamicTitle} />;
+            })()}
           </div>
 
-          <div className="col-span-full">
-            <div className="flex items-start gap-4">
-              <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
+          {vehicles?.length > 0 && (
+            <>
+              <div className="col-span-full">
+                <div className="flex items-start gap-4">
+                  <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
 
-              <div>
-                <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-                  Top Vehicle Near You
-                </h2>
-                <p className="text-third mt-1">
-                  Lorem ipsum dolor sit amet consectetur dolor sit amet
-                  consectetur..
-                </p>
+                  <div>
+                    <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
+                      Top Vehicle For You
+                    </h2>
+                    <p className="text-third mt-1">
+                      Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          {vehicles.map((vehicle) => (
-            <VehicleCard key={vehicle.id} data={vehicle} />
-          ))}
+              {vehicles.map((vehicle) => (
+                <VehicleCard key={vehicle.id} data={vehicle} />
+              ))}
 
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+              {topPicksPageResponse?.totalElements > 9 && (
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              )}
+            </>
+          )}
         </div>
       </main>
 
