@@ -16,7 +16,7 @@ function index() {
         <>
             <Navbar heroMod scrolled />
             <Layout>
-                <Hero />
+                <Hero/>
                 <HowAvxWorks/>
                 <InspectionAdvantage />
                 <WhoCanSell />
@@ -24,6 +24,7 @@ function index() {
                 <Faq />
             </Layout>
             <FooterLink />
+            <Footer />
 
            </>
     ); 
