@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -159,7 +160,7 @@ export default function SharePopup({
           </button>
         </div>
 
-        <div className="py-1">
+        <div className="">
           {shareItems.map((item, index) => {
             const Icon = item.icon;
 
