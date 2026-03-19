@@ -7,6 +7,7 @@ import Layout from "@/components/layout/Layout";
 import InspectionAdvantage from "@/components/features/userSeller/InspectionAdvantage";
 import WhoCanSell from "@/components/features/userSeller/WhoCanSell";
 import Faq from "@/components/features/userSeller/Faq";
+import WhySellOnAvx from "@/components/features/userSeller/WhySellOnAvx";
 
 function index() {
     return (
@@ -14,6 +15,7 @@ function index() {
             <Navbar heroMod scrolled />
             <Layout>
                 <Hero />
+                <WhySellOnAvx/>
                 <InspectionAdvantage />
                 <WhoCanSell />
                 <Faq />
