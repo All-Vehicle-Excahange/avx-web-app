@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
-import { Bike, Car } from "lucide-react";
+import { Bike, Car, ChevronLeft, ChevronRight } from "lucide-react";
 import { getTopPicsFour, getTopPicsTwo, getUserHomeFeed } from "@/services/user.service";
+import CommonSwiper from "@/components/ui/CommonSwiper";
 
 // --- Utility for Tailwind classes ---
 const cn = (...classes) => classes.filter(Boolean).join(" ");
@@ -10,7 +11,8 @@ const cn = (...classes) => classes.filter(Boolean).join(" ");
 export default function ReletedToSearch() {
     const [activeType, setActiveType] = useState("4-Wheeler");
     const [cardData, setCardData] = useState([]);
-
+    const prevRef = useRef(null);
+    const nextRef = useRef(null);
 
     useEffect(() => {
         const fetchHomeFeed = async () => {
@@ -35,68 +37,41 @@ export default function ReletedToSearch() {
     }, [activeType]);
 
     return (
-        <div className="w-full h-full flex flex-col  text-primary">
-            {/* Header Section */}
-            <div className="shrink-0 flex flex-col md:flex-row md:items-end justify-between mb-4 gap-4">
-                <div className="flex items-start gap-4">
-                    {/* VERTICAL ACCENT LINE */}
-                    <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
+        <div className="">
+      <div className="flex justify-between items-end mb-6">
 
-                    {/* TEXT */}
-                    <div>
-                        <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-                            Top Related to Your Search
-                        </h2>
+        <div className="flex items-start gap-4">
+          <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
 
-                        <p className="text-third mt-1">
-                            Lorem ipsum dolor sit amet consectetur dolor sit amet
-                            consectetur..
-                        </p>
-                    </div>
-                </div>
-
-                {/* Toggle Switch */}
-                {/* <div className="flex gap-1 sm:gap-2 mt-auto justify-end w-full sm:w-fit">
-                    <button
-                        onClick={() => setActiveType("4-Wheeler")}
-                        className={cn(
-                            "px-3 py-1 text-xs sm:text-sm font-medium rounded-full border cursor-pointer flex items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0",
-                            activeType === "4-Wheeler"
-                                ? "bg-fourth text-primary border-fourth shadow-sm"
-                                : "text-primary"
-                        )}
-                    >
-                        <Car size={18} /> 4-Wheeler
-                    </button>
-                    <button
-                        onClick={() => setActiveType("2-Wheeler")}
-                        className={cn(
-                            "px-3 py-1 text-xs sm:text-sm font-medium rounded-full border cursor-pointer flex items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0",
-                            activeType === "2-Wheeler"
-                                ? "bg-fourth text-primary border-fourth shadow-sm"
-                                : "text-primary"
-                        )}
-                    >
-                        <Bike size={18} /> 2-Wheeler
-                    </button>
-                </div> */}
-            </div>
-
-            {/* Grid Layout */}
-            <div
-                className="flex-1 min-h-0 grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-1">
-                {cardData.map((vehicle) => (
-                    <div key={vehicle.id} className="lg:col-span-1 lg:row-span-1 h-full">
-                        <VehicleCard data={vehicle} source="home" />
-                    </div>
-                ))}
-            </div>
-
-            <div className="mt-8 flex justify-end">
-                <Button href="/search" variant="outlineAnimated" size="md">
-                    Explore All Vehicles
-                </Button>
-            </div>
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
+              Top Related to Your Search
+            </h2>
+            <p className="text-third mt-1">
+              Lorem ipsum dolor sit amet consectetur dolor sit amet
+              consectetur..
+            </p>
+          </div>
         </div>
-    );
+
+        <div className="flex gap-3">
+          <Button variant="roundedOutline" ref={prevRef}>
+            <ChevronLeft className="w-5 h-5" />
+          </Button>
+
+          <Button variant="roundedOutline" ref={nextRef}>
+            <ChevronRight className="w-5 h-5" />
+          </Button>
+        </div>
+      </div>
+
+      {/* Common Swiper */}
+      <CommonSwiper
+        data={cardData}
+        CardComponent={VehicleCard}
+        prevRef={prevRef}
+        nextRef={nextRef}
+      />
+    </div>
+  );
 }

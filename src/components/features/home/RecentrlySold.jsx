@@ -35,7 +35,7 @@ const RecentrlySold = () => {
           {/* TEXT */}
           <div>
             <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-              Recentrly Sold on AVX
+              Recently Sold on AVX
             </h2>
 
             <p className="text-third mt-1">
