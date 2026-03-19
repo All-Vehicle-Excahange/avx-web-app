@@ -23,11 +23,11 @@ function Hero() {
   return (
     <>
       <section 
-        className="relative w-full min-h-[90vh] flex items-center overflow-hidden pt-16"
+        className="relative w-full min-h-100vh flex items-center overflow-hidden pt-24 pb-12"
       >
         {/* Subtle Background Detail (Minimalist Fourth Color) */}
 
-        <div className="container mx-auto px-6 lg:px-16 grid lg:grid-cols-12 gap-12 items-center relative z-10">
+        <div className="mx-auto px-0 lg:px-0 grid lg:grid-cols-12 gap-12 items-center relative z-10 pb-[32px]">
           
           {/* Left Column: Content */}
           <div className="lg:col-span-6 flex flex-col items-start">
@@ -69,14 +69,14 @@ function Hero() {
 
           {/* Right Column: Clean Visual */}
           <div className="lg:col-span-6 relative flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-[550px] aspect-[4/3] group">
+            <div className="relative w-full max-w-[550px] aspect-4/3 group">
                 
                 {/* Decorative Layering for Professional Depth */}
                 <div className="absolute inset-0 bg-primary/5 rounded-3xl -rotate-3 scale-95 group-hover:rotate-0 transition-transform duration-700 border border-primary/10" />
                 
                 {/* Main Image Container */}
                 <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.7)] border border-primary/10 bg-black/40">
-                    <Image
+                   <Image
                         src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80"
                         alt="Clean Vehicle Resale"
                         fill
@@ -84,7 +84,7 @@ function Hero() {
                         priority
                     />
                     {/* Dark overlay for text contrast if needed */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
                 </div>
 
                 {/* Floating "Status" UI (Professional Touch) */}

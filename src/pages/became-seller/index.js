@@ -9,14 +9,16 @@ import Layout from "@/components/layout/Layout";
 import InspectionAdvantage from "@/components/features/userSeller/InspectionAdvantage";
 import WhoCanSell from "@/components/features/userSeller/WhoCanSell";
 import Faq from "@/components/features/userSeller/Faq";
+import WhySellOnAvx from "@/components/features/userSeller/WhySellOnAvx";
 
 function index() {
     return (
         <>
             <Navbar heroMod scrolled />
             <Layout>
-                <Hero/>
-                <HowAvxWorks/>
+                <Hero />
+                <WhySellOnAvx/>
+                <HowAvxWorks />
                 <InspectionAdvantage />
                 <WhoCanSell />
                 <DocumentRequired />

@@ -40,7 +40,7 @@ export default function FAQSection() {
             <section
                 className="w-full py-16"
             >
-                <div className="container mx-auto px-6 lg:px-20 max-w-7xl">
+                <div className="mx-auto px-6 lg:px-0 max-w-7xl">
                     <div className="flex flex-col lg:flex-row gap-16 lg:gap-32 items-start">
 
                         {/* LEFT SIDE: STICKY HEADING */}
