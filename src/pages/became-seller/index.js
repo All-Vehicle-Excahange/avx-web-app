@@ -17,6 +17,7 @@ function index() {
             <Navbar heroMod scrolled />
             <Layout>
                 <Hero />
+                <HowAvxWorks/>
                 <InspectionAdvantage />
                 <WhoCanSell />
                 <DocumentRequired />
