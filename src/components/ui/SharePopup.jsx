@@ -160,7 +160,7 @@ export default function SharePopup({
           </button>
         </div>
 
-        <div className="py-1">
+        <div className="">
           {shareItems.map((item, index) => {
             const Icon = item.icon;
 
