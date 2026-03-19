@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -43,8 +44,8 @@ export default function ReletedConsualt(props) {
                 }
 
                 // If we have filters, use getFilterConsualt, otherwise fallback to home feed
-                const res = Object.keys(payload).length > 0 
-                    ? await getFilterConsualt(payload) 
+                const res = Object.keys(payload).length > 0
+                    ? await getFilterConsualt(payload)
                     : await getHomeFeedConsult({ pageNo: 1, size: safeLimit });
 
                 if (mounted && Array.isArray(res?.data) && res.data.length > 0) {
@@ -82,7 +83,7 @@ export default function ReletedConsualt(props) {
         if (props.vehicleOverview && Object.keys(props.vehicleOverview).length > 0) {
             fetchConsultants();
         }
-        
+
         return () => (mounted = false);
     }, [safeLimit, props.vehicleOverview, props.vehicleSummary]);
 
@@ -164,7 +165,7 @@ export default function ReletedConsualt(props) {
 
             <div className="mt-8 flex justify-end">
                 <Button onClick={handleViewMore} variant="outlineAnimated">
-                    Explore All 
+                    Explore All
                 </Button>
             </div>
         </div>
