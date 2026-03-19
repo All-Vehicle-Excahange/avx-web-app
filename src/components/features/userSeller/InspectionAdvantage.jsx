@@ -20,11 +20,11 @@ export default function InspectionAdvantage() {
         </motion.p>
 
         {/* MAIN GRID — image left, content right */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-0 lg:gap-0 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-0 items-stretch ">
 
           {/* LEFT — IMAGE BLOCK */}
           <motion.div
-            className="relative h-[300px] lg:h-auto lg:min-h-[600px] overflow-hidden border-0 rounded-2xl"
+            className="relative h-[300px] lg:h-auto lg:max-h-[520px] overflow-hidden border-0 rounded-2xl"
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
@@ -60,7 +60,7 @@ export default function InspectionAdvantage() {
 
           {/* RIGHT — CONTENT */}
           <motion.div
-            className="flex flex-col justify-center gap-5 lg:pl-8 xl:pl-10 pt-10 lg:pt-0"
+            className="flex flex-col justify-start gap-5 lg:pl-8 xl:pl-10 pt-10 lg:pt-0"
             initial={{ opacity: 0, x: 24 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
@@ -103,8 +103,7 @@ export default function InspectionAdvantage() {
                 is confidence, and confidence converts.
               </p>
               <p className="text-[15px] leading-[1.9] text-third/60">
-                Every report is permanently tied to your vehicle's record,
-                accessible from first inquiry to final handover.
+                {"Every report is permanently tied to your vehicle's record,accessible from first inquiry to final handover."}
               </p>
             </div>
 
@@ -132,10 +131,6 @@ export default function InspectionAdvantage() {
                 </motion.div>
               ))}
             </div>
-
-            <Button variant="ghost" className="self-start bg-primary/95 text-secondary">
-              Request AVX Inspection
-            </Button>
           </motion.div>
         </div>
       </div>

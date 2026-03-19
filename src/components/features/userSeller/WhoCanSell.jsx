@@ -120,10 +120,6 @@ export default function WhoCanSell() {
             All seller types go through the same verification process — ensuring
             every listing on AVX meets our standards of trust and transparency.
           </p>
-
-          <Button variant="ghost" className="bg-primary/95 text-secondary">
-            Start Listing
-          </Button>
         </motion.div>
       </div>
     </section>
