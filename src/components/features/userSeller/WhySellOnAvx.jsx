@@ -64,7 +64,7 @@ const features = [
 function WhySellOnAvx() {
   return (
     <section className="py-12 overflow-hidden">
-      <div className="max-w-7xl mx-auto flex flex-col gap-20">
+      <div className="max-w-7xl mx-auto flex flex-col gap-8">
 
         {/* ── Header ──────────────────────────────────    ─────────────── */}
         <div className="flex flex-col gap-5">
@@ -73,7 +73,7 @@ function WhySellOnAvx() {
               Why AVX
             </p>
           </div>
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+          <div className="lg:flex-row lg:items-end lg:justify-between gap-4">
             <h2 className="  text-3xl sm:text-4xl lg:text-5xl
                 font-semibold
                 leading-[1.05]
@@ -83,7 +83,7 @@ function WhySellOnAvx() {
               <br />
               <span className="text-fourth/80">Built for Serious Sellers</span>
             </h2>
-            <p className="text-third text-lg font-[Poppins] max-w-xs leading-relaxed lg:text-right">
+            <p className="text-third text-lg font-[Poppins] max-w-xs leading-relaxed mt-4">
               A structured marketplace designed to give you full control, visibility, and trust.
             </p>
           </div>
