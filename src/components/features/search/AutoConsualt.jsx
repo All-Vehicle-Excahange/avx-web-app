@@ -27,7 +27,7 @@ const mapConsultant = (item) => ({
     isSponsored: item.isActiveTier || false,
 });
 
-export default function AutoConsualt({ limit, data }) {
+export default function AutoConsualt({ limit, data, filterPayload }) {
     const safeLimit = typeof limit === "number" ? limit : 4;
 
     const [consultants, setConsultants] = useState([]);
@@ -71,7 +71,17 @@ export default function AutoConsualt({ limit, data }) {
 
                 <div>
                     <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-                        Consultants Specializing in Diesel SUVs
+                        {(() => {
+                            if (!filterPayload || !filterPayload._labels) return "Top Pic Consualt for you";
+                            
+                            const { bodyTypeLabel, modelLabel, brandLabel } = filterPayload._labels;
+                            
+                            if (bodyTypeLabel) return `Consultants Specializing in ${bodyTypeLabel}s`;
+                            if (modelLabel) return `Consultants Specializing in ${modelLabel}`;
+                            if (brandLabel) return `Consultants Specializing in ${brandLabel}`;
+                            
+                            return "Top Pic Consualt for you";
+                        })()}
                     </h2>
                     <p className="text-third mt-1">
                         Discover trusted consultants curated for you.
@@ -101,7 +111,22 @@ export default function AutoConsualt({ limit, data }) {
             </div>
 
             <div className="mt-8 flex justify-end">
-                <Button href="/consult/discovery" variant="outlineAnimated">
+                <Button onClick={(e) => {
+                    e.preventDefault();
+                    const queryParams = new URLSearchParams();
+                    
+                    if (filterPayload) {
+                        if (filterPayload.cityId) queryParams.set("cityId", filterPayload.cityId);
+                        if (filterPayload.stateId) queryParams.set("stateId", filterPayload.stateId);
+                        if (filterPayload.makerIds?.length > 0) queryParams.set("makerIds", filterPayload.makerIds.join(","));
+                        if (filterPayload.modelIds?.length > 0) queryParams.set("modelIds", filterPayload.modelIds.join(","));
+                        if (filterPayload.vehicleSubTypes?.length > 0) queryParams.set("vehicleSubTypes", filterPayload.vehicleSubTypes.join(","));
+                        if (filterPayload.minPrice) queryParams.set("minPrice", filterPayload.minPrice);
+                        if (filterPayload.maxPrice) queryParams.set("maxPrice", filterPayload.maxPrice);
+                    }
+                    
+                    window.location.href = `/consult/discovery?${queryParams.toString()}`;
+                }} variant="outlineAnimated">
                     See All
                 </Button>
             </div>

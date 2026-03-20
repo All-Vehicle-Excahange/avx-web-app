@@ -21,6 +21,7 @@ export default function Index() {
   const [activeFilters, setActiveFilters] = useState([]);
   const [relatedVehicles, setRelatedVehicles] = useState([]);
   const [consultants, setConsultants] = useState([]);
+  const [consultPayload, setConsultPayload] = useState(null);
 
   return (
     <>
@@ -32,6 +33,7 @@ export default function Index() {
           onFilterChange={setActiveFilters}
           onRelatedChange={setRelatedVehicles}
           onConsultChange={setConsultants}
+          onConsultPayloadChange={setConsultPayload}
         />
       </Layout>
 
@@ -39,7 +41,7 @@ export default function Index() {
         <ReletedToSearch data={relatedVehicles} />
       </Layout>
       <Layout>
-        <AutoConsualt limit={4} data={consultants} />
+        <AutoConsualt limit={4} data={consultants} filterPayload={consultPayload} />
       </Layout>
 
       <DownloadAppSection />
