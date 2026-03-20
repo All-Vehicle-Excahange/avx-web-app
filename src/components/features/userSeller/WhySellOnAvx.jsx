@@ -115,7 +115,7 @@ function WhySellOnAvx() {
 
                   {/* Tag + icon row */}
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 flex items-center justify-center border border-primary/15 group-hover:border-third/30 group-hover:bg-third/[0.06] transition-all duration-300 text-third/50 group-hover:text-third">
+                    <div className="w-8 h-8 flex items-center justify-center border border-primary/15 group-hover:border-third/30 group-hover:bg-third/6 transition-all duration-300 text-third/50 group-hover:text-third">
                       {feature.icon}
                     </div>
                     <span className="text-[12px] font-semibold tracking-[2.5px] uppercase text-third/35 font-[Poppins] group-hover:text-third/60 transition-colors duration-200">

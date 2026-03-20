@@ -56,7 +56,7 @@ export default function HowAvxWorks() {
 
   return (
     <section ref={sectionRef} className="relative ">
-      <div className="container">
+
 
         {/* heading */}
         <div className={`mb-16 transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
@@ -175,7 +175,7 @@ export default function HowAvxWorks() {
           </div>
         </div>
 
-      </div>
+      
     </section>
   );
 }

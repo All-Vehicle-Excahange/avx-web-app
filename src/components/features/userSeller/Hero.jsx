@@ -27,7 +27,7 @@ function Hero() {
       >
         {/* Subtle Background Detail (Minimalist Fourth Color) */}
 
-        <div className="mx-auto px-0 lg:px-0 grid lg:grid-cols-12 gap-12 items-center relative z-10 pb-[32px]">
+        <div className="mx-auto px-0 lg:px-0 grid lg:grid-cols-12 gap-12 items-center relative z-10 ">
           
           {/* Left Column: Content */}
           <div className="lg:col-span-6 flex flex-col items-start">
