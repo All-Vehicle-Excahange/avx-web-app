@@ -16,9 +16,7 @@ export default function ReletedToSearch({ data }) {
   const nextRef = useRef(null);
 
   useEffect(() => {
-    if (data && data.length > 0) {
-      setCardData(data);
-    }
+    setCardData(data || []);
   }, [data]);
 
 

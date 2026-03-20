@@ -51,7 +51,7 @@ function useIsMobile() {
   return isMobile;
 }
 
-export default function SearchWithCard({ onPageResponseChange, onFilterChange, onRelatedChange, onConsultChange }) {
+export default function SearchWithCard({ onPageResponseChange, onFilterChange, onRelatedChange, onConsultChange, onConsultPayloadChange }) {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [activeFilterTab, setActiveFilterTab] = useState("Suggested Filters");
   const [selectedMobileChips, setSelectedMobileChips] = useState([]);
@@ -251,6 +251,34 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
       console.error("Error fetching consultants:", err);
     }
   };
+
+  /* ================= SYNC CONSULT PAYLOAD FOR AUTO-CONSULT ================= */
+  useEffect(() => {
+    if (!onConsultPayloadChange) return;
+    
+    const payload = buildConsultPayload();
+    const safeStr = (v) => v != null ? String(v) : "";
+    
+    const brandLabel = selectedBrands.length > 0 
+      ? (brands.find((b) => safeStr(b.value) === safeStr(selectedBrands[0]))?.label || "") 
+      : "";
+      
+    const modelLabel = selectedModels.length > 0 
+      ? (models.find((m) => safeStr(m.value) === safeStr(selectedModels[0]))?.label || "") 
+      : "";
+      
+    const bodyTypeLabel = selectedBodyType.length > 0 
+      ? selectedBodyType[0].charAt(0).toUpperCase() + selectedBodyType[0].slice(1).toLowerCase() 
+      : "";
+
+    onConsultPayloadChange({
+      ...payload,
+      _labels: { brandLabel, modelLabel, bodyTypeLabel }
+    });
+  }, [
+    selectedBrands, selectedModels, selectedBodyType, 
+    brands, models, minPrice, maxPrice, selectedCityId, selectedStateId
+  ]);
 
   /* ================= FETCH VEHICLES ================= */
   const fetchVehicles = async (page = currentPage, payload = null) => {
@@ -1711,14 +1739,14 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
               const priceLabel = `Between ${toL(priceMin)} – ${toL(priceMax)}`;
 
               // --- Subject label ---
-              // Resolve brand label from selected brand id
+              const safeStr = (v) => v != null ? String(v) : "";
               const brandLabel = selectedBrands.length > 0
-                ? (brands.find((b) => b.value === selectedBrands[0])?.label || "")
+                ? (brands.find((b) => safeStr(b.value) === safeStr(selectedBrands[0]))?.label || "")
                 : "";
 
               // Resolve model label from selected model id
               const modelLabel = selectedModels.length > 0
-                ? (models.find((m) => m.value === selectedModels[0])?.label || "")
+                ? (models.find((m) => safeStr(m.value) === safeStr(selectedModels[0]))?.label || "")
                 : "";
 
               // Resolve body type label (capitalise first letter)
@@ -1735,8 +1763,15 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                 subject = `${brandLabel} Cars`;
               }
 
-              const dynamicTitle = `${subject} ${priceLabel}`;
-
+              const dynamicTitle = (
+                <>
+                  {subject}{" "}
+                  Between{" "}
+                  <span className="text-fourth font-semibold">
+                    {toL(priceMin)} – {toL(priceMax)}
+                  </span>
+                </>
+              );
               return <PriceBased data={priceBasedVehicles} title={dynamicTitle} />;
             })()}
           </div>
