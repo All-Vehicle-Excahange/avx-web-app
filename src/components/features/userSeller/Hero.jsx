@@ -60,7 +60,7 @@ function Hero() {
               <Button 
                 variant="ghost" 
                 onClick={handleStartSelling}
-                className="h-14 px-12 bg-primary text-secondary text-sm font-black tracking-widest hover:bg-primary hover:-translate-y-1 transition-all duration-300 rounded-none shadow-2xl"
+                className=" py-3 bg-primary text-secondary text-sm font-black tracking-widest hover:bg-primary hover:-translate-y-1 transition-all duration-300 rounded-none shadow-2xl"
               >
                 START SELLING
               </Button>
