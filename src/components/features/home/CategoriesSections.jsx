@@ -115,7 +115,7 @@ const CategoriesSections = () => {
 
             <div>
               <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-                Not sure what to buy? Start here
+                Not sure what to buy? <span className="text-fourth">Start here</span>
               </h2>
 
               <p className="text-third mt-1">

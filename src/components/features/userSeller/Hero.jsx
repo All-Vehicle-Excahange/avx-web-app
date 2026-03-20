@@ -27,7 +27,7 @@ function Hero() {
       >
         {/* Subtle Background Detail (Minimalist Fourth Color) */}
 
-        <div className="mx-auto px-0 lg:px-0 grid lg:grid-cols-12 gap-12 items-center relative z-10 pb-[32px]">
+        <div className="mx-auto px-0 lg:px-0 grid lg:grid-cols-12 gap-12 items-center relative z-10 ">
           
           {/* Left Column: Content */}
           <div className="lg:col-span-6 flex flex-col items-start">
@@ -60,7 +60,7 @@ function Hero() {
               <Button 
                 variant="ghost" 
                 onClick={handleStartSelling}
-                className="h-14 px-12 bg-primary text-secondary text-sm font-black tracking-widest hover:bg-primary hover:-translate-y-1 transition-all duration-300 rounded-none shadow-2xl"
+                className=" py-3 bg-primary text-secondary text-sm font-black tracking-widest hover:bg-primary hover:-translate-y-1 transition-all duration-300 rounded-none shadow-2xl"
               >
                 START SELLING
               </Button>

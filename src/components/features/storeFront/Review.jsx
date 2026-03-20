@@ -6,7 +6,7 @@ import {
   checkIsEligibleToCreateReview,
   getAllReview,
 } from "@/services/user.service";
-import { Star, Camera, Info, Lock, Plus } from "lucide-react";
+import { Star, Camera, Info, Lock, Plus, MessageSquare } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -128,8 +128,8 @@ export default function Review() {
                     <Star
                       key={i}
                       className={`w-4 h-4 ${i <= Math.round(reviewSummary.averageRating)
-                          ? "fill-primary text-primary"
-                          : "text-third"
+                        ? "fill-primary text-primary"
+                        : "text-third"
                         }`}
                     />
                   ))}
@@ -194,122 +194,138 @@ export default function Review() {
           <div className="border border-third/40 rounded-2xl p-6">
             <h3 className="text-lg font-semibold mb-4">Write a review</h3>
 
-            {/* ⭐ RATING INPUT */}
-            <div className="flex gap-1 mb-4">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <Star
-                  key={i}
-                  onClick={() => setRating(i)}
-                  className={`w-6 h-6 cursor-pointer transition ${i <= rating ? "fill-primary text-primary" : "text-third"
-                    }`}
+            {isEligibleToCreateReview ? (
+              <>
+                {/* ⭐ RATING INPUT */}
+                <div className="flex gap-1 mb-4">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <Star
+                      key={i}
+                      onClick={() => setRating(i)}
+                      className={`w-6 h-6 cursor-pointer transition ${i <= rating ? "fill-primary text-primary" : "text-third"
+                        }`}
+                    />
+                  ))}
+                </div>
+
+                {/* 📝 REVIEW TEXT */}
+                <textarea
+                  placeholder="What should other customers know?"
+                  value={reviewText}
+                  onChange={(e) => setReviewText(e.target.value)}
+                  className="w-full min-h-[120px] border border-third/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary resize-none"
                 />
-              ))}
-            </div>
 
-            {/* 📝 REVIEW TEXT */}
-            <textarea
-              placeholder="What should other customers know?"
-              value={reviewText}
-              onChange={(e) => setReviewText(e.target.value)}
-              className="w-full min-h-[120px] border border-third/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary resize-none"
-            />
+                {/* 🏷️ TITLE */}
+                <input
+                  placeholder="What's most important to know?"
+                  value={reviewTitle}
+                  onChange={(e) => setReviewTitle(e.target.value)}
+                  className="w-full mt-3  border border-third/40 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-primary"
+                />
 
-            {/* 🏷️ TITLE */}
-            <input
-              placeholder="What's most important to know?"
-              value={reviewTitle}
-              onChange={(e) => setReviewTitle(e.target.value)}
-              className="w-full mt-3  border border-third/40 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-primary"
-            />
+                {/* 📷 MULTI IMAGE INPUTS (OLD DESIGN STYLE) */}
+                <div className="mt-4 space-y-3">
+                  <label className="block text-sm font-medium mb-2">
+                    Share a video or photo (optional)
+                  </label>
 
-            {/* 📷 MULTI IMAGE INPUTS (OLD DESIGN STYLE) */}
-            <div className="mt-4 space-y-3">
-              <label className="block text-sm font-medium mb-2">
-                Share a video or photo (optional)
-              </label>
+                  {/* ✅ Multiple Upload Boxes */}
+                  {media.map((item, index) => (
+                    <label
+                      key={index}
+                      className="flex items-center justify-center gap-2 border border-dashed border-third/50 rounded-xl h-20 cursor-pointer hover:border-primary transition"
+                    >
+                      <Camera className="w-5 h-5 text-third" />
 
-              {/* ✅ Multiple Upload Boxes */}
-              {media.map((item, index) => (
-                <label
-                  key={index}
-                  className="flex items-center justify-center gap-2 border border-dashed border-third/50 rounded-xl h-20 cursor-pointer hover:border-primary transition"
-                >
-                  <Camera className="w-5 h-5 text-third" />
+                      <span className="text-sm text-third">
+                        {item.file ? item.file.name : `Upload Image ${index + 1}`}
+                      </span>
 
-                  <span className="text-sm text-third">
-                    {item.file ? item.file.name : `Upload Image ${index + 1}`}
-                  </span>
+                      {/* ✅ Hidden Input */}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) =>
+                          handleMediaUpload(index, e.target.files?.[0])
+                        }
+                        className="hidden"
+                      />
+                    </label>
+                  ))}
 
-                  {/* ✅ Hidden Input */}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) =>
-                      handleMediaUpload(index, e.target.files?.[0])
-                    }
-                    className="hidden"
-                  />
-                </label>
-              ))}
-
-              {/* ✅ Add More Button */}
-              <Button
-                type="button"
-                variant="outlineSecondary"
-                onClick={addMoreImageInput}
-                className="text-sm text-primary font-medium"
-              >
-                <Plus className="w-4 mr-1 h-4" /> Add Media
-              </Button>
-            </div>
-
-            {!isEligibleToCreateReview && (
-              <div className="mt-4 flex gap-3 rounded-xl border border-third/40  px-4 py-3">
-                <Info size={16} className="text-primary mt-2px" />
-
-                <p className="text-xs leading-relaxed text-third">
-                  We apologize but this account has not met the minimum
-                  eligibility requirements to write a review. If you would like
-                  to learn more about our eligibility requirements, please see
-                  our{" "}
-                  <a
-                    href="/terms-and-conditions"
-                    target="_blank"
-                    className="text-primary font-medium hover:underline"
+                  {/* ✅ Add More Button */}
+                  <Button
+                    type="button"
+                    variant="outlineSecondary"
+                    onClick={addMoreImageInput}
+                    className="text-sm text-primary font-medium"
                   >
-                    community guidelines
-                  </a>
-                  .
-                </p>
-              </div>
+                    <Plus className="w-4 mr-1 h-4" /> Add Media
+                  </Button>
+                </div>
+
+                <div className="relative mt-5">
+                  {/* ✅ SUBMIT BUTTON */}
+                  <Button
+                    onClick={handleSubmitReview}
+                    className="w-full rounded-xl py-2 font-medium flex items-center justify-center gap-2"
+                    full
+                    variant="ghost"
+                  >
+                    Submit Review
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex gap-3 rounded-xl border border-third/40 px-4 py-4 bg-third/5">
+                  <Info size={18} className="text-primary shrink-0 mt-0.5" />
+
+                  <p className="text-sm leading-relaxed text-third">
+                    We apologize but this account has not met the minimum
+                    eligibility requirements to write a review. If you would like
+                    to learn more about our eligibility requirements, please see
+                    our{" "}
+                    <a
+                      href="/terms-and-conditions"
+                      target="_blank"
+                      className="text-primary font-medium hover:underline"
+                    >
+                      community guidelines
+                    </a>
+                    .
+                  </p>
+                </div>
+
+                <div className="relative mt-5">
+                  <Button
+                    disabled
+                    className="w-full rounded-xl py-2 font-medium flex items-center justify-center gap-2 opacity-60 cursor-not-allowed"
+                    full
+                    variant="ghost"
+                  >
+                    <Lock size={16} />
+                    Not Eligible to Review
+                  </Button>
+                </div>
+              </>
             )}
-
-            <div className="relative mt-5">
-              {/* ✅ SUBMIT BUTTON */}
-              <Button
-                disabled={!isEligibleToCreateReview}
-                onClick={handleSubmitReview}
-                className={`w-full rounded-xl py-2 font-medium flex items-center justify-center gap-2
-  ${!isEligibleToCreateReview ? "opacity-60 cursor-not-allowed" : ""}`}
-                full
-                variant="ghost"
-              >
-                {!isEligibleToCreateReview && <Lock size={16} />}
-                Submit Review
-              </Button>
-
-              {/* ✅ DISABLED OVERLAY LAYER */}
-              {!isEligibleToCreateReview && (
-                <div className="absolute inset-0 rounded-xl bg-black/5 backdrop-blur-[1px]" />
-              )}
-            </div>
           </div>
         </div>
 
         {/* ================= RIGHT ================= */}
         <div className="space-y-6">
           {reviews.length === 0 ? (
-            <p className="text-sm text-third">No reviews yet.</p>
+            <div className="flex flex-col items-center justify-center py-16 px-6 border border-third/40 rounded-2xl text-center">
+              <div className="w-16 h-16 bg-third/10 rounded-full flex items-center justify-center mb-4">
+                <MessageSquare className="w-8 h-8 text-third" />
+              </div>
+              <h3 className="text-lg font-semibold text-primary mb-2">No reviews yet</h3>
+              <p className="text-sm text-third max-w-sm mx-auto">
+                Be the first to review this item. Share your experience to help others make better choices.
+              </p>
+            </div>
           ) : (
             reviews.map((review) => {
               const user = review.reviewedBy;
@@ -337,8 +353,8 @@ export default function Review() {
                       <Star
                         key={i}
                         className={`w-4 h-4 ${i <= review.rating
-                            ? "fill-primary text-primary"
-                            : "text-third"
+                          ? "fill-primary text-primary"
+                          : "text-third"
                           }`}
                       />
                     ))}

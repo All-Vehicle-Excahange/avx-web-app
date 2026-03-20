@@ -19,6 +19,8 @@ export default function Index() {
     currentElements: 0,
   });
   const [activeFilters, setActiveFilters] = useState([]);
+  const [relatedVehicles, setRelatedVehicles] = useState([]);
+  const [consultants, setConsultants] = useState([]);
 
   return (
     <>
@@ -28,14 +30,16 @@ export default function Index() {
         <SearchWithCard
           onPageResponseChange={setPageResponse}
           onFilterChange={setActiveFilters}
+          onRelatedChange={setRelatedVehicles}
+          onConsultChange={setConsultants}
         />
       </Layout>
 
       <Layout>
-        <ReletedToSearch />
+        <ReletedToSearch data={relatedVehicles} />
       </Layout>
       <Layout>
-        <AutoConsualt limit={4} />
+        <AutoConsualt limit={4} data={consultants} />
       </Layout>
 
       <DownloadAppSection />

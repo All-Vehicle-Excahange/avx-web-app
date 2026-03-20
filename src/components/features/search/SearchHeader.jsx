@@ -75,8 +75,10 @@ export default function SearchHeader({ pageResponse = {}, activeFilters = [] }) 
 
               {/* Pagination */}
               <span className="text-primary/70">
-                • {pageResponse.totalElements ?? 0} Results
-                • Page {pageResponse.currentPage ?? 1} of {pageResponse.totalPages ?? 0}
+                • {pageResponse.totalElements ?? 0} Total Results
+                {pageResponse.totalPages > 0 && (
+                  <> • Page {pageResponse.currentPage ?? 1} of {pageResponse.totalPages}</>
+                )}
               </span>
             </div>
 

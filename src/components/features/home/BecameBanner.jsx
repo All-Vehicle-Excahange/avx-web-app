@@ -20,7 +20,7 @@ function BecameBanner() {
               group
               flex-1
               transition-all duration-500 ease-out
-              hover:bg-fourth
+              hover:bg-white/20
               hover:flex-[1.3]
               px-10 py-16 lg:py-20
               text-center
@@ -56,8 +56,8 @@ function BecameBanner() {
               text-white
               underline underline-offset-8
               decoration-white/40
-              group-hover:decoration-fourth
-              transition
+              group-hover:decoration-white
+              transition-all duration-500
             "
                         >
                             <Button variant="ghost">Become Consultant </Button>
@@ -71,7 +71,7 @@ function BecameBanner() {
               group
               flex-1
               transition-all duration-500 ease-out
-              hover:bg-fourth
+              hover:bg-white/20
               hover:flex-[1.3]
               px-10 py-16 lg:py-20
               text-center
@@ -107,8 +107,8 @@ function BecameBanner() {
               text-white
               underline underline-offset-8
               decoration-white/40
-              group-hover:decoration-fourth
-              transition
+              group-hover:decoration-white
+              transition-all duration-500
             "
                         >
                             <Button variant="ghost">Become Seller </Button>

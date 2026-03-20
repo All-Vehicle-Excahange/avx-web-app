@@ -100,7 +100,7 @@ export default function AutoConsultPicsSection(props) {
 
       <div className="mt-8 flex justify-end">
         <Button href="/consult/discovery" variant="outlineAnimated">
-          See All
+           Explore All 
         </Button>
       </div>
     </div>

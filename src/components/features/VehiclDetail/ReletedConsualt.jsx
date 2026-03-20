@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import React, { useEffect, useState } from "react";
 import ConsultantCard from "@/components/ui/const/ConsultCard";
 import Button from "@/components/ui/button";
 import { getHomeFeedConsult } from "@/services/user.service";
+import { getFilterConsualt } from "@/services/filter";
 import { useRouter } from "next/navigation";
 
 export default function ReletedConsualt(props) {
@@ -19,10 +21,32 @@ export default function ReletedConsualt(props) {
 
         const fetchConsultants = async () => {
             try {
-                const res = await getHomeFeedConsult({
-                    pageNo: 1,
-                    size: safeLimit,
-                });
+                // Build payload dynamically
+                const payload = {};
+                if (props.vehicleSummary?.address?.cityId) {
+                    payload.cityId = props.vehicleSummary.address.cityId;
+                }
+                if (props.vehicleSummary?.address?.stateId) {
+                    payload.stateId = props.vehicleSummary.address.stateId;
+                }
+                if (props.vehicleOverview?.makerId) {
+                    payload.makerIds = [props.vehicleOverview.makerId];
+                }
+                if (props.vehicleOverview?.modelId) {
+                    payload.modelIds = [props.vehicleOverview.modelId];
+                }
+                if (props.vehicleOverview?.vehicleSubType) {
+                    payload.vehicleSubTypes = [props.vehicleOverview.vehicleSubType.toUpperCase()];
+                }
+                if (props.vehicleOverview?.price) {
+                    payload.minPrice = props.vehicleOverview.price;
+                    payload.maxPrice = props.vehicleOverview.price;
+                }
+
+                // If we have filters, use getFilterConsualt, otherwise fallback to home feed
+                const res = Object.keys(payload).length > 0
+                    ? await getFilterConsualt(payload)
+                    : await getHomeFeedConsult({ pageNo: 1, size: safeLimit });
 
                 if (mounted && Array.isArray(res?.data) && res.data.length > 0) {
                     setConsultants(
@@ -46,19 +70,22 @@ export default function ReletedConsualt(props) {
                                     ? `${(item.minVehiclePrice / 100000).toFixed(1)}L - ${(item.maxVehiclePrice / 100000).toFixed(1)}L`
                                     : "-",
                             isSponsored: item.isActiveTier || false,
-                        })),
+                        }))
                     );
                 }
             } catch (err) {
                 console.error("Consultant fetch failed:", err);
             } finally {
-                mounted && setLoading(false);
+                if (mounted) setLoading(false);
             }
         };
 
-        fetchConsultants();
+        if (props.vehicleOverview && Object.keys(props.vehicleOverview).length > 0) {
+            fetchConsultants();
+        }
+
         return () => (mounted = false);
-    }, [safeLimit]);
+    }, [safeLimit, props.vehicleOverview, props.vehicleSummary]);
 
     const finalConsultants = consultants;
 
@@ -138,7 +165,7 @@ export default function ReletedConsualt(props) {
 
             <div className="mt-8 flex justify-end">
                 <Button onClick={handleViewMore} variant="outlineAnimated">
-                    See All
+                    Explore All
                 </Button>
             </div>
         </div>
