@@ -88,7 +88,7 @@ function Hero() {
                 </div>
 
                 {/* Floating "Status" UI (Professional Touch) */}
-                <div className="absolute -bottom-8 -left-8 bg-secondary/80 backdrop-blur-xl border border-primary/10 p-5 rounded-2xl shadow-2xl hidden sm:block">
+                <div className="absolute -bottom-8 -left-8 bg-secondary/80 backdrop-blur-xl border border-primary/10 p-5 rounded-2xl  hidden sm:block">
                     <div className="flex items-center gap-4">
                         <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center">
                              <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
