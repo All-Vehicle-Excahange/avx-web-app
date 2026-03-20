@@ -69,7 +69,7 @@ export default function AutoConsultPicsSection(props) {
 
         <div>
           <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-            Top Auto Consultants Picks For You
+            Top <span className="text-fourth">Auto Consultants</span> Picks For You
           </h2>
           <p className="text-third mt-1">
             Discover trusted consultants curated for you.
