@@ -108,7 +108,7 @@ export default function StorySection() {
             <div className="flex items-center gap-2 px-4 py-2 rounded-lg">
               <button
                 type="button"
-                className="flex items-center justify-center px-6 py-2 text-primary bg-secondary rounded-lg hover:bg-third/20 hover:text-primary transition-all duration-300 cursor-pointer"
+                className="flex items-center justify-center px-6 py-2 text-primary bg-secondary rounded-lg hover:bg-third/20 hover:text-secondary transition-all duration-300 cursor-pointer"
               >
                 <div className="mr-3">
                   <svg viewBox="30 336.7 120.9 129.2" width="25">
@@ -154,7 +154,7 @@ export default function StorySection() {
               <div className="mb-2">
                 <Quote
                   size={120}
-                  strokeWidth={1.5}
+                  strokeWidth={1}
                   className="text-gray-200 rotate-180"
                 />
               </div>

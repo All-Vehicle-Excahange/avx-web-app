@@ -49,7 +49,7 @@ export default function AvxInspected() {
 
                         <div>
                             <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-                                AVX Inspected Vehicles
+                                AVX <span className="text-fourth">Inspected</span> Vehicles
                             </h2>
 
                             <p className="text-third mt-1">

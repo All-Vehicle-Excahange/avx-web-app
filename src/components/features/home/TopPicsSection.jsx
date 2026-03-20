@@ -45,7 +45,7 @@ export default function TopPicsSection() {
                     {/* TEXT */}
                     <div>
                         <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-                          <span className="text-fourth"> Top picks</span> Vehicle for you
+                          <span className="text-fourth"> Top picks</span> Vehicle For You
                         </h2>
 
                         <p className="text-third mt-1">
