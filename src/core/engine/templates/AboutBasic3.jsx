@@ -164,7 +164,7 @@ function AboutBasic3({ data, isEditing, onUpdate }) {
   /* ================= FRONT ================= */
 
   return (
-    <div className="bg-secondary text-primary py-14">
+    <div className=" text-primary py-14">
       <div className="max-w-[1480px] mx-auto space-y-16">
         {/* HERO */}
         <section className="text-center py-10 w-full mx-auto">
