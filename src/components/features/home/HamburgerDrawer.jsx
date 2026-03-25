@@ -1,5 +1,6 @@
 "use client";
 
+import { X } from "lucide-react";
 import { useEffect } from "react";
 
 export default function HamburgerDrawer({ open, onClose, role }) {
@@ -22,11 +23,11 @@ export default function HamburgerDrawer({ open, onClose, role }) {
       `}
     >
       {/* HEADER */}
-      <div className="h-20 flex items-center px-8 border-b border-white/10">
-        <button onClick={onClose} className="text-2xl mr-6 cursor-pointer">
-          ✕
+      <div className="h-20 flex items-center gap-2 px-8 border-b border-white/10">
+        <button onClick={onClose} className="text-2xl cursor-pointer">
+          <X className="w-5 h-5" />
         </button>
-        <span className="font-black italic text-2xl">AVX</span>
+        <img src="/logo/logo.webp" alt="Reecomm Logo" className="h-6 md:h-6 w-auto object-contain block" />
       </div>
 
       {/* CONTENT */}
