@@ -66,27 +66,36 @@ export default function AutoConsualt({ limit, data, filterPayload }) {
     return (
         <div className="w-full py-10 ">
             {/* Header */}
-            <div className="flex items-start gap-4 mb-6">
-                <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
+            <div className="flex flex-col items-start gap-2 mb-6">
 
-                <div>
-                    <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
+                {/* Top Label */}
+                <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
+                    Top Picks
+                    <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+                </p>
+
+                {/* Dynamic Title (UNCHANGED LOGIC) */}
+                <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary leading-tight">
+                    <span className="text-fourth">
                         {(() => {
-                            if (!filterPayload || !filterPayload._labels) return "Top Pic Consualt for you";
-                            
+                            if (!filterPayload || !filterPayload._labels) return "Top Pick";
+
                             const { bodyTypeLabel, modelLabel, brandLabel } = filterPayload._labels;
-                            
-                            if (bodyTypeLabel) return `Consultants Specializing in ${bodyTypeLabel}s`;
-                            if (modelLabel) return `Consultants Specializing in ${modelLabel}`;
-                            if (brandLabel) return `Consultants Specializing in ${brandLabel}`;
-                            
-                            return "Top Pic Consualt for you";
+
+                            if (bodyTypeLabel) return `${bodyTypeLabel}s`;
+                            if (modelLabel) return modelLabel;
+                            if (brandLabel) return brandLabel;
+
+                            return "Top Pick";
                         })()}
-                    </h2>
-                    <p className="text-third mt-1">
-                        Discover trusted consultants curated for you.
-                    </p>
-                </div>
+                    </span>{" "}
+                    Consultants For You
+                </h2>
+
+                {/* Description */}
+                <p className="text-third mt-1">
+                    Discover trusted consultants curated for you.
+                </p>
             </div>
 
             {loading && (
@@ -114,7 +123,7 @@ export default function AutoConsualt({ limit, data, filterPayload }) {
                 <Button onClick={(e) => {
                     e.preventDefault();
                     const queryParams = new URLSearchParams();
-                    
+
                     if (filterPayload) {
                         if (filterPayload.cityId) queryParams.set("cityId", filterPayload.cityId);
                         if (filterPayload.stateId) queryParams.set("stateId", filterPayload.stateId);
@@ -124,7 +133,7 @@ export default function AutoConsualt({ limit, data, filterPayload }) {
                         if (filterPayload.minPrice) queryParams.set("minPrice", filterPayload.minPrice);
                         if (filterPayload.maxPrice) queryParams.set("maxPrice", filterPayload.maxPrice);
                     }
-                    
+
                     window.location.href = `/consult/discovery?${queryParams.toString()}`;
                 }} variant="outlineAnimated">
                     See All

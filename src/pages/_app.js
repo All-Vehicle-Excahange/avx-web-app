@@ -8,6 +8,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import useGuestSetup from "@/hooks/useGuestSetup";
 import LoginPopup from "@/components/auth/LoginPopup";
 import GlobalLoader from "@/components/ui/GlobalLoader";
+import SplashScreen from "@/components/ui/SplashScreen";
 
 export default function App({ Component, pageProps }) {
     const hasFullWidth = pageProps?.fullWidth;
@@ -17,20 +18,32 @@ export default function App({ Component, pageProps }) {
     const closeLoginPopup = useAuthStore((state) => state.closeLoginPopup);
 
     const [loading, setLoading] = useState(false);
+    const [showSplash, setShowSplash] = useState(true); // 👈 start true
 
-    // Initialize Auth
+    // Splash logic
+    useEffect(() => {
+        const splashShown = sessionStorage.getItem("splashShown");
+
+        if (splashShown) {
+            setShowSplash(false);
+        }
+    }, []);
+
+    const handleSplashComplete = () => {
+        sessionStorage.setItem("splashShown", "true");
+        setShowSplash(false);
+    };
+
+    // ✅ APIs WILL RUN (important)
     useEffect(() => {
         initializeAuth();
     }, [initializeAuth]);
 
     useGuestSetup();
 
-    // Global Loader Logic
+    // Loader
     useEffect(() => {
-        const handleStart = (url) => {
-            // Only show loader if the URL is actually changing
-            setLoading(true);
-        };
+        const handleStart = () => setLoading(true);
         const handleStop = () => setLoading(false);
 
         Router.events.on("routeChangeStart", handleStart);
@@ -46,6 +59,7 @@ export default function App({ Component, pageProps }) {
 
     return (
         <>
+            {/* ✅ APP ALWAYS RENDERS — splash covers via z-index */}
             <GlobalLoader isLoading={loading} />
 
             {hasFullWidth ? (
@@ -56,7 +70,15 @@ export default function App({ Component, pageProps }) {
                 </Layout>
             )}
 
-            <LoginPopup isOpen={isLoginPopupOpen} onClose={closeLoginPopup} />
+            <LoginPopup
+                isOpen={isLoginPopupOpen}
+                onClose={closeLoginPopup}
+            />
+
+            {/* ✅ SPLASH ON TOP */}
+            {showSplash && (
+                <SplashScreen onComplete={handleSplashComplete} />
+            )}
         </>
     );
 }
