@@ -12,9 +12,7 @@ const PriceBased = ({ data, title }) => {
   const [cardData, setCardData] = useState(data || []);
 
   useEffect(() => {
-    if (data && data.length > 0) {
-      setCardData(data);
-    }
+    setCardData(data || []);
   }, [data]);
 
   return (

@@ -48,7 +48,7 @@ function WhoCanSell() {
             <div
               key={i}
               className="group flex flex-col gap-4 p-8   hover:border-primary/40 transition-all duration-300 border border-third/10 rounded-2xl"
-            >
+           >
               {/* Number */}
               <span className="text-[13px] font-bold tracking-[2px] text-third font-[Montserrat]">
                 {String(i + 1).padStart(2, "0")}

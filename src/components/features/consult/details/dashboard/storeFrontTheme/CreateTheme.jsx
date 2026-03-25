@@ -14,7 +14,7 @@ export default function CreateTheme() {
   const [mode, setMode] = useState("editor");
 
   return (
-    <section className="rounded-2xl border border-third/30 overflow-hidden h-full flex flex-col bg-secondary text-primary">
+    <section className="rounded-2xl border border-third/30 overflow-hidden h-full flex flex-col  text-primary">
       {/* Header */}
       <div className="p-4 border-b border-third/30 flex justify-between items-center">
         <div>
@@ -25,24 +25,22 @@ export default function CreateTheme() {
         </div>
 
         {/* Mode Switch */}
-        <div className="flex bg-secondary rounded-full p-1 border border-third/30">
+        <div className="flex  rounded-full p-1 border border-third/30">
           <button
             onClick={() => setMode("editor")}
-            className={`px-4 py-1 rounded-full text-sm transition ${
-              mode === "editor"
-                ? "bg-primary text-secondary font-bold"
-                : "text-third"
-            }`}
+            className={`px-4 py-1 rounded-full text-sm transition ${mode === "editor"
+              ? "bg-primary text-secondary font-bold"
+              : "text-third"
+              }`}
           >
             Editor
           </button>
           <button
             onClick={() => setMode("preview")}
-            className={`px-4 py-1 rounded-full text-sm transition ${
-              mode === "preview"
-                ? "bg-primary text-secondary font-bold"
-                : "text-third"
-            }`}
+            className={`px-4 py-1 rounded-full text-sm transition ${mode === "preview"
+              ? "bg-primary text-secondary font-bold"
+              : "text-third"
+              }`}
           >
             Preview
           </button>

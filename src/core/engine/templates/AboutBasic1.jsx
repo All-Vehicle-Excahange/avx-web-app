@@ -163,7 +163,7 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
 
   /* ================= FRONT ================= */
   return (
-    <div className="bg-secondary text-primary py-24 px-4">
+    <div className="text-primary py-24 px-4">
       <div className="max-w-[1480px] mx-auto space-y-32">
         {/* HERO */}
         <section className="text-center max-w-4xl mx-auto">
@@ -180,7 +180,7 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
         <section className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="grid grid-cols-2 gap-8">
             {data.stats.map((stat, i) => (
-              <div key={i} className="bg-secondary rounded-3xl p-2 text-center">
+              <div key={i} className="border border-primary/20 rounded-xl p-4 text-center">
                 <h2 className="text-4xl font-extrabold">{stat.number}</h2>
                 <p className="text-third uppercase tracking-widest text-sm mt-3">
                   {stat.label}
@@ -202,7 +202,7 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
           </h2>
 
           <div className="grid md:grid-cols-2 gap-10">
-            <div className="bg-secondary p-12 rounded-3xl border border-secondary/10">
+            <div className=" p-12 rounded-xl border-primary/20 border">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-14 h-14 rounded-full border border-primary flex items-center justify-center">
                   <Target size={22} />
@@ -247,7 +247,7 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
             {data.services.map((s, i) => (
               <div
                 key={i}
-                className={`bg-primary/5 p-10 border border-primary/10 rounded-xl `}
+                className={`p-10 border border-primary/20 rounded-xl `}
               >
                 <div className="text-5xl mb-6 text-primary">{s.icon}</div>
                 <h3 className="text-xl font-bold mb-4 uppercase tracking-wide">

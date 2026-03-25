@@ -1,4 +1,3 @@
-import Templete1 from "@/components/features/store-front-testing/basic-tier-page/Templete1";
 import CommitmentSection from "@/components/features/store-front-testing/basic-tier-page/templete1/CommitmentSection";
 import ExperienceSection from "@/components/features/store-front-testing/basic-tier-page/templete1/ExperienceSection";
 import HeroSection from "@/components/features/store-front-testing/basic-tier-page/templete1/HeroSection";

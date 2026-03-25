@@ -16,9 +16,7 @@ export default function ReletedToSearch({ data }) {
   const nextRef = useRef(null);
 
   useEffect(() => {
-    if (data && data.length > 0) {
-      setCardData(data);
-    }
+    setCardData(data || []);
   }, [data]);
 
 
@@ -32,7 +30,7 @@ export default function ReletedToSearch({ data }) {
 
           <div>
             <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-              Top Related to Your Search
+              <span className="text-fourth"> Top Related</span> to Your Search
             </h2>
             <p className="text-third mt-1">
               Lorem ipsum dolor sit amet consectetur dolor sit amet

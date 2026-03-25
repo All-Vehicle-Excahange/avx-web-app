@@ -15,8 +15,8 @@ function index() {
     return (
         <>
             <Navbar heroMod scrolled />
-            <Layout>
                 <Hero />
+            <Layout>
                 <WhySellOnAvx/>
                 <HowAvxWorks />
                 <InspectionAdvantage />
@@ -32,3 +32,9 @@ function index() {
 }
 
 export default index;
+
+export function getServerSideProps() {
+  return {
+    props: { fullWidth: true },
+  };
+}
