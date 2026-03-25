@@ -20,21 +20,21 @@ export default function App({ Component, pageProps }) {
     const [loading, setLoading] = useState(false);
     const [showSplash, setShowSplash] = useState(true); // 👈 start true
 
-    // Splash logic
-    useEffect(() => {
-        const splashShown = sessionStorage.getItem("splashShown");
-
-        if (splashShown) {
-            setShowSplash(false);
-        }
-    }, []);
+    // 🔧 TEMP: Commented out session check so splash shows every time during dev
+    // Uncomment these lines for production (splash only once per session)
+    // useEffect(() => {
+    //     const splashShown = sessionStorage.getItem("splashShown");
+    //     if (splashShown) {
+    //         setShowSplash(false);
+    //     }
+    // }, []);
 
     const handleSplashComplete = () => {
-        sessionStorage.setItem("splashShown", "true");
+        // sessionStorage.setItem("splashShown", "true");
         setShowSplash(false);
     };
 
-    // ✅ APIs WILL RUN (important)
+    //  APIs WILL RUN (important)
     useEffect(() => {
         initializeAuth();
     }, [initializeAuth]);
