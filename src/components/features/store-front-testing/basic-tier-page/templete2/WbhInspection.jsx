@@ -109,7 +109,7 @@ export default function Inspection() {
           >
             <div className="px-6 py-5 border-b border-primary/[0.07] flex items-center justify-between">
               <p className="font-[Montserrat] font-bold text-[9px] tracking-[0.26em] uppercase text-primary/50">
-                What's Covered
+                {"What's Covered"}
               </p>
               <span className="font-[Montserrat] font-bold text-[9px] tracking-[0.16em] uppercase text-primary">
                 Status

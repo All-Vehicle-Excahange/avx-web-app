@@ -32,7 +32,7 @@ function TestimonialCard({ t }) {
     <div className="group border border-primary/40 rounded-2xl p-8 flex flex-col gap-5 hover:border-primary/25 transition-all duration-300 hover:shadow-[0_8px_36px_rgba(0,0,0,0.4)] h-full">
       <Quote size={20} className="text-fourth" strokeWidth={1.4} />
       <p className="font-[Poppins] text-sm leading-[1.86] text-third/70 italic flex-1">
-        "{t.review}"
+        <span>“{t.review}”</span>
       </p>
       <div className="w-full h-px bg-primary/[0.07]" />
       <div className="flex items-center gap-3">
@@ -52,19 +52,21 @@ export default function WHB_Testimonials() {
   const total       = data.testimonials.length;
   const [index, setIndex]       = useState(0);
   const [direction, setDirection] = useState(1);  // 1 = forward, -1 = backward
-  const [isDesktop, setIsDesktop] = useState(true);
+const [isDesktop, setIsDesktop] = useState(() => {
+  if (typeof window !== "undefined") {
+    return window.matchMedia("(min-width: 1024px)").matches;
+  }
+  return true;
+});
   const intervalRef = useRef(null);
 
-  /* detect viewport */
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
-    setIsDesktop(mq.matches);
-    const handler = (e) => setIsDesktop(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
+useEffect(() => {
+  const mq = window.matchMedia("(min-width: 1024px)");
+  const handler = (e) => setIsDesktop(e.matches);
+  mq.addEventListener("change", handler);
+  return () => mq.removeEventListener("change", handler);
+}, []);
 
-  /* how many cards visible */
   const visible = isDesktop ? 2 : 1;
 
   /* total slide positions */
