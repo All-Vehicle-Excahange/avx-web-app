@@ -74,7 +74,7 @@ const SponsoredCars = () => {
 
           <div>
             <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-             Trending Vehicles
+              Trending <span className="text-fourth">Vehicles</span>
             </h2>
 
             <div className="flex items-center gap-1 mt-1 text-xs text-third">

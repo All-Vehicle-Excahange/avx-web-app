@@ -4,13 +4,11 @@ import Link from "next/link";
 
 function BecameBanner() {
     return (
-        <section className="bg-fourth">
+        <section className="bg-fourth relative z-10 -mb-6 md:-mb-10">
             <div className="mx-auto w-full h-auto">
                 <div
                     className="
-          mt-12
           flex flex-col md:flex-row
-          rounded-3xl
           overflow-hidden
         "
                 >
@@ -24,7 +22,7 @@ function BecameBanner() {
               hover:flex-[1.3]
               px-10 py-16 lg:py-20
               text-center
-              border-b md:border-b-0 md:border-r border-primary
+              border-b md:border-b-0 md:border-r border-primary/30
             ">
                         <p className="mb-6">
                             <span

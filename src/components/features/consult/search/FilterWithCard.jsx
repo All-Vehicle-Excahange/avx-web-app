@@ -128,9 +128,13 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
   const [consultants, setConsultants] = useState([]); // from getFilteredConsult
   const [premiumConsultants, setPremiumConsultants] = useState([]); // from getPremiumConsult
 
-  // Add these two lines
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+
+  // ── Hidden filters from URL (for deep linking from search pages) ──
+  const [hiddenMakerIds, setHiddenMakerIds] = useState([]);
+  const [hiddenModelIds, setHiddenModelIds] = useState([]);
+  const [hiddenVehicleSubTypes, setHiddenVehicleSubTypes] = useState([]);
 
   // ── Transform API data to match what ConsultantCard expects ──
   const mapToCardFormat = (items = []) => {
@@ -441,6 +445,28 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
       }
     }
 
+    // Capture hidden filters from URL (passed from AutoConsualt)
+    const qMakerIds = searchParams.get("makerIds");
+    const qModelIds = searchParams.get("modelIds");
+    const qVehicleSubTypes = searchParams.get("vehicleSubTypes");
+
+    if (qMakerIds) {
+      setHiddenMakerIds(qMakerIds.split(",").map(Number));
+    }
+    if (qModelIds) {
+      setHiddenModelIds(qModelIds.split(",").map(Number));
+    }
+    if (qVehicleSubTypes) {
+      setHiddenVehicleSubTypes(qVehicleSubTypes.split(","));
+    }
+
+    // Capture explicit minPrice / maxPrice query params if provided
+    const qMinPrice = searchParams.get("minPrice");
+    const qMaxPrice = searchParams.get("maxPrice");
+    
+    if (qMinPrice) setMinPrice(Number(qMinPrice));
+    if (qMaxPrice) setMaxPrice(Number(qMaxPrice));
+
     // Build initial payload from URL params and fetch
     const initialPayload = {};
 
@@ -492,6 +518,13 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
       }
     }
 
+    if (qMakerIds) initialPayload.makerIds = qMakerIds.split(",").map(Number);
+    if (qModelIds) initialPayload.modelIds = qModelIds.split(",").map(Number);
+    if (qVehicleSubTypes) initialPayload.vehicleSubTypes = qVehicleSubTypes.split(",");
+    
+    if (qMinPrice) initialPayload.minVehiclePrice = Number(qMinPrice);
+    if (qMaxPrice) initialPayload.maxVehiclePrice = Number(qMaxPrice);
+
     fetchConsultants(1, initialPayload);
     console.log("Initial Payload ", initialPayload);
 
@@ -504,6 +537,10 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
 
     if (selectedCityId) payload.cityId = selectedCityId;
     if (selectedStateId) payload.stateId = selectedStateId;
+
+    if (hiddenMakerIds.length > 0) payload.makerIds = hiddenMakerIds;
+    if (hiddenModelIds.length > 0) payload.modelIds = hiddenModelIds;
+    if (hiddenVehicleSubTypes.length > 0) payload.vehicleSubTypes = hiddenVehicleSubTypes;
 
     if (latitude !== null && longitude !== null) {
       payload.latitude = latitude;
@@ -667,6 +704,11 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
     setSelectedStateName("");
     setSelectedCityId(null);
     setSelectedCityName("");
+
+    // Reset hidden filters
+    setHiddenMakerIds([]);
+    setHiddenModelIds([]);
+    setHiddenVehicleSubTypes([]);
 
     // Reset mobile chips
     setSelectedMobileChips([]);

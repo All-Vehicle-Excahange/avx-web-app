@@ -76,7 +76,7 @@ const SayHello = () => {
                     </div>
 
                     <div className="flex flex-col items-start gap-12 pt-16">
-                        <div className="relative pl-5 flex flex-col gap-4">
+                        <div className="relative pl-5 flex flex-col gap-10">
                             {navigation.map((item, index) => {
                                 const isActive = activeTab === item;
 
@@ -84,42 +84,44 @@ const SayHello = () => {
                                     <button
                                         key={item}
                                         onClick={() => setActiveTab(item)}
-                                        className="relative flex items-center gap-3 text-left cursor-pointer group transition-all duration-300"
-                                        style={{ marginLeft: `${index * 1.5}rem` }}
+                                        className="relative flex items-center gap-4 text-left cursor-pointer group transition-all duration-300"
+                                        style={{ marginLeft: `${index * 2.5}rem` }}
                                     >
                                         {/* L-shaped connecting line for stairs effect */}
                                         {index < navigation.length - 1 && (
                                             <div
-                                                className="absolute border-l-2 border-b-2 border-dashed border-gray-300 rounded-bl-lg pointer-events-none"
+                                                className="absolute border-l-[3px] border-b-[3px] border-dashed border-gray-300 rounded-bl-xl pointer-events-none"
                                                 style={{
-                                                    top: "calc(50% + 6px)", 
-                                                    left: "5px",
-                                                    width: "calc(1.5rem + 6px)",
-                                                    height: "calc(100% + 10px)",
+                                                    top: "calc(50% + 14px)",
+                                                    left: "14.5px",
+                                                    width: "35px",
+                                                    height: "calc(100% + 26px)",
                                                     zIndex: 0
                                                 }}
                                             />
                                         )}
 
-                                        {/* Dot */}
-                                        <span
+                                        {/* Step Number Badge */}
+                                        <div
                                             className={`
-                                            relative z-10 rounded-full shrink-0
-                                            transition-all duration-300 ease-out
+                                            relative z-10 rounded-full shrink-0 flex items-center justify-center text-sm font-bold
+                                            transition-all duration-300 ease-out border-2
                                             ${isActive
-                                                    ? "w-3 h-3 bg-fourth scale-110"
-                                                    : "w-3 h-3 bg-gray-300 scale-100"}
+                                                    ? "w-8 h-8 bg-fourth text-white border-fourth shadow-md scale-110"
+                                                    : "w-8 h-8 bg-white text-gray-400 border-gray-300 scale-100"}
                                         `}
-                                        />
+                                        >
+                                            {index + 1}
+                                        </div>
 
                                         {/* Label */}
                                         <span
                                             className={`
-                                            text-md font-bold
+                                            text-lg font-bold
                                             transition-all duration-300 ease-out
                                             ${isActive
                                                     ? "text-fourth translate-x-1"
-                                                    : "text-black"}
+                                                    : "text-gray-800"}
                                         `}
                                         >
                                             {item}

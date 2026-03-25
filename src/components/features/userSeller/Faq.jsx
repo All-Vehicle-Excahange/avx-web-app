@@ -93,13 +93,13 @@ export default function FAQSection() {
                             ))}
 
                             {/* PRIMARY CTA SECTION: THE DARK STRIP */}
-                            <div className="mt-16 relative overflow-hidden bg-black/60 border border-primary/10 p-4 lg:p-8 rounded-xl shadow-2xl group">
+                            <div className="mt-16 relative overflow-hidden  border border-primary/10 p-4 lg:p-8 rounded-xl shadow-2xl group">
                                 {/* Subtle Background Glow */}
-                                <div className="absolute top-0 right-0 w-64 h-64 bg-fourth/5 blur-[100px] pointer-events-none" />
+                                <div className="absolute top-0 right-0 w-64 h-64 blur-[100px] pointer-events-none" />
 
                                 <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
                                     <div className="text-center md:text-left">
-                                        <h3 className="text-primary text-3xl font-semibold font-[Montserrat] mb-3 tracking-tight">Ready to list your vehicle?</h3>
+                                        <h3 className="text-primary text-2xl font-semibold font-[Montserrat] mb-3 tracking-tight">Ready to list your vehicle?</h3>
                                         <div className="flex items-center justify-center md:justify-start gap-2 opacity-40">
                                             <div className="w-1.5 h-1.5 rounded-full bg-fourth animate-pulse" />
                                             <span className="text-primary text-[10px] uppercase font-bold tracking-[0.4em]">Identity Verification Required</span>
@@ -109,7 +109,7 @@ export default function FAQSection() {
                                     <Button
                                         onClick={handleStartSelling}
                                         variant="ghost"
-                                        className="py-3 bg-primary text-secondary text-sm font-black tracking-[0.2em] hover:bg-primary hover:scale-105 transition-all rounded-full border-none shadow-2xl flex items-center group/btn"
+                                        className="py-3  bg-primary text-secondary text-sm font-black tracking-[0.2em] hover:bg-primary hover:scale-105 transition-all rounded-full border-none shadow-2xl flex items-center group/btn"
                                     >
                                         CONTINUE TO KYC
                                         <ArrowRight className="ml-3 group-hover/btn:translate-x-1 transition-transform" size={18} />

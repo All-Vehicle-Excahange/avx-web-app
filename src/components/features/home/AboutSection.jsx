@@ -70,17 +70,16 @@ const AboutSection = () => {
               {/* TEXT */}
               <div>
                 <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-                  Company Overview
+                  Company <span className="text-fourth">Overview</span>
                 </h2>
+                <p className="text-third mt-1">
+                  Lorem ipsum dolor sit amet consectetur dolor sit amet
+                  consectetur..
+                </p>
               </div>
             </div>
           </div>
 
-          <p className="text-primary/70 text-lg">
-            Our growth reflects our commitment to innovation, global reach,
-            and delivering impactful digital solutions for businesses
-            worldwide.
-          </p>
         </div>
 
         {/* Stats Grid */}
