@@ -1,4 +1,8 @@
-// {
+{
+    "cSpell.words": [
+        "color"
+    ]
+} // {
 //     "workbench.colorCustomizations": {
 //         "import": "my_theme.json",
 //         "statusBar.debuggingForeground": "#FDFBFD",
