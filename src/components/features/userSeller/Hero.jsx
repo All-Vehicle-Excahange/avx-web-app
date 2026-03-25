@@ -43,7 +43,7 @@ function Hero() {
 
   return (
     <>
-      <section className="relative w-full  mt-16 overflow-hidden flex flex-col">
+      <section className="relative w-full min-h-screen mt-16 overflow-hidden flex flex-col">
 
         {/* ── FULL BLEED BACKGROUND IMAGE ── */}
         <div className="absolute inset-0 z-0">
@@ -56,8 +56,8 @@ function Hero() {
           />
           {/* Multi-layer cinematic darkening */}
           <div className="absolute inset-0 bg-secondary/70" />
-          <div className="absolute inset-0 bg-gradient-to-t from-secondary via-secondary/40 to-secondary/80" />
-          <div className="absolute inset-0 bg-gradient-to-r from-secondary/80 via-transparent to-secondary/50" />
+          <div className="absolute inset-0 bg-linear-to-t from-secondary via-secondary/40 to-secondary/80" />
+          <div className="absolute inset-0 bg-linear-to-r from-secondary/80 via-transparent to-secondary/50" />
         </div>
 
        
