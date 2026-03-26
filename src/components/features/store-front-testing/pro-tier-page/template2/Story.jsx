@@ -18,7 +18,7 @@ const data = {
 export default function Story() {
   return (
     <section className="py-12 lg:py-12 bg-fourth">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center px-10">
+      <div className="grid max-w-7xl mx-auto grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center px-10">
 
         {/* LEFT — TEXT */}
         <motion.div
