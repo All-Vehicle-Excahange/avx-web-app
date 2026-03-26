@@ -463,7 +463,7 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
     // Capture explicit minPrice / maxPrice query params if provided
     const qMinPrice = searchParams.get("minPrice");
     const qMaxPrice = searchParams.get("maxPrice");
-    
+
     if (qMinPrice) setMinPrice(Number(qMinPrice));
     if (qMaxPrice) setMaxPrice(Number(qMaxPrice));
 
@@ -521,7 +521,7 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
     if (qMakerIds) initialPayload.makerIds = qMakerIds.split(",").map(Number);
     if (qModelIds) initialPayload.modelIds = qModelIds.split(",").map(Number);
     if (qVehicleSubTypes) initialPayload.vehicleSubTypes = qVehicleSubTypes.split(",");
-    
+
     if (qMinPrice) initialPayload.minVehiclePrice = Number(qMinPrice);
     if (qMaxPrice) initialPayload.maxVehiclePrice = Number(qMaxPrice);
 

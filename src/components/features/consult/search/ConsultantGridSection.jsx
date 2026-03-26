@@ -22,8 +22,11 @@ export default function ConsultantGridSection({
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
 
-        <div className="flex items-start gap-4">
-          <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
+        <div className="flex flex-col items-start gap-2">
+          <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
+            Premium
+            <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+          </p>
 
           <div>
             <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">

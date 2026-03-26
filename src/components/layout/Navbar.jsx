@@ -114,7 +114,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
     <>
       <div
         className="fixed top-0 inset-x-0 z-[1100] transition-transform duration-300 pointer-events-none"
-        // style={{ transform: `translateY(${transformY}px)` }}
+      // style={{ transform: `translateY(${transformY}px)` }}
       >
         {isMobileBannerVisible && !isMobileBannerTempHidden && atTop && (
           <div ref={bannerRef} className="pointer-events-auto">
@@ -145,7 +145,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                   setMenuOpen(true);
                 }}
               />
-              <span className="font-black italic text-sm md:text-base">AVX</span>
+              <img src="/logo/logo.webp" alt="Reecomm Logo" className="h-6 md:h-6 w-auto object-contain block" />
             </Link>
 
             {/* ================= CENTER SEARCH ================= */}

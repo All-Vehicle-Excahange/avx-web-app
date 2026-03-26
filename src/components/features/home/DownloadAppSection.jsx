@@ -19,7 +19,7 @@ export default function DownloadAppSection() {
 
                     <div className="flex flex-col sm:flex-row gap-4">
                         {/* Google Play Button */}
-                        <button type="button" className="flex items-center justify-center px-6 py-2 text-secondary bg-primary rounded-lg hover:bg-secondary hover:text-primary transition-all duration-300 cursor-pointer">
+                        <button type="button" className="px-6 py-2 flex items-center justify-center bg-secondary text-primary hover:bg-primary hover:text-secondary transition-all duration-300 rounded-lg cursor-pointer">
                             <div className="mr-3">
                                 <svg viewBox="30 336.7 120.9 129.2" width="25">
                                     <path fill="#FFD400" d="M119.2,421.2c15.3-8.4,27-14.8,28-15.3c3.2-1.7,6.5-6.2,0-9.7  c-2.1-1.1-13.4-7.3-28-15.3l-20.1,20.2L119.2,421.2z">
@@ -36,7 +36,7 @@ export default function DownloadAppSection() {
                                 <div className="text-[10px] font-bold">
                                     GET IT ON
                                 </div>
-                                <div className="text-lg font-bold leading-none">
+                                <div className="text-lg font-semibold leading-none">
                                     Google Play
                                 </div>
                             </div>
@@ -54,7 +54,7 @@ export default function DownloadAppSection() {
                                 <div className="text-[10px] font-bold">
                                     Download on the
                                 </div>
-                                <div className="text-lg font-bold leading-none">
+                                <div className="text-lg font-semibold leading-none">
                                     App Store
                                 </div>
                             </div>

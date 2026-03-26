@@ -110,19 +110,19 @@ const CategoriesSections = () => {
     <section className="w-full h-full flex flex-col text-primary">
       <div className="container">
         <div className="shrink-0 flex flex-col md:flex-row md:items-end justify-between mb-4 gap-4">
-          <div className="flex items-start gap-4">
-            <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
+          <div className="flex flex-col items-start gap-2">
+            <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
+              All Vehicles
+              <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+            </p>
 
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-                Not sure what to buy? <span className="text-fourth">Start here</span>
-              </h2>
+            <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
+              Not sure what to buy? <span className="text-fourth">Start here</span>
+            </h2>
 
-              <p className="text-third mt-1">
-                Lorem ipsum dolor sit amet consectetur dolor sit amet
-                consectetur..
-              </p>
-            </div>
+            <p className="text-third mt-1">
+              Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
+            </p>
           </div>
 
           {/* Toggle Switch */}
@@ -140,7 +140,7 @@ const CategoriesSections = () => {
                 "px-3 py-1 text-xs sm:text-sm font-medium rounded-full border cursor-pointer flex items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0",
                 activeType === "4-Wheeler"
                   ? "bg-fourth text-primary border-fourth shadow-sm"
-                  : "text-primary",
+                  : "text-primary border-white/20 hover:border-primary/40",
               )}
             >
               <Car size={16} /> 4-Wheeler
@@ -159,7 +159,7 @@ const CategoriesSections = () => {
                 "px-3 py-1 text-xs sm:text-sm font-medium rounded-full border cursor-pointer flex items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0",
                 activeType === "2-Wheeler"
                   ? "bg-fourth text-primary border-fourth shadow-sm"
-                  : "text-primary",
+                  : "text-primary border-white/20 hover:border-primary/40",
               )}
             >
               <Bike size={16} /> 2-Wheeler
@@ -178,10 +178,10 @@ const CategoriesSections = () => {
                   key={cat.id}
                   onClick={() => setActive(cat.id)}
                   className={cn(
-                    "flex items-center gap-2 shrink-0 px-5 py-2 text-sm font-semibold rounded-full border-2 transition-all cursor-pointer",
+                    "flex items-center gap-2 shrink-0 px-5 py-2 text-sm font-semibold rounded-full border transition-all cursor-pointer",
                     isActive
                       ? "bg-fourth text-primary border-fourth shadow-sm"
-                      : "text-primary border-white/50 hover:border-primary"
+                      : "text-primary border-white/20 hover:border-primary/40"
                   )}
                 >
                   {cat.icon && <cat.icon size={18} />}
