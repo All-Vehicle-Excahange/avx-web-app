@@ -43,7 +43,7 @@ function Testimonials() {
 
   return (
     <section className="relative py-12">
-      <div className=" mx-auto w-full ">
+      <div className=" mx-auto w-full px-4">
         <div className="flex flex-col items-center gap-10">
 
           {/* ── Header ─────────────────────────────────────────────── */}

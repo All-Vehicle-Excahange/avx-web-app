@@ -22,7 +22,7 @@ function AvxInspection() {
 
                     {/* Left: heading + description + large accent */}
                     <div className="flex flex-col gap-8">
-                        <p className="text-xs tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat]">
+                        <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat]">
                             Avx Inspection
                         </p>
                         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">

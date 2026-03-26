@@ -21,7 +21,7 @@ function CustomerCommitment() {
           <div className="flex flex-col justify-between gap-8 p-10 lg:p-14 lg:w-[45%] border-b lg:border-b-0 lg:border-r border-third/10">
             <div className="flex flex-col gap-6">
               <div className="flex items-center gap-3">
-                <p className="text-xs tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat]">
+                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat]">
                   Our Promise
                 </p>
               </div>
