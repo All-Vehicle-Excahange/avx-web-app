@@ -27,7 +27,7 @@ export default function OurStory() {
 
           {/* LEFT: text — ~41% width */}
           <div
-            className="flex flex-col justify-center lg:w-[41%] animate-[fadeInLeft_0.8s_ease_forwards]"
+            className="flex flex-col justify-center lg:w-[44%] animate-[fadeInLeft_0.8s_ease_forwards]"
           >
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               About Us
