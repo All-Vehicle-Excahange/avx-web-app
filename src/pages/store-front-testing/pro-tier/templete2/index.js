@@ -28,9 +28,9 @@ function index() {
       <Layout>
         <Gallery/>
         <Testimonials/>  
-        <FooterLink />
-        <Footer />
       </Layout>
+              <FooterLink />
+        <Footer />
     </>
   );
 }
