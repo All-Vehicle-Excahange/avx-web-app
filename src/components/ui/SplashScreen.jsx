@@ -5,11 +5,10 @@ export default function SplashScreen({ onComplete }) {
   const [stage, setStage] = useState(0);
   const [progress, setProgress] = useState(0);
 
-  // Total animation time before curtain lifts: ~2800ms
-  // Progress bar fills to 100% by that point
+  // Total animation time: 2s (all stages compressed)
   useEffect(() => {
-    const TOTAL = 2600; // ms to reach 100%
-    const interval = 30;
+    const TOTAL = 1300; // ms to reach 100%
+    const interval = 20;
     let elapsed = 0;
 
     const ticker = setInterval(() => {
@@ -20,10 +19,10 @@ export default function SplashScreen({ onComplete }) {
     }, interval);
 
     const timers = [
-      setTimeout(() => setStage(1), 200),    // logo + bar enter
-      setTimeout(() => setStage(2), 1400),   // slide left + REECOMM letters
-      setTimeout(() => setStage(3), 2800),   // curtain lifts
-      setTimeout(() => { window.scrollTo(0, 0); onComplete(); }, 3800),
+      setTimeout(() => setStage(1), 100),     // logo + bar enter
+      setTimeout(() => setStage(2), 600),     // slide left + REECOMM letters
+      setTimeout(() => setStage(3), 1400),    // curtain lifts
+      setTimeout(() => { window.scrollTo(0, 0); onComplete(); }, 2000),
     ];
 
     return () => {
@@ -85,24 +84,24 @@ export default function SplashScreen({ onComplete }) {
           100% { opacity: 1; transform: translateY(0); }
         }
 
-        .logo-in     { animation: logo-depth-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .letter-in   { opacity: 0; animation: letter-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-        .slide-group { animation: slide-group-left 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
-        .curtain-lift { animation: curtain-lift 1s cubic-bezier(0.76, 0, 0.24, 1) forwards; }
+        .logo-in     { animation: logo-depth-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .letter-in   { opacity: 0; animation: letter-in 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        .slide-group { animation: slide-group-left 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+        .curtain-lift { animation: curtain-lift 0.6s cubic-bezier(0.76, 0, 0.24, 1) forwards; }
 
         .wheel-spin {
-          animation: wheel-spin 1s linear infinite;
+          animation: wheel-spin 0.6s linear infinite;
           transform-origin: center;
         }
 
         .bar-fill {
           background: linear-gradient(90deg, #555 0%, #fff 45%, #aaa 55%, #555 100%);
           background-size: 200% auto;
-          animation: shimmer 1.6s linear infinite;
+          animation: shimmer 0.8s linear infinite;
         }
 
         .bottom-fade {
-          animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+          animation: fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
       `}</style>
 
@@ -121,7 +120,7 @@ export default function SplashScreen({ onComplete }) {
           {stage >= 1 && (
             <div className="relative w-[80px] h-[80px] md:w-[130px] md:h-[130px] logo-in">
               <Image
-                src="/logo/animate-logo.png"
+                src="/logo/animate-logo.webp"
                 alt="Reecomm logo"
                 fill
                 className="object-contain"
@@ -137,7 +136,7 @@ export default function SplashScreen({ onComplete }) {
                 <span
                   key={i}
                   className="text-3xl md:text-[4rem] font-black text-white tracking-[0.05em] letter-in"
-                  style={{ animationDelay: `${i * 0.1}s` }}
+                  style={{ animationDelay: `${i * 0.05}s` }}
                 >
                   {letter}
                 </span>
@@ -148,7 +147,7 @@ export default function SplashScreen({ onComplete }) {
 
         {/* ── BOTTOM LOADING SECTION ── */}
         {stage >= 1 && (
-          <div className="absolute bottom-8 md:bottom-14 left-0 right-0 px-6 md:px-16 lg:px-28 flex flex-col items-center gap-5 bottom-fade">
+          <div className="absolute bottom-30 md:bottom-25 left-0 right-0 px-6 md:px-16 lg:px-28 flex flex-col items-center gap-5 bottom-fade">
 
             {/* Tagline */}
             <p className="text-white/30 text-[10px] md:text-xs tracking-[0.35em] uppercase font-medium">
@@ -156,7 +155,7 @@ export default function SplashScreen({ onComplete }) {
             </p>
 
             {/* Progress Bar Container */}
-            <div className="w-full max-w-md relative">
+            <div className="w-full max-w-[500px] relative">
               {/* Track */}
               <div className="w-full h-[5px] rounded-full bg-white/10 overflow-hidden backdrop-blur-sm">
                 {/* Fill */}

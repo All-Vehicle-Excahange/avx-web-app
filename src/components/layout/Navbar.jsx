@@ -192,7 +192,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
               <Button
                 onClick={() => setOpen(true)}
                 size="sm"
-                className="hidden md:inline-flex"
+                className="hidden md:inline-flex text-xs md:text-sm"
               >
                 Sell Your Vehicle
               </Button>

@@ -255,20 +255,20 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
   /* ================= SYNC CONSULT PAYLOAD FOR AUTO-CONSULT ================= */
   useEffect(() => {
     if (!onConsultPayloadChange) return;
-    
+
     const payload = buildConsultPayload();
     const safeStr = (v) => v != null ? String(v) : "";
-    
-    const brandLabel = selectedBrands.length > 0 
-      ? (brands.find((b) => safeStr(b.value) === safeStr(selectedBrands[0]))?.label || "") 
+
+    const brandLabel = selectedBrands.length > 0
+      ? (brands.find((b) => safeStr(b.value) === safeStr(selectedBrands[0]))?.label || "")
       : "";
-      
-    const modelLabel = selectedModels.length > 0 
-      ? (models.find((m) => safeStr(m.value) === safeStr(selectedModels[0]))?.label || "") 
+
+    const modelLabel = selectedModels.length > 0
+      ? (models.find((m) => safeStr(m.value) === safeStr(selectedModels[0]))?.label || "")
       : "";
-      
-    const bodyTypeLabel = selectedBodyType.length > 0 
-      ? selectedBodyType[0].charAt(0).toUpperCase() + selectedBodyType[0].slice(1).toLowerCase() 
+
+    const bodyTypeLabel = selectedBodyType.length > 0
+      ? selectedBodyType[0].charAt(0).toUpperCase() + selectedBodyType[0].slice(1).toLowerCase()
       : "";
 
     onConsultPayloadChange({
@@ -276,7 +276,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
       _labels: { brandLabel, modelLabel, bodyTypeLabel }
     });
   }, [
-    selectedBrands, selectedModels, selectedBodyType, 
+    selectedBrands, selectedModels, selectedBodyType,
     brands, models, minPrice, maxPrice, selectedCityId, selectedStateId
   ]);
 
@@ -1786,7 +1786,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                     <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
                       Top Vehicle For You
                     </h2>
-                    <p className="text-third mt-1">
+                    <p className="text-third">
                       Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
                     </p>
                   </div>
