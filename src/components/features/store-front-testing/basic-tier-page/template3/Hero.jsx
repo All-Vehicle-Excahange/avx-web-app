@@ -12,7 +12,7 @@ export default function HeroSection() {
 
                 {/* Eyebrow */}
                 <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                    Pre-Owned Vehicle Verification
+                    Why Choose Us
                 </p>
 
                 {/* Headline */}
