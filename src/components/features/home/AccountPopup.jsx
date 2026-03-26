@@ -280,7 +280,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                                 full
                                 size="sm"
                                 onClick={handleCancelLogout}
-                                className="border border-white/10"
+                                className="border border-white/10 "
                             >
                                 Cancel
                             </Button>
