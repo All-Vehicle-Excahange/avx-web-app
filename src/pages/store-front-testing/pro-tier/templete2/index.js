@@ -27,7 +27,7 @@ function index() {
       <Commitment />
       <Layout>
         <Gallery/>
-        <Testimonials/>
+        <Testimonials/>  
         <FooterLink />
         <Footer />
       </Layout>
