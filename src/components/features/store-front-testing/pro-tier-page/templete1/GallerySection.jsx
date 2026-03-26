@@ -9,8 +9,8 @@ function GallerySection() {
   ];
 
   return (
-    <section className="w-full py-12">
-      <div className="max-w-7xl px-8 flex flex-col gap-10">
+    <section className="w-full py-12 ">
+      <div className="containermax-w-7xl px-4 flex flex-col gap-10">
         
         {/* ── HEADER (CSS UNCHANGED) ── */}
         <div className="flex flex-col gap-4 max-w-2xl">

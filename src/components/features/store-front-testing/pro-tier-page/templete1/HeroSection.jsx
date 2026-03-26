@@ -37,17 +37,11 @@ function HeroSection() {
             <span className="text-fourth/80"> Auto Consultants</span>
           </h2>
 
-          {heroData.heroDescription
-            .trim()
-            .split("\n")
-            .map((line, i) => (
-              <p
-                key={i}
+           <p
+               
                 className="max-w-2xl text-base leading-relaxed text-third md:text-lg font-[Poppins] mt-2"
-              >
-                {line.trim()}
-              </p>
-            ))}
+              > {heroData.heroDescription
+           }</p>
 
           <div className="mt-10">
             <a className="group inline-flex items-center gap-2 border border-primary px-7 py-3 text-sm font-semibold text-primary transition-all duration-300 hover:gap-3 font-[Montserrat]">

@@ -19,8 +19,8 @@ function ExperienceSection() {
   };
 
   return (
-    <section className="w-full py-12 bg-primary border-y border-secondary/10">
-      <div className=" container max-w-7xl mx-2 px-4 sm:px-6 grid md:grid-cols-2 gap-14 items-center">
+    <section className="w-full py-12 bg-primary border-y border-secondary/10 px-4">
+      <div className=" container max-w-7xl  sm:px-6 grid md:grid-cols-2 gap-14 items-center">
 
         {/* ── LEFT CONTENT ───────────────── */}
         <div className="flex flex-col gap-6">

@@ -17,7 +17,7 @@ const testimonials = [
 
 function TestimonialSection() {
   return (
-    <section className="w-full py-12 bg-primary ">
+    <section className="w-full py-12 bg-primary px-4">
       <div className=" container max-w-7xl mx-3 px-4 sm:px-6 flex flex-col gap-12">
 
         {/* HEADER */}
