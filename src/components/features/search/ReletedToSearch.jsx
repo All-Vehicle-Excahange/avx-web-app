@@ -34,7 +34,7 @@ export default function ReletedToSearch({ data }) {
           <span className="text-fourth"> Top Related</span> to Your Search
         </h2>
 
-        <p className="text-third mt-1">
+        <p className="text-third">
           Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
         </p>
       </div>

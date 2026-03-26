@@ -93,7 +93,7 @@ export default function AutoConsualt({ limit, data, filterPayload }) {
                 </h2>
 
                 {/* Description */}
-                <p className="text-third mt-1">
+                <p className="text-third">
                     Discover trusted consultants curated for you.
                 </p>
             </div>
