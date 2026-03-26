@@ -44,18 +44,18 @@ export default function AvxInspected() {
             <div className="container">
                 {/* Header */}
                 <div className="shrink-0 flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4 pt-3 pr-3">
-                    <div className="flex items-start gap-4">
-                        <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
 
-                        <div>
-                            <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-                                AVX <span className="text-fourth">Inspected</span> Vehicles
-                            </h2>
-
-                            <p className="text-third mt-1">
-                                Lorem ipsum dolor sit amet consectetur..
-                            </p>
-                        </div>
+                    <div className="flex flex-col items-start gap-2">
+                        <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
+                            Vehicles
+                            <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+                        </p>
+                        <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
+                            AVX <span className="text-fourth">Inspected</span> Vehicles
+                        </h2>
+                        <p className="text-third mt-1">
+                            Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
+                        </p>
                     </div>
 
                     {/* Toggle Buttons */}
@@ -66,7 +66,7 @@ export default function AvxInspected() {
                                 "px-3 py-1 text-xs sm:text-sm font-medium rounded-full border cursor-pointer flex items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0",
                                 activeType === "4-Wheeler"
                                     ? "bg-fourth text-primary border-fourth shadow-sm"
-                                    : "text-primary"
+                                    : "text-primary border-white/20 hover:border-primary/40"
                             )}
                         >
                             <Car size={18} /> 4-Wheeler
@@ -78,7 +78,7 @@ export default function AvxInspected() {
                                 "px-3 py-1 text-xs sm:text-sm font-medium rounded-full border cursor-pointer flex items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0",
                                 activeType === "2-Wheeler"
                                     ? "bg-fourth text-primary border-fourth shadow-sm"
-                                    : "text-primary"
+                                    : "text-primary border-white/20 hover:border-primary/40"
                             )}
                         >
                             <Bike size={18} /> 2-Wheeler

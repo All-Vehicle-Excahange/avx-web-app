@@ -3,10 +3,10 @@ import Banner from "@/components/ui/const/Banner";
 export default function ConsultBanner() {
   return (
     <>
-      <div className="w-full   3xl:max-w-full mx-auto ">
+      <div className="w-full 3xl:max-w-full mx-auto ">
         <div
           className="w-full h-[250px] md:h-80 overflow-hidden bg-cover bg-center  relative bg-fourth"
-          
+
         >
           <Banner
             title="Are you a consultant? List your cars"

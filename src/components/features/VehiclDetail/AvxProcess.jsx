@@ -148,22 +148,21 @@ export default function AvxProcess() {
     >
       <div className="w-full max-w-7xl mx-auto px-6">
         {/* Header with Vertical Accent */}
-        <div className="flex justify-between items-end mb-16">
-          <div className="flex items-start gap-4">
-            {/* VERTICAL ACCENT LINE */}
-            <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-fourth " />
+        <div className="flex flex-col items-start gap-2">
+          <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
+            Process
+            <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+          </p>
 
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-primary">
-                <span className="text-fourth"> Reecomm</span> Process
-              </h2>
-              <p className="text-primary/50 mt-1">
-                A simple and transparent journey to protect your most valued
-                possessions.
-              </p>
-            </div>
-          </div>
+          <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
+            <span className="text-fourth"> Reecomm</span> Process
+          </h2>
+
+          <p className="text-third mt-1">
+            Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
+          </p>
         </div>
+
 
         <div className="relative">
           {/* Central Background Track - Added hidden md:block */}

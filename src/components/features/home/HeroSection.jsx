@@ -33,7 +33,7 @@ export default function HeroSection() {
           }`}
       >
         <p className="text-primary tracking-widest uppercase font-primary">
-          Welcome to AVX
+          Welcome to reecomm
         </p>
 
         <h1 className="text-4xl font-bold text-primary drop-shadow-2xl font-primary">

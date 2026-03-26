@@ -4,18 +4,14 @@ import React from "react";
 
 const Footer = () => {
     return (
-        <footer className=" text-white pt-16 pb-8 font-sans">
+        <footer className=" text-white pt-14 pb-8 font-sans">
             <div className="container mx-auto px-4 lg:px-8">
                 <div className="flex flex-col lg:flex-row gap-12 lg:gap-8 justify-between mb-16 lg:px-4">
 
                     {/* Brand & Description Column */}
                     <div className="lg:w-[25%] flex flex-col gap-6">
                         <Link href="/" className="flex items-center gap-2">
-                            <div className="w-6 h-6 bg-white flex items-center justify-center rounded-sm text-black">
-                                {/* A simple square logo stand-in */}
-                                <div className="w-3 h-3 bg-black rounded-full"></div>
-                            </div>
-                            <span className="text-xl font-semibold tracking-wider">AVX</span>
+                            <img src="/logo/logo.webp" alt="Reecomm Logo" className="h-6 md:h-6 w-auto object-contain block" />
                         </Link>
 
                         <p className="text-primary/60 text-[13px] leading-relaxed lg:pr-4">
@@ -109,10 +105,10 @@ const Footer = () => {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <p>AVX is part of AVX.com Ltd. &copy; 2006-2026</p>
+                        <p>Reecomm is part of Reecomm.com Ltd. &copy; 2006-2026</p>
                         <button
                             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                            className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center hover:border-white hover:text-white transition-colors"
+                            className="w-10 h-10 cursor-pointer rounded-full border border-gray-600 flex items-center justify-center hover:border-white hover:text-white transition-colors"
                             aria-label="Scroll to top"
                         >
                             <ArrowUp size={18} />
