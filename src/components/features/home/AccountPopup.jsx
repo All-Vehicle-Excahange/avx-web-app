@@ -246,7 +246,6 @@ export default function AccountPopup({ open, onClosePopup }) {
                             full
                             size="sm"
                             onClick={() => setShowLogoutConfirm(true)}
-                            className="text-red-500 font-semibold hover:bg-red-500/10"
                         >
                             Logout
                         </Button>
@@ -280,7 +279,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                                 full
                                 size="sm"
                                 onClick={handleCancelLogout}
-                                className="border border-white/10 "
+                                className="border border-white/10  text-primary border border-primary hover:bg-primary hover:text-secondary"
                             >
                                 Cancel
                             </Button>
@@ -290,7 +289,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                                 full
                                 size="sm"
                                 onClick={handleLogout}
-                                className="text-red-500 font-semibold hover:bg-red-500/10"
+
                             >
                                 Yes, Logout
                             </Button>
