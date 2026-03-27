@@ -37,9 +37,21 @@ const SayHello = () => {
                     <div className="text-left w-fit shrink-0">
                         <h2 className="text-3xl md:text-5xl text-secondary font-extrabold leading-tight">
                             Say <span className="text-fourth">
-                                <span className="relative inline-block text-fourth text-4xl md:text-5xl lg:text-6xl font-extrabold">
+                                <span style={{ fontFamily: "var(--secondary)" }} className="relative inline-block text-fourth text-4xl md:text-5xl lg:text-6xl font-bold italic ">
                                     hello
-                                    <span className="absolute left-0 -bottom-2 h-1.5 w-full bg-gradient-to-r from-fourth to-transparent" />
+
+                                    <svg
+                                        className="absolute left-0 -bottom-1 w-full"
+                                        viewBox="0 0 200 20"
+                                        fill="none"
+                                    >
+                                        <path
+                                            d="M5 15 Q 100 5 195 15"
+                                            stroke="currentColor"
+                                            strokeWidth="4"
+                                            strokeLinecap="round"
+                                        />
+                                    </svg>
                                 </span>
                             </span> to the seller
                             <br />
@@ -74,7 +86,7 @@ const SayHello = () => {
                                         }}
                                     />
                                 )}
-                                
+
                                 {/* Vertical connecting line for mobile stepper */}
                                 {index < navigation.length - 1 && (
                                     <div

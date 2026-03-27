@@ -84,15 +84,17 @@ export default function VehicleOverview({ vehicle }) {
 
           <div className="relative group">
             {/* KM Driven Item */}
-            <Item
-              icon={<Gauge />}
-              label="KM driven"
-              value={`${vehicleOverview?.kmDriven || "25,125"} km`}
-            />
+            <div className="relative">
+              <Item
+                icon={<Gauge />}
+                label="KM driven"
+                value={`${vehicleOverview?.kmDriven || "25,125"} km`}
+              />
 
-            {/* Info Icon - adjusted right positioning for mobile */}
-            <div className="absolute top-1 right-2 md:right-44 text-muted-foreground hover:text-primary cursor-pointer">
-              <Info size={12} />
+              {/* Info Icon */}
+              <div className="absolute top-1 right-2 text-muted-foreground hover:text-primary cursor-pointer">
+                <Info size={14} />
+              </div>
             </div>
 
             {/* Hover Image Preview (Only if image provided) */}
