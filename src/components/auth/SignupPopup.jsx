@@ -317,7 +317,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
               type="submit"
               variant="ghost"
               disabled={!acceptedTerms}
-              className={`text-primary w-full h-11 text-sm font-bold ${!acceptedTerms ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`text-secondary w-full h-11 text-sm font-bold ${!acceptedTerms ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               GET OTP
             </Button>
