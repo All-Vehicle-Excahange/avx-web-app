@@ -39,13 +39,13 @@ export default function Commitment() {
             Customer <span className="text-secondary">Commitment</span>
           </h2>
 
-          <p className="text-primary/90 text-[15px] leading-[2] whitespace-pre-line">
+          <p className="text-primary/90 text-[15px] leading-loose whitespace-pre-line">
             {data.commitmentText}
           </p>
         </motion.div>
 
         {/* RIGHT — INTERACTIVE IMAGES */}
-        <div className="flex gap-3 h-[320px]">
+        <div className="flex gap-3 h-80">
 
           {data.commitmentImages.map((img, i) => {
             const isActive = i === active;

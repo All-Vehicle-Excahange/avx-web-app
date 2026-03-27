@@ -86,7 +86,7 @@ export default function Process() {
               >
 
                 {/* IMAGE */}
-                <div className="w-full h-[260px] lg:h-[320px] rounded-2xl overflow-hidden">
+                <div className="w-full h-[260px] lg:h-80 rounded-2xl overflow-hidden">
                   <img
                     src={step.image}
                     loading="lazy"

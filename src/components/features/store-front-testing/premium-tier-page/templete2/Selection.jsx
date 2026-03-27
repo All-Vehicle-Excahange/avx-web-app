@@ -46,7 +46,7 @@ export default function Selection() {
 
         {/* RIGHT — PREMIUM IMAGE COMPOSITION */}
         <motion.div
-          className="relative w-full h-[320px] lg:h-[380px]"
+          className="relative w-full h-80 lg:h-[380px]"
           initial={{ opacity: 0, x: 20 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7 }}

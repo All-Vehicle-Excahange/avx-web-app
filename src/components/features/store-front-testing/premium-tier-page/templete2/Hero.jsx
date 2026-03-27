@@ -26,7 +26,7 @@ export default function Hero() {
 
       <div className="absolute inset-0 bg-black/55" />
 
-      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/40 to-transparent" />
 
       <div className="relative z-10 w-full px-6 lg:px-14 max-w-6xl">
         <motion.div

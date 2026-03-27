@@ -82,7 +82,7 @@ export default function Gallery() {
           <div className="flex gap-3 lg:contents">
 
             <motion.div
-              className="relative overflow-hidden h-[160px] rounded-2xl flex-1 lg:h-auto lg:col-span-3 lg:row-span-1"
+              className="relative overflow-hidden h-40 rounded-2xl flex-1 lg:h-auto lg:col-span-3 lg:row-span-1"
               initial={{ opacity: 0, scale: 0.97 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -96,7 +96,7 @@ export default function Gallery() {
             </motion.div>
 
             <motion.div
-              className="relative overflow-hidden h-[160px] rounded-2xl flex-1 lg:h-auto lg:col-span-3 lg:row-span-1"
+              className="relative overflow-hidden h-40 rounded-2xl flex-1 lg:h-auto lg:col-span-3 lg:row-span-1"
               initial={{ opacity: 0, scale: 0.97 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}

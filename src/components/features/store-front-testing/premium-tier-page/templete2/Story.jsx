@@ -32,7 +32,7 @@ export default function Story() {
             Our <span className="text-secondary">Experience</span>
           </h2>
 
-          <p className="text-primary/85 text-[15px] leading-[2] whitespace-pre-line max-w-md">
+          <p className="text-primary/85 text-[15px] leading-loose whitespace-pre-line max-w-md">
             {data.storyText}
           </p>
         </motion.div>
