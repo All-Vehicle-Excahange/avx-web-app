@@ -1,4 +1,7 @@
 import Home from "@/components/features/store-front-testing/premium-tier-page/templete3/Home";
+import HowBuyingWorks from "@/components/features/store-front-testing/premium-tier-page/templete3/HowBuyingWorks";
+import OurStory from "@/components/features/store-front-testing/premium-tier-page/templete3/OurStory";
+import VehicleSecApproach from "@/components/features/store-front-testing/premium-tier-page/templete3/VehicleSecApproach";
 import Footer from "@/components/layout/Footer";
 import FooterLink from "@/components/layout/FooterLink";
 import Layout from "@/components/layout/Layout";
@@ -9,8 +12,11 @@ function index() {
     return (
         <>
             <Navbar />
+            <Home />
             <Layout>
-                <Home />
+                <OurStory />
+                <VehicleSecApproach/>
+                <HowBuyingWorks/>
             </Layout>
             <FooterLink />
             <Footer />
