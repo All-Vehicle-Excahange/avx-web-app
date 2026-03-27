@@ -20,7 +20,7 @@ export default function ConsultantSliderSection({ title, data }) {
       {/* HEADER */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex flex-col items-start gap-2">
-         <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
+          <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
             Premium
             <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
           </p>
@@ -29,7 +29,7 @@ export default function ConsultantSliderSection({ title, data }) {
             <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
               {title}
             </h2>
-            <p className="text-third mt-1">
+            <p className="text-third">
               Lorem ipsum dolor sit amet consectetur dolor sit amet
               consectetur..
             </p>

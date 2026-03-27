@@ -20,7 +20,7 @@ provides a smoother vehicle buying experience.`,
 function VehicleSecApproach() {
     return (
         <section className="relative py-12">
-            <div className=" mx-auto px-4">
+            <div className=" mx-auto px-2 lg:px-4">
 
                 {/* ── Content ───────────────── */}
                 <div className="flex flex-col   gap-6 max-w-3xl mx-auto mb-14">

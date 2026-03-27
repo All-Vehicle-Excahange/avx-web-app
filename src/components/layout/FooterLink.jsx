@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Linkedin, X } from "lucide-react";
+
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
@@ -7,336 +7,192 @@ const FooterLink = () => {
   return (
     <footer className="">
       <div className="container">
-        <div className="flex flex-col gap-5 ">
-          <div className="flex flex-col gap-2">
-            <h2 className="text-lg font-medium">Reecomm</h2>
-            <div className="text-primary/60 text-sm flex gap-y-2 flex-wrap divide-x divide-primary/60">
-              <Link href="/" className="px-2">
-                Home
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-10 py-10">
+
+          {/* COLUMN 1: TOP STORIES (SEO CONTENT) */}
+          <div className="flex flex-col gap-6 lg:col-span-1">
+            <h2 className="text-[11px] font-bold text-white uppercase tracking-[0.2em] opacity-90">
+              Top Stories
+            </h2>
+
+            <div className="flex flex-col gap-2">
+              <Link href="/blog/best-cars-under-5-lakh" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Best Cars Under 5 Lakh in India
               </Link>
-              <Link href="/aboutus" className="px-2">
-                About
+
+              <Link href="/blog/how-to-sell-car-fast" className="text-[12px] text-white/50 hover:text-white transition-all">
+                How to Sell Your Car Fast
               </Link>
-              <Link href="/why-chose-us" className="px-2">
-                Why Chose Us
+
+              <Link href="/blog/used-car-buying-guide" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Complete Used Car Buying Guide
               </Link>
-              <Link href="/safety-transparency" className="px-2">
-                Safety Transparency
+
+              <Link href="/blog/car-inspection-checklist" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Car Inspection Checklist Before Buying
               </Link>
-              <Link href="/help" className="px-2">
-                Help
-              </Link>
-              <Link href="/inspection-process" className="px-2">
-                Inspection Process
-              </Link>
-              <Link href="/became-seller" className="px-2">
-                Become a Seller
-              </Link>
-              <Link href="/consualt" className="px-2">
-                Became a Consultant
-              </Link>
-              <Link href="/" className="px-2">
-                Vehicles
-              </Link>
-              <Link href="/" className="px-2">
-                Consultant
-              </Link>
-              <Link href="/" className="px-2">
-                Home
-              </Link>
-              <Link href="/" className="px-2">
-                About
-              </Link>
-              <Link href="/" className="px-2">
-                Contact
-              </Link>
-              <Link href="/" className="px-2">
-                Vehicles
-              </Link>
-              <Link href="/" className="px-2">
-                Consultant
-              </Link>
-              <Link href="/" className="px-2">
-                Home
-              </Link>
-              <Link href="/" className="px-2">
-                About
-              </Link>
-              <Link href="/" className="px-2">
-                Contact
-              </Link>
-              <Link href="/" className="px-2">
-                Vehicles
-              </Link>
-              <Link href="/" className="px-2">
-                Consultant
-              </Link>
-              <Link href="/" className="px-2">
-                Home
-              </Link>
-              <Link href="/" className="px-2">
-                About
-              </Link>
-              <Link href="/" className="px-2">
-                Contact
-              </Link>
-              <Link href="/" className="px-2">
-                Vehicles
-              </Link>
-              <Link href="/" className="px-2">
-                Consultant
-              </Link>
-              <Link href="/" className="px-2">
-                Home
-              </Link>
-              <Link href="/" className="px-2">
-                About
-              </Link>
-              <Link href="/" className="px-2">
-                Contact
-              </Link>
-              <Link href="/" className="px-2">
-                Vehicles
-              </Link>
-              <Link href="/" className="px-2">
-                Consultant
-              </Link>
-              <Link href="/" className="px-2">
-                Home
-              </Link>
-              <Link href="/" className="px-2">
-                About
-              </Link>
-              <Link href="/" className="px-2">
-                Contact
-              </Link>
-              <Link href="/" className="px-2">
-                Vehicles
-              </Link>
-              <Link href="/" className="px-2">
-                Consultant
-              </Link>
-              <Link href="/" className="px-2">
-                Home
-              </Link>
-              <Link href="/" className="px-2">
-                About
-              </Link>
-              <Link href="/" className="px-2">
-                Contact
-              </Link>
-              <Link href="/" className="px-2">
-                Vehicles
-              </Link>
-              <Link href="/" className="px-2">
-                Consultant
+
+              <Link href="/blog/best-mileage-cars-india" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Best Mileage Cars in India
               </Link>
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <h2 className="text-lg font-medium">Top Stories</h2>
-            <div className="text-primary/60 text-sm flex gap-y-2 flex-wrap divide-x divide-primary/60">
-              <Link href="/" className="px-2">
-                Home
+          {/* COLUMN 2: RECOMMENDED (SEO) */}
+          <div className="flex flex-col gap-6">
+            <h2 className="text-[11px] font-bold text-white uppercase tracking-[0.2em] opacity-90">
+              Recommended
+            </h2>
+
+            <div className="flex flex-col gap-2">
+              <Link href="/buy-used-cars" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Buy Used Cars
               </Link>
-              <Link href="/" className="px-2">
-                About
+
+              <Link href="/sell-used-car" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Sell Your Car
               </Link>
-              <Link href="/" className="px-2">
-                Contact
+
+              <Link href="/used-cars-in-india" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Used Cars in India
               </Link>
-              <Link href="/" className="px-2">
-                Vehicles
+
+              <Link href="/cars-under-5-lakh" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Cars Under 5 Lakh
               </Link>
-              <Link href="/" className="px-2">
-                Consultant
-              </Link>
-              <Link href="/" className="px-2">
-                Home
-              </Link>
-              <Link href="/" className="px-2">
-                About
-              </Link>
-              <Link href="/" className="px-2">
-                Contact
-              </Link>
-              <Link href="/" className="px-2">
-                Vehicles
-              </Link>
-              <Link href="/" className="px-2">
-                Consultant
-              </Link>
-              <Link href="/" className="px-2">
-                Home
-              </Link>
-              <Link href="/" className="px-2">
-                About
-              </Link>
-              <Link href="/" className="px-2">
-                Contact
-              </Link>
-              <Link href="/" className="px-2">
-                Vehicles
-              </Link>
-              <Link href="/" className="px-2">
-                Consultant
-              </Link>
-              <Link href="/" className="px-2">
-                Home
-              </Link>
-              <Link href="/" className="px-2">
-                About
-              </Link>
-              <Link href="/" className="px-2">
-                Contact
-              </Link>
-              <Link href="/" className="px-2">
-                Vehicles
-              </Link>
-              <Link href="/" className="px-2">
-                Consultant
-              </Link>
-              <Link href="/" className="px-2">
-                Home
-              </Link>
-              <Link href="/" className="px-2">
-                About
-              </Link>
-              <Link href="/" className="px-2">
-                Contact
-              </Link>
-              <Link href="/" className="px-2">
-                Vehicles
-              </Link>
-              <Link href="/" className="px-2">
-                Consultant
-              </Link>
-              <Link href="/" className="px-2">
-                Home
-              </Link>
-              <Link href="/" className="px-2">
-                About
-              </Link>
-              <Link href="/" className="px-2">
-                Contact
-              </Link>
-              <Link href="/" className="px-2">
-                Vehicles
-              </Link>
-              <Link href="/" className="px-2">
-                Consultant
-              </Link>
-              <Link href="/" className="px-2">
-                Home
-              </Link>
-              <Link href="/" className="px-2">
-                About
-              </Link>
-              <Link href="/" className="px-2">
-                Contact
-              </Link>
-              <Link href="/" className="px-2">
-                Vehicles
-              </Link>
-              <Link href="/" className="px-2">
-                Consultant
-              </Link>
-              <Link href="/" className="px-2">
-                Home
-              </Link>
-              <Link href="/" className="px-2">
-                About
-              </Link>
-              <Link href="/" className="px-2">
-                Contact
-              </Link>
-              <Link href="/" className="px-2">
-                Vehicles
-              </Link>
-              <Link href="/" className="px-2">
-                Consultant
+
+              <Link href="/best-family-cars" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Best Family Cars
               </Link>
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <h2 className="text-lg font-medium">Top Stories</h2>
-            <p className="text-primary/60 text-sm flex gap-2">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Repellendus, error unde? Cum eveniet vitae, non sapiente eligendi
-              nihil. Numquam cumque aliquam consectetur, incidunt possimus
-              doloribus maiores laboriosam ipsam est perferendis magni molestias
-              facilis aliquid harum sit et ipsum dicta quidem quae dolor debitis
-              porro, non nisi? At obcaecati odio repellat molestias architecto
-              culpa eos. Veritatis nam tempora iure neque soluta sapiente
-              numquam est excepturi, id ab unde cumque eaque ullam impedit
-              veniam qui dignissimos ex obcaecati. Illo molestiae, officia nemo
-              beatae minima architecto blanditiis odit soluta voluptatum
-              sapiente dolor harum modi, aperiam illum deleniti quas veniam
-              magni? Exercitationem, nemo hic.
-            </p>
+          {/* COLUMN 3: SERVICES (SEO OPTIMIZED) */}
+          <div className="flex flex-col gap-6">
+            <h2 className="text-[11px] font-bold text-white uppercase tracking-[0.2em] opacity-90">
+              Services
+            </h2>
+
+            <div className="flex flex-col gap-2">
+              <Link href="/sell-used-car" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Sell Your Car
+              </Link>
+
+              <Link href="/car-inspection-service" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Car Inspection Service
+              </Link>
+
+              <Link href="/car-valuation" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Car Valuation
+              </Link>
+
+              <Link href="/rc-transfer-service" className="text-[12px] text-white/50 hover:text-white transition-all">
+                RC Transfer Service
+              </Link>
+
+              <Link href="/doorstep-car-inspection" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Doorstep Inspection
+              </Link>
+            </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <h2 className="text-lg font-medium">Top Stories</h2>
-            <p className="text-primary/60 text-sm flex gap-2">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam sit
-              error porro aut dolorem necessitatibus rem voluptate, dignissimos
-              quos aliquid non. Tempora nesciunt recusandae expedita illo qui
-              sunt repellendus, deserunt sit labore omnis corrupti voluptatibus,
-              et enim nihil facilis culpa nulla. Quis explicabo impedit ipsum
-              harum! Nihil corrupti possimus animi.
-            </p>
+
+          {/* COLUMN 4: EXPLORE (SEO OPTIMIZED) */}
+          <div className="flex flex-col gap-6">
+            <h2 className="text-[11px] font-bold text-white uppercase tracking-[0.2em] opacity-90">
+              Explore
+            </h2>
+
+            <div className="flex flex-col gap-2">
+              <Link href="/used-cars" className="text-[12px] text-white/50 hover:text-white transition-all">
+                All Used Cars
+              </Link>
+
+              <Link href="/used-cars-by-brand" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Cars by Brand
+              </Link>
+
+              <Link href="/used-cars-by-budget" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Cars by Budget
+              </Link>
+
+              <Link href="/latest-car-listings" className="text-[12px] text-white/50 hover:text-white transition-all">
+                New Arrivals
+              </Link>
+
+              <Link href="/car-buying-guide" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Car Buying Guide
+              </Link>
+            </div>
           </div>
+
+          {/* COLUMN 6: POPULAR SEARCHES (SEO BOOST) */}
+          <div className="flex flex-col gap-6">
+            <h2 className="text-[11px] font-bold text-white uppercase tracking-[0.2em] opacity-90">
+              Popular Searches
+            </h2>
+
+            <div className="flex flex-col gap-2">
+              <Link href="/used-cars-in-ahmedabad" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Used Cars in Ahmedabad
+              </Link>
+
+              <Link href="/used-cars-in-delhi" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Used Cars in Delhi
+              </Link>
+
+              <Link href="/used-cars-in-mumbai" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Used Cars in Mumbai
+              </Link>
+
+              <Link href="/used-hyundai-cars" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Used Hyundai Cars
+              </Link>
+
+              <Link href="/used-maruti-cars" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Used Maruti Cars
+              </Link>
+
+              <Link href="/cars-under-3-lakh" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Cars Under 3 Lakh
+              </Link>
+
+              <Link href="/automatic-cars" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Automatic Cars
+              </Link>
+            </div>
+          </div>
+
+          {/* COLUMN 5: HELP & SUPPORT (SEO + TRUST) */}
+          <div className="flex flex-col gap-6">
+            <h2 className="text-[11px] font-bold text-white uppercase tracking-[0.2em] opacity-90">
+              Help & Support
+            </h2>
+
+            <div className="flex flex-col gap-2">
+              <Link href="/faqs" className="text-[12px] text-white/50 hover:text-white transition-all">
+                FAQs
+              </Link>
+
+              <Link href="/customer-support" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Customer Care
+              </Link>
+
+              <Link href="/terms-and-conditions" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Terms & Conditions
+              </Link>
+
+              <Link href="/privacy-policy" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Privacy Policy
+              </Link>
+
+              <Link href="/refund-policy" className="text-[12px] text-white/50 hover:text-white transition-all">
+                Refund Policy
+              </Link>
+            </div>
+          </div>
+
+
         </div>
-
-
-        {/* IMPROVED E-COMMERCE SECTION */}
-        <div className="my-10 lg:my-16 bg-secondary rounded-[15px] md:rounded-[20px] overflow-hidden shadow-sm border border-white/20">
-          <div className="grid lg:grid-cols-12 grid-cols-1 items-stretch">
-            {/* LEFT SIDE: Image Features */}
-            <div className="relative min-h-[300px] lg:min-h-full lg:col-span-5 xl:col-span-4 group overflow-hidden">
-              <img
-                src="/promo_bg.png"
-                alt="Reecomm Platform"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/10 to-transparent pointer-events-none"></div>
-
-              {/* Logo Overlay on Image */}
-              <div className="absolute bottom-6 left-6 lg:bottom-10 lg:left-10 bg-secondary backdrop-blur-md px-6 py-3 rounded-2xl shadow-xl border border-white/20">
-                <img src="/logo/logo.webp" alt="Reecomm Logo" className="h-6 md:h-10 w-auto object-contain" />
-              </div>
-            </div>
-
-            {/* RIGHT SIDE: Content */}
-            <div className="flex flex-col justify-center gap-6 p-6 md:p-8 lg:p-10 lg:col-span-7 xl:col-span-8">
-              <div>
-                <p className="inline-block text-xs md:text-sm tracking-[0.3em] uppercase text-fourth font-bold mb-3">
-                  Why Choose Us
-                </p>
-                <h2 className="text-3xl md:text-4xl lg:text-4xl font-semibold text-primary tracking-tight leading-tight">
-                  Driving the Future of E-Commerce
-                </h2>
-              </div>
-              <p className="text-primary/70 text-sm leading-relaxed text-justify">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Repellendus, error unde? Cum eveniet vitae, non sapiente eligendi
-                nihil. Numquam cumque aliquam consectetur, incidunt possimus
-                doloribus maiores laboriosam ipsam est perferendis magni molestias
-                facilis aliquid harum sit et ipsum dicta quidem quae dolor debitis
-                porro, non nisi? At obcaecati odio repellat molestias architecto
-                culpa eos. Veritatis nam tempora iure neque soluta sapiente
-                numquam est excepturi, id ab unde cumque eaque ullam impedit
-                veniam qui dignissimos ex obcaecati. Illo molestiae, officia nemo
-                beatae minima architecto blanditiis odit soluta voluptatum
-                sapiente dolor harum modi, aperiam illum deleniti quas veniam
-                magni? Exercitationem, nemo hic.
-              </p>
-            </div>
-          </div>
-        </div>
-
       </div>
     </footer>
   );

@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Home() {
+function Hero() {
 
     const data = {
         heroTitle: "Why Choose Adarsh Auto Consultants",
@@ -39,7 +39,7 @@ function Home() {
                     />
 
                     {/* OVERLAY */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30"></div>
+                    <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/50 to-black/30"></div>
 
                     {/* CONTENT */}
                     <div className="relative z-10 h-full flex items-center justify-center">
@@ -70,16 +70,16 @@ function Home() {
                     </div>
 
                     {/* FLOATING IMAGE STRIP (INSIDE HERO) */}
-                    <div className="absolute bottom-0 left-0 w-full translate-y-1/2 z-20 px-4">
+                    <div className="absolute bottom-0 left-0 w-full translate-y-1/2 z-20 px-2 md:px-6 lg:px-4 ">
                         <div className="max-w-7xl mx-auto">
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 px-2 lg:px-4 ">
 
                                 {data.heroImages.slice(1).map((img, index) => (
                                     <div
                                         key={index}
                                         className="overflow-hidden rounded-2xl bg-white/10 backdrop-blur-md border border-white/10"
                                     >
-                                        <div className="aspect-[4/3] ">
+                                        <div className="aspect-4/3 ">
                                             <img
                                                 src={img}
                                                 alt="premium"
@@ -104,4 +104,4 @@ function Home() {
     )
 }
 
-export default Home
+export default Hero

@@ -2,7 +2,7 @@ import DownloadAppSection from "@/components/features/home/DownloadAppSection";
 import AvxProcess from "@/components/features/VehiclDetail/AvxProcess";
 import VehiclDetail from "@/components/features/VehiclDetail/VehiclDetail";
 import FooterLink from "@/components/layout/FooterLink";
-import Footer from "@/components/layout/FooterLink";
+import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
 import React from "react";
 

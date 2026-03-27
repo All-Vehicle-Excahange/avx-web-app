@@ -12,7 +12,7 @@ provide honest guidance and reliable information for every buyer.`,
 function CustomerCommitment() {
   return (
     <section className="py-12">
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="max-w-6xl mx-auto px-2 lg:px-4">
         
         {/* Container with background color, border, and shadow */}
         <div className="bg-secondary/10 border border-third/10 rounded-3xl p-10 md:p-14 text-center shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
@@ -20,9 +20,9 @@ function CustomerCommitment() {
           <div className="flex flex-col gap-6 items-center">
 
             {/* Label */}
-            <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Our Promise
-            </span>
+            </p>
 
             {/* Title using only data content and specified styles */}
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">

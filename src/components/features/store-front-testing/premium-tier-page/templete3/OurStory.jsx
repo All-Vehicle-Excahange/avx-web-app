@@ -31,7 +31,7 @@ function OurStory() {
 
 
 
-                <div className="relative z-10  mx-auto w-full px-4">
+                <div className="relative z-10  mx-auto w-full px-2 lg:px-4  ">
                     <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
                         {/* ── LEFT: Text ── */}

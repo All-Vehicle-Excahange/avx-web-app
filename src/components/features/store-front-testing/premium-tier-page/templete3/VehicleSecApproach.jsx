@@ -53,7 +53,7 @@ function VehicleSecApproach() {
             `}</style>
 
             <section className="relative flex flex-col justify-center items-center py-12 overflow-hidden">
-                <div className="mx-auto w-full px-2 sm:px-4">
+                <div className="mx-auto w-full px-2 lg:px-4 ">
 
                     {/* ══ MAIN CINEMATIC BLOCK ══ */}
                     <div className="relative w-full h-[500px] sm:h-[460px] lg:h-[520px] rounded-3xl overflow-hidden">
