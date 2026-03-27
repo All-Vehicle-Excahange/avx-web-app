@@ -35,20 +35,19 @@ const ShowcaseSection = () => {
     <div className="w-full">
       {/* Header */}
       <div className="flex justify-between items-end mb-6">
-        <div className="flex items-start gap-4">
-          {/* Vertical Accent Line */}
-          <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
 
-          {/* Text */}
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-              Continue Where you Left Off
-            </h2>
+        <div className="flex flex-col items-start gap-2">
+          <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
+            Continue
+            <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+          </p>
 
-            <p className="text-third mt-1">
-              Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
-            </p>
-          </div>
+          <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
+            <span className="text-fourth">Continue </span> Where you Left Off
+          </h2>
+          <p className="text-third ">
+            Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
+          </p>
         </div>
       </div>
 

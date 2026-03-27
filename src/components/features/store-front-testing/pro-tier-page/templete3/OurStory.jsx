@@ -20,7 +20,7 @@ const storyData = {
 export default function OurStory() {
   return (
     <section className="relative py-12">
-      <div className=" mx-auto px-4">   
+      <div className=" mx-auto px-2 lg:px-4">   
 
         {/* ── Flex row replacing grid ───────────────────────────────── */}
         <div className="flex flex-col lg:flex-row gap-6 items-stretch justify-center">

@@ -41,7 +41,7 @@ function HowBuyingWorks() {
 
     return (
         <section className="relative py-12">
-            <div className=" mx-auto px-4">
+            <div className=" mx-auto px-2 lg:px-4">
 
                 {/* ── OUTSIDE HEADER — top left ───────────────────────────────── */}
                 <div className="flex flex-col gap-4 mb-8 max-w-lg">

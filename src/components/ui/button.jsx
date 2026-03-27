@@ -21,8 +21,8 @@ export default function Button({
     "inline-flex items-center justify-center font-medium select-none transition-all hover:cursor-pointer relative z-10 group overflow-hidden";
 
   const variants = {
-    default: "bg-secondary text-primary hover:opacity-80 rounded-xl",
-    ghost: "bg-primary text-secondary hover:bg-third rounded-xl",
+    default: "bg-secondary border border-secondary text-primary hover:bg-transparent hover:text-secondary hover:border-secondary hover:border rounded-full",
+    ghost: "bg-primary border border-primary  text-secondary hover:bg-third rounded-full hover:bg-transparent hover:text-primary  ",
 
     outline: cn(
       "text-third rounded-full border border-third",
@@ -38,7 +38,7 @@ export default function Button({
     ),
 
     outlineSecondary:
-      "border border-third text-primary hover:bg-third rounded-xl transition-all duration-300",
+      "border border-third text-primary hover:bg-primary hover:text-secondary rounded-full  transition-all duration-300",
 
     roundedOutline:
       "border border-third text-primary hover:bg-primary hover:text-secondary rounded-full flex items-center justify-center h-10 w-10",
@@ -68,7 +68,7 @@ export default function Button({
               "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
               "w-[1000%] h-[1000%]",
               "animate-[spin_4s_linear_infinite]",
-              "bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]",
+              "bg-[conic-gradient(from_90deg_at_50%_50%,#ffffff_0%,#c0c0c0_25%,#007bff_50%,#c0c0c0_75%,#ffffff_100%)]",
               isOutline
                 ? "opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 : "opacity-100"
@@ -78,7 +78,7 @@ export default function Button({
           {/* Inner Mask */}
           <span
             className={cn(
-              "absolute inset-0.5 rounded-full bg-[#292929]",
+              "absolute inset-0.5 rounded-full bg-[#141414]",
               isOutline
                 ? "opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 : "opacity-100"
@@ -97,7 +97,7 @@ export default function Button({
     </>
   );
 
-  // 👉 If href exists → Link
+  // If href exists → Link
   if (href && !locked) {
     return (
       <Link href={href} scroll={false} className={classes}>
@@ -106,7 +106,7 @@ export default function Button({
     );
   }
 
-  // 👉 Default → Button
+  // Default → Button
   return (
     <button {...props} className={classes} disabled={locked}>
       {Content}
