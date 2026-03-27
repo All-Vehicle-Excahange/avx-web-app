@@ -120,7 +120,7 @@ const CategoriesSections = () => {
               Not sure what to buy? <span className="text-fourth">Start here</span>
             </h2>
 
-            <p className="text-third mt-1">
+            <p className="text-third ">
               Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
             </p>
           </div>

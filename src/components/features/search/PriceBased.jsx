@@ -28,7 +28,7 @@ const PriceBased = ({ data, title }) => {
           <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
             {title || "SUVs Between ₹8L – ₹12L"}
           </h2>
-          <p className="text-third mt-1">
+          <p className="text-third">
             Lorem ipsum dolor sit amet consectetur dolor sit amet
             consectetur..
           </p>

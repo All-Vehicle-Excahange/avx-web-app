@@ -49,7 +49,7 @@ export default function TopPicsSection() {
                         <span className="text-fourth"> Top picks</span> Vehicle For You
                     </h2>
 
-                    <p className="text-third mt-1">
+                    <p className="text-third ">
                         Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
                     </p>
                 </div>

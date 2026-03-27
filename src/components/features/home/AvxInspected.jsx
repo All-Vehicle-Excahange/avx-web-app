@@ -53,7 +53,7 @@ export default function AvxInspected() {
                         <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
                             AVX <span className="text-fourth">Inspected</span> Vehicles
                         </h2>
-                        <p className="text-third mt-1">
+                        <p className="text-third ">
                             Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
                         </p>
                     </div>

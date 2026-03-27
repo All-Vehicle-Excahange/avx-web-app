@@ -63,6 +63,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const [stateId, setStateId] = useState(null);
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [vehicleType, setVehicleType] = useState("");
+  const [vehicleTypeError, setVehicleTypeError] = useState(false);
   const [bodyType, setBodyType] = useState("");
   const [fuelType, setFuelType] = useState("");
   const [brand, setBrand] = useState("");
@@ -287,7 +288,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         }
       }
     }
-    
+
     // Cleanup to ensure banner comes back if unmounted unexpectedly
     return () => setMobileBannerTempHidden(false);
   }, [mobileOpen, setMobileBannerTempHidden]);
@@ -305,13 +306,12 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
   const handleSearch = () => {
 
+    if (!vehicleType) {
+      setVehicleTypeError(true);
+      return;
+    }
+
     const isConsult = internalActiveType === "consult";
-    const hasSelection = isConsult
-      ? (location || cityId || stateId || vehicleType || priceRange || service || availability)
-      : (location || cityId || stateId || vehicleType || bodyType || fuelType || brand || makerId || budget);
-
-    if (!hasSelection) return;
-
 
     // Save/overwrite selected location to localStorage
     if (stateId && cityId && location) {
@@ -439,10 +439,10 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 onClick={() => handleActiveTabChange("vehicle")}
               >
                 <div className="text-md font-semibold text-primary tracking-wide">
-                  Vehicle Type
+                  Vehicle Type 
                 </div>
-                <div className="text-sm font-medium text-gray-200">
-                  {vehicleType || "Add type"}
+                <div className={`text-sm font-medium ${vehicleTypeError ? "text-red-500" : "text-gray-200"}`}>
+                  {vehicleTypeError ? "* Required" : (vehicleType || "Add type")}
                 </div>
                 {activeTab === "vehicle" && (
                   <div className="absolute top-[110%] left-0 z-50 w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
@@ -452,6 +452,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                         onClick={(e) => {
                           e.stopPropagation();
                           setVehicleType(type.label);
+                          setVehicleTypeError(false);
                           openNextAvailableTab("vehicle");
                         }}
                         className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold"
@@ -860,7 +861,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
               >
                 <div className="flex flex-col items-start w-full">
                   <span className="text-xs font-semibold text-primary">Vehicle Type</span>
-                  <span className={`font-medium text-sm mt-1 truncate w-full ${vehicleType ? "text-white" : "text-gray-500"}`}>{vehicleType || "Add type"}</span>
+                  <span className={`font-medium text-sm mt-1 truncate w-full ${vehicleTypeError ? "text-red-500" : (vehicleType ? "text-white" : "text-gray-500")}`}>{vehicleTypeError ? "*Required" : (vehicleType || "Add type")}</span>
                 </div>
               </button>
               {activeTab === "vehicle" && (
@@ -868,7 +869,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   {VEHICLE_TYPES.map((type) => (
                     <button
                       key={type.id}
-                      onClick={() => { setVehicleType(type.label); openNextAvailableTab("vehicle"); }}
+                      onClick={() => { setVehicleType(type.label); setVehicleTypeError(false); openNextAvailableTab("vehicle"); }}
                       className={`flex-1 mt-3 py-3 text-sm font-bold rounded-lg transition-colors ${vehicleType === type.label ? 'bg-white text-black' : 'bg-neutral-800 text-gray-400 hover:text-white'}`}
                     >
                       {type.label}

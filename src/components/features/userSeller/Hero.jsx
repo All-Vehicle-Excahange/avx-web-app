@@ -60,7 +60,7 @@ function Hero() {
           <div className="absolute inset-0 bg-linear-to-r from-secondary/80 via-transparent to-secondary/50" />
         </div>
 
-       
+
 
         {/* ── MAIN CONTENT — CENTERED ── */}
         <div className="relative z-20 flex-1 flex flex-col items-center justify-center px-6 py-16 text-center">
@@ -76,7 +76,7 @@ function Hero() {
           </div>
 
           {/* Main Headline */}
-         
+
           <h2
             className="
              text-3xl sm:text-4xl lg:text-5xl
@@ -110,13 +110,13 @@ function Hero() {
             <Button
               variant="ghost"
               onClick={handleStartSelling}
-              className={" font-[Montserrat] font-extrabold text-[10px] tracking-[0.3em] px-10 py-4  hover:-translate-y-0.5 transition-transform duration-200 "}
+              className={" px-10 py-4 hover:-translate-y-0.5 transition-transform duration-200 "}
             >
               START SELLING
             </Button>
             <Button
               variant="ghost"
-              className="border border-primary/20 text-secondary font-[Montserrat] font-extrabold text-[10px] tracking-[0.3em] px-8 py-4 rounded-none hover:border-primary/50 hover:text-primary transition-all duration-200"
+              className="border border-primary/20 px-8 py-4 hover:border-primary/50 transition-all duration-200"
             >
               EXPLORE MARKET →
             </Button>
@@ -131,8 +131,8 @@ function Hero() {
               <div
                 key={i}
                 className={`px-10 py-5 flex flex-col items-center gap-1 ${i !== TRUST_BADGES.length - 1
-                    ? "border-b sm:border-b-0 sm:border-r border-primary/10"
-                    : ""
+                  ? "border-b sm:border-b-0 sm:border-r border-primary/10"
+                  : ""
                   }`}
               >
                 <span className="font-[Montserrat] font-black text-2xl text-primary leading-none">
@@ -147,7 +147,7 @@ function Hero() {
 
         </div>
 
-       
+
 
       </section>
 

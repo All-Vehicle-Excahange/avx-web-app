@@ -24,19 +24,9 @@ function BecameBanner() {
               text-center
               border-b md:border-b-0 md:border-r border-primary/30
             ">
-                        <p className="mb-6">
-                            <span
-                                className="
-                bg-primary
-                text-secondary
-                px-4 py-1.5
-                rounded-full
-                border border-white/30
-                text-xs tracking-[0.35em] uppercase font-semibold
-              "
-                            >
-                                For Consultants
-                            </span>
+                        <p className="mb-6 text-primary text-md tracking-[0.35em] uppercase font-semibold relative inline-block">
+                            For Consultants
+                            <span className="absolute left-0 -bottom-2 h-[2px] w-1/2 bg-gradient-to-r from-neutral-100 to-transparent rounded-full"></span>
                         </p>
 
                         <p className="text-2xl font-bold font-primary  sm:text-3xl  text-primary ">
@@ -75,19 +65,9 @@ function BecameBanner() {
               text-center
             "
                     >
-                        <p className="mb-6">
-                            <span
-                                className="
-                bg-primary
-                text-secondary
-                px-4 py-1.5
-                rounded-full
-                border border-white/30
-                text-xs tracking-[0.35em] uppercase font-semibold
-              "
-                            >
-                                For Sellers
-                            </span>
+                        <p className="mb-6 text-primary text-md tracking-[0.35em] uppercase font-semibold relative inline-block">
+                            For Sellers
+                            <span className="absolute left-0 -bottom-2 h-[2px] w-1/2 bg-gradient-to-r from-neutral-100 to-transparent rounded-full"></span>
                         </p>
 
                         <p className="text-2xl sm:text-3xl font-bold font-primary text-primary ">

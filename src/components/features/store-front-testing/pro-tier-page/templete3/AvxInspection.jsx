@@ -25,7 +25,7 @@ function AvxInspection() {
 
     return (
         <section className="py-12">
-            <div className=" mx-auto px-4">
+            <div className=" mx-auto px-2 lg:px-4">
 
                 {/* ── TOP HEADER ────────────────────────────────────────── */}
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 mb-16">
