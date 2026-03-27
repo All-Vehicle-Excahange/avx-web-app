@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import Image from "next/image";
 import {
     MessageSquare,
@@ -11,7 +12,16 @@ import Link from "next/link";
 export default function TopPerformingCard({ vehicle, rank }) {
     const [open, setOpen] = useState(false);
     const menuRef = useRef(null);
-
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (menuRef.current && !menuRef.current.contains(e.target)) {
+                setOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+   
     if (!vehicle) return null;
 
     const vehicleTitle = `${vehicle.makerName} ${vehicle.modelName} ${vehicle.variantName}`;
@@ -31,15 +41,7 @@ export default function TopPerformingCard({ vehicle, rank }) {
         : "N/A";
 
     // 👉 close menu on outside click
-    useEffect(() => {
-        const handleClickOutside = (e) => {
-            if (menuRef.current && !menuRef.current.contains(e.target)) {
-                setOpen(false);
-            }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+
 
     return (
         <div className="relative rounded-2xl border border-third/40 p-4 lg:px-5 lg:py-4 flex flex-col sm:flex-row items-start gap-4 shadow-sm hover:shadow-md transition">
