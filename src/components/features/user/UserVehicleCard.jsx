@@ -17,6 +17,7 @@ import {
 import Button from "@/components/ui/button";
 import Image from "next/image";
 
+
 export default function UserVehicleCard({
   data,
   status = "live",
@@ -53,11 +54,12 @@ export default function UserVehicleCard({
       </div>
 
       {/* AVX INSPECTED BADGE */}
-      {avxInspected && (
+      {/* {avxInspected && (
         <div className="absolute top-2 right-2 z-30 px-3 py-1 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center gap-1">
           AVX Inspected <CheckCircle size={14} />
         </div>
-      )}
+      )} */}
+
 
       <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
 
@@ -75,7 +77,7 @@ export default function UserVehicleCard({
 
           {/* Inspection badge overlay (bottom-left of image) */}
           {data?.inspectionBadgeUrl && (
-            <div className="absolute bottom-3 left-3 w-8 h-8 rounded-full overflow-hidden border-2 border-white/20 shadow-md">
+            <div className="absolute top-3 right-3 w-8 h-8 rounded-full overflow-hidden border-2 border-white/20 shadow-md">
               <Image
                 src={data.inspectionBadgeUrl}
                 alt="Inspection Badge"
