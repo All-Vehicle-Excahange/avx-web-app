@@ -22,7 +22,6 @@ function SelectionSection() {
     ],
   };
 
-  // 🔥 AUTO SCROLL LOGIC
   useEffect(() => {
     const container = scrollRef.current;
     let scrollAmount = 0;
@@ -30,11 +29,9 @@ function SelectionSection() {
     const scroll = () => {
       if (!container) return;
 
-      scrollAmount += 1; // speed control
-
+      scrollAmount += 0.25; // slower = premium
       container.scrollLeft = scrollAmount;
 
-      // loop back smoothly
       if (scrollAmount >= container.scrollWidth / 2) {
         scrollAmount = 0;
       }
@@ -46,10 +43,32 @@ function SelectionSection() {
   }, []);
 
   return (
-    <section className="w-full py-12">
-      <div className="max-w-7xl   sm:px-6 flex flex-col gap-10">
+    <section className="relative w-full py-28 overflow-hidden ">
 
-        {/* ── HEADER ───────────────── */}
+      {/* 🔥 BACKGROUND IMAGE STRIP (SOFT) */}
+      <div
+        ref={scrollRef}
+        className="  absolute inset-0 flex  overflow-hidden pointer-events-none"
+      >
+        {[...selectionData.selectionImages, ...selectionData.selectionImages].map((img, i) => (
+          <div
+            key={i}
+            className="min-w-[350px] h-full overflow-hidden rounded-2xl opacity-[0.3]"
+          >
+            <img
+              src={img}
+              className="w-full h-full object-cover grayscale"
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* 🔥 LEFT + RIGHT FADE (IMPORTANT PREMIUM TOUCH) */}
+      <div className="absolute inset-0   " />
+
+      {/* ── CONTENT ───────────────── */}
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 flex flex-col gap-10">
+
         <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
           Our Standards
         </p>
@@ -59,54 +78,23 @@ function SelectionSection() {
           <span className="text-fourth/80">Vehicle Selection</span>
         </h2>
 
-        {/* ── CONTENT GRID ───────────────── */}
-        <div className="grid md:grid-cols-2 gap-10 items-center">
-
-          {/* LEFT TEXT */}
-          <div className="flex flex-col gap-4 border-l-2 border-primary/40 pl-5">
-            {selectionData.selectionDescription
-              .trim()
-              .split("\n\n")
-              .map((para, i) => (
-                <p
-                  key={i}
-                  className="text-third text-lg font-[Poppins] leading-relaxed"
-                >
-                  {para.trim()}
-                </p>
-              ))}
-          </div>
-
-          {/* RIGHT IMAGES (AUTO SCROLL) */}
-          <div
-            ref={scrollRef}
-            className="flex gap-3 overflow-x-scroll no-scrollbar"
-          >
-            {[...selectionData.selectionImages, ...selectionData.selectionImages].map((img, i) => (
-              <div
+        <div className="max-w-2xl border-l-2 border-primary/40 pl-5">
+          {selectionData.selectionDescription
+            .trim()
+            .split("\n\n")
+            .map((para, i) => (
+              <p
                 key={i}
-                className="min-w-[180px] h-[220px] overflow-hidden rounded-lg border border-third/10 shrink-0"
+                className="text-third text-lg font-[Poppins] leading-relaxed"
               >
-                <img
-                  src={img}
-                  alt="selection"
-                  className="w-full h-full object-cover"
-                />
-              </div>
+                {para.trim()}
+              </p>
             ))}
-          </div>
-
         </div>
 
       </div>
-
-      {/* ── HIDE SCROLLBAR STYLE ───────────────── */}
-    
-
     </section>
   );
 }
 
 export default SelectionSection;
-
-
