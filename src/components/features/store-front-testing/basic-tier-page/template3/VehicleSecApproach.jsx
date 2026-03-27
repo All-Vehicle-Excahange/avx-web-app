@@ -25,9 +25,9 @@ function VehicleSecApproach() {
                     {/* ── Centered Content ─────────────────────────────────────── */}
                     <div className="flex flex-col items-center text-center gap-8 max-w-3xl mx-auto">
                         <div className="flex items-center gap-3 ">
-                            <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">Vehicle Approach</span>
+                            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">Vehicle Approach</p>
                         </div>
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat] tracking-tighter">
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                             {data.selectionTitle.split("Vehicle Selection")[0]}
                             <span className="text-fourth/80">Vehicle Selection</span>
                         </h2>

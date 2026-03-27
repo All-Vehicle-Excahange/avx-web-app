@@ -16,7 +16,7 @@ const data = {
 function Gallery() {
     return (
         <section className="py-12 overflow-hidden">
-            <div className=" mx-auto px-4">
+            <div className=" mx-auto px-2 lg:px-4">
                 
                 {/* ── HEADER ────────────────────────────────────────────── */}
                 <div className="flex items-center justify-between mb-6">
