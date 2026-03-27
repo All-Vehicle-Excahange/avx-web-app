@@ -14,7 +14,6 @@ const data = {
 export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* 🎥 VIDEO */}
       <video
         autoPlay
         muted
@@ -25,13 +24,10 @@ export default function Hero() {
         <source src="/store-front-template2.mp4" type="video/mp4" />
       </video>
 
-      {/* 🌑 DARK LAYER */}
       <div className="absolute inset-0 bg-black/55" />
 
-      {/* 🌫 LEFT GRADIENT (premium fade) */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
 
-      {/* CONTENT */}
       <div className="relative z-10 w-full px-6 lg:px-14 max-w-6xl">
         <motion.div
           className="max-w-xl"
@@ -39,7 +35,7 @@ export default function Hero() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <h1 className="text-[clamp(32px,5vw,64px)] font-bold leading-[1.1] text-white mb-6">
+          <h1 className=" sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat] mb-6">
             Why Choose <span className="text-fourth">Adarsh</span> Auto
             Consultants
           </h1>
