@@ -284,10 +284,10 @@ export default function VehicleSpec({ open, setOpen }) {
           {/* Modal Card */}
           <div
             className={`
-        relative z-50 
+        relative z-50 mx-3
         w-full md:w-[60%]  
         max-w-md md:max-w-none
-        h-[80vh] md:h-auto  
+        h-[70vh] md:h-auto  
         md:max-h-[60%]
         flex md:flex
         rounded-2xl md:rounded-2xl
@@ -303,7 +303,7 @@ export default function VehicleSpec({ open, setOpen }) {
 
             {/* CLOSE */}
             <div
-              className="absolute right-3 top-3 cursor-pointer bg-primary text-secondary md:bg-secondary md:text-primary w-10 h-10 rounded-full flex items-center justify-center z-10"
+              className="absolute right-3 top-3 cursor-pointer bg-primary text-secondary md:bg-secondary md:text-primary w-8 h-8 rounded-full flex items-center justify-center z-10"
               onClick={closeModal}
             >
               <X size={20} />
