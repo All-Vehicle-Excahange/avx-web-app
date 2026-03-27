@@ -18,9 +18,9 @@ export default function App({ Component, pageProps }) {
     const closeLoginPopup = useAuthStore((state) => state.closeLoginPopup);
 
     const [loading, setLoading] = useState(false);
-    const [showSplash, setShowSplash] = useState(true); // 👈 start true
+    const [showSplash, setShowSplash] = useState(true); // start true
 
-    // 🔧 TEMP: Commented out session check so splash shows every time during dev
+    // TEMP: Commented out session check so splash shows every time during dev
     // Uncomment these lines for production (splash only once per session)
     // useEffect(() => {
     //     const splashShown = sessionStorage.getItem("splashShown");
