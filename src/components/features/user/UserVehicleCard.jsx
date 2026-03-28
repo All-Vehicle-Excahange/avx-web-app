@@ -108,7 +108,7 @@ export default function UserVehicleCard({
 
               <button
                 onClick={() => setIsFavorite(!isFavorite)}
-                className="w-8 h-8 rounded-full bg-primary/10 hover:bg-primary/20 flex items-center justify-center transition-all shrink-0"
+                className="w-8 h-8 rounded-full bg-primary/10 hover:bg-primary/20 flex items-center justify-center cursor-pointer transition-all shrink-0"
               >
                 <Heart className={`w-5 h-5 ${isFavorite ? "fill-red-500 text-red-500" : "text-primary"}`} />
               </button>
@@ -182,7 +182,7 @@ export default function UserVehicleCard({
               </div>
 
               {status === "live" && (
-                <div className="flex gap-2">
+                <div className="flex flex-col md:flex-row gap-2">
                   <Button variant="ghost" size="sm" showIcon={false} onClick={() => setIsDownloadOpen(true)}>
                     <Pencil size={14} className="mr-2" /> Improve Listing
                   </Button>

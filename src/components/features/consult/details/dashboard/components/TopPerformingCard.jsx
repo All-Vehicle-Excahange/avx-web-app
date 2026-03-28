@@ -46,10 +46,10 @@ export default function TopPerformingCard({ vehicle, rank }) {
     const tier = getSellerTierTitle()
 
     return (
-        <div className="relative rounded-2xl border border-third/40 p-4 lg:px-5 lg:py-4 flex flex-col sm:flex-row items-start gap-4 shadow-sm hover:shadow-md transition">
+        <div className="relative rounded-xl border border-third/40 p-4 lg:px-5 lg:py-4 flex flex-col sm:flex-row items-start gap-4 shadow-sm hover:shadow-md transition">
 
             {/* 3 DOT MENU */}
-            <div className="absolute top-3 right-3 " ref={menuRef}>
+            <div className="absolute top-33 right-3 md:top-3 md:right-3 " ref={menuRef}>
                 <button
                     onClick={() => setOpen(!open)}
                     className="p-1.5 rounded-full hover:bg-primary/10 transition cursor-pointer"

@@ -62,7 +62,7 @@ export default function CreateStoreFront() {
           return (
             <div
               key={tier.id}
-              className={`rounded-3xl border p-6 flex flex-col min-h-[320px] md:h-auto lg:h-[340px] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)]
+              className={`rounded-xl border p-6 flex flex-col min-h-[320px] md:h-auto lg:h-[340px] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)]
               ${isAllowed
                   ? "border-primary ring-2 ring-primary/50 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
                   : "border-third/30 opacity-60 hover:opacity-100 hover:border-third/60"
@@ -115,7 +115,7 @@ export default function CreateStoreFront() {
       </div>
 
       {/* WHY STOREFRONT MATTERS */}
-      <div className="border border-third/30 rounded-3xl p-8 space-y-6 transition-all duration-300 hover:border-third/60 hover:shadow-[0_8px_30px_rgb(0,0,0,0.4)] hover:-translate-y-1">
+      <div className="border border-third/30 rounded-xl p-8 space-y-6 transition-all duration-300 hover:border-third/60 hover:shadow-[0_8px_30px_rgb(0,0,0,0.4)] hover:-translate-y-1">
         <h2 className="text-xl font-semibold">Why your Storefront matters</h2>
 
         <p className="text-third text-sm leading-relaxed max-w-4xl">
@@ -126,7 +126,7 @@ export default function CreateStoreFront() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
-          <div className="border border-third/20 rounded-2xl p-5 space-y-2">
+          <div className="border border-third/20 rounded-xl p-5 space-y-2">
             <h4 className="font-semibold">Higher Buyer Trust</h4>
             <p className="text-sm text-third">
               Professional branding increases buyer confidence and reduces
