@@ -196,7 +196,7 @@ export default function InventoryComponent() {
               <StatCard
                 icon={<Flame className="text-green-500" size={20} />}
                 label="High Demand"
-                value={`${inventorySnapShotCount.highDemandCount} Vehicles`}
+                value={`${inventorySnapShotCount.highDemandCount} `}
               />
             </div>
 
@@ -206,7 +206,7 @@ export default function InventoryComponent() {
               <StatCard
                 icon={<EyeOff className="text-yellow-500" size={20} />}
                 label="Low Visibility"
-                value={`${inventorySnapShotCount.lowDemandCount} Vehicles`}
+                value={`${inventorySnapShotCount.lowDemandCount} `}
               />
             </div>
 
@@ -216,7 +216,7 @@ export default function InventoryComponent() {
               <StatCard
                 icon={<AlertTriangle className="text-red-500" size={20} />}
                 label="Needs Attention"
-                value={`${inventorySnapShotCount.needsAttentionCount} Vehicles`}
+                value={`${inventorySnapShotCount.needsAttentionCount} `}
               />
             </div>
           </div>
@@ -304,7 +304,7 @@ export default function InventoryComponent() {
 
         {/* 4️⃣ FILTER BAR */}
         <div className="rounded-xl border border-third/30  p-5 flex flex-col lg:flex-row gap-4 justify-between">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
             {vehicleTypes.map((type) => (
               <button
                 key={type.id}
