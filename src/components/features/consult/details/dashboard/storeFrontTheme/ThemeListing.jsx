@@ -48,7 +48,7 @@ export default function ThemeListing() {
             <div
               key={theme.id}
               onClick={() => setPreviewTheme(theme)}
-              className="relative group rounded-3xl border border-third/30 overflow-hidden hover:border-primary transition cursor-pointer"
+              className="relative group rounded-xl border border-third/30 overflow-hidden hover:border-primary transition cursor-pointer"
             >
               <div className="relative h-[170px]">
                 <Image

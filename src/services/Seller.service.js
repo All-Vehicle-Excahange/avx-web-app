@@ -4,10 +4,12 @@ import axiosInstance, {
 } from "@/lib/axiosInstance";
 
 const ENDPOINT = {
+    getSellerTier: "/consultation/dashboard/profile/current-tier",
     getInventoryVehicle: "/consultation/dashboard/inventory/vehicles",
     getTopPerformingVehicles: "/consultation/dashboard/inventory/top-performing-vehicles",
     getInventorySnapShotCount: "/consultation/dashboard/inventory/health-check-snapshot-count",
-    getNeedAttenctionVehicles: "/consultation/dashboard/inventory/need-attention-vehicle"
+    getNeedAttenctionVehicles: "/consultation/dashboard/inventory/need-attention-vehicle",
+    getInquiryKpis: "/consultation/dashboard/inquiry/kpis",
 };
 
 export const getInventoryVehicle = async (listingStatus) => {
@@ -57,6 +59,33 @@ export const getNeedAttenctionVehicles = async (payload) => {
         return handleResponse(res);
     } catch (error) {
         handleError(error);
+        throw error;
+    }
+}
+
+export const getSellerTier = async () => {
+    try {
+        const res = await axiosInstance.get(ENDPOINT.getSellerTier);
+        const response = handleResponse(res);
+
+        const tierData = response?.data;
+        if (tierData) {
+            localStorage.setItem("sellerTier", tierData.tierTitle);
+            localStorage.setItem("sellerTierData", JSON.stringify(tierData));
+        }
+
+        return response;
+    } catch (error) {
+
+        throw error;
+    }
+};
+
+export const getInquiryKpis = async () => {
+    try {
+        const res = await axiosInstance.get(ENDPOINT.getInquiryKpis);
+        return handleResponse(res);
+    } catch (error) {
         throw error;
     }
 }

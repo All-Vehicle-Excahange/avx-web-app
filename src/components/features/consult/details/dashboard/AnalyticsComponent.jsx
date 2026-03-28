@@ -83,7 +83,7 @@ export default function AnalyticsComponent() {
         />
       </div>
       {/* Traffic */}
-      <div className=" border border-third/20 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-8 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className=" border border-third/20 rounded-xl p-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-8 shadow-sm transition-colors duration-200 hover:border-third/40">
         <div className="space-y-4">
           <h3 className="font-semibold text-white">Traffic & Conversion</h3>
 
@@ -137,7 +137,7 @@ export default function AnalyticsComponent() {
         </div>
       </div>
       {isProOrPremium && (
-        <div className=" border border-third/20 rounded-2xl p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
+        <div className=" border border-third/20 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
           <h3 className="font-semibold text-white">Weekly Performance</h3>
 
           {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d, i) => (
@@ -174,7 +174,7 @@ export default function AnalyticsComponent() {
       >
         {/* ✅ Left: Demand Breakdown (Hide for BASIC) */}
         {!isBasic && (
-          <div className=" border border-third/20 rounded-2xl p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
+          <div className=" border border-third/20 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
             <h3 className="font-semibold text-white">Demand Breakdown</h3>
 
             {["SUVs", 46, "Sedans", 32, "Luxury", 22].map(
@@ -199,7 +199,7 @@ export default function AnalyticsComponent() {
         )}
 
         {/* ✅ Right: City-wise Demand (Full Width for BASIC) */}
-        <div className=" border border-third/20 rounded-2xl p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
+        <div className=" border border-third/20 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
           <h3 className="font-semibold text-white">City-wise Demand</h3>
 
           {["Ahmedabad", "Surat", "Vadodara"].map((city, i) => (
@@ -220,7 +220,7 @@ export default function AnalyticsComponent() {
         </div>
       </div>
       {/* Insights */}
-      <div className=" border border-primary/20 rounded-2xl p-7 space-y-5 shadow-sm transition-colors duration-200 hover:border-fourth/40">
+      <div className=" border border-primary/20 rounded-xl p-7 space-y-5 shadow-sm transition-colors duration-200 hover:border-fourth/40">
         <h3 className="font-semibold text-lg text-fourth">Key Insights</h3>
 
         <ul className="grid md:grid-cols-2 gap-4 text-sm">
@@ -275,7 +275,7 @@ export default function AnalyticsComponent() {
       </div>{" "}
       {/* Recommended Actions (Only BASIC Users) */}
       {isBasic && (
-        <div className=" border border-blue-400/20 rounded-2xl p-7 space-y-5 shadow-sm transition-colors duration-200 hover:border-blue-400/40">
+        <div className=" border border-blue-400/20 rounded-xl p-7 space-y-5 shadow-sm transition-colors duration-200 hover:border-blue-400/40">
           <h3 className="font-semibold text-lg text-blue-300">
             Recommended Actions
           </h3>
@@ -344,14 +344,14 @@ export default function AnalyticsComponent() {
       )}
       {/* ✅ Recommended Actions (Only PRO + PREMIUM) */}
       {isProOrPremium && (
-        <div className=" border border-third/20 rounded-2xl p-7 space-y-5 shadow-sm transition-colors duration-200 hover:border-third/40">
+        <div className=" border border-third/20 rounded-xl p-7 space-y-5 shadow-sm transition-colors duration-200 hover:border-third/40">
           {/* Title */}
           <h3 className="font-semibold text-lg text-primary">
             Recommended Actions
           </h3>
 
           <div className="grid md:grid-cols-3 gap-4">
-            <div className="rounded-2xl border border-third/20 bg-primary/5 p-5 hover:bg-primary/10 transition cursor-pointer">
+            <div className="rounded-xl border border-third/20 bg-primary/5 p-5 hover:bg-primary/10 transition cursor-pointer">
               <p className="text-sm font-semibold text-primary">
                 Boost 3 top-performing vehicles
               </p>
@@ -360,7 +360,7 @@ export default function AnalyticsComponent() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-third/20 bg-primary/5 p-5 hover:bg-primary/10 transition cursor-pointer">
+            <div className="rounded-xl border border-third/20 bg-primary/5 p-5 hover:bg-primary/10 transition cursor-pointer">
               <p className="text-sm font-semibold text-primary">
                 Inspect 2 high-interest listings
               </p>
@@ -369,7 +369,7 @@ export default function AnalyticsComponent() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-yellow-400/30 bg-yellow-400/5 p-5 hover:bg-yellow-400/10 transition cursor-pointer">
+            <div className="rounded-xl border border-yellow-400/30 bg-yellow-400/5 p-5 hover:bg-yellow-400/10 transition cursor-pointer">
               <p className="text-sm font-semibold text-yellow-300">
                 Upgrade to Premium for higher visibility
               </p>

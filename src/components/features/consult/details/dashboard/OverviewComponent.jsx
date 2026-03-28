@@ -38,7 +38,7 @@ export default function OverviewComponent() {
       </div>
 
       {/* PERFORMANCE */}
-      <div className="rounded-2xl border border-third/30 bg-primary/5 p-6">
+      <div className="rounded-xl border border-third/30 bg-primary/5 p-6">
         <h3 className="font-semibold mb-5">
           Performance Snapshot (Last 30 Days)
         </h3>
@@ -55,7 +55,7 @@ export default function OverviewComponent() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-5">
+      <div className="rounded-xl border border-third/30 bg-primary/5 p-6 space-y-5">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>
             <h3 className="font-semibold text-lg">Complete this steps</h3>
@@ -89,7 +89,7 @@ export default function OverviewComponent() {
       </div>
 
       {/* RECENT ACTIVITY */}
-      <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-3">
+      <div className="rounded-xl border border-third/30 bg-primary/5 p-6 space-y-3">
         <h3 className="font-semibold">Recent Activity</h3>
 
         <Activity text="New inquiry on BMW X1" time="5m ago" />

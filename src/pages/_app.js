@@ -59,7 +59,7 @@ export default function App({ Component, pageProps }) {
 
     return (
         <>
-            {/* ✅ APP ALWAYS RENDERS — splash covers via z-index */}
+            {/*  APP ALWAYS RENDERS — splash covers via z-index */}
             <GlobalLoader isLoading={loading} />
 
             {hasFullWidth ? (
@@ -75,7 +75,7 @@ export default function App({ Component, pageProps }) {
                 onClose={closeLoginPopup}
             />
 
-            {/* ✅ SPLASH ON TOP */}
+            {/*  SPLASH ON TOP */}
             {showSplash && (
                 <SplashScreen onComplete={handleSplashComplete} />
             )}
