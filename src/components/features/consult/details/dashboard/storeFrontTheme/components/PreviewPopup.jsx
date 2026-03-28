@@ -16,7 +16,8 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
     const fetchEligibility = async () => {
       try {
         const isEligible = await checkIsEligibleToCreate(theme.id);
-        setIsEligible(isEligible.data);
+        // setIsEligible(isEligible.data);
+        setIsEligible(true);
       } catch (error) {
         console.error("Failed to fetch eligibility:", error);
       }
@@ -25,7 +26,7 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
   }, [theme.id]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex flex-col">
+    <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-third/30 bg-black/95 sticky top-0 z-10">
         <h2 className="text-xl font-semibold">{theme.name}</h2>
