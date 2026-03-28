@@ -20,7 +20,7 @@ function Hero() {
 
       <div className="mx-auto w-full flex flex-col gap-14">
 
-        <div className="flex flex-col items-center text-center gap-10 max-w-3xl mx-auto">
+        <div className="flex flex-col items-center text-center gap-8 max-w-3xl mx-auto">
 
           {/* Tag */}
           <p className="text-sm tracking-[0.45em] uppercase text-third font-semibold">
