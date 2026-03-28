@@ -63,7 +63,7 @@ export default function Sidebar({ isOpen, onClose }) {
         w-64 bg-secondary md:bg-transparent
         transition-transform duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
-        border-r border-third/30 p-5 space-y-4 overflow-y-auto custom-scrollbar
+        border-r border-third/30 p-3 space-y-2.5 overflow-y-auto custom-scrollbar
       `}
     >
       <h1 className="text-xl font-bold mt-4 mb-4">AVX Dashboard</h1>
@@ -79,7 +79,7 @@ export default function Sidebar({ isOpen, onClose }) {
             key={i}
             href={m.href}
             onClick={onClose}
-            className={`flex items-center gap-3 p-3 rounded-xl transition
+            className={`flex items-center gap-3 p-3 rounded-lg transition
         ${
           isActive
             ? "bg-primary text-secondary shadow-lg"

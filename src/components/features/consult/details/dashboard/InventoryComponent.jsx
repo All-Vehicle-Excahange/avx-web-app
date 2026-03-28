@@ -14,6 +14,8 @@ import {
   Flame,
   EyeOff,
   AlertTriangle,
+  BarChart3,
+  ArrowRight,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import {
@@ -153,16 +155,20 @@ export default function InventoryComponent() {
         </div>
 
         {/* 2️⃣ NOTE */}
-        <div className="rounded-2xl border border-primary/30 bg-primary/10 p-5">
-          <p className="text-sm">
-            <span className="font-semibold">Note:</span> Adding and editing
-            vehicles is available on the AVX mobile app. You can view listings
-            and mark vehicles as sold here.
-          </p>
+        <div className="rounded-lg bg-fourth text-white p-6 md:p-8 min-h-[150px] flex items-center justify-between gap-4 shadow-md">
+
+          {/* Left Content */}
+          <div className="max-w-xl">
+            <p className="text-sm md:text-base leading-relaxed">
+              <span className="font-semibold">Note:</span> Adding and editing vehicles is available on the AVX mobile app.
+              You can still view listings and mark vehicles as sold here.
+            </p>
+          </div>
+
         </div>
 
         {/* 3️⃣ Inventory Health Snapshot  */}
-        <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-5">
+        <div className="rounded-lg border border-third/30 bg-primary/5 p-6 space-y-5">
           <div className="flex items-center gap-2">
             <TrendingUp className="text-primary" size={18} />
             <h3 className="font-semibold">Inventory Health Snapshot</h3>
@@ -205,66 +211,87 @@ export default function InventoryComponent() {
         </div>
 
         {/* 3️⃣ TOP PERFORMING VEHICLES */}
-        {/* 3️⃣ TOP PERFORMING VEHICLES */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
           {/* LEFT SIDE */}
-          <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-5">
+          <div className="rounded-lg border border-third/30 bg-primary/5 p-6 flex flex-col h-[400px] ">
 
-            <div className="flex items-center gap-2">
+            {/* HEADER (fixed) */}
+            <div className="flex items-center gap-2 mb-4">
               <TrendingUp className="text-primary" size={18} />
               <h3 className="font-semibold">Top Performing Vehicles</h3>
-
             </div>
 
-            {topPerforming.length > 0 ? (
-              topPerforming.map((v, index) => (
-                <TopPerformingCard key={v.id} vehicle={v} rank={index + 1} />
-              ))
-            ) : (
-              <p className="text-sm text-third">No top performing vehicles yet.</p>
-            )}
+            {/* SCROLLABLE CONTENT */}
+            <div className="flex-1 overflow-y-auto custom-scrollbar pr-1 space-y-3">
+              {topPerforming.length > 0 ? (
+                topPerforming.map((v, index) => (
+                  <TopPerformingCard key={v.id} vehicle={v} rank={index + 1} />
+                ))
+              ) : (
+                <p className="text-sm text-third">
+                  No top performing vehicles yet.
+                </p>
+              )}
+            </div>
 
           </div>
 
-          {/* RIGHT SIDE (MATCHED DESIGN) */}
-          <div className="rounded-2xl border border-third/30 bg-fourth p-6 space-y-5">
+          <div className="rounded-lg border border-white/10 bg-fourth p-5 md:p-6 flex flex-col gap-5 hover:shadow-lg transition-all">
 
+            {/* HEADER */}
+            <div className="flex items-center justify-between">
 
+              <div className="flex items-center gap-3">
+                {/* Icon */}
+                <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 text-primary">
+                  <BarChart3 className="w-5 h-5" />
+                </div>
 
-            {/* insight card */}
-            <div className="rounded-xl border border-third/20 bg-primary/10 p-5 space-y-3">
+                {/* Title */}
+                <div className="flex flex-col leading-tight">
+                  <span className="text-sm font-semibold tracking-wide text-primary">
+                    Insight
+                  </span>
+                  <span className="text-xs text-primary/60">
+                    Performance metric
+                  </span>
+                </div>
+              </div>
 
-              <p className="text-sm flex items-center gap-2">
-                📈 <span className="font-semibold">Insight:</span>
-              </p>
-
-              <p className="text-sm leading-relaxed">
-                <span className="text-orange-400 font-medium">AVX</span>{" "}
-                Inspected vehicles are converting{" "}
-                <span className="text-pink-400 font-semibold">2.3×</span> better
-              </p>
-
-              <p className="text-sm underline cursor-pointer">
-                [ Inspect More Vehicles ]
-              </p>
-
+              {/* Badge */}
+              <span className="text-xs px-3 py-1 rounded-full bg-pink-500/20 text-primary font-semibold">
+                +2.3×
+              </span>
             </div>
 
-            {/* footer */}
-            <p className="text-sm text-muted-foreground">
-              This directly drives{" "}
-              <span className="font-medium text-foreground">
-                inspection revenue.
-              </span>
+            {/* CONTENT */}
+            <p className="text-sm md:text-base leading-relaxed text-white/90">
+              <span className="text-primary font-semibold">AVX</span>{" "}
+              inspected vehicles are converting significantly better than regular listings.
+            </p>
+            <p className="text-sm md:text-base leading-relaxed text-white/90">
+              <span className="text-primary font-semibold">AVX</span>{" "}
+              inspected vehicles are converting significantly better than regular listings.
             </p>
 
-          </div>
+            {/* FOOTER */}
+            <div className="flex justify-start">
+              <Button
+                variant="ghost"
+                showIcon={false}
+                className="text-sm font-medium rounded-lg px-4 py-2 transition"
+              >
+                Inspect More Vehicles
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
 
+          </div>
         </div>
 
         {/* 4️⃣ FILTER BAR */}
-        <div className="rounded-2xl border border-third/30  p-5 flex flex-col lg:flex-row gap-4 justify-between">
+        <div className="rounded-lg border border-third/30  p-5 flex flex-col lg:flex-row gap-4 justify-between">
           <div className="flex flex-wrap gap-2">
             {vehicleTypes.map((type) => (
               <button
@@ -312,7 +339,7 @@ export default function InventoryComponent() {
               )}
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center py-16 text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5">
+            <div className="flex flex-col items-center justify-center py-16 text-center rounded-lg border-2 border-dashed border-third/20 bg-third/5">
               {activeType === "all" ? (
                 <>
                   <h3 className="text-xl font-bold mb-2">You havent listed any vehicles yet.</h3>
@@ -334,7 +361,7 @@ export default function InventoryComponent() {
             </div>
           )}
         </div>
-        <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-4">
+        <div className="rounded-lg border border-third/30 bg-primary/5 p-6 space-y-4">
           <div className="flex items-center gap-2">
             <AlertTriangle className="text-yellow-500" size={18} />
             <h3 className="font-semibold">Vehicles Needing Attention</h3>
