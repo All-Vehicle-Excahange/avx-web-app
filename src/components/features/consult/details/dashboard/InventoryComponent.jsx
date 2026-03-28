@@ -152,12 +152,12 @@ export default function InventoryComponent() {
         </div>
 
         {/* 2️⃣ NOTE */}
-        <div className="rounded-xl bg-fourth text-white p-6 md:p-8 min-h-[150px] flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-md">
+        <div className="rounded-xl bg-fourth text-white p-5 md:p-8 min-h-[150px] flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-md">
 
           {/* Left Content */}
           <div className="max-w-[500px]">
             <p className="text-sm md:text-base leading-relaxed">
-              <span className="font-semibold">Note:</span> Adding and editing vehicles is available on the AVX mobile app.
+              <span className="font-semibold">Note:</span> Adding and editing vehicles is available on the Reecomm mobile app.
               You can still view listings and mark vehicles as sold here.
             </p>
           </div>
@@ -179,7 +179,7 @@ export default function InventoryComponent() {
         </div>
 
         {/* 3️⃣ Inventory Health Snapshot  */}
-        <div className="rounded-xl border border-third/30 bg-primary/5 p-6 space-y-5">
+        <div className="rounded-xl border border-third/30 bg-primary/5 p-5 space-y-5">
           <div className="flex items-center gap-2">
             <TrendingUp className="text-primary" size={18} />
             <h3 className="font-semibold">Inventory Health Snapshot</h3>
@@ -225,7 +225,7 @@ export default function InventoryComponent() {
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
 
           {/* LEFT SIDE */}
-          <div className="rounded-xl border border-third/30 bg-primary/5 p-6 flex flex-col h-[400px] ">
+          <div className="rounded-xl border border-third/30 bg-primary/5 p-5 flex flex-col h-[400px] ">
 
             {/* HEADER (fixed) */}
             <div className="flex items-center gap-2 mb-4">
@@ -357,7 +357,7 @@ export default function InventoryComponent() {
                   <p className="text-third mb-6">
                     Add vehicles in the AVX mobile app to start receiving inquiries.
                   </p>
-                  <Button variant="ghost" showIcon={false}>
+                  <Button variant="ghost" size="sm" showIcon={false}>
                     Download App
                   </Button>
                 </>
@@ -372,7 +372,7 @@ export default function InventoryComponent() {
             </div>
           )}
         </div>
-        <div className="rounded-xl border border-third/30 bg-primary/5 p-6 space-y-4">
+        <div className="rounded-xl border border-third/30 bg-primary/5 p-5 space-y-4">
           <div className="flex items-center gap-2">
             <AlertTriangle className="text-yellow-500" size={18} />
             <h3 className="font-semibold">Vehicles Needing Attention</h3>
