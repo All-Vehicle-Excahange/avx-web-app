@@ -4,6 +4,7 @@ import axiosInstance, {
 } from "@/lib/axiosInstance";
 
 const ENDPOINT = {
+    getSellerTier: "/consultation/dashboard/profile/current-tier",
     getInventoryVehicle: "/consultation/dashboard/inventory/vehicles",
     getTopPerformingVehicles: "/consultation/dashboard/inventory/top-performing-vehicles",
     getInventorySnapShotCount: "/consultation/dashboard/inventory/health-check-snapshot-count",
@@ -60,3 +61,21 @@ export const getNeedAttenctionVehicles = async (payload) => {
         throw error;
     }
 }
+
+export const getSellerTier = async () => {
+    try {
+        const res = await axiosInstance.get(ENDPOINT.getSellerTier);
+        const response = handleResponse(res);
+
+        const tierData = response?.data;
+        if (tierData) {
+            localStorage.setItem("sellerTier", tierData.tierTitle);
+            localStorage.setItem("sellerTierData", JSON.stringify(tierData));
+        }
+
+        return response;
+    } catch (error) {
+        handleError(error);
+        throw error;
+    }
+};
