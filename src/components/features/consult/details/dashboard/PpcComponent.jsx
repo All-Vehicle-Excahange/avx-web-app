@@ -87,13 +87,13 @@ export default function PpcComponent() {
           <h1 className="text-2xl font-bold">PPC & Visibility Boosts</h1>
           <p className="text-third text-sm">Dominance with guardrails</p>
         </div>
-        <Button onClick={handleClick} variant="ghost">
+        <Button onClick={handleClick} size="sm" variant="ghost">
           <Plus size={16} /> Create New Boost
         </Button>
       </div>
 
       {/* AD SUMMARY */}
-      <div className="rounded-2xl border border-third/30  p-6 space-y-5">
+      <div className="rounded-xl border border-third/30  p-6 space-y-5">
         <div className="flex justify-between items-center">
           <div>
             <h3 className="font-semibold">Advertising Summary</h3>
@@ -143,7 +143,7 @@ export default function PpcComponent() {
       </div>
 
       {/* RECENT ADS */}
-      <div className="rounded-2xl border border-third/30  p-6 space-y-6">
+      <div className="rounded-xl border border-third/30  p-6 space-y-6">
         <h3 className="font-semibold text-lg">Recent Ads</h3>
         {/* Pass the handler to open the modal */}
         <RecentAdCard onOpenResults={() => setShowResults(true)} />
@@ -151,7 +151,7 @@ export default function PpcComponent() {
       </div>
 
       {/* AUDIENCE SECTION */}
-      <div className="rounded-2xl border border-third/30  p-6 space-y-6">
+      <div className="rounded-xl border border-third/30  p-6 space-y-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>
             <h3 className="font-semibold text-lg">Audience</h3>
@@ -206,7 +206,7 @@ export default function PpcComponent() {
       </div>
 
       {/* AI CAMPAIGN PERFORMANCE */}
-      <div className="rounded-2xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         <h3 className="font-semibold text-lg">
           Campaign Performance (Last 7 Days)
         </h3>
@@ -296,7 +296,7 @@ export default function PpcComponent() {
       {/* CUSTOMIZE MODAL */}
       {openCustomize && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md rounded-2xl bg-black border border-white/10 p-6 space-y-4 shadow-2xl">
+          <div className="w-full max-w-md rounded-xl bg-black border border-white/10 p-6 space-y-4 shadow-2xl">
             <div className="flex justify-between items-center">
               <h3 className="font-semibold">Customize Advertising Summary</h3>
               <button onClick={() => setOpenCustomize(false)}>
@@ -350,7 +350,7 @@ export default function PpcComponent() {
 /* -------------------------------------------------------------------------- */
 function RecentAdCard({ paused, onOpenResults }) {
   return (
-    <div className="rounded-2xl border border-third/30  p-4 md:p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+    <div className="rounded-xl border border-third/30  p-4 md:p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
       {/* --- HEADER SECTION: Status & Action Buttons --- */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-3">
@@ -454,7 +454,7 @@ function ResultsModal({ onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
       {/* Container */}
-      <div className="w-full max-w-5xl bg-[#09090b] border border-white/10 rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
+      <div className="w-full max-w-5xl bg-[#09090b] border border-white/10 rounded-xl shadow-2xl flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-white/10">
           <h2 className="text-xl font-bold">View results</h2>

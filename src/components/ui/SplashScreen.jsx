@@ -127,7 +127,7 @@ export default function SplashScreen({ onComplete }) {
         >
           {/* R LOGO */}
           {stage >= 1 && (
-            <div className="relative w-[80px] h-[80px] md:w-[130px] md:h-[130px] -mr-3  logo-in">
+            <div className="relative w-[80px] h-[80px] md:w-[130px] md:h-[130px] -mr-2  logo-in">
               <Image
                 src="/logo/r-main.svg"
                 alt="Reecomm logo"

@@ -148,27 +148,38 @@ export default function InventoryComponent() {
             </p>
           </div>
 
-          <Button className="" variant="ghost" onClick={() => setIsDownloadOpen(true)} showIcon={false}>
-            <Smartphone className="mr-3" size={16} />
-            Add Vehicle
-          </Button>
+
         </div>
 
         {/* 2️⃣ NOTE */}
-        <div className="rounded-lg bg-fourth text-white p-6 md:p-8 min-h-[150px] flex items-center justify-between gap-4 shadow-md">
+        <div className="rounded-xl bg-fourth text-white p-6 md:p-8 min-h-[150px] flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-md">
 
           {/* Left Content */}
-          <div className="max-w-xl">
+          <div className="max-w-[500px]">
             <p className="text-sm md:text-base leading-relaxed">
               <span className="font-semibold">Note:</span> Adding and editing vehicles is available on the AVX mobile app.
               You can still view listings and mark vehicles as sold here.
             </p>
           </div>
 
+          {/* Right Button */}
+          <div className="w-full md:w-auto">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsDownloadOpen(true)}
+              showIcon={false}
+              className="w-auto md:w-auto justify-center"
+            >
+              <Smartphone className="mr-3" size={16} />
+              Add Vehicle
+            </Button>
+          </div>
+
         </div>
 
         {/* 3️⃣ Inventory Health Snapshot  */}
-        <div className="rounded-lg border border-third/30 bg-primary/5 p-6 space-y-5">
+        <div className="rounded-xl border border-third/30 bg-primary/5 p-6 space-y-5">
           <div className="flex items-center gap-2">
             <TrendingUp className="text-primary" size={18} />
             <h3 className="font-semibold">Inventory Health Snapshot</h3>
@@ -211,10 +222,10 @@ export default function InventoryComponent() {
         </div>
 
         {/* 3️⃣ TOP PERFORMING VEHICLES */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
 
           {/* LEFT SIDE */}
-          <div className="rounded-lg border border-third/30 bg-primary/5 p-6 flex flex-col h-[400px] ">
+          <div className="rounded-xl border border-third/30 bg-primary/5 p-6 flex flex-col h-[400px] ">
 
             {/* HEADER (fixed) */}
             <div className="flex items-center gap-2 mb-4">
@@ -237,7 +248,7 @@ export default function InventoryComponent() {
 
           </div>
 
-          <div className="rounded-lg border border-white/10 bg-fourth p-5 md:p-6 flex flex-col gap-5 hover:shadow-lg transition-all">
+          <div className="rounded-xl border border-white/10 bg-fourth p-5 md:p-6 flex flex-col gap-5 hover:shadow-lg transition-all">
 
             {/* HEADER */}
             <div className="flex items-center justify-between">
@@ -280,7 +291,7 @@ export default function InventoryComponent() {
               <Button
                 variant="ghost"
                 showIcon={false}
-                className="text-sm font-medium rounded-lg px-4 py-2 transition"
+                className="text-sm"
               >
                 Inspect More Vehicles
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -291,13 +302,13 @@ export default function InventoryComponent() {
         </div>
 
         {/* 4️⃣ FILTER BAR */}
-        <div className="rounded-lg border border-third/30  p-5 flex flex-col lg:flex-row gap-4 justify-between">
+        <div className="rounded-xl border border-third/30  p-5 flex flex-col lg:flex-row gap-4 justify-between">
           <div className="flex flex-wrap gap-2">
             {vehicleTypes.map((type) => (
               <button
                 key={type.id}
                 onClick={() => setActiveType(type.id)}
-                className={`px-4 py-2 rounded-full border border-third/40 text-sm transition
+                className={`px-4 py-2 cursor-pointer rounded-full border border-third/40 text-sm transition
                 ${activeType === type.id
                     ? "bg-primary text-secondary"
                     : "hover:bg-primary/10"
@@ -313,7 +324,7 @@ export default function InventoryComponent() {
         <div className="w-full space-y-6">
           {vehicles?.length > 0 ? (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 gap-6">
                 {vehicles.slice(0, visibleCount).map((car) => (
                   <UserVehicleCard
                     key={car.id}
@@ -339,7 +350,7 @@ export default function InventoryComponent() {
               )}
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center py-16 text-center rounded-lg border-2 border-dashed border-third/20 bg-third/5">
+            <div className="flex flex-col items-center justify-center py-16 text-center rounded-xl border-2 border-dashed border-third/20 bg-third/5">
               {activeType === "all" ? (
                 <>
                   <h3 className="text-xl font-bold mb-2">You havent listed any vehicles yet.</h3>
@@ -361,7 +372,7 @@ export default function InventoryComponent() {
             </div>
           )}
         </div>
-        <div className="rounded-lg border border-third/30 bg-primary/5 p-6 space-y-4">
+        <div className="rounded-xl border border-third/30 bg-primary/5 p-6 space-y-4">
           <div className="flex items-center gap-2">
             <AlertTriangle className="text-yellow-500" size={18} />
             <h3 className="font-semibold">Vehicles Needing Attention</h3>
