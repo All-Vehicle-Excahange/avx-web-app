@@ -8,7 +8,8 @@ const ENDPOINT = {
     getInventoryVehicle: "/consultation/dashboard/inventory/vehicles",
     getTopPerformingVehicles: "/consultation/dashboard/inventory/top-performing-vehicles",
     getInventorySnapShotCount: "/consultation/dashboard/inventory/health-check-snapshot-count",
-    getNeedAttenctionVehicles: "/consultation/dashboard/inventory/need-attention-vehicle"
+    getNeedAttenctionVehicles: "/consultation/dashboard/inventory/need-attention-vehicle",
+    getInquiryKpis: "/consultation/dashboard/inquiry/kpis",
 };
 
 export const getInventoryVehicle = async (listingStatus) => {
@@ -75,7 +76,16 @@ export const getSellerTier = async () => {
 
         return response;
     } catch (error) {
-        handleError(error);
+
         throw error;
     }
 };
+
+export const getInquiryKpis = async () => {
+    try {
+        const res = await axiosInstance.get(ENDPOINT.getInquiryKpis);
+        return handleResponse(res);
+    } catch (error) {
+        throw error;
+    }
+}

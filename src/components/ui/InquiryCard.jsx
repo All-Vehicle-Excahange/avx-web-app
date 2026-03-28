@@ -27,7 +27,10 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
     inquiryStatus,
     createdAt,
     isInspected,
+    inquiryCloseReason,
   } = inquiry;
+
+
 
   const isPending = inquiryStatus === "PENDING";
   const isApproved = inquiryStatus === "APPROVED";
@@ -42,7 +45,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
     inquiryVehicleResponse.thumbnailUrl ||
     "https://images.pexels.com/photos/831475/pexels-photo-831475.jpeg";
 
-  // ✅ Handlers
+  //   Handlers
   const handleApprove = async () => {
     await approveInquiry(inquiry.id);
     onStatusChange(inquiry.id, "APPROVED");
@@ -53,12 +56,12 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
     onStatusChange(inquiry.id, "REJECTED");
   };
 
-  const handleClose = async () => {
-    await closeInquiry(inquiry.id);
+  const handleClose = async (closeReason) => {
+    await closeInquiry(inquiry.id, closeReason);
     onStatusChange(inquiry.id, "CLOSED_BY_VEHICLE_OWNER");
   };
 
-  // ✅ Date Formatting
+  //   Date Formatting
   const localDate = new Date(createdAt).toLocaleDateString("en-IN", {
     day: "2-digit",
     month: "short",
@@ -68,11 +71,11 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
   return (
     <div className="rounded-2xl border border-third/40  p-4 lg:px-6 lg:py-5 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 lg:gap-6 shadow-sm hover:shadow-md transition">
 
-      {/* ✅ LEFT IMAGE + INFO (Stacks on mobile & tablet, row on desktop) */}
+      {/*   LEFT IMAGE + INFO (Stacks on mobile & tablet, row on desktop) */}
       <div className="flex flex-col lg:flex-row items-start gap-4 lg:gap-5 w-full">
 
-        {/* ✅ Vehicle Image (Full width on mobile/tablet, fixed on desktop) */}
-        <Link 
+        {/*   Vehicle Image (Full width on mobile/tablet, fixed on desktop) */}
+        <Link
           href={`/vehicle/details/${inquiryVehicleResponse.id}`}
           className="w-full lg:w-48 h-48 lg:h-42 rounded-xl overflow-hidden border border-third/30 bg-primary/5 shrink-0 relative block cursor-pointer transition hover:opacity-90"
         >
@@ -84,7 +87,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
           />
         </Link>
 
-        {/* ✅ Content */}
+        {/*   Content */}
         <div className="space-y-2 w-full flex-1">
 
           <div className="flex justify-between items-start gap-2">
@@ -111,7 +114,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
                 </span>
               </p>
 
-              {/* ✅ Date or Closed Date Feature */}
+              {/*   Date or Closed Date Feature */}
               {isClosed ? (
                 <p className="text-xs text-third/80">
                   Closed on:{" "}
@@ -125,21 +128,20 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
               )}
             </div>
 
-            {/* ✅ Status Pill (Visible only on mobile/tablet here) */}
+            {/*  Status Pill (Visible only on mobile/tablet here) */}
             <div className="block lg:hidden shrink-0">
               <StatusPill status={inquiryStatus} />
             </div>
           </div>
 
-          {/* ✅ Closed Reason */}
+          {/*  Closed Reason */}
           {isClosed && (
             <p className="text-xs flex items-center gap-2 text-third pt-1">
-              <span className="text-primary font-semibold">Reason:</span>
-              Closed by vehicle owner request
+              <span className="text-primary font-semibold">Reason: {inquiryCloseReason || "N/A"}</span>
             </p>
           )}
 
-          {/* ✅ Inspection Completed */}
+          {/*   Inspection Completed */}
           {isInspected && isApproved && (
             <p className="text-xs flex items-center gap-2 text-green-500 font-semibold pt-1">
               <BadgeCheck size={15} className="text-green-500" />
@@ -147,7 +149,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
             </p>
           )}
 
-          {/* ✅ Inspection Tip */}
+          {/*   Inspection Tip */}
           {isApproved && !isInspected && (
             <p className="text-xs flex items-center gap-2 text-yellow-400 font-semibold pt-1">
               <Clock size={14} />
@@ -155,7 +157,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
             </p>
           )}
 
-          {/* ✅ Pending Section Messages & Buttons */}
+          {/*   Pending Section Messages & Buttons */}
           {isPending && (
             <div className="pt-2 space-y-2">
               <p className="text-xs text-third flex items-center gap-2">
@@ -193,7 +195,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
             </div>
           )}
 
-          {/* ✅ Approved Section Buttons */}
+          {/*   Approved Section Buttons */}
           {isApproved && (
             <div className="flex flex-wrap gap-3 pt-4">
               {!isInspected && (
@@ -223,7 +225,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
             </div>
           )}
 
-          {/* ✅ Rejected Section */}
+          {/*   Rejected Section */}
           {isRejected && (
             <p className="text-sm text-red-400 font-semibold pt-2">
               Inquiry Rejected
@@ -232,17 +234,18 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
         </div>
       </div>
 
-      {/* ✅ Status Pill (Visible only on desktop here) */}
+      {/*   Status Pill (Visible only on desktop here) */}
       <div className="hidden lg:flex items-center shrink-0">
         <StatusPill status={inquiryStatus} />
       </div>
 
-      {/* ✅ Close Popup */}
+      {/*   Close Popup */}
       {showClosePopup && (
         <CloseInqPopup
           onClose={() => setShowClosePopup(false)}
-          onConfirm={() => {
-            handleClose();
+          onConfirm={({ reason, comment }) => {
+            const closeReason = reason === "Other" ? comment : reason;
+            handleClose(closeReason);
             setShowClosePopup(false);
           }}
         />
@@ -251,7 +254,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
   );
 }
 
-/* ✅ Status Pill */
+/*   Status Pill */
 function StatusPill({ status }) {
   const map = {
     PENDING: "bg-yellow-400/15 text-yellow-400 border-yellow-400/40",
