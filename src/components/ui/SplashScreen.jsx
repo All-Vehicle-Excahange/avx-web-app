@@ -31,7 +31,16 @@ export default function SplashScreen({ onComplete }) {
     };
   }, [onComplete]);
 
-  const letters = "REECOMM".split("");
+  // SVG letter files for "EECOMM" (R logo is separate)
+  const svgLetters = [
+    // { src: "/logo/r.svg", alt: "R" },
+    { src: "/logo/e.svg", alt: "E" },
+    { src: "/logo/e.svg", alt: "E" },
+    { src: "/logo/c.svg", alt: "C" },
+    { src: "/logo/o.svg", alt: "O" },
+    { src: "/logo/m.svg", alt: "M", wide: true },
+    { src: "/logo/m.svg", alt: "M", wide: true },
+  ];
 
   return (
     <>
@@ -111,16 +120,16 @@ export default function SplashScreen({ onComplete }) {
           }`}
         style={{ background: "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)" }}
       >
-        {/* ── CENTER GROUP: logo + REECOMM text ── */}
+        {/* ── CENTER GROUP: logo + REECOMM SVGs ── */}
         <div
-          className={`flex items-center justify-center gap-3 md:gap-6 ${stage >= 2 ? "slide-group" : ""
+          className={`flex items-center justify-center gap-0 ${stage >= 2 ? "slide-group" : ""
             }`}
         >
-          {/* LOGO */}
+          {/* R LOGO */}
           {stage >= 1 && (
-            <div className="relative w-[80px] h-[80px] md:w-[130px] md:h-[130px] logo-in">
+            <div className="relative w-[80px] h-[80px] md:w-[130px] md:h-[130px] -mr-3  logo-in">
               <Image
-                src="/logo/animate-logo.webp"
+                src="/logo/r-main.svg"
                 alt="Reecomm logo"
                 fill
                 className="object-contain"
@@ -129,17 +138,21 @@ export default function SplashScreen({ onComplete }) {
             </div>
           )}
 
-          {/* REECOMM LETTERS */}
+          {/* EECOMM SVG LETTERS */}
           {stage >= 2 && (
-            <div className="flex items-center">
-              {letters.map((letter, i) => (
-                <span
+            <div className="flex items-center gap-[2px] md:gap-[3px]">
+              {svgLetters.map((letter, i) => (
+                <div
                   key={i}
-                  className="text-3xl md:text-[4rem] font-black text-white tracking-[0.05em] letter-in"
+                  className={`letter-in ${letter.wide ? "w-[42px] h-[24px] md:w-[80px] md:h-[44px]" : "w-[22px] h-[24px] md:w-[42px] md:h-[44px]"}`}
                   style={{ animationDelay: `${i * 0.05}s` }}
                 >
-                  {letter}
-                </span>
+                  <img
+                    src={letter.src}
+                    alt={letter.alt}
+                    className="w-full h-full  object-contain"
+                  />
+                </div>
               ))}
             </div>
           )}

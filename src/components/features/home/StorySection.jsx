@@ -174,9 +174,21 @@ export default function StorySection() {
           <div className="lg:col-span-3 flex flex-col items-start lg:mt-[150px]">
             <div className="max-w-xs">
               <h3 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
-                <span className="relative inline-block text-fourth text-4xl md:text-5xl lg:text-6xl font-extrabold mr-2">
+                <span style={{ fontFamily: "var(--secondary)" }} className="relative inline-block text-fourth text-4xl md:text-5xl lg:text-6xl font-bold italic mr-2">
                   What
-                  <span className="absolute left-0 -bottom-2 h-1.5 w-40 bg-gradient-to-r from-fourth to-transparent" />
+
+                  <svg
+                    className="absolute left-0 -bottom-1 w-full"
+                    viewBox="0 0 200 20"
+                    fill="none"
+                  >
+                    <path
+                      d="M5 15 Q 100 5 195 15"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                      strokeLinecap="round"
+                    />
+                  </svg>
                 </span>
                 <span className="text-3xl md:text-4xl font-bold">
                   our customers are saying

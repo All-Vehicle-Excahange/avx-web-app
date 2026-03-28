@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import UserVehicleCard from "@/components/features/user/UserVehicleCard";
 import StatCard from "./components/StateCard";
 import {
@@ -14,156 +16,118 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import Button from "@/components/ui/button";
-import InventorySnapShotListPopup from "./components/InventorySnapShotListPopup";
+import {
+  getInventoryVehicle, getTopPerformingVehicles, getInventorySnapShotCount,
+  getNeedAttenctionVehicles
+} from "@/services/Seller.service";
+import TopPerformingCard from "./components/TopPerformingCard";
+
 
 export default function InventoryComponent() {
-  const cardData = [
-    {
-      id: "1",
-      title: "BMW 8-2-Door",
-      year: "2022",
-      transmission: "Manual",
-      fuel: "Diesel",
-      seats: "5",
-      rating: "4.3",
-      price: "6,75,998",
-      image: "/big_card_car.jpg",
-      status: "live",
-      inquiries: 12,
-      chats: 3,
-      avxInspected: true,
-    },
-    {
-      id: "10",
-      title: "BMW 8-2-Door",
-      year: "2022",
-      transmission: "Manual",
-      fuel: "Diesel",
-      seats: "5",
-      rating: "4.3",
-      price: "6,75,998",
-      image: "/big_card_car.jpg",
-      status: "live",
-      inquiries: 0,
-      chats: 0,
-      avxInspected: false,
-    },
-
-    {
-      id: "10",
-      title: "BMW 8-2-Door",
-      year: "2022",
-      transmission: "Manual",
-      fuel: "Diesel",
-      seats: "5",
-      rating: "4.3",
-      price: "6,75,998",
-      image: "/big_card_car.jpg",
-      status: "live",
-      inquiries: 0,
-      chats: 0,
-      avxInspected: false,
-    },
-    {
-      id: "2",
-      title: "Audi A6 Sedan",
-      year: "2021",
-      transmission: "Automatic",
-      fuel: "Petrol",
-      seats: "5",
-      rating: "4.5",
-      price: "5,40,000",
-      image: "/big_card_car.jpg",
-      status: "draft",
-    },
-    {
-      id: "3",
-      title: "Mercedes C-Class",
-      year: "2020",
-      transmission: "Automatic",
-      fuel: "Diesel",
-      seats: "5",
-      rating: "4.2",
-      price: "4,95,000",
-      image: "/big_card_car.jpg",
-      status: "sold",
-      soldDate: "12 Aug 2025",
-    },
-    {
-      id: "4",
-      title: "Range Rover Evoque",
-      year: "2022",
-      transmission: "Automatic",
-      fuel: "Diesel",
-      seats: "5",
-      rating: "4.6",
-      price: "8,95,000",
-      image: "/big_card_car.jpg",
-      status: "live",
-      inquiries: 8,
-      chats: 1,
-    },
-    {
-      id: "4",
-      title: "Range Rover Evoque",
-      year: "2022",
-      transmission: "Automatic",
-      fuel: "Diesel",
-      seats: "5",
-      rating: "4.6",
-      price: "8,95,000",
-      image: "/big_card_car.jpg",
-      status: "draft",
-      inquiries: 8,
-      chats: 1,
-    },
-  ];
-
   const vehicleTypes = [
     { id: "all", label: "All" },
-    { id: "draft", label: "Draft" },
-    { id: "live", label: "Live" },
-    { id: "sold", label: "Sold" },
-    // { id: "underinspection", label: "Under Inspection" },
+    { id: "DRAFT", label: "Draft" },
+    { id: "LIVE", label: "Live" },
+    { id: "SOLD", label: "Sold" },
   ];
 
-  const topVehicles = [
-    { rank: 1, name: "BMW X1", inquiries: 12 },
-    { rank: 2, name: "Fortuner", inquiries: 9 },
-    { rank: 3, name: "Honda City", inquiries: 8 },
-  ];
+  // Map API response to the shape UserVehicleCard expects
+  const mapVehicle = (v) => ({
+    id: v.id,
+    title: `${v.makerName} ${v.modelName} ${v.variantName}`,
+    year: v.yearOfMfg,
+    transmission: v.transmissionType,
+    fuel: v.fuelType,
+    ownership: v.ownership,
+    price: v.price,
+    image: v.thumbnailUrl || "/big_card_car.jpg",
+    location: v.address?.city || v.address?.state || "Location not set",
+    verificationStatus: v.verificationStatus,
+    inspectionStatus: v.inspectionStatus,
+    inspectionBadgeUrl: v.inspectionBadgeUrl,
+    consultantName: v.consultantName,
+    closingPrice: v.closingPrice,
+    isWishlisted: v.isWishlisted,
+  });
+
   const [activeType, setActiveType] = useState("all");
-  const filtered =
-    activeType === "all"
-      ? cardData
-      : cardData.filter((v) => v.status === activeType);
+  const [vehicles, setVehicles] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(9);
+  const [topPerforming, setTopPerforming] = useState([]);
+  const [inventorySnapShotCount, setInventorySnapShotCount] = useState([]);
 
-  const [popupOpen, setPopupOpen] = useState(false);
-  const [popupTitle, setPopupTitle] = useState("");
-  const [popupVehicles, setPopupVehicles] = useState([]);
+  // Need Attention vehicles state
+  const [needAttentionVehicles, setNeedAttentionVehicles] = useState([]);
+  const [needAttentionPage, setNeedAttentionPage] = useState(1);
+  const [needAttentionTotalPages, setNeedAttentionTotalPages] = useState(1);
+  const [needAttentionLoading, setNeedAttentionLoading] = useState(false);
 
-  const handleSnapshotClick = (type) => {
-    setPopupOpen(true);
+  useEffect(() => {
+    const fetchVehicles = async () => {
+      try {
+        const status = activeType === "all" ? undefined : activeType;
 
-    if (type === "high") {
-      setPopupTitle("🟢 High Demand Vehicles");
-      setPopupVehicles(
-        cardData.filter(
-          (v) =>
-            (v.status === "live" || v.status === "underinspection") &&
-            v.inquiries > 2,
-        ),
-      );
+        const res = await getInventoryVehicle(status);
+        setVehicles(res.data || []);
+        setVisibleCount(9);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchVehicles();
+  }, [activeType]);
+
+  useEffect(() => {
+    const fetchTopPerforming = async () => {
+      try {
+        const res = await getTopPerformingVehicles();
+        setTopPerforming(res.data || []);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchTopPerforming();
+  }, []);
+
+  useEffect(() => {
+    const fetchInventorySnapShotCount = async () => {
+      try {
+        const res = await getInventorySnapShotCount();
+        setInventorySnapShotCount(res.data || []);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchInventorySnapShotCount();
+  }, []);
+
+  // Fetch Need Attention Vehicles (paginated)
+  const fetchNeedAttentionVehicles = async (pageNo = 1) => {
+    try {
+      setNeedAttentionLoading(true);
+      const res = await getNeedAttenctionVehicles({ pageNo, size: 6 });
+      if (pageNo === 1) {
+        setNeedAttentionVehicles(res.data || []);
+      } else {
+        setNeedAttentionVehicles((prev) => [...prev, ...(res.data || [])]);
+      }
+      setNeedAttentionTotalPages(res.pageResponse?.totalPages || 1);
+      setNeedAttentionPage(pageNo);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setNeedAttentionLoading(false);
     }
+  };
 
-    if (type === "low") {
-      setPopupTitle("🟡 Low Visibility Vehicles");
-      setPopupVehicles(cardData.filter((v) => v.status === "draft"));
-    }
+  useEffect(() => {
+    fetchNeedAttentionVehicles(1);
+  }, []);
 
-    if (type === "attention") {
-      setPopupTitle("🔴 Vehicles Needing Attention");
-      setPopupVehicles(cardData.filter((v) => v.status === "live"));
+  const handleViewMoreNeedAttention = () => {
+    if (needAttentionPage < needAttentionTotalPages) {
+      fetchNeedAttentionVehicles(needAttentionPage + 1);
     }
   };
 
@@ -199,74 +163,101 @@ export default function InventoryComponent() {
           <div className="flex items-center gap-2">
             <TrendingUp className="text-primary" size={18} />
             <h3 className="font-semibold">Inventory Health Snapshot</h3>
-            <span className="px-3 py-1 rounded-full bg-primary/10 text-xs">
+            {/* <span className="px-3 py-1 rounded-full bg-primary/10 text-xs">
               Auto-generated
-            </span>
+            </span> */}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div
-              onClick={() => handleSnapshotClick("high")}
               className="cursor-pointer"
             >
               <StatCard
                 icon={<Flame className="text-green-500" size={20} />}
                 label="High Demand"
-                value="6 Vehicles"
+                value={`${inventorySnapShotCount.highDemandCount} Vehicles`}
               />
             </div>
 
             <div
-              onClick={() => handleSnapshotClick("low")}
               className="cursor-pointer"
             >
               <StatCard
                 icon={<EyeOff className="text-yellow-500" size={20} />}
                 label="Low Visibility"
-                value="9 Vehicles"
+                value={`${inventorySnapShotCount.lowDemandCount} Vehicles`}
               />
             </div>
 
             <div
-              onClick={() => handleSnapshotClick("attention")}
               className="cursor-pointer"
             >
               <StatCard
                 icon={<AlertTriangle className="text-red-500" size={20} />}
                 label="Needs Attention"
-                value="4 Vehicles"
+                value={`${inventorySnapShotCount.needsAttentionCount} Vehicles`}
               />
             </div>
           </div>
         </div>
 
         {/* 3️⃣ TOP PERFORMING VEHICLES */}
-        <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-5">
-          <div className="flex items-center gap-2">
-            <TrendingUp className="text-primary" size={18} />
-            <h3 className="font-semibold">Inventory Activity</h3>
-            <span className="px-3 py-1 rounded-full bg-primary/10 text-xs">
-              Auto-generated
-            </span>
+        {/* 3️⃣ TOP PERFORMING VEHICLES */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          {/* LEFT SIDE */}
+          <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-5">
+
+            <div className="flex items-center gap-2">
+              <TrendingUp className="text-primary" size={18} />
+              <h3 className="font-semibold">Top Performing Vehicles</h3>
+
+            </div>
+
+            {topPerforming.length > 0 ? (
+              topPerforming.map((v, index) => (
+                <TopPerformingCard key={v.id} vehicle={v} rank={index + 1} />
+              ))
+            ) : (
+              <p className="text-sm text-third">No top performing vehicles yet.</p>
+            )}
+
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <StatCard
-              icon={<span className="font-bold text-primary">#1</span>}
-              label=""
-              value="BMW X1"
-            />
-            <StatCard
-              icon={<span className="font-bold text-primary">#2</span>}
-              label=""
-              value="Fortuner"
-            />
-            <StatCard
-              icon={<span className="font-bold text-primary">#3</span>}
-              label=""
-              value="Honda City"
-            />
+          {/* RIGHT SIDE (MATCHED DESIGN) */}
+          <div className="rounded-2xl border border-third/30 bg-fourth p-6 space-y-5">
+
+
+
+            {/* insight card */}
+            <div className="rounded-xl border border-third/20 bg-primary/10 p-5 space-y-3">
+
+              <p className="text-sm flex items-center gap-2">
+                📈 <span className="font-semibold">Insight:</span>
+              </p>
+
+              <p className="text-sm leading-relaxed">
+                <span className="text-orange-400 font-medium">AVX</span>{" "}
+                Inspected vehicles are converting{" "}
+                <span className="text-pink-400 font-semibold">2.3×</span> better
+              </p>
+
+              <p className="text-sm underline cursor-pointer">
+                [ Inspect More Vehicles ]
+              </p>
+
+            </div>
+
+            {/* footer */}
+            <p className="text-sm text-muted-foreground">
+              This directly drives{" "}
+              <span className="font-medium text-foreground">
+                inspection revenue.
+              </span>
+            </p>
+
           </div>
+
         </div>
 
         {/* 4️⃣ FILTER BAR */}
@@ -286,66 +277,93 @@ export default function InventoryComponent() {
               </button>
             ))}
           </div>
-
-          <div className="flex gap-3">
-            <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-third/40 hover:bg-primary/10 transition">
-              <SlidersHorizontal size={16} />
-              Filters
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-third/40 hover:bg-primary/10 transition">
-              Sort <ChevronDown size={16} />
-            </button>
-          </div>
         </div>
 
         {/* 5️⃣ VEHICLE GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 gap-6">
-          {filtered.map((car) => (
-            <UserVehicleCard
-              key={car.id}
-              data={car}
-              status={car.status}
-              avxInspected={car.avxInspected}
-              inquiries={car.inquiries}
-              chats={car.chats}
-              soldDate={car.soldDate}
-            />
-          ))}
+        <div className="w-full space-y-6">
+          {vehicles?.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 gap-6">
+                {vehicles.slice(0, visibleCount).map((car) => (
+                  <UserVehicleCard
+                    key={car.id}
+                    data={mapVehicle(car)}
+                    status={car.listingStatus?.toLowerCase()}
+                    avxInspected={car.inspectionStatus === "AI_INSPECTED"}
+                    inquiries={car.totalInquiries}
+                    chats={car.approvedInquiries}
+                  />
+                ))}
+              </div>
+
+              {visibleCount < vehicles.length && (
+                <div className="flex justify-end mt-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => setVisibleCount((prev) => prev + 9)}
+                    className="px-6 py-2 rounded-full text-sm font-semibold shadow-md"
+                  >
+                    View More
+                  </Button>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-16 text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5">
+              {activeType === "all" ? (
+                <>
+                  <h3 className="text-xl font-bold mb-2">You havent listed any vehicles yet.</h3>
+                  <p className="text-third mb-6">
+                    Add vehicles in the AVX mobile app to start receiving inquiries.
+                  </p>
+                  <Button variant="ghost" showIcon={false}>
+                    Download App
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <h3 className="text-xl font-bold mb-2">No vehicles found.</h3>
+                  <p className="text-third">
+                    There are currently no vehicles with this status.
+                  </p>
+                </>
+              )}
+            </div>
+          )}
         </div>
         <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 space-y-4">
           <div className="flex items-center gap-2">
-            <TrendingUp className="text-primary" size={18} />
-            <h3 className="font-semibold">Top Performing Vehicles</h3>
-            <span className="px-3 py-1 rounded-full bg-primary text-xs text-secondary">
-              Auto-generated
-            </span>
+            <AlertTriangle className="text-yellow-500" size={18} />
+            <h3 className="font-semibold">Vehicles Needing Attention</h3>
           </div>
 
-          {topVehicles.map((v) => (
-            <div
-              key={v.rank}
-              className="flex justify-between items-center border border-primary/30 rounded-xl p-4"
-            >
-              <div className="flex items-center gap-4">
-                <span className="w-10 h-10 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center">
-                  #{v.rank}
-                </span>
-                <span className="font-medium">{v.name}</span>
+          {needAttentionVehicles.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {needAttentionVehicles.map((v) => (
+                  <TopPerformingCard key={v.id} vehicle={v} />
+                ))}
               </div>
-              <div className="flex items-center gap-2 text-sm text-third">
-                <MessageSquare size={14} />
-                {v.inquiries} inquiries
-              </div>
-            </div>
-          ))}
+
+              {needAttentionPage < needAttentionTotalPages && (
+                <div className="flex justify-center mt-4">
+                  <Button
+                    variant="outline"
+                    onClick={handleViewMoreNeedAttention}
+                    disabled={needAttentionLoading}
+                    className="px-6 py-2 rounded-full text-sm font-semibold shadow-md"
+                  >
+                    {needAttentionLoading ? "Loading..." : "View More"}
+                  </Button>
+                </div>
+              )}
+            </>
+          ) : (
+            <p className="text-sm text-third">No vehicles needing attention.</p>
+          )}
         </div>
       </section>
-      <InventorySnapShotListPopup
-        open={popupOpen}
-        onClose={() => setPopupOpen(false)}
-        vehicles={popupVehicles}
-        title={popupTitle}
-      />
+
     </>
   );
 }
