@@ -69,9 +69,11 @@ export const rejectInquiry = async (id) => {
   }
 };
 
-export const closeInquiry = async (id) => {
+export const closeInquiry = async (id, closeReason) => {
   try {
-    const res = await axiosInstance.patch(`${ENDPOINT.closeInquiry}/${id}`);
+    const res = await axiosInstance.patch(`${ENDPOINT.closeInquiry}/${id}`, {
+      closeReason,
+    });
     return handleResponse(res);
   } catch (error) {
     handleError(error);
