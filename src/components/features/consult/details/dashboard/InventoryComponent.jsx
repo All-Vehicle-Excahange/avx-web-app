@@ -21,6 +21,8 @@ import {
   getNeedAttenctionVehicles
 } from "@/services/Seller.service";
 import TopPerformingCard from "./components/TopPerformingCard";
+import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
+
 
 
 export default function InventoryComponent() {
@@ -61,6 +63,7 @@ export default function InventoryComponent() {
   const [needAttentionPage, setNeedAttentionPage] = useState(1);
   const [needAttentionTotalPages, setNeedAttentionTotalPages] = useState(1);
   const [needAttentionLoading, setNeedAttentionLoading] = useState(false);
+  const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -143,7 +146,7 @@ export default function InventoryComponent() {
             </p>
           </div>
 
-          <Button className="" variant="ghost" showIcon={false}>
+          <Button className="" variant="ghost" onClick={() => setIsDownloadOpen(true)} showIcon={false}>
             <Smartphone className="mr-3" size={16} />
             Add Vehicle
           </Button>
@@ -339,7 +342,7 @@ export default function InventoryComponent() {
 
           {needAttentionVehicles.length > 0 ? (
             <>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
                 {needAttentionVehicles.map((v) => (
                   <TopPerformingCard key={v.id} vehicle={v} />
                 ))}
@@ -363,7 +366,7 @@ export default function InventoryComponent() {
           )}
         </div>
       </section>
-
+      <DownloadAppPopup isOpen={isDownloadOpen} onClose={() => setIsDownloadOpen(false)} />
     </>
   );
 }

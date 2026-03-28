@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import {
   LayoutGrid,
   Store,
@@ -11,6 +12,9 @@ import {
   CreditCard,
   InspectIcon,
 } from "lucide-react";
+
+import { getSellerTierTitle } from "@/lib/helper";
+import { getSellerTier } from "@/services/Seller.service";
 
 const menu = [
   { label: "Overview", icon: LayoutGrid, href: "/consult/dashboard/overview" },
@@ -39,6 +43,19 @@ const menu = [
 export default function Sidebar({ isOpen, onClose }) {
   const router = useRouter();
 
+  useEffect(() => {
+    const initializeTier = async () => {
+      const tier = getSellerTierTitle();
+      if (!tier) {
+        try {
+          await getSellerTier();
+        } catch (error) {
+          console.error("Error fetching seller tier on sidebar load:", error);
+        }
+      }
+    };
+    initializeTier();
+  }, []);
   return (
     <aside
       className={`

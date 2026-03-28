@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { getSellerTierTitle } from "@/lib/helper";
+import { useRouter } from "next/router";
 
 export default function TopPerformingCard({ vehicle, rank }) {
     const [open, setOpen] = useState(false);
@@ -21,9 +23,10 @@ export default function TopPerformingCard({ vehicle, rank }) {
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
-   
-    if (!vehicle) return null;
 
+    if (!vehicle) return null;
+    
+    const router = useRouter();
     const vehicleTitle = `${vehicle.makerName} ${vehicle.modelName} ${vehicle.variantName}`;
     const isShowInspectionBtn = vehicle?.inspectionStatus === "NOT_INSPECTED";
     const vehicleImage = vehicle.thumbnailUrl || "/big_card_car.jpg";
@@ -40,54 +43,55 @@ export default function TopPerformingCard({ vehicle, rank }) {
         ? `₹ ${Number(vehicle.price).toLocaleString("en-IN")}`
         : "N/A";
 
-    // 👉 close menu on outside click
-
+    const tier = getSellerTierTitle()
 
     return (
         <div className="relative rounded-2xl border border-third/40 p-4 lg:px-5 lg:py-4 flex flex-col sm:flex-row items-start gap-4 shadow-sm hover:shadow-md transition">
 
             {/* 3 DOT MENU */}
-            <div className="absolute top-3 right-3" ref={menuRef}>
+            <div className="absolute top-3 right-3 " ref={menuRef}>
                 <button
                     onClick={() => setOpen(!open)}
-                    className="p-1.5 rounded-full hover:bg-primary/10 transition"
+                    className="p-1.5 rounded-full hover:bg-primary/10 transition cursor-pointer"
                 >
                     <MoreVertical size={18} className="text-primary" />
                 </button>
-
                 {open && (
-                    <div className="absolute right-0 mt-2 w-44 rounded-xl border border-third/20  shadow-lg z-50 overflow-hidden">
+                    <div className="absolute  bg-secondary/10 backdrop-blur-2xl right-0 mt-2 w-44 rounded-xl border border-third/20 shadow-lg z-50 overflow-hidden">
 
+                        {/* Always visible */}
                         <Link
                             href={`/vehicle/details/${vehicle.id}`}
                             className="block px-4 py-2 text-sm hover:bg-primary/5 text-primary"
                         >
                             View Listing
                         </Link>
+                        {tier !== "BASIC" && (
+                            <>
+                                <button
+                                    className="w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
+                                    onClick={() => {
+                                        setOpen(false);
+                                        console.log("Boost listing", vehicle.id);
+                                    }}
+                                >
+                                    Boost Listing
+                                </button>
 
-                        <button
-                            className="w-full text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
-                            onClick={() => {
-                                setOpen(false);
-                                console.log("Boost listing", vehicle.id);
-                            }}
-                        >
-                            Boost Listing
-                        </button>
-
-                        <button
-                            className="w-full text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
-                            onClick={() => {
-                                setOpen(false);
-                                console.log("Improve listing", vehicle.id);
-                            }}
-                        >
-                            Improve Listing
-                        </button>
-
+                                <button
+                                    className="w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
+                                    onClick={() => {
+                                        setOpen(false);
+                                        console.log("Improve listing", vehicle.id);
+                                    }}
+                                >
+                                    Improve Listing
+                                </button>
+                            </>
+                        )}
                         {vehicle?.inspectionStatus === "NOT_INSPECTED" && (
                             <button
-                                className="w-full text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
+                                className="w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
                                 onClick={() => {
                                     setOpen(false);
                                     console.log("Request Inspection", vehicle.id);
@@ -101,12 +105,14 @@ export default function TopPerformingCard({ vehicle, rank }) {
             </div>
 
             {/* IMAGE */}
-            <div className="relative w-full sm:w-36 h-26 rounded-xl overflow-hidden border border-third/30 bg-primary/5 shrink-0">
+            <div className="relative w-full   sm:w-36 h-26 rounded-xl overflow-hidden border border-third/30 bg-primary/5 shrink-0">
                 <Image
                     src={vehicleImage}
                     alt={vehicleTitle}
                     fill
-                    className="object-cover"
+                    onClick={() => router.push(`/vehicle/details/${vehicle.id}`)}
+                    className="object-cover cursor-pointer"
+
                 />
                 {rank && (
                     <div className="absolute top-2 left-2 w-7 h-7 rounded-full bg-primary text-secondary text-xs font-bold flex items-center justify-center shadow-md">
