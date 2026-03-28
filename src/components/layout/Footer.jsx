@@ -5,8 +5,8 @@ import React from "react";
 const Footer = () => {
     return (
         <footer className=" text-white font-sans">
-            <div className="container mx-auto px-4 lg:px-8">
-                <div className="flex flex-col lg:flex-row gap-12 lg:gap-8 justify-between mb-16 lg:px-4">
+            <div className="container mx-auto ">
+                <div className="flex flex-col lg:flex-row gap-12 lg:gap-8 justify-between mb-16">
 
                     {/* Brand & Description Column */}
                     <div className="lg:w-[25%] flex flex-col gap-6">

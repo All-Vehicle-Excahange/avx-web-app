@@ -62,12 +62,13 @@ function InspectionTab() {
       </div>
 
       {/* ================= SNAPSHOT ================= */}
-      <div className="space-y-4">
+      <div className="rounded-xl border border-third/30 bg-primary/5 p-5 space-y-5">
         <h2 className="text-lg font-semibold">
           Inspection Performance Snapshot
         </h2>
 
         {/* Stat Cards */}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
           <StatCard
             icon={<Car className="text-primary" size={20} />}
@@ -99,6 +100,7 @@ function InspectionTab() {
             value="4.6/5"
           />
         </div>
+
       </div>
 
       {/* ================= TRUST SCORE BANNER ================= */}
@@ -160,7 +162,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= HOW INSPECTION AFFECTS RANKING ================= */}
-      <div className="rounded-xl border border-third/30  p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/30  p-5 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         <h3 className="font-semibold flex items-center gap-2">
           <TrendingUp size={18} className="text-primary" />
           How inspection affects ranking:
@@ -185,7 +187,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= VEHICLES REQUIRING ATTENTION ================= */}
-      <div className="rounded-xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/30  p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div>
@@ -289,7 +291,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= INSPECTION REQUESTS FROM BUYERS ================= */}
-      <div className="rounded-xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/30  p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
 
@@ -383,7 +385,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= INSPECTION HISTORY ================= */}
-      <div className="rounded-xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/30  p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div>
           <h2 className="text-xl font-semibold">Inspection History</h2>
@@ -570,7 +572,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= RE-INSPECTION CONTROL PANEL ================= */}
-      <div className="rounded-xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/30  p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div>
           <h2 className="text-xl font-semibold">Re-Inspection Control Panel</h2>
@@ -673,7 +675,7 @@ function InspectionTab() {
 
 
       {/* ================= DISPUTE & ISSUE CENTER ================= */}
-      <div className="rounded-xl border border-third/30 p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/30 p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
 
@@ -755,7 +757,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= UPGRADE YOUR TRUST VISIBILITY ================= */}
-      <div className="rounded-xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/30  p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div>
           <h2 className="text-xl font-semibold">
