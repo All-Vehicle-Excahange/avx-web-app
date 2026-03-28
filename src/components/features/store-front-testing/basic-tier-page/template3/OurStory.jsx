@@ -12,7 +12,7 @@ export default function OurStory() {
     return (
         <section className="relative flex flex-col justify-center items-center py-12">
 
-            <div className="max-w-7xl mx-auto w-full flex flex-col gap-13">
+            <div className="mx-auto w-full flex flex-col gap-13">
 
                 {/* Upper Row: Title and Description aligned horizontally */}
                 <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
