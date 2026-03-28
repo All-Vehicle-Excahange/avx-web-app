@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 
 export default function TopPerformingCard({ vehicle, rank }) {
+    const router = useRouter();
     const [open, setOpen] = useState(false);
     const [isDownloadOpen, setIsDownloadOpen] = useState(false);
     const menuRef = useRef(null);
@@ -28,7 +29,6 @@ export default function TopPerformingCard({ vehicle, rank }) {
 
     if (!vehicle) return null;
 
-    const router = useRouter();
     const vehicleTitle = `${vehicle.makerName} ${vehicle.modelName} ${vehicle.variantName}`;
     const isShowInspectionBtn = vehicle?.inspectionStatus === "NOT_INSPECTED";
     const vehicleImage = vehicle.thumbnailUrl || "/big_card_car.jpg";
@@ -48,37 +48,6 @@ export default function TopPerformingCard({ vehicle, rank }) {
     const tier = getSellerTierTitle()
 
     return (
-        <div className="relative rounded-xl border border-third/40 p-4 lg:px-5 lg:py-4 flex flex-col sm:flex-row items-start gap-4 shadow-sm hover:shadow-md transition">
-
-            {/* 3 DOT MENU */}
-            <div className="absolute top-33 right-3 md:top-3 md:right-3 " ref={menuRef}>
-                <button
-                    onClick={() => setOpen(!open)}
-                    className="p-1.5 rounded-full hover:bg-primary/10 transition cursor-pointer"
-                >
-                    <MoreVertical size={18} className="text-primary" />
-                </button>
-                {open && (
-                    <div className="absolute  bg-secondary/10 backdrop-blur-2xl right-0 mt-2 w-44 rounded-xl border border-third/20 shadow-lg z-50 overflow-hidden">
-
-                        {/* Always visible */}
-                        <Link
-                            href={`/vehicle/details/${vehicle.id}`}
-                            className="block px-4 py-2 text-sm hover:bg-primary/5 text-primary"
-                        >
-                            View Listing
-                        </Link>
-                        {tier !== "BASIC" && (
-                            <>
-                                <button
-                                    className="w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
-                                    onClick={() => {
-                                        setOpen(false);
-                                        console.log("Boost listing", vehicle.id);
-                                    }}
-                                >
-                                    Boost Listing
-                                </button>
         <>
             <div className="relative rounded-2xl border border-third/40 p-4 lg:px-5 lg:py-4 flex flex-col sm:flex-row items-start gap-4 shadow-sm hover:shadow-md transition">
 
