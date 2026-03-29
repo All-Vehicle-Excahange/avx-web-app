@@ -67,19 +67,19 @@ export default function InventoryComponent() {
   const [needAttentionLoading, setNeedAttentionLoading] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
+  const fetchVehicles = async () => {
+    try {
+      const status = activeType === "all" ? undefined : activeType;
+
+      const res = await getInventoryVehicle(status);
+      setVehicles(res.data || []);
+      setVisibleCount(9);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchVehicles = async () => {
-      try {
-        const status = activeType === "all" ? undefined : activeType;
-
-        const res = await getInventoryVehicle(status);
-        setVehicles(res.data || []);
-        setVisibleCount(9);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     fetchVehicles();
   }, [activeType]);
 
@@ -95,15 +95,16 @@ export default function InventoryComponent() {
     fetchTopPerforming();
   }, []);
 
+  const fetchInventorySnapShotCount = async () => {
+    try {
+      const res = await getInventorySnapShotCount();
+      setInventorySnapShotCount(res.data || []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchInventorySnapShotCount = async () => {
-      try {
-        const res = await getInventorySnapShotCount();
-        setInventorySnapShotCount(res.data || []);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fetchInventorySnapShotCount();
   }, []);
 
@@ -333,6 +334,10 @@ export default function InventoryComponent() {
                     avxInspected={car.inspectionStatus === "AI_INSPECTED"}
                     inquiries={car.totalInquiries}
                     chats={car.approvedInquiries}
+                    onRefresh={() => {
+                      fetchVehicles();
+                      fetchInventorySnapShotCount();
+                    }}
                   />
                 ))}
               </div>

@@ -50,6 +50,7 @@ const cards = [
 
 export default function MissionVision() {
   return (
+
     <section className="py-14 lg:py-20">
       <div className="px-2 lg:px-4">
 
@@ -118,5 +119,6 @@ export default function MissionVision() {
 
       </div>
     </section>
-  );
+
+);
 }

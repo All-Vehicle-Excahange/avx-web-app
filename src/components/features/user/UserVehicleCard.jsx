@@ -17,7 +17,7 @@ import {
 import Button from "@/components/ui/button";
 import Image from "next/image";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
-
+import { markAsSoldVehicle } from "@/services/vehicle.service";
 
 export default function UserVehicleCard({
   data,
@@ -26,6 +26,7 @@ export default function UserVehicleCard({
   inquiries = 0,
   chats = 0,
   showBoostButton = false,
+  onRefresh,
 }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
@@ -44,6 +45,18 @@ export default function UserVehicleCard({
   };
 
   const verification = verificationBadge[data?.verificationStatus] || null;
+
+  const handleSoldClick = async (id) => {
+    try {
+      const res = await markAsSoldVehicle(id);
+      console.log(res);
+      if (onRefresh) {
+        onRefresh();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
@@ -186,7 +199,7 @@ export default function UserVehicleCard({
                   <Button variant="ghost" size="sm" showIcon={false} onClick={() => setIsDownloadOpen(true)}>
                     <Pencil size={14} className="mr-2" /> Improve Listing
                   </Button>
-                  <Button variant="ghost" size="sm" showIcon={false}>
+                  <Button onClick={() => handleSoldClick(data.id)} variant="ghost" size="sm" showIcon={false}>
                     <CheckCircle size={14} className="mr-2" /> Mark Sold
                   </Button>
                 </div>
