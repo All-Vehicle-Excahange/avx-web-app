@@ -5,6 +5,7 @@ import { ShieldCheck, Globe, TrendingUp, Cpu } from "lucide-react";
 
 function Hero() {
   const data = {
+    // ====== Hero Section Data ========
     heroTitle: "Our Story Built for Buy & Selling a Vehicle",
     heroDesc: `
       Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
@@ -14,10 +15,14 @@ function Hero() {
       Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
       Sapien platea nec urna ut est sed.
     `,
+
+    // ====== Mission & Vision Section Data ========
     missionTitle: "Our Mission",
     missionDesc: `Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.`,
     visionTitle: "Our Vision",
     visionDesc: `Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.`,
+
+    // ====== Stats Section Data ========
     statsDesc: `Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.`,
     stats: [
       { number: "150K+", label: "Active Users Worldwide" },
@@ -25,6 +30,8 @@ function Hero() {
       { number: "98%", label: "Customer Satisfaction" },
       { number: "100+", label: "Team Members" },
     ],
+
+    // ====== Services Section Data ========
     servicesTitle: "What We Do",
     servicesDesc: `Enterprise-grade digital products designed to scale globally with security, speed and reliability.`,
     services: [
@@ -67,7 +74,7 @@ function Hero() {
 
             {/* Title */}
             <h2 className="flex flex-col gap-2 text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-              <span>Our Story Built for</span>
+              Our Story Built for
               <span className="text-fourth/80">Buy & Selling a Vehicle</span>
             </h2>
 
@@ -158,111 +165,111 @@ function Hero() {
         </div>
       </section>
 
-       <section className="relative flex flex-col justify-center items-center py-12">
+      <section className="relative flex flex-col justify-center items-center py-12 ">
 
 
-            <div className="relative z-10 mx-auto w-full  flex flex-col gap-16">
+        <div className="relative z-10 mx-auto w-full  flex flex-col gap-16">
 
-                {/* ── TOP DESCRIPTION ── */}
-                <div className="flex flex-col gap-6">
-                    <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                        Stats
+          {/* ── TOP DESCRIPTION ── */}
+          <div className="flex flex-col gap-6">
+            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+              Stats
+            </p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+              Numbers that
+              <span className="text-fourth/80"> speak for us</span>
+            </h2>
+            <p className="text-third/70 text-md font-[Poppins] leading-relaxed max-w-md">
+              {data.statsDesc}
+            </p>
+          </div>
+
+          {/* ── STATS GRID ── */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-16">
+
+            {data.stats.map((item, i) => (
+              <div key={i} className="flex flex-col gap-3">
+
+                {/* Number */}
+                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-primary font-[Montserrat]">
+                  {item.number}
+                </h3>
+
+                {/* Label */}
+                <p className="text-third/60 text-sm sm:text-base font-[Poppins]">
+                  {item.label}
+                </p>
+
+              </div>
+            ))}
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <section className="relative flex flex-col justify-center items-center py-12">
+
+        <div className="mx-auto w-full max-w-6xl grid lg:grid-cols-2 gap-16">
+
+          {/* ── LEFT: STRONG TEXT ── */}
+          <div className="flex flex-col gap-6 max-w-xl">
+
+            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+              Our Services
+            </p>
+
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+              What We
+              <span className="text-fourth/80"> Do</span>
+            </h2>
+
+            <p className="text-third/70 text-md font-[Poppins] leading-relaxed">
+              {data.servicesDesc}
+            </p>
+
+          </div>
+
+          {/* ── RIGHT: STAGGERED SERVICES ── */}
+          <div className="flex flex-col gap-12">
+
+            {data.services.map((service, i) => {
+              const Icon = iconMap[service.icon];
+              return (
+                <div
+                  key={i}
+                  className={`flex items-start gap-5 ${i % 2 !== 0 ? "lg:ml-10" : ""
+                    }`}
+                >
+
+                  {/* Icon */}
+                  <div className="w-12 h-12 flex items-center justify-center border border-third/10 rounded-xl">
+                    <Icon className="w-5 h-5 text-third" />
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex flex-col gap-2 max-w-sm">
+
+                    <h3 className="text-xl font-semibold text-primary font-[Montserrat]">
+                      {service.title}
+                    </h3>
+
+                    <p className="text-third/60 text-sm font-[Poppins] leading-relaxed">
+                      {service.desc}
                     </p>
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                        Numbers that 
-                        <span className="text-fourth/80"> speak for us</span>
-                    </h2>
-                    <p className="text-third/70 text-md font-[Poppins] leading-relaxed max-w-md">
-                        {data.statsDesc}
-                    </p>
-                </div>
 
-                {/* ── STATS GRID ── */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-16">
-
-                    {data.stats.map((item, i) => (
-                        <div key={i} className="flex flex-col gap-3">
-
-                            {/* Number */}
-                            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-primary font-[Montserrat]">
-                                {item.number}
-                            </h3>
-
-                            {/* Label */}
-                            <p className="text-third/60 text-sm sm:text-base font-[Poppins]">
-                                {item.label}
-                            </p>
-
-                        </div>
-                    ))}
-
-                </div>
-
-            </div>
-
-        </section>
-
-       <section className="relative flex flex-col justify-center items-center py-12">
-
-            <div className="mx-auto w-full max-w-6xl grid lg:grid-cols-2 gap-16">
-
-                {/* ── LEFT: STRONG TEXT ── */}
-                <div className="flex flex-col gap-6 max-w-xl">
-
-                    <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                        Our Services
-                    </p>
-
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                        What We
-                        <span className="text-fourth/80"> Do</span>
-                    </h2>
-
-                    <p className="text-third/70 text-md font-[Poppins] leading-relaxed">
-                        {data.servicesDesc}
-                    </p>
-
-                </div>
-
-                {/* ── RIGHT: STAGGERED SERVICES ── */}
-                <div className="flex flex-col gap-12">
-
-                    {data.services.map((service, i) => {
-                        const Icon = iconMap[service.icon];
-                        return (
-                            <div
-                                key={i}
-                                className={`flex items-start gap-5 ${i % 2 !== 0 ? "lg:ml-10" : ""
-                                    }`}
-                            >
-
-                                {/* Icon */}
-                                <div className="w-12 h-12 flex items-center justify-center border border-third/10 rounded-xl">
-                                    <Icon className="w-5 h-5 text-third" />
-                                </div>
-
-                                {/* Content */}
-                                <div className="flex flex-col gap-2 max-w-sm">
-
-                                    <h3 className="text-xl font-semibold text-primary font-[Montserrat]">
-                                        {service.title}
-                                    </h3>
-
-                                    <p className="text-third/60 text-sm font-[Poppins] leading-relaxed">
-                                        {service.desc}
-                                    </p>
-
-                                </div>
-
-                            </div>
-                        )
-                    })}
+                  </div>
 
                 </div>
+              )
+            })}
 
-            </div>
+          </div>
 
-        </section>
+        </div>
+
+      </section>
     </>
   );
 }
