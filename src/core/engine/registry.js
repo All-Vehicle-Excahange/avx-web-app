@@ -7,6 +7,7 @@ import AboutPremium3 from "./templates/AboutPremium3";
 import AboutPro1 from "./templates/AboutPro1";
 import AboutPro2 from "./templates/AboutPro2";
 import AboutPro3 from "./templates/AboutPro3";
+import WhyBuyBasic1 from "./templates/WhyBuyBasic1";
 
 export const TEMPLATE_REGISTRY = {
   about_us_theme_basic_1: AboutBasic1,
@@ -18,4 +19,5 @@ export const TEMPLATE_REGISTRY = {
   about_us_theme_premium_1: AboutPremium1,
   about_us_theme_premium_2: AboutPremium2,
   about_us_theme_premium_3: AboutPremium3,
+  why_buy_theme_basic_1: WhyBuyBasic1,
 };

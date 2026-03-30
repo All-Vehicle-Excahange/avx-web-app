@@ -8,88 +8,185 @@ import {
   CheckCircle2,
   Star,
 } from "lucide-react";
-
-const data = {
-  heroTitle: `Why Choose Adarsh`,
-  heroDescription: ` Buyers trust Adarsh Auto Consultants for transparent communication,reliable vehicle options, and a smooth buying experience.`,
-  storyTitle: `Experience`,
-  storyText: `
-    For over 12 years, Adarsh Auto Consultants has been helping buyers
-    discover reliable vehicles across Gujarat.
-
-    Our goal is to maintain a diverse vehicle inventory and provide
-    accurate information so buyers can make confident decisions when
-    purchasing their next vehicle.
-  `,
-  selectionTitle: `Our Approach to`,
-  selectionDescription: `
-            Every vehicle listed through our storefront goes through a basic
-            internal evaluation before being presented to buyers.
-
-            This helps ensure that vehicles listed are suitable for serious buyers
-            and provides a smoother vehicle buying experience.
-          `,
-
-  processTitle: `How Buying`,
-  processDescription: `Buying a vehicle through our storefront is designed to be simple,
-              transparent, and convenient — so you can move forward with
-              clarity, not confusion.`,
-  processSteps: [
-    {
-      title: "Discover Vehicles",
-      description:
-        "Browse our inventory and shortlist vehicles that match your requirements.",
-      icon: Search,
-    },
-    {
-      title: "Connect With Our Team",
-      description:
-        "Use AVX chat to discuss vehicle condition, pricing, and availability.",
-      icon: MessageCircle,
-    },
-    {
-      title: "AVX Inspection Option",
-      description:
-        "Buyers can request AVX inspection to receive an independent condition report.",
-      icon: ShieldCheck,
-    },
-    {
-      title: "Decision & Purchase",
-      description:
-        "Once satisfied with the vehicle details and inspection, finalize the purchase directly with the consultant.",
-      icon: Handshake,
-    },
-  ],
-  inspectionTitle: `AVX Inspection`,
-  inspectionText: `AVX inspection services provide additional transparency by documenting key aspects of the vehicle's condition before purchase.`,
-  inspectionPoints: [
-    "Exterior condition check",
-    "Interior condition check",
-    "Visible mechanical components",
-    "Photo & video documentation",
-  ],
-  commitmentTitle: `Our`,
-  commitmentText: `
-   Our goal is to maintain transparent communication and assist
-              buyers throughout the vehicle discovery and purchase process. We
-              aim to provide honest guidance and reliable information for every
-              buyer.`,
-  testimonialsTitle: "Customer",
-  testimonials: [
-    {
-      name: "Rahul Patel",
-      review:
-        "Great experience buying my car here. The team explained everything clearly and helped me through the entire process.",
-    },
-    {
-      name: "Amit Shah",
-      review:
-        "Transparent communication and good vehicle options. I appreciated the AVX inspection support.",
-    },
-  ],
+import RichTextEditor from "../atoms/RichTextEditor";
+import EditorInput from "../atoms/EditorInput";
+const ICON_MAP = {
+  Search,
+  MessageCircle,
+  ShieldCheck,
+  Handshake,
 };
+function WhyBuyBasic1({ data, isEditing, onUpdate }) {
+  if (!data) return null;
+  const updateField = (field, value) => {
+    onUpdate({ ...data, [field]: value });
+  };
 
-function HeroSection() {
+  const updateArrayItem = (arrayName, index, field, value) => {
+    const newArray = [...data[arrayName]];
+    newArray[index][field] = value;
+    updateField(arrayName, newArray);
+  };
+
+  if (isEditing) {
+    return (
+      <div className="bg-secondary w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
+        {/* HERO */}
+        <div>
+          <h3 className="text-primary font-bold mb-4">Hero Section</h3>
+
+          <EditorInput
+            bold
+            label="Hero Title"
+            value={data.heroTitle}
+            onChange={(e) => updateField("heroTitle", e.target.value)}
+          />
+
+          <RichTextEditor
+            label="Hero Description"
+            value={data.heroDescription}
+            onChange={(v) => updateField("heroDescription", v)}
+          />
+        </div>
+
+        <hr className="border-white/10" />
+
+        {/* STORY */}
+        <div>
+          <h3 className="text-primary font-bold mb-4">Story</h3>
+
+          <EditorInput
+            bold
+            label="Story Title"
+            value={data.storyTitle}
+            onChange={(e) => updateField("storyTitle", e.target.value)}
+          />
+
+          <RichTextEditor
+            label="Story Text"
+            value={data.storyText}
+            onChange={(v) => updateField("storyText", v)}
+          />
+        </div>
+
+        <hr className="border-white/10" />
+
+        {/* PROCESS */}
+        <div>
+          <h3 className="text-primary font-bold mb-4">Process Section</h3>
+
+          <EditorInput
+            bold
+            label="Process Title"
+            value={data.processTitle}
+            onChange={(e) => updateField("processTitle", e.target.value)}
+          />
+
+          <RichTextEditor
+            label="Process Description"
+            value={data.processDescription}
+            onChange={(v) => updateField("processDescription", v)}
+          />
+
+          <div className="grid md:grid-cols-2 gap-4 mt-6">
+            {data.processSteps.map((step, i) => (
+              <div
+                key={i}
+                className="border p-4 rounded bg-primary/5 space-y-2"
+              >
+                <EditorInput
+                  label="Title"
+                  value={step.title}
+                  onChange={(e) =>
+                    updateArrayItem("processSteps", i, "title", e.target.value)
+                  }
+                />
+
+                <EditorInput
+                  label="Description"
+                  value={step.description}
+                  onChange={(e) =>
+                    updateArrayItem(
+                      "processSteps",
+                      i,
+                      "description",
+                      e.target.value,
+                    )
+                  }
+                />
+
+                <EditorInput
+                  label="Icon (Search, MessageCircle...)"
+                  value={step.icon}
+                  onChange={(e) =>
+                    updateArrayItem("processSteps", i, "icon", e.target.value)
+                  }
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <hr className="border-white/10" />
+
+        {/* INSPECTION */}
+        <div>
+          <h3 className="text-primary font-bold mb-4">Inspection</h3>
+
+          <EditorInput
+            bold
+            value={data.inspectionTitle}
+            onChange={(e) => updateField("inspectionTitle", e.target.value)}
+          />
+
+          <RichTextEditor
+            value={data.inspectionText}
+            onChange={(v) => updateField("inspectionText", v)}
+          />
+
+          {data.inspectionPoints.map((pt, i) => (
+            <EditorInput
+              key={i}
+              value={pt}
+              onChange={(e) => {
+                const newArr = [...data.inspectionPoints];
+                newArr[i] = e.target.value;
+                updateField("inspectionPoints", newArr);
+              }}
+            />
+          ))}
+        </div>
+
+        <hr className="border-white/10" />
+
+        {/* TESTIMONIALS */}
+        <div>
+          <h3 className="text-primary font-bold mb-4">Testimonials</h3>
+
+          {data.testimonials.map((t, i) => (
+            <div key={i} className="border p-4 rounded bg-primary/5 space-y-2">
+              <EditorInput
+                label="Name"
+                value={t.name}
+                onChange={(e) =>
+                  updateArrayItem("testimonials", i, "name", e.target.value)
+                }
+              />
+
+              <EditorInput
+                label="Review"
+                value={t.review}
+                onChange={(e) =>
+                  updateArrayItem("testimonials", i, "review", e.target.value)
+                }
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <section className="relative container w-full overflow-hidden flex items-center min-h-fit py-12 md:py-36">
@@ -109,9 +206,10 @@ function HeroSection() {
             <span className="text-fourth/80"> Auto Consultants</span>
           </h2>
 
-          <p className="max-w-2xl text-base leading-relaxed text-third md:text-lg font-[Poppins]">
-            {data.heroDescription}
-          </p>
+          <div
+            className="max-w-2xl text-base leading-relaxed text-third md:text-lg font-[Poppins]"
+            dangerouslySetInnerHTML={{ __html: data.heroDescription }}
+          />
         </div>
       </section>
 
@@ -128,17 +226,10 @@ function HeroSection() {
 
           {/* TEXT */}
           <div className="flex flex-col gap-4 sm:gap-5">
-            {data.storyText
-              .trim()
-              .split("\n\n")
-              .map((para, i) => (
-                <p
-                  key={i}
-                  className="text-secondary/80 font-[Poppins] leading-relaxed text-sm sm:text-base md:text-lg"
-                >
-                  {para.trim()}
-                </p>
-              ))}
+            <div
+              className="text-secondary/80 font-[Poppins] leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: data.storyText }}
+            />
           </div>
         </div>
       </section>
@@ -184,15 +275,16 @@ function HeroSection() {
               {data.processTitle} <span className="text-fourth/80">Works</span>
             </h2>
 
-            <p className="text-sm sm:text-base md:text-lg text-third leading-relaxed font-[Poppins]">
-              {data.processDescription}
-            </p>
+            <div
+              className="text-sm sm:text-base md:text-lg text-third leading-relaxed font-[Poppins]"
+              dangerouslySetInnerHTML={{ __html: data.processDescription }}
+            />
           </div>
 
           {/* STEPS GRID */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {data.processSteps.map((step, i) => {
-              const Icon = step.icon;
+              const Icon = ICON_MAP[step.icon];
               return (
                 <div
                   key={i}
@@ -234,9 +326,10 @@ function HeroSection() {
               <span className="text-fourth/80">Assurance</span>
             </h2>
 
-            <p className="text-third text-lg font-[Poppins] leading-relaxed">
-              {data.inspectionText}
-            </p>
+            <div
+              className="text-third text-lg font-[Poppins] leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: data.inspectionText }}
+            />
           </div>
 
           {/* ── RIGHT SIDE (FILLED CLEANLY) ───────────────── */}
@@ -273,9 +366,10 @@ function HeroSection() {
             {/* subtle divider */}
             <div className="w-12 h-px bg-primary/40 mx-auto" />
 
-            <p className="text-third text-lg font-[Poppins] leading-relaxed">
-              {data.commitmentText}
-            </p>
+            <div
+              className="text-third text-lg font-[Poppins] leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: data.commitmentText }}
+            />
           </div>
         </div>
       </section>
@@ -326,4 +420,4 @@ function HeroSection() {
   );
 }
 
-export default HeroSection;
+export default WhyBuyBasic1;
