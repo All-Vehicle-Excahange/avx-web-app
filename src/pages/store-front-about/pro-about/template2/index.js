@@ -8,9 +8,7 @@ function index() {
   return (
     <>
       <Navbar />
-      <Layout>
         <AboutPage/>
-      </Layout>
       <FooterLink />
       <Footer/>
     </>

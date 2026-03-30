@@ -201,7 +201,7 @@ export default function AboutHero() {
                 </div>
 
                 {/* accent bar */}
-                <div className="w-8 h-[2px] bg-fourth/50" />
+                <div className="w-8 h-0.5 bg-fourth/50" />
 
                 <p className="text-third/65 text-[13.5px] leading-[1.9] font-[Poppins]">
                   {card.desc}
@@ -245,7 +245,7 @@ export default function AboutHero() {
                 <span className="text-3xl font-bold text-primary font-[Montserrat]">
                   {stat.number}
                 </span>
-                <span className="text-[12px] text-primary/70 font-[Poppins] leading-[1.5]">
+                <span className="text-[12px] text-primary/70 font-[Poppins] leading-normal">
                   {stat.label}
                 </span>
               </motion.div>
