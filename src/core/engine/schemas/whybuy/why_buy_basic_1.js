@@ -3,17 +3,17 @@ export const WHY_BUY_BASIC_1 = [
     id: "why_buy_basic_1",
     type: "why_buy_theme_basic_1",
     data: {
-      heroTitle: "Why Choose Adarsh",
-      heroDescription:
+      whyBuyHeroTitle: "Why Choose Adarsh",
+      whyBuyHeroDescription:
         "Buyers trust Adarsh Auto Consultants for transparent communication, reliable vehicle options, and a smooth buying experience.",
 
       storyTitle: "Experience",
-      storyText: `For over 12 years, Adarsh Auto Consultants has been helping buyers discover reliable vehicles across Gujarat.
+      storyDescription: `For over 12 years, Adarsh Auto Consultants has been helping buyers discover reliable vehicles across Gujarat.
 
 Our goal is to maintain a diverse vehicle inventory and provide accurate information so buyers can make confident decisions.`,
 
-      selectionTitle: "Our Approach to",
-      selectionDescription: `Every vehicle listed goes through internal evaluation before being presented to buyers.`,
+      vehicleSelectionTitle: "Our Approach to",
+      vehicleSelectionDescription: `Every vehicle listed goes through internal evaluation before being presented to buyers.`,
 
       processTitle: "How Buying",
       processDescription:
@@ -50,11 +50,11 @@ Our goal is to maintain a diverse vehicle inventory and provide accurate informa
         "Mechanical check",
       ],
 
-      commitmentTitle: "Our",
-      commitmentText:
+      customerCommitmentTitle: "Our",
+      customerCommitmentDescription:
         "We aim to provide honest guidance and reliable information.",
 
-      testimonialsTitle: "Customer",
+      testimonialTitle: "Customer",
       testimonials: [
         {
           name: "Rahul Patel",
