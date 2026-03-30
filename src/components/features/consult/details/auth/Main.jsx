@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import Login from "./Login";
 import Register from "./Register";
@@ -25,19 +27,17 @@ function Main() {
         <div className="mt-6 flex rounded-full bg-primary/10 p-1 border border-third/30">
           <button
             onClick={() => setActiveTab("login")}
-            className={`flex-1 py-2 rounded-full text-sm font-medium transition ${
-              activeTab === "login" ? "bg-primary text-secondary" : "text-third"
-            }`}
+            className={`flex-1 py-2 cursor-pointer rounded-full text-sm font-medium transition ${activeTab === "login" ? "bg-primary text-secondary" : "text-third"
+              }`}
           >
             Login
           </button>
           <button
             onClick={() => setActiveTab("register")}
-            className={`flex-1 py-2 rounded-full text-sm font-medium transition ${
-              activeTab === "register"
-                ? "bg-primary text-secondary"
-                : "text-third"
-            }`}
+            className={`flex-1 py-2 cursor-pointer rounded-full text-sm font-medium transition ${activeTab === "register"
+              ? "bg-primary text-secondary"
+              : "text-third"
+              }`}
           >
             Sign Up
           </button>

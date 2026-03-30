@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/FooterLink";
 import FooterLink from "@/components/layout/FooterLink";
+import Footer from "@/components/layout/Footer";
 import Hero from "@/components/features/userSeller/Hero";
 import HowAvxWorks from "@/components/features/userSeller/HowAvxWorks";
 import DocumentRequired from "@/components/features/userSeller/DocumentRequired";
@@ -12,23 +12,23 @@ import Faq from "@/components/features/userSeller/Faq";
 import WhySellOnAvx from "@/components/features/userSeller/WhySellOnAvx";
 
 function index() {
-    return (
-        <>
-            <Navbar heroMod scrolled />
-                <Hero />
-            <Layout>
-                <WhySellOnAvx/>
-                <HowAvxWorks />
-                <InspectionAdvantage />
-                <WhoCanSell />
-                <DocumentRequired />
-                <Faq />
-            </Layout>
-            <FooterLink />
-            <Footer />
+  return (
+    <>
+      <Navbar heroMod scrolled />
+      <Hero />
+      <Layout>
+        <WhySellOnAvx />
+        <HowAvxWorks />
+        <InspectionAdvantage />
+        <WhoCanSell />
+        <DocumentRequired />
+        <Faq />
+      </Layout>
+      <FooterLink />
+      <Footer />
 
-           </>
-    ); 
+    </>
+  );
 }
 
 export default index;

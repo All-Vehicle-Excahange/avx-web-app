@@ -2,6 +2,7 @@
 
 import Button from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
@@ -155,12 +156,21 @@ export default function ConsultantHeroSection() {
             </p>
             <div className="w-24 h-0.5 bg-fourth rounded-full" />
             <div className="flex flex-col sm:flex-row gap-4 pt-3">
-              <Button variant="ghost" className="bg-primary/95 text-secondary">
-                Become a Consultant
-              </Button>
-              <Button variant="default" className=" border border-primary/80">
-                View Pricing
-              </Button>
+              <Link href="/consult/account">
+                <Button variant="ghost" size="md">
+                  Become a Consultant
+                </Button>
+              </Link>
+
+              <Link href="/consult/subscription">
+                <Button
+                  variant="outlineSecondary"
+                  size="md"
+                  className="border-third/30 text-primary"
+                >
+                  View Pricing
+                </Button>
+              </Link>
             </div>
           </div>
 
@@ -210,11 +220,10 @@ export default function ConsultantHeroSection() {
                   <button
                     key={tab}
                     onClick={() => setActiveTab(i)}
-                    className={`relative px-3.5 py-1.5 text-[11px] font-semibold rounded-lg transition-colors duration-200 ${
-                      activeTab === i
+                    className={`relative px-3.5 py-1.5 text-[11px] font-semibold rounded-lg transition-colors duration-200 ${activeTab === i
                         ? "text-primary"
                         : "text-third hover:text-primary/70"
-                    }`}
+                      }`}
                   >
                     {activeTab === i && (
                       <motion.div

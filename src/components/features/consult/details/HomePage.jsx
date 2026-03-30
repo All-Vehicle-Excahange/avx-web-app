@@ -25,12 +25,13 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ConsultantProgramPage() {
   const router = useRouter();
 
   const handleGetStarted = () => {
-    router.push("/consult/account");
+    router.push("/account");
   };
 
   const handleViewPricing = () => {
@@ -125,7 +126,7 @@ export default function ConsultantProgramPage() {
           <div className="max-w-[1480px] mx-auto flex justify-center">
             <div className="max-w-2xl space-y-8 text-center">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary leading-tight">
-                Grow Your Automotive Business on AVX
+                Grow Your Automotive Business on Reecomm
               </h1>
 
               <p className="text-third text-lg md:text-xl leading-relaxed">
@@ -135,18 +136,21 @@ export default function ConsultantProgramPage() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                <Button onClick={handleGetStarted} variant="ghost" size="md">
-                  Become a Consultant
-                </Button>
+                <Link href="/consult/account">  
+                  <Button variant="ghost" size="md">
+                    Become a Consultant
+                  </Button>
+                </Link>
 
-                <Button
-                  onClick={handleViewPricing}
-                  variant="outlineSecondary"
-                  size="md"
-                  className="border-third/30 text-primary"
-                >
-                  View Pricing
-                </Button>
+                <Link href="/consult/subscription">
+                  <Button
+                    variant="outlineSecondary"
+                    size="md"
+                    className="border-third/30 text-primary"
+                  >
+                    View Pricing
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -439,11 +443,10 @@ export default function ConsultantProgramPage() {
             ].map((item, i) => (
               <div
                 key={i}
-                className={`group py-8 md:py-0 md:px-8 lg:px-10 ${
-                  i < 2
-                    ? "border-b md:border-b-0 md:border-r border-third/8"
-                    : ""
-                } ${i === 0 ? "md:pl-0" : ""} ${i === 2 ? "md:pr-0" : ""}`}
+                className={`group py-8 md:py-0 md:px-8 lg:px-10 ${i < 2
+                  ? "border-b md:border-b-0 md:border-r border-third/8"
+                  : ""
+                  } ${i === 0 ? "md:pl-0" : ""} ${i === 2 ? "md:pr-0" : ""}`}
               >
                 <span className="text-third/12 font-mono font-bold text-sm mb-6 block">
                   {item.num}

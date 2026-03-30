@@ -1,12 +1,15 @@
+"use client";
+
 import React from "react";
 import InputField from "@/components/ui/inputField";
 import Button from "@/components/ui/button";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 function Login() {
   const router = useRouter();
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    if (e) e.preventDefault();
     router.push("/consult/subscription");
   };
 
