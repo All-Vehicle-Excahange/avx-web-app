@@ -1,7 +1,9 @@
+"use client";
+
 import { Zap, Crown, Rocket, Check } from "lucide-react";
 import Button from "@/components/ui/button";
 import PlanCard from "./components/PlanCard";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function Subscription() {
   const router = useRouter();

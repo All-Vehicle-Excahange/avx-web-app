@@ -10,6 +10,7 @@ import {
 import StatCard from "./components/StateCard";
 import Activity from "./components/Activity";
 import Task from "./components/Task";
+import Button from "@/components/ui/button";
 
 export default function OverviewComponent() {
   return (
@@ -56,7 +57,7 @@ export default function OverviewComponent() {
       </div>
 
       <div className="rounded-xl border border-third/30 bg-primary/5 p-6 space-y-5">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
           <div>
             <h3 className="font-semibold text-lg">Complete this steps</h3>
             <p className="text-sm text-third">
@@ -64,9 +65,14 @@ export default function OverviewComponent() {
             </p>
           </div>
 
-          <button className="rounded-xl border border-third/30 px-4 py-2 text-sm hover:bg-primary/10 transition">
+          <Button
+            variant="ghost"
+            size="sm"
+            showIcon={true}
+            className="w-fit"
+          >
             See full step
-          </button>
+          </Button>
         </div>
 
         {/* PROGRESS */}

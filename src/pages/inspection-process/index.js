@@ -10,7 +10,7 @@ import InspectionReportFormat from "@/components/features/inspection-process/Ins
 import InspectionWorkFlow from "@/components/features/inspection-process/InspectionWorkFlow";
 import ReInspectionOptions from "@/components/features/inspection-process/ReInspectionOptions";
 import FooterLink from "@/components/layout/FooterLink";
-import Footer from "@/components/layout/FooterLink";
+import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
 import Navbar from "@/components/layout/Navbar";
 import React from "react";
