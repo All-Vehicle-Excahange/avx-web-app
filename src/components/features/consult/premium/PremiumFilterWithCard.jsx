@@ -13,6 +13,7 @@ import {
   ChevronRight,
   ChevronLeft,
   MapPin,
+  X,
 } from "lucide-react";
 import FilterSection from "../../search/FilterSection";
 import {
@@ -162,6 +163,18 @@ export default function FilterWithCard({ onFilterChange }) {
       prev.includes(chip) ? prev.filter((c) => c !== chip) : [...prev, chip],
     );
   };
+
+  // ── Lock body scroll when mobile filter is open ──
+  useEffect(() => {
+    if (mobileFilterOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileFilterOpen]);
 
   // Close dropdowns on outside click
   useEffect(() => {
@@ -940,17 +953,18 @@ export default function FilterWithCard({ onFilterChange }) {
           <div className="shrink-0">
             <Button
               variant="ghost"
+              className="rounded-lg"
               showIcon={false}
               onClick={() => setMobileFilterOpen(true)}
             >
-              <FilterIcon className="h-4 w-4" />
+              <FilterIcon className="h-4 w-4 mr-1" />
               Filter
             </Button>
           </div>
 
           <div className="shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg border border-white/20 bg-white/5">
             <span className="text-xs text-white font-semibold whitespace-nowrap">
-              AVX Premium Consultants
+              Reecomm Premium Consultants
             </span>
             <button
               onClick={() => setAvxAssumed(!avxAssumed)}
@@ -1007,9 +1021,9 @@ export default function FilterWithCard({ onFilterChange }) {
             variant="ghost"
             showIcon={false}
             onClick={() => setMobileFilterOpen(false)}
-            className="text-secondary text-xl font-bold p-2"
+            className="text-primary bg-secondary hover:bg-secondary/50 hover:text-primary/80 text-xl font-bold p-1"
           >
-            ✕
+            <X size={20} />
           </Button>
         </div>
 

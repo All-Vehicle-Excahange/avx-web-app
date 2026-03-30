@@ -7,8 +7,8 @@ import AvxHero from "@/components/features/why-choose-us/Hero";
 import InspectionAdvantage from "@/components/features/why-choose-us/InspectionAdvantage";
 import RankingDiagram from "@/components/features/why-choose-us/PerformanceRanking";
 import TrustVerification from "@/components/features/why-choose-us/TrustVerification";
+import Footer from "@/components/layout/Footer";
 import FooterLink from "@/components/layout/FooterLink";
-import Footer from "@/components/layout/FooterLink";
 import Navbar from "@/components/layout/Navbar";
 import React from "react";
 

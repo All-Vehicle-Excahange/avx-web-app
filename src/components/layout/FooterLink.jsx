@@ -11,9 +11,7 @@ const FooterLink = () => {
 
           {/* COLUMN 1: TOP STORIES (SEO CONTENT) */}
           <div className="flex flex-col gap-6 lg:col-span-1">
-            <h2 className="text-[11px] font-bold text-white uppercase tracking-[0.2em] opacity-90">
-              Top Stories
-            </h2>
+            <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white"> Top Stories</h2>
 
             <div className="flex flex-col gap-2">
               <Link href="/blog/best-cars-under-5-lakh" className="text-[12px] text-white/50 hover:text-white transition-all">
@@ -40,9 +38,8 @@ const FooterLink = () => {
 
           {/* COLUMN 2: RECOMMENDED (SEO) */}
           <div className="flex flex-col gap-6">
-            <h2 className="text-[11px] font-bold text-white uppercase tracking-[0.2em] opacity-90">
-              Recommended
-            </h2>
+
+            <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white"> Recommended</h2>
 
             <div className="flex flex-col gap-2">
               <Link href="/buy-used-cars" className="text-[12px] text-white/50 hover:text-white transition-all">
@@ -69,9 +66,8 @@ const FooterLink = () => {
 
           {/* COLUMN 3: SERVICES (SEO OPTIMIZED) */}
           <div className="flex flex-col gap-6">
-            <h2 className="text-[11px] font-bold text-white uppercase tracking-[0.2em] opacity-90">
-              Services
-            </h2>
+            <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white"> Services</h2>
+
 
             <div className="flex flex-col gap-2">
               <Link href="/sell-used-car" className="text-[12px] text-white/50 hover:text-white transition-all">
@@ -98,9 +94,7 @@ const FooterLink = () => {
 
           {/* COLUMN 4: EXPLORE (SEO OPTIMIZED) */}
           <div className="flex flex-col gap-6">
-            <h2 className="text-[11px] font-bold text-white uppercase tracking-[0.2em] opacity-90">
-              Explore
-            </h2>
+            <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white"> Explore</h2>
 
             <div className="flex flex-col gap-2">
               <Link href="/used-cars" className="text-[12px] text-white/50 hover:text-white transition-all">
@@ -125,11 +119,9 @@ const FooterLink = () => {
             </div>
           </div>
 
-          {/* COLUMN 6: POPULAR SEARCHES (SEO BOOST) */}
+          {/* COLUMN 5: POPULAR SEARCHES (SEO BOOST) */}
           <div className="flex flex-col gap-6">
-            <h2 className="text-[11px] font-bold text-white uppercase tracking-[0.2em] opacity-90">
-              Popular Searches
-            </h2>
+            <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white"> Popular Searches</h2>
 
             <div className="flex flex-col gap-2">
               <Link href="/used-cars-in-ahmedabad" className="text-[12px] text-white/50 hover:text-white transition-all">
@@ -164,10 +156,7 @@ const FooterLink = () => {
 
           {/* COLUMN 5: HELP & SUPPORT (SEO + TRUST) */}
           <div className="flex flex-col gap-6">
-            <h2 className="text-[11px] font-bold text-white uppercase tracking-[0.2em] opacity-90">
-              Help & Support
-            </h2>
-
+            <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white"> Help & Support</h2>
             <div className="flex flex-col gap-2">
               <Link href="/faqs" className="text-[12px] text-white/50 hover:text-white transition-all">
                 FAQs
