@@ -410,7 +410,7 @@ export default function ProfileComponent() {
         </div>
       </div>
       {/* FOOTER ACTIONS (CONTEXTUAL) */}
-      <div className="rounded-xl border border-third/30 bg-primary/5 p-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+      <div className="rounded-xl border border-third/30 bg-primary/5 p-5 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
         {/* ✅ Text Section: Centered on mobile, left-aligned on desktop */}
         <div className="space-y-1 text-left">
           <p className="font-medium text-sm md:text-base text-primary">
