@@ -6,9 +6,9 @@ const data = {
   `,
   stats: [
     { number: "150K+", label: "Active Users Worldwide" },
-    { number: "$2B+",  label: "Transactions Processed" },
-    { number: "98%",   label: "Customer Satisfaction" },
-    { number: "100+",  label: "Team Members" },
+    { number: "$2B+", label: "Transactions Processed" },
+    { number: "98%", label: "Customer Satisfaction" },
+    { number: "100+", label: "Team Members" },
   ],
 }
 
@@ -25,18 +25,18 @@ function Stats() {
             {/* Left: text */}
             <div className="flex flex-col gap-5 ">
 
-               <div className="flex flex-col gap-6">
-                    <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                        Stats
-                    </p>
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                        Numbers that <br/>
-                        <span className="text-fourth/80"> speak for us</span>
-                    </h2>
-                    <p className="text-third/70 text-md font-[Poppins] leading-relaxed max-w-md">
-                        {data.statsDesc}
-                    </p>
-                </div>
+              <div className="flex flex-col gap-6">
+                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                  Stats
+                </p>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                  Numbers that <br />
+                  <span className="text-fourth/80"> speak for us</span>
+                </h2>
+                <p className="text-third/70 text-md font-[Poppins] leading-relaxed max-w-md">
+                  {data.statsDesc}
+                </p>
+              </div>
 
             </div>
 

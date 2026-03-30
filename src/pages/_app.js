@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+
 import { useEffect, useState } from "react";
 import Router from "next/router";
 
@@ -22,15 +24,15 @@ export default function App({ Component, pageProps }) {
 
     // TEMP: Commented out session check so splash shows every time during dev
     // Uncomment these lines for production (splash only once per session)
-    // useEffect(() => {
-    //     const splashShown = sessionStorage.getItem("splashShown");
-    //     if (splashShown) {
-    //         setShowSplash(false);
-    //     }
-    // }, []);
+    useEffect(() => {
+        const splashShown = sessionStorage.getItem("splashShown");
+        if (splashShown) {
+            setShowSplash(false);
+        }
+    }, []);
 
     const handleSplashComplete = () => {
-        // sessionStorage.setItem("splashShown", "true");
+        sessionStorage.setItem("splashShown", "true");
         setShowSplash(false);
     };
 
@@ -71,7 +73,7 @@ export default function App({ Component, pageProps }) {
             )}
 
             <LoginPopup
-                isOpen={isLoginPopupOpen}
+                isOpen={isLoginPopupOpen && !showSplash}
                 onClose={closeLoginPopup}
             />
 

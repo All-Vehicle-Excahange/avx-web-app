@@ -439,7 +439,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 onClick={() => handleActiveTabChange("vehicle")}
               >
                 <div className="text-md font-semibold text-primary tracking-wide">
-                  Vehicle Type 
+                  Vehicle Type
                 </div>
                 <div className={`text-sm font-medium ${vehicleTypeError ? "text-red-500" : "text-gray-200"}`}>
                   {vehicleTypeError ? "* Required" : (vehicleType || "Add type")}
@@ -745,7 +745,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   <Search size={18} />
                 </div>
                 <div>
-                  <div className="text-white font-bold">Buy Vehicle</div>
+                  <div className="text-white font-bold">Search Vehicle</div>
                   <div className="text-gray-400 text-xs mt-0.5">Find your dream car or bike</div>
                 </div>
               </button>

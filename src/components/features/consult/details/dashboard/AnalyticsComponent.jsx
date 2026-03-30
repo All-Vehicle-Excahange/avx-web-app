@@ -52,7 +52,7 @@ export default function AnalyticsComponent() {
         </div>
       </div>
       {/* Top Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
         <StatCard
           icon={<User size={20} />}
           label="Profile Views"
@@ -82,6 +82,7 @@ export default function AnalyticsComponent() {
           change="+1.2%"
         />
       </div>
+
       {/* Traffic */}
       <div className=" border border-third/20 rounded-xl p-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-8 shadow-sm transition-colors duration-200 hover:border-third/40">
         <div className="space-y-4">

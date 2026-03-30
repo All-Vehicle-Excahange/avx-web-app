@@ -41,7 +41,7 @@ function InspectionTab() {
   return (
     <section className="w-full space-y-10">
       {/* ================= HEADER ================= */}
-      <div className="flex flex-col md:flex-row sm:items-start justify-between gap-4">
+      <div className="flex flex-col lg:flex-row sm:items-start justify-between gap-4">
         <div>
           <h1 className="text-xl md:text-2xl font-bold">
             Inspection Tab — Consultant Panel
@@ -62,16 +62,17 @@ function InspectionTab() {
       </div>
 
       {/* ================= SNAPSHOT ================= */}
-      <div className="space-y-4">
+      <div className="rounded-xl border border-third/30 bg-primary/5 p-5 space-y-5">
         <h2 className="text-lg font-semibold">
           Inspection Performance Snapshot
         </h2>
 
         {/* Stat Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
           <StatCard
             icon={<Car className="text-primary" size={20} />}
-            label="Vehicles with AVX Inspection"
+            label="Vehicles with Reecomm Inspection"
             value="18"
           />
 
@@ -99,24 +100,61 @@ function InspectionTab() {
             value="4.6/5"
           />
         </div>
+
       </div>
 
       {/* ================= TRUST SCORE BANNER ================= */}
       <div className="rounded-xl border border-primary/20 bg-primary/5 px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          {/* Circle */}
-          <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 rounded-full bg-primary text-secondary flex items-center justify-center font-bold text-base md:text-lg">
-            82%
-          </div>
 
-          <div>
-            <p className="font-semibold text-xs md:text-sm leading-tight">
-              Your trust score is{" "}
-              <span className="text-primary font-bold">82%</span>
-            </p>
-            <p className="text-[11px] md:text-xs text-third mt-0.5">
-              Keep inspections updated to improve ranking
-            </p>
+          <div className="flex items-center gap-3">
+
+            {/* Circle Progress */}
+            <div className="relative w-10 h-10 md:w-12 md:h-12">
+              <svg className="w-full h-full -rotate-90">
+                {/* Background */}
+                <circle
+                  cx="50%"
+                  cy="50%"
+                  r="18"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  className="text-neutral-200"
+                  fill="transparent"
+                />
+                {/* Progress */}
+                <circle
+                  cx="50%"
+                  cy="50%"
+                  r="18"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeDasharray={113} // circumference
+                  strokeDashoffset={113 - (113 * 82) / 100}
+                  strokeLinecap="round"
+                  className="text-green-500"
+                  fill="transparent"
+                />
+              </svg>
+
+              {/* Center Text */}
+              <span className="absolute inset-0 flex items-center justify-center text-[10px] md:text-xs font-semibold text-primary">
+                82%
+              </span>
+            </div>
+
+            {/* Text */}
+            <div>
+              <p className="font-semibold text-xs md:text-sm leading-tight text-primary">
+                Your trust score is{" "}
+                <span className="font-bold">82%</span>
+              </p>
+
+              <p className="text-[11px] md:text-xs text-third mt-0.5">
+                Keep inspections updated to improve ranking
+              </p>
+            </div>
+
           </div>
         </div>
 
@@ -124,7 +162,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= HOW INSPECTION AFFECTS RANKING ================= */}
-      <div className="rounded-xl border border-third/30  p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/30  p-5 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         <h3 className="font-semibold flex items-center gap-2">
           <TrendingUp size={18} className="text-primary" />
           How inspection affects ranking:
@@ -149,7 +187,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= VEHICLES REQUIRING ATTENTION ================= */}
-      <div className="rounded-xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/30  p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div>
@@ -253,11 +291,13 @@ function InspectionTab() {
       </div>
 
       {/* ================= INSPECTION REQUESTS FROM BUYERS ================= */}
-      <div className="rounded-xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/30  p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+
+          {/* Title */}
           <div>
-            <h2 className="text-lg font-semibold">
+            <h2 className="text-base sm:text-lg font-semibold leading-tight">
               Inspection Requests From Buyers
             </h2>
             <p className="text-sm text-third">
@@ -265,12 +305,12 @@ function InspectionTab() {
             </p>
           </div>
 
-          {/* Pending Badge */}
-          <span className="px-4 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-sm font-semibold">
+          {/* Badge */}
+          <span className="w-fit px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-500 text-xs sm:text-sm font-semibold">
             1 Pending
           </span>
-        </div>
 
+        </div>
         {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -345,7 +385,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= INSPECTION HISTORY ================= */}
-      <div className="rounded-xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/30  p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div>
           <h2 className="text-xl font-semibold">Inspection History</h2>
@@ -532,7 +572,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= RE-INSPECTION CONTROL PANEL ================= */}
-      <div className="rounded-xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/30  p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div>
           <h2 className="text-xl font-semibold">Re-Inspection Control Panel</h2>
@@ -585,7 +625,7 @@ function InspectionTab() {
             </div>
 
             {/* Schedule Button */}
-            <Button variant="ghost" full>
+            <Button variant="ghost" size="sm" full>
               <RefreshCcw className="mr-4" size={18} />
               Schedule Re-Inspection
             </Button>
@@ -635,20 +675,25 @@ function InspectionTab() {
 
 
       {/* ================= DISPUTE & ISSUE CENTER ================= */}
-      <div className="rounded-xl border border-third/30 p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/30 p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+
+          {/* Left */}
           <div>
-            <h2 className="text-xl font-semibold">Dispute & Issue Center</h2>
+            <h2 className="text-base sm:text-xl font-semibold leading-tight">
+              Dispute & Issue Center
+            </h2>
             <p className="text-sm text-third">
               Manage buyer disputes and inspection issues
             </p>
           </div>
 
-          {/* Open Badge */}
-          <span className="px-4 py-1 rounded-full bg-red-500/10 text-red-400 text-sm font-semibold">
+          {/* Badge */}
+          <span className="w-fit px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-xs sm:text-sm font-semibold">
             1 Open
           </span>
+
         </div>
 
         {/* Table */}
@@ -712,7 +757,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= UPGRADE YOUR TRUST VISIBILITY ================= */}
-      <div className="rounded-xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/30  p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div>
           <h2 className="text-xl font-semibold">
@@ -760,20 +805,32 @@ function InspectionTab() {
         </div>
 
         {/* Bundle Banner */}
-        <div className="rounded-xl border border-primary/20 bg-primary/5 px-6 py-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        {/* Bundle Banner */}
+        <div className="rounded-xl border border-primary/20 bg-primary/5 px-4 sm:px-6 py-4 sm:py-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+
+          {/* Left */}
           <div className="flex items-start gap-3">
-            <BadgeCheck size={22} className="text-primary mt-1" />
+            <BadgeCheck size={20} className="text-primary mt-0.5 shrink-0" />
+
             <div>
-              <p className="font-semibold">Bundle All Premium Features</p>
-              <p className="text-sm text-third">
+              <p className="font-semibold text-sm sm:text-base leading-tight">
+                Bundle All Premium Features
+              </p>
+              <p className="text-xs sm:text-sm text-third mt-0.5">
                 Save 25% when you add all premium inspection features
               </p>
             </div>
           </div>
 
-          <Button variant="ghost" className="px-8">
+          {/* Button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-auto sm:w-auto px-6"
+          >
             Get Bundle
           </Button>
+
         </div>
       </div>
     </section>
@@ -804,30 +861,43 @@ function VehicleScore({ name, score, orange }) {
 
 function PremiumFeatureCard({ icon, title, desc, tag }) {
   return (
-    <div className="rounded-xl border border-third/30  p-5 space-y-4">
-      {/* Top Row */}
-      <div className="flex items-start justify-between">
-        {/* Icon + Title */}
-        <div className="flex items-start gap-3">
-          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-            {icon}
-          </div>
+    <div className="group rounded-2xl border border-zinc-800 bg-primary/5 p-5 transition-all hover:border-zinc-700">
 
-          <div>
-            <p className="font-semibold">{title}</p>
-            <p className="text-sm text-third">{desc}</p>
-          </div>
+      {/* Top Row: Icon + Text + Badge */}
+      <div className="flex items-start gap-4">
+
+        {/* 1. Icon */}
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/5 text-white border border-zinc-800">
+          {icon}
         </div>
 
-        {/* Tag */}
-        <span className="px-3 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-semibold">
-          {tag}
-        </span>
+        {/* 2. Content (Title & Desc) - flex-1 pushes the badge to the right */}
+        <div className="flex-1 min-w-0">
+          <h3 className="text-base font-semibold text-white leading-tight">
+            {title}
+          </h3>
+          <p className="mt-1 text-sm text-zinc-400 line-clamp-2">
+            {desc}
+          </p>
+        </div>
+
+        {/* 3. The Badge - shrink-0 prevents it from getting crushed */}
+        {tag && (
+          <div className="shrink-0">
+            <span className="inline-flex items-center justify-center rounded-full bg-emerald-500/10 px-3 py-1 text-[11px] font-bold text-emerald-500 border border-emerald-500/20 whitespace-nowrap">
+              {tag}
+            </span>
+          </div>
+        )}
       </div>
 
-      {/* CTA Button */}
-      <div className="flex justify-end items-end">
-        <Button variant="ghost" size="sm"  >
+      {/* Bottom Row: CTA Button */}
+      <div className="mt-6 flex justify-end">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="w-auto sm:w-auto px-6"
+        >
           Add to Inspection
         </Button>
       </div>

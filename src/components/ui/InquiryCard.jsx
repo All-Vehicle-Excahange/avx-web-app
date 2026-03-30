@@ -69,7 +69,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
   });
 
   return (
-    <div className="rounded-2xl border border-third/40  p-4 lg:px-6 lg:py-5 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 lg:gap-6 shadow-sm hover:shadow-md transition">
+    <div className="rounded-xl border border-third/40  p-4 lg:px-6 lg:py-5 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 lg:gap-6 shadow-sm hover:shadow-md transition">
 
       {/*   LEFT IMAGE + INFO (Stacks on mobile & tablet, row on desktop) */}
       <div className="flex flex-col lg:flex-row items-start gap-4 lg:gap-5 w-full">
@@ -201,6 +201,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
               {!isInspected && (
                 <Button
                   showIcon={false}
+                  size="sm"
                   variant="outlineSecondary"
                   onClick={() => console.log("Request Inspection")}
                 >
@@ -212,13 +213,18 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
               <Button
                 showIcon={false}
                 variant="ghost"
+                size="sm"
                 onClick={() => setShowClosePopup(true)}
               >
                 <Lock size={16} className="mr-2" />
                 Close Inquiry
               </Button>
 
-              <Button showIcon={false} variant="ghost">
+              <Button
+                showIcon={false}
+                variant="ghost"
+                size="sm"
+              >
                 <MessageCircle size={16} className="mr-2" />
                 Open Chat
               </Button>

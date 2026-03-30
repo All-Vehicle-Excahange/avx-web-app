@@ -2,34 +2,36 @@
 import React from "react"
 import { ShieldCheck, Globe, TrendingUp, Cpu } from "lucide-react"
 
-const data = {
-    services: [
-        {
-            icon: ShieldCheck,
-            title: "Secure Payments",
-            desc: "PCI-DSS compliant global payment systems.",
-        },
-        {
-            icon: Globe,
-            title: "Global Infrastructure",
-            desc: "99.99% uptime cloud deployment in 12 regions.",
-        },
-        {
-            icon: TrendingUp,
-            title: "Growth Tools",
-            desc: "Smart CRM, analytics and automation funnels.",
-        },
-        {
-            icon: Cpu,
-            title: "AI Optimization",
-            desc: "AI powered performance & conversion engines.",
-        },
-    ],
-}
-
 function Services() {
+
+    const data = {
+        services: [
+            {
+                icon: "ShieldCheck",
+                title: "Secure Payments",
+                desc: "PCI-DSS compliant global payment systems.",
+            },
+            {
+                icon: "Globe",
+                title: "Global Infrastructure",
+                desc: "99.99% uptime cloud deployment in 12 regions.",
+            },
+            {
+                icon: "TrendingUp",
+                title: "Growth Tools",
+                desc: "Smart CRM, analytics and automation funnels.",
+            },
+            {
+                icon: "Cpu",
+                title: "AI Optimization",
+                desc: "AI powered performance & conversion engines.",
+            },
+        ],
+
+    }
+
     return (
-        <section className="relative py-12">
+        <section className="relative flex flex-col justify-center items-center py-12">
 
             <div className="mx-auto w-full max-w-6xl grid lg:grid-cols-2 gap-16">
 
@@ -46,9 +48,7 @@ function Services() {
                     </h2>
 
                     <p className="text-third/70 text-md font-[Poppins] leading-relaxed">
-                        We provide a complete infrastructure designed for scale, security,
-                        and intelligent growth. Every system is engineered to perform under
-                        real-world demand.
+                        {data.servicesDesc}
                     </p>
 
                 </div>
@@ -56,8 +56,8 @@ function Services() {
                 {/* ── RIGHT: STAGGERED SERVICES ── */}
                 <div className="flex flex-col gap-12">
 
-                    {data.services.map((item, i) => {
-                        const Icon = item.icon
+                    {data.services.map((service, i) => {
+                        const Icon = iconMap[service.icon];
                         return (
                             <div
                                 key={i}
@@ -74,11 +74,11 @@ function Services() {
                                 <div className="flex flex-col gap-2 max-w-sm">
 
                                     <h3 className="text-xl font-semibold text-primary font-[Montserrat]">
-                                        {item.title}
+                                        {service.title}
                                     </h3>
 
                                     <p className="text-third/60 text-sm font-[Poppins] leading-relaxed">
-                                        {item.desc}
+                                        {service.desc}
                                     </p>
 
                                 </div>

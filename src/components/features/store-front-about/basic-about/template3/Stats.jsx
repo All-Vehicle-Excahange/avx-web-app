@@ -15,7 +15,7 @@ const data = {
 
 function Stats() {
     return (
-        <section className="relative py-12 overflow-hidden">
+        <section className="relative flex flex-col justify-center items-center py-12">
 
 
             <div className="relative z-10 mx-auto w-full  flex flex-col gap-16">
