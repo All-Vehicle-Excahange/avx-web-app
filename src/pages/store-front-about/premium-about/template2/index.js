@@ -1,18 +1,16 @@
 
+import AboutPage from "@/components/features/store-front-about/premium-about/template2/Hero";
 import Footer from "@/components/layout/Footer";
 import FooterLink from "@/components/layout/FooterLink";
 import Layout from "@/components/layout/Layout";
 import Navbar from "@/components/layout/Navbar";
-import Hero from "../../../../components/features/store-front-about/premium-about/template2/Hero";
 
 
 function index() {
     return (
         <>
             <Navbar />
-            <Layout>
-                <Hero />
-            </Layout>
+                <AboutPage/>
             <FooterLink />
             <Footer />
         </>
