@@ -158,210 +158,111 @@ function Hero() {
         </div>
       </section>
 
-      <section className="relative flex flex-col justify-center items-center py-12">
-        <div className="mx-auto w-full">
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            {/* ── LEFT: eyebrow + title + desc ── */}
-            <div className="flex flex-col gap-8">
-              <div className="flex flex-col gap-6">
-                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                  Stats
-                </p>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                  Numbers that
-                  <br />
-                  <span className="text-fourth/80">speak for us</span>
-                </h2>
-              </div>
+       <section className="relative flex flex-col justify-center items-center py-12">
 
-              <p className="text-third/70 text-md font-[Poppins] leading-relaxed max-w-md">
-                {data.statsDesc}
-              </p>
-            </div>
 
-            {/* ── RIGHT: 2x2 stats grid with cross dividers ── */}
-            <div className="relative grid grid-cols-2">
-              {/* Horizontal rule across center */}
-              <div className="absolute top-1/2 left-0 w-full h-px bg-third/20 -translate-y-1/2" />
-              {/* Vertical rule down center */}
-              <div className="absolute left-1/2 top-0 h-full w-px bg-third/20 -translate-x-1/2" />
+            <div className="relative z-10 mx-auto w-full  flex flex-col gap-16">
 
-              {/* Top-left accent line */}
-              <div className="absolute top-0 right-1/2 w-8 h-px bg-fourth" />
-              {/* Bottom-right accent line */}
-              <div className="absolute bottom-0 left-1/2 w-8 h-px bg-fourth" />
-              {/* Top-right vertical accent */}
-              <div className="absolute top-0 left-1/2 w-px h-8 bg-fourth" />
-              {/* Bottom-left vertical accent */}
-              <div className="absolute bottom-0 right-1/2 w-px h-8 bg-fourth" />
-
-              {data.stats.map((stat, index) => (
-                <div key={index} className="flex flex-col gap-3 p-8 lg:p-10">
-                  <p className="text-xl sm:text-2xl lg:text-3xl font-semibold leading-none text-primary font-[Montserrat]">
-                    {stat.number}
-                  </p>
-                  <p className="text-third/60 text-sm font-[Poppins] leading-snug">
-                    {stat.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="relative flex flex-col justify-center items-center py-12">
-        <div className="mx-auto w-full  flex flex-col gap-6">
-          {/* ── Header ── */}
-          <div className="grid gap-5 items-end">
-            <div className="flex flex-col gap-5">
-              <div className="flex items-center gap-4">
-                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                  Our Services
-                </p>
-              </div>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                What We
-                <span className="text-fourth/80"> Actually Do</span>
-              </h2>
-            </div>
-            <div className="flex flex-col gap-4 lg:pb-2">
-              <p className="text-third/70 text-lg md:text-md font-[Poppins] leading-relaxed">
-                {data.servicesDesc}
-              </p>
-            </div>
-          </div>
-
-          {/* ── Services Panel ── */}
-          <div className="grid lg:grid-cols-12 gap-0 border border-third/10 rounded-2xl overflow-hidden">
-            {/* Left: expandable rows — desktop only */}
-            <div className="lg:col-span-5 hidden lg:flex flex-col border-r border-third/10">
-              {data.services.map((service, index) => {
-                const Icon = iconMap[service.icon];
-                const isActive = activeIndex === index;
-                return (
-                  <button
-                    key={index}
-                    onClick={() => setActiveIndex(index)}
-                    onMouseEnter={() => setActiveIndex(index)}
-                    className={`group relative flex flex-col text-left border-b border-third/10 last:border-none transition-all duration-300 overflow-hidden ${isActive ? "bg-third/5 py-7 gap-3" : "py-7 gap-0 hover:bg-third/3"}`}
-                  >
-                    {/* Active left bar */}
-                    <span
-                      className={`absolute left-0 top-0 w-0.5 h-full transition-all duration-300 ${isActive ? "bg-third" : "bg-transparent"}`}
-                    />
-
-                    {/* Row: number + icon + title + toggle */}
-                    <div className="flex items-center justify-between px-8">
-                      <div className="flex items-center gap-4">
-                        <span
-                          className={`text-xs tracking-[0.4em] font-semibold font-[Poppins] transition-colors duration-300 ${isActive ? "text-third" : "text-third/30"}`}
-                        >
-                          0{index + 1}
-                        </span>
-                        <span
-                          className={`transition-colors duration-300 ${isActive ? "text-third" : "text-third/30 group-hover:text-third/60"}`}
-                        >
-                          {Icon && <Icon size={16} strokeWidth={1.5} />}
-                        </span>
-                        <h3
-                          className={`text-sm font-semibold font-[Montserrat] transition-colors duration-300 ${isActive ? "text-primary" : "text-third/50 group-hover:text-third/80"}`}
-                        >
-                          {service.title}
-                        </h3>
-                      </div>
-                      <span
-                        className={`text-sm font-[Poppins] transition-all duration-300 ${isActive ? "text-third" : "text-third/20"}`}
-                      >
-                        {isActive ? "—" : "+"}
-                      </span>
-                    </div>
-
-                    {/* Expanded desc */}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Tab bar — mobile only */}
-            <div className="lg:hidden flex flex-row w-full border-b border-third/10 overflow-x-auto">
-              {data.services.map((service, index) => {
-                const Icon = iconMap[service.icon];
-                const isActive = activeIndex === index;
-                return (
-                  <button
-                    key={index}
-                    onClick={() => setActiveIndex(index)}
-                    className={`relative flex items-center gap-2 px-5 py-4 whitespace-nowrap flex-1 justify-center transition-all duration-200 ${isActive ? "text-primary" : "text-third/40"}`}
-                  >
-                    {Icon && (
-                      <Icon
-                        size={14}
-                        strokeWidth={1.5}
-                        className={isActive ? "text-third" : ""}
-                      />
-                    )}
-                    <span className="text-xs font-semibold font-[Poppins] tracking-wide">
-                      {service.title}
-                    </span>
-                    <span
-                      className={`absolute bottom-0 left-0 h-px w-full transition-all duration-300 ${isActive ? "bg-third" : "bg-transparent"}`}
-                    />
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Right: large active display */}
-            <div className="lg:col-span-7 flex flex-col justify-between p-10 lg:p-14 gap-8">
-              {/* Icon + content */}
-              <div className="flex flex-col gap-4">
-                {/* Icon row */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center justify-center w-16 h-16 rounded-2xl border border-third/20 bg-third/5">
-                    {(() => {
-                      const Icon =
-                        iconMap[data.services[activeIndex].icon];
-                      return Icon ? (
-                        <Icon
-                          size={28}
-                          strokeWidth={1.3}
-                          className="text-third"
-                        />
-                      ) : null;
-                    })()}
-                  </div>
-                  <p className="text-xs tracking-[0.5em] uppercase text-third/30 font-semibold font-[Poppins]">
-                    0{activeIndex + 1} / 0{data.services.length}
-                  </p>
+                {/* ── TOP DESCRIPTION ── */}
+                <div className="flex flex-col gap-6">
+                    <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                        Stats
+                    </p>
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                        Numbers that 
+                        <span className="text-fourth/80"> speak for us</span>
+                    </h2>
+                    <p className="text-third/70 text-md font-[Poppins] leading-relaxed max-w-md">
+                        {data.statsDesc}
+                    </p>
                 </div>
 
-                {/* Title + divider + desc */}
-                <div className="flex flex-col gap-4">
-                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                    {data.services[activeIndex].title}
-                  </h3>
-                  <p className="text-third/70 text-lg font-[Poppins] leading-relaxed max-w-sm">
-                    {data.services[activeIndex].desc}
-                  </p>
-                </div>
-              </div>
+                {/* ── STATS GRID ── */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-16">
 
-              {/* Bottom dot indicators */}
-              <div className="flex items-center gap-3">
-                {data.services.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActiveIndex(i)}
-                    onMouseEnter={() => setActiveIndex(i)}
-                    className={`transition-all duration-300 rounded-full ${i === activeIndex ? "w-8 h-1.5 bg-third" : "w-1.5 h-1.5 bg-third/30 hover:bg-third/60"}`}
-                  />
-                ))}
-              </div>
+                    {data.stats.map((item, i) => (
+                        <div key={i} className="flex flex-col gap-3">
+
+                            {/* Number */}
+                            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-primary font-[Montserrat]">
+                                {item.number}
+                            </h3>
+
+                            {/* Label */}
+                            <p className="text-third/60 text-sm sm:text-base font-[Poppins]">
+                                {item.label}
+                            </p>
+
+                        </div>
+                    ))}
+
+                </div>
+
             </div>
-          </div>
-        </div>
-      </section>
+
+        </section>
+
+       <section className="relative flex flex-col justify-center items-center py-12">
+
+            <div className="mx-auto w-full max-w-6xl grid lg:grid-cols-2 gap-16">
+
+                {/* ── LEFT: STRONG TEXT ── */}
+                <div className="flex flex-col gap-6 max-w-xl">
+
+                    <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                        Our Services
+                    </p>
+
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                        What We
+                        <span className="text-fourth/80"> Do</span>
+                    </h2>
+
+                    <p className="text-third/70 text-md font-[Poppins] leading-relaxed">
+                        {data.servicesDesc}
+                    </p>
+
+                </div>
+
+                {/* ── RIGHT: STAGGERED SERVICES ── */}
+                <div className="flex flex-col gap-12">
+
+                    {data.services.map((service, i) => {
+                        const Icon = iconMap[service.icon];
+                        return (
+                            <div
+                                key={i}
+                                className={`flex items-start gap-5 ${i % 2 !== 0 ? "lg:ml-10" : ""
+                                    }`}
+                            >
+
+                                {/* Icon */}
+                                <div className="w-12 h-12 flex items-center justify-center border border-third/10 rounded-xl">
+                                    <Icon className="w-5 h-5 text-third" />
+                                </div>
+
+                                {/* Content */}
+                                <div className="flex flex-col gap-2 max-w-sm">
+
+                                    <h3 className="text-xl font-semibold text-primary font-[Montserrat]">
+                                        {service.title}
+                                    </h3>
+
+                                    <p className="text-third/60 text-sm font-[Poppins] leading-relaxed">
+                                        {service.desc}
+                                    </p>
+
+                                </div>
+
+                            </div>
+                        )
+                    })}
+
+                </div>
+
+            </div>
+
+        </section>
     </>
   );
 }
