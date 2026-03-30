@@ -2,21 +2,27 @@
 import Image from "next/image";
 import Button from "@/components/ui/button";
 import { LockIcon, LockOpen, X } from "lucide-react";
-import { checkIsEligibleToCreate } from "@/services/theme.service";
+import {
+  checkIsEligibleToCreate,
+  setConsualtTheme,
+} from "@/services/theme.service";
 import { useEffect, useState } from "react";
 
 export default function PreviewPopup({ theme, onClose, onSelect }) {
-
   // TODO Change default value to false when API will be integrated
   const [isEligible, setIsEligible] = useState(false);
 
   // TODO Make API call to check eligibility of theme right now we using static value JUST UNCOMMNET IT WHEN needed from DB
+   
+
+  console.log("Theme id " ,);
+  
 
   useEffect(() => {
     const fetchEligibility = async () => {
       try {
         const isEligible = await checkIsEligibleToCreate(theme.id);
-        // setIsEligible(isEligible.data);
+        setIsEligible(isEligible.data);
         setIsEligible(true);
       } catch (error) {
         console.error("Failed to fetch eligibility:", error);
@@ -34,10 +40,11 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
           <Button
             variant="ghost"
             onClick={isEligible ? onSelect : undefined}
-            className={`transition-all ${!isEligible
-              ? "opacity-50 cursor-not-allowed text-gray-400 border border-dashed border-gray-500 pointer-events-none"
-              : " hover:text-secondary"
-              }`}
+            className={`transition-all ${
+              !isEligible
+                ? "opacity-50 cursor-not-allowed text-gray-400 border border-dashed border-gray-500 pointer-events-none"
+                : " hover:text-primary"
+            }`}
           >
             Use This Theme
             {!isEligible && <LockIcon className="ml-2" />}
