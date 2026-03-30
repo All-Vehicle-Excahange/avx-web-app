@@ -13,16 +13,12 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
   const [isEligible, setIsEligible] = useState(false);
 
   // TODO Make API call to check eligibility of theme right now we using static value JUST UNCOMMNET IT WHEN needed from DB
-   
-
-  console.log("Theme id " ,);
-  
 
   useEffect(() => {
     const fetchEligibility = async () => {
       try {
         const isEligible = await checkIsEligibleToCreate(theme.id);
-        setIsEligible(isEligible.data);
+        // setIsEligible(isEligible.data);
         setIsEligible(true);
       } catch (error) {
         console.error("Failed to fetch eligibility:", error);
@@ -30,6 +26,18 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
     };
     fetchEligibility();
   }, [theme.id]);
+
+  const handleUseTheme = async () => {
+    try {
+      const res = await setConsualtTheme(theme.themeId);
+
+      console.log("Theme set:", res);
+      onSelect?.(theme);
+      onClose?.();
+    } catch (error) {
+      console.error("Failed to set theme:", error);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex flex-col">
@@ -39,7 +47,7 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
-            onClick={isEligible ? onSelect : undefined}
+            onClick={isEligible ? handleUseTheme : undefined}
             className={`transition-all ${
               !isEligible
                 ? "opacity-50 cursor-not-allowed text-gray-400 border border-dashed border-gray-500 pointer-events-none"
