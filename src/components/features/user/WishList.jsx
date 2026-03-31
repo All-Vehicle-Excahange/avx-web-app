@@ -141,120 +141,120 @@ function Wishlist() {
 
         {/* VEHICLE WISHLIST */}
         {activeTab === "wishlist" && (
-        <div>
-          <h1 className="text-3xl font-extrabold mb-6 hidden">Vehicle Wishlist</h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-            {cardData.length > 0 ? (
-              cardData.map((vehicle) => (
-                <div
-                  key={vehicle.id}
-                  className="lg:col-span-1 lg:row-span-1 h-full"
-                >
-                  <VehicleCard data={vehicle} onWishlistChange={() => { setWishlistPage(1); fetchWishList(1); }} />
-                </div>
-              ))
-            ) : (
-              <p className="text-third">Your wishlist is empty.</p>
+          <div>
+            <h1 className="text-3xl font-extrabold mb-6 hidden">Vehicle Wishlist</h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+              {cardData.length > 0 ? (
+                cardData.map((vehicle) => (
+                  <div
+                    key={vehicle.id}
+                    className="lg:col-span-1 lg:row-span-1 h-full"
+                  >
+                    <VehicleCard data={vehicle} onWishlistChange={() => { setWishlistPage(1); fetchWishList(1); }} />
+                  </div>
+                ))
+              ) : (
+                <p className="text-third">Your wishlist is empty.</p>
+              )}
+            </div>
+            {hasMoreWishlist && cardData.length > 0 && (
+              <div className="flex justify-end mt-6">
+                <Button variant="outline" showIcon={false} onClick={handleLoadMoreWishlist}>
+                  See More
+                </Button>
+              </div>
             )}
           </div>
-          {hasMoreWishlist && cardData.length > 0 && (
-            <div className="flex justify-end mt-6">
-              <Button variant="outline" showIcon={false} onClick={handleLoadMoreWishlist}>
-                See More
-              </Button>
-            </div>
-          )}
-        </div>
         )}
 
         {/* CONSULTANT WISHLIST */}
         {activeTab === "subscribed" && (
-        <div>
-          <h1 className="text-3xl font-extrabold mb-6 hidden">
-            Subscribed Consultant
-          </h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {followedConsualt.length > 0 ? (
-              followedConsualt.map((item) => (
-                <ConsultantCard
-                  key={item.id}
-                  {...item} // Using the spread operator since we already formatted the exact props!
-                />
-              ))
-            ) : (
-              <p className="text-third">You havent subscribed to any consultants yet.</p>
+          <div>
+            <h1 className="text-3xl font-extrabold mb-6 hidden">
+              Subscribed Consultant
+            </h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {followedConsualt.length > 0 ? (
+                followedConsualt.map((item) => (
+                  <ConsultantCard
+                    key={item.id}
+                    {...item} // Using the spread operator since we already formatted the exact props!
+                  />
+                ))
+              ) : (
+                <p className="text-third">You havent subscribed to any consultants yet.</p>
+              )}
+            </div>
+            {hasMoreConsultant && followedConsualt.length > 0 && (
+              <div className="flex justify-end mt-6">
+                <Button variant="outline" showIcon={false} onClick={handleLoadMoreConsultant}>
+                  See More
+                </Button>
+              </div>
             )}
           </div>
-          {hasMoreConsultant && followedConsualt.length > 0 && (
-            <div className="flex justify-end mt-6">
-              <Button variant="outline" showIcon={false} onClick={handleLoadMoreConsultant}>
-                See More
-              </Button>
-            </div>
-          )}
-        </div>
         )}
 
         {/* 🔔 NOTIFICATION PREFERENCES */}
         {activeTab === "preference" && (
-        <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 max-w-xl">
-          <h2 className="text-xl font-bold mb-4 hidden">Notification Preferences</h2>
-          <p className="text-third text-sm mb-4">Notify me for:</p>
+          <div className="rounded-2xl border border-third/30 bg-primary/5 p-6 max-w-xl">
+            <h2 className="text-xl font-bold mb-4 hidden">Notification Preferences</h2>
+            <p className="text-third text-sm mb-4">Notify me for:</p>
 
-          <div className="space-y-4 text-sm">
-            {[
-              { key: "suvUnder15", label: "SUVs under ₹15L" },
-              { key: "avx", label: "AVX Inspected vehicles" },
-              { key: "ahmedabad", label: "Vehicles in Ahmedabad" },
-            ].map((item) => (
-              <label
-                key={item.key}
-                className={`flex items-center gap-4 cursor-pointer ${!editMode && "opacity-60 pointer-events-none"
-                  }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={prefs[item.key]}
-                  onChange={() => toggle(item.key)}
-                  className="w-5 h-5 accent-white"
-                />
-                {item.label}
-              </label>
-            ))}
-          </div>
+            <div className="space-y-4 text-sm">
+              {[
+                { key: "suvUnder15", label: "SUVs under ₹15L" },
+                { key: "avx", label: "AVX Inspected vehicles" },
+                { key: "ahmedabad", label: "Vehicles in Ahmedabad" },
+              ].map((item) => (
+                <label
+                  key={item.key}
+                  className={`flex items-center gap-4 cursor-pointer ${!editMode && "opacity-60 pointer-events-none"
+                    }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={prefs[item.key]}
+                    onChange={() => toggle(item.key)}
+                    className="w-5 h-5 accent-white"
+                  />
+                  {item.label}
+                </label>
+              ))}
+            </div>
 
-          {/* ACTION BUTTONS */}
-          <div className="mt-6 flex gap-4">
-            {!editMode && (
-              <Button
-                variant="ghost"
-                showIcon={false}
-                onClick={() => setEditMode(true)}
-              >
-                Update Preferences
-              </Button>
-            )}
-
-            {editMode && (
-              <>
+            {/* ACTION BUTTONS */}
+            <div className="mt-6 flex gap-4">
+              {!editMode && (
                 <Button
                   variant="ghost"
                   showIcon={false}
-                  onClick={() => setEditMode(false)}
+                  onClick={() => setEditMode(true)}
                 >
-                  Save
+                  Update Preferences
                 </Button>
-                <Button
-                  variant="outlineSecondary"
-                  showIcon={false}
-                  onClick={() => setEditMode(false)}
-                >
-                  Cancel
-                </Button>
-              </>
-            )}
+              )}
+
+              {editMode && (
+                <>
+                  <Button
+                    variant="ghost"
+                    showIcon={false}
+                    onClick={() => setEditMode(false)}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    variant="outlineSecondary"
+                    showIcon={false}
+                    onClick={() => setEditMode(false)}
+                  >
+                    Cancel
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
-        </div>
         )}
       </section>
     </>
