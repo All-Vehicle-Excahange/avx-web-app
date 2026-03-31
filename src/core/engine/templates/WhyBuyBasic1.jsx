@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import {
@@ -80,7 +81,6 @@ const ICON_MAP = {
 
 
 function WhyBuyBasic1({ data, isEditing, onUpdate }) {
-  if (!data) return null;
 
   const [allReviews, setAllReviews] = useState([]);
   const [selectedReviewIds, setSelectedReviewIds] = useState([]);
@@ -99,6 +99,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
 
   // Fetch all reviews (no auto-selection)
   useEffect(() => {
+      if (!data) return null;
     const fetchReviews = async () => {
       try {
         const params = { pageNo: 1, size: 20 };
