@@ -16,7 +16,7 @@ export default function AboutPage() {
         </p>
       `,
       videoSrc:
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+        "/store-front-template-1.mp4",
       images: [
         "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=90",
         "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1200&q=90",
