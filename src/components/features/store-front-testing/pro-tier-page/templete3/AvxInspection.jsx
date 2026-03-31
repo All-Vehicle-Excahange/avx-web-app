@@ -21,7 +21,7 @@ const data = {
 };
 
 function AvxInspection() {
-    const [hovered, setHovered] = useState(0);
+    const [avxInspectionHovered, setAvxInspectionHovered] = useState(0);
 
     return (
         <section className="py-12">
@@ -51,7 +51,7 @@ function AvxInspection() {
                     {data.inspectionPoints.map((point, i) => (
                         <div
                             key={i}
-                            onMouseEnter={() => setHovered(i)}
+                            onMouseEnter={() => setAvxInspectionHovered(i)}
                             className="relative bg-secondary/10 p-10 flex flex-col gap-12 transition-colors group cursor-default h-full min-h-60"
                         >
                             {/* Background Image Layer */}
@@ -67,8 +67,8 @@ function AvxInspection() {
                                     <span className="text-2xl font-black font-[Montserrat] text-third/10 group-hover:text-third/20 transition-colors">
                                         0{i + 1}
                                     </span>
-                                    <div className={`w-10 h-10 rounded-xl border border-third/10 flex items-center justify-center transition-all ${hovered === i ? 'bg-third/5 border-third' : 'bg-black/40 backdrop-blur-md'}`}>
-                                        <Check size={16} className={hovered === i ? 'text-primary' : 'text-third/20'} />
+                                    <div className={`w-10 h-10 rounded-xl border border-third/10 flex items-center justify-center transition-all ${avxInspectionHovered === i ? 'bg-third/5 border-third' : 'bg-black/40 backdrop-blur-md'}`}>
+                                        <Check size={16} className={avxInspectionHovered === i ? 'text-primary' : 'text-third/20'} />
                                     </div>
                                 </div>
 
@@ -83,7 +83,7 @@ function AvxInspection() {
                             </div>
 
                             {/* Bottom Accent */}
-                            <div className={`absolute bottom-0 left-0 h-1 bg-third   transition-all duration-500 ${hovered === i ? 'w-full' : 'w-0'}`} />
+                            <div className={`absolute bottom-0 left-0 h-1 bg-third   transition-all duration-500 ${avxInspectionHovered === i ? 'w-full' : 'w-0'}`} />
                         </div>
                     ))}
                 </div>

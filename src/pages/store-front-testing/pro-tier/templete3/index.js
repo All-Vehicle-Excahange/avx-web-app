@@ -19,12 +19,6 @@ function index() {
             <Navbar />
             <Hero />
             <Layout>
-                <OurStory />
-                <VehicleSecApproach />
-                <HowBuyingWorks />
-                <AvxInspection />
-                <CustomerCommitment />
-                <Gallery />
                 <Testimonials />
             </Layout>
             <FooterLink />
