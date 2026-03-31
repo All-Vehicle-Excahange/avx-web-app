@@ -10,9 +10,9 @@ export default function HeroSection() {
         HeroTitle: " Buyers trust Adarsh Auto Consultants for transparent communication, reliable vehicle options, and a smooth buying experience. Our goal is to help every buyer make confident vehicle decisions with clear information and professional support.",
 
         //  =====AboutUs Section =====
-        aboutTitle:"",
-        aboutDescription:"",
-        
+        aboutTitle: "Our Experience",
+        aboutDescription: "For over 12 years, Adarsh Auto Consultants has been helping buyers discover reliable vehicles across Gujarat. Our goal is to maintain a diverse vehicle inventory and provide accurate information so buyers can make confident decisions when purchasing their next vehicle.",
+
         //  =====Vehicle Approach Section =====
         selectionTitle: "Our Approach to Vehicle Selection",
         selectionDescription: `Every vehicle listed through our storefront goes through a basic
@@ -175,13 +175,11 @@ provide honest guidance and reliable information for every buyer.`,
                         <div className="flex flex-col gap-10">
                             <div className="flex flex-col gap-6">
                                 <p className="text-third/70 text-lg md:text-xl font-[Poppins] leading-relaxed">
-                                    For over 12 years, Adarsh Auto Consultants has been helping buyers
-                                    discover reliable vehicles across Gujarat.
+                                    {data.aboutDescription.split('. ')[0]}.
                                 </p>
+
                                 <p className="text-third/50 text-md font-[Poppins] leading-relaxed max-w-md">
-                                    Our goal is to maintain a diverse vehicle inventory and provide
-                                    accurate information so buyers can make confident decisions when
-                                    purchasing their next vehicle.
+                                    {data.aboutDescription.split('. ')[1]}
                                 </p>
                             </div>
                         </div>

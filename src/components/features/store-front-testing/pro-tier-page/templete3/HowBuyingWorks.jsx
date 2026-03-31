@@ -37,7 +37,7 @@ const iconMap = { Search, MessageCircle, ShieldCheck, Handshake };
 
 function HowBuyingWorks() {
     const [hovered, setHovered] = useState(null);
-    const active = hovered ?? 0;
+    const activeHovered = hovered ?? 0;
 
     return (
         <section className="relative py-12">
@@ -76,7 +76,7 @@ function HowBuyingWorks() {
                                 src={step.image}
                                 alt={step.title}
                                 className={`absolute inset-0 w-full h-full object-cover transition-all duration-700
-                                    ${active === i ? "opacity-100 scale-100" : "opacity-0 scale-[1.02]"}`}
+                                    ${activeHovered === i ? "opacity-100 scale-100" : "opacity-0 scale-[1.02]"}`}
                             />
                         ))}
 
@@ -91,7 +91,7 @@ function HowBuyingWorks() {
                                     <div
                                         key={i}
                                         className={`absolute flex flex-col items-center gap-3 text-center px-8 max-w-sm transition-all duration-500
-                                            ${active === i ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                                            ${activeHovered === i ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
                                     >
                                         <div className="flex items-center justify-center w-11 h-11 rounded-xl border border-third/50 bg-third/10">
                                             <Icon size={18} strokeWidth={1.5} className="text-third/90" />

@@ -20,26 +20,26 @@ const data = {
 };
 
 function Testimonials() {
-  const [active, setActive] = useState(0);
+  const [testimonialsactive, setTestimonialsActive] = useState(0);
   const [visible, setVisible] = useState(true);
-  const total = data.testimonials.length;
+  const testimonialsTotal = data.testimonials.length;
   const timeoutRef = useRef(null);
 
   const transition = (newIndex) => {
     setVisible(false);
     clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
-      setActive(newIndex);
+      setTestimonialsActive(newIndex);
       setVisible(true);
     }, 350);
   };
 
-  const prev = () => transition((active - 1 + total) % total);
-  const next = () => transition((active + 1) % total);
+  const prev = () => transition((testimonialsactive - 1 + testimonialsTotal) % testimonialsTotal);
+  const next = () => transition((testimonialsactive + 1) % testimonialsTotal);
 
   useEffect(() => () => clearTimeout(timeoutRef.current), []);
 
-  const item = data.testimonials[active];
+  const item = data.testimonials[testimonialsactive];
 
   return (
     <section className="relative py-12">
@@ -75,7 +75,7 @@ function Testimonials() {
               </div>
 
               <span className="text-[13px] font-bold text-third/30 font-[Montserrat] tracking-[0.5em]">
-                {String(active + 1).padStart(2, "0")}
+                {String(testimonialsactive + 1).padStart(2, "0")}
               </span>
 
               <p className="text-xl md:text-2xl lg:text-3xl font-light text-primary/70 font-[Poppins] leading-[1.6] max-w-3xl italic">
@@ -104,7 +104,7 @@ function Testimonials() {
                   key={i}
                   onClick={() => transition(i)}
                   className={`rounded-full transition-all duration-500 ${
-                    i === active
+                    i === testimonialsactive
                       ? "w-6 h-1.5 bg-primary"
                       : "w-1.5 h-1.5 bg-third/20 hover:bg-third/40"
                   }`}
