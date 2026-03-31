@@ -75,6 +75,7 @@ provides a smoother vehicle buying experience.`,
             image: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=1600&q=90",
         },
     ],
+    
     // ===== Avx Inspection Section =====
     inspectionTitle: "AVX Inspection Assurance",
     inspectionText: `AVX inspection services provide additional transparency by documenting key aspects of the vehicle's condition before purchase.`,
@@ -223,7 +224,7 @@ function Hero() {
                 </div>
 
             </section>
-              {/* ===== AboutUs Section ===== */}
+            {/* ===== AboutUs Section ===== */}
             <section className="relative py-12  px-2 lg:px-4">
                 <div className="container">
                     <div className=" mx-auto">
@@ -304,7 +305,7 @@ function Hero() {
       `}</style>
                 </div>
             </section>
-              {/* =====Vehicle Approach Section ===== */}
+            {/* =====Vehicle Approach Section ===== */}
             <section className="relative py-12 px-2 lg:px-4">
                 <div className=" container">
                     <div className="mx-auto">
@@ -330,12 +331,12 @@ function Hero() {
                         <div className="flex gap-4 h-[260px]">
 
                             {/* Left Big */}
-                            <div className="w-[35%] rounded-3xl overflow-hidden border border-third/10">
+                            <div className="w-[48%] md:w-[35%] rounded-3xl overflow-hidden border border-third/10">
                                 <img src={data.selectionImages[0]} className="w-full h-full object-cover" />
                             </div>
 
                             {/* Middle Stack */}
-                            <div className="w-[25%] flex flex-col gap-4">
+                            <div className="w-[25%] flex flex-col gap-4 hidden md:block">
                                 <div className="h-1/2 rounded-2xl overflow-hidden border border-third/10">
                                     <img src={data.selectionImages[1]} className="w-full h-full object-cover" />
                                 </div>
@@ -345,7 +346,7 @@ function Hero() {
                             </div>
 
                             {/* Right Big */}
-                            <div className="w-[40%] rounded-3xl overflow-hidden border border-third/10">
+                            <div className="w-[48%] md:w-[40%] rounded-3xl overflow-hidden border border-third/10">
                                 <img src={data.selectionImages[3]} className="w-full h-full object-cover" />
                             </div>
 
@@ -356,7 +357,7 @@ function Hero() {
                     </div>
                 </div>
             </section>
-              {/* ===== How Buying Work Section ===== */}
+            {/* ===== How Buying Work Section ===== */}
             <section className="relative py-12  px-2 lg:px-4">
                 <div className="container">
                     <div className=" mx-auto">
@@ -478,7 +479,7 @@ function Hero() {
                     </div>
                 </div>
             </section>
-               {/* ===== Avx Inspection Section ===== */}
+            {/* ===== Avx Inspection Section ===== */}
             <section className="py-12 px-2 lg:px-4">
                 <div className=" container">
                     <div className="mx-auto">
@@ -547,7 +548,7 @@ function Hero() {
                     </div>
                 </div>
             </section>
-              {/* ===== Customer Commitment Section ===== */}
+            {/* ===== Customer Commitment Section ===== */}
             <section className="py-12 px-2 lg:px-4">
                 <div className="container">
                     <div className=" mx-auto ">
@@ -583,7 +584,7 @@ function Hero() {
                     </div>
                 </div>
             </section>
-               {/* ===== Gallery Section ===== */}
+            {/* ===== Gallery Section ===== */}
             <section className="py-12 overflow-hidden px-2 lg:px-4">
                 <div className=" container">
                     <div className=" mx-auto ">
@@ -629,7 +630,7 @@ function Hero() {
                     </div>
                 </div>
             </section>
-               {/* ===== Testimonials Section ===== */}
+            {/* ===== Testimonials Section ===== */}
             <section className="relative py-12  px-2 lg:px-4">
                 <div className="container">
                     <div className=" mx-auto w-full">
