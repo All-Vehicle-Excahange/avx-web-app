@@ -4,11 +4,12 @@ import SearchWithHeader from "@/components/features/consult/search/SearchWithHea
 import DownloadAppSection from "@/components/features/home/DownloadAppSection";
 import SellVehicleBanner from "@/components/features/home/SellVehicleBanner";
 import AvxProcess from "@/components/features/VehiclDetail/AvxProcess";
-import Footer from "@/components/layout/FooterLink";
 import Layout from "@/components/layout/Layout";
 import React from "react";
 import ScrollDownArrow from "@/components/ui/ScrollDownArrow";
 import FooterLink from "@/components/layout/FooterLink";
+import Footer from "@/components/layout/Footer";
+
 
 function Index() {
   const [activeFilters, setActiveFilters] = useState([]);

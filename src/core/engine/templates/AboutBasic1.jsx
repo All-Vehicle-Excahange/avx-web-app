@@ -3,7 +3,13 @@
 import React from "react";
 import EditorInput from "../atoms/EditorInput";
 import RichTextEditor from "../atoms/RichTextEditor";
-
+import {
+  setAboutHero,
+  setAboutMission,
+  setAboutVision,
+  setState,
+  setAboutServices
+} from "@/services/theme.service";
 
 function AboutBasic1({ data, isEditing, onUpdate }) {
   if (!data) return null;
@@ -16,6 +22,96 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
     const newArray = [...data[arrayName]];
     newArray[index][field] = value;
     updateField(arrayName, newArray);
+  };
+
+  const handleHeroBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("heroTitle", data.heroTitle || "");
+      formData.append("heroDescription", data.heroDescription || "");
+
+      const res = await setAboutHero(formData);
+      if (res?.data?.success) {
+        console.log("Hero updated successfully");
+      }
+    } catch (error) {
+      console.error("Failed to update Hero section:", error);
+    }
+  };
+
+  const handleMissionBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("missionTitle", data.missionTitle || "");
+      formData.append("missionDescription", data.missionDesc || "");
+
+      const res = await setAboutMission(formData);
+      if (res?.data?.success) {
+        console.log("Mission updated successfully");
+      }
+    } catch (error) {
+      console.error("Failed to update Mission section:", error);
+    }
+  };
+
+  const handleVisionBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("visionTitle", data.visionTitle || "");
+      formData.append("visionDescription", data.visionDesc || "");
+
+      const res = await setAboutVision(formData);
+      if (res?.data?.success) {
+        console.log("Vision updated successfully");
+      }
+    } catch (error) {
+      console.error("Failed to update Vision section:", error);
+    }
+  };
+
+  const handleStatsBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("aboutUsDescription", data.aboutUsDescription || "");
+
+      if (data.stats && Array.isArray(data.stats)) {
+        data.stats.forEach((stat, i) => {
+          formData.append(`stats[${i}].number`, stat.number || "");
+          formData.append(`stats[${i}].label`, stat.label || "");
+          // Excluded icon as requested
+        });
+      }
+
+      const res = await setState(formData);
+      if (res?.data?.success) {
+        console.log("Stats updated successfully");
+      }
+    } catch (error) {
+      console.error("Failed to update Stats section:", error);
+    }
+  };
+
+  const handleServicesBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("serviceTitle", data.servicesTitle || "");
+      formData.append("serviceDescription", data.servicesDesc || "");
+      
+      if (data.services && Array.isArray(data.services)) {
+        data.services.forEach((service, i) => {
+          formData.append(`services[${i}].title`, service.title || "");
+          formData.append(`services[${i}].desc`, service.desc || "");
+          formData.append(`services[${i}].icon`, service.icon || "");
+        });
+      }
+
+      const res = await setAboutServices(formData);
+      if (res?.data?.success) {
+        console.log("Services updated successfully");
+      }
+    } catch (error) {
+      console.error("Failed to update Services section:", error);
+    }
   };
 
   // ================= EDIT MODE =================
@@ -31,12 +127,14 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
             label="Hero Title"
             value={data.heroTitle}
             onChange={(e) => updateField("heroTitle", e.target.value)}
+            onBlur={handleHeroBlur}
           />
 
           <RichTextEditor
             label="Hero Description"
             value={data.heroDescription}
             onChange={(v) => updateField("heroDescription", v)}
+            onBlur={handleHeroBlur}
           />
         </div>
 
@@ -50,11 +148,13 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
             bold
             value={data.missionTitle}
             onChange={(e) => updateField("missionTitle", e.target.value)}
+            onBlur={handleMissionBlur}
           />
 
           <RichTextEditor
             value={data.missionDesc}
             onChange={(v) => updateField("missionDesc", v)}
+            onBlur={handleMissionBlur}
           />
         </div>
 
@@ -66,11 +166,13 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
             bold
             value={data.visionTitle}
             onChange={(e) => updateField("visionTitle", e.target.value)}
+            onBlur={handleVisionBlur}
           />
 
           <RichTextEditor
             value={data.visionDesc}
             onChange={(v) => updateField("visionDesc", v)}
+            onBlur={handleVisionBlur}
           />
         </div>
 
@@ -81,8 +183,9 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
           <h3 className="text-primary font-bold mb-4">Stats</h3>
 
           <RichTextEditor
-            value={data.statsDesc}
-            onChange={(v) => updateField("statsDesc", v)}
+            value={data.aboutUsDescription || data.statsDesc}
+            onChange={(v) => updateField("aboutUsDescription", v)}
+            onBlur={handleStatsBlur}
           />
 
           <div className="grid grid-cols-2 gap-4 mt-4">
@@ -90,15 +193,18 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
               <div key={i}>
                 <EditorInput
                   value={s.number}
-                  onChange={(e) =>
-                    updateArrayItem("stats", i, "number", e.target.value)
-                  }
+                  onChange={(e) => {
+                    const numericValue = e.target.value.replace(/[^0-9]/g, "");
+                    updateArrayItem("stats", i, "number", numericValue);
+                  }}
+                  onBlur={handleStatsBlur}
                 />
                 <EditorInput
                   value={s.label}
                   onChange={(e) =>
                     updateArrayItem("stats", i, "label", e.target.value)
                   }
+                  onBlur={handleStatsBlur}
                 />
               </div>
             ))}
@@ -115,11 +221,13 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
             bold
             value={data.servicesTitle}
             onChange={(e) => updateField("servicesTitle", e.target.value)}
+            onBlur={handleServicesBlur}
           />
 
           <RichTextEditor
             value={data.servicesDesc}
             onChange={(v) => updateField("servicesDesc", v)}
+            onBlur={handleServicesBlur}
           />
 
           <div className="grid md:grid-cols-2 gap-4 mt-4">
@@ -131,6 +239,7 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
                   onChange={(e) =>
                     updateArrayItem("services", i, "icon", e.target.value)
                   }
+                  onBlur={handleServicesBlur}
                 />
 
                 <EditorInput
@@ -138,6 +247,7 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
                   onChange={(e) =>
                     updateArrayItem("services", i, "title", e.target.value)
                   }
+                  onBlur={handleServicesBlur}
                 />
 
                 <EditorInput
@@ -145,6 +255,7 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
                   onChange={(e) =>
                     updateArrayItem("services", i, "desc", e.target.value)
                   }
+                  onBlur={handleServicesBlur}
                 />
               </div>
             ))}
@@ -172,9 +283,10 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
 
           {/* Description */}
           <div className="flex flex-col gap-5 max-w-7xl">
-            <p className="text-third/70 text-lg md:text-xl font-[Poppins] leading-relaxed">
-              {data.heroDescription}
-            </p>
+            <div
+              className="text-third/70 text-lg md:text-xl font-[Poppins] leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: data.heroDescription }}
+            />
           </div>
         </div>
       </section>
@@ -244,7 +356,7 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
 
             <div
               className="text-secondary/70 text-lg md:text-xl font-[Poppins] leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: data.statsDesc }}
+              dangerouslySetInnerHTML={{ __html: data.aboutUsDescription }}
             />
           </div>
 

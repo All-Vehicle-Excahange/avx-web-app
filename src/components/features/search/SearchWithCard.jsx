@@ -16,6 +16,7 @@ import {
   ChevronUpIcon,
   FilterIcon,
   MapPin,
+  X,
 } from "lucide-react";
 import SponsoredCars from "./SponsoredCars";
 import FilterSection from "./FilterSection";
@@ -180,6 +181,19 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
 
     budgetMid = (mPrice + mxPrice) / 2;
   }
+
+  // ── Lock body scroll when mobile filter is open ──
+  useEffect(() => {
+    if (mobileFilterOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileFilterOpen]);
+
 
   /* ================= BUILD PAYLOAD ================= */
   const buildPayload = () => {
@@ -1682,15 +1696,17 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
           {/* MOBILE FILTER BAR */}
           <div className="col-span-full lg:hidden">
             <div className="flex lg:hidden items-center gap-3 overflow-x-auto scrollbar-hide">
-              <Button
-                variant="ghost"
-                showIcon={false}
-                className="gap-2 shrink-0"
-                onClick={() => setMobileFilterOpen(true)}
-              >
-                <FilterIcon className="h-4 w-4" />
-                Filter
-              </Button>
+              <div className="shrink-0">
+                <Button
+                  variant="ghost"
+                  className="rounded-lg"
+                  showIcon={false}
+                  onClick={() => setMobileFilterOpen(true)}
+                >
+                  <FilterIcon className="h-4 w-4 mr-1" />
+                  Filter
+                </Button>
+              </div>
 
               <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-third/40 shrink-0">
                 <span className="text-sm text-primary font-semibold">
@@ -1779,17 +1795,19 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
           {vehicles?.length > 0 && (
             <>
               <div className="col-span-full">
-                <div className="flex items-start gap-4">
-                  <span className="w-2 h-[52px] rounded-full bg-linear-to-b from-blue-500 to-white-400" />
+                <div className="flex flex-col items-start gap-2">
+                  <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
+                    Top Vehicle
+                    <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+                  </p>
 
-                  <div>
-                    <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-                      Top Vehicle For You
-                    </h2>
-                    <p className="text-third">
-                      Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
-                    </p>
-                  </div>
+                  <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
+                    <span className="text-fourth"> Top Vehicle</span> For You
+                  </h2>
+
+                  <p className="text-third">
+                    Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
+                  </p>
                 </div>
               </div>
 
@@ -1820,9 +1838,9 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
             variant="ghost"
             showIcon={false}
             onClick={() => setMobileFilterOpen(false)}
-            className="text-secondary text-xl font-bold p-2"
+            className="text-primary bg-secondary hover:bg-secondary/50 hover:text-primary/80 text-xl font-bold p-1"
           >
-            ✕
+            <X size={20} />
           </Button>
         </div>
 

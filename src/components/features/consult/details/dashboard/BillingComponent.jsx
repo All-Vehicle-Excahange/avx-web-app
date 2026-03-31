@@ -79,7 +79,7 @@ export default function BillingComponent() {
           {/* Bottom */}
           <div className="flex justify-between items-center mt-auto pt-6">
             <span className="text-xs opacity-90">Auto-renewal enabled</span>
-            <Button variant="ghost">Manage Subscription</Button>
+            <Button variant="ghost" size="sm">Manage Subscription</Button>
           </div>
         </div>
 
@@ -125,7 +125,7 @@ export default function BillingComponent() {
 
             {/* Buttons */}
             <div className="flex gap-3 mt-6">
-              <Button size="md" variant="ghost">
+              <Button size="sm" variant="ghost">
                 + Add Money
               </Button>
               <Button size="sm" variant="outlineSecondary">
@@ -220,7 +220,7 @@ export default function BillingComponent() {
       <div className="rounded-2xl border border-third/20  p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         <div className="flex justify-between items-center">
           <h2 className="font-semibold">Payment Method</h2>
-          <Button variant="outlineSecondary">Update</Button>
+          <Button variant="outlineSecondary" size="sm">Update</Button>
         </div>
 
         <div className="flex items-center gap-4 border border-third/30 rounded-xl p-4">
@@ -256,8 +256,8 @@ export default function BillingComponent() {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto custom-scrollbar pb-2">
+          <table className="w-full text-sm min-w-[500px]">
             <thead className="border-b border-third/30 text-third">
               <tr>
                 <th className="text-left py-2">Date</th>
@@ -332,50 +332,52 @@ export default function BillingComponent() {
       <div className="rounded-2xl border border-third/20  p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         <h2 className="font-semibold">Payment History</h2>
 
-        <table className="w-full text-sm">
-          <thead className="text-third border-b border-third/30">
-            <tr>
-              <th className="text-left py-2">Date</th>
-              <th className="text-left py-2">Plan</th>
-              <th className="text-left py-2">Amount</th>
-              <th className="text-left py-2">Status</th>
-              <th className="text-left py-2">Invoice</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="border-b border-third/20">
-              <td className="py-3">12 Oct 2023</td>
-              <td>Annual Premium</td>
-              <td>₹9,999</td>
-              <td>
-                <span className="px-2 py-1 text-xs rounded-full bg-green-500/20 text-green-400">
-                  Paid
-                </span>
-              </td>
-              <td>
-                <button className="flex items-center gap-2 text-primary hover:underline">
-                  <Download size={14} /> INV-2023-001
-                </button>
-              </td>
-            </tr>
+        <div className="overflow-x-auto custom-scrollbar pb-2">
+          <table className="w-full text-sm min-w-[600px]">
+            <thead className="text-third border-b border-third/30">
+              <tr>
+                <th className="text-left py-2 font-medium">Date</th>
+                <th className="text-left py-2 font-medium">Plan</th>
+                <th className="text-left py-2 font-medium">Amount</th>
+                <th className="text-left py-2 font-medium">Status</th>
+                <th className="text-left py-2 font-medium">Invoice</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-third/20">
+              <tr>
+                <td className="py-4">12 Oct 2023</td>
+                <td>Annual Premium</td>
+                <td>₹9,999</td>
+                <td>
+                  <span className="px-2 py-1 text-xs rounded-full bg-green-500/20 text-green-400">
+                    Paid
+                  </span>
+                </td>
+                <td>
+                  <button className="flex items-center gap-2 text-primary hover:underline">
+                    <Download size={14} /> INV-2023-001
+                  </button>
+                </td>
+              </tr>
 
-            <tr>
-              <td className="py-3">12 Oct 2022</td>
-              <td>Annual Premium</td>
-              <td>₹9,999</td>
-              <td>
-                <span className="px-2 py-1 text-xs rounded-full bg-green-500/20 text-green-400">
-                  Paid
-                </span>
-              </td>
-              <td>
-                <button className="flex items-center gap-2 text-primary hover:underline">
-                  <Download size={14} /> INV-2022-001
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              <tr>
+                <td className="py-4">12 Oct 2022</td>
+                <td>Annual Premium</td>
+                <td>₹9,999</td>
+                <td>
+                  <span className="px-2 py-1 text-xs rounded-full bg-green-500/20 text-green-400">
+                    Paid
+                  </span>
+                </td>
+                <td>
+                  <button className="flex items-center gap-2 text-primary hover:underline">
+                    <Download size={14} /> INV-2022-001
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );

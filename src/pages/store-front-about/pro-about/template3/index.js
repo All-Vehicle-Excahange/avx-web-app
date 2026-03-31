@@ -9,7 +9,7 @@ function index() {
     return (
         <>
             <Navbar />
-                <Hero />
+            <Hero />
             <FooterLink />
             <Footer />
         </>

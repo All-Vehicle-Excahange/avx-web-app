@@ -46,8 +46,8 @@ const footerLinks = {
         { label: 'Reecomm Works', href: '/avx-works' },
         { label: 'Help Center', href: '/help' },
         { label: 'Why Choose Us', href: '/why-chose-us' },
-        { label: 'Site Map', href: '#' },
-        { label: 'Careers', href: '#' },
+        { label: 'Become a Seller', href: '/became-seller' },
+        { label: 'Safety & Transparency', href: '/safety-transparency' },
     ],
     legal: [
         { label: 'Terms of Use', href: '#' },
@@ -99,7 +99,7 @@ const Footer = () => {
 
                         {/* Column 1 */}
                         <div className="flex flex-col gap-4">
-                            <h3 className="text-[11px] font-bold uppercase tracking-wider mb-2 text-white">Product</h3>
+                            <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white"> Product</h2>
                             <ul className="flex flex-col gap-3">
                                 {footerLinks.product.map((item) => (
                                     <li key={item.label}>
@@ -111,7 +111,7 @@ const Footer = () => {
 
                         {/* Column 2 */}
                         <div className="flex flex-col gap-4 relative lg:pr-4">
-                            <h3 className="text-[11px] font-bold uppercase tracking-wider mb-2 text-white">Resources</h3>
+                            <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white"> Resources</h2>
                             <ul className="flex flex-col gap-3">
                                 {footerLinks.resources.map((item) => (
                                     <li key={item.label}>
@@ -125,7 +125,7 @@ const Footer = () => {
 
                         {/* Column 3 */}
                         <div className="flex flex-col gap-4 lg:pl-4">
-                            <h3 className="text-[11px] font-bold uppercase tracking-wider mb-2 text-white">More From Reecomm</h3>
+                            <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white"> More From Reecomm</h2>
                             <ul className="flex flex-col gap-3">
                                 {footerLinks.moreFromReecomm.map((item) => (
                                     <li key={item.label}>
@@ -137,7 +137,7 @@ const Footer = () => {
 
                         {/* Column 4 */}
                         <div className="flex flex-col gap-4">
-                            <h3 className="text-[11px] font-bold uppercase tracking-wider mb-2 text-white">Company</h3>
+                            <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white"> Company</h2>
                             <ul className="flex flex-col gap-3">
                                 {footerLinks.company.map((item) => (
                                     <li key={item.label}>

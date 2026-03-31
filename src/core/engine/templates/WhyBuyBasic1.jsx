@@ -10,12 +10,16 @@ import {
 } from "lucide-react";
 import RichTextEditor from "../atoms/RichTextEditor";
 import EditorInput from "../atoms/EditorInput";
+import { setWhyBuyHero, setWhyBuyStory, setWhyBuyVehicleSelection, setWhyBuyProcess, setWhyBuyInspection, setWhyBuyCustomerCommitment, setWhyBuyTestimonials } from "@/services/theme.service";
 const ICON_MAP = {
   Search,
   MessageCircle,
   ShieldCheck,
   Handshake,
 };
+
+
+
 function WhyBuyBasic1({ data, isEditing, onUpdate }) {
   if (!data) return null;
   const updateField = (field, value) => {
@@ -28,6 +32,88 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
     updateField(arrayName, newArray);
   };
 
+  const handleHeroBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
+      formData.append("whyBuyHeroDescription", data.whyBuyHeroDescription || "");
+      await setWhyBuyHero(formData);
+    } catch (error) { console.error("Error updating hero", error); }
+  };
+
+  const handleStoryBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("storyTitle", data.storyTitle || "");
+      formData.append("storyDescription", data.storyDescription || "");
+      await setWhyBuyStory(formData);
+    } catch (error) { console.error("Error updating story", error); }
+  };
+
+  const handleVehicleSelectionBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("vehicleSelectionTitle", data.vehicleSelectionTitle || "");
+      formData.append("vehicleSelectionDescription", data.vehicleSelectionDescription || "");
+      await setWhyBuyVehicleSelection(formData);
+    } catch (error) { console.error("Error updating vehicle selection", error); }
+  };
+
+  const handleProcessBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("processTitle", data.processTitle || "");
+      formData.append("processDescription", data.processDescription || "");
+      if (data.processSteps) {
+        data.processSteps.forEach((step, i) => {
+          formData.append(`processes[${i}].title`, step.title || "");
+          formData.append(`processes[${i}].desc`, step.description || "");
+          formData.append(`processes[${i}].icon`, step.icon || "");
+        });
+      }
+      await setWhyBuyProcess(formData);
+    } catch (error) { console.error("Error updating process", error); }
+  };
+
+  const handleInspectionBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("inspectionTitle", data.inspectionTitle || "");
+      formData.append("inspectionDescription", data.inspectionText || ""); // mapped from schema
+      formData.append("inspectionTemplateId1", "1"); // based on screenshot
+      if (data.inspectionPoints) {
+        data.inspectionPoints.forEach((pt, i) => {
+          formData.append(`inspectionPoints[${i}]`, pt || "");
+        });
+      }
+      await setWhyBuyInspection(formData);
+    } catch (error) { console.error("Error updating inspection", error); }
+  };
+
+  const handleCustomerCommitmentBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("customerCommitmentTitle", data.customerCommitmentTitle || "");
+      formData.append("customerCommitmentDescription", data.customerCommitmentDescription || "");
+      await setWhyBuyCustomerCommitment(formData);
+    } catch (error) { console.error("Error updating customer commitment", error); }
+  };
+
+  const handleTestimonialBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("testimonialTitle", data.testimonialTitle || "");
+      formData.append("testimonialDescription", data.testimonialDescription || "Reviews from our buyers.");
+      if (data.testimonials) {
+        data.testimonials.forEach((t, i) => {
+          formData.append(`testimonials[${i}].customerName`, t.name || "");
+          formData.append(`testimonials[${i}].review`, t.review || "");
+        });
+      }
+      await setWhyBuyTestimonials(formData);
+    } catch (error) { console.error("Error updating testimonials", error); }
+  };
+
   if (isEditing) {
     return (
       <div className="bg-secondary w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
@@ -38,14 +124,16 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
           <EditorInput
             bold
             label="Hero Title"
-            value={data.heroTitle}
-            onChange={(e) => updateField("heroTitle", e.target.value)}
+            value={data.whyBuyHeroTitle}
+            onChange={(e) => updateField("whyBuyHeroTitle", e.target.value)}
+            onBlur={handleHeroBlur}
           />
 
           <RichTextEditor
             label="Hero Description"
-            value={data.heroDescription}
-            onChange={(v) => updateField("heroDescription", v)}
+            value={data.whyBuyHeroDescription}
+            onChange={(v) => updateField("whyBuyHeroDescription", v)}
+            onBlur={handleHeroBlur}
           />
         </div>
 
@@ -60,12 +148,36 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
             label="Story Title"
             value={data.storyTitle}
             onChange={(e) => updateField("storyTitle", e.target.value)}
+            onBlur={handleStoryBlur}
           />
 
           <RichTextEditor
             label="Story Text"
-            value={data.storyText}
-            onChange={(v) => updateField("storyText", v)}
+            value={data.storyDescription}
+            onChange={(v) => updateField("storyDescription", v)}
+            onBlur={handleStoryBlur}
+          />
+        </div>
+
+        <hr className="border-white/10" />
+
+        {/* VEHICLE SELECTION */}
+        <div>
+          <h3 className="text-primary font-bold mb-4">Vehicle Selection</h3>
+
+          <EditorInput
+            bold
+            label="Selection Title"
+            value={data.vehicleSelectionTitle}
+            onChange={(e) => updateField("vehicleSelectionTitle", e.target.value)}
+            onBlur={handleVehicleSelectionBlur}
+          />
+
+          <RichTextEditor
+            label="Selection Description"
+            value={data.vehicleSelectionDescription}
+            onChange={(v) => updateField("vehicleSelectionDescription", v)}
+            onBlur={handleVehicleSelectionBlur}
           />
         </div>
 
@@ -80,12 +192,14 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
             label="Process Title"
             value={data.processTitle}
             onChange={(e) => updateField("processTitle", e.target.value)}
+            onBlur={handleProcessBlur}
           />
 
           <RichTextEditor
             label="Process Description"
             value={data.processDescription}
             onChange={(v) => updateField("processDescription", v)}
+            onBlur={handleProcessBlur}
           />
 
           <div className="grid md:grid-cols-2 gap-4 mt-6">
@@ -100,6 +214,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
                   onChange={(e) =>
                     updateArrayItem("processSteps", i, "title", e.target.value)
                   }
+                  onBlur={handleProcessBlur}
                 />
 
                 <EditorInput
@@ -113,6 +228,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
                       e.target.value,
                     )
                   }
+                  onBlur={handleProcessBlur}
                 />
 
                 <EditorInput
@@ -121,6 +237,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
                   onChange={(e) =>
                     updateArrayItem("processSteps", i, "icon", e.target.value)
                   }
+                  onBlur={handleProcessBlur}
                 />
               </div>
             ))}
@@ -137,11 +254,13 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
             bold
             value={data.inspectionTitle}
             onChange={(e) => updateField("inspectionTitle", e.target.value)}
+            onBlur={handleInspectionBlur}
           />
 
           <RichTextEditor
             value={data.inspectionText}
             onChange={(v) => updateField("inspectionText", v)}
+            onBlur={handleInspectionBlur}
           />
 
           {data.inspectionPoints.map((pt, i) => (
@@ -153,8 +272,31 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
                 newArr[i] = e.target.value;
                 updateField("inspectionPoints", newArr);
               }}
+              onBlur={handleInspectionBlur}
             />
           ))}
+        </div>
+
+        <hr className="border-white/10" />
+
+        {/* CUSTOMER COMMITMENT */}
+        <div>
+          <h3 className="text-primary font-bold mb-4">Customer Commitment</h3>
+
+          <EditorInput
+            bold
+            label="Commitment Title"
+            value={data.customerCommitmentTitle}
+            onChange={(e) => updateField("customerCommitmentTitle", e.target.value)}
+            onBlur={handleCustomerCommitmentBlur}
+          />
+
+          <RichTextEditor
+            label="Commitment Text"
+            value={data.customerCommitmentDescription}
+            onChange={(v) => updateField("customerCommitmentDescription", v)}
+            onBlur={handleCustomerCommitmentBlur}
+          />
         </div>
 
         <hr className="border-white/10" />
@@ -171,6 +313,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
                 onChange={(e) =>
                   updateArrayItem("testimonials", i, "name", e.target.value)
                 }
+                onBlur={handleTestimonialBlur}
               />
 
               <EditorInput
@@ -179,6 +322,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
                 onChange={(e) =>
                   updateArrayItem("testimonials", i, "review", e.target.value)
                 }
+                onBlur={handleTestimonialBlur}
               />
             </div>
           ))}
@@ -202,13 +346,13 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
               text-primary
               font-[Montserrat]"
           >
-            {data.heroTitle}
+            {data.whyBuyHeroTitle}
             <span className="text-fourth/80"> Auto Consultants</span>
           </h2>
 
           <div
             className="max-w-2xl text-base leading-relaxed text-third md:text-lg font-[Poppins]"
-            dangerouslySetInnerHTML={{ __html: data.heroDescription }}
+            dangerouslySetInnerHTML={{ __html: data.whyBuyHeroDescription }}
           />
         </div>
       </section>
@@ -228,7 +372,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
           <div className="flex flex-col gap-4 sm:gap-5">
             <div
               className="text-secondary/80 font-[Poppins] leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: data.storyText }}
+              dangerouslySetInnerHTML={{ __html: data.storyDescription }}
             />
           </div>
         </div>
@@ -242,13 +386,13 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
           </p>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-            {data.selectionTitle}
+            {data.vehicleSelectionTitle}
             <span className="text-fourth/80">Vehicle Selection</span>
           </h2>
 
           {/* ── DESCRIPTION ───────────────── */}
           <div className="flex flex-col gap-4 border-l-2 border-primary/40 pl-5">
-            {data.selectionDescription
+            {data.vehicleSelectionDescription
               .trim()
               .split("\n\n")
               .map((para, i) => (
@@ -359,7 +503,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
             </p>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-              {data.commitmentTitle}{" "}
+              {data.customerCommitmentTitle}{" "}
               <span className="text-fourth/80">Commitment</span>
             </h2>
 
@@ -368,7 +512,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
 
             <div
               className="text-third text-lg font-[Poppins] leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: data.commitmentText }}
+              dangerouslySetInnerHTML={{ __html: data.customerCommitmentDescription }}
             />
           </div>
         </div>
@@ -383,7 +527,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
             </p>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1] text-secondary font-[Montserrat]">
-              {data.testimonialsTitle}
+              {data.testimonialTitle}
               <span className="text-fourth">Experience</span>
             </h2>
           </div>
