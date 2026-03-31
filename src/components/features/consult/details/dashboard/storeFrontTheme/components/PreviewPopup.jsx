@@ -2,11 +2,13 @@
 import Image from "next/image";
 import Button from "@/components/ui/button";
 import { LockIcon, LockOpen, X } from "lucide-react";
-import { checkIsEligibleToCreate } from "@/services/theme.service";
+import {
+  checkIsEligibleToCreate,
+  setConsualtTheme,
+} from "@/services/theme.service";
 import { useEffect, useState } from "react";
 
 export default function PreviewPopup({ theme, onClose, onSelect }) {
-
   // TODO Change default value to false when API will be integrated
   const [isEligible, setIsEligible] = useState(false);
 
@@ -25,6 +27,18 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
     fetchEligibility();
   }, [theme.id]);
 
+  const handleUseTheme = async () => {
+    try {
+      const res = await setConsualtTheme(theme.themeId);
+
+      console.log("Theme set:", res);
+      onSelect?.(theme);
+      onClose?.();
+    } catch (error) {
+      console.error("Failed to set theme:", error);
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex flex-col">
       {/* Header */}
@@ -33,11 +47,12 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
-            onClick={isEligible ? onSelect : undefined}
-            className={`transition-all ${!isEligible
-              ? "opacity-50 cursor-not-allowed text-gray-400 border border-dashed border-gray-500 pointer-events-none"
-              : " hover:text-secondary"
-              }`}
+            onClick={isEligible ? handleUseTheme : undefined}
+            className={`transition-all ${
+              !isEligible
+                ? "opacity-50 cursor-not-allowed text-gray-400 border border-dashed border-gray-500 pointer-events-none"
+                : " hover:text-primary"
+            }`}
           >
             Use This Theme
             {!isEligible && <LockIcon className="ml-2" />}

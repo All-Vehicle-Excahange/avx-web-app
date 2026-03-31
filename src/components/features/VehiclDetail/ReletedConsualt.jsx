@@ -127,7 +127,7 @@ export default function ReletedConsualt(props) {
     };
 
     return (
-        <div className="w-full py-10 ">
+        <div className="w-full py-10">
             {/* Header */}
             <div className="flex flex-col items-start gap-2">
                 <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
@@ -148,7 +148,7 @@ export default function ReletedConsualt(props) {
             )}
 
             {/* Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {finalConsultants.length === 0 ? (
                     <div className="col-span-full flex justify-center py-16">
                         <h3 className="text-lg font-semibold text-primary/40">

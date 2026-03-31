@@ -48,7 +48,7 @@ export default function ProfileComponent() {
         </p>
       </div>
 
-      <div className="w-full lg:w-1/2 rounded-2xl border border-third/40  p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="w-full lg:w-1/2 rounded-xl border border-third/40  p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Top Line */}
         <div className="flex items-center justify-between">
           <p className="font-semibold text-primary">
@@ -85,15 +85,15 @@ export default function ProfileComponent() {
           </p>
         </div>
 
-        <Button variant="outlineSecondary">Improve Profile</Button>
+        <Button variant="outlineSecondary" size="sm">Improve Profile</Button>
       </div>
 
       {/* PROFILE CARD */}
-      <div className="rounded-2xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         <div className="flex justify-between items-center">
           <h2 className="font-semibold">Business Profile</h2>
           {!isEditing && (
-            <Button variant="ghost" onClick={() => setIsEditing(true)}>
+            <Button variant="ghost" size="sm" onClick={() => setIsEditing(true)}>
               Update Profile
             </Button>
           )}
@@ -126,12 +126,12 @@ export default function ProfileComponent() {
         {isEditing && (
           <div className="flex justify-end gap-4">
             <Button
-              variant="outlineSecondary"
+              variant="outlineSecondary" size="sm"
               onClick={() => setIsEditing(false)}
             >
               Cancel
             </Button>
-            <Button variant="ghost">Save Changes</Button>
+            <Button variant="ghost" size="sm">Save Changes</Button>
           </div>
         )}
 
@@ -144,7 +144,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* VERIFICATION STATUS */}
-      <div className="rounded-2xl border border-third/40  p-6 space-y-4">
+      <div className="rounded-xl border border-third/40  p-6 space-y-4">
         <h2 className="font-semibold">Verification Status</h2>
 
         <div className="grid md:grid-cols-2 gap-6">
@@ -163,7 +163,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* KYC DOCUMENTS */}
-      <div className="rounded-2xl border border-third/40  p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/40  p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         <h2 className="font-semibold">KYC Documents</h2>
 
         {/* ⚠ Pending Banner */}
@@ -180,7 +180,7 @@ export default function ProfileComponent() {
             </span>
           </p>
 
-          <Button variant="outlineSecondary" className="mt-2">
+          <Button variant="outlineSecondary" size="sm" className="mt-2">
             Complete Verification
           </Button>
         </div>
@@ -212,13 +212,13 @@ export default function ProfileComponent() {
       </div>
 
       {/* BUSINESS LOCATION & MAP (TRUST BOOST) */}
-      <div className="rounded-2xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div className="flex justify-between items-center">
           <h2 className="font-semibold">Business Location & Map</h2>
 
           {!isEditingLocation && (
-            <Button variant="ghost" onClick={() => setIsEditingLocation(true)}>
+            <Button variant="ghost" size="sm" onClick={() => setIsEditingLocation(true)}>
               Edit Address
             </Button>
           )}
@@ -276,18 +276,19 @@ export default function ProfileComponent() {
             <div className="flex justify-end gap-4">
               <Button
                 variant="outlineSecondary"
+                size="sm"
                 onClick={() => setIsEditingLocation(false)}
               >
                 Cancel
               </Button>
-              <Button variant="ghost">Save Location</Button>
+              <Button variant="ghost" size="sm">Save Location</Button>
             </div>
           </div>
         )}
       </div>
 
       {/* ACCOUNT & ROLE DETAILS (ADMIN-FRIENDLY) */}
-      <div className="rounded-2xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div>
           <h2 className="font-semibold">Account & Role Details</h2>
@@ -361,7 +362,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* RESTRICTIONS & PLATFORM RULES (TRANSPARENCY) */}
-      <div className="rounded-2xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div>
           <h2 className="font-semibold">Restrictions & Platform Rules</h2>
@@ -402,14 +403,14 @@ export default function ProfileComponent() {
 
         {/* CTA */}
         <div className="pt-2">
-          <Button variant="ghost" className="flex items-center gap-2">
-            <Smartphone size={16} />
+          <Button variant="ghost" size="sm" className="flex items-center gap-2">
+            <Smartphone size={16} className="mr-1" />
             Open Mobile App
           </Button>
         </div>
       </div>
       {/* FOOTER ACTIONS (CONTEXTUAL) */}
-      <div className="rounded-2xl border border-third/30 bg-primary/5 p-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+      <div className="rounded-xl border border-third/30 bg-primary/5 p-5 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
         {/* ✅ Text Section: Centered on mobile, left-aligned on desktop */}
         <div className="space-y-1 text-left">
           <p className="font-medium text-sm md:text-base text-primary">
@@ -420,23 +421,27 @@ export default function ProfileComponent() {
           </p>
         </div>
 
-        {/* ✅ Actions Section: Stacks on mobile, Row on tablet/desktop */}
-        <div className="flex flex-col sm:flex-row gap-3">
+        {/* ✅ Actions Section: Always one line */}
+        <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+
           <Button
             variant="outlineSecondary"
-            className="flex items-center justify-center gap-2 w-full sm:w-auto px-6"
+            size="sm"
+            className="flex items-center justify-center gap-2 whitespace-nowrap shrink-0 px-4"
           >
-            <Headphones size={16} />
+            <Headphones size={16} className="mr-1" />
             <span>Contact Support</span>
           </Button>
 
           <Button
             variant="ghost"
-            className="flex items-center justify-center gap-2 w-full sm:w-auto px-6"
+            size="sm"
+            className="flex items-center justify-center gap-2 whitespace-nowrap shrink-0 px-4"
           >
-            <FileText size={16} />
+            <FileText size={16} className="mr-1" />
             <span>View Guidelines</span>
           </Button>
+
         </div>
       </div>
     </section>
@@ -457,7 +462,7 @@ export function ProfileItem({ label, value }) {
 function StatusCard({ title, value, icon, green }) {
   return (
     <div
-      className={`flex items-center gap-4 rounded-2xl p-5 border border-third/30 ${green ? "bg-green-500/10" : "bg-secondary"
+      className={`flex items-center gap-4 rounded-xl p-5 border border-third/30 ${green ? "bg-green-500/10" : "bg-secondary"
         }`}
     >
       <div

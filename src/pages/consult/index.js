@@ -10,7 +10,7 @@ import WhatYouGetSpotlight from "@/components/features/consult/landing/WhatYouGe
 import WhoItsFor from "@/components/features/consult/landing/WhoItsFor";
 import InspectionAdvantage from "@/components/features/why-choose-us/InspectionAdvantage";
 import FooterLink from "@/components/layout/FooterLink";
-import Footer from "@/components/layout/FooterLink";
+import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
 import Navbar from "@/components/layout/Navbar";
 import React from "react";

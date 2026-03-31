@@ -5,7 +5,7 @@ import HelpHero from "@/components/features/help/HelpHero";
 import PopularTopicsGrid from "@/components/features/help/PopularTopics";
 import SupportBridge from "@/components/features/help/SupportBridge";
 import FooterLink from "@/components/layout/FooterLink";
-import Footer from "@/components/layout/FooterLink";
+import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import React from "react";
 

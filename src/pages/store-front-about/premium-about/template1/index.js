@@ -6,13 +6,14 @@ import Navbar from "@/components/layout/Navbar";
 import Hero from "../../../../components/features/store-front-about/premium-about/template1/Hero";
 
 
+
+
 function index() {
     return (
         <>
             <Navbar />
-            <Layout>
                 <Hero />
-            </Layout>
+           
             <FooterLink />
             <Footer />
         </>
