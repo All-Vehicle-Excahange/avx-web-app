@@ -55,7 +55,7 @@ export default function CreateStoreFront() {
       </div>
 
       {/* TIERS */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
         {TIERS.map((tier) => {
           const isAllowed = USER_TIER === tier.id;
 
@@ -99,12 +99,14 @@ export default function CreateStoreFront() {
                     onClick={handleClick}
                     variant="ghost"
                     full
+                    size="sm"
                     showIcon={true}
                   >
                     Use {tier.label} Storefront
                   </Button>
                 ) : (
-                  <Button full disabled variant="ghost">
+                  <Button full disabled
+                    size="sm" variant="ghost">
                     Locked <Lock className="ml-3" size={16} />
                   </Button>
                 )}
@@ -115,7 +117,7 @@ export default function CreateStoreFront() {
       </div>
 
       {/* WHY STOREFRONT MATTERS */}
-      <div className="border border-third/30 rounded-xl p-8 space-y-6 transition-all duration-300 hover:border-third/60 hover:shadow-[0_8px_30px_rgb(0,0,0,0.4)] hover:-translate-y-1">
+      <div className="border border-third/30 rounded-xl p-8 space-y-6 transition-all duration-300 hover:border-third/60 hover:shadow-[0_8px_30px_rgb(0,0,0,0.4)]">
         <h2 className="text-xl font-semibold">Why your Storefront matters</h2>
 
         <p className="text-third text-sm leading-relaxed max-w-4xl">

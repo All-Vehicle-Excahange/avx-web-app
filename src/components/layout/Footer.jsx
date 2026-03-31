@@ -2,11 +2,64 @@ import { Facebook, Instagram, X, Youtube, ArrowUp } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
+const footerLinks = {
+    product: [
+        { label: 'Design', href: '#' },
+        { label: 'Development', href: '#' },
+        { label: 'Enterprise', href: '#' },
+        { label: 'Figma to AVX', href: '#' },
+        { label: 'AI Features', href: '#' },
+        { label: 'Visual Sitemap', href: '#' },
+        { label: 'Business Solutions', href: '#' },
+        { label: 'eCommerce', href: '#' },
+        { label: 'CMS', href: '#' },
+        { label: 'Management Tools', href: '#' },
+        { label: 'SEO', href: '#' },
+        { label: 'Marketing Integrations', href: '#' },
+        { label: 'Security', href: '#' },
+        { label: 'Reliability & Performance', href: '#' },
+        { label: 'Top Features', href: '#' },
+    ],
+    resources: [
+        { label: 'Reecomm Academy', href: '#' },
+        { label: 'Community', href: '#' },
+        { label: 'Forum', href: '#' },
+        { label: 'Inspiration', href: '#' },
+        { label: 'Marketing Resources', href: '#' },
+        { label: 'Blog', href: '#' },
+        { label: 'Partner Program', href: '#' },
+        { label: 'Help Center', href: '#' },
+        { label: 'Pricing', href: '#' },
+        { label: 'Brand Guidelines', href: '#' },
+    ],
+    moreFromReecomm: [
+        { label: 'Website Builder', href: '#' },
+        { label: 'Website Design', href: '#' },
+        { label: 'Website Templates', href: '#' },
+        { label: 'eCommerce Website', href: '#' },
+        { label: 'Appointment Scheduling', href: '#' },
+        { label: 'Portfolio Website', href: '#' },
+        { label: 'Blog Website', href: '#' },
+    ],
+    company: [
+        { label: 'About Reecomm', href: '/aboutus' },
+        { label: 'Reecomm Works', href: '/avx-works' },
+        { label: 'Help Center', href: '/help' },
+        { label: 'Why Choose Us', href: '/why-chose-us' },
+        { label: 'Site Map', href: '#' },
+        { label: 'Careers', href: '#' },
+    ],
+    legal: [
+        { label: 'Terms of Use', href: '#' },
+        { label: 'Privacy Policy', href: '#' },
+    ]
+};
+
 const Footer = () => {
     return (
         <footer className=" text-white font-sans">
-            <div className="container mx-auto px-4 lg:px-8">
-                <div className="flex flex-col lg:flex-row gap-12 lg:gap-8 justify-between mb-16 lg:px-4">
+            <div className="container mx-auto ">
+                <div className="flex flex-col lg:flex-row gap-12 lg:gap-8 justify-between mb-16">
 
                     {/* Brand & Description Column */}
                     <div className="lg:w-[25%] flex flex-col gap-6">
@@ -15,7 +68,7 @@ const Footer = () => {
                         </Link>
 
                         <p className="text-primary/60 text-[13px] leading-relaxed lg:pr-4">
-                            AVX is the website building platform for designers, developers, and marketers.
+                            Reecomm is the website building platform for designers, developers, and marketers.
                             With high-end design capabilities, streamlined workflows, and robust business tools,
                             it empowers freelancers and agencies to build, manage, and scale exceptional websites
                             with maximum efficiency.
@@ -48,9 +101,9 @@ const Footer = () => {
                         <div className="flex flex-col gap-4">
                             <h3 className="text-[11px] font-bold uppercase tracking-wider mb-2 text-white">Product</h3>
                             <ul className="flex flex-col gap-3">
-                                {['Design', 'Development', 'Enterprise', 'Figma to AVX', 'AI Features', 'Visual Sitemap', 'Business Solutions', 'eCommerce', 'CMS', 'Management Tools', 'SEO', 'Marketing Integrations', 'Security', 'Reliability & Performance', 'Top Features'].map((item) => (
-                                    <li key={item}>
-                                        <Link href="#" className="text-primary/60 hover:text-white text-[13px] transition-colors">{item}</Link>
+                                {footerLinks.product.map((item) => (
+                                    <li key={item.label}>
+                                        <Link href={item.href} className="text-primary/60 hover:text-white text-[13px] transition-colors">{item.label}</Link>
                                     </li>
                                 ))}
                             </ul>
@@ -60,9 +113,9 @@ const Footer = () => {
                         <div className="flex flex-col gap-4 relative lg:pr-4">
                             <h3 className="text-[11px] font-bold uppercase tracking-wider mb-2 text-white">Resources</h3>
                             <ul className="flex flex-col gap-3">
-                                {['AVX Academy', 'Community', 'Forum', 'Inspiration', 'Marketing Resources', 'Blog', 'Partner Program', 'Help Center', 'Pricing', 'Brand Guidelines'].map((item) => (
-                                    <li key={item}>
-                                        <Link href="#" className="text-primary/60 hover:text-white text-[13px] transition-colors">{item}</Link>
+                                {footerLinks.resources.map((item) => (
+                                    <li key={item.label}>
+                                        <Link href={item.href} className="text-primary/60 hover:text-white text-[13px] transition-colors">{item.label}</Link>
                                     </li>
                                 ))}
                             </ul>
@@ -72,11 +125,11 @@ const Footer = () => {
 
                         {/* Column 3 */}
                         <div className="flex flex-col gap-4 lg:pl-4">
-                            <h3 className="text-[11px] font-bold uppercase tracking-wider mb-2 text-white">More From AVX</h3>
+                            <h3 className="text-[11px] font-bold uppercase tracking-wider mb-2 text-white">More From Reecomm</h3>
                             <ul className="flex flex-col gap-3">
-                                {['Website Builder', 'Website Design', 'Website Templates', 'eCommerce Website', 'Appointment Scheduling', 'Portfolio Website', 'Blog Website'].map((item) => (
-                                    <li key={item}>
-                                        <Link href="#" className="text-primary/60 hover:text-white text-[13px] transition-colors">{item}</Link>
+                                {footerLinks.moreFromReecomm.map((item) => (
+                                    <li key={item.label}>
+                                        <Link href={item.href} className="text-primary/60 hover:text-white text-[13px] transition-colors">{item.label}</Link>
                                     </li>
                                 ))}
                             </ul>
@@ -86,9 +139,9 @@ const Footer = () => {
                         <div className="flex flex-col gap-4">
                             <h3 className="text-[11px] font-bold uppercase tracking-wider mb-2 text-white">Company</h3>
                             <ul className="flex flex-col gap-3">
-                                {['About AVX', 'Contact Us', 'Press & Media', 'Accessibility Statement', 'Site Map', 'Careers'].map((item) => (
-                                    <li key={item}>
-                                        <Link href="#" className="text-primary/60 hover:text-white text-[13px] transition-colors">{item}</Link>
+                                {footerLinks.company.map((item) => (
+                                    <li key={item.label}>
+                                        <Link href={item.href} className="text-primary/60 hover:text-white text-[13px] transition-colors">{item.label}</Link>
                                     </li>
                                 ))}
                             </ul>
@@ -100,8 +153,11 @@ const Footer = () => {
                 {/* Bottom Section */}
                 <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-[#ffffff20] text-[13px] text-primary/60">
                     <div className="flex gap-6 mb-4 md:mb-0">
-                        <Link href="#" className="hover:text-white transition-colors hover:underline">Terms of Use</Link>
-                        <Link href="#" className="hover:text-white transition-colors hover:underline">Privacy Policy</Link>
+                        {footerLinks.legal.map((item) => (
+                            <Link key={item.label} href={item.href} className="hover:text-white transition-colors hover:underline">
+                                {item.label}
+                            </Link>
+                        ))}
                     </div>
 
                     <div className="flex items-center gap-4">

@@ -67,19 +67,19 @@ export default function InventoryComponent() {
   const [needAttentionLoading, setNeedAttentionLoading] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
+  const fetchVehicles = async () => {
+    try {
+      const status = activeType === "all" ? undefined : activeType;
+
+      const res = await getInventoryVehicle(status);
+      setVehicles(res.data || []);
+      setVisibleCount(9);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchVehicles = async () => {
-      try {
-        const status = activeType === "all" ? undefined : activeType;
-
-        const res = await getInventoryVehicle(status);
-        setVehicles(res.data || []);
-        setVisibleCount(9);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     fetchVehicles();
   }, [activeType]);
 
@@ -95,15 +95,16 @@ export default function InventoryComponent() {
     fetchTopPerforming();
   }, []);
 
+  const fetchInventorySnapShotCount = async () => {
+    try {
+      const res = await getInventorySnapShotCount();
+      setInventorySnapShotCount(res.data || []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchInventorySnapShotCount = async () => {
-      try {
-        const res = await getInventorySnapShotCount();
-        setInventorySnapShotCount(res.data || []);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fetchInventorySnapShotCount();
   }, []);
 
@@ -152,12 +153,12 @@ export default function InventoryComponent() {
         </div>
 
         {/* 2️⃣ NOTE */}
-        <div className="rounded-xl bg-fourth text-white p-6 md:p-8 min-h-[150px] flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-md">
+        <div className="rounded-xl bg-fourth text-white p-5 md:p-8 min-h-[150px] flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-md">
 
           {/* Left Content */}
           <div className="max-w-[500px]">
             <p className="text-sm md:text-base leading-relaxed">
-              <span className="font-semibold">Note:</span> Adding and editing vehicles is available on the AVX mobile app.
+              <span className="font-semibold">Note:</span> Adding and editing vehicles is available on the Reecomm mobile app.
               You can still view listings and mark vehicles as sold here.
             </p>
           </div>
@@ -179,7 +180,7 @@ export default function InventoryComponent() {
         </div>
 
         {/* 3️⃣ Inventory Health Snapshot  */}
-        <div className="rounded-xl border border-third/30 bg-primary/5 p-6 space-y-5">
+        <div className="rounded-xl border border-third/30 bg-primary/5 p-5 space-y-5">
           <div className="flex items-center gap-2">
             <TrendingUp className="text-primary" size={18} />
             <h3 className="font-semibold">Inventory Health Snapshot</h3>
@@ -195,7 +196,7 @@ export default function InventoryComponent() {
               <StatCard
                 icon={<Flame className="text-green-500" size={20} />}
                 label="High Demand"
-                value={`${inventorySnapShotCount.highDemandCount} Vehicles`}
+                value={`${inventorySnapShotCount.highDemandCount} `}
               />
             </div>
 
@@ -205,7 +206,7 @@ export default function InventoryComponent() {
               <StatCard
                 icon={<EyeOff className="text-yellow-500" size={20} />}
                 label="Low Visibility"
-                value={`${inventorySnapShotCount.lowDemandCount} Vehicles`}
+                value={`${inventorySnapShotCount.lowDemandCount} `}
               />
             </div>
 
@@ -215,7 +216,7 @@ export default function InventoryComponent() {
               <StatCard
                 icon={<AlertTriangle className="text-red-500" size={20} />}
                 label="Needs Attention"
-                value={`${inventorySnapShotCount.needsAttentionCount} Vehicles`}
+                value={`${inventorySnapShotCount.needsAttentionCount} `}
               />
             </div>
           </div>
@@ -225,7 +226,7 @@ export default function InventoryComponent() {
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
 
           {/* LEFT SIDE */}
-          <div className="rounded-xl border border-third/30 bg-primary/5 p-6 flex flex-col h-[400px] ">
+          <div className="rounded-xl border border-third/30 bg-primary/5 p-5 flex flex-col h-[400px] ">
 
             {/* HEADER (fixed) */}
             <div className="flex items-center gap-2 mb-4">
@@ -303,7 +304,7 @@ export default function InventoryComponent() {
 
         {/* 4️⃣ FILTER BAR */}
         <div className="rounded-xl border border-third/30  p-5 flex flex-col lg:flex-row gap-4 justify-between">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
             {vehicleTypes.map((type) => (
               <button
                 key={type.id}
@@ -333,6 +334,10 @@ export default function InventoryComponent() {
                     avxInspected={car.inspectionStatus === "AI_INSPECTED"}
                     inquiries={car.totalInquiries}
                     chats={car.approvedInquiries}
+                    onRefresh={() => {
+                      fetchVehicles();
+                      fetchInventorySnapShotCount();
+                    }}
                   />
                 ))}
               </div>
@@ -357,7 +362,7 @@ export default function InventoryComponent() {
                   <p className="text-third mb-6">
                     Add vehicles in the AVX mobile app to start receiving inquiries.
                   </p>
-                  <Button variant="ghost" showIcon={false}>
+                  <Button variant="ghost" size="sm" showIcon={false}>
                     Download App
                   </Button>
                 </>
@@ -372,7 +377,7 @@ export default function InventoryComponent() {
             </div>
           )}
         </div>
-        <div className="rounded-xl border border-third/30 bg-primary/5 p-6 space-y-4">
+        <div className="rounded-xl border border-third/30 bg-primary/5 p-5 space-y-4">
           <div className="flex items-center gap-2">
             <AlertTriangle className="text-yellow-500" size={18} />
             <h3 className="font-semibold">Vehicles Needing Attention</h3>
