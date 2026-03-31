@@ -45,6 +45,11 @@ const selectStyles = {
     color: "white",
     minHeight: "44px"
   }),
+  
+  indicatorSeparator: () => ({
+    display: "none" 
+  }),
+
   singleValue: (base) => ({
     ...base,
     color: "white"
@@ -61,6 +66,8 @@ const selectStyles = {
     border: "1px solid rgba(255, 255, 255, 0.2)"
   })
 };
+
+
 
 const formatOptionLabel = ({ value, label }) => (
   <div className="flex items-center gap-3">
@@ -154,7 +161,7 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
       const formData = new FormData();
       formData.append("serviceTitle", data.servicesTitle || "");
       formData.append("serviceDescription", data.servicesDesc || "");
-      
+
       if (data.services && Array.isArray(data.services)) {
         data.services.forEach((service, i) => {
           formData.append(`services[${i}].title`, service.title || "");
@@ -175,19 +182,18 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
   // ================= EDIT MODE =================
   if (isEditing) {
     return (
-      <div className="bg-secondary w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
+      <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
         {/* HERO */}
-        <div>
-          <h3 className="text-primary font-bold mb-4">Hero</h3>
-
+        <div className="space-y-6">
+          <h3 className="text-primary font-bold mb-4">Hero Title</h3>
           <EditorInput
-            bold
             label="Hero Title"
             value={data.heroTitle}
             onChange={(e) => updateField("heroTitle", e.target.value)}
             onBlur={handleHeroBlur}
           />
 
+          <h3 className="text-primary font-bold mb-4">Hero Description</h3>
           <RichTextEditor
             label="Hero Description"
             value={data.heroDescription}
@@ -199,8 +205,8 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
         <hr className="border-white/10" />
 
         {/* MISSION */}
-        <div>
-          <h3 className="text-primary font-bold mb-4">Mission</h3>
+        <div className="space-y-6">
+          <h3 className="text-primary font-bold mb-4">Mission Title</h3>
 
           <EditorInput
             bold
@@ -209,6 +215,7 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
             onBlur={handleMissionBlur}
           />
 
+          <h3 className="text-primary font-bold mb-4">Mission Description</h3>
           <RichTextEditor
             value={data.missionDesc}
             onChange={(v) => updateField("missionDesc", v)}
@@ -217,8 +224,8 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
         </div>
 
         {/* VISION */}
-        <div>
-          <h3 className="text-primary font-bold mb-4">Vision</h3>
+        <div className="space-y-6">
+          <h3 className="text-primary font-bold mb-4">Vision Title</h3>
 
           <EditorInput
             bold
@@ -227,6 +234,7 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
             onBlur={handleVisionBlur}
           />
 
+          <h3 className="text-primary font-bold mb-4">Vision Description</h3>
           <RichTextEditor
             value={data.visionDesc}
             onChange={(v) => updateField("visionDesc", v)}
@@ -238,7 +246,7 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
 
         {/* STATS */}
         <div>
-          <h3 className="text-primary font-bold mb-4">Stats</h3>
+          <h3 className="text-primary font-bold mb-4">Stats Description</h3>
 
           <RichTextEditor
             value={data.aboutUsDescription || data.statsDesc}
@@ -248,32 +256,44 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
 
           <div className="grid grid-cols-2 gap-4 mt-4">
             {data.stats.map((s, i) => (
-              <div key={i}>
-                <EditorInput
-                  value={s.number}
-                  onChange={(e) => {
-                    const numericValue = e.target.value.replace(/[^0-9]/g, "");
-                    updateArrayItem("stats", i, "number", numericValue);
-                  }}
-                  onBlur={handleStatsBlur}
-                />
-                <EditorInput
-                  value={s.label}
-                  onChange={(e) =>
-                    updateArrayItem("stats", i, "label", e.target.value)
-                  }
-                  onBlur={handleStatsBlur}
-                />
+              <div key={i} className="space-y-3">
+
+                {/* Number Field */}
+                <div>
+                  <p className="text-sm font-medium mb-1">Number</p>
+                  <EditorInput
+                    value={s.number}
+                    onChange={(e) => {
+                      const numericValue = e.target.value.replace(/[^0-9]/g, "");
+                      updateArrayItem("stats", i, "number", numericValue);
+                    }}
+                    onBlur={handleStatsBlur}
+                  />
+                </div>
+
+                {/* Title Field */}
+                <div>
+                  <p className="text-sm font-medium mb-1">Title</p>
+                  <EditorInput
+                    value={s.label}
+                    onChange={(e) =>
+                      updateArrayItem("stats", i, "label", e.target.value)
+                    }
+                    onBlur={handleStatsBlur}
+                  />
+                </div>
+
               </div>
             ))}
           </div>
+
         </div>
 
         <hr className="border-white/10" />
 
         {/* SERVICES */}
-        <div>
-          <h3 className="text-primary font-bold mb-4">Services</h3>
+        <div className="space-y-6">
+          <h3 className="text-primary font-bold mb-4">Services Title</h3>
 
           <EditorInput
             bold
@@ -282,17 +302,23 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
             onBlur={handleServicesBlur}
           />
 
+          <h3 className="text-primary font-bold mb-4">Services Description</h3>
           <RichTextEditor
             value={data.servicesDesc}
             onChange={(v) => updateField("servicesDesc", v)}
             onBlur={handleServicesBlur}
           />
 
+          <h3 className="text-primary font-bold mb-4">Services Cards</h3>
           <div className="grid md:grid-cols-2 gap-4 mt-4">
             {data.services.map((s, i) => (
-              <div key={i} className="border p-4 rounded bg-primary/5">
-                <div className="flex flex-col gap-2 relative mt-4">
-                  <label className="text-sm font-medium text-primary">Icon (Select SVG)</label>
+              <div key={i} className="border border-third/30 p-4 rounded bg-primary/5">
+
+                {/* Icon */}
+                <div className="flex flex-col gap-2 relative mt-2">
+                  <label className="text-sm font-medium text-primary">
+                    Select Icon
+                  </label>
                   <Select
                     options={SVG_OPTIONS}
                     formatOptionLabel={formatOptionLabel}
@@ -305,24 +331,39 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
                   />
                 </div>
 
-                <EditorInput
-                  value={s.title}
-                  onChange={(e) =>
-                    updateArrayItem("services", i, "title", e.target.value)
-                  }
-                  onBlur={handleServicesBlur}
-                />
+                {/* Title */}
+                <div className="mt-4">
+                  <label className="text-sm font-medium text-primary mb-1 block">
+                    Title
+                  </label>
+                  <EditorInput
+                    value={s.title}
+                    onChange={(e) =>
+                      updateArrayItem("services", i, "title", e.target.value)
+                    }
+                    onBlur={handleServicesBlur}
+                  />
+                </div>
 
-                <EditorInput
-                  value={s.desc}
-                  onChange={(e) =>
-                    updateArrayItem("services", i, "desc", e.target.value)
-                  }
-                  onBlur={handleServicesBlur}
-                />
+                {/* Description */}
+                <div className="mt-4">
+                  <label className="text-sm font-medium text-primary mb-1 block">
+                    Description
+                  </label>
+                  <EditorInput
+                    value={s.desc}
+                    onChange={(e) =>
+                      updateArrayItem("services", i, "desc", e.target.value)
+                    }
+                    onBlur={handleServicesBlur}
+                  />
+                </div>
+
               </div>
             ))}
           </div>
+
+
         </div>
       </div>
     );
@@ -474,7 +515,7 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
                 >
                   <div className="flex flex-col gap-6">
                     {typeof service.icon === 'string' && service.icon.startsWith('<svg') ? (
-                      <div 
+                      <div
                         className="text-third [&>svg]:w-10 [&>svg]:h-10 transition-colors duration-300"
                         dangerouslySetInnerHTML={{ __html: service.icon }}
                       />

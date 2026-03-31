@@ -43,15 +43,15 @@ export default function RichTextEditor({ label, value, onChange, onBlur }) {
 
   return (
     <div className="flex flex-col gap-1 w-full">
-      {label && (
+      {/* {label && (
         <label className="text-xs font-bold uppercase text-third">
           {label}
         </label>
-      )}
+      )} */}
 
-      <div className="border border-third/30 rounded bg-secondary overflow-hidden shadow-sm focus-within:border-primary transition">
+      <div className="border border-third/30 rounded bg-primary/5 overflow-hidden shadow-sm focus-within:border-primary transition">
         {/* Toolbar */}
-        <div className="border-b border-third/30 p-1 flex gap-1 bg-secondary">
+        <div className="border-b border-third/30 p-1 flex gap-1 ">
           <ToolbarBtn
             label="B"
             onClick={() => editor.chain().focus().toggleBold().run()}
