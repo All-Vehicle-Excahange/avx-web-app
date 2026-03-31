@@ -1,13 +1,75 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@/components/ui/button";
 import { Star, MapPin, Pencil } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import CreateStoreFront from "./CreateStoreFront";
+import { getConsualtDraft } from "@/services/theme.service";
+import { getStoreFront } from "@/services/theme.service";
+import { EngineRenderer } from "@/core/engine/Renderer";
+import { THEME_STORE } from "@/core/engine/themeStore";
+
+/**
+ * Maps raw API response fields → template field names expected by theme components.
+ */
+function mapApiToTemplateData(api) {
+  return {
+    // Hero
+    headline: api.heroTitle,
+    heroTitle: api.heroTitle,
+    subHeadline: api.heroDescription,
+    heroDesc: api.heroDescription,
+    heroImageUrl: api.customHeroImageUrl1 || api.heroImageTemplate1?.imageUrl,
+
+    // Story Images (gallery) — only include images that exist
+    storyImages: [
+      api.customHeroImageUrl1 || api.heroImageTemplate1?.imageUrl,
+      api.customHeroImageUrl2 || api.heroImageTemplate2?.imageUrl,
+      api.customMissionUrl1,
+      api.customStoryUrl1,
+    ].filter(Boolean),
+
+    // About Us
+    aboutUsTitle: api.aboutUsTitle,
+    aboutUsDescription: api.aboutUsDescription,
+
+    // Stats
+    stats: api.stats,
+    statsDescription: api.aboutUsDescription,
+    statsDesc: api.aboutUsDescription,
+
+    // Mission
+    missionTitle: api.missionTitle,
+    missionDescription: api.missionDescription,
+    missionDesc: api.missionDescription,
+    missionImageUrl: api.customMissionUrl1,
+    missionImage: api.customMissionUrl1,
+
+    // Vision
+    visionTitle: api.visionTitle,
+    visionDescription: api.visionDescription,
+    visionDesc: api.visionDescription,
+    visionImage: api.visionTemplate1?.imageUrl || "",
+
+    // Services
+    servicesTitle: api.serviceTitle,
+    servicesSubtitle: api.serviceDescription,
+    servicesDesc: api.serviceDescription,
+    services: api.services,
+
+    // WhyBuy (spread all remaining fields)
+    ...api,
+  };
+}
 
 export default function StoreFrontComponent() {
-  const [editor, setEditor] = useState(null); // about | why | mission | vision | store
-  const HAS_STOREFRONT = false; // false = first time seller
+  const router = useRouter();
+  const [editor, setEditor] = useState(null);
+  const [hasStoreFront, setHasStoreFront] = useState(null);
+  const [storeData, setStoreData] = useState(null);
+  const [activeTab, setActiveTab] = useState("about");
+  const [sections, setSections] = useState([]);
 
   const [data, setData] = useState({
     name: "Adarsh Auto Consultants",
@@ -16,21 +78,76 @@ export default function StoreFrontComponent() {
     reviews: 116,
     description:
       "Premium automotive consultant specializing in verified pre-owned luxury and commercial vehicles.",
-    about: "Trusted automotive consultants with over 15 years of experience.",
-    why: "AVX certified inspection, transparent pricing, warranty.",
-    mission: "To deliver verified & transparent vehicles.",
-    vision: "To become India's most trusted auto marketplace.",
     banner: "/sfBg.png",
     logo: "/icons8-user-48.png",
-    aboutImage: "/about2.png",
-    whyImage: "/whowe.png",
-    missionImage: "/about3.png",
-    visionImage: "/about4.png",
   });
 
-  if (!HAS_STOREFRONT) {
+  // Fetch storefront draft on mount
+  useEffect(() => {
+    const getConsultDraft = async () => {
+      try {
+        const res = await getConsualtDraft();
+        if (res?.statusCode === 200) {
+          setHasStoreFront(true);
+          setStoreData(res?.data);
+        } else {
+          setHasStoreFront(false);
+        }
+      } catch (error) {
+        console.log(error);
+        setHasStoreFront(false);
+      }
+    };
+    getConsultDraft();
+  }, []);
+
+  // Hydrate engine sections once storeData is available
+  useEffect(() => {
+    const buildSections = async () => {
+      let apiData = storeData;
+
+      if (!apiData) {
+        try {
+          const res = await getStoreFront();
+          apiData = res?.data;
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      if (!apiData) return;
+
+      const matchedTheme =
+        THEME_STORE.find((t) => t.id === apiData.themeId) || THEME_STORE[0];
+
+      const mappedData = mapApiToTemplateData(apiData);
+
+      const hydratedSections = matchedTheme.schema.map((section) => ({
+        ...section,
+        data: {
+          ...section.data,   // schema defaults as fallback
+          ...mappedData,     // real API values with correct field names
+        },
+      }));
+
+      setSections(hydratedSections);
+    };
+
+    buildSections();
+  }, [storeData]);
+
+  if (hasStoreFront === null) {
+    return null;
+  }
+
+  if (!hasStoreFront) {
     return <CreateStoreFront />;
   }
+
+  // Filter sections for the active tab
+  const filteredSections = sections.filter((section) =>
+    section.type.includes(activeTab)
+  );
 
   return (
     <section className="space-y-10">
@@ -40,103 +157,67 @@ export default function StoreFrontComponent() {
         <p className="text-third text-sm">Manage your public brand presence</p>
       </div>
 
-      {/* BANNER */}
-      <div className="rounded-3xl overflow-hidden border border-third/30 relative h-44 md:h-52">
-        <Image src={data.banner} fill className="object-cover" alt="" />
-      </div>
 
-      {/* STORE INFO */}
-      <div className="bg-secondary border border-third/30 rounded-3xl p-5 md:p-8 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
-        <div className="flex flex-col md:flex-row justify-between items-start gap-6">
-          <div className="flex flex-col sm:flex-row gap-6">
-            <div className="relative w-20 h-20 md:w-[100px] md:h-[100px] shrink-0">
-              <Image
-                src={data.logo}
-                fill
-                className="rounded-xl object-cover"
-                alt=""
-              />
-            </div>
-            <div>
-              <h2 className="text-xl md:text-2xl font-bold">{data.name}</h2>
-              <div className="flex flex-wrap items-center gap-3 text-xs md:text-sm text-third mt-1">
-                <div className="flex items-center gap-1">
-                  <Star size={14} className="text-yellow-400 fill-yellow-400" />
-                  {data.rating} ({data.reviews})
-                </div>
-                <div className="flex items-center gap-1">
-                  <MapPin size={14} /> {data.city}
-                </div>
-              </div>
-              <p className="text-sm mt-4 text-primary/80 leading-relaxed max-w-3xl">
-                {data.description}
-              </p>
+
+      {/* THEME CONTENT TABS */}
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-third/30">
+          <div className="w-full overflow-x-auto no-scrollbar">
+            <div className="flex gap-10 min-w-max">
+              {[
+                { id: "about", label: "About Us" },
+                { id: "why_buy", label: "Why Choose Us" },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`hover:cursor-pointer relative py-4 text-sm font-medium transition whitespace-nowrap ${activeTab === tab.id
+                    ? "text-primary"
+                    : "text-third hover:text-primary"
+                    }`}
+                >
+                  {tab.label}
+                  {activeTab === tab.id && (
+                    <span className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full" />
+                  )}
+                </button>
+              ))}
             </div>
           </div>
 
-          <Button
-            onClick={() => setEditor("store")}
-            variant="outlineSecondary"
-            size="sm"
-            className="w-full md:w-auto"
-          >
-            <Pencil size={13} className="mr-1" /> Edit Storefront
-          </Button>
+          {/* Edit Button */}
+          {storeData &&
+            (!storeData.isSubmitted ||
+              storeData.verificationStatus === "REQUEST_CHANGES") && (
+              <Button
+                onClick={() =>
+                  router.push(`storefront/theme/create?theme=${storeData.themeId}`)
+                }
+                variant="outlineSecondary"
+                size="sm"
+                className="shrink-0 mb-2 sm:mb-0"
+              >
+                <Pencil size={13} className="mr-2" />
+                Edit Storefront
+              </Button>
+            )}
         </div>
-      </div>
 
-      <Content
-        title="About Us"
-        text={data.about}
-        img={data.aboutImage}
-        onEdit={() => setEditor("about")}
-      />
-      <Content
-        title="Why Choose Us"
-        text={data.why}
-        img={data.whyImage}
-        onEdit={() => setEditor("why")}
-      />
-      <Content
-        title="Our Mission"
-        text={data.mission}
-        img={data.missionImage}
-        onEdit={() => setEditor("mission")}
-      />
-      <Content
-        title="Our Vision"
-        text={data.vision}
-        img={data.visionImage}
-        onEdit={() => setEditor("vision")}
-      />
+        {/* TAB CONTENT — inline engine render, filtered by active tab */}
+        <section className="w-full container rounded-2xl p-6 space-y-8">
+          <EngineRenderer
+            sections={filteredSections}
+            mode={"preview"}
+            onUpdate={(i, newData) => {
+              const sectionId = filteredSections[i].id;
+              const updated = sections.map((sec) =>
+                sec.id === sectionId ? { ...sec, data: newData } : sec
+              );
+              setSections(updated);
+            }}
+          />
+        </section>
+      </div>
     </section>
-  );
-}
-
-/* ---------------- SECTION ---------------- */
-
-function Content({ title, text, img, onEdit }) {
-  return (
-    <div className="bg-secondary border border-third/30 rounded-3xl p-5 md:p-8 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
-      <div className="flex justify-between items-center gap-4">
-        <h3 className="font-semibold text-lg md:text-xl">{title}</h3>
-        <Button onClick={onEdit} variant="outlineSecondary" size="sm">
-          <Pencil size={13} className="mr-1" /> Edit
-        </Button>
-      </div>
-
-      <p className="text-sm md:text-base text-third leading-relaxed">
-        {text}
-      </p>
-
-      <div className="relative aspect-3/1 w-full overflow-hidden rounded-2xl">
-        <Image
-          src={img}
-          fill
-          className="object-cover"
-          alt=""
-        />
-      </div>
-    </div>
   );
 }

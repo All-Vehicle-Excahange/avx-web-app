@@ -2,22 +2,135 @@
 
 "use client";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { EngineRenderer } from "@/core/engine/Renderer";
 import { THEME_STORE } from "@/core/engine/themeStore";
+import { getConsualtDraft, getStoreFront, makeAsFinalSubmit } from "@/services/theme.service";
+import Button from "@/components/ui/button";
+
+function mapApiToTemplateData(api) {
+  return {
+    // Hero
+    headline: api.heroTitle,
+    heroTitle: api.heroTitle,
+    subHeadline: api.heroDescription,
+    heroDesc: api.heroDescription,
+    heroImageUrl: api.customHeroImageUrl1 || api.heroImageTemplate1?.imageUrl,
+
+    // Story Images (gallery) — only include images that exist
+    storyImages: [
+      api.customHeroImageUrl1 || api.heroImageTemplate1?.imageUrl,
+      api.customHeroImageUrl2 || api.heroImageTemplate2?.imageUrl,
+      api.customMissionUrl1,
+      api.customStoryUrl1,
+    ].filter(Boolean),
+
+    // About Us
+    aboutUsTitle: api.aboutUsTitle,
+    aboutUsDescription: api.aboutUsDescription,
+
+    // Stats
+    stats: api.stats,
+    statsDescription: api.aboutUsDescription,
+    statsDesc: api.aboutUsDescription,
+
+    // Mission
+    missionTitle: api.missionTitle,
+    missionDescription: api.missionDescription,
+    missionDesc: api.missionDescription,
+    missionImageUrl: api.customMissionUrl1,
+    missionImage: api.customMissionUrl1,
+
+    // Vision
+    visionTitle: api.visionTitle,
+    visionDescription: api.visionDescription,
+    visionDesc: api.visionDescription,
+    visionImage: api.visionTemplate1?.imageUrl || "",
+
+    // Services
+    servicesTitle: api.serviceTitle,
+    servicesSubtitle: api.serviceDescription,
+    servicesDesc: api.serviceDescription,
+    services: api.services,
+
+    // WhyBuy (spread all remaining fields)
+    ...api,
+  };
+}
 
 export default function CreateTheme() {
   const params = useSearchParams();
+  const router = useRouter();
   const themeId = params.get("theme");
 
   const theme = THEME_STORE.find((t) => t.id === themeId) || THEME_STORE[0];
   const [mode, setMode] = useState("editor");
   const [activeTab, setActiveTab] = useState(0);
   const [sections, setSections] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleFinalSubmit = async () => {
+    try {
+      setIsSubmitting(true);
+      const res = await makeAsFinalSubmit();
+      if (res?.statusCode === 200 || res?.status === "SUCCESS" || res?.status === "OK") {
+        router.push("/consult/dashboard/storefront/");
+      } else {
+        console.error("Failed to submit:", res);
+      }
+    } catch (error) {
+      console.error("Error on final submit:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   useEffect(() => {
-    setSections(theme.schema);
-  }, [themeId]);
+    const fetchThemeData = async () => {
+      setIsLoading(true);
+      let apiData = null;
+
+      try {
+        const draftRes = await getConsualtDraft();
+        if (draftRes?.statusCode === 200 && draftRes?.data) {
+          apiData = draftRes.data;
+        } else {
+          const storefrontRes = await getStoreFront();
+          if (storefrontRes?.statusCode === 200 && storefrontRes?.data) {
+            apiData = storefrontRes.data;
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch existing theme data", error);
+      }
+
+      if (apiData) {
+        const mappedData = mapApiToTemplateData(apiData);
+        const hydratedSections = theme.schema.map((section) => ({
+          ...section,
+          data: {
+            ...section.data, // defaults as fallback
+            ...mappedData,   // API values populated properly
+          },
+        }));
+        setSections(hydratedSections);
+      } else {
+        setSections(theme.schema);
+      }
+      setIsLoading(false);
+    };
+
+    fetchThemeData();
+  }, [themeId, theme]);
+
+  if (isLoading) {
+    return (
+      <section className="rounded-2xl border border-third/30 h-full flex items-center justify-center text-third">
+        <div className="animate-pulse">Loading saved storefront data...</div>
+      </section>
+    );
+  }
 
   return (
     <section className="rounded-2xl border border-third/30 overflow-hidden h-full flex flex-col  text-primary">
@@ -76,7 +189,7 @@ export default function CreateTheme() {
       </div>
 
       {/* Renderer */}
-      <div className="flex-1 overflow-auto p-4">
+      <div className="flex-1 overflow-auto p-4 flex flex-col relative pb-24">
         {sections.length > 0 && sections[activeTab] && (
           <EngineRenderer
             sections={[sections[activeTab]]}
@@ -87,6 +200,19 @@ export default function CreateTheme() {
               setSections(updated);
             }}
           />
+        )}
+
+        {/* Final Submit Button (Only on Why Buy tab) */}
+        {sections.length > 0 && sections[activeTab]?.type?.includes("why_buy") && (
+          <div className="absolute inset-x-0 bottom-0 bg-secondary/90 backdrop-blur-sm p-4 border-t border-third/30 flex justify-end z-10">
+            <Button
+               onClick={handleFinalSubmit}
+               disabled={isSubmitting}
+               variant="ghost"
+             >
+               {isSubmitting ? "Submitting..." : "Final Submit"}
+             </Button>
+          </div>
         )}
       </div>
     </section>

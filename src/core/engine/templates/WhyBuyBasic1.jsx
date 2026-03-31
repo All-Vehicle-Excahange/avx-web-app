@@ -10,7 +10,66 @@ import {
 } from "lucide-react";
 import RichTextEditor from "../atoms/RichTextEditor";
 import EditorInput from "../atoms/EditorInput";
-import { setWhyBuyHero, setWhyBuyStory, setWhyBuyVehicleSelection, setWhyBuyProcess, setWhyBuyInspection, setWhyBuyCustomerCommitment, setWhyBuyTestimonials } from "@/services/theme.service";
+import { setWhyBuyHero, setWhyBuyStory, setWhyBuyVehicleSelection, setWhyBuyProcess, setWhyBuyInspection, setWhyBuyCustomerCommitment, setFeaturedReviews } from "@/services/theme.service";
+import { getAllReview } from "@/services/user.service";
+import { useEffect, useState } from "react";
+import Select from "react-select";
+
+const SVG_OPTIONS = [
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>`,
+    label: "Search"
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>`,
+    label: "Cancel"
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M300-360q-25 0-42.5-17.5T240-420v-40h60v40h60v-180h60v180q0 25-17.5 42.5T360-360h-60Zm220 0q-17 0-28.5-11.5T480-400v-40h60v20h80v-40H520q-17 0-28.5-11.5T480-500v-60q0-17 11.5-28.5T520-600h120q17 0 28.5 11.5T680-560v40h-60v-20h-80v40h100q17 0 28.5 11.5T680-460v60q0 17-11.5 28.5T640-360H520Z"/></svg>`,
+    label: "Layout"
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M320-240 80-480l240-240 57 57-184 184 183 183-56 56Zm320 0-57-57 184-184-183-183 56-56 240 240-240 240Z"/></svg>`,
+    label: "Code"
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-40-360v-240h80v207l154 154-57 57-177-178Z"/></svg>`,
+    label: "Clock"
+  }
+];
+
+const selectStyles = {
+  control: (base) => ({
+    ...base,
+    backgroundColor: "transparent",
+    borderColor: "rgba(255, 255, 255, 0.2)",
+    color: "white",
+    minHeight: "44px"
+  }),
+  singleValue: (base) => ({
+    ...base,
+    color: "white"
+  }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isFocused ? "rgba(255,255,255,0.1)" : "#1e1e1e",
+    color: "white",
+    cursor: "pointer"
+  }),
+  menu: (base) => ({
+    ...base,
+    backgroundColor: "#1e1e1e",
+    border: "1px solid rgba(255, 255, 255, 0.2)"
+  })
+};
+
+const formatOptionLabel = ({ value, label }) => (
+  <div className="flex items-center gap-3">
+    <div className="w-5 h-5 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full" dangerouslySetInnerHTML={{ __html: value }} />
+    <span className="text-sm">{label}</span>
+  </div>
+);
+
 const ICON_MAP = {
   Search,
   MessageCircle,
@@ -22,9 +81,36 @@ const ICON_MAP = {
 
 function WhyBuyBasic1({ data, isEditing, onUpdate }) {
   if (!data) return null;
+
+  const [allReviews, setAllReviews] = useState([]);
+  const [selectedReviewIds, setSelectedReviewIds] = useState([]);
+
   const updateField = (field, value) => {
     onUpdate({ ...data, [field]: value });
   };
+
+  // Get consultationId from localStorage
+  let consultId = null;
+  const storedData = typeof window !== "undefined" ? localStorage.getItem("sellerTierData") : null;
+  if (storedData) {
+    const parsed = JSON.parse(storedData);
+    consultId = parsed?.consultationId;
+  }
+
+  // Fetch all reviews (no auto-selection)
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const params = { pageNo: 1, size: 20 };
+        const response = await getAllReview(consultId, params);
+        const reviews = response?.data?.reviews || [];
+        setAllReviews(reviews);
+      } catch (error) {
+        console.error("Error fetching reviews", error);
+      }
+    };
+    if (consultId) fetchReviews();
+  }, [consultId]);
 
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];
@@ -99,19 +185,39 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
     } catch (error) { console.error("Error updating customer commitment", error); }
   };
 
+  // Toggle review selection
+  const toggleReviewSelection = (reviewId) => {
+    setSelectedReviewIds((prev) => {
+      const updated = prev.includes(reviewId)
+        ? prev.filter((id) => id !== reviewId)
+        : [...prev, reviewId];
+
+      // Build featuredReviews from selected IDs
+      const selectedReviews = allReviews
+        .filter((r) => updated.includes(r.id))
+        .map((r) => ({
+          id: r.id,
+          reviewerName: `${r.reviewedBy?.firstname || ""} ${r.reviewedBy?.lastname || ""}`.trim(),
+          rating: r.rating,
+          reviewTitle: r.reviewTitle,
+          reviewText: r.reviewText,
+        }));
+
+      updateField("featuredReviews", selectedReviews);
+
+      // Auto-save to API with review IDs
+      setFeaturedReviews(updated).catch((err) =>
+        console.error("Error saving featured reviews", err)
+      );
+
+      return updated;
+    });
+  };
+
   const handleTestimonialBlur = async () => {
     try {
-      const formData = new FormData();
-      formData.append("testimonialTitle", data.testimonialTitle || "");
-      formData.append("testimonialDescription", data.testimonialDescription || "Reviews from our buyers.");
-      if (data.testimonials) {
-        data.testimonials.forEach((t, i) => {
-          formData.append(`testimonials[${i}].customerName`, t.name || "");
-          formData.append(`testimonials[${i}].review`, t.review || "");
-        });
-      }
-      await setWhyBuyTestimonials(formData);
-    } catch (error) { console.error("Error updating testimonials", error); }
+      await setFeaturedReviews(selectedReviewIds);
+    } catch (error) { console.error("Error updating featured reviews", error); }
   };
 
   if (isEditing) {
@@ -231,14 +337,19 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
                   onBlur={handleProcessBlur}
                 />
 
-                <EditorInput
-                  label="Icon (Search, MessageCircle...)"
-                  value={step.icon}
-                  onChange={(e) =>
-                    updateArrayItem("processSteps", i, "icon", e.target.value)
-                  }
-                  onBlur={handleProcessBlur}
-                />
+                <div className="flex flex-col gap-2 relative mt-4">
+                  <label className="text-sm font-medium text-primary">Icon (Select SVG)</label>
+                  <Select
+                    options={SVG_OPTIONS}
+                    formatOptionLabel={formatOptionLabel}
+                    styles={selectStyles}
+                    value={SVG_OPTIONS.find(opt => opt.value === step.icon) || null}
+                    onChange={(selectedOption) => {
+                      updateArrayItem("processSteps", i, "icon", selectedOption.value);
+                      handleProcessBlur();
+                    }}
+                  />
+                </div>
               </div>
             ))}
           </div>
@@ -301,31 +412,83 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
 
         <hr className="border-white/10" />
 
-        {/* TESTIMONIALS */}
+        {/* TESTIMONIALS — select from real reviews */}
         <div>
-          <h3 className="text-primary font-bold mb-4">Testimonials</h3>
+          <h3 className="text-primary font-bold mb-4">Featured Reviews</h3>
 
-          {data.testimonials.map((t, i) => (
-            <div key={i} className="border p-4 rounded bg-primary/5 space-y-2">
-              <EditorInput
-                label="Name"
-                value={t.name}
-                onChange={(e) =>
-                  updateArrayItem("testimonials", i, "name", e.target.value)
-                }
-                onBlur={handleTestimonialBlur}
-              />
+          <EditorInput
+            bold
+            label="Section Title"
+            value={data.testimonialTitle}
+            onChange={(e) => updateField("testimonialTitle", e.target.value)}
+            onBlur={handleTestimonialBlur}
+          />
 
-              <EditorInput
-                label="Review"
-                value={t.review}
-                onChange={(e) =>
-                  updateArrayItem("testimonials", i, "review", e.target.value)
-                }
-                onBlur={handleTestimonialBlur}
-              />
-            </div>
-          ))}
+          <p className="text-third text-sm mb-4 mt-2">
+            Select which customer reviews to feature on your storefront.
+          </p>
+
+          {allReviews.length === 0 && (
+            <p className="text-third/60 text-sm italic">No reviews found.</p>
+          )}
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {allReviews.map((review) => {
+              const isSelected = selectedReviewIds.includes(review.id);
+              const reviewerName = `${review.reviewedBy?.firstname || ""} ${review.reviewedBy?.lastname || ""}`.trim();
+
+              return (
+                <div
+                  key={review.id}
+                  onClick={() => toggleReviewSelection(review.id)}
+                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
+                    isSelected
+                      ? "border-fourth bg-fourth/10 shadow-md"
+                      : "border-third/20 bg-primary/5 hover:border-third/40"
+                  }`}
+                >
+                  {/* Selection indicator */}
+                  <div className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                    isSelected
+                      ? "border-fourth bg-fourth"
+                      : "border-third/40"
+                  }`}>
+                    {isSelected && (
+                      <CheckCircle2 size={14} className="text-secondary" />
+                    )}
+                  </div>
+
+                  {/* Stars */}
+                  <div className="flex gap-0.5 mb-2">
+                    {[...Array(5)].map((_, idx) => (
+                      <Star
+                        key={idx}
+                        size={13}
+                        className={idx < review.rating ? "text-fourth fill-fourth" : "text-third/30"}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Review Title */}
+                  {review.reviewTitle && (
+                    <h4 className="text-primary font-semibold text-sm mb-1">
+                      {review.reviewTitle}
+                    </h4>
+                  )}
+
+                  {/* Review Text */}
+                  <p className="text-third text-sm leading-relaxed line-clamp-3">
+                    {review.reviewText}
+                  </p>
+
+                  {/* Reviewer */}
+                  <p className="text-primary/70 text-xs font-medium mt-3">
+                    — {reviewerName}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     );
@@ -437,7 +600,16 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
                   {/* ICON */}
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 md:h-11 md:w-11 lg:h-12 lg:w-12 items-center justify-center border border-primary/20 rounded-lg">
-                      <Icon className="text-primary" size={18} />
+                      {typeof step.icon === 'string' && step.icon.startsWith('<svg') ? (
+                        <div 
+                          className="text-primary [&>svg]:w-5 [&>svg]:h-5 transition-colors duration-300"
+                          dangerouslySetInnerHTML={{ __html: step.icon }}
+                        />
+                      ) : Icon ? (
+                        <Icon className="text-primary" size={18} />
+                      ) : (
+                        <div className="text-primary text-[10px]">Icon</div>
+                      )}
                     </div>
                   </div>
 
@@ -527,33 +699,44 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
             </p>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1] text-secondary font-[Montserrat]">
-              {data.testimonialTitle}
+              {data.testimonialTitle}{" "}
               <span className="text-fourth">Experience</span>
             </h2>
           </div>
 
-          {/* TESTIMONIALS */}
+          {/* FEATURED REVIEWS */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {data.testimonials.map((t, i) => (
+            {(data.featuredReviews || []).map((review, i) => (
               <div
-                key={i}
+                key={review.id || i}
                 className="p-6 md:p-7 rounded-xl border border-secondary/15 bg-primary flex flex-col gap-4 hover:border-secondary/30 transition-all duration-300"
               >
                 {/* Stars */}
                 <div className="flex gap-1">
                   {[...Array(5)].map((_, idx) => (
-                    <Star key={idx} size={15} className="text-fourth" />
+                    <Star
+                      key={idx}
+                      size={15}
+                      className={idx < (review.rating || 0) ? "text-fourth fill-fourth" : "text-secondary/30"}
+                    />
                   ))}
                 </div>
 
-                {/* Review */}
+                {/* Review Title */}
+                {review.reviewTitle && (
+                  <h4 className="text-secondary font-[Montserrat] font-semibold text-sm">
+                    {review.reviewTitle}
+                  </h4>
+                )}
+
+                {/* Review Text */}
                 <p className="text-secondary/80 font-[Poppins] leading-relaxed text-[15px]">
-                  {t.review}
+                  {review.reviewText}
                 </p>
 
-                {/* Name */}
+                {/* Reviewer Name */}
                 <h4 className="text-secondary font-[Montserrat] font-semibold text-sm tracking-wide">
-                  {t.name}
+                  — {review.reviewerName}
                 </h4>
               </div>
             ))}
