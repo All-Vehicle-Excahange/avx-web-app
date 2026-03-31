@@ -130,49 +130,6 @@ export default function VehicleDetails() {
               <div className="flex flex-col gap-6 min-w-0">
                 <VehicleImageGallery vehicle={vehicleOverview} />
 
-                {/* <div className="">
-                  <div className="flex gap-8 border-b border-third/40 overflow-x-auto whitespace-nowrap flex-nowrap scrollbar-hide">
-                    {[
-                      {
-                        id: "overview",
-                        label: "Overview",
-                        ref: overviewRef,
-                      },
-                      {
-                        id: "specification",
-                        label: "Specifications",
-                        ref: specificationRef,
-                      },
-                      {
-                        id: "condition",
-                        label: "Condition",
-                        ref: conditionRef,
-                      },
-                      {
-                        id: "inspection",
-                        label: "Inspection",
-                        ref: inspectionRef,
-                      },
-                    ].map((tab) => (
-                      <button
-                        key={tab.id}
-                        onClick={() => scrollToSection(tab.ref, tab.id)}
-                        className={`relative pb-3 text-sm font-medium transition-colors cursor-pointer
-                        ${activeTab === tab.id
-                            ? "text-primary"
-                            : "text-third hover:text-primary"
-                          }`}
-                      >
-                        {tab.label}
-
-                        {activeTab === tab.id && (
-                          <span className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </div> */}
-
                 <div className="relative border-b border-third/40">
                   <div className="overflow-x-auto scrollbar-hide">
                     <div className="flex gap-6 px-2 min-w-max">

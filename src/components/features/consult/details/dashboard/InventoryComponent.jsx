@@ -255,7 +255,7 @@ export default function InventoryComponent() {
                     }}
                     className="cursor-pointer"
                   >
-                    Browse your vehicles
+                    Boost your vehicles
                   </Button>
                 </div>
               )}
