@@ -14,7 +14,7 @@ export default function EditorInput({
       value={value}
       onChange={onChange}
       placeholder={placeholder}
-      className={`rounded-lg outline-none border border-third/30 bg-secondary text-primary
+      className={`rounded-lg outline-none border border-third/30 bg-primary/5 text-primary
         focus:border-primary transition
         ${full ? "w-full" : "w-auto"}
         ${center ? "text-center" : "text-left"}

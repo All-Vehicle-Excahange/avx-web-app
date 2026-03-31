@@ -47,6 +47,9 @@ const selectStyles = {
     color: "white",
     minHeight: "44px"
   }),
+  indicatorSeparator: () => ({
+    display: "none"
+  }),
   singleValue: (base) => ({
     ...base,
     color: "white"
@@ -99,7 +102,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
 
   // Fetch all reviews (no auto-selection)
   useEffect(() => {
-      if (!data) return null;
+    if (!data) return null;
     const fetchReviews = async () => {
       try {
         const params = { pageNo: 1, size: 20 };
@@ -223,9 +226,9 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
 
   if (isEditing) {
     return (
-      <div className="bg-secondary w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
+      <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
         {/* HERO */}
-        <div>
+        <div className="space-y-6">
           <h3 className="text-primary font-bold mb-4">Hero Section</h3>
 
           <EditorInput
@@ -235,7 +238,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
             onChange={(e) => updateField("whyBuyHeroTitle", e.target.value)}
             onBlur={handleHeroBlur}
           />
-
+          <h3 className="text-primary font-bold mb-4">Hero Description</h3>
           <RichTextEditor
             label="Hero Description"
             value={data.whyBuyHeroDescription}
@@ -247,8 +250,8 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
         <hr className="border-white/10" />
 
         {/* STORY */}
-        <div>
-          <h3 className="text-primary font-bold mb-4">Story</h3>
+        <div className="space-y-6">
+          <h3 className="text-primary font-bold mb-4">Story Title</h3>
 
           <EditorInput
             bold
@@ -257,9 +260,10 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
             onChange={(e) => updateField("storyTitle", e.target.value)}
             onBlur={handleStoryBlur}
           />
+          <h3 className="text-primary font-bold mb-4">Story Description</h3>
 
           <RichTextEditor
-            label="Story Text"
+            label="Story Description"
             value={data.storyDescription}
             onChange={(v) => updateField("storyDescription", v)}
             onBlur={handleStoryBlur}
@@ -269,8 +273,8 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
         <hr className="border-white/10" />
 
         {/* VEHICLE SELECTION */}
-        <div>
-          <h3 className="text-primary font-bold mb-4">Vehicle Selection</h3>
+        <div className="space-y-6">
+          <h3 className="text-primary font-bold mb-4">Vehicle Selection Title</h3>
 
           <EditorInput
             bold
@@ -279,7 +283,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
             onChange={(e) => updateField("vehicleSelectionTitle", e.target.value)}
             onBlur={handleVehicleSelectionBlur}
           />
-
+          <h3 className="text-primary font-bold mb-4">Vehicle Selection Description</h3>
           <RichTextEditor
             label="Selection Description"
             value={data.vehicleSelectionDescription}
@@ -291,8 +295,8 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
         <hr className="border-white/10" />
 
         {/* PROCESS */}
-        <div>
-          <h3 className="text-primary font-bold mb-4">Process Section</h3>
+        <div className="space-y-6">
+          <h3 className="text-primary font-bold mb-4">Process Title</h3>
 
           <EditorInput
             bold
@@ -301,7 +305,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
             onChange={(e) => updateField("processTitle", e.target.value)}
             onBlur={handleProcessBlur}
           />
-
+          <h3 className="text-primary font-bold mb-4">Process Description</h3>
           <RichTextEditor
             label="Process Description"
             value={data.processDescription}
@@ -313,33 +317,47 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
             {data.processSteps.map((step, i) => (
               <div
                 key={i}
-                className="border p-4 rounded bg-primary/5 space-y-2"
+                className="border border-primary/30 p-4 rounded bg-primary/5 space-y-4"
               >
-                <EditorInput
-                  label="Title"
-                  value={step.title}
-                  onChange={(e) =>
-                    updateArrayItem("processSteps", i, "title", e.target.value)
-                  }
-                  onBlur={handleProcessBlur}
-                />
 
-                <EditorInput
-                  label="Description"
-                  value={step.description}
-                  onChange={(e) =>
-                    updateArrayItem(
-                      "processSteps",
-                      i,
-                      "description",
-                      e.target.value,
-                    )
-                  }
-                  onBlur={handleProcessBlur}
-                />
+                {/* Title */}
+                <div>
+                  <label className="text-sm font-medium text-primary mb-1 block">
+                    Title
+                  </label>
+                  <EditorInput
+                    value={step.title}
+                    onChange={(e) =>
+                      updateArrayItem("processSteps", i, "title", e.target.value)
+                    }
+                    onBlur={handleProcessBlur}
+                  />
+                </div>
 
-                <div className="flex flex-col gap-2 relative mt-4">
-                  <label className="text-sm font-medium text-primary">Icon (Select SVG)</label>
+                {/* Description */}
+                <div>
+                  <label className="text-sm font-medium text-primary mb-1 block">
+                    Description
+                  </label>
+                  <EditorInput
+                    value={step.description}
+                    onChange={(e) =>
+                      updateArrayItem(
+                        "processSteps",
+                        i,
+                        "description",
+                        e.target.value
+                      )
+                    }
+                    onBlur={handleProcessBlur}
+                  />
+                </div>
+
+                {/* Icon */}
+                <div className="flex flex-col gap-2 relative">
+                  <label className="text-sm font-medium text-primary">
+                    Icon (Select SVG)
+                  </label>
                   <Select
                     options={SVG_OPTIONS}
                     formatOptionLabel={formatOptionLabel}
@@ -351,16 +369,19 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
                     }}
                   />
                 </div>
+
               </div>
             ))}
           </div>
+
+
         </div>
 
         <hr className="border-white/10" />
 
         {/* INSPECTION */}
-        <div>
-          <h3 className="text-primary font-bold mb-4">Inspection</h3>
+        <div className="space-y-6">
+          <h3 className="text-primary font-bold mb-4">Inspection Title</h3>
 
           <EditorInput
             bold
@@ -368,12 +389,14 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
             onChange={(e) => updateField("inspectionTitle", e.target.value)}
             onBlur={handleInspectionBlur}
           />
+             <h3 className="text-primary font-bold mb-4">Inspection Description</h3>
 
           <RichTextEditor
             value={data.inspectionText}
             onChange={(v) => updateField("inspectionText", v)}
             onBlur={handleInspectionBlur}
           />
+               <h3 className="text-primary font-bold mb-4">Inspection Points</h3>
 
           {data.inspectionPoints.map((pt, i) => (
             <EditorInput
@@ -392,8 +415,8 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
         <hr className="border-white/10" />
 
         {/* CUSTOMER COMMITMENT */}
-        <div>
-          <h3 className="text-primary font-bold mb-4">Customer Commitment</h3>
+        <div className="space-y-6">
+          <h3 className="text-primary font-bold mb-4">Customer Commitment Title</h3>
 
           <EditorInput
             bold
@@ -402,6 +425,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
             onChange={(e) => updateField("customerCommitmentTitle", e.target.value)}
             onBlur={handleCustomerCommitmentBlur}
           />
+          <h3 className="text-primary font-bold mb-4">Customer Commitment Description</h3>
 
           <RichTextEditor
             label="Commitment Text"
@@ -415,7 +439,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
 
         {/* TESTIMONIALS — select from real reviews */}
         <div>
-          <h3 className="text-primary font-bold mb-4">Featured Reviews</h3>
+          <h3 className="text-primary font-bold mb-4">Featured Reviews Title</h3>
 
           <EditorInput
             bold
@@ -442,18 +466,16 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
                 <div
                   key={review.id}
                   onClick={() => toggleReviewSelection(review.id)}
-                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
-                    isSelected
-                      ? "border-fourth bg-fourth/10 shadow-md"
-                      : "border-third/20 bg-primary/5 hover:border-third/40"
-                  }`}
+                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${isSelected
+                    ? "border-fourth bg-fourth/10 shadow-md"
+                    : "border-third/20 bg-primary/5 hover:border-third/40"
+                    }`}
                 >
                   {/* Selection indicator */}
-                  <div className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                    isSelected
-                      ? "border-fourth bg-fourth"
-                      : "border-third/40"
-                  }`}>
+                  <div className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected
+                    ? "border-fourth bg-fourth"
+                    : "border-third/40"
+                    }`}>
                     {isSelected && (
                       <CheckCircle2 size={14} className="text-secondary" />
                     )}
@@ -602,7 +624,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 md:h-11 md:w-11 lg:h-12 lg:w-12 items-center justify-center border border-primary/20 rounded-lg">
                       {typeof step.icon === 'string' && step.icon.startsWith('<svg') ? (
-                        <div 
+                        <div
                           className="text-primary [&>svg]:w-5 [&>svg]:h-5 transition-colors duration-300"
                           dangerouslySetInnerHTML={{ __html: step.icon }}
                         />

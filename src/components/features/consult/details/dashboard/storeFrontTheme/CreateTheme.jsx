@@ -204,7 +204,7 @@ export default function CreateTheme() {
 
         {/* Final Submit Button (Only on Why Buy tab) */}
         {sections.length > 0 && sections[activeTab]?.type?.includes("why_buy") && (
-          <div className="absolute inset-x-0 bottom-0 bg-secondary/90 backdrop-blur-sm p-4 border-t border-third/30 flex justify-end z-10">
+          <div className="absolute inset-x-0 bottom-0  backdrop-blur-sm p-4 border-t border-third/30 flex justify-end z-10">
             <Button
                onClick={handleFinalSubmit}
                disabled={isSubmitting}
