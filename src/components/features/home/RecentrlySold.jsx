@@ -25,7 +25,7 @@ const RecentrlySold = () => {
   if (!vehicle.length) return null;
 
   return (
-    <div className="w-full ">
+    <div className="w-full py-10">
       {/* Header */}
       <div className="flex justify-between items-end mb-6">
         <div className="flex flex-col items-start gap-2">
@@ -35,7 +35,7 @@ const RecentrlySold = () => {
           </p>
 
           <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-            <span className="text-fourth">Recently</span>   Sold on AVX
+            <span className="text-fourth">Recently</span>   Sold on Reecomm
           </h2>
           <p className="text-third ">
             Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..

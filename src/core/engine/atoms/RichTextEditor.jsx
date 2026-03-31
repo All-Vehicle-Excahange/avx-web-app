@@ -20,7 +20,7 @@ const ToolbarBtn = ({ onClick, isActive, label }) => (
   </button>
 );
 
-export default function RichTextEditor({ label, value, onChange }) {
+export default function RichTextEditor({ label, value, onChange, onBlur }) {
   const editor = useEditor({
     extensions: [StarterKit, Underline],
     immediatelyRender: false,
@@ -33,6 +33,9 @@ export default function RichTextEditor({ label, value, onChange }) {
     },
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
+    },
+    onBlur: ({ editor }) => {
+      if (onBlur) onBlur(editor.getHTML());
     },
   });
 

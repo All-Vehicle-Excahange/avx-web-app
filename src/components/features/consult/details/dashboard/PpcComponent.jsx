@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   TrendingUp,
   MousePointerClick,
@@ -26,6 +26,8 @@ import {
   XAxis,
   YAxis,
   Tooltip,
+  CartesianGrid,
+  Legend,
   ResponsiveContainer,
 } from "recharts";
 import { useRouter } from "next/navigation";
@@ -47,6 +49,26 @@ export default function PpcComponent() {
 
   // State for the new "View Results" modal
   const [showResults, setShowResults] = useState(false);
+
+  // Animated close for Customize modal (mirrors LoginPopup pattern)
+  const [isClosingCustomize, setIsClosingCustomize] = useState(false);
+  const triggerCloseCustomize = useCallback(() => {
+    setIsClosingCustomize(true);
+    setTimeout(() => {
+      setIsClosingCustomize(false);
+      setOpenCustomize(false);
+    }, 250);
+  }, []);
+
+  // Animated close for Results modal (mirrors LoginPopup pattern)
+  const [isClosingResults, setIsClosingResults] = useState(false);
+  const triggerCloseResults = useCallback(() => {
+    setIsClosingResults(true);
+    setTimeout(() => {
+      setIsClosingResults(false);
+      setShowResults(false);
+    }, 250);
+  }, []);
 
   const [metrics, setMetrics] = useState({
     views: true,
@@ -94,7 +116,9 @@ export default function PpcComponent() {
 
       {/* AD SUMMARY */}
       <div className="rounded-xl border border-third/30  p-6 space-y-5">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+
+          {/* Left Section */}
           <div>
             <h3 className="font-semibold">Advertising Summary</h3>
             <p className="text-xs text-third">
@@ -102,22 +126,30 @@ export default function PpcComponent() {
             </p>
           </div>
 
-          <div className="flex gap-3 w-72">
-            <CustomSelect
-              value={range}
-              onChange={setRange}
-              options={rangeOptions}
-              placeholder="Select range"
-              variant="transparent"
-            />
+          {/* Right Section */}
+          <div className="flex items-center gap-2 w-full sm:w-72">
+
+            {/* Dropdown takes full width on mobile */}
+            <div className="flex-1">
+              <CustomSelect
+                value={range}
+                onChange={setRange}
+                options={rangeOptions}
+                placeholder="Select range"
+                variant="transparent"
+              />
+            </div>
+
+            {/* Filter Button (square, not rounded) */}
             <Button
               variant="ghost"
               size="icon"
-              className="h-10 w-14"
+              className="h-10 w-12 shrink-0 rounded-md"
               onClick={() => setOpenCustomize(true)}
             >
               <SlidersHorizontal size={16} />
             </Button>
+
           </div>
         </div>
 
@@ -151,15 +183,17 @@ export default function PpcComponent() {
       </div>
 
       {/* AUDIENCE SECTION */}
-      <div className="rounded-xl border border-third/30  p-6 space-y-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div className="rounded-xl border border-third/30 p-4 sm:p-6 space-y-5 sm:space-y-6">
+
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <h3 className="font-semibold text-lg">Audience</h3>
             <p className="text-xs text-third">Post engagement</p>
             <p className="text-2xl font-bold mt-1">3.9K</p>
           </div>
 
-          <div className="w-56">
+          <div className="w-full sm:w-56">
             <CustomSelect
               value={range}
               onChange={setRange}
@@ -174,28 +208,63 @@ export default function PpcComponent() {
           </div>
         </div>
 
-        <div className="flex gap-4 text-sm">
-          <button className="px-4 py-1 rounded-full bg-primary/10 text-primary">
+        {/* Filter Tabs */}
+        <div className="flex gap-2 sm:gap-3 text-sm overflow-x-auto scrollbar-hide pb-1">
+          <button className="px-4 py-1.5 rounded-full bg-primary/10 text-primary whitespace-nowrap cursor-pointer transition-colors">
             Age & Gender
           </button>
-          <button className="px-4 py-1 rounded-full border border-third/30 hover:bg-primary/10">
+          <button className="px-4 py-1.5 rounded-full border border-third/30 hover:bg-primary/10 hover:text-primary whitespace-nowrap cursor-pointer transition-colors">
             Placements
           </button>
-          <button className="px-4 py-1 rounded-full border border-third/30 hover:bg-primary/10">
+          <button className="px-4 py-1.5 rounded-full border border-third/30 hover:bg-primary/10 hover:text-primary whitespace-nowrap cursor-pointer transition-colors">
             Locations
           </button>
         </div>
 
-        <div className="w-full h-72">
+        {/* Chart */}
+        <div className="w-full h-56 sm:h-64 md:h-72 -ml-2 sm:ml-0">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={audienceData}>
-              <XAxis dataKey="age" stroke="#888" />
-              <YAxis />
+            <BarChart
+              data={audienceData}
+              margin={{ top: 5, right: 5, left: -15, bottom: 0 }}
+              barCategoryGap="20%"
+              barGap={2}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="rgba(255,255,255,0.06)"
+                vertical={false}
+              />
+              <XAxis
+                dataKey="age"
+                stroke="#555"
+                tick={{ fill: '#888', fontSize: 12 }}
+                tickLine={false}
+                axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+              />
+              <YAxis
+                stroke="#555"
+                tick={{ fill: '#888', fontSize: 12 }}
+                tickLine={false}
+                axisLine={false}
+                width={35}
+              />
               <Tooltip
+                cursor={{ fill: 'rgba(255,255,255,0.04)' }}
                 contentStyle={{
-                  backgroundColor: "#111",
-                  border: "1px solid #333",
+                  backgroundColor: '#1a1a1a',
+                  border: 'none',
+                  borderRadius: '10px',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+                  padding: '10px 14px',
                 }}
+                itemStyle={{ color: '#ccc', fontSize: '12px' }}
+                labelStyle={{ color: '#fff', fontWeight: 600, marginBottom: '4px', fontSize: '13px' }}
+              />
+              <Legend
+                iconType="circle"
+                iconSize={8}
+                wrapperStyle={{ fontSize: '12px', color: '#888', paddingTop: '12px' }}
               />
               <Bar dataKey="women" fill="#22c55e" radius={[6, 6, 0, 0]} />
               <Bar dataKey="men" fill="#6366f1" radius={[6, 6, 0, 0]} />
@@ -212,7 +281,7 @@ export default function PpcComponent() {
         </h3>
 
         {/* Metric Cards */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="rounded-xl bg-purple-500/10 p-5 space-y-1">
             <div className="flex items-center justify-between text-purple-300">
               <span className="text-sm">Total Impressions</span>
@@ -294,43 +363,73 @@ export default function PpcComponent() {
       </div>
 
       {/* CUSTOMIZE MODAL */}
-      {openCustomize && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md rounded-xl bg-black border border-white/10 p-6 space-y-4 shadow-2xl">
+      {(openCustomize || isClosingCustomize) && (
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+          onClick={triggerCloseCustomize}
+          style={{
+            animation: isClosingCustomize
+              ? 'modalBackdropOut 0.25s ease-in forwards'
+              : 'modalBackdropIn 0.25s ease-out',
+          }}
+        >
+          <div
+            className="w-full max-w-md rounded-2xl bg-secondary border border-white/10 p-5 sm:p-6 space-y-4 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              animation: isClosingCustomize
+                ? 'modalCardOut 0.25s ease-in forwards'
+                : 'modalCardIn 0.3s ease-out',
+            }}
+          >
+            {/* HEADER */}
             <div className="flex justify-between items-center">
-              <h3 className="font-semibold">Customize Advertising Summary</h3>
-              <button onClick={() => setOpenCustomize(false)}>
-                <X size={18} />
+              <h3 className="font-semibold text-base sm:text-lg">Customize Advertising Summary</h3>
+              <button
+                onClick={triggerCloseCustomize}
+                className="bg-white cursor-pointer p-1 rounded-full hover:opacity-70 text-secondary transition-opacity"
+              >
+                <X size={20} />
               </button>
             </div>
+
             <p className="text-xs text-third">Show or hide metrics</p>
-            <div className="space-y-2">
+
+            {/* METRICS LIST */}
+            <div className="space-y-2 max-h-[50vh] overflow-y-auto custom-scrollbar pr-1">
               {Object.entries(metrics).map(([key, val]) => (
-                <label key={key} className="flex items-center gap-3">
+                <label
+                  key={key}
+                  className="flex items-center gap-3 cursor-pointer hover:bg-white/5 rounded-lg px-2 py-1.5 transition-colors"
+                >
                   <input
                     type="checkbox"
                     checked={val}
                     onChange={() => toggleMetric(key)}
-                    className="accent-primary"
+                    className="accent-primary cursor-pointer"
                   />
-                  <span className="text-sm capitalize">
+                  <span className="text-sm capitalize select-none">
                     {key.replace(/([A-Z])/g, " $1")}
                   </span>
                 </label>
               ))}
             </div>
+
+            {/* FOOTER BUTTONS */}
             <div className="flex justify-end gap-3 pt-3">
               <Button
                 variant="outlineSecondary"
                 size="sm"
-                onClick={() => setOpenCustomize(false)}
+                className="cursor-pointer"
+                onClick={triggerCloseCustomize}
               >
                 Cancel
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setOpenCustomize(false)}
+                className="cursor-pointer"
+                onClick={triggerCloseCustomize}
               >
                 Apply
               </Button>
@@ -340,7 +439,9 @@ export default function PpcComponent() {
       )}
 
       {/* RESULTS MODAL (THE NEW COMPONENT) */}
-      {showResults && <ResultsModal onClose={() => setShowResults(false)} />}
+      {(showResults || isClosingResults) && (
+        <ResultsModal onClose={triggerCloseResults} isClosing={isClosingResults} />
+      )}
     </section>
   );
 }
@@ -350,33 +451,38 @@ export default function PpcComponent() {
 /* -------------------------------------------------------------------------- */
 function RecentAdCard({ paused, onOpenResults }) {
   return (
-    <div className="rounded-xl border border-third/30  p-4 md:p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
-      {/* --- HEADER SECTION: Status & Action Buttons --- */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div className="flex items-center gap-3">
-          <span
-            className={`px-3 py-1 text-xs rounded-full whitespace-nowrap ${paused
-              ? "bg-yellow-500/20 text-yellow-400"
-              : "bg-primary/10 text-primary"
-              }`}
-          >
-            {paused ? "Paused" : "Completed"}
-          </span>
-          <span className="text-xs text-third">Dec 10</span>
+    <div className="rounded-xl border border-third/30 p-4 md:p-6 space-y-5 shadow-sm transition-all duration-200 hover:border-third/40 bg-white/5 backdrop-blur-sm">
+
+      {/* --- HEADER SECTION --- */}
+      <div className="flex flex-col gap-3">
+
+        {/* Top Row */}
+        <div className="flex justify-between items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span
+              className={`px-3 py-1 text-xs rounded-full whitespace-nowrap ${paused
+                ? "bg-yellow-500/20 text-yellow-400"
+                : "bg-primary/10 text-primary"
+                }`}
+            >
+              {paused ? "Paused" : "Completed"}
+            </span>
+            <span className="text-xs text-third">Dec 10</span>
+          </div>
         </div>
 
-        {/* Buttons: Wrap on very small screens, row on sm+ */}
-        <div className="flex flex-wrap gap-2 sm:gap-3 w-full sm:w-auto">
+        {/* Buttons Row → ALWAYS ONE LINE */}
+        <div className="flex gap-2 overflow-x-auto scrollbar-hide">
           {paused ? (
-            <Button variant="outlineSecondary" size="sm" className="flex-1 sm:flex-none">
+            <Button variant="outlineSecondary" size="sm" className="whitespace-nowrap shrink-0">
               Resume
             </Button>
           ) : (
             <>
-              <Button variant="outlineSecondary" size="sm" className="flex-1 sm:flex-none">
+              <Button variant="outlineSecondary" size="sm" className="whitespace-nowrap shrink-0">
                 Edit
               </Button>
-              <Button variant="outlineSecondary" size="sm" className="flex-1 sm:flex-none">
+              <Button variant="outlineSecondary" size="sm" className="whitespace-nowrap shrink-0">
                 Boost again
               </Button>
             </>
@@ -385,40 +491,41 @@ function RecentAdCard({ paused, onOpenResults }) {
             variant="outlineSecondary"
             size="sm"
             onClick={onOpenResults}
-            className="flex-1 sm:flex-none"
+            className="whitespace-nowrap shrink-0"
           >
             View results
           </Button>
         </div>
       </div>
 
-      {/* --- MAIN CONTENT SECTION --- */}
-      {/* Stacks on mobile/tablet (default), horizontal on Desktop (lg) */}
-      <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr_auto] gap-6 items-start">
+      {/* --- MAIN CONTENT --- */}
+      <div className="flex flex-col sm:flex-row gap-4">
 
-        {/* Ad Image */}
-        <div className="flex justify-start">
+        {/* Image */}
+        <div className="shrink-0">
           <Image
             alt="card image"
             src="/big_card_car.jpg"
             width={80}
             height={80}
-            className="w-20 h-20 rounded-xl object-cover shrink-0 border border-third/10"
+            className="w-20 h-20 rounded-xl object-cover border border-third/10"
           />
         </div>
 
-        {/* Ad Details & Stats */}
-        <div className="space-y-1 w-full">
-          <p className="text-sm text-third">Boosted Instagram reel</p>
-          <h4 className="font-semibold leading-tight text-base">
+        {/* Content */}
+        <div className="flex-1 space-y-2">
+          <p className="text-xs text-third">Boosted Instagram reel</p>
+
+          <h4 className="font-semibold text-sm sm:text-base leading-tight">
             Boosted Instagram media
           </h4>
-          <p className="text-xs text-third line-clamp-2 lg:line-clamp-none">
+
+          <p className="text-xs text-third line-clamp-2">
             Time to Act: Is Your Clinic Ready for Growth?...
           </p>
 
-          {/* Stats Grid: 2 cols on mobile, 4 cols on tablet+ */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 text-sm">
+          {/* Stats */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 text-sm">
             <StatMini label="Views" value="6,220" />
             <StatMini label="Viewers" value="5,761" />
             <StatMini label="Follows" value="8" />
@@ -426,10 +533,14 @@ function RecentAdCard({ paused, onOpenResults }) {
           </div>
         </div>
 
-        {/* Pricing Info: Left aligned on mobile, Right aligned on desktop */}
-        <div className="text-left lg:text-right space-y-1 pt-2 lg:pt-0 border-t lg:border-none border-third/10">
-          <p className="text-lg font-bold lg:font-semibold text-primary lg:text-inherit">₹82.11</p>
-          <p className="text-xs text-third">Spent at ₹200/day</p>
+        {/* Pricing */}
+        <div className="flex sm:flex-col justify-between sm:justify-start items-start sm:items-end text-sm border-t sm:border-none border-third/10 pt-3 sm:pt-0">
+          <p className="text-base font-semibold text-primary sm:text-inherit">
+            ₹82.11
+          </p>
+          <p className="text-xs text-third">
+            Spent at ₹200/day
+          </p>
         </div>
 
       </div>
@@ -450,34 +561,88 @@ function StatMini({ label, value }) {
 /* NEW RESULTS MODAL                               */
 /* -------------------------------------------------------------------------- */
 
-function ResultsModal({ onClose }) {
+function ResultsModal({ onClose, isClosing }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-4"
+      onClick={onClose}
+      style={{
+        animation: isClosing
+          ? 'modalBackdropOut 0.25s ease-in forwards'
+          : 'modalBackdropIn 0.25s ease-out',
+      }}
+    >
       {/* Container */}
-      <div className="w-full max-w-5xl bg-[#09090b] border border-white/10 rounded-xl shadow-2xl flex flex-col max-h-[90vh]">
+      <div
+        className="w-full max-w-5xl bg-secondary border border-white/10 rounded-2xl shadow-2xl flex flex-col max-h-[90vh]"
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          animation: isClosing
+            ? 'modalCardOut 0.25s ease-in forwards'
+            : 'modalCardIn 0.3s ease-out',
+        }}
+      >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-white/10">
-          <h2 className="text-xl font-bold">View results</h2>
-          <div className="flex items-center gap-3">
-            <Button variant="outlineSecondary" size="sm">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-white/10">
+          <h2 className="text-lg sm:text-xl font-bold">View results</h2>
+
+          <div className="flex items-center gap-2 sm:gap-3">
+
+            {/* Mobile Layout */}
+            <div className="flex sm:hidden items-center gap-2">
+              <Button
+                variant="outlineSecondary"
+                size="sm"
+                className="h-8 px-3 text-xs"
+              >
+                Boost again
+              </Button>
+
+              <Button
+                variant="outlineSecondary"
+                size="icon"
+                className="h-8 w-8"
+              >
+                <MoreHorizontal size={16} />
+              </Button>
+            </div>
+
+            {/* Desktop Layout (unchanged) */}
+            <Button
+              variant="outlineSecondary"
+              size="sm"
+              className="cursor-pointer hidden sm:inline-flex"
+            >
               Boost again
             </Button>
-            <Button variant="outlineSecondary" size="icon">
-              <MoreHorizontal size={18} />
+
+            <Button
+              variant="outlineSecondary"
+              size="icon"
+              className="cursor-pointer p-1 hidden sm:inline-flex"
+            >
+              <MoreHorizontal size={20} />
             </Button>
-            <Button variant="ghost" size="icon" onClick={onClose}>
+
+            {/* Close Button */}
+            <button
+              onClick={onClose}
+              className="bg-white cursor-pointer p-1 rounded-full hover:opacity-70 text-secondary transition-opacity"
+            >
               <X size={20} />
-            </Button>
+            </button>
           </div>
         </div>
 
         {/* Scrollable Content */}
-        <div className="overflow-y-auto p-6">
+        <div className="overflow-y-auto p-4 sm:p-6 custom-scrollbar">
+
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
             {/* LEFT COLUMN: Performance */}
             <div className="space-y-6">
               {/* Header Section */}
-              <div className="flex justify-between items-start">
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-semibold text-lg">Performance</h3>
@@ -487,13 +652,13 @@ function ResultsModal({ onClose }) {
                     ₹82.11 spent over 2 days.
                   </p>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/10 text-sm hover:bg-white/5 cursor-pointer">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/10 text-sm hover:bg-white/5 cursor-pointer transition-colors">
                   Lifetime <ChevronDown size={14} />
                 </div>
               </div>
 
-              {/* Metrics Grid (The gray cards in screenshot) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Metrics Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <MetricBox label="Link clicks" value="45" />
                 <MetricBox label="Cost per Link Click" value="₹1.82" />
                 <MetricBox label="Views" value="6,220" />
@@ -509,7 +674,7 @@ function ResultsModal({ onClose }) {
                   <ActivityRow label="Post reactions" />
                   <ActivityRow label="Follows" />
                 </div>
-                <button className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-white/10 hover:bg-white/5 text-sm font-medium transition-colors">
+                <button className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-white/10 hover:bg-white/5 text-sm font-medium transition-colors cursor-pointer">
                   See all <ChevronDown size={14} />
                 </button>
               </div>
@@ -526,7 +691,7 @@ function ResultsModal({ onClose }) {
             {/* RIGHT COLUMN: Sidebar */}
             <div className="space-y-6">
               {/* Ad Rating Card */}
-              <div className="rounded-xl bg-[#121214] border border-white/10 p-5 space-y-4">
+              <div className="rounded-xl bg-[#121214] border border-white/10 p-4 sm:p-5 space-y-4">
                 <div className="space-y-1">
                   <h4 className="font-semibold text-sm">Ad rating</h4>
                   <p className="text-sm text-zinc-400">
@@ -534,17 +699,17 @@ function ResultsModal({ onClose }) {
                   </p>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  <button className="py-2 rounded-lg border border-white/10 hover:bg-white/5 text-sm font-medium">
+                  <button className="py-2 rounded-lg border border-white/10 hover:bg-white/5 text-sm font-medium cursor-pointer transition-colors">
                     No
                   </button>
-                  <button className="py-2 rounded-lg border border-white/10 hover:bg-white/5 text-sm font-medium">
+                  <button className="py-2 rounded-lg border border-white/10 hover:bg-white/5 text-sm font-medium cursor-pointer transition-colors">
                     Yes
                   </button>
                 </div>
               </div>
 
               {/* Details Card */}
-              <div className="rounded-xl bg-[#121214] border border-white/10 p-5 space-y-5">
+              <div className="rounded-xl bg-[#121214] border border-white/10 p-4 sm:p-5 space-y-5">
                 <div className="flex items-center justify-between">
                   <h4 className="font-semibold text-base">Details</h4>
                 </div>
@@ -580,7 +745,7 @@ function ResultsModal({ onClose }) {
                   />
                 </div>
 
-                <button className="w-full flex items-center justify-center gap-2 py-2 mt-2 rounded-lg border border-white/10 hover:bg-white/5 text-sm transition-colors">
+                <button className="w-full flex items-center justify-center gap-2 py-2 mt-2 rounded-lg border border-white/10 hover:bg-white/5 text-sm transition-colors cursor-pointer">
                   See all <ChevronDown size={14} />
                 </button>
               </div>

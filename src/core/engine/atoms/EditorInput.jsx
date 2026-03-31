@@ -6,9 +6,11 @@ export default function EditorInput({
   full = true,
   center = false,
   size = "md",
+  ...props
 }) {
   return (
     <input
+      {...props}
       value={value}
       onChange={onChange}
       placeholder={placeholder}

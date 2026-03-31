@@ -12,55 +12,58 @@ import TransactionStructureSection from "@/components/features/avxWorks/Transact
 import AVXJourneySection from "@/components/features/avxWorks/AVXJourneySection";
 import WhyThisMattersSection from "@/components/features/avxWorks/WhyThisMattersSection";
 import Cta from "@/components/features/about/Cta";
+import FooterLink from "@/components/layout/FooterLink";
+import Footer from "@/components/layout/Footer";
 
 function index() {
     return (
         <>
-            <Navbar scrolled={true}/>
+            <Navbar scrolled={true} />
 
             <Layout>
-                <HeroSection/>
+                <HeroSection />
             </Layout>
 
             <Layout>
-                <AvxStructure/>
+                <AvxStructure />
             </Layout>
             <Layout>
-                <VehiclesListed/>
-            </Layout>
-
-            <Layout>
-                <AvxInspectionLayer/>
+                <VehiclesListed />
             </Layout>
 
             <Layout>
-                <InteractionSection/>
+                <AvxInspectionLayer />
             </Layout>
 
             <Layout>
-                <PerformanceVisibilitySection/>
+                <InteractionSection />
             </Layout>
 
             <Layout>
-                <ReVerification/>
+                <PerformanceVisibilitySection />
             </Layout>
 
             <Layout>
-                <TransactionStructureSection/>
+                <ReVerification />
             </Layout>
 
             <Layout>
-                <AVXJourneySection/>
+                <TransactionStructureSection />
             </Layout>
 
             <Layout>
-                <WhyThisMattersSection/>
+                <AVXJourneySection />
+            </Layout>
+
+            <Layout>
+                <WhyThisMattersSection />
             </Layout>
 
             <Layout>
                 <Cta />
             </Layout>
-
+            <FooterLink />
+            <Footer />
         </>);
 }
 
@@ -68,6 +71,6 @@ export default index;
 
 export function getServerSideProps() {
     return {
-        props: {fullWidth: true},
+        props: { fullWidth: true },
     };
 }

@@ -241,9 +241,23 @@ export default function InventoryComponent() {
                   <TopPerformingCard key={v.id} vehicle={v} rank={index + 1} />
                 ))
               ) : (
-                <p className="text-sm text-third">
-                  No top performing vehicles yet.
-                </p>
+                <div className="flex flex-col items-center justify-center h-full text-center gap-4 py-8">
+                  <p className="text-sm text-third">
+                    No top performing vehicles yet.
+                  </p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    showIcon={false}
+                    onClick={() => {
+                      // Using window.scrollTo or providing a simple anchor interaction
+                      window.scrollTo({ top: 500, behavior: 'smooth' });
+                    }}
+                    className="cursor-pointer"
+                  >
+                    Browse your vehicles
+                  </Button>
+                </div>
               )}
             </div>
 

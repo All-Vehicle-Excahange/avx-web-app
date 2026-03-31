@@ -351,7 +351,7 @@ export default function AnalyticsComponent() {
             Recommended Actions
           </h3>
 
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="rounded-xl border border-third/20 bg-primary/5 p-5 hover:bg-primary/10 transition cursor-pointer">
               <p className="text-sm font-semibold text-primary">
                 Boost 3 top-performing vehicles

@@ -5,6 +5,15 @@ import { ShieldCheck, Globe, TrendingUp, Cpu } from "lucide-react";
 
 export default function Hero() {
   const data = {
+    heroTitle: "Our Story Built for",
+    heroDescription: ` Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
+              Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet
+              consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est
+              sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut
+              donec. Sapien platea nec urna ut est sed. Lorem ipsum dolor sit
+              amet consectetur. Odio at dolor ut donec. Sapien platea nec urna
+              ut est sed.`,
+
     missionTitle: "Our Mission",
     missionDesc: `
       <p>
@@ -72,20 +81,14 @@ export default function Hero() {
 
           {/* Main Heading */}
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1] text-primary font-[Montserrat] max-w-3xl">
-            Our Story Built for
+            {data.heroTitle}
             <span className="text-fourth/80"> Buy & Selling</span> a Vehicle
           </h1>
 
           {/* Description */}
           <div className="flex flex-col gap-5 max-w-xl">
             <p className="text-third/70 text-lg md:text-xl font-[Poppins] leading-relaxed">
-              Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
-              Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet
-              consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est
-              sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut
-              donec. Sapien platea nec urna ut est sed. Lorem ipsum dolor sit
-              amet consectetur. Odio at dolor ut donec. Sapien platea nec urna
-              ut est sed.
+              {data.heroDescription}
             </p>
           </div>
         </div>

@@ -45,7 +45,7 @@ export default function SearchWithHeader({ activeFilters = [], pageResponse = {}
       </div>
 
       {/* HEADER */}
-      <section className="w-full h-[130px] bg-fourth flex items-center pt-16">
+      <section className="w-full h-[145px] bg-fourth flex items-center pt-16">
         <div className="max-w-screen-2xl w-full mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between gap-4">
             {/* LEFT */}
@@ -77,29 +77,43 @@ export default function SearchWithHeader({ activeFilters = [], pageResponse = {}
               <button
                 onClick={() => setOpen((p) => !p)}
                 className="
-                  flex items-center justify-between gap-2
-                  bg-white
-                  border border-primary/25
-                  rounded-lg
-                  px-3
-                  h-[30px]
-                  min-w-[180px]
-                  text-[12px]
-                  font-medium
-                  text-secondary
-                  hover:border-secondary/50
-                "
+    flex items-center justify-center sm:justify-between gap-2
+    bg-white
+    border border-primary/25
+    rounded-lg
+    px-2 sm:px-3
+    h-[30px]
+
+    w-[52px] sm:w-auto   /* slightly smaller */
+    cursor-pointer
+    text-[12px]
+    font-medium
+    text-secondary
+    hover:border-secondary/50
+  "
               >
+                {/* Left Content */}
                 <div className="flex items-center gap-2">
+
+                  {/* Always show icon */}
                   <ArrowUpDown size={14} className="text-secondary/70" />
-                  <span className="hidden sm:inline-block">
+
+                  {/* Hide text on mobile */}
+                  <span className="hidden lg:inline-block">
                     {selected.label}
                   </span>
                 </div>
 
+                {/* Dropdown Arrow */}
                 <ChevronDown
                   size={14}
-                  className={`transition-transform ${open ? "rotate-180" : ""}`}
+                  className={`sm:hidden transition-transform ${open ? "rotate-180" : ""}`}
+                />
+
+                <ChevronDown
+                  size={14}
+                  className={`hidden sm:block transition-transform ${open ? "rotate-180" : ""
+                    }`}
                 />
               </button>
 
@@ -107,15 +121,15 @@ export default function SearchWithHeader({ activeFilters = [], pageResponse = {}
               {open && (
                 <div
                   className="
-                    absolute right-0 mt-2
-                    w-full
-                    bg-white
-                    text-secondary
-                    border border-primary/20
-                    rounded-lg
-                    shadow-lg
-                    overflow-hidden
-                  "
+      absolute right-0 left-auto mt-2
+      w-48 max-w-[90vw]
+      bg-white 
+      text-secondary
+      border border-primary/20
+      rounded-lg
+      shadow-lg
+      z-[9999]
+    "
                 >
                   {sortOptions.map((option) => (
                     <button
@@ -132,14 +146,14 @@ export default function SearchWithHeader({ activeFilters = [], pageResponse = {}
                         router.push(`?${params.toString()}`);
                       }}
                       className={`
-                        w-full text-left px-3 py-2
-                        text-[12px]
-                        hover:bg-secondary/10
-                        ${selected.value === option.value
+          w-full text-left px-3 py-2
+          text-[12px] cursor-pointer
+          hover:bg-secondary/10
+          ${selected.value === option.value
                           ? "bg-primary/10 font-semibold"
                           : ""
                         }
-                      `}
+        `}
                     >
                       {option.label}
                     </button>

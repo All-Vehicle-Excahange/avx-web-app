@@ -1,82 +1,210 @@
+"use client";
+
 import React from "react";
-import RichTextEditor from "../atoms/RichTextEditor";
-import { Star, Eye, Target } from "lucide-react";
 import EditorInput from "../atoms/EditorInput";
-import Image from "next/image";
+import RichTextEditor from "../atoms/RichTextEditor";
+import {
+  setAboutHero,
+  setAboutMission,
+  setAboutVision,
+  setState,
+  setAboutServices
+} from "@/services/theme.service";
 
 function AboutBasic1({ data, isEditing, onUpdate }) {
   if (!data) return null;
 
-  const updateField = (field, value) => onUpdate({ ...data, [field]: value });
+  const updateField = (field, value) => {
+    onUpdate({ ...data, [field]: value });
+  };
 
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];
     newArray[index][field] = value;
     updateField(arrayName, newArray);
   };
+
+  const handleHeroBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("heroTitle", data.heroTitle || "");
+      formData.append("heroDescription", data.heroDescription || "");
+
+      const res = await setAboutHero(formData);
+      if (res?.data?.success) {
+        console.log("Hero updated successfully");
+      }
+    } catch (error) {
+      console.error("Failed to update Hero section:", error);
+    }
+  };
+
+  const handleMissionBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("missionTitle", data.missionTitle || "");
+      formData.append("missionDescription", data.missionDesc || "");
+
+      const res = await setAboutMission(formData);
+      if (res?.data?.success) {
+        console.log("Mission updated successfully");
+      }
+    } catch (error) {
+      console.error("Failed to update Mission section:", error);
+    }
+  };
+
+  const handleVisionBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("visionTitle", data.visionTitle || "");
+      formData.append("visionDescription", data.visionDesc || "");
+
+      const res = await setAboutVision(formData);
+      if (res?.data?.success) {
+        console.log("Vision updated successfully");
+      }
+    } catch (error) {
+      console.error("Failed to update Vision section:", error);
+    }
+  };
+
+  const handleStatsBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("aboutUsDescription", data.aboutUsDescription || "");
+
+      if (data.stats && Array.isArray(data.stats)) {
+        data.stats.forEach((stat, i) => {
+          formData.append(`stats[${i}].number`, stat.number || "");
+          formData.append(`stats[${i}].label`, stat.label || "");
+          // Excluded icon as requested
+        });
+      }
+
+      const res = await setState(formData);
+      if (res?.data?.success) {
+        console.log("Stats updated successfully");
+      }
+    } catch (error) {
+      console.error("Failed to update Stats section:", error);
+    }
+  };
+
+  const handleServicesBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("serviceTitle", data.servicesTitle || "");
+      formData.append("serviceDescription", data.servicesDesc || "");
+      
+      if (data.services && Array.isArray(data.services)) {
+        data.services.forEach((service, i) => {
+          formData.append(`services[${i}].title`, service.title || "");
+          formData.append(`services[${i}].desc`, service.desc || "");
+          formData.append(`services[${i}].icon`, service.icon || "");
+        });
+      }
+
+      const res = await setAboutServices(formData);
+      if (res?.data?.success) {
+        console.log("Services updated successfully");
+      }
+    } catch (error) {
+      console.error("Failed to update Services section:", error);
+    }
+  };
+
+  // ================= EDIT MODE =================
   if (isEditing) {
     return (
       <div className="bg-secondary w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
-        {/* ================= HERO ================= */}
+        {/* HERO */}
         <div>
-          <h3 className="text-primary font-bold mb-4">Hero Section</h3>
+          <h3 className="text-primary font-bold mb-4">Hero</h3>
 
-          <div className="grid md:grid-cols-2 gap-6 items-start">
-            {/* LEFT – Inputs */}
-            <div className="space-y-4">
-              <EditorInput
-                bold
-                label="Hero Title"
-                value={data.headline}
-                onChange={(e) => updateField("headline", e.target.value)}
-              />
-              <RichTextEditor
-                label="Hero Description"
-                value={data.subHeadline}
-                onChange={(v) => updateField("subHeadline", v)}
-              />
-            </div>
+          <EditorInput
+            bold
+            label="Hero Title"
+            value={data.heroTitle}
+            onChange={(e) => updateField("heroTitle", e.target.value)}
+            onBlur={handleHeroBlur}
+          />
 
-            {/* RIGHT – Static Banner Preview */}
-            <div className="relative h-60  overflow-hidden border border-white/10 bg-black/40">
-              <Image
-                src="/banner_Basic.jpeg"
-                alt="Hero Banner Preview"
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-          </div>
+          <RichTextEditor
+            label="Hero Description"
+            value={data.heroDescription}
+            onChange={(v) => updateField("heroDescription", v)}
+            onBlur={handleHeroBlur}
+          />
         </div>
 
         <hr className="border-white/10" />
 
-        {/* ================= STATS ================= */}
+        {/* MISSION */}
         <div>
-          <h3 className="text-primary font-bold mb-4">Stats Section</h3>
-          <RichTextEditor
-            label="Stats Paragraph"
-            value={data.statsDescription}
-            onChange={(v) => updateField("statsDescription", v)}
+          <h3 className="text-primary font-bold mb-4">Mission</h3>
+
+          <EditorInput
+            bold
+            value={data.missionTitle}
+            onChange={(e) => updateField("missionTitle", e.target.value)}
+            onBlur={handleMissionBlur}
           />
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+          <RichTextEditor
+            value={data.missionDesc}
+            onChange={(v) => updateField("missionDesc", v)}
+            onBlur={handleMissionBlur}
+          />
+        </div>
+
+        {/* VISION */}
+        <div>
+          <h3 className="text-primary font-bold mb-4">Vision</h3>
+
+          <EditorInput
+            bold
+            value={data.visionTitle}
+            onChange={(e) => updateField("visionTitle", e.target.value)}
+            onBlur={handleVisionBlur}
+          />
+
+          <RichTextEditor
+            value={data.visionDesc}
+            onChange={(v) => updateField("visionDesc", v)}
+            onBlur={handleVisionBlur}
+          />
+        </div>
+
+        <hr className="border-white/10" />
+
+        {/* STATS */}
+        <div>
+          <h3 className="text-primary font-bold mb-4">Stats</h3>
+
+          <RichTextEditor
+            value={data.aboutUsDescription || data.statsDesc}
+            onChange={(v) => updateField("aboutUsDescription", v)}
+            onBlur={handleStatsBlur}
+          />
+
+          <div className="grid grid-cols-2 gap-4 mt-4">
             {data.stats.map((s, i) => (
-              <div key={i} className="space-y-2">
+              <div key={i}>
                 <EditorInput
-                  placeholder="Number"
                   value={s.number}
-                  onChange={(e) =>
-                    updateArrayItem("stats", i, "number", e.target.value)
-                  }
+                  onChange={(e) => {
+                    const numericValue = e.target.value.replace(/[^0-9]/g, "");
+                    updateArrayItem("stats", i, "number", numericValue);
+                  }}
+                  onBlur={handleStatsBlur}
                 />
                 <EditorInput
-                  placeholder="Label"
                   value={s.label}
                   onChange={(e) =>
                     updateArrayItem("stats", i, "label", e.target.value)
                   }
+                  onBlur={handleStatsBlur}
                 />
               </div>
             ))}
@@ -85,181 +213,223 @@ function AboutBasic1({ data, isEditing, onUpdate }) {
 
         <hr className="border-white/10" />
 
-        {/* ================= MISSION ================= */}
+        {/* SERVICES */}
         <div>
-          <h3 className="text-primary font-bold mb-4">Mission</h3>
+          <h3 className="text-primary font-bold mb-4">Services</h3>
+
           <EditorInput
             bold
-            value={data.missionTitle}
-            onChange={(e) => updateField("missionTitle", e.target.value)}
-            placeholder="Mission Title"
+            value={data.servicesTitle}
+            onChange={(e) => updateField("servicesTitle", e.target.value)}
+            onBlur={handleServicesBlur}
           />
+
           <RichTextEditor
-            label="Mission Description"
-            value={data.missionDescription}
-            onChange={(v) => updateField("missionDescription", v)}
+            value={data.servicesDesc}
+            onChange={(v) => updateField("servicesDesc", v)}
+            onBlur={handleServicesBlur}
           />
-        </div>
 
-        {/* ================= VISION ================= */}
-        <div>
-          <h3 className="text-primary font-bold mb-4">Vision</h3>
-          <EditorInput
-            bold
-            value={data.visionTitle}
-            onChange={(e) => updateField("visionTitle", e.target.value)}
-            placeholder="Vision Title"
-          />
-          <RichTextEditor
-            label="Vision Description"
-            value={data.visionDescription}
-            onChange={(v) => updateField("visionDescription", v)}
-          />
-        </div>
-
-        <hr className="border-white/10" />
-
-        {/* ================= SERVICES ================= */}
-        <div className="space-y-4">
-          <h3 className="text-primary font-bold">Services</h3>
-
-          {data.services.map((s, i) => (
-            <div
-              key={i}
-              className="flex gap-4 items-start border border-third/20 p-4 rounded bg-primary/5"
-            >
-              <div className="w-24">
+          <div className="grid md:grid-cols-2 gap-4 mt-4">
+            {data.services.map((s, i) => (
+              <div key={i} className="border p-4 rounded bg-primary/5">
                 <EditorInput
-                  label="Icon"
+                  label="Icon (ShieldCheck, Globe...)"
                   value={s.icon}
                   onChange={(e) =>
                     updateArrayItem("services", i, "icon", e.target.value)
                   }
+                  onBlur={handleServicesBlur}
                 />
-              </div>
 
-              <div className="w-full space-y-2">
                 <EditorInput
-                  bold
                   value={s.title}
                   onChange={(e) =>
                     updateArrayItem("services", i, "title", e.target.value)
                   }
+                  onBlur={handleServicesBlur}
                 />
+
                 <EditorInput
-                  size="sm"
                   value={s.desc}
                   onChange={(e) =>
                     updateArrayItem("services", i, "desc", e.target.value)
                   }
+                  onBlur={handleServicesBlur}
                 />
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     );
   }
 
-  /* ================= FRONT ================= */
+  // ================= FRONT =================
   return (
-    <div className="text-primary py-24 px-4">
-      <div className="max-w-[1480px] mx-auto space-y-32">
-        {/* HERO */}
-        <section className="text-center max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold uppercase mb-6">
-            {data.headline}
-          </h1>
-          <div
-            className="text-third prose prose-invert"
-            dangerouslySetInnerHTML={{ __html: data.subHeadline }}
-          />
-        </section>
+    <>
+      <section className="relative flex items-center justify-center py-12 min-h-screen">
+        <div className="w-full mx-auto flex flex-col items-center text-center gap-10">
+          {/* Top Label */}
+          <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+            Our Story
+          </p>
 
-        {/* STATS + PARA */}
-        <section className="grid lg:grid-cols-2 gap-16 items-center">
-          <div className="grid grid-cols-2 gap-8">
-            {data.stats.map((stat, i) => (
-              <div key={i} className="border border-primary/20 rounded-xl p-4 text-center">
-                <h2 className="text-4xl font-extrabold">{stat.number}</h2>
-                <p className="text-third uppercase tracking-widest text-sm mt-3">
-                  {stat.label}
+          {/* Main Heading */}
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1] text-primary font-[Montserrat] max-w-3xl">
+            {data.heroTitle}
+            <span className="text-fourth/80"> Buy & Selling</span> a Vehicle
+          </h1>
+
+          {/* Description */}
+          <div className="flex flex-col gap-5 max-w-7xl">
+            <div
+              className="text-third/70 text-lg md:text-xl font-[Poppins] leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: data.heroDescription }}
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="relative py-12 px-2 lg:px-4 ">
+        <div className=" w-full flex flex-col gap-16">
+          {/* ── MAIN HEADING ───────────────── */}
+          <div className="flex flex-col gap-6 max-w-2xl text-center">
+            <p className=" text-sm tracking-[0.4em] uppercase text-third font-semibold">
+              Purpose
+            </p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+              Mission &<span className="text-fourth/80"> Vision</span>
+            </h2>
+          </div>
+
+          {/* Mission Row */}
+          <div className="flex flex-col lg:flex-row gap-10 lg:gap-20 items-start  pt-12">
+            <div className="w-full lg:w-1/3">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                {data.missionTitle.split(" ")[0]}{" "}
+                <span className="text-fourth/80">
+                  {data.missionTitle.split(" ")[1]}
+                </span>
+              </h2>
+            </div>
+            <div className="w-full lg:w-2/3">
+              <div
+                className="text-third/70 text-lg md:text-xl font-[Poppins] leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: data.missionDesc }}
+              />
+            </div>
+          </div>
+
+          {/* Vision Row */}
+          <div className="flex flex-col lg:flex-row-reverse gap-10 lg:gap-20 items-start pt-12">
+            <div className="w-full lg:w-1/3">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                {data.visionTitle.split(" ")[0]}{" "}
+                <span className="text-fourth/80">
+                  {data.visionTitle.split(" ")[1]}
+                </span>
+              </h2>
+            </div>
+            <div className="w-full lg:w-2/3">
+              <div
+                className="text-third/70 text-lg md:text-xl font-[Poppins] leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: data.visionDesc }}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative py-12 px-2 lg:px-4   bg-primary text-secondary">
+        <div className=" container  w-full flex flex-col items-center gap-16 text-center">
+          {/* ── HEADING ───────────────── */}
+          <div className="flex flex-col gap-6 max-w-2xl">
+            <p className="text-sm tracking-[0.4em] uppercase text-secondary/60 font-semibold">
+              Impact
+            </p>
+
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] font-[Montserrat]">
+              Our
+              <span className="text-fourth/80"> Numbers</span>
+            </h2>
+
+            <div
+              className="text-secondary/70 text-lg md:text-xl font-[Poppins] leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: data.aboutUsDescription }}
+            />
+          </div>
+
+          {/* ── STATS BOX LAYOUT ───────────────── */}
+          <div className="w-full max-w-5xl grid sm:grid-cols-2 gap-8">
+            {data.stats.map((item, index) => (
+              <div
+                key={index}
+                className="flex flex-col gap-4 border border-secondary/10 p-8 rounded-2xl"
+              >
+                <h3 className="text-4xl lg:text-5xl font-semibold font-[Montserrat]">
+                  {item.number}
+                </h3>
+
+                <p className="text-secondary/70 text-base font-[Poppins]">
+                  {item.label}
                 </p>
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div
-            className="text-third prose prose-invert"
-            dangerouslySetInnerHTML={{ __html: data.statsDescription }}
-          />
-        </section>
+      <section className="relative py-12 px-2 lg:px-4   ">
+        <div className=" w-full flex flex-col gap-16">
+          {/* Header Section: Vertical Stack */}
+          <div className="flex flex-col gap-6 max-w-2xl">
+            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+              Services
+            </p>
 
-        {/* MISSION & VISION */}
-        <section>
-          <h2 className="text-center text-4xl font-bold tracking-widest mb-16">
-            MISSION & VISION
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-10">
-            <div className=" p-12 rounded-xl border-primary/20 border">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 rounded-full border border-primary flex items-center justify-center">
-                  <Target size={22} />
-                </div>
-                <h3 className="text-2xl font-bold uppercase tracking-widest">
-                  {data.missionTitle}
-                </h3>
-              </div>
-              <div
-                className="text-third"
-                dangerouslySetInnerHTML={{ __html: data.missionDescription }}
-              />
-            </div>
-
-            <div className="bg-secondary p-12 rounded-3xl border border-primary/10">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 rounded-full border border-primary flex items-center justify-center">
-                  <Eye size={22} />
-                </div>
-                <h3 className="text-2xl font-bold uppercase tracking-widest">
-                  {data.visionTitle}
-                </h3>
-              </div>
-              <div
-                className="text-third"
-                dangerouslySetInnerHTML={{ __html: data.visionDescription }}
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* SERVICES */}
-        <section className="px-6">
-          <div className="max-w-[1480px] mx-auto text-center mb-16">
-            <h2 className="text-4xl font-bold text-primary mb-4">
-              {data.servicesTitle}
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+              What <span className="text-fourth/80">We Do</span>
             </h2>
-            <p className="text-third">{data.servicesSubtitle}</p>
+            <div
+              className="text-third/70 text-lg md:text-xl font-[Poppins] leading-relaxed border-l-2 border-primary/30 pl-6"
+              dangerouslySetInnerHTML={{ __html: data.servicesDesc }}
+            />
           </div>
 
-          <div className="max-w-[1480px] mx-auto grid md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {data.services.map((s, i) => (
-              <div
-                key={i}
-                className={`p-10 border border-primary/20 rounded-xl `}
-              >
-                <div className="text-5xl mb-6 text-primary">{s.icon}</div>
-                <h3 className="text-xl font-bold mb-4 uppercase tracking-wide">
-                  {s.title}
-                </h3>
-                <p className="text-third text-sm">{s.desc}</p>
-              </div>
-            ))}
+          {/* Services Layout: Asymmetrical Masonry Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+            {data.services.map((service, index) => {
+              // Logic to make boxes asymmetrical: 1st and 4th are wider, 2nd and 3rd are narrower
+              const colSpan =
+                index === 0 || index === 3 ? "md:col-span-7" : "md:col-span-5";
+
+              return (
+                <div
+                  key={index}
+                  className={`${colSpan} flex flex-col justify-between p-8 lg:p-12 border border-third/10 bg-primary/5 hover:bg-primary/10     transition-all duration-300 min-h-[300px]`}
+                >
+                  <div className="flex flex-col gap-6">
+                    <service.icon
+                      size={40}
+                      strokeWidth={1.2}
+                      className="text-third"
+                    />
+                    <h3 className="text-2xl md:text-3xl font-semibold text-primary font-[Montserrat]">
+                      {service.title}
+                    </h3>
+                  </div>
+
+                  <p className="text-third/60 text-md md:text-lg font-[Poppins] max-w-xs">
+                    {service.desc}
+                  </p>
+                </div>
+              );
+            })}
           </div>
-        </section>
-      </div>
-    </div>
+        </div>
+      </section>
+    </>
   );
 }
 

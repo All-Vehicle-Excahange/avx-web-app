@@ -14,7 +14,7 @@ export default function HeroSection() {
           {/* LEFT TEXT */}
           <div className="w-full  lg:w-[40%]">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-6">
-              About AVX
+              About Reecomm
             </p>
 
             <h2
@@ -27,7 +27,7 @@ export default function HeroSection() {
             "
             >
               Indias Premium
-              <br />  
+              <br />
               <span className="text-fourth/80">Pre-Owned Vehicle Platform</span>
             </h2>
 
