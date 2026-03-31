@@ -1,22 +1,64 @@
-import Image from "next/image";
+import { EngineRenderer } from "@/core/engine/Renderer";
+import { THEME_STORE } from "@/core/engine/themeStore";
+import { getStoreFront } from "@/services/theme.service";
+import { useEffect, useState } from "react";
 
-export default function WhyBuyHere() {
-  const images = ["/about2.png", "/whowe.png", "/about4.png"];
+function mapApiToTemplateData(api) {
+  return {
+    ...api,
+  };
+}
+
+export default function WhyBuyHere({ storeData = null }) {
+  const [sections, setSections] = useState([]);
+
+  useEffect(() => {
+    const fetchTheme = async () => {
+      let apiData = storeData;
+
+      if (!apiData) {
+        try {
+          const res = await getStoreFront();
+          apiData = res?.data;
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      if (!apiData) return;
+
+      const matchedTheme =
+        THEME_STORE.find((t) => t.id === apiData.themeId) || THEME_STORE[0];
+
+      const mappedData = mapApiToTemplateData(apiData);
+
+      const hydratedSections = matchedTheme.schema
+        .filter((section) => section.type.includes("why_buy"))
+        .map((section) => ({
+          ...section,
+          data: {
+            ...section.data,
+            ...mappedData,
+          },
+        }));
+
+      setSections(hydratedSections);
+    };
+
+    fetchTheme();
+  }, [storeData]);
 
   return (
-    <section className="rounded-2xl container   p-6 space-y-8">
-      {images.map((src, index) => (
-        <div key={index} className="relative w-full overflow-hidden rounded-xl">
-          <Image
-            src={src}
-            alt={`about-${index}`}
-            width={1200}
-            height={600}
-            className="w-full h-auto object-cover"
-            priority={index === 0}
-          />
-        </div>
-      ))}
+    <section className="w-full container rounded-2xl p-6 space-y-8">
+      <EngineRenderer
+        sections={sections}
+        mode={"preview"}
+        onUpdate={(i, newData) => {
+          const updated = [...sections];
+          updated[i].data = newData;
+          setSections(updated);
+        }}
+      />
     </section>
   );
 }

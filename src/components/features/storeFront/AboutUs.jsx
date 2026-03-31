@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 
 /**
  * Maps raw API response fields → template field names expected by theme components.
- * API uses different key names than the schema/template, so we bridge them here.
  */
 function mapApiToTemplateData(api) {
   return {
@@ -54,13 +53,23 @@ function mapApiToTemplateData(api) {
   };
 }
 
-export default function AboutUs() {
+export default function AboutUs({ storeData = null }) {
   const [sections, setSections] = useState([]);
 
   useEffect(() => {
     const fetchTheme = async () => {
-      const res = await getStoreFront();
-      const apiData = res.data;
+      let apiData = storeData;
+
+      if (!apiData) {
+        try {
+          const res = await getStoreFront();
+          apiData = res?.data;
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      if (!apiData) return;
 
       // Find the matching theme schema from THEME_STORE using themeId from API
       const matchedTheme =
@@ -81,16 +90,20 @@ export default function AboutUs() {
     };
 
     fetchTheme();
-  }, []);
+  }, [storeData]);
+
+  const filteredSections = sections.filter((section) => section.type.includes("about"));
 
   return (
     <section className="w-full container rounded-2xl p-6 space-y-8">
       <EngineRenderer
-        sections={sections}
+        sections={filteredSections}
         mode={"preview"}
         onUpdate={(i, newData) => {
-          const updated = [...sections];
-          updated[i].data = newData;
+          const sectionId = filteredSections[i].id;
+          const updated = sections.map((sec) =>
+            sec.id === sectionId ? { ...sec, data: newData } : sec
+          );
           setSections(updated);
         }}
       />

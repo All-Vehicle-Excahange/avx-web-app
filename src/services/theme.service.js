@@ -11,14 +11,17 @@ const ENDPOINT = {
   setAboutMission: "/consultation/owner/store/draft/mission",
   setAboutVision: "/consultation/owner/store/draft/vision",
   setState: "/consultation/owner/store/draft/who-we-are",
-  setAboutServices: "/consultation/owner/store/draft/services", 
+  setAboutServices: "/consultation/owner/store/draft/services",
   setWhyBuyHero: "/consultation/owner/store/draft/why-buy-hero",
-  setWhyBuyStory: "/consultation/owner/store/draft/story", 
+  setWhyBuyStory: "/consultation/owner/store/draft/story",
   setWhyBuyVehicleSelection: "/consultation/owner/store/draft/vehicle-selection",
   setWhyBuyProcess: "/consultation/owner/store/draft/process",
   setWhyBuyInspection: "/consultation/owner/store/draft/inspection",
   setWhyBuyCustomerCommitment: "/consultation/owner/store/draft/customer-commitment",
   setWhyBuyTestimonials: "/consultation/owner/store/draft/testimonial",
+  getConsualtDraft: "/consultation/owner/store/get-draft",
+  setFeaturedReviews: "/consultation/owner/store/draft/featured-reviews",
+  makeAsFinalSubmit: "/consultation/owner/store/submit-draft"
 };
 
 export const getThemeListing = async () => {
@@ -240,6 +243,35 @@ export const setWhyBuyTestimonials = async (data) => {
         "Content-Type": "multipart/form-data",
       },
     });
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getConsualtDraft = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getConsualtDraft);
+    return handleResponse(res);
+  } catch (error) {
+    throw error
+  }
+}
+
+export const setFeaturedReviews = async (reviewIds) => {
+  try {
+    const res = await axiosInstance.put(ENDPOINT.setFeaturedReviews, {
+      reviewIds,
+    });
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const makeAsFinalSubmit = async () => {
+  try {
+    const res = await axiosInstance.patch(ENDPOINT.makeAsFinalSubmit);
     return handleResponse(res);
   } catch (error) {
     throw error;

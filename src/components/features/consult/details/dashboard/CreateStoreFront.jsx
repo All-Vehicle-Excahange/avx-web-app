@@ -1,17 +1,18 @@
 "use client";
 import Button from "@/components/ui/button";
+import { getSellerTierTitle } from "@/lib/helper";
 import { CheckCircle2, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const TIERS = [
   {
-    id: "basic",
+    id: "BASIC",
     name: "Tier 1",
     label: "Basic",
     features: ["1 Banner", "Basic About Section", "Single Image"],
   },
   {
-    id: "pro",
+    id: "PRO",
     name: "Tier 2",
     label: "Pro",
     features: [
@@ -22,7 +23,7 @@ const TIERS = [
     ],
   },
   {
-    id: "advance",
+    id: "PREMIUM",
     name: "Tier 3",
     label: "Advance",
     features: [
@@ -35,7 +36,7 @@ const TIERS = [
 ];
 
 // 🔐 Backend will send this later
-const USER_TIER = "basic";
+const USER_TIER = getSellerTierTitle();
 
 export default function CreateStoreFront() {
   const router = useRouter();
@@ -62,10 +63,10 @@ export default function CreateStoreFront() {
           return (
             <div
               key={tier.id}
-              className={`rounded-xl border p-6 flex flex-col min-h-[320px] md:h-auto lg:h-[340px] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)]
-              ${isAllowed
-                  ? "border-primary ring-2 ring-primary/50 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
-                  : "border-third/30 opacity-60 hover:opacity-100 hover:border-third/60"
+              className={`rounded-xl border p-6 flex flex-col min-h-[320px] md:h-auto lg:h-[340px] transition-all duration-300
+                ${isAllowed
+                  ? "hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] border-primary ring-2 ring-primary/50 shadow-[0_0_20px_rgba(255,255,255,0.1)] cursor-pointer"
+                  : "border-third/30 opacity-60 pointer-events-none"
                 }`}
             >
               {/* Top */}
