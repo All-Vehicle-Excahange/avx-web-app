@@ -296,6 +296,20 @@ h3 {
   background-color: rgba(255, 255, 255, 0.4);
 }
 
+
+.hide-scrollbar-bg::-webkit-scrollbar {
+  width: 2px;
+}
+
+.hide-scrollbar-bg::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.hide-scrollbar-bg::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
 /* ===== SMOOTH SCROLL SNAP STYLES ===== */
 html {
   scroll-behavior: smooth;
