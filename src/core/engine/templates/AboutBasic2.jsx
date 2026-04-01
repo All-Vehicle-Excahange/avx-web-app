@@ -112,9 +112,11 @@ const DEFAULT_DATA = ABOUT_BASIC_2[0].data;
 
 function AboutBasic2({ data: rawData, isEditing, onUpdate }) {
   // Merge schema defaults with incoming data so missing fields use dummy values
-  const data = { ...DEFAULT_DATA, ...Object.fromEntries(
-    Object.entries(rawData || {}).filter(([, v]) => v !== undefined && v !== null)
-  ) };
+  const data = {
+    ...DEFAULT_DATA, ...Object.fromEntries(
+      Object.entries(rawData || {}).filter(([, v]) => v !== undefined && v !== null)
+    )
+  };
 
   if (!rawData) return null;
 
@@ -418,7 +420,7 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate }) {
             >
               <EyeBrow>What Drives Us</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                Mission & <span className="text-fourth/80">Vision</span>
+                Mission & <span className="text-primary">Vision</span>
               </h2>
             </motion.div>
 
@@ -450,11 +452,9 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate }) {
               <div className="flex items-start justify-between gap-4">
                 <h3 className="text-xl font-semibold font-[Montserrat]">
                   <span className="text-primary">
-                    {data.missionTitle.split(" ")[0]}{" "}
+                    {data.missionTitle}
                   </span>
-                  <span className="text-fourth">
-                    {data.missionTitle.split(" ")[1]}
-                  </span>
+
                 </h3>
                 <span className="text-[11px] tracking-[0.25em] text-fourth/60 font-[Montserrat] font-bold mt-1 shrink-0">
                   01
@@ -474,11 +474,9 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate }) {
               <div className="flex items-start justify-between gap-4">
                 <h3 className="text-xl font-semibold font-[Montserrat]">
                   <span className="text-primary">
-                    {data.visionTitle.split(" ")[0]}{" "}
+                    {data.visionTitle}
                   </span>
-                  <span className="text-fourth">
-                    {data.visionTitle.split(" ")[1]}
-                  </span>
+
                 </h3>
                 <span className="text-[11px] tracking-[0.25em] text-fourth/60 font-[Montserrat] font-bold mt-1 shrink-0">
                   02
@@ -504,7 +502,7 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate }) {
           >
             <EyeBrow>By The Numbers</EyeBrow>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat] mb-4">
-              Our Growth <span className="text-secondary">in Numbers</span>
+              Our Growth <span className="text-primary">in Numbers</span>
             </h2>
             <Divider />
             <div

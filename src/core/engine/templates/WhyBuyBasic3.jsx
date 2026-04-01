@@ -84,6 +84,14 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
   const [allReviews, setAllReviews] = useState([]);
   const [selectedReviewIds, setSelectedReviewIds] = useState([]);
 
+  const data = {
+    ...Object.fromEntries(
+      Object.entries(rawData || {}).filter(
+        ([, v]) => v !== undefined && v !== null,
+      ),
+    ),
+  };
+
   const [active, setActive] = useState(0);
   const [visible, setVisible] = useState(true);
   const total = data.featuredReviews?.length || data.testimonials?.length || 0;
@@ -118,13 +126,6 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
     if (consultId) fetchReviews();
   }, [consultId]);
 
-  const data = {
-    ...Object.fromEntries(
-      Object.entries(rawData || {}).filter(
-        ([, v]) => v !== undefined && v !== null,
-      ),
-    ),
-  };
   if (!rawData) return null;
   const updateField = (field, value) => {
     onUpdate({ ...data, [field]: value });
@@ -300,7 +301,7 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
   };
   if (isEditing) {
     return (
-      <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10 bg-black/20">
+      <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10 ">
         <div className="space-y-6">
           <h3 className="text-white font-bold mb-4">Hero Section</h3>
           <EditorInput
@@ -578,9 +579,7 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
             Why Choose Us
           </p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-            Why Choose<span className="text-fourth/80"> Adarsh Auto</span>{" "}
-            <br />
-            <span className="text-primary">Consultants</span>
+           {data.whyBuyHeroTitle}
           </h2>
           <div
             className="text-third/55 text-base sm:text-lg font-[Poppins] leading-relaxed max-w-xl"
@@ -595,9 +594,9 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
             <div className="flex flex-col gap-6">
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
                 About Us
-              </p>
+              </p> 
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                Our<span className="text-fourth/80"> Experience</span>
+                <span className="text-primary"> {data.storyTitle}</span>
               </h2>
             </div>
             <div className="flex flex-col gap-10">
@@ -634,7 +633,7 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
               </div>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 {data.vehicleSelectionTitle.split("Vehicle Selection")[0]}
-                <span className="text-fourth/80">Vehicle Selection</span>
+                <span className="text-primary">{data.vehicleSelectionTitle}</span>
               </h2>
               <div
                 className="text-third/60 text-base md:text-lg font-[Poppins] leading-[1.9] max-w-2xl"
@@ -657,8 +656,8 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
                 </p>
               </div>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                {data.processTitle.split("Works")[0]}
-                <span className="text-fourth/80">Works</span>
+              
+                <span className="text-primary">{data.processTitle}</span>
               </h2>
             </div>
             <div
@@ -715,8 +714,8 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
                 Avx Inspection
               </p>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                {data.inspectionTitle.split("Assurance")[0]}
-                <span className="text-fourth/80">Assurance</span>
+                {data.inspectionTitle}
+                
               </h2>
               <div
                 className="text-third/55 text-base font-[Poppins] leading-[1.9] max-w-md"
@@ -768,8 +767,7 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
                   </p>
                 </div>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                  {data.customerCommitmentTitle.split("Commitment")[0]}
-                  <span className="text-fourth/80">Commitment</span>
+                  {data.customerCommitmentTitle}
                 </h2>
               </div>
               <div className="flex items-center gap-4">
@@ -823,8 +821,7 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
                 Feedback
               </span>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                {data.testimonialTitle.split("Experience")[0]}
-                <span className="text-fourth/80">Experience</span>
+               {data.testimonialTitle}
               </h2>
             </div>
             {testimonials.length > 0 && (

@@ -104,9 +104,11 @@ const Divider = ({ light = false }) => (
 const DEFAULT_DATA = WHY_BUY_BASIC_2[0].data;
 
 export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate }) {
-  const data = { ...DEFAULT_DATA, ...Object.fromEntries(
-    Object.entries(rawData || {}).filter(([, v]) => v !== undefined && v !== null)
-  ) };
+  const data = {
+    ...DEFAULT_DATA, ...Object.fromEntries(
+      Object.entries(rawData || {}).filter(([, v]) => v !== undefined && v !== null)
+    )
+  };
 
   const [allReviews, setAllReviews] = useState([]);
   const [selectedReviewIds, setSelectedReviewIds] = useState([]);
@@ -578,7 +580,7 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
             >
               <EyeBrow>Our Story</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                Our <span className="text-secondary">{data.storyTitle}</span>
+                <span className="text-secondary">{data.storyTitle}</span>
               </h2>
             </motion.div>
             <motion.div
@@ -611,7 +613,7 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 Our Approach to
                 <br />
-                <span className="text-fourth/80">Vehicle Selection</span>
+                <span className="text-primary">Vehicle Selection</span>
               </h2>
             </motion.div>
             <motion.div
@@ -636,7 +638,7 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
           <div className="flex flex-col gap-3 mb-10">
             <EyeBrow>Process</EyeBrow>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-              {data.processTitle} <span className="text-fourth/80">Works</span>
+              {data.processTitle} <span className="text-primary">Works</span>
             </h2>
             <p className="text-third/60 text-[15px] font-[Poppins] leading-relaxed max-w-md">
               {data.processDescription}
@@ -697,8 +699,7 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
             >
               <EyeBrow>Inspection</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                {data.inspectionTitle}{" "}
-                <span className="text-fourth/80">Assurance</span>
+                {data.inspectionTitle}
               </h2>
             </motion.div>
             <motion.div
@@ -804,7 +805,7 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
               <EyeBrow>Commitment</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 {data.customerCommitmentTitle}{" "}
-                <span className="text-secondary">Commitment</span>
+
               </h2>
             </motion.div>
             <motion.div
@@ -829,8 +830,7 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
           <div className="flex flex-col gap-3 mb-12">
             <EyeBrow>Reviews</EyeBrow>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-              {data.testimonialTitle}{" "}
-              <span className="text-fourth/80">Experience</span>
+              {data.testimonialTitle}
             </h2>
           </div>
 

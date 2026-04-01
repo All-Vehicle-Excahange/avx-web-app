@@ -64,11 +64,13 @@ const formatOptionLabel = ({ value, label }) => (
 const DEFAULT_DATA = ABOUT_BASIC_3[0].data;
 
 function AboutBasic3({ isEditing, data: rawData, onUpdate }) {
-  const data = { ...DEFAULT_DATA, ...Object.fromEntries(
-    Object.entries(rawData || {}).filter(
-      ([, v]) => v !== undefined && v !== null,
-    ),
-  ) };
+  const data = {
+    ...DEFAULT_DATA, ...Object.fromEntries(
+      Object.entries(rawData || {}).filter(
+        ([, v]) => v !== undefined && v !== null,
+      ),
+    )
+  };
   if (!rawData) return null;
   const updateField = (field, value) => {
     onUpdate({ ...data, [field]: value });
@@ -321,19 +323,13 @@ function AboutBasic3({ isEditing, data: rawData, onUpdate }) {
               Hero
             </p>
             <h2 className="flex flex-col gap-2 text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-              Our Story Built for
-              <span className="text-fourth/80">Buy & Selling a Vehicle</span>
+              {data.heroTitle}
             </h2>
             <div
               className="text-third/55 text-base sm:text-lg font-[Poppins] leading-relaxed max-w-xl"
               dangerouslySetInnerHTML={{ __html: data.heroDescription }}
             />
-            <a
-              href="#"
-              className="font-[Montserrat] font-bold text-sm tracking-[0.15em] uppercase text-primary border-b border-third/40 pb-0.5 hover:border-primary transition-colors duration-200"
-            >
-              Explore Listings →
-            </a>
+
           </div>
         </div>
       </section>
@@ -344,7 +340,7 @@ function AboutBasic3({ isEditing, data: rawData, onUpdate }) {
               Mission / Vision
             </p>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-              Direction We<span className="text-fourth/80"> Move</span>
+              Direction We<span className="text-primary"> Move</span>
             </h2>
           </div>
           <div className="relative max-w-4xl mx-auto flex flex-col gap-16">
@@ -355,8 +351,7 @@ function AboutBasic3({ isEditing, data: rawData, onUpdate }) {
                   Mission
                 </p>
                 <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-primary font-[Montserrat]">
-                  {data.missionTitle.split("Mission")[0]}
-                  <span className="text-fourth/80">Mission</span>
+                  {data.missionTitle}
                 </h3>
                 <div
                   className="text-third/70 text-sm sm:text-base font-[Poppins] leading-relaxed max-w-md"
@@ -374,8 +369,7 @@ function AboutBasic3({ isEditing, data: rawData, onUpdate }) {
                   Vision
                 </p>
                 <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-primary font-[Montserrat]">
-                  {data.visionTitle.split("Vision")[0]}
-                  <span className="text-fourth/80">Vision</span>
+                  {data.visionTitle}
                 </h3>
                 <div
                   className="text-third/70 text-sm sm:text-base font-[Poppins] leading-relaxed max-w-md"
@@ -396,7 +390,7 @@ function AboutBasic3({ isEditing, data: rawData, onUpdate }) {
               Stats
             </p>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-              Numbers that<span className="text-fourth/80"> speak for us</span>
+              Numbers that<span className="text-primary"> speak for us</span>
             </h2>
             <div
               className="text-third/70 text-md font-[Poppins] leading-relaxed max-w-md"
@@ -424,7 +418,7 @@ function AboutBasic3({ isEditing, data: rawData, onUpdate }) {
               Our Services
             </p>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-              What We<span className="text-fourth/80"> Do</span>
+              {data.servicesTitle}
             </h2>
             <div
               className="text-third/70 text-md font-[Poppins] leading-relaxed"

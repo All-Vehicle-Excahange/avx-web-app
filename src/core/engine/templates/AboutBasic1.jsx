@@ -80,9 +80,11 @@ const formatOptionLabel = ({ value, label }) => (
 const DEFAULT_DATA = ABOUT_BASIC_1[0].data;
 
 function AboutBasic1({ data: rawData, isEditing, onUpdate }) {
-  const data = { ...DEFAULT_DATA, ...Object.fromEntries(
-    Object.entries(rawData || {}).filter(([, v]) => v !== undefined && v !== null)
-  ) };
+  const data = {
+    ...DEFAULT_DATA, ...Object.fromEntries(
+      Object.entries(rawData || {}).filter(([, v]) => v !== undefined && v !== null)
+    )
+  };
 
   if (!rawData) return null;
 
@@ -389,7 +391,6 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate }) {
           {/* Main Heading */}
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1] text-primary font-[Montserrat] max-w-3xl">
             {data.heroTitle}
-            <span className="text-fourth/80"> Buy & Selling</span> a Vehicle
           </h1>
 
           {/* Description */}
@@ -405,12 +406,12 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate }) {
       <section className="relative py-12 px-2 lg:px-4 ">
         <div className=" w-full flex flex-col gap-16">
           {/* ── MAIN HEADING ───────────────── */}
-          <div className="flex flex-col gap-6 max-w-2xl text-center">
+          <div className="flex flex-col  gap-6 max-w-2xl text-center">
             <p className=" text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Purpose
             </p>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-              Mission &<span className="text-fourth/80"> Vision</span>
+              Mission &<span className="text-primary"> Vision</span>
             </h2>
           </div>
 
@@ -418,10 +419,7 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate }) {
           <div className="flex flex-col lg:flex-row gap-10 lg:gap-20 items-start  pt-12">
             <div className="w-full lg:w-1/3">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                {data.missionTitle.split(" ")[0]}{" "}
-                <span className="text-fourth/80">
-                  {data.missionTitle.split(" ")[1]}
-                </span>
+                {data.missionTitle}
               </h2>
             </div>
             <div className="w-full lg:w-2/3">
@@ -436,10 +434,8 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate }) {
           <div className="flex flex-col lg:flex-row-reverse gap-10 lg:gap-20 items-start pt-12">
             <div className="w-full lg:w-1/3">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                {data.visionTitle.split(" ")[0]}{" "}
-                <span className="text-fourth/80">
-                  {data.visionTitle.split(" ")[1]}
-                </span>
+                {data.visionTitle}
+
               </h2>
             </div>
             <div className="w-full lg:w-2/3">
@@ -461,8 +457,7 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate }) {
             </p>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] font-[Montserrat]">
-              Our
-              <span className="text-fourth/80"> Numbers</span>
+              Our Stats
             </h2>
 
             <div
@@ -500,7 +495,7 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate }) {
             </p>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-              What <span className="text-fourth/80">We Do</span>
+              What <span className="text-primary">We Do</span>
             </h2>
             <div
               className="text-third/70 text-lg md:text-xl font-[Poppins] leading-relaxed border-l-2 border-primary/30 pl-6"
