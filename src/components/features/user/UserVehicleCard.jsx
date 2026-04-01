@@ -18,6 +18,7 @@ import Button from "@/components/ui/button";
 import Image from "next/image";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import { markAsSoldVehicle } from "@/services/vehicle.service";
+import { createSlug } from "@/lib/helper";
 
 export default function UserVehicleCard({
   data,
@@ -189,7 +190,7 @@ export default function UserVehicleCard({
                 <h3 className="text-sm md:text-lg font-bold text-third">
                   ₹ {data?.price || "-"}
                 </h3>
-                <Button href={`/vehicle/details/${data.id}`} variant="roundedOutline" size="sm" className="w-8 h-8 p-0">
+                <Button href={`/vehicle/details/${createSlug(data?.title)}/${data.id}`} variant="roundedOutline" size="sm" className="w-8 h-8 p-0">
                   <ArrowUpRight size={16} />
                 </Button>
               </div>

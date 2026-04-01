@@ -859,12 +859,12 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-[20px]">
+    <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-[20px] gap-4">
       {/* ================= DESKTOP SIDEBAR ================= */}
       <aside
         className="
           hidden lg:flex
-          w-[340px]
+          w-[328px]
           border border-third/40
           p-4
           flex-col
@@ -1170,7 +1170,7 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
       </aside>
 
       {/* ================= MAIN CONTENT ================= */}
-      <main className="flex-1 lg:pl-6 min-w-0">
+      <main className="flex-1 min-w-0">
         <div className="flex lg:hidden items-center gap-3 mb-4 overflow-x-auto scrollbar-hide pb-2">
           <div className="shrink-0">
             <Button

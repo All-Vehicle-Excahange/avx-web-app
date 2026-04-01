@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { addWishList, removeWishList } from "@/services/user.service";
 import { useAuthStore } from "@/stores/useAuthStore";
 import LoginPopup from "@/components/auth/LoginPopup";
+import { createSlug } from "@/lib/helper";
 import SignupPopup from "@/components/auth/SignupPopup";
 
 export default function VehicleCard({ data, onWishlistChange, source = "search" }) {
@@ -83,9 +84,13 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
 
         sponsored: data.sponsored || false,
     };
-
+    const slug = createSlug(mapped.title);
     const handleCardClick = () => {
-        router.push(`/vehicle/details/${data.id}?source=${source}`, undefined, { scroll: false });
+        router.push(
+            `/vehicle/details/${slug}/${data.id}?source=${source}`,
+            undefined,
+            { scroll: false }
+        );
     }
 
     return (
@@ -99,8 +104,7 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
         border-2 border-third/60
         hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]
         transition-shadow duration-300
-        h-full
-      "
+        h-full md:h-[500px]"
             >
                 <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
                     {/* IMAGE */}
@@ -203,7 +207,7 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
                             <h3 className="text-sm md:text-xl font-bold text-primary">₹ {mapped.price}</h3>
 
                             <div className="hidden md:block">
-                                <Button href={`/vehicle/details/${data.id}?source=${source}`} scroll={false} variant="outline" size="sm">
+                                <Button href={`/vehicle/details/${slug}/${data.id}?source=${source}`} scroll={false} variant="outline" size="sm">
                                     View Details
                                 </Button>
                             </div>

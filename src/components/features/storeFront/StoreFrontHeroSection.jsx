@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { followConsultant, getStoreFrontByUsername, unFollowConsultant } from "@/services/user.service";
 import LoginPopup from "@/components/auth/LoginPopup";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -25,8 +25,8 @@ import SharePopup from "@/components/ui/SharePopup";
 
 
 export default function StoreFrontHeroSection() {
-    const params = useParams();
-    const id = params.id;
+    const router = useRouter();
+    const { id } = router.query;
 
     const [comsultDetails, setComsultDetails] = useState(null);
     const [isFollower, setIsFollower] = useState(false);
@@ -184,7 +184,7 @@ export default function StoreFrontHeroSection() {
                             </div>
                         </div>
 
-                        {/* CENTER COLUMN */}   
+                        {/* CENTER COLUMN */}
                         <div className="flex-1 space-y-4 pt-2">
                             <div>
                                 <div className="flex items-center gap-2">
@@ -195,7 +195,7 @@ export default function StoreFrontHeroSection() {
                                     <Button
                                         onClick={() => setIsShareOpen(true)}
                                         size="sm"
-                                        className="flex h-9 w-9 items-center justify-center rounded-full p-0 text-primary !bg-transparent"
+                                        className="flex h-9 w-9 items-center justify-center rounded-full p-0 text-primary/80 hover:text-primary !bg-transparent"
                                     >
                                         <ExternalLink className="h-5 w-5" />
                                     </Button>

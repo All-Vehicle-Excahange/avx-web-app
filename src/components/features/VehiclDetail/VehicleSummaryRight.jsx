@@ -12,6 +12,7 @@ import { checkIsUserEligbleToSendInquary } from "@/services/vehicle.service";
 import SignupPopup from "@/components/auth/SignupPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import RequestAlredySentPopup from "./RequestAlredySentPopup";
+import { createSlug } from "@/lib/helper";
 
 export default function VehicleSummaryRight({ vehicle, summary }) {
   const vehicleId = vehicle?.id;
@@ -177,7 +178,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
             {vehicleOwnerRole === "CONSULTATION" && (
               <div className="shrink-0">
                 <Button
-                  href={`/store-front/${summary?.username || 1}`}
+                  href={`/store-front/${createSlug(summary?.consultationName)}/${summary?.username || 1}`}
                   variant="outline"
                   showIcon
                 >
