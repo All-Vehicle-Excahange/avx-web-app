@@ -1,83 +1,294 @@
-import React from "react";
-import RichTextEditor from "../atoms/RichTextEditor";
-import { Star, Eye, Target } from "lucide-react";
-import EditorInput from "../atoms/EditorInput";
-import Image from "next/image";
+"use client";
 
-function AboutBasic2({ data, isEditing, onUpdate }) {
-  if (!data) return null;
+import { motion } from "framer-motion";
+import EditorInput from "@/core/engine/atoms/EditorInput";
+import RichTextEditor from "@/core/engine/atoms/RichTextEditor";
+import Select from "react-select";
+import {
+  setAboutHero,
+  setAboutMission,
+  setAboutVision,
+  setState,
+  setAboutServices
+} from "@/services/theme.service";
+import { ABOUT_BASIC_2 } from "@/core/engine/schemas/about/basic/about_basic_2";
 
-  const updateField = (field, value) => onUpdate({ ...data, [field]: value });
+const SVG_OPTIONS = [
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>`,
+    label: "Search",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>`,
+    label: "Cancel",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M300-360q-25 0-42.5-17.5T240-420v-40h60v40h60v-180h60v180q0 25-17.5 42.5T360-360h-60Zm220 0q-17 0-28.5-11.5T480-400v-40h60v20h80v-40H520q-17 0-28.5-11.5T480-500v-60q0-17 11.5-28.5T520-600h120q17 0 28.5 11.5T680-560v40h-60v-20h-80v40h100q17 0 28.5 11.5T680-460v60q0 17-11.5 28.5T640-360H520Z"/></svg>`,
+    label: "Layout",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M320-240 80-480l240-240 57 57-184 184 183 183-56 56Zm320 0-57-57 184-184-183-183 56-56 240 240-240 240Z"/></svg>`,
+    label: "Code",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-40-360v-240h80v207l154 154-57 57-177-178Z"/></svg>`,
+    label: "Clock",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m646-160-42-42 98-98q-37-53-90.5-84.5T480-420q-83 0-156 31.5T197-331q-54 54-85.5 127T80-480q0 83 31.5 156T197-197q54 54 127 85.5T480-80q64 0 117.5-31.5T706-178l98-98-42-42-98 98q-38 33-80.5-6.5T480-300q-54 0-99-45t-45-99q0-54 45-99t99-45q54 0 99 45t45 99q0 51.5-26.5 94T560-360Z"/></svg>`,
+    label: "ShieldCheck",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-320q93 0 156.5-63.5T700-540q0-93-63.5-156.5T480-760q-93 0-156.5 63.5T260-540q0 93 63.5 156.5T480-320Zm0-160q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm0 374q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-106Zm0 106Q319 217 239.5 334.5T160-552q0 150 96.5 255T480-200q150 0 246-105t96-255q0-100-80.5-217.5T480-500Z"/></svg>`,
+    label: "Globe",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M472-160q-104 0-178-74t-74-178q0-63 27.5-115.5T340-614l-18 76q-30 14-47.5 42.5T260-440q0 59 40.5 99.5T400-300h72q29 0 51.5-14t38-38l58-110q71 32 132.5 79T840-256q33 0 63-8t57-24l-52-60q-23 15-48 23.5t-51 8.5zm5-220q36 0 61-25t25-61q0-36-25-61t-61-25q-36 0-61 25t-25 61q0 36 25 61t61 25Zm-97 220-24-50q-30 30-70 46t-80 16q-42 0-80-16t-70-46l-24 50q39 45 93.5 71.5T480-80Z"/></svg>`,
+    label: "TrendingUp",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M440-280v-280q0-17-11.5-28.5T400-600h80q17 0 28.5 11.5T520-560v168q0 13-3.5 25t-10.5 21-17 13-21.5 4.5H440Zm-80-320v-40h160v40h-40v160h-80v-160h-40Zm400-80h-80v-80h-80v80h-80v-80h-80v120q0 17 11.5 28.5T240-460h240q17 0 28.5-11.5T520-500v-80Z"/></svg>`,
+    label: "Cpu",
+  },
+];
+
+const selectStyles = {
+  control: (base) => ({
+    ...base,
+    backgroundColor: "transparent",
+    borderColor: "rgba(255, 255, 255, 0.2)",
+    color: "white",
+    minHeight: "44px",
+  }),
+  indicatorSeparator: () => ({ display: "none" }),
+  singleValue: (base) => ({ ...base, color: "white" }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isFocused ? "rgba(255,255,255,0.1)" : "#1e1e1e",
+    color: "white",
+    cursor: "pointer",
+  }),
+  menu: (base) => ({
+    ...base,
+    backgroundColor: "#1e1e1e",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+  }),
+};
+
+const formatOptionLabel = ({ value, label }) => (
+  <div className="flex items-center gap-3">
+    <div
+      className="w-5 h-5 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full"
+      dangerouslySetInnerHTML={{ __html: value }}
+    />
+    <span className="text-sm">{label}</span>
+  </div>
+);
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+};
+
+const stagger = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12 } },
+};
+
+const Divider = () => <div className="w-8 h-px bg-primary/15 my-2" />;
+
+const EyeBrow = ({ children }) => (
+  <motion.p
+    className="text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat] mb-4"
+    initial={{ opacity: 0 }}
+    whileInView={{ opacity: 1 }}
+    viewport={{ once: true }}
+  >
+    {children}
+  </motion.p>
+);
+
+const DEFAULT_DATA = ABOUT_BASIC_2[0].data;
+
+function AboutBasic2({ data: rawData, isEditing, onUpdate }) {
+  // Merge schema defaults with incoming data so missing fields use dummy values
+  const data = { ...DEFAULT_DATA, ...Object.fromEntries(
+    Object.entries(rawData || {}).filter(([, v]) => v !== undefined && v !== null)
+  ) };
+
+  if (!rawData) return null;
+
+  const updateField = (field, value) => {
+    onUpdate({ ...data, [field]: value });
+  };
 
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];
     newArray[index][field] = value;
     updateField(arrayName, newArray);
   };
+
+  const handleHeroBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("heroTitle", data.heroTitle || "");
+      formData.append("heroDescription", data.heroDescription || "");
+      const res = await setAboutHero(formData);
+      if (res?.data?.success) console.log("Hero updated successfully");
+    } catch (error) {
+      console.error("Failed to update Hero section:", error);
+    }
+  };
+
+  const handleMissionBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("missionTitle", data.missionTitle || "");
+      formData.append("missionDescription", data.missionDesc || "");
+      const res = await setAboutMission(formData);
+      if (res?.data?.success) console.log("Mission updated successfully");
+    } catch (error) {
+      console.error("Failed to update Mission section:", error);
+    }
+  };
+
+  const handleVisionBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("visionTitle", data.visionTitle || "");
+      formData.append("visionDescription", data.visionDesc || "");
+      const res = await setAboutVision(formData);
+      if (res?.data?.success) console.log("Vision updated successfully");
+    } catch (error) {
+      console.error("Failed to update Vision section:", error);
+    }
+  };
+
+  const handleStatsBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("aboutUsDescription", data.aboutUsDescription || "");
+      if (data.stats && Array.isArray(data.stats)) {
+        data.stats.forEach((stat, i) => {
+          formData.append(`stats[${i}].number`, stat.number || "");
+          formData.append(`stats[${i}].label`, stat.label || "");
+        });
+      }
+      const res = await setState(formData);
+      if (res?.data?.success) console.log("Stats updated successfully");
+    } catch (error) {
+      console.error("Failed to update Stats section:", error);
+    }
+  };
+
+  const handleServicesBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("serviceTitle", data.servicesTitle || "");
+      formData.append("serviceDescription", data.servicesDesc || "");
+      if (data.services && Array.isArray(data.services)) {
+        data.services.forEach((service, i) => {
+          formData.append(`services[${i}].title`, service.title || "");
+          formData.append(`services[${i}].desc`, service.desc || "");
+          formData.append(`services[${i}].icon`, service.icon || "");
+        });
+      }
+      const res = await setAboutServices(formData);
+      if (res?.data?.success) console.log("Services updated successfully");
+    } catch (error) {
+      console.error("Failed to update Services section:", error);
+    }
+  };
+
   if (isEditing) {
     return (
-      <div className="bg-secondary w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
-        {/* ================= HERO ================= */}
-        <div>
-          <h3 className="text-primary font-bold mb-4">Hero Section</h3>
-
-          <div className="grid md:grid-cols-2 gap-6 items-start">
-            {/* LEFT – Inputs */}
-            <div className="space-y-4">
-              <EditorInput
-                bold
-                label="Hero Title"
-                value={data.headline}
-                onChange={(e) => updateField("headline", e.target.value)}
-              />
-              <RichTextEditor
-                label="Hero Description"
-                value={data.subHeadline}
-                onChange={(v) => updateField("subHeadline", v)}
-              />
-            </div>
-
-            {/* RIGHT – Static Banner Preview */}
-            <div className="relative h-60  overflow-hidden border border-white/10 bg-black/40">
-              <Image
-                src="/banner_Basic.jpeg"
-                alt="Hero Banner Preview"
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-          </div>
+      <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10 ">
+        <div className="space-y-6">
+          <h3 className="text-white font-bold mb-4">Hero Section</h3>
+          <EditorInput
+            label="Hero Title"
+            value={data.heroTitle}
+            onChange={(e) => updateField("heroTitle", e.target.value)}
+            onBlur={handleHeroBlur}
+          />
+          <RichTextEditor
+            label="Hero Description"
+            value={data.heroDescription}
+            onChange={(v) => updateField("heroDescription", v)}
+            onBlur={handleHeroBlur}
+          />
         </div>
 
         <hr className="border-white/10" />
 
-        {/* ================= STATS ================= */}
-        <div>
-          <h3 className="text-primary font-bold mb-4">Stats Section</h3>
-          <RichTextEditor
-            label="Stats Paragraph"
-            value={data.statsDescription}
-            onChange={(v) => updateField("statsDescription", v)}
+        <div className="space-y-6">
+          <h3 className="text-white font-bold mb-4">Mission Section</h3>
+          <EditorInput
+            label="Mission Title"
+            value={data.missionTitle}
+            onChange={(e) => updateField("missionTitle", e.target.value)}
+            onBlur={handleMissionBlur}
           />
+          <RichTextEditor
+            label="Mission Description"
+            value={data.missionDesc}
+            onChange={(v) => updateField("missionDesc", v)}
+            onBlur={handleMissionBlur}
+          />
+        </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-            {data.stats.map((s, i) => (
-              <div key={i} className="space-y-2">
-                <EditorInput
-                  placeholder="Number"
-                  value={s.number}
-                  onChange={(e) =>
-                    updateArrayItem("stats", i, "number", e.target.value)
-                  }
-                />
-                <EditorInput
-                  placeholder="Label"
-                  value={s.label}
-                  onChange={(e) =>
-                    updateArrayItem("stats", i, "label", e.target.value)
-                  }
-                />
+        <div className="space-y-6">
+          <h3 className="text-white font-bold mb-4">Vision Section</h3>
+          <EditorInput
+            label="Vision Title"
+            value={data.visionTitle}
+            onChange={(e) => updateField("visionTitle", e.target.value)}
+            onBlur={handleVisionBlur}
+          />
+          <RichTextEditor
+            label="Vision Description"
+            value={data.visionDesc}
+            onChange={(v) => updateField("visionDesc", v)}
+            onBlur={handleVisionBlur}
+          />
+        </div>
+
+        <hr className="border-white/10" />
+
+        <div className="space-y-6">
+          <h3 className="text-white font-bold mb-4">Stats Section</h3>
+          <RichTextEditor
+            label="About Us Description"
+            value={data.aboutUsDescription}
+            onChange={(v) => updateField("aboutUsDescription", v)}
+            onBlur={handleStatsBlur}
+          />
+          <div className="grid grid-cols-2 gap-4 mt-4">
+            {(data.stats || []).map((s, i) => (
+              <div
+                key={i}
+                className="space-y-3 border border-white/10 p-4 rounded-lg"
+              >
+                <div>
+                  <p className="text-sm font-medium mb-1 text-white">Number</p>
+                  <EditorInput
+                    value={s.number}
+                    onChange={(e) =>
+                      updateArrayItem("stats", i, "number", e.target.value)
+                    }
+                    onBlur={handleStatsBlur}
+                  />
+                </div>
+                <div>
+                  <p className="text-sm font-medium mb-1 text-white">Label</p>
+                  <EditorInput
+                    value={s.label}
+                    onChange={(e) =>
+                      updateArrayItem("stats", i, "label", e.target.value)
+                    }
+                    onBlur={handleStatsBlur}
+                  />
+                </div>
               </div>
             ))}
           </div>
@@ -85,183 +296,318 @@ function AboutBasic2({ data, isEditing, onUpdate }) {
 
         <hr className="border-white/10" />
 
-        {/* ================= MISSION ================= */}
-        <div>
-          <h3 className="text-primary font-bold mb-4">Mission</h3>
+        <div className="space-y-6">
+          <h3 className="text-white font-bold mb-4">Services Section</h3>
           <EditorInput
-            bold
-            value={data.missionTitle}
-            onChange={(e) => updateField("missionTitle", e.target.value)}
-            placeholder="Mission Title"
+            label="Services Title"
+            value={data.servicesTitle}
+            onChange={(e) => updateField("servicesTitle", e.target.value)}
+            onBlur={handleServicesBlur}
           />
           <RichTextEditor
-            label="Mission Description"
-            value={data.missionDescription}
-            onChange={(v) => updateField("missionDescription", v)}
+            label="Services Description"
+            value={data.servicesDesc}
+            onChange={(v) => updateField("servicesDesc", v)}
+            onBlur={handleServicesBlur}
           />
-        </div>
 
-        {/* ================= VISION ================= */}
-        <div>
-          <h3 className="text-primary font-bold mb-4">Vision</h3>
-          <EditorInput
-            bold
-            value={data.visionTitle}
-            onChange={(e) => updateField("visionTitle", e.target.value)}
-            placeholder="Vision Title"
-          />
-          <RichTextEditor
-            label="Vision Description"
-            value={data.visionDescription}
-            onChange={(v) => updateField("visionDescription", v)}
-          />
-        </div>
-
-        <hr className="border-white/10" />
-
-        {/* ================= SERVICES ================= */}
-        <div className="space-y-4">
-          <h3 className="text-primary font-bold">Services</h3>
-
-          {data.services.map((s, i) => (
-            <div
-              key={i}
-              className="flex gap-4 items-start border border-third/20 p-4 rounded bg-primary/5"
-            >
-              <div className="w-24">
-                <EditorInput
-                  label="Icon"
-                  value={s.icon}
-                  onChange={(e) =>
-                    updateArrayItem("services", i, "icon", e.target.value)
-                  }
-                />
+          <h4 className="text-white font-semibold mt-6 mb-4">Service Cards</h4>
+          <div className="grid md:grid-cols-2 gap-4">
+            {(data.services || []).map((s, i) => (
+              <div
+                key={i}
+                className="border border-white/10 p-4 rounded-lg space-y-4"
+              >
+                <div>
+                  <label className="text-sm font-medium text-white mb-2 block">
+                    Select Icon
+                  </label>
+                  <Select
+                    options={SVG_OPTIONS}
+                    formatOptionLabel={formatOptionLabel}
+                    styles={selectStyles}
+                    value={
+                      SVG_OPTIONS.find((opt) => opt.value === s.icon) || null
+                    }
+                    onChange={(selectedOption) => {
+                      updateArrayItem(
+                        "services",
+                        i,
+                        "icon",
+                        selectedOption.value,
+                      );
+                      handleServicesBlur();
+                    }}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-white mb-1 block">
+                    Title
+                  </label>
+                  <EditorInput
+                    value={s.title}
+                    onChange={(e) =>
+                      updateArrayItem("services", i, "title", e.target.value)
+                    }
+                    onBlur={handleServicesBlur}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-white mb-1 block">
+                    Description
+                  </label>
+                  <EditorInput
+                    value={s.desc}
+                    onChange={(e) =>
+                      updateArrayItem("services", i, "desc", e.target.value)
+                    }
+                    onBlur={handleServicesBlur}
+                  />
+                </div>
               </div>
-
-              <div className="w-full space-y-2">
-                <EditorInput
-                  bold
-                  value={s.title}
-                  onChange={(e) =>
-                    updateArrayItem("services", i, "title", e.target.value)
-                  }
-                />
-                <EditorInput
-                  size="sm"
-                  value={s.desc}
-                  onChange={(e) =>
-                    updateArrayItem("services", i, "desc", e.target.value)
-                  }
-                />
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     );
   }
 
-  /* ================= FRONT ================= */
-
   return (
-    <div className="bg-primary text-secondary py-14 px-4">
-      <div className="max-w-[1480px] mx-auto space-y-32">
-        {/* HERO */}
-        <section className="text-center max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold uppercase mb-6">
-            {data.headline}
-          </h1>
-          <div
-            className="text-secondary/70 prose prose-invert"
-            dangerouslySetInnerHTML={{ __html: data.subHeadline }}
-          />
-        </section>
+    <>
+      <section className="relative flex items-center justify-center min-h-screen py-14 lg:py-24">
+        <div className="px-5 flex flex-col items-center text-center gap-6 max-w-3xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <EyeBrow>About Us</EyeBrow>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1] text-primary font-[Montserrat]">
+              {data.heroTitle}
+            </h1>
+          </motion.div>
 
-        {/* STATS + PARA */}
-        <section className="grid lg:grid-cols-2 gap-16 items-center">
-          <div className="grid grid-cols-2 gap-8">
-            {data.stats.map((stat, i) => (
+          <motion.div
+            className="w-10 h-px bg-primary/15"
+            initial={{ opacity: 0, scaleX: 0 }}
+            whileInView={{ opacity: 1, scaleX: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+          />
+
+          <motion.div
+            className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]"
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.25 }}
+            viewport={{ once: true }}
+            dangerouslySetInnerHTML={{ __html: data.heroDescription }}
+          />
+        </div>
+      </section>
+
+      <section className="py-14 lg:py-20">
+        <div className="px-2 lg:px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7 }}
+              viewport={{ once: true }}
+            >
+              <EyeBrow>What Drives Us</EyeBrow>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                Mission & <span className="text-fourth/80">Vision</span>
+              </h2>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              viewport={{ once: true }}
+            >
+              <Divider />
+              <p className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]">
+                The principles behind everything we build and every decision we
+                make.
+              </p>
+            </motion.div>
+          </div>
+
+          <motion.div
+            className="grid grid-cols-1 lg:grid-cols-2 gap-4"
+            variants={stagger}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+          >
+            <motion.div
+              variants={fadeUp}
+              className="group flex flex-col gap-5 p-8 border border-third/10 rounded-2xl hover:border-primary/25 transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <h3 className="text-xl font-semibold font-[Montserrat]">
+                  <span className="text-primary">
+                    {data.missionTitle.split(" ")[0]}{" "}
+                  </span>
+                  <span className="text-fourth">
+                    {data.missionTitle.split(" ")[1]}
+                  </span>
+                </h3>
+                <span className="text-[11px] tracking-[0.25em] text-fourth/60 font-[Montserrat] font-bold mt-1 shrink-0">
+                  01
+                </span>
+              </div>
+              <div className="w-8 h-0.5 bg-fourth/50" />
               <div
+                className="text-third/65 text-[13.5px] leading-[1.9] font-[Poppins]"
+                dangerouslySetInnerHTML={{ __html: data.missionDesc }}
+              />
+            </motion.div>
+
+            <motion.div
+              variants={fadeUp}
+              className="group flex flex-col gap-5 p-8 border border-third/10 rounded-2xl hover:border-primary/25 transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <h3 className="text-xl font-semibold font-[Montserrat]">
+                  <span className="text-primary">
+                    {data.visionTitle.split(" ")[0]}{" "}
+                  </span>
+                  <span className="text-fourth">
+                    {data.visionTitle.split(" ")[1]}
+                  </span>
+                </h3>
+                <span className="text-[11px] tracking-[0.25em] text-fourth/60 font-[Montserrat] font-bold mt-1 shrink-0">
+                  02
+                </span>
+              </div>
+              <div className="w-8 h-0.5 bg-fourth/50" />
+              <div
+                className="text-third/65 text-[13.5px] leading-[1.9] font-[Poppins]"
+                dangerouslySetInnerHTML={{ __html: data.visionDesc }}
+              />
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="py-12 lg:py-16 bg-fourth">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center px-10">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true }}
+          >
+            <EyeBrow>By The Numbers</EyeBrow>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat] mb-4">
+              Our Growth <span className="text-secondary">in Numbers</span>
+            </h2>
+            <Divider />
+            <div
+              className="text-primary/80 text-[15px] leading-[1.9] font-[Poppins]"
+              dangerouslySetInnerHTML={{ __html: data.aboutUsDescription }}
+            />
+          </motion.div>
+
+          <div className="grid grid-cols-2 gap-3">
+            {(data.stats || []).map((stat, i) => (
+              <motion.div
                 key={i}
-                className="bg-primary rounded-3xl p-2 text-center "
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.09 }}
+                className="group flex flex-col gap-2 p-6 border border-primary/20 rounded-2xl hover:border-primary/40 hover:bg-primary/5 transition-all duration-300"
               >
-                <h2 className="text-4xl font-extrabold">{stat.number}</h2>
-                <p className="text-secondary/70 uppercase tracking-widest text-sm mt-3">
+                <span className="text-3xl font-bold text-primary font-[Montserrat]">
+                  {stat.number}
+                </span>
+                <span className="text-[12px] text-primary/70 font-[Poppins] leading-normal">
                   {stat.label}
-                </p>
-              </div>
+                </span>
+              </motion.div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div
-            className="text-secondary/70 prose prose-invert"
-            dangerouslySetInnerHTML={{ __html: data.statsDescription }}
-          />
-        </section>
+      <section className="py-14 lg:py-20">
+        <div className="px-2 lg:px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7 }}
+              viewport={{ once: true }}
+            >
+              <EyeBrow>Services</EyeBrow>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                {data.servicesTitle}
+              </h2>
+            </motion.div>
 
-        {/* MISSION & VISION */}
-        <section>
-          <h2 className="text-center text-4xl font-bold tracking-widest mb-16">
-            MISSION & VISION
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-10">
-            <div className="bg-secondary/10 p-12 rounded-3xl border border-secondary/20">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 rounded-full border border-secondary flex items-center justify-center">
-                  <Target size={22} />
-                </div>
-                <h3 className="text-2xl font-bold uppercase tracking-widest">
-                  {data.missionTitle}
-                </h3>
-              </div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              viewport={{ once: true }}
+            >
+              <Divider />
               <div
-                className="text-secondary/70"
-                dangerouslySetInnerHTML={{ __html: data.missionDescription }}
+                className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]"
+                dangerouslySetInnerHTML={{ __html: data.servicesDesc }}
               />
-            </div>
-
-            <div className="bg-secondary/10 p-12 rounded-3xl border border-secondary/20">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 rounded-full border border-secondary flex items-center justify-center">
-                  <Eye size={22} />
-                </div>
-                <h3 className="text-2xl font-bold uppercase tracking-widest">
-                  {data.visionTitle}
-                </h3>
-              </div>
-              <div
-                className="text-secondary/70"
-                dangerouslySetInnerHTML={{ __html: data.visionDescription }}
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* SERVICES */}
-        <section className="px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">{data.servicesTitle}</h2>
-            <p className="text-secondary/70">{data.servicesSubtitle}</p>
+            </motion.div>
           </div>
 
-          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {data.services.map((s, i) => (
-              <div
-                key={i}
-                className="bg-secondary/10 p-10 border border-secondary/20 rounded-xl"
-              >
-                <div className="text-5xl mb-6">{s.icon}</div>
-                <h3 className="text-xl font-bold mb-4 uppercase tracking-wide">
-                  {s.title}
-                </h3>
-                <p className="text-secondary/70 text-sm">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      </div>
-    </div>
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+            variants={stagger}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+          >
+            {(data.services || []).map((svc, i) => {
+              return (
+                <motion.div
+                  key={i}
+                  variants={fadeUp}
+                  className="group flex flex-col gap-5 p-7 border border-third/10 rounded-2xl hover:border-primary/25 transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl border border-third/10 flex items-center justify-center group-hover:border-fourth/40 transition-colors duration-300">
+                      {typeof svc.icon === 'string' && svc.icon.startsWith('<svg') ? (
+                        <div
+                          className="text-fourth [&>svg]:w-5 [&>svg]:h-5"
+                          dangerouslySetInnerHTML={{ __html: svc.icon }}
+                        />
+                      ) : (
+                        <div className="w-5 h-5 bg-third/20 rounded flex items-center justify-center text-xs text-fourth">
+                          Icon
+                        </div>
+                      )}
+                    </div>
+                    <span className="font-[Montserrat] font-bold text-[10px] tracking-[0.2em] text-fourth/50">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <h3 className="text-[15px] font-semibold text-primary font-[Montserrat] group-hover:text-fourth transition-colors duration-300">
+                    {svc.title}
+                  </h3>
+                  <p className="text-third/65 text-[13px] leading-[1.8] font-[Poppins]">
+                    {svc.desc}
+                  </p>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </div>
+      </section>
+    </>
   );
 }
 

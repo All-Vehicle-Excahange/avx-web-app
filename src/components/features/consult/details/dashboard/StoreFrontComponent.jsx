@@ -65,68 +65,58 @@ function mapApiToTemplateData(api) {
 
 export default function StoreFrontComponent() {
   const router = useRouter();
-  const [editor, setEditor] = useState(null);
   const [hasStoreFront, setHasStoreFront] = useState(null);
   const [storeData, setStoreData] = useState(null);
   const [activeTab, setActiveTab] = useState("about");
   const [sections, setSections] = useState([]);
 
-  const [data, setData] = useState({
-    name: "Adarsh Auto Consultants",
-    city: "Ahmedabad",
-    rating: "4.7",
-    reviews: 116,
-    description:
-      "Premium automotive consultant specializing in verified pre-owned luxury and commercial vehicles.",
-    banner: "/sfBg.png",
-    logo: "/icons8-user-48.png",
-  });
-
   // Fetch storefront draft on mount
   useEffect(() => {
-    const getConsultDraft = async () => {
+    const fetchData = async () => {
       try {
-        const res = await getConsualtDraft();
-        if (res?.statusCode === 200) {
+        let apiData = null;
+        const draftRes = await getConsualtDraft();
+        
+        if (draftRes?.statusCode === 200 && draftRes?.data) {
+          apiData = draftRes.data;
+        } else {
+          const liveRes = await getStoreFront();
+          if (liveRes?.statusCode === 200 && liveRes?.data) {
+            apiData = liveRes.data;
+          }
+        }
+
+        if (apiData) {
+          setStoreData(apiData);
           setHasStoreFront(true);
-          setStoreData(res?.data);
         } else {
           setHasStoreFront(false);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
         setHasStoreFront(false);
       }
     };
-    getConsultDraft();
+    fetchData();
   }, []);
 
   // Hydrate engine sections once storeData is available
   useEffect(() => {
-    const buildSections = async () => {
-      let apiData = storeData;
-
-      if (!apiData) {
-        try {
-          const res = await getStoreFront();
-          apiData = res?.data;
-        } catch (error) {
-          console.error(error);
-        }
-      }
-
-      if (!apiData) return;
+    const buildSections = () => {
+      if (!storeData) return;
 
       const matchedTheme =
-        THEME_STORE.find((t) => t.id === apiData.themeId) || THEME_STORE[0];
+        THEME_STORE.find((t) => t.id === storeData.themeId) || THEME_STORE[0];
 
-      const mappedData = mapApiToTemplateData(apiData);
+      const mappedData = mapApiToTemplateData(storeData);
 
       const hydratedSections = matchedTheme.schema.map((section) => ({
         ...section,
         data: {
-          ...section.data,   // schema defaults as fallback
-          ...mappedData,     // real API values with correct field names
+          ...section.data, // schema defaults as fallback
+          ...Object.fromEntries(
+            Object.entries(mappedData).filter(([, v]) => v !== undefined && v !== null)
+          ),
         },
       }));
 
@@ -156,9 +146,6 @@ export default function StoreFrontComponent() {
         <h1 className="text-2xl font-bold">Your Storefront</h1>
         <p className="text-third text-sm">Manage your public brand presence</p>
       </div>
-
-
-
       {/* THEME CONTENT TABS */}
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-third/30">

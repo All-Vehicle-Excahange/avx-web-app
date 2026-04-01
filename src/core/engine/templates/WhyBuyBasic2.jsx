@@ -1,0 +1,899 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import {
+  Quote,
+  CheckCircle2,
+  Star,
+} from "lucide-react";
+import EditorInput from "@/core/engine/atoms/EditorInput";
+import RichTextEditor from "@/core/engine/atoms/RichTextEditor";
+import Select from "react-select";
+import {
+  setWhyBuyHero,
+  setWhyBuyStory,
+  setWhyBuyVehicleSelection,
+  setWhyBuyProcess,
+  setWhyBuyInspection,
+  setWhyBuyCustomerCommitment,
+  setFeaturedReviews,
+} from "@/services/theme.service";
+import { getAllReview } from "@/services/user.service";
+import { WHY_BUY_BASIC_2 } from "@/core/engine/schemas/whybuy/why_buy_basic_2";
+
+const SVG_OPTIONS = [
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>`,
+    label: "Search",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M880-300 760-420l-80 80q-83 0-141.5-58.5T480-620q0-83 58.5-141.5T680-820q83 0 141.5 58.5T880-620v200ZM480-160q33 0 56.5-23.5T560-240v-240q0-33-23.5-56.5T480-560q-33 0-56.5 23.5T400-480v240q0 33 23.5 56.5T480-160Z"/></svg>`,
+    label: "MessageCircle",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M440-280v-280q0-17-11.5-28.5T400-600h80q17 0 28.5 11.5T520-560v168q0 13-3.5 25t-10.5 21-17 13-21.5 4.5H440Zm-80-320v-40h160v40h-40v160h-80v-160h-40Zm400-80h-80v-80h-80v80h-80v-80h-80v120q0 17 11.5 28.5T240-460h240q17 0 28.5-11.5T520-500v-80Z"/></svg>`,
+    label: "ShieldCheck",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M760-260q-50 0-85-35t-35-85q0-35 18.5-64.5T700-498l58-118q17 31 49 51.5t69 20.5h30q8 0 14-6t6-14q0-33-23.5-56.5T760-740q-33 0-56.5 23.5T680-660q0 8 6 14t14 6h30q50 0 89.5 25.5T870-547l-58 118q-17-8-37-12.5t-43-4.5q-50 0-85 35t-35 85q0 35 18.5 64.5T700-262l-58 118q-17-31-49-51.5T524-230H494q-8 0-14 6t-6 14q0 33 23.5 56.5T440-120q33 0 56.5-23.5T520-200q0-8-6-14t-14-6h-30q-50 0-89.5-25.5T330-313l58-118q17 8 37 12.5T470-410q50 0 85-35t35-85q0-35-18.5-64.5T520-662l58-118q17 31 49 51.5T696-694h30q8 0 14-6t6-14q0-33-23.5-56.5T760-800q-33 0-56.5 23.5T680-720q0 8 6 14t14 6h30q50 0 89.5 25.5T870-607l-58 118q-17-8-37-12.5T730-510Z"/></svg>`,
+    label: "Handshake",
+  },
+];
+
+const selectStyles = {
+  control: (base) => ({
+    ...base,
+    backgroundColor: "transparent",
+    borderColor: "rgba(255, 255, 255, 0.2)",
+    color: "white",
+    minHeight: "44px",
+  }),
+  indicatorSeparator: () => ({ display: "none" }),
+  singleValue: (base) => ({ ...base, color: "white" }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isFocused ? "rgba(255,255,255,0.1)" : "#1e1e1e",
+    color: "white",
+    cursor: "pointer",
+  }),
+  menu: (base) => ({
+    ...base,
+    backgroundColor: "#1e1e1e",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+  }),
+};
+
+const formatOptionLabel = ({ value, label }) => (
+  <div className="flex items-center gap-3">
+    <div
+      className="w-5 h-5 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full"
+      dangerouslySetInnerHTML={{ __html: value }}
+    />
+    <span className="text-sm">{label}</span>
+  </div>
+);
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+};
+
+const stagger = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1 } },
+};
+
+const EyeBrow = ({ children, center = false }) => (
+  <motion.p
+    className={`text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat] mb-2 ${center ? "text-center" : ""}`}
+    initial={{ opacity: 0 }}
+    whileInView={{ opacity: 1 }}
+    viewport={{ once: true }}
+  >
+    {children}
+  </motion.p>
+);
+
+const Divider = ({ light = false }) => (
+  <div
+    className={`w-8 h-px my-2 ${light ? "bg-primary/30" : "bg-primary/15"}`}
+  />
+);
+
+const DEFAULT_DATA = WHY_BUY_BASIC_2[0].data;
+
+export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate }) {
+  const data = { ...DEFAULT_DATA, ...Object.fromEntries(
+    Object.entries(rawData || {}).filter(([, v]) => v !== undefined && v !== null)
+  ) };
+
+  const [allReviews, setAllReviews] = useState([]);
+  const [selectedReviewIds, setSelectedReviewIds] = useState([]);
+
+  // Get consultationId from localStorage
+  let consultId = null;
+  const storedData = typeof window !== "undefined" ? localStorage.getItem("sellerTierData") : null;
+  if (storedData) {
+    const parsed = JSON.parse(storedData);
+    consultId = parsed?.consultationId;
+  }
+
+  // Fetch all reviews
+  useEffect(() => {
+    if (!rawData) return;
+    const fetchReviews = async () => {
+      try {
+        const params = { pageNo: 1, size: 20 };
+        const response = await getAllReview(consultId, params);
+        const reviews = response?.data?.reviews || [];
+        setAllReviews(reviews);
+      } catch (error) {
+        console.error("Error fetching reviews", error);
+      }
+    };
+    if (consultId) fetchReviews();
+  }, [consultId]);
+
+  if (!rawData) return null;
+
+  const updateField = (field, value) => {
+    onUpdate({ ...data, [field]: value });
+  };
+
+  const updateArrayItem = (arrayName, index, field, value) => {
+    const newArray = [...data[arrayName]];
+    newArray[index][field] = value;
+    updateField(arrayName, newArray);
+  };
+
+  // ── API HANDLERS ──
+
+  const handleHeroBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
+      formData.append("whyBuyHeroDescription", data.whyBuyHeroDescription || "");
+      await setWhyBuyHero(formData);
+    } catch (error) { console.error("Error updating hero", error); }
+  };
+
+  const handleStoryBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("storyTitle", data.storyTitle || "");
+      formData.append("storyDescription", data.storyDescription || "");
+      await setWhyBuyStory(formData);
+    } catch (error) { console.error("Error updating story", error); }
+  };
+
+  const handleVehicleSelectionBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("vehicleSelectionTitle", data.vehicleSelectionTitle || "");
+      formData.append("vehicleSelectionDescription", data.vehicleSelectionDescription || "");
+      await setWhyBuyVehicleSelection(formData);
+    } catch (error) { console.error("Error updating vehicle selection", error); }
+  };
+
+  const handleProcessBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("processTitle", data.processTitle || "");
+      formData.append("processDescription", data.processDescription || "");
+      if (data.processSteps) {
+        data.processSteps.forEach((step, i) => {
+          formData.append(`processes[${i}].title`, step.title || "");
+          formData.append(`processes[${i}].desc`, step.description || "");
+          formData.append(`processes[${i}].icon`, step.icon || "");
+        });
+      }
+      await setWhyBuyProcess(formData);
+    } catch (error) { console.error("Error updating process", error); }
+  };
+
+  const handleInspectionBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("inspectionTitle", data.inspectionTitle || "");
+      formData.append("inspectionDescription", data.inspectionText || "");
+      formData.append("inspectionTemplateId1", "1");
+      if (data.inspectionPoints) {
+        data.inspectionPoints.forEach((pt, i) => {
+          formData.append(`inspectionPoints[${i}]`, pt || "");
+        });
+      }
+      await setWhyBuyInspection(formData);
+    } catch (error) { console.error("Error updating inspection", error); }
+  };
+
+  const handleCustomerCommitmentBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("customerCommitmentTitle", data.customerCommitmentTitle || "");
+      formData.append("customerCommitmentDescription", data.customerCommitmentDescription || "");
+      await setWhyBuyCustomerCommitment(formData);
+    } catch (error) { console.error("Error updating customer commitment", error); }
+  };
+
+  // Toggle review selection
+  const toggleReviewSelection = (reviewId) => {
+    setSelectedReviewIds((prev) => {
+      const updated = prev.includes(reviewId)
+        ? prev.filter((id) => id !== reviewId)
+        : [...prev, reviewId];
+
+      // Build featuredReviews from selected IDs
+      const selectedReviews = allReviews
+        .filter((r) => updated.includes(r.id))
+        .map((r) => ({
+          id: r.id,
+          reviewerName: `${r.reviewedBy?.firstname || ""} ${r.reviewedBy?.lastname || ""}`.trim(),
+          rating: r.rating,
+          reviewTitle: r.reviewTitle,
+          reviewText: r.reviewText,
+        }));
+
+      updateField("featuredReviews", selectedReviews);
+
+      // Auto-save to API with review IDs
+      setFeaturedReviews(updated).catch((err) =>
+        console.error("Error saving featured reviews", err)
+      );
+
+      return updated;
+    });
+  };
+
+  const handleTestimonialBlur = async () => {
+    try {
+      await setFeaturedReviews(selectedReviewIds);
+    } catch (error) { console.error("Error updating featured reviews", error); }
+  };
+
+  // ── EDIT MODE ──
+
+  if (isEditing) {
+    return (
+      <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10 bg-black/20">
+        {/* HERO */}
+        <div className="space-y-6">
+          <h3 className="text-white font-bold mb-4">Hero Section</h3>
+          <EditorInput
+            label="Hero Title"
+            value={data.whyBuyHeroTitle}
+            onChange={(e) => updateField("whyBuyHeroTitle", e.target.value)}
+            onBlur={handleHeroBlur}
+          />
+          <RichTextEditor
+            label="Hero Description"
+            value={data.whyBuyHeroDescription}
+            onChange={(v) => updateField("whyBuyHeroDescription", v)}
+            onBlur={handleHeroBlur}
+          />
+        </div>
+
+        <hr className="border-white/10" />
+
+        {/* STORY */}
+        <div className="space-y-6">
+          <h3 className="text-white font-bold mb-4">Story Section</h3>
+          <EditorInput
+            label="Story Title"
+            value={data.storyTitle}
+            onChange={(e) => updateField("storyTitle", e.target.value)}
+            onBlur={handleStoryBlur}
+          />
+          <RichTextEditor
+            label="Story Description"
+            value={data.storyDescription}
+            onChange={(v) => updateField("storyDescription", v)}
+            onBlur={handleStoryBlur}
+          />
+        </div>
+
+        <hr className="border-white/10" />
+
+        {/* VEHICLE SELECTION */}
+        <div className="space-y-6">
+          <h3 className="text-white font-bold mb-4">
+            Vehicle Selection Section
+          </h3>
+          <EditorInput
+            label="Vehicle Selection Title"
+            value={data.vehicleSelectionTitle}
+            onChange={(e) =>
+              updateField("vehicleSelectionTitle", e.target.value)
+            }
+            onBlur={handleVehicleSelectionBlur}
+          />
+          <RichTextEditor
+            label="Vehicle Selection Description"
+            value={data.vehicleSelectionDescription}
+            onChange={(v) => updateField("vehicleSelectionDescription", v)}
+            onBlur={handleVehicleSelectionBlur}
+          />
+        </div>
+
+        <hr className="border-white/10" />
+
+        {/* PROCESS */}
+        <div className="space-y-6">
+          <h3 className="text-white font-bold mb-4">Process Section</h3>
+          <EditorInput
+            label="Process Title"
+            value={data.processTitle}
+            onChange={(e) => updateField("processTitle", e.target.value)}
+            onBlur={handleProcessBlur}
+          />
+          <RichTextEditor
+            label="Process Description"
+            value={data.processDescription}
+            onChange={(v) => updateField("processDescription", v)}
+            onBlur={handleProcessBlur}
+          />
+
+          <h4 className="text-white font-semibold mt-6 mb-4">Process Steps</h4>
+          <div className="grid md:grid-cols-2 gap-4">
+            {data.processSteps.map((step, i) => (
+              <div
+                key={i}
+                className="border border-white/10 p-4 rounded-lg space-y-4"
+              >
+                <div>
+                  <label className="text-sm font-medium text-white mb-1 block">
+                    Title
+                  </label>
+                  <EditorInput
+                    value={step.title}
+                    onChange={(e) =>
+                      updateArrayItem(
+                        "processSteps",
+                        i,
+                        "title",
+                        e.target.value,
+                      )
+                    }
+                    onBlur={handleProcessBlur}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-white mb-1 block">
+                    Description
+                  </label>
+                  <EditorInput
+                    value={step.description}
+                    onChange={(e) =>
+                      updateArrayItem(
+                        "processSteps",
+                        i,
+                        "description",
+                        e.target.value,
+                      )
+                    }
+                    onBlur={handleProcessBlur}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-white mb-1 block">
+                    Icon
+                  </label>
+                  <Select
+                    options={SVG_OPTIONS}
+                    formatOptionLabel={formatOptionLabel}
+                    styles={selectStyles}
+                    value={
+                      SVG_OPTIONS.find((opt) => opt.value === step.icon) || null
+                    }
+                    onChange={(selectedOption) => {
+                      updateArrayItem(
+                        "processSteps",
+                        i,
+                        "icon",
+                        selectedOption.value,
+                      );
+                      handleProcessBlur();
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <hr className="border-white/10" />
+
+        {/* INSPECTION */}
+        <div className="space-y-6">
+          <h3 className="text-white font-bold mb-4">Inspection Section</h3>
+          <EditorInput
+            label="Inspection Title"
+            value={data.inspectionTitle}
+            onChange={(e) => updateField("inspectionTitle", e.target.value)}
+            onBlur={handleInspectionBlur}
+          />
+          <RichTextEditor
+            label="Inspection Text"
+            value={data.inspectionText}
+            onChange={(v) => updateField("inspectionText", v)}
+            onBlur={handleInspectionBlur}
+          />
+          <h4 className="text-white font-semibold mt-4">Inspection Points</h4>
+          {data.inspectionPoints.map((pt, i) => (
+            <EditorInput
+              key={i}
+              label={`Point ${i + 1}`}
+              value={pt}
+              onChange={(e) => {
+                const newArr = [...data.inspectionPoints];
+                newArr[i] = e.target.value;
+                updateField("inspectionPoints", newArr);
+              }}
+              onBlur={handleInspectionBlur}
+            />
+          ))}
+        </div>
+
+        <hr className="border-white/10" />
+
+        {/* CUSTOMER COMMITMENT */}
+        <div className="space-y-6">
+          <h3 className="text-white font-bold mb-4">
+            Customer Commitment Section
+          </h3>
+          <EditorInput
+            label="Commitment Title"
+            value={data.customerCommitmentTitle}
+            onChange={(e) =>
+              updateField("customerCommitmentTitle", e.target.value)
+            }
+            onBlur={handleCustomerCommitmentBlur}
+          />
+          <RichTextEditor
+            label="Commitment Description"
+            value={data.customerCommitmentDescription}
+            onChange={(v) => updateField("customerCommitmentDescription", v)}
+            onBlur={handleCustomerCommitmentBlur}
+          />
+        </div>
+
+        <hr className="border-white/10" />
+
+        {/* TESTIMONIALS — select from real reviews */}
+        <div>
+          <h3 className="text-white font-bold mb-4">Featured Reviews</h3>
+
+          <EditorInput
+            label="Section Title"
+            value={data.testimonialTitle}
+            onChange={(e) => updateField("testimonialTitle", e.target.value)}
+            onBlur={handleTestimonialBlur}
+          />
+
+          <p className="text-third text-sm mb-4 mt-2">
+            Select which customer reviews to feature on your storefront.
+          </p>
+
+          {allReviews.length === 0 && (
+            <p className="text-third/60 text-sm italic">No reviews found.</p>
+          )}
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {allReviews.map((review) => {
+              const isSelected = selectedReviewIds.includes(review.id);
+              const reviewerName = `${review.reviewedBy?.firstname || ""} ${review.reviewedBy?.lastname || ""}`.trim();
+
+              return (
+                <div
+                  key={review.id}
+                  onClick={() => toggleReviewSelection(review.id)}
+                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${isSelected
+                    ? "border-fourth bg-fourth/10 shadow-md"
+                    : "border-third/20 bg-primary/5 hover:border-third/40"
+                    }`}
+                >
+                  {/* Selection indicator */}
+                  <div className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected
+                    ? "border-fourth bg-fourth"
+                    : "border-third/40"
+                    }`}>
+                    {isSelected && (
+                      <CheckCircle2 size={14} className="text-secondary" />
+                    )}
+                  </div>
+
+                  {/* Stars */}
+                  <div className="flex gap-0.5 mb-2">
+                    {[...Array(5)].map((_, idx) => (
+                      <Star
+                        key={idx}
+                        size={13}
+                        className={idx < review.rating ? "text-fourth fill-fourth" : "text-third/30"}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Review Title */}
+                  {review.reviewTitle && (
+                    <h4 className="text-primary font-semibold text-sm mb-1">
+                      {review.reviewTitle}
+                    </h4>
+                  )}
+
+                  {/* Review Text */}
+                  <p className="text-third text-sm leading-relaxed line-clamp-3">
+                    {review.reviewText}
+                  </p>
+
+                  {/* Reviewer */}
+                  <p className="text-primary/70 text-xs font-medium mt-3">
+                    — {reviewerName}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── FRONT MODE ──
+
+  return (
+    <>
+      {/* SECTION 1 — HERO */}
+      <section className="relative flex items-center justify-center overflow-hidden min-h-screen py-12">
+        <div className="w-[70%] mx-auto text-center">
+          <EyeBrow center>Why Choose Us</EyeBrow>
+          <motion.h1
+            className="text-[clamp(28px,5vw,54px)] font-bold leading-[1.15] text-primary font-[Montserrat] mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
+          >
+            {data.whyBuyHeroTitle}
+          </motion.h1>
+          <motion.div
+            className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+            dangerouslySetInnerHTML={{ __html: data.whyBuyHeroDescription }}
+          />
+        </div>
+      </section>
+
+      {/* SECTION 2 — STORY */}
+      <section className="py-12 px-2 lg:px-4 bg-fourth">
+        <div className="container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7 }}
+              viewport={{ once: true }}
+            >
+              <EyeBrow>Our Story</EyeBrow>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                Our <span className="text-secondary">{data.storyTitle}</span>
+              </h2>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.12 }}
+              viewport={{ once: true }}
+              className="flex flex-col gap-4"
+            >
+              <div
+                className="text-primary/90 text-[15px] leading-[1.9] font-[Poppins]"
+                dangerouslySetInnerHTML={{ __html: data.storyDescription }}
+              />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 3 — SELECTION */}
+      <section className="py-12 px-2 lg:px-4">
+        <div className="container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7 }}
+              viewport={{ once: true }}
+            >
+              <EyeBrow>Selection</EyeBrow>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                Our Approach to
+                <br />
+                <span className="text-fourth/80">Vehicle Selection</span>
+              </h2>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.12 }}
+              viewport={{ once: true }}
+            >
+              <Divider />
+              <div
+                className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]"
+                dangerouslySetInnerHTML={{ __html: data.vehicleSelectionDescription }}
+              />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 4 — PROCESS */}
+      <section className="py-12 px-2 lg:px-4">
+        <div className="container">
+          <div className="flex flex-col gap-3 mb-10">
+            <EyeBrow>Process</EyeBrow>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+              {data.processTitle} <span className="text-fourth/80">Works</span>
+            </h2>
+            <p className="text-third/60 text-[15px] font-[Poppins] leading-relaxed max-w-md">
+              {data.processDescription}
+            </p>
+          </div>
+
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"
+            variants={stagger}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+          >
+            {data.processSteps.map((s, i) => (
+              <motion.div
+                key={i}
+                variants={fadeUp}
+                className="group relative border border-third/10 rounded-2xl p-7 flex flex-col gap-5 hover:border-primary/30 transition-all duration-300 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+              >
+                <span className="font-[Montserrat] font-bold text-[11px] tracking-[0.18em] text-third/40 absolute top-5 right-5">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div className="w-10 h-10 border border-third/20 rounded-xl flex items-center justify-center shrink-0 group-hover:border-primary/30 transition-colors duration-300">
+                  {typeof s.icon === 'string' && s.icon.startsWith('<svg') ? (
+                    <div
+                      className="text-fourth [&>svg]:w-5 [&>svg]:h-5"
+                      dangerouslySetInnerHTML={{ __html: s.icon }}
+                    />
+                  ) : (
+                    <div className="w-5 h-5 bg-third/20 rounded flex items-center justify-center text-xs text-fourth">
+                      Icon
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <p className="font-[Montserrat] font-semibold text-[13px] text-fourth mb-2">
+                    {s.title}
+                  </p>
+                  <p className="font-[Poppins] text-[12px] text-third/65 leading-[1.8]">
+                    {s.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* SECTION 5 — INSPECTION */}
+      <section className="py-12 px-2 lg:px-4">
+        <div className="container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7 }}
+              viewport={{ once: true }}
+            >
+              <EyeBrow>Inspection</EyeBrow>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                {data.inspectionTitle}{" "}
+                <span className="text-fourth/80">Assurance</span>
+              </h2>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              viewport={{ once: true }}
+            >
+              <Divider />
+              <p className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]">
+                {data.inspectionText}
+              </p>
+            </motion.div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-stretch">
+            <motion.div
+              className="grid grid-cols-2 gap-3"
+              variants={stagger}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true }}
+            >
+              {data.inspectionPoints.map((pt) => (
+                <motion.div
+                  key={pt}
+                  variants={fadeUp}
+                  className="group flex flex-col gap-4 p-6 border border-third/10 rounded-2xl hover:border-primary/25 transition-all duration-300 hover:shadow-[0_6px_28px_rgba(0,0,0,0.35)]"
+                >
+                  <div className="w-8 h-8 rounded-lg border-[1.5px] border-fourth flex items-center justify-center shrink-0">
+                    <svg width="12" height="10" viewBox="0 0 10 8" fill="none">
+                      <path
+                        d="M1 4L3.8 7L9 1"
+                        stroke="#007bff"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <span className="font-[Poppins] text-sm text-third/70 leading-[1.7] group-hover:text-primary/80 transition-colors duration-300">
+                    {pt}
+                  </span>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            <motion.div
+              className="border border-third/10 rounded-2xl overflow-hidden hover:border-primary/25 transition-all duration-300 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)]"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.15 }}
+              viewport={{ once: true }}
+            >
+              <div className="px-6 py-5 border-b border-primary/[0.07] flex items-center justify-between">
+                <p className="font-[Montserrat] font-bold text-[9px] tracking-[0.26em] uppercase text-primary/50">
+                  {"What's Covered"}
+                </p>
+                <span className="font-[Montserrat] font-bold text-[9px] tracking-[0.16em] uppercase text-primary">
+                  Status
+                </span>
+              </div>
+              {data.inspectionPoints.map((pt, i, arr) => (
+                <motion.div
+                  key={pt}
+                  className={`flex justify-between items-center px-6 py-[18px] transition-colors duration-150 hover:bg-primary/4 ${i < arr.length - 1 ? "border-b border-primary/6" : ""}`}
+                  initial={{ opacity: 0, x: 10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 + i * 0.07 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="font-[Montserrat] font-bold text-[10px] tracking-[0.14em] text-fourth">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="font-[Poppins] text-sm text-third/70">
+                      {pt}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-fourth" />
+                    <span className="font-[Montserrat] font-bold text-[9px] tracking-[0.16em] uppercase text-primary">
+                      Included
+                    </span>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 6 — COMMITMENT */}
+      <section className="py-12 px-2 lg:px-4 bg-fourth">
+        <div className="container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7 }}
+              viewport={{ once: true }}
+            >
+              <EyeBrow>Commitment</EyeBrow>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                {data.customerCommitmentTitle}{" "}
+                <span className="text-secondary">Commitment</span>
+              </h2>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              viewport={{ once: true }}
+            >
+              <Divider light />
+              <div
+                className="text-primary/90 text-[15px] leading-[1.9] font-[Poppins]"
+                dangerouslySetInnerHTML={{ __html: data.customerCommitmentDescription }}
+              />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 7 — FEATURED REVIEWS */}
+      <section className="py-12 px-2 lg:px-4">
+        <div className="container">
+          <div className="flex flex-col gap-3 mb-12">
+            <EyeBrow>Reviews</EyeBrow>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+              {data.testimonialTitle}{" "}
+              <span className="text-fourth/80">Experience</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {(data.featuredReviews || data.testimonials || []).map((t, i) => (
+              <div
+                key={t.id || i}
+                className="group border border-primary/40 rounded-2xl p-8 flex flex-col gap-5 hover:border-primary/25 transition-all duration-300 hover:shadow-[0_8px_36px_rgba(0,0,0,0.4)] h-full"
+              >
+                {/* Stars */}
+                {t.rating && (
+                  <div className="flex gap-1">
+                    {[...Array(5)].map((_, idx) => (
+                      <Star
+                        key={idx}
+                        size={15}
+                        className={idx < (t.rating || 0) ? "text-fourth fill-fourth" : "text-third/30"}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {!t.rating && (
+                  <Quote
+                    size={20}
+                    className="text-fourth"
+                    strokeWidth={1.4}
+                  />
+                )}
+
+                {/* Review Title */}
+                {t.reviewTitle && (
+                  <h4 className="font-[Montserrat] font-semibold text-[13px] text-primary">
+                    {t.reviewTitle}
+                  </h4>
+                )}
+
+                {/* Review Text */}
+                <p className="font-[Poppins] text-sm leading-[1.86] text-third/70 italic flex-1">
+                  {t.reviewText || t.review}
+                </p>
+
+                <div className="w-full h-px bg-primary/[0.07]" />
+
+                {/* Reviewer Info */}
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full border border-third/20 flex items-center justify-center font-bold text-[13px] text-fourth shrink-0">
+                    {(t.reviewerName || t.name)?.[0] || "?"}{" "}
+                  </div>
+                  <div>
+                    <p className="font-[Montserrat] font-semibold text-[13px] text-primary">
+                      {t.reviewerName || t.name}
+                    </p>
+                    <p className="font-[Poppins] text-[11px] text-third/50">
+                      Verified Buyer
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

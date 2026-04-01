@@ -13,6 +13,7 @@ import {
   setAboutServices
 } from "@/services/theme.service";
 import Select from "react-select";
+import { ABOUT_BASIC_1 } from "@/core/engine/schemas/about/basic/about_basic_1";
 
 const SVG_OPTIONS = [
   {
@@ -45,9 +46,9 @@ const selectStyles = {
     color: "white",
     minHeight: "44px"
   }),
-  
+
   indicatorSeparator: () => ({
-    display: "none" 
+    display: "none"
   }),
 
   singleValue: (base) => ({
@@ -76,8 +77,14 @@ const formatOptionLabel = ({ value, label }) => (
   </div>
 );
 
-function AboutBasic1({ data, isEditing, onUpdate }) {
-  if (!data) return null;
+const DEFAULT_DATA = ABOUT_BASIC_1[0].data;
+
+function AboutBasic1({ data: rawData, isEditing, onUpdate }) {
+  const data = { ...DEFAULT_DATA, ...Object.fromEntries(
+    Object.entries(rawData || {}).filter(([, v]) => v !== undefined && v !== null)
+  ) };
+
+  if (!rawData) return null;
 
   const updateField = (field, value) => {
     onUpdate({ ...data, [field]: value });

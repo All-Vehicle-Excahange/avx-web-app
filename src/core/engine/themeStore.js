@@ -8,6 +8,8 @@ import { ABOUT_PRO_2 } from "./schemas/about/pro/about_pro_2";
 import { ABOUT_PRO_3 } from "./schemas/about/pro/about_pro_3";
 import { ABOUT_PREMIUM_3 } from "./schemas";
 import { WHY_BUY_BASIC_1 } from "./schemas/whybuy/why_buy_basic_1";
+import { WHY_BUY_BASIC_2 } from "./schemas/whybuy/why_buy_basic_2";
+import { WHY_BUY_BASIC_3 } from "./schemas/whybuy/why_buy_basic_3";
 
 export const THEME_STORE = [
   {
@@ -26,7 +28,7 @@ export const THEME_STORE = [
     category: "about",
     thumbnail: "/About us-basic-1.webp",
     preview: "/About us-basic-1.webp",
-    schema: ABOUT_BASIC_2,
+    schema: [...ABOUT_BASIC_2, ...WHY_BUY_BASIC_2],
   },
   {
     id: "about_basic_3",
@@ -35,7 +37,7 @@ export const THEME_STORE = [
     category: "about",
     thumbnail: "/About us-basic-1.webp",
     preview: "/About us-basic-1.webp",
-    schema: ABOUT_BASIC_3,
+    schema: [...ABOUT_BASIC_3, ...WHY_BUY_BASIC_3],
   },
 
   {
