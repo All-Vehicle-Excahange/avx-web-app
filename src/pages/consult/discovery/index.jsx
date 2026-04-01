@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, Suspense } from "react";
+import Head from "next/head";
+import { useSearchParams } from "next/navigation";
 import FilterWithCard from "@/components/features/consult/search/FilterWithCard";
 import SearchWithHeader from "@/components/features/consult/search/SearchWithHeader";
 import DownloadAppSection from "@/components/features/home/DownloadAppSection";
@@ -16,7 +18,46 @@ function Index() {
   const [pageResponse, setPageResponse] = useState({ totalElements: 0, totalPages: 0, currentPage: 1 });
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SearchContent
+        activeFilters={activeFilters}
+        setActiveFilters={setActiveFilters}
+        pageResponse={pageResponse}
+        setPageResponse={setPageResponse}
+      />
+    </Suspense>
+  );
+}
+
+function SearchContent({ activeFilters, setActiveFilters, pageResponse, setPageResponse }) {
+  const searchParams = useSearchParams();
+  const location = searchParams.get("location");
+  const serviceParam = searchParams.get("service");
+
+  const getDynamicTitle = () => {
+    let serviceText = "";
+    if (serviceParam) {
+      serviceText = serviceParam
+        .split("_")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+        .join(" ") + " ";
+    }
+
+    let title = `${serviceText}Expert Car Consultants`;
+    if (location) {
+      title += ` in ${location}`;
+    }
+    return `${title} | Reecomm`;
+  };
+
+  const dynamicTitle = getDynamicTitle();
+
+  return (
     <>
+      <Head>
+        <title>{dynamicTitle}</title>
+        <meta name="description" content={`Find the best ${serviceParam || "expert car consultants"}${location ? ` in ${location}` : ""}. Personalized and expert assistance with Reecomm.`} />
+      </Head>
       <SearchWithHeader activeFilters={activeFilters} pageResponse={pageResponse} />
 
       <Layout>

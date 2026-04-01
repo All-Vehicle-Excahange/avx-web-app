@@ -17,10 +17,16 @@ import FooterLink from "@/components/layout/FooterLink";
 import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
 import BecameBanner from "@/components/features/home/BecameBanner";
+import Head from "next/head";
 
 export default function Home() {
   return (
     <>
+      <Head>
+        <title>Reecomm - Buy & Sell Used Cars Online in India | Best Deals on Second Hand Cars</title>
+        <meta name="description" content="Certified and verified second-hand cars for sale. Buy and sell used cars online at best prices with Reecomm. Expert inspection and transparent process." />
+        <meta name="keywords" content="buy used cars, sell used cars, second hand cars, certified pre-owned cars, car inspection, Reecomm" />
+      </Head>
       <HeroSection fullWidth />
       {/* <RecentlyVisitedSection /> */}
       <Layout>
