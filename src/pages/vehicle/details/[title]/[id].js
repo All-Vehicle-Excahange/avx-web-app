@@ -8,7 +8,7 @@ import Layout from "@/components/layout/Layout";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-function index() {
+function Index() {
   const router = useRouter();
   const { title } = router.query;
   const slug = title
@@ -40,4 +40,4 @@ export function getServerSideProps() {
   };
 }
 
-export default index;
+export default Index;
