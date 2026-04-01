@@ -11,13 +11,14 @@ import Image from "next/image";
 import { useState } from "react";
 import Button from "@/components/ui/button";
 import { useRouter } from "next/router";
+import { createSlug } from "@/lib/helper";
 
 export default function FeaturedVehicleCard({ data }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const router = useRouter();
 
   const handleClick = () => {
-    router.push("/vehicle/details?source=home");
+    router.push(`/vehicle/details/${createSlug(data?.title)}/${data?.id}?source=home`);
   };
 
   return (

@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { getSellerTierTitle } from "@/lib/helper";
+import { getSellerTierTitle, createSlug } from "@/lib/helper";
 import { useRouter } from "next/router";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 
@@ -64,7 +64,7 @@ export default function TopPerformingCard({ vehicle, rank }) {
 
                             {/* Always visible */}
                             <Link
-                                href={`/vehicle/details/${vehicle.id}`}
+                                href={`/vehicle/details/${createSlug(vehicleTitle)}/${vehicle.id}`}
                                 className="block px-4 py-2 text-sm hover:bg-primary/5 text-primary"
                             >
                                 View Listing
@@ -107,7 +107,7 @@ export default function TopPerformingCard({ vehicle, rank }) {
                         src={vehicleImage}
                         alt={vehicleTitle}
                         fill
-                        onClick={() => router.push(`/vehicle/details/${vehicle.id}`)}
+                        onClick={() => router.push(`/vehicle/details/${createSlug(vehicleTitle)}/${vehicle.id}`)}
                         className="object-cover cursor-pointer"
 
                     />

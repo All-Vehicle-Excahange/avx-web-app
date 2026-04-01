@@ -44,3 +44,14 @@ export const getResponseStatus = (minutes) => {
 
     return { label: "Bad", color: "text-red-600" };
 };
+
+export const createSlug = (text = "") => {
+    return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/&/g, "and")           // replace &
+        .replace(/[^\w\s-]/g, "")       // remove special chars
+        .replace(/\s+/g, "-")           // spaces → -
+        .replace(/--+/g, "-");          // remove multiple -
+};

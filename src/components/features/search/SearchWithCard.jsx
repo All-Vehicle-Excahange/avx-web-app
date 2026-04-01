@@ -1233,12 +1233,12 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-[20px]">
+    <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-[20px] gap-4">
       {/* ================= DESKTOP SIDEBAR ================= */}
       <aside
         className="
           hidden lg:flex
-          w-[340px]
+          w-[328px]
           border border-third/40
           p-4
           flex-col
@@ -1688,7 +1688,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
 
       {/* ================= MAIN CONTENT ================= */}
       <main className="flex-1">
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 auto-rows-max sm:px-5 md:px-0 lg:px-6 py-4 sm:py-5 lg:py-0">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-4 auto-rows-max py-4 sm:py-5 lg:py-0">
           <div className="col-span-full mb-10">
             <PromoCardRow />
           </div>
