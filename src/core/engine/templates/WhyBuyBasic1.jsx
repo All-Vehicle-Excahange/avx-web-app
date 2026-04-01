@@ -15,6 +15,7 @@ import { setWhyBuyHero, setWhyBuyStory, setWhyBuyVehicleSelection, setWhyBuyProc
 import { getAllReview } from "@/services/user.service";
 import { useEffect, useState } from "react";
 import Select from "react-select";
+import { WHY_BUY_BASIC_1 } from "@/core/engine/schemas/whybuy/why_buy_basic_1";
 
 const SVG_OPTIONS = [
   {
@@ -83,7 +84,14 @@ const ICON_MAP = {
 
 
 
-function WhyBuyBasic1({ data, isEditing, onUpdate }) {
+const DEFAULT_DATA = WHY_BUY_BASIC_1[0].data;
+
+function WhyBuyBasic1({ data: rawData, isEditing, onUpdate }) {
+  const data = {
+    ...DEFAULT_DATA, ...Object.fromEntries(
+      Object.entries(rawData || {}).filter(([, v]) => v !== undefined && v !== null)
+    )
+  };
 
   const [allReviews, setAllReviews] = useState([]);
   const [selectedReviewIds, setSelectedReviewIds] = useState([]);
@@ -102,7 +110,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
 
   // Fetch all reviews (no auto-selection)
   useEffect(() => {
-    if (!data) return null;
+    if (!rawData) return null;
     const fetchReviews = async () => {
       try {
         const params = { pageNo: 1, size: 20 };
@@ -389,14 +397,14 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
             onChange={(e) => updateField("inspectionTitle", e.target.value)}
             onBlur={handleInspectionBlur}
           />
-             <h3 className="text-primary font-bold mb-4">Inspection Description</h3>
+          <h3 className="text-primary font-bold mb-4">Inspection Description</h3>
 
           <RichTextEditor
             value={data.inspectionText}
             onChange={(v) => updateField("inspectionText", v)}
             onBlur={handleInspectionBlur}
           />
-               <h3 className="text-primary font-bold mb-4">Inspection Points</h3>
+          <h3 className="text-primary font-bold mb-4">Inspection Points</h3>
 
           {data.inspectionPoints.map((pt, i) => (
             <EditorInput
@@ -533,7 +541,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
               font-[Montserrat]"
           >
             {data.whyBuyHeroTitle}
-            <span className="text-fourth/80"> Auto Consultants</span>
+
           </h2>
 
           <div
@@ -551,7 +559,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
           </p>
 
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold leading-[1.1] text-secondary font-[Montserrat]">
-            Our <span className="text-fourth">{data.storyTitle}</span>
+            <span className="text-secondary">{data.storyTitle}</span>
           </h2>
 
           {/* TEXT */}
@@ -573,7 +581,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
             {data.vehicleSelectionTitle}
-            <span className="text-fourth/80">Vehicle Selection</span>
+            <span className="text-primary/80">Vehicle Selection</span>
           </h2>
 
           {/* ── DESCRIPTION ───────────────── */}
@@ -602,7 +610,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
             </p>
 
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold leading-[1.1] text-primary font-[Montserrat]">
-              {data.processTitle} <span className="text-fourth/80">Works</span>
+              {data.processTitle}
             </h2>
 
             <div
@@ -661,8 +669,8 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
             </p>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-              {data.inspectionTitle}{" "}
-              <span className="text-fourth/80">Assurance</span>
+              {data.inspectionTitle}
+
             </h2>
 
             <div
@@ -699,7 +707,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
               {data.customerCommitmentTitle}{" "}
-              <span className="text-fourth/80">Commitment</span>
+              
             </h2>
 
             {/* subtle divider */}
@@ -723,7 +731,7 @@ function WhyBuyBasic1({ data, isEditing, onUpdate }) {
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1] text-secondary font-[Montserrat]">
               {data.testimonialTitle}{" "}
-              <span className="text-fourth">Experience</span>
+             
             </h2>
           </div>
 

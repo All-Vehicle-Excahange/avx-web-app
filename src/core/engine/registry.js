@@ -8,6 +8,8 @@ import AboutPro1 from "./templates/AboutPro1";
 import AboutPro2 from "./templates/AboutPro2";
 import AboutPro3 from "./templates/AboutPro3";
 import WhyBuyBasic1 from "./templates/WhyBuyBasic1";
+import WhyBuyBasic2 from "./templates/WhyBuyBasic2";
+import WhyBuyBasic3 from "./templates/WhyBuyBasic3";
 
 export const TEMPLATE_REGISTRY = {
   about_us_theme_basic_1: AboutBasic1,
@@ -20,4 +22,6 @@ export const TEMPLATE_REGISTRY = {
   about_us_theme_premium_2: AboutPremium2,
   about_us_theme_premium_3: AboutPremium3,
   why_buy_theme_basic_1: WhyBuyBasic1,
+  why_buy_theme_basic_2: WhyBuyBasic2,
+  why_buy_theme_basic_3: WhyBuyBasic3,
 };

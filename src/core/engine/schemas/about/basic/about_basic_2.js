@@ -3,74 +3,67 @@ export const ABOUT_BASIC_2 = [
     id: "about_basic_2",
     type: "about_us_theme_basic_2",
     data: {
-      headline: "LOREM IPSUM DOLOR SIT AMET CONSUR. NAM VULPUTATE",
-
-      // Used in Hero + Stats right side paragraph
-      subHeadline: `
-        <p>
-          Aliquet diam erat dui. Nam id ipsum dolor sit amet consectetur. 
-          Nam massa mi vulputate sit nisl. 
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-          Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
-      `,
-
-      // Stats Cards
-      statsDescription:
-        "<p>Write your stats section paragraph here. Lorem ipsum dolor sit amet consectetur.loremWrite your stats section paragraph here. Lorem ipsum dolor sit amet consectetur.loremWrite your stats section paragraph here. Lorem ipsum dolor sit amet consectetur.loremWrite your stats section paragraph here. Lorem ipsum dolor sit amet consectetur.lorem </p>",
-      stats: [
-        { number: "200+", label: "Happy Customers" },
-        { number: "456+", label: "Working Hours" },
-        { number: "250+", label: "Vehicles Sold" },
-        { number: "98%", label: "Client Satisfaction" },
-      ],
-
-      // Mission & Vision
+      heroTitle: "Our Story Built for Buy & Selling a Vehicle",
+      heroDescription: `Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
+    Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
+    Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
+    Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
+    Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
+    Sapien platea nec urna ut est sed.`,
       missionTitle: "Our Mission",
-      missionDescription: `
-        <p>
-          To provide transparent, reliable and technology-driven vehicle services
-          that simplify buying and selling for everyone.
-        </p>
-        <p>
-          We focus on trust, speed and customer-first experiences in every interaction.
-        </p>
-      `,
-
+      missionDesc: `
+    <p>
+      Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
+      Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
+      Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
+      Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Lorem ipsum dolor sit amet consectetur.
+      Odio at dolor ut donec. Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur.
+      Odio at dolor ut donec. Sapien platea nec
+    </p>
+  `,
       visionTitle: "Our Vision",
-      visionDescription: `
-        <p>
-          To become India’s most trusted digital automotive marketplace.
-        </p>
-        <p>
-          Building the future of mobility through innovation and verified networks.
-        </p>
-      `,
-
-      // Services
-      servicesTitle: "Our Services",
-      servicesSubtitle: "Everything you need in one automotive platform.",
-
+      visionDesc: `
+    <p>
+      Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
+      Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
+      Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
+      Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Lorem ipsum dolor sit amet consectetur.
+      Odio at dolor ut donec. Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur.
+      Odio at dolor ut donec. Sapien platea nec
+    </p>
+  `,
+      stats: [
+        { number: "150K+", label: "Active Users Worldwide" },
+        { number: "$2B+", label: "Transactions Processed" },
+        { number: "98%", label: "Customer Satisfaction" },
+        { number: "100+", label: "Team Members" },
+      ],
+      servicesTitle: "What We Do",
+      servicesDesc: `
+    <p>
+      Enterprise-grade digital products designed to scale globally with security, speed and reliability.
+    </p>
+  `,
       services: [
         {
-          icon: "✻",
-          title: "Discover Vehicles",
-          desc: "Browse verified cars, bikes and commercial vehicles easily.",
-        },
-        {
-          icon: "◆",
-          title: "Sell Faster",
-          desc: "List your vehicle and connect with genuine buyers instantly.",
-        },
-        {
-          icon: "□",
-          title: "Consult Experts",
-          desc: "Get pricing, documentation and inspection assistance.",
-        },
-        {
-          icon: "✻",
+          icon: "ShieldCheck",
           title: "Secure Payments",
-          desc: "End-to-end protected and transparent payment flow.",
+          desc: "PCI-DSS compliant global payment systems.",
+        },
+        {
+          icon: "Globe",
+          title: "Global Infrastructure",
+          desc: "99.99% uptime cloud deployment in 12 regions.",
+        },
+        {
+          icon: "TrendingUp",
+          title: "Growth Tools",
+          desc: "Smart CRM, analytics and automation funnels.",
+        },
+        {
+          icon: "Cpu",
+          title: "AI Optimization",
+          desc: "AI powered performance & conversion engines.",
         },
       ],
     },

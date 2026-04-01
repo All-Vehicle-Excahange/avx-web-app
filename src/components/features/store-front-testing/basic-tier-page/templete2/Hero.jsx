@@ -15,22 +15,20 @@ import {
 /* ─────────────────────────────────────────────
    DATA  (flat structure matching WHY_BUY_HERE_PREMIUM_1 schema)
 ───────────────────────────────────────────── */
+
 const data = {
   /* HERO */
-  heroTitle: "Why Choose Adarsh Auto Consultants",
-  heroDescription:
+  whyBuyHeroTitle: "Why Choose Adarsh Auto Consultants",
+  whyBuyHeroDescription:
     "Buyers trust Adarsh Auto Consultants for transparent communication, reliable vehicle options, and a smooth buying experience. Our goal is to help every buyer make confident vehicle decisions with clear information and professional support.",
-
   /* CONSULTANT STORY */
   storyTitle: "Our Experience",
-  storyText:
+  storyDescription:
     "For over 12 years, Adarsh Auto Consultants has been helping buyers discover reliable vehicles across Gujarat.\n\nOur goal is to maintain a diverse vehicle inventory and provide accurate information so buyers can make confident decisions when purchasing their next vehicle.",
-
   /* VEHICLE SELECTION APPROACH */
-  selectionTitle: "Our Approach to Vehicle Selection",
-  selectionDescription:
+  vehicleSelectionTitle: "Our Approach to Vehicle Selection",
+  vehicleSelectionDescription:
     "Every vehicle listed through our storefront goes through a basic internal evaluation before being presented to buyers. This helps ensure that vehicles listed are suitable for serious buyers and provides a smoother vehicle buying experience.",
-
   /* HOW BUYING WORKS */
   processTitle: "How Buying Works",
   processDescription:
@@ -61,7 +59,6 @@ const data = {
       icon: "Handshake",
     },
   ],
-
   /* AVX INSPECTION */
   inspectionTitle: "AVX Inspection Assurance",
   inspectionText:
@@ -72,14 +69,12 @@ const data = {
     "Visible mechanical components",
     "Photo & video documentation",
   ],
-
   /* CUSTOMER COMMITMENT */
-  commitmentTitle: "Customer Commitment",
-  commitmentText:
+  customerCommitmentTitle: "Customer Commitment",
+  customerCommitmentDescription:
     "Our goal is to maintain transparent communication and assist buyers throughout the vehicle discovery and purchase process. We aim to provide honest guidance and reliable information for every buyer.",
-
   /* TESTIMONIALS */
-  testimonialsTitle: "Customer Experience",
+  testimonialTitle: "Customer Experience",
   testimonials: [
     {
       name: "Rahul Patel",

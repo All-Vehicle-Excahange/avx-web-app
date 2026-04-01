@@ -1,25 +1,24 @@
-export const WHY_BUY_BASIC_1 = [
+export const WHY_BUY_BASIC_2 = [
   {
-    id: "why_buy_basic_1",
-    type: "why_buy_theme_basic_1",
+    id: "why_buy_basic_2",
+    type: "why_buy_theme_basic_2",
     data: {
+      /* HERO */
       whyBuyHeroTitle: "Why Choose Adarsh Auto Consultants",
       whyBuyHeroDescription:
         "Buyers trust Adarsh Auto Consultants for transparent communication, reliable vehicle options, and a smooth buying experience. Our goal is to help every buyer make confident vehicle decisions with clear information and professional support.",
-
+      /* CONSULTANT STORY */
       storyTitle: "Our Experience",
-      storyDescription: `For over 12 years, Adarsh Auto Consultants has been helping buyers discover reliable vehicles across Gujarat.
-
-Our goal is to maintain a diverse vehicle inventory and provide accurate information so buyers can make confident decisions when purchasing their next vehicle.`,
-
+      storyDescription:
+        "For over 12 years, Adarsh Auto Consultants has been helping buyers discover reliable vehicles across Gujarat.\n\nOur goal is to maintain a diverse vehicle inventory and provide accurate information so buyers can make confident decisions when purchasing their next vehicle.",
+      /* VEHICLE SELECTION APPROACH */
       vehicleSelectionTitle: "Our Approach to Vehicle Selection",
       vehicleSelectionDescription:
         "Every vehicle listed through our storefront goes through a basic internal evaluation before being presented to buyers. This helps ensure that vehicles listed are suitable for serious buyers and provides a smoother vehicle buying experience.",
-
+      /* HOW BUYING WORKS */
       processTitle: "How Buying Works",
       processDescription:
         "Buying a vehicle through our storefront is designed to be simple, transparent, and convenient for buyers.",
-
       processSteps: [
         {
           title: "Discover Vehicles",
@@ -46,7 +45,7 @@ Our goal is to maintain a diverse vehicle inventory and provide accurate informa
           icon: "Handshake",
         },
       ],
-
+      /* AVX INSPECTION */
       inspectionTitle: "AVX Inspection Assurance",
       inspectionText:
         "AVX inspection services provide additional transparency by documenting key aspects of the vehicle's condition before purchase.",
@@ -56,11 +55,11 @@ Our goal is to maintain a diverse vehicle inventory and provide accurate informa
         "Visible mechanical components",
         "Photo & video documentation",
       ],
-
+      /* CUSTOMER COMMITMENT */
       customerCommitmentTitle: "Customer Commitment",
       customerCommitmentDescription:
         "Our goal is to maintain transparent communication and assist buyers throughout the vehicle discovery and purchase process. We aim to provide honest guidance and reliable information for every buyer.",
-
+      /* TESTIMONIALS */
       testimonialTitle: "Customer Experience",
       testimonials: [
         {
@@ -84,6 +83,7 @@ Our goal is to maintain a diverse vehicle inventory and provide accurate informa
             "Honest and transparent throughout the entire process. The AVX inspection gave me confidence in my purchase.",
         },
       ],
+      featuredReviews: [],
     },
   },
 ];

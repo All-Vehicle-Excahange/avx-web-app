@@ -4,36 +4,37 @@ import { motion } from "framer-motion";
 import { ShieldCheck, Globe, TrendingUp, Cpu } from "lucide-react";
 
 const iconMap = { ShieldCheck, Globe, TrendingUp, Cpu };
+
 const data = {
   heroTitle: "Our Story Built for Buy & Selling a Vehicle",
-  heroDesc: `Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
+  heroDescription: `Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
     Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
     Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
     Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
     Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
     Sapien platea nec urna ut est sed.`,
   missionTitle: "Our Mission",
-  missionDesc: `Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
-    Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
-    Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
-    Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Lorem ipsum dolor sit amet consectetur.
-    Odio at dolor ut donec. Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur.
-    Odio at dolor ut donec. Sapien platea nec`,
-
+  missionDesc: `
+    <p>
+      Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
+      Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
+      Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
+      Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Lorem ipsum dolor sit amet consectetur.
+      Odio at dolor ut donec. Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur.
+      Odio at dolor ut donec. Sapien platea nec
+    </p>
+  `,
   visionTitle: "Our Vision",
-  visionDesc: `Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
-    Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
-    Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
-    Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Lorem ipsum dolor sit amet consectetur.
-    Odio at dolor ut donec. Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur.
-    Odio at dolor ut donec. Sapien platea nec`,
-  statsDesc: `Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
-    Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
-    Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
-    Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Lorem ipsum dolor sit amet consectetur.
-    Odio at dolor ut donec. Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur.
-    Odio at dolor ut donec. Sapien platea nec`,
-
+  visionDesc: `
+    <p>
+      Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
+      Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
+      Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
+      Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Lorem ipsum dolor sit amet consectetur.
+      Odio at dolor ut donec. Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur.
+      Odio at dolor ut donec. Sapien platea nec
+    </p>
+  `,
   stats: [
     { number: "150K+", label: "Active Users Worldwide" },
     { number: "$2B+", label: "Transactions Processed" },
@@ -41,8 +42,11 @@ const data = {
     { number: "100+", label: "Team Members" },
   ],
   servicesTitle: "What We Do",
-  servicesDesc: `Enterprise-grade digital products designed to scale globally with security, speed and reliability.`,
-
+  servicesDesc: `
+    <p>
+      Enterprise-grade digital products designed to scale globally with security, speed and reliability.
+    </p>
+  `,
   services: [
     {
       icon: "ShieldCheck",
