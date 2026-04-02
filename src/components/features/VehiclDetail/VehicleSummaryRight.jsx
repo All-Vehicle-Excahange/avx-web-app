@@ -23,7 +23,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isAlreadySentOpen, setIsAlreadySentOpen] = useState(false);
-   const [inquiryStatus, setInquiryStatus] = useState(null);
+  const [inquiryStatus, setInquiryStatus] = useState(null);
   const [isCheckingInquiry, setIsCheckingInquiry] = useState(false);
   const [localInquiryCount, setLocalInquiryCount] = useState(vehicle?.totalInquiryCount || 0);
 
@@ -32,7 +32,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
 
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
-   useEffect(() => {
+  useEffect(() => {
     setIsFavorite(vehicle?.isWishlisted || false);
     setLocalInquiryCount(vehicle?.totalInquiryCount || 0);
   }, [vehicle?.isWishlisted, vehicle?.totalInquiryCount]);
@@ -98,13 +98,13 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
       <aside className="relative text-primary rounded-2xl shadow-xl overflow-hidden border border-third/60">
         <div className="relative z-10 p-6 space-y-5">
           {/* HEADER */}
-          <div className="flex items-start justify-between">
+          <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-third">
+              <p className="text-md text-third">
                 Register {vehicle?.yearOfMfg || 2025}
               </p>
 
-              <h2 className="text-2xl font-bold leading-tight">
+              <h2 className="hidden text-2xl font-bold leading-tight">
                 {vehicle?.makerName || "Tata"}{" "}
                 {vehicle?.modelName || "Harrier XZ Plus"}{" "}
                 {vehicle?.variantName || ""}
@@ -132,25 +132,42 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
                 {summary?.consultationName || "Adarsh Auto Consultants"}
               </h3>
 
-              <div className="flex items-center gap-2 text-sm">
-                <Star className="text-yellow-400" size={16} />
-                <span className="font-medium text-primary">
-                  {summary?.averageRating || 0}
-                </span>
-                <span className="text-third">
-                  | {summary?.soldVehiclesCount || 0} Sold Vehicles
-                </span>
+              <div className="flex justify-between items-start pt-1 gap-2">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 text-sm">
+                    <Star className="text-yellow-400" size={16} />
+                    <span className="font-medium text-primary">
+                      {summary?.averageRating || 0}
+                    </span>
+                    <span className="text-third">
+                      | {summary?.soldVehiclesCount || 0} Sold Vehicles
+                    </span>
+                  </div>
+
+                  <p className="flex items-start gap-2 text-sm text-third">
+                    <MapPin size={14} className="mt-0.5 shrink-0" />
+                    <span className="line-clamp-2">
+                      {summary?.address
+                        ? `${summary.address.city}, ${summary.address.state}`
+                        : "Location not available"}
+                    </span>
+                  </p>
+                </div>
+
+                {vehicleOwnerRole === "CONSULTATION" && (
+                  <div className="shrink-0">
+                    <Button
+                      href={`/store-front/${createSlug(summary?.consultationName)}/${summary?.username || 1}`}
+                      variant="outline"
+                      size="sm"
+                      showIcon
+                      className="h-8 py-0 px-3 text-xs"
+                    >
+                      View Storefront
+                    </Button>
+                  </div>
+                )}
               </div>
-
-              <p className="flex items-start gap-2 text-sm text-third">
-                <MapPin size={14} className="mt-0.5 shrink-0" />
-
-                <span className="line-clamp-2">
-                  {summary?.address
-                    ? `${summary.address.city}, ${summary.address.state}`
-                    : "Location not available"}
-                </span>
-              </p>
 
               <div className="space-y-2 mt-4">
                 <p className="text-sm font-medium text-primary">
@@ -174,18 +191,6 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
                 </ul>
               </div>
             </div>
-
-            {vehicleOwnerRole === "CONSULTATION" && (
-              <div className="shrink-0">
-                <Button
-                  href={`/store-front/${createSlug(summary?.consultationName)}/${summary?.username || 1}`}
-                  variant="outline"
-                  showIcon
-                >
-                  View Storefront
-                </Button>
-              </div>
-            )}
           </div>
 
           <div className="border-t border-third/40" />
@@ -234,8 +239,8 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
 
           <div className="border-t border-third/40" />
 
-          {/* ACTION BUTTONS */}
-          <div className="grid grid-cols-2 gap-3 pt-2">
+          {/* ACTION BUTTONS (DESKTOP) */}
+          <div className="hidden lg:grid grid-cols-2 gap-3 pt-2">
             <Button
               variant="ghost"
               size="sm"
@@ -260,6 +265,48 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
           </div>
         </div>
       </aside>
+
+
+      {/* MOBILE STICKY BOTTOM BAR */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-secondary border-t border-third/20 p-3 px-4 flex items-center justify-between lg:hidden backdrop-blur-md bg-secondary/95 shadow-[0_-10px_25px_rgba(0,0,0,0.15)]">
+        <div className="flex flex-col">
+          <p className="text-third text-[10px] uppercase tracking-wider font-semibold">Price</p>
+          <p className="text-xl font-bold text-primary leading-tight">
+            ₹{vehicle?.price?.toLocaleString("en-IN") || "0"}
+          </p>
+        </div>
+
+        <div className="flex gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            showIcon={false}
+            className=""
+            disabled={loading || isCheckingInquiry}
+            onClick={() => {
+              if (!isLoggedIn) {
+                pendingAction.current = 'request';
+                setIsLoginOpen(true);
+              } else {
+                handleRequestInquiry();
+              }
+            }}
+          >
+            {isCheckingInquiry ? "Please wait..." : "Request Vehicle"}
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
+            showIcon={false}
+            className=""
+            onClick={() => setIsDownloadOpen(true)}
+          >
+            Chat
+          </Button>
+        </div>
+      </div>
+
       <LoginPopup
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}

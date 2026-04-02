@@ -7,10 +7,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 /* ================= SORT OPTIONS ================= */
 const sortOptions = [
-  { sortBy: "",                  direction: "",     label: "Recommended" },
-  { sortBy: "price",             direction: "asc",  label: "Price Low → High" },
-  { sortBy: "price",             direction: "desc", label: "Price High → Low" },
-  { sortBy: "listingDate",       direction: "desc", label: "Newest Listed" },
+  { sortBy: "", direction: "", label: "Recommended" },
+  { sortBy: "price", direction: "asc", label: "Price Low → High" },
+  { sortBy: "price", direction: "desc", label: "Price High → Low" },
+  { sortBy: "listingDate", direction: "desc", label: "Newest Listed" },
   { sortBy: "totalInquiryCount", direction: "desc", label: "Most Inquired" },
 ];
 
@@ -50,8 +50,7 @@ export default function SearchHeader({ pageResponse = {}, activeFilters = [] }) 
       </div>
 
       {/* HEADER */}
-      {/* Changed height to h-auto on mobile, increased mobile pt-24 to clear navbar, added pb-4 for bottom spacing */}
-      <section className=" w-full h-auto md:h-[106px] bg-fourth flex items-center pt-24 md:pt-16 pb-4 md:pb-0">
+      <section className="w-full h-[145px] bg-fourth flex items-center pt-16">
         <div className="max-w-screen-2xl w-full mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between gap-4">
 
@@ -86,30 +85,41 @@ export default function SearchHeader({ pageResponse = {}, activeFilters = [] }) 
               <button
                 onClick={() => setOpen((p) => !p)}
                 className="
-                  flex items-center justify-between gap-2
-                  bg-white
-                  border border-primary/25
-                  rounded-lg
-                  px-2 sm:px-3
-                  h-[30px]
-                  w-auto sm:min-w-[180px]
-                  text-[12px]
-                  font-medium
-                  text-secondary
-                  hover:border-secondary/50
-                "
+      flex items-center justify-center sm:justify-between gap-2
+      bg-white
+      border border-primary/25
+      rounded-lg
+      px-2 sm:px-3
+      h-[30px]
+      w-[52px] sm:w-auto
+      cursor-pointer
+      text-[12px]
+      font-medium
+      text-secondary
+      hover:border-secondary/50
+    "
               >
+                {/* Left Content */}
                 <div className="flex items-center gap-2">
                   <ArrowUpDown size={14} className="text-secondary/70" />
-                  {/* Hidden on mobile, inline-block on screens sm and up */}
-                  <span className="hidden sm:inline-block">
+
+                  {/* Match first code behavior (hidden on mobile, visible on lg) */}
+                  <span className="hidden lg:inline-block">
                     {selected.label}
                   </span>
                 </div>
 
+                {/* Match dual-chevron behavior */}
                 <ChevronDown
                   size={14}
-                  className={`transition-transform ${open ? "rotate-180" : ""}`}
+                  className={`sm:hidden transition-transform ${open ? "rotate-180" : ""
+                    }`}
+                />
+
+                <ChevronDown
+                  size={14}
+                  className={`hidden sm:block transition-transform ${open ? "rotate-180" : ""
+                    }`}
                 />
               </button>
 
@@ -117,15 +127,15 @@ export default function SearchHeader({ pageResponse = {}, activeFilters = [] }) 
               {open && (
                 <div
                   className="
-                    absolute right-0 mt-2
-                    w-[180px] sm:w-full
-                    bg-white
-                    text-secondary
-                    border border-primary/20
-                    rounded-lg
-                    shadow-lg
-                    overflow-hidden
-                  "
+        absolute right-0 left-auto mt-2
+        w-48 max-w-[90vw]
+        bg-white 
+        text-secondary
+        border border-primary/20
+        rounded-lg
+        shadow-lg
+        z-[9999]
+      "
                 >
                   {sortOptions.map((option) => (
                     <button
@@ -145,19 +155,19 @@ export default function SearchHeader({ pageResponse = {}, activeFilters = [] }) 
                           params.delete("sortBy");
                           params.delete("direction");
                         }
-                        params.delete("sort"); // clean up old param
+                        params.delete("sort");
 
                         router.push(`?${params.toString()}`);
                       }}
                       className={`
-                        w-full text-left px-3 py-2
-                        text-[12px]
-                        hover:bg-secondary/10
-                        ${selected.label === option.label
+            w-full text-left px-3 py-2
+            text-[12px] cursor-pointer
+            hover:bg-secondary/10
+            ${selected.label === option.label
                           ? "bg-primary/10 font-semibold"
                           : ""
                         }
-                      `}
+          `}
                     >
                       {option.label}
                     </button>

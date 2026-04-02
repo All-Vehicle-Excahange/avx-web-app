@@ -8,7 +8,7 @@ import { getOtp, signup } from "@/services/auth.service";
 import { useForm } from "react-hook-form";
 import { X } from "lucide-react";
 
-export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
+export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSuccess = () => { } }) {
   const {
     register,
     handleSubmit,
@@ -30,6 +30,18 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
     if (isOpen) {
       document.dispatchEvent(new Event("signuppopup:open"));
     }
+  }, [isOpen]);
+
+  // Auto-lock body scroll when popup is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
   }, [isOpen]);
 
   if (!isOpen && !isClosing) return null;
@@ -128,6 +140,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
       });
 
       if (!res?.error && (res?.success || res?.status)) {
+        onSuccess();
         setTimeout(() => handleClosePopup(), 500);
       } else if (res?.error) {
         const msg = res?.message?.toLowerCase();
@@ -160,7 +173,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
   };
 
   const modalContent = (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={handleClosePopup} style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}>
+    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={handleClosePopup} style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}>
       <div className="relative flex w-full max-w-[900px] overflow-hidden rounded-2xl shadow-2xl bg-primary-white" onClick={(e) => e.stopPropagation()} style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}>
 
         <button
@@ -330,7 +343,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
                 Enter OTP sent to +91 {getValues("phone")}
               </p>
 
-              <div className="flex justify-between gap-3 mb-6">
+              <div className="flex justify-center gap-2 sm:gap-4 mb-6">
                 {otp.map((digit, index) => (
                   <input
                     key={index}
@@ -338,7 +351,8 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
                     maxLength={1}
                     value={digit}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
-                    className="w-12 h-12 text-center text-lg font-bold border rounded-md border-accent-gray bg-transparent outline-none focus:border-primary text-primary"
+                    onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                    className="w-10 h-10 sm:w-12 sm:h-12 text-center text-primary text-xl font-bold border rounded-lg border-accent-primary/20 outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary/50 transition-all p-0"
                   />
                 ))}
               </div>
@@ -346,7 +360,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { } }) {
               <Button
                 type="submit"
                 variant="ghost"
-                className="text-primary w-full h-11 text-sm font-bold"
+                className="text-secondary w-full h-11 text-sm font-bold"
               >
                 VALIDATE OTP
               </Button>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import Image from "next/image";
@@ -37,6 +37,18 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { }, onSuccess = () => {
       onClose();
     }, 250);
   }, [onClose, reset]);
+
+  // Auto-lock body scroll when popup is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
 
   if (!isOpen && !isClosing) return null;
 
@@ -118,7 +130,7 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { }, onSuccess = () => {
   };
 
   const modalContent = (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={handleClose} style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}>
+    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={handleClose} style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}>
       <div className="relative flex w-full max-w-[900px] overflow-hidden rounded-2xl shadow-2xl bg-primary-white" onClick={(e) => e.stopPropagation()} style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}>
         {/* CLOSE */}
         <button
@@ -193,7 +205,7 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { }, onSuccess = () => {
                 Enter the 6-digit OTP
               </p>
 
-              <div className="flex justify-center gap-4 mb-3">
+              <div className="flex justify-center gap-2 sm:gap-4 mb-6 mt-2">
                 {otp.map((digit, index) => (
                   <input
                     key={index}
@@ -202,7 +214,7 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { }, onSuccess = () => {
                     value={digit}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                    className="w-12 h-12 text-center text-primary text-lg font-bold border rounded-md border-accent-gray outline-none focus:border-primary"
+                    className="w-10 h-10 sm:w-12 sm:h-12 text-center text-primary text-xl font-bold border rounded-lg border-accent-primary/20 outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary/50 transition-all p-0"
                   />
                 ))}
               </div>

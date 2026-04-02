@@ -4,7 +4,7 @@ import LoginPopup from "@/components/auth/LoginPopup";
 import SignupPopup from "@/components/auth/SignupPopup";
 import Button from "@/components/ui/button";
 import { createPortal } from "react-dom";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -16,6 +16,21 @@ export default function AccountPopup({ open, onClosePopup }) {
 
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
     const [isLogoutClosing, setIsLogoutClosing] = useState(false);
+
+    const user = useAuthStore((state) => state.user);
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    const logout = useAuthStore((state) => state.logout);
+
+    // Auto-close EVERYTHING when login happens
+    const prevLoggedIn = useRef(isLoggedIn);
+    useEffect(() => {
+        if (isLoggedIn && !prevLoggedIn.current) {
+            onClosePopup();
+            setIsLoginOpen(false);
+            setIsSignupOpen(false);
+        }
+        prevLoggedIn.current = isLoggedIn;
+    }, [isLoggedIn, onClosePopup]);
 
     const handleCloseLogout = () => {
         setIsLogoutClosing(true);
@@ -34,9 +49,7 @@ export default function AccountPopup({ open, onClosePopup }) {
         }, 250);
     };
 
-    const user = useAuthStore((state) => state.user);
-    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-    const logout = useAuthStore((state) => state.logout);
+
     const isConsultant = ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(user?.userRole);
 
     const router = useRouter();
@@ -305,6 +318,10 @@ export default function AccountPopup({ open, onClosePopup }) {
                     setIsLoginOpen(false);
                     onClosePopup();
                 }}
+                onSuccess={() => {
+                    setIsLoginOpen(false);
+                    onClosePopup();
+                }}
                 onSignup={() => {
                     setIsSignupOpen(true);
                     setIsLoginOpen(false);
@@ -314,6 +331,10 @@ export default function AccountPopup({ open, onClosePopup }) {
             <SignupPopup
                 isOpen={isSignupOpen}
                 onClose={() => {
+                    setIsSignupOpen(false);
+                    onClosePopup();
+                }}
+                onSuccess={() => {
                     setIsSignupOpen(false);
                     onClosePopup();
                 }}

@@ -56,7 +56,7 @@ export default function DownloadAppPopup({ isOpen, onClose }) {
         </button>
 
         {/* LEFT IMAGE */}
-        <div className="hidden md:block w-5/12 relative">
+        <div className="hidden lg:block w-5/12 relative">
           <Image
             src="/mobile_CTA_sm.png"
             alt="AVX App"
@@ -66,7 +66,7 @@ export default function DownloadAppPopup({ isOpen, onClose }) {
         </div>
 
         {/* RIGHT CONTENT */}
-        <div className="w-full md:w-7/12 p-5 flex flex-col justify-center">
+        <div className="w-full lg:w-7/12 p-5 flex flex-col justify-center">
           <h3 className="text-3xl font-bold mb-6 text-primary tracking-tight">
             Get the full experience.
           </h3>

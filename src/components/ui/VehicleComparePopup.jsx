@@ -6,15 +6,22 @@ import { X, Search, Loader2 } from "lucide-react";
 import Button from "@/components/ui/button";
 import { getWishList } from "@/services/user.service";
 import { getVehicleOverview } from "@/services/vehicle.service";
+import { useCompareStore } from "@/stores/useCompareStore";
 
 export default function VehicleComparePopup({
     isOpen,
     onClose,
     selectedVehicle
 }) {
+    const isVehicleDetails = useCompareStore((state) => state.isVehicleDetails);
     const [isClosing, setIsClosing] = useState(false);
-    const [search, setSearch] = useState("");
-    const [vehicle2, setVehicle2] = useState(null);
+
+    // Independent state for both sides
+    const [leftVehicle, setLeftVehicle] = useState(null);
+    const [rightVehicle, setRightVehicle] = useState(null);
+    const [leftSearch, setLeftSearch] = useState("");
+    const [rightSearch, setRightSearch] = useState("");
+
     const [isComparing, setIsComparing] = useState(false);
 
     // API State
@@ -26,25 +33,43 @@ export default function VehicleComparePopup({
     const [fullCompareData, setFullCompareData] = useState(null);
     const compareSectionRef = useRef(null);
 
-    const searchResults = search
-        ? wishlistCars.filter(c => `${c.makerName} ${c.modelName}`.toLowerCase().includes(search.toLowerCase()))
-        : wishlistCars;
+    const getSearchResults = (searchTerm) =>
+        searchTerm
+            ? wishlistCars.filter(c => `${c.makerName} ${c.modelName}`.toLowerCase().includes(searchTerm.toLowerCase()))
+            : wishlistCars;
+
+    // Auto-lock body scroll when popup is open
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+        }
+        return () => {
+            document.body.style.overflow = "unset";
+        };
+    }, [isOpen]);
 
     useEffect(() => {
         if (isOpen) {
-            setVehicle2(null);
-            setSearch("");
+            // Reset states
+            if (isVehicleDetails && selectedVehicle) {
+                setLeftVehicle(selectedVehicle);
+            } else {
+                setLeftVehicle(null);
+            }
+            setRightVehicle(null);
+            setLeftSearch("");
+            setRightSearch("");
             setIsClosing(false);
-            setIsComparing(false); // reset comparison state when reopened
+            setIsComparing(false);
             setFullCompareData(null);
 
             const fetchWishlist = async () => {
                 setIsLoading(true);
                 try {
-                    // Fetch up to 50 wishlist vehicles for client-side search in popup
                     const res = await getWishList({ pageNo: 1, size: 50 });
                     if (res?.success && res?.data) {
-                        // Map API properties to UI-expected format
                         const formattedCars = res.data.map(car => ({
                             ...car,
                             registrationYear: car.yearOfMfg,
@@ -65,7 +90,7 @@ export default function VehicleComparePopup({
 
             fetchWishlist();
         }
-    }, [isOpen]);
+    }, [isOpen, isVehicleDetails, selectedVehicle]);
 
     const triggerClose = useCallback(() => {
         setIsClosing(true);
@@ -76,20 +101,19 @@ export default function VehicleComparePopup({
     }, [onClose]);
 
     const handleCompareNow = async () => {
-        if (!selectedVehicle?.id || !vehicle2?.id) return;
+        if (!leftVehicle?.id || !rightVehicle?.id) return;
 
         setIsFetchingComparison(true);
         try {
             const [res1, res2] = await Promise.all([
-                getVehicleOverview(selectedVehicle.id),
-                getVehicleOverview(vehicle2.id)
+                getVehicleOverview(leftVehicle.id),
+                getVehicleOverview(rightVehicle.id)
             ]);
 
             if (res1?.data && res2?.data) {
                 setFullCompareData({ v1: res1.data, v2: res2.data });
                 setIsComparing(true);
 
-                // Fast transition scroll
                 setTimeout(() => {
                     compareSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }, 100);
@@ -103,21 +127,25 @@ export default function VehicleComparePopup({
 
     if (!isOpen && !isClosing) return null;
 
-    const renderVehicleBox = (vehicle, isSearchBox) => {
-        if (isSearchBox && !vehicle) {
+    const renderVehicleBox = (vehicle, side) => {
+        const isSearchable = side === "right" || (side === "left" && !isVehicleDetails);
+        const currentSearch = side === "left" ? leftSearch : rightSearch;
+        const setCurrentSearch = side === "left" ? setLeftSearch : setRightSearch;
+        const setSideVehicle = side === "left" ? setLeftVehicle : setRightVehicle;
+        const searchResults = getSearchResults(currentSearch);
+
+        if (isSearchable && !vehicle) {
             return (
                 <div className="border border-dashed border-primary/30 rounded-xl p-2 sm:p-4 flex flex-col h-full bg-primary/5 min-h-[220px] sm:min-h-[300px]">
-                    {/* Search Field */}
                     <div className="flex items-center border rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 bg-secondary mb-3 border-primary/20">
                         <Search size={14} className="text-primary/60 shrink-0" />
                         <input
                             placeholder="Wishlist..."
                             className="bg-transparent outline-none ml-1 sm:ml-2 text-primary w-full text-[10px] sm:text-sm placeholder:text-primary/40 truncate"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
+                            value={currentSearch}
+                            onChange={(e) => setCurrentSearch(e.target.value)}
                         />
                     </div>
-                    {/* Search Results List */}
                     <div className="flex-1 overflow-y-auto space-y-2 pr-1 max-h-[225px] sm:max-h-[350px] custom-scrollbar">
                         {isLoading ? (
                             <div className="flex flex-col items-center justify-center h-full text-primary/60 py-4 sm:py-6">
@@ -128,7 +156,7 @@ export default function VehicleComparePopup({
                             searchResults.map((v, i) => (
                                 <div
                                     key={i}
-                                    onClick={() => setVehicle2(v)}
+                                    onClick={() => setSideVehicle(v)}
                                     className="p-1.5 sm:p-3 bg-secondary rounded-lg border border-primary/10 cursor-pointer hover:border-primary/40 focus:bg-primary/5 transition-colors flex items-center gap-2 sm:gap-3"
                                 >
                                     <div className="w-8 h-8 sm:w-12 sm:h-12 bg-primary/5 rounded-md overflow-hidden relative shrink-0 flex items-center justify-center">
@@ -150,7 +178,7 @@ export default function VehicleComparePopup({
                             ))
                         ) : (
                             <div className="text-center text-primary/50 text-[10px] sm:text-sm mt-2 sm:mt-4 px-1">
-                                {search ? "Not found" : "Empty wishlist"}
+                                {currentSearch ? "Not found" : "Empty wishlist"}
                             </div>
                         )}
                     </div>
@@ -164,7 +192,6 @@ export default function VehicleComparePopup({
 
         return (
             <div className="border border-primary/20 rounded-xl p-2 sm:p-4 flex flex-col h-full bg-secondary shadow-sm relative group transition-all duration-300">
-                {/* Vehicle Image */}
                 <div className="w-full h-20 sm:h-40 bg-primary/5 rounded-lg mb-2 sm:mb-4 relative overflow-hidden flex items-center justify-center shrink-0">
                     {vehicle.thumbnailUrl ? (
                         <img src={vehicle.thumbnailUrl} alt={name} className="w-full h-full object-cover" />
@@ -173,21 +200,18 @@ export default function VehicleComparePopup({
                     )}
                 </div>
 
-                {/* Title */}
                 <h3 className="text-xs sm:text-base font-bold text-primary line-clamp-2 min-h-[32px] sm:min-h-[48px] mb-1 sm:mb-2 leading-tight">
                     {name || "Vehicle Info"}
                 </h3>
 
-                {/* Price */}
                 <div className="text-sm sm:text-xl font-bold text-primary mb-2 sm:mb-4 truncate">
                     {vehicle.price ? `₹${vehicle.price.toLocaleString("en-IN")}` : "Price TBA"}
                 </div>
 
-                {/* Specs Grid */}
                 <div className="space-y-1 sm:space-y-3 mt-auto pt-2 sm:pt-4 border-t border-primary/10">
                     <div className="flex flex-col xl:flex-row justify-between text-[9px] sm:text-sm leading-tight gap-0.5">
                         <span className="text-primary/60">Year</span>
-                        <span className="font-medium text-primary xl:text-right truncate">{vehicle.registrationYear || "-"}</span>
+                        <span className="font-medium text-primary xl:text-right truncate">{vehicle.registrationYear || vehicle.yearOfMfg || "-"}</span>
                     </div>
                     <div className="flex flex-col xl:flex-row justify-between text-[9px] sm:text-sm leading-tight gap-0.5">
                         <span className="text-primary/60">Fuel</span>
@@ -196,7 +220,7 @@ export default function VehicleComparePopup({
                     <div className="flex flex-col xl:flex-row justify-between text-[9px] sm:text-sm leading-tight gap-0.5">
                         <span className="text-primary/60 xl:hidden">Trans.</span>
                         <span className="text-primary/60 hidden xl:inline">Transmission</span>
-                        <span className="font-medium text-primary xl:text-right truncate">{vehicle.transmission || "-"}</span>
+                        <span className="font-medium text-primary xl:text-right truncate">{vehicle.transmission || vehicle.transmissionType || "-"}</span>
                     </div>
                     <div className="flex flex-col xl:flex-row justify-between text-[9px] sm:text-sm leading-tight gap-0.5">
                         <span className="text-primary/60">Driven</span>
@@ -204,10 +228,10 @@ export default function VehicleComparePopup({
                     </div>
                 </div>
 
-                {/* Remove Button for Vehicle 2 */}
-                {isSearchBox && !isComparing && (
+                {/* Remove Button (Only for searchable slots) */}
+                {isSearchable && !isComparing && (
                     <button
-                        onClick={(e) => { e.stopPropagation(); setVehicle2(null); }}
+                        onClick={(e) => { e.stopPropagation(); setSideVehicle(null); }}
                         className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-white/80 backdrop-blur-md p-1 sm:p-1.5 rounded-full text-red-500 cursor-pointer hover:bg-white shadow-sm opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
                     >
                         <X size={12} className="sm:w-4 sm:h-4" />
@@ -217,7 +241,6 @@ export default function VehicleComparePopup({
         );
     };
 
-    // Helper for detailed compare row
     const renderCompareSection = (title, fields) => (
         <div className="mb-6">
             <h4 className="font-semibold text-primary mb-3 bg-primary/5 px-3 py-2 rounded-md uppercase tracking-wider text-xs sm:text-sm text-center">{title}</h4>
@@ -242,7 +265,6 @@ export default function VehicleComparePopup({
         </div>
     );
 
-    // Prepare robust table data strictly driven by the API payload result
     const v1 = fullCompareData?.v1;
     const v2 = fullCompareData?.v2;
 
@@ -278,7 +300,7 @@ export default function VehicleComparePopup({
 
     const modalContent = (
         <div
-            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-4 overflow-hidden py-6 sm:py-8"
+            className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-4 overflow-hidden py-6 sm:py-8"
             onClick={triggerClose}
             style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}
         >
@@ -287,7 +309,6 @@ export default function VehicleComparePopup({
                 onClick={(e) => e.stopPropagation()}
                 style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}
             >
-                {/* STATIC HEADER (Structurally outside the scroll area) */}
                 <div className="bg-secondary px-4 sm:px-6 md:px-8 py-3 sm:py-4 flex items-center justify-between border-b border-primary/10 shadow-sm shrink-0 z-20 relative">
                     <h2 className="text-lg sm:text-2xl font-bold text-primary m-0">
                         Compare Vehicles
@@ -300,33 +321,26 @@ export default function VehicleComparePopup({
                     </button>
                 </div>
 
-                {/* SCROLLABLE BODY */}
                 <div className="overflow-y-auto custom-scrollbar flex-1 p-3 sm:p-5 md:p-6 flex flex-col">
-
-                    {/* CONTENT AREA */}
                     <div className="grid grid-cols-2 gap-2 sm:gap-6 relative mb-4 sm:mb-6 shrink-0">
-                        {/* Box 1 (Auto-selected current vehicle) */}
                         <div>
-                            {renderVehicleBox(selectedVehicle, false)}
+                            {renderVehicleBox(leftVehicle, "left")}
                         </div>
 
-                        {/* VS Badge */}
-                        <div className="absolute left-1/2 top-[40%] sm:top-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 sm:w-10 sm:h-10 bg-primary text-secondary rounded-full flex items-center justify-center font-bold text-[8px] sm:text-sm shadow-md z-10 border-[2px] sm:border-[3px] border-secondary">
+                        <div className="absolute left-1/2 top-[40%] sm:top-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 sm:w-10 sm:h-10 bg-primary text-secondary rounded-full flex items-center justify-center font-bold text-[8px] sm:text-sm shadow-md z-10 border-2 sm:border-[3px] border-secondary">
                             VS
                         </div>
 
-                        {/* Box 2 (Search or Target vehicle) */}
                         <div>
-                            {renderVehicleBox(vehicle2, true)}
+                            {renderVehicleBox(rightVehicle, "right")}
                         </div>
                     </div>
 
-                    {/* ACTION BUTTON */}
                     {!isComparing && (
                         <div className="flex justify-end w-full mb-2">
                             <Button
                                 variant="outlineSecondary"
-                                disabled={!selectedVehicle || !vehicle2 || isFetchingComparison}
+                                disabled={!leftVehicle || !rightVehicle || isFetchingComparison}
                                 className="py-2 w-[160px] sm:w-[180px] text-sm flex items-center justify-center gap-2 transition-all"
                                 onClick={handleCompareNow}
                             >
@@ -342,11 +356,9 @@ export default function VehicleComparePopup({
                         </div>
                     )}
 
-                    {/* DETAILED COMPARISON TABLE (SCROLLS INTO VIEW) */}
                     {isComparing && fullCompareData && (
                         <div ref={compareSectionRef} className="mt-2 sm:mt-4 border-t border-primary/20 pt-6 animate-fade-in transition-all scroll-m-4">
                             <h3 className="text-lg sm:text-xl font-bold text-primary mb-6 text-center">Detailed Comparison</h3>
-
                             <div className="space-y-2">
                                 {renderCompareSection("Overview", overviewFields)}
                                 {renderCompareSection("Specifications", specFields)}
@@ -360,7 +372,6 @@ export default function VehicleComparePopup({
         </div>
     );
 
-    // render via portal
     return typeof document !== "undefined"
         ? createPortal(modalContent, document.body)
         : null;

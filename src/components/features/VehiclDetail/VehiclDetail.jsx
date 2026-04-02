@@ -44,7 +44,7 @@ export default function VehicleDetails() {
 
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, []);
-  const NAVBAR_OFFSET = 210;
+
 
   const scrollToSection = (ref, tab) => {
     setActiveTab(tab);
@@ -72,8 +72,13 @@ export default function VehicleDetails() {
     }
 
     if (!ref.current) return;
+
+    // Adjust offset based on screen size (lg breakpoint)
+    const isMobile = window.innerWidth < 1024;
+    const dynamicOffset = isMobile ? 130 : 220; // 130 for navbar + sticky tabs on mobile, 220 for desktop sticky header
+
     const top =
-      ref.current.getBoundingClientRect().top + window.scrollY - NAVBAR_OFFSET;
+      ref.current.getBoundingClientRect().top + window.scrollY - dynamicOffset;
 
     window.scrollTo({
       top,
@@ -119,10 +124,10 @@ export default function VehicleDetails() {
       </div>
 
       <main className=" text-secondary w-full">
-        <div className="w-full py-6">
+        <div className="w-full py-6 pb-24 lg:pb-6">
           {/* HEADER */}
           <section className="relative">
-            <div className="sticky top-16 pb-7 md:pb-4 z-40 ">
+            <div className="lg:sticky top-16 md:pb-4 z-40">
               <VehicleHeader vehicle={vehicleOverview} vehicleSummary={vehicleSummary} />
             </div>
 
@@ -130,7 +135,7 @@ export default function VehicleDetails() {
               <div className="flex flex-col gap-6 min-w-0">
                 <VehicleImageGallery vehicle={vehicleOverview} />
 
-                <div className="relative border-b border-third/40">
+                <div className="sticky top-[64px] lg:relative lg:top-0 lg:z-auto z-40 bg-transparent backdrop-blur-lg border-b border-third/40">
                   <div className="overflow-x-auto scrollbar-hide">
                     <div className="flex gap-6 px-2 min-w-max">
                       {[
