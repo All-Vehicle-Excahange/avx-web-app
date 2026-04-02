@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
   MessageCircle,
@@ -120,14 +119,10 @@ const stagger = {
    SHARED ATOMS
 ───────────────────────────────────────────── */
 const EyeBrow = ({ children, center = false }) => (
-  <motion.p
-    className={`text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat] mb-2 ${center ? "text-center" : ""}`}
-    initial={{ opacity: 0 }}
-    whileInView={{ opacity: 1 }}
-    viewport={{ once: true }}
-  >
+  <p
+    className={`text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat] mb-2 ${center ? "text-center" : ""}`}>
     {children}
-  </motion.p>
+  </p>
 );
 
 const Divider = ({ light = false }) => (
@@ -209,26 +204,16 @@ export default function WhyBuyHereBasic() {
       <section className="relative flex items-center justify-center overflow-hidden min-h-screen py-12">
         <div className="w-[70%] mx-auto text-center">
           <EyeBrow center>Why Choose Us</EyeBrow>
-          <motion.h1
-            className="text-[clamp(28px,5vw,54px)] font-bold leading-[1.15] text-primary font-[Montserrat] mb-6"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true }}
-          >
-            {data.heroTitle.split("Adarsh")[0]}
+          <h1
+            className="text-[clamp(28px,5vw,54px)] font-bold leading-[1.15] text-primary font-[Montserrat] mb-6" >
+            {data.whyBuyHeroTitle.split("Adarsh")[0]}
             <span className="text-fourth">Adarsh</span>
-            {data.heroTitle.split("Adarsh")[1]}
-          </motion.h1>
-          <motion.p
-            className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]"
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            {data.heroDescription}
-          </motion.p>
+            {data.whyBuyHeroTitle.split("Adarsh")[1]}
+          </h1>
+          <p
+            className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]">
+            {data.whyBuyHeroDescription}
+          </p>
         </div>
       </section>
 
@@ -238,25 +223,16 @@ export default function WhyBuyHereBasic() {
       <section className="py-12 px-2 lg:px-4 bg-fourth">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              viewport={{ once: true }}
-            >
+            <div>
               <EyeBrow>Our Story</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 Our <span className="text-secondary">Experience</span>
               </h2>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.12 }}
-              viewport={{ once: true }}
+            </div>
+            <div
               className="flex flex-col gap-4"
             >
-              {data.storyText
+              {data.storyDescription
                 .split("\n\n")
                 .filter(Boolean)
                 .map((para, i) => (
@@ -267,7 +243,7 @@ export default function WhyBuyHereBasic() {
                     {para.trim()}
                   </p>
                 ))}
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -278,30 +254,20 @@ export default function WhyBuyHereBasic() {
       <section className="py-12 px-2 lg:px-4">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              viewport={{ once: true }}
-            >
+            <div>
               <EyeBrow>Selection</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 Our Approach to
                 <br />
                 <span className="text-fourth/80">Vehicle Selection</span>
               </h2>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.12 }}
-              viewport={{ once: true }}
-            >
+            </div>
+            <div>
               <Divider />
               <p className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]">
-                {data.selectionDescription}
+                {data.vehicleSelectionDescription}
               </p>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -321,17 +287,13 @@ export default function WhyBuyHereBasic() {
             </p>
           </div>
 
-          <motion.div
+          <div
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"
-            variants={stagger}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-          >
+            variants={stagger}>
             {data.processSteps.map((s, i) => {
               const Icon = iconMap[s.icon];
               return (
-                <motion.div
+                <div
                   key={i}
                   variants={fadeUp}
                   className="group relative border border-third/10 rounded-2xl p-7 flex flex-col gap-5 hover:border-primary/30 transition-all duration-300 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
@@ -350,10 +312,10 @@ export default function WhyBuyHereBasic() {
                       {s.description}
                     </p>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -363,41 +325,27 @@ export default function WhyBuyHereBasic() {
       <section className="py-12 px-2 lg:px-4">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              viewport={{ once: true }}
-            >
+            <div >
               <EyeBrow>Inspection</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 AVX Inspection <span className="text-fourth/80">Assurance</span>
               </h2>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              viewport={{ once: true }}
-            >
+            </div>
+            <div>
               <Divider />
               <p className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]">
                 {data.inspectionText}
               </p>
-            </motion.div>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-stretch">
             {/* left — 2×2 tick cards */}
-            <motion.div
+            <div
               className="grid grid-cols-2 gap-3"
-              variants={stagger}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-            >
+              variants={stagger}>
               {data.inspectionPoints.map((pt) => (
-                <motion.div
+                <div
                   key={pt}
                   variants={fadeUp}
                   className="group flex flex-col gap-4 p-6 border border-third/10 rounded-2xl hover:border-primary/25 transition-all duration-300 hover:shadow-[0_6px_28px_rgba(0,0,0,0.35)]"
@@ -416,18 +364,13 @@ export default function WhyBuyHereBasic() {
                   <span className="font-[Poppins] text-sm text-third/70 leading-[1.7] group-hover:text-primary/80 transition-colors duration-300">
                     {pt}
                   </span>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
+            </div>
 
             {/* right — table card */}
-            <motion.div
-              className="border border-third/10 rounded-2xl overflow-hidden hover:border-primary/25 transition-all duration-300 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)]"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.15 }}
-              viewport={{ once: true }}
-            >
+            <div
+              className="border border-third/10 rounded-2xl overflow-hidden hover:border-primary/25 transition-all duration-300 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)]" >
               <div className="px-6 py-5 border-b border-primary/[0.07] flex items-center justify-between">
                 <p className="font-[Montserrat] font-bold text-[9px] tracking-[0.26em] uppercase text-primary/50">
                   {"What's Covered"}
@@ -437,7 +380,7 @@ export default function WhyBuyHereBasic() {
                 </span>
               </div>
               {data.inspectionPoints.map((pt, i, arr) => (
-                <motion.div
+                <div
                   key={pt}
                   className={`flex justify-between items-center px-6 py-[18px] transition-colors duration-150 hover:bg-primary/4 ${i < arr.length - 1 ? "border-b border-primary/6" : ""
                     }`}
@@ -460,9 +403,9 @@ export default function WhyBuyHereBasic() {
                       Included
                     </span>
                   </div>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -473,28 +416,18 @@ export default function WhyBuyHereBasic() {
       <section className="py-12 px-2 lg:px-4 bg-fourth">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              viewport={{ once: true }}
-            >
+            <div>
               <EyeBrow>Commitment</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 Customer <span className="text-secondary">Commitment</span>
               </h2>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              viewport={{ once: true }}
-            >
+            </div>
+            <div>
               <Divider light />
               <p className="text-primary/90 text-[15px] leading-[1.9] font-[Poppins]">
-                {data.commitmentText}
+                {data.customerCommitmentDescription}
               </p>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -538,8 +471,7 @@ export default function WhyBuyHereBasic() {
             onMouseEnter={pauseSlider}
             onMouseLeave={resumeSlider}
           >
-            <AnimatePresence mode="wait" custom={direction}>
-              <motion.div
+              <div
                 key={index}
                 custom={direction}
                 variants={sliderVariants}
@@ -577,8 +509,7 @@ export default function WhyBuyHereBasic() {
                     </div>
                   </div>
                 ))}
-              </motion.div>
-            </AnimatePresence>
+              </div>
           </div>
 
           <div className="flex items-center gap-2 mt-8">
