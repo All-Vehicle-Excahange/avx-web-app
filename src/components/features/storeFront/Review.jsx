@@ -112,12 +112,12 @@ export default function Review() {
   };
 
   return (
-    <section className="container mt-2!  text-primary py-10">
-      <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_2.1fr] gap-10">
+    <section className="container mt-4 text-primary py-6 sm:py-10">
+      <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-6 lg:gap-12">
         {/* ================= LEFT ================= */}
-        <div className="space-y-6 sticky top-24 h-fit">
+        <div className="space-y-6 lg:sticky lg:top-24 h-fit">
           {/* ⭐ RATING SUMMARY */}
-          <div className="border border-third/40 rounded-2xl p-6">
+          <div className="border border-third/40 rounded-2xl p-4 sm:p-6">
             <h2 className="text-xl font-semibold mb-3">Customer reviews</h2>
 
             {reviewSummary ? (
@@ -191,7 +191,7 @@ export default function Review() {
           </div>
 
           {/* ✍️ WRITE REVIEW */}
-          <div className="border border-third/40 rounded-2xl p-6">
+          <div className="border border-third/40 rounded-2xl p-4 sm:p-6">
             <h3 className="text-lg font-semibold mb-4">Write a review</h3>
 
             {isEligibleToCreateReview ? (
@@ -317,7 +317,7 @@ export default function Review() {
         {/* ================= RIGHT ================= */}
         <div className="space-y-6">
           {reviews.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 px-6 border border-third/40 rounded-2xl text-center">
+            <div className="flex flex-col items-center justify-center py-12 sm:py-16 px-4 sm:px-6 border border-third/40 rounded-2xl text-center">
               <div className="w-16 h-16 bg-third/10 rounded-full flex items-center justify-center mb-4">
                 <MessageSquare className="w-8 h-8 text-third" />
               </div>
@@ -333,7 +333,7 @@ export default function Review() {
               return (
                 <div
                   key={review.id}
-                  className="border border-third/40 rounded-2xl p-6 space-y-4"
+                  className="border border-third/40 rounded-2xl p-4 sm:p-6 space-y-4"
                 >
                   {/* ✅ USER HEADER */}
                   <div className="flex items-center gap-3">
@@ -386,7 +386,7 @@ export default function Review() {
                         <div
                           key={img.id}
                           onClick={() => setSelectedImage(img.imageUrl)}
-                          className="relative w-20 h-20 rounded-xl overflow-hidden border cursor-pointer hover:scale-105 transition"
+                          className="relative w-20 h-20 sm:w-28 sm:h-28 rounded-xl overflow-hidden border border-third/20 cursor-pointer hover:scale-105 transition shadow-sm"
                         >
                           <Image
                             src={img.imageUrl}
@@ -413,9 +413,9 @@ export default function Review() {
             {/* ✅ Popup Box */}
             <div
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-3xl h-[75vh]
+              className="relative w-full max-w-4xl h-[85vh] sm:h-[80vh]
                  rounded-2xl overflow-hidden 
-                 bg-transparent shadow-2xl"
+                 bg-secondary/90 backdrop-blur-xl shadow-2xl border border-white/10"
             >
               {/* ✅ Close Button */}
               <button

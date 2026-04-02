@@ -1,26 +1,28 @@
-
-/* eslint-disable react-hooks/set-state-in-effect */
-"use client";
-
-import { ArrowLeftRight, ChevronRight, Star, StatArrowLeftRight } from "lucide-react";
+import { ChevronRight, Star } from "lucide-react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import Button from "@/components/ui/button";
-import { useState, useRef, useEffect } from "react";
-import VehicleComparePopup from "./VehicleComparePopup";
-import { motion } from "framer-motion";
-import { createPortal } from "react-dom";
+
+import { useState, useEffect } from "react";
+import { useCompareStore } from "@/stores/useCompareStore";
 
 export default function VehicleHeader({ vehicle, ratting, vehicleSummary }) {
     const router = useRouter();
     const source = router.query.source; // "home" | "search" | undefined
-    const [isCompareOpen, setIsCompareOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
-    const dragConstraintsRef = useRef(null);
+
+    // Global Comparison Store
+    const { openCompare, setSelectedVehicle } = useCompareStore();
 
     useEffect(() => {
         setMounted(true);
     }, []);
+
+    // Sync vehicle with store when viewing details
+    useEffect(() => {
+        if (vehicle) {
+            setSelectedVehicle(vehicle);
+        }
+    }, [vehicle,]);
 
     const vehicleNameBase = [vehicle?.makerName, vehicle?.modelName, vehicle?.variantName]
         .filter(Boolean)
@@ -38,25 +40,10 @@ export default function VehicleHeader({ vehicle, ratting, vehicleSummary }) {
     if (cityName) searchQueryParams.set("cityName", cityName);
     const searchUrl = `/search?${searchQueryParams.toString()}`;
 
-    const floatingButton = (
-        <div className="fixed inset-0 pointer-events-none z-[999]" ref={dragConstraintsRef}>
-            <motion.button
-                drag
-                dragConstraints={dragConstraintsRef}
-                dragElastic={0.05}
-                dragMomentum={false}
-                onClick={() => setIsCompareOpen(true)}
-                className="absolute right-4 bottom-24 sm:right-6 sm:bottom-24 bg-fourth text-primary p-3 sm:p-4 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.5)] cursor-grab active:cursor-grabbing hover:bg-fourth/90 border border-primary/20 flex flex-col items-center justify-center gap-1 w-14 h-14 transition-colors pointer-events-auto"
-                whileTap={{ scale: 0.95 }}
-                title="Compare Vehicles (Drag me!)"
-            >
-                <ArrowLeftRight size={24} />
-            </motion.button>
-        </div>
-    );
+
 
     return (
-        <header className="w-full space-y-3 pt-6 bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)]">
+        <header className="w-full space-y-3 pt-9 md:pt-6 bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)]">
             {/* Breadcrumb */}
             <nav className="text-xs sm:text-sm text-third flex items-center gap-1 flex-wrap">
                 <Link
@@ -128,7 +115,7 @@ export default function VehicleHeader({ vehicle, ratting, vehicleSummary }) {
                 <div className="flex items-center gap-3 ml-auto">
 
                     {/* PRICE */}
-                    <div className="bg-primary text-secondary px-4 py-2 rounded-lg text-right">
+                    <div className="hidden lg:block bg-primary text-secondary px-4 py-2 rounded-lg text-right">
                         <p className="text-lg font-semibold">
                             ₹{vehicle?.price?.toLocaleString("en-IN")}
                         </p>
@@ -138,14 +125,6 @@ export default function VehicleHeader({ vehicle, ratting, vehicleSummary }) {
 
             </div>
 
-            <VehicleComparePopup
-                isOpen={isCompareOpen}
-                onClose={() => setIsCompareOpen(false)}
-                selectedVehicle={vehicle}
-            />
-
-            {mounted && typeof document !== "undefined" && createPortal(floatingButton, document.body)}
         </header>
-
     );
 }   

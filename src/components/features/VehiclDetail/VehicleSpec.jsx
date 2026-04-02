@@ -190,14 +190,14 @@ export default function VehicleSpec({ open, setOpen }) {
                       <div>
                         <Button
                           variant="outline"
-                          size="md"
+                          size="sm"
                           showIcon={false}
                           onClick={() => {
                             setShowModal(true);
                             setTimeout(() => setAnimateModal(true), 10);
                           }}
                         >
-                          Request New AVX Inspection
+                          Request New Reecomm Inspection
                         </Button>
                       </div>
                     </div>
@@ -285,10 +285,10 @@ export default function VehicleSpec({ open, setOpen }) {
           <div
             className={`
         relative z-50 mx-3
-        w-full md:w-[60%]  
+        w-full md:w-[85%] lg:w-[70%]  
         max-w-md md:max-w-none
         h-[70vh] md:h-auto  
-        md:max-h-[60%]
+        md:max-h-[62%]
         flex md:flex
         rounded-2xl md:rounded-2xl
         bg-secondary overflow-hidden text-primary

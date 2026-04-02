@@ -11,7 +11,7 @@ export default function DashboardLayout({ children }) {
       <Navbar heroMode scrolled={true} />
       <div className="min-h-screen pt-16 flex flex-col md:flex-row text-primary relative">
         {/* MOBILE HEADER FOR SIDEBAR TOGGLE */}
-        <div className="md:hidden z-999 flex items-center justify-between p-4 border-b border-third/30 bg-secondary sticky top-16 z-30">
+        <div className="md:hidden z-999 flex items-center justify-between p-4 border-b border-third/30 bg-[#2B2A2A] sticky top-16 z-30">
           <span className="font-bold ">Dashboard Menu</span>
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
