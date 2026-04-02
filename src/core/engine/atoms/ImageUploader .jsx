@@ -47,7 +47,7 @@ export const ImageUploader = ({
 
               {/* Hover Overlay */}
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
-                <span className="text-secondary font-semibold text-sm">
+                <span className="text-primary font-semibold text-sm">
                   Change Image
                 </span>
               </div>
@@ -69,7 +69,13 @@ export const ImageUploader = ({
         type={type}
         onClose={() => setOpen(false)}
         onSelect={(img) => {
-          onChange(img);
+          // img can be a full object { imageUrl, id, ... } from library
+          // or a blob URL string from upload
+          if (typeof img === "string") {
+            onChange({ imageUrl: img, id: null });
+          } else {
+            onChange({ imageUrl: img.imageUrl, id: img.id });
+          }
           setOpen(false);
         }}
       />
