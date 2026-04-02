@@ -69,11 +69,10 @@ export default function MediaPickerModal({ open, onClose, onSelect, type }) {
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`uppercase text-sm font-bold tracking-widest pb-2 border-b-2 transition ${
-                tab === t
+              className={`uppercase text-sm font-bold tracking-widest pb-2 border-b-2 transition ${tab === t
                   ? "border-primary text-primary"
                   : "border-transparent text-third hover:text-primary"
-              }`}
+                }`}
             >
               {t}
             </button>
@@ -91,33 +90,15 @@ export default function MediaPickerModal({ open, onClose, onSelect, type }) {
             {images.map((img, i) => (
               <div
                 key={i}
-                onClick={() => img.isEligible && onSelect(img)}
-                className={`relative h-44 rounded-2xl overflow-hidden border transition group
-             ${
-               img.isEligible
-                 ? "border-third/30 hover:border-primary cursor-pointer"
-                 : "border-dashed border-yellow-400 opacity-70 cursor-not-allowed"
-             }`}
+                onClick={() => onSelect(img)}
+                className="relative h-44 rounded-2xl overflow-hidden border border-third/30 hover:border-primary cursor-pointer transition group"
               >
                 <NextImage
                   src={img.imageUrl}
                   alt="Media"
                   fill
-                  className={`object-cover transition ${
-                    img.isEligible ? "group-hover:scale-105" : "grayscale"
-                  }`}
+                  className="object-cover transition group-hover:scale-105"
                 />
-
-                {!img.isEligible && (
-                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
-                    <div className="flex flex-col items-center gap-2 text-primary-400">
-                      <Lock className="w-6 h-6" />
-                      <span className="text-xs uppercase tracking-widest font-bold">
-                        Locked
-                      </span>
-                    </div>
-                  </div>
-                )}
               </div>
             ))}
           </div>
@@ -140,11 +121,10 @@ export default function MediaPickerModal({ open, onClose, onSelect, type }) {
             {/* REAL UPLOAD ZONE */}
             <label
               className={`relative block border-2 border-dashed rounded-3xl p-20 text-center transition
-        ${
-          isEligibleToUpload
-            ? "border-primary cursor-pointer hover:bg-primary/10"
-            : "border-primary-400 opacity-40 cursor-not-allowed"
-        }`}
+        ${isEligibleToUpload
+                  ? "border-primary cursor-pointer hover:bg-primary/10"
+                  : "border-primary-400 opacity-40 cursor-not-allowed"
+                }`}
             >
               <div className="flex flex-col items-center justify-center gap-4 text-primary">
                 <div className="w-16 h-16 bg-primary text-secondary rounded-2xl flex items-center justify-center">

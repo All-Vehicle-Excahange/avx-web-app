@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Button from "@/components/ui/button";
-import { Star, MapPin, Pencil } from "lucide-react";
+import { Star, MapPin, Pencil, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import CreateStoreFront from "./CreateStoreFront";
@@ -69,6 +69,7 @@ export default function StoreFrontComponent() {
   const [storeData, setStoreData] = useState(null);
   const [activeTab, setActiveTab] = useState("about");
   const [sections, setSections] = useState([]);
+  const [viewStoreFront, setViewStoreFront] = useState(false);
 
   // Fetch storefront draft on mount
   useEffect(() => {
@@ -130,10 +131,25 @@ export default function StoreFrontComponent() {
     return null;
   }
 
+  // No draft data — show plain CreateStoreFront (tier selection only)
   if (!hasStoreFront) {
     return <CreateStoreFront />;
   }
 
+  // Has draft data but user hasn't clicked "View" yet — show CreateStoreFront with table
+  if (!viewStoreFront) {
+    return (
+      <CreateStoreFront
+        storeData={storeData}
+        onView={(tab) => {
+          setActiveTab(tab || "about");
+          setViewStoreFront(true);
+        }}
+      />
+    );
+  }
+
+  // ── Full Storefront Preview ──
   // Filter sections for the active tab
   const filteredSections = sections.filter((section) =>
     section.type.includes(activeTab)
@@ -142,9 +158,17 @@ export default function StoreFrontComponent() {
   return (
     <section className="space-y-10">
       {/* HEADER */}
-      <div>
-        <h1 className="text-2xl font-bold">Your Storefront</h1>
-        <p className="text-third text-sm">Manage your public brand presence</p>
+      <div className="flex items-center gap-4">
+        <button
+          onClick={() => setViewStoreFront(false)}
+          className="p-2 rounded-lg border border-third/30 hover:border-primary/50 transition-colors hover:cursor-pointer"
+        >
+          <ArrowLeft size={18} />
+        </button>
+        <div>
+          <h1 className="text-2xl font-bold">Your Storefront</h1>
+          <p className="text-third text-sm">Manage your public brand presence</p>
+        </div>
       </div>
       {/* THEME CONTENT TABS */}
       <div className="space-y-6">
