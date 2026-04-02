@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import EditorInput from "@/core/engine/atoms/EditorInput";
 import RichTextEditor from "@/core/engine/atoms/RichTextEditor";
 import Select from "react-select";
@@ -98,14 +97,11 @@ const stagger = {
 const Divider = () => <div className="w-8 h-px bg-primary/15 my-2" />;
 
 const EyeBrow = ({ children }) => (
-  <motion.p
+  <p
     className="text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat] mb-4"
-    initial={{ opacity: 0 }}
-    whileInView={{ opacity: 1 }}
-    viewport={{ once: true }}
   >
     {children}
-  </motion.p>
+  </p>
 );
 
 const DEFAULT_DATA = ABOUT_BASIC_2[0].data;
@@ -378,32 +374,20 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate }) {
     <>
       <section className="relative flex items-center justify-center min-h-screen py-14 lg:py-24">
         <div className="px-5 flex flex-col items-center text-center gap-6 max-w-3xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
+          <div
           >
             <EyeBrow>About Us</EyeBrow>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1] text-primary font-[Montserrat]">
               {data.heroTitle}
             </h1>
-          </motion.div>
+          </div>
 
-          <motion.div
+          <div
             className="w-10 h-px bg-primary/15"
-            initial={{ opacity: 0, scaleX: 0 }}
-            whileInView={{ opacity: 1, scaleX: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            viewport={{ once: true }}
           />
 
-          <motion.div
+          <div
             className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]"
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
-            viewport={{ once: true }}
             dangerouslySetInnerHTML={{ __html: data.heroDescription }}
           />
         </div>
@@ -412,40 +396,29 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate }) {
       <section className="py-14 lg:py-20">
         <div className="px-2 lg:px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              viewport={{ once: true }}
+            <div
             >
               <EyeBrow>What Drives Us</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 Mission & <span className="text-primary">Vision</span>
               </h2>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              viewport={{ once: true }}
+            <div
             >
               <Divider />
               <p className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]">
                 The principles behind everything we build and every decision we
                 make.
               </p>
-            </motion.div>
+            </div>
           </div>
 
-          <motion.div
+          <div
             className="grid grid-cols-1 lg:grid-cols-2 gap-4"
             variants={stagger}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
           >
-            <motion.div
+            <div
               variants={fadeUp}
               className="group flex flex-col gap-5 p-8 border border-third/10 rounded-2xl hover:border-primary/25 transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
             >
@@ -465,9 +438,9 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate }) {
                 className="text-third/65 text-[13.5px] leading-[1.9] font-[Poppins]"
                 dangerouslySetInnerHTML={{ __html: data.missionDesc }}
               />
-            </motion.div>
+            </div>
 
-            <motion.div
+            <div
               variants={fadeUp}
               className="group flex flex-col gap-5 p-8 border border-third/10 rounded-2xl hover:border-primary/25 transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
             >
@@ -487,18 +460,14 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate }) {
                 className="text-third/65 text-[13.5px] leading-[1.9] font-[Poppins]"
                 dangerouslySetInnerHTML={{ __html: data.visionDesc }}
               />
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
       </section>
 
       <section className="py-12 lg:py-16 bg-fourth">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center px-10">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7 }}
-            viewport={{ once: true }}
+          <div
           >
             <EyeBrow>By The Numbers</EyeBrow>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat] mb-4">
@@ -509,16 +478,12 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate }) {
               className="text-primary/80 text-[15px] leading-[1.9] font-[Poppins]"
               dangerouslySetInnerHTML={{ __html: data.aboutUsDescription }}
             />
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-2 gap-3">
             {(data.stats || []).map((stat, i) => (
-              <motion.div
+              <div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.09 }}
                 className="group flex flex-col gap-2 p-6 border border-primary/20 rounded-2xl hover:border-primary/40 hover:bg-primary/5 transition-all duration-300"
               >
                 <span className="text-3xl font-bold text-primary font-[Montserrat]">
@@ -527,7 +492,7 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate }) {
                 <span className="text-[12px] text-primary/70 font-[Poppins] leading-normal">
                   {stat.label}
                 </span>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -536,42 +501,31 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate }) {
       <section className="py-14 lg:py-20">
         <div className="px-2 lg:px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              viewport={{ once: true }}
+            <div
             >
               <EyeBrow>Services</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 {data.servicesTitle}
               </h2>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              viewport={{ once: true }}
+            <div
             >
               <Divider />
               <div
                 className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]"
                 dangerouslySetInnerHTML={{ __html: data.servicesDesc }}
               />
-            </motion.div>
+            </div>
           </div>
 
-          <motion.div
+          <div
             className="grid grid-cols-1 sm:grid-cols-2 gap-4"
             variants={stagger}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
           >
             {(data.services || []).map((svc, i) => {
               return (
-                <motion.div
+                <div
                   key={i}
                   variants={fadeUp}
                   className="group flex flex-col gap-5 p-7 border border-third/10 rounded-2xl hover:border-primary/25 transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
@@ -599,10 +553,10 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate }) {
                   <p className="text-third/65 text-[13px] leading-[1.8] font-[Poppins]">
                     {svc.desc}
                   </p>
-                </motion.div>
+                </div>
               );
             })}
-          </motion.div>
+          </div>
         </div>
       </section>
     </>

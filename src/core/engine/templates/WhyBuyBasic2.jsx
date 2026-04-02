@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import {
   Quote,
   CheckCircle2,
@@ -85,14 +84,14 @@ const stagger = {
 };
 
 const EyeBrow = ({ children, center = false }) => (
-  <motion.p
+  <p
     className={`text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat] mb-2 ${center ? "text-center" : ""}`}
     initial={{ opacity: 0 }}
     whileInView={{ opacity: 1 }}
     viewport={{ once: true }}
   >
     {children}
-  </motion.p>
+  </p>
 );
 
 const Divider = ({ light = false }) => (
@@ -548,21 +547,13 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
       <section className="relative flex items-center justify-center overflow-hidden min-h-screen py-12">
         <div className="w-[70%] mx-auto text-center">
           <EyeBrow center>Why Choose Us</EyeBrow>
-          <motion.h1
+          <h1
             className="text-[clamp(28px,5vw,54px)] font-bold leading-[1.15] text-primary font-[Montserrat] mb-6"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true }}
           >
             {data.whyBuyHeroTitle}
-          </motion.h1>
-          <motion.div
+          </h1>
+          <div
             className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]"
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
             dangerouslySetInnerHTML={{ __html: data.whyBuyHeroDescription }}
           />
         </div>
@@ -572,29 +563,21 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
       <section className="py-12 px-2 lg:px-4 bg-fourth">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              viewport={{ once: true }}
+            <div
             >
               <EyeBrow>Our Story</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 <span className="text-secondary">{data.storyTitle}</span>
               </h2>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.12 }}
-              viewport={{ once: true }}
+            </div>
+            <div
               className="flex flex-col gap-4"
             >
               <div
                 className="text-primary/90 text-[15px] leading-[1.9] font-[Poppins]"
                 dangerouslySetInnerHTML={{ __html: data.storyDescription }}
               />
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -603,11 +586,7 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
       <section className="py-12 px-2 lg:px-4">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              viewport={{ once: true }}
+            <div
             >
               <EyeBrow>Selection</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
@@ -615,19 +594,15 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
                 <br />
                 <span className="text-primary">Vehicle Selection</span>
               </h2>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.12 }}
-              viewport={{ once: true }}
+            </div>
+            <div
             >
               <Divider />
               <div
                 className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]"
                 dangerouslySetInnerHTML={{ __html: data.vehicleSelectionDescription }}
               />
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -645,15 +620,12 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
             </p>
           </div>
 
-          <motion.div
+          <div
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"
             variants={stagger}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
           >
             {data.processSteps.map((s, i) => (
-              <motion.div
+              <div
                 key={i}
                 variants={fadeUp}
                 className="group relative border border-third/10 rounded-2xl p-7 flex flex-col gap-5 hover:border-primary/30 transition-all duration-300 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
@@ -681,9 +653,9 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
                     {s.description}
                   </p>
                 </div>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -691,40 +663,29 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
       <section className="py-12 px-2 lg:px-4">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              viewport={{ once: true }}
+            <div
             >
               <EyeBrow>Inspection</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 {data.inspectionTitle}
               </h2>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              viewport={{ once: true }}
+            </div>
+            <div
             >
               <Divider />
               <p className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]">
                 {data.inspectionText}
               </p>
-            </motion.div>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-stretch">
-            <motion.div
+            <div
               className="grid grid-cols-2 gap-3"
               variants={stagger}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
             >
               {data.inspectionPoints.map((pt) => (
-                <motion.div
+                <div
                   key={pt}
                   variants={fadeUp}
                   className="group flex flex-col gap-4 p-6 border border-third/10 rounded-2xl hover:border-primary/25 transition-all duration-300 hover:shadow-[0_6px_28px_rgba(0,0,0,0.35)]"
@@ -743,16 +704,12 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
                   <span className="font-[Poppins] text-sm text-third/70 leading-[1.7] group-hover:text-primary/80 transition-colors duration-300">
                     {pt}
                   </span>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
+            </div>
 
-            <motion.div
+            <div
               className="border border-third/10 rounded-2xl overflow-hidden hover:border-primary/25 transition-all duration-300 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)]"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.15 }}
-              viewport={{ once: true }}
             >
               <div className="px-6 py-5 border-b border-primary/[0.07] flex items-center justify-between">
                 <p className="font-[Montserrat] font-bold text-[9px] tracking-[0.26em] uppercase text-primary/50">
@@ -763,13 +720,9 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
                 </span>
               </div>
               {data.inspectionPoints.map((pt, i, arr) => (
-                <motion.div
+                <div
                   key={pt}
                   className={`flex justify-between items-center px-6 py-[18px] transition-colors duration-150 hover:bg-primary/4 ${i < arr.length - 1 ? "border-b border-primary/6" : ""}`}
-                  initial={{ opacity: 0, x: 10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 + i * 0.07 }}
-                  viewport={{ once: true }}
                 >
                   <div className="flex items-center gap-3">
                     <span className="font-[Montserrat] font-bold text-[10px] tracking-[0.14em] text-fourth">
@@ -785,9 +738,9 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
                       Included
                     </span>
                   </div>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -796,30 +749,22 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
       <section className="py-12 px-2 lg:px-4 bg-fourth">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              viewport={{ once: true }}
+            <div
             >
               <EyeBrow>Commitment</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 {data.customerCommitmentTitle}{" "}
 
               </h2>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              viewport={{ once: true }}
+            </div>
+            <div
             >
               <Divider light />
               <div
                 className="text-primary/90 text-[15px] leading-[1.9] font-[Poppins]"
                 dangerouslySetInnerHTML={{ __html: data.customerCommitmentDescription }}
               />
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
