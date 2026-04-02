@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import LoginPopup from "@/components/auth/LoginPopup";
