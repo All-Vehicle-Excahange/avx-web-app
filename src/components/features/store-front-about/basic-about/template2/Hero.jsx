@@ -14,25 +14,21 @@ const data = {
     Sapien platea nec urna ut est sed.`,
   missionTitle: "Our Mission",
   missionDesc: `
-    <p>
       Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
       Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
       Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
       Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Lorem ipsum dolor sit amet consectetur.
       Odio at dolor ut donec. Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur.
       Odio at dolor ut donec. Sapien platea nec
-    </p>
   `,
   visionTitle: "Our Vision",
   visionDesc: `
-    <p>
       Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
       Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
       Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.
       Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Lorem ipsum dolor sit amet consectetur.
       Odio at dolor ut donec. Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur.
       Odio at dolor ut donec. Sapien platea nec
-    </p>
   `,
   stats: [
     { number: "150K+", label: "Active Users Worldwide" },
@@ -42,9 +38,7 @@ const data = {
   ],
   servicesTitle: "What We Do",
   servicesDesc: `
-    <p>
       Enterprise-grade digital products designed to scale globally with security, speed and reliability.
-    </p>
   `,
   services: [
     {
