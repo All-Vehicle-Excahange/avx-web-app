@@ -108,6 +108,7 @@ export default function AboutHero() {
   return (
     <>
       <section className="relative flex items-center justify-center min-h-screen py-14 lg:py-24">
+        <div className="container">
         <div className="px-5 flex flex-col items-center text-center gap-6 max-w-3xl mx-auto">
           <div>
             <EyeBrow>About Us</EyeBrow>
@@ -124,9 +125,11 @@ export default function AboutHero() {
             {data.heroDescription}
           </p>
         </div>
+        </div>
       </section>
 
       <section className="py-14 lg:py-20">
+          <div className="container">
         <div className="px-2 lg:px-4">
           {/* heading row */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
@@ -172,10 +175,12 @@ export default function AboutHero() {
             ))}
           </div>
         </div>
+        </div>
       </section>
 
       <section className="py-12 lg:py-16 bg-fourth">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center px-10">
+          <div className="container">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center px-2 lg:px-4">
           {/* left — desc */}
           <div>
             <EyeBrow>By The Numbers</EyeBrow>
@@ -205,9 +210,11 @@ export default function AboutHero() {
             ))}
           </div>
         </div>
+        </div>
       </section>
 
       <section className="py-14 lg:py-20">
+          <div className="container">
         <div className="px-2 lg:px-4">
           {/* heading row */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
@@ -261,6 +268,7 @@ export default function AboutHero() {
               );
             })}
           </div>
+        </div>
         </div>
       </section>
     </>
