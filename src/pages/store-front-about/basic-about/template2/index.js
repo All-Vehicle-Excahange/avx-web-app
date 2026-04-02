@@ -1,4 +1,3 @@
-import Layout from "@/components/layout/Layout";
 import AboutHero from "@/components/features/store-front-about/basic-about/template2/Hero";
 import Navbar from "@/components/layout/Navbar";
 import FooterLink from "@/components/layout/FooterLink";
@@ -8,9 +7,7 @@ function index() {
   return (
     <>
       <Navbar/>
-      <Layout>
         <AboutHero />
-      </Layout>
       <FooterLink/>
       <Footer/>
     </>
