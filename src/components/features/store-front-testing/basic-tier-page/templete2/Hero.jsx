@@ -382,9 +382,8 @@ export default function WhyBuyHereBasic() {
               {data.inspectionPoints.map((pt, i, arr) => (
                 <div
                   key={pt}
-                  className={`flex justify-between items-center px-6 py-[18px] transition-colors duration-150 hover:bg-primary/4 ${
-                    i < arr.length - 1 ? "border-b border-primary/6" : ""
-                  }`}
+                  className={`flex justify-between items-center px-6 py-[18px] transition-colors duration-150 hover:bg-primary/4 ${i < arr.length - 1 ? "border-b border-primary/6" : ""
+                    }`}
                   initial={{ opacity: 0, x: 10 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 + i * 0.07 }}
@@ -521,11 +520,10 @@ export default function WhyBuyHereBasic() {
                   setDirection(i > index ? 1 : -1);
                   setIndex(i);
                 }}
-                className={`h-1 rounded-full transition-all duration-300 ${
-                  i === index
+                className={`h-1 rounded-full transition-all duration-300 ${i === index
                     ? "w-6 bg-primary/60"
                     : "w-2 bg-primary/15 hover:bg-primary/30"
-                }`}
+                  }`}
                 aria-label={`Go to slide ${i + 1}`}
               />
             ))}
