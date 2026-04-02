@@ -11,7 +11,6 @@ import {
   Star,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
 import EditorInput from "@/core/engine/atoms/EditorInput";
 import RichTextEditor from "@/core/engine/atoms/RichTextEditor";
 import Select from "react-select";
