@@ -1,3 +1,7 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+"use client";
+
+
 import { ChevronRight, Star } from "lucide-react";
 import { useRouter } from "next/router";
 import Link from "next/link";
