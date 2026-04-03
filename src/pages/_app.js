@@ -136,9 +136,11 @@ export default function App({ Component, pageProps }) {
             )}
 
             {/* GLOBAL COMPARE BUTTON */}
-            {!showSplash && !router.asPath.startsWith("/consult/dashboard/") && (
-                <GlobalCompareButton />
-            )}
+            {!showSplash &&
+                !router.asPath.startsWith("/consult/dashboard/") &&
+                !router.asPath.startsWith("/consult/kyc") && (
+                    <GlobalCompareButton />
+                )}
         </>
     );
 }
