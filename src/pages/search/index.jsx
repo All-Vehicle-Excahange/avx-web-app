@@ -26,7 +26,7 @@ export default function Index() {
   const [consultPayload, setConsultPayload] = useState(null);
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={null}>
       <SearchContent
         pageResponse={pageResponse}
         setPageResponse={setPageResponse}

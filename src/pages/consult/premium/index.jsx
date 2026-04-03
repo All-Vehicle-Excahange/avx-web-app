@@ -18,7 +18,7 @@ function Index() {
   const [pageResponse, setPageResponse] = useState({ totalElements: 0, totalPages: 0, currentPage: 1 });
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={null}>
       <SearchContent
         activeFilters={activeFilters}
         setActiveFilters={setActiveFilters}
