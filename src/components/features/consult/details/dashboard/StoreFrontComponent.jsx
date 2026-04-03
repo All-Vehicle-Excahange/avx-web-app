@@ -77,7 +77,7 @@ export default function StoreFrontComponent() {
       try {
         let apiData = null;
         const draftRes = await getConsualtDraft();
-        
+
         if (draftRes?.statusCode === 200 && draftRes?.data) {
           apiData = draftRes.data;
         } else {

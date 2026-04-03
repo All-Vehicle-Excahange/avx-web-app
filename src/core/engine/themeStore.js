@@ -10,6 +10,9 @@ import { ABOUT_PREMIUM_3 } from "./schemas";
 import { WHY_BUY_BASIC_1 } from "./schemas/whybuy/why_buy_basic_1";
 import { WHY_BUY_BASIC_2 } from "./schemas/whybuy/why_buy_basic_2";
 import { WHY_BUY_BASIC_3 } from "./schemas/whybuy/why_buy_basic_3";
+import { WHY_BUY_PRO_1 } from "./schemas/whybuy/why_buy_pro_1";
+import { WHY_BUY_PRO_2 } from "./schemas/whybuy/why_buy_pro_2";
+import { WHY_BUY_PRO_3 } from "./schemas/whybuy/why_buy_pro_3";
 
 export const THEME_STORE = [
   {
@@ -47,7 +50,7 @@ export const THEME_STORE = [
     category: "about",
     thumbnail: "/About us-pro-1.webp",
     preview: "/About us-pro-1.webp",
-    schema: ABOUT_PRO_1,
+    schema: [...ABOUT_PRO_1, ...WHY_BUY_PRO_1],
   },
   {
     id: "about_pro_2",
@@ -56,7 +59,7 @@ export const THEME_STORE = [
     category: "about",
     thumbnail: "/themes/about2/thumb.png",
     preview: "/themes/about2/full.png",
-    schema: ABOUT_PRO_2,
+    schema: [...ABOUT_PRO_2, ...WHY_BUY_PRO_2],
   },
   {
     id: "about_pro_3",
@@ -65,7 +68,7 @@ export const THEME_STORE = [
     category: "about",
     thumbnail: "/themes/about2/thumb.png",
     preview: "/themes/about2/full.png",
-    schema: ABOUT_PRO_3,
+    schema: [...ABOUT_PRO_3, ...WHY_BUY_PRO_3],
   },
   {
     id: "about_premium_1",

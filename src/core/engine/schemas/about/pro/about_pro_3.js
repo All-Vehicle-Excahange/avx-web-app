@@ -3,69 +3,52 @@ export const ABOUT_PRO_3 = [
     id: "about_pro_3",
     type: "about_us_theme_pro_3",
     data: {
-      /* ================= HERO ================= */
-      heroTitle: "Driving Trust. Delivering Excellence.",
-      heroSubtitle: `
-        <p>We are a next-generation automotive consulting platform helping customers buy, sell and manage vehicles with confidence.</p>
-        <p>Our verified network, transparent pricing and dedicated support ensure a premium experience at every step.</p>
-      `,
-      heroImage: "/cs.png",
-
-      /* ================= STATS ================= */
-      statsDescription: `
-        <p>Over the last decade, we have helped thousands of customers make smarter automotive decisions.</p>
-        <p>From trusted consultants to verified listings, we focus on reliability, transparency and long-term value.</p>
-      `,
+      // ====== Hero Section Data ========
+      aboutHeroTitle: "Our Story Built for Buy & Selling a Vehicle",
+      aboutHeroDescription: ` Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
+        Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
+        Sapien platea nec urna ut est sed. `,
+      aboutHeroTemplate1: { id: 1, imageUrl: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&q=80" },
+      // ====== Mission & Vision Section Data ========
+      aboutMissionTitle: "Our Mission",
+      aboutMissionDescription: `Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.`,
+      aboutMissionTemplate1: { id: 1, imageUrl: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80" },
+      aboutVisionTitle: "Our Vision",
+      aboutVisionDescription: `Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.`,
+      aboutVisionTemplate1: { id: 1, imageUrl: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80" },
+      // ====== Stats Section Data ========
+      aboutStatsDescription: `Lorem ipsum dolor sit amet consectetur.`,
       stats: [
-        { number: "15+", label: "Years Experience" },
-        { number: "4,500+", label: "Happy Customers" },
-        { number: "3,200+", label: "Vehicles Sold" },
-        { number: "120+", label: "Verified Consultants" },
+        { number: "150K+", label: "Active Users Worldwide" },
+        { number: "$2B+", label: "Transactions Processed" },
+        { number: "98%", label: "Customer Satisfaction" },
+        { number: "100+", label: "Team Members" },
       ],
-
-      /* ================= MISSION ================= */
-      missionTitle: "Our Mission",
-      missionDesc: `
-        <p>Our mission is to simplify the vehicle buying and selling journey.</p>
-        <p>We connect customers with verified consultants, provide honest pricing insights and ensure complete transaction transparency.</p>
-      `,
-      missionImage: "/cs.png",
-
-      /* ================= VISION ================= */
-      visionTitle: "Our Vision",
-      visionDesc: `
-        <p>We envision a future where automotive decisions are powered by trust and technology.</p>
-        <p>Our platform aims to become India’s most reliable digital automotive ecosystem.</p>
-      `,
-      visionImage: "/cs.png",
-
-      /* ================= SERVICES ================= */
-      servicesTitle: "What We Offer",
-      servicesSubtitle:
-        "Premium automotive solutions designed for buyers, sellers and consultants.",
-
+      // ====== Services Section Data ========
+      aboutServicesTitle: "What We Do",
+      aboutServicesDescription: `Enterprise-grade digital products designed to scale globally with security, speed and reliability.`,
       services: [
         {
-          icon: "🚗",
-          title: "Browse Vehicles",
-          desc: "Explore verified cars, bikes and EVs with transparent pricing.",
+          icon: "ShieldCheck",
+          title: "Secure Payments",
+          desc: "PCI-DSS compliant global payment systems.",
         },
         {
-          icon: "🛡️",
-          title: "Verified Consultants",
-          desc: "Connect with trusted and background-checked automotive experts.",
+          icon: "Globe",
+          title: "Global Infrastructure",
+          desc: "99.99% uptime cloud deployment in 12 regions.",
         },
         {
-          icon: "📊",
-          title: "Market Insights",
-          desc: "Get real-time pricing trends and demand analytics.",
+          icon: "TrendingUp",
+          title: "Growth Tools",
+          desc: "Smart CRM, analytics and automation funnels.",
         },
         {
-          icon: "⚡",
-          title: "Fast Transactions",
-          desc: "Quick documentation, digital verification and secure payments.",
+          icon: "Cpu",
+          title: "AI Optimization",
+          desc: "AI powered performance & conversion engines.",
         },
       ],
-    },
+    }
   },
 ];
