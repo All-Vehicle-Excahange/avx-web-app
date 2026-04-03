@@ -13,6 +13,7 @@ import WhyBuyBasic2 from "./templates/WhyBuyBasic2";
 import WhyBuyBasic3 from "./templates/WhyBuyBasic3";
 import WhyBuyPro1 from "./templates/WhyBuyPro1";
 import WhyBuyPro2 from "./templates/WhyBuyPro2";
+import WhyBuyPro3 from "./templates/WhyBuyPro3";
 
 export const TEMPLATE_REGISTRY = {
   about_us_theme_basic_1: AboutBasic1,
@@ -29,4 +30,5 @@ export const TEMPLATE_REGISTRY = {
   why_buy_theme_basic_3: WhyBuyBasic3,
   why_buy_theme_pro_1: WhyBuyPro1,
   why_buy_theme_pro_2: WhyBuyPro2,
+  why_buy_theme_pro_3: WhyBuyPro3,
 };

@@ -139,11 +139,10 @@ export default function CreateTheme() {
           <button
             key={sec.id}
             onClick={() => setActiveTab(i)}
-            className={`px-4 py-1 rounded-full text-sm ${
-              activeTab === i
+            className={`px-4 py-1 rounded-full text-sm ${activeTab === i
                 ? "bg-primary text-secondary font-bold"
                 : "border border-third/30 text-third"
-            }`}
+              }`}
           >
             {sec.type.includes("about")
               ? "About Us"
@@ -167,21 +166,19 @@ export default function CreateTheme() {
         <div className="flex  rounded-full p-1 border border-third/30">
           <button
             onClick={() => setMode("editor")}
-            className={`px-4 py-1 rounded-full text-sm transition ${
-              mode === "editor"
+            className={`px-4 py-1 rounded-full text-sm transition ${mode === "editor"
                 ? "bg-primary text-secondary font-bold"
                 : "text-third"
-            }`}
+              }`}
           >
             Editor
           </button>
           <button
             onClick={() => setMode("preview")}
-            className={`px-4 py-1 rounded-full text-sm transition ${
-              mode === "preview"
+            className={`px-4 py-1 rounded-full text-sm transition ${mode === "preview"
                 ? "bg-primary text-secondary font-bold"
                 : "text-third"
-            }`}
+              }`}
           >
             Preview
           </button>
@@ -206,12 +203,12 @@ export default function CreateTheme() {
         {sections.length > 0 && sections[activeTab]?.type?.includes("why_buy") && (
           <div className="absolute inset-x-0 bottom-0  backdrop-blur-sm p-4 border-t border-third/30 flex justify-end z-10">
             <Button
-               onClick={handleFinalSubmit}
-               disabled={isSubmitting}
-               variant="ghost"
-             >
-               {isSubmitting ? "Submitting..." : "Final Submit"}
-             </Button>
+              onClick={handleFinalSubmit}
+              disabled={isSubmitting}
+              variant="ghost"
+            >
+              {isSubmitting ? "Submitting..." : "Final Submit"}
+            </Button>
           </div>
         )}
       </div>

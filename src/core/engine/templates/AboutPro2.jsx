@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+
 "use client";
 import { motion } from "framer-motion";
 import { ABOUT_PRO_2 } from "../schemas";
