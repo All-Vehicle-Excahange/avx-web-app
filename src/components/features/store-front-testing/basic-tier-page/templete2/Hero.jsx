@@ -384,10 +384,6 @@ export default function WhyBuyHereBasic() {
                   key={pt}
                   className={`flex justify-between items-center px-6 py-[18px] transition-colors duration-150 hover:bg-primary/4 ${i < arr.length - 1 ? "border-b border-primary/6" : ""
                     }`}
-                  initial={{ opacity: 0, x: 10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 + i * 0.07 }}
-                  viewport={{ once: true }}
                 >
                   <div className="flex items-center gap-3">
                     <span className="font-[Montserrat] font-bold text-[10px] tracking-[0.14em] text-fourth">

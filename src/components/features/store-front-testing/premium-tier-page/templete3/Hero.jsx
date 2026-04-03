@@ -858,10 +858,8 @@ function Hero() {
                                 return (
                                     <div
                                         key={i}
-                                        className="absolute transition-all duration-500"
+                                        className="absolute transition-all duration-500 w-[260px] h-80"
                                         style={{
-                                            width: "260px",
-                                            height: "320px",
                                             zIndex: isHovered ? 10 : fan.zIndex,
                                             transform: `translateX(${tx}px) translateY(${ty}px) rotate(${rot}deg) scale(${sc})`,
                                         }}
