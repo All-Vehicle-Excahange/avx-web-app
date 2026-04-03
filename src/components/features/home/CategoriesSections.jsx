@@ -9,6 +9,7 @@ import {
   getFourWheelWithTag,
   getTwoWheelWithTag,
 } from "@/services/user.service";
+import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 
 const cn = (...classes) => classes.filter(Boolean).join(" ");
 
@@ -58,8 +59,10 @@ const CategoriesSections = () => {
   const [activeType, setActiveType] = useState("4-Wheeler");
   const [active, setActive] = useState("urban-rides");
   const [vehicles, setVehicles] = useState([]);
+  const [loading, setLoading] = useState(true);
   const checkedCategories = React.useRef(new Set());
   const fetchVehicles = async () => {
+    setLoading(true);
     try {
       const selectedTag = vehicleTagMap[activeType]?.[active];
       if (!selectedTag) return;
@@ -100,6 +103,8 @@ const CategoriesSections = () => {
       setVehicles(fetchedVehicles);
     } catch (error) {
       console.error("Error fetching vehicles:", error);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -194,7 +199,11 @@ const CategoriesSections = () => {
 
         {/* Vehicle Grid */}
         <div className="flex-1 min-h-0 grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {vehicles.length === 0 ? (
+          {loading ? (
+            [...Array(4)].map((_, i) => (
+              <VehicleCardSkeleton key={`skel-${i}`} />
+            ))
+          ) : vehicles.length === 0 ? (
             <div className="col-span-full text-center py-10">
               <p className="text-lg font-semibold text-primary">
                 No Vehicles Found
@@ -209,6 +218,7 @@ const CategoriesSections = () => {
             ))
           )}
         </div>
+
 
         {/* Bottom Button */}
         <div className="mt-7 flex justify-end">

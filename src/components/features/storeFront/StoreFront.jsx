@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StoreFrontHeroSection from "./StoreFrontHeroSection";
 
 // RIGHT CONTENT
@@ -13,6 +13,14 @@ import Navbar from "@/components/layout/Navbar";
 
 export default function StoreFront() {
   const [activeTab, setActiveTab] = useState("inventory");
+
+  // Fix for page opening from the middle: Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "instant", // Use "smooth" if you want a smooth transition, but "instant" is usually better for page loads
+    });
+  }, []);
 
   return (
     <>

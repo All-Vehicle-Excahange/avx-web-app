@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 import { useEffect, useState } from "react";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import Head from "next/head";
 
 import Layout from "@/components/layout/Layout";
@@ -15,6 +15,7 @@ import SplashScreen from "@/components/ui/SplashScreen";
 import GlobalCompareButton from "@/components/ui/GlobalCompareButton";
 
 export default function App({ Component, pageProps }) {
+    const router = useRouter();
     const hasFullWidth = pageProps?.fullWidth;
 
     const initializeAuth = useAuthStore((state) => state.initializeAuth);
@@ -110,7 +111,7 @@ export default function App({ Component, pageProps }) {
             </Head>
 
             {/* GLOBAL LOADER */}
-            <GlobalLoader isLoading={loading} />
+            {/* <GlobalLoader isLoading={loading} /> */}
 
             {/* MAIN APP */}
             {hasFullWidth ? (
@@ -135,7 +136,9 @@ export default function App({ Component, pageProps }) {
             )}
 
             {/* GLOBAL COMPARE BUTTON */}
-            {!showSplash && <GlobalCompareButton />}
+            {!showSplash && !router.asPath.startsWith("/consult/dashboard/") && (
+                <GlobalCompareButton />
+            )}
         </>
     );
 }

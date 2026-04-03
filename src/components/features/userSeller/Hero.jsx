@@ -97,7 +97,7 @@ function Hero() {
             className={`font-[Poppins] text-sm text-third leading-relaxed max-w-md mb-12 transition-all duration-700 delay-200 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
           >
-            AVX connects pre-owned vehicle sellers with verified buyers and
+            Reecomm connects pre-owned vehicle sellers with verified buyers and
             certified consultants. Structured deals.{" "}
             <span className="text-primary font-medium">No commission. Ever.</span>
           </p>
@@ -109,14 +109,14 @@ function Hero() {
           >
             <Button
               variant="ghost"
+              size="md"
               onClick={handleStartSelling}
-              className={" px-10 py-4 hover:-translate-y-0.5 transition-transform duration-200 "}
             >
               START SELLING
             </Button>
             <Button
               variant="ghost"
-              className="border border-primary/20 px-8 py-4 hover:border-primary/50 transition-all duration-200"
+              size="md"
             >
               EXPLORE MARKET →
             </Button>

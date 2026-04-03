@@ -9,6 +9,7 @@ import ChipGroup from "@/components/ui/chipGroup";
 import PromoCardRow from "./PromoCardRow";
 import Chip from "@/components/ui/chip";
 import Pagination from "@/components/ui/Pagination";
+import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 import {
   ChevronDownIcon,
   ChevronLeft,
@@ -52,7 +53,7 @@ function useIsMobile() {
   return isMobile;
 }
 
-export default function SearchWithCard({ onPageResponseChange, onFilterChange, onRelatedChange, onConsultChange, onConsultPayloadChange }) {
+export default function SearchWithCard({ onPageResponseChange, onFilterChange, onRelatedChange, onConsultChange, onConsultPayloadChange, onLoadingChange }) {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [activeFilterTab, setActiveFilterTab] = useState("Suggested Filters");
   const [selectedMobileChips, setSelectedMobileChips] = useState([]);
@@ -61,6 +62,12 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
   const [maxPrice, setMaxPrice] = useState(2000000);
   const [kmDistance, setKmDistance] = useState(0);
   const [vehicles, setVehicles] = useState([]);
+  const [vehiclesLoading, setVehiclesLoading] = useState(true);
+
+  useEffect(() => {
+    if (onLoadingChange) onLoadingChange(vehiclesLoading);
+  }, [vehiclesLoading, onLoadingChange]);
+
   const [relatedVehicles, setRelatedVehicles] = useState([]);
   const [priceBasedVehicles, setPriceBasedVehicles] = useState([]);
   const [topPicksPageResponse, setTopPicksPageResponse] = useState(null);
@@ -296,6 +303,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
 
   /* ================= FETCH VEHICLES ================= */
   const fetchVehicles = async (page = currentPage, payload = null) => {
+    setVehiclesLoading(true);
     try {
       const body = payload ?? buildPayload();
       const params = {
@@ -342,6 +350,8 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
     } catch (error) {
       console.error("Error fetching vehicles:", error);
       setVehicles([]);
+    } finally {
+      setVehiclesLoading(false);
     }
   };
 
@@ -1425,85 +1435,85 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                   </div>
                 )}
               </div>
-            </div>
-
-            <div className="hidden lg:flex items-center justify-between px-4 py-3 rounded-xl border border-white/20 backdrop-blur-md bg-transparent">
-              <span className="text-primary font-semibold text-sm">
-                AVX Inspected
-              </span>
-
-              <button
-                onClick={() => setAvxAssumed(!avxAssumed)}
-                className={`relative w-12 h-6 rounded-full transition cursor-pointer ${avxAssumed ? "bg-primary/90" : "bg-white/20"}`}
-              >
-                <span
-                  className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-secondary transition-transform ${avxAssumed ? "translate-x-6" : "translate-x-0"}`}
-                />
-              </button>
-            </div>
 
 
-            <FilterSection title="Budget" defaultOpen={true}>
-              <div className="flex flex-col gap-2 mt-3">
-                <div className="flex justify-between text-xs text-primary/70 mb-1">
-                  <span>Min Price</span>
-                  <span>Max Price</span>
-                </div>
+              <div className="hidden lg:flex items-center justify-between px-4 py-3 rounded-xl border border-white/20 backdrop-blur-md bg-transparent">
+                <span className="text-primary font-semibold text-sm">
+                  Reecomm Inspected
+                </span>
 
-                <div className="relative h-6 flex items-center">
-                  <div
-                    className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
-                    style={{ background: getTrackBackground() }}
+                <button
+                  onClick={() => setAvxAssumed(!avxAssumed)}
+                  className={`relative w-12 h-6 rounded-full transition cursor-pointer ${avxAssumed ? "bg-primary/90" : "bg-white/20"}`}
+                >
+                  <span
+                    className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-secondary transition-transform ${avxAssumed ? "translate-x-6" : "translate-x-0"}`}
                   />
-
-                  <input
-                    type="range"
-                    min={MIN}
-                    max={MAX}
-                    step={1}
-                    value={minPrice}
-                    onChange={(e) =>
-                      setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
-                    }
-                    onMouseUp={() => {
-                      setCurrentPage(1);
-                      fetchVehicles(1);
-                    }}
-                    onTouchEnd={() => {
-                      setCurrentPage(1);
-                      fetchVehicles(1);
-                    }}
-                    className="dual-range z-30"
-                  />
-
-                  <input
-                    type="range"
-                    min={MIN}
-                    max={MAX}
-                    step={1}
-                    value={maxPrice}
-                    onChange={(e) =>
-                      setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
-                    }
-                    onMouseUp={() => {
-                      setCurrentPage(1);
-                      fetchVehicles(1);
-                    }}
-                    onTouchEnd={() => {
-                      setCurrentPage(1);
-                      fetchVehicles(1);
-                    }}
-                    className="dual-range z-40"
-                  />
-                </div>
-
-                <div className="flex justify-between text-xs text-primary/70 mb-1">
-                  <span>₹{minPrice}</span>
-                  <span>₹{maxPrice}</span>
-                </div>
+                </button>
               </div>
-            </FilterSection>
 
+
+              <FilterSection title="Budget" defaultOpen={true}>
+                <div className="flex flex-col gap-2 mt-3">
+                  <div className="flex justify-between text-xs text-primary/70 mb-1">
+                    <span>Min Price</span>
+                    <span>Max Price</span>
+                  </div>
+
+                  <div className="relative h-6 flex items-center">
+                    <div
+                      className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
+                      style={{ background: getTrackBackground() }}
+                    />
+
+                    <input
+                      type="range"
+                      min={MIN}
+                      max={MAX}
+                      step={1}
+                      value={minPrice}
+                      onChange={(e) =>
+                        setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
+                      }
+                      onMouseUp={() => {
+                        setCurrentPage(1);
+                        fetchVehicles(1);
+                      }}
+                      onTouchEnd={() => {
+                        setCurrentPage(1);
+                        fetchVehicles(1);
+                      }}
+                      className="dual-range z-30"
+                    />
+
+                    <input
+                      type="range"
+                      min={MIN}
+                      max={MAX}
+                      step={1}
+                      value={maxPrice}
+                      onChange={(e) =>
+                        setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
+                      }
+                      onMouseUp={() => {
+                        setCurrentPage(1);
+                        fetchVehicles(1);
+                      }}
+                      onTouchEnd={() => {
+                        setCurrentPage(1);
+                        fetchVehicles(1);
+                      }}
+                      className="dual-range z-40"
+                    />
+                  </div>
+
+                  <div className="flex justify-between text-xs text-primary/70 mb-1">
+                    <span>₹{minPrice}</span>
+                    <span>₹{maxPrice}</span>
+                  </div>
+                </div>
+              </FilterSection>
+            </div>
 
             <FilterSection title="Brand">
               <ChipGroup
@@ -1670,7 +1680,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
               />
             </FilterSection>
 
-            <div className="mt-4 flex items-center justify-between gap-3">
+            {/* <div className="mt-4 flex items-center justify-between gap-3">
               <Button
                 variant="outline"
                 className="text-primary px-5 py-2"
@@ -1679,9 +1689,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
               >
                 Apply Filter
               </Button>
-
-
-            </div>
+            </div> */}
           </div>
         </div>
       </aside>
@@ -1735,10 +1743,10 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
           </div>
 
           <div className="col-span-full mb-10">
-            <SponsoredCars />
+            <SponsoredCars loading={vehiclesLoading} />
           </div>
 
-          <div className="col-span-full mb-10">
+          <div className="col-span-full mb-10 ">
             {(() => {
               // --- Price range label ---
               const userSetPrice = minPrice > MIN || maxPrice < MAX;
@@ -1788,11 +1796,24 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                   </span>
                 </>
               );
-              return <PriceBased data={priceBasedVehicles} title={dynamicTitle} />;
+              return <PriceBased data={priceBasedVehicles} title={dynamicTitle} loading={vehiclesLoading} />;
             })()}
           </div>
 
-          {vehicles?.length > 0 && (
+          {vehiclesLoading ? (
+            <>
+              <div className="col-span-full">
+                <div className="flex flex-col items-start gap-2">
+                  <div className="skeleton-shimmer h-4 w-28 rounded-md mb-2" />
+                  <div className="skeleton-shimmer h-8 w-64 rounded-md" />
+                  <div className="skeleton-shimmer h-4 w-80 rounded-md" />
+                </div>
+              </div>
+              {[...Array(6)].map((_, i) => (
+                <VehicleCardSkeleton key={`skel-${i}`} />
+              ))}
+            </>
+          ) : vehicles?.length > 0 && (
             <>
               <div className="col-span-full">
                 <div className="flex flex-col items-start gap-2">

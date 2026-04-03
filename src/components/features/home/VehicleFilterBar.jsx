@@ -415,7 +415,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                               setStateId(item.stateId);
                               openNextAvailableTab("location");
                             }}
-                            className="flex items-center justify-between gap-4 py-2 px-3 hover:bg-neutral-800 rounded-lg text-left"
+                            className="flex items-center justify-between gap-4 py-2 px-3 hover:bg-neutral-800 rounded-lg text-left cursor-pointer"
                           >
                             <span className="text-sm font-semibold text-white">{item.cityName}</span>
                             <span className="text-xs text-gray-400">{item.stateName}</span>
@@ -455,7 +455,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                           setVehicleTypeError(false);
                           openNextAvailableTab("vehicle");
                         }}
-                        className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold"
+                        className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold cursor-pointer"
                       >
                         {type.label}
                       </button>
@@ -490,7 +490,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                               setPriceRange(range);
                               openNextAvailableTab("priceRange");
                             }}
-                            className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold"
+                            className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold cursor-pointer"
                           >
                             {range}
                           </button>
@@ -522,7 +522,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                                   setService(svc.value);
                                   openNextAvailableTab("service");
                                 }}
-                                className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold"
+                                className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold cursor-pointer"
                               >
                                 {svc.label}
                               </button>
@@ -558,7 +558,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                               setAvailability(opt.label);
                               openNextAvailableTab("availability");
                             }}
-                            className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold"
+                            className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold cursor-pointer"
                           >
                             {opt.label}
                           </button>
@@ -599,7 +599,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                               setBodyType(type.label);
                               openNextAvailableTab("bodyType", type.label);
                             }}
-                            className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold"
+                            className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold cursor-pointer"
                           >
                             {type.label}
                           </button>
@@ -629,7 +629,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                               setFuelType(f);
                               openNextAvailableTab("fuel", f);
                             }}
-                            className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold"
+                            className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold cursor-pointer"
                           >
                             {f}
                           </button>
@@ -668,7 +668,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                                 setBrandSearch("");
                                 openNextAvailableTab("brand");
                               }}
-                              className="w-full py-1.5 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold"
+                              className="w-full py-1.5 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold cursor-pointer"
                             >
                               {b.makeDisplay}
                             </button>
@@ -699,7 +699,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                               setBudget(range);
                               openNextAvailableTab("budget");
                             }}
-                            className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold"
+                            className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold cursor-pointer"
                           >
                             {range}
                           </button>
@@ -739,7 +739,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   setMobileOpen(true);
                   setShowTypeDropdown(false);
                 }}
-                className="w-full flex items-center gap-3 p-4 hover:bg-neutral-800 rounded-xl text-left"
+                className="w-full flex items-center gap-3 p-4 hover:bg-neutral-800 rounded-xl text-left cursor-pointer"
               >
                 <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-primary">
                   <Search size={18} />
@@ -756,7 +756,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   setMobileOpen(true);
                   setShowTypeDropdown(false);
                 }}
-                className="w-full flex items-center gap-3 p-4 hover:bg-neutral-800 rounded-xl text-left"
+                className="w-full flex items-center gap-3 p-4 hover:bg-neutral-800 rounded-xl text-left cursor-pointer"
               >
                 <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-primary">
                   <Search size={18} />
@@ -812,7 +812,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
             <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "location" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
               <button
                 onClick={() => handleActiveTabChange(activeTab === "location" ? null : "location")}
-                className="w-full flex items-center justify-between p-4 text-left"
+                className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
               >
                 <div className="flex flex-col items-start w-full">
                   <span className="text-xs font-semibold text-primary">Location</span>
@@ -841,7 +841,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                             setLocationSuggestions([]);
                             openNextAvailableTab("location");
                           }}
-                          className="w-full flex items-center justify-between gap-4 py-3 px-4 border-b border-neutral-700 last:border-0 hover:bg-neutral-700 text-left"
+                          className="w-full flex items-center justify-between gap-4 py-3 px-4 border-b border-neutral-700 last:border-0 hover:bg-neutral-700 text-left cursor-pointer"
                         >
                           <span className="text-sm font-semibold text-white">{item.cityName}</span>
                           <span className="text-xs text-gray-400">{item.stateName}</span>
@@ -857,7 +857,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
             <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "vehicle" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
               <button
                 onClick={() => handleActiveTabChange(activeTab === "vehicle" ? null : "vehicle")}
-                className="w-full flex items-center justify-between p-4 text-left"
+                className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
               >
                 <div className="flex flex-col items-start w-full">
                   <span className="text-xs font-semibold text-primary">Vehicle Type</span>
@@ -870,7 +870,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     <button
                       key={type.id}
                       onClick={() => { setVehicleType(type.label); setVehicleTypeError(false); openNextAvailableTab("vehicle"); }}
-                      className={`flex-1 mt-3 py-3 text-sm font-bold rounded-lg transition-colors ${vehicleType === type.label ? 'bg-white text-black' : 'bg-neutral-800 text-gray-400 hover:text-white'}`}
+                      className={`flex-1 mt-3 py-3 text-sm font-bold rounded-lg transition-colors cursor-pointer ${vehicleType === type.label ? 'bg-white text-black' : 'bg-neutral-800 text-gray-400 hover:text-white'}`}
                     >
                       {type.label}
                     </button>
@@ -883,7 +883,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
               <>
                 {/* Price Range */}
                 <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "priceRange" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
-                  <button onClick={() => handleActiveTabChange(activeTab === "priceRange" ? null : "priceRange")} className="w-full flex items-center justify-between p-4 text-left">
+                  <button onClick={() => handleActiveTabChange(activeTab === "priceRange" ? null : "priceRange")} className="w-full flex items-center justify-between p-4 text-left cursor-pointer">
                     <div className="flex flex-col items-start w-full">
                       <span className="text-xs font-semibold text-primary">Price Range</span>
                       <span className={`font-medium text-sm mt-1 truncate w-full ${priceRange ? "text-white" : "text-gray-500"}`}>{priceRange || "Select price"}</span>
@@ -895,7 +895,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                         <button
                           key={range}
                           onClick={() => { setPriceRange(range); openNextAvailableTab("priceRange"); }}
-                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 ${priceRange === range ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
+                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${priceRange === range ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
                         >
                           {range}
                         </button>
@@ -906,7 +906,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
                 {/* Service */}
                 <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "service" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
-                  <button onClick={() => handleActiveTabChange(activeTab === "service" ? null : "service")} className="w-full flex items-center justify-between p-4 text-left">
+                  <button onClick={() => handleActiveTabChange(activeTab === "service" ? null : "service")} className="w-full flex items-center justify-between p-4 text-left cursor-pointer">
                     <div className="flex flex-col items-start w-full">
                       <span className="text-xs font-semibold text-primary">Service</span>
                       <span className={`font-medium text-sm mt-1 truncate w-full ${service ? "text-white" : "text-gray-500"}`}>{service || "Select service"}</span>
@@ -918,7 +918,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                         <button
                           key={opt.value}
                           onClick={() => { setService(opt.value); openNextAvailableTab("service"); }}
-                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 ${service === opt.value ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
+                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${service === opt.value ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
                         >
                           {opt.label}
                         </button>
@@ -929,7 +929,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
                 {/* Availability */}
                 <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "availability" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
-                  <button onClick={() => handleActiveTabChange(activeTab === "availability" ? null : "availability")} className="w-full flex items-center justify-between p-4 text-left">
+                  <button onClick={() => handleActiveTabChange(activeTab === "availability" ? null : "availability")} className="w-full flex items-center justify-between p-4 text-left cursor-pointer">
                     <div className="flex flex-col items-start w-full">
                       <span className="text-xs font-semibold text-primary">Availability</span>
                       <span className={`font-medium text-sm mt-1 truncate w-full ${availability ? "text-white" : "text-gray-500"}`}>{availability || "Select availability"}</span>
@@ -941,7 +941,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                         <button
                           key={opt.value}
                           onClick={() => { setAvailability(opt.label); openNextAvailableTab("availability"); }}
-                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 ${availability === opt.label ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
+                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${availability === opt.label ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
                         >
                           {opt.label}
                         </button>
@@ -954,7 +954,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
               <>
                 {/* Body Type */}
                 <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "bodyType" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
-                  <button onClick={() => handleActiveTabChange(activeTab === "bodyType" ? null : "bodyType")} className="w-full flex items-center justify-between p-4 text-left">
+                  <button onClick={() => handleActiveTabChange(activeTab === "bodyType" ? null : "bodyType")} className="w-full flex items-center justify-between p-4 text-left cursor-pointer">
                     <div className="flex flex-col items-start w-full">
                       <span className="text-xs font-semibold text-primary">Body Type</span>
                       <span className={`font-medium text-sm mt-1 truncate w-full ${bodyType ? "text-white" : "text-gray-500"}`}>{bodyType || "Add type"}</span>
@@ -966,7 +966,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                         <button
                           key={type.key}
                           onClick={() => { setBodyType(type.label); openNextAvailableTab("bodyType", type.label); }}
-                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 ${bodyType === type.label ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
+                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${bodyType === type.label ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
                         >
                           {type.label}
                         </button>
@@ -977,7 +977,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
                 {/* Fuel Type */}
                 <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "fuel" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
-                  <button onClick={() => handleActiveTabChange(activeTab === "fuel" ? null : "fuel")} className="w-full flex items-center justify-between p-4 text-left">
+                  <button onClick={() => handleActiveTabChange(activeTab === "fuel" ? null : "fuel")} className="w-full flex items-center justify-between p-4 text-left cursor-pointer">
                     <div className="flex flex-col items-start w-full">
                       <span className="text-xs font-semibold text-primary">Fuel Type</span>
                       <span className={`font-medium text-sm mt-1 truncate w-full ${fuelType ? "text-white" : "text-gray-500"}`}>{fuelType || "Select fuel"}</span>
@@ -989,7 +989,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                         <button
                           key={fuel}
                           onClick={() => { setFuelType(fuel); openNextAvailableTab("fuel", fuel); }}
-                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 ${fuelType === fuel ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
+                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${fuelType === fuel ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
                         >
                           {fuel}
                         </button>
@@ -1000,7 +1000,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
                 {/* Brand Search */}
                 <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "brand" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
-                  <button onClick={() => handleActiveTabChange(activeTab === "brand" ? null : "brand")} className="w-full flex items-center justify-between p-4 text-left">
+                  <button onClick={() => handleActiveTabChange(activeTab === "brand" ? null : "brand")} className="w-full flex items-center justify-between p-4 text-left cursor-pointer">
                     <div className="flex flex-col items-start w-full">
                       <span className="text-xs font-semibold text-primary">Brand</span>
                       <span className={`font-medium text-sm mt-1 truncate w-full ${brand ? "text-white" : "text-gray-500"}`}>{brand || "Search brand"}</span>
@@ -1028,7 +1028,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                               setBrandSearch("");
                               openNextAvailableTab("brand");
                             }}
-                            className={`w-full py-3 px-4 border-b border-neutral-700 last:border-none text-left text-sm font-semibold text-white ${brand === b.makeName ? 'bg-white text-black' : 'hover:bg-neutral-800'}`}
+                            className={`w-full py-3 px-4 border-b border-neutral-700 last:border-none text-left text-sm font-semibold text-white cursor-pointer ${brand === b.makeName ? 'bg-white text-black' : 'hover:bg-neutral-800'}`}
                           >
                             {b.makeDisplay}
                           </button>
@@ -1040,7 +1040,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
                 {/* Budget */}
                 <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "budget" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
-                  <button onClick={() => handleActiveTabChange(activeTab === "budget" ? null : "budget")} className="w-full flex items-center justify-between p-4 text-left">
+                  <button onClick={() => handleActiveTabChange(activeTab === "budget" ? null : "budget")} className="w-full flex items-center justify-between p-4 text-left cursor-pointer">
                     <div className="flex flex-col items-start w-full">
                       <span className="text-xs font-semibold text-primary">Budget</span>
                       <span className={`font-medium text-sm mt-1 truncate w-full ${budget ? "text-white" : "text-gray-500"}`}>{budget || "Select budget"}</span>
@@ -1052,7 +1052,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                         <button
                           key={range}
                           onClick={() => { setBudget(range); openNextAvailableTab("budget"); }}
-                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 ${budget === range ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
+                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${budget === range ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
                         >
                           {range}
                         </button>
@@ -1068,7 +1068,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           <div className="p-4 border-t border-neutral-800 shrink-0 bg-secondary sm:rounded-b-3xl">
             <button
               onClick={handleSearch}
-              className="w-full bg-primary text-secondary font-bold text-lg py-4 rounded-full flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-95 transition-transform"
+              className="w-full bg-primary text-secondary font-bold text-lg py-4 rounded-full flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-95 transition-transform cursor-pointer"
             >
               <Search size={20} />
               Search Vehicles

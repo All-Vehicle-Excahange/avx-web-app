@@ -87,15 +87,14 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
     const slug = createSlug(mapped.title);
     const handleCardClick = () => {
         router.push(
-            `/vehicle/details/${slug}/${data.id}?source=${source}`,
-            undefined,
-            { scroll: false }
+            `/vehicle/details/${slug}/${data.id}?source=${source}`
         );
     }
 
     return (
         <>
             <div
+                onClick={handleCardClick}
                 className="
         group/card relative flex flex-row md:flex-col
         rounded-2xl overflow-hidden
@@ -104,11 +103,11 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
         border-2 border-third/60
         hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]
         transition-shadow duration-300
-        h-full md:h-[500px]"
+        h-full md:h-[500px] cursor-pointer"
             >
                 <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
                     {/* IMAGE */}
-                    <div onClick={handleCardClick} className="relative w-42 sm:w-40 min-h-45 md:min-h-0 md:h-62 md:w-full shrink-0 p-2 hover:cursor-pointer">
+                    <div className="relative w-42 sm:w-40 min-h-45 md:min-h-0 md:h-62 md:w-full shrink-0 p-2">
                         <div className="relative w-full h-full overflow-hidden rounded-xl">
                             {mapped.sponsored && <SponsoredRibbon />}
 
@@ -207,7 +206,7 @@ export default function VehicleCard({ data, onWishlistChange, source = "search" 
                             <h3 className="text-sm md:text-xl font-bold text-primary">₹ {mapped.price}</h3>
 
                             <div className="hidden md:block">
-                                <Button href={`/vehicle/details/${slug}/${data.id}?source=${source}`} scroll={false} variant="outline" size="sm">
+                                <Button href={`/vehicle/details/${slug}/${data.id}?source=${source}`} scroll={true} variant="outline" size="sm">
                                     View Details
                                 </Button>
                             </div>

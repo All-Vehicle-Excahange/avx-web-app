@@ -26,6 +26,7 @@ import VehicleOverviewMain from "./VehicleOverviewMain";
 import { useParams } from "next/navigation";
 import { getVehicleOverview, getVehicleSummary } from "@/services/vehicle.service";
 import ReletedConsualt from "./ReletedConsualt";
+import VehicleDetailsSkeleton from "@/components/ui/skeleton/VehicleDetailsSkeleton";
 
 export default function VehicleDetails() {
   const specificationRef = useRef(null);
@@ -89,33 +90,41 @@ export default function VehicleDetails() {
   const id = params.id;
   const [vehicleOverview, setVehicleOverview] = useState({});
   const [vehicleSummary, setVehicleSummary] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchOverview = async () => {
+    const fetchAll = async () => {
+      setLoading(true);
       try {
-        const res = await getVehicleOverview(id)
-        setVehicleOverview(res.data)
+        const [overviewRes, summaryRes] = await Promise.all([
+          getVehicleOverview(id),
+          id ? getVehicleSummary(id) : Promise.resolve({ data: {} }),
+        ]);
+        setVehicleOverview(overviewRes.data);
+        setVehicleSummary(summaryRes.data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
-    }
-    fetchOverview();
-  }, [id])
+    };
+    if (id) fetchAll();
+  }, [id]);
 
-  useEffect(() => {
-    const fetchSummary = async () => {
-      try {
-        const res = await getVehicleSummary(id)
-        setVehicleSummary(res.data)
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    if (id) {
-      fetchSummary();
-    }
-  }, [id])
-
+  if (loading) {
+    return (
+      <>
+        <div className="fixed top-0 inset-x-0 z-1000">
+          <Navbar heroMode scrolled={true} />
+        </div>
+        <main className="text-secondary w-full">
+          <div className="w-full py-6 pb-24 lg:pb-6">
+            <VehicleDetailsSkeleton />
+          </div>
+        </main>
+      </>
+    );
+  }
 
   return (
     <>

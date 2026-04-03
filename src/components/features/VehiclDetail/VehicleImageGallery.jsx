@@ -51,7 +51,7 @@ export default function VehicleImageGallery({ vehicle }) {
     if (!media.length) return null;
 
     return (
-        <section className="w-full bg-primary/80 rounded-xl p-4 shadow border border-third">
+        <section className="w-full rounded-xl p-4 shadow border border-third/60">
             {/* ===== MAIN PREVIEW ===== */}
             <div className="relative w-full aspect-video bg-black/5 rounded-lg overflow-hidden group">
                 <Swiper
@@ -88,11 +88,11 @@ export default function VehicleImageGallery({ vehicle }) {
                 </Swiper>
 
                 {/* NAV BUTTONS */}
-                <button className="gallery-prev absolute left-3 top-1/2 -translate-y-1/2 z-10 bg-secondary text-primary p-2 rounded-full hover:scale-105 transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hidden md:block">
+                <button className="gallery-prev absolute left-3 top-1/2 -translate-y-1/2 z-10 bg-primary/90 text-secondary p-2 rounded-full hover:scale-105 transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hidden md:block">
                     <ChevronLeft />
                 </button>
 
-                <button className="gallery-next absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-secondary text-primary p-2 rounded-full hover:scale-105 transition duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hidden md:block">
+                <button className="gallery-next absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-primary/90 text-secondary p-2 rounded-full hover:scale-105 transition duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hidden md:block">
                     <ChevronRight />
                 </button>
             </div>
@@ -113,8 +113,8 @@ export default function VehicleImageGallery({ vehicle }) {
                         <SwiperSlide
                             key={idx}
                             className="w-20! sm:w-24! shrink-0 rounded-md overflow-hidden cursor-pointer transition-all
-  [&.swiper-slide-thumb-active_div]:border-secondary [&.swiper-slide-thumb-active_div]:border-2"                        >
-                            <div className="w-20 h-14 sm:w-24 sm:h-16 bg-black/5 flex items-center justify-center relative border transition rounded-md overflow-hidden border-third/40 [&.swiper-slide-thumb-active>div]:border-secondary">
+  [&.swiper-slide-thumb-active_div]:border-primary/90 [&.swiper-slide-thumb-active_div]:border-2"                        >
+                            <div className="w-20 h-14 sm:w-24 sm:h-16 bg-black/5 flex items-center justify-center relative border transition rounded-md overflow-hidden border-primary/40 [&.swiper-slide-thumb-active>div]:border-primary/90">
                                 {item.type === "image" ? (
                                     <Image
                                         src={item.thumbnail}

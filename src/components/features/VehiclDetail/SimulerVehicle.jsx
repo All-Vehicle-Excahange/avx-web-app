@@ -2,17 +2,20 @@ import React, { useEffect, useState } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
 import { getSimularVehicles } from "@/services/user.service";
+import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 import { useParams, useRouter } from "next/navigation";
 
 function SimulerVehicle({ vehicleOverview }) {
 
     const [vehicle, setVehicle] = useState([])
+    const [loading, setLoading] = useState(true);
     const params = useParams();
     const router = useRouter();
     const id = params.id;
 
     useEffect(() => {
         const fetchVehicles = async () => {
+            setLoading(true);
             try {
                 const data = {
                     pageNo: 1, size: 8, id: id
@@ -21,6 +24,8 @@ function SimulerVehicle({ vehicleOverview }) {
                 setVehicle(res.data)
             } catch (error) {
                 console.log(error);
+            } finally {
+                setLoading(false);
             }
         }
 
@@ -57,7 +62,7 @@ function SimulerVehicle({ vehicleOverview }) {
             <div className="flex flex-col items-start gap-2">
                 <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
                     Similar
-                    <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+                    <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
                 </p>
 
                 <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
@@ -73,9 +78,15 @@ function SimulerVehicle({ vehicleOverview }) {
             <div
                 className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
             >
-                {vehicle.map((car) => (
-                    <VehicleCard key={car.id} data={car} />
-                ))}
+                {loading ? (
+                    [...Array(4)].map((_, i) => (
+                        <VehicleCardSkeleton key={`skel-${i}`} />
+                    ))
+                ) : (
+                    vehicle.map((car) => (
+                        <VehicleCard key={car.id} data={car} />
+                    ))
+                )}
             </div>
 
             {/* Bottom Right Button */}

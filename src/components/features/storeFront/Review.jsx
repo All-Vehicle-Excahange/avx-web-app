@@ -10,6 +10,7 @@ import { Star, Camera, Info, Lock, Plus, MessageSquare } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import StoreFrontReviewSkeleton from "@/components/ui/skeleton/StoreFrontReviewSkeleton";
 
 export default function Review() {
   const id = useParams()?.id;
@@ -24,6 +25,7 @@ export default function Review() {
   const [reviewSummary, setReviewSummary] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [media, setMedia] = useState([{ file: null }]);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
 
   useEffect(() => {
     const checkEligibility = async () => {
@@ -49,6 +51,8 @@ export default function Review() {
         setReviewSummary(apiData?.reviewSummary || null);
       } catch (error) {
         console.log("Review Fetch Error:", error);
+      } finally {
+        setReviewsLoading(false);
       }
     };
 
@@ -110,6 +114,8 @@ export default function Review() {
       console.log("❌ Submit Error:", error);
     }
   };
+
+  if (reviewsLoading) return <StoreFrontReviewSkeleton />;
 
   return (
     <section className="container mt-4 text-primary py-6 sm:py-10">

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
 import { Bike, Car } from "lucide-react";
+import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 
 import "swiper/css";
 import {
@@ -16,9 +17,11 @@ const cn = (...classes) => classes.filter(Boolean).join(" ");
 export default function AvxInspected() {
     const [activeType, setActiveType] = useState("4-Wheeler");
     const [vehicles, setVehicles] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchVehicles = async () => {
+            setLoading(true);
             try {
                 const data = { pageNo: 1, size: 4 };
                 let res;
@@ -32,6 +35,8 @@ export default function AvxInspected() {
                 setVehicles(res?.data || []);
             } catch (error) {
                 console.log("API ERROR:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -48,10 +53,10 @@ export default function AvxInspected() {
                     <div className="flex flex-col items-start gap-2">
                         <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
                             Vehicles
-                            <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+                            <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
                         </p>
                         <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-                            AVX <span className="text-fourth">Inspected</span> Vehicles
+                            Reecomm <span className="text-fourth">Inspected</span> Vehicles
                         </h2>
                         <p className="text-third ">
                             Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
@@ -87,9 +92,12 @@ export default function AvxInspected() {
                 </div>
 
                 {/* Grid */}
-
                 <div className="grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {vehicles.length > 0 ? (
+                    {loading ? (
+                        [...Array(4)].map((_, i) => (
+                            <VehicleCardSkeleton key={`skel-${i}`} />
+                        ))
+                    ) : vehicles.length > 0 ? (
                         vehicles.map((vehicle) => (
                             <VehicleCard
                                 key={vehicle.id}

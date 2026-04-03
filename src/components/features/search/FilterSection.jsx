@@ -10,14 +10,13 @@ export default function FilterSection({ title, defaultOpen = false, children }) 
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between text-left"
+        className="w-full cursor-pointer flex items-center justify-between text-left"
       >
         <h3 className="text-sm font-semibold text-primary">{title}</h3>
 
         <ChevronDown
-          className={`h-4 w-4 text-primary transition-transform ${
-            open ? "rotate-180" : ""
-          }`}
+          className={`h-4 w-4 text-primary transition-transform ${open ? "rotate-180" : ""
+            }`}
         />
       </button>
 

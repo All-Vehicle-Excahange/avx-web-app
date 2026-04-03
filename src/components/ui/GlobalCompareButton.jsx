@@ -24,7 +24,7 @@ export default function GlobalCompareButton() {
                     dragElastic={0.05}
                     dragMomentum={false}
                     onClick={() => openCompare(isDetailPage)}
-                    className="absolute right-4 bottom-32 sm:right-6 lg:bottom-24 bg-fourth text-primary p-3 sm:p-4 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.5)] cursor-grab active:cursor-grabbing hover:bg-fourth/90 border border-primary/20 flex flex-col items-center justify-center gap-1 w-14 h-14 transition-colors pointer-events-auto"
+                    className="absolute right-4 bottom-32 sm:right-6 lg:bottom-10 bg-fourth text-primary p-3 sm:p-4 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.5)] cursor-grab active:cursor-grabbing hover:bg-fourth/90 border border-primary/20 flex flex-col items-center justify-center gap-1 w-14 h-14 transition-colors pointer-events-auto"
                     whileTap={{ scale: 0.95 }}
                     title="Compare Vehicles (Drag me!)"
                 >
