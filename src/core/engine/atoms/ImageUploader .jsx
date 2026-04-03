@@ -18,10 +18,11 @@ export const ImageUploader = ({
   onChange,
   fieldKey,
   sizeText = "Image",
+  imageType,
 }) => {
   const [open, setOpen] = useState(false);
 
-  const type = detectType(fieldKey);
+  const type = imageType || detectType(fieldKey);
   return (
     <>
       <div className="flex flex-col gap-1 w-full h-full">
