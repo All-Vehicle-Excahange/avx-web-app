@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { ShieldCheck, Globe, TrendingUp, Cpu, Target, Eye } from "lucide-react";
 
 const iconMap = { ShieldCheck, Globe, TrendingUp, Cpu, Target, Eye };
@@ -98,14 +97,14 @@ const stagger = {
 };
 
 const EyeBrow = ({ children }) => (
-  <motion.p
+  <p
     className="text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat] mb-4"
     initial={{ opacity: 0 }}
     whileInView={{ opacity: 1 }}
     viewport={{ once: true }}
   >
     {children}
-  </motion.p>
+  </p>
 );
 
 const Divider = () => <div className="w-8 h-px bg-primary/15 my-2" />;
@@ -157,11 +156,8 @@ export default function AboutPage() {
     <div className="w-full flex justify-center">
       <div className="flex flex-col gap-6 max-w-2xl text-left">
 
-        <motion.div
+        <div
           className="flex flex-col gap-6"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
         >
           <EyeBrow>About Us</EyeBrow>
 
@@ -174,19 +170,16 @@ export default function AboutPage() {
           </h1>
 
           <div className="w-12 h-0.5 bg-fourth" />
-        </motion.div>
+        </div>
 
         {/* description */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.15 }}
+        <div
         >
           <div
             className="font-[Poppins] text-[14.5px] text-white/80 leading-[1.9]"
             dangerouslySetInnerHTML={{ __html: data.heroDesc }}
           />
-        </motion.div>
+        </div>
 
       </div>
     </div>
@@ -200,23 +193,15 @@ export default function AboutPage() {
           <div className="">
             {/* heading row */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-28 items-end mb-16">
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7 }}
-                viewport={{ once: true }}
+              <div
               >
                 <EyeBrow>What Drives Us</EyeBrow>
                 <h2 className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-[1.02] text-primary font-[Montserrat]">
                   Mission &amp; <span className="text-fourth">Vision</span>
                 </h2>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7, delay: 0.1 }}
-                viewport={{ once: true }}
+              <div
                 className="max-w-md"
               >
                 <Divider />
@@ -224,7 +209,7 @@ export default function AboutPage() {
                   The principles behind everything we build and every decision
                   we make.
                 </p>
-              </motion.div>
+              </div>
             </div>
 
             {/* cards */}
@@ -233,12 +218,8 @@ export default function AboutPage() {
                 const Icon = iconMap[item.icon];
 
                 return (
-                  <motion.div
+                  <div
                     key={item.tag}
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.7 }}
                     className={`grid grid-cols-1 lg:grid-cols-2 gap-10 items-center relative
               ${item.flip ? "lg:[&>*:first-child]:order-2 lg:[&>*:last-child]:order-1" : ""}`}
                   >
@@ -272,7 +253,7 @@ export default function AboutPage() {
                         {item.desc}
                       </p>
                     </div>
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>
@@ -284,11 +265,7 @@ export default function AboutPage() {
           STATS
           ════════════════════════════════════════ */}
       <section className="py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+        <div
           className="relative  overflow-hidden bg-fourth/95 border border-primary/10 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
         >
           {/* subtle glow background */}
@@ -324,12 +301,8 @@ export default function AboutPage() {
               {/* ── STATS ── */}
               <div className="grid grid-cols-2 lg:grid-cols-4 relative z-10">
                 {data.stats.map((stat, i) => (
-                  <motion.div
+                  <div
                     key={i}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: i * 0.08 }}
                     className="group relative  py-5 border-primary/10 border-r border-b lg:border-b-0 last:border-r-0 overflow-hidden"
                   >
                     {/* background hover glow */}
@@ -355,12 +328,12 @@ export default function AboutPage() {
                     <span className="block mt-2 font-[Poppins] text-[11px] text-primary/55 uppercase tracking-[0.25em] font-medium">
                       {stat.label}
                     </span>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* ════════════════════════════════════════
