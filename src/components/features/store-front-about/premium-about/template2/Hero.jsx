@@ -8,14 +8,12 @@ const data = {
   /* ── HERO ── */
   heroTitle: "Our Story Built for Buy & Selling a Vehicle",
   heroDesc: `
-    <p>
       Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
       Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
       Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
       Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
       Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
       Sapien platea nec urna ut est sed.
-    </p>
   `,
   heroImages: [
     "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1200&auto=format&fit=crop",
@@ -86,15 +84,6 @@ const data = {
   ],
 };
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-};
-
-const stagger = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.12 } },
-};
 
 const EyeBrow = ({ children }) => (
   <p
@@ -136,55 +125,46 @@ export default function AboutPage() {
       {/* ════════════════════════════════════════
           HERO
           ════════════════════════════════════════ */}
-<section className="relative px-2 lg:px-4 overflow-hidden">
-  {/* BACKGROUND VIDEO */}
-  <div className="absolute inset-0 h-screen">
-    <video
-      src={data.heroVideo}
-      autoPlay
-      muted
-      loop
-      playsInline
-      className="w-full h-full object-cover"
-    />
-    <div className="absolute inset-0 bg-black/60" />
-  </div>
-
-  <div className="container relative z-10 h-screen flex items-center">
-
-    {/* content (CENTERED container, LEFT text) */}
-    <div className="w-full flex justify-center">
-      <div className="flex flex-col gap-6 max-w-2xl text-left">
-
-        <div
-          className="flex flex-col gap-6"
-        >
-          <EyeBrow>About Us</EyeBrow>
-
-          <h1
-            className="font-[Montserrat] font-bold text-white leading-[1.02]"
-            style={{ fontSize: "clamp(34px, 4.5vw, 68px)" }}
-          >
-            Our Story Built for{" "}
-            <span className="text-fourth">Buy &amp; Selling</span> a Vehicle
-          </h1>
-
-          <div className="w-12 h-0.5 bg-fourth" />
-        </div>
-
-        {/* description */}
-        <div
-        >
-          <div
-            className="font-[Poppins] text-[14.5px] text-white/80 leading-[1.9]"
-            dangerouslySetInnerHTML={{ __html: data.heroDesc }}
+      <section className="relative px-2 lg:px-4 overflow-hidden">
+        {/* BACKGROUND VIDEO */}
+        <div className="absolute inset-0 h-screen">
+          <video
+            src={data.heroVideo}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
           />
+          <div className="absolute inset-0 bg-black/60" />
         </div>
 
-      </div>
-    </div>
-  </div>
-</section>
+        <div className="container relative z-10 h-screen flex items-center">
+          {/* content (CENTERED container, LEFT text) */}
+          <div className="w-full flex justify-center">
+            <div className="flex flex-col gap-6 max-w-2xl text-left">
+              <div className="flex flex-col gap-6">
+                <EyeBrow>About Us</EyeBrow>
+
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-[Montserrat] font-bold text-white leading-[1.02]">
+                  Our Story Built for{" "}
+                  <span className="text-fourth">Buy &amp; Selling</span> a
+                  Vehicle
+                </h1>
+
+                <div className="w-12 h-0.5 bg-fourth" />
+              </div>
+
+              {/* description */}
+              <div>
+                <div className="font-[Poppins] text-[14.5px] text-white/80 leading-[1.9]">
+                  <p>{data.heroDesc}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       {/* ════════════════════════════════════════
           MISSION & VISION
           ════════════════════════════════════════ */}
@@ -193,17 +173,14 @@ export default function AboutPage() {
           <div className="">
             {/* heading row */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-28 items-end mb-16">
-              <div
-              >
+              <div>
                 <EyeBrow>What Drives Us</EyeBrow>
                 <h2 className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-[1.02] text-primary font-[Montserrat]">
                   Mission &amp; <span className="text-fourth">Vision</span>
                 </h2>
               </div>
 
-              <div
-                className="max-w-md"
-              >
+              <div className="max-w-md">
                 <Divider />
                 <p className="text-third/70 text-[15px] leading-[1.9] font-[Poppins] mt-4">
                   The principles behind everything we build and every decision
@@ -265,9 +242,7 @@ export default function AboutPage() {
           STATS
           ════════════════════════════════════════ */}
       <section className="py-12">
-        <div
-          className="relative  overflow-hidden bg-fourth/95 border border-primary/10 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
-        >
+        <div className="relative  overflow-hidden bg-fourth/95 border border-primary/10 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
           {/* subtle glow background */}
           <div className="absolute inset-0 bg-linear-to-br from-white/5 via-transparent to-black/10 pointer-events-none" />
           <div className="px-2 lg:px-4">
@@ -278,10 +253,7 @@ export default function AboutPage() {
                 <div className="flex flex-col justify-center gap-6">
                   <EyeBrow>By The Numbers</EyeBrow>
 
-                  <h2
-                    className="font-[Montserrat] font-bold text-primary leading-[1.02]"
-                    style={{ fontSize: "clamp(32px, 4vw, 52px)" }}
-                  >
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-[Montserrat] font-bold text-primary leading-[1.02]">
                     Our Growth{" "}
                     <span className="text-secondary">in Numbers</span>
                   </h2>
@@ -291,10 +263,9 @@ export default function AboutPage() {
 
                 {/* right */}
                 <div className="flex flex-col justify-center max-w-md">
-                  <div
-                    className="font-[Poppins] text-[14.5px] text-primary/70 leading-[1.9]"
-                    dangerouslySetInnerHTML={{ __html: data.statsDesc }}
-                  />
+                  <div className="font-[Poppins] text-[14.5px] text-primary/70 leading-[1.9]">
+                    <p>{data.statsDesc}</p>
+                  </div>
                 </div>
               </div>
 
@@ -345,10 +316,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 mb-16">
             <div className="flex flex-col gap-5">
               <EyeBrow>Services</EyeBrow>
-              <h2
-                className="font-[Montserrat] font-bold text-primary leading-[1.02]"
-                style={{ fontSize: "clamp(34px, 4vw, 56px)" }}
-              >
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-[Montserrat] font-bold text-primary leading-[1.02]">
                 What We <span className="text-fourth">Do</span>
               </h2>
             </div>

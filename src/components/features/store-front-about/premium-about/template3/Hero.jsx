@@ -145,10 +145,9 @@ function Hero() {
                 </h3>
 
                 <div
-                  className="text-third/70 font-[Poppins] leading-relaxed"
-                >
-                  <p>{data.missionDesc}</p>
-                </div>
+                  className="text-third/70 font-[Poppins] leading-relaxed">
+                    <p>{data.missionDesc}</p>
+                  </div>
               </div>
             </div>
 
@@ -173,8 +172,8 @@ function Hero() {
 
                 <div
                   className="text-third/70 font-[Poppins] leading-relaxed">
-                  <p>{data.visionDesc}</p>
-                </div>
+                    <p>{data.visionDesc}</p>
+                  </div>
               </div>
             </div>
 
