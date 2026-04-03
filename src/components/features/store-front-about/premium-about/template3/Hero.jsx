@@ -146,8 +146,9 @@ function Hero() {
 
                 <div
                   className="text-third/70 font-[Poppins] leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: data.missionDesc }}
-                />
+                >
+                  <p>{data.missionDesc}</p>
+                </div>
               </div>
             </div>
 
@@ -171,9 +172,9 @@ function Hero() {
                 </h3>
 
                 <div
-                  className="text-third/70 font-[Poppins] leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: data.visionDesc }}
-                />
+                  className="text-third/70 font-[Poppins] leading-relaxed">
+                  <p>{data.visionDesc}</p>
+                </div>
               </div>
             </div>
 
