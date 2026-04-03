@@ -22,6 +22,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import SignupPopup from "@/components/auth/SignupPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import SharePopup from "@/components/ui/SharePopup";
+import StoreFrontHeroSkeleton from "@/components/ui/skeleton/StoreFrontHeroSkeleton";
 
 
 export default function StoreFrontHeroSection() {
@@ -55,7 +56,7 @@ export default function StoreFrontHeroSection() {
         if (id) fetchStoreFront();
     }, [id]);
 
-    if (!comsultDetails) return null;
+    if (!comsultDetails) return <StoreFrontHeroSkeleton />;
 
     const formatServiceName = (service) =>
         service

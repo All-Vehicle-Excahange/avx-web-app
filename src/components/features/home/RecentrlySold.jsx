@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
 import { getRecentlySold } from "@/services/user.service";
+import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 
 
 const RecentrlySold = () => {
   const [vehicle, setVehicle] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -17,12 +19,14 @@ const RecentrlySold = () => {
         setVehicle(res.data)
       } catch (error) {
         throw error;
+      } finally {
+        setLoading(false);
       }
     }
     fetchVehicles()
   }, [])
 
-  if (!vehicle.length) return null;
+  if (!loading && !vehicle.length) return null;
 
   return (
     <div className="w-full py-10">
@@ -44,9 +48,12 @@ const RecentrlySold = () => {
       </div>
 
       <div className="flex-1 min-h-0 grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {vehicle.map((car) => (
-          <VehicleCard data={car} key={car.id} source="home" />
-        ))}
+        {loading
+          ? [...Array(4)].map((_, i) => <VehicleCardSkeleton key={`skel-${i}`} />)
+          : vehicle.map((car) => (
+            <VehicleCard data={car} key={car.id} source="home" />
+          ))
+        }
       </div>
       <div className="mt-4 flex justify-end">
         <Button href="/search" variant="outlineAnimated" size="md">

@@ -50,6 +50,7 @@ function SearchContent({
   consultants, setConsultants,
   consultPayload, setConsultPayload
 }) {
+  const [isLoading, setIsLoading] = useState(true);
   const searchParams = useSearchParams();
 
   const brand = searchParams.get("brand");
@@ -100,14 +101,15 @@ function SearchContent({
           onRelatedChange={setRelatedVehicles}
           onConsultChange={setConsultants}
           onConsultPayloadChange={setConsultPayload}
+          onLoadingChange={setIsLoading}
         />
       </Layout>
 
       <Layout>
-        <ReletedToSearch data={relatedVehicles} />
+        <ReletedToSearch data={relatedVehicles} loading={isLoading} />
       </Layout>
       <Layout>
-        <AutoConsualt limit={4} data={consultants} filterPayload={consultPayload} />
+        <AutoConsualt limit={4} data={consultants} filterPayload={consultPayload} loading={isLoading} />
       </Layout>
 
       <DownloadAppSection />

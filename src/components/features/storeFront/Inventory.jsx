@@ -6,12 +6,14 @@ import Select from "react-select";
 import { getConsualtInventory } from "@/services/user.service";
 import { useParams } from "next/navigation";
 import Button from "@/components/ui/button";
+import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 
 export default function Inventory() {
     const id = useParams()?.id;
 
     const [activeType, setActiveType] = useState("all");
     const [vehicles, setVehicles] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [pageNo, setPageNo] = useState(1);
     const [pageInfo, setPageInfo] = useState(null);
 
@@ -34,6 +36,7 @@ export default function Inventory() {
 
     useEffect(() => {
         const fetchInventory = async () => {
+            setLoading(true);
             try {
                 const data = {
                     pageNo: pageNo,
@@ -53,6 +56,8 @@ export default function Inventory() {
                 setPageInfo(res.pagination);
             } catch (error) {
                 console.error("Error fetching inventory:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -150,9 +155,12 @@ export default function Inventory() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-                {vehicles.map((car, index) => (
-                    <VehicleCard key={`${car.id}-${index}`} data={car} />
-                ))}
+                {loading
+                    ? [...Array(4)].map((_, i) => <VehicleCardSkeleton key={`skel-${i}`} />)
+                    : vehicles.map((car, index) => (
+                        <VehicleCard key={`${car.id}-${index}`} data={car} />
+                    ))
+                }
             </div>
             {pageInfo?.totalElements > 4 && (
                 <div className="mt-8 flex justify-end">

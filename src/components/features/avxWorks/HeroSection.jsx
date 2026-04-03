@@ -73,7 +73,6 @@ export default function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-4 pt-3">
               <Link
                 href="/vehicles"
-                scroll={false}
                 className="relative group inline-flex items-center justify-center px-7 py-3.5 rounded-xl text-sm font-semibold text-primary bg-linear-to-r from-[#044596] to-fourth shadow-lg shadow-blue-900/40 transition duration-300 hover:shadow-blue-600/40 hover:-translate-y-px"
               >
                 Browse Vehicles
@@ -81,7 +80,6 @@ export default function HeroSection() {
 
               <Link
                 href="/consultant"
-                scroll={false}
                 className="px-7 py-3.5 rounded-xl text-sm font-semibold border-[#374151] border-2 text-primary bg-[#111318] transition duration-300 hover:border-fourth hover:text-fourth hover:bg-[#151922] hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]"
               >
                 Become a Consultant

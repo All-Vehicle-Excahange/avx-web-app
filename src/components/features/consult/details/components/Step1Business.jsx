@@ -156,7 +156,7 @@ export default function Step1Business({ onChange, initialData }) {
           { label: "Four Wheelers", value: "FOUR_WHEELER" },
           { label: "Other", value: "OTHER" },
         ]}
-        value={form.vehicleTypes} // Ensure ChipGroup receives current value
+        selected={form.vehicleTypes} // Use 'selected' instead of 'value'
         onChange={(v) => handleInput("vehicleTypes", v)}
       />
 
@@ -168,7 +168,7 @@ export default function Step1Business({ onChange, initialData }) {
           { label: "Exchange", value: "EXCHANGE" },
           { label: "Finance", value: "FINANCE" },
         ]}
-        value={form.services} // Ensure ChipGroup receives current value
+        selected={form.services} // Use 'selected' instead of 'value'
         onChange={(v) => handleInput("services", v)}
       />
     </div>

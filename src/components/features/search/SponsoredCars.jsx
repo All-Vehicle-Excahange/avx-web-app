@@ -3,6 +3,8 @@ import VehicleCard from "@/components/ui/const/VehicleCard";
 import React, { useRef } from "react";
 import { ChevronLeft, ChevronRight, Info } from "lucide-react";
 import CommonSwiper from "@/components/ui/CommonSwiper";
+import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
+import { SwiperSlide } from "swiper/react";
 
 const smallCars = [
   {
@@ -59,7 +61,7 @@ const smallCars = [
   },
 ];
 
-const SponsoredCars = () => {
+const SponsoredCars = ({ loading = false, data = [] }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
@@ -74,7 +76,7 @@ const SponsoredCars = () => {
         <div className="flex flex-col items-start gap-2">
           <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
             Trending Vehicles
-            <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+            <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
           </p>
 
           <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
@@ -106,12 +108,21 @@ const SponsoredCars = () => {
       </div>
 
       {/* Swiper */}
-      <CommonSwiper
-        data={smallCars}
-        CardComponent={VehicleCard}
-        prevRef={prevRef}
-        nextRef={nextRef}
-      />
+      {loading ? (
+        <CommonSwiper
+          data={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]} // Dummy objects with IDs for keys
+          CardComponent={() => <VehicleCardSkeleton />}
+          prevRef={prevRef}
+          nextRef={nextRef}
+        />
+      ) : (
+        <CommonSwiper
+          data={data.length > 0 ? data : smallCars}
+          CardComponent={VehicleCard}
+          prevRef={prevRef}
+          nextRef={nextRef}
+        />
+      )}
     </div>
   );
 };

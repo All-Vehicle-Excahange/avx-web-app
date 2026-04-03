@@ -4,7 +4,7 @@ import axiosInstance, {
 
 const ENDPOINT = {
     getVehicleOverview: "/vehicle/detail-page",
-    getVehicleSummary: "/consultation/detail-page/meta",
+    getVehicleSummary: "/vehicle/detail-page/consultation/meta",
     sendInquary: "/vehicles/inquiry/create",
     checkIsUserEligbleToSendInquary: "/vehicles/inquiry/latest-by-vehicle",
     markAsSoldVehicle: "/vehicle/sell/basic"

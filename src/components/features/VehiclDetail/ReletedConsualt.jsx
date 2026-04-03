@@ -6,6 +6,7 @@ import ConsultantCard from "@/components/ui/const/ConsultCard";
 import Button from "@/components/ui/button";
 import { getHomeFeedConsult } from "@/services/user.service";
 import { getFilterConsualt } from "@/services/filter";
+import ConsultantCardSkeleton from "@/components/ui/skeleton/ConsultantCardSkeleton";
 import { useRouter } from "next/navigation";
 
 export default function ReletedConsualt(props) {
@@ -132,7 +133,7 @@ export default function ReletedConsualt(props) {
             <div className="flex flex-col items-start gap-2">
                 <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
                     Top Picks
-                    <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+                    <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
                 </p>
 
                 <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
@@ -143,13 +144,13 @@ export default function ReletedConsualt(props) {
                 </p>
             </div>
 
-            {loading && (
-                <p className="text-sm text-third mb-4">Loading consultants...</p>
-            )}
-
             {/* Grid */}
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {finalConsultants.length === 0 ? (
+                {loading ? (
+                    [...Array(safeLimit)].map((_, i) => (
+                        <ConsultantCardSkeleton key={`skel-${i}`} />
+                    ))
+                ) : finalConsultants.length === 0 ? (
                     <div className="col-span-full flex justify-center py-16">
                         <h3 className="text-lg font-semibold text-primary/40">
                             No auto consult found

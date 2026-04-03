@@ -225,11 +225,10 @@ export default function KycForm() {
                   <div
                     key={num}
                     className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm
-                    ${
-                      step >= num
+                    ${step >= num
                         ? "bg-primary text-secondary border border-primary"
                         : "bg-secondary border border-third text-third"
-                    }`}
+                      }`}
                   >
                     {num}
                   </div>

@@ -2,6 +2,7 @@ import { EngineRenderer } from "@/core/engine/Renderer";
 import { THEME_STORE } from "@/core/engine/themeStore";
 import { getStoreFront } from "@/services/theme.service";
 import { useEffect, useState } from "react";
+import StoreFrontAboutSkeleton from "@/components/ui/skeleton/StoreFrontAboutSkeleton";
 
 /**
  * Maps raw API response fields → template field names expected by theme components.
@@ -55,6 +56,7 @@ function mapApiToTemplateData(api) {
 
 export default function AboutUs({ storeData = null }) {
   const [sections, setSections] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTheme = async () => {
@@ -89,10 +91,12 @@ export default function AboutUs({ storeData = null }) {
       setSections(hydratedSections);
     };
 
-    fetchTheme();
+    fetchTheme().finally(() => setLoading(false));
   }, [storeData]);
 
   const filteredSections = sections.filter((section) => section.type.includes("about"));
+
+  if (loading) return <StoreFrontAboutSkeleton />;
 
   return (
     <section className="w-full container rounded-2xl p-6 space-y-8">

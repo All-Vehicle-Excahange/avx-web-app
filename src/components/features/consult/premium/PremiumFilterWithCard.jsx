@@ -96,6 +96,7 @@ export default function FilterWithCard({ onFilterChange }) {
 
   // ── Result data ──
   const [premiumConsultants, setPremiumConsultants] = useState([]); // from getPremiumConsult
+  const [consultantsLoading, setConsultantsLoading] = useState(true);
 
   // Add these two lines
   const [latitude, setLatitude] = useState(null);
@@ -319,6 +320,7 @@ export default function FilterWithCard({ onFilterChange }) {
 
   // ── Fetch both APIs ──
   const fetchConsultants = async (page = currentPage, payload = {}) => {
+    setConsultantsLoading(true);
     try {
       const { sortBy, direction } = getSortConfig(sort);
 
@@ -344,6 +346,8 @@ export default function FilterWithCard({ onFilterChange }) {
     } catch (err) {
       console.error("Failed to fetch consultants:", err);
       setPremiumConsultants([]);
+    } finally {
+      setConsultantsLoading(false);
     }
   };
 
@@ -887,54 +891,55 @@ export default function FilterWithCard({ onFilterChange }) {
                 onChange={setSelectedServices}
               />
             </FilterSection>
+
+
+            <FilterSection title="Budget" defaultOpen={true}>
+              <div className="flex flex-col gap-2 mt-3">
+                <div className="flex justify-between text-xs text-primary/70 mb-1">
+                  <span>Min Price</span>
+                  <span>Max Price</span>
+                </div>
+
+                <div className="relative h-6 flex items-center">
+                  <div
+                    className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
+                    style={{ background: getTrackBackground() }}
+                  />
+
+                  <input
+                    type="range"
+                    min={MIN}
+                    max={MAX}
+                    step={50000}
+                    value={minPrice}
+                    onChange={(e) =>
+                      setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
+                    }
+                    className="dual-range z-30"
+                  />
+
+                  <input
+                    type="range"
+                    min={MIN}
+                    max={MAX}
+                    step={50000}
+                    value={maxPrice}
+                    onChange={(e) =>
+                      setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
+                    }
+                    className="dual-range z-40"
+                  />
+                </div>
+
+                <div className="flex justify-between text-xs text-primary/70 mb-1">
+                  <span>₹{minPrice.toLocaleString()}</span>
+                  <span>₹{maxPrice.toLocaleString()}</span>
+                </div>
+              </div>
+            </FilterSection>
           </div>
 
-          <FilterSection title="Budget" defaultOpen={true}>
-            <div className="flex flex-col gap-2 mt-3">
-              <div className="flex justify-between text-xs text-primary/70 mb-1">
-                <span>Min Price</span>
-                <span>Max Price</span>
-              </div>
-
-              <div className="relative h-6 flex items-center">
-                <div
-                  className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
-                  style={{ background: getTrackBackground() }}
-                />
-
-                <input
-                  type="range"
-                  min={MIN}
-                  max={MAX}
-                  step={50000}
-                  value={minPrice}
-                  onChange={(e) =>
-                    setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
-                  }
-                  className="dual-range z-30"
-                />
-
-                <input
-                  type="range"
-                  min={MIN}
-                  max={MAX}
-                  step={50000}
-                  value={maxPrice}
-                  onChange={(e) =>
-                    setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
-                  }
-                  className="dual-range z-40"
-                />
-              </div>
-
-              <div className="flex justify-between text-xs text-primary/70 mb-1">
-                <span>₹{minPrice.toLocaleString()}</span>
-                <span>₹{maxPrice.toLocaleString()}</span>
-              </div>
-            </div>
-          </FilterSection>
-
-          <div className="mt-4 flex items-center justify-between gap-3">
+          {/* <div className="mt-4 flex items-center justify-between gap-3">
             <Button
               variant="outline"
               className="text-primary px-5 py-2"
@@ -943,7 +948,7 @@ export default function FilterWithCard({ onFilterChange }) {
             >
               Apply Filter
             </Button>
-          </div>
+          </div> */}
         </div>
       </aside>
 
@@ -1000,6 +1005,7 @@ export default function FilterWithCard({ onFilterChange }) {
           data={premiumConsultants}
           showIsSponsored={true}
           i={itemsPerPage}
+          loading={consultantsLoading}
         />
 
         {/* Pagination Controls */}
@@ -1012,7 +1018,7 @@ export default function FilterWithCard({ onFilterChange }) {
 
       {/* ================= MOBILE FILTER DRAWER ================= */}
       <div
-        className={`fixed top-[64px] inset-x-0 bottom-0 z-[100] bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${mobileFilterOpen ? "translate-y-0" : "translate-y-full"
+        className={`fixed top-[64px] inset-x-0 bottom-0 z-100 bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${mobileFilterOpen ? "translate-y-0" : "translate-y-full"
           }`}
       >
         <div className="flex items-center justify-between px-4 py-3 border-b border-third/40 shrink-0">

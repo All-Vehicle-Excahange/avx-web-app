@@ -3,6 +3,7 @@ import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
 import { Bike, Car } from "lucide-react";
 import { getTopPicsFour, getTopPicsTwo, getUserHomeFeed } from "@/services/user.service";
+import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 
 // --- Utility for Tailwind classes ---
 const cn = (...classes) => classes.filter(Boolean).join(" ");
@@ -10,10 +11,12 @@ const cn = (...classes) => classes.filter(Boolean).join(" ");
 export default function TopPicsSection() {
     const [activeType, setActiveType] = useState("4-Wheeler");
     const [cardData, setCardData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
 
     useEffect(() => {
         const fetchHomeFeed = async () => {
+            setLoading(true);
             try {
                 const data = {
                     pageNo: 1,
@@ -28,6 +31,8 @@ export default function TopPicsSection() {
                 setCardData(res.data)
             } catch (error) {
                 console.error("Failed to fetch themes:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -84,11 +89,18 @@ export default function TopPicsSection() {
             {/* Grid Layout */}
             <div
                 className="flex-1 min-h-0 grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-1">
-                {cardData.map((vehicle) => (
-                    <div key={vehicle.id} className="lg:col-span-1 lg:row-span-1 h-full">
-                        <VehicleCard data={vehicle} source="home" />
-                    </div>
-                ))}
+                {loading
+                    ? [...Array(4)].map((_, i) => (
+                        <div key={`skel-${i}`} className="lg:col-span-1 lg:row-span-1 h-full">
+                            <VehicleCardSkeleton />
+                        </div>
+                    ))
+                    : cardData.map((vehicle) => (
+                        <div key={vehicle.id} className="lg:col-span-1 lg:row-span-1 h-full">
+                            <VehicleCard data={vehicle} source="home" />
+                        </div>
+                    ))
+                }
             </div>
 
             <div className="mt-8 flex justify-end">

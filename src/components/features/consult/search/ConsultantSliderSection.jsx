@@ -4,8 +4,9 @@ import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ConsultantCard from "@/components/ui/const/ConsultCard";
 import Button from "@/components/ui/button";
+import ConsultantCardSkeleton from "@/components/ui/skeleton/ConsultantCardSkeleton";
 
-export default function ConsultantSliderSection({ title, data }) {
+export default function ConsultantSliderSection({ title, data, loading = false }) {
   const sliderRef = useRef(null);
 
   const scroll = (dir) => {
@@ -22,7 +23,7 @@ export default function ConsultantSliderSection({ title, data }) {
         <div className="flex flex-col items-start gap-2">
           <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
             Premium
-            <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+            <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
           </p>
 
           <div>
@@ -60,20 +61,27 @@ export default function ConsultantSliderSection({ title, data }) {
           ref={sliderRef}
           className="flex gap-4 overflow-x-auto scrollbar-hide max-w-full"
         >
-          {data.map((c) => (
-            <div key={c.id} className="min-w-[350px]">
-              <ConsultantCard
-                image={c.image}
-                logo={c.logo}
-                name={c.name}
-                location={c.location}
-                rating={c.rating}
-                vehicleCount={c.vehicleCount}
-                priceRange={c.priceRange}
-                isSponsored={c.isSponsored}
-              />
-            </div>
-          ))}
+          {loading
+            ? [...Array(3)].map((_, idx) => (
+                <div key={`skel-${idx}`} className="min-w-[350px]">
+                  <ConsultantCardSkeleton />
+                </div>
+              ))
+            : data.map((c) => (
+                <div key={c.id} className="min-w-[350px]">
+                  <ConsultantCard
+                    image={c.image}
+                    logo={c.logo}
+                    name={c.name}
+                    location={c.location}
+                    rating={c.rating}
+                    vehicleCount={c.vehicleCount}
+                    priceRange={c.priceRange}
+                    isSponsored={c.isSponsored}
+                  />
+                </div>
+              ))
+          }
         </div>
       </div>
     </section>

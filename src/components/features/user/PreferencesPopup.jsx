@@ -184,7 +184,7 @@ function PreferencesPopup({ isOpen, onClose }) {
     { value: "COMMERCIAL", label: "Commercial" },
     { value: "TWO_WHEELER", label: "Two Wheeler" },
     { value: "FOUR_WHEELER", label: "Four Wheeler" },
-  ];  
+  ];
 
   // ✅ Select State + Fetch Cities (MERGE FIX)
   const handleSelectState = async (e) => {
@@ -289,6 +289,7 @@ function PreferencesPopup({ isOpen, onClose }) {
               serverPagination={true}
               hasMore={page < totalPages}
               onLoadMore={loadMoreMakers}
+              selected={selectedBrands}
               onChange={(values) => setSelectedBrands(values)}
             />
 
@@ -302,6 +303,7 @@ function PreferencesPopup({ isOpen, onClose }) {
               items={modelItems}
               showMore
               searchable
+              selected={selectedModels}
               onChange={(values) => setSelectedModels(values)}
             />
 
@@ -309,22 +311,26 @@ function PreferencesPopup({ isOpen, onClose }) {
             <ChipGroup
               title="Fuel Type"
               items={fuelTypes}
+              selected={selectedFuelTypes}
               onChange={(values) => setSelectedFuelTypes(values)}
             />
             <ChipGroup
               title="Transmission"
               items={transmissionTypes}
+              selected={selectedTransmissionTypes}
               onChange={(values) => setSelectedTransmissionTypes(values)}
             />
             <ChipGroup
               title="Variant"
               items={variants}
               showMore
+              selected={selectedVariants}
               onChange={(values) => setSelectedVariants(values)}
             />
             <ChipGroup
               title="Vehicle Type"
               items={vehicleTypes}
+              selected={selectedVehicleTypes}
               onChange={(values) => setSelectedVehicleTypes(values)}
             />
 

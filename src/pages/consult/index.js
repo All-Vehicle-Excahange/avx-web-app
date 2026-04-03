@@ -13,11 +13,16 @@ import FooterLink from "@/components/layout/FooterLink";
 import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
 import Navbar from "@/components/layout/Navbar";
+import Head from "next/head";
 import React from "react";
 
 function index() {
   return (
     <>
+      <Head>
+        <title>Become a Consultant | Reecomm</title>
+        <meta name="description" content="Join Reecomm as a consultant and earn through vehicle inspections while growing your business with our advanced tools." />
+      </Head>
       <Navbar />
 
       <ConsultantHeroSection />
