@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import "swiper/css";
 import {
   Search,
   MessageCircle,
@@ -169,15 +171,13 @@ export default function WhyBuyHerePremium2() {
   const [activeCommitment, setActiveCommitment] = useState(1);
 
   /* ── Testimonials slider state ── */
-  const total = data.testimonials.length;
-  const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
+  const swiperRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [isDesktop, setIsDesktop] = useState(() =>
     typeof window !== "undefined"
       ? window.matchMedia("(min-width: 1024px)").matches
       : true,
   );
-  const intervalRef = useRef(null);
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 1024px)");
@@ -186,43 +186,9 @@ export default function WhyBuyHerePremium2() {
     return () => mq.removeEventListener("change", handler);
   }, []);
 
-  const visible = isDesktop ? 2 : 1;
-  const maxIndex = total - visible;
-
-  const next = useCallback(() => {
-    setDirection(1);
-    setIndex((i) => (i >= maxIndex ? 0 : i + 1));
-  }, [maxIndex]);
-
-  const prev = useCallback(() => {
-    setDirection(-1);
-    setIndex((i) => (i <= 0 ? maxIndex : i - 1));
-  }, [maxIndex]);
-
-  useEffect(() => {
-    intervalRef.current = setInterval(next, 3500);
-    return () => clearInterval(intervalRef.current);
-  }, [next]);
-
-  const pauseSlider = () => clearInterval(intervalRef.current);
-  const resumeSlider = () => {
-    intervalRef.current = setInterval(next, 3500);
-  };
-
-  const sliderVariants = {
-    enter: (dir) => ({ x: dir > 0 ? 60 : -60, opacity: 0 }),
-    center: { x: 0, opacity: 1, transition: { duration: 0.45 } },
-    exit: (dir) => ({
-      x: dir > 0 ? -60 : 60,
-      opacity: 0,
-      transition: { duration: 0.35 },
-    }),
-  };
-
-  const visibleTestimonials = Array.from(
-    { length: visible },
-    (_, i) => data.testimonials[(index + i) % total],
-  );
+  const slidesPerView = isDesktop ? 2 : 1;
+  const total = data.testimonials.length;
+  const maxIndex = total - slidesPerView;
 
   /* ── RENDER ── */
   return (
@@ -245,24 +211,17 @@ export default function WhyBuyHerePremium2() {
         <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/40 to-transparent" />
 
         <div className="container">
-
-        <div className="relative z-10 w-full max-w-6xl">
-          <motion.div
-            className="max-w-xl"
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            viewport={{ once: true }}
-          >
-            <h1 className="sm:text-4xl lg:text-5xl text-4xl font-semibold leading-[1.05] text-primary font-[Montserrat] mb-6">
-              Why Choose <span className="text-fourth">Adarsh</span> Auto
-              Consultants
-            </h1>
-            <p className="text-white/80 leading-[1.9] text-[15px]">
-              {data.heroDescription}
-            </p>
-          </motion.div>
-        </div>
+          <div className="relative z-10 w-full max-w-6xl">
+            <div className="max-w-xl">
+              <h1 className="sm:text-4xl lg:text-5xl text-4xl font-semibold leading-[1.05] text-primary font-[Montserrat] mb-6">
+                Why Choose <span className="text-fourth">Adarsh</span> Auto
+                Consultants
+              </h1>
+              <p className="text-white/80 leading-[1.9] text-[15px]">
+                {data.heroDescription}
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -273,12 +232,7 @@ export default function WhyBuyHerePremium2() {
         <div className="container">
           <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
             {/* text */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
+            <div>
               <p className="text-xs tracking-[0.35em] uppercase text-primary/60 mb-4">
                 Our Story
               </p>
@@ -288,16 +242,10 @@ export default function WhyBuyHerePremium2() {
               <p className="text-primary/85 text-[15px] leading-loose whitespace-pre-line max-w-md">
                 {data.storyText}
               </p>
-            </motion.div>
+            </div>
 
             {/* visual — dominant image + floating inset */}
-            <motion.div
-              className="relative w-full h-[420px]"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
+            <div className="relative w-full h-[420px]">
               <div className="absolute inset-0 overflow-hidden rounded-2xl">
                 <img
                   src={data.storyImages[0]}
@@ -312,7 +260,7 @@ export default function WhyBuyHerePremium2() {
                   loading="lazy"
                 />
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -324,12 +272,7 @@ export default function WhyBuyHerePremium2() {
         <div className="container">
           <div className="pt-10 grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
             {/* LEFT — text */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              viewport={{ once: true }}
-            >
+            <div>
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-3">
                 Selection
               </p>
@@ -341,16 +284,10 @@ export default function WhyBuyHerePremium2() {
               <p className="text-third/70 text-[15px] leading-[1.9] max-w-md">
                 {data.selectionDescription}
               </p>
-            </motion.div>
+            </div>
 
             {/* RIGHT — overlapping image composition */}
-            <motion.div
-              className="relative w-full h-80 lg:h-[380px]"
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              viewport={{ once: true }}
-            >
+            <div className="relative w-full h-80 lg:h-[380px]">
               <div className="absolute top-0 left-0 w-[75%] h-full overflow-hidden">
                 <img
                   src={data.selectionImages[0]}
@@ -372,10 +309,11 @@ export default function WhyBuyHerePremium2() {
                   loading="lazy"
                 />
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
+
       {/* ═══════════════════════════════════════
           SECTION 4 — PROCESS
       ═══════════════════════════════════════ */}
@@ -398,12 +336,8 @@ export default function WhyBuyHerePremium2() {
               const Icon = iconMap[step.icon];
               const isLeft = i % 2 === 0;
               return (
-                <motion.div
+                <div
                   key={i}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  viewport={{ once: true }}
                   className={`grid lg:grid-cols-2 gap-10 items-center ${
                     !isLeft ? "lg:[&>*:first-child]:order-2" : ""
                   }`}
@@ -434,7 +368,7 @@ export default function WhyBuyHerePremium2() {
                       {step.description}
                     </p>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>
@@ -467,19 +401,16 @@ export default function WhyBuyHerePremium2() {
           {/* main */}
           <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-12 items-center">
             {/* LEFT — animated image */}
-            <motion.div
+            <div
               key={activeInspection}
               className="w-full h-60 sm:h-[300px] md:h-[340px] lg:h-[270px] rounded-2xl overflow-hidden"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
             >
               <img
                 src={data.inspectionPoints[activeInspection].image}
                 loading="lazy"
                 className="w-full h-full object-cover"
               />
-            </motion.div>
+            </div>
 
             {/* RIGHT — stacked clickable titles */}
             <div className="flex flex-col gap-8">
@@ -530,13 +461,7 @@ export default function WhyBuyHerePremium2() {
         <div className="container">
           <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-5 items-center">
             {/* text */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="max-w-md"
-            >
+            <div className="max-w-md">
               <p className="text-xs tracking-[0.35em] uppercase text-primary/60 mb-4">
                 Commitment
               </p>
@@ -546,12 +471,12 @@ export default function WhyBuyHerePremium2() {
               <p className="text-primary/90 text-[15px] leading-loose">
                 {data.commitmentText}
               </p>
-            </motion.div>
+            </div>
 
             {/* interactive accordion images */}
             <div className="flex gap-3 h-80">
               {data.commitmentImages.map((img, i) => (
-                <motion.div
+                <div
                   key={i}
                   onMouseEnter={() => setActiveCommitment(i)}
                   className="relative overflow-hidden rounded-2xl cursor-pointer transition-all duration-500"
@@ -567,7 +492,7 @@ export default function WhyBuyHerePremium2() {
                       i === activeCommitment ? "bg-black/10" : "bg-black/30"
                     }`}
                   />
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -591,80 +516,50 @@ export default function WhyBuyHerePremium2() {
           {/* mosaic */}
           <div className="flex flex-col gap-3 lg:grid lg:grid-cols-12 lg:grid-rows-[400px_220px] lg:gap-3">
             {/* hero */}
-            <motion.div
-              className="relative overflow-hidden rounded-2xl h-[300px] lg:h-auto lg:col-span-6 lg:row-span-2"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-            >
+            <div className="relative overflow-hidden rounded-2xl h-[300px] lg:h-auto lg:col-span-6 lg:row-span-2">
               <img
                 src={data.galleryImages[0]}
                 className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
                 loading="lazy"
               />
-            </motion.div>
+            </div>
 
             {/* top-right pair */}
             <div className="flex gap-3 lg:contents">
-              <motion.div
-                className="relative overflow-hidden rounded-2xl h-[180px] flex-1 lg:h-auto lg:col-span-4 lg:row-span-1"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.1 }}
-              >
+              <div className="relative overflow-hidden rounded-2xl h-[180px] flex-1 lg:h-auto lg:col-span-4 lg:row-span-1">
                 <img
                   src={data.galleryImages[1]}
                   className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
                   loading="lazy"
                 />
-              </motion.div>
+              </div>
 
-              <motion.div
-                className="relative overflow-hidden rounded-2xl h-[180px] w-[30%] lg:h-auto lg:w-auto lg:col-span-2 lg:row-span-1"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.15 }}
-              >
+              <div className="relative overflow-hidden rounded-2xl h-[180px] w-[30%] lg:h-auto lg:w-auto lg:col-span-2 lg:row-span-1">
                 <img
                   src={data.galleryImages[4]}
                   className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
                   loading="lazy"
                 />
-              </motion.div>
+              </div>
             </div>
 
             {/* bottom row */}
             <div className="flex gap-3 lg:contents">
-              <motion.div
-                className="relative overflow-hidden h-40 rounded-2xl flex-1 lg:h-auto lg:col-span-3 lg:row-span-1"
-                initial={{ opacity: 0, scale: 0.97 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.2 }}
-              >
+              <div className="relative overflow-hidden h-40 rounded-2xl flex-1 lg:h-auto lg:col-span-3 lg:row-span-1">
                 <img
                   src={data.galleryImages[2]}
                   className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
                   loading="lazy"
                 />
-              </motion.div>
+              </div>
 
-              <motion.div
-                className="relative overflow-hidden h-40 rounded-2xl flex-1 lg:h-auto lg:col-span-3 lg:row-span-1"
-                initial={{ opacity: 0, scale: 0.97 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.25 }}
-              >
+              <div className="relative overflow-hidden h-40 rounded-2xl flex-1 lg:h-auto lg:col-span-3 lg:row-span-1">
                 <img
                   src={data.galleryImages[3]}
                   className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
                   loading="lazy"
                 />
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>
@@ -677,31 +572,22 @@ export default function WhyBuyHerePremium2() {
         <div className="container">
           <div className="flex items-end justify-between mb-12">
             <div className="flex flex-col gap-3">
-              <motion.p
-                className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-              >
+              <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2">
                 Reviews
-              </motion.p>
+              </p>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary">
                 Customer <span className="text-fourth/80">Experience</span>
               </h2>
             </div>
             <div className="flex gap-2">
               <button
-                onClick={prev}
-                onMouseEnter={pauseSlider}
-                onMouseLeave={resumeSlider}
+                onClick={() => swiperRef.current?.slidePrev()}
                 className="w-10 h-10 rounded-xl border border-primary/30 flex items-center justify-center text-fourth hover:bg-primary/10"
               >
                 <ChevronLeft size={18} />
               </button>
               <button
-                onClick={next}
-                onMouseEnter={pauseSlider}
-                onMouseLeave={resumeSlider}
+                onClick={() => swiperRef.current?.slideNext()}
                 className="w-10 h-10 rounded-xl border border-primary/30 flex items-center justify-center text-fourth hover:bg-primary/10"
               >
                 <ChevronRight size={18} />
@@ -709,65 +595,55 @@ export default function WhyBuyHerePremium2() {
             </div>
           </div>
 
-          <div
-            className="relative overflow-hidden rounded-2xl"
-            onMouseEnter={pauseSlider}
-            onMouseLeave={resumeSlider}
+          <Swiper
+            modules={[Autoplay]}
+            slidesPerView={slidesPerView}
+            spaceBetween={24}
+            loop={true}
+            autoplay={{ delay: 3500, disableOnInteraction: false, pauseOnMouseEnter: true }}
+            onSwiper={(swiper) => (swiperRef.current = swiper)}
+            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+            className="rounded-2xl overflow-hidden"
           >
-            <AnimatePresence mode="wait" custom={direction}>
-              <motion.div
-                key={index}
-                custom={direction}
-                variants={sliderVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-              >
-                {visibleTestimonials.map((t, i) => (
-                  <div
-                    key={`${t.name}-${i}`}
-                    className="group relative rounded-2xl p-7 bg-white/5 backdrop-blur-md border border-white/10 hover:border-primary/30 transition-all duration-300 overflow-hidden"
-                  >
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-linear-to-br from-primary/10 via-transparent to-transparent" />
-                    <Quote
-                      size={22}
-                      className="text-fourth mb-4 relative z-10"
-                      strokeWidth={1.4}
-                    />
-                    <p className="font-[Poppins] text-[14px] leading-[1.9] text-third/80 italic relative z-10 mb-6">
-                      {t.review}
-                    </p>
-                    <div className="w-full h-px bg-primary/10 mb-5 relative z-10" />
-                    <div className="flex items-center gap-3 relative z-10">
-                      <div className="w-10 h-10 rounded-full bg-linear-to-br from-fourth/30 to-fourth/10 flex items-center justify-center font-bold text-[14px] text-fourth">
-                        {t.name[0]}
-                      </div>
-                      <div>
-                        <p className="font-[Montserrat] font-semibold text-[13px] text-primary">
-                          {t.name}
-                        </p>
-                        <p className="text-[11px] text-third/50">
-                          Verified Buyer
-                        </p>
-                      </div>
+            {data.testimonials.map((t, i) => (
+              <SwiperSlide key={`${t.name}-${i}`}>
+                <div className="group relative rounded-2xl p-7 bg-white/5 backdrop-blur-md border border-white/10 hover:border-primary/30 transition-all duration-300 overflow-hidden">
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-linear-to-br from-primary/10 via-transparent to-transparent" />
+                  <Quote
+                    size={22}
+                    className="text-fourth mb-4 relative z-10"
+                    strokeWidth={1.4}
+                  />
+                  <p className="font-[Poppins] text-[14px] leading-[1.9] text-third/80 italic relative z-10 mb-6">
+                    {t.review}
+                  </p>
+                  <div className="w-full h-px bg-primary/10 mb-5 relative z-10" />
+                  <div className="flex items-center gap-3 relative z-10">
+                    <div className="w-10 h-10 rounded-full bg-linear-to-br from-fourth/30 to-fourth/10 flex items-center justify-center font-bold text-[14px] text-fourth">
+                      {t.name[0]}
+                    </div>
+                    <div>
+                      <p className="font-[Montserrat] font-semibold text-[13px] text-primary">
+                        {t.name}
+                      </p>
+                      <p className="text-[11px] text-third/50">
+                        Verified Buyer
+                      </p>
                     </div>
                   </div>
-                ))}
-              </motion.div>
-            </AnimatePresence>
-          </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
 
+          {/* Dot indicators */}
           <div className="flex items-center gap-2 mt-8">
             {Array.from({ length: maxIndex + 1 }).map((_, i) => (
               <button
                 key={i}
-                onClick={() => {
-                  setDirection(i > index ? 1 : -1);
-                  setIndex(i);
-                }}
+                onClick={() => swiperRef.current?.slideToLoop(i)}
                 className={`h-1 rounded-full transition-all duration-300 ${
-                  i === index ? "w-6 bg-primary/60" : "w-2 bg-primary/15"
+                  i === activeIndex ? "w-6 bg-primary/60" : "w-2 bg-primary/15"
                 }`}
               />
             ))}
