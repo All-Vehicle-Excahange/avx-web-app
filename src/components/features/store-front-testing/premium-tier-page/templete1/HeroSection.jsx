@@ -17,7 +17,6 @@ export default function FullPage() {
   const data = {
 
     /* ───────── HERO ───────── */
-    heroData: {
       heroTitle: "Why Choose Adarsh Auto Consultants",
       heroDescription: `
     Buyers trust Adarsh Auto Consultants for transparent communication,
@@ -25,7 +24,6 @@ export default function FullPage() {
     is to help every buyer make confident vehicle decisions with clear
     information and professional support.
   `,
-    },
     heroVideo: "/store-front-template-1.mp4",
     galleryImage: [
       { src: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&q=80" },
@@ -35,7 +33,6 @@ export default function FullPage() {
     ],
 
     /* ───────── EXPERIENCE ───────── */
-    storyData: {
       storyText: `
       For over 12 years, Adarsh Auto Consultants has been helping buyers
       discover reliable vehicles across Gujarat.
@@ -49,10 +46,8 @@ export default function FullPage() {
         "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop",
         "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1200&auto=format&fit=crop",
       ],
-    },
 
     /* ───────── SELECTION ───────── */
-    selectionData: {
       selectionTitle: "Our Approach to Vehicle Selection",
       selectionDescription: `
       Every vehicle listed through our storefront goes through a basic
@@ -67,9 +62,13 @@ export default function FullPage() {
         "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1200",
         "https://images.unsplash.com/photo-1583267746897-2cf415887172?q=80&w=1200",
       ],
-    },
 
     /* ───────── PROCESS ───────── */
+    processTitle: "How Buying Works",
+      processDescription: `
+        Buying a vehicle through our storefront is designed to be simple,
+        transparent, and convenient for buyers.
+      `,
     steps: [
       {
         title: "Discover Vehicles",
@@ -106,7 +105,6 @@ export default function FullPage() {
     ],
 
     /* ───────── INSPECTION ───────── */
-    inspectionData: {
       inspectionTitle: "AVX Inspection Assurance",
       inspectionText: `
       AVX inspection services provide additional transparency by documenting
@@ -123,7 +121,6 @@ export default function FullPage() {
         "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop",
         "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1200&auto=format&fit=crop",
       ],
-    },
 
     /* ───────── GALLERY ───────── */
     galleryImages: [
@@ -133,7 +130,6 @@ export default function FullPage() {
       "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?q=80&w=1200&auto=format&fit=crop",
     ],
 
-     commitmentData : {
     commitmentTitle: "Customer Commitment",
     commitmentText: `
       Our goal is to maintain transparent communication and assist buyers
@@ -147,7 +143,6 @@ export default function FullPage() {
       "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?q=80&w=1200&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1583267746897-2cf415887172?q=80&w=1200&auto=format&fit=crop",
     ],
-  },
 
      testimonialsTitle: "Customer",
     testimonials: [
@@ -254,7 +249,7 @@ export default function FullPage() {
             </h2>
 
             <p className="text-[#a89f94] text-base md:text-lg leading-relaxed font-[Poppins] max-w-lg mb-10">
-              {data.heroData.heroDescription.trim()}
+              {data.heroDescription.trim()}
             </p>
 
             {/* CTA */}
@@ -328,7 +323,7 @@ export default function FullPage() {
 
             <div className="w-10 h-px bg-secondary/30" />
 
-            {data.storyData.storyText.trim().split("\n\n").map((para, i) => (
+            {data.storyText.trim().split("\n\n").map((para, i) => (
               <p
                 key={i}
                 className="text-secondary/80 font-[Poppins] leading-relaxed text-base md:text-lg"
@@ -345,7 +340,7 @@ export default function FullPage() {
             className="relative h-[500px] hidden md:block"
           >
 
-            {data.storyData.storyImages.map((src, i) => {
+            {data.storyImages.map((src, i) => {
               const positions = [
                 "top-0 left-0 w-[68%] h-[62%]",
                 "bottom-0 right-0 w-[60%] h-[58%]",
@@ -419,7 +414,7 @@ export default function FullPage() {
           ref={scrollRef}
           className="  absolute inset-0 flex  overflow-hidden pointer-events-none"
         >
-          {[...data.selectionData.selectionImages, ...data.selectionData.selectionImages].map((img, i) => (
+          {[...data.selectionImages, ...data.selectionImages].map((img, i) => (
             <div
               key={i}
               className="min-w-[350px] h-full overflow-hidden rounded-2xl opacity-[0.3]"
@@ -448,7 +443,7 @@ export default function FullPage() {
           </h2>
 
           <div className="max-w-2xl border-l-2 border-primary/40 pl-5">
-            {data.selectionData.selectionDescription
+            {data.selectionDescription
               .trim()
               .split("\n\n")
               .map((para, i) => (
@@ -480,8 +475,7 @@ export default function FullPage() {
             </h2>
 
             <p className="text-third text-sm sm:text-base lg:text-lg font-[Poppins] leading-relaxed">
-              Buying a vehicle through our storefront is designed to be simple,
-              transparent, and convenient for buyers.
+              {data.processDescription}
             </p>
           </div>
 
@@ -604,7 +598,7 @@ export default function FullPage() {
               {/* 1. The "Base" Image (Large, Back Layer) */}
               <div className="absolute top-0 left-0 w-[75%] h-[70%] rounded-4xl overflow-hidden shadow-2xl z-10 group">
                 <img
-                  src={data.inspectionData.inspectionImages[0]}
+                  src={data.inspectionImages[0]}
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   alt="Main"
                 />
@@ -614,7 +608,7 @@ export default function FullPage() {
               {/* 2. The "Focus" Image (Vertical, Middle Layer) */}
               <div className="absolute top-[20%] right-0 w-[45%] h-[60%] rounded-4xl overflow-hidden border-12 border-white shadow-[-20px_20px_60px_rgba(0,0,0,0.15)] z-20 group">
                 <img
-                  src={data.inspectionData.inspectionImages[1]}
+                  src={data.inspectionImages[1]}
                   className="w-full h-full object-cover"
                   alt="Detail"
                 />
@@ -624,7 +618,7 @@ export default function FullPage() {
               {/* 3. The "Abstract" Image (Small, Front Layer) */}
               <div className="absolute bottom-0 left-[15%] w-[35%] h-[25%] rounded-2xl overflow-hidden border-4 border-white shadow-xl z-30 transition-transform hover:-translate-y-2.5">
                 <img
-                  src={data.inspectionData.inspectionImages[2]}
+                  src={data.inspectionImages[2]}
                   className="w-full h-full object-cover"
                   alt="Mini Detail"
                 />
@@ -637,12 +631,12 @@ export default function FullPage() {
             <div className="lg:col-span-5 flex flex-col gap-10 lg:pt-12">
 
               <p className="text-third text-[18px] font-[Poppins] leading-relaxed italic border-l-4 border-primary/30 pl-6">
-                {data.inspectionData.inspectionText.trim()}
+                {data.inspectionText.trim()}
               </p>
 
               {/* ICON-BASED POINTS */}
               <div className="flex flex-col gap-6">
-                {data.inspectionData.inspectionPoints.map((pt, i) => (
+                {data.inspectionPoints.map((pt, i) => (
                   <div key={i} className="flex items-center gap-5 group cursor-default">
                     <div className="shrink-0 w-12 h-12 rounded-2xl  border border-fourth/10 flex items-center justify-center  group-hover:rotate-10 transition-all duration-300">
                       <CheckCircle2
@@ -675,7 +669,7 @@ export default function FullPage() {
       {/* BACKGROUND */}
       <div className="absolute inset-0 z-0">
         <img
-          src={data.commitmentData.commitmentImages[0]}
+          src={data.commitmentImages[0]}
           className="w-full h-full object-cover opacity-40"
           alt="Main Background"
         />
@@ -699,7 +693,7 @@ export default function FullPage() {
 
           <div className="backdrop-blur-md p-8 rounded-3xl border border-primary/10 shadow-xl">
             <p className="text-primary/90 text-base sm:text-lg md:text-[16px] font-[Poppins] leading-relaxed">
-              {data.commitmentData.commitmentText}
+              {data.commitmentText}
             </p>
           </div>
 
@@ -711,7 +705,7 @@ export default function FullPage() {
           {/* Main image */}
           <div className="absolute top-0 left-0 w-4/5 h-[350px] rounded-2xl overflow-hidden border-4 border-primary shadow-2xl z-20 group">
             <img
-              src={data.commitmentData.commitmentImages[1]}
+              src={data.commitmentImages[1]}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               alt=""
             />
@@ -719,7 +713,7 @@ export default function FullPage() {
             {/* Circle overlap */}
             <div className="absolute bottom-4 left-4 w-28 h-28 rounded-full border-4 border-primary overflow-hidden z-40 transition-transform duration-500 group-hover:translate-x-2 group-hover:-translate-y-1 shadow-xl">
               <img
-                src={data.commitmentData.commitmentImages[3]}
+                src={data.commitmentImages[3]}
                 className="w-full h-full object-cover"
                 alt=""
               />
@@ -729,7 +723,7 @@ export default function FullPage() {
           {/* Offset image */}
           <div className="absolute bottom-0 right-0 w-3/5 h-[280px] rounded-2xl overflow-hidden border-4 border-primary shadow-2xl z-30 transform translate-x-4 -translate-y-10">
             <img
-              src={data.commitmentData.commitmentImages[2]}
+              src={data.commitmentImages[2]}
               className="w-full h-full object-cover"
               alt=""
             />
@@ -738,7 +732,7 @@ export default function FullPage() {
           {/* Small accent */}
           <div className="absolute -top-6 right-20 w-24 h-24 rounded-2xl rotate-12 border-2 border-primary overflow-hidden z-10 opacity-60">
             <img
-              src={data.commitmentData.commitmentImages[4]}
+              src={data.commitmentImages[4]}
               className="w-full h-full object-cover"
               alt=""
             />
