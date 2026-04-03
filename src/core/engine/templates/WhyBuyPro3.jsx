@@ -18,9 +18,7 @@ import {
     setFeaturedReviews
 } from "@/services/theme.service";
 import { getAllReview } from "@/services/user.service";
-
 const DEFAULT_DATA = WHY_BUY_PRO_3[0].data;
-
 const SVG_OPTIONS = [
     {
         value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>`,
@@ -47,7 +45,6 @@ const SVG_OPTIONS = [
         label: "Shield"
     }
 ];
-
 const selectStyles = {
     control: (base) => ({
         ...base,
@@ -70,16 +67,14 @@ const selectStyles = {
         border: "1px solid rgba(255, 255, 255, 0.2)"
     })
 };
-
 const formatOptionLabel = ({ value, label }) => (
     <div className="flex items-center gap-3">
         <div className="w-5 h-5 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full" dangerouslySetInnerHTML={{ __html: value }} />
         <span className="text-sm">{label}</span>
     </div>
 );
-
 const INTERVAL = 5000;
-
+const iconMap = { Search, MessageCircle, ShieldCheck, Handshake };
 export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
     const data = {
         ...DEFAULT_DATA,
@@ -87,11 +82,9 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
             Object.entries(rawData || {}).filter(([, v]) => v !== undefined && v !== null)
         )
     };
-
     const updateField = (field, value) => {
         if (onUpdate) onUpdate({ ...data, [field]: value });
     };
-
     const updateArrayItem = (arrayName, index, field, value) => {
         const newArray = [...data[arrayName]];
         if (newArray[index]) {
@@ -99,12 +92,10 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
             updateField(arrayName, newArray);
         }
     };
-
     const [allReviews, setAllReviews] = useState([]);
     const [selectedReviewIds, setSelectedReviewIds] = useState(
         rawData?.featuredReviews?.map((r) => r.id) || []
     );
-
     const [active, setActive] = useState(0);
     const [fading, setFading] = useState(false);
     const [hovered, setHovered] = useState(null);
@@ -115,7 +106,6 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
     const activeHovered = hovered ?? 0;
     const activeRef = useRef(0);
     const timeoutRef = useRef(null);
-
     const heroImages = [
         data.whyBuyHeroTemplate1?.imageUrl,
         data.whyBuyHeroTemplate2?.imageUrl,
@@ -123,8 +113,38 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
         data.whyBuyHeroTemplate4?.imageUrl,
         data.whyBuyHeroTemplate5?.imageUrl,
     ].filter(Boolean);
-
-
+    const storyImages = [
+        data.whyBuyStoryTemplate1?.imageUrl,
+        data.whyBuyStoryTemplate2?.imageUrl,
+        data.whyBuyStoryTemplate3?.imageUrl,
+        data.whyBuyStoryTemplate4?.imageUrl,
+        data.whyBuyStoryTemplate5?.imageUrl,
+    ].filter(Boolean);
+    const vehicleSelectionImages = [
+        data.whyBuyVehicleSelectionTemplate1?.imageUrl,
+        data.whyBuyVehicleSelectionTemplate2?.imageUrl,
+        data.whyBuyVehicleSelectionTemplate3?.imageUrl,
+        data.whyBuyVehicleSelectionTemplate4?.imageUrl,
+        data.whyBuyVehicleSelectionTemplate5?.imageUrl,
+    ].filter(Boolean);
+    const processImages = [
+        data.whyBuyProcessTemplate1?.imageUrl,
+        data.whyBuyProcessTemplate2?.imageUrl,
+        data.whyBuyProcessTemplate3?.imageUrl,
+        data.whyBuyProcessTemplate4?.imageUrl,
+    ].filter(Boolean);
+    const inspectionImages = [
+        data.whyBuyInspectionTemplate1?.imageUrl,
+        data.whyBuyInspectionTemplate2?.imageUrl,
+        data.whyBuyInspectionTemplate3?.imageUrl,
+        data.whyBuyInspectionTemplate4?.imageUrl,
+    ].filter(Boolean);
+    const galleryImages = [
+        data.whyBuyGalleryTemplate1?.imageUrl,
+        data.whyBuyGalleryTemplate2?.imageUrl,
+        data.whyBuyGalleryTemplate3?.imageUrl,
+        data.whyBuyGalleryTemplate4?.imageUrl,
+    ].filter(Boolean);
     const total = heroImages.length;
     const goTo = useCallback((index) => {
         setFading(true);
@@ -152,14 +172,12 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
     const next = () => transition((testimonialsactive + 1) % testimonialsTotal);
     useEffect(() => () => clearTimeout(timeoutRef.current), []);
     const item = data.featuredReviews?.[testimonialsactive] || {};
-
     let consultId = null;
     const storedData = typeof window !== "undefined" ? localStorage.getItem("sellerTierData") : null;
     if (storedData) {
         const parsed = JSON.parse(storedData);
         consultId = parsed?.consultationId;
     }
-
     useEffect(() => {
         if (!rawData) return;
         const fetchReviews = async () => {
@@ -174,7 +192,6 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
         };
         if (consultId) fetchReviews();
     }, [consultId, rawData]);
-
     const handleHeroBlur = async () => {
         try {
             const formData = new FormData();
@@ -188,7 +205,6 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
             await setWhyBuyHero(formData);
         } catch (error) { console.error("Error updating hero", error); }
     };
-
     const handleStoryBlur = async () => {
         try {
             const formData = new FormData();
@@ -202,7 +218,6 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
             await setWhyBuyStory(formData);
         } catch (error) { console.error("Error updating story", error); }
     };
-
     const handleVehicleSelectionBlur = async () => {
         try {
             const formData = new FormData();
@@ -216,7 +231,6 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
             await setWhyBuyVehicleSelection(formData);
         } catch (error) { console.error("Error updating vehicle selection", error); }
     };
-
     const handleProcessBlur = async () => {
         try {
             const formData = new FormData();
@@ -236,7 +250,6 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
             await setWhyBuyProcess(formData);
         } catch (error) { console.error("Error updating process", error); }
     };
-
     const handleInspectionBlur = async () => {
         try {
             const formData = new FormData();
@@ -254,7 +267,6 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
             await setWhyBuyInspection(formData);
         } catch (error) { console.error("Error updating inspection", error); }
     };
-
     const handleCustomerCommitmentBlur = async () => {
         try {
             const formData = new FormData();
@@ -263,17 +275,14 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
             await setWhyBuyCustomerCommitment(formData);
         } catch (error) { console.error("Error updating customer commitment", error); }
     };
-
     const handleGalleryBlur = async () => {
         console.log("Gallery updated locally.");
     };
-
     const toggleReviewSelection = (reviewId) => {
         setSelectedReviewIds((prev) => {
             const updated = prev.includes(reviewId)
                 ? prev.filter((id) => id !== reviewId)
                 : [...prev, reviewId];
-
             const selectedReviews = allReviews
                 .filter((r) => updated.includes(r.id))
                 .map((r) => ({
@@ -283,61 +292,18 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                     reviewTitle: r.reviewTitle,
                     reviewText: r.reviewText,
                 }));
-
             updateField("featuredReviews", selectedReviews);
-
             setFeaturedReviews(updated).catch((err) =>
                 console.error("Error saving featured reviews", err)
             );
-
             return updated;
         });
     };
-
     const handleTestimonialBlur = async () => {
         try {
             updateField("whyBuyTestimonialTitle", data.whyBuyTestimonialTitle);
         } catch (error) { console.error("Error updating testimonials", error); }
     };
-
-
-    const storyImages = [
-        data.whyBuyStoryTemplate1?.imageUrl,
-        data.whyBuyStoryTemplate2?.imageUrl,
-        data.whyBuyStoryTemplate3?.imageUrl,
-        data.whyBuyStoryTemplate4?.imageUrl,
-        data.whyBuyStoryTemplate5?.imageUrl,
-    ].filter(Boolean);
-
-    const vehicleSelectionImages = [
-        data.whyBuyVehicleSelectionTemplate1?.imageUrl,
-        data.whyBuyVehicleSelectionTemplate2?.imageUrl,
-        data.whyBuyVehicleSelectionTemplate3?.imageUrl,
-        data.whyBuyVehicleSelectionTemplate4?.imageUrl,
-        data.whyBuyVehicleSelectionTemplate5?.imageUrl,
-    ].filter(Boolean);
-
-    const processImages = [
-        data.whyBuyProcessTemplate1?.imageUrl,
-        data.whyBuyProcessTemplate2?.imageUrl,
-        data.whyBuyProcessTemplate3?.imageUrl,
-        data.whyBuyProcessTemplate4?.imageUrl,
-    ].filter(Boolean);
-
-    const inspectionImages = [
-        data.whyBuyInspectionTemplate1?.imageUrl,
-        data.whyBuyInspectionTemplate2?.imageUrl,
-        data.whyBuyInspectionTemplate3?.imageUrl,
-        data.whyBuyInspectionTemplate4?.imageUrl,
-    ].filter(Boolean);
-
-    const galleryImages = [
-        data.whyBuyGalleryTemplate1?.imageUrl,
-        data.whyBuyGalleryTemplate2?.imageUrl,
-        data.whyBuyGalleryTemplate3?.imageUrl,
-        data.whyBuyGalleryTemplate4?.imageUrl,
-    ].filter(Boolean);
-
     if (isEditing) {
         return (
             <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
@@ -382,9 +348,7 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                         </div>
                     </div>
                 </div>
-
                 <hr className="border-third/20" />
-
                 {/* EXPERIENCE (STORY) */}
                 <div className="space-y-6">
                     <h3 className="text-primary font-bold text-xl mb-4">Experience (Story) Section</h3>
@@ -426,9 +390,7 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                         </div>
                     </div>
                 </div>
-
                 <hr className="border-third/20" />
-
                 {/* VEHICLE SELECTION */}
                 <div className="space-y-6">
                     <h3 className="text-primary font-bold text-xl mb-4">Vehicle Selection Section</h3>
@@ -470,9 +432,7 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                         </div>
                     </div>
                 </div>
-
                 <hr className="border-third/20" />
-
                 {/* PROCESS */}
                 <div className="space-y-6">
                     <h3 className="text-primary font-bold text-xl mb-4">Process Section</h3>
@@ -546,9 +506,7 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                         ))}
                     </div>
                 </div>
-
                 <hr className="border-third/20" />
-
                 {/* INSPECTION */}
                 <div className="space-y-6">
                     <h3 className="text-primary font-bold text-xl mb-4">Inspection Section</h3>
@@ -602,9 +560,7 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                         </div>
                     </div>
                 </div>
-
                 <hr className="border-third/20" />
-
                 {/* CUSTOMER COMMITMENT */}
                 <div className="space-y-6">
                     <h3 className="text-primary font-bold text-xl mb-4">Customer Commitment Section</h3>
@@ -626,9 +582,7 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                         </div>
                     </div>
                 </div>
-
                 <hr className="border-third/20" />
-
                 {/* GALLERY */}
                 <div className="space-y-6">
                     <h3 className="text-primary font-bold text-xl mb-4">Gallery Section</h3>
@@ -655,9 +609,7 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                         </div>
                     </div>
                 </div>
-
                 <hr className="border-third/20" />
-
                 {/* TESTIMONIALS */}
                 <div>
                     <h3 className="text-primary font-bold text-xl mb-4">Featured Reviews Title</h3>
@@ -668,20 +620,16 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                         onChange={(e) => updateField("whyBuyTestimonialTitle", e.target.value)}
                         onBlur={handleTestimonialBlur}
                     />
-
                     <p className="text-third text-sm mb-4 mt-2">
                         Select which customer reviews to feature on your storefront.
                     </p>
-
                     {allReviews.length === 0 && (
                         <p className="text-third/60 text-sm italic">No reviews found.</p>
                     )}
-
                     <div className="grid md:grid-cols-2 gap-4">
                         {allReviews.map((review) => {
                             const isSelected = selectedReviewIds.includes(review.id);
                             const reviewerName = `${review.reviewedBy?.firstname || ""} ${review.reviewedBy?.lastname || ""}`.trim();
-
                             return (
                                 <div
                                     key={review.id}
@@ -710,494 +658,412 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
             </div>
         );
     }
-
-    const rotations = [-6, 8, 4, -5, 10];
-    const desktopPositions = [
-        { top: "20px", left: "20px" },
-        { top: "30px", right: "40px" },
-        { top: "200px", left: "0px" },
-        { bottom: "10px", left: "160px" },
-        { bottom: "120px", right: "30px" },
-    ];
-
     return (
         <>
-            {/* ═══════════════════════════════════════
-          SECTION 1 — HERO
-      ═══════════════════════════════════════ */}
-            <section className="py-12 px-2 lg:px-4 relative flex items-center justify-center overflow-hidden min-h-screen">
-                <div className="container">
-                    <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-                        {/* LEFT CONTENT */}
-                        <div>
-                            <motion.h1
-                                className="text-[clamp(28px,5vw,54px)] font-bold leading-[1.15] text-primary mb-5"
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.7 }}
-                                viewport={{ once: true }}
+            {/* ===== Hero Section ===== */}
+            <section className="relative w-full overflow-hidden min-h-screen">
+                <img
+                    src={heroImages[active]}
+                    alt="vehicle"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    style={{
+                        opacity: fading ? 0 : 1,
+                        transform: fading ? "scale(1.04)" : "scale(1)",
+                        transition: "opacity 0.5s ease, transform 0.5s ease",
+                    }}
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/50 to-black/30" />
+                <div className="absolute inset-0 flex items-center justify-center px-8">
+                    <div className="max-w-3xl w-full flex flex-col items-center text-center gap-6">
+                        <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                            Why Choose Us
+                        </p>
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                            {data.whyBuyHeroTitle}
+                        </h2>
+                        <div
+                            className="text-primary/70 text-base font-[Poppins] leading-relaxed"
+                            dangerouslySetInnerHTML={{ __html: data.whyBuyHeroDescription }}
+                        />
+                        <div className="pt-4">
+                            <a
+                                href="#"
+                                className="font-[Montserrat] font-bold text-sm tracking-[0.15em] uppercase text-primary border-b border-third/40 pb-0.5 hover:border-primary transition-colors duration-200"
                             >
-                                {data.whyBuyHeroTitle}
-                            </motion.h1>
-                            <div
-                                className="text-third/70 text-[15px] leading-[1.9]"
-                                dangerouslySetInnerHTML={{ __html: data.whyBuyHeroDescription }}
-                            />
-                        </div>
-
-                        {/* RIGHT — polaroid scatter */}
-                        <div className="w-full">
-                            {/* MOBILE: 2-col polaroid grid */}
-                            <div className="grid grid-cols-2 gap-3 lg:hidden pt-2 pb-4">
-                                {heroImages.map((src, i) => (
-                                    <motion.div
-                                        key={i}
-                                        className={i === 2 ? "col-span-2" : "col-span-1"}
-                                        initial={{ opacity: 0, y: 20, scale: 0.92 }}
-                                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                                        transition={{ duration: 0.45, delay: i * 0.08 }}
-                                        viewport={{ once: true }}
-                                    >
-                                        <div
-                                            className="bg-white rounded-xs"
-                                            style={{
-                                                padding: "6px 6px 22px",
-                                                boxShadow: "0 4px 18px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.07)",
-                                                transform: `rotate(${rotations[i] * 0.4}deg)`,
-                                            }}
-                                        >
-                                            <img
-                                                src={src}
-                                                alt="car"
-                                                loading="lazy"
-                                                className="w-full object-cover rounded-[1px] block"
-                                                style={{ height: i === 2 ? "140px" : "110px" }}
-                                            />
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
-
-                            {/* DESKTOP: absolute scatter board */}
-                            <div className="relative h-[480px] hidden lg:block">
-                                {heroImages.map((src, i) => (
-                                    <motion.div
-                                        key={i}
-                                        className="absolute cursor-pointer"
-                                        style={{ ...desktopPositions[i], zIndex: 5 + i }}
-                                        initial={{ opacity: 0, y: 30, scale: 0.9, rotate: rotations[i] - 3 }}
-                                        whileInView={{ opacity: 1, y: 0, scale: 1, rotate: rotations[i] }}
-                                        whileHover={{
-                                            scale: 1.06, rotate: rotations[i] * 0.25, zIndex: 20, y: -6,
-                                            transition: { duration: 0.25, ease: "easeOut" },
-                                        }}
-                                        transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 0.68, 0, 1.2] }}
-                                        viewport={{ once: true }}
-                                    >
-                                        <div
-                                            className="bg-white rounded-xs w-[180px]"
-                                            style={{ padding: "7px 7px 26px", boxShadow: "0 6px 28px rgba(0,0,0,0.14), 0 1px 4px rgba(0,0,0,0.07)" }}
-                                        >
-                                            <img
-                                                src={src}
-                                                alt="car"
-                                                loading="lazy"
-                                                className="w-full h-[120px] object-cover rounded-[1px] block"
-                                            />
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
+                                Explore Listings →
+                            </a>
                         </div>
                     </div>
                 </div>
             </section>
-
-            {/* ═══════════════════════════════════════
-          SECTION 2 — STORY
-      ═══════════════════════════════════════ */}
-            <section className="py-12 px-2 lg:px-4 bg-fourth">
+            {/* ===== AboutUs Section ===== */}
+            <section className="relative py-12 px-2 lg:px-4">
                 <div className="container">
-                    <div className="grid max-w-7xl mx-auto grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-                        {/* LEFT — text */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.7 }}
-                            viewport={{ once: true }}
-                        >
-                            <p className="text-sm tracking-[0.4em] uppercase text-primary/60 font-semibold mb-2">Our Experience</p>
-                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary mb-5">
-                                {data.whyBuyStoryTitle}
-                            </h2>
-                            <div
-                                className="text-primary/90 text-[15px] leading-[1.9] whitespace-pre-line"
-                                dangerouslySetInnerHTML={{ __html: data.whyBuyStoryDescription }}
-                            />
-                        </motion.div>
-
-                        {/* RIGHT — stacked images */}
-                        <motion.div
-                            className="flex flex-col gap-4"
-                            initial={{ opacity: 0, x: 20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.7 }}
-                            viewport={{ once: true }}
-                        >
-                            {storyImages.slice(0, 2).map((img, i) => (
-                                <div key={i} className="w-full h-40 rounded-xl overflow-hidden">
-                                    <img src={img} loading="lazy" className="w-full h-full object-cover" />
-                                </div>
-                            ))}
-                        </motion.div>
+                    <div className="mx-auto">
+                        <div className="flex flex-col lg:flex-row gap-6 items-stretch justify-center">
+                            <div className="flex flex-col justify-center lg:w-[44%] animate-[fadeInLeft_0.8s_ease_forwards]">
+                                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                                    About Us
+                                </p>
+                                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat] mt-4">
+                                    {data.whyBuyStoryTitle}
+                                </h2>
+                                <div
+                                    className="flex flex-col gap-6 mt-8 max-w-md text-primary/75 text-lg leading-relaxed font-[Poppins]"
+                                    dangerouslySetInnerHTML={{ __html: data.whyBuyStoryDescription }}
+                                />
+                            </div>
+                            <div className="relative overflow-hidden rounded-2xl group lg:w-[26.5%] min-h-[500px] animate-[fadeInUp_0.8s_ease_0.15s_forwards] opacity-0">
+                                <img
+                                    src={storyImages[0]}
+                                    alt=""
+                                    className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700"
+                                />
+                                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-black/20" />
+                            </div>
+                            <div className="flex lg:flex-col gap-4 lg:w-[26%] animate-[fadeInRight_0.8s_ease_0.3s_forwards] opacity-0">
+                                {storyImages.slice(1, 3).map((src, i) => (
+                                    <div key={i} className="relative flex-1 overflow-hidden rounded-2xl group min-h-60">
+                                        <img
+                                            src={src}
+                                            alt=""
+                                            className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700"
+                                        />
+                                        <div className="absolute inset-0 bg-linear-to-br from-transparent to-black/60" />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
+                    <style>{`
+                        @keyframes fadeInLeft {
+                            from { opacity: 0; transform: translateX(-32px); }
+                            to   { opacity: 1; transform: translateX(0); }
+                        }
+                        @keyframes fadeInUp {
+                            from { opacity: 0; transform: translateY(32px); }
+                            to   { opacity: 1; transform: translateY(0); }
+                        }
+                        @keyframes fadeInRight {
+                            from { opacity: 0; transform: translateX(32px); }
+                            to   { opacity: 1; transform: translateX(0); }
+                        }
+                    `}</style>
                 </div>
             </section>
-
-            {/* ═══════════════════════════════════════
-          SECTION 3 — VEHICLE SELECTION
-      ═══════════════════════════════════════ */}
-            <section className="py-12 px-2 lg:px-4">
+            {/* ===== Vehicle Approach Section ===== */}
+            <section className="relative py-12 px-2 lg:px-4">
                 <div className="container">
-                    <div className="pt-10 grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-                        {/* LEFT — TEXT */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.7 }}
-                            viewport={{ once: true }}
-                        >
-                            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2">Selection</p>
-                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary mb-5">
+                    <div className="mx-auto">
+                        <div className="flex flex-col gap-6 max-w-3xl mx-auto mb-14">
+                            <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                                Vehicle Approach
+                            </span>
+                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                                 {data.whyBuyVehicleSelectionTitle}
                             </h2>
-                            <div className="w-8 h-px bg-primary/15 my-3" />
                             <div
-                                className="text-third/70 text-[15px] leading-[1.9]"
+                                className="text-primary/70 text-base font-[Poppins] leading-relaxed max-w-2xl"
                                 dangerouslySetInnerHTML={{ __html: data.whyBuyVehicleSelectionDescription }}
                             />
-                        </motion.div>
-
-                        {/* RIGHT — image grid */}
-                        <motion.div
-                            className="p-3 rounded-2xl w-full h-full"
-                            initial={{ opacity: 0, x: 20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.7 }}
-                            viewport={{ once: true }}
-                        >
-                            <div className="grid grid-cols-3 gap-3 w-full h-full">
-                                <div className="col-span-2 aspect-4/3 rounded-xl overflow-hidden">
-                                    <img src={vehicleSelectionImages[0]} loading="lazy" className="w-full h-full object-cover" />
+                        </div>
+                        <div className="flex gap-4 h-[260px]">
+                            <div className="w-[48%] md:w-[35%] rounded-3xl overflow-hidden border border-third/10">
+                                <img src={vehicleSelectionImages[0]} className="w-full h-full object-cover" />
+                            </div>
+                            <div className="w-[25%] flex flex-col gap-4 hidden md:block">
+                                <div className="h-1/2 rounded-2xl overflow-hidden border border-third/10">
+                                    <img src={vehicleSelectionImages[1]} className="w-full h-full object-cover" />
                                 </div>
-                                <div className="flex flex-col gap-3">
-                                    {vehicleSelectionImages.slice(1, 3).map((img, i) => (
-                                        <div key={i} className="aspect-4/3 rounded-xl overflow-hidden">
-                                            <img src={img} loading="lazy" className="w-full h-full object-cover" />
+                                <div className="h-1/2 rounded-2xl overflow-hidden border border-third/10">
+                                    <img src={vehicleSelectionImages[2]} className="w-full h-full object-cover" />
+                                </div>
+                            </div>
+                            <div className="w-[48%] md:w-[40%] rounded-3xl overflow-hidden border border-third/10">
+                                <img src={vehicleSelectionImages[3]} className="w-full h-full object-cover" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {/* ===== How Buying Work Section ===== */}
+            <section className="relative py-12 px-2 lg:px-4">
+                <div className="container">
+                    <div className="mx-auto">
+                        <div className="flex flex-col gap-4 mb-8 max-w-lg">
+                            <div className="flex flex-col gap-4">
+                                <div className="flex items-center gap-3">
+                                    <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                                        Buying Process
+                                    </p>
+                                </div>
+                                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                                    {data.whyBuyProcessTitle}
+                                </h2>
+                            </div>
+                            <div
+                                className="text-third/55 text-base font-[Poppins] leading-relaxed max-w-xs"
+                                dangerouslySetInnerHTML={{ __html: data.whyBuyProcessDescription }}
+                            />
+                        </div>
+                        <div className="border border-third/10 rounded-3xl shadow-2xl overflow-hidden">
+                            <div className="relative w-full h-[280px] md:h-80">
+                                {processImages.map((src, i) => (
+                                    <img
+                                        key={i}
+                                        src={src}
+                                        alt={data.processSteps?.[i]?.title}
+                                        className={`absolute inset-0 w-full h-full object-cover transition-all duration-700
+                                            ${activeHovered === i ? "opacity-100 scale-100" : "opacity-0 scale-[1.02]"}`}
+                                    />
+                                ))}
+                                <div className="absolute inset-0 bg-black/50 pointer-events-none" />
+                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                    {data.processSteps?.map((step, i) => {
+                                        const Icon = iconMap[step.icon] || Search;
+                                        return (
+                                            <div
+                                                key={i}
+                                                className={`absolute flex flex-col items-center gap-3 text-center px-8 max-w-sm transition-all duration-500
+                                                    ${activeHovered === i ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                                            >
+                                                <div className="flex items-center justify-center w-11 h-11 rounded-xl border border-third/50 bg-third/10">
+                                                    <Icon size={18} strokeWidth={1.5} className="text-third/90" />
+                                                </div>
+                                                <h3 className="text-white text-xl md:text-2xl font-semibold font-[Montserrat] tracking-tighter leading-tight">
+                                                    {step.title}
+                                                </h3>
+                                                <div
+                                                    className="text-white/55 text-sm font-[Poppins] leading-[1.8]"
+                                                    dangerouslySetInnerHTML={{ __html: step.description }}
+                                                />
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-4 border-t border-third/10">
+                                {data.processSteps?.map((step, i) => {
+                                    const Icon = iconMap[step.icon] || Search;
+                                    const isHovered = hovered === i;
+                                    return (
+                                        <button
+                                            key={i}
+                                            onMouseEnter={() => setHovered(i)}
+                                            onMouseLeave={() => setHovered(null)}
+                                            className={`group relative flex flex-col gap-2 px-5 py-5 text-left transition-all duration-400 cursor-pointer
+                                                ${isHovered ? "bg-third/5" : "hover:bg-third/5"}`}
+                                        >
+                                            <div className={`absolute top-0 left-0 right-0 h-0.5 transition-all duration-500
+                                                ${isHovered ? "bg-primary/60" : "bg-transparent"}`} />
+                                            <div className="flex items-center justify-between">
+                                                <div className={`flex items-center justify-center w-8 h-8 rounded-lg border transition-all duration-400
+                                                    ${isHovered
+                                                        ? "border-third/40 bg-third/10 text-third/80"
+                                                        : "border-third/15 text-third/35"}`}>
+                                                    <Icon size={14} strokeWidth={1.5} />
+                                                </div>
+                                                <span className={`text-[10px] font-bold font-[Montserrat] tabular-nums transition-colors duration-300
+                                                    ${isHovered ? "text-third/60" : "text-third/25"}`}>
+                                                    0{i + 1}
+                                                </span>
+                                            </div>
+                                            <h3 className={`text-xs font-semibold font-[Montserrat] leading-snug transition-colors duration-300
+                                                ${isHovered ? "text-primary" : "text-third/45"}`}>
+                                                {step.title}
+                                            </h3>
+                                            {i < (data.processSteps?.length || 0) - 1 && (
+                                                <div className="absolute top-4 bottom-4 right-0 w-px bg-third/10" />
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {/* ===== Avx Inspection Section ===== */}
+            <section className="py-12 px-2 lg:px-4">
+                <div className="container">
+                    <div className="mx-auto">
+                        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 mb-16">
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-3">
+                                    <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                                        Avx Inspection
+                                    </p>
+                                </div>
+                                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                                    {data.whyBuyInspectionTitle}
+                                </h2>
+                                <div
+                                    className="max-w-xs text-third/55 text-sm font-[Poppins] leading-[1.8] border-l border-third/10"
+                                    dangerouslySetInnerHTML={{ __html: data.whyBuyInspectionDescription }}
+                                />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 lg:grid-cols-4 gap-px bg-third/10 border border-third/10 rounded-2xl overflow-hidden">
+                            {data.inspectionPoints?.map((point, i) => (
+                                <div
+                                    key={i}
+                                    onMouseEnter={() => setAvxInspectionHovered(i)}
+                                    className="relative bg-secondary/10 p-10 flex flex-col gap-12 transition-colors group cursor-default h-full min-h-60"
+                                >
+                                    <img
+                                        src={inspectionImages[i]}
+                                        alt={point}
+                                        className="absolute inset-0 w-full h-full object-cover grayscale brightness-[0.15] group-hover:brightness-[0.45] transition-all duration-700"
+                                    />
+                                    <div className="relative z-10 flex flex-col justify-between h-full">
+                                        <div className="flex justify-between items-start">
+                                            <span className="text-2xl font-black font-[Montserrat] text-third/10 group-hover:text-third/20 transition-colors">
+                                                0{i + 1}
+                                            </span>
+                                            <div className={`w-10 h-10 rounded-xl border border-third/10 flex items-center justify-center transition-all ${avxInspectionHovered === i ? 'bg-third/5 border-third' : 'bg-black/40 backdrop-blur-md'}`}>
+                                                <Check size={16} className={avxInspectionHovered === i ? 'text-primary' : 'text-third/20'} />
+                                            </div>
                                         </div>
+                                        <div className="space-y-4">
+                                            <h3 className="text-lg font-bold font-[Montserrat] text-primary uppercase tracking-tight leading-tight">
+                                                {point.split(" ").slice(0, 2).join(" ")}
+                                            </h3>
+                                            <div
+                                                className="text-xs text-third/40 font-[Poppins] leading-relaxed uppercase tracking-wider"
+                                                dangerouslySetInnerHTML={{ __html: point }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className={`absolute bottom-0 left-0 h-1 bg-third transition-all duration-500 ${avxInspectionHovered === i ? 'w-full' : 'w-0'}`} />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {/* ===== Customer Commitment Section ===== */}
+            <section className="py-12 px-2 lg:px-4">
+                <div className="container">
+                    <div className="mx-auto">
+                        <div className="bg-secondary/10 border border-third/10 rounded-3xl p-10 md:p-14 text-center shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                            <div className="flex flex-col gap-6 items-center">
+                                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                                    Our Promise
+                                </p>
+                                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                                    {data.whyBuyCustomerCommitmentTitle}
+                                </h2>
+                                <div
+                                    className="text-third/55 text-base md:text-lg font-[Poppins] leading-[1.9] max-w-3xl italic"
+                                    dangerouslySetInnerHTML={{ __html: data.whyBuyCustomerCommitmentDescription }}
+                                />
+                                <div className="h-px w-1/4 bg-linear-to-r from-transparent via-third/10 to-transparent mt-4" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {/* ===== Gallery Section ===== */}
+            <section className="py-12 overflow-hidden px-2 lg:px-4">
+                <div className="container">
+                    <div className="mx-auto">
+                        <div className="flex items-center justify-between mb-6">
+                            <div className="flex flex-col gap-6">
+                                <div>
+                                    <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                                        Gallery
+                                    </p>
+                                </div>
+                                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                                    {data.whyBuyGalleryTitle}
+                                </h2>
+                            </div>
+                            <Camera size={32} className="text-third/10 hidden md:block" />
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {galleryImages.map((img, i) => (
+                                <div
+                                    key={i}
+                                    className={`relative rounded-2xl overflow-hidden border border-third/10 group
+                                        ${i % 3 === 0 ? "md:col-span-2 aspect-video" : "aspect-square"}
+                                    `}
+                                >
+                                    <img
+                                        src={img}
+                                        className="w-full h-full object-cover brightness-50 group-hover:brightness-110 group-hover:scale-105 transition-all duration-1000"
+                                        alt={`Gallery item ${i + 1}`}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {/* ===== Testimonials Section ===== */}
+            <section className="relative py-12 px-2 lg:px-4">
+                <div className="container">
+                    <div className="mx-auto w-full">
+                        <div className="flex flex-col items-center gap-10">
+                            <div className="flex flex-col items-center gap-4 text-center">
+                                <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                                    Feedback
+                                </span>
+                                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                                    {data.whyBuyTestimonialTitle}
+                                </h2>
+                            </div>
+                            <div
+                                className="w-full"
+                                style={{
+                                    opacity: visible ? 1 : 0,
+                                    transform: visible ? "translateY(0px)" : "translateY(12px)",
+                                    transition: "opacity 0.35s ease, transform 0.35s ease",
+                                }}
+                            >
+                                <div className="relative flex flex-col items-center text-center gap-8 px-10 py-12 border border-third/15 rounded-2xl">
+                                    <div className="absolute top-5 right-6 w-9 h-9 rounded-full flex items-center justify-center">
+                                        <Quote className="w-6 h-6 text-third/30" />
+                                    </div>
+                                    <span className="text-[13px] font-bold text-third/30 font-[Montserrat] tracking-[0.5em]">
+                                        {String(testimonialsactive + 1).padStart(2, "0")}
+                                    </span>
+                                    <div
+                                        className="text-xl md:text-2xl lg:text-3xl font-light text-primary/70 font-[Poppins] leading-[1.6] max-w-3xl italic"
+                                        dangerouslySetInnerHTML={{ __html: item.reviewText || item.review }}
+                                    />
+                                    <span className="text-xs font-semibold text-primary/90 font-[Montserrat] uppercase tracking-widest">
+                                        {item.reviewerName || item.name}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-6">
+                                <button
+                                    onClick={prev}
+                                    className="w-10 h-10 rounded-full border border-third/20 flex items-center justify-center hover:border-third/40 hover:bg-third/5 transition-all duration-300 group"
+                                >
+                                    <ChevronLeft className="w-4 h-4 text-third/50 group-hover:text-third/70 transition-colors duration-300" />
+                                </button>
+                                <div className="flex items-center gap-2">
+                                    {data.featuredReviews?.map((_, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => transition(i)}
+                                            className={`rounded-full transition-all duration-500 ${i === testimonialsactive
+                                                ? "w-6 h-1.5 bg-primary"
+                                                : "w-1.5 h-1.5 bg-third/20 hover:bg-third/40"
+                                                }`}
+                                        />
                                     ))}
                                 </div>
-                            </div>
-                        </motion.div>
-                    </div>
-                </div>
-            </section>
-
-            {/* ═══════════════════════════════════════
-          SECTION 4 — PROCESS
-      ═══════════════════════════════════════ */}
-            <section className="py-12 px-2 lg:px-4">
-                <div className="container">
-                    <div className="flex flex-col gap-3 mb-10">
-                        <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">Process</p>
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary">
-                            {data.whyBuyProcessTitle}
-                        </h2>
-                        <div
-                            className="text-third/60 text-[15px] max-w-md"
-                            dangerouslySetInnerHTML={{ __html: data.whyBuyProcessDescription }}
-                        />
-                    </div>
-
-                    <div className="relative">
-                        <div className="hidden lg:block absolute top-8 left-0 right-0 h-px bg-third/10" />
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-                            {(data.processSteps || []).map((step, i) => (
-                                <motion.div
-                                    key={i}
-                                    initial={{ opacity: 0, y: 30 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: i * 0.15 }}
-                                    viewport={{ once: true }}
-                                    className="relative flex flex-col gap-4"
+                                <button
+                                    onClick={next}
+                                    className="w-10 h-10 rounded-full border border-third/20 flex items-center justify-center hover:border-third/40 hover:bg-third/5 transition-all duration-300 group"
                                 >
-                                    <div className="w-full h-[140px] rounded-xl overflow-hidden">
-                                        <img
-                                            src={processImages[i % Math.max(processImages.length, 1)]}
-                                            alt={step.title}
-                                            className="w-full h-full object-cover"
-                                            loading="lazy"
-                                        />
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <div className="w-10 h-10 rounded-full border border-third/20 flex items-center justify-center overflow-hidden">
-                                            {typeof step.icon === "string" && step.icon.startsWith("<svg") ? (
-                                                <div
-                                                    className="text-primary [&>svg]:w-5 [&>svg]:h-5"
-                                                    dangerouslySetInnerHTML={{ __html: step.icon }}
-                                                />
-                                            ) : (
-                                                <div className="w-5 h-5 bg-third/20 rounded flex items-center justify-center text-[10px] text-third">Icon</div>
-                                            )}
-                                        </div>
-                                        <span className="text-[11px] tracking-[0.2em] text-third/40 font-semibold">
-                                            {String(i + 1).padStart(2, "0")}
-                                        </span>
-                                    </div>
-                                    <div>
-                                        <p className="font-semibold text-[14px] text-primary mb-1">{step.title}</p>
-                                        <div
-                                            className="text-[13px] text-third/65 leading-[1.7]"
-                                            dangerouslySetInnerHTML={{ __html: step.description }}
-                                        />
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* ═══════════════════════════════════════
-          SECTION 5 — INSPECTION
-      ═══════════════════════════════════════ */}
-            <section className="py-12 px-2 lg:px-4">
-                <div className="container">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-10">
-                        <div>
-                            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2">Inspection</p>
-                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary">
-                                {data.whyBuyInspectionTitle}
-                            </h2>
-                        </div>
-                        <div>
-                            <div className="w-8 h-px bg-primary/15 my-2" />
-                            <div
-                                className="text-third/70 text-[15px] leading-[1.9]"
-                                dangerouslySetInnerHTML={{ __html: data.whyBuyInspectionDescription }}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        {/* LEFT — clickable list */}
-                        <div className="border border-third/10 rounded-2xl overflow-hidden">
-                            {(data.inspectionPoints || []).map((pt, i) => (
-                                <div
-                                    key={i}
-                                    onClick={() => setAvxInspectionHovered(i)}
-                                    className={`flex justify-between items-center px-6 py-5 cursor-pointer transition ${
-                                        i === avxInspectionHovered
-                                            ? "bg-primary/5 border-l-4 border-primary"
-                                            : "hover:bg-primary/3"
-                                    }`}
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <span className="text-[10px] font-bold text-primary tracking-[0.2em]">
-                                            {String(i + 1).padStart(2, "0")}
-                                        </span>
-                                        <div className="text-sm text-third/80" dangerouslySetInnerHTML={{ __html: pt }} />
-                                    </div>
-                                    <span className="text-[10px] uppercase font-bold text-primary">View</span>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* RIGHT — active image */}
-                        <motion.div
-                            key={avxInspectionHovered}
-                            className="w-full h-[260px] rounded-xl overflow-hidden"
-                            initial={{ opacity: 0, scale: 0.96 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.4 }}
-                        >
-                            <img
-                                src={inspectionImages[avxInspectionHovered % Math.max(inspectionImages.length, 1)]}
-                                loading="lazy"
-                                className="w-full h-full object-cover"
-                            />
-                        </motion.div>
-                    </div>
-                </div>
-            </section>
-
-            {/* ═══════════════════════════════════════
-          SECTION 6 — COMMITMENT
-      ═══════════════════════════════════════ */}
-            <section className="py-12 px-2 lg:px-4 bg-fourth">
-                <div className="container">
-                    <div className="max-w-5xl mx-auto text-center">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.7 }}
-                            viewport={{ once: true }}
-                        >
-                            <p className="text-sm tracking-[0.4em] uppercase text-primary/60 font-semibold mb-3">Commitment</p>
-                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary mb-5">
-                                {data.whyBuyCustomerCommitmentTitle}
-                            </h2>
-                            <div className="w-10 h-px bg-primary/20 mx-auto my-4" />
-                            <div
-                                className="text-primary/90 text-[15px] leading-[1.9] max-w-5xl"
-                                dangerouslySetInnerHTML={{ __html: data.whyBuyCustomerCommitmentDescription }}
-                            />
-                        </motion.div>
-                    </div>
-                </div>
-            </section>
-
-            {/* ═══════════════════════════════════════
-          SECTION 7 — GALLERY
-      ═══════════════════════════════════════ */}
-            <section className="py-12 px-2 lg:px-4">
-                <div className="container">
-                    <div className="flex flex-col gap-3 mb-10">
-                        <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">Gallery</p>
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary">
-                            {data.whyBuyGalleryTitle}
-                        </h2>
-                    </div>
-
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 auto-rows-[120px]">
-                        <motion.div
-                            className="col-span-2 row-span-2 rounded-xl overflow-hidden"
-                            initial={{ opacity: 0, scale: 0.96 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                        >
-                            <img src={galleryImages[0]} loading="lazy" className="w-full h-full object-cover hover:scale-105 transition duration-500" />
-                        </motion.div>
-                        <motion.div
-                            className="col-span-1 row-span-1 rounded-xl overflow-hidden"
-                            initial={{ opacity: 0, y: 16 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 }}
-                            viewport={{ once: true }}
-                        >
-                            <img src={galleryImages[1]} loading="lazy" className="w-full h-full object-cover hover:scale-105 transition duration-500" />
-                        </motion.div>
-                        <motion.div
-                            className="col-span-1 row-span-2 rounded-xl overflow-hidden"
-                            initial={{ opacity: 0, y: 16 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            viewport={{ once: true }}
-                        >
-                            <img src={galleryImages[2]} loading="lazy" className="w-full h-full object-cover hover:scale-105 transition duration-500" />
-                        </motion.div>
-                        <motion.div
-                            className="col-span-1 row-span-1 rounded-xl overflow-hidden"
-                            initial={{ opacity: 0, y: 16 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 }}
-                            viewport={{ once: true }}
-                        >
-                            <img src={galleryImages[3]} loading="lazy" className="w-full h-full object-cover hover:scale-105 transition duration-500" />
-                        </motion.div>
-                    </div>
-                </div>
-            </section>
-
-            {/* ═══════════════════════════════════════
-          SECTION 8 — TESTIMONIALS
-      ═══════════════════════════════════════ */}
-            <section className="py-12 px-2 lg:px-4">
-                <div className="container">
-                    <div className="flex items-end justify-between mb-12">
-                        <div className="flex flex-col gap-3">
-                            <motion.p
-                                className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2"
-                                initial={{ opacity: 0 }}
-                                whileInView={{ opacity: 1 }}
-                                viewport={{ once: true }}
-                            >
-                                Reviews
-                            </motion.p>
-                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary">
-                                {data.whyBuyTestimonialTitle}
-                            </h2>
-                        </div>
-                        {(data.featuredReviews?.length || 0) > 1 && (
-                            <div className="flex gap-2">
-                                <button onClick={prev} className="w-9 h-9 rounded-full border border-third/20 flex items-center justify-center hover:border-primary transition">
-                                    <ChevronLeft size={16} className="text-primary" />
-                                </button>
-                                <button onClick={next} className="w-9 h-9 rounded-full border border-third/20 flex items-center justify-center hover:border-primary transition">
-                                    <ChevronRight size={16} className="text-primary" />
+                                    <ChevronRight className="w-4 h-4 text-third/50 group-hover:text-third/70 transition-colors duration-300" />
                                 </button>
                             </div>
-                        )}
+                        </div>
                     </div>
-
-                    {data.featuredReviews && data.featuredReviews.length > 0 ? (
-                        <div
-                            style={{ opacity: visible ? 1 : 0, transition: "opacity 0.35s ease" }}
-                            className="grid grid-cols-1 md:grid-cols-2 gap-6"
-                        >
-                            {[item].map((t, i) => (
-                                <div
-                                    key={i}
-                                    className="group relative rounded-2xl p-7 bg-white/5 backdrop-blur-md border border-white/10 hover:border-primary/30 transition-all duration-300 overflow-hidden"
-                                >
-                                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-linear-to-br from-primary/10 via-transparent to-transparent" />
-                                    <div className="text-primary mb-4 relative z-10">
-                                        <Quote size={22} />
-                                    </div>
-                                    <p className="font-[Poppins] text-[14px] leading-[1.9] text-third/80 italic relative z-10 mb-6">
-                                        {t.reviewText}
-                                    </p>
-                                    <div className="w-full h-px bg-primary/10 mb-5 relative z-10" />
-                                    <div className="flex items-center gap-3 relative z-10">
-                                        <div className="w-10 h-10 rounded-full bg-linear-to-br from-primary/20 to-primary/5 flex items-center justify-center font-bold text-[14px] text-primary">
-                                            {t.reviewerName?.[0] || "?"}
-                                        </div>
-                                        <div>
-                                            <p className="font-[Montserrat] font-semibold text-[13px] text-primary">{t.reviewerName}</p>
-                                            <p className="text-[11px] text-third/50">Verified Buyer</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {(data.testimonials || []).slice(0, 2).map((t, i) => (
-                                <div
-                                    key={i}
-                                    className="group relative rounded-2xl p-7 bg-white/5 backdrop-blur-md border border-white/10 hover:border-primary/30 transition-all duration-300 overflow-hidden"
-                                >
-                                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-linear-to-br from-primary/10 via-transparent to-transparent" />
-                                    <div className="text-primary mb-4 relative z-10">
-                                        <Quote size={22} />
-                                    </div>
-                                    <p className="font-[Poppins] text-[14px] leading-[1.9] text-third/80 italic relative z-10 mb-6">
-                                        {t.review}
-                                    </p>
-                                    <div className="w-full h-px bg-primary/10 mb-5 relative z-10" />
-                                    <div className="flex items-center gap-3 relative z-10">
-                                        <div className="w-10 h-10 rounded-full bg-linear-to-br from-primary/20 to-primary/5 flex items-center justify-center font-bold text-[14px] text-primary">
-                                            {t.name?.[0] || "?"}
-                                        </div>
-                                        <div>
-                                            <p className="font-[Montserrat] font-semibold text-[13px] text-primary">{t.name}</p>
-                                            <p className="text-[11px] text-third/50">Verified Buyer</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
                 </div>
             </section>
         </>
