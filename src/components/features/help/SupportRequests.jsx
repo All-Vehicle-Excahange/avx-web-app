@@ -15,38 +15,38 @@ import {
 
 const STATUS_CONFIG = {
   Open: {
-    color: "#fff",
-    bg: "rgba(255,255,255,0.05)",
-    border: "rgba(255,255,255,0.1)",
-    dot: "#fff",
+    textClass: "text-primary",
+    bgClass: "bg-primary/5",
+    borderClass: "border-white/10",
+    dotClass: "bg-primary",
     pulse: false,
   },
   "In Progress": {
-    color: "#007bff",
-    bg: "rgba(0,123,255,0.1)",
-    border: "rgba(0,123,255,0.25)",
-    dot: "#007bff",
+    textClass: "text-fourth",
+    bgClass: "bg-fourth/10",
+    borderClass: "border-fourth/25",
+    dotClass: "bg-fourth",
     pulse: true,
   },
   Escalated: {
-    color: "#f59e0b",
-    bg: "rgba(245,158,11,0.1)",
-    border: "rgba(245,158,11,0.25)",
-    dot: "#f59e0b",
+    textClass: "text-[#f59e0b]",
+    bgClass: "bg-[#f59e0b]/10",
+    borderClass: "border-[#f59e0b]/25",
+    dotClass: "bg-[#f59e0b]",
     pulse: true,
   },
   Resolved: {
-    color: "rgba(255,255,255,0.5)",
-    bg: "rgba(255,255,255,0.04)",
-    border: "rgba(255,255,255,0.08)",
-    dot: "rgba(255,255,255,0.4)",
+    textClass: "text-primary/50",
+    bgClass: "bg-primary/10",
+    borderClass: "border-white/20",
+    dotClass: "bg-primary/40",
     pulse: false,
   },
   Closed: {
-    color: "rgba(255,255,255,0.25)",
-    bg: "rgba(255,255,255,0.02)",
-    border: "rgba(255,255,255,0.05)",
-    dot: "rgba(255,255,255,0.2)",
+    textClass: "text-primary/25",
+    bgClass: "bg-primary/5",
+    borderClass: "border-white/10",
+    dotClass: "bg-primary/20",
     pulse: false,
   },
 };
@@ -149,20 +149,14 @@ export default function SupportRequests({
         <div className="relative flex-1 max-w-xs">
           <Search
             size={13}
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
-            style={{ color: "rgba(255,255,255,0.25)" }}
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-primary/25"
           />
           <input
             type="text"
             placeholder="Search tickets…"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none transition-colors duration-200 font-secondary"
-            style={{
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              color: "rgba(255,255,255,0.8)",
-            }}
+            className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none transition-colors duration-200 font-secondary bg-primary/5 border border-white/10 text-primary/80"
           />
           {searchQuery && (
             <button
@@ -176,32 +170,17 @@ export default function SupportRequests({
 
         {/* Filter chips */}
         <div className="flex items-center gap-1.5 flex-wrap">
-          <Filter
-            size={11}
-            style={{ color: "rgba(255,255,255,0.2)" }}
-            className="mr-1"
-          />
+          <Filter size={11} className="mr-1 text-primary/20" />
           {FILTERS.map((f) => (
             <button
               key={f}
               onClick={() => setActiveFilter(f)}
-              className="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-[0.15em] font-primary transition-all duration-200 border "
-              style={{
-                background: activeFilter === f ? "" : "transparent",
-                borderColor:
-                  activeFilter === f
-                    ? "rgba(0,123,255,0.3)"
-                    : "rgba(255,255,255,0.06)",
-                color: activeFilter === f ? "" : "rgba(255,255,255,0.35)",
-              }}
+              className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-[0.15em] font-primary transition-all duration-200 border ${activeFilter === f ? "bg-fourth/10 border-fourth/30 text-fourth" : "bg-transparent border-white/5 text-primary/35"}`}
             >
               {f}
               {counts[f] > 0 && (
                 <span
-                  className="ml-1.5 text-[9px] font-black"
-                  style={{
-                    color: activeFilter === f ? "" : "rgba(255,255,255,0.2)",
-                  }}
+                  className={`ml-1.5 text-[9px] font-black ${activeFilter === f ? "text-fourth" : "text-primary/20"}`}
                 >
                   {counts[f]}
                 </span>
@@ -212,20 +191,12 @@ export default function SupportRequests({
       </div>
 
       {/* ── TABLE HEADER (desktop) ── */}
-      <div
-        className="hidden sm:grid px-5 py-3 mb-1 rounded-xl"
-        style={{
-          gridTemplateColumns: "140px 1fr 160px 120px 44px",
-          background: "rgba(255,255,255,0.02)",
-          border: "1px solid rgba(255,255,255,0.05)",
-        }}
-      >
+      <div className="hidden sm:grid grid-cols-[140px_1fr_160px_120px_44px] px-5 py-3 mb-1 rounded-xl bg-primary/5 border border-white/5">
         {["Ticket ID", "Subject / Category", "Status", "Updated", ""].map(
           (h, i) => (
             <span
               key={i}
-              className="text-[10px] uppercase tracking-[0.3em] font-black font-primary"
-              style={{ color: "rgba(255,255,255,0.2)" }}
+              className="text-[10px] uppercase tracking-[0.3em] font-black font-primary text-primary/20"
             >
               {h}
             </span>
@@ -236,10 +207,7 @@ export default function SupportRequests({
       {/* ── ROWS ── */}
       <div className="flex flex-col gap-1">
         {filtered.length === 0 && (
-          <div
-            className="py-14 text-center text-sm"
-            style={{ color: "rgba(255,255,255,0.2)" }}
-          >
+          <div className="py-14 text-center text-sm text-primary/20">
             No tickets found.
           </div>
         )}
@@ -252,20 +220,7 @@ export default function SupportRequests({
           return (
             <div
               key={ticket.id}
-              className="rounded-2xl overflow-hidden transition-all duration-200"
-              style={{
-                border: "1px solid",
-                borderColor: isActive
-                  ? "rgba(255,254,255,0.1)"
-                  : isHovered
-                    ? "rgba(255,255,255,0.09)"
-                    : "rgba(255,255,255,0.05)",
-                background: isActive
-                  ? "rgba(255,254,255,0)"
-                  : isHovered
-                    ? "rgba(255,255,255,0.03)"
-                    : "rgba(255,255,255,0.01)",
-              }}
+              className={`rounded-2xl overflow-hidden transition-all duration-200 border ${isActive ? "border-white/10 bg-transparent" : isHovered ? "border-white/10 bg-primary/10" : "border-white/5 bg-primary/5"}`}
             >
               {/* Row */}
               <div
@@ -280,64 +235,37 @@ export default function SupportRequests({
                 )}
 
                 {/* Desktop grid */}
-                <div
-                  className="hidden sm:grid items-center gap-4"
-                  style={{ gridTemplateColumns: "140px 1fr 160px 120px 44px" }}
-                >
-                  <span
-                    className="font-primary text-[11px] font-black tracking-widest"
-                    style={{ color: "rgba(255,255,255,0.35)" }}
-                  >
+                <div className="hidden sm:grid items-center gap-4 sm:grid-cols-[140px_1fr_160px_120px_44px]">
+                  <span className="font-primary text-[11px] font-black tracking-widest text-primary/35">
                     {ticket.id}
                   </span>
                   <div className="min-w-0">
                     <p
-                      className="text-sm font-semibold truncate"
-                      style={{
-                        color: isActive
-                          ? "rgba(255,255,255,0.95)"
-                          : "rgba(255,255,255,0.65)",
-                      }}
+                      className={`text-sm font-semibold truncate ${isActive ? 'text-primary' : 'text-primary/65'}`}
                     >
                       {ticket.subject}
                     </p>
-                    <p
-                      className="text-[10px] mt-0.5 uppercase tracking-widest font-primary"
-                      style={{ color: "rgba(255,255,255,0.2)" }}
-                    >
+                    <p className="text-[10px] mt-0.5 uppercase tracking-widest font-primary text-primary/20">
                       {ticket.category}
                     </p>
                   </div>
                   <div>
                     <span
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] uppercase tracking-[0.15em] font-black font-primary border"
-                      style={{
-                        color: cfg.color,
-                        background: cfg.bg,
-                        borderColor: cfg.border,
-                      }}
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] uppercase tracking-[0.15em] font-black font-primary border ${cfg.textClass} ${cfg.bgClass} ${cfg.borderClass}`}
                     >
                       <span
-                        className={`w-1.5 h-1.5 rounded-full ${cfg.pulse ? "animate-pulse" : ""}`}
-                        style={{ background: cfg.dot }}
+                        className={`w-1.5 h-1.5 rounded-full ${cfg.pulse ? "animate-pulse" : ""} ${cfg.dotClass}`}
                       />
                       {ticket.status}
                     </span>
                   </div>
-                  <span
-                    className="text-xs font-secondary flex items-center gap-1"
-                    style={{ color: "rgba(255,255,255,0.25)" }}
-                  >
+                  <span className="text-xs font-secondary flex items-center gap-1 text-primary/25">
                     <Clock size={9} /> {ticket.updated}
                   </span>
                   <div className="flex justify-end">
                     <ChevronRight
                       size={14}
-                      className="transition-all duration-200"
-                      style={{
-                        color: isActive ? "#007bff" : "rgba(255,255,255,0.2)",
-                        transform: isActive ? "rotate(90deg)" : "none",
-                      }}
+                      className={`transition-all duration-200 ${isActive ? "text-fourth rotate-90" : "text-primary/20"}`}
                     />
                   </div>
                 </div>
@@ -345,37 +273,22 @@ export default function SupportRequests({
                 {/* Mobile layout */}
                 <div className="sm:hidden">
                   <div className="flex items-start justify-between gap-3 mb-2">
-                    <span
-                      className="font-primary text-[10px] font-black tracking-widest"
-                      style={{ color: "rgba(255,255,255,0.3)" }}
-                    >
+                    <span className="font-primary text-[10px] font-black tracking-widest text-primary/30">
                       {ticket.id}
                     </span>
                     <span
-                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] uppercase tracking-widest font-black font-primary border"
-                      style={{
-                        color: cfg.color,
-                        background: cfg.bg,
-                        borderColor: cfg.border,
-                      }}
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] uppercase tracking-widest font-black font-primary border ${cfg.textClass} ${cfg.bgClass} ${cfg.borderClass}`}
                     >
                       <span
-                        className={`w-1 h-1 rounded-full ${cfg.pulse ? "animate-pulse" : ""}`}
-                        style={{ background: cfg.dot }}
+                        className={`w-1 h-1 rounded-full ${cfg.pulse ? 'animate-pulse' : ''} ${cfg.dotClass}`}
                       />
                       {ticket.status}
                     </span>
                   </div>
-                  <p
-                    className="text-sm font-semibold leading-snug"
-                    style={{ color: "rgba(255,255,255,0.7)" }}
-                  >
+                  <p className="text-sm font-semibold leading-snug text-primary/70">
                     {ticket.subject}
                   </p>
-                  <p
-                    className="text-[10px] mt-1 uppercase tracking-widest font-primary"
-                    style={{ color: "rgba(255,255,255,0.2)" }}
-                  >
+                  <p className="text-[10px] mt-1 uppercase tracking-widest font-primary text-primary/20">
                     {ticket.category}
                   </p>
                 </div>
@@ -383,19 +296,10 @@ export default function SupportRequests({
 
               {/* Thread */}
               {isActive && (
-                <div
-                  className="px-5 pb-6 border-t"
-                  style={{ borderColor: "rgba(0,123,255,0.12)" }}
-                >
+                <div className="px-5 pb-6 border-t border-fourth/20">
                   <div className="pt-5 flex items-center justify-center gap-2 mb-5">
-                    <MessageSquare
-                      size={12}
-                      style={{ color: "rgba(0,123,255,0.5)" }}
-                    />
-                    <span
-                      className="text-[10px] uppercase tracking-[0.3em] font-black font-primary"
-                      style={{ color: "rgba(255,255,255,0.2)" }}
-                    >
+                    <MessageSquare size={12} className="text-fourth/50" />
+                    <span className="text-[10px] uppercase tracking-[0.3em] font-black font-primary text-primary/20">
                       Conversation Thread · {ticket.messages.length} messages
                     </span>
                   </div>
@@ -407,30 +311,15 @@ export default function SupportRequests({
                         className={`flex flex-col gap-1 ${msg.mine ? "items-end" : "items-start"}`}
                       >
                         <div className="flex items-center gap-2">
-                          <span
-                            className="text-[10px] font-black uppercase tracking-wider font-primary"
-                            style={{ color: "rgba(255,255,255,0.3)" }}
-                          >
+                          <span className="text-[10px] font-black uppercase tracking-wider font-primary text-primary/30">
                             {msg.from}
                           </span>
-                          <span
-                            className="text-[10px]"
-                            style={{ color: "rgba(255,255,255,0.15)" }}
-                          >
+                          <span className="text-[10px] text-primary/15">
                             {msg.time}
                           </span>
                         </div>
                         <div
-                          className="px-4 py-2.5 rounded-xl text-sm max-w-md leading-relaxed border"
-                          style={{
-                            color: "rgba(255,255,255,0.75)",
-                            background: msg.mine
-                              ? "rgba(0,123,255,0.12)"
-                              : "rgba(255,255,255,0.04)",
-                            borderColor: msg.mine
-                              ? "rgba(0,123,255,0.2)"
-                              : "rgba(255,255,255,0.06)",
-                          }}
+                          className={`px-4 py-2.5 rounded-xl text-sm max-w-md leading-relaxed border ${msg.mine ? 'bg-fourth/10 border-fourth/20' : 'bg-primary/5 border-white/6'} text-primary/75`}
                         >
                           {msg.text}
                         </div>
@@ -439,7 +328,7 @@ export default function SupportRequests({
                   </div>
 
                   {ticket.status !== "Closed" ? (
-                    <div className="mt-5 flex items-center gap-2">
+                    <div className="mt-5 flex flex-wrap items-center gap-2">
                       <input
                         type="text"
                         placeholder="Write a reply…"
@@ -453,29 +342,17 @@ export default function SupportRequests({
                         onKeyDown={(e) => {
                           if (e.key === "Enter") handleSend(ticket.id);
                         }}
-                        className="flex-1 px-4 py-2.5 rounded-xl text-sm outline-none transition-colors duration-200 font-secondary"
-                        style={{
-                          background: "rgba(255,255,255,0.04)",
-                          border: "1px solid rgba(255,255,255,0.08)",
-                          color: "rgba(255,255,255,0.8)",
-                        }}
+                        className="flex-1 min-w-0 px-4 py-2.5 rounded-xl text-sm outline-none transition-colors duration-200 font-secondary bg-primary/5 border border-white/10 text-primary/80"
                       />
                       <button
                         onClick={() => handleSend(ticket.id)}
-                        className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest font-primary text-primary transition-all hover:opacity-90"
-                        style={{
-                          background: "#007bff",
-                          boxShadow: "0 4px 16px rgba(0,123,255,0.25)",
-                        }}
+                        className="flex items-center gap-2 whitespace-nowrap px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest font-primary text-secondary transition-all duration-200 bg-fourth hover:opacity-90 shadow-[0_4px_16px_rgba(0,123,255,0.25)]"
                       >
                         <Send size={12} /> Send
                       </button>
                     </div>
                   ) : (
-                    <p
-                      className="mt-4 text-[10px] uppercase tracking-[0.2em] font-black text-center font-primary"
-                      style={{ color: "rgba(255,255,255,0.2)" }}
-                    >
+                    <p className="mt-4 text-[10px] uppercase tracking-[0.2em] font-black text-center font-primary text-primary/20">
                       This ticket is closed. Open a new request to continue.
                     </p>
                   )}
@@ -488,10 +365,7 @@ export default function SupportRequests({
 
       {/* Footer count */}
       <div className="flex items-center justify-between mt-6 pt-4 border-t border-white/5">
-        <span
-          className="text-[10px] uppercase tracking-[0.3em] font-black font-primary"
-          style={{ color: "rgba(255,255,255,0.2)" }}
-        >
+        <span className="text-[10px] uppercase tracking-[0.3em] font-black font-primary text-primary/20">
           Showing {filtered.length} of {tickets.length} tickets
         </span>
         <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest font-primary text-fourth hover:gap-3 transition-all duration-200">

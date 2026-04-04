@@ -27,8 +27,7 @@ function RenderContent({ content }) {
           return (
             <h3
               key={i}
-              className="text-[11px] uppercase tracking-[0.3em] font-black pt-6 font-primary"
-              style={{ color: "#fff" }}
+              className="text-[11px] uppercase tracking-[0.3em] font-black pt-6 font-primary text-primary"
             >
               {block.replace(/\*\*/g, "")}
             </h3>
@@ -38,15 +37,13 @@ function RenderContent({ content }) {
         return (
           <p
             key={i}
-            className="text-sm sm:text-[15px] leading-[1.9] font-secondary"
-            style={{ color: "rgba(255,255,255,0.55)" }}
+            className="text-sm sm:text-[15px] leading-[1.9] font-secondary text-primary/55"
           >
             {parts.map((part, j) =>
               part.startsWith("**") ? (
                 <span
                   key={j}
-                  className="font-semibold"
-                  style={{ color: "rgba(255,255,255,0.85)" }}
+                  className="font-semibold text-primary/85"
                 >
                   {part.replace(/\*\*/g, "")}
                 </span>
@@ -89,14 +86,12 @@ export default function ArticleDetailPage() {
       <section className="relative min-h-[50vh] py-16 px-4 flex items-center justify-center">
         <div className="text-center">
           <p
-            className="text-6xl font-black mb-4 font-primary"
-            style={{ color: "rgba(255,255,255,0.06)" }}
+            className="text-6xl font-black mb-4 font-primary text-primary/6"
           >
             404
           </p>
           <p
-            className="text-sm mb-6 font-secondary"
-            style={{ color: "rgba(255,255,255,0.3)" }}
+            className="text-sm mb-6 font-secondary text-primary/30"
           >
             Article not found.
           </p>
@@ -124,11 +119,7 @@ export default function ArticleDetailPage() {
       <section className="relative min-h-screen py-12 px-4 sm:px-8 lg:px-16 overflow-hidden">
         {/* bg ambient */}
         <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse, rgba(0,123,255,0.05) 0%, transparent 70%)",
-          }}
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] pointer-events-none bg-[radial-gradient(ellipse_at_center,_theme(colors.fourth/0.05)_0%,_transparent_70%)]"
         />
 
         <div
@@ -139,8 +130,7 @@ export default function ArticleDetailPage() {
             <div className="flex items-center justify-between gap-2 mb-10">
               <Link
                 href="/help"
-                className="flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] font-black font-primary transition-colors hover:text-primary group"
-                style={{ color: "rgba(255,255,255,0.4)" }}
+                className="flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] font-black font-primary transition-colors hover:text-primary group text-primary/40"
               >
                 <ArrowLeft
                   size={13}
@@ -149,8 +139,7 @@ export default function ArticleDetailPage() {
                 Back
               </Link>
               <div
-                className="flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-black font-primary"
-                style={{ color: "rgba(255,255,255,0.2)" }}
+                className="flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-black font-primary text-primary/20"
               >
                 <Link
                   href="/help"
@@ -159,14 +148,13 @@ export default function ArticleDetailPage() {
                   Help
                 </Link>
                 <ChevronRight size={9} />
-                <span style={{ color: "rgba(255,255,255,0.45)" }}>
+                <span className="text-primary/45">
                   {article.tag}
                 </span>
               </div>
               <Link
                 href="/inspection-process"
-                className="flex items-center gap-1.5 text-[11px] uppercase tracking-[0.3em] font-black font-primary transition-colors hover:text-primary"
-                style={{ color: "rgba(255,255,255,0.4)" }}
+                className="flex items-center gap-1.5 text-[11px] uppercase tracking-[0.3em] font-black font-primary transition-colors hover:text-primary text-primary/40"
               >
                 <Shield size={12} /> Inspection
               </Link>
@@ -181,8 +169,7 @@ export default function ArticleDetailPage() {
                 {article.tag}
               </span>
               <span
-                className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-primary"
-                style={{ color: "rgba(255,255,255,0.2)" }}
+                className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-primary text-primary/20"
               >
                 <Clock size={9} /> {article.readTime} read
               </span>
@@ -195,11 +182,7 @@ export default function ArticleDetailPage() {
 
             {/* ── LAST UPDATED ── */}
             <div
-              className="flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] pb-8 mb-8 font-primary"
-              style={{
-                color: "rgba(255,255,255,0.2)",
-                borderBottom: "1px solid rgba(255,255,255,0.07)",
-              }}
+              className="flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] pb-8 mb-8 font-primary text-primary/20 border-b border-white/7"
             >
               <Calendar size={9} /> Last Updated: {article.lastUpdated}
             </div>
@@ -211,26 +194,17 @@ export default function ArticleDetailPage() {
 
             {/* ── DIVIDER ── */}
             <div
-              className="h-px w-full mb-8"
-              style={{
-                background:
-                  "linear-gradient(90deg, rgba(0,123,255,0.2), rgba(255,255,255,0.05), transparent)",
-              }}
+              className="h-px w-full mb-8 bg-gradient-to-r from-fourth/20 via-primary/5 to-transparent"
             />
 
             {/* ── HELPFUL WIDGET ── */}
             <div
-              className="rounded-2xl p-6 mb-5 border"
-              style={{
-                background: "rgba(255,255,255,0.02)",
-                borderColor: "rgba(255,255,255,0.07)",
-              }}
+              className="rounded-2xl p-6 mb-5 border bg-primary/5 border-white/7"
             >
               {feedback === "yes" ? (
                 <div className="flex items-center gap-3">
                   <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-                    style={{ background: "rgba(0,123,255,0.12)" }}
+                    className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 bg-fourth/12"
                   >
                     <CheckCircle size={16} className="text-fourth" />
                   </div>
@@ -239,8 +213,7 @@ export default function ArticleDetailPage() {
                       Thanks for your feedback
                     </p>
                     <p
-                      className="text-[11px] mt-0.5 font-secondary"
-                      style={{ color: "rgba(255,255,255,0.3)" }}
+                      className="text-[11px] mt-0.5 font-secondary text-primary/30"
                     >
                       Glad this article was helpful.
                     </p>
@@ -249,16 +222,14 @@ export default function ArticleDetailPage() {
               ) : (
                 <>
                   <p
-                    className="text-[10px] uppercase tracking-[0.3em] font-black mb-4 font-primary"
-                    style={{ color: "rgba(255,255,255,0.25)" }}
+                    className="text-[10px] uppercase tracking-[0.3em] font-black mb-4 font-primary text-primary/25"
                   >
                     Was this helpful?
                   </p>
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => setFeedback("yes")}
-                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] uppercase tracking-[0.15em] font-black font-primary text-fourth border border-fourth/20 hover:bg-fourth/10 transition-all duration-200"
-                      style={{ background: "rgba(0,123,255,0.08)" }}
+                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] uppercase tracking-[0.15em] font-black font-primary text-fourth border border-fourth/20 hover:bg-fourth/10 transition-all duration-200 bg-fourth/8"
                     >
                       <ThumbsUp size={12} /> Yes
                     </button>
@@ -267,21 +238,7 @@ export default function ArticleDetailPage() {
                         setFeedback("no");
                         setSupportOpen(true);
                       }}
-                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] uppercase tracking-[0.15em] font-black font-primary border transition-all duration-200"
-                      style={{
-                        background:
-                          feedback === "no"
-                            ? "rgba(245,158,11,0.08)"
-                            : "rgba(255,255,255,0.04)",
-                        borderColor:
-                          feedback === "no"
-                            ? "rgba(245,158,11,0.25)"
-                            : "rgba(255,255,255,0.08)",
-                        color:
-                          feedback === "no"
-                            ? "#f59e0b"
-                            : "rgba(255,255,255,0.35)",
-                      }}
+                      className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] uppercase tracking-[0.15em] font-black font-primary border transition-all duration-200 ${feedback === "no" ? "bg-[#f59e0b]/8 border-[#f59e0b]/25 text-[#f59e0b]" : "bg-primary/5 border-white/10 text-primary/35"}`}
                     >
                       <ThumbsDown size={12} /> No
                     </button>
@@ -294,11 +251,7 @@ export default function ArticleDetailPage() {
 
             {/* ── DIVIDER ── */}
             <div
-              className="h-px w-full mb-8"
-              style={{
-                background:
-                  "linear-gradient(90deg, rgba(255,255,255,0.05), transparent)",
-              }}
+              className="h-px w-full mb-8 bg-gradient-to-r from-primary/5 to-transparent"
             />
 
             {/* ── STILL NEED HELP CTA ── */}
@@ -322,11 +275,7 @@ export default function ArticleDetailPage() {
                     setFeedback("no");
                     setSupportOpen(true);
                   }}
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] uppercase tracking-[0.15em] font-black font-primary text-secondary transition-all duration-300 hover:-translate-y-0.5"
-                  style={{
-                    background: "#fff",
-                    boxShadow: "0 6px 20px rgba(0,123,255,0.25)",
-                  }}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] uppercase tracking-[0.15em] font-black font-primary text-secondary transition-all duration-300 hover:-translate-y-0.5 bg-white shadow-[0_6px_20px_rgba(0,123,255,0.25)]"
                 >
                   Contact Support <ArrowUpRight size={11} />
                 </button>
@@ -339,21 +288,15 @@ export default function ArticleDetailPage() {
                 {prevArticle ? (
                   <Link
                     href={`/help/${prevArticle.slug}`}
-                    className="group flex flex-col gap-1.5 p-4 rounded-xl transition-all duration-200 border hover:border-white/12"
-                    style={{
-                      background: "rgba(255,255,255,0.02)",
-                      borderColor: "rgba(255,255,255,0.07)",
-                    }}
+                    className="group flex flex-col gap-1.5 p-4 rounded-xl transition-all duration-200 border hover:border-white/12 bg-primary/5 border-white/7"
                   >
                     <span
-                      className="text-[9px] uppercase tracking-[0.25em] font-black flex items-center gap-1 font-primary"
-                      style={{ color: "rgba(255,255,255,0.2)" }}
+                      className="text-[9px] uppercase tracking-[0.25em] font-black flex items-center gap-1 font-primary text-primary/20"
                     >
                       <ArrowLeft size={8} /> Previous
                     </span>
                     <span
-                      className="text-[12px] font-semibold leading-snug line-clamp-2 font-secondary"
-                      style={{ color: "rgba(255,255,255,0.55)" }}
+                      className="text-[12px] font-semibold leading-snug line-clamp-2 font-secondary text-primary/55"
                     >
                       {prevArticle.question}
                     </span>
@@ -365,21 +308,15 @@ export default function ArticleDetailPage() {
                 {nextArticle ? (
                   <Link
                     href={`/help/${nextArticle.slug}`}
-                    className="group flex flex-col gap-1.5 p-4 rounded-xl transition-all duration-200 border hover:border-white/12 text-right"
-                    style={{
-                      background: "rgba(255,255,255,0.02)",
-                      borderColor: "rgba(255,255,255,0.07)",
-                    }}
+                    className="group flex flex-col gap-1.5 p-4 rounded-xl transition-all duration-200 border hover:border-white/12 text-right bg-primary/5 border-white/7"
                   >
                     <span
-                      className="text-[9px] uppercase tracking-[0.25em] font-black flex items-center justify-end gap-1 font-primary"
-                      style={{ color: "rgba(255,255,255,0.2)" }}
+                      className="text-[9px] uppercase tracking-[0.25em] font-black flex items-center justify-end gap-1 font-primary text-primary/20"
                     >
                       Next <ArrowUpRight size={8} />
                     </span>
                     <span
-                      className="text-[12px] font-semibold leading-snug line-clamp-2 font-secondary"
-                      style={{ color: "rgba(255,255,255,0.55)" }}
+                      className="text-[12px] font-semibold leading-snug line-clamp-2 font-secondary text-primary/55"
                     >
                       {nextArticle.question}
                     </span>

@@ -20,34 +20,21 @@ export default function SupportFlowModal({ onClose }) {
   };
 
   return (
-    <div className="  fixed inset-0 z-999 p-4 sm:p-6 md:p-12  lg:px-0 flex items-center justify-center backdrop-blur-sm ">
+    <div className="  fixed inset-0 z-999 py-2 pt-18  flex items-center justify-center backdrop-blur-sm ">
       <div
-        className="relative  max-w-7xl mx-auto bg-secondary border border-primary/30 rounded-xl shadow-2xl overflow-hidden flex flex-col"
-        style={{ maxHeight: "calc(88vh - 40px)" }}
+        className="relative max-w-7xl mx-auto max-h-[calc(85vh-40px)] bg-secondary border border-primary/30 rounded-xl shadow-2xl overflow-hidden flex flex-col"
       >
         {/* Close bar */}
-        <div
-          className="flex items-center justify-between px-6 py-4 shrink-0 border-b"
-          style={{
-            borderColor: "rgba(255,255,255,0.07)",
-            background: "rgba(10,10,18,0.95)",
-          }}
-        >
+        <div className="flex items-center justify-between px-6 py-4 shrink-0 border-b border-white/10 bg-secondary/95">
           <div className="flex items-center gap-3">
-            <div
-              className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
-              style={{ background: "rgba(0,123,255,0.1)" }}
-            >
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-fourth/10">
               <MessageSquare size={14} className="text-fourth" />
             </div>
             <div>
               <p className="text-[11px] font-black uppercase tracking-[0.3em] font-primary text-primary">
                 Contact Support
               </p>
-              <p
-                className="text-[10px] font-secondary mt-0.5"
-                style={{ color: "rgba(255,255,255,0.4)" }}
-              >
+              <p className="text-[10px] font-secondary mt-0.5 text-primary/40">
                 Well get back to you within 48 hours
               </p>
             </div>
@@ -66,13 +53,7 @@ export default function SupportFlowModal({ onClose }) {
         </div>
 
         {submitted && (
-          <div
-            className="shrink-0 px-6 py-4 border-t flex justify-center"
-            style={{
-              borderColor: "rgba(255,255,255,0.07)",
-              background: "rgba(10,10,18,0.95)",
-            }}
-          >
+          <div className="shrink-0 px-6 py-4 border-t border-white/10 bg-secondary/95 flex justify-center">
             <button
               onClick={onClose}
               className="text-[11px] font-black uppercase tracking-[0.25em] font-primary text-fourth hover:opacity-80 transition-opacity flex items-center gap-2"
