@@ -424,14 +424,14 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate }) {
         <div className="absolute inset-0 bg-secondary/65" />
         <div className="absolute inset-0 bg-linear-to-b from-secondary/20 via-secondary/40 to-secondary" />
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center gap-8 text-center px-2 lg:px-4 pt-16 pb-6">
-          <p className="text-sm tracking-[0.45em] uppercase text-third font-semibold fade-up-1">
+          <p className="text-sm tracking-[0.45em] uppercase text-third font-semibold ">
             Hero
           </p>
-          <h2 className="flex flex-col gap-2 text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat] fade-up-2">
+          <h2 className="flex flex-col gap-2 text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat] ">
             <span>{data.aboutHeroTitle}</span>
           </h2>
           <div
-            className="text-third/55 text-base sm:text-lg font-[Poppins] leading-relaxed max-w-6xl fade-up-3"
+            className="text-third/55 text-base sm:text-lg font-[Poppins] leading-relaxed max-w-6xl "
             dangerouslySetInnerHTML={{ __html: data.aboutHeroDescription }}
           />
         </div>
@@ -440,7 +440,7 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate }) {
       {/* MISSION / VISION */}
       <section className="relative py-8 overflow-hidden px-2 lg:px-4">
         <div className="container">
-          <div className="flex flex-col items-center gap-3 mb-12 fade-up-1">
+          <div className="flex flex-col items-center gap-3 mb-12 ">
             <div className="flex flex-col items-center text-center gap-6 max-w-2xl mx-auto">
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
                 Mission / Vision
