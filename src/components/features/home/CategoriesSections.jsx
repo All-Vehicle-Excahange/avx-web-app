@@ -205,10 +205,10 @@ const CategoriesSections = () => {
             ))
           ) : vehicles.length === 0 ? (
             <div className="col-span-full text-center py-10">
-              <p className="text-lg font-semibold text-primary">
+              <h3 className="text-lg font-semibold text-primary/50">
                 No Vehicles Found
-              </p>
-              <p className="text-sm text-third mt-2">
+              </h3>
+              <p className="text-sm text-third/80 mt-2">
                 Try selecting another category.
               </p>
             </div>
