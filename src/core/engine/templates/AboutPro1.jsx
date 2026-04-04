@@ -99,12 +99,7 @@ function AboutPro1({ data, isEditing, onUpdate }) {
     return () => clearInterval(intervalRef.current);
   }, []);
 
-  useEffect(() => {
-    const els = document.querySelectorAll(".fade-up");
-    els.forEach((el, i) => {
-      setTimeout(() => el.classList.add("fade-up-in"), 300 + i * 150);
-    });
-  }, []);
+
 
   if (!data) return null;
 
@@ -456,48 +451,7 @@ function AboutPro1({ data, isEditing, onUpdate }) {
   /* ================== LIVE PREVIEW ================== */
   return (
     <>
-      {/* HERO CSS (REQUIRED) */}
-      <style>{`
-        .bg-slide {
-          position: absolute;
-          inset: 0;
-          background-size: cover;
-          background-position: center;
-          opacity: 0;
-          transition: opacity 1.4s ease;
-          transform: scale(1.04);
-          animation: slow-zoom 10s ease-in-out infinite alternate;
-        }
-        .active-slide { opacity: 1; }
-
-        @keyframes slow-zoom {
-          from { transform: scale(1.04); }
-          to { transform: scale(1); }
-        }
-
-        .diag-panel {
-          clip-path: polygon(0 0, 100% 0, 100% 78%, 0 100%);
-        }
-
-        .fade-up {
-          opacity: 0;
-          transform: translateY(40px);
-          transition: all 1s cubic-bezier(0.16,1,0.3,1);
-        }
-        .fade-up-in {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        .thumb {
-          transition: all 0.4s ease;
-          cursor: pointer;
-        }
-        .thumb:hover {
-          transform: translateY(-6px);
-          box-shadow: 0 20px 40px rgba(0,0,0,0.7);
-        }
-      `}</style>
+     
 
       {/* HERO */}
       <section className="relative w-full min-h-screen overflow-hidden flex  px-4 lg:px-8 py-12">
