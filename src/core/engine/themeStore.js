@@ -13,6 +13,9 @@ import { WHY_BUY_BASIC_3 } from "./schemas/whybuy/why_buy_basic_3";
 import { WHY_BUY_PRO_1 } from "./schemas/whybuy/why_buy_pro_1";
 import { WHY_BUY_PRO_2 } from "./schemas/whybuy/why_buy_pro_2";
 import { WHY_BUY_PRO_3 } from "./schemas/whybuy/why_buy_pro_3";
+import { WHY_BUY_PREMIUM_1 } from "./schemas/whybuy/why_buy_premium_1";
+import { WHY_BUY_PREMIUM_2 } from "./schemas/whybuy/why_buy_premium_2";
+import { WHY_BUY_PREMIUM_3 } from "./schemas/whybuy/why_buy_premium_3";
 
 export const THEME_STORE = [
   {
@@ -77,7 +80,7 @@ export const THEME_STORE = [
     category: "about",
     thumbnail: "/themes/premium/thumb.webp",
     preview: "/themes/premium/full.webp",
-    schema: ABOUT_PREMIUM_1,
+    schema: [...ABOUT_PREMIUM_1, ...WHY_BUY_PREMIUM_1],
   },
   {
     id: "about_premium_2",
@@ -86,7 +89,7 @@ export const THEME_STORE = [
     category: "about",
     thumbnail: "/themes/premium/thumb.webp",
     preview: "/themes/premium/full.webp",
-    schema: ABOUT_PREMIUM_2,
+    schema: [...ABOUT_PREMIUM_2, ...WHY_BUY_PREMIUM_2],
   },
   {
     id: "about_premium_3",
@@ -95,6 +98,6 @@ export const THEME_STORE = [
     category: "about",
     thumbnail: "/themes/premium/thumb.webp",
     preview: "/themes/premium/full.webp",
-    schema: ABOUT_PREMIUM_3,
+    schema: [...ABOUT_PREMIUM_3, ...WHY_BUY_PREMIUM_3],
   },
 ];

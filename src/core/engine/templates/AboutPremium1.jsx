@@ -1,381 +1,659 @@
-import Button from "@/components/ui/button";
+/* eslint-disable react-hooks/set-state-in-effect */
+"use client";
+import React, { useState } from "react";
+import { ABOUT_PREMIUM_1 } from "../schemas";
 import EditorInput from "../atoms/EditorInput";
 import { ImageUploader } from "../atoms/ImageUploader ";
 import RichTextEditor from "../atoms/RichTextEditor";
-import Image from "next/image";
-import { BarChart3, Target, TrendingUp } from "lucide-react";
-import * as Icons from "lucide-react";
-
-function AboutPremium1({ data, isEditing, onUpdate }) {
-  if (!data) return null;
-
-  const update = (k, v) => onUpdate({ ...data, [k]: v });
-
-  const updateArrayItem = (array, i, key, value) => {
-    const copy = [...data[array]];
-    copy[i][key] = value;
-    onUpdate({ ...data, [array]: copy });
+import { Plus, Trash } from "lucide-react";
+import Select from "react-select";
+import {
+  setAboutHero,
+  setAboutMission,
+  setAboutVision,
+  setState,
+  setAboutServices,
+} from "@/services/theme.service";
+const SVG_OPTIONS = [
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>`,
+    label: "Search",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>`,
+    label: "Cancel",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M300-360q-25 0-42.5-17.5T240-420v-40h60v40h60v-180h60v180q0 25-17.5 42.5T360-360h-60Zm220 0q-17 0-28.5-11.5T480-400v-40h60v20h80v-40H520q-17 0-28.5-11.5T480-500v-60q0-17 11.5-28.5T520-600h120q17 0 28.5 11.5T680-560v40h-60v-20h-80v40h100q17 0 28.5 11.5T680-460v60q0 17-11.5 28.5T640-360H520Z"/></svg>`,
+    label: "Layout",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M320-240 80-480l240-240 57 57-184 184 183 183-56 56Zm320 0-57-57 184-184-183-183 56-56 240 240-240 240Z"/></svg>`,
+    label: "Code",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-40-360v-240h80v207l154 154-57 57-177-178Z"/></svg>`,
+    label: "Clock",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/></svg>`,
+    label: "Shield",
+  },
+];
+const selectStyles = {
+  control: (base) => ({
+    ...base,
+    backgroundColor: "transparent",
+    borderColor: "rgba(255, 255, 255, 0.2)",
+    color: "white",
+    minHeight: "44px",
+  }),
+  indicatorSeparator: () => ({
+    display: "none",
+  }),
+  singleValue: (base) => ({
+    ...base,
+    color: "white",
+  }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isFocused ? "rgba(255,255,255,0.1)" : "#1e1e1e",
+    color: "white",
+    cursor: "pointer",
+  }),
+  menu: (base) => ({
+    ...base,
+    backgroundColor: "#1e1e1e",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+  }),
+};
+const formatOptionLabel = ({ value, label }) => (
+  <div className="flex items-center gap-3">
+    <div
+      className="w-5 h-5 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full"
+      dangerouslySetInnerHTML={{ __html: value }}
+    />
+    <span className="text-sm">{label}</span>
+  </div>
+);
+const DEFAULT_DATA = ABOUT_PREMIUM_1[0].data;
+export default function AboutPremium1({ data, isEditing, onUpdate }) {
+  const fallbackData = { ...DEFAULT_DATA };
+  const d = data || fallbackData;
+  const [active, setActive] = useState(0);
+  const [hovered, setHovered] = useState(null);
+  const current = hovered !== null ? hovered : active;
+  /* ================== HELPERS ================== */
+  const getBlobFromUrl = async (url) => {
+    if (!url || !url.startsWith("blob:")) return null;
+    try {
+      const response = await fetch(url);
+      return await response.blob();
+    } catch (e) {
+      console.error("Error fetching blob from URL:", e);
+      return null;
+    }
   };
-
-  /* ================= EDITOR ================= */
+  const update = (k, v) => onUpdate({ ...d, [k]: v });
+  const updateArr = (k, i, f, v) => {
+    const copy = [...d[k]];
+    copy[i][f] = v;
+    update(k, copy);
+  };
+  const addArr = (k, item) => update(k, [...d[k], item]);
+  const removeArr = (k, i) => {
+    const copy = [...d[k]];
+    copy.splice(i, 1);
+    update(k, copy);
+  };
+  /* ================== API HANDLERS ================== */
+  const handleHeroBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("heroTitle", d.heroTitle || "");
+      formData.append("heroDescription", d.heroDescription || "");
+      if (d.heroTemplate1?.id) {
+        formData.append("heroTemplateId1", d.heroTemplate1.id);
+      } else if (d.heroTemplate1?.imageUrl) {
+        const blob = await getBlobFromUrl(d.heroTemplate1.imageUrl);
+        if (blob) {
+          formData.append("customAboutHero1", blob, "hero_image.png");
+        }
+      }
+      const res = await setAboutHero(formData);
+      if (res?.data?.success) console.log("Hero updated successfully");
+    } catch (error) {
+      console.error("Failed to update Hero section:", error);
+    }
+  };
+  const handleMissionBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("missionTitle", d.missionTitle || "");
+      formData.append("missionDescription", d.missionDesc || "");
+      if (d.missionTemplate1?.id) {
+        formData.append("missionTemplateId1", d.missionTemplate1.id);
+      } else if (d.missionTemplate1?.imageUrl) {
+        const blob = await getBlobFromUrl(d.missionTemplate1.imageUrl);
+        if (blob) {
+          formData.append("customAboutMission1", blob, "mission_image.png");
+        }
+      }
+      const res = await setAboutMission(formData);
+      if (res?.data?.success) console.log("Mission updated successfully");
+    } catch (error) {
+      console.error("Failed to update Mission section:", error);
+    }
+  };
+  const handleVisionBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("visionTitle", d.visionTitle || "");
+      formData.append("visionDescription", d.visionDesc || "");
+      if (d.visionTemplate1?.id) {
+        formData.append("visionTemplateId1", d.visionTemplate1.id);
+      } else if (d.visionTemplate1?.imageUrl) {
+        const blob = await getBlobFromUrl(d.visionTemplate1.imageUrl);
+        if (blob) {
+          formData.append("customAboutVision1", blob, "vision_image.png");
+        }
+      }
+      const res = await setAboutVision(formData);
+      if (res?.data?.success) console.log("Vision updated successfully");
+    } catch (error) {
+      console.error("Failed to update Vision section:", error);
+    }
+  };
+  const handleStatsBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("aboutUsDescription", d.aboutUsDescription || "");
+      if (d.stats && Array.isArray(d.stats)) {
+        d.stats.forEach((stat, i) => {
+          formData.append(`stats[${i}].number`, stat.number || "");
+          formData.append(`stats[${i}].label`, stat.label || "");
+        });
+      }
+      const res = await setState(formData);
+      if (res?.data?.success) console.log("Stats updated successfully");
+    } catch (error) {
+      console.error("Failed to update Stats section:", error);
+    }
+  };
+  const handleServicesBlur = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("serviceTitle", d.servicesTitle || "");
+      formData.append("serviceDescription", d.servicesDesc || "");
+      if (d.services && Array.isArray(d.services)) {
+        d.services.forEach((service, i) => {
+          formData.append(`services[${i}].title`, service.title || "");
+          formData.append(`services[${i}].desc`, service.desc || "");
+          formData.append(`services[${i}].icon`, service.icon || "");
+        });
+      }
+      const res = await setAboutServices(formData);
+      if (res?.data?.success) console.log("Services updated successfully");
+    } catch (error) {
+      console.error("Failed to update Services section:", error);
+    }
+  };
+  /* ================== EDITOR ================== */
   if (isEditing) {
     return (
-      <div className="bg-secondary p-8  w-full rounded-xl border border-third/30 max-w-[1480px] mx-auto space-y-12">
-        <h3 className="text-primary font-bold text-xl">Premium Hero</h3>
-
-        <EditorInput
-          bold
-          value={data.headline}
-          onChange={(e) => update("headline", e.target.value)}
-          placeholder="Hero Headline"
-        />
-
-        <RichTextEditor
-          value={data.subText}
-          onChange={(v) => update("subText", v)}
-        />
-
-        {/* Image Layout Editor */}
-        <div className="grid grid-cols-2 gap-6 items-start">
-          {/* Left Big Image */}
-          <ImageUploader
-            label="Main Hero Image"
-            src={data.heroImage1}
-            fieldKey="hero1"
-            onChange={(v) => update("heroImage1", v)}
-          />
-
-          {/* Right stacked images */}
-          <div className="space-y-6">
-            <ImageUploader
-              label="Side Image 1"
-              src={data.heroImage2}
-              fieldKey="hero2"
-              onChange={(v) => update("heroImage2", v)}
+      <div className="p-8 rounded-xl border border-third/30 w-full max-w-[1480px] mx-auto space-y-10">
+        {/* HERO EDITOR */}
+        <h3 className="text-primary text-xl font-bold">Hero Section</h3>
+        <div className="grid grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <EditorInput
+              bold
+              value={d.heroTitle}
+              onChange={(e) => update("heroTitle", e.target.value)}
+              onBlur={handleHeroBlur}
+              placeholder="Hero Title"
             />
+            <RichTextEditor
+              label="Hero Description"
+              value={d.heroDescription}
+              onChange={(v) => update("heroDescription", v)}
+              onBlur={handleHeroBlur}
+            />
+          </div>
+          <div className="h-52 relative">
             <ImageUploader
-              label="Side Image 2"
-              src={data.heroImage3}
-              fieldKey="hero3"
-              onChange={(v) => update("heroImage3", v)}
+              label="Hero Background Image"
+              src={d.customAboutHero1 || d.heroTemplate1?.imageUrl}
+              fieldKey="hero"
+              onChange={({ imageUrl, id }) => {
+                const updatedData = { ...d };
+                updatedData.heroTemplate1 = {
+                  ...d.heroTemplate1,
+                  imageUrl,
+                  id: id ?? null,
+                };
+                if (!id) {
+                  updatedData.customAboutHero1 = imageUrl;
+                } else {
+                  delete updatedData.customAboutHero1;
+                }
+                onUpdate(updatedData);
+                setTimeout(handleHeroBlur, 100);
+              }}
             />
           </div>
         </div>
-
-        <hr className="border-third/30" />
-        <h3 className="text-primary font-bold text-xl">Who We Are / Impact</h3>
-
-        <RichTextEditor
-          value={data.aboutText}
-          onChange={(v) => update("aboutText", v)}
-        />
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
-          {data.stats.map((s, i) => (
-            <div
-              key={i}
-              className="bg-primary/5 border border-third/20 rounded-2xl p-6 space-y-4"
-            >
-              <EditorInput
-                label="Icon / Emoji"
-                center
-                value={s.icon || ""}
-                onChange={(e) =>
-                  updateArrayItem("stats", i, "icon", e.target.value)
-                }
-              />
-
-              <EditorInput
-                bold
-                center
-                value={s.number}
-                onChange={(e) =>
-                  updateArrayItem("stats", i, "number", e.target.value)
-                }
-              />
-
-              <EditorInput
-                center
-                size="sm"
-                value={s.label}
-                onChange={(e) =>
-                  updateArrayItem("stats", i, "label", e.target.value)
-                }
-              />
-            </div>
-          ))}
-        </div>
-
-        <hr className="border-third/30" />
-        <h3 className="text-primary font-bold text-xl">Mission & Vision</h3>
-
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Left Image */}
-          <ImageUploader
-            label="Main Image"
-            src={data.missionImage}
-            fieldKey="mission"
-            onChange={(v) => update("missionImage", v)}
-          />
-
-          {/* Right Content */}
-          <div className="space-y-16">
-            {/* Mission */}
-            <div className="space-y-3">
-              <EditorInput
-                bold
-                value={data.missionTitle}
-                onChange={(e) => update("missionTitle", e.target.value)}
-              />
-              <RichTextEditor
-                value={data.missionText}
-                onChange={(v) => update("missionText", v)}
-              />
-            </div>
-
-            <hr className="border-third/20" />
-
-            {/* Vision */}
-            <div className="space-y-3">
-              <EditorInput
-                bold
-                value={data.visionTitle}
-                onChange={(e) => update("visionTitle", e.target.value)}
-              />
-              <RichTextEditor
-                value={data.visionText}
-                onChange={(v) => update("visionText", v)}
+        <hr className="border-third/20" />
+        {/* MISSION EDITOR */}
+        <h3 className="text-primary text-xl font-bold">Mission Section</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="space-y-4">
+            <EditorInput
+              bold
+              value={d.missionTitle}
+              onChange={(e) => update("missionTitle", e.target.value)}
+              onBlur={handleMissionBlur}
+              placeholder="Mission Title"
+            />
+            <RichTextEditor
+              label="Mission Description"
+              value={d.missionDesc}
+              onChange={(v) => update("missionDesc", v)}
+              onBlur={handleMissionBlur}
+            />
+          </div>
+          <div className="space-y-4">
+            <p className="text-sm font-semibold text-primary">Image</p>
+            <div className="h-52 relative">
+              <ImageUploader
+                label="Mission Image"
+                src={d.customAboutMission1 || d.missionTemplate1?.imageUrl}
+                fieldKey="mission"
+                onChange={({ imageUrl, id }) => {
+                  const updatedData = { ...d };
+                  updatedData.missionTemplate1 = {
+                    ...d.missionTemplate1,
+                    imageUrl,
+                    id: id ?? null,
+                  };
+                  if (!id) {
+                    updatedData.customAboutMission1 = imageUrl;
+                  } else {
+                    delete updatedData.customAboutMission1;
+                  }
+                  onUpdate(updatedData);
+                  setTimeout(handleMissionBlur, 100);
+                }}
               />
             </div>
           </div>
         </div>
-
-        <hr className="border-third/30" />
-        <h3 className="text-primary font-bold text-xl">Our Services</h3>
-
-        <EditorInput
-          bold
-          value={data.servicesTitle}
-          onChange={(e) => update("servicesTitle", e.target.value)}
+        <hr className="border-third/20" />
+        {/* VISION EDITOR */}
+        <h3 className="text-primary text-xl font-bold">Vision Section</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="space-y-4">
+            <EditorInput
+              bold
+              value={d.visionTitle}
+              onChange={(e) => update("visionTitle", e.target.value)}
+              onBlur={handleVisionBlur}
+              placeholder="Vision Title"
+            />
+            <RichTextEditor
+              label="Vision Description"
+              value={d.visionDesc}
+              onChange={(v) => update("visionDesc", v)}
+              onBlur={handleVisionBlur}
+            />
+          </div>
+          <div className="space-y-4">
+            <p className="text-sm font-semibold text-primary">Image</p>
+            <div className="h-52 relative">
+              <ImageUploader
+                label="Vision Image"
+                src={d.customAboutVision1 || d.visionTemplate1?.imageUrl}
+                fieldKey="vision"
+                onChange={({ imageUrl, id }) => {
+                  const updatedData = { ...d };
+                  updatedData.visionTemplate1 = {
+                    ...d.visionTemplate1,
+                    imageUrl,
+                    id: id ?? null,
+                  };
+                  if (!id) {
+                    updatedData.customAboutVision1 = imageUrl;
+                  } else {
+                    delete updatedData.customAboutVision1;
+                  }
+                  onUpdate(updatedData);
+                  setTimeout(handleVisionBlur, 100);
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        <hr className="border-third/20" />
+        {/* STATS EDITOR */}
+        <h3 className="text-primary text-xl font-bold">Stats Section</h3>
+        <RichTextEditor
+          label="About Us Description"
+          value={d.aboutUsDescription}
+          onChange={(v) => update("aboutUsDescription", v)}
+          onBlur={handleStatsBlur}
         />
-
-        <EditorInput
-          value={data.servicesSubtitle}
-          onChange={(e) => update("servicesSubtitle", e.target.value)}
-        />
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
-          {data.services.map((s, i) => (
+        <div className="p-4 bg-primary/5 rounded-lg border border-third/10">
+          <h4 className="text-primary font-semibold mb-4">Stats Numbers</h4>
+          <div className="grid grid-cols-4 gap-4">
+            {(d.stats || []).map((s, i) => (
+              <div key={i} className="space-y-2">
+                <EditorInput
+                  bold
+                  value={s.number}
+                  onChange={(e) =>
+                    updateArr("stats", i, "number", e.target.value)
+                  }
+                  onBlur={handleStatsBlur}
+                  placeholder="Number"
+                />
+                <EditorInput
+                  value={s.label}
+                  onChange={(e) =>
+                    updateArr("stats", i, "label", e.target.value)
+                  }
+                  onBlur={handleStatsBlur}
+                  placeholder="Label"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+        <hr className="border-third/20" />
+        {/* SERVICES EDITOR */}
+        <h3 className="text-primary font-bold text-xl mb-4">
+          Services Section
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <EditorInput
+            bold
+            value={d.servicesTitle}
+            onChange={(e) => update("servicesTitle", e.target.value)}
+            onBlur={handleServicesBlur}
+            placeholder="Services Title"
+          />
+          <RichTextEditor
+            label="Services Description"
+            value={d.servicesDesc}
+            onChange={(v) => update("servicesDesc", v)}
+            onBlur={handleServicesBlur}
+          />
+        </div>
+        <div className="grid md:grid-cols-2 gap-4 mt-4">
+          {(d.services || []).map((s, i) => (
             <div
               key={i}
-              className="bg-primary/5 border border-third/20 rounded-2xl p-6 space-y-4"
+              className="border border-third/30 p-4 rounded bg-primary/5"
             >
-              <EditorInput
-                label="Lucide Icon Name (e.g. Rocket, Shield, Code)"
-                center
-                value={s.icon}
-                onChange={(e) =>
-                  updateArrayItem("services", i, "icon", e.target.value)
-                }
-              />
-              <EditorInput
-                bold
-                center
-                value={s.title}
-                onChange={(e) =>
-                  updateArrayItem("services", i, "title", e.target.value)
-                }
-              />
-              <EditorInput
-                center
-                size="sm"
-                value={s.desc}
-                onChange={(e) =>
-                  updateArrayItem("services", i, "desc", e.target.value)
-                }
-              />
+              <div className="flex flex-col gap-2 relative mt-2">
+                <label className="text-sm font-medium text-primary">
+                  Select Icon
+                </label>
+                <Select
+                  options={SVG_OPTIONS}
+                  formatOptionLabel={formatOptionLabel}
+                  styles={selectStyles}
+                  value={
+                    SVG_OPTIONS.find((opt) => opt.value === s.icon) || null
+                  }
+                  onChange={(selectedOption) => {
+                    updateArr("services", i, "icon", selectedOption.value);
+                    handleServicesBlur();
+                  }}
+                />
+              </div>
+              <div className="mt-4">
+                <label className="text-sm font-medium text-primary mb-1 block">
+                  Title
+                </label>
+                <EditorInput
+                  bold
+                  value={s.title}
+                  onChange={(e) =>
+                    updateArr("services", i, "title", e.target.value)
+                  }
+                  onBlur={handleServicesBlur}
+                  placeholder="Service Title"
+                />
+              </div>
+              <div className="mt-4">
+                <label className="text-sm font-medium text-primary mb-1 block">
+                  Description
+                </label>
+                <EditorInput
+                  size="sm"
+                  value={s.desc}
+                  onChange={(e) =>
+                    updateArr("services", i, "desc", e.target.value)
+                  }
+                  onBlur={handleServicesBlur}
+                  placeholder="Service Description"
+                />
+              </div>
             </div>
           ))}
         </div>
       </div>
     );
   }
-
-  /* ================= VIEW ================= */
+  /* ================== LIVE PREVIEW ================== */
   return (
-    <section className="bg-secondary py-10 px-6">
-      <div className="max-w-[1480px] mx-auto space-y-16">
-        <div className="text-center max-w-4xl mx-auto space-y-6">
-          <h1 className="text-5xl md:text-6xl font-extrabold text-primary leading-tight">
-            {data.headline}
-          </h1>
-          <div
-            dangerouslySetInnerHTML={{ __html: data.subText }}
-            className="text-third text-lg"
-          />
-        </div>
-
-        <div className="grid lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 relative h-[520px] rounded-3xl overflow-hidden group">
-            <Image
-              src={data.heroImage1 || "/cs.png"}
-              alt="Hero Main"
-              fill
-              className="object-cover "
+    <>
+      {/* ═════════ HERO ═════════ */}
+      <section className="w-full min-h-screen flex items-center justify-center py-12 pt-20">
+        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+          {/* LEFT CONTENT */}
+          <div className="relative z-10">
+            <p className="mb-4 text-xs tracking-[0.5em] uppercase text-third font-semibold">
+              Hero
+            </p>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-[1.1] text-primary font-[Montserrat]">
+              {d.heroTitle}
+            </h1>
+            <div
+              className="mt-6 text-third/70 text-lg font-[Poppins] leading-relaxed max-w-xl"
+              dangerouslySetInnerHTML={{ __html: d.heroDescription }}
             />
           </div>
-
-          <div className="flex flex-col gap-6">
-            <div className="relative h-[250px] rounded-3xl overflow-hidden group">
-              <Image
-                src={data.heroImage2 || "/cs.png"}
-                alt="Hero Side 1"
-                fill
-                className="object-cover"
+          {/* RIGHT IMAGE */}
+          <div className="relative">
+            <div className="relative rounded-2xl overflow-hidden border border-primary/20">
+              <img
+                src={d.customAboutHero1 || d.heroTemplate1.imageUrl}
+                alt="Hero"
+                className="w-full h-[300px] sm:h-[400px] lg:h-[400px] object-cover"
               />
-            </div>
-
-            <div className="relative h-[250px] rounded-3xl overflow-hidden group">
-              <Image
-                src={data.heroImage3 || "/cs.png"}
-                alt="Hero Side 2"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <section className="bg-secondary py-18 ">
-        <div className="max-w-[1480px] mx-auto grid lg:grid-cols-2 gap-24 items-center">
-          {/* LEFT STORY */}
-          <div
-            className="text-third text-xl leading-relaxed text-center flex items-center justify-center"
-            dangerouslySetInnerHTML={{ __html: data.aboutText }}
-          />
-
-          {/* RIGHT STAT CARDS */}
-          <div className="grid grid-cols-2 gap-8">
-            {data.stats.map((s, i) => (
-              <div
-                key={i}
-                className="bg-primary/5 border border-third/20 rounded-3xl p-10 backdrop-blur-xl hover:bg-primary/10 transition-all duration-300"
-              >
-                <div className="text-4xl mb-6 text-primary">
-                  {s.icon || "★"}
-                </div>
-
-                <div className="text-5xl font-extrabold text-primary mb-4">
-                  {s.number}
-                </div>
-
-                <div className="text-third text-sm leading-relaxed">
-                  {s.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-secondary py-28">
-        <div className="max-w-[1480px] mx-auto grid lg:grid-cols-2 gap-24 items-center">
-          {/* LEFT IMAGE - Kept existing rounded style */}
-          <div className="relative h-[560px] rounded-3xl overflow-hidden">
-            <Image
-              src={data.missionImage || "/cs.png"}
-              alt="Story"
-              fill
-              className="object-cover"
-            />
-          </div>
-
-          {/* RIGHT CONTENT - Redesigned Alignment */}
-          <div className="space-y-10">
-            <div className="space-y-6 rounded-2xl  border border-third/20 bg-primary/5 px-4  py-4">
-              <div className="flex items-center justify-between gap-6">
-                {/* Icon */}
-                <Target strokeWidth={1.5} className="w-16 h-16 text-primary" />
-
-                {/* Stacked Text */}
-                <div className="flex flex-col">
-                  <span className="text-4xl font-semibold text-primary leading-none">
-                    Our
-                  </span>
-                  <h2 className="text-4xl font-extrabold text-primary leading-tight">
-                    {data.missionTitle}
-                  </h2>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div
-                className="text-third text-xl leading-relaxed px-4  py-4"
-                dangerouslySetInnerHTML={{ __html: data.missionText }}
-              />
-            </div>
-
-            <div className="space-y-6 rounded-2xl  border border-third/20 bg-primary/5">
-              <div className="flex items-center justify-between rounded-3xl px-4  py-4 backdrop-blur-xl">
-                {/* Stacked Text */}
-                <div className="flex flex-col">
-                  <span className="text-4xl font-semibold text-primary leading-none">
-                    Our
-                  </span>
-                  <h2 className="text-4xl font-extrabold text-primary leading-tight">
-                    {data.visionTitle}
-                  </h2>
-                </div>
-
-                {/* Icon */}
-                <BarChart3
-                  strokeWidth={1.5}
-                  className="w-16 h-16 text-primary"
-                />
-              </div>
-
-              {/* Description */}
-              <div
-                className="text-third text-xl leading-relaxed px-4  py-4"
-                dangerouslySetInnerHTML={{ __html: data.visionText }}
-              />
+              <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent" />
             </div>
           </div>
         </div>
       </section>
-
-      <section className="bg-secondary py-8">
-        <div className="max-w-[1480px] mx-auto space-y-20">
-          {/* Title */}
-          <div className="max-w-xl">
-            <h2 className="text-5xl font-extrabold text-primary mb-4">
-              {data.servicesTitle}
+      {/* ═════════ MISSION & VISION ═════════ */}
+      <section className="relative py-12 px-2 lg:px-4 overflow-hidden">
+        <div className="container">
+          <div className="max-w-[1600px] mx-auto relative z-10">
+            {/* ── HEADING ── */}
+            <div className="flex flex-col gap-6 max-w-2xl text-center mx-auto mb-16">
+              <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                Purpose
+              </p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                {d.missionTitle} & {d.visionTitle}
+              </h2>
+            </div>
+            {/* ── MAIN LAYOUT ── */}
+            <div className="flex flex-col lg:flex-row gap-20 lg:gap-0 items-stretch">
+              {/* LEFT: MISSION */}
+              <div className="lg:w-1/2 relative group">
+                <div className="relative h-[800px] lg:h-[600px] w-full lg:w-[95%] overflow-hidden rounded-tr-[100px] lg:rounded-tr-[200px] border-r border-t border-primary/10">
+                  <img
+                    src={d.customAboutMission1 || d.missionTemplate1.imageUrl}
+                    className="w-full h-full object-cover grayscale transition-all duration-800 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:grayscale-0 group-hover:-translate-y-5 group-hover:brightness-110 group-hover:saturate-125"
+                    alt="Mission"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-t from-secondary via-transparent to-transparent" />
+                </div>
+                {/* CONTENT */}
+                <div className="absolute bottom-12 left-0 w-[520px] p-5 border border-primary/10 backdrop-blur-2xl bg-primary/5 transition-all duration-500 group-hover:border-primary/40">
+                  <h3 className="text-4xl font-bold font-[Montserrat] mb-6 text-primary uppercase">
+                    {d.missionTitle}
+                  </h3>
+                  <div
+                    className="text-third text-lg font-light leading-relaxed italic"
+                    dangerouslySetInnerHTML={{ __html: d.missionDesc }}
+                  />
+                </div>
+              </div>
+              {/* RIGHT: VISION */}
+              <div className="lg:w-1/2 lg:mt-64 relative group">
+                <div className="relative h-[400px] lg:h-[550px] w-full overflow-hidden rounded-bl-[100px] lg:rounded-bl-[200px] border-b border-l border-primary/10">
+                  <img
+                    src={d.customAboutVision1 || d.visionTemplate1.imageUrl}
+                    className="w-full h-full object-cover transition-all duration-800 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-105"
+                    alt="Vision"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-b from-secondary via-transparent to-transparent" />
+                </div>
+                {/* CONTENT */}
+                <div className="mt-12 lg:mt-0 lg:absolute -top-24 right-0 lg:right-12 max-w-md p-10 border border-primary/10 backdrop-blur-2xl bg-primary/5 transition-all duration-500 group-hover:border-primary/40">
+                  <h3 className="text-4xl font-bold font-[Montserrat] mb-6 text-primary uppercase">
+                    {d.visionTitle}
+                  </h3>
+                  <div
+                    className="text-third text-lg font-light leading-relaxed italic"
+                    dangerouslySetInnerHTML={{ __html: d.visionDesc }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* ═════════ STATS ═════════ */}
+      <section className="relative py-12 bg-primary text-secondary overflow-hidden">
+        <div className="container">
+          <div className="px-4 lg:px-8 grid lg:grid-cols-2 gap-16 items-center">
+            <div className="flex flex-col gap-6">
+              <p className="text-sm tracking-[0.4em] uppercase text-secondary/60 font-semibold">
+                Impact
+              </p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold font-[Montserrat]">
+                Our <span className="text-secondary">Numbers</span>
+              </h2>
+              <div
+                className="text-secondary/70 text-lg font-[Poppins]"
+                dangerouslySetInnerHTML={{ __html: d.aboutUsDescription }}
+              />
+            </div>
+            <div className="relative flex justify-center">
+              <div className="relative w-[320px] h-80 sm:w-[400px] sm:h-[400px]">
+                {d.stats.map((item, index) => {
+                  const pos = [
+                    "top-0 left-1/2 -translate-x-1/2",
+                    "right-0 top-1/2 -translate-y-1/2",
+                    "bottom-0 left-1/2 -translate-x-1/2",
+                    "left-0 top-1/2 -translate-y-1/2",
+                  ];
+                  return (
+                    <div
+                      key={index}
+                      className={`absolute ${pos[index]} flex flex-col items-center`}
+                    >
+                      <h3 className="text-3xl sm:text-4xl font-semibold font-[Montserrat]">
+                        {item.number}
+                      </h3>
+                      <p className="text-secondary/60 text-sm text-center max-w-[120px]">
+                        {item.label}
+                      </p>
+                    </div>
+                  );
+                })}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-3 h-3 rounded-full bg-fourth/80" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* ═════════ SERVICES ═════════ */}
+      <section className="relative py-20 px-4 text-primary font-[Poppins]">
+        <div className="container mx-auto max-w-7xl">
+          {/* HEADER */}
+          <div className="max-w-2xl mb-16">
+            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-4">
+              Services
+            </p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+              {d.servicesTitle}
             </h2>
-            <p className="text-third text-lg">{data.servicesSubtitle}</p>
+            <div
+              className="mt-6 text-third/70 text-lg leading-relaxed border-l-2 border-primary/30 pl-6"
+              dangerouslySetInnerHTML={{ __html: d.servicesDesc }}
+            />
           </div>
-
-          {/* Services Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
-            {data.services.map((s, i) => {
-              const Icon = Icons[s.icon] || Icons.Star;
-
-              return (
-                <div
-                  key={i}
-                  className="bg-primary/5 border border-third/20 rounded-3xl p-10 space-y-6 hover:bg-primary/10 transition-all"
-                >
-                  <Icon size={36} className="text-primary" />
-                  <h3 className="text-xl font-bold text-primary">{s.title}</h3>
-                  <p className="text-third text-sm leading-relaxed">{s.desc}</p>
-                </div>
-              );
-            })}
+          {/* MAIN GRID */}
+          <div className="grid lg:grid-cols-2 gap-14 items-center">
+            {/* LEFT: CARDS */}
+            <div className="grid sm:grid-cols-2 gap-6">
+              {d.services.map((service, i) => {
+                const isActive = current === i;
+                return (
+                  <div
+                    key={i}
+                    onClick={() => setActive(i)}
+                    onMouseEnter={() => setHovered(i)}
+                    onMouseLeave={() => setHovered(null)}
+                    className={`cursor-pointer rounded-2xl p-6 border transition-all duration-300 
+                    ${
+                      isActive
+                        ? "border-primary/40 bg-primary/5"
+                        : "border-primary/20 hover:border-primary/40 hover:bg-primary/5"
+                    }`}
+                  >
+                    <div className="flex items-center gap-4 mb-4">
+                      <div
+                        className={`w-12 h-12 flex items-center justify-center rounded-xl 
+                        ${isActive ? "bg-primary text-secondary" : "bg-primary/5 text-third"}`}
+                        dangerouslySetInnerHTML={{ __html: service.icon }}
+                      />
+                      <h4 className="text-lg font-semibold font-[Montserrat]">
+                        {service.title}
+                      </h4>
+                    </div>
+                    <p className="text-third/60 text-sm leading-relaxed">
+                      {service.desc.substring(0, 70)}...
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+            {/* RIGHT: CONTENT PANEL */}
+            <div className="relative">
+              <div className="rounded-3xl border border-primary/20 p-8 lg:p-10 bg-primary/5 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.4)] transition-all duration-500">
+                <p className="text-xs tracking-[0.4em] uppercase text-third mb-3">
+                  Selected Service
+                </p>
+                <h3 className="text-2xl lg:text-4xl font-bold font-[Montserrat] mb-6">
+                  {d.services[current].title}
+                </h3>
+                <p className="text-third/70 text-lg leading-relaxed border-l-2 border-primary pl-6">
+                  {d.services[current].desc}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
-    </section>
+    </>
   );
 }
-
-export default AboutPremium1;
