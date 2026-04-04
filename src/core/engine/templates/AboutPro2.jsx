@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 "use client";
-import { motion } from "framer-motion";
 import { ABOUT_PRO_2 } from "../schemas";
 
 import React, { useEffect, useRef } from "react";
@@ -97,14 +96,11 @@ const stagger = {
   show: { transition: { staggerChildren: 0.12 } },
 };
 const EyeBrow = ({ children }) => (
-  <motion.p
+  <p
     className="text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat] mb-4"
-    initial={{ opacity: 0 }}
-    whileInView={{ opacity: 1 }}
-    viewport={{ once: true }}
   >
     {children}
-  </motion.p>
+  </p>
 );
 const Divider = () => <div className="w-8 h-px bg-primary/15 my-2" />;
 
@@ -500,11 +496,8 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
         <div className="container relative z-10 h-full flex flex-col justify-center">
           {/* heading + description (stacked) */}
           <div className="flex flex-col gap-6 max-w-2xl">
-            <motion.div
+            <div
               className="flex flex-col gap-5"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
             >
               <EyeBrow>About Us</EyeBrow>
               <h1
@@ -514,22 +507,15 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
                 {data.aboutHeroTitle}
               </h1>
               <div className="w-10 h-0.5 bg-fourth/70" />
-            </motion.div>
+            </div>
             {/* description */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.65,
-                delay: 0.12,
-                ease: [0.22, 1, 0.36, 1],
-              }}
+            <div
             >
               <div
                 className="font-[Poppins] text-[14px] text-white/80 leading-[1.9]"
                 dangerouslySetInnerHTML={{ __html: data.aboutHeroDescription }}
               />
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -541,40 +527,28 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
           <div className="">
             {/* heading row */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7 }}
-                viewport={{ once: true }}
+              <div
               >
                 <EyeBrow>What Drives Us</EyeBrow>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                   Mission & <span className="text-fourth/80">Vision</span>
                 </h2>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7, delay: 0.1 }}
-                viewport={{ once: true }}
+              </div>
+              <div
               >
                 <Divider />
                 <p className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]">
                   The principles behind everything we build and every decision
                   we make.
                 </p>
-              </motion.div>
+              </div>
             </div>
             {/* alternating rows */}
             <div className="flex flex-col gap-5">
               {missionVisionCards.map((item) => {
                 return (
-                  <motion.div
+                  <div
                     key={item.tag}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.65 }}
                     className={`grid grid-cols-1 lg:grid-cols-2 gap-0 border border-third/10 rounded-2xl overflow-hidden
                     hover:border-primary/20 transition-colors duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]
                     ${item.flip ? "lg:[&>*:first-child]:order-2 lg:[&>*:last-child]:order-1" : ""}`}
@@ -607,7 +581,7 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
                         {item.desc}
                       </p>
                     </div>
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>
@@ -618,11 +592,7 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
           STATS
           ════════════════════════════════════════ */}
       <section className="py-12  ">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+        <div
           className=" overflow-hidden bg-fourth"
         >
           <div className="container">
@@ -652,12 +622,8 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
               {/* ── BOTTOM: 4-col stat strip (unchanged) ── */}
               <div className="lg:px-4 grid grid-cols-2 lg:grid-cols-4 divide-x divide-y lg:divide-y-0 divide-primary/10">
                 {data.stats.map((stat, i) => (
-                  <motion.div
+                  <div
                     key={i}
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.45, delay: i * 0.08 }}
                     className="group relative flex flex-col gap-2 px-10 py-9 transition-colors duration-300 overflow-hidden"
                   >
                     {/* top accent line on hover */}
@@ -675,12 +641,12 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
                     <span className="font-[Poppins] text-[11px] text-primary/55 uppercase tracking-widest font-medium">
                       {stat.label}
                     </span>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </section>
       {/* ════════════════════════════════════════
           SERVICES
@@ -689,11 +655,7 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
         {/* ── heading row — split with border ── */}
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2  mb-5">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              viewport={{ once: true }}
+            <div
               className="flex flex-col gap-4 pb-10 lg:pr-16 "
             >
               <EyeBrow>Services</EyeBrow>
@@ -703,30 +665,23 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
               >
                 {data.aboutServicesTitle}
               </h2>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              viewport={{ once: true }}
+            </div>
+            <div
               className="flex flex-col justify-center pb-10 lg:pl-16"
             >
               <p className="font-[Poppins] text-[13.5px] text-third/65 leading-[1.9]">
                 {data.aboutServicesDescription}
               </p>
-            </motion.div>
+            </div>
           </div>
           {/* ── 2×2 pro cards ── */}
-          <motion.div
+          <div
             className="grid grid-cols-1 sm:grid-cols-2 gap-[25px]"
             variants={stagger}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
           >
             {data.services.map((svc, i) => {
               return (
-                <motion.div
+                <div
                   key={i}
                   variants={fadeUp}
                   className="group relative flex flex-col gap-5 p-7 border border-third/10 rounded-2xl overflow-hidden
@@ -751,10 +706,10 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
                   <p className="font-[Poppins] text-[13px] text-third/65 leading-[1.8]">
                     {svc.desc}
                   </p>
-                </motion.div>
+                </div>
               );
             })}
-          </motion.div>
+          </div>
         </div>
       </section>
     </>
