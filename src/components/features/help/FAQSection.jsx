@@ -281,28 +281,18 @@ function QRow({ item, isOpen, onToggle }) {
       >
         <div className="flex-1 min-w-0">
           <span
-            className="text-[14px] sm:text-[15px] font-semibold leading-snug transition-colors duration-200 font-secondary"
-            style={{ color: isOpen ? "" : "rgba(255,255,255,0.65)" }}
+            className={`text-[14px] sm:text-[15px] font-semibold leading-snug transition-colors duration-200 font-secondary ${isOpen ? 'text-primary' : 'text-primary/65'}`}
           >
             {item.q}
           </span>
         </div>
         <div
-          className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 mt-0.5 transition-all duration-250"
-          style={{
-            background: isOpen
-              ? "rgba(0,123,255,0.15)"
-              : "rgba(255,255,255,0.05)",
-            border: "1px solid",
-            borderColor: isOpen
-              ? "rgba(0,123,255,0.3)"
-              : "rgba(255,255,255,0.08)",
-          }}
+          className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 mt-0.5 transition-all duration-250 ${isOpen ? 'bg-fourth/15 border border-fourth/30' : 'bg-primary/5 border border-white/10'}`}
         >
           {isOpen ? (
             <Minus size={11} className="text-primary" />
           ) : (
-            <Plus size={11} style={{ color: "rgba(255,255,255,0.3)" }} />
+            <Plus size={11} className="text-primary/30" />
           )}
         </div>
       </button>
@@ -344,7 +334,7 @@ export default function FAQSections() {
   return (
     <section
       id="faq"
-      className="relative py-20 px-4 sm:px-8 lg:px-0 overflow-hidden"
+      className="relative py-20 px-2 sm:px-8 lg:px-4 overflow-hidden"
     >
       <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/5 to-transparent" />
 
@@ -385,8 +375,7 @@ export default function FAQSections() {
           {/* ── SIDEBAR CATEGORY TABS ── */}
           <div className="lg:sticky lg:top-8">
             <div
-              className="rounded-2xl overflow-hidden border border-white/6"
-              style={{ background: "rgba(255,255,255,0.02)" }}
+              className="rounded-2xl overflow-hidden border border-white/6 bg-primary/5"
             >
               <div className="px-5 py-4 border-b border-white/5">
                 <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary/25 font-primary">
@@ -401,24 +390,10 @@ export default function FAQSections() {
                     <button
                       key={c.id}
                       onClick={() => switchCat(idx)}
-                      className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left transition-all duration-250 outline-none group"
-                      style={{
-                        background: isCurrent
-                          ? "rgba(255,254,255,0.04)"
-                          : "transparent",
-                        border: "1px solid",
-                        borderColor: isCurrent
-                          ? "rgba(255,254,255,0.1)"
-                          : "transparent",
-                      }}
+                      className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left transition-all duration-250 outline-none group ${isCurrent ? 'bg-primary/5 border-white/10' : 'bg-transparent border-transparent'}`}
                     >
                       <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-250"
-                        style={{
-                          background: isCurrent
-                            ? "rgba(255,254,255,0.1)"
-                            : "rgba(255,255,255,0.04)",
-                        }}
+                        className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-250 ${isCurrent ? 'bg-primary/10' : 'bg-primary/5'}`}
                       >
                         <Icon
                           size={14}
@@ -436,12 +411,7 @@ export default function FAQSections() {
                         </p>
                       </div>
                       <span
-                        className="text-[11px] font-black font-primary tabular-nums transition-colors duration-250"
-                        style={{
-                          color: isCurrent
-                            ? "rgba(255,254,255,1)"
-                            : "rgba(255,255,255,0.1)",
-                        }}
+                        className={`text-[11px] font-black font-primary tabular-nums transition-colors duration-250 ${isCurrent ? 'text-primary' : 'text-primary/10'}`}
                       >
                         {c.number}
                       </span>
@@ -457,8 +427,7 @@ export default function FAQSections() {
             {/* Category heading */}
             <div className="flex items-center gap-4 mb-8">
               <span
-                className="font-black text-6xl leading-none select-none font-primary"
-                style={{ color: "rgba(255,254,255,0.1)" }}
+                className="font-black text-6xl leading-none select-none font-primary text-primary/10"
               >
                 {cat.number}
               </span>
@@ -477,12 +446,7 @@ export default function FAQSections() {
 
             {/* Accordion list */}
             <div
-              className="transition-all duration-220 rounded-2xl overflow-hidden border border-white/6"
-              style={{
-                opacity: animating ? 0 : 1,
-                transform: animating ? "translateY(10px)" : "translateY(0)",
-                background: "rgba(255,255,255,0.015)",
-              }}
+              className="transition-all duration-220 rounded-2xl overflow-hidden border border-white/6 bg-primary/5"
             >
               {items.map((item, idx) => (
                 <QRow
@@ -512,12 +476,7 @@ export default function FAQSections() {
                   <button
                     key={i}
                     onClick={() => switchCat(i)}
-                    className="h-1 rounded-full transition-all duration-350"
-                    style={{
-                      width: activeCat === i ? "28px" : "6px",
-                      background:
-                        activeCat === i ? "#007bff" : "rgba(255,255,255,0.1)",
-                    }}
+                    className={`h-1 rounded-full transition-all duration-350 ${activeCat === i ? 'w-7 bg-fourth' : 'w-1.5 bg-primary/10'}`}
                   />
                 ))}
               </div>

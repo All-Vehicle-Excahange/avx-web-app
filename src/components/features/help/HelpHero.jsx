@@ -136,12 +136,12 @@ export default function HelpHero() {
 
         {/* ── CONTENT ── */}
         <div
-          className={`relative z-10 w-full px-4 sm:px-8 lg:px-0 py-24 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"} `}
+          className={`relative z-10 w-full px-2 sm:px-8 lg:px-4 py-24 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"} `}
         >
           <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+            <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center min-w-0">
               {/* ── LEFT COLUMN ── */}
-              <div className="flex flex-col gap-8">
+              <div className="flex flex-col gap-8 min-w-0">
                 {/* Eyebrow badge */}
                 <div className="flex items-center gap-3 self-start">
                   <div>
@@ -177,7 +177,7 @@ export default function HelpHero() {
                 </p>
 
                 {/* ── SEARCH BAR ── */}
-                <div className="relative">
+                <div className="relative min-w-0">
                   {/* Glow ring on focus */}
                   <div
                     className={`absolute -inset-0.5 rounded-2xl transition-opacity duration-300 pointer-events-none ${focused ? "opacity-100" : "opacity-0"}`}
@@ -189,8 +189,7 @@ export default function HelpHero() {
                   />
 
                   <div
-                    className={`relative flex items-center gap-3 px-5 py-4 rounded-2xl border transition-all duration-300 ${focused ? "border-third/10 " : "border-white/8 bg-white/4"}`}
-                   
+                    className={`relative flex min-w-0 flex-wrap items-center gap-3 px-5 py-4 rounded-2xl border transition-all duration-300 ${focused ? "border-third/10" : "border-white/8 bg-white/4"}`}
                   >
                     <Search
                       size={18}
@@ -204,7 +203,7 @@ export default function HelpHero() {
                       onFocus={() => setFocused(true)}
                       onBlur={() => setTimeout(() => setFocused(false), 200)}
                       placeholder='Try "inspection", "listing", "refund"…'
-                      className="flex-1 bg-transparent border-none outline-none text-primary text-sm font-secondary placeholder:text-primary/20"
+                      className="flex-1 min-w-0 bg-transparent border-none outline-none text-primary text-sm font-secondary placeholder:text-primary/20"
                     />
                     {query ? (
                       <button
@@ -218,7 +217,7 @@ export default function HelpHero() {
                         ⌘ K
                       </span>
                     )}
-                    <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-[0.18em] font-primary text-secondary bg-primary transition-all duration-200 hover:-translate-y-0.5">
+                    <button className="flex items-center gap-2 whitespace-nowrap px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-[0.18em] font-primary text-secondary bg-primary transition-all duration-200 hover:-translate-y-0.5">
                       <Zap size={11} />
                       Search
                     </button>
@@ -227,12 +226,7 @@ export default function HelpHero() {
                   {/* Dropdown */}
                   {focused && (
                     <div
-                      className="absolute top-[calc(100%+8px)] overflow-scroll scrollbar-hide left-0 right-0 z-50 rounded-2xl  border border-white/8"
-                      style={{
-                        background: "#252424",
-                        boxShadow:
-                          "0 24px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04)",
-                      }}
+                      className="absolute top-[calc(100%+8px)] overflow-scroll scrollbar-hide left-0 right-0 z-50 rounded-2xl border border-white/8 bg-[#252424] shadow-[0_24px_64px_rgba(0,0,0,0.7),_0_0_0_1px_rgba(255,255,255,0.04)]"
                     >
                       <div className="px-4 pt-3 pb-2 text-[9px] tracking-[0.4em] uppercase font-black font-primary text-primary/25 border-b border-white/5">
                         {query ? `Results for "${query}"` : "Quick Links"}
@@ -243,10 +237,9 @@ export default function HelpHero() {
                             key={i}
                             href={item.href}
                             onMouseDown={(e) => e.preventDefault()}
-                            className="flex items-center justify-between px-4 py-3.5 hover:bg-fourth/8 transition-colors group border-b border-white/4 last:border-0"
-                            style={{ background: "transparent" }}
+                            className="flex items-center justify-between px-4 py-3.5 hover:bg-fourth/8 transition-colors group border-b border-white/4 last:border-0 min-w-0"
                           >
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 min-w-0">
                               <Search
                                 size={11}
                                 className="text-primary/40 shrink-0"
@@ -289,7 +282,7 @@ export default function HelpHero() {
               </div>
 
               {/* ── RIGHT COLUMN ── */}
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-5 min-w-0">
                 {/* Stats grid */}
                 {/* <div className="grid grid-cols-2 gap-3">
                   {STATS.map((stat, i) => {
@@ -323,43 +316,26 @@ export default function HelpHero() {
                     );
                   })}
                 </div> */}
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {STATS.map((stat, i) => {
                     const Icon = stat.icon;
                     return (
                       <div
                         key={i}
-                        className="relative p-5 rounded-2xl border overflow-hidden"
-                        style={{
-                          background: "rgba(255,255,255,0.03)",
-                          borderColor: "rgba(255,255,255,0.07)",
-                        }}
+                        className="relative p-5 rounded-2xl border border-white/10 overflow-hidden bg-primary/5"
                       >
                         <div
-                          className="absolute top-0 left-0 right-0 h-px"
-                          style={{
-                            background:
-                              "linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent)",
-                          }}
+                          className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-primary/10 to-transparent"
                         />
                         <div className="flex items-start gap-3">
-                          <div
-                            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-                            style={{ background: "rgba(255,255,255,0.06)" }}
-                          >
-                            <Icon size={15} style={{ color: "rgba(255,255,255,0.5)" }} />
+                          <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 bg-primary/10">
+                            <Icon size={15} className="text-primary/50" />
                           </div>
                           <div>
-                            <div
-                              className="font-primary font-black text-2xl leading-none"
-                              style={{ color: "#fffef7" }}
-                            >
+                            <div className="font-primary font-black text-2xl leading-none text-primary">
                               {stat.value}
                             </div>
-                            <div
-                              className="text-[10px] font-bold uppercase tracking-[0.25em] mt-1 font-primary"
-                              style={{ color: "rgba(255,254,247,0.28)" }}
-                            >
+                            <div className="text-[10px] font-bold uppercase tracking-[0.25em] mt-1 font-primary text-primary/30">
                               {stat.label}
                             </div>
                           </div>
@@ -369,10 +345,7 @@ export default function HelpHero() {
                   })}
                 </div>
                 {/* Quick nav card */}
-                <div
-                  className="rounded-2xl border border-white/6 overflow-hidden"
-                  style={{ background: "rgba(255,255,255,0.02)" }}
-                >
+                <div className="rounded-2xl border border-white/6 overflow-hidden bg-primary/5">
                   <div className="px-5 py-4 border-b border-white/5 flex items-center justify-between">
                     <span className="text-[10px] font-black uppercase tracking-[0.35em] text-primary/30 font-primary">
                       Top Articles
@@ -389,16 +362,15 @@ export default function HelpHero() {
                       <Link
                         key={i}
                         href={link.href}
-                        className="flex items-center justify-between px-5 py-3.5 group hover:bg-white/2 transition-colors"
+                        className="flex items-center justify-between px-5 py-3.5 group hover:bg-white/2 transition-colors min-w-0"
                       >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 min-w-0">
                           <span
-                            className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 text-[9px] font-black font-primary text-primary/25"
-                            style={{ background: "rgba(255,255,255,0.04)" }}
+                            className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 text-[9px] font-black font-primary text-primary/25 bg-primary/10"
                           >
                             {String(i + 1).padStart(2, "0")}
                           </span>
-                          <span className="text-sm text-primary/60 group-hover:text-primary transition-colors font-secondary leading-snug">
+                          <span className="text-sm text-primary/60 group-hover:text-primary transition-colors font-secondary leading-snug wrap-break-word">
                             {link.label}
                           </span>
                         </div>
@@ -412,21 +384,17 @@ export default function HelpHero() {
                 </div>
 
                 {/* CTA Strip */}
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-3">
                   <Link
                     href="/help"
                     className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-[11px] font-black uppercase tracking-[0.18em] font-primary text-secondary transition-all duration-200 hover:-translate-y-0.5 bg-primary/90"
-                    style={{
-                      // boxShadow: "0 8px 28px rgba(0,123,255,0.3)",
-                    }}
                   >
                     Browse All Articles <ArrowUpRight size={12} />
                   </Link>
                   <Link
                     href="/help#support"
-                    className="flex items-center gap-2 px-5 py-3.5 rounded-xl text-[11px] font-black uppercase tracking-[0.18em] font-primary text-primary/50 border border-white/8 hover:border-white/15 hover:text-primary transition-all duration-200"
+                    className="flex items-center gap-2 px-5 py-3.5 rounded-xl text-[11px] font-black uppercase tracking-[0.18em] font-primary text-primary/50 border border-white/8 hover:border-white/15 hover:text-primary transition-all duration-200 bg-primary/5"
                     onClick={() => setSupportOpen(true)}
-                    style={{ background: "rgba(255,255,255,0.03)" }}
                   >
                     <MessageSquare size={12} /> Contact
                   </Link>

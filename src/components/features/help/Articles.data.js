@@ -269,12 +269,12 @@ Remote sessions are available 7 days a week and can typically be scheduled withi
 ];
 
 export const tagStyles = {
-  Overview:  { bg: "rgba(0,123,255,0.12)",   text: "#007bff" },
-  Reports:   { bg: "rgba(190,190,190,0.08)", text: "#bebebe" },
-  Payments:  { bg: "rgba(190,190,190,0.08)", text: "#bebebe" },
-  Timeline:  { bg: "rgba(190,190,190,0.08)", text: "#bebebe" },
-  Process:   { bg: "rgba(190,190,190,0.08)", text: "#bebebe" },
-  Buyer:     { bg: "rgba(0,123,255,0.12)",   text: "#007bff" },
-  Liability: { bg: "rgba(202,11,0,0.10)",    text: "#CA0B00" },
-  Remote:    { bg: "rgba(190,190,190,0.08)", text: "#bebebe" },
+  Overview:  { bgClass: "bg-fourth/10", textClass: "text-fourth" },
+  Reports:   { bgClass: "bg-primary/10", textClass: "text-third/70" },
+  Payments:  { bgClass: "bg-primary/10", textClass: "text-third/70" },
+  Timeline:  { bgClass: "bg-primary/10", textClass: "text-third/70" },
+  Process:   { bgClass: "bg-primary/10", textClass: "text-third/70" },
+  Buyer:     { bgClass: "bg-fourth/10", textClass: "text-fourth" },
+  Liability: { bgClass: "bg-[#CA0B00]/10", textClass: "text-[#CA0B00]" },
+  Remote:    { bgClass: "bg-primary/10", textClass: "text-third/70" },
 };

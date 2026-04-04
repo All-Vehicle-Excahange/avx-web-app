@@ -76,7 +76,7 @@ export default function PopularTopicsGrid() {
   const [hovered, setHovered] = useState(null);
 
   return (
-    <section className="relative py-20 px-4 sm:px-8 lg:px-0 overflow-hidden">
+    <section className="relative py-20 px-2 sm:px-8 lg:px-4 overflow-hidden">
 
       <div className="max-w-7xl mx-auto">
         {/* HEADER */}
@@ -127,39 +127,17 @@ export default function PopularTopicsGrid() {
                 key={topic.id}
                 onMouseEnter={() => setHovered(topic.id)}
                 onMouseLeave={() => setHovered(null)}
-                className="group relative flex flex-col justify-between p-6 text-left transition-all duration-350 overflow-hidden rounded-2xl border outline-none"
-                style={{
-                  minHeight: "200px",
-                  background: isHovered
-                    ? "rgba(255,255,255,0.04)"
-                    : "rgba(255,255,255,0.02)",
-                  borderColor: isHovered
-                    ? "rgba(255,255,255,0.12)"
-                    : "rgba(255,255,255,0.06)",
-                  transform: isHovered ? "translateY(-2px)" : "translateY(0)",
-                  boxShadow: isHovered ? "0 8px 30px rgba(0,0,0,0.4)" : "none",
-                }}
+                className={`group relative flex flex-col justify-between p-6 text-left transition-all duration-350 overflow-hidden rounded-2xl border outline-none min-h-[200px] ${isHovered ? "bg-primary/5 border-white/12 -translate-y-0.5 shadow-[0_8px_30px_rgba(0,0,0,0.4)]" : "bg-primary/3 border-white/5"}`}
                 aria-label={`Go to ${topic.label}`}
               >
                 {/* Top hover line */}
                 <div
-                  className={`absolute top-0 left-0 right-0 h-[1.5px] transition-opacity duration-300 ${
-                    isHovered ? "opacity-100" : "opacity-0"
-                  }`}
-                  style={{
-                    background:
-                      "linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)",
-                  }}
+                  className={`absolute top-0 left-0 right-0 h-[1.5px] transition-opacity duration-300 ${isHovered ? "opacity-100" : "opacity-0"} bg-linear-to-r from-transparent via-primary/20 to-transparent`}
                 />
 
                 {/* Ghost index */}
                 <div
-                  className="absolute bottom-3 right-4 font-primary font-black select-none leading-none pointer-events-none transition-all duration-300 text-[4.5rem]"
-                  style={{
-                    color: isHovered
-                      ? "rgba(255,255,255,0.06)"
-                      : "rgba(255,255,255,0.03)",
-                  }}
+                  className={`absolute bottom-3 right-4 font-primary font-black select-none leading-none pointer-events-none transition-all duration-300 text-[4.5rem] ${isHovered ? "text-primary/10" : "text-primary/20"}`}
                 >
                   {topic.index}
                 </div>
@@ -167,12 +145,7 @@ export default function PopularTopicsGrid() {
                 {/* Icon + Arrow */}
                 <div className="flex items-start justify-between mb-6 relative z-10">
                   <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300"
-                    style={{
-                      background: isHovered
-                        ? "rgba(255,255,255,0.1)"
-                        : "rgba(255,255,255,0.05)",
-                    }}
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${isHovered ? "bg-primary/10" : "bg-primary/5"}`}
                   >
                     <Icon
                       size={16}
@@ -183,14 +156,7 @@ export default function PopularTopicsGrid() {
                   </div>
 
                   <div
-                    className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-300 ${
-                      isHovered
-                        ? "opacity-100 translate-x-0"
-                        : "opacity-0 translate-x-2"
-                    }`}
-                    style={{
-                      background: "rgba(255,255,255,0.08)",
-                    }}
+                    className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-300 ${isHovered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-2"} bg-primary/10`}
                   >
                     <ArrowUpRight size={12} className="text-primary/60" />
                   </div>

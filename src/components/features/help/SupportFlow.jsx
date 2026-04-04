@@ -280,14 +280,8 @@ export default function SupportFlow({ onTicketCreated = () => { }, onBack }) {
             </div>
             <div className="h-1 bg-primary/10 mx-5 mb-5 rounded-full overflow-hidden">
               <div
-                className="h-full rounded-full transition-all duration-1000"
-                style={{
-                  width: `${pctUsed}%`,
-                  backgroundColor:
-                    pctUsed > 80
-                      ? "var(--color-warning)"
-                      : "var(--color-fourth)",
-                }}
+                className={`h-full rounded-full transition-all duration-1000 ${pctUsed > 80 ? 'bg-warning' : 'bg-fourth'}`}
+                style={{ width: `${pctUsed}%` }}
               />
             </div>
             <div className="px-5 pb-4 flex items-center gap-2">
@@ -312,7 +306,7 @@ export default function SupportFlow({ onTicketCreated = () => { }, onBack }) {
 
   /* ── MAIN FLOW ── */
   return (
-    <section className="px-4 sm:px-6 lg:px-8 py-16 font-secondary">
+    <section className="px-2 sm:px-6 lg:px-4 py-16 font-secondary">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10">
           <div>
@@ -445,8 +439,7 @@ export default function SupportFlow({ onTicketCreated = () => { }, onBack }) {
                       </button>
                       {dropOpen && (
                         <div
-                          className="absolute left-0 right-0 z-50 mt-1.5 border border-primary/10 rounded-xl shadow-2xl overflow-y-auto bg-secondary"
-                          style={{ maxHeight: "260px", top: "100%" }}
+                          className="absolute left-0 right-0 z-50 mt-1.5 border border-primary/10 rounded-xl shadow-2xl overflow-y-auto bg-secondary max-h-[260px] top-full"
                         >
                           {ISSUE_TYPES.map(({ value, label, icon: Icon }) => (
                             <button

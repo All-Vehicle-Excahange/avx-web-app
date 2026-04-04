@@ -24,7 +24,7 @@ export default function CategoryPage() {
   );
 
   return (
-    <section className="relative py-16 px-4 sm:px-8 lg:px-0 overflow-hidden">
+    <section className="relative py-16 px-2 sm:px-8 lg:px-4 overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/5 to-transparent" />
 
       <div className="max-w-7xl mx-auto">
@@ -70,10 +70,7 @@ export default function CategoryPage() {
             </div>
 
             {/* Article count badge */}
-            <div
-              className="self-start sm:self-auto flex items-center gap-3 px-5 py-3 rounded-2xl border border-white/8"
-              style={{ background: "rgba(255,255,255,0.03)" }}
-            >
+            <div className="self-start sm:self-auto flex items-center gap-3 px-5 py-3 rounded-2xl border border-white/8 bg-primary/5">
               <span className="font-primary font-black text-3xl leading-none text-primary">
                 {articles.length}
               </span>
@@ -135,8 +132,8 @@ export default function CategoryPage() {
           {filtered.map((article, i) => {
             const isHovered = hoveredId === article.id;
             const tc = tagStyles[article.tag] || {
-              bg: "rgba(255,255,255,0.06)",
-              text: "rgba(255,255,255,0.5)",
+              bgClass: "bg-primary/10",
+              textClass: "text-primary/50",
             };
 
             return (
@@ -145,13 +142,7 @@ export default function CategoryPage() {
                 href={`/help/${article.slug}`}
                 onMouseEnter={() => setHoveredId(article.id)}
                 onMouseLeave={() => setHoveredId(null)}
-                className="group relative flex items-start gap-4 sm:gap-6 py-5 sm:py-6 transition-all duration-300 ease-out"
-                style={{
-                  borderBottom: "1px solid rgba(255,255,255,0.05)",
-                  borderTop:
-                    i === 0 ? "1px solid rgba(255,255,255,0.05)" : "none",
-                  paddingLeft: isHovered ? "14px" : "0px",
-                }}
+                className={`group relative flex items-start gap-4 sm:gap-6 py-5 sm:py-6 transition-all duration-300 ease-out border-b border-white/5 first:border-t first:border-white/5 pl-0 hover:pl-3`}
               >
                 {/* Left accent bar on hover */}
                 {isHovered && (
@@ -160,12 +151,7 @@ export default function CategoryPage() {
 
                 {/* Number */}
                 <span
-                  className="shrink-0 font-black tabular-nums leading-none text-[11px] pt-1 min-w-7 transition-colors duration-300 font-primary"
-                  style={{
-                    color: isHovered
-                      ? ""
-                      : "rgba(255,255,255,0.12)",
-                  }}
+                  className={`shrink-0 font-black tabular-nums leading-none text-[11px] pt-1 min-w-7 transition-colors duration-300 font-primary ${isHovered ? "text-primary" : "text-primary/10"}`}
                 >
                   {String(i + 1).padStart(2, "0")}
                 </span>
@@ -173,10 +159,7 @@ export default function CategoryPage() {
                 {/* Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2 mb-2">
-                    <span
-                      className="text-[9px] uppercase tracking-[0.25em] font-black px-2 py-0.5 rounded-md font-primary"
-                      style={{ backgroundColor: tc.bg, color: tc.text }}
-                    >
+                    <span className={`text-[9px] uppercase tracking-[0.25em] font-black px-2 py-0.5 rounded-md font-primary ${tc.bgClass} ${tc.textClass}`}>
                       {article.tag}
                     </span>
                     <span className="flex items-center gap-1 text-[9px] uppercase tracking-widest text-primary/20 font-primary">
@@ -185,23 +168,13 @@ export default function CategoryPage() {
                   </div>
 
                   <h3
-                    className="font-semibold text-sm sm:text-base leading-snug mb-1.5 transition-colors duration-200 font-secondary"
-                    style={{
-                      color: isHovered
-                        ? "rgba(255,255,255,0.95)"
-                        : "rgba(255,255,255,0.65)",
-                    }}
+                    className={`font-semibold text-sm sm:text-base leading-snug mb-1.5 transition-colors duration-200 font-secondary ${isHovered ? "text-primary" : "text-primary/65"}`}
                   >
                     {article.question}
                   </h3>
 
                   <p
-                    className="text-[12px] sm:text-[13px] leading-relaxed line-clamp-2 text-primary/30 transition-all duration-300 font-secondary"
-                    style={{
-                      maxHeight: isHovered ? "60px" : "0px",
-                      overflow: "hidden",
-                      opacity: isHovered ? 1 : 0,
-                    }}
+                    className={`text-[12px] sm:text-[13px] leading-relaxed line-clamp-2 text-primary/30 transition-all duration-300 font-secondary overflow-hidden ${isHovered ? "max-h-16 opacity-100" : "max-h-0 opacity-0"}`}
                   >
                     {article.excerpt}
                   </p>
@@ -214,11 +187,7 @@ export default function CategoryPage() {
                 >
                   <ArrowUpRight
                     size={18}
-                    className="transition-all duration-200"
-                    style={{
-                      color: isHovered ? "#fff" : "rgba(255,255,255,0.2)",
-                      transform: isHovered ? "translate(1px,-1px)" : "none",
-                    }}
+                    className={`transition-all duration-200 ${isHovered ? "text-primary translate-x-1 -translate-y-1" : "text-primary/20"}`}
                   />
                 </div>
               </Link>
