@@ -194,7 +194,7 @@ function Hero() {
                     }}
                 />
                 {/* ── Gradient overlay ─────────────────────────────────────────── */}
-                <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/50 to-black/30" />
+                <div className="absolute inset-0 bg-linear-to-t from-secondary/70 via-secondary/50 to-secondary/30" />
                 {/* ── Centered text ────────────────────────────────────────────── */}
                 <div className="absolute inset-0 flex items-center justify-center px-8">
                     <div className="max-w-3xl w-full flex flex-col items-center text-center gap-6">
@@ -227,7 +227,7 @@ function Hero() {
                         <div className="flex flex-col lg:flex-row gap-6 items-stretch justify-center">
                             {/* LEFT: text */}
                             <div
-                                className="flex flex-col justify-center lg:w-[44%] animate-[fadeInLeft_0.8s_ease_forwards]"
+                                className="flex flex-col justify-center lg:w-[44%] "
                             >
                                 <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
                                     About Us
@@ -242,18 +242,18 @@ function Hero() {
                             </div>
                             {/* CENTER: big image */}
                             <div
-                                className="relative overflow-hidden rounded-2xl group lg:w-[26.5%] min-h-[500px] animate-[fadeInUp_0.8s_ease_0.15s_forwards] opacity-0"
+                                className="relative overflow-hidden rounded-2xl group lg:w-[26.5%] min-h-[500px]"
                             >
                                 <img
                                     src={storyImages[0]}
                                     alt=""
                                     className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700"
                                 />
-                                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-black/20" />
+                                <div className="absolute inset-0 bg-linear-to-t from-secondary/80 via-transparent to-secondary/20" />
                             </div>
                             {/* RIGHT: two stacked images */}
                             <div
-                                className="flex lg:flex-col gap-4 lg:w-[26%] animate-[fadeInRight_0.8s_ease_0.3s_forwards] opacity-0"
+                                className="flex lg:flex-col gap-4 lg:w-[26%]"
                             >
                                 {storyImages.slice(1, 3).map((src, i) => (
                                     <div
@@ -265,26 +265,13 @@ function Hero() {
                                             alt=""
                                             className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700"
                                         />
-                                        <div className="absolute inset-0 bg-linear-to-br from-transparent to-black/60" />
+                                        <div className="absolute inset-0 bg-linear-to-br from-transparent to-secondary/60" />
                                     </div>
                                 ))}
                             </div>
                         </div>
                     </div>
-                    <style>{`
-                        @keyframes fadeInLeft {
-                            from { opacity: 0; transform: translateX(-32px); }
-                            to   { opacity: 1; transform: translateX(0); }
-                        }
-                        @keyframes fadeInUp {
-                            from { opacity: 0; transform: translateY(32px); }
-                            to   { opacity: 1; transform: translateY(0); }
-                        }
-                        @keyframes fadeInRight {
-                            from { opacity: 0; transform: translateX(32px); }
-                            to   { opacity: 1; transform: translateX(0); }
-                        }
-                    `}</style>
+                   
                 </div>
             </section>
             {/* ===== Vehicle Approach Section ===== */}
@@ -363,7 +350,7 @@ function Hero() {
                                     />
                                 ))}
                                 {/* Gradient overlay */}
-                                <div className="absolute inset-0 bg-black/50 pointer-events-none" />
+                                <div className="absolute inset-0 bg-secondary/50 pointer-events-none" />
                                 {/* ── CENTERED text inside image ───────────────────────── */}
                                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                                     {data.processSteps.map((step, i) => {
@@ -377,11 +364,11 @@ function Hero() {
                                                 <div className="flex items-center justify-center w-11 h-11 rounded-xl border border-third/50 bg-third/10">
                                                     <Icon size={18} strokeWidth={1.5} className="text-third/90" />
                                                 </div>
-                                                <h3 className="text-white text-xl md:text-2xl font-semibold font-[Montserrat] tracking-tighter leading-tight">
+                                                <h3 className="text-primary text-xl md:text-2xl font-semibold font-[Montserrat] tracking-tighter leading-tight">
                                                     {step.title}
                                                 </h3>
                                                 <div
-                                                    className="text-white/55 text-sm font-[Poppins] leading-[1.8]"
+                                                    className="text-primary/55 text-sm font-[Poppins] leading-[1.8]"
                                                     dangerouslySetInnerHTML={{ __html: step.description }}
                                                 />
                                             </div>
@@ -476,7 +463,7 @@ function Hero() {
                                             <span className="text-2xl font-black font-[Montserrat] text-third/10 group-hover:text-third/20 transition-colors">
                                                 0{i + 1}
                                             </span>
-                                            <div className={`w-10 h-10 rounded-xl border border-third/10 flex items-center justify-center transition-all ${avxInspectionHovered === i ? 'bg-third/5 border-third' : 'bg-black/40 backdrop-blur-md'}`}>
+                                            <div className={`w-10 h-10 rounded-xl border border-third/10 flex items-center justify-center transition-all ${avxInspectionHovered === i ? 'bg-third/5 border-third' : 'bg-secondary/40 backdrop-blur-md'}`}>
                                                 <Check size={16} className={avxInspectionHovered === i ? 'text-primary' : 'text-third/20'} />
                                             </div>
                                         </div>

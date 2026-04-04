@@ -672,7 +672,7 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                         transition: "opacity 0.5s ease, transform 0.5s ease",
                     }}
                 />
-                <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/50 to-black/30" />
+                <div className="absolute inset-0 bg-linear-to-t from-secondary/70 via-secondary/50 to-secondary/30" />
                 <div className="absolute inset-0 flex items-center justify-center px-8">
                     <div className="max-w-3xl w-full flex flex-col items-center text-center gap-6">
                         <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
@@ -701,7 +701,7 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                 <div className="container">
                     <div className="mx-auto">
                         <div className="flex flex-col lg:flex-row gap-6 items-stretch justify-center">
-                            <div className="flex flex-col justify-center lg:w-[44%] animate-[fadeInLeft_0.8s_ease_forwards]">
+                            <div className="flex flex-col justify-center lg:w-[44%] ">
                                 <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
                                     About Us
                                 </p>
@@ -713,15 +713,15 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                                     dangerouslySetInnerHTML={{ __html: data.whyBuyStoryDescription }}
                                 />
                             </div>
-                            <div className="relative overflow-hidden rounded-2xl group lg:w-[26.5%] min-h-[500px] animate-[fadeInUp_0.8s_ease_0.15s_forwards] opacity-0">
+                            <div className="relative overflow-hidden rounded-2xl group lg:w-[26.5%] min-h-[500px] ">
                                 <img
                                     src={storyImages[0]}
                                     alt=""
                                     className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700"
                                 />
-                                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-black/20" />
+                                <div className="absolute inset-0 bg-linear-to-t from-secondary/80 via-transparent to-secondary/20" />
                             </div>
-                            <div className="flex lg:flex-col gap-4 lg:w-[26%] animate-[fadeInRight_0.8s_ease_0.3s_forwards] opacity-0">
+                            <div className="flex lg:flex-col gap-4 lg:w-[26%] ">
                                 {storyImages.slice(1, 3).map((src, i) => (
                                     <div key={i} className="relative flex-1 overflow-hidden rounded-2xl group min-h-60">
                                         <img
@@ -729,26 +729,12 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                                             alt=""
                                             className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700"
                                         />
-                                        <div className="absolute inset-0 bg-linear-to-br from-transparent to-black/60" />
+                                        <div className="absolute inset-0 bg-linear-to-br from-transparent to-secondary/60" />
                                     </div>
                                 ))}
                             </div>
                         </div>
                     </div>
-                    <style>{`
-                        @keyframes fadeInLeft {
-                            from { opacity: 0; transform: translateX(-32px); }
-                            to   { opacity: 1; transform: translateX(0); }
-                        }
-                        @keyframes fadeInUp {
-                            from { opacity: 0; transform: translateY(32px); }
-                            to   { opacity: 1; transform: translateY(0); }
-                        }
-                        @keyframes fadeInRight {
-                            from { opacity: 0; transform: translateX(32px); }
-                            to   { opacity: 1; transform: translateX(0); }
-                        }
-                    `}</style>
                 </div>
             </section>
             {/* ===== Vehicle Approach Section ===== */}
@@ -817,7 +803,7 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                                             ${activeHovered === i ? "opacity-100 scale-100" : "opacity-0 scale-[1.02]"}`}
                                     />
                                 ))}
-                                <div className="absolute inset-0 bg-black/50 pointer-events-none" />
+                                <div className="absolute inset-0 bg-secondary/50 pointer-events-none" />
                                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                                     {data.processSteps?.map((step, i) => {
                                         const Icon = iconMap[step.icon] || Search;
@@ -830,11 +816,11 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                                                 <div className="flex items-center justify-center w-11 h-11 rounded-xl border border-third/50 bg-third/10">
                                                     <Icon size={18} strokeWidth={1.5} className="text-third/90" />
                                                 </div>
-                                                <h3 className="text-white text-xl md:text-2xl font-semibold font-[Montserrat] tracking-tighter leading-tight">
+                                                <h3 className="text-primary text-xl md:text-2xl font-semibold font-[Montserrat] tracking-tighter leading-tight">
                                                     {step.title}
                                                 </h3>
                                                 <div
-                                                    className="text-white/55 text-sm font-[Poppins] leading-[1.8]"
+                                                    className="text-primary/55 text-sm font-[Poppins] leading-[1.8]"
                                                     dangerouslySetInnerHTML={{ __html: step.description }}
                                                 />
                                             </div>
@@ -920,7 +906,7 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                                             <span className="text-2xl font-black font-[Montserrat] text-third/10 group-hover:text-third/20 transition-colors">
                                                 0{i + 1}
                                             </span>
-                                            <div className={`w-10 h-10 rounded-xl border border-third/10 flex items-center justify-center transition-all ${avxInspectionHovered === i ? 'bg-third/5 border-third' : 'bg-black/40 backdrop-blur-md'}`}>
+                                            <div className={`w-10 h-10 rounded-xl border border-third/10 flex items-center justify-center transition-all ${avxInspectionHovered === i ? 'bg-third/5 border-third' : 'bg-secondary/40 backdrop-blur-md'}`}>
                                                 <Check size={16} className={avxInspectionHovered === i ? 'text-primary' : 'text-third/20'} />
                                             </div>
                                         </div>
