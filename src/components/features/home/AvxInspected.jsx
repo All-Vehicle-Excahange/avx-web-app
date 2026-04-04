@@ -106,8 +106,10 @@ export default function AvxInspected() {
                             />
                         ))
                     ) : (
-                        <div className="col-span-full text-center text-primary/60 py-10">
-                            No vehicles found
+                        <div className="col-span-full flex justify-center py-16">
+                            <h3 className="text-lg font-semibold text-primary/40">
+                                No vehicles found
+                            </h3>
                         </div>
                     )}
                 </div>

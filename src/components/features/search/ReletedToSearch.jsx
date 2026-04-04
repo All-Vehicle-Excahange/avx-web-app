@@ -44,6 +44,12 @@ export default function ReletedToSearch({ data, loading = false }) {
               <VehicleCardSkeleton />
             </div>
           ))
+        ) : cardData.length === 0 ? (
+          <div className="col-span-full flex justify-center py-16">
+            <h3 className="text-lg font-semibold text-primary/40">
+              No vehicles found
+            </h3>
+          </div>
         ) : (
           cardData.map((vehicle) => (
             <div key={vehicle.id} className="lg:col-span-1 lg:row-span-1 h-full">
