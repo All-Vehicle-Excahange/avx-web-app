@@ -14,6 +14,9 @@ import WhyBuyBasic3 from "./templates/WhyBuyBasic3";
 import WhyBuyPro1 from "./templates/WhyBuyPro1";
 import WhyBuyPro2 from "./templates/WhyBuyPro2";
 import WhyBuyPro3 from "./templates/WhyBuyPro3";
+import WhyBuyPremium1 from "./templates/WhyBuyPremium1";
+import WhyBuyPremium2 from "./templates/WhyBuyPremium2";
+import WhyBuyPremium3 from "./templates/WhyBuyPremium3";
 
 export const TEMPLATE_REGISTRY = {
   about_us_theme_basic_1: AboutBasic1,
@@ -31,4 +34,7 @@ export const TEMPLATE_REGISTRY = {
   why_buy_theme_pro_1: WhyBuyPro1,
   why_buy_theme_pro_2: WhyBuyPro2,
   why_buy_theme_pro_3: WhyBuyPro3,
+  why_buy_theme_premium_1: WhyBuyPremium1,
+  why_buy_theme_premium_2: WhyBuyPremium2,
+  why_buy_theme_premium_3: WhyBuyPremium3,
 };
