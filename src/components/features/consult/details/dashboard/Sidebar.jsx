@@ -71,6 +71,7 @@ export default function Sidebar({ isOpen, onClose }) {
       {menu.map((m, i) => {
         const isActive =
           router.pathname === m.href ||
+          router.pathname.startsWith(m.href + "/") ||
           (router.pathname === "/consult/dashboard" &&
             m.href === "/consult/dashboard/overview");
 

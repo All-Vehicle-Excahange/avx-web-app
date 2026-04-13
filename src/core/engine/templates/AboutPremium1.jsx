@@ -107,57 +107,90 @@ export default function AboutPremium1({ data, isEditing, onUpdate }) {
     update(k, copy);
   };
   /* ================== API HANDLERS ================== */
-  const handleHeroBlur = async () => {
+  const handleHeroBlur = async (dataOverride) => {
+    const currentData = dataOverride || d;
+    console.log("🚀 HERO FINAL DATA:", {
+      customHeroImage1: currentData.customHeroImage1,
+      heroTemplate1: currentData.heroTemplate1,
+    });
+    
     try {
       const formData = new FormData();
-      formData.append("heroTitle", d.heroTitle || "");
-      formData.append("heroDescription", d.heroDescription || "");
-      if (d.heroTemplate1?.id) {
-        formData.append("heroTemplateId1", d.heroTemplate1.id);
-      } else if (d.heroTemplate1?.imageUrl) {
-        const blob = await getBlobFromUrl(d.heroTemplate1.imageUrl);
+      formData.append("heroTitle", currentData.heroTitle || "");
+      formData.append("heroDescription", currentData.heroDescription || "");
+      
+      // Hero Image
+      if (currentData.customHeroImage1) {
+        const blob = await getBlobFromUrl(currentData.customHeroImage1);
         if (blob) {
-          formData.append("customAboutHero1", blob, "hero_image.png");
+          formData.append("customHeroImage1", blob, "hero1.png");
+          console.log("✅ Appending customHeroImage1 blob");
         }
+      } else if (currentData.heroTemplate1?.id) {
+        formData.append("heroTemplateId1", currentData.heroTemplate1.id);
+        console.log("✅ Appending heroTemplateId1:", currentData.heroTemplate1.id);
       }
+      
       const res = await setAboutHero(formData);
       if (res?.data?.success) console.log("Hero updated successfully");
     } catch (error) {
       console.error("Failed to update Hero section:", error);
     }
   };
-  const handleMissionBlur = async () => {
+  const handleMissionBlur = async (dataOverride) => {
+    const currentData = dataOverride || d;
+    console.log("🚀 MISSION FINAL DATA:", {
+      customMissionImage1: currentData.customMissionImage1,
+      missionTemplate1: currentData.missionTemplate1,
+    });
+    
     try {
       const formData = new FormData();
-      formData.append("missionTitle", d.missionTitle || "");
-      formData.append("missionDescription", d.missionDesc || "");
-      if (d.missionTemplate1?.id) {
-        formData.append("missionTemplateId1", d.missionTemplate1.id);
-      } else if (d.missionTemplate1?.imageUrl) {
-        const blob = await getBlobFromUrl(d.missionTemplate1.imageUrl);
+      formData.append("missionTitle", currentData.missionTitle || "");
+      formData.append("missionDescription", currentData.missionDesc || "");
+      
+      // Mission Image
+      if (currentData.customMissionImage1) {
+        const blob = await getBlobFromUrl(currentData.customMissionImage1);
         if (blob) {
-          formData.append("customAboutMission1", blob, "mission_image.png");
+          formData.append("customMission1", blob, "mission1.png");
+          console.log("✅ Appending customMission1 blob");
         }
+      } else if (currentData.missionTemplate1?.id) {
+        formData.append("missionTemplateId1", currentData.missionTemplate1.id);
+        console.log("✅ Appending missionTemplateId1:", currentData.missionTemplate1.id);
       }
+      
       const res = await setAboutMission(formData);
       if (res?.data?.success) console.log("Mission updated successfully");
     } catch (error) {
       console.error("Failed to update Mission section:", error);
     }
   };
-  const handleVisionBlur = async () => {
+  const handleVisionBlur = async (dataOverride) => {
+    const currentData = dataOverride || d;
+    console.log("🚀 VISION FINAL DATA:", {
+      customVisionImage1: currentData.customVisionImage1,
+      visionTemplate1: currentData.visionTemplate1,
+    });
+    
     try {
       const formData = new FormData();
-      formData.append("visionTitle", d.visionTitle || "");
-      formData.append("visionDescription", d.visionDesc || "");
-      if (d.visionTemplate1?.id) {
-        formData.append("visionTemplateId1", d.visionTemplate1.id);
-      } else if (d.visionTemplate1?.imageUrl) {
-        const blob = await getBlobFromUrl(d.visionTemplate1.imageUrl);
+      formData.append("visionTitle", currentData.visionTitle || "");
+      formData.append("visionDescription", currentData.visionDesc || "");
+      
+      // Vision Image
+      if (currentData.customVisionImage1) {
+        const blob = await getBlobFromUrl(currentData.customVisionImage1);
         if (blob) {
-          formData.append("customAboutVision1", blob, "vision_image.png");
+          formData.append("customVision1", blob, "vision1.png");
+          console.log("✅ Appending customVision1 blob");
         }
+      } else if (currentData.visionTemplate1?.id) {
+        formData.append("visionTemplateId1", currentData.visionTemplate1.id);
+        console.log("✅ Appending visionTemplateId1:", currentData.visionTemplate1.id);
       }
+      
       const res = await setAboutVision(formData);
       if (res?.data?.success) console.log("Vision updated successfully");
     } catch (error) {
@@ -223,22 +256,23 @@ export default function AboutPremium1({ data, isEditing, onUpdate }) {
           <div className="h-52 relative">
             <ImageUploader
               label="Hero Background Image"
-              src={d.customAboutHero1 || d.heroTemplate1?.imageUrl}
+              src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl}
               fieldKey="hero"
               onChange={({ imageUrl, id }) => {
                 const updatedData = { ...d };
-                updatedData.heroTemplate1 = {
-                  ...d.heroTemplate1,
-                  imageUrl,
-                  id: id ?? null,
-                };
-                if (!id) {
-                  updatedData.customAboutHero1 = imageUrl;
+                if (id) {
+                  // Template selected
+                  updatedData.heroTemplate1 = { imageUrl, id };
+                  delete updatedData.customHeroImage1;
+                  delete updatedData.customHeroImageUrl1;
                 } else {
-                  delete updatedData.customAboutHero1;
+                  // Custom image uploaded
+                  updatedData.customHeroImage1 = imageUrl;
+                  delete updatedData.heroTemplate1;
+                  delete updatedData.customHeroImageUrl1;
                 }
                 onUpdate(updatedData);
-                setTimeout(handleHeroBlur, 100);
+                handleHeroBlur(updatedData); // 🔥 PASS FRESH DATA
               }}
             />
           </div>
@@ -267,22 +301,23 @@ export default function AboutPremium1({ data, isEditing, onUpdate }) {
             <div className="h-52 relative">
               <ImageUploader
                 label="Mission Image"
-                src={d.customAboutMission1 || d.missionTemplate1?.imageUrl}
+                src={d.customMissionImage1 || d.customMissionUrl1 || d.missionTemplate1?.imageUrl}
                 fieldKey="mission"
                 onChange={({ imageUrl, id }) => {
                   const updatedData = { ...d };
-                  updatedData.missionTemplate1 = {
-                    ...d.missionTemplate1,
-                    imageUrl,
-                    id: id ?? null,
-                  };
-                  if (!id) {
-                    updatedData.customAboutMission1 = imageUrl;
+                  if (id) {
+                    // Template selected
+                    updatedData.missionTemplate1 = { imageUrl, id };
+                    delete updatedData.customMissionImage1;
+                    delete updatedData.customMissionUrl1;
                   } else {
-                    delete updatedData.customAboutMission1;
+                    // Custom image uploaded
+                    updatedData.customMissionImage1 = imageUrl;
+                    delete updatedData.missionTemplate1;
+                    delete updatedData.customMissionUrl1;
                   }
                   onUpdate(updatedData);
-                  setTimeout(handleMissionBlur, 100);
+                  handleMissionBlur(updatedData); // 🔥 PASS FRESH DATA
                 }}
               />
             </div>
@@ -312,22 +347,23 @@ export default function AboutPremium1({ data, isEditing, onUpdate }) {
             <div className="h-52 relative">
               <ImageUploader
                 label="Vision Image"
-                src={d.customAboutVision1 || d.visionTemplate1?.imageUrl}
+                src={d.customVisionImage1 || d.customVisionUrl1 || d.visionTemplate1?.imageUrl}
                 fieldKey="vision"
                 onChange={({ imageUrl, id }) => {
                   const updatedData = { ...d };
-                  updatedData.visionTemplate1 = {
-                    ...d.visionTemplate1,
-                    imageUrl,
-                    id: id ?? null,
-                  };
-                  if (!id) {
-                    updatedData.customAboutVision1 = imageUrl;
+                  if (id) {
+                    // Template selected
+                    updatedData.visionTemplate1 = { imageUrl, id };
+                    delete updatedData.customVisionImage1;
+                    delete updatedData.customVisionUrl1;
                   } else {
-                    delete updatedData.customAboutVision1;
+                    // Custom image uploaded
+                    updatedData.customVisionImage1 = imageUrl;
+                    delete updatedData.visionTemplate1;
+                    delete updatedData.customVisionUrl1;
                   }
                   onUpdate(updatedData);
-                  setTimeout(handleVisionBlur, 100);
+                  handleVisionBlur(updatedData); // 🔥 PASS FRESH DATA
                 }}
               />
             </div>
@@ -468,7 +504,7 @@ export default function AboutPremium1({ data, isEditing, onUpdate }) {
           <div className="relative">
             <div className="relative rounded-2xl overflow-hidden border border-primary/20">
               <img
-                src={d.customAboutHero1 || d.heroTemplate1.imageUrl}
+                src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl}
                 alt="Hero"
                 className="w-full h-[300px] sm:h-[400px] lg:h-[400px] object-cover"
               />
@@ -496,7 +532,7 @@ export default function AboutPremium1({ data, isEditing, onUpdate }) {
               <div className="lg:w-1/2 relative group">
                 <div className="relative h-[800px] lg:h-[600px] w-full lg:w-[95%] overflow-hidden rounded-tr-[100px] lg:rounded-tr-[200px] border-r border-t border-primary/10">
                   <img
-                    src={d.customAboutMission1 || d.missionTemplate1.imageUrl}
+                    src={d.customMissionImage1 || d.customMissionUrl1 || d.missionTemplate1?.imageUrl}
                     className="w-full h-full object-cover grayscale transition-all duration-800 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:grayscale-0 group-hover:-translate-y-5 group-hover:brightness-110 group-hover:saturate-125"
                     alt="Mission"
                   />
@@ -517,7 +553,7 @@ export default function AboutPremium1({ data, isEditing, onUpdate }) {
               <div className="lg:w-1/2 lg:mt-64 relative group">
                 <div className="relative h-[400px] lg:h-[550px] w-full overflow-hidden rounded-bl-[100px] lg:rounded-bl-[200px] border-b border-l border-primary/10">
                   <img
-                    src={d.customAboutVision1 || d.visionTemplate1.imageUrl}
+                    src={d.customVisionImage1 || d.customVisionUrl1 || d.visionTemplate1?.imageUrl}
                     className="w-full h-full object-cover transition-all duration-800 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-105"
                     alt="Vision"
                   />

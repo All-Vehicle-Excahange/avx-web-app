@@ -165,37 +165,60 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
     }
   };
   /* ================== API HANDLERS ================== */
-  const handleHeroBlur = async () => {
+  /* ================== API HANDLERS ================== */
+  const handleHeroBlur = async (dataOverride) => {
+    const currentData = dataOverride || data;
+    console.log("🚀 HERO FINAL DATA:", {
+      customWhyBuyHero1: currentData.customWhyBuyHero1,
+      customWhyBuyHero2: currentData.customWhyBuyHero2,
+      customWhyBuyHero3: currentData.customWhyBuyHero3,
+      whyBuyHeroTemplate1: currentData.whyBuyHeroTemplate1,
+      whyBuyHeroTemplate2: currentData.whyBuyHeroTemplate2,
+      whyBuyHeroTemplate3: currentData.whyBuyHeroTemplate3,
+    });
+
     try {
       const formData = new FormData();
-      formData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
+      formData.append("whyBuyHeroTitle", currentData.whyBuyHeroTitle || "");
       formData.append(
         "whyBuyHeroDescription",
-        data.whyBuyHeroDescription || "",
+        currentData.whyBuyHeroDescription || "",
       );
 
       // Hero 1 (Can be video or image)
-      if (data.whyBuyHeroTemplate1?.id) {
-        formData.append("whyBuyHeroTemplateId1", data.whyBuyHeroTemplate1.id);
-      } else if (data.customWhyBuyHero1) {
-        const blob = await getBlobFromUrl(data.customWhyBuyHero1);
-        if (blob) formData.append("customWhyBuyHero1", blob, "hero1.png");
+      if (currentData.customWhyBuyHero1 && currentData.customWhyBuyHero1.startsWith("blob:")) {
+        const blob = await getBlobFromUrl(currentData.customWhyBuyHero1);
+        if (blob) {
+          formData.append("customWhyBuyHero1", blob, "hero1.png");
+          console.log("✅ Appending customWhyBuyHero1 blob");
+        }
+      } else if (currentData.whyBuyHeroTemplate1?.id) {
+        formData.append("whyBuyHeroTemplateId1", currentData.whyBuyHeroTemplate1.id);
+        console.log("✅ Appending whyBuyHeroTemplateId1:", currentData.whyBuyHeroTemplate1.id);
       }
 
       // Hero 2
-      if (data.whyBuyHeroTemplate2?.id) {
-        formData.append("whyBuyHeroTemplateId2", data.whyBuyHeroTemplate2.id);
-      } else if (data.customWhyBuyHero2) {
-        const blob = await getBlobFromUrl(data.customWhyBuyHero2);
-        if (blob) formData.append("customWhyBuyHero2", blob, "hero2.png");
+      if (currentData.customWhyBuyHero2 && currentData.customWhyBuyHero2.startsWith("blob:")) {
+        const blob = await getBlobFromUrl(currentData.customWhyBuyHero2);
+        if (blob) {
+          formData.append("customWhyBuyHero2", blob, "hero2.png");
+          console.log("✅ Appending customWhyBuyHero2 blob");
+        }
+      } else if (currentData.whyBuyHeroTemplate2?.id) {
+        formData.append("whyBuyHeroTemplateId2", currentData.whyBuyHeroTemplate2.id);
+        console.log("✅ Appending whyBuyHeroTemplateId2:", currentData.whyBuyHeroTemplate2.id);
       }
 
       // Hero 3
-      if (data.whyBuyHeroTemplate3?.id) {
-        formData.append("whyBuyHeroTemplateId3", data.whyBuyHeroTemplate3.id);
-      } else if (data.customWhyBuyHero3) {
-        const blob = await getBlobFromUrl(data.customWhyBuyHero3);
-        if (blob) formData.append("customWhyBuyHero3", blob, "hero3.png");
+      if (currentData.customWhyBuyHero3 && currentData.customWhyBuyHero3.startsWith("blob:")) {
+        const blob = await getBlobFromUrl(currentData.customWhyBuyHero3);
+        if (blob) {
+          formData.append("customWhyBuyHero3", blob, "hero3.png");
+          console.log("✅ Appending customWhyBuyHero3 blob");
+        }
+      } else if (currentData.whyBuyHeroTemplate3?.id) {
+        formData.append("whyBuyHeroTemplateId3", currentData.whyBuyHeroTemplate3.id);
+        console.log("✅ Appending whyBuyHeroTemplateId3:", currentData.whyBuyHeroTemplate3.id);
       }
 
       await setWhyBuyHero(formData);
@@ -203,20 +226,26 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
       console.error("Error updating hero", error);
     }
   };
-  const handleStoryBlur = async () => {
+  const handleStoryBlur = async (dataOverride) => {
+    const currentData = dataOverride || data;
     try {
       const formData = new FormData();
-      formData.append("storyTitle", data.storyTitle || "");
-      formData.append("storyDescription", data.storyDescription || "");
+      formData.append("storyTitle", currentData.storyTitle || "");
+      formData.append("storyDescription", currentData.storyDescription || "");
 
       for (let i = 1; i <= 4; i++) {
-        const tmpl = data[`storyTemplate${i}`];
-        const customField = `customWhyBuyStory${i}`;
-        if (tmpl?.id) {
+        const customField = `customStory${i}`;
+        const tmpl = currentData[`storyTemplate${i}`];
+        
+        if (currentData[customField] && currentData[customField].startsWith("blob:")) {
+          const blob = await getBlobFromUrl(currentData[customField]);
+          if (blob) {
+            formData.append(customField, blob, `story${i}.png`);
+            console.log(`✅ Appending ${customField} blob`);
+          }
+        } else if (tmpl?.id) {
           formData.append(`storyTemplateId${i}`, tmpl.id);
-        } else if (data[customField]) {
-          const blob = await getBlobFromUrl(data[customField]);
-          if (blob) formData.append(customField, blob, `story${i}.png`);
+          console.log(`✅ Appending storyTemplateId${i}:`, tmpl.id);
         }
       }
 
@@ -225,26 +254,32 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
       console.error("Error updating story", error);
     }
   };
-  const handleVehicleSelectionBlur = async () => {
+  const handleVehicleSelectionBlur = async (dataOverride) => {
+    const currentData = dataOverride || data;
     try {
       const formData = new FormData();
       formData.append(
         "vehicleSelectionTitle",
-        data.vehicleSelectionTitle || "",
+        currentData.vehicleSelectionTitle || "",
       );
       formData.append(
         "vehicleSelectionDescription",
-        data.vehicleSelectionDescription || "",
+        currentData.vehicleSelectionDescription || "",
       );
 
       for (let i = 1; i <= 2; i++) {
-        const tmpl = data[`vehicleSelectionTemplate${i}`];
-        const customField = `customWhyBuyVehicleSelection${i}`;
-        if (tmpl?.id) {
+        const customField = `customVehicleSelection${i}`;
+        const tmpl = currentData[`vehicleSelectionTemplate${i}`];
+        
+        if (currentData[customField] && currentData[customField].startsWith("blob:")) {
+          const blob = await getBlobFromUrl(currentData[customField]);
+          if (blob) {
+            formData.append(customField, blob, `selection${i}.png`);
+            console.log(`✅ Appending ${customField} blob`);
+          }
+        } else if (tmpl?.id) {
           formData.append(`vehicleSelectionTemplateId${i}`, tmpl.id);
-        } else if (data[customField]) {
-          const blob = await getBlobFromUrl(data[customField]);
-          if (blob) formData.append(customField, blob, `selection${i}.png`);
+          console.log(`✅ Appending vehicleSelectionTemplateId${i}:`, tmpl.id);
         }
       }
 
@@ -253,14 +288,15 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
       console.error("Error updating vehicle selection", error);
     }
   };
-  const handleProcessBlur = async () => {
+  const handleProcessBlur = async (dataOverride) => {
+    const currentData = dataOverride || data;
     try {
       const formData = new FormData();
-      formData.append("processTitle", data.processTitle || "");
-      formData.append("processDescription", data.processDescription || "");
+      formData.append("processTitle", currentData.processTitle || "");
+      formData.append("processDescription", currentData.processDescription || "");
 
-      if (data.processSteps) {
-        data.processSteps.forEach((step, i) => {
+      if (currentData.processSteps) {
+        currentData.processSteps.forEach((step, i) => {
           formData.append(`processes[${i}].title`, step.title || "");
           formData.append(`processes[${i}].desc`, step.description || "");
           formData.append(`processes[${i}].icon`, step.icon || "");
@@ -268,13 +304,18 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
       }
 
       for (let i = 1; i <= 4; i++) {
-        const tmpl = data[`processTemplate${i}`];
-        const customField = `customWhyBuyProcess${i}`;
-        if (tmpl?.id) {
+        const customField = `customProcess${i}`;
+        const tmpl = currentData[`processTemplate${i}`];
+        
+        if (currentData[customField] && currentData[customField].startsWith("blob:")) {
+          const blob = await getBlobFromUrl(currentData[customField]);
+          if (blob) {
+            formData.append(customField, blob, `process${i}.png`);
+            console.log(`✅ Appending ${customField} blob`);
+          }
+        } else if (tmpl?.id) {
           formData.append(`processTemplateId${i}`, tmpl.id);
-        } else if (data[customField]) {
-          const blob = await getBlobFromUrl(data[customField]);
-          if (blob) formData.append(customField, blob, `process${i}.png`);
+          console.log(`✅ Appending processTemplateId${i}:`, tmpl.id);
         }
       }
 
@@ -283,26 +324,32 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
       console.error("Error updating process", error);
     }
   };
-  const handleInspectionBlur = async () => {
+  const handleInspectionBlur = async (dataOverride) => {
+    const currentData = dataOverride || data;
     try {
       const formData = new FormData();
-      formData.append("inspectionTitle", data.inspectionTitle || "");
-      formData.append("inspectionDescription", data.inspectionText || "");
+      formData.append("inspectionTitle", currentData.inspectionTitle || "");
+      formData.append("inspectionDescription", currentData.inspectionText || "");
 
-      if (data.inspectionPoints) {
-        data.inspectionPoints.forEach((pt, i) => {
+      if (currentData.inspectionPoints) {
+        currentData.inspectionPoints.forEach((pt, i) => {
           formData.append(`inspectionPoints[${i}]`, pt || "");
         });
       }
 
       for (let i = 1; i <= 4; i++) {
-        const tmpl = data[`inspectionTemplate${i}`];
-        const customField = `customWhyBuyInspection${i}`;
-        if (tmpl?.id) {
+        const customField = `customInspection${i}`;
+        const tmpl = currentData[`inspectionTemplate${i}`];
+        
+        if (currentData[customField] && currentData[customField].startsWith("blob:")) {
+          const blob = await getBlobFromUrl(currentData[customField]);
+          if (blob) {
+            formData.append(customField, blob, `inspection${i}.png`);
+            console.log(`✅ Appending ${customField} blob`);
+          }
+        } else if (tmpl?.id) {
           formData.append(`inspectionTemplateId${i}`, tmpl.id);
-        } else if (data[customField]) {
-          const blob = await getBlobFromUrl(data[customField]);
-          if (blob) formData.append(customField, blob, `inspection${i}.png`);
+          console.log(`✅ Appending inspectionTemplateId${i}:`, tmpl.id);
         }
       }
 
@@ -311,26 +358,32 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
       console.error("Error updating inspection", error);
     }
   };
-  const handleCustomerCommitmentBlur = async () => {
+  const handleCustomerCommitmentBlur = async (dataOverride) => {
+    const currentData = dataOverride || data;
     try {
       const formData = new FormData();
       formData.append(
         "customerCommitmentTitle",
-        data.customerCommitmentTitle || "",
+        currentData.customerCommitmentTitle || "",
       );
       formData.append(
         "customerCommitmentDescription",
-        data.customerCommitmentDescription || "",
+        currentData.customerCommitmentDescription || "",
       );
 
       for (let i = 1; i <= 5; i++) {
-        const tmpl = data[`customerCommitmentTemplate${i}`];
-        const customField = `customWhyBuyCustomerCommitment${i}`;
-        if (tmpl?.id) {
+        const customField = `customCustomerCommitment${i}`;
+        const tmpl = currentData[`customerCommitmentTemplate${i}`];
+        
+        if (currentData[customField] && currentData[customField].startsWith("blob:")) {
+          const blob = await getBlobFromUrl(currentData[customField]);
+          if (blob) {
+            formData.append(customField, blob, `commitment${i}.png`);
+            console.log(`✅ Appending ${customField} blob`);
+          }
+        } else if (tmpl?.id) {
           formData.append(`customerCommitmentTemplateId${i}`, tmpl.id);
-        } else if (data[customField]) {
-          const blob = await getBlobFromUrl(data[customField]);
-          if (blob) formData.append(customField, blob, `commitment${i}.png`);
+          console.log(`✅ Appending customerCommitmentTemplateId${i}:`, tmpl.id);
         }
       }
 
@@ -339,17 +392,23 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
       console.error("Error updating customer commitment", error);
     }
   };
-  const handleGalleryBlur = async () => {
+  const handleGalleryBlur = async (dataOverride) => {
+    const currentData = dataOverride || data;
     try {
       const formData = new FormData();
       for (let i = 1; i <= 5; i++) {
-        const tmpl = data[`galleryTemplate${i}`];
-        const customField = `customWhyBuyGallery${i}`;
-        if (tmpl?.id) {
+        const customField = `customGallery${i}`;
+        const tmpl = currentData[`galleryTemplate${i}`];
+        
+        if (currentData[customField] && currentData[customField].startsWith("blob:")) {
+          const blob = await getBlobFromUrl(currentData[customField]);
+          if (blob) {
+            formData.append(customField, blob, `gallery${i}.png`);
+            console.log(`✅ Appending ${customField} blob`);
+          }
+        } else if (tmpl?.id) {
           formData.append(`galleryTemplateId${i}`, tmpl.id);
-        } else if (data[customField]) {
-          const blob = await getBlobFromUrl(data[customField]);
-          if (blob) formData.append(customField, blob, `gallery${i}.png`);
+          console.log(`✅ Appending galleryTemplateId${i}:`, tmpl.id);
         }
       }
       // Assuming there is a setWhyBuyGallery service, if not, we use the general setState or similar
@@ -418,24 +477,24 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
                     label="Video"
                     src={
                       data.customWhyBuyHero1 ||
+                      data.customWhyBuyHeroUrl1 ||
                       data.whyBuyHeroTemplate1?.imageUrl
                     }
                     fieldKey="heroVid"
                     imageType="WHY_BUY_HERO"
                     onChange={({ imageUrl, id }) => {
                       const updatedData = { ...data };
-                      updatedData.whyBuyHeroTemplate1 = {
-                        ...data.whyBuyHeroTemplate1,
-                        imageUrl,
-                        id: id ?? null,
-                      };
-                      if (!id) {
-                        updatedData.customWhyBuyHero1 = imageUrl;
-                      } else {
+                      if (id) {
+                        // Template selected
+                        updatedData.whyBuyHeroTemplate1 = { imageUrl, id };
                         delete updatedData.customWhyBuyHero1;
+                      } else {
+                        // Custom image uploaded
+                        updatedData.customWhyBuyHero1 = imageUrl;
+                        delete updatedData.whyBuyHeroTemplate1;
                       }
                       onUpdate(updatedData);
-                      setTimeout(handleHeroBlur, 100);
+                      handleHeroBlur(updatedData); // 🔥 PASS FRESH DATA
                     }}
                   />
                 </div>
@@ -444,24 +503,24 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
                     label="Image 1"
                     src={
                       data.customWhyBuyHero2 ||
+                      data.customWhyBuyHeroUrl2 ||
                       data.whyBuyHeroTemplate2?.imageUrl
                     }
                     fieldKey="heroImg1"
                     imageType="WHY_BUY_HERO"
                     onChange={({ imageUrl, id }) => {
                       const updatedData = { ...data };
-                      updatedData.whyBuyHeroTemplate2 = {
-                        ...data.whyBuyHeroTemplate2,
-                        imageUrl,
-                        id: id ?? null,
-                      };
-                      if (!id) {
-                        updatedData.customWhyBuyHero2 = imageUrl;
-                      } else {
+                      if (id) {
+                        // Template selected
+                        updatedData.whyBuyHeroTemplate2 = { imageUrl, id };
                         delete updatedData.customWhyBuyHero2;
+                      } else {
+                        // Custom image uploaded
+                        updatedData.customWhyBuyHero2 = imageUrl;
+                        delete updatedData.whyBuyHeroTemplate2;
                       }
                       onUpdate(updatedData);
-                      setTimeout(handleHeroBlur, 100);
+                      handleHeroBlur(updatedData); // 🔥 PASS FRESH DATA
                     }}
                   />
                 </div>
@@ -470,24 +529,24 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
                     label="Image 2"
                     src={
                       data.customWhyBuyHero3 ||
+                      data.customWhyBuyHeroUrl3 ||
                       data.whyBuyHeroTemplate3?.imageUrl
                     }
                     fieldKey="heroImg2"
                     imageType="WHY_BUY_HERO"
                     onChange={({ imageUrl, id }) => {
                       const updatedData = { ...data };
-                      updatedData.whyBuyHeroTemplate3 = {
-                        ...data.whyBuyHeroTemplate3,
-                        imageUrl,
-                        id: id ?? null,
-                      };
-                      if (!id) {
-                        updatedData.customWhyBuyHero3 = imageUrl;
-                      } else {
+                      if (id) {
+                        // Template selected
+                        updatedData.whyBuyHeroTemplate3 = { imageUrl, id };
                         delete updatedData.customWhyBuyHero3;
+                      } else {
+                        // Custom image uploaded
+                        updatedData.customWhyBuyHero3 = imageUrl;
+                        delete updatedData.whyBuyHeroTemplate3;
                       }
                       onUpdate(updatedData);
-                      setTimeout(handleHeroBlur, 100);
+                      handleHeroBlur(updatedData); // 🔥 PASS FRESH DATA
                     }}
                   />
                 </div>
@@ -526,26 +585,25 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
                     <ImageUploader
                       label={`Image ${n}`}
                       src={
-                        data[`customWhyBuyStory${n}`] ||
+                        data[`customStory${n}`] ||
+                        data[`customStoryUrl${n}`] ||
                         data[`storyTemplate${n}`]?.imageUrl
                       }
                       fieldKey={`storyImg${n}`}
                       imageType="CONSULTANT_STORY"
                       onChange={({ imageUrl, id }) => {
                         const updatedData = { ...data };
-                        updatedData[`storyTemplate${n}`] = {
-                          ...data[`storyTemplate${n}`],
-                          imageUrl,
-                          id: id ?? null,
-                        };
-                        const customField = `customWhyBuyStory${n}`;
-                        if (!id) {
-                          updatedData[customField] = imageUrl;
+                        if (id) {
+                          // Template selected
+                          updatedData[`storyTemplate${n}`] = { imageUrl, id };
+                          delete updatedData[`customStory${n}`];
                         } else {
-                          delete updatedData[customField];
+                          // Custom image uploaded
+                          updatedData[`customStory${n}`] = imageUrl;
+                          delete updatedData[`storyTemplate${n}`];
                         }
                         onUpdate(updatedData);
-                        setTimeout(handleStoryBlur, 100);
+                        handleStoryBlur(updatedData); // 🔥 PASS FRESH DATA
                       }}
                     />
                   </div>
@@ -588,26 +646,25 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
                     <ImageUploader
                       label={`Image ${n}`}
                       src={
-                        data[`customWhyBuyVehicleSelection${n}`] ||
+                        data[`customVehicleSelection${n}`] ||
+                        data[`customVehicleSelectionUrl${n}`] ||
                         data[`vehicleSelectionTemplate${n}`]?.imageUrl
                       }
                       fieldKey={`selImg${n}`}
                       imageType="VEHICLE_SELECTION"
                       onChange={({ imageUrl, id }) => {
                         const updatedData = { ...data };
-                        updatedData[`vehicleSelectionTemplate${n}`] = {
-                          ...data[`vehicleSelectionTemplate${n}`],
-                          imageUrl,
-                          id: id ?? null,
-                        };
-                        const customField = `customWhyBuyVehicleSelection${n}`;
-                        if (!id) {
-                          updatedData[customField] = imageUrl;
+                        if (id) {
+                          // Template selected
+                          updatedData[`vehicleSelectionTemplate${n}`] = { imageUrl, id };
+                          delete updatedData[`customVehicleSelection${n}`];
                         } else {
-                          delete updatedData[customField];
+                          // Custom image uploaded
+                          updatedData[`customVehicleSelection${n}`] = imageUrl;
+                          delete updatedData[`vehicleSelectionTemplate${n}`];
                         }
                         onUpdate(updatedData);
-                        setTimeout(handleVehicleSelectionBlur, 100);
+                        handleVehicleSelectionBlur(updatedData); // 🔥 PASS FRESH DATA
                       }}
                     />
                   </div>
@@ -648,26 +705,25 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
                     <ImageUploader
                       label={`Step ${n} Image`}
                       src={
-                        data[`customWhyBuyProcess${n}`] ||
+                        data[`customProcess${n}`] ||
+                        data[`customProcessUrl${n}`] ||
                         data[`processTemplate${n}`]?.imageUrl
                       }
                       fieldKey={`procImg${n}`}
                       imageType="HOW_BUYING_WORKS"
                       onChange={({ imageUrl, id }) => {
                         const updatedData = { ...data };
-                        updatedData[`processTemplate${n}`] = {
-                          ...data[`processTemplate${n}`],
-                          imageUrl,
-                          id: id ?? null,
-                        };
-                        const customField = `customWhyBuyProcess${n}`;
-                        if (!id) {
-                          updatedData[customField] = imageUrl;
+                        if (id) {
+                          // Template selected
+                          updatedData[`processTemplate${n}`] = { imageUrl, id };
+                          delete updatedData[`customProcess${n}`];
                         } else {
-                          delete updatedData[customField];
+                          // Custom image uploaded
+                          updatedData[`customProcess${n}`] = imageUrl;
+                          delete updatedData[`processTemplate${n}`];
                         }
                         onUpdate(updatedData);
-                        setTimeout(handleProcessBlur, 100);
+                        handleProcessBlur(updatedData); // 🔥 PASS FRESH DATA
                       }}
                     />
                   </div>
@@ -793,26 +849,25 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
                     <ImageUploader
                       label={`Image ${n}`}
                       src={
-                        data[`customWhyBuyInspection${n}`] ||
+                        data[`customInspection${n}`] ||
+                        data[`customInspectionUrl${n}`] ||
                         data[`inspectionTemplate${n}`]?.imageUrl
                       }
                       fieldKey={`inspImg${n}`}
                       imageType="INSPECTION_PROCESS"
                       onChange={({ imageUrl, id }) => {
                         const updatedData = { ...data };
-                        updatedData[`inspectionTemplate${n}`] = {
-                          ...data[`inspectionTemplate${n}`],
-                          imageUrl,
-                          id: id ?? null,
-                        };
-                        const customField = `customWhyBuyInspection${n}`;
-                        if (!id) {
-                          updatedData[customField] = imageUrl;
+                        if (id) {
+                          // Template selected
+                          updatedData[`inspectionTemplate${n}`] = { imageUrl, id };
+                          delete updatedData[`customInspection${n}`];
                         } else {
-                          delete updatedData[customField];
+                          // Custom image uploaded
+                          updatedData[`customInspection${n}`] = imageUrl;
+                          delete updatedData[`inspectionTemplate${n}`];
                         }
                         onUpdate(updatedData);
-                        setTimeout(handleInspectionBlur, 100);
+                        handleInspectionBlur(updatedData); // 🔥 PASS FRESH DATA
                       }}
                     />
                   </div>
@@ -860,26 +915,25 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
                     <ImageUploader
                       label={`Image ${n}`}
                       src={
-                        data[`customWhyBuyCustomerCommitment${n}`] ||
+                        data[`customCustomerCommitment${n}`] ||
+                        data[`customCustomerCommitmentUrl${n}`] ||
                         data[`customerCommitmentTemplate${n}`]?.imageUrl
                       }
                       fieldKey={`commImg${n}`}
                       imageType="CUSTOMER_COMMITMENT"
                       onChange={({ imageUrl, id }) => {
                         const updatedData = { ...data };
-                        updatedData[`customerCommitmentTemplate${n}`] = {
-                          ...data[`customerCommitmentTemplate${n}`],
-                          imageUrl,
-                          id: id ?? null,
-                        };
-                        const customField = `customWhyBuyCustomerCommitment${n}`;
-                        if (!id) {
-                          updatedData[customField] = imageUrl;
+                        if (id) {
+                          // Template selected
+                          updatedData[`customerCommitmentTemplate${n}`] = { imageUrl, id };
+                          delete updatedData[`customCustomerCommitment${n}`];
                         } else {
-                          delete updatedData[customField];
+                          // Custom image uploaded
+                          updatedData[`customCustomerCommitment${n}`] = imageUrl;
+                          delete updatedData[`customerCommitmentTemplate${n}`];
                         }
                         onUpdate(updatedData);
-                        setTimeout(handleCustomerCommitmentBlur, 100);
+                        handleCustomerCommitmentBlur(updatedData); // 🔥 PASS FRESH DATA
                       }}
                     />
                   </div>
@@ -903,26 +957,25 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
                 <ImageUploader
                   label={`Gallery Image ${n}`}
                   src={
-                    data[`customWhyBuyGallery${n}`] ||
+                    data[`customGallery${n}`] ||
+                    data[`customGalleryUrl${n}`] ||
                     data[`galleryTemplate${n}`]?.imageUrl
                   }
                   fieldKey={`galImg${n}`}
                   imageType="GALLERY"
                   onChange={({ imageUrl, id }) => {
                     const updatedData = { ...data };
-                    updatedData[`galleryTemplate${n}`] = {
-                      ...data[`galleryTemplate${n}`],
-                      imageUrl,
-                      id: id ?? null,
-                    };
-                    const customField = `customWhyBuyGallery${n}`;
-                    if (!id) {
-                      updatedData[customField] = imageUrl;
+                    if (id) {
+                      // Template selected
+                      updatedData[`galleryTemplate${n}`] = { imageUrl, id };
+                      delete updatedData[`customGallery${n}`];
                     } else {
-                      delete updatedData[customField];
+                      // Custom image uploaded
+                      updatedData[`customGallery${n}`] = imageUrl;
+                      delete updatedData[`galleryTemplate${n}`];
                     }
                     onUpdate(updatedData);
-                    setTimeout(handleGalleryBlur, 100);
+                    handleGalleryBlur(updatedData); // 🔥 PASS FRESH DATA
                   }}
                 />
               </div>
@@ -1008,10 +1061,10 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
         {/* HERO BACKGROUND (Video/Image) */}
         <div className="absolute inset-0 w-full h-full">
           {(
-            data.customWhyBuyHero1 || data.whyBuyHeroTemplate1?.imageUrl
+            data.customWhyBuyHero1 || data.customWhyBuyHeroUrl1 || data.whyBuyHeroTemplate1?.imageUrl
           )?.includes(".mp4") ? (
             <video
-              src={data.customWhyBuyHero1 || data.whyBuyHeroTemplate1?.imageUrl}
+              src={data.customWhyBuyHero1 || data.customWhyBuyHeroUrl1 || data.whyBuyHeroTemplate1?.imageUrl}
               autoPlay
               muted
               loop
@@ -1020,7 +1073,7 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
             />
           ) : (
             <img
-              src={data.customWhyBuyHero1 || data.whyBuyHeroTemplate1?.imageUrl}
+              src={data.customWhyBuyHero1 || data.customWhyBuyHeroUrl1 || data.whyBuyHeroTemplate1?.imageUrl}
               className="w-full h-full object-cover"
               alt="Hero Background"
             />
@@ -1063,14 +1116,14 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
             <div className="relative w-full h-[420px]">
               <div className="absolute inset-0 overflow-hidden rounded-2xl">
                 <img
-                  src={data.customWhyBuyStory1 || data.storyTemplate1?.imageUrl}
+                  src={data.customStory1 || data.customStoryUrl1 || data.storyTemplate1?.imageUrl}
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
               </div>
               <div className="absolute bottom-6 right-6 w-[140px] h-[100px] overflow-hidden border rounded-2xl border-white/20">
                 <img
-                  src={data.customWhyBuyStory2 || data.storyTemplate2?.imageUrl}
+                  src={data.customStory2 || data.customStoryUrl2 || data.storyTemplate2?.imageUrl}
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
@@ -1104,7 +1157,8 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
               <div className="absolute top-0 left-0 w-[75%] h-full overflow-hidden">
                 <img
                   src={
-                    data.customWhyBuyVehicleSelection1 ||
+                    data.customVehicleSelection1 ||
+                    data.customVehicleSelectionUrl1 ||
                     data.vehicleSelectionTemplate1?.imageUrl
                   }
                   className="w-full h-full object-cover"
@@ -1114,7 +1168,8 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
               <div className="absolute top-0 right-0 w-[38%] h-[48%] overflow-hidden">
                 <img
                   src={
-                    data.customWhyBuyVehicleSelection2 ||
+                    data.customVehicleSelection2 ||
+                    data.customVehicleSelectionUrl2 ||
                     data.vehicleSelectionTemplate2?.imageUrl
                   }
                   className="w-full h-full object-cover"
@@ -1124,9 +1179,11 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
               <div className="absolute bottom-0 right-0 w-[38%] h-[48%] overflow-hidden">
                 <img
                   src={
-                    data.customWhyBuyStory3 ||
+                    data.customStory3 ||
+                    data.customStoryUrl3 ||
                     data.storyTemplate3?.imageUrl ||
-                    data.customWhyBuyVehicleSelection1 ||
+                    data.customVehicleSelection1 ||
+                    data.customVehicleSelectionUrl1 ||
                     data.vehicleSelectionTemplate1?.imageUrl
                   }
                   className="w-full h-full object-cover"
@@ -1167,7 +1224,8 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
                   <div className="w-full h-[260px] lg:h-80 rounded-2xl overflow-hidden">
                     <img
                       src={
-                        data[`customWhyBuyProcess${i + 1}`] ||
+                        data[`customProcess${i + 1}`] ||
+                        data[`customProcessUrl${i + 1}`] ||
                         data[`processTemplate${i + 1}`]?.imageUrl
                       }
                       loading="lazy"
@@ -1226,7 +1284,8 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
             >
               <img
                 src={
-                  data[`customWhyBuyInspection${activeInspection + 1}`] ||
+                  data[`customInspection${activeInspection + 1}`] ||
+                  data[`customInspectionUrl${activeInspection + 1}`] ||
                   data[`inspectionTemplate${activeInspection + 1}`]?.imageUrl
                 }
                 loading="lazy"
@@ -1307,7 +1366,8 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
                 >
                   <img
                     src={
-                      data[`customWhyBuyCustomerCommitment${i + 2}`] ||
+                      data[`customCustomerCommitment${i + 2}`] ||
+                      data[`customCustomerCommitmentUrl${i + 2}`] ||
                       data[`customerCommitmentTemplate${i + 2}`]?.imageUrl
                     }
                     className="w-full h-full object-cover transition duration-700"
@@ -1341,7 +1401,7 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
             <div className="relative overflow-hidden rounded-2xl h-[300px] lg:h-auto lg:col-span-6 lg:row-span-2">
               <img
                 src={
-                  data.customWhyBuyGallery1 || data.galleryTemplate1?.imageUrl
+                  data.customGallery1 || data.customGalleryUrl1 || data.galleryTemplate1?.imageUrl
                 }
                 className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
                 loading="lazy"
@@ -1351,7 +1411,7 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
               <div className="relative overflow-hidden rounded-2xl h-[180px] flex-1 lg:h-auto lg:col-span-4 lg:row-span-1">
                 <img
                   src={
-                    data.customWhyBuyGallery2 || data.galleryTemplate2?.imageUrl
+                    data.customGallery2 || data.customGalleryUrl2 || data.galleryTemplate2?.imageUrl
                   }
                   className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
                   loading="lazy"
@@ -1360,7 +1420,7 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
               <div className="relative overflow-hidden rounded-2xl h-[180px] w-[30%] lg:h-auto lg:w-auto lg:col-span-2 lg:row-span-1">
                 <img
                   src={
-                    data.customWhyBuyGallery5 || data.galleryTemplate5?.imageUrl
+                    data.customGallery5 || data.customGalleryUrl5 || data.galleryTemplate5?.imageUrl
                   }
                   className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
                   loading="lazy"
@@ -1371,7 +1431,7 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
               <div className="relative overflow-hidden h-40 rounded-2xl flex-1 lg:h-auto lg:col-span-3 lg:row-span-1">
                 <img
                   src={
-                    data.customWhyBuyGallery3 || data.galleryTemplate3?.imageUrl
+                    data.customGallery3 || data.customGalleryUrl3 || data.galleryTemplate3?.imageUrl
                   }
                   className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
                   loading="lazy"
@@ -1380,7 +1440,7 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate }) {
               <div className="relative overflow-hidden h-40 rounded-2xl flex-1 lg:h-auto lg:col-span-3 lg:row-span-1">
                 <img
                   src={
-                    data.customWhyBuyGallery4 || data.galleryTemplate4?.imageUrl
+                    data.customGallery4 || data.customGalleryUrl4 || data.galleryTemplate4?.imageUrl
                   }
                   className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
                   loading="lazy"
