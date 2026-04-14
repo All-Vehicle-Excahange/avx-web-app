@@ -10,6 +10,9 @@ import { getInquiryKpis } from "@/services/Seller.service";
 import { getInquiries } from "@/services/inquiry.service";
 import { formatResponseTime, getResponseStatus } from "@/lib/helper";
 import Button from "@/components/ui/button";
+import StatCardSkeleton from "@/components/ui/skeleton/StatCardSkeleton";
+import InquiryCardSkeleton from "@/components/ui/skeleton/InquiryCardSkeleton";
+import SkeletonBox from "@/components/ui/skeleton/SkeletonBox";
 
 export default function InquiriesComponent() {
   const [activeType, setActiveType] = useState("all");
@@ -17,12 +20,19 @@ export default function InquiriesComponent() {
   const [inquiries, setInquiries] = useState([]);
   const [visibleCount, setVisibleCount] = useState(6);
 
+  // Loading states
+  const [kpiLoading, setKpiLoading] = useState(false);
+  const [inquiriesLoading, setInquiriesLoading] = useState(false);
+
   const fetchInquiryKpis = async () => {
     try {
+      setKpiLoading(true);
       const response = await getInquiryKpis();
       setInquiryKpis(response.data);
     } catch (error) {
       console.error("Error fetching inquiry KPIs:", error);
+    } finally {
+      setKpiLoading(false);
     }
   };
 
@@ -30,6 +40,7 @@ export default function InquiriesComponent() {
   useEffect(() => {
     const fetchInquiries = async () => {
       try {
+        setInquiriesLoading(true);
         const status = activeType === "all" ? undefined
           : activeType === "closed" ? "CLOSED_BY_INQUIRER"
             : activeType.toUpperCase();
@@ -39,6 +50,8 @@ export default function InquiriesComponent() {
         setVisibleCount(6);
       } catch (error) {
         console.log(error);
+      } finally {
+        setInquiriesLoading(false);
       }
     };
 
@@ -84,68 +97,87 @@ export default function InquiriesComponent() {
           </p>
         </div>
 
-        <div className="rounded-xl bg-primary p-3 space-y-2">
-          <p className={`text-sm ${status.color}`}>
-            Avg response time: {formattedTime} ({status.label})
-          </p>
+        {kpiLoading ? (
+          <div className="rounded-xl bg-primary p-3 space-y-2 min-w-[200px]">
+            <SkeletonBox className="h-4 w-3/4 opacity-20" rounded="rounded-md" />
+            <SkeletonBox className="h-4 w-full opacity-20" rounded="rounded-md" />
+          </div>
+        ) : (
+          <div className="rounded-xl bg-primary p-3 space-y-2">
+            <p className={`text-sm ${status.color}`}>
+              Avg response time: {formattedTime} ({status.label})
+            </p>
 
-          <p className="text-sm text-secondary">
-            Fast responses increase chances of closing.
-          </p>
-        </div>
+            <p className="text-sm text-secondary">
+              Fast responses increase chances of closing.
+            </p>
+          </div>
+        )}
 
       </div>
 
       <div className="rounded-xl border border-third/30 bg-primary/5 p-5 space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-          <div
-            className="cursor-pointer"
-          >
-            <StatCard
-              icon={<Flame className="text-primary" size={20} />}
-              label="All Inquiries "
-              value={`${inquiryKpis?.totalInquiries || 0} `}
-            />
-          </div>
-          <div
-            className="cursor-pointer"
-          >
-            <StatCard
-              icon={<Flame className="text-green-500" size={20} />}
-              label="Accepted Inquiries"
-              value={`${inquiryKpis?.totalApprovedInquiries || 0} `}
-            />
-          </div>
+          {kpiLoading ? (
+            <>
+              <StatCardSkeleton />
+              <StatCardSkeleton />
+              <StatCardSkeleton />
+              <StatCardSkeleton />
+              <StatCardSkeleton />
+            </>
+          ) : (
+            <>
+              <div
+                className="cursor-pointer"
+              >
+                <StatCard
+                  icon={<Flame className="text-primary" size={20} />}
+                  label="All Inquiries "
+                  value={`${inquiryKpis?.totalInquiries || 0} `}
+                />
+              </div>
+              <div
+                className="cursor-pointer"
+              >
+                <StatCard
+                  icon={<Flame className="text-green-500" size={20} />}
+                  label="Accepted Inquiries"
+                  value={`${inquiryKpis?.totalApprovedInquiries || 0} `}
+                />
+              </div>
 
-          <div
-            className="cursor-pointer"
-          >
-            <StatCard
-              icon={<EyeOff className="text-yellow-500" size={20} />}
-              label="Pending Inquiries"
-              value={`${inquiryKpis?.totalPendingInquiries || 0} `}
-            />
-          </div>
+              <div
+                className="cursor-pointer"
+              >
+                <StatCard
+                  icon={<EyeOff className="text-yellow-500" size={20} />}
+                  label="Pending Inquiries"
+                  value={`${inquiryKpis?.totalPendingInquiries || 0} `}
+                />
+              </div>
 
-          <div
-            className="cursor-pointer"
-          >
-            <StatCard
-              icon={<AlertTriangle className="text-blue-500" size={20} />}
-              label="Closed Inquiries"
-              value={`${inquiryKpis?.totalClosedInquiries || 0} `}
-            />
-          </div>
+              <div
+                className="cursor-pointer"
+              >
+                <StatCard
+                  icon={<AlertTriangle className="text-blue-500" size={20} />}
+                  label="Closed Inquiries"
+                  value={`${inquiryKpis?.totalClosedInquiries || 0} `}
+                />
+              </div>
 
-          <div
-            className="cursor-pointer"
-          >
-            <StatCard
-              icon={<AlertTriangle className="text-red-500" size={20} />}
-              label="Rejected Inquiries"
-              value={`${inquiryKpis?.totalRejectedInquiries || 0}`}
-            />
-          </div>
+              <div
+                className="cursor-pointer"
+              >
+                <StatCard
+                  icon={<AlertTriangle className="text-red-500" size={20} />}
+                  label="Rejected Inquiries"
+                  value={`${inquiryKpis?.totalRejectedInquiries || 0}`}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -172,7 +204,13 @@ export default function InquiriesComponent() {
 
       {/* INQUIRY LIST */}
       <div className="grid grid-cols-1 gap-6">
-        {inquiries?.length > 0 ? (
+        {inquiriesLoading ? (
+          <>
+            <InquiryCardSkeleton />
+            <InquiryCardSkeleton />
+            <InquiryCardSkeleton />
+          </>
+        ) : inquiries?.length > 0 ? (
           <>
             {inquiries.slice(0, visibleCount).map((inq) => (
               <InquiryCard

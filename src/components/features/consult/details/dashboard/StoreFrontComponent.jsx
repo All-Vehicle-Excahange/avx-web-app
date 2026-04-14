@@ -9,6 +9,7 @@ import { getConsualtDraft } from "@/services/theme.service";
 import { getStoreFront } from "@/services/theme.service";
 import { EngineRenderer } from "@/core/engine/Renderer";
 import { THEME_STORE } from "@/core/engine/themeStore";
+import SkeletonBox from "@/components/ui/skeleton/SkeletonBox";
 
 /**
  * Maps raw API response fields → template field names expected by theme components.
@@ -128,7 +129,56 @@ export default function StoreFrontComponent() {
   }, [storeData]);
 
   if (hasStoreFront === null) {
-    return null;
+    return (
+      <section className="space-y-10">
+        {/* HEADER SKELETON */}
+        <div className="space-y-2">
+          <SkeletonBox className="h-8 w-64" />
+          <SkeletonBox className="h-4 w-96" />
+        </div>
+
+        {/* TIERS GRID SKELETON */}
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="rounded-xl border border-third/30 p-6 flex flex-col h-[340px] space-y-6"
+            >
+              <div className="space-y-6 flex-1">
+                <div className="flex justify-between items-start">
+                  <div className="space-y-2">
+                    <SkeletonBox className="h-7 w-24" />
+                    <SkeletonBox className="h-4 w-32" />
+                  </div>
+                  <SkeletonBox className="h-6 w-6 rounded-full" />
+                </div>
+
+                <div className="space-y-3">
+                  <SkeletonBox className="h-4 w-full" />
+                  <SkeletonBox className="h-4 w-[90%]" />
+                  <SkeletonBox className="h-4 w-[80%]" />
+                </div>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-third/10">
+                <SkeletonBox className="h-10 w-full" />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* INFO BOX SKELETON */}
+        <div className="border border-third/30 rounded-xl p-8 space-y-6">
+          <SkeletonBox className="h-7 w-64" />
+          <SkeletonBox className="h-20 w-full" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+            <SkeletonBox className="h-24 w-full" />
+            <SkeletonBox className="h-24 w-full" />
+            <SkeletonBox className="h-24 w-full" />
+          </div>
+        </div>
+      </section>
+    );
   }
 
   // No draft data — show plain CreateStoreFront (tier selection only)

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Button from "@/components/ui/button";
+import { ProfileSkeleton } from "@/components/ui/skeleton";
 import InputField from "@/components/ui/inputField";
 import {
   ShieldCheck,
@@ -44,6 +45,7 @@ const formatVehicleTypes = (types) => {
 export default function ProfileComponent() {
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingLocation, setIsEditingLocation] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [verificationData, setVerificationData] = useState({
     status: "Pending",
@@ -81,6 +83,7 @@ export default function ProfileComponent() {
 
   useEffect(() => {
     const fetchStatuses = async () => {
+      setLoading(true);
       try {
         const [verificationRes, documentRes, addressRes, profileRes] =
           await Promise.all([
@@ -168,6 +171,8 @@ export default function ProfileComponent() {
         }
       } catch (error) {
         console.error("Failed to fetch statuses:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchStatuses();
@@ -191,6 +196,10 @@ export default function ProfileComponent() {
       }
     }
   }, []);
+
+  if (loading) {
+    return <ProfileSkeleton />;
+  }
 
   const getDocStatusText = (status) => {
     if (status === "VERIFIED") return "Verified successfully";

@@ -24,6 +24,9 @@ import {
 } from "@/services/Seller.service";
 import TopPerformingCard from "./components/TopPerformingCard";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
+import StatCardSkeleton from "@/components/ui/skeleton/StatCardSkeleton";
+import TopPerformingCardSkeleton from "@/components/ui/skeleton/TopPerformingCardSkeleton";
+import UserVehicleCardSkeleton from "@/components/ui/skeleton/UserVehicleCardSkeleton";
 
 
 
@@ -60,6 +63,11 @@ export default function InventoryComponent() {
   const [topPerforming, setTopPerforming] = useState([]);
   const [inventorySnapShotCount, setInventorySnapShotCount] = useState([]);
 
+  // Loading states
+  const [vehiclesLoading, setVehiclesLoading] = useState(false);
+  const [topPerformingLoading, setTopPerformingLoading] = useState(false);
+  const [snapshotLoading, setSnapshotLoading] = useState(false);
+
   // Need Attention vehicles state
   const [needAttentionVehicles, setNeedAttentionVehicles] = useState([]);
   const [needAttentionPage, setNeedAttentionPage] = useState(1);
@@ -69,6 +77,7 @@ export default function InventoryComponent() {
 
   const fetchVehicles = async () => {
     try {
+      setVehiclesLoading(true);
       const status = activeType === "all" ? undefined : activeType;
 
       const res = await getInventoryVehicle(status);
@@ -76,6 +85,8 @@ export default function InventoryComponent() {
       setVisibleCount(9);
     } catch (error) {
       console.log(error);
+    } finally {
+      setVehiclesLoading(false);
     }
   };
 
@@ -86,10 +97,13 @@ export default function InventoryComponent() {
   useEffect(() => {
     const fetchTopPerforming = async () => {
       try {
+        setTopPerformingLoading(true);
         const res = await getTopPerformingVehicles();
         setTopPerforming(res.data || []);
       } catch (error) {
         console.log(error);
+      } finally {
+        setTopPerformingLoading(false);
       }
     };
     fetchTopPerforming();
@@ -97,10 +111,13 @@ export default function InventoryComponent() {
 
   const fetchInventorySnapShotCount = async () => {
     try {
+      setSnapshotLoading(true);
       const res = await getInventorySnapShotCount();
       setInventorySnapShotCount(res.data || []);
     } catch (error) {
       console.log(error);
+    } finally {
+      setSnapshotLoading(false);
     }
   };
 
@@ -190,35 +207,45 @@ export default function InventoryComponent() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div
-              className="cursor-pointer"
-            >
-              <StatCard
-                icon={<Flame className="text-green-500" size={20} />}
-                label="High Demand"
-                value={`${inventorySnapShotCount.highDemandCount} `}
-              />
-            </div>
+            {snapshotLoading ? (
+              <>
+                <StatCardSkeleton />
+                <StatCardSkeleton />
+                <StatCardSkeleton />
+              </>
+            ) : (
+              <>
+                <div
+                  className="cursor-pointer"
+                >
+                  <StatCard
+                    icon={<Flame className="text-green-500" size={20} />}
+                    label="High Demand"
+                    value={`${inventorySnapShotCount.highDemandCount} `}
+                  />
+                </div>
 
-            <div
-              className="cursor-pointer"
-            >
-              <StatCard
-                icon={<EyeOff className="text-yellow-500" size={20} />}
-                label="Low Visibility"
-                value={`${inventorySnapShotCount.lowDemandCount} `}
-              />
-            </div>
+                <div
+                  className="cursor-pointer"
+                >
+                  <StatCard
+                    icon={<EyeOff className="text-yellow-500" size={20} />}
+                    label="Low Visibility"
+                    value={`${inventorySnapShotCount.lowDemandCount} `}
+                  />
+                </div>
 
-            <div
-              className="cursor-pointer"
-            >
-              <StatCard
-                icon={<AlertTriangle className="text-red-500" size={20} />}
-                label="Needs Attention"
-                value={`${inventorySnapShotCount.needsAttentionCount} `}
-              />
-            </div>
+                <div
+                  className="cursor-pointer"
+                >
+                  <StatCard
+                    icon={<AlertTriangle className="text-red-500" size={20} />}
+                    label="Needs Attention"
+                    value={`${inventorySnapShotCount.needsAttentionCount} `}
+                  />
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -236,7 +263,13 @@ export default function InventoryComponent() {
 
             {/* SCROLLABLE CONTENT */}
             <div className="flex-1 overflow-y-auto custom-scrollbar pr-1 space-y-3">
-              {topPerforming.length > 0 ? (
+              {topPerformingLoading ? (
+                <>
+                  <TopPerformingCardSkeleton />
+                  <TopPerformingCardSkeleton />
+                  <TopPerformingCardSkeleton />
+                </>
+              ) : topPerforming.length > 0 ? (
                 topPerforming.map((v, index) => (
                   <TopPerformingCard key={v.id} vehicle={v} rank={index + 1} />
                 ))
@@ -337,7 +370,13 @@ export default function InventoryComponent() {
 
         {/* 5️⃣ VEHICLE GRID */}
         <div className="w-full space-y-6">
-          {vehicles?.length > 0 ? (
+          {vehiclesLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <UserVehicleCardSkeleton key={i} />
+              ))}
+            </div>
+          ) : vehicles?.length > 0 ? (
             <>
               <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 gap-6">
                 {vehicles.slice(0, visibleCount).map((car) => (
@@ -397,7 +436,12 @@ export default function InventoryComponent() {
             <h3 className="font-semibold">Vehicles Needing Attention</h3>
           </div>
 
-          {needAttentionVehicles.length > 0 ? (
+          {needAttentionLoading && needAttentionPage === 1 ? (
+            <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
+              <TopPerformingCardSkeleton />
+              <TopPerformingCardSkeleton />
+            </div>
+          ) : needAttentionVehicles.length > 0 ? (
             <>
               <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
                 {needAttentionVehicles.map((v) => (

@@ -39,7 +39,6 @@
 //   );
 // }
 
-
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 
 export default function StatCard({ icon, label, value, trend }) {
@@ -48,7 +47,6 @@ export default function StatCard({ icon, label, value, trend }) {
 
   return (
     <div className="flex items-center justify-between gap-2 rounded-xl border border-third/30 p-3 sm:p-4 transition hover:border-third/40 min-w-0">
-
       {/* Left Section */}
       <div className="flex items-center gap-3 min-w-0">
         {/* Added shrink-0 to prevent icon box from squishing */}
@@ -72,16 +70,17 @@ export default function StatCard({ icon, label, value, trend }) {
         <div className="shrink-0">
           <span
             className={`flex items-center gap-0.5 text-[10px] font-bold px-2 py-1 rounded-md
-              ${isPositive
-                ? "text-emerald-500 bg-emerald-500/10"
-                : isNegative
-                  ? "text-rose-500 bg-rose-500/10"
-                  : "text-third bg-third/10"
+              ${
+                isPositive
+                  ? "text-emerald-500 bg-emerald-500/10"
+                  : isNegative
+                    ? "text-rose-500 bg-rose-500/10"
+                    : "text-third bg-third/10"
               }`}
           >
             {isPositive && <ArrowUpRight size={12} strokeWidth={3} />}
             {isNegative && <ArrowDownRight size={12} strokeWidth={3} />}
-            {trend.split(' ')[0]}
+            {trend.split(" ")[0]}
           </span>
         </div>
       )}
