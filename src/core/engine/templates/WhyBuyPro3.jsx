@@ -5,6 +5,8 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { WHY_BUY_PRO_3 } from "../schemas/whybuy/why_buy_pro_3";
 import RichTextEditor from "../atoms/RichTextEditor";
+import Button from "@/components/ui/button";
+import GlobalLoader from "@/components/ui/GlobalLoader";
 import EditorInput from "../atoms/EditorInput";
 import { ImageUploader } from "../atoms/ImageUploader ";
 import Select from "react-select";
@@ -75,7 +77,8 @@ const formatOptionLabel = ({ value, label }) => (
 );
 const INTERVAL = 5000;
 const iconMap = { Search, MessageCircle, ShieldCheck, Handshake };
-export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
+export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate, onNextTab }) {
+    const [isSaving, setIsSaving] = useState(false);
     const data = {
         ...DEFAULT_DATA,
         ...Object.fromEntries(
@@ -192,121 +195,89 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
         };
         if (consultId) fetchReviews();
     }, [consultId, rawData]);
-    const handleHeroBlur = async () => {
+    const handleSaveAndNext = async () => {
+        setIsSaving(true);
         try {
-            const formData = new FormData();
-            formData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
-            formData.append("whyBuyHeroDescription", data.whyBuyHeroDescription || "");
-            if (data.whyBuyHeroTemplate1?.id) formData.append("whyBuyHeroTemplateId1", data.whyBuyHeroTemplate1.id);
-            if (data.whyBuyHeroTemplate2?.id) formData.append("whyBuyHeroTemplateId2", data.whyBuyHeroTemplate2.id);
-            if (data.whyBuyHeroTemplate3?.id) formData.append("whyBuyHeroTemplateId3", data.whyBuyHeroTemplate3.id);
-            if (data.whyBuyHeroTemplate4?.id) formData.append("whyBuyHeroTemplateId4", data.whyBuyHeroTemplate4.id);
-            if (data.whyBuyHeroTemplate5?.id) formData.append("whyBuyHeroTemplateId5", data.whyBuyHeroTemplate5.id);
-            await setWhyBuyHero(formData);
-        } catch (error) { console.error("Error updating hero", error); }
-    };
-    const handleStoryBlur = async () => {
-        try {
-            const formData = new FormData();
-            formData.append("storyTitle", data.whyBuyStoryTitle || "");
-            formData.append("storyDescription", data.whyBuyStoryDescription || "");
-            if (data.whyBuyStoryTemplate1?.id) formData.append("storyTemplateId1", data.whyBuyStoryTemplate1.id);
-            if (data.whyBuyStoryTemplate2?.id) formData.append("storyTemplateId2", data.whyBuyStoryTemplate2.id);
-            if (data.whyBuyStoryTemplate3?.id) formData.append("storyTemplateId3", data.whyBuyStoryTemplate3.id);
-            if (data.whyBuyStoryTemplate4?.id) formData.append("storyTemplateId4", data.whyBuyStoryTemplate4.id);
-            if (data.whyBuyStoryTemplate5?.id) formData.append("storyTemplateId5", data.whyBuyStoryTemplate5.id);
-            await setWhyBuyStory(formData);
-        } catch (error) { console.error("Error updating story", error); }
-    };
-    const handleVehicleSelectionBlur = async () => {
-        try {
-            const formData = new FormData();
-            formData.append("vehicleSelectionTitle", data.whyBuyVehicleSelectionTitle || "");
-            formData.append("vehicleSelectionDescription", data.whyBuyVehicleSelectionDescription || "");
-            if (data.whyBuyVehicleSelectionTemplate1?.id) formData.append("vehicleSelectionTemplateId1", data.whyBuyVehicleSelectionTemplate1.id);
-            if (data.whyBuyVehicleSelectionTemplate2?.id) formData.append("vehicleSelectionTemplateId2", data.whyBuyVehicleSelectionTemplate2.id);
-            if (data.whyBuyVehicleSelectionTemplate3?.id) formData.append("vehicleSelectionTemplateId3", data.whyBuyVehicleSelectionTemplate3.id);
-            if (data.whyBuyVehicleSelectionTemplate4?.id) formData.append("vehicleSelectionTemplateId4", data.whyBuyVehicleSelectionTemplate4.id);
-            if (data.whyBuyVehicleSelectionTemplate5?.id) formData.append("vehicleSelectionTemplateId5", data.whyBuyVehicleSelectionTemplate5.id);
-            await setWhyBuyVehicleSelection(formData);
-        } catch (error) { console.error("Error updating vehicle selection", error); }
-    };
-    const handleProcessBlur = async () => {
-        try {
-            const formData = new FormData();
-            formData.append("processTitle", data.whyBuyProcessTitle || "");
-            formData.append("processDescription", data.whyBuyProcessDescription || "");
+            const heroData = new FormData();
+            heroData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
+            heroData.append("whyBuyHeroDescription", data.whyBuyHeroDescription || "");
+            if (data.whyBuyHeroTemplate1?.id) heroData.append("whyBuyHeroTemplateId1", data.whyBuyHeroTemplate1.id);
+            if (data.whyBuyHeroTemplate2?.id) heroData.append("whyBuyHeroTemplateId2", data.whyBuyHeroTemplate2.id);
+            if (data.whyBuyHeroTemplate3?.id) heroData.append("whyBuyHeroTemplateId3", data.whyBuyHeroTemplate3.id);
+            if (data.whyBuyHeroTemplate4?.id) heroData.append("whyBuyHeroTemplateId4", data.whyBuyHeroTemplate4.id);
+            if (data.whyBuyHeroTemplate5?.id) heroData.append("whyBuyHeroTemplateId5", data.whyBuyHeroTemplate5.id);
+
+            const storyData = new FormData();
+            storyData.append("storyTitle", data.whyBuyStoryTitle || "");
+            storyData.append("storyDescription", data.whyBuyStoryDescription || "");
+            if (data.whyBuyStoryTemplate1?.id) storyData.append("storyTemplateId1", data.whyBuyStoryTemplate1.id);
+            if (data.whyBuyStoryTemplate2?.id) storyData.append("storyTemplateId2", data.whyBuyStoryTemplate2.id);
+            if (data.whyBuyStoryTemplate3?.id) storyData.append("storyTemplateId3", data.whyBuyStoryTemplate3.id);
+            if (data.whyBuyStoryTemplate4?.id) storyData.append("storyTemplateId4", data.whyBuyStoryTemplate4.id);
+            if (data.whyBuyStoryTemplate5?.id) storyData.append("storyTemplateId5", data.whyBuyStoryTemplate5.id);
+
+            const vehicleData = new FormData();
+            vehicleData.append("vehicleSelectionTitle", data.whyBuyVehicleSelectionTitle || "");
+            vehicleData.append("vehicleSelectionDescription", data.whyBuyVehicleSelectionDescription || "");
+            if (data.whyBuyVehicleSelectionTemplate1?.id) vehicleData.append("vehicleSelectionTemplateId1", data.whyBuyVehicleSelectionTemplate1.id);
+            if (data.whyBuyVehicleSelectionTemplate2?.id) vehicleData.append("vehicleSelectionTemplateId2", data.whyBuyVehicleSelectionTemplate2.id);
+            if (data.whyBuyVehicleSelectionTemplate3?.id) vehicleData.append("vehicleSelectionTemplateId3", data.whyBuyVehicleSelectionTemplate3.id);
+            if (data.whyBuyVehicleSelectionTemplate4?.id) vehicleData.append("vehicleSelectionTemplateId4", data.whyBuyVehicleSelectionTemplate4.id);
+            if (data.whyBuyVehicleSelectionTemplate5?.id) vehicleData.append("vehicleSelectionTemplateId5", data.whyBuyVehicleSelectionTemplate5.id);
+
+            const processData = new FormData();
+            processData.append("processTitle", data.whyBuyProcessTitle || "");
+            processData.append("processDescription", data.whyBuyProcessDescription || "");
             if (data.processSteps) {
                 data.processSteps.forEach((step, i) => {
-                    formData.append(`processes[${i}].title`, step.title || "");
-                    formData.append(`processes[${i}].desc`, step.description || "");
-                    formData.append(`processes[${i}].icon`, step.icon || "");
+                    processData.append(`processes[${i}].title`, step.title || "");
+                    processData.append(`processes[${i}].desc`, step.description || "");
+                    processData.append(`processes[${i}].icon`, step.icon || "");
                 });
             }
-            if (data.whyBuyProcessTemplate1?.id) formData.append("processTemplateId1", data.whyBuyProcessTemplate1.id);
-            if (data.whyBuyProcessTemplate2?.id) formData.append("processTemplateId2", data.whyBuyProcessTemplate2.id);
-            if (data.whyBuyProcessTemplate3?.id) formData.append("processTemplateId3", data.whyBuyProcessTemplate3.id);
-            if (data.whyBuyProcessTemplate4?.id) formData.append("processTemplateId4", data.whyBuyProcessTemplate4.id);
-            await setWhyBuyProcess(formData);
-        } catch (error) { console.error("Error updating process", error); }
-    };
-    const handleInspectionBlur = async () => {
-        try {
-            const formData = new FormData();
-            formData.append("inspectionTitle", data.whyBuyInspectionTitle || "");
-            formData.append("inspectionDescription", data.whyBuyInspectionDescription || "");
-            if (data.whyBuyInspectionTemplate1?.id) formData.append("inspectionTemplateId1", data.whyBuyInspectionTemplate1.id);
-            if (data.whyBuyInspectionTemplate2?.id) formData.append("inspectionTemplateId2", data.whyBuyInspectionTemplate2.id);
-            if (data.whyBuyInspectionTemplate3?.id) formData.append("inspectionTemplateId3", data.whyBuyInspectionTemplate3.id);
-            if (data.whyBuyInspectionTemplate4?.id) formData.append("inspectionTemplateId4", data.whyBuyInspectionTemplate4.id);
+            if (data.whyBuyProcessTemplate1?.id) processData.append("processTemplateId1", data.whyBuyProcessTemplate1.id);
+            if (data.whyBuyProcessTemplate2?.id) processData.append("processTemplateId2", data.whyBuyProcessTemplate2.id);
+            if (data.whyBuyProcessTemplate3?.id) processData.append("processTemplateId3", data.whyBuyProcessTemplate3.id);
+            if (data.whyBuyProcessTemplate4?.id) processData.append("processTemplateId4", data.whyBuyProcessTemplate4.id);
+
+            const inspectionData = new FormData();
+            inspectionData.append("inspectionTitle", data.whyBuyInspectionTitle || "");
+            inspectionData.append("inspectionDescription", data.whyBuyInspectionDescription || "");
+            if (data.whyBuyInspectionTemplate1?.id) inspectionData.append("inspectionTemplateId1", data.whyBuyInspectionTemplate1.id);
+            if (data.whyBuyInspectionTemplate2?.id) inspectionData.append("inspectionTemplateId2", data.whyBuyInspectionTemplate2.id);
+            if (data.whyBuyInspectionTemplate3?.id) inspectionData.append("inspectionTemplateId3", data.whyBuyInspectionTemplate3.id);
+            if (data.whyBuyInspectionTemplate4?.id) inspectionData.append("inspectionTemplateId4", data.whyBuyInspectionTemplate4.id);
             if (data.inspectionPoints) {
                 data.inspectionPoints.forEach((pt, i) => {
-                    formData.append(`inspectionPoints[${i}]`, pt || "");
+                    inspectionData.append(`inspectionPoints[${i}]`, pt || "");
                 });
             }
-            await setWhyBuyInspection(formData);
-        } catch (error) { console.error("Error updating inspection", error); }
-    };
-    const handleCustomerCommitmentBlur = async () => {
-        try {
-            const formData = new FormData();
-            formData.append("customerCommitmentTitle", data.whyBuyCustomerCommitmentTitle || "");
-            formData.append("customerCommitmentDescription", data.whyBuyCustomerCommitmentDescription || "");
-            await setWhyBuyCustomerCommitment(formData);
-        } catch (error) { console.error("Error updating customer commitment", error); }
-    };
-    const handleGalleryBlur = async () => {
-        console.log("Gallery updated locally.");
-    };
-    const toggleReviewSelection = (reviewId) => {
-        setSelectedReviewIds((prev) => {
-            const updated = prev.includes(reviewId)
-                ? prev.filter((id) => id !== reviewId)
-                : [...prev, reviewId];
-            const selectedReviews = allReviews
-                .filter((r) => updated.includes(r.id))
-                .map((r) => ({
-                    id: r.id,
-                    reviewerName: `${r.reviewedBy?.firstname || ""} ${r.reviewedBy?.lastname || ""}`.trim(),
-                    rating: r.rating,
-                    reviewTitle: r.reviewTitle,
-                    reviewText: r.reviewText,
-                }));
-            updateField("featuredReviews", selectedReviews);
-            setFeaturedReviews(updated).catch((err) =>
-                console.error("Error saving featured reviews", err)
-            );
-            return updated;
-        });
-    };
-    const handleTestimonialBlur = async () => {
-        try {
-            updateField("whyBuyTestimonialTitle", data.whyBuyTestimonialTitle);
-        } catch (error) { console.error("Error updating testimonials", error); }
+
+            const commitmentData = new FormData();
+            commitmentData.append("customerCommitmentTitle", data.whyBuyCustomerCommitmentTitle || "");
+            commitmentData.append("customerCommitmentDescription", data.whyBuyCustomerCommitmentDescription || "");
+
+            await Promise.all([
+                setWhyBuyHero(heroData),
+                setWhyBuyStory(storyData),
+                setWhyBuyVehicleSelection(vehicleData),
+                setWhyBuyProcess(processData),
+                setWhyBuyInspection(inspectionData),
+                setWhyBuyCustomerCommitment(commitmentData),
+                setFeaturedReviews(selectedReviewIds)
+            ]);
+
+            if (onNextTab) onNextTab();
+        } catch (error) {
+            console.error("Error saving Why Buy sections:", error);
+        } finally {
+            setIsSaving(false);
+        }
     };
     if (isEditing) {
         return (
             <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
+                <GlobalLoader isLoading={isSaving} />
                 {/* HERO */}
                 <div className="space-y-6">
                     <h3 className="text-primary font-bold text-xl mb-4">Hero Section</h3>
@@ -317,32 +288,30 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                                 label="Hero Title"
                                 value={data.whyBuyHeroTitle}
                                 onChange={(e) => updateField("whyBuyHeroTitle", e.target.value)}
-                                onBlur={handleHeroBlur}
                             />
                             <RichTextEditor
                                 label="Hero Description"
                                 value={data.whyBuyHeroDescription}
                                 onChange={(v) => updateField("whyBuyHeroDescription", v)}
-                                onBlur={handleHeroBlur}
                             />
                         </div>
                         <div className="space-y-4">
                             <p className="text-sm font-semibold text-primary">Hero Images</p>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 1" src={data.whyBuyHeroTemplate1?.imageUrl} fieldKey="heroImg1" imageType="WHY_BUY_HERO" onChange={({ imageUrl, id }) => { updateField("whyBuyHeroTemplate1", { ...data.whyBuyHeroTemplate1, imageUrl, id: id ?? data.whyBuyHeroTemplate1?.id }); setTimeout(handleHeroBlur, 100); }} />
+                                    <ImageUploader label="Image 1" src={data.whyBuyHeroTemplate1?.imageUrl} fieldKey="heroImg1" imageType="WHY_BUY_HERO" onChange={({ imageUrl, id }) => { updateField("whyBuyHeroTemplate1", { ...data.whyBuyHeroTemplate1, imageUrl, id: id ?? data.whyBuyHeroTemplate1?.id }); }} />
                                 </div>
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 2" src={data.whyBuyHeroTemplate2?.imageUrl} fieldKey="heroImg2" imageType="WHY_BUY_HERO" onChange={({ imageUrl, id }) => { updateField("whyBuyHeroTemplate2", { ...data.whyBuyHeroTemplate2, imageUrl, id: id ?? data.whyBuyHeroTemplate2?.id }); setTimeout(handleHeroBlur, 100); }} />
+                                    <ImageUploader label="Image 2" src={data.whyBuyHeroTemplate2?.imageUrl} fieldKey="heroImg2" imageType="WHY_BUY_HERO" onChange={({ imageUrl, id }) => { updateField("whyBuyHeroTemplate2", { ...data.whyBuyHeroTemplate2, imageUrl, id: id ?? data.whyBuyHeroTemplate2?.id }); }} />
                                 </div>
                                 <div className="h-40 relative col-span-2">
-                                    <ImageUploader label="Image 3" src={data.whyBuyHeroTemplate3?.imageUrl} fieldKey="heroImg3" imageType="WHY_BUY_HERO" onChange={({ imageUrl, id }) => { updateField("whyBuyHeroTemplate3", { ...data.whyBuyHeroTemplate3, imageUrl, id: id ?? data.whyBuyHeroTemplate3?.id }); setTimeout(handleHeroBlur, 100); }} />
+                                    <ImageUploader label="Image 3" src={data.whyBuyHeroTemplate3?.imageUrl} fieldKey="heroImg3" imageType="WHY_BUY_HERO" onChange={({ imageUrl, id }) => { updateField("whyBuyHeroTemplate3", { ...data.whyBuyHeroTemplate3, imageUrl, id: id ?? data.whyBuyHeroTemplate3?.id }); }} />
                                 </div>
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 4" src={data.whyBuyHeroTemplate4?.imageUrl} fieldKey="heroImg4" imageType="WHY_BUY_HERO" onChange={({ imageUrl, id }) => { updateField("whyBuyHeroTemplate4", { ...data.whyBuyHeroTemplate4, imageUrl, id: id ?? data.whyBuyHeroTemplate4?.id }); setTimeout(handleHeroBlur, 100); }} />
+                                    <ImageUploader label="Image 4" src={data.whyBuyHeroTemplate4?.imageUrl} fieldKey="heroImg4" imageType="WHY_BUY_HERO" onChange={({ imageUrl, id }) => { updateField("whyBuyHeroTemplate4", { ...data.whyBuyHeroTemplate4, imageUrl, id: id ?? data.whyBuyHeroTemplate4?.id }); }} />
                                 </div>
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 5" src={data.whyBuyHeroTemplate5?.imageUrl} fieldKey="heroImg5" imageType="WHY_BUY_HERO" onChange={({ imageUrl, id }) => { updateField("whyBuyHeroTemplate5", { ...data.whyBuyHeroTemplate5, imageUrl, id: id ?? data.whyBuyHeroTemplate5?.id }); setTimeout(handleHeroBlur, 100); }} />
+                                    <ImageUploader label="Image 5" src={data.whyBuyHeroTemplate5?.imageUrl} fieldKey="heroImg5" imageType="WHY_BUY_HERO" onChange={({ imageUrl, id }) => { updateField("whyBuyHeroTemplate5", { ...data.whyBuyHeroTemplate5, imageUrl, id: id ?? data.whyBuyHeroTemplate5?.id }); }} />
                                 </div>
                             </div>
                         </div>
@@ -359,32 +328,30 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                                 label="Story Title"
                                 value={data.whyBuyStoryTitle}
                                 onChange={(e) => updateField("whyBuyStoryTitle", e.target.value)}
-                                onBlur={handleStoryBlur}
                             />
                             <RichTextEditor
                                 label="Story Description"
                                 value={data.whyBuyStoryDescription}
                                 onChange={(v) => updateField("whyBuyStoryDescription", v)}
-                                onBlur={handleStoryBlur}
                             />
                         </div>
                         <div className="space-y-4">
                             <p className="text-sm font-semibold text-primary">Story Images</p>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="h-40 relative col-span-2">
-                                    <ImageUploader label="Image 1" src={data.whyBuyStoryTemplate1?.imageUrl} fieldKey="storyImg1" imageType="CONSULTANT_STORY" onChange={({ imageUrl, id }) => { updateField("whyBuyStoryTemplate1", { ...data.whyBuyStoryTemplate1, imageUrl, id: id ?? data.whyBuyStoryTemplate1?.id }); setTimeout(handleStoryBlur, 100); }} />
+                                    <ImageUploader label="Image 1" src={data.whyBuyStoryTemplate1?.imageUrl} fieldKey="storyImg1" imageType="CONSULTANT_STORY" onChange={({ imageUrl, id }) => { updateField("whyBuyStoryTemplate1", { ...data.whyBuyStoryTemplate1, imageUrl, id: id ?? data.whyBuyStoryTemplate1?.id }); }} />
                                 </div>
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 2" src={data.whyBuyStoryTemplate2?.imageUrl} fieldKey="storyImg2" imageType="CONSULTANT_STORY" onChange={({ imageUrl, id }) => { updateField("whyBuyStoryTemplate2", { ...data.whyBuyStoryTemplate2, imageUrl, id: id ?? data.whyBuyStoryTemplate2?.id }); setTimeout(handleStoryBlur, 100); }} />
+                                    <ImageUploader label="Image 2" src={data.whyBuyStoryTemplate2?.imageUrl} fieldKey="storyImg2" imageType="CONSULTANT_STORY" onChange={({ imageUrl, id }) => { updateField("whyBuyStoryTemplate2", { ...data.whyBuyStoryTemplate2, imageUrl, id: id ?? data.whyBuyStoryTemplate2?.id }); }} />
                                 </div>
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 3" src={data.whyBuyStoryTemplate3?.imageUrl} fieldKey="storyImg3" imageType="CONSULTANT_STORY" onChange={({ imageUrl, id }) => { updateField("whyBuyStoryTemplate3", { ...data.whyBuyStoryTemplate3, imageUrl, id: id ?? data.whyBuyStoryTemplate3?.id }); setTimeout(handleStoryBlur, 100); }} />
+                                    <ImageUploader label="Image 3" src={data.whyBuyStoryTemplate3?.imageUrl} fieldKey="storyImg3" imageType="CONSULTANT_STORY" onChange={({ imageUrl, id }) => { updateField("whyBuyStoryTemplate3", { ...data.whyBuyStoryTemplate3, imageUrl, id: id ?? data.whyBuyStoryTemplate3?.id }); }} />
                                 </div>
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 4" src={data.whyBuyStoryTemplate4?.imageUrl} fieldKey="storyImg4" imageType="CONSULTANT_STORY" onChange={({ imageUrl, id }) => { updateField("whyBuyStoryTemplate4", { ...data.whyBuyStoryTemplate4, imageUrl, id: id ?? data.whyBuyStoryTemplate4?.id }); setTimeout(handleStoryBlur, 100); }} />
+                                    <ImageUploader label="Image 4" src={data.whyBuyStoryTemplate4?.imageUrl} fieldKey="storyImg4" imageType="CONSULTANT_STORY" onChange={({ imageUrl, id }) => { updateField("whyBuyStoryTemplate4", { ...data.whyBuyStoryTemplate4, imageUrl, id: id ?? data.whyBuyStoryTemplate4?.id }); }} />
                                 </div>
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 5" src={data.whyBuyStoryTemplate5?.imageUrl} fieldKey="storyImg5" imageType="CONSULTANT_STORY" onChange={({ imageUrl, id }) => { updateField("whyBuyStoryTemplate5", { ...data.whyBuyStoryTemplate5, imageUrl, id: id ?? data.whyBuyStoryTemplate5?.id }); setTimeout(handleStoryBlur, 100); }} />
+                                    <ImageUploader label="Image 5" src={data.whyBuyStoryTemplate5?.imageUrl} fieldKey="storyImg5" imageType="CONSULTANT_STORY" onChange={({ imageUrl, id }) => { updateField("whyBuyStoryTemplate5", { ...data.whyBuyStoryTemplate5, imageUrl, id: id ?? data.whyBuyStoryTemplate5?.id }); }} />
                                 </div>
                             </div>
                         </div>
@@ -401,32 +368,30 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                                 label="Selection Title"
                                 value={data.whyBuyVehicleSelectionTitle}
                                 onChange={(e) => updateField("whyBuyVehicleSelectionTitle", e.target.value)}
-                                onBlur={handleVehicleSelectionBlur}
                             />
                             <RichTextEditor
                                 label="Selection Description"
                                 value={data.whyBuyVehicleSelectionDescription}
                                 onChange={(v) => updateField("whyBuyVehicleSelectionDescription", v)}
-                                onBlur={handleVehicleSelectionBlur}
                             />
                         </div>
                         <div className="space-y-4">
                             <p className="text-sm font-semibold text-primary">Selection Images</p>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 1" src={data.whyBuyVehicleSelectionTemplate1?.imageUrl} fieldKey="selImg1" imageType="VEHICLE_SELECTION" onChange={({ imageUrl, id }) => { updateField("whyBuyVehicleSelectionTemplate1", { ...data.whyBuyVehicleSelectionTemplate1, imageUrl, id: id ?? data.whyBuyVehicleSelectionTemplate1?.id }); setTimeout(handleVehicleSelectionBlur, 100); }} />
+                                    <ImageUploader label="Image 1" src={data.whyBuyVehicleSelectionTemplate1?.imageUrl} fieldKey="selImg1" imageType="VEHICLE_SELECTION" onChange={({ imageUrl, id }) => { updateField("whyBuyVehicleSelectionTemplate1", { ...data.whyBuyVehicleSelectionTemplate1, imageUrl, id: id ?? data.whyBuyVehicleSelectionTemplate1?.id }); }} />
                                 </div>
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 2" src={data.whyBuyVehicleSelectionTemplate2?.imageUrl} fieldKey="selImg2" imageType="VEHICLE_SELECTION" onChange={({ imageUrl, id }) => { updateField("whyBuyVehicleSelectionTemplate2", { ...data.whyBuyVehicleSelectionTemplate2, imageUrl, id: id ?? data.whyBuyVehicleSelectionTemplate2?.id }); setTimeout(handleVehicleSelectionBlur, 100); }} />
+                                    <ImageUploader label="Image 2" src={data.whyBuyVehicleSelectionTemplate2?.imageUrl} fieldKey="selImg2" imageType="VEHICLE_SELECTION" onChange={({ imageUrl, id }) => { updateField("whyBuyVehicleSelectionTemplate2", { ...data.whyBuyVehicleSelectionTemplate2, imageUrl, id: id ?? data.whyBuyVehicleSelectionTemplate2?.id }); }} />
                                 </div>
                                 <div className="h-40 relative col-span-2">
-                                    <ImageUploader label="Image 3" src={data.whyBuyVehicleSelectionTemplate3?.imageUrl} fieldKey="selImg3" imageType="VEHICLE_SELECTION" onChange={({ imageUrl, id }) => { updateField("whyBuyVehicleSelectionTemplate3", { ...data.whyBuyVehicleSelectionTemplate3, imageUrl, id: id ?? data.whyBuyVehicleSelectionTemplate3?.id }); setTimeout(handleVehicleSelectionBlur, 100); }} />
+                                    <ImageUploader label="Image 3" src={data.whyBuyVehicleSelectionTemplate3?.imageUrl} fieldKey="selImg3" imageType="VEHICLE_SELECTION" onChange={({ imageUrl, id }) => { updateField("whyBuyVehicleSelectionTemplate3", { ...data.whyBuyVehicleSelectionTemplate3, imageUrl, id: id ?? data.whyBuyVehicleSelectionTemplate3?.id }); }} />
                                 </div>
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 4" src={data.whyBuyVehicleSelectionTemplate4?.imageUrl} fieldKey="selImg4" imageType="VEHICLE_SELECTION" onChange={({ imageUrl, id }) => { updateField("whyBuyVehicleSelectionTemplate4", { ...data.whyBuyVehicleSelectionTemplate4, imageUrl, id: id ?? data.whyBuyVehicleSelectionTemplate4?.id }); setTimeout(handleVehicleSelectionBlur, 100); }} />
+                                    <ImageUploader label="Image 4" src={data.whyBuyVehicleSelectionTemplate4?.imageUrl} fieldKey="selImg4" imageType="VEHICLE_SELECTION" onChange={({ imageUrl, id }) => { updateField("whyBuyVehicleSelectionTemplate4", { ...data.whyBuyVehicleSelectionTemplate4, imageUrl, id: id ?? data.whyBuyVehicleSelectionTemplate4?.id }); }} />
                                 </div>
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 5" src={data.whyBuyVehicleSelectionTemplate5?.imageUrl} fieldKey="selImg5" imageType="VEHICLE_SELECTION" onChange={({ imageUrl, id }) => { updateField("whyBuyVehicleSelectionTemplate5", { ...data.whyBuyVehicleSelectionTemplate5, imageUrl, id: id ?? data.whyBuyVehicleSelectionTemplate5?.id }); setTimeout(handleVehicleSelectionBlur, 100); }} />
+                                    <ImageUploader label="Image 5" src={data.whyBuyVehicleSelectionTemplate5?.imageUrl} fieldKey="selImg5" imageType="VEHICLE_SELECTION" onChange={({ imageUrl, id }) => { updateField("whyBuyVehicleSelectionTemplate5", { ...data.whyBuyVehicleSelectionTemplate5, imageUrl, id: id ?? data.whyBuyVehicleSelectionTemplate5?.id }); }} />
                                 </div>
                             </div>
                         </div>
@@ -443,29 +408,27 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                                 label="Process Title"
                                 value={data.whyBuyProcessTitle}
                                 onChange={(e) => updateField("whyBuyProcessTitle", e.target.value)}
-                                onBlur={handleProcessBlur}
                             />
                             <RichTextEditor
                                 label="Process Description"
                                 value={data.whyBuyProcessDescription}
                                 onChange={(v) => updateField("whyBuyProcessDescription", v)}
-                                onBlur={handleProcessBlur}
                             />
                         </div>
                         <div className="space-y-4">
                             <p className="text-sm font-semibold text-primary">Process Images</p>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 1" src={data.whyBuyProcessTemplate1?.imageUrl} fieldKey="procImg1" imageType="PROCESS" onChange={({ imageUrl, id }) => { updateField("whyBuyProcessTemplate1", { ...data.whyBuyProcessTemplate1, imageUrl, id: id ?? data.whyBuyProcessTemplate1?.id }); setTimeout(handleProcessBlur, 100); }} />
+                                    <ImageUploader label="Image 1" src={data.whyBuyProcessTemplate1?.imageUrl} fieldKey="procImg1" imageType="PROCESS" onChange={({ imageUrl, id }) => { updateField("whyBuyProcessTemplate1", { ...data.whyBuyProcessTemplate1, imageUrl, id: id ?? data.whyBuyProcessTemplate1?.id }); }} />
                                 </div>
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 2" src={data.whyBuyProcessTemplate2?.imageUrl} fieldKey="procImg2" imageType="PROCESS" onChange={({ imageUrl, id }) => { updateField("whyBuyProcessTemplate2", { ...data.whyBuyProcessTemplate2, imageUrl, id: id ?? data.whyBuyProcessTemplate2?.id }); setTimeout(handleProcessBlur, 100); }} />
+                                    <ImageUploader label="Image 2" src={data.whyBuyProcessTemplate2?.imageUrl} fieldKey="procImg2" imageType="PROCESS" onChange={({ imageUrl, id }) => { updateField("whyBuyProcessTemplate2", { ...data.whyBuyProcessTemplate2, imageUrl, id: id ?? data.whyBuyProcessTemplate2?.id }); }} />
                                 </div>
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 3" src={data.whyBuyProcessTemplate3?.imageUrl} fieldKey="procImg3" imageType="PROCESS" onChange={({ imageUrl, id }) => { updateField("whyBuyProcessTemplate3", { ...data.whyBuyProcessTemplate3, imageUrl, id: id ?? data.whyBuyProcessTemplate3?.id }); setTimeout(handleProcessBlur, 100); }} />
+                                    <ImageUploader label="Image 3" src={data.whyBuyProcessTemplate3?.imageUrl} fieldKey="procImg3" imageType="PROCESS" onChange={({ imageUrl, id }) => { updateField("whyBuyProcessTemplate3", { ...data.whyBuyProcessTemplate3, imageUrl, id: id ?? data.whyBuyProcessTemplate3?.id }); }} />
                                 </div>
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 4" src={data.whyBuyProcessTemplate4?.imageUrl} fieldKey="procImg4" imageType="PROCESS" onChange={({ imageUrl, id }) => { updateField("whyBuyProcessTemplate4", { ...data.whyBuyProcessTemplate4, imageUrl, id: id ?? data.whyBuyProcessTemplate4?.id }); setTimeout(handleProcessBlur, 100); }} />
+                                    <ImageUploader label="Image 4" src={data.whyBuyProcessTemplate4?.imageUrl} fieldKey="procImg4" imageType="PROCESS" onChange={({ imageUrl, id }) => { updateField("whyBuyProcessTemplate4", { ...data.whyBuyProcessTemplate4, imageUrl, id: id ?? data.whyBuyProcessTemplate4?.id }); }} />
                                 </div>
                             </div>
                         </div>
@@ -478,7 +441,6 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                                     <EditorInput
                                         value={step.title}
                                         onChange={(e) => updateArrayItem("processSteps", i, "title", e.target.value)}
-                                        onBlur={handleProcessBlur}
                                     />
                                 </div>
                                 <div>
@@ -486,7 +448,6 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                                     <EditorInput
                                         value={step.description}
                                         onChange={(e) => updateArrayItem("processSteps", i, "description", e.target.value)}
-                                        onBlur={handleProcessBlur}
                                     />
                                 </div>
                                 <div className="flex flex-col gap-2 relative mt-4">
@@ -498,7 +459,6 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                                         value={SVG_OPTIONS.find(opt => opt.value === step.icon) || null}
                                         onChange={(selectedOption) => {
                                             updateArrayItem("processSteps", i, "icon", selectedOption.value);
-                                            handleProcessBlur();
                                         }}
                                     />
                                 </div>
@@ -517,13 +477,11 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                                 label="Inspection Title"
                                 value={data.whyBuyInspectionTitle}
                                 onChange={(e) => updateField("whyBuyInspectionTitle", e.target.value)}
-                                onBlur={handleInspectionBlur}
                             />
                             <RichTextEditor
                                 label="Inspection Description"
                                 value={data.whyBuyInspectionDescription}
                                 onChange={(v) => updateField("whyBuyInspectionDescription", v)}
-                                onBlur={handleInspectionBlur}
                             />
                             <div className="space-y-2 mt-4">
                                 <label className="text-sm font-medium text-primary">Inspection Points</label>
@@ -536,7 +494,6 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                                             newArr[i] = e.target.value;
                                             updateField("inspectionPoints", newArr);
                                         }}
-                                        onBlur={handleInspectionBlur}
                                     />
                                 ))}
                             </div>
@@ -545,16 +502,16 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                             <p className="text-sm font-semibold text-primary">Inspection Images</p>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 1" src={data.whyBuyInspectionTemplate1?.imageUrl} fieldKey="inspImg1" imageType="INSPECTION_PROCESS" onChange={({ imageUrl, id }) => { updateField("whyBuyInspectionTemplate1", { ...data.whyBuyInspectionTemplate1, imageUrl, id: id ?? data.whyBuyInspectionTemplate1?.id }); setTimeout(handleInspectionBlur, 100); }} />
+                                    <ImageUploader label="Image 1" src={data.whyBuyInspectionTemplate1?.imageUrl} fieldKey="inspImg1" imageType="INSPECTION_PROCESS" onChange={({ imageUrl, id }) => { updateField("whyBuyInspectionTemplate1", { ...data.whyBuyInspectionTemplate1, imageUrl, id: id ?? data.whyBuyInspectionTemplate1?.id }); }} />
                                 </div>
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 2" src={data.whyBuyInspectionTemplate2?.imageUrl} fieldKey="inspImg2" imageType="INSPECTION_PROCESS" onChange={({ imageUrl, id }) => { updateField("whyBuyInspectionTemplate2", { ...data.whyBuyInspectionTemplate2, imageUrl, id: id ?? data.whyBuyInspectionTemplate2?.id }); setTimeout(handleInspectionBlur, 100); }} />
+                                    <ImageUploader label="Image 2" src={data.whyBuyInspectionTemplate2?.imageUrl} fieldKey="inspImg2" imageType="INSPECTION_PROCESS" onChange={({ imageUrl, id }) => { updateField("whyBuyInspectionTemplate2", { ...data.whyBuyInspectionTemplate2, imageUrl, id: id ?? data.whyBuyInspectionTemplate2?.id }); }} />
                                 </div>
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 3" src={data.whyBuyInspectionTemplate3?.imageUrl} fieldKey="inspImg3" imageType="INSPECTION_PROCESS" onChange={({ imageUrl, id }) => { updateField("whyBuyInspectionTemplate3", { ...data.whyBuyInspectionTemplate3, imageUrl, id: id ?? data.whyBuyInspectionTemplate3?.id }); setTimeout(handleInspectionBlur, 100); }} />
+                                    <ImageUploader label="Image 3" src={data.whyBuyInspectionTemplate3?.imageUrl} fieldKey="inspImg3" imageType="INSPECTION_PROCESS" onChange={({ imageUrl, id }) => { updateField("whyBuyInspectionTemplate3", { ...data.whyBuyInspectionTemplate3, imageUrl, id: id ?? data.whyBuyInspectionTemplate3?.id }); }} />
                                 </div>
                                 <div className="h-40 relative">
-                                    <ImageUploader label="Image 4" src={data.whyBuyInspectionTemplate4?.imageUrl} fieldKey="inspImg4" imageType="INSPECTION_PROCESS" onChange={({ imageUrl, id }) => { updateField("whyBuyInspectionTemplate4", { ...data.whyBuyInspectionTemplate4, imageUrl, id: id ?? data.whyBuyInspectionTemplate4?.id }); setTimeout(handleInspectionBlur, 100); }} />
+                                    <ImageUploader label="Image 4" src={data.whyBuyInspectionTemplate4?.imageUrl} fieldKey="inspImg4" imageType="INSPECTION_PROCESS" onChange={({ imageUrl, id }) => { updateField("whyBuyInspectionTemplate4", { ...data.whyBuyInspectionTemplate4, imageUrl, id: id ?? data.whyBuyInspectionTemplate4?.id }); }} />
                                 </div>
                             </div>
                         </div>
@@ -571,13 +528,11 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                                 label="Commitment Title"
                                 value={data.whyBuyCustomerCommitmentTitle}
                                 onChange={(e) => updateField("whyBuyCustomerCommitmentTitle", e.target.value)}
-                                onBlur={handleCustomerCommitmentBlur}
                             />
                             <RichTextEditor
                                 label="Commitment Text"
                                 value={data.whyBuyCustomerCommitmentDescription}
                                 onChange={(v) => updateField("whyBuyCustomerCommitmentDescription", v)}
-                                onBlur={handleCustomerCommitmentBlur}
                             />
                         </div>
                     </div>
@@ -591,21 +546,20 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                         label="Gallery Title"
                         value={data.whyBuyGalleryTitle}
                         onChange={(e) => updateField("whyBuyGalleryTitle", e.target.value)}
-                        onBlur={handleGalleryBlur}
                     />
                     <br />
                     <div className="grid grid-cols-2 gap-4">
                         <div className="h-40 relative">
-                            <ImageUploader label="Gallery Image 1" src={data.whyBuyGalleryTemplate1?.imageUrl} fieldKey="galImg1" imageType="GALLERY" onChange={({ imageUrl, id }) => { updateField("whyBuyGalleryTemplate1", { ...data.whyBuyGalleryTemplate1, imageUrl, id: id ?? data.whyBuyGalleryTemplate1?.id }); setTimeout(handleGalleryBlur, 100); }} />
+                            <ImageUploader label="Gallery Image 1" src={data.whyBuyGalleryTemplate1?.imageUrl} fieldKey="galImg1" imageType="GALLERY" onChange={({ imageUrl, id }) => { updateField("whyBuyGalleryTemplate1", { ...data.whyBuyGalleryTemplate1, imageUrl, id: id ?? data.whyBuyGalleryTemplate1?.id }); }} />
                         </div>
                         <div className="h-40 relative">
-                            <ImageUploader label="Gallery Image 2" src={data.whyBuyGalleryTemplate2?.imageUrl} fieldKey="galImg2" imageType="GALLERY" onChange={({ imageUrl, id }) => { updateField("whyBuyGalleryTemplate2", { ...data.whyBuyGalleryTemplate2, imageUrl, id: id ?? data.whyBuyGalleryTemplate2?.id }); setTimeout(handleGalleryBlur, 100); }} />
+                            <ImageUploader label="Gallery Image 2" src={data.whyBuyGalleryTemplate2?.imageUrl} fieldKey="galImg2" imageType="GALLERY" onChange={({ imageUrl, id }) => { updateField("whyBuyGalleryTemplate2", { ...data.whyBuyGalleryTemplate2, imageUrl, id: id ?? data.whyBuyGalleryTemplate2?.id }); }} />
                         </div>
                         <div className="h-40 relative">
-                            <ImageUploader label="Gallery Image 3" src={data.whyBuyGalleryTemplate3?.imageUrl} fieldKey="galImg3" imageType="GALLERY" onChange={({ imageUrl, id }) => { updateField("whyBuyGalleryTemplate3", { ...data.whyBuyGalleryTemplate3, imageUrl, id: id ?? data.whyBuyGalleryTemplate3?.id }); setTimeout(handleGalleryBlur, 100); }} />
+                            <ImageUploader label="Gallery Image 3" src={data.whyBuyGalleryTemplate3?.imageUrl} fieldKey="galImg3" imageType="GALLERY" onChange={({ imageUrl, id }) => { updateField("whyBuyGalleryTemplate3", { ...data.whyBuyGalleryTemplate3, imageUrl, id: id ?? data.whyBuyGalleryTemplate3?.id }); }} />
                         </div>
                         <div className="h-40 relative">
-                            <ImageUploader label="Gallery Image 4" src={data.whyBuyGalleryTemplate4?.imageUrl} fieldKey="galImg4" imageType="GALLERY" onChange={({ imageUrl, id }) => { updateField("whyBuyGalleryTemplate4", { ...data.whyBuyGalleryTemplate4, imageUrl, id: id ?? data.whyBuyGalleryTemplate4?.id }); setTimeout(handleGalleryBlur, 100); }} />
+                            <ImageUploader label="Gallery Image 4" src={data.whyBuyGalleryTemplate4?.imageUrl} fieldKey="galImg4" imageType="GALLERY" onChange={({ imageUrl, id }) => { updateField("whyBuyGalleryTemplate4", { ...data.whyBuyGalleryTemplate4, imageUrl, id: id ?? data.whyBuyGalleryTemplate4?.id }); }} />
                         </div>
                     </div>
                 </div>
@@ -618,7 +572,6 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                         label="Section Title"
                         value={data.whyBuyTestimonialTitle}
                         onChange={(e) => updateField("whyBuyTestimonialTitle", e.target.value)}
-                        onBlur={handleTestimonialBlur}
                     />
                     <p className="text-third text-sm mb-4 mt-2">
                         Select which customer reviews to feature on your storefront.
@@ -654,6 +607,16 @@ export default function WhyBuyPro3({ data: rawData, isEditing, onUpdate }) {
                             );
                         })}
                     </div>
+                </div>
+
+                <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
+                    <Button 
+                        onClick={handleSaveAndNext} 
+                        disabled={isSaving}
+                        variant="ghost"
+                    >
+                        {isSaving ? "Saving..." : "Save"}
+                    </Button>
                 </div>
             </div>
         );

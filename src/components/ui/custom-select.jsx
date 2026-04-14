@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useState, useRef, useMemo, useEffect } from "react";
@@ -31,6 +32,12 @@ export default function CustomSelect({
     [value, options]
   );
 
+  useEffect(() => {
+    if (!open) {
+      setSearch(selectedOption ? selectedOption.label : "");
+    }
+  }, [selectedOption, open]);
+
   // 🔹 Close dropdown on outside click
   useEffect(() => {
     const handleClick = (e) => {
@@ -43,9 +50,12 @@ export default function CustomSelect({
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const filteredOptions = options.filter((opt) =>
-    opt.label.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredOptions =
+    selectedOption && search === selectedOption.label
+      ? options
+      : options.filter((opt) =>
+          opt.label.toLowerCase().includes(search.toLowerCase())
+        );
 
   return (
     <div className="relative w-full" ref={wrapperRef}>

@@ -2,12 +2,13 @@
 
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import EditorInput from "../atoms/EditorInput";
 import { ImageUploader } from "../atoms/ImageUploader ";
 import RichTextEditor from "../atoms/RichTextEditor";
 import { Plus, Trash } from "lucide-react";
 import Button from "@/components/ui/button";
+import GlobalLoader from "@/components/ui/GlobalLoader";
 import Select from "react-select";
 import {
   setAboutHero,
@@ -16,6 +17,7 @@ import {
   setState,
   setAboutServices,
 } from "@/services/theme.service";
+import { ABOUT_PRO_1 } from "@/core/engine/schemas/about/pro/about_pro_1";
 
 const SVG_OPTIONS = [
   {
@@ -82,7 +84,18 @@ const formatOptionLabel = ({ value, label }) => (
   </div>
 );
 
-function AboutPro1({ data, isEditing, onUpdate }) {
+const DEFAULT_DATA = ABOUT_PRO_1[0].data;
+
+function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
+  const [isSaving, setIsSaving] = useState(false);
+  const data = {
+    ...DEFAULT_DATA,
+    ...Object.fromEntries(
+      Object.entries(rawData || {}).filter(
+        ([, v]) => v !== undefined && v !== null,
+      ),
+    ),
+  };
   const activeRef = useRef(0);
   const intervalRef = useRef(null);
 
@@ -99,9 +112,7 @@ function AboutPro1({ data, isEditing, onUpdate }) {
     return () => clearInterval(intervalRef.current);
   }, []);
 
-
-
-  if (!data) return null;
+  if (!rawData) return null;
 
   const update = (k, v) => onUpdate({ ...data, [k]: v });
 
@@ -118,85 +129,63 @@ function AboutPro1({ data, isEditing, onUpdate }) {
     update(k, copy);
   };
 
-  /* ================== API HANDLERS ================== */
-  const handleHeroBlur = async () => {
+  const handleSaveAndNext = async () => {
+    setIsSaving(true);
     try {
-      const formData = new FormData();
-      formData.append("heroTitle", data.heroTitle || "");
-      formData.append("heroDescription", data.heroDescription || "");
+      const heroData = new FormData();
+      heroData.append("heroTitle", data.heroTitle || "");
+      heroData.append("heroDescription", data.heroDescription || "");
       if (data.heroTemplate1?.id) {
-        formData.append("heroTemplateId1", data.heroTemplate1.id);
+        heroData.append("heroTemplateId1", data.heroTemplate1.id);
       }
-      const res = await setAboutHero(formData);
-      if (res?.data?.success) console.log("Hero updated successfully");
-    } catch (error) {
-      console.error("Failed to update Hero section:", error);
-    }
-  };
 
-  const handleMissionBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("missionTitle", data.missionTitle || "");
-      formData.append("missionDescription", data.missionDesc || "");
+      const missionData = new FormData();
+      missionData.append("missionTitle", data.missionTitle || "");
+      missionData.append("missionDescription", data.missionDesc || "");
       if (data.missionTemplate1?.id) {
-        formData.append("missionTemplateId1", data.missionTemplate1.id);
+        missionData.append("missionTemplateId1", data.missionTemplate1.id);
       }
-      const res = await setAboutMission(formData);
-      if (res?.data?.success) console.log("Mission updated successfully");
-    } catch (error) {
-      console.error("Failed to update Mission section:", error);
-    }
-  };
 
-  const handleVisionBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("visionTitle", data.visionTitle || "");
-      formData.append("visionDescription", data.visionDesc || "");
+      const visionData = new FormData();
+      visionData.append("visionTitle", data.visionTitle || "");
+      visionData.append("visionDescription", data.visionDesc || "");
       if (data.visionTemplate1?.id) {
-        formData.append("visionTemplateId1", data.visionTemplate1.id);
+        visionData.append("visionTemplateId1", data.visionTemplate1.id);
       }
-      const res = await setAboutVision(formData);
-      if (res?.data?.success) console.log("Vision updated successfully");
-    } catch (error) {
-      console.error("Failed to update Vision section:", error);
-    }
-  };
 
-  const handleStatsBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("aboutUsDescription", data.aboutUsDescription || "");
+      const statsData = new FormData();
+      statsData.append("aboutUsDescription", data.aboutUsDescription || "");
       if (data.stats && Array.isArray(data.stats)) {
         data.stats.forEach((stat, i) => {
-          formData.append(`stats[${i}].number`, stat.number || "");
-          formData.append(`stats[${i}].label`, stat.label || "");
+          statsData.append(`stats[${i}].number`, stat.number || "");
+          statsData.append(`stats[${i}].label`, stat.label || "");
         });
       }
-      const res = await setState(formData);
-      if (res?.data?.success) console.log("Stats updated successfully");
-    } catch (error) {
-      console.error("Failed to update Stats section:", error);
-    }
-  };
 
-  const handleServicesBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("serviceTitle", data.servicesTitle || "");
-      formData.append("serviceDescription", data.servicesDesc || "");
+      const servicesData = new FormData();
+      servicesData.append("serviceTitle", data.servicesTitle || "");
+      servicesData.append("serviceDescription", data.servicesDesc || "");
       if (data.services && Array.isArray(data.services)) {
         data.services.forEach((service, i) => {
-          formData.append(`services[${i}].title`, service.title || "");
-          formData.append(`services[${i}].desc`, service.desc || "");
-          formData.append(`services[${i}].icon`, service.icon || "");
+          servicesData.append(`services[${i}].title`, service.title || "");
+          servicesData.append(`services[${i}].desc`, service.desc || "");
+          servicesData.append(`services[${i}].icon`, service.icon || "");
         });
       }
-      const res = await setAboutServices(formData);
-      if (res?.data?.success) console.log("Services updated successfully");
+
+      await Promise.all([
+        setAboutHero(heroData),
+        setAboutMission(missionData),
+        setAboutVision(visionData),
+        setState(statsData),
+        setAboutServices(servicesData),
+      ]);
+
+      if (onNextTab) onNextTab();
     } catch (error) {
-      console.error("Failed to update Services section:", error);
+      console.error("Failed to update sections:", error);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -204,6 +193,7 @@ function AboutPro1({ data, isEditing, onUpdate }) {
   if (isEditing) {
     return (
       <div className=" p-8 rounded-xl border border-third/30 w-full max-w-[1480px] mx-auto space-y-10">
+        <GlobalLoader isLoading={isSaving} />
         {/* HERO EDITOR */}
         <h3 className="text-primary text-xl font-bold">Hero Section</h3>
         <div className="grid grid-cols-2 gap-6">
@@ -212,14 +202,12 @@ function AboutPro1({ data, isEditing, onUpdate }) {
               bold
               value={data.heroTitle}
               onChange={(e) => update("heroTitle", e.target.value)}
-              onBlur={handleHeroBlur}
               placeholder="Hero Title"
             />
             <RichTextEditor
               label="Hero Description"
               value={data.heroDescription}
               onChange={(v) => update("heroDescription", v)}
-              onBlur={handleHeroBlur}
             />
           </div>
           <div className="h-52 relative">
@@ -233,8 +221,6 @@ function AboutPro1({ data, isEditing, onUpdate }) {
                   imageUrl,
                   id: id ?? data.heroTemplate1?.id,
                 });
-                // Auto-save when image is selected
-                setTimeout(handleHeroBlur, 100);
               }}
             />
           </div>
@@ -249,14 +235,12 @@ function AboutPro1({ data, isEditing, onUpdate }) {
               bold
               value={data.missionTitle}
               onChange={(e) => update("missionTitle", e.target.value)}
-              onBlur={handleMissionBlur}
               placeholder="Mission Title"
             />
             <RichTextEditor
               label="Mission Description"
               value={data.missionDesc}
               onChange={(v) => update("missionDesc", v)}
-              onBlur={handleMissionBlur}
             />
           </div>
           <div className="space-y-4">
@@ -272,7 +256,6 @@ function AboutPro1({ data, isEditing, onUpdate }) {
                     imageUrl,
                     id: id ?? data.missionTemplate1?.id,
                   });
-                  setTimeout(handleMissionBlur, 100);
                 }}
               />
             </div>
@@ -288,14 +271,12 @@ function AboutPro1({ data, isEditing, onUpdate }) {
               bold
               value={data.visionTitle}
               onChange={(e) => update("visionTitle", e.target.value)}
-              onBlur={handleVisionBlur}
               placeholder="Vision Title"
             />
             <RichTextEditor
               label="Vision Description"
               value={data.visionDesc}
               onChange={(v) => update("visionDesc", v)}
-              onBlur={handleVisionBlur}
             />
           </div>
           <div className="space-y-4">
@@ -311,7 +292,6 @@ function AboutPro1({ data, isEditing, onUpdate }) {
                     imageUrl,
                     id: id ?? data.visionTemplate1?.id,
                   });
-                  setTimeout(handleVisionBlur, 100);
                 }}
               />
             </div>
@@ -325,7 +305,6 @@ function AboutPro1({ data, isEditing, onUpdate }) {
           label="About Us Description"
           value={data.aboutUsDescription}
           onChange={(v) => update("aboutUsDescription", v)}
-          onBlur={handleStatsBlur}
         />
         <div className="p-4 bg-primary/5 rounded-lg border border-third/10">
           <h4 className="text-primary font-semibold mb-4">Stats Numbers</h4>
@@ -338,7 +317,6 @@ function AboutPro1({ data, isEditing, onUpdate }) {
                   onChange={(e) =>
                     updateArr("stats", i, "number", e.target.value)
                   }
-                  onBlur={handleStatsBlur}
                   placeholder="Number"
                 />
                 <EditorInput
@@ -346,7 +324,6 @@ function AboutPro1({ data, isEditing, onUpdate }) {
                   onChange={(e) =>
                     updateArr("stats", i, "label", e.target.value)
                   }
-                  onBlur={handleStatsBlur}
                   placeholder="Label"
                 />
               </div>
@@ -364,14 +341,12 @@ function AboutPro1({ data, isEditing, onUpdate }) {
             bold
             value={data.servicesTitle}
             onChange={(e) => update("servicesTitle", e.target.value)}
-            onBlur={handleServicesBlur}
             placeholder="Services Title"
           />
           <RichTextEditor
             label="Services Description"
             value={data.servicesDesc}
             onChange={(v) => update("servicesDesc", v)}
-            onBlur={handleServicesBlur}
           />
         </div>
         <div className="grid md:grid-cols-2 gap-4 mt-4">
@@ -394,7 +369,6 @@ function AboutPro1({ data, isEditing, onUpdate }) {
                   }
                   onChange={(selectedOption) => {
                     updateArr("services", i, "icon", selectedOption.value);
-                    handleServicesBlur();
                   }}
                 />
               </div>
@@ -410,7 +384,6 @@ function AboutPro1({ data, isEditing, onUpdate }) {
                   onChange={(e) =>
                     updateArr("services", i, "title", e.target.value)
                   }
-                  onBlur={handleServicesBlur}
                   placeholder="Service Title"
                 />
               </div>
@@ -426,24 +399,22 @@ function AboutPro1({ data, isEditing, onUpdate }) {
                   onChange={(e) =>
                     updateArr("services", i, "desc", e.target.value)
                   }
-                  onBlur={handleServicesBlur}
                   placeholder="Service Description"
                 />
-              </div>
-
-              {/* Delete */}
-              <div className="mt-3 flex justify-end">
-                <button
-                  onClick={() => removeArr("services", i)}
-                  className="text-red-500 p-2 hover:bg-red-500/10 rounded transition"
-                >
-                  <Trash size={16} />
-                </button>
               </div>
             </div>
           ))}
         </div>
 
+        <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
+          <Button
+            onClick={handleSaveAndNext}
+            disabled={isSaving}
+            variant="ghost"
+          >
+            {isSaving ? "Saving..." : "Save and Next"}
+          </Button>
+        </div>
       </div>
     );
   }
@@ -451,8 +422,6 @@ function AboutPro1({ data, isEditing, onUpdate }) {
   /* ================== LIVE PREVIEW ================== */
   return (
     <>
-     
-
       {/* HERO */}
       <section className="relative w-full min-h-screen overflow-hidden flex  px-4 lg:px-8 py-12">
         {/* BACKGROUND IMAGE */}
@@ -623,7 +592,7 @@ function AboutPro1({ data, isEditing, onUpdate }) {
                   >
                     <div className="flex flex-col gap-6">
                       {typeof service.icon === "string" &&
-                        service.icon.startsWith("<svg") ? (
+                      service.icon.startsWith("<svg") ? (
                         <div
                           className="text-third [&>svg]:w-10 [&>svg]:h-10 transition-colors duration-300"
                           dangerouslySetInnerHTML={{ __html: service.icon }}

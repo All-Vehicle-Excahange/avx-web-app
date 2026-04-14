@@ -17,7 +17,7 @@ import CustomSelect from "@/components/ui/custom-select";
 import Button from "@/components/ui/button";
 
 export default function AnalyticsComponent() {
-  const [range, setRange] = useState("30");
+  const [range, setRange] = useState("7");
   const tier = "PREMIUM"; // BASIC | PRO | PREMIUM
   const isProOrPremium = tier === "PRO" || tier === "PREMIUM";
   const isBasic = tier === "BASIC";
@@ -26,9 +26,28 @@ export default function AnalyticsComponent() {
   const rangeOptions = [
     { label: "Last 7 days", value: "7" },
     { label: "Last 30 days", value: "30" },
-    { label: "Last 60 days", value: "60" },
     { label: "Last 90 days", value: "90" },
   ];
+
+  const performanceData = {
+    "7": {
+      labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      percentages: [48, 60, 72, 56, 80, 88, 64],
+      inquiries: [12, 15, 18, 14, 20, 22, 16],
+    },
+    "30": {
+      labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+      percentages: [60, 85, 75, 92],
+      inquiries: [45, 68, 55, 82],
+    },
+    "90": {
+      labels: ["Jan", "Feb", "Mar"],
+      percentages: [70, 95, 65],
+      inquiries: [120, 180, 110],
+    },
+  };
+
+  const currentPerformance = performanceData[range] || performanceData["7"];
 
   return (
     <section className="space-y-6">
@@ -139,21 +158,21 @@ export default function AnalyticsComponent() {
       </div>
       {isProOrPremium && (
         <div className=" border border-third/20 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
-          <h3 className="font-semibold text-white">Weekly Performance</h3>
+          <h3 className="font-semibold text-white">Performance Overview</h3>
 
-          {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d, i) => (
+          {currentPerformance.labels.map((label, i) => (
             <div key={i} className="flex items-center gap-4">
-              <span className="w-10 text-xs text-third">{d}</span>
+              <span className="w-12 text-xs text-third">{label}</span>
 
               <div className="flex-1 h-3 bg-white/10 rounded-full">
                 <div
-                  className="h-full bg-fourth rounded-full"
-                  style={{ width: `${[48, 60, 72, 56, 80, 88, 64][i]}%` }}
+                  className="h-full bg-fourth rounded-full transition-all duration-500"
+                  style={{ width: `${currentPerformance.percentages[i]}%` }}
                 ></div>
               </div>
 
-              <span className="text-xs text-third">
-                {[12, 15, 18, 14, 20, 22, 16][i]} inquiries
+              <span className="text-xs text-third w-20 text-right">
+                {currentPerformance.inquiries[i]} inquiries
               </span>
             </div>
           ))}

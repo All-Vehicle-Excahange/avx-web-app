@@ -8,6 +8,8 @@ import Select from "react-select";
 import EditorInput from "../atoms/EditorInput";
 import { ImageUploader } from "../atoms/ImageUploader ";
 import RichTextEditor from "../atoms/RichTextEditor";
+import Button from "@/components/ui/button";
+import GlobalLoader from "@/components/ui/GlobalLoader";
 import {
   setAboutHero,
   setAboutMission,
@@ -82,7 +84,8 @@ const formatOptionLabel = ({ value, label }) => (
 
 const DEFAULT_DATA = ABOUT_PRO_3[0].data;
 
-export default function AboutPro3({ data: rawData, isEditing, onUpdate }) {
+export default function AboutPro3({ data: rawData, isEditing, onUpdate, onNextTab }) {
+  const [isSaving, setIsSaving] = useState(false);
   const data = rawData
     ? {
       ...DEFAULT_DATA,
@@ -110,82 +113,67 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate }) {
     update(k, copy);
   };
 
-  const handleHeroBlur = async () => {
+  const handleSaveAndNext = async () => {
+    setIsSaving(true);
     try {
-      const formData = new FormData();
-      formData.append("heroTitle", data.aboutHeroTitle || "");
-      formData.append("heroDescription", data.aboutHeroDescription || "");
+      const heroData = new FormData();
+      heroData.append("heroTitle", data.aboutHeroTitle || "");
+      heroData.append("heroDescription", data.aboutHeroDescription || "");
       if (data.aboutHeroTemplate1?.id)
-        formData.append("heroTemplateId1", data.aboutHeroTemplate1.id);
-      await setAboutHero(formData);
-    } catch (error) {
-      console.error("Error", error);
-    }
-  };
-
-  const handleMissionBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("missionTitle", data.aboutMissionTitle || "");
-      formData.append("missionDescription", data.aboutMissionDescription || "");
+        heroData.append("heroTemplateId1", data.aboutHeroTemplate1.id);
+      
+      const missionData = new FormData();
+      missionData.append("missionTitle", data.aboutMissionTitle || "");
+      missionData.append("missionDescription", data.aboutMissionDescription || "");
       if (data.aboutMissionTemplate1?.id)
-        formData.append("missionTemplateId1", data.aboutMissionTemplate1.id);
-      await setAboutMission(formData);
-    } catch (error) {
-      console.error("Error", error);
-    }
-  };
-
-  const handleVisionBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("visionTitle", data.aboutVisionTitle || "");
-      formData.append("visionDescription", data.aboutVisionDescription || "");
+        missionData.append("missionTemplateId1", data.aboutMissionTemplate1.id);
+      
+      const visionData = new FormData();
+      visionData.append("visionTitle", data.aboutVisionTitle || "");
+      visionData.append("visionDescription", data.aboutVisionDescription || "");
       if (data.aboutVisionTemplate1?.id)
-        formData.append("visionTemplateId1", data.aboutVisionTemplate1.id);
-      await setAboutVision(formData);
-    } catch (error) {
-      console.error("Error", error);
-    }
-  };
-
-  const handleStatsBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("aboutUsDescription", data.aboutStatsDescription || "");
+        visionData.append("visionTemplateId1", data.aboutVisionTemplate1.id);
+      
+      const statsData = new FormData();
+      statsData.append("aboutUsDescription", data.aboutStatsDescription || "");
       if (data.stats && Array.isArray(data.stats)) {
         data.stats.forEach((stat, i) => {
-          formData.append(`stats[${i}].number`, stat.number || "");
-          formData.append(`stats[${i}].label`, stat.label || "");
+          statsData.append(`stats[${i}].number`, stat.number || "");
+          statsData.append(`stats[${i}].label`, stat.label || "");
         });
       }
-      await setState(formData);
-    } catch (error) {
-      console.error("Error", error);
-    }
-  };
-
-  const handleServicesBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("serviceTitle", data.aboutServicesTitle || "");
-      formData.append("serviceDescription", data.aboutServicesDescription || "");
+      
+      const servicesData = new FormData();
+      servicesData.append("serviceTitle", data.aboutServicesTitle || "");
+      servicesData.append("serviceDescription", data.aboutServicesDescription || "");
       if (data.services && Array.isArray(data.services)) {
         data.services.forEach((service, i) => {
-          formData.append(`services[${i}].title`, service.title || "");
-          formData.append(`services[${i}].desc`, service.desc || "");
-          formData.append(`services[${i}].icon`, service.icon || "");
+          servicesData.append(`services[${i}].title`, service.title || "");
+          servicesData.append(`services[${i}].desc`, service.desc || "");
+          servicesData.append(`services[${i}].icon`, service.icon || "");
         });
       }
-      await setAboutServices(formData);
+
+      await Promise.all([
+        setAboutHero(heroData),
+        setAboutMission(missionData),
+        setAboutVision(visionData),
+        setState(statsData),
+        setAboutServices(servicesData),
+      ]);
+
+      if (onNextTab) onNextTab();
     } catch (error) {
-      console.error("Error", error);
+      console.error("Error saving About sections:", error);
+    } finally {
+      setIsSaving(false);
     }
   };
 
   if (isEditing) {
     return (
       <div className="w-full max-w-[1480px] mx-auto space-y-10">
+        <GlobalLoader isLoading={isSaving} />
         {/* HERO EDITOR */}
         <h3 className="text-primary text-xl font-bold">Hero Section</h3>
         <div className="grid grid-cols-2 gap-6">
@@ -194,14 +182,12 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate }) {
               bold
               value={data.aboutHeroTitle}
               onChange={(e) => update("aboutHeroTitle", e.target.value)}
-              onBlur={handleHeroBlur}
               placeholder="Hero Title"
             />
             <RichTextEditor
               label="Hero Description"
               value={data.aboutHeroDescription}
               onChange={(v) => update("aboutHeroDescription", v)}
-              onBlur={handleHeroBlur}
             />
           </div>
           <div className="space-y-4">
@@ -218,7 +204,6 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate }) {
                     imageUrl,
                     id: id ?? data.aboutHeroTemplate1?.id,
                   });
-                  setTimeout(handleHeroBlur, 100);
                 }}
               />
             </div>
@@ -234,14 +219,12 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate }) {
               bold
               value={data.aboutMissionTitle}
               onChange={(e) => update("aboutMissionTitle", e.target.value)}
-              onBlur={handleMissionBlur}
               placeholder="Mission Title"
             />
             <RichTextEditor
               label="Mission Description"
               value={data.aboutMissionDescription}
               onChange={(v) => update("aboutMissionDescription", v)}
-              onBlur={handleMissionBlur}
             />
           </div>
           <div className="space-y-4">
@@ -257,7 +240,6 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate }) {
                     imageUrl,
                     id: id ?? data.aboutMissionTemplate1?.id,
                   });
-                  setTimeout(handleMissionBlur, 100);
                 }}
               />
             </div>
@@ -273,14 +255,12 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate }) {
               bold
               value={data.aboutVisionTitle}
               onChange={(e) => update("aboutVisionTitle", e.target.value)}
-              onBlur={handleVisionBlur}
               placeholder="Vision Title"
             />
             <RichTextEditor
               label="Vision Description"
               value={data.aboutVisionDescription}
               onChange={(v) => update("aboutVisionDescription", v)}
-              onBlur={handleVisionBlur}
             />
           </div>
           <div className="space-y-4">
@@ -296,7 +276,6 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate }) {
                     imageUrl,
                     id: id ?? data.aboutVisionTemplate1?.id,
                   });
-                  setTimeout(handleVisionBlur, 100);
                 }}
               />
             </div>
@@ -310,7 +289,6 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate }) {
           label="Stats Description"
           value={data.aboutStatsDescription}
           onChange={(v) => update("aboutStatsDescription", v)}
-          onBlur={handleStatsBlur}
         />
         <div className="p-4 bg-primary/5 rounded-lg border border-third/10 mt-4">
           <h4 className="text-primary font-semibold mb-4">Stats Numbers</h4>
@@ -321,13 +299,11 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate }) {
                   bold
                   value={s.number}
                   onChange={(e) => updateArr("stats", i, "number", e.target.value)}
-                  onBlur={handleStatsBlur}
                   placeholder="Number"
                 />
                 <EditorInput
                   value={s.label}
                   onChange={(e) => updateArr("stats", i, "label", e.target.value)}
-                  onBlur={handleStatsBlur}
                   placeholder="Label"
                 />
               </div>
@@ -343,14 +319,12 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate }) {
             bold
             value={data.aboutServicesTitle}
             onChange={(e) => update("aboutServicesTitle", e.target.value)}
-            onBlur={handleServicesBlur}
             placeholder="Services Title"
           />
           <RichTextEditor
             label="Services Description"
             value={data.aboutServicesDescription}
             onChange={(v) => update("aboutServicesDescription", v)}
-            onBlur={handleServicesBlur}
           />
         </div>
         <div className="grid md:grid-cols-2 gap-4 mt-4">
@@ -373,7 +347,6 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate }) {
                   }
                   onChange={(selectedOption) => {
                     updateArr("services", i, "icon", selectedOption.value);
-                    setTimeout(handleServicesBlur, 100);
                   }}
                 />
               </div>
@@ -387,7 +360,6 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate }) {
                   bold
                   value={s.title}
                   onChange={(e) => updateArr("services", i, "title", e.target.value)}
-                  onBlur={handleServicesBlur}
                   placeholder="Service Title"
                 />
               </div>
@@ -401,12 +373,21 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate }) {
                   size="sm"
                   value={s.desc}
                   onChange={(e) => updateArr("services", i, "desc", e.target.value)}
-                  onBlur={handleServicesBlur}
                   placeholder="Service Description"
                 />
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
+          <Button 
+            onClick={handleSaveAndNext} 
+            disabled={isSaving}
+            variant="ghost"
+          >
+            {isSaving ? "Saving..." : "Save and Next"}
+          </Button>
         </div>
       </div>
     );

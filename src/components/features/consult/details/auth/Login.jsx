@@ -1,52 +1,180 @@
 "use client";
 
-import React from "react";
-import InputField from "@/components/ui/inputField";
+import React, { useState, useRef } from "react";
 import Button from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { getOtp, login } from "@/services/auth.service";
+import { useForm } from "react-hook-form";
 
 function Login() {
   const router = useRouter();
 
-  const handleClick = (e) => {
-    if (e) e.preventDefault();
-    router.push("/consult/subscription");
+  const {
+    register,
+    handleSubmit,
+    setError,
+    getValues,
+    formState: { errors },
+  } = useForm();
+
+  const [otp, setOtp] = useState(Array(6).fill(""));
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpError, setOtpError] = useState("");
+  const otpRefs = useRef([]);
+
+  const handleOtpChange = (index, value) => {
+    if (!/^\d?$/.test(value)) return;
+    setOtpError("");
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    if (value && index < 5) {
+      otpRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index, e) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      otpRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const onSendOtp = async () => {
+    try {
+      const phone = getValues("phoneNumber");
+      const res = await getOtp({
+        phoneNumber: phone,
+        countryCode: "+91",
+        requestType: "LOGIN",
+      });
+
+      if (res?.success || res?.status) {
+        setOtpSent(true);
+        setTimeout(() => otpRefs.current[0]?.focus(), 200);
+      }
+    } catch (err) {
+      const api = err?.response?.data;
+      const msg = api?.message || "Failed to send OTP";
+      setError("phoneNumber", {
+        type: "server",
+        message: msg,
+      });
+    }
+  };
+
+  const onValidateOtp = async () => {
+    const finalOtp = otp.join("");
+    if (finalOtp.length !== 6) {
+      setOtpError("OTP must be 6 digits");
+      return;
+    }
+
+    try {
+      const phone = getValues("phoneNumber");
+      const res = await login({
+        phoneNumber: phone,
+        countryCode: "+91",
+        otp: finalOtp,
+      });
+
+      if (res?.success || res?.status) {
+        router.push("/consult/subscription");
+      }
+    } catch (err) {
+      const api = err?.response?.data;
+      const msg = api?.message || "Invalid or expired OTP";
+      setOtpError(msg);
+    }
   };
 
   return (
-    <form className="space-y-5">
-      <InputField
-        label="Email"
-        placeholder="consultant@example.com"
-        type="email"
-        variant="colored"
-        required
-      />
-
-      <InputField
-        label="Password"
-        placeholder="Enter your password"
-        type="password"
-        variant="colored"
-        required
-      />
-
-      {/* OPTIONS */}
-      <div className="flex items-center justify-between text-sm">
-        <label className="flex items-center gap-2 text-third cursor-pointer">
-          <input type="checkbox" className="accent-current" />
-          Remember me
+    <form
+      className="w-full"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (!otpSent) {
+          handleSubmit(onSendOtp)();
+        } else {
+          onValidateOtp();
+        }
+      }}
+    >
+      <div className="mb-4">
+        <label className="block text-sm mb-2 text-primary/70">
+          Mobile number
         </label>
-
-        <span className="text-primary cursor-pointer hover:underline">
-          Forgot password?
-        </span>
+        <div className="flex items-center border rounded-md border-accent-primary">
+          <span className="pl-4 pr-2 text-primary/60">+91-</span>
+          <input
+            maxLength={10}
+            placeholder="9999999999"
+            {...register("phoneNumber", {
+              required: "Mobile number is required",
+              minLength: {
+                value: 10,
+                message: "Mobile must be 10 digits",
+              },
+            })}
+            className="w-full text-primary py-3 px-2 outline-none bg-transparent"
+          />
+        </div>
+        {errors.phoneNumber && (
+          <p className="text-red-500 text-xs mt-1">
+            {errors.phoneNumber.message}
+          </p>
+        )}
       </div>
 
+      {otpSent && (
+        <>
+          <p className="text-sm text-primary/70 mb-3">
+            Enter the 6-digit OTP
+          </p>
+          <div className="flex justify-center gap-2 sm:gap-4 mb-6 mt-2">
+            {otp.map((digit, index) => (
+              <input
+                key={index}
+                ref={(el) => (otpRefs.current[index] = el)}
+                maxLength={1}
+                value={digit}
+                onChange={(e) => handleOtpChange(index, e.target.value)}
+                onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                className="w-10 h-10 sm:w-12 sm:h-12 text-center text-primary text-xl font-bold border rounded-lg border-accent-primary/20 outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary/50 transition-all p-0"
+              />
+            ))}
+          </div>
+          {otpError && (
+            <p className="text-red-500 text-xs text-center mb-4">
+              {otpError}
+            </p>
+          )}
+        </>
+      )}
+
       {/* BUTTON */}
-      <Button onClick={handleClick} className="gap-2" full variant="ghost">
-        Login
-      </Button>
+      {!otpSent ? (
+        <Button
+          type="submit"
+          variant="ghost"
+          className="w-full h-11 text-sm font-bold"
+        >
+          GET OTP
+        </Button>
+      ) : (
+        <Button
+          type="submit"
+          variant="ghost"
+          className="w-full h-11 text-sm font-bold"
+        >
+          Validate OTP
+        </Button>
+      )}
+
+      {/* TERMS */}
+      <div className="text-[10px] text-primary/50 mt-6 text-center">
+        By logging in, you agree to AVXs Privacy Policy & Terms
+      </div>
     </form>
   );
 }

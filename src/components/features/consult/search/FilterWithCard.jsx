@@ -48,8 +48,7 @@ function useIsMobile() {
 
 export default function FilterWithCard({ onFilterChange, onPageResponseChange }) {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
-  const [activeFilterTab, setActiveFilterTab] = useState("Vehicle Type");
-  const [selectedMobileChips, setSelectedMobileChips] = useState([]);
+  const [activeFilterTab, setActiveFilterTab] = useState("Location");
   const [avxAssumed, setAvxAssumed] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -171,11 +170,7 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
     }));
   };
 
-  const toggleMobileChip = (chip) => {
-    setSelectedMobileChips((prev) =>
-      prev.includes(chip) ? prev.filter((c) => c !== chip) : [...prev, chip],
-    );
-  };
+
 
   // ── Lock body scroll when mobile filter is open ──
   useEffect(() => {
@@ -728,8 +723,7 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
     setHiddenModelIds([]);
     setHiddenVehicleSubTypes([]);
 
-    // Reset mobile chips
-    setSelectedMobileChips([]);
+
 
     // Reset pagination
     setCurrentPage(1);
@@ -764,14 +758,7 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
     { value: "3.0", label: "⭐ 3.0+ Rating" },
   ];
 
-  const mobileFilterMap = {
-    "Vehicle Type": vehicleTypes.map((v) => v.label),
-    "Consultant Type": [], // not implemented yet
-    Rating: ratings.map((r) => r.label),
-    "Inventory Size": inventorySizes.map((i) => i.label),
-    Services: services.map((s) => s.label),
-    Distance: distances.map((d) => d.label),
-  };
+
 
   // ── Real-time filter tag emission ──
   useEffect(() => {
@@ -1195,31 +1182,50 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
             </span>
             <button
               onClick={() => setAvxAssumed(!avxAssumed)}
-              className={`relative w-9 h-5 rounded-full ${avxAssumed ? "bg-primary" : "bg-white/20"
-                }`}
+              className={`relative w-9 h-5 rounded-full cursor-pointer ${avxAssumed ? "bg-primary" : "bg-white/20"}`}
             >
               <span
-                className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-secondary transition-transform ${avxAssumed ? "translate-x-4" : ""
-                  }`}
+                className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-secondary transition-transform ${avxAssumed ? "translate-x-4" : ""}`}
               />
             </button>
           </div>
 
-          {[
-            "Premium Consultant",
-            "⭐ 4.5+ Rating",
-            "Car",
-            "AVX Certified Inspection",
-          ].map((chip) => (
-            <div key={chip} className="shrink-0">
-              <Chip
-                label={chip}
-                selected={selectedMobileChips.includes(chip)}
-                variant="outline"
-                onClick={() => toggleMobileChip(chip)}
-              />
-            </div>
-          ))}
+          <div className="shrink-0">
+            <Chip
+              label="Four-Wheeler"
+              selected={selectedVehicleTypes.includes("FOUR_WHEELER")}
+              variant="outline"
+              onClick={() => {
+                setSelectedVehicleTypes((prev) =>
+                  prev.includes("FOUR_WHEELER") ? prev.filter((v) => v !== "FOUR_WHEELER") : [...prev, "FOUR_WHEELER"]
+                );
+              }}
+            />
+          </div>
+          <div className="shrink-0">
+            <Chip
+              label="⭐ 4.5+ Rating"
+              selected={selectedRating.includes("4.5")}
+              variant="outline"
+              onClick={() => {
+                setSelectedRating((prev) =>
+                  prev.includes("4.5") ? prev.filter((r) => r !== "4.5") : ["4.5"]
+                );
+              }}
+            />
+          </div>
+          <div className="shrink-0">
+            <Chip
+              label="30+ Vehicles"
+              selected={selectedInventory.includes("30+")}
+              variant="outline"
+              onClick={() => {
+                setSelectedInventory((prev) =>
+                  prev.includes("30+") ? prev.filter((i) => i !== "30+") : ["30+"]
+                );
+              }}
+            />
+          </div>
         </div>
 
         <ConsultantGridSection
@@ -1253,10 +1259,13 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
       </main>
 
 
+      {/* ================= MOBILE FILTER DRAWER ================= */}
       <div
-        className={`fixed top-[64px] inset-x-0 bottom-0 z-100 bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${mobileFilterOpen ? "translate-y-0" : "translate-y-full"
-          }`}
+        className={`fixed top-[64px] inset-x-0 bottom-0 z-100 bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${
+          mobileFilterOpen ? "translate-y-0" : "translate-y-full"
+        }`}
       >
+        {/* ── Header ── */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-third/40 shrink-0">
           <h2 className="text-lg font-semibold">Filters</h2>
           <Button
@@ -1269,45 +1278,292 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
           </Button>
         </div>
 
+        {/* ── Two-column layout ── */}
         <div className="flex flex-1 overflow-hidden">
+          {/* ── Left Tabs ── */}
           <div className="w-[40%] border-r border-third/40 overflow-y-auto">
-            {Object.keys(mobileFilterMap).map((item) => (
+            {[
+              "Location",
+              "Vehicle Type",
+              "Distance",
+              "Inventory Size",
+              "Rating",
+              "Services",
+              "Price Range",
+            ].map((tab) => (
               <div
-                key={item}
-                onClick={() => setActiveFilterTab(item)}
-                className={`px-4 py-3 text-sm cursor-pointer ${activeFilterTab === item
-                  ? "bg-secondary/10 font-semibold"
-                  : "hover:bg-secondary/5"
-                  }`}
+                key={tab}
+                onClick={() => setActiveFilterTab(tab)}
+                className={`px-4 py-3 cursor-pointer text-sm ${
+                  activeFilterTab === tab
+                    ? "bg-secondary/10 font-semibold"
+                    : "hover:bg-secondary/5"
+                }`}
               >
-                {item}
+                {tab}
               </div>
             ))}
           </div>
 
+          {/* ── Right Content ── */}
           <div className="flex-1 p-4 overflow-y-auto">
-            <div className="flex flex-wrap gap-3">
-              {mobileFilterMap[activeFilterTab]?.map((chip) => (
-                <Chip
-                  key={chip}
-                  label={chip}
-                  selected={selectedMobileChips.includes(chip)}
-                  variant="outlineDark"
-                  onClick={() => toggleMobileChip(chip)}
-                />
-              ))}
-            </div>
+            <h3 className="text-sm font-semibold mb-3">{activeFilterTab}</h3>
+
+            {/* ── LOCATION ── */}
+            {activeFilterTab === "Location" && (
+              <div className="space-y-4">
+                <div className="relative">
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs text-secondary/60">State</label>
+                    <button
+                      type="button"
+                      onClick={handleDetectLocation}
+                      className="flex items-center gap-1 text-xs text-secondary/70 hover:text-secondary cursor-pointer transition-colors"
+                    >
+                      <MapPin size={14} />
+                      <span>Detect</span>
+                    </button>
+                  </div>
+                  {stateOpen ? (
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={stateSearch}
+                        onKeyDown={handleStateKeyDown}
+                        onChange={(e) => {
+                          setStateSearch(e.target.value);
+                          setHighlightedStateIndex(0);
+                        }}
+                        placeholder={selectedStateName || "Search state..."}
+                        className="w-full pl-3 pr-10 py-2.5 bg-transparent border border-secondary/40 rounded-md text-secondary placeholder:text-secondary/50 focus:outline-none text-sm"
+                        autoFocus
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setStateOpen(false)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary/70"
+                      >
+                        <ChevronDown size={16} />
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      onClick={() => setStateOpen(true)}
+                      className="h-10 px-3 flex items-center justify-between rounded-md border border-secondary/40 bg-transparent text-secondary cursor-pointer"
+                    >
+                      <span className="truncate text-sm">{selectedStateName || "Select State"}</span>
+                      <ChevronDown size={16} />
+                    </div>
+                  )}
+                  {stateOpen && (
+                    <div className="absolute z-50 mt-1 w-full border border-secondary/40 rounded-md bg-primary text-secondary shadow-xl max-h-48 overflow-hidden">
+                      <div className="max-h-44 overflow-y-auto pt-1">
+                        {filteredStates.map((s, index) => (
+                          <div
+                            key={s.value}
+                            onClick={() => {
+                              setSelectedStateId(s.value);
+                              setSelectedStateName(s.label);
+                              setSelectedCityId(null);
+                              setSelectedCityName("");
+                              setStateSearch("");
+                              setStateOpen(false);
+                            }}
+                            className={`px-4 py-2.5 cursor-pointer text-sm ${
+                              highlightedStateIndex === index ? "bg-secondary/20" : "hover:bg-secondary/10"
+                            }`}
+                          >
+                            {s.label}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="relative">
+                  <label className="text-xs text-secondary/60 block mb-1">City</label>
+                  {cityOpen && selectedStateId ? (
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={citySearch}
+                        onKeyDown={handleCityKeyDown}
+                        onChange={(e) => {
+                          setCitySearch(e.target.value);
+                          setHighlightedCityIndex(0);
+                        }}
+                        placeholder={selectedCityName || "Search city..."}
+                        className="w-full pl-3 pr-10 py-2.5 bg-transparent border border-secondary/40 rounded-md text-secondary placeholder:text-secondary/50 focus:outline-none text-sm"
+                        autoFocus
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setCityOpen(false)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary/70"
+                      >
+                        <ChevronDown size={16} />
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      onClick={() => selectedStateId && setCityOpen(true)}
+                      className={`h-10 px-3 flex items-center justify-between rounded-md border border-secondary/40 bg-transparent text-secondary ${
+                        !selectedStateId ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+                      }`}
+                    >
+                      <span className="truncate text-sm">
+                        {selectedCityName || (selectedStateId ? "Select City" : "Select state first")}
+                      </span>
+                      <ChevronDown size={16} />
+                    </div>
+                  )}
+                  {cityOpen && selectedStateId && (
+                    <div className="absolute z-50 mt-1 w-full border border-secondary/40 rounded-md bg-primary text-secondary shadow-xl max-h-48 overflow-hidden">
+                      <div className="max-h-44 overflow-y-auto pt-1">
+                        {filteredCities.map((c, index) => (
+                          <div
+                            key={c.value}
+                            onClick={() => {
+                              setSelectedCityId(c.value);
+                              setSelectedCityName(c.label);
+                              setCitySearch("");
+                              setCityOpen(false);
+                            }}
+                            className={`px-4 py-2.5 cursor-pointer text-sm ${
+                              highlightedCityIndex === index ? "bg-secondary/20" : "hover:bg-secondary/10"
+                            }`}
+                          >
+                            {c.label}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* ── VEHICLE TYPE ── */}
+            {activeFilterTab === "Vehicle Type" && (
+              <ChipGroup
+                title=""
+                items={vehicleTypes}
+                selected={selectedVehicleTypes}
+                onChange={setSelectedVehicleTypes}
+                variant="outlineDark"
+              />
+            )}
+
+            {/* ── DISTANCE ── */}
+            {activeFilterTab === "Distance" && (
+              <ChipGroup
+                title=""
+                items={distances}
+                selected={selectedDistance}
+                onChange={setSelectedDistance}
+                allowMultiple={false}
+                variant="outlineDark"
+              />
+            )}
+
+            {/* ── INVENTORY SIZE ── */}
+            {activeFilterTab === "Inventory Size" && (
+              <ChipGroup
+                title=""
+                items={inventorySizes}
+                selected={selectedInventory}
+                onChange={setSelectedInventory}
+                allowMultiple={false}
+                variant="outlineDark"
+              />
+            )}
+
+            {/* ── RATING ── */}
+            {activeFilterTab === "Rating" && (
+              <ChipGroup
+                title=""
+                items={ratings}
+                selected={selectedRating}
+                onChange={setSelectedRating}
+                allowMultiple={false}
+                variant="outlineDark"
+              />
+            )}
+
+            {/* ── SERVICES ── */}
+            {activeFilterTab === "Services" && (
+              <ChipGroup
+                title=""
+                items={services}
+                selected={selectedServices}
+                onChange={setSelectedServices}
+                variant="outlineDark"
+              />
+            )}
+
+            {/* ── PRICE RANGE ── */}
+            {activeFilterTab === "Price Range" && (
+              <div className="flex flex-col gap-2 mt-3">
+                <div className="flex justify-between text-xs text-secondary/70 mb-1">
+                  <span>Min Price</span>
+                  <span>Max Price</span>
+                </div>
+                <div className="relative h-6 flex items-center">
+                  <div
+                    className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
+                    style={{ background: getTrackBackground() }}
+                  />
+                  <input
+                    type="range"
+                    min={MIN}
+                    max={MAX}
+                    step={50000}
+                    value={minPrice}
+                    onChange={(e) => setMinPrice(Math.min(+e.target.value, maxPrice - 50000))}
+                    onTouchEnd={() => { const p = buildPayload(); setCurrentPage(1); fetchConsultants(1, p); }}
+                    className="dual-range z-30"
+                  />
+                  <input
+                    type="range"
+                    min={MIN}
+                    max={MAX}
+                    step={50000}
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(Math.max(+e.target.value, minPrice + 50000))}
+                    onTouchEnd={() => { const p = buildPayload(); setCurrentPage(1); fetchConsultants(1, p); }}
+                    className="dual-range z-40"
+                  />
+                </div>
+                <div className="flex justify-between text-xs text-secondary/70 mb-1">
+                  <span>₹{minPrice.toLocaleString()}</span>
+                  <span>₹{maxPrice.toLocaleString()}</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="w-full p-4 border-t border-third/40 bg-primary shrink-0">
+        {/* ── Footer ── */}
+        <div className="w-full p-4 border-t border-third/40 bg-primary shrink-0 flex gap-3">
+          <Button
+            variant="outline"
+            showIcon={false}
+            className="flex-1 text-secondary border-secondary/40 hover:bg-secondary/10"
+            onClick={() => {
+              handleClearFilters();
+              setMobileFilterOpen(false);
+            }}
+          >
+            Clear All
+          </Button>
           <Button
             variant="default"
             showIcon={false}
-            className="w-full"
+            className="flex-1"
             onClick={() => setMobileFilterOpen(false)}
           >
-            Show results
+            Show Results
           </Button>
         </div>
       </div>

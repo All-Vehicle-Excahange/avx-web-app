@@ -8,6 +8,8 @@ import RichTextEditor from "../atoms/RichTextEditor";
 import EditorInput from "../atoms/EditorInput";
 import { ImageUploader } from "../atoms/ImageUploader ";
 import Select from "react-select";
+import Button from "@/components/ui/button";
+import GlobalLoader from "@/components/ui/GlobalLoader";
 import {
   setWhyBuyHero,
   setWhyBuyStory,
@@ -107,6 +109,8 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
     rawData?.featuredReviews?.map((r) => r.id) || [],
   );
 
+  const [isSaving, setIsSaving] = useState(false);
+
   const updateField = (field, value) => {
     if (onUpdate) onUpdate({ ...data, [field]: value });
   };
@@ -144,168 +148,83 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
     }
   };
 
-  const handleHeroBlur = async () => {
+  const handleSave = async () => {
+    setIsSaving(true);
     try {
-      const formData = new FormData();
-      formData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
-      formData.append(
-        "whyBuyHeroDescription",
-        data.whyBuyHeroDescription || "",
-      );
-      if (data.whyBuyHeroTemplate1?.id)
-        formData.append("whyBuyHeroTemplateId1", data.whyBuyHeroTemplate1.id);
-      if (data.whyBuyHeroTemplate2?.id)
-        formData.append("whyBuyHeroTemplateId2", data.whyBuyHeroTemplate2.id);
-      if (data.whyBuyHeroTemplate3?.id)
-        formData.append("whyBuyHeroTemplateId3", data.whyBuyHeroTemplate3.id);
-      if (data.whyBuyHeroTemplate4?.id)
-        formData.append("whyBuyHeroTemplateId4", data.whyBuyHeroTemplate4.id);
-      if (data.whyBuyHeroTemplate5?.id)
-        formData.append("whyBuyHeroTemplateId5", data.whyBuyHeroTemplate5.id);
-      await setWhyBuyHero(formData);
-    } catch (error) {
-      console.error("Error updating hero", error);
-    }
-  };
+      const heroData = new FormData();
+      heroData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
+      heroData.append("whyBuyHeroDescription", data.whyBuyHeroDescription || "");
+      if (data.whyBuyHeroTemplate1?.id) heroData.append("whyBuyHeroTemplateId1", data.whyBuyHeroTemplate1.id);
+      if (data.whyBuyHeroTemplate2?.id) heroData.append("whyBuyHeroTemplateId2", data.whyBuyHeroTemplate2.id);
+      if (data.whyBuyHeroTemplate3?.id) heroData.append("whyBuyHeroTemplateId3", data.whyBuyHeroTemplate3.id);
+      if (data.whyBuyHeroTemplate4?.id) heroData.append("whyBuyHeroTemplateId4", data.whyBuyHeroTemplate4.id);
+      if (data.whyBuyHeroTemplate5?.id) heroData.append("whyBuyHeroTemplateId5", data.whyBuyHeroTemplate5.id);
 
-  const handleStoryBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("storyTitle", data.storyTitle || "");
-      formData.append("storyDescription", data.storyDescription || "");
-      if (data.storyTemplate1?.id)
-        formData.append("storyTemplateId1", data.storyTemplate1.id);
-      if (data.storyTemplate2?.id)
-        formData.append("storyTemplateId2", data.storyTemplate2.id);
-      if (data.storyTemplate3?.id)
-        formData.append("storyTemplateId3", data.storyTemplate3.id);
-      if (data.storyTemplate4?.id)
-        formData.append("storyTemplateId4", data.storyTemplate4.id);
-      await setWhyBuyStory(formData);
-    } catch (error) {
-      console.error("Error updating story", error);
-    }
-  };
+      const storyData = new FormData();
+      storyData.append("storyTitle", data.storyTitle || "");
+      storyData.append("storyDescription", data.storyDescription || "");
+      if (data.storyTemplate1?.id) storyData.append("storyTemplateId1", data.storyTemplate1.id);
+      if (data.storyTemplate2?.id) storyData.append("storyTemplateId2", data.storyTemplate2.id);
+      if (data.storyTemplate3?.id) storyData.append("storyTemplateId3", data.storyTemplate3.id);
+      if (data.storyTemplate4?.id) storyData.append("storyTemplateId4", data.storyTemplate4.id);
 
-  const handleVehicleSelectionBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append(
-        "vehicleSelectionTitle",
-        data.vehicleSelectionTitle || "",
-      );
-      formData.append(
-        "vehicleSelectionDescription",
-        data.vehicleSelectionDescription || "",
-      );
-      if (data.vehicleSelectionTemplate1?.id)
-        formData.append(
-          "vehicleSelectionTemplateId1",
-          data.vehicleSelectionTemplate1.id,
-        );
-      if (data.vehicleSelectionTemplate2?.id)
-        formData.append(
-          "vehicleSelectionTemplateId2",
-          data.vehicleSelectionTemplate2.id,
-        );
-      if (data.vehicleSelectionTemplate3?.id)
-        formData.append(
-          "vehicleSelectionTemplateId3",
-          data.vehicleSelectionTemplate3.id,
-        );
-      await setWhyBuyVehicleSelection(formData);
-    } catch (error) {
-      console.error("Error updating vehicle selection", error);
-    }
-  };
+      const vehicleData = new FormData();
+      vehicleData.append("vehicleSelectionTitle", data.vehicleSelectionTitle || "");
+      vehicleData.append("vehicleSelectionDescription", data.vehicleSelectionDescription || "");
+      if (data.vehicleSelectionTemplate1?.id) vehicleData.append("vehicleSelectionTemplateId1", data.vehicleSelectionTemplate1.id);
+      if (data.vehicleSelectionTemplate2?.id) vehicleData.append("vehicleSelectionTemplateId2", data.vehicleSelectionTemplate2.id);
+      if (data.vehicleSelectionTemplate3?.id) vehicleData.append("vehicleSelectionTemplateId3", data.vehicleSelectionTemplate3.id);
 
-  const handleProcessBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("processTitle", data.processTitle || "");
-      formData.append("processDescription", data.processDescription || "");
+      const processData = new FormData();
+      processData.append("processTitle", data.processTitle || "");
+      processData.append("processDescription", data.processDescription || "");
       if (data.processSteps) {
         data.processSteps.forEach((step, i) => {
-          formData.append(`processes[${i}].title`, step.title || "");
-          formData.append(`processes[${i}].desc`, step.description || "");
-          formData.append(`processes[${i}].icon`, step.icon || "");
+          processData.append(`processes[${i}].title`, step.title || "");
+          processData.append(`processes[${i}].desc`, step.description || "");
+          processData.append(`processes[${i}].icon`, step.icon || "");
         });
       }
+      if (data.processTemplate1?.id) processData.append("processTemplateId1", data.processTemplate1.id);
+      if (data.processTemplate2?.id) processData.append("processTemplateId2", data.processTemplate2.id);
+      if (data.processTemplate3?.id) processData.append("processTemplateId3", data.processTemplate3.id);
+      if (data.processTemplate4?.id) processData.append("processTemplateId4", data.processTemplate4.id);
 
-      if (data.processTemplate1?.id)
-        formData.append("processTemplateId1", data.processTemplate1.id);
-      if (data.processTemplate2?.id)
-        formData.append("processTemplateId2", data.processTemplate2.id);
-      if (data.processTemplate3?.id)
-        formData.append("processTemplateId3", data.processTemplate3.id);
-      if (data.processTemplate4?.id)
-        formData.append("processTemplateId4", data.processTemplate4.id);
-      await setWhyBuyProcess(formData);
-    } catch (error) {
-      console.error("Error updating process", error);
-    }
-  };
-
-  const handleInspectionBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("inspectionTitle", data.inspectionTitle || "");
-      formData.append("inspectionDescription", data.inspectionText || "");
-      if (data.inspectionTemplate1?.id)
-        formData.append("inspectionTemplateId1", data.inspectionTemplate1.id);
-      if (data.inspectionTemplate2?.id)
-        formData.append("inspectionTemplateId2", data.inspectionTemplate2.id);
-      if (data.inspectionTemplate3?.id)
-        formData.append("inspectionTemplateId3", data.inspectionTemplate3.id);
-      if (data.inspectionTemplate4?.id)
-        formData.append("inspectionTemplateId4", data.inspectionTemplate4.id);
+      const inspectionData = new FormData();
+      inspectionData.append("inspectionTitle", data.inspectionTitle || "");
+      inspectionData.append("inspectionDescription", data.inspectionText || "");
+      if (data.inspectionTemplate1?.id) inspectionData.append("inspectionTemplateId1", data.inspectionTemplate1.id);
+      if (data.inspectionTemplate2?.id) inspectionData.append("inspectionTemplateId2", data.inspectionTemplate2.id);
+      if (data.inspectionTemplate3?.id) inspectionData.append("inspectionTemplateId3", data.inspectionTemplate3.id);
+      if (data.inspectionTemplate4?.id) inspectionData.append("inspectionTemplateId4", data.inspectionTemplate4.id);
       if (data.inspectionPoints) {
         data.inspectionPoints.forEach((pt, i) => {
-          formData.append(`inspectionPoints[${i}]`, pt || "");
+          inspectionData.append(`inspectionPoints[${i}]`, pt || "");
         });
       }
-      await setWhyBuyInspection(formData);
-    } catch (error) {
-      console.error("Error updating inspection", error);
-    }
-  };
 
-  const handleCustomerCommitmentBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append(
-        "customerCommitmentTitle",
-        data.customerCommitmentTitle || "",
-      );
-      formData.append(
-        "customerCommitmentDescription",
-        data.customerCommitmentDescription || "",
-      );
-      if (data.customerCommitmentTemplate1?.id)
-        formData.append(
-          "customerCommitmentTemplateId1",
-          data.customerCommitmentTemplate1.id,
-        );
-      if (data.customerCommitmentTemplate2?.id)
-        formData.append(
-          "customerCommitmentTemplateId2",
-          data.customerCommitmentTemplate2.id,
-        );
-      if (data.customerCommitmentTemplate3?.id)
-        formData.append(
-          "customerCommitmentTemplateId3",
-          data.customerCommitmentTemplate3.id,
-        );
-      await setWhyBuyCustomerCommitment(formData);
-    } catch (error) {
-      console.error("Error updating customer commitment", error);
-    }
-  };
+      const commitmentData = new FormData();
+      commitmentData.append("customerCommitmentTitle", data.customerCommitmentTitle || "");
+      commitmentData.append("customerCommitmentDescription", data.customerCommitmentDescription || "");
+      if (data.customerCommitmentTemplate1?.id) commitmentData.append("customerCommitmentTemplateId1", data.customerCommitmentTemplate1.id);
+      if (data.customerCommitmentTemplate2?.id) commitmentData.append("customerCommitmentTemplateId2", data.customerCommitmentTemplate2.id);
+      if (data.customerCommitmentTemplate3?.id) commitmentData.append("customerCommitmentTemplateId3", data.customerCommitmentTemplate3.id);
 
-  const handleGalleryBlur = async () => {
-    // Mock method to handle gallery update.
-    // Once backend exposes correct endpoint, this is where integration goes.
-    console.log("Gallery updated locally.");
+      await Promise.all([
+        setWhyBuyHero(heroData),
+        setWhyBuyStory(storyData),
+        setWhyBuyVehicleSelection(vehicleData),
+        setWhyBuyProcess(processData),
+        setWhyBuyInspection(inspectionData),
+        setWhyBuyCustomerCommitment(commitmentData),
+        setFeaturedReviews(selectedReviewIds),
+        // Gallery update would go here
+      ]);
+    } catch (error) {
+      console.error("Error saving Why Buy sections:", error);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const toggleReviewSelection = (reviewId) => {
@@ -327,21 +246,10 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
 
       updateField("featuredReviews", selectedReviews);
 
-      setFeaturedReviews(updated).catch((err) =>
-        console.error("Error saving featured reviews", err),
-      );
-
       return updated;
     });
   };
 
-  const handleTestimonialBlur = async () => {
-    try {
-      updateField("testimonialTitle", data.testimonialTitle);
-    } catch (error) {
-      console.error("Error updating testimonials", error);
-    }
-  };
 
   const heroImages = [
     data.whyBuyHeroTemplate1?.imageUrl,
@@ -395,6 +303,7 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
   if (isEditing) {
     return (
       <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
+        <GlobalLoader isLoading={isSaving} />
         {/* HERO */}
         <div className="space-y-6">
           <h3 className="text-primary font-bold text-xl mb-4">Hero Section</h3>
@@ -405,13 +314,11 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                 label="Hero Title"
                 value={data.whyBuyHeroTitle}
                 onChange={(e) => updateField("whyBuyHeroTitle", e.target.value)}
-                onBlur={handleHeroBlur}
               />
               <RichTextEditor
                 label="Hero Description"
                 value={data.whyBuyHeroDescription}
                 onChange={(v) => updateField("whyBuyHeroDescription", v)}
-                onBlur={handleHeroBlur}
               />
             </div>
             <div className="space-y-4">
@@ -429,7 +336,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.whyBuyHeroTemplate1?.id,
                       });
-                      setTimeout(handleHeroBlur, 100);
                     }}
                   />
                 </div>
@@ -445,7 +351,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.whyBuyHeroTemplate2?.id,
                       });
-                      setTimeout(handleHeroBlur, 100);
                     }}
                   />
                 </div>
@@ -462,7 +367,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.whyBuyHeroTemplate3?.id,
                       });
-                      setTimeout(handleHeroBlur, 100);
                     }}
                   />
                 </div>
@@ -478,7 +382,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.whyBuyHeroTemplate4?.id,
                       });
-                      setTimeout(handleHeroBlur, 100);
                     }}
                   />
                 </div>
@@ -494,7 +397,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.whyBuyHeroTemplate5?.id,
                       });
-                      setTimeout(handleHeroBlur, 100);
                     }}
                   />
                 </div>
@@ -517,13 +419,11 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                 label="Story Title"
                 value={data.storyTitle}
                 onChange={(e) => updateField("storyTitle", e.target.value)}
-                onBlur={handleStoryBlur}
               />
               <RichTextEditor
                 label="Story Description"
                 value={data.storyDescription}
                 onChange={(v) => updateField("storyDescription", v)}
-                onBlur={handleStoryBlur}
               />
             </div>
             <div className="space-y-4">
@@ -541,7 +441,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.storyTemplate1?.id,
                       });
-                      setTimeout(handleStoryBlur, 100);
                     }}
                   />
                 </div>
@@ -557,7 +456,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.storyTemplate2?.id,
                       });
-                      setTimeout(handleStoryBlur, 100);
                     }}
                   />
                 </div>
@@ -574,7 +472,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.storyTemplate3?.id,
                       });
-                      setTimeout(handleStoryBlur, 100);
                     }}
                   />
                 </div>
@@ -590,7 +487,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.storyTemplate4?.id,
                       });
-                      setTimeout(handleStoryBlur, 100);
                     }}
                   />
                 </div>
@@ -615,13 +511,11 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                 onChange={(e) =>
                   updateField("vehicleSelectionTitle", e.target.value)
                 }
-                onBlur={handleVehicleSelectionBlur}
               />
               <RichTextEditor
                 label="Selection Description"
                 value={data.vehicleSelectionDescription}
                 onChange={(v) => updateField("vehicleSelectionDescription", v)}
-                onBlur={handleVehicleSelectionBlur}
               />
             </div>
             <div className="space-y-4">
@@ -641,7 +535,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.vehicleSelectionTemplate1?.id,
                       });
-                      setTimeout(handleVehicleSelectionBlur, 100);
                     }}
                   />
                 </div>
@@ -657,7 +550,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.vehicleSelectionTemplate2?.id,
                       });
-                      setTimeout(handleVehicleSelectionBlur, 100);
                     }}
                   />
                 </div>
@@ -673,7 +565,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.vehicleSelectionTemplate3?.id,
                       });
-                      setTimeout(handleVehicleSelectionBlur, 100);
                     }}
                   />
                 </div>
@@ -696,13 +587,11 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                 label="Process Title"
                 value={data.processTitle}
                 onChange={(e) => updateField("processTitle", e.target.value)}
-                onBlur={handleProcessBlur}
               />
               <RichTextEditor
                 label="Process Description"
                 value={data.processDescription}
                 onChange={(v) => updateField("processDescription", v)}
-                onBlur={handleProcessBlur}
               />
             </div>
             <div className="space-y-4">
@@ -722,7 +611,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.processTemplate1?.id,
                       });
-                      setTimeout(handleProcessBlur, 100);
                     }}
                   />
                 </div>
@@ -738,7 +626,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.processTemplate2?.id,
                       });
-                      setTimeout(handleProcessBlur, 100);
                     }}
                   />
                 </div>
@@ -754,7 +641,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.processTemplate3?.id,
                       });
-                      setTimeout(handleProcessBlur, 100);
                     }}
                   />
                 </div>
@@ -770,7 +656,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.processTemplate4?.id,
                       });
-                      setTimeout(handleProcessBlur, 100);
                     }}
                   />
                 </div>
@@ -797,7 +682,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         e.target.value,
                       )
                     }
-                    onBlur={handleProcessBlur}
                   />
                 </div>
                 <div>
@@ -814,7 +698,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         e.target.value,
                       )
                     }
-                    onBlur={handleProcessBlur}
                   />
                 </div>
                 <div className="flex flex-col gap-2 relative mt-4">
@@ -835,7 +718,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         "icon",
                         selectedOption.value,
                       );
-                      handleProcessBlur();
                     }}
                   />
                 </div>
@@ -858,13 +740,11 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                 label="Inspection Title"
                 value={data.inspectionTitle}
                 onChange={(e) => updateField("inspectionTitle", e.target.value)}
-                onBlur={handleInspectionBlur}
               />
               <RichTextEditor
                 label="Inspection Description"
                 value={data.inspectionText}
                 onChange={(v) => updateField("inspectionText", v)}
-                onBlur={handleInspectionBlur}
               />
               <div className="space-y-2 mt-4">
                 <label className="text-sm font-medium text-primary">
@@ -879,7 +759,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                       newArr[i] = e.target.value;
                       updateField("inspectionPoints", newArr);
                     }}
-                    onBlur={handleInspectionBlur}
                   />
                 ))}
               </div>
@@ -901,7 +780,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.inspectionTemplate1?.id,
                       });
-                      setTimeout(handleInspectionBlur, 100);
                     }}
                   />
                 </div>
@@ -917,7 +795,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.inspectionTemplate2?.id,
                       });
-                      setTimeout(handleInspectionBlur, 100);
                     }}
                   />
                 </div>
@@ -933,7 +810,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.inspectionTemplate3?.id,
                       });
-                      setTimeout(handleInspectionBlur, 100);
                     }}
                   />
                 </div>
@@ -949,7 +825,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.inspectionTemplate4?.id,
                       });
-                      setTimeout(handleInspectionBlur, 100);
                     }}
                   />
                 </div>
@@ -974,7 +849,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                 onChange={(e) =>
                   updateField("customerCommitmentTitle", e.target.value)
                 }
-                onBlur={handleCustomerCommitmentBlur}
               />
               <RichTextEditor
                 label="Commitment Text"
@@ -982,7 +856,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                 onChange={(v) =>
                   updateField("customerCommitmentDescription", v)
                 }
-                onBlur={handleCustomerCommitmentBlur}
               />
             </div>
             <div className="space-y-4">
@@ -1002,7 +875,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.customerCommitmentTemplate1?.id,
                       });
-                      setTimeout(handleCustomerCommitmentBlur, 100);
                     }}
                   />
                 </div>
@@ -1018,7 +890,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.customerCommitmentTemplate2?.id,
                       });
-                      setTimeout(handleCustomerCommitmentBlur, 100);
                     }}
                   />
                 </div>
@@ -1034,7 +905,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                         imageUrl,
                         id: id ?? data.customerCommitmentTemplate3?.id,
                       });
-                      setTimeout(handleCustomerCommitmentBlur, 100);
                     }}
                   />
                 </div>
@@ -1055,7 +925,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
             label="Gallery Title"
             value={data.galleryTitle}
             onChange={(e) => updateField("galleryTitle", e.target.value)}
-            onBlur={handleGalleryBlur}
           />
           <br />
           <div className="grid grid-cols-2 gap-4">
@@ -1071,7 +940,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                     imageUrl,
                     id: id ?? data.galleryTemplate1?.id,
                   });
-                  setTimeout(handleGalleryBlur, 100);
                 }}
               />
             </div>
@@ -1087,7 +955,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                     imageUrl,
                     id: id ?? data.galleryTemplate2?.id,
                   });
-                  setTimeout(handleGalleryBlur, 100);
                 }}
               />
             </div>
@@ -1103,7 +970,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                     imageUrl,
                     id: id ?? data.galleryTemplate3?.id,
                   });
-                  setTimeout(handleGalleryBlur, 100);
                 }}
               />
             </div>
@@ -1119,7 +985,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                     imageUrl,
                     id: id ?? data.galleryTemplate4?.id,
                   });
-                  setTimeout(handleGalleryBlur, 100);
                 }}
               />
             </div>
@@ -1135,7 +1000,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
                     imageUrl,
                     id: id ?? data.galleryTemplate5?.id,
                   });
-                  setTimeout(handleGalleryBlur, 100);
                 }}
               />
             </div>
@@ -1154,7 +1018,6 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
             label="Section Title"
             value={data.testimonialTitle}
             onChange={(e) => updateField("testimonialTitle", e.target.value)}
-            onBlur={handleTestimonialBlur}
           />
 
           <p className="text-third text-sm mb-4 mt-2">
@@ -1216,6 +1079,16 @@ export default function WhyBuyPro2({ data: rawData, isEditing, onUpdate }) {
               );
             })}
           </div>
+        </div>
+
+        <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
+          <Button 
+            onClick={handleSave} 
+            disabled={isSaving}
+            variant="ghost"
+          >
+            {isSaving ? "Saving..." : "Save"}
+          </Button>
         </div>
       </div>
     );

@@ -10,3 +10,4 @@ export { default as StoreFrontHeroSkeleton } from "./StoreFrontHeroSkeleton";
 export { default as StoreFrontInventorySkeleton } from "./StoreFrontInventorySkeleton";
 export { default as StoreFrontReviewSkeleton } from "./StoreFrontReviewSkeleton";
 export { default as StoreFrontAboutSkeleton } from "./StoreFrontAboutSkeleton";
+export { default as ProfileSkeleton } from "./ProfileSkeleton";

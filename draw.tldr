@@ -13,15 +13,16 @@
 			"com.tldraw.instance_presence": 6,
 			"com.tldraw.pointer": 1,
 			"com.tldraw.shape": 4,
-			"com.tldraw.asset.bookmark": 2,
-			"com.tldraw.asset.image": 5,
+			"com.tldraw.user": 1,
+			"com.tldraw.asset.image": 6,
 			"com.tldraw.asset.video": 5,
+			"com.tldraw.asset.bookmark": 2,
 			"com.tldraw.shape.group": 0,
 			"com.tldraw.shape.text": 4,
 			"com.tldraw.shape.bookmark": 2,
 			"com.tldraw.shape.draw": 4,
 			"com.tldraw.shape.geo": 11,
-			"com.tldraw.shape.note": 10,
+			"com.tldraw.shape.note": 12,
 			"com.tldraw.shape.line": 5,
 			"com.tldraw.shape.frame": 1,
 			"com.tldraw.shape.arrow": 8,
@@ -42,9 +43,9 @@
 			"typeName": "pointer"
 		},
 		{
-			"x": 160.6837919258777,
-			"y": 559.1074196144388,
-			"z": 0.81,
+			"x": 80.99549307797867,
+			"y": 754.4681315793915,
+			"z": 0.9272375127223195,
 			"meta": {},
 			"id": "camera:page:page",
 			"typeName": "camera"
@@ -101,7 +102,9 @@
 		{
 			"editingShapeId": null,
 			"croppingShapeId": null,
-			"selectedShapeIds": [],
+			"selectedShapeIds": [
+				"shape:3SyA8uNPfsxhkzYjQebkL"
+			],
 			"hoveredShapeId": null,
 			"erasingShapeIds": [],
 			"hintingShapeIds": [],
@@ -249,8 +252,8 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 251.16806746117862,
-			"y": -66.02100739655685,
+			"x": 115.71193634029595,
+			"y": -116.2778245163696,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -287,8 +290,16 @@
 				}
 			},
 			"parentId": "page:page",
-			"index": "a6uOZkjV",
+			"index": "a0U3rK2l",
 			"typeName": "shape"
+		},
+		{
+			"name": "",
+			"color": "#9D5BD2",
+			"imageUrl": "",
+			"meta": {},
+			"id": "user:1HbaFi2ZscBj6oh1Ercbi",
+			"typeName": "user"
 		},
 		{
 			"meta": {},
@@ -321,7 +332,7 @@
 			"screenBounds": {
 				"x": 0,
 				"y": 0,
-				"w": 926.4000244140625,
+				"w": 936,
 				"h": 754.4000244140625
 			},
 			"insets": [
@@ -339,7 +350,7 @@
 			"isFocused": true,
 			"devicePixelRatio": 1.25,
 			"isCoarsePointer": false,
-			"isHoveringCanvas": true,
+			"isHoveringCanvas": false,
 			"openMenus": [],
 			"isChangingStyle": false,
 			"isReadonly": false,

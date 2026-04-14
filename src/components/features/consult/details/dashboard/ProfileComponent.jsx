@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@/components/ui/button";
+import { ProfileSkeleton } from "@/components/ui/skeleton";
 import InputField from "@/components/ui/inputField";
 import {
   ShieldCheck,
@@ -21,22 +22,191 @@ import {
   XCircle,
   Headphones,
 } from "lucide-react";
+import {
+  getVerificationStatus,
+  getDocumentStatus,
+  getConsualtAdress,
+  getConsualtProfile,
+} from "@/services/profile.service";
+
+// Helper to format vehicleTypes array into readable text
+const formatVehicleTypes = (types) => {
+  if (!types || types.length === 0) return "Not Specified";
+  const labelMap = {
+    TWO_WHEELER: "Two Wheeler",
+    THREE_WHEELER: "Three Wheeler",
+    FOUR_WHEELER: "Four Wheeler",
+    COMMERCIAL: "Commercial",
+    HEAVY_VEHICLE: "Heavy Vehicle",
+  };
+  return types.map((t) => labelMap[t] || t.replace(/_/g, " ")).join(", ");
+};
 
 export default function ProfileComponent() {
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingLocation, setIsEditingLocation] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const [verificationData, setVerificationData] = useState({
+    status: "Pending",
+    verifiedAt: "Not verified yet",
+  });
+
+  const [documentData, setDocumentData] = useState({
+    gst: "PENDING",
+    panCard: "PENDING",
+    aadharCard: "PENDING",
+  });
+
+  const [businessLocation, setBusinessLocation] = useState({
+    address: "Chaapi",
+    city: "Ahmedabad",
+    state: "Gujarat",
+  });
 
   const [profile, setProfile] = useState({
-    businessName: "Adarsh Auto Consultants",
-    ownerName: "Adarsh Patel",
-    email: "adarsh@adarshautoconsultants.com",
-    phone: "+91 98765 43210",
-    city: "Ahmedabad, Gujarat",
-    businessType: "Pre-owned Vehicle Consultant",
-    aadhaar: "1234 1234 1234",
-    pan: "ABCDE1234F",
-    gst: "27ABCDE1234F1Z5",
+    businessName: "",
+    ownerName: "",
+    email: "",
+    phone: "",
+    businessType: "",
+    establishmentYear: 0,
   });
+
+  const [accountDetails, setAccountDetails] = useState({
+    accountType: "Consultant",
+    tier: "Premium Partner",
+    joinedOn: "",
+    storefrontStatus: "Live",
+    inventoryVisibility: "Active",
+  });
+
+  useEffect(() => {
+    const fetchStatuses = async () => {
+      setLoading(true);
+      try {
+        const [verificationRes, documentRes, addressRes, profileRes] =
+          await Promise.all([
+            getVerificationStatus().catch(() => null),
+            getDocumentStatus().catch(() => null),
+            getConsualtAdress().catch(() => null),
+            getConsualtProfile().catch(() => null),
+          ]);
+
+        if (verificationRes?.data) {
+          const { verificationStatus, verifiedAt } = verificationRes.data;
+
+          let formattedDate = "Not verified yet";
+          if (verifiedAt) {
+            const dateObj = new Date(verifiedAt);
+            formattedDate =
+              dateObj.toLocaleDateString("en-US", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              }) +
+              " at " +
+              dateObj.toLocaleTimeString("en-US", {
+                hour: "2-digit",
+                minute: "2-digit",
+              });
+          }
+
+          setVerificationData({
+            status:
+              verificationStatus === "VERIFIED"
+                ? "Verified"
+                : verificationStatus || "Pending",
+            verifiedAt: formattedDate,
+          });
+        }
+
+        if (documentRes?.data) {
+          setDocumentData({
+            gst: documentRes.data.gst || "PENDING",
+            panCard: documentRes.data.panCard || "PENDING",
+            aadharCard: documentRes.data.aadharCard || "PENDING",
+          });
+        }
+
+        if (addressRes?.data) {
+          const { address, city, state } = addressRes.data;
+          setBusinessLocation({
+            address: address || "",
+            city: city?.name || "",
+            state: state?.name || "",
+          });
+        }
+
+        // Populate Business Profile from getConsultProfile API
+        if (profileRes?.data) {
+          const d = profileRes.data;
+          setProfile({
+            businessName: d.consultationName || "",
+            ownerName: d.ownerName || "",
+            email: d.companyEmail || "",
+            phone: d.phone || "",
+            businessType: formatVehicleTypes(d.vehicleTypes),
+            establishmentYear: d.establishmentYear || 0,
+          });
+
+          // Format createdAt for Joined On
+          let joinedFormatted = "";
+          if (d.createdAt) {
+            const dateObj = new Date(d.createdAt);
+            joinedFormatted = dateObj.toLocaleDateString("en-US", {
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+            });
+          }
+
+          setAccountDetails((prev) => ({
+            ...prev,
+            joinedOn: joinedFormatted,
+            storefrontStatus:
+              d.status === "ACTIVE" ? "Live" : d.status || "Live",
+            tier: d.isActiveTier ? "Premium Partner" : "Standard",
+          }));
+        }
+      } catch (error) {
+        console.error("Failed to fetch statuses:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStatuses();
+
+    // Read user data from localStorage for Account & Role Details
+    if (typeof window !== "undefined") {
+      const savedUser = localStorage.getItem("user");
+      if (savedUser) {
+        try {
+          const userData = JSON.parse(savedUser);
+          setAccountDetails((prev) => ({
+            ...prev,
+            accountType: userData.role
+              ? userData.role.charAt(0).toUpperCase() +
+                userData.role.slice(1).toLowerCase()
+              : "Consultant",
+          }));
+        } catch (e) {
+          console.error("Failed to parse user from localStorage", e);
+        }
+      }
+    }
+  }, []);
+
+  if (loading) {
+    return <ProfileSkeleton />;
+  }
+
+  const getDocStatusText = (status) => {
+    if (status === "VERIFIED") return "Verified successfully";
+    if (status === "PENDING") return "Verification Pending";
+    if (status === "REJECTED") return "Verification Failed";
+    return "Not Uploaded Yet";
+  };
 
   return (
     <section className="w-full space-y-10">
@@ -85,7 +255,9 @@ export default function ProfileComponent() {
           </p>
         </div>
 
-        <Button variant="outlineSecondary" size="sm">Improve Profile</Button>
+        <Button variant="outlineSecondary" size="sm">
+          Improve Profile
+        </Button>
       </div>
 
       {/* PROFILE CARD */}
@@ -93,7 +265,11 @@ export default function ProfileComponent() {
         <div className="flex justify-between items-center">
           <h2 className="font-semibold">Business Profile</h2>
           {!isEditing && (
-            <Button variant="ghost" size="sm" onClick={() => setIsEditing(true)}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsEditing(true)}
+            >
               Update Profile
             </Button>
           )}
@@ -106,8 +282,9 @@ export default function ProfileComponent() {
             <ProfileItem label="Owner Name" value={profile.ownerName} />
             <ProfileItem label="Email" value={profile.email} />
             <ProfileItem label="Phone" value={profile.phone} />
-            <ProfileItem label="City" value={profile.city} />
+            {/* <ProfileItem label="City" value={profile.city} /> */}
             <ProfileItem label="Business Type" value={profile.businessType} />
+            <ProfileItem label="Establishment Year" value={profile.establishmentYear} />
           </div>
         )}
 
@@ -118,7 +295,7 @@ export default function ProfileComponent() {
             <InputField label="Owner Name" variant="colored" />
             <InputField label="Email" variant="colored" type="email" />
             <ProfileItem label="Phone" value={profile.phone} />
-            <InputField label="City" variant="colored" />
+            {/* <InputField label="City" variant="colored" /> */}
             <InputField label="Business Type" variant="colored" />
           </div>
         )}
@@ -126,12 +303,15 @@ export default function ProfileComponent() {
         {isEditing && (
           <div className="flex justify-end gap-4">
             <Button
-              variant="outlineSecondary" size="sm"
+              variant="outlineSecondary"
+              size="sm"
               onClick={() => setIsEditing(false)}
             >
               Cancel
             </Button>
-            <Button variant="ghost" size="sm">Save Changes</Button>
+            <Button variant="ghost" size="sm">
+              Save Changes
+            </Button>
           </div>
         )}
 
@@ -150,13 +330,13 @@ export default function ProfileComponent() {
         <div className="grid md:grid-cols-2 gap-6">
           <StatusCard
             title="Verification Status"
-            value="Verified"
+            value={verificationData.status}
             icon={<ShieldCheck />}
-            green
+            green={verificationData.status === "Verified"}
           />
           <StatusCard
             title="Verified On"
-            value="12 July 2024"
+            value={verificationData.verifiedAt}
             icon={<BadgeCheck />}
           />
         </div>
@@ -166,48 +346,46 @@ export default function ProfileComponent() {
       <div className="rounded-xl border border-third/40  p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         <h2 className="font-semibold">KYC Documents</h2>
 
-        {/* ⚠ Pending Banner */}
-        <div className="rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 space-y-1">
-          <p className="flex items-center gap-2 text-yellow-400 font-medium text-sm">
-            <AlertTriangle size={16} />
-            Verification Pending
-          </p>
+        {Object.values(documentData).some((s) => s !== "VERIFIED") && (
+          <div className="rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 space-y-1">
+            <p className="flex items-center gap-2 text-yellow-400 font-medium text-sm">
+              <AlertTriangle size={16} />
+              Verification Action Required
+            </p>
+            <p className="text-xs text-third">
+              Missing/Pending:{" "}
+              <span className="text-primary font-medium">
+                {[
+                  documentData.gst !== "VERIFIED" && "GST",
+                  documentData.panCard !== "VERIFIED" && "PAN",
+                  documentData.aadharCard !== "VERIFIED" && "Aadhaar",
+                ]
+                  .filter(Boolean)
+                  .join(" / ")}
+              </span>
+            </p>
+            <Button variant="outlineSecondary" size="sm" className="mt-2">
+              Complete Verification
+            </Button>
+          </div>
+        )}
 
-          <p className="text-xs text-third">
-            Missing:{" "}
-            <span className="text-primary font-medium">
-              GST / Address Proof
-            </span>
-          </p>
-
-          <Button variant="outlineSecondary" size="sm" className="mt-2">
-            Complete Verification
-          </Button>
-        </div>
-
-        {/* ✅ Verified */}
         <KycRow
           title="PAN"
-          status="Verified on 10 July 2024"
-          state="verified"
+          status={getDocStatusText(documentData.panCard)}
+          state={documentData.panCard.toLowerCase()}
         />
 
-        {/* ✅ Verified */}
         <KycRow
           title="Aadhaar"
-          status="Verified on 10 July 2024"
-          state="verified"
+          status={getDocStatusText(documentData.aadharCard)}
+          state={documentData.aadharCard.toLowerCase()}
         />
 
-        {/* ⚠ Pending */}
-        <KycRow title="GST" status="Not Uploaded Yet" state="pending" />
-
-        {/* ❌ Rejected */}
         <KycRow
-          title="Address Proof"
-          status="Verification Failed"
-          state="rejected"
-          reason="Image unclear"
+          title="GST"
+          status={getDocStatusText(documentData.gst)}
+          state={documentData.gst.toLowerCase()}
         />
       </div>
 
@@ -218,7 +396,11 @@ export default function ProfileComponent() {
           <h2 className="font-semibold">Business Location & Map</h2>
 
           {!isEditingLocation && (
-            <Button variant="ghost" size="sm" onClick={() => setIsEditingLocation(true)}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsEditingLocation(true)}
+            >
               Edit Address
             </Button>
           )}
@@ -230,13 +412,21 @@ export default function ProfileComponent() {
             {/* Address */}
             <div>
               <p className="text-xs text-third">Business Address</p>
-              <p className="font-medium">Chaapi, Ahmedabad, Gujarat</p>
+              <p className="font-medium">
+                {[
+                  businessLocation.address,
+                  businessLocation.city,
+                  businessLocation.state,
+                ]
+                  .filter(Boolean)
+                  .join(", ") || "Not Available"}
+              </p>
             </div>
 
             {/* Map Preview */}
             <a
               href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                profile.address + " " + profile.city,
+                `${businessLocation.address} ${businessLocation.city} ${businessLocation.state}`,
               )}`}
               target="_blank"
               className="block rounded-xl border border-third/30  px-4 py-4 hover:bg-primary/10 transition"
@@ -254,7 +444,9 @@ export default function ProfileComponent() {
             {/* Service Area */}
             <p className="text-xs text-third">
               Service Area:{" "}
-              <span className="font-medium text-primary">Ahmedabad + 30km</span>
+              <span className="font-medium text-primary">
+                {businessLocation.city || "Ahmedabad"} + 30km
+              </span>
             </p>
 
             {/* Trust Note */}
@@ -270,8 +462,16 @@ export default function ProfileComponent() {
         {/* EDIT MODE */}
         {isEditingLocation && (
           <div className="space-y-4">
-            <InputField label="Full Address" variant="colored" />
-            <InputField label="City" variant="colored" />
+            <InputField
+              label="Full Address"
+              variant="colored"
+              defaultValue={businessLocation.address}
+            />
+            <InputField
+              label="City"
+              variant="colored"
+              defaultValue={businessLocation.city}
+            />
 
             <div className="flex justify-end gap-4">
               <Button
@@ -281,7 +481,9 @@ export default function ProfileComponent() {
               >
                 Cancel
               </Button>
-              <Button variant="ghost" size="sm">Save Location</Button>
+              <Button variant="ghost" size="sm">
+                Save Location
+              </Button>
             </div>
           </div>
         )}
@@ -304,7 +506,7 @@ export default function ProfileComponent() {
             <UserCog className="text-primary" size={18} />
             <div>
               <p className="text-xs text-third">Account Type</p>
-              <p className="font-semibold">Consultant</p>
+              <p className="font-semibold">{accountDetails.accountType}</p>
             </div>
           </div>
 
@@ -313,7 +515,7 @@ export default function ProfileComponent() {
             <Crown className="text-yellow-400" size={18} />
             <div>
               <p className="text-xs text-third">Tier</p>
-              <p className="font-semibold">Premium Partner</p>
+              <p className="font-semibold">{accountDetails.tier}</p>
             </div>
           </div>
 
@@ -322,7 +524,7 @@ export default function ProfileComponent() {
             <CalendarDays className="text-primary" size={18} />
             <div>
               <p className="text-xs text-third">Joined On</p>
-              <p className="font-semibold">05 June 2024</p>
+              <p className="font-semibold">{accountDetails.joinedOn || "—"}</p>
             </div>
           </div>
 
@@ -331,8 +533,14 @@ export default function ProfileComponent() {
             <Store className="text-green-400" size={18} />
             <div>
               <p className="text-xs text-third">Storefront Status</p>
-              <span className="inline-flex items-center px-3 py-1 mt-1 rounded-full bg-green-500/20 text-green-400 text-xs font-medium">
-                Live
+              <span
+                className={`inline-flex items-center px-3 py-1 mt-1 rounded-full text-xs font-medium ${
+                  accountDetails.storefrontStatus === "Live"
+                    ? "bg-green-500/20 text-green-400"
+                    : "bg-yellow-500/20 text-yellow-400"
+                }`}
+              >
+                {accountDetails.storefrontStatus}
               </span>
             </div>
           </div>
@@ -345,17 +553,6 @@ export default function ProfileComponent() {
               <span className="inline-flex items-center px-3 py-1 mt-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
                 Active
               </span>
-            </div>
-          </div>
-
-          {/* Chat Enabled */}
-          <div className="flex items-start gap-3">
-            <MessageCircle className="text-primary" size={18} />
-            <div>
-              <p className="text-xs text-third">Chat Enabled</p>
-              <p className="font-semibold">
-                Yes <span className="text-xs text-third">(Mobile App)</span>
-              </p>
             </div>
           </div>
         </div>
@@ -423,7 +620,6 @@ export default function ProfileComponent() {
 
         {/* ✅ Actions Section: Always one line */}
         <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-
           <Button
             variant="outlineSecondary"
             size="sm"
@@ -441,7 +637,6 @@ export default function ProfileComponent() {
             <FileText size={16} className="mr-1" />
             <span>View Guidelines</span>
           </Button>
-
         </div>
       </div>
     </section>
@@ -462,14 +657,16 @@ export function ProfileItem({ label, value }) {
 function StatusCard({ title, value, icon, green }) {
   return (
     <div
-      className={`flex items-center gap-4 rounded-xl p-5 border border-third/30 ${green ? "bg-green-500/10" : "bg-secondary"
-        }`}
+      className={`flex items-center gap-4 rounded-xl p-5 border border-third/30 ${
+        green ? "bg-green-500/10" : "bg-secondary"
+      }`}
     >
       <div
-        className={`w-10 h-10 rounded-full flex items-center justify-center ${green
-          ? "bg-green-500/20 text-green-400"
-          : "bg-primary/10 text-primary"
-          }`}
+        className={`w-10 h-10 rounded-full flex items-center justify-center ${
+          green
+            ? "bg-green-500/20 text-green-400"
+            : "bg-primary/10 text-primary"
+        }`}
       >
         {icon}
       </div>

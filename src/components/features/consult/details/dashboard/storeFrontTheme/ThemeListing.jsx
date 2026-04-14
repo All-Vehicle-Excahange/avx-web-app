@@ -6,21 +6,26 @@ import PreviewPopup from "./components/PreviewPopup";
 import { THEME_STORE } from "@/core/engine/themeStore";
 import { useRouter } from "next/router";
 import { getThemeListing } from "@/services/theme.service";
+import SkeletonBox from "@/components/ui/skeleton/SkeletonBox";
 
 export default function ThemeListing() {
   const [previewTheme, setPreviewTheme] = useState(null);
   const [themes, setThemes] = useState([]);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   // call the API to get themes in frist load
 
   useEffect(() => {
     const fetchThemes = async () => {
+      setLoading(true);
       try {
         const data = await getThemeListing();
         setThemes(data.data || []);
       } catch (error) {
         console.error("Failed to fetch themes:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -43,29 +48,39 @@ export default function ThemeListing() {
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* TODO: Fetch themes from API right now we are using local just replace it with theme  */}
-          {themes.map((theme) => (
-            <div
-              key={theme.id}
-              onClick={() => setPreviewTheme(theme)}
-              className="relative group rounded-xl border border-third/30 overflow-hidden hover:border-primary transition cursor-pointer"
-            >
-              <div className="relative h-[170px]">
-                <Image
-                  src={theme.thumbnail}
-                  alt={theme.name}
-                  fill
-                  className="object-cover"
-                />
+          {loading ? (
+            Array.from({ length: 6 }).map((_, index) => (
+              <div
+                key={index}
+                className="relative rounded-xl border border-third/30 overflow-hidden"
+              >
+                <SkeletonBox className="h-[170px] w-full" rounded="rounded-none" />
               </div>
+            ))
+          ) : (
+            themes.map((theme) => (
+              <div
+                key={theme.id}
+                onClick={() => setPreviewTheme(theme)}
+                className="relative group rounded-xl border border-third/30 overflow-hidden hover:border-primary transition cursor-pointer"
+              >
+                <div className="relative h-[170px]">
+                  <Image
+                    src={theme.thumbnail}
+                    alt={theme.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
 
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                <span className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 size={16} /> Preview Theme
-                </span>
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                  <span className="flex items-center gap-2 text-sm">
+                    <CheckCircle2 size={16} /> Preview Theme
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </section>
 

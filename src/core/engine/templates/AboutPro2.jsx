@@ -3,12 +3,14 @@
 "use client";
 import { ABOUT_PRO_2 } from "../schemas";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import EditorInput from "../atoms/EditorInput";
 import { ImageUploader } from "../atoms/ImageUploader ";
 import RichTextEditor from "../atoms/RichTextEditor";
 import { Plus, Trash } from "lucide-react";
 import Select from "react-select";
+import Button from "@/components/ui/button";
+import GlobalLoader from "@/components/ui/GlobalLoader";
 import {
   setAboutHero,
   setAboutMission,
@@ -105,7 +107,8 @@ const EyeBrow = ({ children }) => (
 const Divider = () => <div className="w-8 h-px bg-primary/15 my-2" />;
 
 
-export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
+export default function AboutPro2({ data: rawData, isEditing, onUpdate, onNextTab }) {
+  const [isSaving, setIsSaving] = useState(false);
 
   const defaultDataLoaded = rawData ? {
     ...DEFAULT_DATA,
@@ -154,66 +157,60 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
     update(k, copy);
   };
 
-  const handleHeroBlur = async () => {
+  const handleSaveAndNext = async () => {
+    setIsSaving(true);
     try {
-      const formData = new FormData();
-      formData.append("heroTitle", data.aboutHeroTitle || "");
-      formData.append("heroDescription", data.aboutHeroDescription || "");
-      if (data.aboutHeroTemplate1?.id) formData.append("heroTemplateId1", data.aboutHeroTemplate1.id);
-      if (data.aboutHeroTemplate2?.id) formData.append("heroTemplateId2", data.aboutHeroTemplate2.id);
-      if (data.aboutHeroTemplate3?.id) formData.append("heroTemplateId3", data.aboutHeroTemplate3.id);
-      const res = await setAboutHero(formData);
-    } catch (error) { console.error("Error", error); }
-  };
+      const heroData = new FormData();
+      heroData.append("heroTitle", data.aboutHeroTitle || "");
+      heroData.append("heroDescription", data.aboutHeroDescription || "");
+      if (data.aboutHeroTemplate1?.id) heroData.append("heroTemplateId1", data.aboutHeroTemplate1.id);
+      if (data.aboutHeroTemplate2?.id) heroData.append("heroTemplateId2", data.aboutHeroTemplate2.id);
+      if (data.aboutHeroTemplate3?.id) heroData.append("heroTemplateId3", data.aboutHeroTemplate3.id);
 
-  const handleMissionBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("missionTitle", data.aboutMissionTitle || "");
-      formData.append("missionDescription", data.aboutMissionDescription || "");
-      if (data.aboutMissionTemplate1?.id) formData.append("missionTemplateId1", data.aboutMissionTemplate1.id);
-      const res = await setAboutMission(formData);
-    } catch (error) { console.error("Error", error); }
-  };
+      const missionData = new FormData();
+      missionData.append("missionTitle", data.aboutMissionTitle || "");
+      missionData.append("missionDescription", data.aboutMissionDescription || "");
+      if (data.aboutMissionTemplate1?.id) missionData.append("missionTemplateId1", data.aboutMissionTemplate1.id);
 
-  const handleVisionBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("visionTitle", data.aboutVisionTitle || "");
-      formData.append("visionDescription", data.aboutVisionDescription || "");
-      if (data.aboutVisionTemplate1?.id) formData.append("visionTemplateId1", data.aboutVisionTemplate1.id);
-      const res = await setAboutVision(formData);
-    } catch (error) { console.error("Error", error); }
-  };
+      const visionData = new FormData();
+      visionData.append("visionTitle", data.aboutVisionTitle || "");
+      visionData.append("visionDescription", data.aboutVisionDescription || "");
+      if (data.aboutVisionTemplate1?.id) visionData.append("visionTemplateId1", data.aboutVisionTemplate1.id);
 
-  const handleStatsBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("aboutUsDescription", data.aboutStatsDescription || "");
+      const statsData = new FormData();
+      statsData.append("aboutUsDescription", data.aboutStatsDescription || "");
       if (data.stats && Array.isArray(data.stats)) {
         data.stats.forEach((stat, i) => {
-          formData.append(`stats[${i}].number`, stat.number || "");
-          formData.append(`stats[${i}].label`, stat.label || "");
+          statsData.append(`stats[${i}].number`, stat.number || "");
+          statsData.append(`stats[${i}].label`, stat.label || "");
         });
       }
-      const res = await setState(formData);
-    } catch (error) { console.error("Error", error); }
-  };
 
-  const handleServicesBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("serviceTitle", data.aboutServicesTitle || "");
-      formData.append("serviceDescription", data.aboutServicesDescription || "");
+      const servicesData = new FormData();
+      servicesData.append("serviceTitle", data.aboutServicesTitle || "");
+      servicesData.append("serviceDescription", data.aboutServicesDescription || "");
       if (data.services && Array.isArray(data.services)) {
         data.services.forEach((service, i) => {
-          formData.append(`services[${i}].title`, service.title || "");
-          formData.append(`services[${i}].desc`, service.desc || "");
-          formData.append(`services[${i}].icon`, service.icon || "");
+          servicesData.append(`services[${i}].title`, service.title || "");
+          servicesData.append(`services[${i}].desc`, service.desc || "");
+          servicesData.append(`services[${i}].icon`, service.icon || "");
         });
       }
-      const res = await setAboutServices(formData);
-    } catch (error) { console.error("Error", error); }
+
+      await Promise.all([
+        setAboutHero(heroData),
+        setAboutMission(missionData),
+        setAboutVision(visionData),
+        setState(statsData),
+        setAboutServices(servicesData),
+      ]);
+
+      if (onNextTab) onNextTab();
+    } catch (error) {
+      console.error("Error saving About sections:", error);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
 
@@ -221,6 +218,7 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
   if (isEditing) {
     return (
       <div className=" p-8 rounded-xl border border-third/30 w-full max-w-[1480px] mx-auto space-y-10">
+        <GlobalLoader isLoading={isSaving} />
         {/* HERO EDITOR */}
         <h3 className="text-primary text-xl font-bold">Hero Section</h3>
         <div className="grid grid-cols-2 gap-6">
@@ -229,27 +227,25 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
               bold
               value={data.aboutHeroTitle}
               onChange={(e) => update("aboutHeroTitle", e.target.value)}
-              onBlur={handleHeroBlur}
               placeholder="Hero Title"
             />
             <RichTextEditor
               label="Hero Description"
               value={data.aboutHeroDescription}
               onChange={(v) => update("aboutHeroDescription", v)}
-              onBlur={handleHeroBlur}
             />
           </div>
           <div className="space-y-4">
             <p className="text-sm font-semibold text-primary">Hero Images</p>
             <div className="grid grid-cols-2 gap-4">
                <div className="h-40 relative col-span-2">
-                 <ImageUploader label="Hero Image 1" src={data.aboutHeroTemplate1?.imageUrl} fieldKey="hero1" imageType="ABOUT_HERO" onChange={({ imageUrl, id }) => { update("aboutHeroTemplate1", { ...data.aboutHeroTemplate1, imageUrl, id: id ?? data.aboutHeroTemplate1?.id }); setTimeout(handleHeroBlur, 100); }} />
+                 <ImageUploader label="Hero Image 1" src={data.aboutHeroTemplate1?.imageUrl} fieldKey="hero1" imageType="ABOUT_HERO" onChange={({ imageUrl, id }) => { update("aboutHeroTemplate1", { ...data.aboutHeroTemplate1, imageUrl, id: id ?? data.aboutHeroTemplate1?.id }); }} />
                </div>
                <div className="h-40 relative">
-                 <ImageUploader label="Hero Image 2" src={data.aboutHeroTemplate2?.imageUrl} fieldKey="hero2" imageType="ABOUT_HERO" onChange={({ imageUrl, id }) => { update("aboutHeroTemplate2", { ...data.aboutHeroTemplate2, imageUrl, id: id ?? data.aboutHeroTemplate2?.id }); setTimeout(handleHeroBlur, 100); }} />
+                 <ImageUploader label="Hero Image 2" src={data.aboutHeroTemplate2?.imageUrl} fieldKey="hero2" imageType="ABOUT_HERO" onChange={({ imageUrl, id }) => { update("aboutHeroTemplate2", { ...data.aboutHeroTemplate2, imageUrl, id: id ?? data.aboutHeroTemplate2?.id }); }} />
                </div>
                <div className="h-40 relative">
-                 <ImageUploader label="Hero Image 3" src={data.aboutHeroTemplate3?.imageUrl} fieldKey="hero3" imageType="ABOUT_HERO" onChange={({ imageUrl, id }) => { update("aboutHeroTemplate3", { ...data.aboutHeroTemplate3, imageUrl, id: id ?? data.aboutHeroTemplate3?.id }); setTimeout(handleHeroBlur, 100); }} />
+                 <ImageUploader label="Hero Image 3" src={data.aboutHeroTemplate3?.imageUrl} fieldKey="hero3" imageType="ABOUT_HERO" onChange={({ imageUrl, id }) => { update("aboutHeroTemplate3", { ...data.aboutHeroTemplate3, imageUrl, id: id ?? data.aboutHeroTemplate3?.id }); }} />
                </div>
             </div>
           </div>
@@ -264,14 +260,12 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
               bold
               value={data.aboutMissionTitle}
               onChange={(e) => update("aboutMissionTitle", e.target.value)}
-              onBlur={handleMissionBlur}
               placeholder="Mission Title"
             />
             <RichTextEditor
               label="Mission Description"
               value={data.aboutMissionDescription}
               onChange={(v) => update("aboutMissionDescription", v)}
-              onBlur={handleMissionBlur}
             />
           </div>
           <div className="space-y-4">
@@ -287,7 +281,6 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
                     imageUrl,
                     id: id ?? data.aboutMissionTemplate1?.id,
                   });
-                  setTimeout(handleMissionBlur, 100);
                 }}
               />
             </div>
@@ -303,14 +296,12 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
               bold
               value={data.aboutVisionTitle}
               onChange={(e) => update("aboutVisionTitle", e.target.value)}
-              onBlur={handleVisionBlur}
               placeholder="Vision Title"
             />
             <RichTextEditor
               label="Vision Description"
               value={data.aboutVisionDescription}
               onChange={(v) => update("aboutVisionDescription", v)}
-              onBlur={handleVisionBlur}
             />
           </div>
           <div className="space-y-4">
@@ -326,7 +317,6 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
                     imageUrl,
                     id: id ?? data.aboutVisionTemplate1?.id,
                   });
-                  setTimeout(handleVisionBlur, 100);
                 }}
               />
             </div>
@@ -340,7 +330,6 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
           label="Stats Description"
           value={data.aboutStatsDescription}
           onChange={(v) => update("aboutStatsDescription", v)}
-          onBlur={handleStatsBlur}
         />
         <div className="p-4 bg-primary/5 rounded-lg border border-third/10 mt-4">
           <h4 className="text-primary font-semibold mb-4">Stats Numbers</h4>
@@ -353,7 +342,6 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
                   onChange={(e) =>
                     updateArr("stats", i, "number", e.target.value)
                   }
-                  onBlur={handleStatsBlur}
                   placeholder="Number"
                 />
                 <EditorInput
@@ -361,7 +349,6 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
                   onChange={(e) =>
                     updateArr("stats", i, "label", e.target.value)
                   }
-                  onBlur={handleStatsBlur}
                   placeholder="Label"
                 />
               </div>
@@ -379,14 +366,12 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
             bold
             value={data.aboutServicesTitle}
             onChange={(e) => update("aboutServicesTitle", e.target.value)}
-            onBlur={handleServicesBlur}
             placeholder="Services Title"
           />
           <RichTextEditor
             label="Services Description"
             value={data.aboutServicesDescription}
             onChange={(v) => update("aboutServicesDescription", v)}
-            onBlur={handleServicesBlur}
           />
         </div>
         <div className="grid md:grid-cols-2 gap-4 mt-4">
@@ -409,7 +394,6 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
                   }
                   onChange={(selectedOption) => {
                     updateArr("services", i, "icon", selectedOption.value);
-                    setTimeout(handleServicesBlur, 100);
                   }}
                 />
               </div>
@@ -425,7 +409,6 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
                   onChange={(e) =>
                     updateArr("services", i, "title", e.target.value)
                   }
-                  onBlur={handleServicesBlur}
                   placeholder="Service Title"
                 />
               </div>
@@ -441,39 +424,26 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate }) {
                   onChange={(e) =>
                     updateArr("services", i, "desc", e.target.value)
                   }
-                  onBlur={handleServicesBlur}
                   placeholder="Service Description"
                 />
               </div>
 
-              {/* Delete */}
-              <div className="mt-3 flex justify-end">
-                <button
-                  onClick={() => {
-                      removeArr("services", i);
-                      setTimeout(handleServicesBlur, 100);
-                  }}
-                  className="text-red-500 p-2 hover:bg-red-500/10 rounded transition"
-                >
-                  <Trash size={16} />
-                </button>
-              </div>
+            
+            
             </div>
           ))}
-          <div
-            onClick={() => {
-                addArr("services", { icon: "", title: "New Service", desc: "Service description" });
-                setTimeout(handleServicesBlur, 100);
-            }}
-            className="border border-dashed border-third/40 p-4 rounded bg-primary/5 flex items-center justify-center cursor-pointer hover:bg-primary/10 transition"
-          >
-            <div className="flex items-center gap-2 text-primary font-medium">
-              <Plus size={18} />
-              <span>Add Service</span>
-            </div>
-          </div>
+         
         </div>
 
+        <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
+          <Button 
+            onClick={handleSaveAndNext} 
+            disabled={isSaving}
+            variant="ghost"
+          >
+            {isSaving ? "Saving..." : "Save and Next"}
+          </Button>
+        </div>
       </div>
     );
   }

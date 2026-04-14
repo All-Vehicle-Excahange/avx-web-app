@@ -5,11 +5,14 @@ import {
   checkIsEligibleToUpload,
   getThemeImages,
 } from "@/services/theme.service";
+import SkeletonBox from "@/components/ui/skeleton/SkeletonBox";
 
 export default function MediaPickerModal({ open, onClose, onSelect, type }) {
   const [tab, setTab] = useState("library");
   const [images, setImages] = useState([]);
   const [isEligibleToUpload, setIsEligibleToUpload] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [eligibilityLoading, setEligibilityLoading] = useState(false);
 
   //  Call api with type to get images in useEffect
 
@@ -17,11 +20,14 @@ export default function MediaPickerModal({ open, onClose, onSelect, type }) {
     if (!open || tab !== "library") return;
 
     const fetchImages = async () => {
+      setLoading(true);
       try {
         const data = await getThemeImages(type);
         setImages(data.data || []);
       } catch (error) {
         console.error("Failed to fetch images:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -32,12 +38,15 @@ export default function MediaPickerModal({ open, onClose, onSelect, type }) {
     if (!open || tab !== "upload") return;
 
     const check = async () => {
+      setEligibilityLoading(true);
       try {
         const res = await checkIsEligibleToUpload();
         setIsEligibleToUpload(res.data);
       } catch (err) {
         console.error("Eligibility check failed", err);
         setIsEligibleToUpload(false);
+      } finally {
+        setEligibilityLoading(false);
       }
     };
 
@@ -81,33 +90,40 @@ export default function MediaPickerModal({ open, onClose, onSelect, type }) {
 
         {/* TAB CONTENT */}
         {tab === "library" && (
-          <div className="grid grid-cols-4 gap-6">
-            {images.length === 0 && (
-              <p className="text-center text-third col-span-4">
+          <div className="grid grid-cols-4 gap-6 max-h-[60vh] overflow-y-auto pr-2">
+            {loading ? (
+              Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="relative h-44 rounded-2xl overflow-hidden border border-third/30">
+                  <SkeletonBox className="w-full h-full" rounded="rounded-none" />
+                </div>
+              ))
+            ) : images.length === 0 ? (
+              <p className="text-center text-third col-span-4 py-20">
                 No images found in library.
               </p>
+            ) : (
+              images.map((img, i) => (
+                <div
+                  key={i}
+                  onClick={() => onSelect(img)}
+                  className="relative h-44 rounded-2xl overflow-hidden border border-third/30 hover:border-primary cursor-pointer transition group"
+                >
+                  <NextImage
+                    src={img.imageUrl}
+                    alt="Media"
+                    fill
+                    className="object-cover transition group-hover:scale-105"
+                  />
+                </div>
+              ))
             )}
-            {images.map((img, i) => (
-              <div
-                key={i}
-                onClick={() => onSelect(img)}
-                className="relative h-44 rounded-2xl overflow-hidden border border-third/30 hover:border-primary cursor-pointer transition group"
-              >
-                <NextImage
-                  src={img.imageUrl}
-                  alt="Media"
-                  fill
-                  className="object-cover transition group-hover:scale-105"
-                />
-              </div>
-            ))}
           </div>
         )}
 
         {tab === "upload" && (
           <div className="relative">
             {/* LOCK OVERLAY */}
-            {!isEligibleToUpload && (
+            {!isEligibleToUpload && !eligibilityLoading && (
               <div className="absolute inset-0 z-20 bg-black/70 flex items-center justify-center rounded-3xl">
                 <div className="flex flex-col items-center gap-2 text-primary-400">
                   <Lock className="w-8 h-8" />
