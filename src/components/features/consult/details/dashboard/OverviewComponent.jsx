@@ -8,10 +8,19 @@ import {
   BadgeCheck,
   BarChart3,
   Zap,
+  AlertTriangle,
+  AlertCircle,
   ArrowDown,
   Info,
   Tag,
   Calendar,
+  Inbox,
+  Shield,
+  Rocket,
+  ChevronRight,
+  Lightbulb,
+  BadgeDollarSign,
+  PlusCircle,
 } from "lucide-react";
 import StatCard from "./components/StateCard";
 import Activity from "./components/Activity";
@@ -19,359 +28,532 @@ import Task from "./components/Task";
 import Button from "@/components/ui/button";
 import { ShieldCheck, Star } from "lucide-react";
 import TopPerformingCard from "./components/TopPerformingCard";
+import { useState } from "react";
+import CustomSelect from "@/components/ui/custom-select";
+import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
+
+const rangeOptions = [
+  { label: "Last 7 days", value: "7" },
+  { label: "Last 30 days", value: "30" },
+  { label: "Last 90 days", value: "90" },
+];
+
+const DATE_3_DAYS_AGO = new Date(Date.now() - 86400000 * 3).toISOString();
+const DATE_12_DAYS_AGO = new Date(Date.now() - 86400000 * 12).toISOString();
+const DATE_18_DAYS_AGO = new Date(Date.now() - 86400000 * 18).toISOString();
 
 export default function OverviewComponent() {
+  const [range, setRange] = useState("30");
+  const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+
   return (
-    <div className="space-y-8">
-      {/* HEADER */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-          <h1 className="text-xl lg:text-2xl font-bold">
-            Welcome, Adarsh Auto Consultants
-          </h1>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs md:text-sm text-third mt-1">
-            <span className="flex items-center gap-1 text-green-400 font-medium">
-              <BadgeCheck size={16} />
-              Verified
+    <>
+      <div className="space-y-8">
+        {/* HEADER */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <h1 className="text-xl lg:text-2xl font-bold">
+              Welcome, Adarsh Auto Consultants
+            </h1>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs md:text-sm text-third mt-1">
+              <span className="flex items-center gap-1 text-green-400 font-medium">
+                <BadgeCheck size={16} />
+                Verified
+              </span>
+              <span className="flex items-center gap-2">
+                <MapPin size={16} />
+                City: Ahmedabad
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 flex-wrap">
+            {/* Day range filter */}
+            <div className="w-44">
+              <CustomSelect
+                value={range}
+                onChange={setRange}
+                options={rangeOptions}
+                placeholder="Select range"
+                variant="transparent"
+              />
+            </div>
+
+            <span className="w-fit inline-flex items-center px-4 py-1.5 rounded-full bg-primary text-secondary text-[10px] md:text-xs font-bold tracking-wider">
+              PREMIUM PARTNER
             </span>
-            <span className="flex items-center gap-2">
-              <MapPin size={16} />
-              City: Ahmedabad
-            </span>
           </div>
         </div>
 
-        <span className="w-fit inline-flex items-center px-4 py-1.5 rounded-full bg-primary text-secondary text-[10px] md:text-xs font-bold tracking-wider">
-          PREMIUM PARTNER
-        </span>
-      </div>
-
-      {/* PERFORMANCE */}
-      <div className="rounded-xl border border-third/30 bg-primary/5 p-6">
-        <h3 className="font-semibold mb-5">
-          Performance Snapshot (Last 30 Days)
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-          <StatCard
-            icon={<Eye />}
-            label="Storefront Visits"
-            value="1,420"
-            trend="+12%"
-          />
-          <StatCard
-            icon={<Car />}
-            label="Vehicle Views"
-            value="3,820"
-            trend="+18%"
-          />
-          <StatCard
-            icon={<MessageCircle />}
-            label="Inquiries"
-            value="86"
-            trend="+11%"
-          />
-          <StatCard
-            icon={<BarChart3 />}
-            label="Conversion Rate"
-            value="6.1%"
-            subValue={true}
-            comparison="City Avg: 4.8%"
-          />
-          <StatCard
-            icon={<Zap />}
-            label="Featured Impressions"
-            value="8,300"
-            trend="+22%"
-          />
-        </div>
-      </div>
-
-      {/* PERFORMANCE FUNNEL */}
-      <div className="rounded-xl border border-third/30 bg-primary/5 p-6 space-y-8">
-        <div className="flex items-center gap-3 text-primary font-bold tracking-wider">
-          <BarChart3
-            size={20}
-            className="text-secondary bg-primary p-1 rounded-md"
-          />
-          <h3 className="text-sm uppercase italic">Performance Funnel</h3>
-        </div>
-
-        <div className="space-y-6">
-          {/* Step 1 */}
-          <div className="space-y-2">
-            <div className="flex justify-between items-end">
-              <span className="text-[10px] font-bold text-third uppercase tracking-widest">
-                Storefront Visits
-              </span>
-              <span className="text-lg font-bold text-white tracking-tight">
-                1,420
-              </span>
-            </div>
-            <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-              <div className="h-full bg-fourth rounded-full w-full"></div>
-            </div>
-          </div>
-
-          {/* Step 2 */}
-          <div className="space-y-2">
-            <div className="flex justify-between items-end">
-              <span className="text-[10px] font-bold text-third uppercase tracking-widest">
-                Vehicle Views
-              </span>
-              <span className="text-lg font-bold text-white tracking-tight">
-                3,820
-              </span>
-            </div>
-            <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-              <div className="h-full bg-fourth rounded-full w-[85%]"></div>
-            </div>
-          </div>
-
-          {/* Step 3 */}
-          <div className="space-y-2">
-            <div className="flex justify-between items-end">
-              <span className="text-[10px] font-bold text-third uppercase tracking-widest">
-                Inquiries
-              </span>
-              <span className="text-lg font-bold text-white tracking-tight">
-                86
-              </span>
-            </div>
-            <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-              <div className="h-full bg-fourth rounded-full w-[60%]"></div>
-            </div>
+        {/* PERFORMANCE */}
+        <div className="rounded-xl border border-third/30  p-6">
+          <h3 className="font-semibold mb-5">
+            Performance Snapshot (Last 30 Days)
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <StatCard
+              icon={<Eye />}
+              label="Vehicle Views"
+              value="3,820"
+              trend="+18%"
+            />
+            <StatCard
+              icon={<MessageCircle />}
+              label="Inquiries"
+              value="86"
+              trend="+11%"
+            />
+            <StatCard icon={<BarChart3 />} label="Conversion" value="6.1%" />
+            <StatCard icon={<Car />} label="Active Vehicles" value="28" />
           </div>
         </div>
 
-        {/* Insight Box */}
-        <div className="bg-white/5 border-l-2 border-orange-500 p-4 rounded-r-lg">
-          <p className="text-[10px] font-bold text-orange-400 uppercase tracking-widest mb-1">
-            Insight
-          </p>
-          <p className="text-xs text-white leading-relaxed font-medium">
-            Strong traffic but moderate conversion. Improving listing quality
-            can increase inquiries.
-          </p>
-        </div>
-      </div>
-
-      {/* RECOMMENDED ACTIONS */}
-      <div className="rounded-xl border border-third/30 bg-primary/5 p-6">
-        <h3 className="font-semibold mb-5">Recommended Actions</h3>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Action 1 */}
-          <div className="rounded-xl border border-blue-500/20 bg-blue-500/10 p-5 space-y-3 transition hover:border-blue-500/40 cursor-pointer">
-            <Zap size={18} className="text-blue-500" />
-            <div className="space-y-1">
-              <h4 className="text-sm font-bold text-blue-500">
-                Boost High-View Listings
-              </h4>
-              <p className="text-xs text-third leading-relaxed">
-                3 vehicles getting views but low inquiries
+        {/* RECOMMENDED ACTIONS */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Action 1: New Inquiries */}
+          <div className="rounded-2xl border border-primary/20  p-6 flex flex-col justify-between transition hover:border-primary/40 group">
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="h-11 w-11 shrink-0 rounded-xl bg-rose-500/20 flex items-center justify-center text-rose-500 border border-rose-500/20">
+                  <AlertTriangle size={22} strokeWidth={2.5} />
+                </div>
+                <h4 className="font-bold text-white text-lg tracking-tight">
+                  5 New Inquiries
+                </h4>
+              </div>
+              <p className="mb-4 text-xs text-third leading-relaxed font-medium">
+                Respond within 15 min for better leads
               </p>
             </div>
-            <button className="flex items-center gap-1.5 text-[10px] font-bold text-blue-500 uppercase tracking-widest pt-2">
-              Take Action <span className="text-[14px]">›</span>
-            </button>
+            <Button
+              href={"/consult/dashboard/inquiries"}
+              variant="ghost"
+              className="w-full"
+            >
+              Respond Now
+            </Button>
           </div>
 
-          {/* Action 2 */}
-          <div className="rounded-xl border border-green-500/20 bg-green-500/10 p-5 space-y-3 transition hover:border-green-500/40 cursor-pointer">
-            <ShieldCheck size={18} className="text-green-500" />
-            <div className="space-y-1">
-              <h4 className="text-sm font-bold text-green-500">
-                Add AVX Inspection
-              </h4>
-              <p className="text-xs text-third leading-relaxed">
-                2 listings can gain more trust
+          {/* Action 2: Chats Pending */}
+          <div className="rounded-2xl border border-primary/20  p-6 flex flex-col justify-between transition hover:border-primary/40 group">
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="h-11 w-11 shrink-0 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-500 border border-orange-500/20">
+                  <MessageSquare size={22} strokeWidth={2.5} />
+                </div>
+                <h4 className="font-bold text-white text-lg tracking-tight">
+                  3 Chats Pending
+                </h4>
+              </div>
+              <p className="mb-4 text-xs text-third leading-relaxed font-medium">
+                Active conversations waiting
               </p>
             </div>
-            <button className="flex items-center gap-1.5 text-[10px] font-bold text-green-500 uppercase tracking-widest pt-2">
-              Take Action <span className="text-[14px]">›</span>
-            </button>
+            <Button
+              onClick={() => setIsDownloadOpen(true)}
+              variant="ghost"
+              className="w-full"
+            >
+              View Chats
+            </Button>
           </div>
 
-          {/* Action 4 */}
-          <div className="rounded-xl border border-yellow-500/20 bg-yellow-500/10 p-5 space-y-3 transition hover:border-yellow-500/40 cursor-pointer">
-            <BarChart3 size={18} className="text-yellow-500" />
-            <div className="space-y-1">
-              <h4 className="text-sm font-bold text-yellow-500">
-                Improve Pricing
-              </h4>
-              <p className="text-xs text-third leading-relaxed">
-                2 listings priced above market range
+          {/* Action 3: Fix Listings */}
+          <div className="rounded-2xl border border-primary/20  p-6 flex flex-col justify-between transition hover:border-primary/40 group">
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="h-11 w-11 shrink-0 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-500 border border-amber-500/20">
+                  <AlertCircle size={22} strokeWidth={2.5} />
+                </div>
+                <h4 className="font-bold text-white text-lg tracking-tight">
+                  2 Fix Listings
+                </h4>
+              </div>
+              <p className="mb-4 text-xs text-third leading-relaxed font-medium">
+                Low visibility detected
               </p>
             </div>
-            <button className="flex items-center gap-1.5 text-[10px] font-bold text-yellow-500 uppercase tracking-widest pt-2">
-              Take Action <span className="text-[14px]">›</span>
-            </button>
+            <Button
+              href={"/consult/dashboard/inventory"}
+              variant="ghost"
+              className="w-full"
+            >
+              Fix Listings
+            </Button>
           </div>
         </div>
-      </div>
 
-      {/* INVENTORY & INSPECTION */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Inventory Status */}
-        <div className="rounded-xl border border-third/30 bg-primary/5 p-6 flex flex-col">
-          <h3 className="font-semibold text-sm uppercase tracking-wider mb-6">
+        {/* INQUIRIES & CHATS DETAILS */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-white">
+          {/* Inquiries Detail */}
+          <div className="rounded-2xl border border-third/20  p-6 flex flex-col space-y-6 transition">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-purple-500/10 rounded-lg text-purple-400">
+                <Inbox size={20} />
+              </div>
+              <h3 className="font-bold text-lg tracking-tight">Inquiries</h3>
+            </div>
+
+            <div className="space-y-4 flex-1">
+              <div className="flex justify-between items-center text-sm border-b border-third/5 pb-3">
+                <span className="text-third font-medium">New</span>
+                <span className="font-bold text-base">12</span>
+              </div>
+              <div className="flex justify-between items-center text-sm border-b border-third/5 pb-3">
+                <span className="text-third font-medium">Active</span>
+                <span className="font-bold text-base">8</span>
+              </div>
+              <div className="flex justify-between items-center text-sm pb-2">
+                <span className="text-third font-medium">Closed</span>
+                <span className="font-bold text-base">2</span>
+              </div>
+
+              <div className="bg-green-500/10 border border-green-500/20 p-3.5 rounded-xl flex items-center gap-3">
+                <Zap size={16} className="text-green-500 fill-green-500/20" />
+                <span className="text-xs font-bold text-green-500 uppercase tracking-wider">
+                  Response Time: 12 min
+                </span>
+              </div>
+            </div>
+
+            <Button
+              href={"/consult/dashboard/inquiries"}
+              className="bg-purple-600 self-end  hover:text-primary hover:border-primary text-white"
+            >
+              View All
+            </Button>
+          </div>
+
+          {/* Chats Detail */}
+          <div className="rounded-2xl border border-third/20  p-6 flex flex-col space-y-6 transition ">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-blue-500/10 rounded-lg text-blue-400">
+                <MessageSquare size={20} />
+              </div>
+              <h3 className="font-bold text-lg tracking-tight">Chats</h3>
+            </div>
+
+            <div className="space-y-4 flex-1">
+              <div className="flex justify-between items-center text-sm border-b border-third/5 pb-3">
+                <span className="text-third font-medium">Started</span>
+                <span className="font-bold text-base">18</span>
+              </div>
+              <div className="flex justify-between items-center text-sm border-b border-third/5 pb-3">
+                <span className="text-third font-medium">Replied</span>
+                <span className="font-bold text-base">16</span>
+              </div>
+              <div className="flex justify-between items-center text-sm pb-2">
+                <span className="text-third font-medium">Pending</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-base">2</span>
+                  <AlertTriangle size={16} className="text-orange-500" />
+                </div>
+              </div>
+
+              <div className="bg-blue-500/10 border border-blue-500/20 p-3.5 rounded-xl flex items-center gap-3">
+                <span className="text-xs font-bold text-blue-400 uppercase tracking-wider">
+                  Response Rate: 89%
+                </span>
+              </div>
+            </div>
+
+            <Button
+              onClick={() => setIsDownloadOpen(true)}
+              className="bg-blue-600 self-end  hover:text-primary hover:border-primary text-white"
+            >
+              Open Inbox
+            </Button>
+          </div>
+        </div>
+
+        {/* INVENTORY & INSPECTION */}
+        {/* INVENTORY STATUS */}
+        <div className="rounded-xl border border-third/30  p-6 space-y-6">
+          <h3 className="font-semibold text-sm uppercase tracking-wider">
             Inventory Status
           </h3>
 
-          <div className="space-y-4 flex-1">
-            <div className="flex justify-between items-center text-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="flex justify-between items-center text-sm p-4 bg-white/5 rounded-xl border border-third/10">
               <span className="text-third font-medium">Active Vehicles</span>
-              <span className="font-bold text-blue-500 text-base">28</span>
+              <span className="font-bold text-blue-500 text-lg">28</span>
             </div>
-            <div className="flex justify-between items-center text-sm">
+            <div className="flex justify-between items-center text-sm p-4 bg-white/5 rounded-xl border border-third/10">
               <span className="text-third font-medium">Inspected Vehicles</span>
-              <span className="font-bold text-green-500 text-base">9</span>
+              <span className="font-bold text-green-500 text-lg">9</span>
             </div>
-            <div className="flex justify-between items-center text-sm">
+            <div className="flex justify-between items-center text-sm p-4 bg-white/5 rounded-xl border border-third/10">
               <span className="text-third font-medium">Featured Vehicles</span>
-              <span className="font-bold text-orange-500 text-base">6</span>
+              <span className="font-bold text-orange-500 text-lg">6</span>
             </div>
-            <div className="flex justify-between items-center text-sm border-b border-third/10 pb-4">
-              <span className="text-third font-medium">
-                Low Performance Vehicles
+            <div className="flex justify-between items-center text-sm p-4 bg-white/5 rounded-xl border border-third/10">
+              <span className="text-third font-medium">Low Performance</span>
+              <span className="font-bold text-yellow-500 text-lg">5</span>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4 pt-4 border-t border-third/10">
+            <div className="bg-white/5 border-l-2 border-green-500 p-3 rounded-r-lg">
+              <p className="text-[10px] font-bold text-green-500 uppercase tracking-widest mb-0.5">
+                Insight
+              </p>
+              <p className="text-xs text-white leading-relaxed">
+                Listings with inspection are performing 30% better. Active
+                vehicles are healthy, but 5 vehicles need attention to improve
+                overall conversion.
+              </p>
+            </div>
+            <Button
+              href={"/consult/dashboard/inventory"}
+              variant="ghost"
+              className="self-end"
+            >
+              Manage Inventory
+            </Button>
+          </div>
+        </div>
+
+        {/* TOP PERFORMING LISTINGS + NEEDS ATTENTION */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* TOP PERFORMING LISTINGS */}
+          <div className="rounded-xl border border-third/30  p-6 flex flex-col gap-4">
+            <h3 className="font-semibold">Top Performing Listings</h3>
+
+            <div className="flex flex-col gap-4 flex-1">
+              <TopPerformingCard
+                rank={1}
+                vehicle={{
+                  id: "v1",
+                  makerName: "BMW",
+                  modelName: "X1",
+                  variantName: "sDrive20d xLine",
+                  price: 4500000,
+                  totalInquiries: 24,
+                  listingDate: new Date().toISOString(),
+                  inspectionStatus: "INSPECTED",
+                  thumbnailUrl: "/big_card_car.jpg",
+                }}
+              />
+              <TopPerformingCard
+                rank={2}
+                vehicle={{
+                  id: "v2",
+                  makerName: "Honda",
+                  modelName: "City",
+                  variantName: "ZX CVT",
+                  price: 1550000,
+                  totalInquiries: 18,
+                  listingDate: DATE_3_DAYS_AGO,
+                  inspectionStatus: "NOT_INSPECTED",
+                  thumbnailUrl: "/big_card_car.jpg",
+                }}
+              />
+            </div>
+
+            <div className="pt-3 border-t border-third/10 self-end">
+              <Button
+                href={"/consult/dashboard/inventory"}
+                variant="ghost"
+                className="w-full"
+              >
+                View All
+              </Button>
+            </div>
+          </div>
+
+          {/* NEEDS ATTENTION */}
+          <div className="rounded-xl border border-third/30  p-6 flex flex-col gap-4">
+            <h3 className="font-semibold text-primary">Needs Attention</h3>
+
+            <div className="flex flex-col gap-4 flex-1">
+              <TopPerformingCard
+                vehicle={{
+                  id: "v3",
+                  makerName: "Maruti",
+                  modelName: "Swift",
+                  variantName: "VXI AMT",
+                  price: 780000,
+                  totalInquiries: 2,
+                  listingDate: DATE_12_DAYS_AGO,
+                  inspectionStatus: "NOT_INSPECTED",
+                  thumbnailUrl: "/big_card_car.jpg",
+                }}
+              />
+              <TopPerformingCard
+                vehicle={{
+                  id: "v4",
+                  makerName: "Hyundai",
+                  modelName: "i20",
+                  variantName: "Asta Turbo",
+                  price: 1020000,
+                  totalInquiries: 1,
+                  listingDate: DATE_18_DAYS_AGO,
+                  inspectionStatus: "NOT_INSPECTED",
+                  thumbnailUrl: "/big_card_car.jpg",
+                }}
+              />
+            </div>
+
+            <div className="pt-3 border-t border-amber-500/20 self-end">
+              <Button
+                href={"/consult/dashboard/inventory"}
+                variant="outlineSecondary"
+                className="w-full"
+              >
+                Improve Listing
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* INSPECTION STATUS + VISIBILITY */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* INSPECTION STATUS */}
+          <div className="rounded-xl border border-third/30 p-6 flex flex-col gap-5">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-blue-500/10 rounded-lg text-blue-400">
+                <Shield size={20} />
+              </div>
+              <h3 className="font-bold text-lg tracking-tight">
+                Inspection Status
+              </h3>
+            </div>
+
+            <div className="flex flex-col gap-3 flex-1">
+              <div className="flex justify-between items-center text-sm border-b border-third/10 pb-3">
+                <span className="text-third font-medium">Inspected</span>
+                <span className="font-bold text-base">9</span>
+              </div>
+              <div className="flex justify-between items-center text-sm pb-3">
+                <span className="text-third font-medium">Not Inspected</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-base">19</span>
+                  <AlertTriangle size={15} className="text-amber-400" />
+                </div>
+              </div>
+
+              <div className="bg-green-500/10 border border-green-500/20 p-3 rounded-xl flex items-center gap-2">
+                <TrendingUp size={15} className="text-green-500" />
+                <span className="text-xs font-bold text-green-500">
+                  +30% better performance
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-third/10 self-end">
+              <Button
+                href={"/consult/dashboard/inspection"}
+                className=" bg-blue-600  hover:text-primary hover:border-primary text-white"
+              >
+                Request Inspection
+              </Button>
+            </div>
+          </div>
+
+          {/* VISIBILITY */}
+          <div className="rounded-xl border border-third/30 p-6 flex flex-col gap-5">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-purple-500/10 rounded-lg text-purple-400">
+                <Eye size={20} />
+              </div>
+              <h3 className="font-bold text-lg tracking-tight">Visibility</h3>
+            </div>
+
+            <div className="flex flex-col gap-3 flex-1">
+              <div className="flex justify-between items-center text-sm border-b border-third/10 pb-3">
+                <span className="text-third font-medium">Featured</span>
+                <span className="font-bold text-base">6</span>
+              </div>
+              <div className="flex justify-between items-center text-sm border-b border-third/10 pb-3">
+                <span className="text-third font-medium">Boost Active</span>
+                <span className="font-bold text-base">3</span>
+              </div>
+              <div className="flex justify-between items-center text-sm pb-3">
+                <span className="text-third font-medium">Impressions</span>
+                <span className="font-bold text-base">8,300</span>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-third/10 self-end">
+              <Button
+                href={"/consult/dashboard/ppc"}
+                className="bg-purple-600   hover:text-primary hover:border-primary text-white"
+              >
+                Manage Boost
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* RECENT ACTIVITY */}
+        <div className="rounded-xl border border-third/30    p-6 space-y-3">
+          <h3 className="font-semibold">Recent Activity</h3>
+
+          <Activity text="New inquiry on BMW X1" time="5m ago" />
+          <Activity text="Vehicle marked sold: Honda City" time="2h ago" />
+          <Activity text="Inspection completed: Baleno" time="4h ago" />
+          <Activity
+            text="Featured slot impression spike (+18%)"
+            time="6h ago"
+          />
+        </div>
+
+        {/* RECOMMENDED ACTIONS */}
+        <div className="rounded-xl border border-primary/20  p-6 flex flex-col gap-5 transition-colors duration-200 ">
+          {/* Header */}
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 bg-primary/15 rounded-lg text-yellow-400">
+              <Lightbulb size={18} />
+            </div>
+            <h3 className="font-bold text-base tracking-tight">
+              Recommended Actions
+            </h3>
+          </div>
+
+          {/* Action rows */}
+          <div className="flex flex-col divide-y divide-third/10">
+            {/* Row 1 */}
+            <button className="cursor-pointer flex items-center gap-4 py-3.5 group/row text-left hover:bg-white/2 transition px-1 rounded-lg">
+              <div className="h-9 w-9 shrink-0 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                <Car size={18} />
+              </div>
+              <span className="flex-1 text-sm font-medium text-primary">
+                Add more SUVs —{" "}
+                <span className="text-blue-400 font-semibold">high demand</span>
               </span>
-              <span className="font-bold text-yellow-500 text-base">5</span>
-            </div>
-          </div>
+            </button>
 
-          <div className="mt-4 bg-white/5 border-l-2 border-green-500 p-3 rounded-r-lg">
-            <p className="text-[10px] font-bold text-green-500 uppercase tracking-widest mb-0.5">
-              Insight
-            </p>
-            <p className="text-xs text-white leading-relaxed">
-              Listings with inspection are performing 30% better.
-            </p>
-          </div>
-        </div>
-
-        {/* Inspection Impact */}
-        <div className="rounded-xl border border-third/30 bg-primary/5 p-6 space-y-5 flex flex-col">
-          <h3 className="font-semibold text-sm uppercase tracking-wider">
-            Inspection Impact
-          </h3>
-
-          <div className="space-y-3 flex-1">
-            {/* With Inspection */}
-            <div className="bg-green-500/10 border border-green-500/20 p-4 rounded-xl space-y-1">
-              <div className="flex items-center gap-2 text-green-500 text-[10px] font-bold uppercase tracking-widest">
-                <BadgeCheck size={14} />
-                With Inspection
+            {/* Row 2 */}
+            <button className="cursor-pointer flex items-center gap-4 py-3.5 group/row text-left hover:bg-white/2 transition px-1 rounded-lg">
+              <div className="h-9 w-9 shrink-0 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+                <BadgeDollarSign size={18} />
               </div>
-              <ul className="text-xs text-green-200/80 space-y-1.5 pl-5 list-disc">
-                <li>+31% inquiries</li>
-                <li>Faster conversion</li>
-              </ul>
-            </div>
+              <span className="flex-1 text-sm font-medium text-primary">
+                Reduce price for{" "}
+                <span className="text-amber-400 font-semibold">1 listing</span>
+              </span>
+            </button>
 
-            {/* Without Inspection */}
-            <div className="bg-rose-500/10 border border-rose-500/20 p-4 rounded-xl space-y-1">
-              <div className="flex items-center gap-2 text-rose-500 text-[10px] font-bold uppercase tracking-widest">
-                <Info size={14} className="rotate-180" />
-                Without Inspection
+            {/* Row 3 */}
+            <button className="cursor-pointer flex items-center gap-4 py-3.5 group/row text-left hover:bg-white/2 transition px-1 rounded-lg">
+              <div className="h-9 w-9 shrink-0 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+                <Rocket size={18} />
               </div>
-              <ul className="text-xs text-rose-200/80 space-y-1.5 pl-5 list-disc">
-                <li>Lower buyer trust</li>
-              </ul>
-            </div>
+              <span className="flex-1 text-sm font-medium text-primary">
+                Boost top{" "}
+                <span className="text-purple-400 font-semibold">
+                  2 vehicles
+                </span>
+              </span>
+            </button>
           </div>
-
-          <button className="w-full bg-green-500 hover:bg-green-600 text-secondary font-bold text-xs uppercase py-3 rounded-xl tracking-widest mt-2 transition-colors shadow-lg shadow-green-500/10">
-            Inspect More Vehicles
-          </button>
         </div>
       </div>
 
-      {/* TOP PERFORMING LISTINGS */}
-      <div className="rounded-xl border border-third/30 bg-primary/5 p-6 space-y-5">
-        <h3 className="font-semibold mb-5">Top Performing Listings</h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <TopPerformingCard
-            rank={1}
-            vehicle={{
-              id: "v1",
-              makerName: "BMW",
-              modelName: "X1",
-              variantName: "sDrive20d xLine",
-              price: 4500000,
-              totalInquiries: 24,
-              listingDate: new Date().toISOString(),
-              inspectionStatus: "INSPECTED",
-              thumbnailUrl: "/big_card_car.jpg",
-            }}
-          />
-          <TopPerformingCard
-            rank={2}
-            vehicle={{
-              id: "v2",
-              makerName: "Honda",
-              modelName: "City",
-              variantName: "ZX CVT",
-              price: 1550000,
-              totalInquiries: 18,
-              listingDate: new Date(Date.now() - 86400000 * 3).toISOString(),
-              inspectionStatus: "NOT_INSPECTED",
-              thumbnailUrl: "/big_card_car.jpg",
-            }}
-          />
-        </div>
-      </div>
-
-      {/* RECENT ACTIVITY */}
-      <div className="rounded-xl border border-third/30 bg-primary/5 p-6 space-y-3">
-        <h3 className="font-semibold">Recent Activity</h3>
-
-        <Activity text="New inquiry on BMW X1" time="5m ago" />
-        <Activity text="Vehicle marked sold: Honda City" time="2h ago" />
-        <Activity text="Inspection completed: Baleno" time="4h ago" />
-        <Activity text="Featured slot impression spike (+18%)" time="6h ago" />
-      </div>
-
-      {/* PERFORMANCE INSIGHTS */}
-      <div className="rounded-xl border border-fourth/30 bg-fourth/5 p-7 space-y-5 transition-colors duration-200 hover:border-fourth/50">
-        <h3 className="font-semibold text-lg text-fourth">
-          Performance Insights
-        </h3>
-
-        <ul className="grid md:grid-cols-2 gap-x-8 gap-y-4 text-sm">
-          <li className="flex items-start gap-3 text-third">
-            <TrendingUp className="text-fourth mt-0.5 shrink-0" size={18} />
-            <span>
-              <b className="text-white">Featured vehicles</b> perform{" "}
-              <b>1.8× better</b> than normal listings.
-            </span>
-          </li>
-
-          <li className="flex items-start gap-3 text-third">
-            <Zap className="text-fourth mt-0.5 shrink-0" size={18} />
-            <span>
-              <b className="text-white">Fast responses</b> significantly improve
-              your marketplace ranking.
-            </span>
-          </li>
-
-          <li className="flex items-start gap-3 text-third">
-            <Calendar className="text-fourth mt-0.5 shrink-0" size={18} />
-            <span>
-              <b className="text-white">Weekend traffic</b> is <b>23% higher</b>{" "}
-              — best time to boost listings.
-            </span>
-          </li>
-
-          <li className="flex items-start gap-3 text-third">
-            <Tag className="text-fourth mt-0.5 shrink-0" size={18} />
-            <span>
-              <b className="text-white">Competitive pricing</b> improves
-              conversions by up to <b>19%</b>.
-            </span>
-          </li>
-        </ul>
-      </div>
-    </div>
+      <DownloadAppPopup
+        isOpen={isDownloadOpen}
+        onClose={() => setIsDownloadOpen(false)}
+      />
+    </>
   );
 }

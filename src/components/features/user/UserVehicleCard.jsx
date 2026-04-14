@@ -13,6 +13,7 @@ import {
   Users,
   ShieldCheck,
   ShieldAlert,
+  Ban,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
@@ -37,6 +38,7 @@ export default function UserVehicleCard({
     sold: "bg-gray-600",
     draft: "bg-yellow-500",
     underinspection: "bg-orange-500",
+    suspended: "bg-red-600",
   };
 
   const verificationBadge = {
@@ -150,7 +152,7 @@ export default function UserVehicleCard({
 
             {/* Verification Status + Consultant */}
             <div className="flex flex-wrap items-center gap-2">
-              {verification && (
+              {status !== "suspended" && verification && (
                 <span className={`flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full font-semibold ${verification.cls}`}>
                   {verification.icon} {verification.label}
                 </span>
@@ -182,6 +184,32 @@ export default function UserVehicleCard({
               <p className="text-xs text-yellow-400/80">
                 This listing is not yet published.
               </p>
+            )}
+
+            {/* SUSPENDED notice + reason */}
+            {status === "suspended" && (
+              <div className="flex items-start gap-2 rounded-lg border border-red-500/30 bg-red-500/8 px-3 py-2">
+                <Ban size={13} className="text-red-400 mt-0.5 shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-red-400/70 mb-0.5">
+                    This listing is not yet published.
+                  </p>
+                  <p className="text-xs font-semibold text-red-400 leading-snug">
+                    {data?.suspendReason || "No reason provided"}
+                  </p>
+                  {data?.vehicleSuspenseType && (
+                    <span
+                      className={`mt-1 inline-block text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
+                        data.vehicleSuspenseType === "PERMANENT"
+                          ? "bg-red-500/20 text-red-400"
+                          : "bg-orange-500/20 text-orange-400"
+                      }`}
+                    >
+                      {data.vehicleSuspenseType}
+                    </span>
+                  )}
+                </div>
+              </div>
             )}
 
             {/* BOTTOM — price + actions */}

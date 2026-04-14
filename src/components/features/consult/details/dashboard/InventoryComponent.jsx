@@ -6,21 +6,21 @@ import { useState, useEffect } from "react";
 import UserVehicleCard from "@/components/features/user/UserVehicleCard";
 import StatCard from "./components/StateCard";
 import {
-  SlidersHorizontal,
-  ChevronDown,
   Smartphone,
   TrendingUp,
-  MessageSquare,
   Flame,
   EyeOff,
   AlertTriangle,
   BarChart3,
   ArrowRight,
+  Ban,
+  ChevronDown,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import {
   getInventoryVehicle, getTopPerformingVehicles, getInventorySnapShotCount,
-  getNeedAttenctionVehicles
+  getNeedAttenctionVehicles,
+  getSusPendedVehicles
 } from "@/services/Seller.service";
 import TopPerformingCard from "./components/TopPerformingCard";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
@@ -36,6 +36,7 @@ export default function InventoryComponent() {
     { id: "DRAFT", label: "Draft" },
     { id: "LIVE", label: "Live" },
     { id: "SOLD", label: "Sold" },
+    { id: "SUSPENDED", label: "Suspended" },
   ];
 
   // Map API response to the shape UserVehicleCard expects
@@ -55,6 +56,8 @@ export default function InventoryComponent() {
     consultantName: v.consultantName,
     closingPrice: v.closingPrice,
     isWishlisted: v.isWishlisted,
+    suspendReason: v.suspendReason,
+    vehicleSuspenseType: v.vehicleSuspenseType,
   });
 
   const [activeType, setActiveType] = useState("all");
@@ -75,11 +78,17 @@ export default function InventoryComponent() {
   const [needAttentionLoading, setNeedAttentionLoading] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
+  // Suspended vehicles state
+  const [suspendedVehicles, setSuspendedVehicles] = useState([]);
+  const [suspendedPage, setSuspendedPage] = useState(1);
+  const [suspendedPageSize] = useState(9);
+  const [suspendedTotalPages, setSuspendedTotalPages] = useState(1);
+  const [suspendedLoading, setSuspendedLoading] = useState(false);
+
   const fetchVehicles = async () => {
     try {
       setVehiclesLoading(true);
       const status = activeType === "all" ? undefined : activeType;
-
       const res = await getInventoryVehicle(status);
       setVehicles(res.data || []);
       setVisibleCount(9);
@@ -90,8 +99,33 @@ export default function InventoryComponent() {
     }
   };
 
+  const fetchSuspendedVehicles = async (pageNo = 1) => {
+    try {
+      setSuspendedLoading(true);
+      const res = await getSusPendedVehicles({ pageNo, pageSize: suspendedPageSize });
+      if (pageNo === 1) {
+        setSuspendedVehicles(res.data || []);
+      } else {
+        setSuspendedVehicles((prev) => [...prev, ...(res.data || [])]);
+      }
+      setSuspendedTotalPages(res.pageResponse?.totalPages || 1);
+      setSuspendedPage(pageNo);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSuspendedLoading(false);
+    }
+  };
+
   useEffect(() => {
-    fetchVehicles();
+    if (activeType === "SUSPENDED") {
+      setSuspendedVehicles([]);
+      setSuspendedPage(1);
+      fetchSuspendedVehicles(1);
+    } else {
+      fetchVehicles();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeType]);
 
   useEffect(() => {
@@ -350,86 +384,145 @@ export default function InventoryComponent() {
         </div>
 
         {/* 4️⃣ FILTER BAR */}
-        <div className="rounded-xl border border-third/30  p-5 flex flex-col lg:flex-row gap-4 justify-between">
+        <div className="rounded-xl border border-third/30 p-5 flex flex-col lg:flex-row gap-4 justify-between">
           <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
             {vehicleTypes.map((type) => (
               <button
                 key={type.id}
                 onClick={() => setActiveType(type.id)}
-                className={`px-4 py-2 cursor-pointer rounded-full border border-third/40 text-sm transition
-                ${activeType === type.id
-                    ? "bg-primary text-secondary"
-                    : "hover:bg-primary/10"
+                className={`px-4 py-2 cursor-pointer rounded-full border text-sm transition
+                  ${
+                    type.id === "SUSPENDED"
+                      ? activeType === "SUSPENDED"
+                        ? "bg-red-500 text-white border-red-500"
+                        : "border-red-500/40 text-red-400 hover:bg-red-500/10"
+                      : activeType === type.id
+                      ? "bg-primary text-secondary border-primary"
+                      : "border-third/40 hover:bg-primary/10"
                   }`}
               >
+                {type.id === "SUSPENDED" && (
+                  <Ban size={12} className="inline mr-1.5 -mt-0.5" />
+                )}
                 {type.label}
               </button>
             ))}
           </div>
         </div>
 
-        {/* 5️⃣ VEHICLE GRID */}
-        <div className="w-full space-y-6">
-          {vehiclesLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 gap-6">
-              {[...Array(6)].map((_, i) => (
-                <UserVehicleCardSkeleton key={i} />
-              ))}
-            </div>
-          ) : vehicles?.length > 0 ? (
-            <>
+        {/* 5️⃣ VEHICLE GRID — normal tabs */}
+        {activeType !== "SUSPENDED" && (
+          <div className="w-full space-y-6">
+            {vehiclesLoading ? (
               <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 gap-6">
-                {vehicles.slice(0, visibleCount).map((car) => (
-                  <UserVehicleCard
-                    key={car.id}
-                    data={mapVehicle(car)}
-                    status={car.listingStatus?.toLowerCase()}
-                    avxInspected={car.inspectionStatus === "AI_INSPECTED"}
-                    inquiries={car.totalInquiries}
-                    chats={car.approvedInquiries}
-                    onRefresh={() => {
-                      fetchVehicles();
-                      fetchInventorySnapShotCount();
-                    }}
-                  />
+                {[...Array(6)].map((_, i) => (
+                  <UserVehicleCardSkeleton key={i} />
                 ))}
               </div>
-
-              {visibleCount < vehicles.length && (
-                <div className="flex justify-end mt-4">
-                  <Button
-                    variant="outline"
-                    onClick={() => setVisibleCount((prev) => prev + 9)}
-                    className="px-6 py-2 rounded-full text-sm font-semibold shadow-md"
-                  >
-                    View More
-                  </Button>
+            ) : vehicles?.length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 gap-6">
+                  {vehicles.slice(0, visibleCount).map((car) => (
+                    <UserVehicleCard
+                      key={car.id}
+                      data={mapVehicle(car)}
+                      status={car.listingStatus?.toLowerCase()}
+                      avxInspected={car.inspectionStatus === "AI_INSPECTED"}
+                      inquiries={car.totalInquiries}
+                      chats={car.approvedInquiries}
+                      onRefresh={() => {
+                        fetchVehicles();
+                        fetchInventorySnapShotCount();
+                      }}
+                    />
+                  ))}
                 </div>
-              )}
-            </>
-          ) : (
-            <div className="flex flex-col items-center justify-center py-16 text-center rounded-xl border-2 border-dashed border-third/20 bg-third/5">
-              {activeType === "all" ? (
-                <>
-                  <h3 className="text-xl font-bold mb-2">You havent listed any vehicles yet.</h3>
-                  <p className="text-third mb-6">
-                    Add vehicles in the AVX mobile app to start receiving inquiries.
-                  </p>
-                  <Button variant="ghost" size="sm" showIcon={false}>
-                    Download App
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <h3 className="text-xl font-bold mb-2">No vehicles found.</h3>
-                  <p className="text-third">
-                    There are currently no vehicles with this status.
-                  </p>
-                </>
-              )}
-            </div>
-          )}
-        </div>
+
+                {visibleCount < vehicles.length && (
+                  <div className="flex justify-end mt-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => setVisibleCount((prev) => prev + 9)}
+                      className="px-6 py-2 rounded-full text-sm font-semibold shadow-md"
+                    >
+                      View More
+                    </Button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-16 text-center rounded-xl border-2 border-dashed border-third/20 bg-third/5">
+                {activeType === "all" ? (
+                  <>
+                    <h3 className="text-xl font-bold mb-2">You havent listed any vehicles yet.</h3>
+                    <p className="text-third mb-6">
+                      Add vehicles in the AVX mobile app to start receiving inquiries.
+                    </p>
+                    <Button variant="ghost" size="sm" showIcon={false}>
+                      Download App
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="text-xl font-bold mb-2">No vehicles found.</h3>
+                    <p className="text-third">
+                      There are currently no vehicles with this status.
+                    </p>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 5️⃣ SUSPENDED VEHICLES SECTION */}
+        {activeType === "SUSPENDED" && (
+          <div className="w-full space-y-4">
+            {suspendedLoading && suspendedPage === 1 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
+                {[...Array(3)].map((_, i) => (
+                  <UserVehicleCardSkeleton key={i} />
+                ))}
+              </div>
+            ) : suspendedVehicles.length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
+                  {suspendedVehicles.map((car) => (
+                    <UserVehicleCard
+                      key={car.id}
+                      data={mapVehicle(car)}
+                      status="suspended"
+                      avxInspected={car.inspectionStatus === "AI_INSPECTED"}
+                      inquiries={car.totalInquiries}
+                      chats={car.approvedInquiries}
+                      onRefresh={() => fetchSuspendedVehicles(1)}
+                    />
+                  ))}               </div>
+
+                {suspendedPage < suspendedTotalPages && (
+                  <div className="flex justify-end mt-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => fetchSuspendedVehicles(suspendedPage + 1)}
+                      disabled={suspendedLoading}
+                      className="px-6 py-2 rounded-full text-sm font-semibold shadow-md"
+                    >
+                      {suspendedLoading ? "Loading..." : "Load More"}
+                    </Button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-16 text-center rounded-xl border-2 border-dashed border-red-500/20 bg-red-500/5">
+                <Ban size={32} className="text-red-400/40 mb-3" />
+                <h3 className="text-xl font-bold mb-2">No suspended vehicles.</h3>
+                <p className="text-third">
+                  None of your listings are currently suspended.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
         <div className="rounded-xl border border-third/30 bg-primary/5 p-5 space-y-4">
           <div className="flex items-center gap-2">
             <AlertTriangle className="text-yellow-500" size={18} />
