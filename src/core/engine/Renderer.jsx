@@ -1,7 +1,7 @@
 import React from "react";
 import { TEMPLATE_REGISTRY } from "./registry";
 
-export const EngineRenderer = ({ sections, mode, onUpdate }) => {
+export const EngineRenderer = ({ sections, mode, onUpdate, onNextTab }) => {
   return (
     <div className="flex flex-col gap-10">
       {sections.map((section, index) => {
@@ -20,6 +20,7 @@ export const EngineRenderer = ({ sections, mode, onUpdate }) => {
             data={section.data}
             isEditing={mode === "editor"}
             onUpdate={(newData) => onUpdate(index, newData)}
+            onNextTab={onNextTab}
           />
         );
       })}

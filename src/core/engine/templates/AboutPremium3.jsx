@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 import { Cpu, Globe, ShieldCheck, TrendingUp } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import EditorInput from "../atoms/EditorInput";
 import { ImageUploader } from "../atoms/ImageUploader "; 
 import RichTextEditor from "../atoms/RichTextEditor";
-import { Plus, Trash } from "lucide-react";
 import Select from "react-select";
+import GlobalLoader from "@/components/ui/GlobalLoader";
+import Button from "@/components/ui/button";
 import {
   setAboutHero,
   setAboutMission,
@@ -73,7 +74,8 @@ const formatOptionLabel = ({ value, label }) => (
   </div>
 );
 const DEFAULT_DATA = ABOUT_PREMIUM_3[0].data;
-export default function AboutPremium2({ data, isEditing, onUpdate }) {
+export default function AboutPremium3({ data, isEditing, onUpdate, onNextTab }) {
+  const [isSaving, setIsSaving] = useState(false);
   const fallbackData = { ...DEFAULT_DATA };
   const d = data || fallbackData;
   const [activeIndex, setActiveIndex] = useState(0);
@@ -101,148 +103,93 @@ export default function AboutPremium2({ data, isEditing, onUpdate }) {
     update(k, copy);
   };
   /* ================== API HANDLERS ================== */
-  const handleHeroBlur = async (dataOverride) => {
-    const currentData = dataOverride || d;
-    console.log("🚀 HERO FINAL DATA:", {
-      customHeroImage1: currentData.customHeroImage1,
-      customHeroImage2: currentData.customHeroImage2,
-      heroTemplate1: currentData.heroTemplate1,
-      heroTemplate2: currentData.heroTemplate2,
-    });
-    
+  const handleSaveAndNext = async () => {
+    setIsSaving(true);
     try {
-      const formData = new FormData();
-      formData.append("heroTitle", currentData.heroTitle || "");
-      formData.append("heroDescription", currentData.heroDescription || "");
-      
-      // Hero Image 1
-      if (currentData.customHeroImage1) {
-        const blob = await getBlobFromUrl(currentData.customHeroImage1);
-        if (blob) {
-          formData.append("customHeroImage1", blob, "hero1.png");
-          console.log("✅ Appending customHeroImage1 blob");
-        }
-      } else if (currentData.heroTemplate1?.id) {
-        formData.append("heroTemplateId1", currentData.heroTemplate1.id);
-        console.log("✅ Appending heroTemplateId1:", currentData.heroTemplate1.id);
+      // Hero
+      const heroData = new FormData();
+      heroData.append("heroTitle", d.heroTitle || "");
+      heroData.append("heroDescription", d.heroDescription || "");
+
+      if (d.customHeroImage1 && d.customHeroImage1.startsWith("blob:")) {
+        const blob = await getBlobFromUrl(d.customHeroImage1);
+        if (blob) heroData.append("customHeroImage1", blob, "hero1.png");
+      } else if (d.heroTemplate1?.id) {
+        heroData.append("heroTemplateId1", d.heroTemplate1.id);
       }
-      
-      // Hero Image 2
-      if (currentData.customHeroImage2) {
-        const blob = await getBlobFromUrl(currentData.customHeroImage2);
-        if (blob) {
-          formData.append("customHeroImage2", blob, "hero2.png");
-          console.log("✅ Appending customHeroImage2 blob");
-        }
-      } else if (currentData.heroTemplate2?.id) {
-        formData.append("heroTemplateId2", currentData.heroTemplate2.id);
-        console.log("✅ Appending heroTemplateId2:", currentData.heroTemplate2.id);
+
+      if (d.customHeroImage2 && d.customHeroImage2.startsWith("blob:")) {
+        const blob = await getBlobFromUrl(d.customHeroImage2);
+        if (blob) heroData.append("customHeroImage2", blob, "hero2.png");
+      } else if (d.heroTemplate2?.id) {
+        heroData.append("heroTemplateId2", d.heroTemplate2.id);
       }
-      
-      const res = await setAboutHero(formData);
-      if (res?.data?.success) console.log("Hero updated successfully");
-    } catch (error) {
-      console.error("Failed to update Hero section:", error);
-    }
-  };
-  const handleMissionBlur = async (dataOverride) => {
-    const currentData = dataOverride || d;
-    console.log("🚀 MISSION FINAL DATA:", {
-      customMissionImage1: currentData.customMissionImage1,
-      missionTemplate1: currentData.missionTemplate1,
-    });
-    
-    try {
-      const formData = new FormData();
-      formData.append("missionTitle", currentData.missionTitle || "");
-      formData.append("missionDescription", currentData.missionDesc || "");
-      
-      // Mission Image
-      if (currentData.customMissionImage1) {
-        const blob = await getBlobFromUrl(currentData.customMissionImage1);
-        if (blob) {
-          formData.append("customMission1", blob, "mission1.png");
-          console.log("✅ Appending customMission1 blob");
-        }
-      } else if (currentData.missionTemplate1?.id) {
-        formData.append("missionTemplateId1", currentData.missionTemplate1.id);
-        console.log("✅ Appending missionTemplateId1:", currentData.missionTemplate1.id);
+
+      // Mission
+      const missionData = new FormData();
+      missionData.append("missionTitle", d.missionTitle || "");
+      missionData.append("missionDescription", d.missionDesc || "");
+      if (d.customMissionImage1 && d.customMissionImage1.startsWith("blob:")) {
+        const blob = await getBlobFromUrl(d.customMissionImage1);
+        if (blob) missionData.append("customMission1", blob, "mission1.png");
+      } else if (d.missionTemplate1?.id) {
+        missionData.append("missionTemplateId1", d.missionTemplate1.id);
       }
-      
-      const res = await setAboutMission(formData);
-      if (res?.data?.success) console.log("Mission updated successfully");
-    } catch (error) {
-      console.error("Failed to update Mission section:", error);
-    }
-  };
-  const handleVisionBlur = async (dataOverride) => {
-    const currentData = dataOverride || d;
-    console.log("🚀 VISION FINAL DATA:", {
-      customVisionImage1: currentData.customVisionImage1,
-      visionTemplate1: currentData.visionTemplate1,
-    });
-    
-    try {
-      const formData = new FormData();
-      formData.append("visionTitle", currentData.visionTitle || "");
-      formData.append("visionDescription", currentData.visionDesc || "");
-      
-      // Vision Image
-      if (currentData.customVisionImage1) {
-        const blob = await getBlobFromUrl(currentData.customVisionImage1);
-        if (blob) {
-          formData.append("customVision1", blob, "vision1.png");
-          console.log("✅ Appending customVision1 blob");
-        }
-      } else if (currentData.visionTemplate1?.id) {
-        formData.append("visionTemplateId1", currentData.visionTemplate1.id);
-        console.log("✅ Appending visionTemplateId1:", currentData.visionTemplate1.id);
+
+      // Vision
+      const visionData = new FormData();
+      visionData.append("visionTitle", d.visionTitle || "");
+      visionData.append("visionDescription", d.visionDesc || "");
+      if (d.customVisionImage1 && d.customVisionImage1.startsWith("blob:")) {
+        const blob = await getBlobFromUrl(d.customVisionImage1);
+        if (blob) visionData.append("customVision1", blob, "vision1.png");
+      } else if (d.visionTemplate1?.id) {
+        visionData.append("visionTemplateId1", d.visionTemplate1.id);
       }
-      
-      const res = await setAboutVision(formData);
-      if (res?.data?.success) console.log("Vision updated successfully");
-    } catch (error) {
-      console.error("Failed to update Vision section:", error);
-    }
-  };
-  const handleStatsBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("aboutUsDescription", d.aboutUsDescription || "");
+
+      // Stats
+      const statsData = new FormData();
+      statsData.append("aboutUsDescription", d.aboutUsDescription || "");
       if (d.stats && Array.isArray(d.stats)) {
         d.stats.forEach((stat, i) => {
-          formData.append(`stats[${i}].number`, stat.number || "");
-          formData.append(`stats[${i}].label`, stat.label || "");
+          statsData.append(`stats[${i}].number`, stat.number || "");
+          statsData.append(`stats[${i}].label`, stat.label || "");
         });
       }
-      const res = await setState(formData);
-      if (res?.data?.success) console.log("Stats updated successfully");
-    } catch (error) {
-      console.error("Failed to update Stats section:", error);
-    }
-  };
-  const handleServicesBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("serviceTitle", d.servicesTitle || "");
-      formData.append("serviceDescription", d.servicesDesc || "");
+
+      // Services
+      const servicesData = new FormData();
+      servicesData.append("serviceTitle", d.servicesTitle || "");
+      servicesData.append("serviceDescription", d.servicesDesc || "");
       if (d.services && Array.isArray(d.services)) {
         d.services.forEach((service, i) => {
-          formData.append(`services[${i}].title`, service.title || "");
-          formData.append(`services[${i}].desc`, service.desc || "");
-          formData.append(`services[${i}].icon`, service.icon || "");
+          servicesData.append(`services[${i}].title`, service.title || "");
+          servicesData.append(`services[${i}].desc`, service.desc || "");
+          servicesData.append(`services[${i}].icon`, service.icon || "");
         });
       }
-      const res = await setAboutServices(formData);
-      if (res?.data?.success) console.log("Services updated successfully");
+
+      await Promise.all([
+        setAboutHero(heroData),
+        setAboutMission(missionData),
+        setAboutVision(visionData),
+        setState(statsData),
+        setAboutServices(servicesData),
+      ]);
+
+      if (onNextTab) onNextTab();
     } catch (error) {
-      console.error("Failed to update Services section:", error);
+      console.error("Error saving sections:", error);
+    } finally {
+      setIsSaving(false);
     }
   };
+
   /* ================== EDITOR ================== */
   if (isEditing) {
     return (
-      <div className=" w-full max-w-[1480px] mx-auto space-y-10">
+      <div className="p-8 rounded-xl border border-third/30 w-full max-w-[1480px] mx-auto space-y-10">
+        <GlobalLoader isLoading={isSaving} />
         {/* HERO EDITOR */}
         <h3 className="text-primary text-xl font-bold">Hero Section</h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -269,7 +216,6 @@ export default function AboutPremium2({ data, isEditing, onUpdate }) {
                     delete updatedData.customHeroImageUrl1;
                   }
                   onUpdate(updatedData);
-                  handleHeroBlur(updatedData); // 🔥 PASS FRESH DATA
                 }}
               />
             </div>
@@ -295,7 +241,6 @@ export default function AboutPremium2({ data, isEditing, onUpdate }) {
                     delete updatedData.customHeroImageUrl2;
                   }
                   onUpdate(updatedData);
-                  handleHeroBlur(updatedData); // 🔥 PASS FRESH DATA
                 }}
               />
             </div>
@@ -306,14 +251,12 @@ export default function AboutPremium2({ data, isEditing, onUpdate }) {
             bold
             value={d.heroTitle}
             onChange={(e) => update("heroTitle", e.target.value)}
-            onBlur={handleHeroBlur}
             placeholder="Hero Title"
           />
           <RichTextEditor
             label="Hero Description"
             value={d.heroDescription}
             onChange={(v) => update("heroDescription", v)}
-            onBlur={handleHeroBlur}
           />
         </div>
         <hr className="border-third/20" />
@@ -325,14 +268,12 @@ export default function AboutPremium2({ data, isEditing, onUpdate }) {
               bold
               value={d.missionTitle}
               onChange={(e) => update("missionTitle", e.target.value)}
-              onBlur={handleMissionBlur}
               placeholder="Mission Title"
             />
             <RichTextEditor
               label="Mission Description"
               value={d.missionDesc}
               onChange={(v) => update("missionDesc", v)}
-              onBlur={handleMissionBlur}
             />
           </div>
           <div className="space-y-4">
@@ -343,27 +284,19 @@ export default function AboutPremium2({ data, isEditing, onUpdate }) {
                 src={d.customMissionImage1 || d.customMissionUrl1 || d.missionTemplate1?.imageUrl}
                 fieldKey="mission"
                 onChange={({ imageUrl, id }) => {
-                  console.log("🔍 Mission onChange:", { imageUrl, id });
                   const updatedData = { ...d };
                   if (id) {
                     // Template selected
-                    console.log("📋 Template selected");
                     updatedData.missionTemplate1 = { imageUrl, id };
                     delete updatedData.customMissionImage1;
                     delete updatedData.customMissionUrl1;
                   } else {
                     // Custom image uploaded
-                    console.log("🖼️ Custom image uploaded");
                     updatedData.customMissionImage1 = imageUrl;
                     delete updatedData.missionTemplate1; // 🔥 IMPORTANT FIX
                     delete updatedData.customMissionUrl1;
                   }
-                  console.log("🔍 Updated data:", {
-                    customMissionImage1: updatedData.customMissionImage1,
-                    missionTemplate1: updatedData.missionTemplate1,
-                  });
                   onUpdate(updatedData);
-                  handleMissionBlur(updatedData); // 🔥 PASS FRESH DATA
                 }}
               />
             </div>
@@ -378,14 +311,12 @@ export default function AboutPremium2({ data, isEditing, onUpdate }) {
               bold
               value={d.visionTitle}
               onChange={(e) => update("visionTitle", e.target.value)}
-              onBlur={handleVisionBlur}
               placeholder="Vision Title"
             />
             <RichTextEditor
               label="Vision Description"
               value={d.visionDesc}
               onChange={(v) => update("visionDesc", v)}
-              onBlur={handleVisionBlur}
             />
           </div>
           <div className="space-y-4">
@@ -409,7 +340,6 @@ export default function AboutPremium2({ data, isEditing, onUpdate }) {
                     delete updatedData.customVisionUrl1;
                   }
                   onUpdate(updatedData);
-                  handleVisionBlur(updatedData); // 🔥 PASS FRESH DATA
                 }}
               />
             </div>
@@ -422,7 +352,6 @@ export default function AboutPremium2({ data, isEditing, onUpdate }) {
           label="About Us Description"
           value={d.aboutUsDescription}
           onChange={(v) => update("aboutUsDescription", v)}
-          onBlur={handleStatsBlur}
         />
         <div className="p-4 bg-primary/5 rounded-lg border border-third/10">
           <h4 className="text-primary font-semibold mb-4">Stats Numbers</h4>
@@ -435,7 +364,6 @@ export default function AboutPremium2({ data, isEditing, onUpdate }) {
                   onChange={(e) =>
                     updateArr("stats", i, "number", e.target.value)
                   }
-                  onBlur={handleStatsBlur}
                   placeholder="Number"
                 />
                 <EditorInput
@@ -443,7 +371,6 @@ export default function AboutPremium2({ data, isEditing, onUpdate }) {
                   onChange={(e) =>
                     updateArr("stats", i, "label", e.target.value)
                   }
-                  onBlur={handleStatsBlur}
                   placeholder="Label"
                 />
               </div>
@@ -460,14 +387,12 @@ export default function AboutPremium2({ data, isEditing, onUpdate }) {
             bold
             value={d.servicesTitle}
             onChange={(e) => update("servicesTitle", e.target.value)}
-            onBlur={handleServicesBlur}
             placeholder="Services Title"
           />
           <RichTextEditor
             label="Services Description"
             value={d.servicesDesc}
             onChange={(v) => update("servicesDesc", v)}
-            onBlur={handleServicesBlur}
           />
         </div>
         <div className="grid md:grid-cols-2 gap-4 mt-4">
@@ -489,7 +414,6 @@ export default function AboutPremium2({ data, isEditing, onUpdate }) {
                   }
                   onChange={(selectedOption) => {
                     updateArr("services", i, "icon", selectedOption.value);
-                    handleServicesBlur();
                   }}
                 />
               </div>
@@ -503,7 +427,6 @@ export default function AboutPremium2({ data, isEditing, onUpdate }) {
                   onChange={(e) =>
                     updateArr("services", i, "title", e.target.value)
                   }
-                  onBlur={handleServicesBlur}
                   placeholder="Service Title"
                 />
               </div>
@@ -517,12 +440,20 @@ export default function AboutPremium2({ data, isEditing, onUpdate }) {
                   onChange={(e) =>
                     updateArr("services", i, "desc", e.target.value)
                   }
-                  onBlur={handleServicesBlur}
                   placeholder="Service Description"
                 />
               </div>
             </div>
           ))}
+        </div>
+        <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
+          <Button 
+            onClick={handleSaveAndNext} 
+            disabled={isSaving}
+            variant="ghost"
+          >
+            {isSaving ? "Saving..." : "Save and Next"}
+          </Button>
         </div>
       </div>
     );

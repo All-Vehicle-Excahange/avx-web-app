@@ -191,6 +191,7 @@ export default function CreateTheme() {
           <EngineRenderer
             sections={[sections[activeTab]]}
             mode={mode}
+            onNextTab={() => setActiveTab(prev => Math.min(prev + 1, sections.length - 1))}
             onUpdate={(i, newData) => {
               const updated = [...sections];
               updated[activeTab].data = newData;

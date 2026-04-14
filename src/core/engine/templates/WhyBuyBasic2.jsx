@@ -9,6 +9,8 @@ import {
 import EditorInput from "@/core/engine/atoms/EditorInput";
 import RichTextEditor from "@/core/engine/atoms/RichTextEditor";
 import Select from "react-select";
+import Button from "@/components/ui/button";
+import GlobalLoader from "@/components/ui/GlobalLoader";
 import {
   setWhyBuyHero,
   setWhyBuyStory,
@@ -103,6 +105,7 @@ const Divider = ({ light = false }) => (
 const DEFAULT_DATA = WHY_BUY_BASIC_2[0].data;
 
 export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate }) {
+  const [isSaving, setIsSaving] = useState(false);
   const data = {
     ...DEFAULT_DATA, ...Object.fromEntries(
       Object.entries(rawData || {}).filter(([, v]) => v !== undefined && v !== null)
@@ -148,73 +151,60 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
     updateField(arrayName, newArray);
   };
 
-  // ── API HANDLERS ──
-
-  const handleHeroBlur = async () => {
+  const handleSave = async () => {
+    setIsSaving(true);
     try {
-      const formData = new FormData();
-      formData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
-      formData.append("whyBuyHeroDescription", data.whyBuyHeroDescription || "");
-      await setWhyBuyHero(formData);
-    } catch (error) { console.error("Error updating hero", error); }
-  };
+      const heroData = new FormData();
+      heroData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
+      heroData.append("whyBuyHeroDescription", data.whyBuyHeroDescription || "");
 
-  const handleStoryBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("storyTitle", data.storyTitle || "");
-      formData.append("storyDescription", data.storyDescription || "");
-      await setWhyBuyStory(formData);
-    } catch (error) { console.error("Error updating story", error); }
-  };
+      const storyData = new FormData();
+      storyData.append("storyTitle", data.storyTitle || "");
+      storyData.append("storyDescription", data.storyDescription || "");
 
-  const handleVehicleSelectionBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("vehicleSelectionTitle", data.vehicleSelectionTitle || "");
-      formData.append("vehicleSelectionDescription", data.vehicleSelectionDescription || "");
-      await setWhyBuyVehicleSelection(formData);
-    } catch (error) { console.error("Error updating vehicle selection", error); }
-  };
+      const vehicleData = new FormData();
+      vehicleData.append("vehicleSelectionTitle", data.vehicleSelectionTitle || "");
+      vehicleData.append("vehicleSelectionDescription", data.vehicleSelectionDescription || "");
 
-  const handleProcessBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("processTitle", data.processTitle || "");
-      formData.append("processDescription", data.processDescription || "");
+      const processData = new FormData();
+      processData.append("processTitle", data.processTitle || "");
+      processData.append("processDescription", data.processDescription || "");
       if (data.processSteps) {
         data.processSteps.forEach((step, i) => {
-          formData.append(`processes[${i}].title`, step.title || "");
-          formData.append(`processes[${i}].desc`, step.description || "");
-          formData.append(`processes[${i}].icon`, step.icon || "");
+          processData.append(`processes[${i}].title`, step.title || "");
+          processData.append(`processes[${i}].desc`, step.description || "");
+          processData.append(`processes[${i}].icon`, step.icon || "");
         });
       }
-      await setWhyBuyProcess(formData);
-    } catch (error) { console.error("Error updating process", error); }
-  };
 
-  const handleInspectionBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("inspectionTitle", data.inspectionTitle || "");
-      formData.append("inspectionDescription", data.inspectionText || "");
-      formData.append("inspectionTemplateId1", "1");
+      const inspectionData = new FormData();
+      inspectionData.append("inspectionTitle", data.inspectionTitle || "");
+      inspectionData.append("inspectionDescription", data.inspectionText || "");
+      inspectionData.append("inspectionTemplateId1", "1");
       if (data.inspectionPoints) {
         data.inspectionPoints.forEach((pt, i) => {
-          formData.append(`inspectionPoints[${i}]`, pt || "");
+          inspectionData.append(`inspectionPoints[${i}]`, pt || "");
         });
       }
-      await setWhyBuyInspection(formData);
-    } catch (error) { console.error("Error updating inspection", error); }
-  };
 
-  const handleCustomerCommitmentBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("customerCommitmentTitle", data.customerCommitmentTitle || "");
-      formData.append("customerCommitmentDescription", data.customerCommitmentDescription || "");
-      await setWhyBuyCustomerCommitment(formData);
-    } catch (error) { console.error("Error updating customer commitment", error); }
+      const commitmentData = new FormData();
+      commitmentData.append("customerCommitmentTitle", data.customerCommitmentTitle || "");
+      commitmentData.append("customerCommitmentDescription", data.customerCommitmentDescription || "");
+
+      await Promise.all([
+        setWhyBuyHero(heroData),
+        setWhyBuyStory(storyData),
+        setWhyBuyVehicleSelection(vehicleData),
+        setWhyBuyProcess(processData),
+        setWhyBuyInspection(inspectionData),
+        setWhyBuyCustomerCommitment(commitmentData),
+        setFeaturedReviews(selectedReviewIds),
+      ]);
+    } catch (error) {
+      console.error("Error updating Why Buy sections", error);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   // Toggle review selection
@@ -237,26 +227,18 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
 
       updateField("featuredReviews", selectedReviews);
 
-      // Auto-save to API with review IDs
-      setFeaturedReviews(updated).catch((err) =>
-        console.error("Error saving featured reviews", err)
-      );
-
       return updated;
     });
   };
 
-  const handleTestimonialBlur = async () => {
-    try {
-      await setFeaturedReviews(selectedReviewIds);
-    } catch (error) { console.error("Error updating featured reviews", error); }
-  };
+
 
   // ── EDIT MODE ──
 
   if (isEditing) {
     return (
       <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10 bg-black/20">
+        <GlobalLoader isLoading={isSaving} />
         {/* HERO */}
         <div className="space-y-6">
           <h3 className="text-white font-bold mb-4">Hero Section</h3>
@@ -264,13 +246,11 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
             label="Hero Title"
             value={data.whyBuyHeroTitle}
             onChange={(e) => updateField("whyBuyHeroTitle", e.target.value)}
-            onBlur={handleHeroBlur}
           />
           <RichTextEditor
             label="Hero Description"
             value={data.whyBuyHeroDescription}
             onChange={(v) => updateField("whyBuyHeroDescription", v)}
-            onBlur={handleHeroBlur}
           />
         </div>
 
@@ -283,13 +263,11 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
             label="Story Title"
             value={data.storyTitle}
             onChange={(e) => updateField("storyTitle", e.target.value)}
-            onBlur={handleStoryBlur}
           />
           <RichTextEditor
             label="Story Description"
             value={data.storyDescription}
             onChange={(v) => updateField("storyDescription", v)}
-            onBlur={handleStoryBlur}
           />
         </div>
 
@@ -306,13 +284,11 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
             onChange={(e) =>
               updateField("vehicleSelectionTitle", e.target.value)
             }
-            onBlur={handleVehicleSelectionBlur}
           />
           <RichTextEditor
             label="Vehicle Selection Description"
             value={data.vehicleSelectionDescription}
             onChange={(v) => updateField("vehicleSelectionDescription", v)}
-            onBlur={handleVehicleSelectionBlur}
           />
         </div>
 
@@ -325,13 +301,11 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
             label="Process Title"
             value={data.processTitle}
             onChange={(e) => updateField("processTitle", e.target.value)}
-            onBlur={handleProcessBlur}
           />
           <RichTextEditor
             label="Process Description"
             value={data.processDescription}
             onChange={(v) => updateField("processDescription", v)}
-            onBlur={handleProcessBlur}
           />
 
           <h4 className="text-white font-semibold mt-6 mb-4">Process Steps</h4>
@@ -355,7 +329,6 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
                         e.target.value,
                       )
                     }
-                    onBlur={handleProcessBlur}
                   />
                 </div>
                 <div>
@@ -372,7 +345,6 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
                         e.target.value,
                       )
                     }
-                    onBlur={handleProcessBlur}
                   />
                 </div>
                 <div>
@@ -393,7 +365,6 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
                         "icon",
                         selectedOption.value,
                       );
-                      handleProcessBlur();
                     }}
                   />
                 </div>
@@ -411,13 +382,11 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
             label="Inspection Title"
             value={data.inspectionTitle}
             onChange={(e) => updateField("inspectionTitle", e.target.value)}
-            onBlur={handleInspectionBlur}
           />
           <RichTextEditor
             label="Inspection Text"
             value={data.inspectionText}
             onChange={(v) => updateField("inspectionText", v)}
-            onBlur={handleInspectionBlur}
           />
           <h4 className="text-white font-semibold mt-4">Inspection Points</h4>
           {data.inspectionPoints.map((pt, i) => (
@@ -430,7 +399,6 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
                 newArr[i] = e.target.value;
                 updateField("inspectionPoints", newArr);
               }}
-              onBlur={handleInspectionBlur}
             />
           ))}
         </div>
@@ -448,13 +416,11 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
             onChange={(e) =>
               updateField("customerCommitmentTitle", e.target.value)
             }
-            onBlur={handleCustomerCommitmentBlur}
           />
           <RichTextEditor
             label="Commitment Description"
             value={data.customerCommitmentDescription}
             onChange={(v) => updateField("customerCommitmentDescription", v)}
-            onBlur={handleCustomerCommitmentBlur}
           />
         </div>
 
@@ -468,7 +434,6 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
             label="Section Title"
             value={data.testimonialTitle}
             onChange={(e) => updateField("testimonialTitle", e.target.value)}
-            onBlur={handleTestimonialBlur}
           />
 
           <p className="text-third text-sm mb-4 mt-2">
@@ -534,6 +499,16 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
               );
             })}
           </div>
+        </div>
+
+        <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
+          <Button 
+            onClick={handleSave} 
+            disabled={isSaving}
+            variant="ghost"
+          >
+            {isSaving ? "Saving..." : "Save"}
+          </Button>
         </div>
       </div>
     );

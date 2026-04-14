@@ -66,7 +66,7 @@ export default function Sidebar({ isOpen, onClose }) {
         border-r border-third/30 p-3 space-y-2.5 overflow-y-auto custom-scrollbar
       `}
     >
-      <h1 className="text-xl font-bold mt-4 mb-4">Reecomm Dashboard</h1>
+      {/* <h1 className="text-xl font-bold mt-4 mb-4">Reecomm Dashboard</h1> */}
 
       {menu.map((m, i) => {
         const isActive =

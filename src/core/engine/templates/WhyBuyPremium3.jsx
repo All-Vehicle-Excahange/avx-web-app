@@ -10,6 +10,8 @@ import RichTextEditor from "../atoms/RichTextEditor";
 import EditorInput from "../atoms/EditorInput";
 import { ImageUploader } from "../atoms/ImageUploader ";
 import Select from "react-select";
+import Button from "@/components/ui/button";
+import GlobalLoader from "@/components/ui/GlobalLoader";
 import {
   setWhyBuyHero,
   setWhyBuyStory,
@@ -81,7 +83,8 @@ const formatOptionLabel = ({ value, label }) => (
 );
 const DEFAULT_DATA = WHY_BUY_PREMIUM_3[0].data;
 
-export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
+export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate, onNextTab }) {
+  const [isSaving, setIsSaving] = useState(false);
   const data = {
     ...DEFAULT_DATA,
     ...Object.fromEntries(
@@ -162,180 +165,122 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
     }
   };
   /* ================== API HANDLERS ================== */
-  const handleHeroBlur = async () => {
+  /* ================== API HANDLERS ================== */
+  const handleSaveAndNext = async () => {
+    setIsSaving(true);
     try {
-      const formData = new FormData();
-      formData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
-      formData.append(
-        "whyBuyHeroDescription",
-        data.whyBuyHeroDescription || "",
-      );
-      if (data.whyBuyHeroTemplate1?.id)
-        formData.append("whyBuyHeroTemplateId1", data.whyBuyHeroTemplate1.id);
-      else if (data.customWhyBuyHero1) {
-        const blob = await getBlobFromUrl(data.customWhyBuyHero1);
-        if (blob) formData.append("customWhyBuyHero1", blob, "hero1.png");
+      const heroData = new FormData();
+      heroData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
+      heroData.append("whyBuyHeroDescription", data.whyBuyHeroDescription || "");
+      for (let i = 1; i <= 3; i++) {
+        const tmpl = data[`whyBuyHeroTemplate${i}`];
+        const customField = `customWhyBuyHero${i}`;
+        if (tmpl?.id) heroData.append(`whyBuyHeroTemplateId${i}`, tmpl.id);
+        else if (data[customField] && data[customField].startsWith("blob:")) {
+          const blob = await getBlobFromUrl(data[customField]);
+          if (blob) heroData.append(customField, blob, `hero${i}.png`);
+        }
       }
-      if (data.whyBuyHeroTemplate2?.id)
-        formData.append("whyBuyHeroTemplateId2", data.whyBuyHeroTemplate2.id);
-      else if (data.customWhyBuyHero2) {
-        const blob = await getBlobFromUrl(data.customWhyBuyHero2);
-        if (blob) formData.append("customWhyBuyHero2", blob, "hero2.png");
-      }
-      if (data.whyBuyHeroTemplate3?.id)
-        formData.append("whyBuyHeroTemplateId3", data.whyBuyHeroTemplate3.id);
-      else if (data.customWhyBuyHero3) {
-        const blob = await getBlobFromUrl(data.customWhyBuyHero3);
-        if (blob) formData.append("customWhyBuyHero3", blob, "hero3.png");
-      }
-      await setWhyBuyHero(formData);
-    } catch (error) {
-      console.error("Error updating hero", error);
-    }
-  };
-  const handleStoryBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("storyTitle", data.storyTitle || "");
-      formData.append("storyDescription", data.storyDescription || "");
+
+      const storyData = new FormData();
+      storyData.append("storyTitle", data.storyTitle || "");
+      storyData.append("storyDescription", data.storyDescription || "");
       for (let i = 1; i <= 4; i++) {
         const tmpl = data[`storyTemplate${i}`];
         const customField = `customWhyBuyStory${i}`;
-        if (tmpl?.id) formData.append(`storyTemplateId${i}`, tmpl.id);
-        else if (data[customField]) {
+        if (tmpl?.id) storyData.append(`storyTemplateId${i}`, tmpl.id);
+        else if (data[customField] && data[customField].startsWith("blob:")) {
           const blob = await getBlobFromUrl(data[customField]);
-          if (blob) formData.append(customField, blob, `story${i}.png`);
+          if (blob) storyData.append(customField, blob, `story${i}.png`);
         }
       }
-      await setWhyBuyStory(formData);
-    } catch (error) {
-      console.error("Error updating story", error);
-    }
-  };
-  const handleVehicleSelectionBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append(
-        "vehicleSelectionTitle",
-        data.vehicleSelectionTitle || "",
-      );
-      formData.append(
-        "vehicleSelectionDescription",
-        data.vehicleSelectionDescription || "",
-      );
+
+      const vehicleData = new FormData();
+      vehicleData.append("vehicleSelectionTitle", data.vehicleSelectionTitle || "");
+      vehicleData.append("vehicleSelectionDescription", data.vehicleSelectionDescription || "");
       for (let i = 1; i <= 2; i++) {
         const tmpl = data[`vehicleSelectionTemplate${i}`];
         const customField = `customWhyBuyVehicleSelection${i}`;
-        if (tmpl?.id)
-          formData.append(`vehicleSelectionTemplateId${i}`, tmpl.id);
-        else if (data[customField]) {
+        if (tmpl?.id) vehicleData.append(`vehicleSelectionTemplateId${i}`, tmpl.id);
+        else if (data[customField] && data[customField].startsWith("blob:")) {
           const blob = await getBlobFromUrl(data[customField]);
-          if (blob) formData.append(customField, blob, `selection${i}.png`);
+          if (blob) vehicleData.append(customField, blob, `selection${i}.png`);
         }
       }
-      await setWhyBuyVehicleSelection(formData);
-    } catch (error) {
-      console.error("Error updating vehicle selection", error);
-    }
-  };
-  const handleProcessBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("processTitle", data.processTitle || "");
-      formData.append("processDescription", data.processDescription || "");
-      if (data.processSteps)
+
+      const processData = new FormData();
+      processData.append("processTitle", data.processTitle || "");
+      processData.append("processDescription", data.processDescription || "");
+      if (data.processSteps) {
         data.processSteps.forEach((step, i) => {
-          formData.append(`processes[${i}].title`, step.title || "");
-          formData.append(`processes[${i}].desc`, step.description || "");
-          formData.append(`processes[${i}].icon`, step.icon || "");
+          processData.append(`processes[${i}].title`, step.title || "");
+          processData.append(`processes[${i}].desc`, step.description || "");
+          processData.append(`processes[${i}].icon`, step.icon || "");
         });
+      }
       for (let i = 1; i <= 4; i++) {
         const tmpl = data[`processTemplate${i}`];
         const customField = `customWhyBuyProcess${i}`;
-        if (tmpl?.id) formData.append(`processTemplateId${i}`, tmpl.id);
-        else if (data[customField]) {
+        if (tmpl?.id) processData.append(`processTemplateId${i}`, tmpl.id);
+        else if (data[customField] && data[customField].startsWith("blob:")) {
           const blob = await getBlobFromUrl(data[customField]);
-          if (blob) formData.append(customField, blob, `process${i}.png`);
+          if (blob) processData.append(customField, blob, `process${i}.png`);
         }
       }
-      await setWhyBuyProcess(formData);
-    } catch (error) {
-      console.error("Error updating process", error);
-    }
-  };
-  const handleInspectionBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("inspectionTitle", data.inspectionTitle || "");
-      formData.append("inspectionDescription", data.inspectionText || "");
-      if (data.inspectionPoints)
-        data.inspectionPoints.forEach((pt, i) =>
-          formData.append(`inspectionPoints[${i}]`, pt || ""),
-        );
+
+      const inspectionData = new FormData();
+      inspectionData.append("inspectionTitle", data.inspectionTitle || "");
+      inspectionData.append("inspectionDescription", data.inspectionText || "");
+      if (data.inspectionPoints) {
+        data.inspectionPoints.forEach((pt, i) => {
+          inspectionData.append(`inspectionPoints[${i}]`, pt || "");
+        });
+      }
       for (let i = 1; i <= 4; i++) {
         const tmpl = data[`inspectionTemplate${i}`];
         const customField = `customWhyBuyInspection${i}`;
-        if (tmpl?.id) formData.append(`inspectionTemplateId${i}`, tmpl.id);
-        else if (data[customField]) {
+        if (tmpl?.id) inspectionData.append(`inspectionTemplateId${i}`, tmpl.id);
+        else if (data[customField] && data[customField].startsWith("blob:")) {
           const blob = await getBlobFromUrl(data[customField]);
-          if (blob) formData.append(customField, blob, `inspection${i}.png`);
+          if (blob) inspectionData.append(customField, blob, `inspection${i}.png`);
         }
       }
-      await setWhyBuyInspection(formData);
-    } catch (error) {
-      console.error("Error updating inspection", error);
-    }
-  };
-  const handleCustomerCommitmentBlur = async () => {
-    try {
-      const formData = new FormData();
-      formData.append(
-        "customerCommitmentTitle",
-        data.customerCommitmentTitle || "",
-      );
-      formData.append(
-        "customerCommitmentDescription",
-        data.customerCommitmentDescription || "",
-      );
+
+      const commitmentData = new FormData();
+      commitmentData.append("customerCommitmentTitle", data.customerCommitmentTitle || "");
+      commitmentData.append("customerCommitmentDescription", data.customerCommitmentDescription || "");
       for (let i = 1; i <= 3; i++) {
         const tmpl = data[`customerCommitmentTemplate${i}`];
         const customField = `customWhyBuyCustomerCommitment${i}`;
-        if (tmpl?.id)
-          formData.append(`customerCommitmentTemplateId${i}`, tmpl.id);
-        else if (data[customField]) {
+        if (tmpl?.id) commitmentData.append(`customerCommitmentTemplateId${i}`, tmpl.id);
+        else if (data[customField] && data[customField].startsWith("blob:")) {
           const blob = await getBlobFromUrl(data[customField]);
-          if (blob) formData.append(customField, blob, `commitment${i}.png`);
+          if (blob) commitmentData.append(customField, blob, `commitment${i}.png`);
         }
       }
-      await setWhyBuyCustomerCommitment(formData);
+
+      try {
+         updateField("testimonialTitle", data.testimonialTitle || "");
+      } catch(e) {}
+
+      await Promise.all([
+        setWhyBuyHero(heroData),
+        setWhyBuyStory(storyData),
+        setWhyBuyVehicleSelection(vehicleData),
+        setWhyBuyProcess(processData),
+        setWhyBuyInspection(inspectionData),
+        setWhyBuyCustomerCommitment(commitmentData),
+        setFeaturedReviews(selectedReviewIds)
+      ]);
+
+      if (onNextTab) onNextTab();
     } catch (error) {
-      console.error("Error updating customer commitment", error);
+      console.error("Error saving sections:", error);
+    } finally {
+      setIsSaving(false);
     }
   };
-  const handleGalleryBlur = async () => {
-    try {
-      const formData = new FormData();
-      for (let i = 1; i <= 5; i++) {
-        const tmpl = data[`galleryTemplate${i}`];
-        const customField = `customWhyBuyGallery${i}`;
-        if (tmpl?.id) formData.append(`galleryTemplateId${i}`, tmpl.id);
-        else if (data[customField]) {
-          const blob = await getBlobFromUrl(data[customField]);
-          if (blob) formData.append(customField, blob, `gallery${i}.png`);
-        }
-      }
-      console.log("Gallery blur handled.");
-    } catch (error) {
-      console.error("Error updating gallery", error);
-    }
-  };
-  const handleTestimonialBlur = async () => {
-    try {
-      updateField("testimonialTitle", data.testimonialTitle);
-    } catch (error) {
-      console.error("Error updating testimonials", error);
-    }
-  };
+
   /* ================== PREVIEW STATE ================== */
   const AUTOPLAY_DURATION = 4000;
   const [activeIndex, setActiveIndex] = useState(0);
@@ -461,6 +406,7 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
   if (isEditing) {
     return (
       <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
+        <GlobalLoader isLoading={isSaving} />
         {/* HERO */}
         <div className="space-y-6">
           <h3 className="text-primary font-bold text-xl mb-4">Hero Section</h3>
@@ -471,13 +417,11 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                 label="Hero Title"
                 value={data.whyBuyHeroTitle}
                 onChange={(e) => updateField("whyBuyHeroTitle", e.target.value)}
-                onBlur={handleHeroBlur}
               />
               <RichTextEditor
                 label="Hero Description"
                 value={data.whyBuyHeroDescription}
                 onChange={(v) => updateField("whyBuyHeroDescription", v)}
-                onBlur={handleHeroBlur}
               />
             </div>
             <div className="space-y-4">
@@ -504,7 +448,6 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                       if (!id) u.customWhyBuyHero1 = imageUrl;
                       else delete u.customWhyBuyHero1;
                       onUpdate(u);
-                      setTimeout(handleHeroBlur, 100);
                     }}
                   />
                 </div>
@@ -529,7 +472,6 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                       if (!id) u.customWhyBuyHero2 = imageUrl;
                       else delete u.customWhyBuyHero2;
                       onUpdate(u);
-                      setTimeout(handleHeroBlur, 100);
                     }}
                   />
                 </div>
@@ -554,7 +496,6 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                       if (!id) u.customWhyBuyHero3 = imageUrl;
                       else delete u.customWhyBuyHero3;
                       onUpdate(u);
-                      setTimeout(handleHeroBlur, 100);
                     }}
                   />
                 </div>
@@ -573,13 +514,11 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                 label="Story Title"
                 value={data.storyTitle}
                 onChange={(e) => updateField("storyTitle", e.target.value)}
-                onBlur={handleStoryBlur}
               />
               <RichTextEditor
                 label="Story Description"
                 value={data.storyDescription}
                 onChange={(v) => updateField("storyDescription", v)}
-                onBlur={handleStoryBlur}
               />
             </div>
             <div className="space-y-4">
@@ -611,7 +550,6 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                         if (!id) u[cf] = imageUrl;
                         else delete u[cf];
                         onUpdate(u);
-                        setTimeout(handleStoryBlur, 100);
                       }}
                     />
                   </div>
@@ -635,13 +573,11 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                 onChange={(e) =>
                   updateField("vehicleSelectionTitle", e.target.value)
                 }
-                onBlur={handleVehicleSelectionBlur}
               />
               <RichTextEditor
                 label="Selection Description"
                 value={data.vehicleSelectionDescription}
                 onChange={(v) => updateField("vehicleSelectionDescription", v)}
-                onBlur={handleVehicleSelectionBlur}
               />
             </div>
             <div className="space-y-4">
@@ -672,7 +608,6 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                         if (!id) u[cf] = imageUrl;
                         else delete u[cf];
                         onUpdate(u);
-                        setTimeout(handleVehicleSelectionBlur, 100);
                       }}
                     />
                   </div>
@@ -694,13 +629,11 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                 label="Process Title"
                 value={data.processTitle}
                 onChange={(e) => updateField("processTitle", e.target.value)}
-                onBlur={handleProcessBlur}
               />
               <RichTextEditor
                 label="Process Description"
                 value={data.processDescription}
                 onChange={(v) => updateField("processDescription", v)}
-                onBlur={handleProcessBlur}
               />
             </div>
             <div className="space-y-4">
@@ -731,7 +664,6 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                         if (!id) u[cf] = imageUrl;
                         else delete u[cf];
                         onUpdate(u);
-                        setTimeout(handleProcessBlur, 100);
                       }}
                     />
                   </div>
@@ -759,7 +691,6 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                         e.target.value,
                       )
                     }
-                    onBlur={handleProcessBlur}
                   />
                 </div>
                 <div>
@@ -776,7 +707,6 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                         e.target.value,
                       )
                     }
-                    onBlur={handleProcessBlur}
                   />
                 </div>
                 <div className="flex flex-col gap-2 relative mt-4">
@@ -792,7 +722,6 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                     }
                     onChange={(sel) => {
                       updateArrayItem("processSteps", i, "icon", sel.value);
-                      handleProcessBlur();
                     }}
                   />
                 </div>
@@ -813,13 +742,11 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                 label="Inspection Title"
                 value={data.inspectionTitle}
                 onChange={(e) => updateField("inspectionTitle", e.target.value)}
-                onBlur={handleInspectionBlur}
               />
               <RichTextEditor
                 label="Inspection Description"
                 value={data.inspectionText}
                 onChange={(v) => updateField("inspectionText", v)}
-                onBlur={handleInspectionBlur}
               />
               <div className="space-y-2 mt-4">
                 <label className="text-sm font-medium text-primary">
@@ -834,7 +761,6 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                       a[i] = e.target.value;
                       updateField("inspectionPoints", a);
                     }}
-                    onBlur={handleInspectionBlur}
                   />
                 ))}
               </div>
@@ -870,7 +796,6 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                         if (!id) u[cf] = imageUrl;
                         else delete u[cf];
                         onUpdate(u);
-                        setTimeout(handleInspectionBlur, 100);
                       }}
                     />
                   </div>
@@ -894,7 +819,6 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                 onChange={(e) =>
                   updateField("customerCommitmentTitle", e.target.value)
                 }
-                onBlur={handleCustomerCommitmentBlur}
               />
               <RichTextEditor
                 label="Commitment Description"
@@ -902,7 +826,6 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                 onChange={(v) =>
                   updateField("customerCommitmentDescription", v)
                 }
-                onBlur={handleCustomerCommitmentBlur}
               />
             </div>
             <div className="space-y-4">
@@ -936,7 +859,6 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                         if (!id) u[cf] = imageUrl;
                         else delete u[cf];
                         onUpdate(u);
-                        setTimeout(handleCustomerCommitmentBlur, 100);
                       }}
                     />
                   </div>
@@ -978,7 +900,6 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
                     if (!id) u[cf] = imageUrl;
                     else delete u[cf];
                     onUpdate(u);
-                    setTimeout(handleGalleryBlur, 100);
                   }}
                 />
               </div>
@@ -996,7 +917,6 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
             label="Section Title"
             value={data.testimonialTitle}
             onChange={(e) => updateField("testimonialTitle", e.target.value)}
-            onBlur={handleTestimonialBlur}
           />
           <p className="text-third text-sm">
             Select which customer reviews to feature.
@@ -1050,6 +970,15 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate }) {
               );
             })}
           </div>
+        </div>
+        <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
+          <Button 
+            onClick={handleSaveAndNext} 
+            disabled={isSaving}
+            variant="ghost"
+          >
+            {isSaving ? "Saving..." : "Save"}
+          </Button>
         </div>
       </div>
     );
