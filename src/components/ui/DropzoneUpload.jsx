@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useRef, useState, useMemo } from "react";
+import { UploadCloud, CheckCircle2 } from "lucide-react";
 
 export default function DropzoneUpload({ label, onChange, preview }) {
   const inputRef = useRef();
@@ -32,34 +33,39 @@ export default function DropzoneUpload({ label, onChange, preview }) {
 
       <div
         onClick={() => inputRef.current.click()}
-        className="cursor-pointer rounded-xl border-2 border-dashed border-third/40 bg-primary/5 hover:border-primary transition p-6 text-center"
+        className="cursor-pointer rounded-xl border-2 border-dashed border-third/40 bg-primary/5 hover:border-primary transition p-6 text-center w-full"
       >
         {!currentFile ? (
-          <div className="space-y-2">
-            <p className="text-third text-sm uppercase tracking-wide">
-              Drop your image here, or browse (required)
+          <div className="flex flex-col items-center justify-center space-y-3 py-4">
+            <UploadCloud className="w-10 h-10 text-primary/40" />
+            <p className="text-third text-sm tracking-wide">
+              Drop your image here, or click to browse
             </p>
-            <p className="text-xs text-third">Supports: JPG, PNG</p>
+            <p className="text-xs text-third/70">Supports: JPG, PNG, PDF</p>
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-3">
-            <div className="relative w-full max-w-xs aspect-4/3">
+          <div className="flex flex-col items-center gap-4 w-full">
+            <div className="relative w-full max-w-sm h-48 rounded-lg overflow-hidden bg-black/5 shadow-inner">
               <Image
                 src={displayUrl}
                 alt="preview"
                 fill
-                className="object-cover"
+                className="object-contain p-2"
                 unoptimized
               />
             </div> 
 
-            <p className="text-xs text-primary">
-              {typeof currentFile === "string"
-                ? "Existing Image"
-                : currentFile.name}
-            </p>
-
-            <p className="text-xs text-third">Click to change</p>
+            <div className="flex flex-col items-center justify-center gap-1">
+              <div className="flex items-center justify-center gap-2 text-primary">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                <p className="text-sm font-medium truncate max-w-[250px]">
+                  {typeof currentFile === "string"
+                    ? "Existing document loaded"
+                    : currentFile.name}
+                </p>
+              </div>
+              <p className="text-xs text-third/80">Click anywhere here to change</p>
+            </div>
           </div>
         )}
       </div>

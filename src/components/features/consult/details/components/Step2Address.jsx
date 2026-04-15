@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import InputField from "@/components/ui/inputField";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import { getState, getCities } from "@/services/user.service";
 
 export default function Step2Address({ onChange, initialData }) {
@@ -12,19 +12,22 @@ export default function Step2Address({ onChange, initialData }) {
   const [stateOpen, setStateOpen] = useState(false);
   const [cityOpen, setCityOpen] = useState(false);
 
+  const [stateSearch, setStateSearch] = useState("");
+  const [citySearch, setCitySearch] = useState("");
+
   const stateRef = useRef();
   const cityRef = useRef();
 
   // ✅ Initialize state directly from initialData
   const [form, setForm] = useState({
     address: initialData?.address || "",
-    cityId: initialData?.cityId || null,
-    stateId: initialData?.stateId || null,
-    countryId: initialData?.countryId || 101,
+    cityId: initialData?.city?.id || initialData?.cityId || null,
+    stateId: initialData?.state?.id || initialData?.stateId || null,
+    countryId: initialData?.country?.id || initialData?.countryId || 101,
     latitude: initialData?.latitude || 12.12,
     longitude: initialData?.longitude || 12.12,
-    stateName: initialData?.stateName || "",
-    cityName: initialData?.cityName || "",
+    stateName: initialData?.state?.name || initialData?.stateName || "",
+    cityName: initialData?.city?.name || initialData?.cityName || "",
   });
 
   // ===== Fetch States =====
@@ -76,6 +79,8 @@ export default function Step2Address({ onChange, initialData }) {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  const isFirstRender = useRef(true);
+
   // ✅ Memoized payload creation to prevent infinite loops
   const syncWithParent = useCallback(() => {
     if (!onChange) return;
@@ -87,7 +92,8 @@ export default function Step2Address({ onChange, initialData }) {
       latitude: form.latitude,
       longitude: form.longitude,
     };
-    onChange(payload, false); // Pass 'false' for initial sync
+    onChange(payload, !isFirstRender.current);
+    if (isFirstRender.current) isFirstRender.current = false;
   }, [form, onChange]);
 
   useEffect(() => {
@@ -106,84 +112,131 @@ export default function Step2Address({ onChange, initialData }) {
         }}
       />
 
-      {/* ===== STATE ===== */}
-      <div ref={stateRef}>
-        <label className="text-sm font-semibold text-text-black mb-1.5 ml-1">
-          State
-        </label>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* ===== STATE ===== */}
+        <div ref={stateRef}>
+          <label className="text-sm font-semibold text-text-black mb-1.5 ml-1">
+            State
+          </label>
 
-        <div
-          onClick={() => setStateOpen(!stateOpen)}
-          className="h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-primary/10 text-primary cursor-pointer"
-        >
-          <span>{form.stateName || "Select State"}</span>
-          <ChevronDown className="w-4 h-4" />
+          <div
+            onClick={() => !stateOpen && setStateOpen(true)}
+            className="h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-primary/10 text-primary cursor-text transition-colors"
+          >
+            {stateOpen ? (
+              <input
+                type="text"
+                autoFocus
+                placeholder="Type to search..."
+                value={stateSearch}
+                onChange={(e) => setStateSearch(e.target.value)}
+                className="w-full bg-transparent outline-none text-sm text-primary placeholder:text-primary/60"
+              />
+            ) : (
+              <span className={!form.stateName ? "text-primary/60" : ""}>
+                {form.stateName || "Select State"}
+              </span>
+            )}
+            <ChevronDown
+              className={`w-4 h-4 shrink-0 transition-transform ${
+                stateOpen ? "rotate-180" : ""
+              }`}
+            />
+          </div>
+
+          {stateOpen && (
+            <div className="mt-1 border border-primary bg-primary/10 rounded-md overflow-hidden relative z-10 shadow-lg">
+              <div className="max-h-40 overflow-y-auto">
+                {states
+                  .filter((s) =>
+                    s.label.toLowerCase().includes(stateSearch.toLowerCase()),
+                  )
+                  .map((s) => (
+                    <div
+                      key={s.value}
+                      onClick={() => {
+                        setForm((p) => ({
+                          ...p,
+                          stateId: s.value,
+                          stateName: s.label,
+                          cityId: null,
+                          cityName: "",
+                        }));
+                        setStateOpen(false);
+                        setStateSearch(""); // clear search on select
+                      }}
+                      className="px-3 py-2 hover:bg-primary/20 cursor-pointer"
+                    >
+                      {s.label}
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
         </div>
 
-        {stateOpen && (
-          <div className="mt-1 border border-primary bg-primary/10 rounded-md max-h-40 overflow-y-auto">
-            {states.map((s) => (
-              <div
-                key={s.value}
-                onClick={() => {
-                  setForm((p) => ({
-                    ...p,
-                    stateId: s.value,
-                    stateName: s.label,
-                    cityId: null,
-                    cityName: "",
-                  }));
-                  setStateOpen(false);
-                }}
-                className="px-3 py-2 hover:bg-primary/20 cursor-pointer"
-              >
-                {s.label}
-              </div>
-            ))}
+        {/* ===== CITY ===== */}
+        <div ref={cityRef}>
+          <label className="text-sm font-semibold text-text-black mb-1.5 ml-1">
+            City
+          </label>
+
+          <div
+            onClick={() => form.stateId && !cityOpen && setCityOpen(true)}
+            className={`h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-primary/10 text-primary transition-colors ${
+              !form.stateId ? "opacity-60 cursor-not-allowed" : "cursor-text"
+            }`}
+          >
+            {cityOpen ? (
+              <input
+                type="text"
+                autoFocus
+                placeholder="Type to search..."
+                value={citySearch}
+                onChange={(e) => setCitySearch(e.target.value)}
+                className="w-full bg-transparent outline-none text-sm text-primary placeholder:text-primary/60"
+              />
+            ) : (
+              <span className={!form.cityName ? "text-primary/60" : ""}>
+                {form.cityName ||
+                  (form.stateId ? "Select City" : "Select state first")}
+              </span>
+            )}
+            <ChevronDown
+              className={`w-4 h-4 shrink-0 transition-transform ${
+                cityOpen ? "rotate-180" : ""
+              }`}
+            />
           </div>
-        )}
-      </div>
 
-      {/* ===== CITY ===== */}
-      <div ref={cityRef}>
-        <label className="text-sm font-semibold text-text-black mb-1.5 ml-1">
-          City
-        </label>
-
-        <div
-          onClick={() => form.stateId && setCityOpen(!cityOpen)}
-          className={`h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-primary/10 text-primary ${
-            !form.stateId ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
-          }`}
-        >
-          <span>
-            {form.cityName ||
-              (form.stateId ? "Select City" : "Select state first")}
-          </span>
-
-          <ChevronDown className="w-4 h-4" />
+          {cityOpen && (
+            <div className="mt-1 border border-primary bg-primary/10 rounded-md overflow-hidden relative z-10 shadow-lg">
+              <div className="max-h-40 overflow-y-auto">
+                {cities
+                  .filter((c) =>
+                    c.label.toLowerCase().includes(citySearch.toLowerCase()),
+                  )
+                  .map((c) => (
+                    <div
+                      key={c.value}
+                      onClick={() => {
+                        setForm((p) => ({
+                          ...p,
+                          cityId: c.value,
+                          cityName: c.label,
+                        }));
+                        setCityOpen(false);
+                        setCitySearch(""); // clear search on select
+                      }}
+                      className="px-3 py-2 hover:bg-primary/20 cursor-pointer"
+                    >
+                      {c.label}
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
         </div>
-
-        {cityOpen && (
-          <div className="mt-1 border border-primary bg-primary/10 rounded-md max-h-40 overflow-y-auto">
-            {cities.map((c) => (
-              <div
-                key={c.value}
-                onClick={() => {
-                  setForm((p) => ({
-                    ...p,
-                    cityId: c.value,
-                    cityName: c.label,
-                  }));
-                  setCityOpen(false);
-                }}
-                className="px-3 py-2 hover:bg-primary/20 cursor-pointer"
-              >
-                {c.label}
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

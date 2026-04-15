@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
 import Step1Business from "../components/Step1Business";
@@ -21,7 +21,7 @@ import Button from "@/components/ui/button";
 import toast, { Toaster } from "react-hot-toast";
 import { showBackendError } from "@/lib/axiosInstance";
 
-export default function PreviewAndEdite({ existing }) {
+export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
   const router = useRouter();
 
   // ===== EDIT MODES =====
@@ -34,9 +34,9 @@ export default function PreviewAndEdite({ existing }) {
   const [loading, setLoading] = useState(false);
 
   const [data, setData] = useState({
-    business: null,
-    address: null,
-    kyc: null,
+    business: existing?.business,
+    address: existing?.address,
+    kyc: existing?.kyc,
   });
 
   const [form, setForm] = useState({
@@ -45,24 +45,17 @@ export default function PreviewAndEdite({ existing }) {
     kyc: null,
   });
 
-  useEffect(() => {
-    const load = async () => {
-      // 1. Set normal data
-      setData({
-        business: existing.business,
-        address: existing.address,
-        kyc: existing.kyc,
-      });
+  const handleBusinessChange = useCallback((d) => {
+    setForm((p) => ({ ...p, business: d }));
+  }, []);
 
-      // 2. CHECK SUBMITTED STATUS 🔥
-      // if (existing?.business?.isSubmitted === true) {
-      //   router.push("/consult/dashboard");
-      //   return;
-      // }
-    };
+  const handleAddressChange = useCallback((d) => {
+    setForm((p) => ({ ...p, address: d }));
+  }, []);
 
-    load();
-  }, [existing]);
+  const handleKycChange = useCallback((d) => {
+    setForm((p) => ({ ...p, kyc: d }));
+  }, []);
 
   const updateBusiness = async () => {
     try {
@@ -123,16 +116,20 @@ export default function PreviewAndEdite({ existing }) {
   // ==========================================
   const handleSubmit = async () => {
     try {
+      setLoading(true);
       const res = await finalSubmit();
 
       if (res?.success || res?.data) {
         toast.success(res?.message || "Profile submitted successfully");
+        if (onSuccess) onSuccess();
         return;
       }
 
       toast.error("Something went wrong");
     } catch (error) {
       showBackendError(error); // 👈 better than plain toast
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -160,7 +157,7 @@ export default function PreviewAndEdite({ existing }) {
             ) : (
               <div className="flex gap-3">
                 <Button
-                  variant="ghost"
+                  variant="outlineSecondary"
                   onClick={() =>
                     setEditMode((p) => ({ ...p, business: false }))
                   }
@@ -168,18 +165,20 @@ export default function PreviewAndEdite({ existing }) {
                   Cancel
                 </Button>
 
-                <Button onClick={updateBusiness} disabled={loading}>
+                <Button variant="ghost" onClick={updateBusiness} disabled={loading}>
                   {loading ? "Updating..." : "Update"}
                 </Button>
               </div>
             )}
           </div>
 
-          <Step1Business
-            initialData={data.business}
-            onChange={(d) => setForm((p) => ({ ...p, business: d }))}
-            readOnly={!editMode.business}
-          />
+          <div className={`transition-opacity duration-300 ${!editMode.business ? "pointer-events-none opacity-60" : ""}`}>
+            <Step1Business
+              initialData={data.business}
+              onChange={handleBusinessChange}
+              readOnly={!editMode.business}
+            />
+          </div>
         </div>
 
         {/* ================= ADDRESS ================= */}
@@ -197,24 +196,26 @@ export default function PreviewAndEdite({ existing }) {
             ) : (
               <div className="flex gap-3">
                 <Button
-                  variant="ghost"
+                  variant="outlineSecondary"
                   onClick={() => setEditMode((p) => ({ ...p, address: false }))}
                 >
                   Cancel
                 </Button>
 
-                <Button onClick={updateAddress} disabled={loading}>
+                <Button variant="ghost" onClick={updateAddress} disabled={loading}>
                   {loading ? "Updating..." : "Update"}
                 </Button>
               </div>
             )}
           </div>
 
-          <Step2Address
-            initialData={data.address}
-            onChange={(d) => setForm((p) => ({ ...p, address: d }))}
-            readOnly={!editMode.address}
-          />
+          <div className={`transition-opacity duration-300 ${!editMode.address ? "pointer-events-none opacity-60" : ""}`}>
+            <Step2Address
+              initialData={data.address}
+              onChange={handleAddressChange}
+              readOnly={!editMode.address}
+            />
+          </div>
         </div>
 
         {/* ================= KYC ================= */}
@@ -232,30 +233,32 @@ export default function PreviewAndEdite({ existing }) {
             ) : (
               <div className="flex gap-3">
                 <Button
-                  variant="ghost"
+                  variant="outlineSecondary"
                   onClick={() => setEditMode((p) => ({ ...p, kyc: false }))}
                 >
                   Cancel
                 </Button>
 
-                <Button onClick={updateKyc} disabled={loading}>
+                <Button variant="ghost" onClick={updateKyc} disabled={loading}>
                   {loading ? "Updating..." : "Update"}
                 </Button>
               </div>
             )}
           </div>
 
-          <Step3KYC
-            initialData={data.kyc}
-            onChange={(d) => setForm((p) => ({ ...p, kyc: d }))}
-            readOnly={!editMode.kyc}
-          />
+          <div className={`transition-opacity duration-300 ${!editMode.kyc ? "pointer-events-none opacity-60" : ""}`}>
+            <Step3KYC
+              initialData={data.kyc}
+              onChange={handleKycChange}
+              readOnly={!editMode.kyc}
+            />
+          </div>
         </div>
 
         {/* ================= FINAL SUBMIT ================= */}
         <div className="flex justify-end">
-          <Button variant="ghost" onClick={handleSubmit}>
-            Final Submit
+          <Button variant="ghost" onClick={handleSubmit} disabled={loading}>
+            {loading ? "Submitting..." : "Final Submit"}
           </Button>
         </div>
       </div>

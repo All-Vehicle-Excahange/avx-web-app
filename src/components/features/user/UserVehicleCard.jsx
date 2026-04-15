@@ -39,12 +39,25 @@ export default function UserVehicleCard({
     draft: "bg-yellow-500",
     underinspection: "bg-orange-500",
     suspended: "bg-red-600",
+    request_changes: "bg-amber-500",
   };
 
   const verificationBadge = {
-    VERIFIED: { label: "Verified", icon: <ShieldCheck size={12} />, cls: "bg-green-600/20 text-green-400 border border-green-500/30" },
-    REQUESTED: { label: "Pending", icon: <ShieldAlert size={12} />, cls: "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30" },
-    REJECTED: { label: "Rejected", icon: <ShieldAlert size={12} />, cls: "bg-red-500/20 text-red-400 border border-red-500/30" },
+    VERIFIED: {
+      label: "Verified",
+      icon: <ShieldCheck size={12} />,
+      cls: "bg-green-600/20 text-green-400 border border-green-500/30",
+    },
+    REQUESTED: {
+      label: "Pending",
+      icon: <ShieldAlert size={12} />,
+      cls: "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30",
+    },
+    REJECTED: {
+      label: "Rejected",
+      icon: <ShieldAlert size={12} />,
+      cls: "bg-red-500/20 text-red-400 border border-red-500/30",
+    },
   };
 
   const verification = verificationBadge[data?.verificationStatus] || null;
@@ -59,15 +72,16 @@ export default function UserVehicleCard({
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <>
       <div className="group/card relative flex flex-row md:flex-col rounded-2xl overflow-hidden text-primary w-full border-2 border-third/60 hover:shadow-[0_20px_60px_rgba(255,255,255,0.25)] transition-shadow duration-300">
-
         {/* STATUS PILL */}
         <div className="absolute top-2 left-2 z-30">
-          <div className={`py-1 px-3 rounded-full text-[11px] font-bold text-white shadow-sm ${statusBg[status] || "bg-gray-600"}`}>
+          <div
+            className={`py-1 px-3 rounded-full text-[11px] font-bold text-white shadow-sm ${statusBg[status] || "bg-gray-600"}`}
+          >
             {status?.toUpperCase() || "-"}
           </div>
         </div>
@@ -79,9 +93,7 @@ export default function UserVehicleCard({
         </div>
       )} */}
 
-
         <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
-
           {/* IMAGE */}
           <div className="relative w-40 sm:w-48 h-auto min-h-[160px] md:h-56 md:w-full shrink-0 p-2">
             <div className="relative w-full h-full overflow-hidden rounded-xl">
@@ -109,7 +121,6 @@ export default function UserVehicleCard({
 
           {/* CONTENT */}
           <div className="flex flex-col flex-1 p-3 md:p-4 space-y-2.5 justify-between">
-
             {/* TITLE + WISHLIST */}
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
@@ -126,7 +137,9 @@ export default function UserVehicleCard({
                 onClick={() => setIsFavorite(!isFavorite)}
                 className="w-8 h-8 rounded-full bg-primary/10 hover:bg-primary/20 flex items-center justify-center cursor-pointer transition-all shrink-0"
               >
-                <Heart className={`w-5 h-5 ${isFavorite ? "fill-red-500 text-red-500" : "text-primary"}`} />
+                <Heart
+                  className={`w-5 h-5 ${isFavorite ? "fill-red-500 text-red-500" : "text-primary"}`}
+                />
               </button>
             </div>
 
@@ -153,7 +166,9 @@ export default function UserVehicleCard({
             {/* Verification Status + Consultant */}
             <div className="flex flex-wrap items-center gap-2">
               {status !== "suspended" && verification && (
-                <span className={`flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full font-semibold ${verification.cls}`}>
+                <span
+                  className={`flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full font-semibold ${verification.cls}`}
+                >
                   {verification.icon} {verification.label}
                 </span>
               )}
@@ -211,6 +226,24 @@ export default function UserVehicleCard({
                 </div>
               </div>
             )}
+            {/* REQUEST_CHANGES notice + reason */}
+            {status === "request_changes" && (
+              <div className="flex items-start gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2">
+                <ShieldAlert
+                  size={13}
+                  className="text-amber-500 mt-0.5 shrink-0"
+                />
+                <div className="min-w-0">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500/70 mb-0.5">
+                     Remarks:
+                  </p>
+                  <p className="text-xs font-semibold text-primary leading-snug">
+                    {data?.adminRemark ||
+                      "Please review and improve your listing."}
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* BOTTOM — price + actions */}
             <div className="mt-auto space-y-2">
@@ -218,17 +251,32 @@ export default function UserVehicleCard({
                 <h3 className="text-sm md:text-lg font-bold text-third">
                   ₹ {data?.price || "-"}
                 </h3>
-                <Button href={`/vehicle/details/${createSlug(data?.title)}/${data.id}`} variant="roundedOutline" size="sm" className="w-8 h-8 p-0">
-                  <ArrowUpRight size={16} />
+                <Button
+                  href={`/vehicle/details/${createSlug(data?.title)}/${data.id}`}
+                  variant="roundedOutline"
+                  size="sm"
+                  className="w-8 h-8 p-0 group"
+                >
+                  <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:rotate-45" />
                 </Button>
               </div>
 
               {status === "live" && (
                 <div className="flex flex-col md:flex-row gap-2">
-                  <Button variant="ghost" size="sm" showIcon={false} onClick={() => setIsDownloadOpen(true)}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    showIcon={false}
+                    onClick={() => setIsDownloadOpen(true)}
+                  >
                     <Pencil size={14} className="mr-2" /> Improve Listing
                   </Button>
-                  <Button onClick={() => handleSoldClick(data.id)} variant="ghost" size="sm" showIcon={false}>
+                  <Button
+                    onClick={() => handleSoldClick(data.id)}
+                    variant="ghost"
+                    size="sm"
+                    showIcon={false}
+                  >
                     <CheckCircle size={14} className="mr-2" /> Mark Sold
                   </Button>
                 </div>
@@ -236,17 +284,37 @@ export default function UserVehicleCard({
 
               {status === "draft" && (
                 <div className="flex gap-2">
-                  <Button variant="ghost" size="sm" showIcon={false}>
+                  <Button
+                    variant="ghost"
+                    onClick={() => setIsDownloadOpen(true)}
+                    size="sm"
+                    showIcon={false}
+                  >
                     <Pencil size={14} className="mr-2" /> Edit Draft
                   </Button>
                 </div>
               )}
-            </div>
 
+              {status === "request_changes" && (
+                <div className="flex gap-2">
+                  <Button
+                    variant="ghost"
+                    onClick={() => setIsDownloadOpen(true)}
+                    size="sm"
+                    showIcon={false}
+                  >
+                    <Pencil size={14} className="mr-2" /> Improve Listing
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
-      <DownloadAppPopup isOpen={isDownloadOpen} onClose={() => setIsDownloadOpen(false)} />
+      <DownloadAppPopup
+        isOpen={isDownloadOpen}
+        onClose={() => setIsDownloadOpen(false)}
+      />
     </>
   );
 }

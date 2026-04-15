@@ -18,9 +18,11 @@ import {
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import {
-  getInventoryVehicle, getTopPerformingVehicles, getInventorySnapShotCount,
+  getInventoryVehicle,
+  getTopPerformingVehicles,
+  getInventorySnapShotCount,
   getNeedAttenctionVehicles,
-  getSusPendedVehicles
+  getSusPendedVehicles,
 } from "@/services/Seller.service";
 import TopPerformingCard from "./components/TopPerformingCard";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
@@ -28,14 +30,13 @@ import StatCardSkeleton from "@/components/ui/skeleton/StatCardSkeleton";
 import TopPerformingCardSkeleton from "@/components/ui/skeleton/TopPerformingCardSkeleton";
 import UserVehicleCardSkeleton from "@/components/ui/skeleton/UserVehicleCardSkeleton";
 
-
-
 export default function InventoryComponent() {
   const vehicleTypes = [
     { id: "all", label: "All" },
     { id: "DRAFT", label: "Draft" },
     { id: "LIVE", label: "Live" },
     { id: "SOLD", label: "Sold" },
+    { id: "REQUEST_CHANGES", label: "Request Changes" },
     { id: "SUSPENDED", label: "Suspended" },
   ];
 
@@ -57,6 +58,7 @@ export default function InventoryComponent() {
     closingPrice: v.closingPrice,
     isWishlisted: v.isWishlisted,
     suspendReason: v.suspendReason,
+    adminRemark: v.adminRemark,
     vehicleSuspenseType: v.vehicleSuspenseType,
   });
 
@@ -102,7 +104,10 @@ export default function InventoryComponent() {
   const fetchSuspendedVehicles = async (pageNo = 1) => {
     try {
       setSuspendedLoading(true);
-      const res = await getSusPendedVehicles({ pageNo, pageSize: suspendedPageSize });
+      const res = await getSusPendedVehicles({
+        pageNo,
+        pageSize: suspendedPageSize,
+      });
       if (pageNo === 1) {
         setSuspendedVehicles(res.data || []);
       } else {
@@ -125,7 +130,7 @@ export default function InventoryComponent() {
     } else {
       fetchVehicles();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeType]);
 
   useEffect(() => {
@@ -199,18 +204,16 @@ export default function InventoryComponent() {
               Track inventory health & performance
             </p>
           </div>
-
-
         </div>
 
         {/* 2️⃣ NOTE */}
         <div className="rounded-xl bg-fourth text-white p-5 md:p-8 min-h-[150px] flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-md">
-
           {/* Left Content */}
           <div className="max-w-[500px]">
             <p className="text-sm md:text-base leading-relaxed">
-              <span className="font-semibold">Note:</span> Adding and editing vehicles is available on the Reecomm mobile app.
-              You can still view listings and mark vehicles as sold here.
+              <span className="font-semibold">Note:</span> Adding and editing
+              vehicles is available on the Reecomm mobile app. You can still
+              view listings and mark vehicles as sold here.
             </p>
           </div>
 
@@ -227,7 +230,6 @@ export default function InventoryComponent() {
               Add Vehicle
             </Button>
           </div>
-
         </div>
 
         {/* 3️⃣ Inventory Health Snapshot  */}
@@ -249,9 +251,7 @@ export default function InventoryComponent() {
               </>
             ) : (
               <>
-                <div
-                  className="cursor-pointer"
-                >
+                <div className="cursor-pointer">
                   <StatCard
                     icon={<Flame className="text-green-500" size={20} />}
                     label="High Demand"
@@ -259,9 +259,7 @@ export default function InventoryComponent() {
                   />
                 </div>
 
-                <div
-                  className="cursor-pointer"
-                >
+                <div className="cursor-pointer">
                   <StatCard
                     icon={<EyeOff className="text-yellow-500" size={20} />}
                     label="Low Visibility"
@@ -269,9 +267,7 @@ export default function InventoryComponent() {
                   />
                 </div>
 
-                <div
-                  className="cursor-pointer"
-                >
+                <div className="cursor-pointer">
                   <StatCard
                     icon={<AlertTriangle className="text-red-500" size={20} />}
                     label="Needs Attention"
@@ -285,10 +281,8 @@ export default function InventoryComponent() {
 
         {/* 3️⃣ TOP PERFORMING VEHICLES */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-
           {/* LEFT SIDE */}
           <div className="rounded-xl border border-third/30 bg-primary/5 p-5 flex flex-col h-[400px] ">
-
             {/* HEADER (fixed) */}
             <div className="flex items-center gap-2 mb-4">
               <TrendingUp className="text-primary" size={18} />
@@ -318,7 +312,7 @@ export default function InventoryComponent() {
                     showIcon={false}
                     onClick={() => {
                       // Using window.scrollTo or providing a simple anchor interaction
-                      window.scrollTo({ top: 500, behavior: 'smooth' });
+                      window.scrollTo({ top: 500, behavior: "smooth" });
                     }}
                     className="cursor-pointer"
                   >
@@ -327,14 +321,11 @@ export default function InventoryComponent() {
                 </div>
               )}
             </div>
-
           </div>
 
           <div className="rounded-xl border border-white/10 bg-fourth p-5 md:p-6 flex flex-col gap-5 hover:shadow-lg transition-all">
-
             {/* HEADER */}
             <div className="flex items-center justify-between">
-
               <div className="flex items-center gap-3">
                 {/* Icon */}
                 <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 text-primary">
@@ -360,26 +351,23 @@ export default function InventoryComponent() {
 
             {/* CONTENT */}
             <p className="text-sm md:text-base leading-relaxed text-white/90">
-              <span className="text-primary font-semibold">AVX</span>{" "}
-              inspected vehicles are converting significantly better than regular listings.
+              <span className="text-primary font-semibold">AVX</span> inspected
+              vehicles are converting significantly better than regular
+              listings.
             </p>
             <p className="text-sm md:text-base leading-relaxed text-white/90">
-              <span className="text-primary font-semibold">AVX</span>{" "}
-              inspected vehicles are converting significantly better than regular listings.
+              <span className="text-primary font-semibold">AVX</span> inspected
+              vehicles are converting significantly better than regular
+              listings.
             </p>
 
             {/* FOOTER */}
             <div className="flex justify-start">
-              <Button
-                variant="ghost"
-                showIcon={false}
-                className="text-sm"
-              >
+              <Button variant="ghost" showIcon={false} className="text-sm">
                 Inspect More Vehicles
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
-
           </div>
         </div>
 
@@ -392,11 +380,7 @@ export default function InventoryComponent() {
                 onClick={() => setActiveType(type.id)}
                 className={`px-4 py-2 cursor-pointer rounded-full border text-sm transition
                   ${
-                    type.id === "SUSPENDED"
-                      ? activeType === "SUSPENDED"
-                        ? "bg-red-500 text-white border-red-500"
-                        : "border-red-500/40 text-red-400 hover:bg-red-500/10"
-                      : activeType === type.id
+                    activeType === type.id
                       ? "bg-primary text-secondary border-primary"
                       : "border-third/40 hover:bg-primary/10"
                   }`}
@@ -454,9 +438,12 @@ export default function InventoryComponent() {
               <div className="flex flex-col items-center justify-center py-16 text-center rounded-xl border-2 border-dashed border-third/20 bg-third/5">
                 {activeType === "all" ? (
                   <>
-                    <h3 className="text-xl font-bold mb-2">You havent listed any vehicles yet.</h3>
+                    <h3 className="text-xl font-bold mb-2">
+                      You havent listed any vehicles yet.
+                    </h3>
                     <p className="text-third mb-6">
-                      Add vehicles in the AVX mobile app to start receiving inquiries.
+                      Add vehicles in the AVX mobile app to start receiving
+                      inquiries.
                     </p>
                     <Button variant="ghost" size="sm" showIcon={false}>
                       Download App
@@ -464,7 +451,9 @@ export default function InventoryComponent() {
                   </>
                 ) : (
                   <>
-                    <h3 className="text-xl font-bold mb-2">No vehicles found.</h3>
+                    <h3 className="text-xl font-bold mb-2">
+                      No vehicles found.
+                    </h3>
                     <p className="text-third">
                       There are currently no vehicles with this status.
                     </p>
@@ -497,7 +486,8 @@ export default function InventoryComponent() {
                       chats={car.approvedInquiries}
                       onRefresh={() => fetchSuspendedVehicles(1)}
                     />
-                  ))}               </div>
+                  ))}{" "}
+                </div>
 
                 {suspendedPage < suspendedTotalPages && (
                   <div className="flex justify-end mt-4">
@@ -515,7 +505,9 @@ export default function InventoryComponent() {
             ) : (
               <div className="flex flex-col items-center justify-center py-16 text-center rounded-xl border-2 border-dashed border-red-500/20 bg-red-500/5">
                 <Ban size={32} className="text-red-400/40 mb-3" />
-                <h3 className="text-xl font-bold mb-2">No suspended vehicles.</h3>
+                <h3 className="text-xl font-bold mb-2">
+                  No suspended vehicles.
+                </h3>
                 <p className="text-third">
                   None of your listings are currently suspended.
                 </p>
@@ -560,7 +552,10 @@ export default function InventoryComponent() {
           )}
         </div>
       </section>
-      <DownloadAppPopup isOpen={isDownloadOpen} onClose={() => setIsDownloadOpen(false)} />
+      <DownloadAppPopup
+        isOpen={isDownloadOpen}
+        onClose={() => setIsDownloadOpen(false)}
+      />
     </>
   );
 }
