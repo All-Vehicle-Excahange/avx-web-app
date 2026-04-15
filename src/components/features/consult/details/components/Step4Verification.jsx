@@ -136,7 +136,8 @@ export default function Step4Verification({ existing, onEdit }) {
                         <Button
                           onClick={onEdit}
                           variant="ghost"
-                          className="w-full sm:w-auto flex items-center justify-center gap-2 border-orange-500/50 text-orange-400 hover:bg-orange-500/10"
+                          size="sm"
+                          className="w-full sm:w-auto flex items-center justify-center gap-2"
                         >
                           <Edit className="w-4 h-4 mr-2" /> Edit My Details
                         </Button>

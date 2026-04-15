@@ -33,13 +33,25 @@ export default function ChipGroup({
     setKnownSelectedItems((prev) => {
       const newKnown = items.filter((i) => selected.includes(i.value));
       const merged = [...prev];
+      
       newKnown.forEach((nk) => {
         if (!merged.some((m) => m.value === nk.value)) {
           merged.push(nk);
         }
       });
+      
       // Only keep the ones that are STILL selected
-      return merged.filter((m) => selected.includes(m.value));
+      const finalKnown = merged.filter((m) => selected.includes(m.value));
+
+      // Bail out if contents haven't actually changed to avoid infinite update depth
+      if (
+        prev.length === finalKnown.length &&
+        prev.every((v, idx) => v.value === finalKnown[idx].value)
+      ) {
+        return prev;
+      }
+
+      return finalKnown;
     });
   }, [selected, items]);
 
