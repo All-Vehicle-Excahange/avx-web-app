@@ -356,7 +356,7 @@ export default function KycForm() {
           <div className="w-full lg:w-[70%] flex flex-col relative">
             {/* Form body naturally pushes height */}
             <div className="flex-1 px-6 py-8 lg:px-16 lg:py-10 relative">
-              <div className="max-w-2xl mx-auto w-full">
+              <div className="max-w-3xl mx-auto w-full">
                 {/* Headers */}
                 <h2 className="text-2xl font-bold text-primary mb-2">
                   Create your account
@@ -381,8 +381,8 @@ export default function KycForm() {
                             step > item.num
                               ? "bg-primary text-secondary"
                               : step === item.num
-                              ? "bg-primary text-secondary ring-8 ring-primary/10"
-                              : "bg-secondary border-2 border-third/10 text-third/40"
+                                ? "bg-primary text-secondary ring-8 ring-primary/10"
+                                : "bg-secondary border-2 border-third/10 text-third/40"
                           }`}
                         >
                           {step > item.num ? (
@@ -400,7 +400,9 @@ export default function KycForm() {
                               />
                             </svg>
                           ) : (
-                            <span className="text-sm font-bold">{item.num}</span>
+                            <span className="text-sm font-bold">
+                              {item.num}
+                            </span>
                           )}
                         </div>
                         <span
