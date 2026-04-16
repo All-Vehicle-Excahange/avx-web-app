@@ -1,13 +1,15 @@
 import { useEffect, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
+import { useRouter } from "next/router";
 import InputField from "@/components/ui/inputField";
 import DropzoneUpload from "@/components/ui/DropzoneUpload";
-import { postBecameSeller } from "@/services/user.service";
+import { postBecameSeller, updateBecameSeller } from "@/services/user.service";
 import Button from "@/components/ui/button";
 import Image from "next/image";
 import { X, CheckCircle2 } from "lucide-react";
 
-function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
+function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
+  const router = useRouter();
   const [form, setForm] = useState({
     panCardNumber: "",
     panCardFrontImage: null,
@@ -26,6 +28,24 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
 
   const [isClosing, setIsClosing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    if (existing) {
+      setForm({
+        panCardNumber: existing.panCardNumber || "",
+        panCardFrontImage: null,
+        aadharCardNumber: existing.aadharCardNumber || "",
+        aadharCardFrontImage: null,
+        aadharCardBackImage: null,
+      });
+
+      setPreview({
+        pan: existing.panCardFrontUrl || null,
+        aadhaarFront: existing.aadharCardFrontUrl || null,
+        aadhaarBack: existing.aadharCardBackUrl || null,
+      });
+    }
+  }, [existing, isOpen]);
 
   const handleClose = useCallback(() => {
     setIsClosing(true);
@@ -65,19 +85,116 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
 
   const handleInput = (key, value) => {
     setError("");
-    setValidationErrors((prev) => ({ ...prev, [key]: undefined }));
-    setForm((prev) => ({ ...prev, [key]: value }));
+
+    let finalValue = value;
+    if (key === "panCardNumber") {
+      finalValue = value.toUpperCase().slice(0, 10);
+    } else if (key === "aadharCardNumber") {
+      finalValue = value.replace(/\D/g, "").slice(0, 12);
+    }
+
+    setForm((prev) => ({ ...prev, [key]: finalValue }));
+
+    setValidationErrors((prev) => {
+      const newErrors = { ...prev };
+
+      if (key === "panCardNumber") {
+        const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+        if (finalValue && !panRegex.test(finalValue)) {
+          newErrors.panCardNumber =
+            "Invalid PAN format. Must be like ABCDE1234F";
+        } else {
+          delete newErrors.panCardNumber;
+        }
+      } else if (key === "aadharCardNumber") {
+        const cleanAadhar = finalValue.replace(/\s/g, "");
+        if (finalValue && !/^[0-9]{12}$/.test(cleanAadhar)) {
+          newErrors.aadharCardNumber = "Aadhaar must be exactly 12 digits";
+        } else {
+          delete newErrors.aadharCardNumber;
+        }
+      } else {
+        delete newErrors[key];
+      }
+
+      return newErrors;
+    });
   };
 
   const handleSubmit = async () => {
+    // Local validation
+    const errors = {};
+    const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+    const aadharRegex = /^\d{4}\s?\d{4}\s?\d{4}$/; // allows spaces or just 12 digits directly if we also test ^[0-9]{12}$
+
+    if (
+      form.panCardNumber &&
+      !panRegex.test(form.panCardNumber.toUpperCase())
+    ) {
+      errors.panCardNumber = "Invalid PAN format. Must be like ABCDE1234F";
+    }
+
+    if (form.aadharCardNumber) {
+      const cleanAadhar = form.aadharCardNumber.replace(/\s/g, "");
+      if (!/^[0-9]{12}$/.test(cleanAadhar)) {
+        errors.aadharCardNumber = "Aadhaar must be exactly 12 digits";
+      }
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors((prev) => ({ ...prev, ...errors }));
+      return;
+    }
+
     try {
       setLoading(true);
       setError("");
 
-      await postBecameSeller(form);
+      if (existing) {
+        // Only send changed fields for PUT request
+        const payload = {};
+        const formattedPan = form.panCardNumber?.toUpperCase();
+        const formattedAadhar = form.aadharCardNumber?.replace(/\s/g, "");
+
+        if (formattedPan !== existing.panCardNumber) {
+          payload.panCardNumber = formattedPan;
+        }
+        if (form.panCardFrontImage) {
+          payload.panCardFrontImage = form.panCardFrontImage;
+        }
+        if (formattedAadhar !== existing.aadharCardNumber) {
+          payload.aadharCardNumber = formattedAadhar;
+        }
+        if (form.aadharCardFrontImage) {
+          payload.aadharCardFrontImage = form.aadharCardFrontImage;
+        }
+        if (form.aadharCardBackImage) {
+          payload.aadharCardBackImage = form.aadharCardBackImage;
+        }
+
+        // If nothing changed, just close or notify user
+        if (Object.keys(payload).length === 0) {
+          handleClose();
+          return;
+        }
+
+        await updateBecameSeller(payload);
+      } else {
+        // Automatically convert PAN to uppercase before submission just in case
+        const submissionData = {
+          ...form,
+          panCardNumber: form.panCardNumber?.toUpperCase(),
+          aadharCardNumber: form.aadharCardNumber?.replace(/\s/g, ""),
+        };
+
+        await postBecameSeller(submissionData);
+      }
 
       setIsSuccess(true);
-      setTimeout(() => handleClose(), 60000); // auto close after 1 minute
+      setTimeout(() => {
+        handleClose();
+        router.push("/user/details/myprofile");
+      }, 2000); // auto close and navigate after 2 seconds
     } catch (err) {
       console.error("Seller verification failed:", err);
       const api = err?.response?.data;
@@ -113,16 +230,24 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60  backdrop-blur-sm p-4"
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60  backdrop-blur-sm p-4"
       onClick={handleClose}
-      style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}
+      style={{
+        animation: isClosing
+          ? "modalBackdropOut 0.25s ease-in forwards"
+          : "modalBackdropIn 0.25s ease-out",
+      }}
     >
       <div
         className="relative flex w-full max-w-[1200px] max-h-[70vh] overflow-hidden rounded-2xl shadow-2xl bg-primary-white"
         onClick={(e) => e.stopPropagation()}
-        style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}
+        style={{
+          animation: isClosing
+            ? "modalCardOut 0.25s ease-in forwards"
+            : "modalCardIn 0.3s ease-out",
+        }}
       >
-        {/* ❌ Close Button */}
+        {/*  Close Button */}
         <button
           onClick={handleClose}
           className="absolute bg-white cursor-pointer top-4 right-4 z-20 p-1 rounded-full hover:opacity-70 text-secondary"
@@ -151,8 +276,9 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
         {/* RIGHT CONTENT (FORM) */}
         <div
           id="form-container"
-          className={`w-full md:w-7/12 p-8 md:p-12 bg-secondary overflow-y-auto custom-scrollbar ${isSuccess ? "flex flex-col justify-center" : ""
-            }`}
+          className={`w-full md:w-7/12 p-8 md:p-12 bg-secondary overflow-y-auto custom-scrollbar ${
+            isSuccess ? "flex flex-col justify-center" : ""
+          }`}
         >
           {isSuccess ? (
             <div className="flex flex-col items-center justify-center h-full space-y-6">
@@ -177,13 +303,16 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
                   Our team will review your details shortly.
                 </p>
                 <p className="text-third text-sm leading-relaxed">
-                  You will be notified once you are successfully verified as a seller.
+                  You will be notified once you are successfully verified as a
+                  seller.
                 </p>
               </div>
             </div>
           ) : (
             <>
-              <h3 className="text-2xl font-bold mb-6 text-primary">Document Verification</h3>
+              <h3 className="text-2xl font-bold mb-6 text-primary">
+                Document Verification
+              </h3>
               {error && Object.keys(validationErrors).length === 0 && (
                 <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl">
                   <p className="text-red-500 text-sm">{error}</p>
@@ -196,10 +325,14 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
                     label="PAN Card Number"
                     variant="colored"
                     value={form.panCardNumber}
-                    onChange={(e) => handleInput("panCardNumber", e.target.value)}
+                    onChange={(e) =>
+                      handleInput("panCardNumber", e.target.value)
+                    }
                   />
                   {validationErrors.panCardNumber && (
-                    <p className="text-red-500 text-xs mt-1">{validationErrors.panCardNumber}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {validationErrors.panCardNumber}
+                    </p>
                   )}
                 </div>
 
@@ -212,14 +345,17 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
                       if (f) {
                         setPreview((p) => ({
                           ...p,
-                          pan: typeof f === "string" ? f : URL.createObjectURL(f),
+                          pan:
+                            typeof f === "string" ? f : URL.createObjectURL(f),
                         }));
                         handleInput("panCardFrontImage", f);
                       }
                     }}
                   />
                   {validationErrors.panCardFrontImage && (
-                    <p className="text-red-500 text-xs mt-1">{validationErrors.panCardFrontImage}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {validationErrors.panCardFrontImage}
+                    </p>
                   )}
                 </div>
 
@@ -228,10 +364,14 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
                     label="Aadhaar Card Number"
                     variant="colored"
                     value={form.aadharCardNumber}
-                    onChange={(e) => handleInput("aadharCardNumber", e.target.value)}
+                    onChange={(e) =>
+                      handleInput("aadharCardNumber", e.target.value)
+                    }
                   />
                   {validationErrors.aadharCardNumber && (
-                    <p className="text-red-500 text-xs mt-1">{validationErrors.aadharCardNumber}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {validationErrors.aadharCardNumber}
+                    </p>
                   )}
                 </div>
 
@@ -252,7 +392,9 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
                     }}
                   />
                   {validationErrors.aadharCardFrontImage && (
-                    <p className="text-red-500 text-xs mt-1">{validationErrors.aadharCardFrontImage}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {validationErrors.aadharCardFrontImage}
+                    </p>
                   )}
                 </div>
 
@@ -273,19 +415,26 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit }) {
                     }}
                   />
                   {validationErrors.aadharCardBackImage && (
-                    <p className="text-red-500 text-xs mt-1">{validationErrors.aadharCardBackImage}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {validationErrors.aadharCardBackImage}
+                    </p>
                   )}
                 </div>
                 {/* 🔥 Buttons */}
                 <div className="flex justify-end gap-4 pt-6">
-                  <button
+                  <Button
                     onClick={handleClose}
-                    className="px-6 h-11 rounded-xl border border-gray-300"
+                    variant="outlineSecondary"
+                    className=""
                   >
                     Cancel
-                  </button>
+                  </Button>
 
-                  <Button onClick={handleSubmit} variant="ghost" showIcon={false}>
+                  <Button
+                    onClick={handleSubmit}
+                    variant="ghost"
+                    showIcon={false}
+                  >
                     {loading ? "Submitting..." : "Submit"}
                   </Button>
                 </div>

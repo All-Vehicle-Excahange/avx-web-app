@@ -31,16 +31,20 @@ export default function VehicleHeader({ vehicle, ratting, vehicleSummary }) {
     const vehicleNameBase = [vehicle?.makerName, vehicle?.modelName, vehicle?.variantName]
         .filter(Boolean)
         .join(" ") || "Vehicle";
-    const cityName = vehicleSummary?.address?.city;
-    const vehicleName = cityName ? `${vehicleNameBase} in ${cityName}` : vehicleNameBase;
+
+    // city / state — prefer summary (CONSULTATION) then fall back to vehicleAddress (USER_SELLER)
+    const cityName = vehicleSummary?.address?.city || vehicle?.vehicleAddress?.city;
+    const stateName = vehicleSummary?.address?.state || vehicle?.vehicleAddress?.state;
+    const cityId = vehicleSummary?.address?.cityId || vehicle?.vehicleAddress?.cityId;
+    const stateId = vehicleSummary?.address?.stateId || vehicle?.vehicleAddress?.stateId;
 
     // Build the query string for search links
     const searchQueryParams = new URLSearchParams();
     if (vehicle?.makerId || vehicle?.makeId) searchQueryParams.set("makerId", vehicle.makerId || vehicle.makeId);
     if (vehicle?.makerName) searchQueryParams.set("brand", vehicle.makerName);
-    if (vehicleSummary?.address?.stateId) searchQueryParams.set("stateId", vehicleSummary?.address?.stateId);
-    if (vehicleSummary?.address?.cityId) searchQueryParams.set("cityId", vehicleSummary?.address?.cityId);
-    if (vehicleSummary?.address?.state) searchQueryParams.set("stateName", vehicleSummary?.address?.state);
+    if (stateId) searchQueryParams.set("stateId", stateId);
+    if (cityId) searchQueryParams.set("cityId", cityId);
+    if (stateName) searchQueryParams.set("stateName", stateName);
     if (cityName) searchQueryParams.set("cityName", cityName);
     const searchUrl = `/search?${searchQueryParams.toString()}`;
 
@@ -110,9 +114,7 @@ export default function VehicleHeader({ vehicle, ratting, vehicleSummary }) {
 
                 {/* LEFT SIDE */}
                 <h1 className="text-2xl text-primary sm:text-3xl 3xl:text-4xl font-bold">
-                    {vehicle?.makerName || "Tata"}{" "}
-                    {vehicle?.modelName || "Harrier XZ Plus"}{" "}
-                    {vehicle?.variantName || "Harrier XZ Plus"}
+                    {[vehicle?.makerName, vehicle?.modelName, vehicle?.variantName].filter(Boolean).join(" ") || "-"}
                 </h1>
 
                 {/* RIGHT SIDE */}

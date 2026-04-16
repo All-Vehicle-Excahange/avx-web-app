@@ -5,6 +5,7 @@ import InputField from "@/components/ui/inputField";
 import {
   checkIsMetaExist,
   createUserMeta,
+  getBecameSeller,
   getCities,
   getState,
   getuserProfile,
@@ -12,8 +13,16 @@ import {
   updateuserProfile,
   updateuserProfileMeta,
 } from "@/services/user.service";
-import { ChevronDown, Lock, Clock } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import {
+  ChevronDown,
+  Lock,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { ProfileSkeleton } from "@/components/ui/skeleton";
+import DetailsFromPopup from "../userSeller/DetailsFromPopup";
 
 function MyProfile() {
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -21,6 +30,8 @@ function MyProfile() {
   const [isMetaExist, setIsMetaExist] = useState(false);
   const [isCreatingMeta, setIsCreatingMeta] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [sellerData, setSellerData] = useState(null);
+  const [isSellerPopupOpen, setIsSellerPopupOpen] = useState(false);
 
   const [profile, setProfile] = useState({});
   const [profileForm, setProfileForm] = useState({});
@@ -37,6 +48,9 @@ function MyProfile() {
   const [stateOpen, setStateOpen] = useState(false);
   const [cityOpen, setCityOpen] = useState(false);
   const [genderOpen, setGenderOpen] = useState(false);
+
+  const [stateSearch, setStateSearch] = useState("");
+  const [citySearch, setCitySearch] = useState("");
 
   const stateRef = useRef(null);
   const cityRef = useRef(null);
@@ -57,7 +71,6 @@ function MyProfile() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -66,7 +79,8 @@ function MyProfile() {
         // Check if meta exists
         const metaExistsRes = await checkIsMetaExist();
         console.log("Meta Exists Response:", metaExistsRes);
-        const metaExists = metaExistsRes.data?.exists || metaExistsRes.data === true;
+        const metaExists =
+          metaExistsRes.data?.exists || metaExistsRes.data === true;
         console.log("Meta Exists:", metaExists);
         setIsMetaExist(metaExists);
 
@@ -131,6 +145,21 @@ function MyProfile() {
     };
     fetchStates();
   }, []);
+
+  const fetchSellerStatus = useCallback(async () => {
+    try {
+      const res = await getBecameSeller();
+      if (res.success) {
+        setSellerData(res.data);
+      }
+    } catch (error) {
+      console.error("Fetch Seller Status Error:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSellerStatus();
+  }, [fetchSellerStatus]);
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -292,24 +321,234 @@ function MyProfile() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="py-12">
+        <ProfileSkeleton />
+      </div>
+    );
+  }
+
   return (
     <section className="w-full py-12 rounded-2xl  space-y-10">
-      {/* APPLICATION STATUS WARNING */}
-      {profile.role === "USER_SELLER_APPLICANT" && (
-        <div className="bg-yellow-500/10 border border-yellow-500/30 text-yellow-600 p-4 rounded-xl flex items-center gap-3 shadow-sm">
-          <Clock className="w-5 h-5 text-yellow-600 shrink-0" />
-          <p className="text-sm font-semibold">
-            You have applied to become a user seller. Please wait until we process your application.
-          </p>
+      {/* APPLICATION STATUS BOARD */}
+      {sellerData && sellerData.verificationStatus !== "VERIFIED" && (
+        <div className="mx-auto max-w-2xl space-y-6 mb-10">
+          {/* Admin Remark Box for REQUEST_CHANGES or REJECTED */}
+          {(sellerData.verificationStatus === "REQUEST_CHANGES" ||
+            sellerData.verificationStatus === "REJECTED") && (
+            <div
+              className={`rounded-2xl p-6 space-y-4 shadow-sm
+              ${
+                sellerData.verificationStatus === "REQUEST_CHANGES"
+                  ? "bg-amber-500/5 border border-amber-500/20"
+                  : "bg-red-500/5 border border-red-500/20"
+              }`}
+            >
+              <div className="flex items-start gap-3">
+                <div
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0
+                  ${
+                    sellerData.verificationStatus === "REQUEST_CHANGES"
+                      ? "bg-amber-500/10 text-amber-500"
+                      : "bg-red-500/10 text-red-500"
+                  }`}
+                >
+                  <AlertCircle className="w-5 h-5" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="font-bold text-lg tracking-tight text-primary">
+                    {sellerData.verificationStatus === "REQUEST_CHANGES"
+                      ? "Updates Needed"
+                      : "Reason for Rejection"}
+                  </h3>
+                  <p className="text-third text-xs leading-relaxed">
+                    {sellerData.verificationStatus === "REQUEST_CHANGES"
+                      ? "The AVX verification team has requested some changes to your application."
+                      : "Your application was not approved for the following reason:"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-primary/5 rounded-xl border border-primary/5 p-4 mx-0 md:ml-13">
+                <p className="text-sm font-medium leading-relaxed text-primary">
+                  <span className="font-bold">Remark:</span>{" "}
+                  {sellerData.adminRemark || "No specific remark provided."}
+                </p>
+              </div>
+
+              {sellerData.verificationStatus === "REQUEST_CHANGES" && (
+                <div className="flex justify-end pt-2">
+                  <Button
+                    onClick={() => setIsSellerPopupOpen(true)}
+                    variant="ghost"
+                    size="sm"
+                    className="gap-2"
+                  >
+                    Edit & Re-submit
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Header & Main Status */}
+          <div className="border border-primary/30 rounded-2xl overflow-hidden bg-primary/5">
+            <div className="p-5 md:p-6 space-y-6">
+              <div className="flex items-center gap-4">
+                <div
+                  className={`w-12 h-12 rounded-2xl flex items-center justify-center
+                  ${
+                    sellerData.verificationStatus === "REQUEST_CHANGES"
+                      ? "bg-amber-500/10 text-amber-500"
+                      : sellerData.verificationStatus === "REJECTED"
+                        ? "bg-red-500/10 text-red-500"
+                        : "bg-primary/10 text-primary"
+                  }`}
+                >
+                  {sellerData.verificationStatus === "REJECTED" ? (
+                    <AlertCircle className="w-6 h-6" />
+                  ) : (
+                    <Clock className="w-6 h-6" />
+                  )}
+                </div>
+                <div className="space-y-0.5">
+                  <h2 className="text-xl font-bold text-primary tracking-tight">
+                    {sellerData.verificationStatus === "REQUEST_CHANGES"
+                      ? "Action Required"
+                      : sellerData.verificationStatus === "REJECTED"
+                        ? "Application Rejected"
+                        : "Seller Application Status"}
+                  </h2>
+                  <p className="text-xs text-third">
+                    {sellerData.verificationStatus === "REQUEST_CHANGES"
+                      ? "We found some issues with your submission."
+                      : sellerData.verificationStatus === "REJECTED"
+                        ? "We regret to inform you that your application was not approved."
+                        : "Your request is currently being processed by our team"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Steps */}
+              <div className="space-y-4">
+                {[
+                  {
+                    id: "reg",
+                    label: "Account Registration",
+                    status: "Completed",
+                    info: "Done",
+                    isDone: true,
+                  },
+                  {
+                    id: "doc",
+                    label: "Document Submission",
+                    status: "Completed",
+                    info: "PAN & Aadhaar Received",
+                    isDone: true,
+                  },
+                  {
+                    id: "rev",
+                    label: "AVX Admin Review",
+                    status:
+                      sellerData.verificationStatus === "REQUEST_CHANGES"
+                        ? "Request Changes"
+                        : sellerData.verificationStatus === "REJECTED"
+                          ? "Rejected"
+                          : "In Progress",
+                    info:
+                      sellerData.verificationStatus === "REQUEST_CHANGES"
+                        ? "Fix issues"
+                        : sellerData.verificationStatus === "REJECTED"
+                          ? "Verification failed"
+                          : "Verifying documents...",
+                    isWarning:
+                      sellerData.verificationStatus === "REQUESTED" ||
+                      sellerData.verificationStatus === "REQUEST_CHANGES",
+                    isError: sellerData.verificationStatus === "REJECTED",
+                  },
+                ].map((step, index, arr) => (
+                  <div
+                    key={step.id}
+                    className="relative flex items-start group"
+                  >
+                    {index !== arr.length - 1 && (
+                      <div className="absolute left-[17px] top-9 w-[1.5px] h-full bg-primary/10 transition-colors" />
+                    )}
+
+                    <div className="flex items-center justify-between w-full pb-3">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-transform relative z-10
+                          ${
+                            step.isDone
+                              ? "bg-green-500/20 text-green-500"
+                              : step.isWarning
+                                ? "bg-amber-500/20 text-amber-500"
+                                : step.isError
+                                  ? "bg-red-500/20 text-red-500"
+                                  : "bg-primary/20 text-primary"
+                          }`}
+                        >
+                          {step.isDone ? (
+                            <CheckCircle2 className="w-5 h-5" />
+                          ) : step.isWarning || step.isError ? (
+                            <AlertCircle className="w-5 h-5" />
+                          ) : (
+                            <Clock className="w-5 h-5" />
+                          )}
+                        </div>
+                        <span className="font-semibold text-sm text-primary/90">
+                          {step.label}
+                        </span>
+                      </div>
+
+                      <div className="flex flex-col items-end">
+                        <span
+                          className={`text-xs font-bold
+                          ${
+                            step.isDone
+                              ? "text-green-500"
+                              : step.isWarning
+                                ? "text-yellow-500"
+                                : step.isError
+                                  ? "text-red-500"
+                                  : "text-primary"
+                          }`}
+                        >
+                          {step.status}
+                        </span>
+                        <span className="text-[10px] text-third/40 font-medium">
+                          {step.info}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Footer */}
+              {sellerData.verificationStatus !== "REJECTED" && (
+                <div className="pt-6 border-t border-third/10 flex items-center justify-between text-sm">
+                  <span className="text-third font-medium tracking-tight">
+                    Estimated Review Time
+                  </span>
+                  <span className="text-primary font-black uppercase text-lg">
+                    24 – 48 Hours
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
 
-      {/* ✅ PROFILE INFO SECTION */}
+      {/*  PROFILE INFO SECTION */}
       <div className="rounded-2xl border border-third/40 px-6 pb-6">
         <div className="flex justify-between py-6">
           <h2 className="text-lg font-semibold">Profile Info</h2>
 
-          {!isEditingProfile && (
+          {!isEditingProfile && profile.role !== "USER_SELLER_APPLICANT" && (
             <Button variant="ghost" onClick={handleEditProfile}>
               Edit
             </Button>
@@ -410,18 +649,20 @@ function MyProfile() {
         <div className="flex justify-between py-6">
           <h2 className="text-lg font-semibold">Profile Meta</h2>
 
-          {!isEditingMeta && !isCreatingMeta && (
-            <Button
-              variant="ghost"
-              onClick={isMetaExist ? handleEditMeta : handleCreateMeta}
-            >
-              {isMetaExist ? "Edit" : "Create"}
-            </Button>
-          )}
+          {!isEditingMeta &&
+            !isCreatingMeta &&
+            profile.role !== "USER_SELLER_APPLICANT" && (
+              <Button
+                variant="ghost"
+                onClick={isMetaExist ? handleEditMeta : handleCreateMeta}
+              >
+                {isMetaExist ? "Edit" : "Create"}
+              </Button>
+            )}
         </div>
 
         {/* Meta View */}
-        {!isEditingMeta && !isCreatingMeta && isMetaExist && (
+        {!isEditingMeta && !isCreatingMeta && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
             <ProfileItem label="Age" value={profileMetaData.age} />
             <ProfileItem label="Gender" value={profileMetaData.gender} />
@@ -449,28 +690,31 @@ function MyProfile() {
                 <label className="text-xs text-third">Gender</label>
 
                 <div
-                    onClick={() => setGenderOpen(!genderOpen)}
-                    className="h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-secondary text-primary cursor-pointer"
+                  onClick={() => setGenderOpen(!genderOpen)}
+                  className="h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-secondary text-primary cursor-pointer"
                 >
                   <span>{metaForm.gender || "Select Gender"}</span>
                   <ChevronDown size={16} />
                 </div>
 
                 {genderOpen && (
-                    <div className="absolute z-9999 mt-1 w-full border border-primary rounded-md bg-secondary text-primary shadow-lg overflow-hidden">
-                      {["MALE", "FEMALE"].map((genderOption) => (
-                          <div
-                              key={genderOption}
-                              onClick={() => {
-                                setMetaForm((prev) => ({ ...prev, gender: genderOption }));
-                                setGenderOpen(false);
-                              }}
-                              className="px-3 py-2 hover:bg-primary/20 cursor-pointer"
-                          >
-                            {genderOption}
-                          </div>
-                      ))}
-                    </div>
+                  <div className="absolute z-9999 mt-1 w-full border border-primary rounded-md bg-secondary text-primary shadow-lg overflow-hidden">
+                    {["MALE", "FEMALE"].map((genderOption) => (
+                      <div
+                        key={genderOption}
+                        onClick={() => {
+                          setMetaForm((prev) => ({
+                            ...prev,
+                            gender: genderOption,
+                          }));
+                          setGenderOpen(false);
+                        }}
+                        className="px-3 py-2 hover:bg-primary/20 cursor-pointer"
+                      >
+                        {genderOption}
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
 
@@ -496,34 +740,77 @@ function MyProfile() {
               <div ref={stateRef} className="relative">
                 <label className="text-xs text-third">State</label>
 
-                <div
-                  onClick={() => setStateOpen(!stateOpen)}
-                  className="h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-secondary text-primary cursor-pointer"
-                >
-                  <span>{metaForm.stateName || "Select State"}</span>
-                  <ChevronDown size={16} />
+                <div className="h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-secondary text-primary cursor-pointer relative">
+                  {stateOpen ? (
+                    <input
+                      type="text"
+                      autoFocus
+                      placeholder="Search state..."
+                      value={stateSearch}
+                      onChange={(e) => setStateSearch(e.target.value)}
+                      className="w-full bg-transparent outline-none h-full text-sm placeholder:text-primary/40"
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  ) : (
+                    <span
+                      onClick={() => {
+                        setStateOpen(true);
+                        setCityOpen(false);
+                        setGenderOpen(false);
+                      }}
+                      className="flex-1 h-full flex items-center"
+                    >
+                      {metaForm.stateName || "Select State"}
+                    </span>
+                  )}
+                  <ChevronDown
+                    size={16}
+                    className={`transition-transform duration-200 ${stateOpen ? "rotate-180" : ""}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setStateOpen(!stateOpen);
+                    }}
+                  />
                 </div>
 
                 {stateOpen && (
-                  <div className="absolute z-9999 mt-1 w-full border border-primary rounded-md bg-secondary text-primary shadow-lg max-h-40 overflow-y-auto">
-                    {states.map((s) => (
-                      <div
-                        key={s.value}
-                        onClick={() => {
-                          setMetaForm((p) => ({
-                            ...p,
-                            stateId: s.value,
-                            stateName: s.label,
-                            cityId: null,
-                            cityName: "",
-                          }));
-                          setStateOpen(false);
-                        }}
-                        className="px-3 py-2 hover:bg-primary/20 cursor-pointer"
-                      >
-                        {s.label}
-                      </div>
-                    ))}
+                  <div className="absolute z-9999 mt-1 w-full border border-primary rounded-md bg-secondary text-primary shadow-lg shadow-black/20 overflow-hidden flex flex-col">
+                    <div className="max-h-40 overflow-y-auto custom-scrollbar">
+                      {states
+                        .filter((s) =>
+                          s.label
+                            .toLowerCase()
+                            .includes(stateSearch.toLowerCase()),
+                        )
+                        .map((s) => (
+                          <div
+                            key={s.value}
+                            onClick={() => {
+                              setMetaForm((p) => ({
+                                ...p,
+                                stateId: s.value,
+                                stateName: s.label,
+                                cityId: null,
+                                cityName: "",
+                              }));
+                              setStateOpen(false);
+                              setStateSearch("");
+                            }}
+                            className="px-3 py-2 hover:bg-primary/20 cursor-pointer text-sm"
+                          >
+                            {s.label}
+                          </div>
+                        ))}
+                      {states.filter((s) =>
+                        s.label
+                          .toLowerCase()
+                          .includes(stateSearch.toLowerCase()),
+                      ).length === 0 && (
+                        <div className="px-3 py-4 text-center text-xs text-third italic border-t border-primary/10">
+                          No states found
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
@@ -533,38 +820,85 @@ function MyProfile() {
                 <label className="text-xs text-third">City</label>
 
                 <div
-                  onClick={() => metaForm.stateId && setCityOpen(!cityOpen)}
                   className={`h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-secondary text-primary ${
                     !metaForm.stateId
                       ? "opacity-50 cursor-not-allowed"
                       : "cursor-pointer"
                   }`}
                 >
-                  <span>
-                    {metaForm.cityName ||
-                      (metaForm.stateId ? "Select City" : "Select state first")}
-                  </span>
-                  <ChevronDown size={16} />
+                  {cityOpen ? (
+                    <input
+                      type="text"
+                      autoFocus
+                      placeholder="Search city..."
+                      value={citySearch}
+                      onChange={(e) => setCitySearch(e.target.value)}
+                      className="w-full bg-transparent outline-none h-full text-sm placeholder:text-primary/40"
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  ) : (
+                    <span
+                      onClick={() => {
+                        if (metaForm.stateId) {
+                          setCityOpen(true);
+                          setStateOpen(false);
+                          setGenderOpen(false);
+                        }
+                      }}
+                      className="flex-1 h-full flex items-center"
+                    >
+                      {metaForm.cityName ||
+                        (metaForm.stateId
+                          ? "Select City"
+                          : "Select state first")}
+                    </span>
+                  )}
+                  <ChevronDown
+                    size={16}
+                    className={`transition-transform duration-200 ${cityOpen ? "rotate-180" : ""}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (metaForm.stateId) setCityOpen(!cityOpen);
+                    }}
+                  />
                 </div>
 
                 {cityOpen && (
-                  <div className="absolute z-9999 mt-1 w-full border border-primary rounded-md bg-secondary text-primary shadow-lg max-h-40 overflow-y-auto">
-                    {cities.map((c) => (
-                      <div
-                        key={c.value}
-                        onClick={() => {
-                          setMetaForm((p) => ({
-                            ...p,
-                            cityId: c.value,
-                            cityName: c.label,
-                          }));
-                          setCityOpen(false);
-                        }}
-                        className="px-3 py-2 hover:bg-primary/20 cursor-pointer"
-                      >
-                        {c.label}
-                      </div>
-                    ))}
+                  <div className="absolute z-9999 mt-1 w-full border border-primary rounded-md bg-secondary text-primary shadow-lg shadow-black/20 overflow-hidden flex flex-col">
+                    <div className="max-h-40 overflow-y-auto custom-scrollbar">
+                      {cities
+                        .filter((c) =>
+                          c.label
+                            .toLowerCase()
+                            .includes(citySearch.toLowerCase()),
+                        )
+                        .map((c) => (
+                          <div
+                            key={c.value}
+                            onClick={() => {
+                              setMetaForm((p) => ({
+                                ...p,
+                                cityId: c.value,
+                                cityName: c.label,
+                              }));
+                              setCityOpen(false);
+                              setCitySearch("");
+                            }}
+                            className="px-3 py-2 hover:bg-primary/20 cursor-pointer text-sm"
+                          >
+                            {c.label}
+                          </div>
+                        ))}
+                      {cities.filter((c) =>
+                        c.label
+                          .toLowerCase()
+                          .includes(citySearch.toLowerCase()),
+                      ).length === 0 && (
+                        <div className="px-3 py-4 text-center text-xs text-third italic border-t border-primary/10">
+                          No cities found
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
@@ -608,6 +942,14 @@ function MyProfile() {
           </>
         )}
       </div>
+      <DetailsFromPopup
+        isOpen={isSellerPopupOpen}
+        onClose={() => {
+          setIsSellerPopupOpen(false);
+          fetchSellerStatus();
+        }}
+        existing={sellerData}
+      />
     </section>
   );
 }
@@ -618,7 +960,7 @@ function ProfileItem({ label, value }) {
   return (
     <div className="flex flex-col gap-1">
       <span className="text-xs text-third">{label}</span>
-      <span className="font-medium">{value || "--"}</span>
+      <span className="font-medium">{value || "N/A"}</span>
     </div>
   );
 }

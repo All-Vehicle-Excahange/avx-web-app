@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react"; // Added useCallback
+import React, { useEffect, useState, useCallback } from "react";
 import Step1Business from "./components/Step1Business";
 import Step2Address from "./components/Step2Address";
 import Step3KYC from "./components/Step3KYC";
@@ -17,13 +17,13 @@ import {
   updateAddressDetials,
   updateKycDetials,
   updatebasicDetials,
+  checkIsAccountSuspended,
 } from "@/services/consult.service";
 
 import toast, { Toaster } from "react-hot-toast";
 import { showBackendError } from "@/lib/axiosInstance";
 import Step4Verification from "./components/Step4Verification";
 import Navbar from "@/components/layout/Navbar";
-import FooterLink from "@/components/layout/FooterLink";
 
 const steps = [1, 2, 3, 4];
 
@@ -51,6 +51,7 @@ export default function KycForm() {
   const [loading, setLoading] = useState(false);
   const [backLoading, setBackLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [suspensionInfo, setSuspensionInfo] = useState(null);
 
   // ===== VERSION COUNTERS — incrementing forces child remount with fresh initialData =====
   const [dataVersion, setDataVersion] = useState({ 1: 0, 2: 0, 3: 0 });
@@ -98,6 +99,17 @@ export default function KycForm() {
             err?.response?.data?.statusCode === 404
           );
         };
+
+        try {
+          const susp = await checkIsAccountSuspended();
+          if (susp?.data?.isSuspended) {
+            setSuspensionInfo(susp.data);
+            // If suspended, we typically want to show Step 4 (which will handle the suspension UI)
+            setStep(4);
+          }
+        } catch (err) {
+          console.error("Suspension check failed", err);
+        }
 
         let bData = null;
         let aData = null;
@@ -366,17 +378,18 @@ export default function KycForm() {
                 </p>
 
                 {/* ===== NEW PROGRESS BAR (MATCHING SCREENSHOT) ===== */}
-                <div className="mb-16 flex items-center justify-between">
-                  {[
-                    { num: 1, label: "Business" },
-                    { num: 2, label: "Address" },
-                    { num: 3, label: "Documents" },
-                    { num: 4, label: "Verification" },
-                  ].map((item, i, arr) => (
-                    <React.Fragment key={item.num}>
-                      <div className="flex flex-col items-center relative gap-3">
-                        <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 relative shrink-0
+                {!suspensionInfo?.isSuspended && (
+                  <div className="mb-16 flex items-center justify-between">
+                    {[
+                      { num: 1, label: "Business" },
+                      { num: 2, label: "Address" },
+                      { num: 3, label: "Documents" },
+                      { num: 4, label: "Verification" },
+                    ].map((item, i, arr) => (
+                      <React.Fragment key={item.num}>
+                        <div className="flex flex-col items-center relative gap-3">
+                          <div
+                            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 relative shrink-0
                           ${
                             step > item.num
                               ? "bg-primary text-secondary"
@@ -384,46 +397,47 @@ export default function KycForm() {
                                 ? "bg-primary text-secondary ring-8 ring-primary/10"
                                 : "bg-secondary border-2 border-third/10 text-third/40"
                           }`}
-                        >
-                          {step > item.num ? (
-                            <svg
-                              className="w-5 h-5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="3.5"
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                          ) : (
-                            <span className="text-sm font-bold">
-                              {item.num}
-                            </span>
-                          )}
-                        </div>
-                        <span
-                          className={`text-xs font-bold transition-colors duration-300 absolute top-full mt-3 whitespace-nowrap
+                          >
+                            {step > item.num ? (
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="3.5"
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                            ) : (
+                              <span className="text-sm font-bold">
+                                {item.num}
+                              </span>
+                            )}
+                          </div>
+                          <span
+                            className={`text-xs font-bold transition-colors duration-300 absolute top-full mt-3 whitespace-nowrap
                           ${step >= item.num ? "text-primary" : "text-third/40"}`}
-                        >
-                          {item.label}
-                        </span>
-                      </div>
-                      {/* Connecting Line */}
-                      {i < arr.length - 1 && (
-                        <div className="flex-1 h-[1.5px] bg-third/30 mx-4 relative">
-                          <div
-                            className="absolute inset-0 bg-primary transition-all duration-500"
-                            style={{ width: step > item.num ? "100%" : "0%" }}
-                          />
+                          >
+                            {item.label}
+                          </span>
                         </div>
-                      )}
-                    </React.Fragment>
-                  ))}
-                </div>
+                        {/* Connecting Line */}
+                        {i < arr.length - 1 && (
+                          <div className="flex-1 h-[1.5px] bg-third/30 mx-4 relative">
+                            <div
+                              className="absolute inset-0 bg-primary transition-all duration-500"
+                              style={{ width: step > item.num ? "100%" : "0%" }}
+                            />
+                          </div>
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </div>
+                )}
 
                 {/* ===== STEPS WITH KEYS TO TRIGGER RE-MOUNT ON DATA LOAD ===== */}
                 <div className="min-h-[350px]">
@@ -459,6 +473,7 @@ export default function KycForm() {
                       <Step4Verification
                         existing={existing}
                         onEdit={() => setShowPreview(true)}
+                        suspensionInfo={suspensionInfo}
                       />
                     )}
 

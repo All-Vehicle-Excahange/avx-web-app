@@ -19,7 +19,6 @@ import AutoConsultPicsSection from "../home/AutoConsultPicsSection";
 import AvxProcess from "./AvxProcess";
 import SpecialOffer from "./SpecialOffer";
 import Navbar from "@/components/layout/Navbar";
-import overview from "@/pages/consult/dashboard/overview";
 import VehicleOverviewMain from "./VehicleOverviewMain";
 
 
@@ -96,14 +95,29 @@ export default function VehicleDetails() {
     const fetchAll = async () => {
       setLoading(true);
       try {
-        const [overviewRes, summaryRes] = await Promise.all([
-          getVehicleOverview(id),
-          id ? getVehicleSummary(id) : Promise.resolve({ data: {} }),
-        ]);
-        setVehicleOverview(overviewRes.data);
-        setVehicleSummary(summaryRes.data);
+        // Step 1: Always fetch overview first
+        const overviewRes = await getVehicleOverview(id);
+        const overviewData = overviewRes.data;
+        setVehicleOverview(overviewData);
+
+        // Step 2: Only fetch consultation meta if the owner is a CONSULTATION
+        // Normal USER sellers do not have a consultation meta endpoint → would return 404
+        const ownerRole = overviewData?.vehicleOwner?.userRole;
+        if (ownerRole === "CONSULTATION") {
+          try {
+            const summaryRes = await getVehicleSummary(id);
+            setVehicleSummary(summaryRes.data);
+          } catch (summaryErr) {
+            // 404 or any error from meta API — silently ignore, page still works
+            console.warn("Consultation meta not available:", summaryErr?.message);
+            setVehicleSummary({});
+          }
+        } else {
+          // Non-consultant seller — skip the meta API entirely
+          setVehicleSummary({});
+        }
       } catch (error) {
-        console.log(error);
+        console.error("Failed to load vehicle details:", error);
       } finally {
         setLoading(false);
       }

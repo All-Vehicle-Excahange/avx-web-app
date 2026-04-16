@@ -4,6 +4,7 @@ import VehicleCard from "@/components/ui/const/VehicleCard";
 import React, { useCallback, useEffect, useState } from "react";
 import Button from "@/components/ui/button";
 import { getWishList, getFollowedConsultant } from "@/services/user.service";
+import { VehicleCardSkeleton, ConsultantCardSkeleton } from "@/components/ui/skeleton";
 
 function Wishlist() {
   const [activeTab, setActiveTab] = useState("wishlist");
@@ -28,11 +29,13 @@ function Wishlist() {
   const [followedConsualt, setFollowedConsualt] = useState([]);
   const [consultantPage, setConsultantPage] = useState(1);
   const [hasMoreConsultant, setHasMoreConsultant] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const toggle = (key) => setPrefs({ ...prefs, [key]: !prefs[key] });
 
   const fetchWishList = useCallback(async (page = 1) => {
     try {
+      if (page === 1) setIsLoading(true);
       const pageNumber = typeof page === 'number' ? page : 1;
       const res = await getWishList({ pageNo: pageNumber, size: 8 });
       if (res.success && res.data) {
@@ -48,11 +51,14 @@ function Wishlist() {
     } catch (error) {
       console.error("Failed to fetch wishlist:", error);
       setHasMoreWishlist(false);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
   const fetchFollowedConsultant = useCallback(async (page = 1) => {
     try {
+      if (page === 1) setIsLoading(true);
       const pageNumber = typeof page === 'number' ? page : 1;
       const data = { pageNo: pageNumber, size: 4 };
       const res = await getFollowedConsultant(data);
@@ -92,6 +98,8 @@ function Wishlist() {
     } catch (error) {
       console.error("Failed to fetch followed consultants:", error);
       setHasMoreConsultant(false);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -144,7 +152,11 @@ function Wishlist() {
           <div>
             <h1 className="text-3xl font-extrabold mb-6 hidden">Vehicle Wishlist</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-              {cardData.length > 0 ? (
+              {isLoading ? (
+                Array.from({ length: 4 }).map((_, i) => (
+                  <VehicleCardSkeleton key={i} />
+                ))
+              ) : cardData.length > 0 ? (
                 cardData.map((vehicle) => (
                   <div
                     key={vehicle.id}
@@ -154,10 +166,15 @@ function Wishlist() {
                   </div>
                 ))
               ) : (
-                <p className="text-third">Your wishlist is empty.</p>
+                <div className="col-span-full py-16 flex flex-col items-center justify-center text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5 mt-4">
+                  <h3 className="text-xl font-bold mb-2 text-primary">Your wishlist is empty.</h3>
+                  <p className="text-third text-sm max-w-sm">
+                    Browse our vehicle marketplace and add your favorites to your wishlist.
+                  </p>
+                </div>
               )}
             </div>
-            {hasMoreWishlist && cardData.length > 0 && (
+            {hasMoreWishlist && cardData.length > 0 && !isLoading && (
               <div className="flex justify-end mt-6">
                 <Button variant="outline" showIcon={false} onClick={handleLoadMoreWishlist}>
                   See More
@@ -174,7 +191,11 @@ function Wishlist() {
               Subscribed Consultant
             </h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {followedConsualt.length > 0 ? (
+              {isLoading ? (
+                Array.from({ length: 4 }).map((_, i) => (
+                  <ConsultantCardSkeleton key={i} />
+                ))
+              ) : followedConsualt.length > 0 ? (
                 followedConsualt.map((item) => (
                   <ConsultantCard
                     key={item.id}
@@ -182,10 +203,15 @@ function Wishlist() {
                   />
                 ))
               ) : (
-                <p className="text-third">You havent subscribed to any consultants yet.</p>
+                <div className="col-span-full py-16 flex flex-col items-center justify-center text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5 mt-4">
+                  <h3 className="text-xl font-bold mb-2 text-primary">You haven&apos;t subscribed to any consultants yet.</h3>
+                  <p className="text-third text-sm max-w-sm">
+                    Follow  consultants to get expert advice and exclusive deal updates.
+                  </p>
+                </div>
               )}
             </div>
-            {hasMoreConsultant && followedConsualt.length > 0 && (
+            {hasMoreConsultant && followedConsualt.length > 0 && !isLoading && (
               <div className="flex justify-end mt-6">
                 <Button variant="outline" showIcon={false} onClick={handleLoadMoreConsultant}>
                   See More

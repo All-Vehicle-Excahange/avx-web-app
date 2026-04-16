@@ -33,6 +33,7 @@ const ENDPOINT = {
   getTwoWheelWithTag: "/homefeed/vehicles/two-wheeler/with-tag",
   getSellerInventory: "/vehicle/seller/my-vehicles",
   postBecameSeller: "/users/seller",
+  getBecameSeller: "/users/seller",
   getGlobalSearch: "/global-search/consultations",
 };
 
@@ -440,6 +441,29 @@ export const getSellerInventory = async (data) => {
 export const postBecameSeller = async (payload) => {
   try {
     const res = await axiosInstance.post(ENDPOINT.postBecameSeller, payload, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getBecameSeller = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getBecameSeller);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateBecameSeller = async (payload) => {
+  try {
+    const res = await axiosInstance.put(ENDPOINT.postBecameSeller, payload, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

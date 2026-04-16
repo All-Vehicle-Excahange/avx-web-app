@@ -42,8 +42,9 @@
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 
 export default function StatCard({ icon, label, value, trend }) {
-  const isPositive = trend?.startsWith("+");
-  const isNegative = trend?.startsWith("-");
+  const isPositive = typeof trend === "number" ? trend > 0 : trend?.toString().startsWith("+");
+  const isNegative = typeof trend === "number" ? trend < 0 : trend?.toString().startsWith("-");
+  const displayTrend = typeof trend === "string" ? trend.split(" ")[0] : (typeof trend === "number" && trend > 0 ? `+${trend}` : trend);
 
   return (
     <div className="flex items-center justify-between gap-2 rounded-xl border border-third/30 p-3 sm:p-4 transition hover:border-third/40 min-w-0">
@@ -80,7 +81,7 @@ export default function StatCard({ icon, label, value, trend }) {
           >
             {isPositive && <ArrowUpRight size={12} strokeWidth={3} />}
             {isNegative && <ArrowDownRight size={12} strokeWidth={3} />}
-            {trend.split(" ")[0]}
+            {displayTrend}
           </span>
         </div>
       )}

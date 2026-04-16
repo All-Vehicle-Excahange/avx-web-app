@@ -36,6 +36,7 @@ export default function InventoryComponent() {
     { id: "DRAFT", label: "Draft" },
     { id: "LIVE", label: "Live" },
     { id: "SOLD", label: "Sold" },
+    { id: "REJECTED", label: "Rejected" },
     { id: "REQUEST_CHANGES", label: "Request Changes" },
     { id: "SUSPENDED", label: "Suspended" },
   ];
