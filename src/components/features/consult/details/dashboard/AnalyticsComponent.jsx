@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 import StatCard from "./components/StateCard";
 import {
@@ -12,16 +13,58 @@ import {
   SquareMousePointer,
   BadgePercent,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomSelect from "@/components/ui/custom-select";
 import Button from "@/components/ui/button";
+import { getSellerTierTitle } from "@/lib/helper";
+import {
+  getAnalyticsKips,
+  getTrafficConversion,
+} from "@/services/analytics.service";
 
 export default function AnalyticsComponent() {
   const [range, setRange] = useState("7");
-  const tier = "PREMIUM"; // BASIC | PRO | PREMIUM
+  const [tier, setTier] = useState(null);
+  const [analyticsData, setAnalyticsData] = useState(null);
+  const [trafficData, setTrafficData] = useState(null);
+
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      let daysParam = "LAST_7_DAYS";
+      if (range === "30") {
+        daysParam = "LAST_30_DAYS";
+      } else if (range === "90") {
+        daysParam = "LAST_90_DAYS";
+      }
+
+      try {
+        const [kpiRes, trafficRes] = await Promise.all([
+          getAnalyticsKips(daysParam),
+          getTrafficConversion(daysParam),
+        ]);
+
+        if (kpiRes.success) {
+          setAnalyticsData(kpiRes.data);
+        }
+        if (trafficRes.success) {
+          setTrafficData(trafficRes.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch analytics:", error);
+      }
+    };
+
+    fetchAnalytics();
+  }, [range]);
   const isProOrPremium = tier === "PRO" || tier === "PREMIUM";
   const isBasic = tier === "BASIC";
   const isPro = tier === "PRO";
+
+  useEffect(() => {
+    setTier(getSellerTierTitle() || "BASIC");
+  }, []);
+
+  if (tier === null) return null;
 
   const rangeOptions = [
     { label: "Last 7 days", value: "7" },
@@ -30,17 +73,17 @@ export default function AnalyticsComponent() {
   ];
 
   const performanceData = {
-    "7": {
+    7: {
       labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       percentages: [48, 60, 72, 56, 80, 88, 64],
       inquiries: [12, 15, 18, 14, 20, 22, 16],
     },
-    "30": {
+    30: {
       labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
       percentages: [60, 85, 75, 92],
       inquiries: [45, 68, 55, 82],
     },
-    "90": {
+    90: {
       labels: ["Jan", "Feb", "Mar"],
       percentages: [70, 95, 65],
       inquiries: [120, 180, 110],
@@ -73,35 +116,30 @@ export default function AnalyticsComponent() {
       {/* Top Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
         <StatCard
-          icon={<User size={20} />}
-          label="Profile Views"
-          value="2,180"
-          change="+12.5%"
-          trend="+5% improved"
+          icon={<Car size={20} />}
+          label="Vehicle Views"
+          value={analyticsData?.totalVehicleView || 0}
+          trend={analyticsData?.totalVehicleViewChange || 0}
         />
         <StatCard
           icon={<StoreIcon size={20} />}
-          trend="-5% improved"
           label="Storefront Visits"
-          value="1,420"
-          change="+8.3%"
+          value={analyticsData?.totalProfileVisit || 0}
+          trend={analyticsData?.totalProfileVisitChange || 0}
         />
         <StatCard
           icon={<SquareMousePointer size={20} />}
           label="Total Inquiries"
-          trend="-5% improved"
-          value="86"
-          change="+15.2%"
+          value={analyticsData?.totalInquiry || 0}
+          trend={analyticsData?.totalInquiryChange || 0}
         />
         <StatCard
           icon={<BadgePercent size={20} />}
           label="Conversion Rate"
-          trend="+5% improved"
-          value="6.1%"
-          change="+1.2%"
+          value={analyticsData?.conversionRate || 0}
+          trend={analyticsData?.conversionRateChange || 0}
         />
       </div>
-
       {/* Traffic */}
       <div className=" border border-third/20 rounded-xl p-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-8 shadow-sm transition-colors duration-200 hover:border-third/40">
         <div className="space-y-4">
@@ -110,30 +148,45 @@ export default function AnalyticsComponent() {
           <div>
             <div className="flex justify-between text-xs text-third">
               <span>Inquiry Conversion Rate</span>
-              <span>6.1%</span>
+              <span>{trafficData?.inquiryConversionRate || 0}%</span>
             </div>
             <div className="h-2 bg-white/10 rounded-full mt-1">
-              <div className="h-full bg-white rounded-full w-[61%]"></div>
+              <div
+                className="h-full bg-white rounded-full transition-all duration-500"
+                style={{
+                  width: `${Math.min(trafficData?.inquiryConversionRate || 0, 100)}%`,
+                }}
+              ></div>
             </div>
           </div>
 
           <div>
             <div className="flex justify-between text-xs text-third">
-              <span>Chat Response Rate</span>
-              <span>94%</span>
+              <span>Chat Conversion Rate</span>
+              <span>{trafficData?.chatConversionRate || 0}%</span>
             </div>
             <div className="h-2 bg-white/10 rounded-full mt-1">
-              <div className="h-full bg-white rounded-full w-[94%]"></div>
+              <div
+                className="h-full bg-white rounded-full transition-all duration-500"
+                style={{
+                  width: `${Math.min(trafficData?.chatConversionRate || 0, 100)}%`,
+                }}
+              ></div>
             </div>
           </div>
 
           <div>
             <div className="flex justify-between text-xs text-third">
               <span>Visit to Inquiry Rate</span>
-              <span>8.2%</span>
+              <span>{trafficData?.visitToInquiryRate || 0}%</span>
             </div>
             <div className="h-2 bg-white/10 rounded-full mt-1">
-              <div className="h-full bg-white rounded-full w-[82%]"></div>
+              <div
+                className="h-full bg-white rounded-full transition-all duration-500"
+                style={{
+                  width: `${Math.min(trafficData?.visitToInquiryRate || 0, 100)}%`,
+                }}
+              ></div>
             </div>
           </div>
         </div>

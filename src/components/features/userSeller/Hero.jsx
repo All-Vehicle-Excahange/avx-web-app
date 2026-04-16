@@ -160,6 +160,7 @@ function Hero() {
           setLoginPopup(false);
           setSignupPopup(true);
         }}
+        onSuccess={() => setOpen(true)}
       />
       <SignupPopup
         isOpen={signupPopup}
@@ -168,6 +169,7 @@ function Hero() {
           setSignupPopup(false);
           setLoginPopup(true);
         }}
+        onSuccess={() => setOpen(true)}
       />
     </>
   );

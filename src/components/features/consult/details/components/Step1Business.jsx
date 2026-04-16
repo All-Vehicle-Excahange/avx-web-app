@@ -10,7 +10,7 @@ import DropzoneUpload from "@/components/ui/DropzoneUpload";
 export default function Step1Business({ onChange, initialData }) {
   const logoRef = useRef();
 
-  // ✅ Initialize state directly from initialData to avoid useEffect cascading renders
+  // Initialize state directly from initialData to avoid useEffect cascading renders
   const [logo, setLogo] = useState(initialData?.logoUrl || null);
   const [bannerPreview, setBannerPreview] = useState(
     initialData?.bannerUrl || null,

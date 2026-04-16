@@ -3,15 +3,18 @@ import MyInquiryCard from "@/components/ui/MyInquiryCard";
 import { getMyInquiries } from "@/services/inquiry.service";
 import Button from "@/components/ui/button";
 import Link from "next/link";
+import { InquiryCardSkeleton } from "@/components/ui/skeleton";
 
 function MyInquary() {
   const [activeType, setActiveType] = useState("all");
   const [inquiries, setInquiries] = useState([]);
   const [visibleCount, setVisibleCount] = useState(6);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchInquiries = async () => {
       try {
+        setIsLoading(true);
         const status = activeType === "all" ? undefined : activeType;
 
         const res = await getMyInquiries(status);
@@ -19,6 +22,8 @@ function MyInquary() {
         setVisibleCount(6);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -62,7 +67,11 @@ function MyInquary() {
 
       {/* INQUIRIES LIST */}
       <div className="grid grid-cols-1 gap-6">
-        {inquiries?.length > 0 ? (
+        {isLoading ? (
+          Array.from({ length: 3 }).map((_, i) => (
+            <InquiryCardSkeleton key={i} />
+          ))
+        ) : inquiries?.length > 0 ? (
           <>
             {inquiries.slice(0, visibleCount).map((inq) => (
               <MyInquiryCard

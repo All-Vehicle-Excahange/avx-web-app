@@ -101,13 +101,11 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-md text-third">
-                Register {vehicle?.yearOfMfg || 2025}
+                Register {vehicle?.yearOfMfg || "-"}
               </p>
 
               <h2 className="hidden text-2xl font-bold leading-tight">
-                {vehicle?.makerName || "Tata"}{" "}
-                {vehicle?.modelName || "Harrier XZ Plus"}{" "}
-                {vehicle?.variantName || ""}
+                {[vehicle?.makerName, vehicle?.modelName, vehicle?.variantName].filter(Boolean).join(" ") || "-"}
               </h2>
             </div>
 
@@ -125,71 +123,95 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
 
           <div className="border-t border-third/40" />
 
-          {/* DEALER INFO */}
+          {/* SELLER / DEALER INFO */}
           <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
-            <div className="space-y-2">
+            <div className="space-y-2 w-full">
+              {/* Seller name: consultation name OR vehicle owner firstname+lastname */}
               <h3 className="text-md font-semibold">
-                {summary?.consultationName || "Adarsh Auto Consultants"}
+                {vehicleOwnerRole === "CONSULTATION"
+                  ? summary?.consultationName || "Auto Consultant"
+                  : [vehicle?.vehicleOwner?.firstname, vehicle?.vehicleOwner?.lastname]
+                      .filter(Boolean).join(" ") || "Private Seller"}
               </h3>
 
-              <div className="flex justify-between items-start pt-1 gap-2">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Star className="text-yellow-400" size={16} />
-                    <span className="font-medium text-primary">
-                      {summary?.averageRating || 0}
-                    </span>
-                    <span className="text-third">
-                      | {summary?.soldVehiclesCount || 0} Sold Vehicles
-                    </span>
+              {vehicleOwnerRole === "CONSULTATION" ? (
+                /* ── CONSULTATION-ONLY stats ── */
+                <div className="flex justify-between items-start pt-1 gap-2">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2 text-sm">
+                      <Star className="text-yellow-400" size={16} />
+                      <span className="font-medium text-primary">
+                        {summary?.averageRating || 0}
+                      </span>
+                      <span className="text-third">
+                        | {summary?.soldVehiclesCount || 0} Sold Vehicles
+                      </span>
+                    </div>
+
+                    <p className="flex items-start gap-2 text-sm text-third">
+                      <MapPin size={14} className="mt-0.5 shrink-0" />
+                      <span className="line-clamp-2">
+                        {summary?.address
+                          ? `${summary.address.city}, ${summary.address.state}`
+                          : "Location not available"}
+                      </span>
+                    </p>
                   </div>
 
-                  <p className="flex items-start gap-2 text-sm text-third">
-                    <MapPin size={14} className="mt-0.5 shrink-0" />
-                    <span className="line-clamp-2">
-                      {summary?.address
-                        ? `${summary.address.city}, ${summary.address.state}`
-                        : "Location not available"}
-                    </span>
-                  </p>
-                </div>
-
-                {vehicleOwnerRole === "CONSULTATION" && (
-                  <div className="shrink-0">
-                    <Button
-                      href={`/store-front/${createSlug(summary?.consultationName)}/${summary?.username || 1}`}
-                      variant="outline"
-                      size="sm"
-                      showIcon
-                      className="h-8 py-0 px-3 text-xs"
-                    >
-                      View Storefront
-                    </Button>
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-2 mt-4">
-                <p className="text-sm font-medium text-primary">
-                  What’s Included
-                </p>
-
-                <ul className="text-sm text-third">
-                  {summary?.services?.length > 0 ? (
-                    summary.services.map((service, index) => (
-                      <li key={index} className="flex items-center gap-2">
-                        <CheckCircle size={14} className="text-green-500" />
-                        {service.replaceAll("_", " ")}
-                      </li>
-                    ))
-                  ) : (
-                    <li className="flex items-center gap-2">
-                      <CheckCircle size={14} className="text-green-500" />
-                      No services listed
-                    </li>
+                  {summary?.consultationName && (
+                    <div className="shrink-0">
+                      <Button
+                        href={`/store-front/${createSlug(summary.consultationName)}/${summary?.username || 1}`}
+                        variant="outline"
+                        size="sm"
+                        showIcon
+                        className="h-8 py-0 px-3 text-xs"
+                      >
+                        View Storefront
+                      </Button>
+                    </div>
                   )}
-                </ul>
-              </div>
+                </div>
+              ) : (
+                /* ── NORMAL USER_SELLER info ── */
+                <div className="space-y-2 pt-1">
+                  {(vehicle?.vehicleAddress?.city || vehicle?.vehicleAddress?.state) && (
+                    <p className="flex items-start gap-2 text-sm text-third">
+                      <MapPin size={14} className="mt-0.5 shrink-0" />
+                      <span className="line-clamp-2">
+                        {[vehicle.vehicleAddress.city, vehicle.vehicleAddress.state]
+                          .filter(Boolean)
+                          .join(", ")}
+                      </span>
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Services — only shown for consultants */}
+              {vehicleOwnerRole === "CONSULTATION" && (
+                <div className="space-y-2 mt-4">
+                  <p className="text-sm font-medium text-primary">
+                    Whats Included
+                  </p>
+
+                  <ul className="text-sm text-third">
+                    {summary?.services?.length > 0 ? (
+                      summary.services.map((service, index) => (
+                        <li key={index} className="flex items-center gap-2">
+                          <CheckCircle size={14} className="text-green-500" />
+                          {service.replaceAll("_", " ")}
+                        </li>
+                      ))
+                    ) : (
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={14} className="text-green-500" />
+                        No services listed
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
 

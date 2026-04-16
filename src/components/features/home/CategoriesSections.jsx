@@ -61,7 +61,9 @@ const CategoriesSections = () => {
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
   const checkedCategories = React.useRef(new Set());
-  const fetchVehicles = async () => {
+
+  const fetchVehicles = React.useCallback(async () => {
+    // We keep loading here for robustness, though we also set it in useEffect
     setLoading(true);
     try {
       const selectedTag = vehicleTagMap[activeType]?.[active];
@@ -106,10 +108,18 @@ const CategoriesSections = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [active, activeType]);
+
   useEffect(() => {
-    fetchVehicles();
-  }, [active]);
+    // Immediate visual feedback
+    setLoading(true);
+
+    const debounceTimer = setTimeout(() => {
+      fetchVehicles();
+    }, 400); // 400ms debounce to prevent API spam
+
+    return () => clearTimeout(debounceTimer);
+  }, [active, activeType, fetchVehicles]);
 
   return (
     <section className="w-full h-full flex flex-col text-primary">

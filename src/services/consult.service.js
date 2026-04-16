@@ -14,6 +14,8 @@ const ENDPOINT = {
   postKycDetials: "/consultation/owner/documents",
   updateKycDetials: "/consultation/owner/documents",
   finalSubmit: "/consultation/owner/final-submit",
+  checkIsAccountSuspended:
+    "/consultation/dashboard/profile/account-suspend-status",
 };
 
 export const postbasicDetials = async (payload) => {
@@ -131,6 +133,16 @@ export const updateKycDetials = async (payload) => {
 export const finalSubmit = async () => {
   try {
     const res = await axiosInstance.patch(ENDPOINT.finalSubmit);
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const checkIsAccountSuspended = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.checkIsAccountSuspended);
     return handleResponse(res);
   } catch (error) {
     handleError(error);
