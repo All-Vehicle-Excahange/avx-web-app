@@ -36,6 +36,7 @@ export default function InventoryComponent() {
     { id: "all", label: "All" },
     { id: "DRAFT", label: "Draft" },
     { id: "LIVE", label: "Live" },
+    { id: "PENDING", label: "Pending" },
     { id: "SOLD", label: "Sold" },
     { id: "REJECTED", label: "Rejected" },
     { id: "REQUEST_CHANGES", label: "Request Changes" },
@@ -62,6 +63,7 @@ export default function InventoryComponent() {
     suspendReason: v.suspendReason,
     adminRemark: v.adminRemark,
     vehicleSuspenseType: v.vehicleSuspenseType,
+    listingStatus: v.listingStatus,
   });
 
   const [activeType, setActiveType] = useState("all");
@@ -95,7 +97,14 @@ export default function InventoryComponent() {
   const fetchVehicles = async () => {
     try {
       setVehiclesLoading(true);
-      const status = activeType === "all" ? undefined : activeType;
+      let status;
+      if (activeType === "all") {
+        status = undefined;
+      } else if (activeType === "PENDING") {
+        status = "REQUESTED";
+      } else {
+        status = activeType;
+      }
       const res = await getInventoryVehicle(status);
       setVehicles(res.data || []);
       setVisibleCount(9);
