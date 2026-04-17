@@ -13,6 +13,7 @@ import Navbar from "@/components/layout/Navbar";
 
 export default function StoreFront() {
   const [activeTab, setActiveTab] = useState("inventory");
+  const [consultantId, setConsultantId] = useState(null);
 
   // Fix for page opening from the middle: Scroll to top on mount
   useEffect(() => {
@@ -30,7 +31,9 @@ export default function StoreFront() {
 
       <main className=" px-4 text-primary pt-12">
         {/* HERO */}
-        <StoreFrontHeroSection />
+        <StoreFrontHeroSection
+          onDataFetched={(data) => setConsultantId(data?.id)}
+        />
 
         <div className=" py-6">
           <section className="w-full">
@@ -54,10 +57,9 @@ export default function StoreFront() {
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
                       className={`hover:cursor-pointer relative py-4 text-sm font-medium transition whitespace-nowrap
-        ${activeTab === tab.id
-                          ? "text-primary"
-                          : "text-third hover:text-primary"
-                        }`}
+        ${
+          activeTab === tab.id ? "text-primary" : "text-third hover:text-primary"
+        }`}
                     >
                       {tab.label}
 
@@ -73,7 +75,7 @@ export default function StoreFront() {
               {activeTab === "inventory" && <Inventory />}
               {activeTab === "aboutus" && <AboutUs />}
               {activeTab === "whybuyhere" && <WhyBuyHere />}
-              {activeTab === "reviews" && <Review />}
+              {activeTab === "reviews" && <Review consultantId={consultantId} />}
             </div>
           </section>
         </div>
