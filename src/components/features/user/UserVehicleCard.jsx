@@ -173,16 +173,11 @@ export default function UserVehicleCard({
 
             {/* Verification Status + Consultant */}
             <div className="flex flex-wrap items-center gap-2">
-              {status !== "suspended" && verification && (
+              {status !== "suspended" && status !== "draft" && verification && (
                 <span
                   className={`flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full font-semibold ${verification.cls}`}
                 >
                   {verification.icon} {verification.label}
-                </span>
-              )}
-              {data?.consultantName && (
-                <span className="text-[10px] text-primary/50 truncate">
-                  via {data.consultantName}
                 </span>
               )}
             </div>

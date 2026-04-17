@@ -49,29 +49,6 @@ export default function DashboardLayout({ children }) {
     currentPath.charAt(0).toUpperCase() +
     currentPath.slice(1).replace(/-/g, " ");
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="flex flex-col items-center gap-6">
-          <div className="relative">
-            <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-8 h-8 bg-primary/10 rounded-full animate-pulse" />
-            </div>
-          </div>
-          <div className="text-center space-y-2">
-            <h3 className="text-primary font-bold text-xl tracking-tight">
-              Accessing Dashboard
-            </h3>
-            <p className="text-third text-sm animate-pulse">
-              Verifying account status...
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <>
       <Head>
@@ -81,39 +58,54 @@ export default function DashboardLayout({ children }) {
       </Head>
       <Navbar heroMode scrolled={true} />
 
-      {isSuspended ? (
-        <div className="min-h-screen pt-16 flex items-center justify-center">
-          <SuspendedAccount data={suspensionData} />
+      <div className="min-h-screen pt-16 flex flex-col md:flex-row text-primary relative">
+        {/* MOBILE HEADER FOR SIDEBAR TOGGLE */}
+        <div className="md:hidden z-999 flex items-center justify-between p-4 border-b border-third/30 bg-[#2B2A2A] sticky top-16 z-30">
+          <span className="font-bold ">Dashboard Menu</span>
+          <button
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="p-2 hover:bg-primary/10 rounded-lg transition-colors"
+          >
+            <LayoutDashboard className="w-6 h-6" />
+          </button>
         </div>
-      ) : (
-        <div className="min-h-screen pt-16 flex flex-col md:flex-row text-primary relative">
-          {/* MOBILE HEADER FOR SIDEBAR TOGGLE */}
-          <div className="md:hidden z-999 flex items-center justify-between p-4 border-b border-third/30 bg-[#2B2A2A] sticky top-16 z-30">
-            <span className="font-bold ">Dashboard Menu</span>
-            <button
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-2 hover:bg-primary/10 rounded-lg transition-colors"
-            >
-              <LayoutDashboard className="w-6 h-6" />
-            </button>
-          </div>
 
-          <Sidebar
-            isOpen={isSidebarOpen}
-            onClose={() => setIsSidebarOpen(false)}
+        <Sidebar
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
+
+        {/* OVERLAY FOR MOBILE */}
+        {isSidebarOpen && (
+          <div
+            className="fixed inset-0 bg-black/50 z-30 md:hidden"
+            onClick={() => setIsSidebarOpen(false)}
           />
+        )}
 
-          {/* OVERLAY FOR MOBILE */}
-          {isSidebarOpen && (
-            <div
-              className="fixed inset-0 bg-black/50 z-30 md:hidden"
-              onClick={() => setIsSidebarOpen(false)}
-            />
+        <main className="flex-1 p-4 md:p-8 overflow-y-auto">
+          {isLoading ? (
+            <div className="space-y-6 animate-pulse">
+              <div className="flex items-center justify-between">
+                <div className="h-8 w-48 bg-third/10 rounded-lg" />
+                <div className="h-10 w-32 bg-third/10 rounded-lg" />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="h-32 bg-third/5 rounded-2xl border border-third/10" />
+                <div className="h-32 bg-third/5 rounded-2xl border border-third/10" />
+                <div className="h-32 bg-third/5 rounded-2xl border border-third/10" />
+              </div>
+              <div className="h-96 bg-third/5 rounded-2xl border border-third/10" />
+            </div>
+          ) : isSuspended ? (
+            <div className="min-h-[70vh] flex items-center justify-center">
+              <SuspendedAccount data={suspensionData} />
+            </div>
+          ) : (
+            children
           )}
-
-          <main className="flex-1 p-4 md:p-8 overflow-y-auto">{children}</main>
-        </div>
-      )}
+        </main>
+      </div>
     </>
   );
 }
