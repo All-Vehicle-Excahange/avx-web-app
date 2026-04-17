@@ -104,11 +104,13 @@ export default function KycForm() {
           const susp = await checkIsAccountSuspended();
           if (susp?.data?.isSuspended) {
             setSuspensionInfo(susp.data);
-            // If suspended, we typically want to show Step 4 (which will handle the suspension UI)
             setStep(4);
+            //  Stop here if suspended
+            return;
           }
         } catch (err) {
           console.error("Suspension check failed", err);
+          // We continue checking other details if suspension check fails
         }
 
         let bData = null;

@@ -13,6 +13,8 @@ import {
   ExternalLink,
   Edit2,
   HelpCircle,
+  ShieldAlert,
+  Ban,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 
@@ -94,9 +96,11 @@ export default function Step4Verification({ existing, onEdit, suspensionInfo }) 
       <div className="flex flex-col items-center text-center space-y-6">
         <div
           className={`w-20 h-20 rounded-full flex items-center justify-center transition-all duration-700
-          ${isVerified ? "bg-green-500/10" : isChangesRequested ? "bg-orange-500/10" : isRejected ? "bg-red-500/10" : "bg-primary/10"}`}
+          ${isSuspended ? "bg-red-500/20" : isVerified ? "bg-green-500/10" : isChangesRequested ? "bg-orange-500/10" : isRejected ? "bg-red-500/10" : "bg-primary/10"}`}
         >
-          {isVerified ? (
+          {isSuspended ? (
+            <ShieldAlert className="w-10 h-10 text-red-500 animate-pulse" />
+          ) : isVerified ? (
             <ShieldCheck className="w-10 h-10 text-green-500" />
           ) : isChangesRequested ? (
             <AlertCircle className="w-10 h-10 text-yellow-500" />
@@ -111,7 +115,7 @@ export default function Step4Verification({ existing, onEdit, suspensionInfo }) 
           <h1 className="text-3xl font-bold text-primary flex items-center justify-center gap-2">
             {isSuspended ? (
               <>
-                <AlertCircle className="w-8 h-8 text-red-500" />
+                <Ban className="w-8 h-8 text-red-500" />
                 Account Suspended
               </>
             ) : isVerified ? (
