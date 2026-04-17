@@ -29,6 +29,7 @@ import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import StatCardSkeleton from "@/components/ui/skeleton/StatCardSkeleton";
 import TopPerformingCardSkeleton from "@/components/ui/skeleton/TopPerformingCardSkeleton";
 import UserVehicleCardSkeleton from "@/components/ui/skeleton/UserVehicleCardSkeleton";
+import { useRouter } from "next/navigation";
 
 export default function InventoryComponent() {
   const vehicleTypes = [
@@ -87,6 +88,9 @@ export default function InventoryComponent() {
   const [suspendedPageSize] = useState(9);
   const [suspendedTotalPages, setSuspendedTotalPages] = useState(1);
   const [suspendedLoading, setSuspendedLoading] = useState(false);
+
+
+  const router = useRouter();
 
   const fetchVehicles = async () => {
     try {
@@ -207,7 +211,7 @@ export default function InventoryComponent() {
           </div>
         </div>
 
-        {/* 2️⃣ NOTE */}
+        {/* 2️ NOTE */}
         <div className="rounded-xl bg-fourth text-white p-5 md:p-8 min-h-[150px] flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-md">
           {/* Left Content */}
           <div className="max-w-[500px]">
@@ -312,8 +316,7 @@ export default function InventoryComponent() {
                     size="sm"
                     showIcon={false}
                     onClick={() => {
-                      // Using window.scrollTo or providing a simple anchor interaction
-                      window.scrollTo({ top: 500, behavior: "smooth" });
+                      router.push("/consult/dashboard/ppc");
                     }}
                     className="cursor-pointer"
                   >
