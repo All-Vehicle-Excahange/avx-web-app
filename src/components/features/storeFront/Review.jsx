@@ -12,7 +12,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import StoreFrontReviewSkeleton from "@/components/ui/skeleton/StoreFrontReviewSkeleton";
 
-export default function Review({ consultantId }) {
+export default function Review() {
   const id = useParams()?.id;
 
   const [rating, setRating] = useState(0);
@@ -28,18 +28,12 @@ export default function Review({ consultantId }) {
   const [reviewsLoading, setReviewsLoading] = useState(true);
 
   useEffect(() => {
-    if (!consultantId) return;
-
     const checkEligibility = async () => {
-      try {
-        const isEligible = await checkIsEligibleToCreateReview(consultantId);
-        setIsEligibleToCreateReview(isEligible.data);
-      } catch (error) {
-        console.log("Eligibility Check Error:", error);
-      }
+      const isEligible = await checkIsEligibleToCreateReview(id);
+      setIsEligibleToCreateReview(isEligible.data);
     };
     checkEligibility();
-  }, [consultantId]);
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -112,10 +106,10 @@ export default function Review({ consultantId }) {
   };
 
   const handleSubmitReview = async () => {
-    if (!consultantId) return;
     try {
       const payload = createReviewPayload();
-      await addNewReview(consultantId, payload);
+
+      await addNewReview(id, payload);
     } catch (error) {
       console.log("❌ Submit Error:", error);
     }
