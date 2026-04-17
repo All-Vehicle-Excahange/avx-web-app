@@ -123,7 +123,9 @@ export default function Step1Business({ onChange, initialData }) {
     <div className="space-y-8">
       {/* ===== LOGO ===== */}
       <div className="flex flex-col items-center gap-3">
-        <h3 className="text-sm font-semibold text-primary uppercase tracking-wider">Business Logo</h3>
+        <h3 className="text-sm  font-semibold text-primary uppercase tracking-wider">
+          Business Logo
+        </h3>
         <div className="relative">
           <div
             onClick={() => logoRef.current.click()}
@@ -144,7 +146,7 @@ export default function Step1Business({ onChange, initialData }) {
                 unoptimized
               />
             )}
-            
+
             {/* Overlay on hover when logo exists */}
             {logo && (
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -186,68 +188,70 @@ export default function Step1Business({ onChange, initialData }) {
 
       {/* ===== FIELDS ===== */}
       <div className="space-y-6">
-        <h3 className="text-sm font-semibold text-primary uppercase tracking-wider">Business Details</h3>
+        <h3 className="text-sm font-semibold text-primary uppercase tracking-wider">
+          Business Details
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <InputField
-          label="Consultation Name"
-          variant="colored"
-          value={form.consultationName}
-          onChange={(e) => handleInput("consultationName", e.target.value)}
-        />
-
-        <InputField
-          label="Owner Name"
-          variant="colored"
-          value={form.ownerName}
-          onChange={(e) => handleInput("ownerName", e.target.value)}
-        />
-
-        <div className="flex flex-col">
           <InputField
-            label="Company Email"
-            type="email"
+            label="Consultation Name"
             variant="colored"
-            value={form.email}
-            onChange={(e) => handleInput("email", e.target.value)}
-            onBlur={(e) => {
-              if (e.target.value && !validateEmail(e.target.value)) {
-                setErrors((p) => ({ ...p, email: "Invalid email format" }));
-              }
-            }}
+            value={form.consultationName}
+            onChange={(e) => handleInput("consultationName", e.target.value)}
           />
-          {errors.email && (
-            <span className="text-red-500 text-[10px] mt-1 ml-1">
-              {errors.email}
-            </span>
-          )}
-        </div>
 
-        <div className="flex flex-col">
           <InputField
-            label="Establishment Year"
+            label="Owner Name"
             variant="colored"
-            value={form.establishmentYear}
-            onChange={(e) => {
-              const val = e.target.value;
-              if (val === "" || (/^\d+$/.test(val) && val.length <= 4)) {
-                handleInput("establishmentYear", val);
-              }
-            }}
-            onBlur={(e) => {
-              if (e.target.value && !validateYear(e.target.value)) {
-                setErrors((p) => ({
-                  ...p,
-                  establishmentYear: "Must be 4 digits & > 1850",
-                }));
-              }
-            }}
+            value={form.ownerName}
+            onChange={(e) => handleInput("ownerName", e.target.value)}
           />
-          {errors.establishmentYear && (
-            <span className="text-red-500 text-[10px] mt-1 ml-1">
-              {errors.establishmentYear}
-            </span>
-          )}
-        </div>
+
+          <div className="flex flex-col">
+            <InputField
+              label="Company Email"
+              type="email"
+              variant="colored"
+              value={form.email}
+              onChange={(e) => handleInput("email", e.target.value)}
+              onBlur={(e) => {
+                if (e.target.value && !validateEmail(e.target.value)) {
+                  setErrors((p) => ({ ...p, email: "Invalid email format" }));
+                }
+              }}
+            />
+            {errors.email && (
+              <span className="text-red-500 text-[10px] mt-1 ml-1">
+                {errors.email}
+              </span>
+            )}
+          </div>
+
+          <div className="flex flex-col">
+            <InputField
+              label="Establishment Year"
+              variant="colored"
+              value={form.establishmentYear}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === "" || (/^\d+$/.test(val) && val.length <= 4)) {
+                  handleInput("establishmentYear", val);
+                }
+              }}
+              onBlur={(e) => {
+                if (e.target.value && !validateYear(e.target.value)) {
+                  setErrors((p) => ({
+                    ...p,
+                    establishmentYear: "Must be 4 digits & > 1850",
+                  }));
+                }
+              }}
+            />
+            {errors.establishmentYear && (
+              <span className="text-red-500 text-[10px] mt-1 ml-1">
+                {errors.establishmentYear}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 

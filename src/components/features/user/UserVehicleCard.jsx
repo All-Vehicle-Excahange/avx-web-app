@@ -40,6 +40,7 @@ export default function UserVehicleCard({
     underinspection: "bg-orange-500",
     suspended: "bg-red-600",
     request_changes: "bg-amber-500",
+    requested: "bg-orange-500",
     rejected: "bg-red-600",
   };
 
@@ -65,6 +66,7 @@ export default function UserVehicleCard({
 
   const formatStatus = (s) => {
     if (!s) return "-";
+    if (s.toLowerCase() === "requested") return "Pending";
     return s.replaceAll("_", " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
   };
 
@@ -246,6 +248,24 @@ export default function UserVehicleCard({
                   <p className="text-xs font-semibold text-primary leading-snug">
                     {data?.adminRemark ||
                       "Please review and improve your listing."}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* REQUESTED (Pending) notice */}
+            {status === "requested" && (
+              <div className="flex items-start gap-2 rounded-lg border border-orange-500/30 bg-orange-500/10 px-3 py-2">
+                <ShieldAlert
+                  size={13}
+                  className="text-orange-500 mt-0.5 shrink-0"
+                />
+                <div className="min-w-0">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-orange-500/70 mb-0.5">
+                     Status:
+                  </p>
+                  <p className="text-xs font-semibold text-primary leading-snug">
+                    Waiting for admin approval.
                   </p>
                 </div>
               </div>

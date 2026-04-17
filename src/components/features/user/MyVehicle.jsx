@@ -26,6 +26,7 @@ function MyVehicle() {
     { id: "all", label: "All" },
     { id: "draft", label: "Draft" },
     { id: "live", label: "Live" },
+    { id: "PENDING", label: "Pending" },
     { id: "sold", label: "Sold" },
     { id: "rejected", label: "Rejected" },
     { id: "request_changes", label: "Request Changes" },
@@ -50,7 +51,12 @@ function MyVehicle() {
         const payload = {
           pageNo: page,
           size: 4,
-          listingStatus: activeType === "all" ? null : activeType.toUpperCase(),
+          listingStatus:
+            activeType === "all"
+              ? null
+              : activeType === "PENDING"
+                ? "REQUESTED"
+                : activeType.toUpperCase(),
         };
         res = await getSellerInventory(payload);
       }

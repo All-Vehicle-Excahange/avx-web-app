@@ -108,6 +108,13 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
     }
   };
 
+  useEffect(() => {
+    if (isLoggedIn && pendingAction.current === "request") {
+      pendingAction.current = null;
+      handleRequestInquiry();
+    }
+  }, [isLoggedIn]);
+
   return (
     <>
       <aside className="relative text-primary rounded-2xl shadow-xl overflow-hidden border border-third/60">
@@ -367,12 +374,6 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
         onSignup={() => {
           setIsLoginOpen(false);
           setIsSignupOpen(true);
-        }}
-        onSuccess={() => {
-          if (pendingAction.current === "request") {
-            pendingAction.current = null;
-            setTimeout(() => handleRequestInquiry(), 300);
-          }
         }}
       />
       <SignupPopup

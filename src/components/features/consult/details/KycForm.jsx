@@ -51,7 +51,6 @@ export default function KycForm() {
   const [loading, setLoading] = useState(false);
   const [backLoading, setBackLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
-  const [suspensionInfo, setSuspensionInfo] = useState(null);
 
   // ===== VERSION COUNTERS — incrementing forces child remount with fresh initialData =====
   const [dataVersion, setDataVersion] = useState({ 1: 0, 2: 0, 3: 0 });
@@ -99,17 +98,6 @@ export default function KycForm() {
             err?.response?.data?.statusCode === 404
           );
         };
-
-        try {
-          const susp = await checkIsAccountSuspended();
-          if (susp?.data?.isSuspended) {
-            setSuspensionInfo(susp.data);
-            // If suspended, we typically want to show Step 4 (which will handle the suspension UI)
-            setStep(4);
-          }
-        } catch (err) {
-          console.error("Suspension check failed", err);
-        }
 
         let bData = null;
         let aData = null;
@@ -378,8 +366,7 @@ export default function KycForm() {
                 </p>
 
                 {/* ===== NEW PROGRESS BAR (MATCHING SCREENSHOT) ===== */}
-                {!suspensionInfo?.isSuspended && (
-                  <div className="mb-16 flex items-center justify-between">
+                <div className="mb-16 flex items-center justify-between">
                     {[
                       { num: 1, label: "Business" },
                       { num: 2, label: "Address" },
@@ -437,7 +424,6 @@ export default function KycForm() {
                       </React.Fragment>
                     ))}
                   </div>
-                )}
 
                 {/* ===== STEPS WITH KEYS TO TRIGGER RE-MOUNT ON DATA LOAD ===== */}
                 <div className="min-h-[350px]">
@@ -473,7 +459,6 @@ export default function KycForm() {
                       <Step4Verification
                         existing={existing}
                         onEdit={() => setShowPreview(true)}
-                        suspensionInfo={suspensionInfo}
                       />
                     )}
 
