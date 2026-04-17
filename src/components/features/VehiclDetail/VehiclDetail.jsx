@@ -207,11 +207,12 @@ export default function VehicleDetails() {
                 </div>
 
                 <div ref={specificationRef}>
-                  <VehicleOverview open={isSpecOpen} setOpen={setIsSpecOpen} />
+                  <VehicleOverview vehicle={vehicleOverview} open={isSpecOpen} setOpen={setIsSpecOpen} />
                 </div>
 
                 <div ref={conditionRef}>
                   <VehicleCondition
+                    vehicle={vehicleOverview}
                     open={isConditionOpen}
                     setOpen={setIsConditionOpen}
                   />
@@ -219,6 +220,7 @@ export default function VehicleDetails() {
 
                 <div ref={inspectionRef}>
                   <VehicleSpec
+                    vehicle={vehicleOverview}
                     open={isInspectionOpen}
                     setOpen={setIsInspectionOpen}
                   />

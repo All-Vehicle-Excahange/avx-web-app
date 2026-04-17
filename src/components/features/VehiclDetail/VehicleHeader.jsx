@@ -1,17 +1,15 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
-
 import { ChevronRight, Star } from "lucide-react";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-
 import { useState, useEffect } from "react";
 import { useCompareStore } from "@/stores/useCompareStore";
 
-export default function VehicleHeader({ vehicle, ratting, vehicleSummary }) {
-    const router = useRouter();
-    const source = router.query.source; // "home" | "search" | undefined
+export default function VehicleHeader({ vehicle, vehicleSummary }) {
+    const searchParams = useSearchParams();
+    const source = searchParams.get("source"); // "home" | "search" | undefined
     const [mounted, setMounted] = useState(false);
 
     // Global Comparison Store
@@ -26,7 +24,7 @@ export default function VehicleHeader({ vehicle, ratting, vehicleSummary }) {
         if (vehicle) {
             setSelectedVehicle(vehicle);
         }
-    }, [vehicle,]);
+    }, [vehicle]);
 
     const vehicleNameBase = [vehicle?.makerName, vehicle?.modelName, vehicle?.variantName]
         .filter(Boolean)
@@ -47,8 +45,6 @@ export default function VehicleHeader({ vehicle, ratting, vehicleSummary }) {
     if (stateName) searchQueryParams.set("stateName", stateName);
     if (cityName) searchQueryParams.set("cityName", cityName);
     const searchUrl = `/search?${searchQueryParams.toString()}`;
-
-
 
     return (
         <header className="w-full space-y-3 pt-9 md:pt-6 bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)]">
@@ -123,7 +119,7 @@ export default function VehicleHeader({ vehicle, ratting, vehicleSummary }) {
                     {/* PRICE */}
                     <div className="hidden lg:block bg-primary text-secondary px-4 py-2 rounded-lg text-right">
                         <p className="text-lg font-semibold">
-                            ₹{vehicle?.price?.toLocaleString("en-IN")}
+                            ₹{vehicle?.price?.toLocaleString("en-IN") || "0"}
                         </p>
                     </div>
 
@@ -133,4 +129,4 @@ export default function VehicleHeader({ vehicle, ratting, vehicleSummary }) {
 
         </header>
     );
-}   
+}

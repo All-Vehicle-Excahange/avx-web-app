@@ -12,7 +12,6 @@ import {
   Key,
   BadgeCheck,
   FileText,
-  Receipt,
   Truck,
   ShieldCheck,
   CheckCircle,
@@ -20,29 +19,11 @@ import {
   Info,
 } from "lucide-react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
-import { getVehicleOverview } from "@/services/vehicle.service";
-import { useEffect, useState } from "react";
 
 export default function VehicleOverview({ vehicle }) {
-  const params = useParams();
-  const id = params.id;
-  const [vehicleOverview, setVehicleOverview] = useState({});
+  const isInsuranceActive = vehicle?.vehicleDocument?.insurance ?? false;
+  const hasSpareKey = vehicle?.spareKey ?? false;
 
-  useEffect(() => {
-    const fetchOverview = async () => {
-      try {
-        const res = await getVehicleOverview(id);
-        setVehicleOverview(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchOverview();
-  }, [id]);
-
-  const isInsuranceActive = vehicleOverview.vehicleDocument?.insurance ?? false;
-  const hasSpareKey = vehicleOverview?.spareKey ?? false;
   const formatInsuranceType = (type) => {
     if (!type) return "NA";
 
@@ -53,10 +34,9 @@ export default function VehicleOverview({ vehicle }) {
   };
 
   const speedometerImage =
-    vehicleOverview?.vehicleImages?.find(
+    vehicle?.vehicleImages?.find(
       (img) => img.imageKey?.toLowerCase() === "speedometer",
     )?.imageUrl || "";
-
 
   return (
     <section className="relative rounded-2xl overflow-hidden text-primary border border-third/60">
@@ -71,8 +51,8 @@ export default function VehicleOverview({ vehicle }) {
             icon={<Calendar />}
             label="Reg. year"
             value={
-              vehicleOverview.vehicleDocument?.regDate
-                ? new Date(vehicleOverview.vehicleDocument.regDate)
+              vehicle?.vehicleDocument?.regDate
+                ? new Date(vehicle.vehicleDocument.regDate)
                   .toLocaleDateString("en-US", {
                     month: "short",
                     year: "numeric",
@@ -88,7 +68,7 @@ export default function VehicleOverview({ vehicle }) {
               <Item
                 icon={<Gauge />}
                 label="KM driven"
-                value={`${vehicleOverview?.kmDriven || "25,125"} km`}
+                value={`${vehicle?.kmDriven || "25,125"} km`}
               />
 
               {/* Info Icon */}
@@ -120,7 +100,7 @@ export default function VehicleOverview({ vehicle }) {
           <Item
             icon={<Fuel />}
             label="Fuel"
-            value={vehicleOverview?.fuelType || "CNG"}
+            value={vehicle?.fuelType || "CNG"}
           />
           <Divider />
 
@@ -128,17 +108,17 @@ export default function VehicleOverview({ vehicle }) {
           <Item
             icon={<Users />}
             label="Ownership"
-            value={vehicleOverview?.ownership || "1st"}
+            value={vehicle?.ownership || "1st"}
           />
           <Item
             icon={<Settings />}
             label="Transmission"
-            value={vehicleOverview?.transmissionType || "NA"}
+            value={vehicle?.transmissionType || "NA"}
           />
           <Item
             icon={<BadgeCheck />}
             label="Reg number"
-            value={vehicleOverview.vehicleDocument?.regNumber || "NA"}
+            value={vehicle?.vehicleDocument?.regNumber || "NA"}
           />
 
           <Divider />
@@ -153,13 +133,13 @@ export default function VehicleOverview({ vehicle }) {
             icon={<FileText />}
             label="Insurance Type"
             value={formatInsuranceType(
-              vehicleOverview.vehicleDocument?.typeOfInsurance,
+              vehicle?.vehicleDocument?.typeOfInsurance,
             )}
           />
           <Item
             icon={<MapPin />}
             label="Registered State"
-            value={vehicleOverview.vehicleDocument?.regState || "-"}
+            value={vehicle?.vehicleDocument?.regState || "-"}
           />
 
           <Divider />
@@ -187,7 +167,7 @@ export default function VehicleOverview({ vehicle }) {
           <Item
             icon={<Truck />}
             label="Commercial Vehicle"
-            value={vehicleOverview?.isCommercialVehicle ? "Yes" : "No"}
+            value={vehicle?.isCommercialVehicle ? "Yes" : "No"}
           />
         </div>
       </div>

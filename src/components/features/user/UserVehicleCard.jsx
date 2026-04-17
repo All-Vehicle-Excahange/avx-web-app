@@ -40,6 +40,7 @@ export default function UserVehicleCard({
     underinspection: "bg-orange-500",
     suspended: "bg-red-600",
     request_changes: "bg-amber-500",
+    rejected: "bg-red-600",
   };
 
   const verificationBadge = {
@@ -62,6 +63,11 @@ export default function UserVehicleCard({
 
   const verification = verificationBadge[data?.verificationStatus] || null;
 
+  const formatStatus = (s) => {
+    if (!s) return "-";
+    return s.replaceAll("_", " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+  };
+
   const handleSoldClick = async (id) => {
     try {
       const res = await markAsSoldVehicle(id);
@@ -82,7 +88,7 @@ export default function UserVehicleCard({
           <div
             className={`py-1 px-3 rounded-full text-[11px] font-bold text-white shadow-sm ${statusBg[status] || "bg-gray-600"}`}
           >
-            {status?.toUpperCase() || "-"}
+            {formatStatus(status)}
           </div>
         </div>
 
@@ -245,6 +251,25 @@ export default function UserVehicleCard({
               </div>
             )}
 
+            {/* REJECTED notice + reason */}
+            {status === "rejected" && (
+              <div className="flex items-start gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2">
+                <Ban
+                  size={13}
+                  className="text-red-500 mt-0.5 shrink-0"
+                />
+                <div className="min-w-0">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-red-500/70 mb-0.5">
+                     Remark:
+                  </p>
+                  <p className="text-xs font-semibold text-primary leading-snug">
+                    {data?.adminRemark ||
+                      "Your listing has been rejected by admin."}
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* BOTTOM — price + actions */}
             <div className="mt-auto space-y-2">
               <div className="flex items-center justify-between gap-2 border-t border-white/5 pt-2">
@@ -295,7 +320,7 @@ export default function UserVehicleCard({
                 </div>
               )}
 
-              {status === "request_changes" && (
+              {(status === "request_changes" || status === "rejected") && (
                 <div className="flex gap-2">
                   <Button
                     variant="ghost"
