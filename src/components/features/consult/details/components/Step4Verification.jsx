@@ -18,9 +18,8 @@ import {
 } from "lucide-react";
 import Button from "@/components/ui/button";
 
-export default function Step4Verification({ existing, onEdit, suspensionInfo }) {
+export default function Step4Verification({ existing, onEdit }) {
   const router = useRouter();
-  const isSuspended = suspensionInfo?.isSuspended;
 
   const business = existing?.business || {};
   const status = business.verificationStatus; // REQUESTED, REQUEST_CHANGES, REJECTED, VERIFIED
@@ -96,11 +95,9 @@ export default function Step4Verification({ existing, onEdit, suspensionInfo }) 
       <div className="flex flex-col items-center text-center space-y-6">
         <div
           className={`w-20 h-20 rounded-full flex items-center justify-center transition-all duration-700
-          ${isSuspended ? "bg-red-500/20" : isVerified ? "bg-green-500/10" : isChangesRequested ? "bg-orange-500/10" : isRejected ? "bg-red-500/10" : "bg-primary/10"}`}
+          ${isVerified ? "bg-green-500/10" : isChangesRequested ? "bg-orange-500/10" : isRejected ? "bg-red-500/10" : "bg-primary/10"}`}
         >
-          {isSuspended ? (
-            <ShieldAlert className="w-10 h-10 text-red-500 animate-pulse" />
-          ) : isVerified ? (
+          {isVerified ? (
             <ShieldCheck className="w-10 h-10 text-green-500" />
           ) : isChangesRequested ? (
             <AlertCircle className="w-10 h-10 text-yellow-500" />
@@ -113,12 +110,7 @@ export default function Step4Verification({ existing, onEdit, suspensionInfo }) 
 
         <div className="space-y-3">
           <h1 className="text-3xl font-bold text-primary flex items-center justify-center gap-2">
-            {isSuspended ? (
-              <>
-                <Ban className="w-8 h-8 text-red-500" />
-                Account Suspended
-              </>
-            ) : isVerified ? (
+            {isVerified ? (
               <>
                 <CheckCircle2 className="w-8 h-8 text-green-500" />
                 Approved
@@ -135,15 +127,13 @@ export default function Step4Verification({ existing, onEdit, suspensionInfo }) 
             )}
           </h1>
           <p className="text-third text-lg max-w-xl mx-auto leading-relaxed">
-            {isSuspended
-              ? "Your account access has been restricted by the AVX administration. Please review the details below."
-              : isVerified
-                ? "Your application has been approved! Redirecting to your dashboard..."
-                : isChangesRequested
-                  ? "We found some issues with your submission. Please check the remarks below and update your details."
-                  : isRejected
-                    ? "We regret to inform you that your application was not approved at this time."
-                    : "Your partner application is under review. Our team is verifying your documents. This usually takes 24-48 hours."}
+            {isVerified
+              ? "Your application has been approved! Redirecting to your dashboard..."
+              : isChangesRequested
+                ? "We found some issues with your submission. Please check the remarks below and update your details."
+                : isRejected
+                  ? "We regret to inform you that your application was not approved at this time."
+                  : "Your partner application is under review. Our team is verifying your documents. This usually takes 24-48 hours."}
           </p>
         </div>
       </div>
@@ -169,8 +159,7 @@ export default function Step4Verification({ existing, onEdit, suspensionInfo }) 
           <div className="bg-primary/5 rounded-xl border border-orange-500/20 p-5 ml-0 md:ml-16">
             <p className="text-primary font-medium leading-relaxed">
               <span className="text-primary font-bold">Admin Remark:</span>{" "}
-              {remark ||
-                "-"}
+              {remark || "-"}
             </p>
           </div>
 
@@ -188,93 +177,8 @@ export default function Step4Verification({ existing, onEdit, suspensionInfo }) 
       )}
 
       {/* ── APPLICATION STATUS OR SUSPENSION BOARD ────────────────────────── */}
-      {isSuspended ? (
-        <div className="bg-red-500/10 border border-red-500/20 rounded-2xl overflow-hidden shadow-sm shadow-red-500/5">
-          <div className="p-8 space-y-8">
-            <div className="flex items-center gap-4 text-red-600">
-              <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center shrink-0">
-                <AlertCircle className="w-6 h-6" />
-              </div>
-              <div>
-                <h2 className="text-xl font-bold tracking-tight">
-                  Suspension Details
-                </h2>
-                <p className="text-red-600/70 text-sm">
-                  This action was taken due to a policy violation
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white/40 dark:bg-black/20 p-5 rounded-xl border border-red-500/10 space-y-2">
-                <span className="text-[10px] uppercase font-black text-red-600/60 tracking-widest px-2 py-0.5 bg-red-500/10 rounded-full">
-                  Reason
-                </span>
-                <p className="text-primary font-bold text-lg leading-snug">
-                  {suspensionInfo?.reason || "Policy Violation"}
-                </p>
-              </div>
-
-              <div className="bg-white/40 dark:bg-black/20 p-5 rounded-xl border border-red-500/10 space-y-2">
-                <span className="text-[10px] uppercase font-black text-red-600/60 tracking-widest px-2 py-0.5 bg-red-500/10 rounded-full">
-                  Suspension Type
-                </span>
-                <p className="text-primary font-bold text-lg capitalize">
-                  {suspensionInfo?.consultSuspenseType?.toLowerCase() ||
-                    "Temporary"}
-                </p>
-              </div>
-
-              {suspensionInfo?.consultSuspenseType !== "PERMANENT" &&
-                suspensionInfo?.suspendUntil && (
-                  <div className="md:col-span-2 bg-linear-to-r from-red-500/20 via-red-500/10 to-transparent p-5 rounded-xl border border-red-500/20">
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-1">
-                        <span className="text-[10px] uppercase font-black text-red-600 tracking-widest">
-                          Suspended Until
-                        </span>
-                        <p className="text-primary font-black text-2xl">
-                          {new Intl.DateTimeFormat("en-IN", {
-                            dateStyle: "long",
-                            timeStyle: "short",
-                          }).format(new Date(suspensionInfo.suspendUntil))}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-red-600 font-bold text-sm">
-                          {Math.max(
-                            0,
-                            Math.ceil(
-                              (new Date(suspensionInfo.suspendUntil) -
-                                new Date()) /
-                                (1000 * 60 * 60 * 24),
-                            ),
-                          )}{" "}
-                          Days Left
-                        </p>
-                        <p className="text-[10px] text-third/60">
-                          Approximate duration
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-            </div>
-
-            <div className="pt-6 border-t border-red-500/10">
-              <p className="text-third text-sm text-center">
-                If you believe this is an error, please contact our support team
-                at{" "}
-                <a
-                  href="mailto:support@avx.com"
-                  className="text-primary font-bold hover:underline"
-                >
-                  support@avx.com
-                </a>
-              </p>
-            </div>
-          </div>
-        </div>
+      {false ? (
+        <div />
       ) : (
         <div className="bg-primary/5 border border-third/10 rounded-2xl overflow-hidden">
           <div className="p-8 space-y-8">
