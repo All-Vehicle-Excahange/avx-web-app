@@ -13,6 +13,7 @@ import SignupPopup from "@/components/auth/SignupPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import RequestAlredySentPopup from "./RequestAlredySentPopup";
 import { createSlug } from "@/lib/helper";
+import { useDebouncedCallback } from "@/hooks/useDebounce";
 
 export default function VehicleSummaryRight({ vehicle, summary }) {
   const vehicleId = vehicle?.id;
@@ -25,12 +26,35 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
   const [isAlreadySentOpen, setIsAlreadySentOpen] = useState(false);
   const [inquiryStatus, setInquiryStatus] = useState(null);
   const [isCheckingInquiry, setIsCheckingInquiry] = useState(false);
-  const [localInquiryCount, setLocalInquiryCount] = useState(vehicle?.totalInquiryCount || 0);
+  const [localInquiryCount, setLocalInquiryCount] = useState(
+    vehicle?.totalInquiryCount || 0,
+  );
 
   const [loading, setLoading] = useState(false);
   const pendingAction = useRef(null);
-
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const lastSyncedValue = useRef(vehicle?.isWishlisted || false);
+
+  const debouncedSyncWishlist = useDebouncedCallback(async (nextState) => {
+    try {
+      if (!nextState) {
+        const res = await removeWishList(vehicleId);
+        if (!(res?.success || res?.status)) {
+          throw new Error("Failed to remove");
+        }
+      } else {
+        const res = await addWishList(vehicleId);
+        if (!(res?.success || res?.status)) {
+          throw new Error("Failed to add");
+        }
+      }
+      lastSyncedValue.current = nextState;
+    } catch (err) {
+      console.log("Wishlist sync error:", err);
+      // Revert if API fails
+      setIsFavorite(!nextState);
+    }
+  }, 1000);
 
   useEffect(() => {
     setIsFavorite(vehicle?.isWishlisted || false);
@@ -38,7 +62,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
   }, [vehicle?.isWishlisted, vehicle?.totalInquiryCount]);
 
   const handleInquirySuccess = () => {
-    setLocalInquiryCount(prev => prev + 1);
+    setLocalInquiryCount((prev) => prev + 1);
   };
 
   const handleRequestInquiry = async () => {
@@ -66,30 +90,21 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
     }
   };
 
-  const handleWishlistToggle = async () => {
+  const handleWishlistToggle = () => {
     if (!isLoggedIn) {
       setIsLoginOpen(true);
       return;
     }
 
-    if (!vehicleId || loading) return;
+    if (!vehicleId) return;
 
-    try {
-      setLoading(true);
+    const nextState = !isFavorite;
+    setIsFavorite(nextState);
 
-      const newValue = !isFavorite;
-      setIsFavorite(newValue);
-
-      if (newValue) {
-        await addWishList(vehicleId);
-      } else {
-        await removeWishList(vehicleId);
-      }
-    } catch (error) {
-      console.error("Wishlist error:", error);
-      setIsFavorite((prev) => !prev);
-    } finally {
-      setLoading(false);
+    if (nextState === lastSyncedValue.current) {
+      debouncedSyncWishlist.cancel();
+    } else {
+      debouncedSyncWishlist(nextState);
     }
   };
 
@@ -105,7 +120,9 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
               </p>
 
               <h2 className="hidden text-2xl font-bold leading-tight">
-                {[vehicle?.makerName, vehicle?.modelName, vehicle?.variantName].filter(Boolean).join(" ") || "-"}
+                {[vehicle?.makerName, vehicle?.modelName, vehicle?.variantName]
+                  .filter(Boolean)
+                  .join(" ") || "-"}
               </h2>
             </div>
 
@@ -115,8 +132,9 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
               className="text-primary p-2 rounded-full hover:scale-105 transition cursor-pointer border"
             >
               <Heart
-                className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${isFavorite ? "fill-red-500 text-red-500" : "text-primary"
-                  }`}
+                className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${
+                  isFavorite ? "fill-red-500 text-red-500" : "text-primary"
+                }`}
               />
             </button>
           </div>
@@ -130,8 +148,12 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
               <h3 className="text-md font-semibold">
                 {vehicleOwnerRole === "CONSULTATION"
                   ? summary?.consultationName || "Auto Consultant"
-                  : [vehicle?.vehicleOwner?.firstname, vehicle?.vehicleOwner?.lastname]
-                      .filter(Boolean).join(" ") || "Private Seller"}
+                  : [
+                      vehicle?.vehicleOwner?.firstname,
+                      vehicle?.vehicleOwner?.lastname,
+                    ]
+                      .filter(Boolean)
+                      .join(" ") || "Private Seller"}
               </h3>
 
               {vehicleOwnerRole === "CONSULTATION" ? (
@@ -175,11 +197,15 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
               ) : (
                 /* ── NORMAL USER_SELLER info ── */
                 <div className="space-y-2 pt-1">
-                  {(vehicle?.vehicleAddress?.city || vehicle?.vehicleAddress?.state) && (
+                  {(vehicle?.vehicleAddress?.city ||
+                    vehicle?.vehicleAddress?.state) && (
                     <p className="flex items-start gap-2 text-sm text-third">
                       <MapPin size={14} className="mt-0.5 shrink-0" />
                       <span className="line-clamp-2">
-                        {[vehicle.vehicleAddress.city, vehicle.vehicleAddress.state]
+                        {[
+                          vehicle.vehicleAddress.city,
+                          vehicle.vehicleAddress.state,
+                        ]
                           .filter(Boolean)
                           .join(", ")}
                       </span>
@@ -271,7 +297,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
               disabled={loading || isCheckingInquiry}
               onClick={() => {
                 if (!isLoggedIn) {
-                  pendingAction.current = 'request';
+                  pendingAction.current = "request";
                   setIsLoginOpen(true);
                 } else {
                   handleRequestInquiry();
@@ -281,18 +307,24 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
               {isCheckingInquiry ? "Please wait..." : "Request Vehicle"}
             </Button>
 
-            <Button variant="outline" size="sm" showIcon={false} onClick={() => setIsDownloadOpen(true)}>
+            <Button
+              variant="outline"
+              size="sm"
+              showIcon={false}
+              onClick={() => setIsDownloadOpen(true)}
+            >
               Chat with Seller
             </Button>
           </div>
         </div>
       </aside>
 
-
       {/* MOBILE STICKY BOTTOM BAR */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-secondary border-t border-third/20 p-3 px-4 flex items-center justify-between lg:hidden backdrop-blur-md bg-secondary/95 shadow-[0_-10px_25px_rgba(0,0,0,0.15)]">
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-secondary/95 border-t border-third/20 p-3 px-4 flex items-center justify-between lg:hidden backdrop-blur-md  shadow-[0_-10px_25px_rgba(0,0,0,0.15)]">
         <div className="flex flex-col">
-          <p className="text-third text-[10px] uppercase tracking-wider font-semibold">Price</p>
+          <p className="text-third text-[10px] uppercase tracking-wider font-semibold">
+            Price
+          </p>
           <p className="text-xl font-bold text-primary leading-tight">
             ₹{vehicle?.price?.toLocaleString("en-IN") || "0"}
           </p>
@@ -307,7 +339,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
             disabled={loading || isCheckingInquiry}
             onClick={() => {
               if (!isLoggedIn) {
-                pendingAction.current = 'request';
+                pendingAction.current = "request";
                 setIsLoginOpen(true);
               } else {
                 handleRequestInquiry();
@@ -337,7 +369,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
           setIsSignupOpen(true);
         }}
         onSuccess={() => {
-          if (pendingAction.current === 'request') {
+          if (pendingAction.current === "request") {
             pendingAction.current = null;
             setTimeout(() => handleRequestInquiry(), 300);
           }

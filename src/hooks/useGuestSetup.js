@@ -20,5 +20,5 @@ export default function useGuestSetup() {
         setupGuestUser();
       })();
     }
-  }, [isLoggedIn, authInitialized]);
+  }, [isLoggedIn, authInitialized, openLoginPopup]);
 }

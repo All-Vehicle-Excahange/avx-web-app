@@ -166,7 +166,7 @@ export default function Step4Verification({ existing, onEdit, suspensionInfo }) 
             <p className="text-primary font-medium leading-relaxed">
               <span className="text-primary font-bold">Admin Remark:</span>{" "}
               {remark ||
-                "Please review your documents and contact information for accuracy."}
+                "-"}
             </p>
           </div>
 
@@ -223,7 +223,7 @@ export default function Step4Verification({ existing, onEdit, suspensionInfo }) 
 
               {suspensionInfo?.consultSuspenseType !== "PERMANENT" &&
                 suspensionInfo?.suspendUntil && (
-                  <div className="md:col-span-2 bg-gradient-to-r from-red-500/20 via-red-500/10 to-transparent p-5 rounded-xl border border-red-500/20">
+                  <div className="md:col-span-2 bg-linear-to-r from-red-500/20 via-red-500/10 to-transparent p-5 rounded-xl border border-red-500/20">
                     <div className="flex items-center justify-between">
                       <div className="space-y-1">
                         <span className="text-[10px] uppercase font-black text-red-600 tracking-widest">

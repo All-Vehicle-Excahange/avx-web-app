@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 import { useState, Suspense } from "react";
 import Head from "next/head";
 import { useSearchParams } from "next/navigation";

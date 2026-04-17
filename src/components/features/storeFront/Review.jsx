@@ -323,7 +323,7 @@ export default function Review() {
         {/* ================= RIGHT ================= */}
         <div className="space-y-6">
           {reviews.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 sm:py-16 px-4 sm:px-6 border border-third/40 rounded-2xl text-center">
+            <div className="flex flex-col items-center justify-center py-12 sm:py-16 px-4 sm:px-6 border-2 border-dashed border-third/40 rounded-2xl text-center">
               <div className="w-16 h-16 bg-third/10 rounded-full flex items-center justify-center mb-4">
                 <MessageSquare className="w-8 h-8 text-third" />
               </div>

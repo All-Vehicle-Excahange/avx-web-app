@@ -6,7 +6,7 @@ import DropzoneUpload from "@/components/ui/DropzoneUpload";
 import { postBecameSeller, updateBecameSeller } from "@/services/user.service";
 import Button from "@/components/ui/button";
 import Image from "next/image";
-import { X, CheckCircle2 } from "lucide-react";
+import { X, CheckCircle2, Loader2 } from "lucide-react";
 
 function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
   const router = useRouter();
@@ -434,8 +434,17 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
                     onClick={handleSubmit}
                     variant="ghost"
                     showIcon={false}
+                    locked={loading}
+                    className="flex items-center gap-2"
                   >
-                    {loading ? "Submitting..." : "Submit"}
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span>Submitting...</span>
+                      </>
+                    ) : (
+                      "Submit"
+                    )}
                   </Button>
                 </div>
               </div>

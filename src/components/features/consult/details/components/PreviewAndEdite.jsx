@@ -143,7 +143,7 @@ export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
         </h2>
 
         {/* ================= BUSINESS ================= */}
-        <div className="border rounded-xl p-6 bg-third/10">
+        <div className="border border-primary/30 rounded-xl p-6 bg-third/10">
           <div className="flex justify-between mb-4">
             <h3 className="font-semibold">Business Details</h3>
 
@@ -165,14 +165,20 @@ export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
                   Cancel
                 </Button>
 
-                <Button variant="ghost" onClick={updateBusiness} disabled={loading}>
+                <Button
+                  variant="ghost"
+                  onClick={updateBusiness}
+                  disabled={loading}
+                >
                   {loading ? "Updating..." : "Update"}
                 </Button>
               </div>
             )}
           </div>
 
-          <div className={`transition-opacity duration-300 ${!editMode.business ? "pointer-events-none opacity-60" : ""}`}>
+          <div
+            className={`transition-opacity duration-300 ${!editMode.business ? "pointer-events-none opacity-60" : ""}`}
+          >
             <Step1Business
               initialData={data.business}
               onChange={handleBusinessChange}
@@ -202,14 +208,20 @@ export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
                   Cancel
                 </Button>
 
-                <Button variant="ghost" onClick={updateAddress} disabled={loading}>
+                <Button
+                  variant="ghost"
+                  onClick={updateAddress}
+                  disabled={loading}
+                >
                   {loading ? "Updating..." : "Update"}
                 </Button>
               </div>
             )}
           </div>
 
-          <div className={`transition-opacity duration-300 ${!editMode.address ? "pointer-events-none opacity-60" : ""}`}>
+          <div
+            className={`transition-opacity duration-300 ${!editMode.address ? "pointer-events-none opacity-60" : ""}`}
+          >
             <Step2Address
               initialData={data.address}
               onChange={handleAddressChange}
@@ -246,7 +258,9 @@ export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
             )}
           </div>
 
-          <div className={`transition-opacity duration-300 ${!editMode.kyc ? "pointer-events-none opacity-60" : ""}`}>
+          <div
+            className={`transition-opacity duration-300 ${!editMode.kyc ? "pointer-events-none opacity-60" : ""}`}
+          >
             <Step3KYC
               initialData={data.kyc}
               onChange={handleKycChange}

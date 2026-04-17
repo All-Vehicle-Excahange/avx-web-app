@@ -26,7 +26,7 @@ import {
   setWhyBuyCustomerCommitment,
   setFeaturedReviews,
 } from "@/services/theme.service";
-import { getAllReview } from "@/services/user.service";
+import { getAllReviewById } from "@/services/user.service";
 import { WHY_BUY_PREMIUM_2 } from "../schemas/whybuy/why_buy_premium_2";
 const SVG_OPTIONS = [
   {
@@ -86,7 +86,12 @@ const formatOptionLabel = ({ value, label }) => (
   </div>
 );
 const DEFAULT_DATA = WHY_BUY_PREMIUM_2[0].data;
-export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onNextTab }) {
+export default function WhyBuyPremium2({
+  data: rawData,
+  isEditing,
+  onUpdate,
+  onNextTab,
+}) {
   const [isSaving, setIsSaving] = useState(false);
   const data = {
     ...DEFAULT_DATA,
@@ -115,7 +120,7 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
     const fetchReviews = async () => {
       try {
         const params = { pageNo: 1, size: 20 };
-        const response = await getAllReview(consultId, params);
+        const response = await getAllReviewById(consultId, params);
         const reviews = response?.data?.reviews || [];
         setAllReviews(reviews);
       } catch (error) {
@@ -173,7 +178,10 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
     try {
       const heroData = new FormData();
       heroData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
-      heroData.append("whyBuyHeroDescription", data.whyBuyHeroDescription || "");
+      heroData.append(
+        "whyBuyHeroDescription",
+        data.whyBuyHeroDescription || "",
+      );
 
       for (let i = 1; i <= 3; i++) {
         const customField = `customWhyBuyHero${i}`;
@@ -201,8 +209,14 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
       }
 
       const vehicleData = new FormData();
-      vehicleData.append("vehicleSelectionTitle", data.vehicleSelectionTitle || "");
-      vehicleData.append("vehicleSelectionDescription", data.vehicleSelectionDescription || "");
+      vehicleData.append(
+        "vehicleSelectionTitle",
+        data.vehicleSelectionTitle || "",
+      );
+      vehicleData.append(
+        "vehicleSelectionDescription",
+        data.vehicleSelectionDescription || "",
+      );
       for (let i = 1; i <= 2; i++) {
         const customField = `customVehicleSelection${i}`;
         const tmpl = data[`vehicleSelectionTemplate${i}`];
@@ -248,21 +262,29 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
         const tmpl = data[`inspectionTemplate${i}`];
         if (data[customField] && data[customField].startsWith("blob:")) {
           const blob = await getBlobFromUrl(data[customField]);
-          if (blob) inspectionData.append(customField, blob, `inspection${i}.png`);
+          if (blob)
+            inspectionData.append(customField, blob, `inspection${i}.png`);
         } else if (tmpl?.id) {
           inspectionData.append(`inspectionTemplateId${i}`, tmpl.id);
         }
       }
 
       const commitmentData = new FormData();
-      commitmentData.append("customerCommitmentTitle", data.customerCommitmentTitle || "");
-      commitmentData.append("customerCommitmentDescription", data.customerCommitmentDescription || "");
+      commitmentData.append(
+        "customerCommitmentTitle",
+        data.customerCommitmentTitle || "",
+      );
+      commitmentData.append(
+        "customerCommitmentDescription",
+        data.customerCommitmentDescription || "",
+      );
       for (let i = 1; i <= 5; i++) {
         const customField = `customCustomerCommitment${i}`;
         const tmpl = data[`customerCommitmentTemplate${i}`];
         if (data[customField] && data[customField].startsWith("blob:")) {
           const blob = await getBlobFromUrl(data[customField]);
-          if (blob) commitmentData.append(customField, blob, `commitment${i}.png`);
+          if (blob)
+            commitmentData.append(customField, blob, `commitment${i}.png`);
         } else if (tmpl?.id) {
           commitmentData.append(`customerCommitmentTemplateId${i}`, tmpl.id);
         }
@@ -270,8 +292,8 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
 
       // Testimonial
       try {
-         updateField("testimonialTitle", data.testimonialTitle || "");
-      } catch(e) {}
+        updateField("testimonialTitle", data.testimonialTitle || "");
+      } catch (e) {}
 
       await Promise.all([
         setWhyBuyHero(heroData),
@@ -280,7 +302,7 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
         setWhyBuyProcess(processData),
         setWhyBuyInspection(inspectionData),
         setWhyBuyCustomerCommitment(commitmentData),
-        setFeaturedReviews(selectedReviewIds)
+        setFeaturedReviews(selectedReviewIds),
       ]);
 
       if (onNextTab) onNextTab();
@@ -512,7 +534,10 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
                         const updatedData = { ...data };
                         if (id) {
                           // Template selected
-                          updatedData[`vehicleSelectionTemplate${n}`] = { imageUrl, id };
+                          updatedData[`vehicleSelectionTemplate${n}`] = {
+                            imageUrl,
+                            id,
+                          };
                           delete updatedData[`customVehicleSelection${n}`];
                         } else {
                           // Custom image uploaded
@@ -705,7 +730,10 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
                         const updatedData = { ...data };
                         if (id) {
                           // Template selected
-                          updatedData[`inspectionTemplate${n}`] = { imageUrl, id };
+                          updatedData[`inspectionTemplate${n}`] = {
+                            imageUrl,
+                            id,
+                          };
                           delete updatedData[`customInspection${n}`];
                         } else {
                           // Custom image uploaded
@@ -768,11 +796,15 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
                         const updatedData = { ...data };
                         if (id) {
                           // Template selected
-                          updatedData[`customerCommitmentTemplate${n}`] = { imageUrl, id };
+                          updatedData[`customerCommitmentTemplate${n}`] = {
+                            imageUrl,
+                            id,
+                          };
                           delete updatedData[`customCustomerCommitment${n}`];
                         } else {
                           // Custom image uploaded
-                          updatedData[`customCustomerCommitment${n}`] = imageUrl;
+                          updatedData[`customCustomerCommitment${n}`] =
+                            imageUrl;
                           delete updatedData[`customerCommitmentTemplate${n}`];
                         }
                         onUpdate(updatedData);
@@ -889,8 +921,8 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
           </div>
         </div>
         <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
-          <Button 
-            onClick={handleSaveAndNext} 
+          <Button
+            onClick={handleSaveAndNext}
             disabled={isSaving}
             variant="ghost"
           >
@@ -910,10 +942,16 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
         {/* HERO BACKGROUND (Video/Image) */}
         <div className="absolute inset-0 w-full h-full">
           {(
-            data.customWhyBuyHero1 || data.customWhyBuyHeroUrl1 || data.whyBuyHeroTemplate1?.imageUrl
+            data.customWhyBuyHero1 ||
+            data.customWhyBuyHeroUrl1 ||
+            data.whyBuyHeroTemplate1?.imageUrl
           )?.includes(".mp4") ? (
             <video
-              src={data.customWhyBuyHero1 || data.customWhyBuyHeroUrl1 || data.whyBuyHeroTemplate1?.imageUrl}
+              src={
+                data.customWhyBuyHero1 ||
+                data.customWhyBuyHeroUrl1 ||
+                data.whyBuyHeroTemplate1?.imageUrl
+              }
               autoPlay
               muted
               loop
@@ -922,7 +960,11 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
             />
           ) : (
             <img
-              src={data.customWhyBuyHero1 || data.customWhyBuyHeroUrl1 || data.whyBuyHeroTemplate1?.imageUrl}
+              src={
+                data.customWhyBuyHero1 ||
+                data.customWhyBuyHeroUrl1 ||
+                data.whyBuyHeroTemplate1?.imageUrl
+              }
               className="w-full h-full object-cover"
               alt="Hero Background"
             />
@@ -965,14 +1007,22 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
             <div className="relative w-full h-[420px]">
               <div className="absolute inset-0 overflow-hidden rounded-2xl">
                 <img
-                  src={data.customStory1 || data.customStoryUrl1 || data.storyTemplate1?.imageUrl}
+                  src={
+                    data.customStory1 ||
+                    data.customStoryUrl1 ||
+                    data.storyTemplate1?.imageUrl
+                  }
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
               </div>
               <div className="absolute bottom-6 right-6 w-[140px] h-[100px] overflow-hidden border rounded-2xl border-white/20">
                 <img
-                  src={data.customStory2 || data.customStoryUrl2 || data.storyTemplate2?.imageUrl}
+                  src={
+                    data.customStory2 ||
+                    data.customStoryUrl2 ||
+                    data.storyTemplate2?.imageUrl
+                  }
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
@@ -1250,7 +1300,9 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
             <div className="relative overflow-hidden rounded-2xl h-[300px] lg:h-auto lg:col-span-6 lg:row-span-2">
               <img
                 src={
-                  data.customGallery1 || data.customGalleryUrl1 || data.galleryTemplate1?.imageUrl
+                  data.customGallery1 ||
+                  data.customGalleryUrl1 ||
+                  data.galleryTemplate1?.imageUrl
                 }
                 className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
                 loading="lazy"
@@ -1260,7 +1312,9 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
               <div className="relative overflow-hidden rounded-2xl h-[180px] flex-1 lg:h-auto lg:col-span-4 lg:row-span-1">
                 <img
                   src={
-                    data.customGallery2 || data.customGalleryUrl2 || data.galleryTemplate2?.imageUrl
+                    data.customGallery2 ||
+                    data.customGalleryUrl2 ||
+                    data.galleryTemplate2?.imageUrl
                   }
                   className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
                   loading="lazy"
@@ -1269,7 +1323,9 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
               <div className="relative overflow-hidden rounded-2xl h-[180px] w-[30%] lg:h-auto lg:w-auto lg:col-span-2 lg:row-span-1">
                 <img
                   src={
-                    data.customGallery5 || data.customGalleryUrl5 || data.galleryTemplate5?.imageUrl
+                    data.customGallery5 ||
+                    data.customGalleryUrl5 ||
+                    data.galleryTemplate5?.imageUrl
                   }
                   className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
                   loading="lazy"
@@ -1280,7 +1336,9 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
               <div className="relative overflow-hidden h-40 rounded-2xl flex-1 lg:h-auto lg:col-span-3 lg:row-span-1">
                 <img
                   src={
-                    data.customGallery3 || data.customGalleryUrl3 || data.galleryTemplate3?.imageUrl
+                    data.customGallery3 ||
+                    data.customGalleryUrl3 ||
+                    data.galleryTemplate3?.imageUrl
                   }
                   className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
                   loading="lazy"
@@ -1289,7 +1347,9 @@ export default function WhyBuyPremium2({ data: rawData, isEditing, onUpdate, onN
               <div className="relative overflow-hidden h-40 rounded-2xl flex-1 lg:h-auto lg:col-span-3 lg:row-span-1">
                 <img
                   src={
-                    data.customGallery4 || data.customGalleryUrl4 || data.galleryTemplate4?.imageUrl
+                    data.customGallery4 ||
+                    data.customGalleryUrl4 ||
+                    data.galleryTemplate4?.imageUrl
                   }
                   className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
                   loading="lazy"

@@ -17,7 +17,7 @@ import {
   setWhyBuyCustomerCommitment,
   setFeaturedReviews,
 } from "@/services/theme.service";
-import { getAllReview } from "@/services/user.service";
+import { getAllReviewById } from "@/services/user.service";
 import { WHY_BUY_PREMIUM_1 } from "../schemas/whybuy/why_buy_premium_1";
 const SVG_OPTIONS = [
   {
@@ -77,7 +77,12 @@ const formatOptionLabel = ({ value, label }) => (
   </div>
 );
 const DEFAULT_DATA = WHY_BUY_PREMIUM_1[0].data;
-export default function WhyBuyPremium1({ data: rawData, isEditing, onUpdate, onNextTab }) {
+export default function WhyBuyPremium1({
+  data: rawData,
+  isEditing,
+  onUpdate,
+  onNextTab,
+}) {
   const [isSaving, setIsSaving] = useState(false);
   const data = {
     ...DEFAULT_DATA,
@@ -139,7 +144,7 @@ export default function WhyBuyPremium1({ data: rawData, isEditing, onUpdate, onN
     const fetchReviews = async () => {
       try {
         const params = { pageNo: 1, size: 20 };
-        const response = await getAllReview(consultId, params);
+        const response = await getAllReviewById(consultId, params);
         const reviews = response?.data?.reviews || [];
         setAllReviews(reviews);
       } catch (error) {
@@ -154,18 +159,24 @@ export default function WhyBuyPremium1({ data: rawData, isEditing, onUpdate, onN
     try {
       const heroData = new FormData();
       heroData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
-      heroData.append("whyBuyHeroDescription", data.whyBuyHeroDescription || "");
-      if (data.whyBuyHeroTemplate1?.id) heroData.append("whyBuyHeroTemplateId1", data.whyBuyHeroTemplate1.id);
+      heroData.append(
+        "whyBuyHeroDescription",
+        data.whyBuyHeroDescription || "",
+      );
+      if (data.whyBuyHeroTemplate1?.id)
+        heroData.append("whyBuyHeroTemplateId1", data.whyBuyHeroTemplate1.id);
       else if (data.whyBuyHeroTemplate1?.imageUrl) {
         const b = await getBlobFromUrl(data.whyBuyHeroTemplate1.imageUrl);
         if (b) heroData.append("customWhyBuyHero1", b, "hero1.png");
       }
-      if (data.whyBuyHeroTemplate2?.id) heroData.append("whyBuyHeroTemplateId2", data.whyBuyHeroTemplate2.id);
+      if (data.whyBuyHeroTemplate2?.id)
+        heroData.append("whyBuyHeroTemplateId2", data.whyBuyHeroTemplate2.id);
       else if (data.whyBuyHeroTemplate2?.imageUrl) {
         const b = await getBlobFromUrl(data.whyBuyHeroTemplate2.imageUrl);
         if (b) heroData.append("customWhyBuyHero2", b, "hero2.png");
       }
-      if (data.whyBuyHeroTemplate3?.id) heroData.append("whyBuyHeroTemplateId3", data.whyBuyHeroTemplate3.id);
+      if (data.whyBuyHeroTemplate3?.id)
+        heroData.append("whyBuyHeroTemplateId3", data.whyBuyHeroTemplate3.id);
       else if (data.whyBuyHeroTemplate3?.imageUrl) {
         const b = await getBlobFromUrl(data.whyBuyHeroTemplate3.imageUrl);
         if (b) heroData.append("customWhyBuyHero3", b, "hero3.png");
@@ -174,34 +185,53 @@ export default function WhyBuyPremium1({ data: rawData, isEditing, onUpdate, onN
       const storyData = new FormData();
       storyData.append("storyTitle", data.storyTitle || "");
       storyData.append("storyDescription", data.storyDescription || "");
-      if (data.storyTemplate1?.id) storyData.append("storyTemplateId1", data.storyTemplate1.id);
+      if (data.storyTemplate1?.id)
+        storyData.append("storyTemplateId1", data.storyTemplate1.id);
       else if (data.storyTemplate1?.imageUrl) {
         const b = await getBlobFromUrl(data.storyTemplate1.imageUrl);
         if (b) storyData.append("customWhyBuyStory1", b, "story1.png");
       }
-      if (data.storyTemplate2?.id) storyData.append("storyTemplateId2", data.storyTemplate2.id);
+      if (data.storyTemplate2?.id)
+        storyData.append("storyTemplateId2", data.storyTemplate2.id);
       else if (data.storyTemplate2?.imageUrl) {
         const b = await getBlobFromUrl(data.storyTemplate2.imageUrl);
         if (b) storyData.append("customWhyBuyStory2", b, "story2.png");
       }
-      if (data.storyTemplate3?.id) storyData.append("storyTemplateId3", data.storyTemplate3.id);
+      if (data.storyTemplate3?.id)
+        storyData.append("storyTemplateId3", data.storyTemplate3.id);
       else if (data.storyTemplate3?.imageUrl) {
         const b = await getBlobFromUrl(data.storyTemplate3.imageUrl);
         if (b) storyData.append("customWhyBuyStory3", b, "story3.png");
       }
 
       const vehicleData = new FormData();
-      vehicleData.append("vehicleSelectionTitle", data.vehicleSelectionTitle || "");
-      vehicleData.append("vehicleSelectionDescription", data.vehicleSelectionDescription || "");
-      if (data.vehicleSelectionTemplate1?.id) vehicleData.append("vehicleSelectionTemplateId1", data.vehicleSelectionTemplate1.id);
+      vehicleData.append(
+        "vehicleSelectionTitle",
+        data.vehicleSelectionTitle || "",
+      );
+      vehicleData.append(
+        "vehicleSelectionDescription",
+        data.vehicleSelectionDescription || "",
+      );
+      if (data.vehicleSelectionTemplate1?.id)
+        vehicleData.append(
+          "vehicleSelectionTemplateId1",
+          data.vehicleSelectionTemplate1.id,
+        );
       else if (data.vehicleSelectionTemplate1?.imageUrl) {
         const b = await getBlobFromUrl(data.vehicleSelectionTemplate1.imageUrl);
-        if (b) vehicleData.append("customWhyBuyVehicleSelection1", b, "sel1.png");
+        if (b)
+          vehicleData.append("customWhyBuyVehicleSelection1", b, "sel1.png");
       }
-      if (data.vehicleSelectionTemplate2?.id) vehicleData.append("vehicleSelectionTemplateId2", data.vehicleSelectionTemplate2.id);
+      if (data.vehicleSelectionTemplate2?.id)
+        vehicleData.append(
+          "vehicleSelectionTemplateId2",
+          data.vehicleSelectionTemplate2.id,
+        );
       else if (data.vehicleSelectionTemplate2?.imageUrl) {
         const b = await getBlobFromUrl(data.vehicleSelectionTemplate2.imageUrl);
-        if (b) vehicleData.append("customWhyBuyVehicleSelection2", b, "sel2.png");
+        if (b)
+          vehicleData.append("customWhyBuyVehicleSelection2", b, "sel2.png");
       }
 
       const processData = new FormData();
@@ -214,10 +244,14 @@ export default function WhyBuyPremium1({ data: rawData, isEditing, onUpdate, onN
           processData.append(`processes[${i}].icon`, step.icon || "");
         });
       }
-      if (data.processTemplate1?.id) processData.append("processTemplateId1", data.processTemplate1.id);
-      if (data.processTemplate2?.id) processData.append("processTemplateId2", data.processTemplate2.id);
-      if (data.processTemplate3?.id) processData.append("processTemplateId3", data.processTemplate3.id);
-      if (data.processTemplate4?.id) processData.append("processTemplateId4", data.processTemplate4.id);
+      if (data.processTemplate1?.id)
+        processData.append("processTemplateId1", data.processTemplate1.id);
+      if (data.processTemplate2?.id)
+        processData.append("processTemplateId2", data.processTemplate2.id);
+      if (data.processTemplate3?.id)
+        processData.append("processTemplateId3", data.processTemplate3.id);
+      if (data.processTemplate4?.id)
+        processData.append("processTemplateId4", data.processTemplate4.id);
       const procImages = [
         { key: "customWhyBuyProcess1", val: data.customWhyBuyProcess1 },
         { key: "customWhyBuyProcess2", val: data.customWhyBuyProcess2 },
@@ -234,17 +268,29 @@ export default function WhyBuyPremium1({ data: rawData, isEditing, onUpdate, onN
       const inspectionData = new FormData();
       inspectionData.append("inspectionTitle", data.inspectionTitle || "");
       inspectionData.append("inspectionDescription", data.inspectionText || "");
-      if (data.inspectionTemplate1?.id) inspectionData.append("inspectionTemplateId1", data.inspectionTemplate1.id);
+      if (data.inspectionTemplate1?.id)
+        inspectionData.append(
+          "inspectionTemplateId1",
+          data.inspectionTemplate1.id,
+        );
       else if (data.inspectionTemplate1?.imageUrl) {
         const b = await getBlobFromUrl(data.inspectionTemplate1.imageUrl);
         if (b) inspectionData.append("customWhyBuyInspection1", b, "insp1.png");
       }
-      if (data.inspectionTemplate2?.id) inspectionData.append("inspectionTemplateId2", data.inspectionTemplate2.id);
+      if (data.inspectionTemplate2?.id)
+        inspectionData.append(
+          "inspectionTemplateId2",
+          data.inspectionTemplate2.id,
+        );
       else if (data.inspectionTemplate2?.imageUrl) {
         const b = await getBlobFromUrl(data.inspectionTemplate2.imageUrl);
         if (b) inspectionData.append("customWhyBuyInspection2", b, "insp2.png");
       }
-      if (data.inspectionTemplate3?.id) inspectionData.append("inspectionTemplateId3", data.inspectionTemplate3.id);
+      if (data.inspectionTemplate3?.id)
+        inspectionData.append(
+          "inspectionTemplateId3",
+          data.inspectionTemplate3.id,
+        );
       else if (data.inspectionTemplate3?.imageUrl) {
         const b = await getBlobFromUrl(data.inspectionTemplate3.imageUrl);
         if (b) inspectionData.append("customWhyBuyInspection3", b, "insp3.png");
@@ -256,14 +302,26 @@ export default function WhyBuyPremium1({ data: rawData, isEditing, onUpdate, onN
       }
 
       const commitmentData = new FormData();
-      commitmentData.append("customerCommitmentTitle", data.customerCommitmentTitle || "");
-      commitmentData.append("customerCommitmentDescription", data.customerCommitmentDescription || "");
+      commitmentData.append(
+        "customerCommitmentTitle",
+        data.customerCommitmentTitle || "",
+      );
+      commitmentData.append(
+        "customerCommitmentDescription",
+        data.customerCommitmentDescription || "",
+      );
       for (let i = 1; i <= 5; i++) {
         const tmpl = data[`customerCommitmentTemplate${i}`];
-        if (tmpl?.id) commitmentData.append(`customerCommitmentTemplateId${i}`, tmpl.id);
+        if (tmpl?.id)
+          commitmentData.append(`customerCommitmentTemplateId${i}`, tmpl.id);
         else if (tmpl?.imageUrl) {
           const b = await getBlobFromUrl(tmpl.imageUrl);
-          if (b) commitmentData.append(`customWhyBuyCustomerCommitment${i}`, b, `comm${i}.png`);
+          if (b)
+            commitmentData.append(
+              `customWhyBuyCustomerCommitment${i}`,
+              b,
+              `comm${i}.png`,
+            );
         }
       }
 
@@ -273,7 +331,8 @@ export default function WhyBuyPremium1({ data: rawData, isEditing, onUpdate, onN
         if (tmpl?.id) galleryData.append(`galleryTemplateId${i}`, tmpl.id);
         else if (tmpl?.imageUrl) {
           const b = await getBlobFromUrl(tmpl.imageUrl);
-          if (b) galleryData.append(`customWhyBuyGallery${i}`, b, `gal${i}.png`);
+          if (b)
+            galleryData.append(`customWhyBuyGallery${i}`, b, `gal${i}.png`);
         }
       }
       // Note: Backend might not use galleryData directly in WhyBuyPremium. Keeping consistent with existing logic.
@@ -285,7 +344,7 @@ export default function WhyBuyPremium1({ data: rawData, isEditing, onUpdate, onN
         setWhyBuyProcess(processData),
         setWhyBuyInspection(inspectionData),
         setWhyBuyCustomerCommitment(commitmentData),
-        setFeaturedReviews(selectedReviewIds)
+        setFeaturedReviews(selectedReviewIds),
       ]);
 
       if (onNextTab) onNextTab();
@@ -1262,8 +1321,8 @@ export default function WhyBuyPremium1({ data: rawData, isEditing, onUpdate, onN
           </div>
         </div>
         <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
-          <Button 
-            onClick={handleSaveAndNext} 
+          <Button
+            onClick={handleSaveAndNext}
             disabled={isSaving}
             variant="ghost"
           >

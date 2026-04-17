@@ -4,6 +4,7 @@ import Button from "@/components/ui/button";
 import { Bike, Car } from "lucide-react";
 import { getTopPicsFour, getTopPicsTwo, getUserHomeFeed } from "@/services/user.service";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
+import { useDebounceValue } from "@/hooks/useDebounce";
 
 // --- Utility for Tailwind classes ---
 const cn = (...classes) => classes.filter(Boolean).join(" ");
@@ -12,6 +13,7 @@ export default function TopPicsSection() {
     const [activeType, setActiveType] = useState("4-Wheeler");
     const [cardData, setCardData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const debouncedType = useDebounceValue(activeType, 400);
 
 
     useEffect(() => {
@@ -23,7 +25,7 @@ export default function TopPicsSection() {
                     size: 4,
                 }
                 let res;
-                if (activeType === "4-Wheeler") {
+                if (debouncedType === "4-Wheeler") {
                     res = await getTopPicsFour(data)
                 } else {
                     res = await getTopPicsTwo(data)
@@ -37,7 +39,7 @@ export default function TopPicsSection() {
         };
 
         fetchHomeFeed();
-    }, [activeType]);
+    }, [debouncedType]);
 
     return (
         <div className="w-full h-full flex flex-col  text-primary">

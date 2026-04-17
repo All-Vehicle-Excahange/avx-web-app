@@ -25,7 +25,8 @@ const ENDPOINT = {
   getFollowedConsultant: "/consultation/follow",
   getStoreFrontByUsername: "/consultation/detail-page/by-username",
   checkIsEligibleToCreateReview: "/consultation/review/eligible",
-  getAllReview: "/consultation/review/all",
+  getAllReview: "/consultation/review/all/by-username",
+  getAllReviewById: "/consultation/review/all/by-id",
   addNewReview: "/consultation/review",
   getSimularVehicles: "/vehicle/detail-page",
   getConsualtInventory: "/consultation/detail-page/inventory",
@@ -35,6 +36,7 @@ const ENDPOINT = {
   postBecameSeller: "/users/seller",
   getBecameSeller: "/users/seller",
   getGlobalSearch: "/global-search/consultations",
+  getUserSellerSuspend: "/users/seller/account-suspend-status",
 };
 
 export const getUserHomeFeed = async (data) => {
@@ -325,9 +327,23 @@ export const checkIsEligibleToCreateReview = async (id) => {
   }
 };
 
-export const getAllReview = async (id, data) => {
+export const getAllReview = async (username, data) => {
   try {
-    const res = await axiosInstance.get(`${ENDPOINT.getAllReview}/${id}`, {
+    const res = await axiosInstance.get(
+      `${ENDPOINT.getAllReview}/${username}`,
+      {
+        params: { pageNo: data.pageNo, size: data.size },
+      },
+    );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllReviewById = async (id, data) => {
+  try {
+    const res = await axiosInstance.get(`${ENDPOINT.getAllReviewById}/${id}`, {
       params: { pageNo: data.pageNo, size: data.size },
     });
     return handleResponse(res);
@@ -479,6 +495,15 @@ export const getGlobalSearch = async (query) => {
   try {
     const res = await axiosInstance.post(ENDPOINT.getGlobalSearch, { query });
 
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getUserSellerSuspend = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getUserSellerSuspend);
     return handleResponse(res);
   } catch (error) {
     throw error;

@@ -25,7 +25,7 @@ import {
   setWhyBuyCustomerCommitment,
   setFeaturedReviews,
 } from "@/services/theme.service";
-import { getAllReview } from "@/services/user.service";
+import { getAllReviewById } from "@/services/user.service";
 const SVG_OPTIONS = [
   {
     value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>`,
@@ -118,7 +118,7 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
     const fetchReviews = async () => {
       try {
         const params = { pageNo: 1, size: 20 };
-        const response = await getAllReview(consultId, params);
+        const response = await getAllReviewById(consultId, params);
         const reviews = response?.data?.reviews || [];
         setAllReviews(reviews);
       } catch (error) {
@@ -145,15 +145,24 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
     try {
       const heroData = new FormData();
       heroData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
-      heroData.append("whyBuyHeroDescription", data.whyBuyHeroDescription || "");
+      heroData.append(
+        "whyBuyHeroDescription",
+        data.whyBuyHeroDescription || "",
+      );
 
       const storyData = new FormData();
       storyData.append("storyTitle", data.storyTitle || "");
       storyData.append("storyDescription", data.storyDescription || "");
 
       const vehicleData = new FormData();
-      vehicleData.append("vehicleSelectionTitle", data.vehicleSelectionTitle || "");
-      vehicleData.append("vehicleSelectionDescription", data.vehicleSelectionDescription || "");
+      vehicleData.append(
+        "vehicleSelectionTitle",
+        data.vehicleSelectionTitle || "",
+      );
+      vehicleData.append(
+        "vehicleSelectionDescription",
+        data.vehicleSelectionDescription || "",
+      );
 
       const processData = new FormData();
       processData.append("processTitle", data.processTitle || "");
@@ -177,8 +186,14 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
       }
 
       const commitmentData = new FormData();
-      commitmentData.append("customerCommitmentTitle", data.customerCommitmentTitle || "");
-      commitmentData.append("customerCommitmentDescription", data.customerCommitmentDescription || "");
+      commitmentData.append(
+        "customerCommitmentTitle",
+        data.customerCommitmentTitle || "",
+      );
+      commitmentData.append(
+        "customerCommitmentDescription",
+        data.customerCommitmentDescription || "",
+      );
 
       await Promise.all([
         setWhyBuyHero(heroData),
@@ -220,8 +235,6 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
       return updated;
     });
   };
-
-
 
   const transition = (newIndex) => {
     setVisible(false);
@@ -506,11 +519,7 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
         </div>
 
         <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
-          <Button 
-            onClick={handleSave} 
-            disabled={isSaving}
-            variant="ghost"
-          >
+          <Button onClick={handleSave} disabled={isSaving} variant="ghost">
             {isSaving ? "Saving..." : "Save"}
           </Button>
         </div>
@@ -526,7 +535,7 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
             Why Choose Us
           </p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-           {data.whyBuyHeroTitle}
+            {data.whyBuyHeroTitle}
           </h2>
           <div
             className="text-third/55 text-base sm:text-lg font-[Poppins] leading-relaxed max-w-xl"
@@ -541,7 +550,7 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
             <div className="flex flex-col gap-6">
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
                 About Us
-              </p> 
+              </p>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 <span className="text-primary"> {data.storyTitle}</span>
               </h2>
@@ -580,7 +589,9 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
               </div>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 {data.vehicleSelectionTitle.split("Vehicle Selection")[0]}
-                <span className="text-primary">{data.vehicleSelectionTitle}</span>
+                <span className="text-primary">
+                  {data.vehicleSelectionTitle}
+                </span>
               </h2>
               <div
                 className="text-third/60 text-base md:text-lg font-[Poppins] leading-[1.9] max-w-2xl"
@@ -603,7 +614,6 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
                 </p>
               </div>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-              
                 <span className="text-primary">{data.processTitle}</span>
               </h2>
             </div>
@@ -662,7 +672,6 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
               </p>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 {data.inspectionTitle}
-                
               </h2>
               <div
                 className="text-third/55 text-base font-[Poppins] leading-[1.9] max-w-md"
@@ -768,7 +777,7 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
                 Feedback
               </span>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-               {data.testimonialTitle}
+                {data.testimonialTitle}
               </h2>
             </div>
             {testimonials.length > 0 && (

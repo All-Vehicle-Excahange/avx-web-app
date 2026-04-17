@@ -2,13 +2,18 @@
 
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { X } from "lucide-react";
+import { X, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Button from "@/components/ui/button";
 import { getOtp, login } from "@/services/auth.service";
 import { useForm } from "react-hook-form";
 
-function LoginPopup({ isOpen, onClose, onSignup = () => { }, onSuccess = () => { } }) {
+function LoginPopup({
+  isOpen,
+  onClose,
+  onSignup = () => {},
+  onSuccess = () => {},
+}) {
   const {
     register,
     handleSubmit,
@@ -25,6 +30,7 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { }, onSuccess = () => {
 
   const otpRefs = useRef([]);
   const [isClosing, setIsClosing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const triggerClose = useCallback(() => {
     setIsClosing(true);
@@ -76,6 +82,7 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { }, onSuccess = () => {
 
   const onSendOtp = async () => {
     try {
+      setIsLoading(true);
       const phone = getValues("phoneNumber");
 
       const res = await getOtp({
@@ -96,6 +103,8 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { }, onSuccess = () => {
         type: "server",
         message: msg,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -108,6 +117,7 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { }, onSuccess = () => {
     }
 
     try {
+      setIsLoading(true);
       const phone = getValues("phoneNumber");
 
       const res = await login({
@@ -124,14 +134,31 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { }, onSuccess = () => {
       const api = err?.response?.data;
       const msg = api?.message || "Invalid or expired OTP";
 
-
       setOtpError(msg);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const modalContent = (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={handleClose} style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}>
-      <div className="relative flex w-full max-w-[900px] overflow-hidden rounded-2xl shadow-2xl bg-primary-white" onClick={(e) => e.stopPropagation()} style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}>
+    <div
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      onClick={handleClose}
+      style={{
+        animation: isClosing
+          ? "modalBackdropOut 0.25s ease-in forwards"
+          : "modalBackdropIn 0.25s ease-out",
+      }}
+    >
+      <div
+        className="relative flex w-full max-w-[900px] overflow-hidden rounded-2xl shadow-2xl bg-primary-white"
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          animation: isClosing
+            ? "modalCardOut 0.25s ease-in forwards"
+            : "modalCardIn 0.3s ease-out",
+        }}
+      >
         {/* CLOSE */}
         <button
           onClick={handleClose}
@@ -233,21 +260,31 @@ function LoginPopup({ isOpen, onClose, onSignup = () => { }, onSuccess = () => {
             <Button
               type="submit"
               variant="ghost"
-              className="w-full h-11 text-sm font-bold"
+              locked={isLoading}
+              className="w-full h-11 text-sm font-bold flex items-center justify-center gap-2"
             >
-              GET OTP
+              {isLoading ? (
+                <Loader2 size={20} className="animate-spin" />
+              ) : (
+                "GET OTP"
+              )}
             </Button>
           ) : (
             <Button
               type="submit"
               variant="ghost"
-              className="w-full h-11 text-sm font-bold"
+              locked={isLoading}
+              className="w-full h-11 text-sm font-bold flex items-center justify-center gap-2"
             >
-              Validate OTP
+              {isLoading ? (
+                <Loader2 size={20} className="animate-spin" />
+              ) : (
+                "Validate OTP"
+              )}
             </Button>
           )}
 
-          {/* ✅ SIGNUP SWITCH */}
+          {/*  SIGNUP SWITCH */}
           <div className="mt-4 text-center text-sm text-primary/70">
             Don’t have an account?{" "}
             <button
