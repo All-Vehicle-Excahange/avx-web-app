@@ -31,7 +31,6 @@ function SimulerVehicle({ vehicleOverview }) {
 
         if (id) {
             fetchVehicles();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }, [id]);
 
@@ -46,8 +45,6 @@ function SimulerVehicle({ vehicleOverview }) {
         if (vehicleOverview?.variantName) queryParams.set("variant", vehicleOverview.variantName);
 
         if (vehicleOverview?.price) {
-            // "this min and max is 20 - main price + 20 for max"
-            // Wait, maybe price - 20% and + 20%
             const minPriceLakhs = Math.max(0, (vehicleOverview.price * 0.8) / 100000).toFixed(2);
             const maxPriceLakhs = ((vehicleOverview.price * 1.2) / 100000).toFixed(2);
             queryParams.set("budget", `${minPriceLakhs}-${maxPriceLakhs}`);
