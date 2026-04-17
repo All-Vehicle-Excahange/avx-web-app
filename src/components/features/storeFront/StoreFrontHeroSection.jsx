@@ -29,7 +29,7 @@ import SharePopup from "@/components/ui/SharePopup";
 import StoreFrontHeroSkeleton from "@/components/ui/skeleton/StoreFrontHeroSkeleton";
 import { useDebouncedCallback } from "@/hooks/useDebounce";
 
-export default function StoreFrontHeroSection() {
+export default function StoreFrontHeroSection({ onDataFetched = () => {} }) {
   const router = useRouter();
   const { id } = router.query;
 
@@ -50,6 +50,7 @@ export default function StoreFrontHeroSection() {
 
         if (res?.data) {
           setComsultDetails(res.data);
+          onDataFetched(res.data);
           setIsFollower(res.data.isFollower || false);
           lastSyncState.current = res.data.isFollower || false;
         }
