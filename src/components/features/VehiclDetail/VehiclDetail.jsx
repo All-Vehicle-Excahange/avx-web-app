@@ -15,9 +15,6 @@ import VehicleCondition from "./VehicleCondition";
 import VehicleSummaryRight from "./VehicleSummaryRight";
 import Testimonials from "./Testimonials";
 import SimulerVehicle from "./SimulerVehicle";
-import AutoConsultPicsSection from "../home/AutoConsultPicsSection";
-import AvxProcess from "./AvxProcess";
-import SpecialOffer from "./SpecialOffer";
 import Navbar from "@/components/layout/Navbar";
 import VehicleOverviewMain from "./VehicleOverviewMain";
 
@@ -26,6 +23,7 @@ import { useParams } from "next/navigation";
 import { getVehicleOverview, getVehicleSummary } from "@/services/vehicle.service";
 import ReletedConsualt from "./ReletedConsualt";
 import VehicleDetailsSkeleton from "@/components/ui/skeleton/VehicleDetailsSkeleton";
+import SpecialOffer from "./SpecialOffer";
 
 export default function VehicleDetails() {
   const specificationRef = useRef(null);
@@ -101,19 +99,16 @@ export default function VehicleDetails() {
         setVehicleOverview(overviewData);
 
         // Step 2: Only fetch consultation meta if the owner is a CONSULTATION
-        // Normal USER sellers do not have a consultation meta endpoint → would return 404
         const ownerRole = overviewData?.vehicleOwner?.userRole;
         if (ownerRole === "CONSULTATION") {
           try {
             const summaryRes = await getVehicleSummary(id);
             setVehicleSummary(summaryRes.data);
           } catch (summaryErr) {
-            // 404 or any error from meta API — silently ignore, page still works
             console.warn("Consultation meta not available:", summaryErr?.message);
             setVehicleSummary({});
           }
         } else {
-          // Non-consultant seller — skip the meta API entirely
           setVehicleSummary({});
         }
       } catch (error) {
@@ -125,7 +120,8 @@ export default function VehicleDetails() {
     if (id) fetchAll();
   }, [id]);
 
-  if (loading) {
+  // 🔥 Stricter loading check to prevent "Labels without values" UI flash
+  if (loading || !vehicleOverview?.id) {
     return (
       <>
         <div className="fixed top-0 inset-x-0 z-1000">
@@ -162,26 +158,10 @@ export default function VehicleDetails() {
                   <div className="overflow-x-auto scrollbar-hide">
                     <div className="flex gap-6 px-2 min-w-max">
                       {[
-                        {
-                          id: "overview",
-                          label: "Overview",
-                          ref: overviewRef,
-                        },
-                        {
-                          id: "specification",
-                          label: "Specifications",
-                          ref: specificationRef,
-                        },
-                        {
-                          id: "condition",
-                          label: "Condition",
-                          ref: conditionRef,
-                        },
-                        {
-                          id: "inspection",
-                          label: "Inspection",
-                          ref: inspectionRef,
-                        },
+                        { id: "overview", label: "Overview", ref: overviewRef },
+                        { id: "specification", label: "Specifications", ref: specificationRef },
+                        { id: "condition", label: "Condition", ref: conditionRef },
+                        { id: "inspection", label: "Inspection", ref: inspectionRef },
                       ].map((tab) => (
                         <button
                           key={tab.id}

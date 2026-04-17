@@ -10,6 +10,7 @@ import {
   getTwoWheelWithTag,
 } from "@/services/user.service";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
+import { useDebounceValue } from "@/hooks/useDebounce";
 
 const cn = (...classes) => classes.filter(Boolean).join(" ");
 
@@ -62,11 +63,14 @@ const CategoriesSections = () => {
   const [loading, setLoading] = useState(true);
   const checkedCategories = React.useRef(new Set());
 
+  const debouncedType = useDebounceValue(activeType, 400);
+  const debouncedActive = useDebounceValue(active, 400);
+
   const fetchVehicles = React.useCallback(async () => {
     // We keep loading here for robustness, though we also set it in useEffect
     setLoading(true);
     try {
-      const selectedTag = vehicleTagMap[activeType]?.[active];
+      const selectedTag = vehicleTagMap[debouncedType]?.[debouncedActive];
       if (!selectedTag) return;
 
       const data = {
@@ -108,18 +112,13 @@ const CategoriesSections = () => {
     } finally {
       setLoading(false);
     }
-  }, [active, activeType]);
+  }, [debouncedActive, debouncedType]);
 
   useEffect(() => {
     // Immediate visual feedback
     setLoading(true);
-
-    const debounceTimer = setTimeout(() => {
-      fetchVehicles();
-    }, 400); // 400ms debounce to prevent API spam
-
-    return () => clearTimeout(debounceTimer);
-  }, [active, activeType, fetchVehicles]);
+    fetchVehicles();
+  }, [debouncedActive, debouncedType, fetchVehicles]);
 
   return (
     <section className="w-full h-full flex flex-col text-primary">

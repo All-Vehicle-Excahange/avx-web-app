@@ -154,12 +154,23 @@ export default function Inventory() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div className={`grid ${(!loading && vehicles.length === 0) ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2 xl:grid-cols-4"} gap-4`}>
                 {loading
                     ? [...Array(4)].map((_, i) => <VehicleCardSkeleton key={`skel-${i}`} />)
-                    : vehicles.map((car, index) => (
-                        <VehicleCard key={`${car.id}-${index}`} data={car} />
-                    ))
+                    : vehicles.length > 0 ? (
+                        vehicles.map((car, index) => (
+                            <VehicleCard key={`${car.id}-${index}`} data={car} />
+                        ))
+                    ) : (
+                        <div className="flex flex-col items-center justify-center py-20 text-center rounded-2xl border-2 border-dashed border-third/20 bg-primary/5 w-full">
+                            <h3 className="text-xl font-bold mb-2 text-primary">
+                                No {activeType === "all" ? "" : vehicleTypes.find(t => t.id === activeType)?.label} vehicles found
+                            </h3>
+                            <p className="text-third max-w-sm px-4">
+                                We couldnt find any {activeType === "all" ? "vehicles" : vehicleTypes.find(t => t.id === activeType)?.label.toLowerCase()} in this store at the moment.
+                            </p>
+                        </div>
+                    )
                 }
             </div>
             {pageInfo?.totalElements > 4 && (

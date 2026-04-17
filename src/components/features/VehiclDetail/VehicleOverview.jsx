@@ -33,13 +33,21 @@ import {
   Radar,
   ActivityIcon,
 } from "lucide-react";
-import Activity from "../consult/details/dashboard/components/Activity";
 import Button from "@/components/ui/button";
 import { useState } from "react";
 import SpecificationPopup from "./SpecificationPopup";
+import SkeletonBox from "@/components/ui/skeleton/SkeletonBox";
 
 export default function VehicleOverview({ vehicle, open, setOpen }) {
   const [openSpec, setOpenSpec] = useState(false);
+
+  if (!vehicle?.id) {
+    return (
+      <section className="relative rounded-2xl overflow-hidden text-primary border border-third/60 p-4">
+        <SkeletonBox className="h-6 w-40" />
+      </section>
+    );
+  }
 
   return (
       <section className="relative rounded-2xl overflow-hidden text-primary border border-third/60">
@@ -83,19 +91,19 @@ export default function VehicleOverview({ vehicle, open, setOpen }) {
               <Item
                   icon={<Cpu />}
                   label="Engine"
-                  value={`${vehicle?.engineCapacity || "1956"} cc`}
+                  value={vehicle?.engineCapacity ? `${vehicle.engineCapacity} cc` : "-"}
               />
 
               <Item
                   icon={<Zap />}
                   label="Power"
-                  value={`${vehicle?.power || "170"} bhp`}
+                  value={vehicle?.power ? `${vehicle.power} bhp` : "-"}
               />
 
               <Item
                   icon={<RotateCw />}
                   label="Torque"
-                  value={`${vehicle?.torque || "350"} Nm`}
+                  value={vehicle?.torque ? `${vehicle.torque} Nm` : "-"}
               />
 
               <Item

@@ -1,11 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Quote,
-  CheckCircle2,
-  Star,
-} from "lucide-react";
+import { Quote, CheckCircle2, Star } from "lucide-react";
 import EditorInput from "@/core/engine/atoms/EditorInput";
 import RichTextEditor from "@/core/engine/atoms/RichTextEditor";
 import Select from "react-select";
@@ -20,7 +16,7 @@ import {
   setWhyBuyCustomerCommitment,
   setFeaturedReviews,
 } from "@/services/theme.service";
-import { getAllReview } from "@/services/user.service";
+import { getAllReviewById } from "@/services/user.service";
 import { WHY_BUY_BASIC_2 } from "@/core/engine/schemas/whybuy/why_buy_basic_2";
 
 const SVG_OPTIONS = [
@@ -104,12 +100,19 @@ const Divider = ({ light = false }) => (
 
 const DEFAULT_DATA = WHY_BUY_BASIC_2[0].data;
 
-export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate }) {
+export default function WhyBuyHereBasic2({
+  data: rawData,
+  isEditing,
+  onUpdate,
+}) {
   const [isSaving, setIsSaving] = useState(false);
   const data = {
-    ...DEFAULT_DATA, ...Object.fromEntries(
-      Object.entries(rawData || {}).filter(([, v]) => v !== undefined && v !== null)
-    )
+    ...DEFAULT_DATA,
+    ...Object.fromEntries(
+      Object.entries(rawData || {}).filter(
+        ([, v]) => v !== undefined && v !== null,
+      ),
+    ),
   };
 
   const [allReviews, setAllReviews] = useState([]);
@@ -117,7 +120,10 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
 
   // Get consultationId from localStorage
   let consultId = null;
-  const storedData = typeof window !== "undefined" ? localStorage.getItem("sellerTierData") : null;
+  const storedData =
+    typeof window !== "undefined"
+      ? localStorage.getItem("sellerTierData")
+      : null;
   if (storedData) {
     const parsed = JSON.parse(storedData);
     consultId = parsed?.consultationId;
@@ -129,7 +135,7 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
     const fetchReviews = async () => {
       try {
         const params = { pageNo: 1, size: 20 };
-        const response = await getAllReview(consultId, params);
+        const response = await getAllReviewById(consultId, params);
         const reviews = response?.data?.reviews || [];
         setAllReviews(reviews);
       } catch (error) {
@@ -156,15 +162,24 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
     try {
       const heroData = new FormData();
       heroData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
-      heroData.append("whyBuyHeroDescription", data.whyBuyHeroDescription || "");
+      heroData.append(
+        "whyBuyHeroDescription",
+        data.whyBuyHeroDescription || "",
+      );
 
       const storyData = new FormData();
       storyData.append("storyTitle", data.storyTitle || "");
       storyData.append("storyDescription", data.storyDescription || "");
 
       const vehicleData = new FormData();
-      vehicleData.append("vehicleSelectionTitle", data.vehicleSelectionTitle || "");
-      vehicleData.append("vehicleSelectionDescription", data.vehicleSelectionDescription || "");
+      vehicleData.append(
+        "vehicleSelectionTitle",
+        data.vehicleSelectionTitle || "",
+      );
+      vehicleData.append(
+        "vehicleSelectionDescription",
+        data.vehicleSelectionDescription || "",
+      );
 
       const processData = new FormData();
       processData.append("processTitle", data.processTitle || "");
@@ -188,8 +203,14 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
       }
 
       const commitmentData = new FormData();
-      commitmentData.append("customerCommitmentTitle", data.customerCommitmentTitle || "");
-      commitmentData.append("customerCommitmentDescription", data.customerCommitmentDescription || "");
+      commitmentData.append(
+        "customerCommitmentTitle",
+        data.customerCommitmentTitle || "",
+      );
+      commitmentData.append(
+        "customerCommitmentDescription",
+        data.customerCommitmentDescription || "",
+      );
 
       await Promise.all([
         setWhyBuyHero(heroData),
@@ -219,7 +240,8 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
         .filter((r) => updated.includes(r.id))
         .map((r) => ({
           id: r.id,
-          reviewerName: `${r.reviewedBy?.firstname || ""} ${r.reviewedBy?.lastname || ""}`.trim(),
+          reviewerName:
+            `${r.reviewedBy?.firstname || ""} ${r.reviewedBy?.lastname || ""}`.trim(),
           rating: r.rating,
           reviewTitle: r.reviewTitle,
           reviewText: r.reviewText,
@@ -230,8 +252,6 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
       return updated;
     });
   };
-
-
 
   // ── EDIT MODE ──
 
@@ -447,22 +467,25 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
           <div className="grid md:grid-cols-2 gap-4">
             {allReviews.map((review) => {
               const isSelected = selectedReviewIds.includes(review.id);
-              const reviewerName = `${review.reviewedBy?.firstname || ""} ${review.reviewedBy?.lastname || ""}`.trim();
+              const reviewerName =
+                `${review.reviewedBy?.firstname || ""} ${review.reviewedBy?.lastname || ""}`.trim();
 
               return (
                 <div
                   key={review.id}
                   onClick={() => toggleReviewSelection(review.id)}
-                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${isSelected
-                    ? "border-fourth bg-fourth/10 shadow-md"
-                    : "border-third/20 bg-primary/5 hover:border-third/40"
-                    }`}
+                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
+                    isSelected
+                      ? "border-fourth bg-fourth/10 shadow-md"
+                      : "border-third/20 bg-primary/5 hover:border-third/40"
+                  }`}
                 >
                   {/* Selection indicator */}
-                  <div className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected
-                    ? "border-fourth bg-fourth"
-                    : "border-third/40"
-                    }`}>
+                  <div
+                    className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                      isSelected ? "border-fourth bg-fourth" : "border-third/40"
+                    }`}
+                  >
                     {isSelected && (
                       <CheckCircle2 size={14} className="text-secondary" />
                     )}
@@ -474,7 +497,11 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
                       <Star
                         key={idx}
                         size={13}
-                        className={idx < review.rating ? "text-fourth fill-fourth" : "text-third/30"}
+                        className={
+                          idx < review.rating
+                            ? "text-fourth fill-fourth"
+                            : "text-third/30"
+                        }
                       />
                     ))}
                   </div>
@@ -502,11 +529,7 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
         </div>
 
         <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
-          <Button 
-            onClick={handleSave} 
-            disabled={isSaving}
-            variant="ghost"
-          >
+          <Button onClick={handleSave} disabled={isSaving} variant="ghost">
             {isSaving ? "Saving..." : "Save"}
           </Button>
         </div>
@@ -522,9 +545,7 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
       <section className="relative flex items-center justify-center overflow-hidden min-h-screen py-12">
         <div className="w-[70%] mx-auto text-center">
           <EyeBrow center>Why Choose Us</EyeBrow>
-          <h1
-            className="text-[clamp(28px,5vw,54px)] font-bold leading-[1.15] text-primary font-[Montserrat] mb-6"
-          >
+          <h1 className="text-[clamp(28px,5vw,54px)] font-bold leading-[1.15] text-primary font-[Montserrat] mb-6">
             {data.whyBuyHeroTitle}
           </h1>
           <div
@@ -538,16 +559,13 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
       <section className="py-12 px-2 lg:px-4 bg-fourth">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-            <div
-            >
+            <div>
               <EyeBrow>Our Story</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 <span className="text-secondary">{data.storyTitle}</span>
               </h2>
             </div>
-            <div
-              className="flex flex-col gap-4"
-            >
+            <div className="flex flex-col gap-4">
               <div
                 className="text-primary/90 text-[15px] leading-[1.9] font-[Poppins]"
                 dangerouslySetInnerHTML={{ __html: data.storyDescription }}
@@ -561,8 +579,7 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
       <section className="py-12 px-2 lg:px-4">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-            <div
-            >
+            <div>
               <EyeBrow>Selection</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 Our Approach to
@@ -570,12 +587,13 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
                 <span className="text-primary">Vehicle Selection</span>
               </h2>
             </div>
-            <div
-            >
+            <div>
               <Divider />
               <div
                 className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]"
-                dangerouslySetInnerHTML={{ __html: data.vehicleSelectionDescription }}
+                dangerouslySetInnerHTML={{
+                  __html: data.vehicleSelectionDescription,
+                }}
               />
             </div>
           </div>
@@ -609,7 +627,7 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div className="w-10 h-10 border border-third/20 rounded-xl flex items-center justify-center shrink-0 group-hover:border-primary/30 transition-colors duration-300">
-                  {typeof s.icon === 'string' && s.icon.startsWith('<svg') ? (
+                  {typeof s.icon === "string" && s.icon.startsWith("<svg") ? (
                     <div
                       className="text-fourth [&>svg]:w-5 [&>svg]:h-5"
                       dangerouslySetInnerHTML={{ __html: s.icon }}
@@ -638,15 +656,13 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
       <section className="py-12 px-2 lg:px-4">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
-            <div
-            >
+            <div>
               <EyeBrow>Inspection</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 {data.inspectionTitle}
               </h2>
             </div>
-            <div
-            >
+            <div>
               <Divider />
               <p className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]">
                 {data.inspectionText}
@@ -655,10 +671,7 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-stretch">
-            <div
-              className="grid grid-cols-2 gap-3"
-              variants={stagger}
-            >
+            <div className="grid grid-cols-2 gap-3" variants={stagger}>
               {data.inspectionPoints.map((pt) => (
                 <div
                   key={pt}
@@ -683,9 +696,7 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
               ))}
             </div>
 
-            <div
-              className="border border-third/10 rounded-2xl overflow-hidden hover:border-primary/25 transition-all duration-300 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)]"
-            >
+            <div className="border border-third/10 rounded-2xl overflow-hidden hover:border-primary/25 transition-all duration-300 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)]">
               <div className="px-6 py-5 border-b border-primary/[0.07] flex items-center justify-between">
                 <p className="font-[Montserrat] font-bold text-[9px] tracking-[0.26em] uppercase text-primary/50">
                   {"What's Covered"}
@@ -724,20 +735,19 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
       <section className="py-12 px-2 lg:px-4 bg-fourth">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-            <div
-            >
+            <div>
               <EyeBrow>Commitment</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 {data.customerCommitmentTitle}{" "}
-
               </h2>
             </div>
-            <div
-            >
+            <div>
               <Divider light />
               <div
                 className="text-primary/90 text-[15px] leading-[1.9] font-[Poppins]"
-                dangerouslySetInnerHTML={{ __html: data.customerCommitmentDescription }}
+                dangerouslySetInnerHTML={{
+                  __html: data.customerCommitmentDescription,
+                }}
               />
             </div>
           </div>
@@ -767,18 +777,18 @@ export default function WhyBuyHereBasic2({ data: rawData, isEditing, onUpdate })
                       <Star
                         key={idx}
                         size={15}
-                        className={idx < (t.rating || 0) ? "text-fourth fill-fourth" : "text-third/30"}
+                        className={
+                          idx < (t.rating || 0)
+                            ? "text-fourth fill-fourth"
+                            : "text-third/30"
+                        }
                       />
                     ))}
                   </div>
                 )}
 
                 {!t.rating && (
-                  <Quote
-                    size={20}
-                    className="text-fourth"
-                    strokeWidth={1.4}
-                  />
+                  <Quote size={20} className="text-fourth" strokeWidth={1.4} />
                 )}
 
                 {/* Review Title */}

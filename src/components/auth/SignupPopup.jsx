@@ -6,7 +6,7 @@ import Image from "next/image";
 import Button from "@/components/ui/button";
 import { getOtp, signup } from "@/services/auth.service";
 import { useForm } from "react-hook-form";
-import { X } from "lucide-react";
+import { X, Loader2 } from "lucide-react";
 
 export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSuccess = () => { } }) {
   const {
@@ -25,6 +25,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
   const otpRefs = useRef([]);
   const [isClosing, setIsClosing] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -73,6 +74,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
 
   const onSendOtp = async () => {
     try {
+      setIsLoading(true);
       const phone = getValues("phone");
       const email = getValues("email");
 
@@ -115,6 +117,8 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
           message: api?.message || "Failed to send OTP",
         });
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -127,6 +131,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
     }
 
     try {
+      setIsLoading(true);
       const values = getValues();
 
       const res = await signup({
@@ -169,6 +174,8 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
           message: api?.message || "Signup failed",
         });
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -329,10 +336,16 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
             <Button
               type="submit"
               variant="ghost"
-              disabled={!acceptedTerms}
-              className={`text-secondary w-full h-11 text-sm font-bold ${!acceptedTerms ? 'opacity-50 cursor-not-allowed' : ''}`}
+              locked={!acceptedTerms || isLoading}
+              className={`text-secondary w-full h-11 text-sm font-bold flex items-center justify-center gap-2 ${
+                !acceptedTerms ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
-              GET OTP
+              {isLoading ? (
+                <Loader2 size={20} className="animate-spin" />
+              ) : (
+                "GET OTP"
+              )}
             </Button>
           )}
 
@@ -360,9 +373,14 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
               <Button
                 type="submit"
                 variant="ghost"
-                className="text-secondary w-full h-11 text-sm font-bold"
+                locked={isLoading}
+                className="text-secondary w-full h-11 text-sm font-bold flex items-center justify-center gap-2"
               >
-                VALIDATE OTP
+                {isLoading ? (
+                  <Loader2 size={20} className="animate-spin" />
+                ) : (
+                  "VALIDATE OTP"
+                )}
               </Button>
             </>
           )}

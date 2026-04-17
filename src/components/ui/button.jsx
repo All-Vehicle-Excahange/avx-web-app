@@ -17,12 +17,20 @@ export default function Button({
   const isOutline = variant === "outline";
   const isOutlineAnimated = variant === "outlineAnimated";
 
-  const base =
-    "inline-flex items-center justify-center font-medium select-none transition-all hover:cursor-pointer relative z-10 group overflow-hidden";
+  const base = cn(
+    "inline-flex items-center justify-center font-medium select-none transition-all relative z-10 group overflow-hidden",
+    locked ? "cursor-not-allowed opacity-70" : "hover:cursor-pointer"
+  );
 
   const variants = {
-    default: "bg-secondary border border-secondary text-primary hover:bg-transparent hover:text-secondary hover:border-secondary hover:border rounded-full",
-    ghost: "bg-primary border border-primary  text-secondary hover:bg-third rounded-full hover:bg-transparent hover:text-primary  ",
+    default: cn(
+      "bg-secondary border border-secondary text-primary rounded-full",
+      !locked && "hover:bg-transparent hover:text-secondary hover:border-secondary hover:border"
+    ),
+    ghost: cn(
+      "bg-primary border border-primary text-secondary rounded-full",
+      !locked && "hover:bg-third hover:bg-transparent hover:text-primary"
+    ),
 
     outline: cn(
       "text-third rounded-full border border-third",
@@ -37,11 +45,14 @@ export default function Button({
       "relative overflow-hidden"
     ),
 
-    outlineSecondary:
-      "border border-third text-primary hover:bg-primary hover:text-secondary rounded-full  transition-all duration-300",
-
-    roundedOutline:
-      "border border-third text-primary hover:bg-primary hover:text-secondary rounded-full flex items-center justify-center h-10 w-10",
+    outlineSecondary: cn(
+      "border border-third text-primary rounded-full transition-all duration-300",
+      !locked && "hover:bg-primary hover:text-secondary"
+    ),
+    roundedOutline: cn(
+      "border border-third text-primary rounded-full flex items-center justify-center h-10 w-10",
+      !locked && "hover:bg-primary hover:text-secondary"
+    ),
   };
 
   const sizes = {
@@ -89,7 +100,6 @@ export default function Button({
       )}
 
       <span className="relative z-10 flex items-center">
-        {locked && <Lock className="h-4 w-4 mr-2" />}
         {children}
         {showIcon && !isRounded && !locked && (
           <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />

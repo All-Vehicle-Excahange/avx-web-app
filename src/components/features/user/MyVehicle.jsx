@@ -7,16 +7,19 @@ import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import DetailsFromPopup from "../userSeller/DetailsFromPopup";
 import { useAuthStore } from "@/stores/useAuthStore";
 import Button from "@/components/ui/button";
-import { Clock } from "lucide-react";
+import { Clock, Ban } from "lucide-react";
 import { UserVehicleCardSkeleton } from "@/components/ui/skeleton";
+import { getSusPendedVehicles } from "@/services/Seller.service";
 
 function MyVehicle() {
   const [vehicles, setVehicles] = useState([]);
   const [activeType, setActiveType] = useState("all");
-  const [visibleCount, setVisibleCount] = useState(4);
+  const [pageNo, setPageNo] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const user = useAuthStore((state) => state.user);
 
   const vehicleTypes = [
@@ -25,34 +28,57 @@ function MyVehicle() {
     { id: "live", label: "Live" },
     { id: "sold", label: "Sold" },
     { id: "rejected", label: "Rejected" },
-    { id: "REQUEST_CHANGES", label: "Request Changes" },
+    { id: "request_changes", label: "Request Changes" },
     { id: "suspended", label: "Suspended" },
   ];
 
-  useEffect(() => {
-    const fetchVehicles = async () => {
-      try {
+  const fetchVehicles = async (page = 1, isLoadMore = false) => {
+    try {
+      if (isLoadMore) setIsFetchingMore(true);
+      else {
         setIsLoading(true);
+        setVehicles([]); // Clear list on tab change
+      }
+
+      let res;
+      if (activeType === "suspended") {
+        res = await getSusPendedVehicles({
+          pageNo: page,
+          pageSize: 4,
+        });
+      } else {
         const payload = {
-          pageNo: 1,
-          size: 100,
+          pageNo: page,
+          size: 4,
           listingStatus: activeType === "all" ? null : activeType.toUpperCase(),
         };
-
-        const res = await getSellerInventory(payload);
-        setVehicles(res?.data || []);
-        setVisibleCount(4);
-      } catch (error) {
-        console.error("Error fetching vehicles:", error);
-      } finally {
-        setIsLoading(false);
+        res = await getSellerInventory(payload);
       }
-    };
 
-    fetchVehicles();
+      const newData = res?.data || [];
+      const pagination = res?.pagination;
+
+      if (isLoadMore) {
+        setVehicles((prev) => [...prev, ...newData]);
+      } else {
+        setVehicles(newData);
+      }
+
+      setTotalPages(Number(pagination?.totalPages) || 1);
+      setPageNo(Number(page));
+    } catch (error) {
+      console.error("Error fetching vehicles:", error);
+    } finally {
+      setIsLoading(false);
+      setIsFetchingMore(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchVehicles(1, false);
   }, [activeType]);
 
-  // ✅ Map API → Card Structure
+  // Map API → Card Structure
   const mappedVehicles = vehicles.map((v) => ({
     id: v.id,
     title: `${v.makerName || "-"} ${v.modelName || "-"} ${v.variantName || ""}`,
@@ -98,20 +124,21 @@ function MyVehicle() {
           </div>
         )} */}
 
-      {/* FILTER */}
-      {vehicles.length > 0 && (
-        <div className="flex flex-wrap gap-2">
+      {/* FILTER TABS */}
+      {!isLoading && !(activeType === "all" && mappedVehicles.length === 0) && (
+        <div className="flex gap-2 overflow-x-auto whitespace-nowrap pb-2 no-scrollbar">
           {vehicleTypes.map((type) => (
             <button
               key={type.id}
               onClick={() => setActiveType(type.id)}
-              className={`px-4 py-2 rounded-full border border-third/50 text-sm font-medium transition
+              className={`px-6 py-2 rounded-full border text-sm font-semibold transition-all duration-300 cursor-pointer flex items-center gap-2
                 ${
                   activeType === type.id
-                    ? "bg-primary text-secondary"
-                    : "bg-third/10 text-primary hover:bg-third/20"
+                    ? "bg-primary text-secondary border-primary "
+                    : "bg-third/5 text-primary border-third/20 hover:bg-third/10"
                 }`}
             >
+              {type.id === "suspended" && <Ban size={14} />}
               {type.label}
             </button>
           ))}
@@ -124,9 +151,9 @@ function MyVehicle() {
           Array.from({ length: 4 }).map((_, i) => (
             <UserVehicleCardSkeleton key={i} />
           ))
-        ) : filtered.length > 0 ? (
+        ) : mappedVehicles.length > 0 ? (
           <>
-            {filtered.slice(0, visibleCount).map((car) => (
+            {mappedVehicles.map((car) => (
               <UserVehicleCard
                 key={car.id}
                 data={car}
@@ -136,27 +163,32 @@ function MyVehicle() {
                 chats={car.chats}
               />
             ))}
+            {isFetchingMore &&
+              Array.from({ length: 4 }).map((_, i) => (
+                <UserVehicleCardSkeleton key={`more-${i}`} />
+              ))}
           </>
         ) : null}
       </div>
 
       {/* Load More Button */}
-      {!isLoading && filtered.length > 0 && visibleCount < filtered.length && (
+      {!isLoading && pageNo < totalPages && (
         <div className="flex justify-end mt-6">
           <Button
             variant="outline"
-            onClick={() => setVisibleCount((prev) => prev + 4)}
-            className="px-6 py-2 rounded-full text-sm font-semibold shadow-md"
+            disabled={isFetchingMore}
+            onClick={() => fetchVehicles(pageNo + 1, true)}
+            className="px-8 py-2 rounded-full text-sm font-semibold shadow-md border-primary text-primary hover:bg-primary hover:text-white transition-all"
           >
-            Load More
+            {isFetchingMore ? "Loading..." : "Load More"}
           </Button>
         </div>
       )}
 
       {/* EMPTY STATE */}
-      {!isLoading && filtered.length === 0 && (
+      {!isLoading && mappedVehicles.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16 text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5">
-          {vehicles.length === 0 ? (
+          {activeType === "all" ? (
             <>
               <h3 className="text-xl font-bold mb-2">No vehicles listed yet</h3>
               <p className="text-third mb-6">Sell your first vehicle on AVX.</p>
@@ -177,10 +209,11 @@ function MyVehicle() {
           ) : (
             <>
               <h3 className="text-xl font-bold mb-2">
-                No {activeType.toLowerCase()} vehicles found.
+                No {activeType.replaceAll("_", " ")} vehicles found
               </h3>
-              <p className="text-third max-w-sm">
-                You dont have any vehicles with this status.
+              <p className="text-third max-w-sm px-4">
+                You dont have any vehicles with{" "}
+                {activeType.replaceAll("_", " ")} status.
               </p>
             </>
           )}

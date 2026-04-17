@@ -21,7 +21,7 @@ import {
   setWhyBuyCustomerCommitment,
   setFeaturedReviews,
 } from "@/services/theme.service";
-import { getAllReview } from "@/services/user.service";
+import { getAllReviewById } from "@/services/user.service";
 import { WHY_BUY_PREMIUM_2 } from "../schemas/whybuy/why_buy_premium_2";
 import { WHY_BUY_PREMIUM_3 } from "../schemas/whybuy/why_buy_premium_3";
 const SVG_OPTIONS = [
@@ -83,7 +83,12 @@ const formatOptionLabel = ({ value, label }) => (
 );
 const DEFAULT_DATA = WHY_BUY_PREMIUM_3[0].data;
 
-export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate, onNextTab }) {
+export default function WhyBuyPremium3({
+  data: rawData,
+  isEditing,
+  onUpdate,
+  onNextTab,
+}) {
   const [isSaving, setIsSaving] = useState(false);
   const data = {
     ...DEFAULT_DATA,
@@ -113,7 +118,7 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate, onN
     const fetchReviews = async () => {
       try {
         const params = { pageNo: 1, size: 20 };
-        const response = await getAllReview(consultId, params);
+        const response = await getAllReviewById(consultId, params);
         setAllReviews(response?.data?.reviews || []);
       } catch (error) {
         console.error("Error fetching reviews", error);
@@ -171,7 +176,10 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate, onN
     try {
       const heroData = new FormData();
       heroData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
-      heroData.append("whyBuyHeroDescription", data.whyBuyHeroDescription || "");
+      heroData.append(
+        "whyBuyHeroDescription",
+        data.whyBuyHeroDescription || "",
+      );
       for (let i = 1; i <= 3; i++) {
         const tmpl = data[`whyBuyHeroTemplate${i}`];
         const customField = `customWhyBuyHero${i}`;
@@ -196,12 +204,19 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate, onN
       }
 
       const vehicleData = new FormData();
-      vehicleData.append("vehicleSelectionTitle", data.vehicleSelectionTitle || "");
-      vehicleData.append("vehicleSelectionDescription", data.vehicleSelectionDescription || "");
+      vehicleData.append(
+        "vehicleSelectionTitle",
+        data.vehicleSelectionTitle || "",
+      );
+      vehicleData.append(
+        "vehicleSelectionDescription",
+        data.vehicleSelectionDescription || "",
+      );
       for (let i = 1; i <= 2; i++) {
         const tmpl = data[`vehicleSelectionTemplate${i}`];
         const customField = `customWhyBuyVehicleSelection${i}`;
-        if (tmpl?.id) vehicleData.append(`vehicleSelectionTemplateId${i}`, tmpl.id);
+        if (tmpl?.id)
+          vehicleData.append(`vehicleSelectionTemplateId${i}`, tmpl.id);
         else if (data[customField] && data[customField].startsWith("blob:")) {
           const blob = await getBlobFromUrl(data[customField]);
           if (blob) vehicleData.append(customField, blob, `selection${i}.png`);
@@ -239,29 +254,39 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate, onN
       for (let i = 1; i <= 4; i++) {
         const tmpl = data[`inspectionTemplate${i}`];
         const customField = `customWhyBuyInspection${i}`;
-        if (tmpl?.id) inspectionData.append(`inspectionTemplateId${i}`, tmpl.id);
+        if (tmpl?.id)
+          inspectionData.append(`inspectionTemplateId${i}`, tmpl.id);
         else if (data[customField] && data[customField].startsWith("blob:")) {
           const blob = await getBlobFromUrl(data[customField]);
-          if (blob) inspectionData.append(customField, blob, `inspection${i}.png`);
+          if (blob)
+            inspectionData.append(customField, blob, `inspection${i}.png`);
         }
       }
 
       const commitmentData = new FormData();
-      commitmentData.append("customerCommitmentTitle", data.customerCommitmentTitle || "");
-      commitmentData.append("customerCommitmentDescription", data.customerCommitmentDescription || "");
+      commitmentData.append(
+        "customerCommitmentTitle",
+        data.customerCommitmentTitle || "",
+      );
+      commitmentData.append(
+        "customerCommitmentDescription",
+        data.customerCommitmentDescription || "",
+      );
       for (let i = 1; i <= 3; i++) {
         const tmpl = data[`customerCommitmentTemplate${i}`];
         const customField = `customWhyBuyCustomerCommitment${i}`;
-        if (tmpl?.id) commitmentData.append(`customerCommitmentTemplateId${i}`, tmpl.id);
+        if (tmpl?.id)
+          commitmentData.append(`customerCommitmentTemplateId${i}`, tmpl.id);
         else if (data[customField] && data[customField].startsWith("blob:")) {
           const blob = await getBlobFromUrl(data[customField]);
-          if (blob) commitmentData.append(customField, blob, `commitment${i}.png`);
+          if (blob)
+            commitmentData.append(customField, blob, `commitment${i}.png`);
         }
       }
 
       try {
-         updateField("testimonialTitle", data.testimonialTitle || "");
-      } catch(e) {}
+        updateField("testimonialTitle", data.testimonialTitle || "");
+      } catch (e) {}
 
       await Promise.all([
         setWhyBuyHero(heroData),
@@ -270,7 +295,7 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate, onN
         setWhyBuyProcess(processData),
         setWhyBuyInspection(inspectionData),
         setWhyBuyCustomerCommitment(commitmentData),
-        setFeaturedReviews(selectedReviewIds)
+        setFeaturedReviews(selectedReviewIds),
       ]);
 
       if (onNextTab) onNextTab();
@@ -972,8 +997,8 @@ export default function WhyBuyPremium3({ data: rawData, isEditing, onUpdate, onN
           </div>
         </div>
         <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
-          <Button 
-            onClick={handleSaveAndNext} 
+          <Button
+            onClick={handleSaveAndNext}
             disabled={isSaving}
             variant="ghost"
           >

@@ -19,8 +19,25 @@ import {
   Info,
 } from "lucide-react";
 import Image from "next/image";
+import SkeletonBox from "@/components/ui/skeleton/SkeletonBox";
 
 export default function VehicleOverview({ vehicle }) {
+  if (!vehicle?.id) {
+    return (
+      <section className="relative rounded-2xl overflow-hidden text-primary border border-third/60 p-6">
+        <SkeletonBox className="h-6 w-40 mb-6" rounded="rounded-md" />
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="space-y-2">
+              <SkeletonBox className="h-3 w-16" rounded="rounded-md" />
+              <SkeletonBox className="h-4 w-24" rounded="rounded-md" />
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   const isInsuranceActive = vehicle?.vehicleDocument?.insurance ?? false;
   const hasSpareKey = vehicle?.spareKey ?? false;
 
@@ -68,7 +85,7 @@ export default function VehicleOverview({ vehicle }) {
               <Item
                 icon={<Gauge />}
                 label="KM driven"
-                value={`${vehicle?.kmDriven || "25,125"} km`}
+                value={vehicle?.kmDriven ? `${vehicle.kmDriven.toLocaleString("en-IN")} km` : "-"}
               />
 
               {/* Info Icon */}

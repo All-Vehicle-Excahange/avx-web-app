@@ -120,17 +120,18 @@ export default function Step1Business({ onChange, initialData }) {
   }, [createPayload, onChange]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* ===== LOGO ===== */}
-      <div className="flex justify-center">
+      <div className="flex flex-col items-center gap-3">
+        <h3 className="text-sm font-semibold text-primary uppercase tracking-wider">Business Logo</h3>
         <div className="relative">
           <div
             onClick={() => logoRef.current.click()}
-            className="relative w-32 h-32 rounded-full border-4 border-primary/60 bg-primary/10 overflow-hidden cursor-pointer flex items-center justify-center"
+            className="relative w-32 h-32 rounded-full border-4 border-primary/60 bg-primary/10 overflow-hidden cursor-pointer flex items-center justify-center transition-all hover:border-primary hover:shadow-lg group"
           >
             {!logo ? (
-              <span className="text-third text-xs text-center px-3">
-                <Camera />
+              <span className="text-third transition-transform group-hover:scale-110">
+                <Camera size={32} strokeWidth={1.5} />
               </span>
             ) : (
               <Image
@@ -143,11 +144,14 @@ export default function Step1Business({ onChange, initialData }) {
                 unoptimized
               />
             )}
+            
+            {/* Overlay on hover when logo exists */}
+            {logo && (
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <Camera className="text-white w-8 h-8" />
+              </div>
+            )}
           </div>
-
-          {/* <div className="absolute bottom-1 right-1 bg-secondary p-2 rounded-full border cursor-pointer">
-            <Camera />
-          </div> */}
 
           <input
             ref={logoRef}
@@ -181,7 +185,9 @@ export default function Step1Business({ onChange, initialData }) {
       />
 
       {/* ===== FIELDS ===== */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="space-y-6">
+        <h3 className="text-sm font-semibold text-primary uppercase tracking-wider">Business Details</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <InputField
           label="Consultation Name"
           variant="colored"
@@ -241,6 +247,7 @@ export default function Step1Business({ onChange, initialData }) {
               {errors.establishmentYear}
             </span>
           )}
+        </div>
         </div>
       </div>
 

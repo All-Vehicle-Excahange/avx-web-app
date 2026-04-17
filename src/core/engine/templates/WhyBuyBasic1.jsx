@@ -11,8 +11,16 @@ import {
 } from "lucide-react";
 import RichTextEditor from "../atoms/RichTextEditor";
 import EditorInput from "../atoms/EditorInput";
-import { setWhyBuyHero, setWhyBuyStory, setWhyBuyVehicleSelection, setWhyBuyProcess, setWhyBuyInspection, setWhyBuyCustomerCommitment, setFeaturedReviews } from "@/services/theme.service";
-import { getAllReview } from "@/services/user.service";
+import {
+  setWhyBuyHero,
+  setWhyBuyStory,
+  setWhyBuyVehicleSelection,
+  setWhyBuyProcess,
+  setWhyBuyInspection,
+  setWhyBuyCustomerCommitment,
+  setFeaturedReviews,
+} from "@/services/theme.service";
+import { getAllReviewById } from "@/services/user.service";
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import { WHY_BUY_BASIC_1 } from "@/core/engine/schemas/whybuy/why_buy_basic_1";
@@ -22,24 +30,24 @@ import GlobalLoader from "@/components/ui/GlobalLoader";
 const SVG_OPTIONS = [
   {
     value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>`,
-    label: "Search"
+    label: "Search",
   },
   {
     value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>`,
-    label: "Cancel"
+    label: "Cancel",
   },
   {
     value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M300-360q-25 0-42.5-17.5T240-420v-40h60v40h60v-180h60v180q0 25-17.5 42.5T360-360h-60Zm220 0q-17 0-28.5-11.5T480-400v-40h60v20h80v-40H520q-17 0-28.5-11.5T480-500v-60q0-17 11.5-28.5T520-600h120q17 0 28.5 11.5T680-560v40h-60v-20h-80v40h100q17 0 28.5 11.5T680-460v60q0 17-11.5 28.5T640-360H520Z"/></svg>`,
-    label: "Layout"
+    label: "Layout",
   },
   {
     value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M320-240 80-480l240-240 57 57-184 184 183 183-56 56Zm320 0-57-57 184-184-183-183 56-56 240 240-240 240Z"/></svg>`,
-    label: "Code"
+    label: "Code",
   },
   {
     value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-40-360v-240h80v207l154 154-57 57-177-178Z"/></svg>`,
-    label: "Clock"
-  }
+    label: "Clock",
+  },
 ];
 
 const selectStyles = {
@@ -48,31 +56,34 @@ const selectStyles = {
     backgroundColor: "transparent",
     borderColor: "rgba(255, 255, 255, 0.2)",
     color: "white",
-    minHeight: "44px"
+    minHeight: "44px",
   }),
   indicatorSeparator: () => ({
-    display: "none"
+    display: "none",
   }),
   singleValue: (base) => ({
     ...base,
-    color: "white"
+    color: "white",
   }),
   option: (base, state) => ({
     ...base,
     backgroundColor: state.isFocused ? "rgba(255,255,255,0.1)" : "#1e1e1e",
     color: "white",
-    cursor: "pointer"
+    cursor: "pointer",
   }),
   menu: (base) => ({
     ...base,
     backgroundColor: "#1e1e1e",
-    border: "1px solid rgba(255, 255, 255, 0.2)"
-  })
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+  }),
 };
 
 const formatOptionLabel = ({ value, label }) => (
   <div className="flex items-center gap-3">
-    <div className="w-5 h-5 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full" dangerouslySetInnerHTML={{ __html: value }} />
+    <div
+      className="w-5 h-5 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full"
+      dangerouslySetInnerHTML={{ __html: value }}
+    />
     <span className="text-sm">{label}</span>
   </div>
 );
@@ -84,16 +95,17 @@ const ICON_MAP = {
   Handshake,
 };
 
-
-
 const DEFAULT_DATA = WHY_BUY_BASIC_1[0].data;
 
 function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
   const [isSaving, setIsSaving] = useState(false);
   const data = {
-    ...DEFAULT_DATA, ...Object.fromEntries(
-      Object.entries(rawData || {}).filter(([, v]) => v !== undefined && v !== null)
-    )
+    ...DEFAULT_DATA,
+    ...Object.fromEntries(
+      Object.entries(rawData || {}).filter(
+        ([, v]) => v !== undefined && v !== null,
+      ),
+    ),
   };
 
   const [allReviews, setAllReviews] = useState([]);
@@ -105,7 +117,10 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
 
   // Get consultationId from localStorage
   let consultId = null;
-  const storedData = typeof window !== "undefined" ? localStorage.getItem("sellerTierData") : null;
+  const storedData =
+    typeof window !== "undefined"
+      ? localStorage.getItem("sellerTierData")
+      : null;
   if (storedData) {
     const parsed = JSON.parse(storedData);
     consultId = parsed?.consultationId;
@@ -117,7 +132,7 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
     const fetchReviews = async () => {
       try {
         const params = { pageNo: 1, size: 20 };
-        const response = await getAllReview(consultId, params);
+        const response = await getAllReviewById(consultId, params);
         const reviews = response?.data?.reviews || [];
         setAllReviews(reviews);
       } catch (error) {
@@ -138,15 +153,24 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
     try {
       const heroData = new FormData();
       heroData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
-      heroData.append("whyBuyHeroDescription", data.whyBuyHeroDescription || "");
+      heroData.append(
+        "whyBuyHeroDescription",
+        data.whyBuyHeroDescription || "",
+      );
 
       const storyData = new FormData();
       storyData.append("storyTitle", data.storyTitle || "");
       storyData.append("storyDescription", data.storyDescription || "");
 
       const vehicleData = new FormData();
-      vehicleData.append("vehicleSelectionTitle", data.vehicleSelectionTitle || "");
-      vehicleData.append("vehicleSelectionDescription", data.vehicleSelectionDescription || "");
+      vehicleData.append(
+        "vehicleSelectionTitle",
+        data.vehicleSelectionTitle || "",
+      );
+      vehicleData.append(
+        "vehicleSelectionDescription",
+        data.vehicleSelectionDescription || "",
+      );
 
       const processData = new FormData();
       processData.append("processTitle", data.processTitle || "");
@@ -170,8 +194,14 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
       }
 
       const commitmentData = new FormData();
-      commitmentData.append("customerCommitmentTitle", data.customerCommitmentTitle || "");
-      commitmentData.append("customerCommitmentDescription", data.customerCommitmentDescription || "");
+      commitmentData.append(
+        "customerCommitmentTitle",
+        data.customerCommitmentTitle || "",
+      );
+      commitmentData.append(
+        "customerCommitmentDescription",
+        data.customerCommitmentDescription || "",
+      );
 
       await Promise.all([
         setWhyBuyHero(heroData),
@@ -182,8 +212,6 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
         setWhyBuyCustomerCommitment(commitmentData),
         setFeaturedReviews(selectedReviewIds),
       ]);
-
-
     } catch (error) {
       console.error("Error updating Why Buy sections:", error);
     } finally {
@@ -203,7 +231,8 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
         .filter((r) => updated.includes(r.id))
         .map((r) => ({
           id: r.id,
-          reviewerName: `${r.reviewedBy?.firstname || ""} ${r.reviewedBy?.lastname || ""}`.trim(),
+          reviewerName:
+            `${r.reviewedBy?.firstname || ""} ${r.reviewedBy?.lastname || ""}`.trim(),
           rating: r.rating,
           reviewTitle: r.reviewTitle,
           reviewText: r.reviewText,
@@ -214,8 +243,6 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
       return updated;
     });
   };
-
-
 
   if (isEditing) {
     return (
@@ -264,15 +291,21 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
 
         {/* VEHICLE SELECTION */}
         <div className="space-y-6">
-          <h3 className="text-primary font-bold mb-4">Vehicle Selection Title</h3>
+          <h3 className="text-primary font-bold mb-4">
+            Vehicle Selection Title
+          </h3>
 
           <EditorInput
             bold
             label="Selection Title"
             value={data.vehicleSelectionTitle}
-            onChange={(e) => updateField("vehicleSelectionTitle", e.target.value)}
+            onChange={(e) =>
+              updateField("vehicleSelectionTitle", e.target.value)
+            }
           />
-          <h3 className="text-primary font-bold mb-4">Vehicle Selection Description</h3>
+          <h3 className="text-primary font-bold mb-4">
+            Vehicle Selection Description
+          </h3>
           <RichTextEditor
             label="Selection Description"
             value={data.vehicleSelectionDescription}
@@ -305,7 +338,6 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
                 key={i}
                 className="border border-primary/30 p-4 rounded bg-primary/5 space-y-4"
               >
-
                 {/* Title */}
                 <div>
                   <label className="text-sm font-medium text-primary mb-1 block">
@@ -314,7 +346,12 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
                   <EditorInput
                     value={step.title}
                     onChange={(e) =>
-                      updateArrayItem("processSteps", i, "title", e.target.value)
+                      updateArrayItem(
+                        "processSteps",
+                        i,
+                        "title",
+                        e.target.value,
+                      )
                     }
                   />
                 </div>
@@ -331,7 +368,7 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
                         "processSteps",
                         i,
                         "description",
-                        e.target.value
+                        e.target.value,
                       )
                     }
                   />
@@ -346,18 +383,22 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
                     options={SVG_OPTIONS}
                     formatOptionLabel={formatOptionLabel}
                     styles={selectStyles}
-                    value={SVG_OPTIONS.find(opt => opt.value === step.icon) || null}
+                    value={
+                      SVG_OPTIONS.find((opt) => opt.value === step.icon) || null
+                    }
                     onChange={(selectedOption) => {
-                      updateArrayItem("processSteps", i, "icon", selectedOption.value);
+                      updateArrayItem(
+                        "processSteps",
+                        i,
+                        "icon",
+                        selectedOption.value,
+                      );
                     }}
                   />
                 </div>
-
               </div>
             ))}
           </div>
-
-
         </div>
 
         <hr className="border-white/10" />
@@ -371,7 +412,9 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
             value={data.inspectionTitle}
             onChange={(e) => updateField("inspectionTitle", e.target.value)}
           />
-          <h3 className="text-primary font-bold mb-4">Inspection Description</h3>
+          <h3 className="text-primary font-bold mb-4">
+            Inspection Description
+          </h3>
 
           <RichTextEditor
             value={data.inspectionText}
@@ -396,15 +439,21 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
 
         {/* CUSTOMER COMMITMENT */}
         <div className="space-y-6">
-          <h3 className="text-primary font-bold mb-4">Customer Commitment Title</h3>
+          <h3 className="text-primary font-bold mb-4">
+            Customer Commitment Title
+          </h3>
 
           <EditorInput
             bold
             label="Commitment Title"
             value={data.customerCommitmentTitle}
-            onChange={(e) => updateField("customerCommitmentTitle", e.target.value)}
+            onChange={(e) =>
+              updateField("customerCommitmentTitle", e.target.value)
+            }
           />
-          <h3 className="text-primary font-bold mb-4">Customer Commitment Description</h3>
+          <h3 className="text-primary font-bold mb-4">
+            Customer Commitment Description
+          </h3>
 
           <RichTextEditor
             label="Commitment Text"
@@ -417,7 +466,9 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
 
         {/* TESTIMONIALS — select from real reviews */}
         <div>
-          <h3 className="text-primary font-bold mb-4">Featured Reviews Title</h3>
+          <h3 className="text-primary font-bold mb-4">
+            Featured Reviews Title
+          </h3>
 
           <EditorInput
             bold
@@ -437,22 +488,25 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
           <div className="grid md:grid-cols-2 gap-4">
             {allReviews.map((review) => {
               const isSelected = selectedReviewIds.includes(review.id);
-              const reviewerName = `${review.reviewedBy?.firstname || ""} ${review.reviewedBy?.lastname || ""}`.trim();
+              const reviewerName =
+                `${review.reviewedBy?.firstname || ""} ${review.reviewedBy?.lastname || ""}`.trim();
 
               return (
                 <div
                   key={review.id}
                   onClick={() => toggleReviewSelection(review.id)}
-                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${isSelected
-                    ? "border-fourth bg-fourth/10 shadow-md"
-                    : "border-third/20 bg-primary/5 hover:border-third/40"
-                    }`}
+                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
+                    isSelected
+                      ? "border-fourth bg-fourth/10 shadow-md"
+                      : "border-third/20 bg-primary/5 hover:border-third/40"
+                  }`}
                 >
                   {/* Selection indicator */}
-                  <div className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected
-                    ? "border-fourth bg-fourth"
-                    : "border-third/40"
-                    }`}>
+                  <div
+                    className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                      isSelected ? "border-fourth bg-fourth" : "border-third/40"
+                    }`}
+                  >
                     {isSelected && (
                       <CheckCircle2 size={14} className="text-secondary" />
                     )}
@@ -464,7 +518,11 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
                       <Star
                         key={idx}
                         size={13}
-                        className={idx < review.rating ? "text-fourth fill-fourth" : "text-third/30"}
+                        className={
+                          idx < review.rating
+                            ? "text-fourth fill-fourth"
+                            : "text-third/30"
+                        }
                       />
                     ))}
                   </div>
@@ -492,11 +550,7 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
         </div>
 
         <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
-          <Button 
-            onClick={handleSave} 
-            disabled={isSaving}
-            variant="ghost"
-          >
+          <Button onClick={handleSave} disabled={isSaving} variant="ghost">
             {isSaving ? "Saving..." : "Save"}
           </Button>
         </div>
@@ -520,7 +574,6 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
               font-[Montserrat]"
           >
             {data.whyBuyHeroTitle}
-
           </h2>
 
           <div
@@ -610,7 +663,8 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
                   {/* ICON */}
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 md:h-11 md:w-11 lg:h-12 lg:w-12 items-center justify-center border border-primary/20 rounded-lg">
-                      {typeof step.icon === 'string' && step.icon.startsWith('<svg') ? (
+                      {typeof step.icon === "string" &&
+                      step.icon.startsWith("<svg") ? (
                         <div
                           className="text-primary [&>svg]:w-5 [&>svg]:h-5 transition-colors duration-300"
                           dangerouslySetInnerHTML={{ __html: step.icon }}
@@ -649,7 +703,6 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
               {data.inspectionTitle}
-
             </h2>
 
             <div
@@ -686,7 +739,6 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
               {data.customerCommitmentTitle}{" "}
-              
             </h2>
 
             {/* subtle divider */}
@@ -694,7 +746,9 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
 
             <div
               className="text-third text-lg font-[Poppins] leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: data.customerCommitmentDescription }}
+              dangerouslySetInnerHTML={{
+                __html: data.customerCommitmentDescription,
+              }}
             />
           </div>
         </div>
@@ -710,7 +764,6 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1] text-secondary font-[Montserrat]">
               {data.testimonialTitle}{" "}
-             
             </h2>
           </div>
 
@@ -727,7 +780,11 @@ function WhyBuyBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
                     <Star
                       key={idx}
                       size={15}
-                      className={idx < (review.rating || 0) ? "text-fourth fill-fourth" : "text-secondary/30"}
+                      className={
+                        idx < (review.rating || 0)
+                          ? "text-fourth fill-fourth"
+                          : "text-secondary/30"
+                      }
                     />
                   ))}
                 </div>
