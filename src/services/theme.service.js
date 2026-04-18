@@ -14,14 +14,17 @@ const ENDPOINT = {
   setAboutServices: "/consultation/owner/store/draft/services",
   setWhyBuyHero: "/consultation/owner/store/draft/why-buy-hero",
   setWhyBuyStory: "/consultation/owner/store/draft/story",
-  setWhyBuyVehicleSelection: "/consultation/owner/store/draft/vehicle-selection",
+  setWhyBuyVehicleSelection:
+    "/consultation/owner/store/draft/vehicle-selection",
   setWhyBuyProcess: "/consultation/owner/store/draft/process",
   setWhyBuyInspection: "/consultation/owner/store/draft/inspection",
-  setWhyBuyCustomerCommitment: "/consultation/owner/store/draft/customer-commitment",
+  setWhyBuyGallery: "/consultation/owner/store/draft/gallery",
+  setWhyBuyCustomerCommitment:
+    "/consultation/owner/store/draft/customer-commitment",
   setWhyBuyTestimonials: "/consultation/owner/store/draft/testimonial",
   getConsualtDraft: "/consultation/owner/store/get-draft",
   setFeaturedReviews: "/consultation/owner/store/draft/featured-reviews",
-  makeAsFinalSubmit: "/consultation/owner/store/submit-draft"
+  makeAsFinalSubmit: "/consultation/owner/store/submit-draft",
 };
 
 export const getThemeListing = async () => {
@@ -129,7 +132,6 @@ export const setAboutVision = async (data) => {
   }
 };
 
-
 export const setState = async (data) => {
   try {
     const res = await axiosInstance.put(ENDPOINT.setState, data, {
@@ -155,8 +157,6 @@ export const setAboutServices = async (data) => {
     throw error;
   }
 };
-
-
 
 export const setWhyBuyHero = async (data) => {
   try {
@@ -186,11 +186,15 @@ export const setWhyBuyStory = async (data) => {
 
 export const setWhyBuyVehicleSelection = async (data) => {
   try {
-    const res = await axiosInstance.put(ENDPOINT.setWhyBuyVehicleSelection, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
+    const res = await axiosInstance.put(
+      ENDPOINT.setWhyBuyVehicleSelection,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       },
-    });
+    );
     return handleResponse(res);
   } catch (error) {
     throw error;
@@ -225,11 +229,15 @@ export const setWhyBuyInspection = async (data) => {
 
 export const setWhyBuyCustomerCommitment = async (data) => {
   try {
-    const res = await axiosInstance.put(ENDPOINT.setWhyBuyCustomerCommitment, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
+    const res = await axiosInstance.put(
+      ENDPOINT.setWhyBuyCustomerCommitment,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       },
-    });
+    );
     return handleResponse(res);
   } catch (error) {
     throw error;
@@ -249,14 +257,27 @@ export const setWhyBuyTestimonials = async (data) => {
   }
 };
 
+export const setWhyBuyGallery = async (data) => {
+  try {
+    const res = await axiosInstance.put(ENDPOINT.setWhyBuyGallery, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getConsualtDraft = async () => {
   try {
     const res = await axiosInstance.get(ENDPOINT.getConsualtDraft);
     return handleResponse(res);
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 export const setFeaturedReviews = async (reviewIds) => {
   try {

@@ -209,7 +209,7 @@ export default function AboutPremium1({ data, isEditing, onUpdate, onNextTab }) 
             <ImageUploader
               label="Hero Background Image"
               src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl}
-              fieldKey="hero"
+              fieldKey="HEADER"
               onChange={({ imageUrl, id }) => {
                 const updatedData = { ...d };
                 if (id) {

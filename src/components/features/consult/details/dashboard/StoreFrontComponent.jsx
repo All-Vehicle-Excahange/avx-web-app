@@ -117,7 +117,9 @@ export default function StoreFrontComponent() {
         data: {
           ...section.data, // schema defaults as fallback
           ...Object.fromEntries(
-            Object.entries(mappedData).filter(([, v]) => v !== undefined && v !== null)
+            Object.entries(mappedData).filter(
+              ([, v]) => v !== undefined && v !== null,
+            ),
           ),
         },
       }));
@@ -202,7 +204,7 @@ export default function StoreFrontComponent() {
   // ── Full Storefront Preview ──
   // Filter sections for the active tab
   const filteredSections = sections.filter((section) =>
-    section.type.includes(activeTab)
+    section.type.includes(activeTab),
   );
 
   return (
@@ -217,7 +219,9 @@ export default function StoreFrontComponent() {
         </button>
         <div>
           <h1 className="text-2xl font-bold">Your Storefront</h1>
-          <p className="text-third text-sm">Manage your public brand presence</p>
+          <p className="text-third text-sm">
+            Manage your public brand presence
+          </p>
         </div>
       </div>
       {/* THEME CONTENT TABS */}
@@ -232,10 +236,11 @@ export default function StoreFrontComponent() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`hover:cursor-pointer relative py-4 text-sm font-medium transition whitespace-nowrap ${activeTab === tab.id
-                    ? "text-primary"
-                    : "text-third hover:text-primary"
-                    }`}
+                  className={`hover:cursor-pointer relative py-4 text-sm font-medium transition whitespace-nowrap ${
+                    activeTab === tab.id
+                      ? "text-primary"
+                      : "text-third hover:text-primary"
+                  }`}
                 >
                   {tab.label}
                   {activeTab === tab.id && (
@@ -252,7 +257,9 @@ export default function StoreFrontComponent() {
               storeData.verificationStatus === "REQUEST_CHANGES") && (
               <Button
                 onClick={() =>
-                  router.push(`storefront/theme/create?theme=${storeData.themeId}`)
+                  router.push(
+                    `storefront/theme/create?theme=${storeData.themeId}`,
+                  )
                 }
                 variant="outlineSecondary"
                 size="sm"
@@ -272,7 +279,7 @@ export default function StoreFrontComponent() {
             onUpdate={(i, newData) => {
               const sectionId = filteredSections[i].id;
               const updated = sections.map((sec) =>
-                sec.id === sectionId ? { ...sec, data: newData } : sec
+                sec.id === sectionId ? { ...sec, data: newData } : sec,
               );
               setSections(updated);
             }}

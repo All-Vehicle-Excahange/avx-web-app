@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Lock } from "lucide-react";
+import { ArrowUpRight, Lock, Loader2 } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 export default function Button({
@@ -10,6 +10,7 @@ export default function Button({
   full = false,
   showIcon = false,
   locked = false,
+  loading = false,
   className = "",
   ...props
 }) {
@@ -17,27 +18,29 @@ export default function Button({
   const isOutline = variant === "outline";
   const isOutlineAnimated = variant === "outlineAnimated";
 
+  const isLocked = locked || loading;
+
   const base = cn(
     "inline-flex items-center justify-center font-medium select-none transition-all relative z-10 group overflow-hidden",
-    locked ? "cursor-not-allowed opacity-70" : "hover:cursor-pointer"
+    isLocked ? "cursor-not-allowed opacity-70" : "hover:cursor-pointer"
   );
 
   const variants = {
     default: cn(
       "bg-secondary border border-secondary text-primary rounded-full",
-      !locked && "hover:bg-transparent hover:text-secondary hover:border-secondary hover:border"
+      !isLocked && "hover:bg-transparent hover:text-secondary hover:border-secondary hover:border"
     ),
     ghost: cn(
       "bg-primary border border-primary text-secondary rounded-full",
-      !locked && "hover:bg-third hover:bg-transparent hover:text-primary"
+      !isLocked && "hover:bg-third hover:bg-transparent hover:text-primary"
     ),
 
     outline: cn(
       "text-third rounded-full border border-third",
       "transition-all duration-300",
       "hover:text-white",
-      !locked && "hover:text-white",
-      locked && "opacity-50 cursor-not-allowed pointer-events-none"
+      !isLocked && "hover:text-white",
+      isLocked && "opacity-50 cursor-not-allowed pointer-events-none"
     ),
 
     outlineAnimated: cn(
@@ -47,11 +50,11 @@ export default function Button({
 
     outlineSecondary: cn(
       "border border-third text-primary rounded-full transition-all duration-300",
-      !locked && "hover:bg-primary hover:text-secondary"
+      !isLocked && "hover:bg-primary hover:text-secondary"
     ),
     roundedOutline: cn(
       "border border-third text-primary rounded-full flex items-center justify-center h-10 w-10",
-      !locked && "hover:bg-primary hover:text-secondary"
+      !isLocked && "hover:bg-primary hover:text-secondary"
     ),
   };
 
@@ -99,9 +102,15 @@ export default function Button({
         </>
       )}
 
-      <span className="relative z-10 flex items-center">
+      {loading && (
+        <span className="absolute inset-0 flex items-center justify-center z-20">
+          <Loader2 className="w-4 h-4 animate-spin" />
+        </span>
+      )}
+
+      <span className={cn("relative z-10 flex items-center", loading && "opacity-0")}>
         {children}
-        {showIcon && !isRounded && !locked && (
+        {showIcon && !isRounded && !isLocked && (
           <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />
         )}
       </span>
@@ -109,7 +118,7 @@ export default function Button({
   );
 
   // If href exists → Link
-  if (href && !locked) {
+  if (href && !isLocked) {
     return (
       <Link href={href} scroll={true} className={classes}>
         {Content}
@@ -119,7 +128,7 @@ export default function Button({
 
   // Default → Button
   return (
-    <button {...props} className={classes} disabled={locked}>
+    <button {...props} className={classes} disabled={isLocked}>
       {Content}
     </button>
   );

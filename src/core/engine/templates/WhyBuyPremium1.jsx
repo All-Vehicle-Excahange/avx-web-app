@@ -16,6 +16,7 @@ import {
   setWhyBuyInspection,
   setWhyBuyCustomerCommitment,
   setFeaturedReviews,
+  setWhyBuyGallery,
 } from "@/services/theme.service";
 import { getAllReviewById } from "@/services/user.service";
 import { WHY_BUY_PREMIUM_1 } from "../schemas/whybuy/why_buy_premium_1";
@@ -129,6 +130,11 @@ export default function WhyBuyPremium1({
     copy.splice(index, 1);
     updateField(arrayName, copy);
   };
+  const toggleReviewSelection = (id) => {
+    setSelectedReviewIds((prev) =>
+      prev.includes(id) ? prev.filter((rid) => rid !== id) : [...prev, id],
+    );
+  };
   /* ================== EFFECTS ================== */
   let consultId = null;
   const storedData =
@@ -189,19 +195,19 @@ export default function WhyBuyPremium1({
         storyData.append("storyTemplateId1", data.storyTemplate1.id);
       else if (data.storyTemplate1?.imageUrl) {
         const b = await getBlobFromUrl(data.storyTemplate1.imageUrl);
-        if (b) storyData.append("customWhyBuyStory1", b, "story1.png");
+        if (b) storyData.append("customStory1", b, "story1.png");
       }
       if (data.storyTemplate2?.id)
         storyData.append("storyTemplateId2", data.storyTemplate2.id);
       else if (data.storyTemplate2?.imageUrl) {
         const b = await getBlobFromUrl(data.storyTemplate2.imageUrl);
-        if (b) storyData.append("customWhyBuyStory2", b, "story2.png");
+        if (b) storyData.append("customStory2", b, "story2.png");
       }
       if (data.storyTemplate3?.id)
         storyData.append("storyTemplateId3", data.storyTemplate3.id);
       else if (data.storyTemplate3?.imageUrl) {
         const b = await getBlobFromUrl(data.storyTemplate3.imageUrl);
-        if (b) storyData.append("customWhyBuyStory3", b, "story3.png");
+        if (b) storyData.append("customStory3", b, "story3.png");
       }
 
       const vehicleData = new FormData();
@@ -221,7 +227,7 @@ export default function WhyBuyPremium1({
       else if (data.vehicleSelectionTemplate1?.imageUrl) {
         const b = await getBlobFromUrl(data.vehicleSelectionTemplate1.imageUrl);
         if (b)
-          vehicleData.append("customWhyBuyVehicleSelection1", b, "sel1.png");
+          vehicleData.append("customVehicleSelection1", b, "sel1.png");
       }
       if (data.vehicleSelectionTemplate2?.id)
         vehicleData.append(
@@ -231,7 +237,7 @@ export default function WhyBuyPremium1({
       else if (data.vehicleSelectionTemplate2?.imageUrl) {
         const b = await getBlobFromUrl(data.vehicleSelectionTemplate2.imageUrl);
         if (b)
-          vehicleData.append("customWhyBuyVehicleSelection2", b, "sel2.png");
+          vehicleData.append("customVehicleSelection2", b, "sel2.png");
       }
 
       const processData = new FormData();
@@ -275,7 +281,7 @@ export default function WhyBuyPremium1({
         );
       else if (data.inspectionTemplate1?.imageUrl) {
         const b = await getBlobFromUrl(data.inspectionTemplate1.imageUrl);
-        if (b) inspectionData.append("customWhyBuyInspection1", b, "insp1.png");
+        if (b) inspectionData.append("customInspection1", b, "insp1.png");
       }
       if (data.inspectionTemplate2?.id)
         inspectionData.append(
@@ -284,7 +290,7 @@ export default function WhyBuyPremium1({
         );
       else if (data.inspectionTemplate2?.imageUrl) {
         const b = await getBlobFromUrl(data.inspectionTemplate2.imageUrl);
-        if (b) inspectionData.append("customWhyBuyInspection2", b, "insp2.png");
+        if (b) inspectionData.append("customInspection2", b, "insp2.png");
       }
       if (data.inspectionTemplate3?.id)
         inspectionData.append(
@@ -293,7 +299,7 @@ export default function WhyBuyPremium1({
         );
       else if (data.inspectionTemplate3?.imageUrl) {
         const b = await getBlobFromUrl(data.inspectionTemplate3.imageUrl);
-        if (b) inspectionData.append("customWhyBuyInspection3", b, "insp3.png");
+        if (b) inspectionData.append("customInspection3", b, "insp3.png");
       }
       if (data.inspectionPoints) {
         data.inspectionPoints.forEach((pt, i) => {
@@ -318,7 +324,7 @@ export default function WhyBuyPremium1({
           const b = await getBlobFromUrl(tmpl.imageUrl);
           if (b)
             commitmentData.append(
-              `customWhyBuyCustomerCommitment${i}`,
+              `customCustomerCommitment${i}`,
               b,
               `comm${i}.png`,
             );
@@ -327,12 +333,15 @@ export default function WhyBuyPremium1({
 
       const galleryData = new FormData();
       for (let i = 1; i <= 5; i++) {
+        const customField = `customGallery${i}`;
         const tmpl = data[`galleryTemplate${i}`];
-        if (tmpl?.id) galleryData.append(`galleryTemplateId${i}`, tmpl.id);
-        else if (tmpl?.imageUrl) {
-          const b = await getBlobFromUrl(tmpl.imageUrl);
-          if (b)
-            galleryData.append(`customWhyBuyGallery${i}`, b, `gal${i}.png`);
+        const imageUrl = data[customField] || tmpl?.imageUrl;
+
+        if (imageUrl && imageUrl.startsWith("blob:")) {
+          const blob = await getBlobFromUrl(imageUrl);
+          if (blob) galleryData.append(customField, blob, `gal${i}.png`);
+        } else if (tmpl?.id) {
+          galleryData.append(`galleryTemplateId${i}`, tmpl.id);
         }
       }
       // Note: Backend might not use galleryData directly in WhyBuyPremium. Keeping consistent with existing logic.
@@ -344,6 +353,7 @@ export default function WhyBuyPremium1({
         setWhyBuyProcess(processData),
         setWhyBuyInspection(inspectionData),
         setWhyBuyCustomerCommitment(commitmentData),
+        setWhyBuyGallery(galleryData),
         setFeaturedReviews(selectedReviewIds),
       ]);
 
@@ -371,11 +381,11 @@ export default function WhyBuyPremium1({
   }, [isEditing]);
   /* ================== GALLERY CAROUSEL ================== */
   const galleryImages = [
-    data.customWhyBuyGallery1 || data.galleryTemplate1?.imageUrl,
-    data.customWhyBuyGallery2 || data.galleryTemplate2?.imageUrl,
-    data.customWhyBuyGallery3 || data.galleryTemplate3?.imageUrl,
-    data.customWhyBuyGallery4 || data.galleryTemplate4?.imageUrl,
-    data.customWhyBuyGallery5 || data.galleryTemplate5?.imageUrl,
+    data.customGallery1 || data.galleryTemplate1?.imageUrl,
+    data.customGallery2 || data.galleryTemplate2?.imageUrl,
+    data.customGallery3 || data.galleryTemplate3?.imageUrl,
+    data.customGallery4 || data.galleryTemplate4?.imageUrl,
+    data.customGallery5 || data.galleryTemplate5?.imageUrl,
   ].filter(Boolean);
   const n = galleryImages.length;
   const animating = useRef(false);
@@ -703,7 +713,7 @@ export default function WhyBuyPremium1({
           <h3 className="text-primary font-bold text-xl mb-4">
             Process Section
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-8">
             <div className="space-y-4">
               <EditorInput
                 bold
@@ -717,7 +727,7 @@ export default function WhyBuyPremium1({
                 onChange={(v) => updateField("processDescription", v)}
               />
             </div>
-            <div className="space-y-4">
+            {/* <div className="space-y-4">
               <p className="text-sm font-semibold text-primary">
                 Process Images
               </p>
@@ -819,7 +829,7 @@ export default function WhyBuyPremium1({
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="grid md:grid-cols-2 gap-4 mt-6">
             {data.processSteps.map((step, i) => (
@@ -1157,7 +1167,7 @@ export default function WhyBuyPremium1({
               <ImageUploader
                 label="Gallery Image 1"
                 src={
-                  data.customWhyBuyGallery1 || data.galleryTemplate1?.imageUrl
+                  data.customGallery1 || data.galleryTemplate1?.imageUrl
                 }
                 fieldKey="galImg1"
                 imageType="GALLERY"
@@ -1170,7 +1180,7 @@ export default function WhyBuyPremium1({
                       id: id || null,
                     },
                   };
-                  if (id) delete updated.customWhyBuyGallery1;
+                  if (id) delete updated.customGallery1;
                   if (onUpdate) onUpdate(updated);
                 }}
               />
@@ -1179,7 +1189,7 @@ export default function WhyBuyPremium1({
               <ImageUploader
                 label="Gallery Image 2"
                 src={
-                  data.customWhyBuyGallery2 || data.galleryTemplate2?.imageUrl
+                  data.customGallery2 || data.galleryTemplate2?.imageUrl
                 }
                 fieldKey="galImg2"
                 imageType="GALLERY"
@@ -1192,7 +1202,7 @@ export default function WhyBuyPremium1({
                       id: id || null,
                     },
                   };
-                  if (id) delete updated.customWhyBuyGallery2;
+                  if (id) delete updated.customGallery2;
                   if (onUpdate) onUpdate(updated);
                 }}
               />
@@ -1201,7 +1211,7 @@ export default function WhyBuyPremium1({
               <ImageUploader
                 label="Gallery Image 3"
                 src={
-                  data.customWhyBuyGallery3 || data.galleryTemplate3?.imageUrl
+                  data.customGallery3 || data.galleryTemplate3?.imageUrl
                 }
                 fieldKey="galImg3"
                 imageType="GALLERY"
@@ -1214,7 +1224,7 @@ export default function WhyBuyPremium1({
                       id: id || null,
                     },
                   };
-                  if (id) delete updated.customWhyBuyGallery3;
+                  if (id) delete updated.customGallery3;
                   if (onUpdate) onUpdate(updated);
                 }}
               />
@@ -1223,7 +1233,7 @@ export default function WhyBuyPremium1({
               <ImageUploader
                 label="Gallery Image 4"
                 src={
-                  data.customWhyBuyGallery4 || data.galleryTemplate4?.imageUrl
+                  data.customGallery4 || data.galleryTemplate4?.imageUrl
                 }
                 fieldKey="galImg4"
                 imageType="GALLERY"
@@ -1236,7 +1246,7 @@ export default function WhyBuyPremium1({
                       id: id || null,
                     },
                   };
-                  if (id) delete updated.customWhyBuyGallery4;
+                  if (id) delete updated.customGallery4;
                   if (onUpdate) onUpdate(updated);
                 }}
               />
@@ -1245,7 +1255,7 @@ export default function WhyBuyPremium1({
               <ImageUploader
                 label="Gallery Image 5"
                 src={
-                  data.customWhyBuyGallery5 || data.galleryTemplate5?.imageUrl
+                  data.customGallery5 || data.galleryTemplate5?.imageUrl
                 }
                 fieldKey="galImg5"
                 imageType="GALLERY"
@@ -1258,7 +1268,7 @@ export default function WhyBuyPremium1({
                       id: id || null,
                     },
                   };
-                  if (id) delete updated.customWhyBuyGallery5;
+                  if (id) delete updated.customGallery5;
                   if (onUpdate) onUpdate(updated);
                 }}
               />

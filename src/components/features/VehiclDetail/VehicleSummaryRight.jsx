@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "@/components/ui/button";
-import { Heart, Star, MapPin, CheckCircle } from "lucide-react";
+import { Heart, Star, MapPin, CheckCircle, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { addWishList, removeWishList } from "@/services/user.service";
 
@@ -301,7 +301,8 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
               size="sm"
               showIcon={false}
               className="rounded-full"
-              disabled={loading || isCheckingInquiry}
+              loading={isCheckingInquiry}
+              locked={loading}
               onClick={() => {
                 if (!isLoggedIn) {
                   pendingAction.current = "request";
@@ -311,7 +312,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
                 }
               }}
             >
-              {isCheckingInquiry ? "Please wait..." : "Request Vehicle"}
+              Request Vehicle
             </Button>
 
             <Button
@@ -343,7 +344,8 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
             size="sm"
             showIcon={false}
             className=""
-            disabled={loading || isCheckingInquiry}
+            loading={isCheckingInquiry}
+            locked={loading}
             onClick={() => {
               if (!isLoggedIn) {
                 pendingAction.current = "request";
@@ -353,7 +355,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
               }
             }}
           >
-            {isCheckingInquiry ? "Please wait..." : "Request Vehicle"}
+            Request Vehicle
           </Button>
 
           <Button

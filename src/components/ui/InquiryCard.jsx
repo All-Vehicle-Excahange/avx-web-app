@@ -5,7 +5,15 @@ import {
   closeInquiry,
   rejectInquiry,
 } from "@/services/inquiry.service";
-import { Check, X, Lock, MessageCircle, Clock, BadgeCheck } from "lucide-react";
+import {
+  Check,
+  X,
+  Lock,
+  MessageCircle,
+  Clock,
+  BadgeCheck,
+  Loader2,
+} from "lucide-react";
 import Image from "next/image";
 import CloseInqPopup from "../features/consult/details/dashboard/components/CloseInqPopup";
 import { useState } from "react";
@@ -13,6 +21,7 @@ import { createSlug } from "@/lib/helper";
 
 export default function InquiryCard({ inquiry, onStatusChange }) {
   const [showClosePopup, setShowClosePopup] = useState(false);
+  const [loadingAction, setLoadingAction] = useState(null); // 'APPROVE', 'REJECT', 'CLOSE'
 
   if (!inquiry) {
     return (
@@ -48,18 +57,42 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
 
   //   Handlers
   const handleApprove = async () => {
-    await approveInquiry(inquiry.id);
-    onStatusChange(inquiry.id, "APPROVED");
+    if (loadingAction) return;
+    try {
+      setLoadingAction("APPROVE");
+      await approveInquiry(inquiry.id);
+      onStatusChange(inquiry.id, "APPROVED");
+    } catch (error) {
+      console.error("Approve error:", error);
+    } finally {
+      setLoadingAction(null);
+    }
   };
 
   const handleReject = async () => {
-    await rejectInquiry(inquiry.id);
-    onStatusChange(inquiry.id, "REJECTED");
+    if (loadingAction) return;
+    try {
+      setLoadingAction("REJECT");
+      await rejectInquiry(inquiry.id);
+      onStatusChange(inquiry.id, "REJECTED");
+    } catch (error) {
+      console.error("Reject error:", error);
+    } finally {
+      setLoadingAction(null);
+    }
   };
 
   const handleClose = async (closeReason) => {
-    await closeInquiry(inquiry.id, closeReason);
-    onStatusChange(inquiry.id, "CLOSED_BY_VEHICLE_OWNER");
+    if (loadingAction) return;
+    try {
+      setLoadingAction("CLOSE");
+      await closeInquiry(inquiry.id, closeReason);
+      onStatusChange(inquiry.id, "CLOSED_BY_VEHICLE_OWNER");
+    } catch (error) {
+      console.error("Close error:", error);
+    } finally {
+      setLoadingAction(null);
+    }
   };
 
   //   Date Formatting
@@ -179,6 +212,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
                   variant="ghost"
                   size="md"
                   onClick={handleApprove}
+                  loading={loadingAction === "APPROVE"}
                 >
                   <Check size={16} className="mr-2" />
                   Accept
@@ -188,6 +222,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
                   showIcon={false}
                   variant="outlineSecondary"
                   onClick={handleReject}
+                  loading={loadingAction === "REJECT"}
                 >
                   <X size={16} className="mr-2" />
                   Reject
@@ -216,6 +251,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowClosePopup(true)}
+                loading={loadingAction === "CLOSE"}
               >
                 <Lock size={16} className="mr-2" />
                 Close Inquiry
@@ -249,10 +285,11 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
       {/*   Close Popup */}
       {showClosePopup && (
         <CloseInqPopup
+          loading={loadingAction === "CLOSE"}
           onClose={() => setShowClosePopup(false)}
-          onConfirm={({ reason, comment }) => {
+          onConfirm={async ({ reason, comment }) => {
             const closeReason = reason === "Other" ? comment : reason;
-            handleClose(closeReason);
+            await handleClose(closeReason);
             setShowClosePopup(false);
           }}
         />
