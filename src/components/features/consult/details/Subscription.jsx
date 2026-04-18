@@ -7,38 +7,57 @@ import PlanCard from "./components/PlanCard";
 import { useRouter } from "next/router";
 import { getSellerTier } from "@/services/Seller.service";
 import { SkeletonBox } from "@/components/ui/skeleton";
+import { getAllTier } from "@/services/user.service";
 
 export default function Subscription() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [tiers, setTiers] = useState([]);
 
   useEffect(() => {
-    const checkSubscription = async () => {
+    const initializeData = async () => {
       try {
-        const res = await getSellerTier();
-        // If user already has an active tier, skip this page and go to KYC
-        if (res?.data && res.data.userTierStatus === "ACTIVE") {
+        // Start both fetches in parallel
+        const [subRes, tierRes] = await Promise.allSettled([
+          getSellerTier(),
+          getAllTier(),
+        ]);
+
+        // Handle subscription check redirect
+        if (
+          subRes.status === "fulfilled" &&
+          subRes.value?.data &&
+          subRes.value.data.userTierStatus === "ACTIVE"
+        ) {
           if (router.query?.redirect) {
-            router.push(`/consult/kyc?redirect=${encodeURIComponent(router.query.redirect)}`);
+            router.push(
+              `/consult/kyc?redirect=${encodeURIComponent(router.query.redirect)}`,
+            );
           } else {
             router.push("/consult/kyc");
           }
-        } else {
-          // No active tier found, let them choose a plan
-          setLoading(false);
+          return;
+        }
+
+        // Handle tier data
+        if (tierRes.status === "fulfilled" && tierRes.value?.data) {
+          setTiers(tierRes.value.data);
         }
       } catch (error) {
-        console.error("Error checking subscription:", error);
-        // On error or no data, we stay on this page so they can subscribe
+        console.error("Error initializing subscription data:", error);
+      } finally {
         setLoading(false);
       }
     };
-    checkSubscription();
+
+    initializeData();
   }, [router]);
 
   const handleClick = () => {
     if (router.query?.redirect) {
-      router.push(`/consult/kyc?redirect=${encodeURIComponent(router.query.redirect)}`);
+      router.push(
+        `/consult/kyc?redirect=${encodeURIComponent(router.query.redirect)}`,
+      );
     } else {
       router.push("/consult/kyc");
     }
@@ -46,7 +65,7 @@ export default function Subscription() {
 
   if (loading) {
     return (
-      <section className="w-full">
+      <section className="w-full ">
         {/* HEADER SKELETON */}
         <div className="text-center space-y-3">
           <SkeletonBox className="w-64 h-10 mx-auto rounded-lg" />
@@ -82,7 +101,7 @@ export default function Subscription() {
   }
 
   return (
-    <section className="w-full text-primary">
+    <section className="w-full text-primary mt-20">
       {/* HEADER */}
       <div className="text-center space-y-3">
         <h2 className="text-3xl font-bold">Choose Your Plan</h2>
@@ -94,53 +113,43 @@ export default function Subscription() {
 
       {/* PLANS */}
       <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-8">
-        <PlanCard
-          icon={<Zap />}
-          title="Starter"
-          price="$29"
-          features={[
-            "Up to 5 active projects",
-            "Basic analytics",
-            "Email support",
-            "5% platform fee",
-            "Profile listing",
-            "Client messaging",
-          ]}
-        />
+        {tiers.map((tier) => (
+          <PlanCard
+            key={tier.id}
+            popular={tier.title === "PRO"}
+            icon={
+              <img
+                src={tier.tierBadgeUrl}
+                alt={tier.title}
+                className="w-10 h-10 object-contain"
+              />
+            }
+            title={tier.title}
+            monthlyPrice={tier.monthlyPrice}
+            yearlyPrice={tier.yearlyPrice}
+            features={
+              tier.features?.map((f) => (
+                <span key={f.id}>
+                  {f.featureName}
+                  {f.featureDescription && (
+                    <span className="text-[11px] opacity-60 ml-1 font-normal">
+                      ({f.featureDescription})
+                    </span>
+                  )}
+                </span>
+              )) || []
+            }
+          />
+        ))}
 
-        <PlanCard
-          popular
-          icon={<Crown />}
-          title="Professional"
-          price="$79"
-          features={[
-            "Unlimited projects",
-            "Advanced analytics",
-            "Priority support",
-            "3% platform fee",
-            "Featured profile",
-            "Video consultations",
-            "Custom branding",
-            "API access",
-          ]}
-        />
-
-        <PlanCard
-          icon={<Rocket />}
-          title="Enterprise"
-          price="$199"
-          features={[
-            "Everything in Professional",
-            "Dedicated account manager",
-            "24/7 phone support",
-            "1% platform fee",
-            "Premium placement",
-            "White-label options",
-            "Team collaboration",
-            "Custom integrations",
-          ]}
-        />
+        {/* Fallback if no tiers loaded */}
+        {tiers.length === 0 && (
+          <div className="col-span-full text-center py-20 text-third font-medium">
+            No subscription plans available at the moment.
+          </div>
+        )}
       </div>
+
 
       {/* CTA */}
       <div className="mt-16 text-center">
