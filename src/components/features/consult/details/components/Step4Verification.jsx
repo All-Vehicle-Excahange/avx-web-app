@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import {
   CheckCircle2,
   Clock,
@@ -30,10 +30,11 @@ export default function Step4Verification({ existing, onEdit }) {
 
   useEffect(() => {
     if (isVerified) {
-      const timer = setTimeout(() => {
-        router.push("/consult/dashboard");
-      }, 3000);
-      return () => clearTimeout(timer);
+      if (router.query?.redirect) {
+        router.push(router.query.redirect);
+      } else {
+        router.push("/consult/dashboard/overview");
+      }
     }
   }, [isVerified, router]);
 

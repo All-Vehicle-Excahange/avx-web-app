@@ -129,8 +129,12 @@ export default function KycForm() {
           if (!is404Err(err)) throw err;
         }
 
-        if (bData?.verificationStatus === "APPROVED") {
-          router.push("/consult/dashboard/overview");
+        if (bData?.verificationStatus === "VERIFIED") {
+          if (router.query?.redirect) {
+            router.push(router.query.redirect);
+          } else {
+            router.push("/consult/dashboard/overview");
+          }
           return;
         }
 
@@ -396,8 +400,8 @@ export default function KycForm() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
                         {[1, 2, 3, 4].map((num) => (
                           <div key={num} className="space-y-2">
-                             <SkeletonBox className="w-24 h-4 rounded" />
-                             <SkeletonBox className="w-full h-12 rounded-xl" />
+                            <SkeletonBox className="w-24 h-4 rounded" />
+                            <SkeletonBox className="w-full h-12 rounded-xl" />
                           </div>
                         ))}
                       </div>

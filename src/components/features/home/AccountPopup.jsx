@@ -62,6 +62,8 @@ export default function AccountPopup({ open, onClosePopup }) {
     onClosePopup();
   };
 
+  const wrapConsultAuth = (path) => `/consult/subscription?redirect=${encodeURIComponent(path)}`;
+
   const handleLogout = async () => {
     try {
       await logoutUser();
@@ -271,34 +273,34 @@ export default function AccountPopup({ open, onClosePopup }) {
               {isConsultant && (
                 <>
                   <Section title="Dashboard">
-                    <Item href="/consult/dashboard" onClick={onClosePopup}>
+                    <Item href={wrapConsultAuth("/consult/dashboard/overview")} onClick={onClosePopup}>
                       Overview
                     </Item>
                     <Item
-                      href="/consult/dashboard/inventory"
+                      href={wrapConsultAuth("/consult/dashboard/inventory")}
                       onClick={onClosePopup}
                     >
                       Inventory
                     </Item>
                     <Item
-                      href="/consult/dashboard/inquiries"
+                      href={wrapConsultAuth("/consult/dashboard/inquiries")}
                       onClick={onClosePopup}
                     >
                       Inquiries
                     </Item>
                     <Item
-                      href="/consult/dashboard/inspections"
+                      href={wrapConsultAuth("/consult/dashboard/inspections")}
                       onClick={onClosePopup}
                     >
                       Inspections
                     </Item>
                     <Item
-                      href="/consult/dashboard/analytics"
+                      href={wrapConsultAuth("/consult/dashboard/analytics")}
                       onClick={onClosePopup}
                     >
                       Analytics
                     </Item>
-                    <Item href="/consult/dashboard/ppc" onClick={onClosePopup}>
+                    <Item href={wrapConsultAuth("/consult/dashboard/ppc")} onClick={onClosePopup}>
                       PPC & Boost
                     </Item>
                   </Section>
@@ -308,13 +310,13 @@ export default function AccountPopup({ open, onClosePopup }) {
                       View Storefront
                     </Item>
                     <Item
-                      href="/consult/dashboard/storefront"
+                      href={wrapConsultAuth("/consult/dashboard/storefront")}
                       onClick={onClosePopup}
                     >
                       Edit Storefront
                     </Item>
                     <Item
-                      href="/consult/dashboard/storefront"
+                      href={wrapConsultAuth("/consult/dashboard/storefront")}
                       onClick={onClosePopup}
                     >
                       Theme Settings
@@ -323,19 +325,19 @@ export default function AccountPopup({ open, onClosePopup }) {
 
                   <Section title="Billing">
                     <Item
-                      href="/consult/dashboard/billing"
+                      href={wrapConsultAuth("/consult/dashboard/billing")}
                       onClick={onClosePopup}
                     >
                       Wallet
                     </Item>
                     <Item
-                      href="/consult/dashboard/billing"
+                      href={wrapConsultAuth("/consult/dashboard/billing")}
                       onClick={onClosePopup}
                     >
                       Subscription Plan
                     </Item>
                     <Item
-                      href="/consult/dashboard/billing"
+                      href={wrapConsultAuth("/consult/dashboard/billing")}
                       onClick={onClosePopup}
                     >
                       Transaction History

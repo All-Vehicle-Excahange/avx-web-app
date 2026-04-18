@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Zap, Crown, Rocket, Check, Loader2 } from "lucide-react";
 import Button from "@/components/ui/button";
 import PlanCard from "./components/PlanCard";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { getSellerTier } from "@/services/Seller.service";
 import { SkeletonBox } from "@/components/ui/skeleton";
 
@@ -18,7 +18,11 @@ export default function Subscription() {
         const res = await getSellerTier();
         // If user already has an active tier, skip this page and go to KYC
         if (res?.data && res.data.userTierStatus === "ACTIVE") {
-          router.push("/consult/kyc");
+          if (router.query?.redirect) {
+            router.push(`/consult/kyc?redirect=${encodeURIComponent(router.query.redirect)}`);
+          } else {
+            router.push("/consult/kyc");
+          }
         } else {
           // No active tier found, let them choose a plan
           setLoading(false);
@@ -33,7 +37,11 @@ export default function Subscription() {
   }, [router]);
 
   const handleClick = () => {
-    router.push("/consult/kyc");
+    if (router.query?.redirect) {
+      router.push(`/consult/kyc?redirect=${encodeURIComponent(router.query.redirect)}`);
+    } else {
+      router.push("/consult/kyc");
+    }
   };
 
   if (loading) {
