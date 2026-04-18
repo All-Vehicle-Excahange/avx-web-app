@@ -120,7 +120,7 @@ export default function VehicleDetails() {
     if (id) fetchAll();
   }, [id]);
 
-  // 🔥 Stricter loading check to prevent "Labels without values" UI flash
+  //  Stricter loading check to prevent "Labels without values" UI flash
   if (loading || !vehicleOverview?.id) {
     return (
       <>

@@ -20,15 +20,19 @@ import {
   checkIsAccountSuspended,
 } from "@/services/consult.service";
 
+import { useRouter } from "next/router";
 import toast, { Toaster } from "react-hot-toast";
 import { showBackendError } from "@/lib/axiosInstance";
 import Step4Verification from "./components/Step4Verification";
 import Navbar from "@/components/layout/Navbar";
+import { SkeletonBox } from "@/components/ui/skeleton";
 
 const steps = [1, 2, 3, 4];
 
 export default function KycForm() {
+  const router = useRouter();
   const [step, setStep] = useState(1);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   const [existing, setExisting] = useState({
     business: null,
@@ -75,6 +79,7 @@ export default function KycForm() {
 
   useEffect(() => {
     const check = async () => {
+      setInitialLoading(true);
       try {
         const parseResponse = (res) => {
           if (!res) return null;
@@ -124,6 +129,15 @@ export default function KycForm() {
           if (!is404Err(err)) throw err;
         }
 
+        if (bData?.verificationStatus === "VERIFIED") {
+          if (router.query?.redirect) {
+            router.push(router.query.redirect);
+          } else {
+            router.push("/consult/dashboard/overview");
+          }
+          return;
+        }
+
         setExisting({
           business: bData,
           address: aData,
@@ -162,11 +176,13 @@ export default function KycForm() {
       } catch (e) {
         console.log("Real error", e);
         setStep(1);
+      } finally {
+        setInitialLoading(false);
       }
     };
 
     check();
-  }, []);
+  }, [router]);
 
   const handleNext = async () => {
     try {
@@ -357,26 +373,68 @@ export default function KycForm() {
             {/* Form body naturally pushes height */}
             <div className="flex-1 px-6 py-8 lg:px-16 lg:py-10 relative">
               <div className="max-w-3xl mx-auto w-full">
-                {/* Headers */}
-                <h2 className="text-2xl font-bold text-primary mb-2">
-                  Create your account
-                </h2>
-                <p className="text-third text-sm mb-10">
-                  Enter your details to get started
-                </p>
+                {initialLoading ? (
+                  <div className="space-y-10 animate-pulse">
+                    {/* Progress Bar Skeleton */}
+                    <div className="flex items-center justify-between mb-16">
+                      {[1, 2, 3, 4].map((item, i) => (
+                        <React.Fragment key={i}>
+                          <div className="flex flex-col items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-third/10" />
+                            <div className="w-16 h-3 bg-third/10 rounded" />
+                          </div>
+                          {i < 3 && (
+                            <div className="flex-1 h-[1.5px] bg-third/10 mx-4" />
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </div>
 
-                {/* ===== NEW PROGRESS BAR (MATCHING SCREENSHOT) ===== */}
-                <div className="mb-16 flex items-center justify-between">
-                    {[
-                      { num: 1, label: "Business" },
-                      { num: 2, label: "Address" },
-                      { num: 3, label: "Documents" },
-                      { num: 4, label: "Verification" },
-                    ].map((item, i, arr) => (
-                      <React.Fragment key={item.num}>
-                        <div className="flex flex-col items-center relative gap-3">
-                          <div
-                            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 relative shrink-0
+                    {/* Step Content Skeleton */}
+                    <div className="space-y-8">
+                      <div className="space-y-3">
+                        <SkeletonBox className="w-1/3 h-8 rounded-lg" />
+                        <SkeletonBox className="w-1/2 h-4 rounded-lg" />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+                        {[1, 2, 3, 4].map((num) => (
+                          <div key={num} className="space-y-2">
+                            <SkeletonBox className="w-24 h-4 rounded" />
+                            <SkeletonBox className="w-full h-12 rounded-xl" />
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Button Skeletons */}
+                      <div className="flex justify-between items-center pt-10">
+                        <SkeletonBox className="w-24 h-10 rounded-lg" />
+                        <SkeletonBox className="w-32 h-10 rounded-lg" />
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    {/* Headers */}
+                    <h2 className="text-2xl font-bold text-primary mb-2">
+                      Create your account
+                    </h2>
+                    <p className="text-third text-sm mb-10">
+                      Enter your details to get started
+                    </p>
+
+                    {/* ===== NEW PROGRESS BAR (MATCHING SCREENSHOT) ===== */}
+                    <div className="mb-16 flex items-center justify-between">
+                      {[
+                        { num: 1, label: "Business" },
+                        { num: 2, label: "Address" },
+                        { num: 3, label: "Documents" },
+                        { num: 4, label: "Verification" },
+                      ].map((item, i, arr) => (
+                        <React.Fragment key={item.num}>
+                          <div className="flex flex-col items-center relative gap-3">
+                            <div
+                              className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 relative shrink-0
                           ${
                             step > item.num
                               ? "bg-primary text-secondary"
@@ -384,139 +442,143 @@ export default function KycForm() {
                                 ? "bg-primary text-secondary ring-8 ring-primary/10"
                                 : "bg-secondary border-2 border-third/10 text-third/40"
                           }`}
-                          >
-                            {step > item.num ? (
-                              <svg
-                                className="w-5 h-5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="3.5"
-                                  d="M5 13l4 4L19 7"
-                                />
-                              </svg>
-                            ) : (
-                              <span className="text-sm font-bold">
-                                {item.num}
-                              </span>
-                            )}
-                          </div>
-                          <span
-                            className={`text-xs font-bold transition-colors duration-300 absolute top-full mt-3 whitespace-nowrap
+                            >
+                              {step > item.num ? (
+                                <svg
+                                  className="w-5 h-5"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="3.5"
+                                    d="M5 13l4 4L19 7"
+                                  />
+                                </svg>
+                              ) : (
+                                <span className="text-sm font-bold">
+                                  {item.num}
+                                </span>
+                              )}
+                            </div>
+                            <span
+                              className={`text-xs font-bold transition-colors duration-300 absolute top-full mt-3 whitespace-nowrap
                           ${step >= item.num ? "text-primary" : "text-third/40"}`}
-                          >
-                            {item.label}
-                          </span>
-                        </div>
-                        {/* Connecting Line */}
-                        {i < arr.length - 1 && (
-                          <div className="flex-1 h-[1.5px] bg-third/30 mx-4 relative">
-                            <div
-                              className="absolute inset-0 bg-primary transition-all duration-500"
-                              style={{ width: step > item.num ? "100%" : "0%" }}
-                            />
+                            >
+                              {item.label}
+                            </span>
                           </div>
+                          {/* Connecting Line */}
+                          {i < arr.length - 1 && (
+                            <div className="flex-1 h-[1.5px] bg-third/30 mx-4 relative">
+                              <div
+                                className="absolute inset-0 bg-primary transition-all duration-500"
+                                style={{
+                                  width: step > item.num ? "100%" : "0%",
+                                }}
+                              />
+                            </div>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </div>
+
+                    {/* ===== STEPS WITH KEYS TO TRIGGER RE-MOUNT ON DATA LOAD ===== */}
+                    <div className="min-h-[350px]">
+                      {step === 1 && (
+                        <Step1Business
+                          key={`biz-v${dataVersion[1]}-${existing.business ? "exist" : "new"}`}
+                          initialData={existing.business}
+                          onChange={handleBusinessChange}
+                        />
+                      )}
+
+                      {step === 2 && (
+                        <Step2Address
+                          key={`addr-v${dataVersion[2]}-${existing.address ? "exist" : "new"}`}
+                          initialData={existing.address}
+                          onChange={handleAddressChange}
+                        />
+                      )}
+
+                      {step === 3 && (
+                        <Step3KYC
+                          key={`kyc-v${dataVersion[3]}-${existing.kyc ? "exist" : "new"}`}
+                          initialData={existing.kyc}
+                          onChange={handleKycChange}
+                        />
+                      )}
+
+                      {step === 4 &&
+                        (existing?.business?.isSubmitted !== false ||
+                          existing?.business?.verificationStatus ===
+                            "REQUEST_CHANGES") &&
+                        !showPreview && (
+                          <Step4Verification
+                            existing={existing}
+                            onEdit={() => setShowPreview(true)}
+                          />
                         )}
-                      </React.Fragment>
-                    ))}
-                  </div>
 
-                {/* ===== STEPS WITH KEYS TO TRIGGER RE-MOUNT ON DATA LOAD ===== */}
-                <div className="min-h-[350px]">
-                  {step === 1 && (
-                    <Step1Business
-                      key={`biz-v${dataVersion[1]}-${existing.business ? "exist" : "new"}`}
-                      initialData={existing.business}
-                      onChange={handleBusinessChange}
-                    />
-                  )}
+                      {step === 4 &&
+                        ((existing?.business?.isSubmitted === false &&
+                          existing?.business?.verificationStatus !==
+                            "REQUEST_CHANGES") ||
+                          showPreview) && (
+                          <PreviewAndEdite
+                            existing={existing}
+                            onBack={() => {
+                              if (existing?.business?.isSubmitted === false) {
+                                setStep(3);
+                                setShowPreview(false);
+                              } else {
+                                setShowPreview(false);
+                              }
+                            }}
+                            onSuccess={() => {
+                              setExisting((p) => ({
+                                ...p,
+                                business: {
+                                  ...p.business,
+                                  isSubmitted: true,
+                                  verificationStatus: "REQUESTED",
+                                },
+                              }));
+                              setShowPreview(false);
+                            }}
+                          />
+                        )}
+                    </div>
 
-                  {step === 2 && (
-                    <Step2Address
-                      key={`addr-v${dataVersion[2]}-${existing.address ? "exist" : "new"}`}
-                      initialData={existing.address}
-                      onChange={handleAddressChange}
-                    />
-                  )}
+                    {/* ===== ACTIONS: placed inside form flow, not pinned at bottom ===== */}
+                    {step < 4 && (
+                      <div className="mt-6 pt-5  flex justify-between items-center">
+                        <div className="w-24">
+                          {step > 1 && (
+                            <Button
+                              variant="ghost"
+                              showIcon={false}
+                              onClick={handleBack}
+                              disabled={backLoading || loading}
+                            >
+                              {backLoading ? "Loading..." : "Previous"}
+                            </Button>
+                          )}
+                        </div>
 
-                  {step === 3 && (
-                    <Step3KYC
-                      key={`kyc-v${dataVersion[3]}-${existing.kyc ? "exist" : "new"}`}
-                      initialData={existing.kyc}
-                      onChange={handleKycChange}
-                    />
-                  )}
-
-                  {step === 4 &&
-                    (existing?.business?.isSubmitted !== false ||
-                      existing?.business?.verificationStatus ===
-                        "REQUEST_CHANGES") &&
-                    !showPreview && (
-                      <Step4Verification
-                        existing={existing}
-                        onEdit={() => setShowPreview(true)}
-                      />
-                    )}
-
-                  {step === 4 &&
-                    ((existing?.business?.isSubmitted === false &&
-                      existing?.business?.verificationStatus !==
-                        "REQUEST_CHANGES") ||
-                      showPreview) && (
-                      <PreviewAndEdite
-                        existing={existing}
-                        onBack={() => {
-                          if (existing?.business?.isSubmitted === false) {
-                            setStep(3);
-                            setShowPreview(false);
-                          } else {
-                            setShowPreview(false);
-                          }
-                        }}
-                        onSuccess={() => {
-                          setExisting((p) => ({
-                            ...p,
-                            business: {
-                              ...p.business,
-                              isSubmitted: true,
-                              verificationStatus: "REQUESTED",
-                            },
-                          }));
-                          setShowPreview(false);
-                        }}
-                      />
-                    )}
-                </div>
-
-                {/* ===== ACTIONS: placed inside form flow, not pinned at bottom ===== */}
-                {step < 4 && (
-                  <div className="mt-6 pt-5  flex justify-between items-center">
-                    <div className="w-24">
-                      {step > 1 && (
                         <Button
                           variant="ghost"
                           showIcon={false}
-                          onClick={handleBack}
-                          disabled={backLoading || loading}
+                          onClick={handleNext}
+                          disabled={loading}
                         >
-                          {backLoading ? "Loading..." : "Previous"}
+                          {loading ? "Processing..." : "Continue"}
                         </Button>
-                      )}
-                    </div>
-
-                    <Button
-                      variant="ghost"
-                      showIcon={false}
-                      onClick={handleNext}
-                      disabled={loading}
-                    >
-                      {loading ? "Processing..." : "Continue"}
-                    </Button>
-                  </div>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>

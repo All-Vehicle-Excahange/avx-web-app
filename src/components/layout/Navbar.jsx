@@ -190,7 +190,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
             {/* RIGHT SIDE */}
             <div className="flex items-center gap-2 md:gap-4">
               <Button
-                onClick={() => setOpen(true)}
+               
                 size="sm"
                 className="hidden md:block text-xs md:text-sm text-primary border border-primary hover:bg-primary hover:text-secondary"
               >

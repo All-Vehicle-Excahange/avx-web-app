@@ -12,11 +12,13 @@ function Main() {
   const [activeTab, setActiveTab] = useState("login");
   const router = useRouter();
   const { user, isLoggedIn } = useAuthStore();
-  const isConsultant = ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(user?.userRole);
+  const isConsultant = ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(
+    user?.userRole,
+  );
 
   useEffect(() => {
     if (isLoggedIn && isConsultant) {
-      router.push("/consult/subscription");
+      router.replace("/consult/subscription");
     }
   }, [isLoggedIn, isConsultant, router]);
 
@@ -25,7 +27,6 @@ function Main() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-secondary px-4 py-8">
       <div className="relative flex w-full max-w-[900px] min-h-[600px] overflow-hidden rounded-2xl shadow-2xl bg-secondary border border-third/30">
-        
         {/* LEFT IMAGE */}
         <div className="hidden md:block w-5/12 relative">
           <Image src="/cs.png" alt="Cars" fill className="object-cover" />
@@ -57,17 +58,21 @@ function Main() {
           <div className="mt-6 flex rounded-full bg-primary/10 p-1 border border-third/30">
             <button
               onClick={() => setActiveTab("login")}
-              className={`flex-1 py-2 cursor-pointer rounded-full text-sm font-medium transition ${activeTab === "login" ? "bg-primary text-secondary" : "text-third"
-                }`}
+              className={`flex-1 py-2 cursor-pointer rounded-full text-sm font-medium transition ${
+                activeTab === "login"
+                  ? "bg-primary text-secondary"
+                  : "text-third"
+              }`}
             >
               Login
             </button>
             <button
               onClick={() => setActiveTab("register")}
-              className={`flex-1 py-2 cursor-pointer rounded-full text-sm font-medium transition ${activeTab === "register"
-                ? "bg-primary text-secondary"
-                : "text-third"
-                }`}
+              className={`flex-1 py-2 cursor-pointer rounded-full text-sm font-medium transition ${
+                activeTab === "register"
+                  ? "bg-primary text-secondary"
+                  : "text-third"
+              }`}
             >
               Sign Up
             </button>

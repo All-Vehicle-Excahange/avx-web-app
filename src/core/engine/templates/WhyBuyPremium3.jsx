@@ -19,6 +19,7 @@ import {
   setWhyBuyProcess,
   setWhyBuyInspection,
   setWhyBuyCustomerCommitment,
+  setWhyBuyGallery,
   setFeaturedReviews,
 } from "@/services/theme.service";
 import { getAllReviewById } from "@/services/user.service";
@@ -195,7 +196,7 @@ export default function WhyBuyPremium3({
       storyData.append("storyDescription", data.storyDescription || "");
       for (let i = 1; i <= 4; i++) {
         const tmpl = data[`storyTemplate${i}`];
-        const customField = `customWhyBuyStory${i}`;
+        const customField = `customStory${i}`;
         if (tmpl?.id) storyData.append(`storyTemplateId${i}`, tmpl.id);
         else if (data[customField] && data[customField].startsWith("blob:")) {
           const blob = await getBlobFromUrl(data[customField]);
@@ -214,7 +215,7 @@ export default function WhyBuyPremium3({
       );
       for (let i = 1; i <= 2; i++) {
         const tmpl = data[`vehicleSelectionTemplate${i}`];
-        const customField = `customWhyBuyVehicleSelection${i}`;
+        const customField = `customVehicleSelection${i}`;
         if (tmpl?.id)
           vehicleData.append(`vehicleSelectionTemplateId${i}`, tmpl.id);
         else if (data[customField] && data[customField].startsWith("blob:")) {
@@ -253,7 +254,7 @@ export default function WhyBuyPremium3({
       }
       for (let i = 1; i <= 4; i++) {
         const tmpl = data[`inspectionTemplate${i}`];
-        const customField = `customWhyBuyInspection${i}`;
+        const customField = `customInspection${i}`;
         if (tmpl?.id)
           inspectionData.append(`inspectionTemplateId${i}`, tmpl.id);
         else if (data[customField] && data[customField].startsWith("blob:")) {
@@ -274,7 +275,7 @@ export default function WhyBuyPremium3({
       );
       for (let i = 1; i <= 3; i++) {
         const tmpl = data[`customerCommitmentTemplate${i}`];
-        const customField = `customWhyBuyCustomerCommitment${i}`;
+        const customField = `customCustomerCommitment${i}`;
         if (tmpl?.id)
           commitmentData.append(`customerCommitmentTemplateId${i}`, tmpl.id);
         else if (data[customField] && data[customField].startsWith("blob:")) {
@@ -288,6 +289,20 @@ export default function WhyBuyPremium3({
         updateField("testimonialTitle", data.testimonialTitle || "");
       } catch (e) {}
 
+      const galleryData = new FormData();
+      for (let i = 1; i <= 5; i++) {
+        const customField = `customGallery${i}`;
+        const tmpl = data[`galleryTemplate${i}`];
+        const imageUrl = data[customField] || tmpl?.imageUrl;
+
+        if (imageUrl && imageUrl.startsWith("blob:")) {
+          const blob = await getBlobFromUrl(imageUrl);
+          if (blob) galleryData.append(customField, blob, `gal${i}.png`);
+        } else if (tmpl?.id) {
+          galleryData.append(`galleryTemplateId${i}`, tmpl.id);
+        }
+      }
+
       await Promise.all([
         setWhyBuyHero(heroData),
         setWhyBuyStory(storyData),
@@ -295,6 +310,7 @@ export default function WhyBuyPremium3({
         setWhyBuyProcess(processData),
         setWhyBuyInspection(inspectionData),
         setWhyBuyCustomerCommitment(commitmentData),
+        setWhyBuyGallery(galleryData),
         setFeaturedReviews(selectedReviewIds),
       ]);
 
@@ -416,10 +432,10 @@ export default function WhyBuyPremium3({
   const reviewerName = item.reviewerName || item.name || "";
   const rating = item.rating || 5;
   const galleryImages = [
-    data.customWhyBuyGallery1 || data.galleryTemplate1?.imageUrl,
-    data.customWhyBuyGallery2 || data.galleryTemplate2?.imageUrl,
-    data.customWhyBuyGallery3 || data.galleryTemplate3?.imageUrl,
-    data.customWhyBuyGallery4 || data.galleryTemplate4?.imageUrl,
+    data.customGallery1 || data.galleryTemplate1?.imageUrl,
+    data.customGallery2 || data.galleryTemplate2?.imageUrl,
+    data.customGallery3 || data.galleryTemplate3?.imageUrl,
+    data.customGallery4 || data.galleryTemplate4?.imageUrl,
   ].filter(Boolean);
   const captions = [
     "Showroom Floor",
@@ -557,7 +573,7 @@ export default function WhyBuyPremium3({
                     <ImageUploader
                       label={`Image ${n}`}
                       src={
-                        data[`customWhyBuyStory${n}`] ||
+                        data[`customStory${n}`] ||
                         data[`storyTemplate${n}`]?.imageUrl
                       }
                       fieldKey={`storyImg${n}`}
@@ -571,7 +587,7 @@ export default function WhyBuyPremium3({
                             id: id ?? null,
                           },
                         };
-                        const cf = `customWhyBuyStory${n}`;
+                        const cf = `customStory${n}`;
                         if (!id) u[cf] = imageUrl;
                         else delete u[cf];
                         onUpdate(u);
@@ -615,7 +631,7 @@ export default function WhyBuyPremium3({
                     <ImageUploader
                       label={`Image ${n}`}
                       src={
-                        data[`customWhyBuyVehicleSelection${n}`] ||
+                        data[`customVehicleSelection${n}`] ||
                         data[`vehicleSelectionTemplate${n}`]?.imageUrl
                       }
                       fieldKey={`selImg${n}`}
@@ -629,7 +645,7 @@ export default function WhyBuyPremium3({
                             id: id ?? null,
                           },
                         };
-                        const cf = `customWhyBuyVehicleSelection${n}`;
+                        const cf = `customVehicleSelection${n}`;
                         if (!id) u[cf] = imageUrl;
                         else delete u[cf];
                         onUpdate(u);
@@ -803,7 +819,7 @@ export default function WhyBuyPremium3({
                     <ImageUploader
                       label={`Image ${n}`}
                       src={
-                        data[`customWhyBuyInspection${n}`] ||
+                        data[`customInspection${n}`] ||
                         data[`inspectionTemplate${n}`]?.imageUrl
                       }
                       fieldKey={`inspImg${n}`}
@@ -817,7 +833,7 @@ export default function WhyBuyPremium3({
                             id: id ?? null,
                           },
                         };
-                        const cf = `customWhyBuyInspection${n}`;
+                        const cf = `customInspection${n}`;
                         if (!id) u[cf] = imageUrl;
                         else delete u[cf];
                         onUpdate(u);
@@ -866,7 +882,7 @@ export default function WhyBuyPremium3({
                     <ImageUploader
                       label={`Image ${n}`}
                       src={
-                        data[`customWhyBuyCustomerCommitment${n}`] ||
+                        data[`customCustomerCommitment${n}`] ||
                         data[`customerCommitmentTemplate${n}`]?.imageUrl
                       }
                       fieldKey={`commImg${n}`}
@@ -880,7 +896,7 @@ export default function WhyBuyPremium3({
                             id: id ?? null,
                           },
                         };
-                        const cf = `customWhyBuyCustomerCommitment${n}`;
+                        const cf = `customCustomerCommitment${n}`;
                         if (!id) u[cf] = imageUrl;
                         else delete u[cf];
                         onUpdate(u);
@@ -907,7 +923,7 @@ export default function WhyBuyPremium3({
                 <ImageUploader
                   label={`Gallery Image ${n}`}
                   src={
-                    data[`customWhyBuyGallery${n}`] ||
+                    data[`customGallery${n}`] ||
                     data[`galleryTemplate${n}`]?.imageUrl
                   }
                   fieldKey={`galImg${n}`}
@@ -921,7 +937,7 @@ export default function WhyBuyPremium3({
                         id: id ?? null,
                       },
                     };
-                    const cf = `customWhyBuyGallery${n}`;
+                    const cf = `customGallery${n}`;
                     if (!id) u[cf] = imageUrl;
                     else delete u[cf];
                     onUpdate(u);
@@ -1062,8 +1078,8 @@ export default function WhyBuyPremium3({
                       data.whyBuyHeroTemplate2?.imageUrl,
                     data.customWhyBuyHero3 ||
                       data.whyBuyHeroTemplate3?.imageUrl,
-                    data.customWhyBuyStory1 || data.storyTemplate1?.imageUrl,
-                    data.customWhyBuyStory2 || data.storyTemplate2?.imageUrl,
+                    data.customStory1 || data.storyTemplate1?.imageUrl,
+                    data.customStory2 || data.storyTemplate2?.imageUrl,
                   ]
                     .filter(Boolean)
                     .map((img, index) => (
@@ -1120,7 +1136,7 @@ export default function WhyBuyPremium3({
                 <div className="absolute top-0 left-0 w-[75%] h-[72%] rounded-2xl border border-third/10 shadow-2xl overflow-hidden">
                   <img
                     src={
-                      data.customWhyBuyStory1 || data.storyTemplate1?.imageUrl
+                      data.customStory1 || data.storyTemplate1?.imageUrl
                     }
                     alt="Our story"
                     className="w-full h-full object-cover"
@@ -1130,7 +1146,7 @@ export default function WhyBuyPremium3({
                 <div className="absolute bottom-0 right-0 w-[58%] h-[55%] rounded-2xl shadow-2xl overflow-hidden">
                   <img
                     src={
-                      data.customWhyBuyStory2 || data.storyTemplate2?.imageUrl
+                      data.customStory2 || data.storyTemplate2?.imageUrl
                     }
                     alt="Our story"
                     className="w-full h-full object-cover rounded-2xl"
@@ -1148,12 +1164,12 @@ export default function WhyBuyPremium3({
           <div className="mx-auto w-full px-2 lg:px-4">
             <div className="relative w-full h-[500px] sm:h-[460px] lg:h-[520px] rounded-3xl overflow-hidden">
               {[
-                data.customWhyBuyVehicleSelection1 ||
+                data.customVehicleSelection1 ||
                   data.vehicleSelectionTemplate1?.imageUrl,
-                data.customWhyBuyVehicleSelection2 ||
+                data.customVehicleSelection2 ||
                   data.vehicleSelectionTemplate2?.imageUrl,
-                data.customWhyBuyStory3 || data.storyTemplate3?.imageUrl,
-                data.customWhyBuyStory4 || data.storyTemplate4?.imageUrl,
+                data.customStory3 || data.storyTemplate3?.imageUrl,
+                data.customStory4 || data.storyTemplate4?.imageUrl,
                 data.customWhyBuyProcess1 || data.processTemplate1?.imageUrl,
               ]
                 .filter(Boolean)
@@ -1188,12 +1204,12 @@ export default function WhyBuyPremium3({
                   </div>
                   <div className="flex gap-3 shrink-0 overflow-x-scroll no-scrollbar">
                     {[
-                      data.customWhyBuyVehicleSelection1 ||
+                      data.customVehicleSelection1 ||
                         data.vehicleSelectionTemplate1?.imageUrl,
-                      data.customWhyBuyVehicleSelection2 ||
+                      data.customVehicleSelection2 ||
                         data.vehicleSelectionTemplate2?.imageUrl,
-                      data.customWhyBuyStory3 || data.storyTemplate3?.imageUrl,
-                      data.customWhyBuyStory4 || data.storyTemplate4?.imageUrl,
+                      data.customStory3 || data.storyTemplate3?.imageUrl,
+                      data.customStory4 || data.storyTemplate4?.imageUrl,
                       data.customWhyBuyProcess1 ||
                         data.processTemplate1?.imageUrl,
                     ]
@@ -1327,7 +1343,7 @@ export default function WhyBuyPremium3({
                   <img
                     key={i}
                     src={
-                      data[`customWhyBuyInspection${i + 1}`] ||
+                      data[`customInspection${i + 1}`] ||
                       data[`inspectionTemplate${i + 1}`]?.imageUrl
                     }
                     alt={inspectionPoints[i]}
@@ -1404,7 +1420,7 @@ export default function WhyBuyPremium3({
                     <div className="shrink-0 w-14 h-14 rounded-lg overflow-hidden">
                       <img
                         src={
-                          data[`customWhyBuyInspection${i + 1}`] ||
+                          data[`customInspection${i + 1}`] ||
                           data[`inspectionTemplate${i + 1}`]?.imageUrl
                         }
                         alt={point}
@@ -1436,11 +1452,11 @@ export default function WhyBuyPremium3({
           <div className="relative flex items-center justify-center">
             <div className="absolute inset-0 overflow-hidden rounded-2xl">
               {[
-                data.customWhyBuyCustomerCommitment1 ||
+                data.customCustomerCommitment1 ||
                   data.customerCommitmentTemplate1?.imageUrl,
-                data.customWhyBuyCustomerCommitment2 ||
+                data.customCustomerCommitment2 ||
                   data.customerCommitmentTemplate2?.imageUrl,
-                data.customWhyBuyCustomerCommitment3 ||
+                data.customCustomerCommitment3 ||
                   data.customerCommitmentTemplate3?.imageUrl,
               ]
                 .filter(Boolean)

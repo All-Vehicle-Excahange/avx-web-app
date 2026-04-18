@@ -5,11 +5,11 @@ import { Image as LucideImage } from "lucide-react";import MediaPickerModal from
 const detectType = (key = "") => {
   const k = key.toLowerCase();
 
-  if (k.includes("hero") || k.includes("header")) return "HEADER";
+  if (k.includes("hero") || k.includes("header")) return "HERO";
   if (k.includes("mission")) return "MISSION";
   if (k.includes("vision")) return "VISION";
 
-  return "HEADER";
+  return "HERO";
 };
 
 export const ImageUploader = ({

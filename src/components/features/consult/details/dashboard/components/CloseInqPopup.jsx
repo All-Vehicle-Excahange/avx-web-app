@@ -3,9 +3,9 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import Button from "@/components/ui/button";
-import { X } from "lucide-react";
+import { X, Loader2 } from "lucide-react";
 
-function CloseInqPopup({ onClose, onConfirm }) {
+function CloseInqPopup({ onClose, onConfirm, loading = false }) {
   const [reason, setReason] = useState("");
   const [comment, setComment] = useState("");
   const [isClosing, setIsClosing] = useState(false);
@@ -111,7 +111,13 @@ function CloseInqPopup({ onClose, onConfirm }) {
           </Button>
 
           {/* Close Inquiry */}
-          <Button showIcon={false} variant="ghost" onClick={handleSubmit}>
+          <Button 
+            showIcon={false} 
+            variant="ghost" 
+            onClick={handleSubmit}
+            loading={loading}
+            locked={!reason || (reason === "Other" && !comment.trim())}
+          >
             Close Inquiry
           </Button>
         </div>

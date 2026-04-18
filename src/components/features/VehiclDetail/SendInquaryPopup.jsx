@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import Select from "react-select";
 import Button from "@/components/ui/button";
-import { X, CheckCircle2 } from "lucide-react";
+import { X, CheckCircle2, Loader2 } from "lucide-react";
 import { sendInquary } from "@/services/vehicle.service";
 
 function SendInquaryPopup({ onClose, consultName = "Consultant", vehicleId, onSuccess }) {
@@ -234,9 +234,10 @@ function SendInquaryPopup({ onClose, consultName = "Consultant", vehicleId, onSu
                                     showIcon={false}
                                     variant="ghost"
                                     onClick={handleSubmit}
-                                    disabled={isLoading || !title || (title === "Other" && !description.trim())}
+                                    loading={isLoading}
+                                    locked={!title || (title === "Other" && !description.trim())}
                                 >
-                                    {isLoading ? "Sending..." : "Send Inquiry"}
+                                    Send Inquiry
                                 </Button>
                             </div>
                         </>

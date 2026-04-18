@@ -24,6 +24,7 @@ import {
   setWhyBuyProcess,
   setWhyBuyInspection,
   setWhyBuyCustomerCommitment,
+  setWhyBuyGallery,
   setFeaturedReviews,
 } from "@/services/theme.service";
 import { getAllReviewById } from "@/services/user.service";
@@ -295,6 +296,20 @@ export default function WhyBuyPremium2({
         updateField("testimonialTitle", data.testimonialTitle || "");
       } catch (e) {}
 
+      const galleryData = new FormData();
+      for (let i = 1; i <= 5; i++) {
+        const customField = `customGallery${i}`;
+        const tmpl = data[`galleryTemplate${i}`];
+        const imageUrl = data[customField] || tmpl?.imageUrl;
+
+        if (imageUrl && imageUrl.startsWith("blob:")) {
+          const blob = await getBlobFromUrl(imageUrl);
+          if (blob) galleryData.append(customField, blob, `gal${i}.png`);
+        } else if (tmpl?.id) {
+          galleryData.append(`galleryTemplateId${i}`, tmpl.id);
+        }
+      }
+
       await Promise.all([
         setWhyBuyHero(heroData),
         setWhyBuyStory(storyData),
@@ -302,6 +317,7 @@ export default function WhyBuyPremium2({
         setWhyBuyProcess(processData),
         setWhyBuyInspection(inspectionData),
         setWhyBuyCustomerCommitment(commitmentData),
+        setWhyBuyGallery(galleryData),
         setFeaturedReviews(selectedReviewIds),
       ]);
 

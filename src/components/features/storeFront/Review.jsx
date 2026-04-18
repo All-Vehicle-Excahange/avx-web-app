@@ -6,10 +6,18 @@ import {
   checkIsEligibleToCreateReview,
   getAllReview,
 } from "@/services/user.service";
-import { Star, Camera, Info, Lock, Plus, MessageSquare } from "lucide-react";
+import {
+  Star,
+  Camera,
+  Info,
+  Lock,
+  Plus,
+  MessageSquare,
+  Loader2,
+} from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import StoreFrontReviewSkeleton from "@/components/ui/skeleton/StoreFrontReviewSkeleton";
 
 export default function Review() {
@@ -26,38 +34,44 @@ export default function Review() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [media, setMedia] = useState([{ file: null }]);
   const [reviewsLoading, setReviewsLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    const checkEligibility = async () => {
+  const checkEligibility = useCallback(async () => {
+    if (!id) return;
+    try {
       const isEligible = await checkIsEligibleToCreateReview(id);
       setIsEligibleToCreateReview(isEligible.data);
-    };
-    checkEligibility();
-  }, []);
+    } catch (error) {
+      console.log("Check Eligibility Error:", error);
+    }
+  }, [id]);
+
+  const fetchReviews = useCallback(async () => {
+    if (!id) return;
+    try {
+      const res = await getAllReview(id, {
+        pageNo: 1,
+        size: 10,
+      });
+
+      const apiData = res?.data;
+
+      setReviews(apiData?.reviews || []);
+      setReviewSummary(apiData?.reviewSummary || null);
+    } catch (error) {
+      console.log("Review Fetch Error:", error);
+    } finally {
+      setReviewsLoading(false);
+    }
+  }, [id]);
 
   useEffect(() => {
-    if (!id) return;
+    checkEligibility();
+  }, [checkEligibility]);
 
-    const fetchReviews = async () => {
-      try {
-        const res = await getAllReview(id, {
-          pageNo: 1,
-          size: 10,
-        });
-
-        const apiData = res?.data;
-
-        setReviews(apiData?.reviews || []);
-        setReviewSummary(apiData?.reviewSummary || null);
-      } catch (error) {
-        console.log("Review Fetch Error:", error);
-      } finally {
-        setReviewsLoading(false);
-      }
-    };
-
+  useEffect(() => {
     fetchReviews();
-  }, [id]);
+  }, [fetchReviews]);
 
   useEffect(() => {
     const handleEsc = (e) => {
@@ -75,12 +89,14 @@ export default function Review() {
     };
   }, [selectedImage]);
 
-  const hasContent = reviewText.trim() || reviewTitle.trim() || name.trim();
+  const hasContent = reviewText.trim() || reviewTitle.trim();
   const canSubmit = rating > 0 && !!hasContent;
 
   const handleMediaUpload = (index, file) => {
+    if (!file) return;
     const updated = [...media];
     updated[index].file = file;
+    updated[index].preview = URL.createObjectURL(file);
     setMedia(updated);
   };
 
@@ -106,12 +122,25 @@ export default function Review() {
   };
 
   const handleSubmitReview = async () => {
+    if (!id || submitting) return;
     try {
+      setSubmitting(true);
       const payload = createReviewPayload();
 
       await addNewReview(id, payload);
+
+      // Reset form
+      setRating(0);
+      setReviewTitle("");
+      setReviewText("");
+      setMedia([{ file: null }]);
+
+      // Refresh data
+      await Promise.all([fetchReviews(), checkEligibility()]);
     } catch (error) {
       console.log("❌ Submit Error:", error);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -122,21 +151,22 @@ export default function Review() {
       <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-6 lg:gap-12">
         {/* ================= LEFT ================= */}
         <div className="space-y-6 lg:sticky lg:top-24 h-fit">
-          {/* ⭐ RATING SUMMARY */}
+          {/*  RATING SUMMARY */}
           <div className="border border-third/40 rounded-2xl p-4 sm:p-6">
             <h2 className="text-xl font-semibold mb-3">Customer reviews</h2>
 
             {reviewSummary ? (
               <>
-                {/* ✅ Average Rating */}
+                {/*  Average Rating */}
                 <div className="flex items-center gap-2 mb-1">
                   {[1, 2, 3, 4, 5].map((i) => (
                     <Star
                       key={i}
-                      className={`w-4 h-4 ${i <= Math.round(reviewSummary.averageRating)
-                        ? "fill-primary text-primary"
-                        : "text-third"
-                        }`}
+                      className={`w-4 h-4 ${
+                        i <= Math.round(reviewSummary.averageRating)
+                          ? "fill-primary text-primary"
+                          : "text-third"
+                      }`}
                     />
                   ))}
 
@@ -196,20 +226,21 @@ export default function Review() {
             )}
           </div>
 
-          {/* ✍️ WRITE REVIEW */}
+          {/*  WRITE REVIEW */}
           <div className="border border-third/40 rounded-2xl p-4 sm:p-6">
             <h3 className="text-lg font-semibold mb-4">Write a review</h3>
 
             {isEligibleToCreateReview ? (
               <>
-                {/* ⭐ RATING INPUT */}
+                {/*  RATING INPUT */}
                 <div className="flex gap-1 mb-4">
                   {[1, 2, 3, 4, 5].map((i) => (
                     <Star
                       key={i}
                       onClick={() => setRating(i)}
-                      className={`w-6 h-6 cursor-pointer transition ${i <= rating ? "fill-primary text-primary" : "text-third"
-                        }`}
+                      className={`w-6 h-6 cursor-pointer transition ${
+                        i <= rating ? "fill-primary text-primary" : "text-third"
+                      }`}
                     />
                   ))}
                 </div>
@@ -240,17 +271,33 @@ export default function Review() {
                   {media.map((item, index) => (
                     <label
                       key={index}
-                      className="flex items-center justify-center gap-2 border border-dashed border-third/50 rounded-xl h-20 cursor-pointer hover:border-primary transition"
+                      className="relative flex flex-col items-center justify-center gap-1 border border-dashed border-third/50 rounded-xl h-24 sm:h-28 cursor-pointer hover:border-primary transition overflow-hidden group"
                     >
-                      <Camera className="w-5 h-5 text-third" />
-
-                      <span className="text-sm text-third">
-                        {item.file ? item.file.name : `Upload Image ${index + 1}`}
-                      </span>
+                      {item.preview ? (
+                        <>
+                          <Image
+                            src={item.preview}
+                            alt="preview"
+                            fill
+                            className="object-cover"
+                          />
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <Camera className="w-6 h-6 text-white" />
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <Camera className="w-5 h-5 text-third" />
+                          <span className="text-xs text-third px-2 text-center">
+                            {`Upload Image ${index + 1}`}
+                          </span>
+                        </>
+                      )}
 
                       {/* ✅ Hidden Input */}
                       <input
                         type="file"
+                        id={`review-image-${index}`}
                         accept="image/*"
                         onChange={(e) =>
                           handleMediaUpload(index, e.target.files?.[0])
@@ -272,12 +319,14 @@ export default function Review() {
                 </div>
 
                 <div className="relative mt-5">
-                  {/* ✅ SUBMIT BUTTON */}
+                  {/* SUBMIT BUTTON */}
                   <Button
                     onClick={handleSubmitReview}
-                    className="w-full rounded-xl py-2 font-medium flex items-center justify-center gap-2"
+                    className="w-full  py-2 font-medium flex items-center justify-center gap-2"
                     full
                     variant="ghost"
+                    loading={submitting}
+                    locked={!canSubmit}
                   >
                     Submit Review
                   </Button>
@@ -290,9 +339,9 @@ export default function Review() {
 
                   <p className="text-sm leading-relaxed text-third">
                     We apologize but this account has not met the minimum
-                    eligibility requirements to write a review. If you would like
-                    to learn more about our eligibility requirements, please see
-                    our{" "}
+                    eligibility requirements to write a review. If you would
+                    like to learn more about our eligibility requirements,
+                    please see our{" "}
                     <a
                       href="/terms-and-conditions"
                       target="_blank"
@@ -306,12 +355,12 @@ export default function Review() {
 
                 <div className="relative mt-5">
                   <Button
-                    disabled
-                    className="w-full rounded-xl py-2 font-medium flex items-center justify-center gap-2 opacity-60 cursor-not-allowed"
+                    className="w-full  py-2 font-medium flex items-center justify-center gap-2"
                     full
                     variant="ghost"
+                    locked={true}
                   >
-                    <Lock size={16} />
+                    <Lock size={16} className="mr-2" />
                     Not Eligible to Review
                   </Button>
                 </div>
@@ -327,9 +376,12 @@ export default function Review() {
               <div className="w-16 h-16 bg-third/10 rounded-full flex items-center justify-center mb-4">
                 <MessageSquare className="w-8 h-8 text-third" />
               </div>
-              <h3 className="text-lg font-semibold text-primary mb-2">No reviews yet</h3>
+              <h3 className="text-lg font-semibold text-primary mb-2">
+                No reviews yet
+              </h3>
               <p className="text-sm text-third max-w-sm mx-auto">
-                Be the first to review this item. Share your experience to help others make better choices.
+                Be the first to review this item. Share your experience to help
+                others make better choices.
               </p>
             </div>
           ) : (
@@ -341,7 +393,7 @@ export default function Review() {
                   key={review.id}
                   className="border border-third/40 rounded-2xl p-4 sm:p-6 space-y-4"
                 >
-                  {/* ✅ USER HEADER */}
+                  {/*  USER HEADER */}
                   <div className="flex items-center gap-3">
                     {/* Avatar */}
                     <div className="w-10 h-10 rounded-full bg-third/40 flex items-center justify-center font-semibold">
@@ -358,10 +410,11 @@ export default function Review() {
                     {[1, 2, 3, 4, 5].map((i) => (
                       <Star
                         key={i}
-                        className={`w-4 h-4 ${i <= review.rating
-                          ? "fill-primary text-primary"
-                          : "text-third"
-                          }`}
+                        className={`w-4 h-4 ${
+                          i <= review.rating
+                            ? "fill-primary text-primary"
+                            : "text-third"
+                        }`}
                       />
                     ))}
 
@@ -416,14 +469,14 @@ export default function Review() {
             className="fixed inset-0 z-50 flex items-center justify-center p-4
                bg-black/30 backdrop-blur-sm"
           >
-            {/* ✅ Popup Box */}
+            {/*  Popup Box */}
             <div
               onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-4xl h-[85vh] sm:h-[80vh]
                  rounded-2xl overflow-hidden 
                  bg-secondary/90 backdrop-blur-xl shadow-2xl border border-white/10"
             >
-              {/* ✅ Close Button */}
+              {/*  Close Button */}
               <button
                 onClick={() => setSelectedImage(null)}
                 className="absolute top-3 right-3 z-50 

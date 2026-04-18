@@ -47,8 +47,8 @@ export default function StoreFront() {
                   {[
                     { id: "inventory", label: "Inventory" },
                     { id: "aboutus", label: "About Us" },
-                    { id: "reviews", label: "Reviews" },
                     { id: "whybuyhere", label: "Why Buy Here" },
+                    { id: "reviews", label: "Reviews" },
                   ].map((tab) => (
                     <button
                       key={tab.id}

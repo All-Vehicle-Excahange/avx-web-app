@@ -214,7 +214,8 @@ function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
             <ImageUploader
               label="Hero Background Image"
               src={data.heroTemplate1?.imageUrl}
-              fieldKey="hero"
+              fieldKey="HERO"
+              imageType="HERO"
               onChange={({ imageUrl, id }) => {
                 update("heroTemplate1", {
                   ...data.heroTemplate1,

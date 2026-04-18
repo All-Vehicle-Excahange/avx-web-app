@@ -84,10 +84,7 @@ const formatOptionLabel = ({ value, label }) => (
   </div>
 );
 
-
-
 const DEFAULT_DATA = ABOUT_PRO_2[0].data;
-
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -98,24 +95,30 @@ const stagger = {
   show: { transition: { staggerChildren: 0.12 } },
 };
 const EyeBrow = ({ children }) => (
-  <p
-    className="text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat] mb-4"
-  >
+  <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat] mb-4">
     {children}
   </p>
 );
 const Divider = () => <div className="w-8 h-px bg-primary/15 my-2" />;
 
-
-export default function AboutPro2({ data: rawData, isEditing, onUpdate, onNextTab }) {
+export default function AboutPro2({
+  data: rawData,
+  isEditing,
+  onUpdate,
+  onNextTab,
+}) {
   const [isSaving, setIsSaving] = useState(false);
 
-  const defaultDataLoaded = rawData ? {
-    ...DEFAULT_DATA,
-    ...Object.fromEntries(
-        Object.entries(rawData || {}).filter(([, v]) => v !== undefined && v !== null)
-    )
-  } : DEFAULT_DATA;
+  const defaultDataLoaded = rawData
+    ? {
+        ...DEFAULT_DATA,
+        ...Object.fromEntries(
+          Object.entries(rawData || {}).filter(
+            ([, v]) => v !== undefined && v !== null,
+          ),
+        ),
+      }
+    : DEFAULT_DATA;
   const data = defaultDataLoaded;
 
   const missionVisionCards = [
@@ -163,19 +166,27 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate, onNextTa
       const heroData = new FormData();
       heroData.append("heroTitle", data.aboutHeroTitle || "");
       heroData.append("heroDescription", data.aboutHeroDescription || "");
-      if (data.aboutHeroTemplate1?.id) heroData.append("heroTemplateId1", data.aboutHeroTemplate1.id);
-      if (data.aboutHeroTemplate2?.id) heroData.append("heroTemplateId2", data.aboutHeroTemplate2.id);
-      if (data.aboutHeroTemplate3?.id) heroData.append("heroTemplateId3", data.aboutHeroTemplate3.id);
+      if (data.aboutHeroTemplate1?.id)
+        heroData.append("heroTemplateId1", data.aboutHeroTemplate1.id);
+      if (data.aboutHeroTemplate2?.id)
+        heroData.append("heroTemplateId2", data.aboutHeroTemplate2.id);
+      if (data.aboutHeroTemplate3?.id)
+        heroData.append("heroTemplateId3", data.aboutHeroTemplate3.id);
 
       const missionData = new FormData();
       missionData.append("missionTitle", data.aboutMissionTitle || "");
-      missionData.append("missionDescription", data.aboutMissionDescription || "");
-      if (data.aboutMissionTemplate1?.id) missionData.append("missionTemplateId1", data.aboutMissionTemplate1.id);
+      missionData.append(
+        "missionDescription",
+        data.aboutMissionDescription || "",
+      );
+      if (data.aboutMissionTemplate1?.id)
+        missionData.append("missionTemplateId1", data.aboutMissionTemplate1.id);
 
       const visionData = new FormData();
       visionData.append("visionTitle", data.aboutVisionTitle || "");
       visionData.append("visionDescription", data.aboutVisionDescription || "");
-      if (data.aboutVisionTemplate1?.id) visionData.append("visionTemplateId1", data.aboutVisionTemplate1.id);
+      if (data.aboutVisionTemplate1?.id)
+        visionData.append("visionTemplateId1", data.aboutVisionTemplate1.id);
 
       const statsData = new FormData();
       statsData.append("aboutUsDescription", data.aboutStatsDescription || "");
@@ -188,7 +199,10 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate, onNextTa
 
       const servicesData = new FormData();
       servicesData.append("serviceTitle", data.aboutServicesTitle || "");
-      servicesData.append("serviceDescription", data.aboutServicesDescription || "");
+      servicesData.append(
+        "serviceDescription",
+        data.aboutServicesDescription || "",
+      );
       if (data.services && Array.isArray(data.services)) {
         data.services.forEach((service, i) => {
           servicesData.append(`services[${i}].title`, service.title || "");
@@ -213,8 +227,6 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate, onNextTa
     }
   };
 
-
-
   if (isEditing) {
     return (
       <div className=" p-8 rounded-xl border border-third/30 w-full max-w-[1480px] mx-auto space-y-10">
@@ -238,15 +250,51 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate, onNextTa
           <div className="space-y-4">
             <p className="text-sm font-semibold text-primary">Hero Images</p>
             <div className="grid grid-cols-2 gap-4">
-               <div className="h-40 relative col-span-2">
-                 <ImageUploader label="Hero Image 1" src={data.aboutHeroTemplate1?.imageUrl} fieldKey="hero1" imageType="ABOUT_HERO" onChange={({ imageUrl, id }) => { update("aboutHeroTemplate1", { ...data.aboutHeroTemplate1, imageUrl, id: id ?? data.aboutHeroTemplate1?.id }); }} />
-               </div>
-               <div className="h-40 relative">
-                 <ImageUploader label="Hero Image 2" src={data.aboutHeroTemplate2?.imageUrl} fieldKey="hero2" imageType="ABOUT_HERO" onChange={({ imageUrl, id }) => { update("aboutHeroTemplate2", { ...data.aboutHeroTemplate2, imageUrl, id: id ?? data.aboutHeroTemplate2?.id }); }} />
-               </div>
-               <div className="h-40 relative">
-                 <ImageUploader label="Hero Image 3" src={data.aboutHeroTemplate3?.imageUrl} fieldKey="hero3" imageType="ABOUT_HERO" onChange={({ imageUrl, id }) => { update("aboutHeroTemplate3", { ...data.aboutHeroTemplate3, imageUrl, id: id ?? data.aboutHeroTemplate3?.id }); }} />
-               </div>
+              <div className="h-40 relative col-span-2">
+                <ImageUploader
+                  label="Hero Image 1"
+                  src={data.aboutHeroTemplate1?.imageUrl}
+                  fieldKey="hero1"
+                  imageType="ABOUT_HERO"
+                  onChange={({ imageUrl, id }) => {
+                    update("aboutHeroTemplate1", {
+                      ...data.aboutHeroTemplate1,
+                      imageUrl,
+                      id: id ?? data.aboutHeroTemplate1?.id,
+                    });
+                  }}
+                />
+              </div>
+              <div className="h-40 relative">
+                <ImageUploader
+                  label="Hero Image 2"
+                  src={data.aboutHeroTemplate2?.imageUrl}
+                  fieldKey="hero2"
+                  imageType="ABOUT_HERO"
+                  onChange={({ imageUrl, id }) => {
+                    update("aboutHeroTemplate2", {
+                      ...data.aboutHeroTemplate2,
+                      imageUrl,
+                      id: id ?? data.aboutHeroTemplate2?.id,
+                    });
+                  }}
+                />
+              </div>
+              <div className="h-40 relative">
+                <ImageUploader
+                  label="Hero Image 3"
+                  src={data.aboutHeroTemplate3?.imageUrl}
+                  fieldKey="hero3"
+                  imageType="ABOUT_HERO"
+                  onChange={({ imageUrl, id }) => {
+                    update("aboutHeroTemplate3", {
+                      ...data.aboutHeroTemplate3,
+                      imageUrl,
+                      id: id ?? data.aboutHeroTemplate3?.id,
+                    });
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -427,17 +475,13 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate, onNextTa
                   placeholder="Service Description"
                 />
               </div>
-
-            
-            
             </div>
           ))}
-         
         </div>
 
         <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
-          <Button 
-            onClick={handleSaveAndNext} 
+          <Button
+            onClick={handleSaveAndNext}
             disabled={isSaving}
             variant="ghost"
           >
@@ -466,9 +510,7 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate, onNextTa
         <div className="container relative z-10 h-full flex flex-col justify-center">
           {/* heading + description (stacked) */}
           <div className="flex flex-col gap-6 max-w-2xl">
-            <div
-              className="flex flex-col gap-5"
-            >
+            <div className="flex flex-col gap-5">
               <EyeBrow>About Us</EyeBrow>
               <h1
                 className="font-[Montserrat] font-bold text-white leading-[1.08]"
@@ -479,8 +521,7 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate, onNextTa
               <div className="w-10 h-0.5 bg-fourth/70" />
             </div>
             {/* description */}
-            <div
-            >
+            <div>
               <div
                 className="font-[Poppins] text-[14px] text-white/80 leading-[1.9]"
                 dangerouslySetInnerHTML={{ __html: data.aboutHeroDescription }}
@@ -497,15 +538,13 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate, onNextTa
           <div className="">
             {/* heading row */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
-              <div
-              >
+              <div>
                 <EyeBrow>What Drives Us</EyeBrow>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                   Mission & <span className="text-fourth/80">Vision</span>
                 </h2>
               </div>
-              <div
-              >
+              <div>
                 <Divider />
                 <p className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]">
                   The principles behind everything we build and every decision
@@ -533,7 +572,10 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate, onNextTa
                       <div className="absolute inset-0 bg-linear-to-t from-secondary/60 to-transparent" />
                       <div className="absolute bottom-5 left-5 flex items-center gap-3">
                         <div className="w-9 h-9 rounded-xl border border-fourth/50 bg-secondary/60 backdrop-blur-sm flex items-center justify-center">
-                          <span className="text-fourth" dangerouslySetInnerHTML={{ __html: item.icon }} />
+                          <span
+                            className="text-fourth"
+                            dangerouslySetInnerHTML={{ __html: item.icon }}
+                          />
                         </div>
                         <span className="font-[Montserrat] font-bold text-[10px] tracking-[0.28em] uppercase text-primary/60">
                           {item.tag}
@@ -562,9 +604,7 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate, onNextTa
           STATS
           ════════════════════════════════════════ */}
       <section className="py-12  ">
-        <div
-          className=" overflow-hidden bg-fourth"
-        >
+        <div className=" overflow-hidden bg-fourth">
           <div className="container">
             <div className="px-2 lg:px-4">
               {/* ── TOP: heading + description ── */}
@@ -585,7 +625,9 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate, onNextTa
                 <div className="flex flex-col justify-center px-2 lg:px-4 py-14">
                   <div
                     className="font-[Poppins] text-[13.5px] text-primary/65 leading-[1.9]"
-                    dangerouslySetInnerHTML={{ __html: data.aboutStatsDescription }}
+                    dangerouslySetInnerHTML={{
+                      __html: data.aboutStatsDescription,
+                    }}
                   />
                 </div>
               </div>
@@ -625,9 +667,7 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate, onNextTa
         {/* ── heading row — split with border ── */}
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2  mb-5">
-            <div
-              className="flex flex-col gap-4 pb-10 lg:pr-16 "
-            >
+            <div className="flex flex-col gap-4 pb-10 lg:pr-16 ">
               <EyeBrow>Services</EyeBrow>
               <h2
                 className="font-[Montserrat] font-bold text-primary leading-[1.08]"
@@ -636,9 +676,7 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate, onNextTa
                 {data.aboutServicesTitle}
               </h2>
             </div>
-            <div
-              className="flex flex-col justify-center pb-10 lg:pl-16"
-            >
+            <div className="flex flex-col justify-center pb-10 lg:pl-16">
               <p className="font-[Poppins] text-[13.5px] text-third/65 leading-[1.9]">
                 {data.aboutServicesDescription}
               </p>
@@ -662,7 +700,10 @@ export default function AboutPro2({ data: rawData, isEditing, onUpdate, onNextTa
                   {/* icon + step */}
                   <div className="flex items-center justify-between">
                     <div className="w-[42px] h-[42px] rounded-xl border border-third/10 flex items-center justify-center group-hover:border-fourth/50 transition-colors duration-300">
-                      <span className="text-fourth" dangerouslySetInnerHTML={{ __html: svc.icon }} />
+                      <span
+                        className="text-fourth"
+                        dangerouslySetInnerHTML={{ __html: svc.icon }}
+                      />
                     </div>
                     <span className="font-[Montserrat] font-bold text-[9px] tracking-[0.2em] text-fourth/40">
                       {String(i + 1).padStart(2, "0")}

@@ -37,6 +37,7 @@ const ENDPOINT = {
   getBecameSeller: "/users/seller",
   getGlobalSearch: "/global-search/consultations",
   getUserSellerSuspend: "/users/seller/account-suspend-status",
+  getAllTier: "/tier",
 };
 
 export const getUserHomeFeed = async (data) => {
@@ -504,6 +505,15 @@ export const getGlobalSearch = async (query) => {
 export const getUserSellerSuspend = async () => {
   try {
     const res = await axiosInstance.get(ENDPOINT.getUserSellerSuspend);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllTier = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getAllTier);
     return handleResponse(res);
   } catch (error) {
     throw error;
