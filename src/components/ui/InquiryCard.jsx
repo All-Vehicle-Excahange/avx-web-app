@@ -18,10 +18,13 @@ import Image from "next/image";
 import CloseInqPopup from "../features/consult/details/dashboard/components/CloseInqPopup";
 import { useState } from "react";
 import { createSlug } from "@/lib/helper";
+import { markAsSoldVehicle } from "@/services/vehicle.service";
+import MarkSoldPopup from "./MarkSoldPopup";
 
 export default function InquiryCard({ inquiry, onStatusChange }) {
   const [showClosePopup, setShowClosePopup] = useState(false);
-  const [loadingAction, setLoadingAction] = useState(null); // 'APPROVE', 'REJECT', 'CLOSE'
+  const [showMarkSoldPopup, setShowMarkSoldPopup] = useState(false);
+  const [loadingAction, setLoadingAction] = useState(null); // 'APPROVE', 'REJECT', 'CLOSE', 'MARK_SOLD'
 
   if (!inquiry) {
     return (
@@ -45,7 +48,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
   const isPending = inquiryStatus === "PENDING";
   const isApproved = inquiryStatus === "APPROVED";
   const isRejected = inquiryStatus === "REJECTED";
-  const isClosed = inquiryStatus === "CLOSED_BY_VEHICLE_OWNER";
+  const isClosed = inquiryStatus?.startsWith("CLOSED");
 
   const vehicleTitle = `${inquiryVehicleResponse.makerName} ${inquiryVehicleResponse.modelName
     } ${inquiryVehicleResponse.variantName} - ${inquiryVehicleResponse.yearOfMfg
@@ -92,6 +95,27 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
       console.error("Close error:", error);
     } finally {
       setLoadingAction(null);
+    }
+  };
+
+  const handleMarkSold = async (closingPrice) => {
+    if (loadingAction) return;
+    try {
+      setLoadingAction("MARK_SOLD");
+      await markAsSoldVehicle(inquiryVehicleResponse.id, closingPrice);
+      // Update local state by telling parent the vehicle is sold
+      // This is slightly tricky as onStatusChange usually takes a status string for the inquiry
+      // But we can trigger a refresh or handle it if onStatusChange allows.
+      // For now, we assume the parent will handle the refresh or we can manually 
+      // update the inquiry object if we had local state for it.
+      // Since it's passed as a prop, we usually rely on onStatusChange.
+      // Let's call onStatusChange with the current status to trigger a refresh in parent.
+      onStatusChange(inquiry.id, inquiryStatus);
+    } catch (error) {
+      console.error("Mark as sold error:", error);
+    } finally {
+      setLoadingAction(null);
+      setShowMarkSoldPopup(false);
     }
   };
 
@@ -274,6 +298,29 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
               Inquiry Rejected
             </p>
           )}
+
+          {/*   Closed & Not Sold Section */}
+          {isClosed && !inquiryVehicleResponse.isVehicleSold && (
+            <div className="pt-4">
+              <Button
+                showIcon={false}
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowMarkSoldPopup(true)}
+                loading={loadingAction === "MARK_SOLD"}
+              >
+                Mark as Sold
+              </Button>
+            </div>
+          )}
+
+          {/*   Sold Badge */}
+          {inquiryVehicleResponse.isVehicleSold && (
+            <p className="text-xs flex items-center gap-2 text-green-600 font-bold pt-2 uppercase tracking-wide">
+              <BadgeCheck size={16} />
+              Vehicle Sold
+            </p>
+          )}
         </div>
       </div>
 
@@ -294,6 +341,15 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
           }}
         />
       )}
+
+      {/*   Mark as Sold Popup */}
+      {showMarkSoldPopup && (
+        <MarkSoldPopup
+          loading={loadingAction === "MARK_SOLD"}
+          onClose={() => setShowMarkSoldPopup(false)}
+          onConfirm={handleMarkSold}
+        />
+      )}
     </div>
   );
 }
@@ -305,6 +361,7 @@ function StatusPill({ status }) {
     APPROVED: "bg-green-500/15 text-green-500 border-green-500/40",
     REJECTED: "bg-red-500/15 text-red-500 border-red-500/40",
     CLOSED_BY_VEHICLE_OWNER: "bg-gray-500/15 text-gray-400 border-gray-500/40",
+    CLOSED_BY_INQUIRER: "bg-gray-500/15 text-gray-400 border-gray-500/40",
   };
 
   return (

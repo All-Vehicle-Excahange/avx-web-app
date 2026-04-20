@@ -78,9 +78,11 @@ export default function AccountPopup({ open, onClosePopup }) {
     } finally {
       setIsLoggingOut(false);
 
-      // If we are on a dashboard page, move to /consult after logout
+      // Both conditions preserved: Dashboard goes to /consult, others to /
       if (pathname.includes("/consult/dashboard")) {
         router.push("/consult");
+      } else {
+        router.push("/");
       }
 
       logout();
@@ -136,9 +138,42 @@ export default function AccountPopup({ open, onClosePopup }) {
               </p>
             </>
           ) : (
-            <p className="text-lg font-bold text-primary">
-              Hello, {user?.firstname} {user?.lastname}
-            </p>
+            <div className="space-y-4">
+              <Link
+                href={
+                  pathname.includes("/user/details")
+                    ? "/user/details"
+                    : "/user/details/myprofile"
+                }
+                onClick={onClosePopup}
+                className="text-lg font-bold text-primary hover:text-third transition-colors block"
+              >
+                Hello, {user?.firstname} {user?.lastname}
+              </Link>
+
+              {/* PROGRESS INDICATOR */}
+              <div className="space-y-4 px-2 pt-2">
+                {/* Single Profile Progress */}
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-third/60">
+                    <span>Profile Mastery</span>
+                    <span className="text-secondary bg-primary px-2 py-0.5 rounded-full text-[9px]">60%</span>
+                  </div>
+                  <div className="h-1.5 w-full bg-primary/10 rounded-full overflow-hidden border border-white/5">
+                    <div 
+                      className="h-full bg-primary rounded-full transition-all duration-1000 ease-out shadow-[0_0_8px_rgba(var(--primary-rgb),0.4)]"
+                      style={{ width: '60%' }}
+                    />
+                  </div>
+                </div>
+
+                {/* Compact Suggestion Text */}
+                <div className="bg-primary/5 px-4 py-2 rounded-xl border border-white/5 text-[11px] text-primary/70">
+                  <span className="text-primary font-bold mr-1.5 uppercase tracking-wider">Next Step:</span>
+                  Complete your KYC to list your vehicle.
+                </div>
+              </div>
+            </div>
           )}
         </div>
 

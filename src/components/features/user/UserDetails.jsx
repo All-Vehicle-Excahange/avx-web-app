@@ -30,7 +30,13 @@ function UserDetails() {
           { id: "wishlist", label: "My Activity & Preference" },
           { id: "myprofile", label: "My Profile" },
         ]
-          .filter((tab) => !(tab.id === "inquaries" && user?.userRole === "USER"))
+          .filter((tab) => {
+            if (tab.id === "inquaries") {
+              const allowedRoles = ["USER_SELLER", "USER_SELLER_APPLICANT", "CONSULTATION"];
+              return allowedRoles.includes(user?.userRole);
+            }
+            return true;
+          })
           .map((tab) => (
           <button
             key={tab.id}

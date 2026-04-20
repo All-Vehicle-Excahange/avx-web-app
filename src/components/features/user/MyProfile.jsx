@@ -342,73 +342,100 @@ function MyProfile() {
     <section className="w-full py-12 rounded-2xl  space-y-10">
       {/* SUSPENSION STATUS BOARD */}
       {suspendData?.isSuspended && (
-        <div className="mx-auto max-w-2xl space-y-6 mb-10">
-          <div className="rounded-2xl p-8 space-y-6 shadow-xl border-2 border-red-500/30 bg-red-500/5 backdrop-blur-sm relative overflow-hidden group">
-            {/* Background pattern */}
-            <div className="absolute -top-24 -right-24 w-64 h-64 bg-red-500/10 rounded-full blur-3xl group-hover:bg-red-500/15 transition-all duration-700" />
-            <div className="relative z-10 flex flex-col items-center text-center space-y-6">
-              <div className="w-20 h-20 rounded-3xl bg-red-500/20 flex items-center justify-center shadow-inner ring-4 ring-red-500/10 scale-110">
-                <Ban className="w-10 h-10 text-red-500 animate-pulse" />
-              </div>
+        <div className="mx-auto max-w-2xl mb-12">
+          <div className="bg-red-800/10 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-third/20 overflow-hidden relative">
+            <div className="p-8 sm:p-10">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left border-b border-third/10 pb-8">
+                <div className="w-16 h-16 shrink-0 bg-transparent rounded-full flex items-center justify-center border border-primary/40 shadow-sm">
+                  <Ban className="w-8 h-8 text-red-500" />
+                </div>
 
-              <div className="space-y-2">
-                <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic">
-                  Account Suspended
-                </h2>
-                <div className="flex items-center justify-center gap-2">
-                  <span
-                    className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm
-                    ${
-                      suspendData.suspendType === "PERMANENT"
-                        ? "bg-red-600 text-white"
-                        : "bg-orange-500 text-white"
-                    }`}
-                  >
-                    {suspendData.suspendType || "TEMPORARY"} SUSPENSION
-                  </span>
+                <div className="space-y-3 flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h2 className="text-2xl font-bold text-primary tracking-tight">
+                      Account Restricted
+                    </h2>
+                    <p className="text-sm text-third mt-1">
+                      Your access to the AVX platform has been temporarily or
+                      permanently limited.
+                    </p>
+                  </div>
+                  <div className="inline-flex px-4 py-1.5 bg-transparent border border-primary/40 rounded-full text-[11px] font-bold text-primary/70 tracking-widest shadow-sm">
+                    {(
+                      suspendData.consultSuspenseType ||
+                      suspendData.suspendType ||
+                      "TEMPORARY"
+                    ).toUpperCase()}
+                  </div>
                 </div>
               </div>
 
-              <div className="w-full max-w-md bg-white/40 backdrop-blur-md rounded-2xl border border-red-500/10 p-6 space-y-4 shadow-sm">
-                <div className="space-y-1">
-                  <p className="text-[10px] font-bold text-red-500/60 uppercase tracking-[0.2em]">
-                    Reason for Suspension
-                  </p>
-                  <p className="text-base font-bold text-primary leading-tight">
-                    {suspendData.suspendReason ||
-                      "Your consultation account has been suspended for violating our terms of service."}
-                  </p>
-                </div>
+              <div className="mt-8 space-y-4">
+                {(suspendData.reason || suspendData.suspendReason) && (
+                  <div className="bg-third/5 rounded-2xl border border-third/10 p-5 md:p-6 transition hover:bg-third/10">
+                    <div className="flex items-center gap-2 mb-3">
+                      <AlertCircle className="w-4 h-4 text-red-500" />
+                      <h3 className="text-sm font-bold text-primary">
+                        Reason for Enforcement
+                      </h3>
+                    </div>
+                    <p className="text-sm text-third leading-relaxed">
+                      {suspendData.reason || suspendData.suspendReason}
+                    </p>
+                  </div>
+                )}
 
-                {suspendData.expiryDate &&
-                  suspendData.suspendType !== "PERMANENT" && (
-                    <div className="pt-4 border-t border-red-500/10 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-red-400" />
-                        <span className="text-xs font-bold text-third">
-                          Suspension expires on:
-                        </span>
+                {suspendData.adminRemark && (
+                  <div className="bg-third/5 rounded-2xl border border-third/10 p-5 md:p-6 transition hover:bg-third/10">
+                    <h3 className="text-[11px] font-bold text-third uppercase tracking-wider mb-2">
+                      Admin Remark
+                    </h3>
+                    <p className="text-sm text-primary font-medium italic">
+                      &quot;{suspendData.adminRemark}&quot;
+                    </p>
+                  </div>
+                )}
+
+                {(suspendData.suspendUntil || suspendData.expiryDate) &&
+                  (suspendData.consultSuspenseType ||
+                    suspendData.suspendType) !== "PERMANENT" && (
+                    <div className="flex items-center gap-4 bg-orange-50 rounded-2xl border border-orange-100 p-5 md:p-6 shadow-sm">
+                      <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center shrink-0">
+                        <Clock className="w-5 h-5 text-orange-500" />
                       </div>
-                      <span className="text-xs font-black text-red-500">
-                        {new Date(suspendData.expiryDate).toLocaleDateString(
-                          "en-IN",
-                          {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-                          },
-                        )}
-                      </span>
+                      <div>
+                        <p className="text-[11px] font-bold text-orange-500 uppercase tracking-wider">
+                          Restoration Date
+                        </p>
+                        <p className="text-sm text-orange-900 mt-0.5">
+                          Suspension expires on{" "}
+                          <span className="font-bold">
+                            {new Date(
+                              suspendData.suspendUntil ||
+                                suspendData.expiryDate,
+                            ).toLocaleDateString("en-IN", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })}
+                          </span>
+                        </p>
+                      </div>
                     </div>
                   )}
               </div>
 
-              <div className="pt-2 text-xs text-third font-medium max-w-sm">
-                If you believe this is a mistake, please contact our support
-                team at{" "}
-                <span className="text-primary font-bold underline">
-                  support@avx.com
-                </span>
+              <div className="mt-8 pt-6 border-t border-third/10">
+                <p className="text-[13px] text-third text-center sm:text-left leading-relaxed">
+                  If you believe this enforcement is an error or wish to appeal
+                  the decision, please contact our support team at{" "}
+                  <a
+                    href="mailto:support@avx.com"
+                    className="text-primary font-bold hover:underline ml-1"
+                  >
+                    support@avx.com
+                  </a>
+                </p>
               </div>
             </div>
           </div>

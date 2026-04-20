@@ -189,13 +189,32 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
             {/* RIGHT SIDE */}
             <div className="flex items-center gap-2 md:gap-4">
-              <Button
-               
-                size="sm"
-                className="hidden md:block text-xs md:text-sm text-primary border border-primary hover:bg-primary hover:text-secondary"
-              >
-                Sell Your Vehicle
-              </Button>
+              {(() => {
+                const isConsultant = ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(user?.userRole);
+                
+                let btnText = "Sell Your Vehicle";
+                let btnPath = "/became-seller";
+
+                if (isLoggedIn) {
+                  if (isConsultant) {
+                    btnText = "Go TO Dashboard";
+                    btnPath = "/consult/subscription";
+                  } else {
+                    btnText = "My Activity";
+                    btnPath = "/user/details/myprofile";
+                  }
+                }
+
+                return (
+                  <Button
+                    onClick={() => router.push(btnPath)}
+                    size="sm"
+                    className="hidden md:block text-xs md:text-sm text-primary border border-primary hover:bg-primary hover:text-secondary whitespace-nowrap"
+                  >
+                    {btnText}
+                  </Button>
+                );
+              })()}
 
               {/* ACCOUNT */}
               <div
