@@ -7,11 +7,11 @@ export const ABOUT_PREMIUM_1 = [
       heroTitle: "Our Story Built for Buy & Selling a Vehicle",
       heroDescription: `<p>Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
      Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur.</p>`,
-      heroTemplate1: {
+      heroImageTemplateId1: {
         imageUrl: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=90",
         id: 1,
       },
-      heroTemplate2: {
+      heroImageTemplateId2: {
         imageUrl: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1200&q=90",
         id: 2,
       },
@@ -62,6 +62,27 @@ export const ABOUT_PREMIUM_1 = [
           desc: "AI-powered performance engines that learn from every interaction to optimize your fleet.",
         },
       ],
-    }
+    },
+    rules: {
+      heroTitle: { min: 10, max: 100 },
+      heroDescription: { min: 50, max: 2000 },
+      aboutUsDescription: { min: 50, max: 2000 },
+      missionTitle: { min: 10, max: 100 },
+      missionDesc: { min: 50, max: 2000 },
+      visionTitle: { min: 10, max: 100 },
+      visionDesc: { min: 50, max: 2000 },
+      servicesTitle: { min: 10, max: 100 },
+      servicesDesc: { min: 50, max: 2000 },
+    },
+    arrayRules: {
+      stats: {
+        number: { min: 1, max: 10 },
+        label: { min: 5, max: 100 },
+      },
+      services: {
+        title: { min: 5, max: 100 },
+        desc: { min: 10, max: 300 },
+      },
+    },
   },
 ];

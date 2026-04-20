@@ -135,14 +135,14 @@ export default function AboutPremium2({
         const blob = await getBlobFromUrl(d.customHeroImage1);
         if (blob) heroData.append("customHeroImage1", blob, "hero1.png");
       } else if (d.heroTemplate1?.id) {
-        heroData.append("heroTemplateId1", d.heroTemplate1.id);
+        heroData.append("heroImageTemplateId1", d.heroTemplate1.id);
       }
 
       if (d.customHeroImage2 && d.customHeroImage2.startsWith("blob:")) {
         const blob = await getBlobFromUrl(d.customHeroImage2);
         if (blob) heroData.append("customHeroImage2", blob, "hero2.png");
       } else if (d.heroTemplate2?.id) {
-        heroData.append("heroTemplateId2", d.heroTemplate2.id);
+        heroData.append("heroImageTemplateId2", d.heroTemplate2.id);
       }
 
       // Mission
@@ -508,34 +508,15 @@ export default function AboutPremium2({
       <section className="relative px-2 lg:px-4 overflow-hidden">
         {/* HERO BACKGROUND (VIDEO/IMAGE) */}
         <div className="absolute inset-0 h-screen overflow-hidden">
-          {(
-            d.customHeroImage1 ||
-            d.customHeroImageUrl1 ||
-            d.heroTemplate1?.imageUrl
-          )?.includes(".mp4") ? (
-            <video
-              src={
-                d.customHeroImage1 ||
-                d.customHeroImageUrl1 ||
-                d.heroTemplate1?.imageUrl
-              }
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <img
-              src={
-                d.customHeroImage1 ||
-                d.customHeroImageUrl1 ||
-                d.heroTemplate1?.imageUrl
-              }
-              className="w-full h-full object-cover"
-              alt="Background"
-            />
-          )}
+          <img
+            src={
+              d.customHeroImage1 ||
+              d.customHeroImageUrl1 ||
+              d.heroImageTemplate1?.imageUrl
+            }
+            className="w-full h-full object-cover"
+            alt="Background"
+          />
           <div className="absolute inset-0 bg-black/60" />
         </div>
 
@@ -563,7 +544,7 @@ export default function AboutPremium2({
                     src={
                       d.customHeroImage2 ||
                       d.customHeroImageUrl2 ||
-                      d.heroTemplate2?.imageUrl
+                      d.heroImageTemplate2?.imageUrl
                     }
                     alt="Hero side"
                     className="w-full h-[450px] object-cover transition-transform duration-700 group-hover:scale-110"

@@ -167,12 +167,12 @@ export default function AboutPro2({
       heroData.append("heroTitle", data.aboutHeroTitle || "");
       heroData.append("heroDescription", data.aboutHeroDescription || "");
       if (data.aboutHeroTemplate1?.id)
-        heroData.append("heroTemplateId1", data.aboutHeroTemplate1.id);
+        heroData.append("heroImageTemplateId1", data.aboutHeroTemplate1.id);
       if (data.aboutHeroTemplate2?.id)
-        heroData.append("heroTemplateId2", data.aboutHeroTemplate2.id);
+        heroData.append("heroImageTemplateId2", data.aboutHeroTemplate2.id);
       if (data.aboutHeroTemplate3?.id)
-        heroData.append("heroTemplateId3", data.aboutHeroTemplate3.id);
-
+        heroData.append("heroImageTemplateId3", data.aboutHeroTemplate3.id);
+      // Mission
       const missionData = new FormData();
       missionData.append("missionTitle", data.aboutMissionTitle || "");
       missionData.append(
@@ -182,6 +182,7 @@ export default function AboutPro2({
       if (data.aboutMissionTemplate1?.id)
         missionData.append("missionTemplateId1", data.aboutMissionTemplate1.id);
 
+      // Vision
       const visionData = new FormData();
       visionData.append("visionTitle", data.aboutVisionTitle || "");
       visionData.append("visionDescription", data.aboutVisionDescription || "");
@@ -255,7 +256,7 @@ export default function AboutPro2({
                   label="Hero Image 1"
                   src={data.aboutHeroTemplate1?.imageUrl}
                   fieldKey="hero1"
-                  imageType="ABOUT_HERO"
+                  imageType="HERO"
                   onChange={({ imageUrl, id }) => {
                     update("aboutHeroTemplate1", {
                       ...data.aboutHeroTemplate1,
@@ -270,7 +271,7 @@ export default function AboutPro2({
                   label="Hero Image 2"
                   src={data.aboutHeroTemplate2?.imageUrl}
                   fieldKey="hero2"
-                  imageType="ABOUT_HERO"
+                  imageType="HERO"
                   onChange={({ imageUrl, id }) => {
                     update("aboutHeroTemplate2", {
                       ...data.aboutHeroTemplate2,
@@ -285,7 +286,7 @@ export default function AboutPro2({
                   label="Hero Image 3"
                   src={data.aboutHeroTemplate3?.imageUrl}
                   fieldKey="hero3"
-                  imageType="ABOUT_HERO"
+                  imageType="HERO"
                   onChange={({ imageUrl, id }) => {
                     update("aboutHeroTemplate3", {
                       ...data.aboutHeroTemplate3,
@@ -501,7 +502,12 @@ export default function AboutPro2({
         {/* BACKGROUND IMAGE */}
         <div className="absolute inset-0">
           <img
-            src={data.aboutHeroTemplate1.imageUrl}
+            src={
+              data.aboutHeroTemplate1.imageUrl ||
+              data.customHeroImage1 ||
+              data.customHeroImageUrl1 ||
+              data.heroImageTemplate1?.imageUrl
+            }
             alt="Our story"
             className="w-full h-full object-cover object-center"
           />

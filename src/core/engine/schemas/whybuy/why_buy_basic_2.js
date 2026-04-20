@@ -24,25 +24,25 @@ export const WHY_BUY_BASIC_2 = [
           title: "Discover Vehicles",
           description:
             "Browse our inventory and shortlist vehicles that match your requirements.",
-          icon: "Search",
+          icon: `<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="currentColor"><path d="M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/></svg>`,
         },
         {
           title: "Connect With Our Team",
           description:
             "Use AVX chat to discuss vehicle condition, pricing, and availability.",
-          icon: "MessageCircle",
+          icon: `<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="currentColor"><path d="M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/></svg>`,
         },
         {
           title: "AVX Inspection Option",
           description:
             "Buyers can request AVX inspection to receive an independent condition report.",
-          icon: "ShieldCheck",
+          icon: `<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="currentColor"><path d="M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/></svg>`,
         },
         {
           title: "Decision & Purchase",
           description:
             "Once satisfied with the vehicle details and inspection, finalize the purchase directly with the consultant.",
-          icon: "Handshake",
+          icon: `<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="currentColor"><path d="M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/></svg>`,
         },
       ],
       /* AVX INSPECTION */
@@ -84,6 +84,31 @@ export const WHY_BUY_BASIC_2 = [
         },
       ],
       featuredReviews: [],
+    },
+    rules: {
+      whyBuyHeroTitle: { min: 10, max: 100 },
+      whyBuyHeroDescription: { min: 50, max: 2000 },
+      storyTitle: { min: 10, max: 100 },
+      storyDescription: { min: 50, max: 2000 },
+      vehicleSelectionTitle: { min: 10, max: 100 },
+      vehicleSelectionDescription: { min: 50, max: 2000 },
+      processTitle: { min: 10, max: 100 },
+      processDescription: { min: 50, max: 2000 },
+      inspectionTitle: { min: 10, max: 100 },
+      inspectionText: { min: 50, max: 2000 },
+      customerCommitmentTitle: { min: 10, max: 100 },
+      customerCommitmentDescription: { min: 50, max: 2000 },
+      testimonialTitle: { min: 10, max: 100 },
+    },
+    arrayRules: {
+      processSteps: {
+        title: { min: 5, max: 100 },
+        description: { min: 10, max: 300 },
+      },
+      testimonials: {
+        name: { min: 3, max: 50 },
+        review: { min: 10, max: 300 },
+      },
     },
   },
 ];

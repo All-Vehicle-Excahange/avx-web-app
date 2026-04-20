@@ -79,7 +79,12 @@ const formatOptionLabel = ({ value, label }) => (
   </div>
 );
 const DEFAULT_DATA = ABOUT_PREMIUM_1[0].data;
-export default function AboutPremium1({ data, isEditing, onUpdate, onNextTab }) {
+export default function AboutPremium1({
+  data,
+  isEditing,
+  onUpdate,
+  onNextTab,
+}) {
   const [isSaving, setIsSaving] = useState(false);
   const fallbackData = { ...DEFAULT_DATA };
   const d = data || fallbackData;
@@ -121,7 +126,7 @@ export default function AboutPremium1({ data, isEditing, onUpdate, onNextTab }) 
         const blob = await getBlobFromUrl(d.customHeroImage1);
         if (blob) heroData.append("customHeroImage1", blob, "hero1.png");
       } else if (d.heroTemplate1?.id) {
-        heroData.append("heroTemplateId1", d.heroTemplate1.id);
+        heroData.append("heroImageTemplateId1", d.heroTemplate1.id);
       }
 
       // Mission
@@ -208,7 +213,11 @@ export default function AboutPremium1({ data, isEditing, onUpdate, onNextTab }) 
           <div className="h-52 relative">
             <ImageUploader
               label="Hero Background Image"
-              src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl}
+              src={
+                d.customHeroImage1 ||
+                d.customHeroImageUrl1 ||
+                d.heroTemplate1?.imageUrl
+              }
               fieldKey="HEADER"
               onChange={({ imageUrl, id }) => {
                 const updatedData = { ...d };
@@ -250,7 +259,11 @@ export default function AboutPremium1({ data, isEditing, onUpdate, onNextTab }) 
             <div className="h-52 relative">
               <ImageUploader
                 label="Mission Image"
-                src={d.customMissionImage1 || d.customMissionUrl1 || d.missionTemplate1?.imageUrl}
+                src={
+                  d.customMissionImage1 ||
+                  d.customMissionUrl1 ||
+                  d.missionTemplate1?.imageUrl
+                }
                 fieldKey="mission"
                 onChange={({ imageUrl, id }) => {
                   const updatedData = { ...d };
@@ -293,7 +306,11 @@ export default function AboutPremium1({ data, isEditing, onUpdate, onNextTab }) 
             <div className="h-52 relative">
               <ImageUploader
                 label="Vision Image"
-                src={d.customVisionImage1 || d.customVisionUrl1 || d.visionTemplate1?.imageUrl}
+                src={
+                  d.customVisionImage1 ||
+                  d.customVisionUrl1 ||
+                  d.visionTemplate1?.imageUrl
+                }
                 fieldKey="vision"
                 onChange={({ imageUrl, id }) => {
                   const updatedData = { ...d };
@@ -416,8 +433,8 @@ export default function AboutPremium1({ data, isEditing, onUpdate, onNextTab }) 
           ))}
         </div>
         <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
-          <Button 
-            onClick={handleSaveAndNext} 
+          <Button
+            onClick={handleSaveAndNext}
             disabled={isSaving}
             variant="ghost"
           >
@@ -450,7 +467,11 @@ export default function AboutPremium1({ data, isEditing, onUpdate, onNextTab }) 
           <div className="relative">
             <div className="relative rounded-2xl overflow-hidden border border-primary/20">
               <img
-                src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl}
+                src={
+                  d.customHeroImage1 ||
+                  d.customHeroImageUrl1 ||
+                  d.heroImageTemplate1?.imageUrl
+                }
                 alt="Hero"
                 className="w-full h-[300px] sm:h-[400px] lg:h-[400px] object-cover"
               />
@@ -478,7 +499,11 @@ export default function AboutPremium1({ data, isEditing, onUpdate, onNextTab }) 
               <div className="lg:w-1/2 relative group">
                 <div className="relative h-[800px] lg:h-[600px] w-full lg:w-[95%] overflow-hidden rounded-tr-[100px] lg:rounded-tr-[200px] border-r border-t border-primary/10">
                   <img
-                    src={d.customMissionImage1 || d.customMissionUrl1 || d.missionTemplate1?.imageUrl}
+                    src={
+                      d.customMissionImage1 ||
+                      d.customMissionUrl1 ||
+                      d.missionTemplate1?.imageUrl
+                    }
                     className="w-full h-full object-cover grayscale transition-all duration-800 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:grayscale-0 group-hover:-translate-y-5 group-hover:brightness-110 group-hover:saturate-125"
                     alt="Mission"
                   />
@@ -499,7 +524,11 @@ export default function AboutPremium1({ data, isEditing, onUpdate, onNextTab }) 
               <div className="lg:w-1/2 lg:mt-64 relative group">
                 <div className="relative h-[400px] lg:h-[550px] w-full overflow-hidden rounded-bl-[100px] lg:rounded-bl-[200px] border-b border-l border-primary/10">
                   <img
-                    src={d.customVisionImage1 || d.customVisionUrl1 || d.visionTemplate1?.imageUrl}
+                    src={
+                      d.customVisionImage1 ||
+                      d.customVisionUrl1 ||
+                      d.visionTemplate1?.imageUrl
+                    }
                     className="w-full h-full object-cover transition-all duration-800 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-105"
                     alt="Vision"
                   />

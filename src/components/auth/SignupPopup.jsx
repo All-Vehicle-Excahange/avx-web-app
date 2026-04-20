@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Button from "@/components/ui/button";
 import { getOtp, signup } from "@/services/auth.service";
@@ -17,6 +18,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
     reset,
     formState: { errors },
   } = useForm();
+  const router = useRouter();
 
   const [accountType, setAccountType] = useState("personal");
 
@@ -146,7 +148,12 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
 
       if (!res?.error && (res?.success || res?.status)) {
         onSuccess();
-        setTimeout(() => handleClosePopup(), 500);
+        setTimeout(() => {
+          if (accountType === "consultant") {
+            router.push("/consult");
+          }
+          handleClosePopup();
+        }, 500);
       } else if (res?.error) {
         const msg = res?.message?.toLowerCase();
         if (msg?.includes("email")) {

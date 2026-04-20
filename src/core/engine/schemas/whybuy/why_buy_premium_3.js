@@ -196,5 +196,30 @@ export const WHY_BUY_PREMIUM_3 = [
         },
       ],
     },
+    rules: {
+      whyBuyHeroTitle: { min: 10, max: 100 },
+      whyBuyHeroDescription: { min: 50, max: 2000 },
+      storyTitle: { min: 10, max: 100 },
+      storyDescription: { min: 50, max: 2000 },
+      vehicleSelectionTitle: { min: 10, max: 100 },
+      vehicleSelectionDescription: { min: 50, max: 2000 },
+      processTitle: { min: 10, max: 100 },
+      processDescription: { min: 50, max: 2000 },
+      inspectionTitle: { min: 10, max: 100 },
+      inspectionText: { min: 50, max: 2000 },
+      customerCommitmentTitle: { min: 10, max: 100 },
+      customerCommitmentDescription: { min: 50, max: 2000 },
+      testimonialTitle: { min: 10, max: 100 },
+    },
+    arrayRules: {
+      processSteps: {
+        title: { min: 5, max: 100 },
+        description: { min: 10, max: 300 },
+      },
+      testimonials: {
+        name: { min: 3, max: 50 },
+        review: { min: 10, max: 300 },
+      },
+    },
   },
 ];

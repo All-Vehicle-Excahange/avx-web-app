@@ -99,6 +99,32 @@ provide honest guidance and reliable information for every buyer.`,
                     review: "Transparent communication and good vehicle options. I appreciated the AVX inspection support.",
                 },
             ],
-        }
+        },
+        rules: {
+            whyBuyHeroTitle: { min: 10, max: 100 },
+            whyBuyHeroDescription: { min: 50, max: 2000 },
+            whyBuyStoryTitle: { min: 10, max: 100 },
+            whyBuyStoryDescription: { min: 50, max: 2000 },
+            whyBuyVehicleSelectionTitle: { min: 10, max: 100 },
+            whyBuyVehicleSelectionDescription: { min: 50, max: 2000 },
+            whyBuyProcessTitle: { min: 10, max: 100 },
+            whyBuyProcessDescription: { min: 50, max: 2000 },
+            whyBuyInspectionTitle: { min: 10, max: 100 },
+            whyBuyInspectionDescription: { min: 50, max: 2000 },
+            whyBuyCustomerCommitmentTitle: { min: 10, max: 100 },
+            whyBuyCustomerCommitmentDescription: { min: 50, max: 2000 },
+            whyBuyGalleryTitle: { min: 10, max: 100 },
+            whyBuyTestimonialTitle: { min: 10, max: 100 },
+        },
+        arrayRules: {
+            processSteps: {
+                title: { min: 5, max: 100 },
+                description: { min: 10, max: 300 },
+            },
+            testimonials: {
+                name: { min: 3, max: 50 },
+                review: { min: 10, max: 300 },
+            },
+        },
     },
 ];

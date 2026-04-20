@@ -627,15 +627,13 @@ export default function WhyBuyHereBasic2({
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div className="w-10 h-10 border border-third/20 rounded-xl flex items-center justify-center shrink-0 group-hover:border-primary/30 transition-colors duration-300">
-                  {typeof s.icon === "string" && s.icon.startsWith("<svg") ? (
+                  {s.icon ? (
                     <div
-                      className="text-fourth [&>svg]:w-5 [&>svg]:h-5"
+                      className="text-fourth flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5"
                       dangerouslySetInnerHTML={{ __html: s.icon }}
                     />
                   ) : (
-                    <div className="w-5 h-5 bg-third/20 rounded flex items-center justify-center text-xs text-fourth">
-                      Icon
-                    </div>
+                    <div className="w-5 h-5 bg-third/20 rounded flex items-center justify-center text-xs text-fourth" />
                   )}
                 </div>
                 <div>

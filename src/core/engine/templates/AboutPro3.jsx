@@ -84,17 +84,22 @@ const formatOptionLabel = ({ value, label }) => (
 
 const DEFAULT_DATA = ABOUT_PRO_3[0].data;
 
-export default function AboutPro3({ data: rawData, isEditing, onUpdate, onNextTab }) {
+export default function AboutPro3({
+  data: rawData,
+  isEditing,
+  onUpdate,
+  onNextTab,
+}) {
   const [isSaving, setIsSaving] = useState(false);
   const data = rawData
     ? {
-      ...DEFAULT_DATA,
-      ...Object.fromEntries(
-        Object.entries(rawData || {}).filter(
-          ([, v]) => v !== undefined && v !== null
-        )
-      ),
-    }
+        ...DEFAULT_DATA,
+        ...Object.fromEntries(
+          Object.entries(rawData || {}).filter(
+            ([, v]) => v !== undefined && v !== null,
+          ),
+        ),
+      }
     : DEFAULT_DATA;
 
   const update = (k, v) => {
@@ -120,20 +125,23 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate, onNextTa
       heroData.append("heroTitle", data.aboutHeroTitle || "");
       heroData.append("heroDescription", data.aboutHeroDescription || "");
       if (data.aboutHeroTemplate1?.id)
-        heroData.append("heroTemplateId1", data.aboutHeroTemplate1.id);
-      
+        heroData.append("heroImageTemplateId1", data.aboutHeroTemplate1.id);
+
       const missionData = new FormData();
       missionData.append("missionTitle", data.aboutMissionTitle || "");
-      missionData.append("missionDescription", data.aboutMissionDescription || "");
+      missionData.append(
+        "missionDescription",
+        data.aboutMissionDescription || "",
+      );
       if (data.aboutMissionTemplate1?.id)
         missionData.append("missionTemplateId1", data.aboutMissionTemplate1.id);
-      
+
       const visionData = new FormData();
       visionData.append("visionTitle", data.aboutVisionTitle || "");
       visionData.append("visionDescription", data.aboutVisionDescription || "");
       if (data.aboutVisionTemplate1?.id)
         visionData.append("visionTemplateId1", data.aboutVisionTemplate1.id);
-      
+
       const statsData = new FormData();
       statsData.append("aboutUsDescription", data.aboutStatsDescription || "");
       if (data.stats && Array.isArray(data.stats)) {
@@ -142,10 +150,13 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate, onNextTa
           statsData.append(`stats[${i}].label`, stat.label || "");
         });
       }
-      
+
       const servicesData = new FormData();
       servicesData.append("serviceTitle", data.aboutServicesTitle || "");
-      servicesData.append("serviceDescription", data.aboutServicesDescription || "");
+      servicesData.append(
+        "serviceDescription",
+        data.aboutServicesDescription || "",
+      );
       if (data.services && Array.isArray(data.services)) {
         data.services.forEach((service, i) => {
           servicesData.append(`services[${i}].title`, service.title || "");
@@ -197,7 +208,7 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate, onNextTa
                 label="Hero Image 1"
                 src={data.aboutHeroTemplate1?.imageUrl}
                 fieldKey="hero1"
-                imageType="ABOUT_HERO"
+                imageType="HERO"
                 onChange={({ imageUrl, id }) => {
                   update("aboutHeroTemplate1", {
                     ...data.aboutHeroTemplate1,
@@ -298,12 +309,16 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate, onNextTa
                 <EditorInput
                   bold
                   value={s.number}
-                  onChange={(e) => updateArr("stats", i, "number", e.target.value)}
+                  onChange={(e) =>
+                    updateArr("stats", i, "number", e.target.value)
+                  }
                   placeholder="Number"
                 />
                 <EditorInput
                   value={s.label}
-                  onChange={(e) => updateArr("stats", i, "label", e.target.value)}
+                  onChange={(e) =>
+                    updateArr("stats", i, "label", e.target.value)
+                  }
                   placeholder="Label"
                 />
               </div>
@@ -313,7 +328,9 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate, onNextTa
         <hr className="border-third/20" />
 
         {/* SERVICES EDITOR */}
-        <h3 className="text-primary font-bold text-xl mb-4">Services Section</h3>
+        <h3 className="text-primary font-bold text-xl mb-4">
+          Services Section
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <EditorInput
             bold
@@ -359,7 +376,9 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate, onNextTa
                 <EditorInput
                   bold
                   value={s.title}
-                  onChange={(e) => updateArr("services", i, "title", e.target.value)}
+                  onChange={(e) =>
+                    updateArr("services", i, "title", e.target.value)
+                  }
                   placeholder="Service Title"
                 />
               </div>
@@ -372,7 +391,9 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate, onNextTa
                 <EditorInput
                   size="sm"
                   value={s.desc}
-                  onChange={(e) => updateArr("services", i, "desc", e.target.value)}
+                  onChange={(e) =>
+                    updateArr("services", i, "desc", e.target.value)
+                  }
                   placeholder="Service Description"
                 />
               </div>
@@ -381,8 +402,8 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate, onNextTa
         </div>
 
         <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
-          <Button 
-            onClick={handleSaveAndNext} 
+          <Button
+            onClick={handleSaveAndNext}
             disabled={isSaving}
             variant="ghost"
           >
@@ -398,7 +419,12 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate, onNextTa
       {/* HERO */}
       <section className="relative min-h-screen py-12 flex flex-col overflow-hidden">
         <img
-          src={data.aboutHeroTemplate1?.imageUrl}
+          src={
+            data.aboutHeroTemplate1?.imageUrl ||
+            data.customHeroImage1 ||
+            data.customHeroImageUrl1 ||
+            data.heroImageTemplate1?.imageUrl
+          }
           className="absolute inset-0 w-full h-full object-cover"
           alt="Hero"
         />
@@ -440,13 +466,17 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate, onNextTa
               />
               <div className="absolute inset-0 bg-linear-to-r from-secondary/95 via-secondary/85 to-secondary/70" />
               <div className="relative z-10 px-8 sm:px-12 lg:px-16 max-w-2xl flex flex-col gap-4">
-                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">01</p>
+                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                  01
+                </p>
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-primary font-[Montserrat]">
                   {data.aboutMissionTitle}
                 </h2>
                 <div
                   className="text-third/70"
-                  dangerouslySetInnerHTML={{ __html: data.aboutMissionDescription }}
+                  dangerouslySetInnerHTML={{
+                    __html: data.aboutMissionDescription,
+                  }}
                 />
               </div>
             </div>
@@ -458,13 +488,17 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate, onNextTa
               />
               <div className="absolute inset-0 bg-linear-to-l from-secondary/95 via-secondary/85 to-secondary/70" />
               <div className="relative z-10 px-8 sm:px-12 lg:px-16 text-right ml-auto max-w-2xl flex flex-col gap-4 w-full">
-                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">02</p>
+                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                  02
+                </p>
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-primary font-[Montserrat]">
                   {data.aboutVisionTitle}
                 </h2>
                 <div
                   className="text-third/70"
-                  dangerouslySetInnerHTML={{ __html: data.aboutVisionDescription }}
+                  dangerouslySetInnerHTML={{
+                    __html: data.aboutVisionDescription,
+                  }}
                 />
               </div>
             </div>
@@ -495,7 +529,9 @@ export default function AboutPro3({ data: rawData, isEditing, onUpdate, onNextTa
                   key={i}
                   className="flex flex-col gap-2 border border-third/10 rounded-2xl p-6 lg:p-8 hover:border-third/20 hover:bg-third/3 shadow-2xl"
                 >
-                  <span className="text-xl lg:text-3xl text-primary">{stat.number}</span>
+                  <span className="text-xl lg:text-3xl text-primary">
+                    {stat.number}
+                  </span>
                   <span className="text-sm text-third/50">{stat.label}</span>
                 </div>
               ))}

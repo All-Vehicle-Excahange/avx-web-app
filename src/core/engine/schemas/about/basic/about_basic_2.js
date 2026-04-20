@@ -67,5 +67,26 @@ export const ABOUT_BASIC_2 = [
         },
       ],
     },
+    rules: {
+      heroTitle: { min: 10, max: 100 },
+      heroDescription: { min: 50, max: 2000 },
+      missionTitle: { min: 10, max: 100 },
+      missionDesc: { min: 50, max: 2000 },
+      visionTitle: { min: 10, max: 100 },
+      visionDesc: { min: 50, max: 2000 },
+      aboutUsDescription: { min: 50, max: 2000 },
+      servicesTitle: { min: 10, max: 100 },
+      servicesDesc: { min: 50, max: 2000 },
+    },
+    arrayRules: {
+      stats: {
+        number: { min: 1, max: 10 },
+        label: { min: 5, max: 100 },
+      },
+      services: {
+        title: { min: 5, max: 100 },
+        desc: { min: 10, max: 300 },
+      },
+    },
   },
 ];

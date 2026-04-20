@@ -1,16 +1,42 @@
 import { EngineRenderer } from "@/core/engine/Renderer";
 import { THEME_STORE } from "@/core/engine/themeStore";
-import { getStoreFront } from "@/services/theme.service";
 import { useEffect, useState } from "react";
 import StoreFrontAboutSkeleton from "@/components/ui/skeleton/StoreFrontAboutSkeleton";
+import { getWhyBuyHereStoreFrontByUserName } from "@/services/user.service";
+import { useParams } from "next/navigation";
 
 function mapApiToTemplateData(api) {
   return {
     ...api,
+    // Hero
+    whyBuyHeroTemplate1: { imageUrl: api.customWhyBuyHeroUrl1 },
+    whyBuyHeroTemplate2: { imageUrl: api.customWhyBuyHeroUrl2 },
+    whyBuyHeroTemplate3: { imageUrl: api.customWhyBuyHeroUrl3 },
+
+    // Process
+    processSteps: api.processes?.map((p) => ({
+      title: p.title,
+      description: p.desc,
+      icon: p.icon,
+    })),
+
+    // Inspection
+    inspectionText: api.inspectionDescription,
+    inspectionTemplate1: { imageUrl: api.customInspectionUrl1 },
+    inspectionTemplate2: { imageUrl: api.customInspectionUrl2 },
+    inspectionTemplate3: { imageUrl: api.customInspectionUrl3 },
+
+    // Testimonials (Featured Reviews)
+    testimonials: api.featuredReviews?.map((r) => ({
+      name: r.reviewerName,
+      review: r.reviewText,
+    })),
   };
 }
 
 export default function WhyBuyHere({ storeData = null }) {
+  const id = useParams()?.id;
+
   const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -18,12 +44,12 @@ export default function WhyBuyHere({ storeData = null }) {
     const fetchTheme = async () => {
       let apiData = storeData;
 
-      if (!apiData) {
+      if (!apiData && id) {
         try {
-          const res = await getStoreFront();
+          const res = await getWhyBuyHereStoreFrontByUserName(id);
           apiData = res?.data;
         } catch (error) {
-          console.error(error);
+          console.error("Error fetching why buy here data:", error);
         }
       }
 
@@ -48,7 +74,7 @@ export default function WhyBuyHere({ storeData = null }) {
     };
 
     fetchTheme().finally(() => setLoading(false));
-  }, [storeData]);
+  }, [storeData, id]);
 
   if (loading) return <StoreFrontAboutSkeleton />;
 
