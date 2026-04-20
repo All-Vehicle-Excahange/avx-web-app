@@ -73,6 +73,13 @@ export const ABOUT_PREMIUM_3 = [
       visionDesc: { min: 50, max: 2000 },
       servicesTitle: { min: 10, max: 100 },
       servicesDesc: { min: 50, max: 2000 },
+      heroImageTemplateId1: { min: 5, max: 2000 },
+      heroImageTemplateId2: { min: 5, max: 2000 },
+      missionTemplate1: { min: 5, max: 2000 },
+      visionTemplate1: { min: 5, max: 2000 },
+      customHeroImage1: { min: 5, max: 2000 },
+      customMissionImage1: { min: 5, max: 2000 },
+      customVisionImage1: { min: 5, max: 2000 },
     },
     arrayRules: {
       stats: {

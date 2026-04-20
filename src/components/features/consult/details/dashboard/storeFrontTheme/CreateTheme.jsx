@@ -73,18 +73,32 @@ const getSectionProgress = (section, defaultSection) => {
       const defaultValue = defaultData[field] || "";
 
       // Count as valid ONLY if it's different from default AND meets length rules
-      const cleanValue = String(value).replace(/<[^>]*>/g, "").trim();
-      const cleanDefault = String(defaultValue)
-        .replace(/<[^>]*>/g, "")
-        .trim();
+      const getCleanString = (val) => {
+        if (!val) return "";
+        if (typeof val === "object" && val.imageUrl) return val.imageUrl.trim();
+        return String(val).replace(/<[^>]*>/g, "").trim();
+      };
+
+      const cleanValue = getCleanString(value);
+      const cleanDefault = getCleanString(defaultValue);
 
       totalFields++;
-      if (
-        cleanValue !== cleanDefault &&
-        cleanValue.length >= rule.min &&
-        cleanValue.length <= rule.max
-      ) {
-        filledFields++;
+
+      const isImageField =
+        field.toLowerCase().includes("image") ||
+        field.toLowerCase().includes("template");
+
+      if (cleanValue !== cleanDefault && cleanValue.length > 0) {
+        if (isImageField || (rule.min === undefined && rule.max === undefined)) {
+          // If it's an image OR the rule has no min/max, existence is enough
+          filledFields++;
+        } else if (
+          cleanValue.length >= (rule.min ?? 0) &&
+          cleanValue.length <= (rule.max ?? Infinity)
+        ) {
+          // Otherwise, respect the provided bounds
+          filledFields++;
+        }
       }
     });
   }
@@ -103,18 +117,28 @@ const getSectionProgress = (section, defaultSection) => {
             const value = item[field] || "";
             const defaultValue = defaultItem[field] || "";
 
-            const cleanValue = String(value).replace(/<[^>]*>/g, "").trim();
-            const cleanDefault = String(defaultValue)
-              .replace(/<[^>]*>/g, "")
-              .trim();
+            const cleanValue = getCleanString(value);
+            const cleanDefault = getCleanString(defaultValue);
 
             totalFields++;
-            if (
-              cleanValue !== cleanDefault &&
-              cleanValue.length >= rule.min &&
-              cleanValue.length <= rule.max
-            ) {
-              filledFields++;
+
+            const isImageField =
+              field.toLowerCase().includes("image") ||
+              field.toLowerCase().includes("template") ||
+              field.toLowerCase().includes("icon");
+
+            if (cleanValue !== cleanDefault && cleanValue.length > 0) {
+              if (
+                isImageField ||
+                (rule.min === undefined && rule.max === undefined)
+              ) {
+                filledFields++;
+              } else if (
+                cleanValue.length >= (rule.min ?? 0) &&
+                cleanValue.length <= (rule.max ?? Infinity)
+              ) {
+                filledFields++;
+              }
             }
           });
         });

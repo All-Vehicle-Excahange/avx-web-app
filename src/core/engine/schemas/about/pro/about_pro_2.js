@@ -85,6 +85,14 @@ export const ABOUT_PRO_2 = [
       aboutStatsDescription: { min: 50, max: 2000 },
       aboutServicesTitle: { min: 10, max: 100 },
       aboutServicesDescription: { min: 50, max: 2000 },
+      aboutHeroTemplate1: { min: 5, max: 2000 },
+      aboutHeroTemplate2: { min: 5, max: 2000 },
+      aboutHeroTemplate3: { min: 5, max: 2000 },
+      aboutMissionTemplate1: { min: 5, max: 2000 },
+      aboutVisionTemplate1: { min: 5, max: 2000 },
+      customHeroImage1: { min: 5, max: 2000 },
+      customMissionImage1: { min: 5, max: 2000 },
+      customVisionImage1: { min: 5, max: 2000 },
     },
     arrayRules: {
       stats: {

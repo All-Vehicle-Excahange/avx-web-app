@@ -6,7 +6,8 @@ import SignupPopup from "@/components/auth/SignupPopup";
 import Button from "@/components/ui/button";
 import { createPortal } from "react-dom";
 import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 import { useAuthStore } from "@/stores/useAuthStore";
 import { logoutUser } from "@/services/auth.service";
@@ -18,6 +19,9 @@ export default function AccountPopup({ open, onClosePopup }) {
 
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [isLogoutClosing, setIsLogoutClosing] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const pathname = usePathname();
 
   const user = useAuthStore((state) => state.user);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -62,17 +66,26 @@ export default function AccountPopup({ open, onClosePopup }) {
     onClosePopup();
   };
 
-  const wrapConsultAuth = (path) => `/consult/subscription?redirect=${encodeURIComponent(path)}`;
+  const wrapConsultAuth = (path) =>
+    `/consult/subscription?redirect=${encodeURIComponent(path)}`;
 
   const handleLogout = async () => {
     try {
+      setIsLoggingOut(true);
       await logoutUser();
     } catch (err) {
       console.log("Logout API failed, clearing state anyway...");
-    }
+    } finally {
+      setIsLoggingOut(false);
 
-    logout();
-    handleCloseLogout();
+      // If we are on a dashboard page, move to /consult after logout
+      if (pathname.includes("/consult/dashboard")) {
+        router.push("/consult");
+      }
+
+      logout();
+      handleCloseLogout();
+    }
   };
 
   return (
@@ -273,7 +286,10 @@ export default function AccountPopup({ open, onClosePopup }) {
               {isConsultant && (
                 <>
                   <Section title="Dashboard">
-                    <Item href={wrapConsultAuth("/consult/dashboard/overview")} onClick={onClosePopup}>
+                    <Item
+                      href={wrapConsultAuth("/consult/dashboard/overview")}
+                      onClick={onClosePopup}
+                    >
                       Overview
                     </Item>
                     <Item
@@ -300,7 +316,10 @@ export default function AccountPopup({ open, onClosePopup }) {
                     >
                       Analytics
                     </Item>
-                    <Item href={wrapConsultAuth("/consult/dashboard/ppc")} onClick={onClosePopup}>
+                    <Item
+                      href={wrapConsultAuth("/consult/dashboard/ppc")}
+                      onClick={onClosePopup}
+                    >
                       PPC & Boost
                     </Item>
                   </Section>
@@ -414,13 +433,25 @@ export default function AccountPopup({ open, onClosePopup }) {
                   full
                   size="sm"
                   onClick={handleCancelLogout}
-                  className="border border-white/10  text-primary border border-primary hover:bg-primary hover:text-secondary"
+                  disabled={isLoggingOut}
+                  className="border border-white/10  text-primary border border-primary hover:bg-primary hover:text-secondary disabled:opacity-50"
                 >
                   Cancel
                 </Button>
 
-                <Button variant="ghost" full size="sm" onClick={handleLogout}>
-                  Yes, Logout
+                <Button
+                  variant="ghost"
+                  full
+                  size="sm"
+                  onClick={handleLogout}
+                  locked={isLoggingOut}
+                  className="flex items-center justify-center gap-2"
+                >
+                  {isLoggingOut ? (
+                    <Loader2 size={16} className="animate-spin" />
+                  ) : (
+                    "Yes, Logout"
+                  )}
                 </Button>
               </div>
             </div>
