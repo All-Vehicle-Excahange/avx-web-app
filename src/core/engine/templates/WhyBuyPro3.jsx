@@ -97,6 +97,8 @@ export default function WhyBuyPro3({
   isEditing,
   onUpdate,
   onNextTab,
+  errors,
+  rules,
 }) {
   const [isSaving, setIsSaving] = useState(false);
   const data = {
@@ -402,11 +404,17 @@ export default function WhyBuyPro3({
                 label="Hero Title"
                 value={data.whyBuyHeroTitle}
                 onChange={(e) => updateField("whyBuyHeroTitle", e.target.value)}
+                maxLength={rules?.whyBuyHeroTitle?.max}
+                error={!!errors?.whyBuyHeroTitle}
+                errorMsg={errors?.whyBuyHeroTitle}
               />
               <RichTextEditor
                 label="Hero Description"
                 value={data.whyBuyHeroDescription}
                 onChange={(v) => updateField("whyBuyHeroDescription", v)}
+                maxLength={rules?.whyBuyHeroDescription?.max}
+                error={!!errors?.whyBuyHeroDescription}
+                errorMsg={errors?.whyBuyHeroDescription}
               />
             </div>
             <div className="space-y-4">
@@ -425,6 +433,8 @@ export default function WhyBuyPro3({
                         id: id ?? data.whyBuyHeroTemplate1?.id,
                       });
                     }}
+                    error={errors?.whyBuyHeroTemplate1}
+                    errorMsg={errors?.whyBuyHeroTemplate1}
                   />
                 </div>
                 <div className="h-40 relative">
@@ -440,6 +450,8 @@ export default function WhyBuyPro3({
                         id: id ?? data.whyBuyHeroTemplate2?.id,
                       });
                     }}
+                    error={errors?.whyBuyHeroTemplate2}
+                    errorMsg={errors?.whyBuyHeroTemplate2}
                   />
                 </div>
                 <div className="h-40 relative col-span-2">
@@ -455,6 +467,8 @@ export default function WhyBuyPro3({
                         id: id ?? data.whyBuyHeroTemplate3?.id,
                       });
                     }}
+                    error={errors?.whyBuyHeroTemplate3}
+                    errorMsg={errors?.whyBuyHeroTemplate3}
                   />
                 </div>
                 <div className="h-40 relative">
@@ -470,6 +484,8 @@ export default function WhyBuyPro3({
                         id: id ?? data.whyBuyHeroTemplate4?.id,
                       });
                     }}
+                    error={errors?.whyBuyHeroTemplate4}
+                    errorMsg={errors?.whyBuyHeroTemplate4}
                   />
                 </div>
                 <div className="h-40 relative">
@@ -485,6 +501,8 @@ export default function WhyBuyPro3({
                         id: id ?? data.whyBuyHeroTemplate5?.id,
                       });
                     }}
+                    error={errors?.whyBuyHeroTemplate5}
+                    errorMsg={errors?.whyBuyHeroTemplate5}
                   />
                 </div>
               </div>
@@ -506,11 +524,17 @@ export default function WhyBuyPro3({
                 onChange={(e) =>
                   updateField("whyBuyStoryTitle", e.target.value)
                 }
+                maxLength={rules?.whyBuyStoryTitle?.max}
+                error={!!errors?.whyBuyStoryTitle}
+                errorMsg={errors?.whyBuyStoryTitle}
               />
               <RichTextEditor
                 label="Story Description"
                 value={data.whyBuyStoryDescription}
                 onChange={(v) => updateField("whyBuyStoryDescription", v)}
+                maxLength={rules?.whyBuyStoryDescription?.max}
+                error={!!errors?.whyBuyStoryDescription}
+                errorMsg={errors?.whyBuyStoryDescription}
               />
             </div>
             <div className="space-y-4">
@@ -529,6 +553,8 @@ export default function WhyBuyPro3({
                         id: id ?? data.whyBuyStoryTemplate1?.id,
                       });
                     }}
+                    error={errors?.whyBuyStoryTemplate1}
+                    errorMsg={errors?.whyBuyStoryTemplate1}
                   />
                 </div>
                 <div className="h-40 relative">
@@ -544,6 +570,8 @@ export default function WhyBuyPro3({
                         id: id ?? data.whyBuyStoryTemplate2?.id,
                       });
                     }}
+                    error={errors?.whyBuyStoryTemplate2}
+                    errorMsg={errors?.whyBuyStoryTemplate2}
                   />
                 </div>
                 <div className="h-40 relative">
@@ -559,6 +587,8 @@ export default function WhyBuyPro3({
                         id: id ?? data.whyBuyStoryTemplate3?.id,
                       });
                     }}
+                    error={errors?.whyBuyStoryTemplate3}
+                    errorMsg={errors?.whyBuyStoryTemplate3}
                   />
                 </div>
                 <div className="h-40 relative">
@@ -574,6 +604,8 @@ export default function WhyBuyPro3({
                         id: id ?? data.whyBuyStoryTemplate4?.id,
                       });
                     }}
+                    error={errors?.whyBuyStoryTemplate4}
+                    errorMsg={errors?.whyBuyStoryTemplate4}
                   />
                 </div>
                 <div className="h-40 relative">
@@ -589,6 +621,8 @@ export default function WhyBuyPro3({
                         id: id ?? data.whyBuyStoryTemplate5?.id,
                       });
                     }}
+                    error={errors?.whyBuyStoryTemplate5}
+                    errorMsg={errors?.whyBuyStoryTemplate5}
                   />
                 </div>
               </div>
@@ -610,6 +644,9 @@ export default function WhyBuyPro3({
                 onChange={(e) =>
                   updateField("whyBuyVehicleSelectionTitle", e.target.value)
                 }
+                maxLength={rules?.whyBuyVehicleSelectionTitle?.max}
+                error={!!errors?.whyBuyVehicleSelectionTitle}
+                errorMsg={errors?.whyBuyVehicleSelectionTitle}
               />
               <RichTextEditor
                 label="Selection Description"
@@ -617,6 +654,9 @@ export default function WhyBuyPro3({
                 onChange={(v) =>
                   updateField("whyBuyVehicleSelectionDescription", v)
                 }
+                maxLength={rules?.whyBuyVehicleSelectionDescription?.max}
+                error={!!errors?.whyBuyVehicleSelectionDescription}
+                errorMsg={errors?.whyBuyVehicleSelectionDescription}
               />
             </div>
             <div className="space-y-4">
@@ -718,11 +758,17 @@ export default function WhyBuyPro3({
                 onChange={(e) =>
                   updateField("whyBuyProcessTitle", e.target.value)
                 }
+                maxLength={rules?.whyBuyProcessTitle?.max}
+                error={!!errors?.whyBuyProcessTitle}
+                errorMsg={errors?.whyBuyProcessTitle}
               />
               <RichTextEditor
                 label="Process Description"
                 value={data.whyBuyProcessDescription}
                 onChange={(v) => updateField("whyBuyProcessDescription", v)}
+                maxLength={rules?.whyBuyProcessDescription?.max}
+                error={!!errors?.whyBuyProcessDescription}
+                errorMsg={errors?.whyBuyProcessDescription}
               />
             </div>
             {/* <div className="space-y-4">
@@ -813,6 +859,9 @@ export default function WhyBuyPro3({
                         e.target.value,
                       )
                     }
+                    maxLength={rules?.arrayRules?.processSteps?.title?.max}
+                    error={!!errors?.processSteps?.[i]?.title}
+                    errorMsg={errors?.processSteps?.[i]?.title}
                   />
                 </div>
                 <div>
@@ -829,6 +878,9 @@ export default function WhyBuyPro3({
                         e.target.value,
                       )
                     }
+                    maxLength={rules?.arrayRules?.processSteps?.description?.max}
+                    error={!!errors?.processSteps?.[i]?.description}
+                    errorMsg={errors?.processSteps?.[i]?.description}
                   />
                 </div>
                 <div className="flex flex-col gap-2 relative mt-4">
@@ -871,11 +923,17 @@ export default function WhyBuyPro3({
                 onChange={(e) =>
                   updateField("whyBuyInspectionTitle", e.target.value)
                 }
+                maxLength={rules?.whyBuyInspectionTitle?.max}
+                error={!!errors?.whyBuyInspectionTitle}
+                errorMsg={errors?.whyBuyInspectionTitle}
               />
               <RichTextEditor
                 label="Inspection Description"
                 value={data.whyBuyInspectionDescription}
                 onChange={(v) => updateField("whyBuyInspectionDescription", v)}
+                maxLength={rules?.whyBuyInspectionDescription?.max}
+                error={!!errors?.whyBuyInspectionDescription}
+                errorMsg={errors?.whyBuyInspectionDescription}
               />
               <div className="space-y-2 mt-4">
                 <label className="text-sm font-medium text-primary">
@@ -890,6 +948,9 @@ export default function WhyBuyPro3({
                       newArr[i] = e.target.value;
                       updateField("inspectionPoints", newArr);
                     }}
+                    maxLength={rules?.arrayRules?.inspectionPoints?.text?.max}
+                    error={!!errors?.inspectionPoints?.[i]?.text}
+                    errorMsg={errors?.inspectionPoints?.[i]?.text}
                   />
                 ))}
               </div>
@@ -912,6 +973,7 @@ export default function WhyBuyPro3({
                         id: id ?? data.whyBuyInspectionTemplate1?.id,
                       });
                     }}
+                    error={!!errors?.whyBuyInspectionTemplate1}
                   />
                 </div>
                 <div className="h-40 relative">
@@ -978,6 +1040,9 @@ export default function WhyBuyPro3({
                 onChange={(e) =>
                   updateField("whyBuyCustomerCommitmentTitle", e.target.value)
                 }
+                maxLength={rules?.whyBuyCustomerCommitmentTitle?.max}
+                error={!!errors?.whyBuyCustomerCommitmentTitle}
+                errorMsg={errors?.whyBuyCustomerCommitmentTitle}
               />
               <RichTextEditor
                 label="Commitment Text"
@@ -985,6 +1050,9 @@ export default function WhyBuyPro3({
                 onChange={(v) =>
                   updateField("whyBuyCustomerCommitmentDescription", v)
                 }
+                maxLength={rules?.whyBuyCustomerCommitmentDescription?.max}
+                error={!!errors?.whyBuyCustomerCommitmentDescription}
+                errorMsg={errors?.whyBuyCustomerCommitmentDescription}
               />
             </div>
           </div>
@@ -1000,6 +1068,9 @@ export default function WhyBuyPro3({
             label="Gallery Title"
             value={data.whyBuyGalleryTitle}
             onChange={(e) => updateField("whyBuyGalleryTitle", e.target.value)}
+            maxLength={rules?.whyBuyGalleryTitle?.max}
+            error={!!errors?.whyBuyGalleryTitle}
+            errorMsg={errors?.whyBuyGalleryTitle}
           />
           <br />
           <div className="grid grid-cols-2 gap-4">
@@ -1016,6 +1087,7 @@ export default function WhyBuyPro3({
                     id: id ?? data.whyBuyGalleryTemplate1?.id,
                   });
                 }}
+                error={!!errors?.whyBuyGalleryTemplate1}
               />
             </div>
             <div className="h-40 relative">

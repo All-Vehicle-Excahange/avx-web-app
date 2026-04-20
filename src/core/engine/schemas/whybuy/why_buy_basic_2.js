@@ -109,6 +109,9 @@ export const WHY_BUY_BASIC_2 = [
         name: { min: 3, max: 50 },
         review: { min: 10, max: 300 },
       },
+      inspectionPoints: {
+        text: { min: 10, max: 200 },
+      },
     },
   },
 ];

@@ -58,26 +58,25 @@ function mapApiToTemplateData(api) {
   };
 }
 
-// Progress Calculator for a single section
 const getSectionProgress = (section, defaultSection) => {
   let totalFields = 0;
   let filledFields = 0;
+  const errors = {};
 
   const { rules, arrayRules, data } = section;
   const defaultData = defaultSection?.data || {};
+
+  const getCleanString = (val) => {
+    if (!val) return "";
+    if (typeof val === "object" && val.imageUrl) return val.imageUrl.trim();
+    return String(val).replace(/<[^>]*>/g, "").trim();
+  };
 
   // Normal field validation
   if (rules) {
     Object.entries(rules).forEach(([field, rule]) => {
       const value = data[field] || "";
       const defaultValue = defaultData[field] || "";
-
-      // Count as valid ONLY if it's different from default AND meets length rules
-      const getCleanString = (val) => {
-        if (!val) return "";
-        if (typeof val === "object" && val.imageUrl) return val.imageUrl.trim();
-        return String(val).replace(/<[^>]*>/g, "").trim();
-      };
 
       const cleanValue = getCleanString(value);
       const cleanDefault = getCleanString(defaultValue);
@@ -88,17 +87,26 @@ const getSectionProgress = (section, defaultSection) => {
         field.toLowerCase().includes("image") ||
         field.toLowerCase().includes("template");
 
-      if (cleanValue !== cleanDefault && cleanValue.length > 0) {
-        if (isImageField || (rule.min === undefined && rule.max === undefined)) {
-          // If it's an image OR the rule has no min/max, existence is enough
-          filledFields++;
-        } else if (
-          cleanValue.length >= (rule.min ?? 0) &&
-          cleanValue.length <= (rule.max ?? Infinity)
-        ) {
-          // Otherwise, respect the provided bounds
-          filledFields++;
+      let errorMsg = null;
+      const currentLen = cleanValue.length;
+
+      if (isImageField) {
+        if (cleanValue === cleanDefault || currentLen === 0) {
+          errorMsg = "Image selection required";
         }
+      } else {
+        const min = rule.min ?? 0;
+        if (currentLen === 0) {
+          errorMsg = `Minimum ${min} characters required`;
+        } else if (currentLen < min) {
+          errorMsg = `Need ${min - currentLen} more characters`;
+        }
+      }
+
+      if (!errorMsg) {
+        filledFields++;
+      } else {
+        errors[field] = errorMsg;
       }
     });
   }
@@ -110,12 +118,17 @@ const getSectionProgress = (section, defaultSection) => {
       const defaultArrayData = defaultData[arrayField] || [];
 
       if (Array.isArray(arrayData)) {
+        errors[arrayField] = [];
         arrayData.forEach((item, index) => {
           const defaultItem = defaultArrayData[index] || {};
+          const itemErrors = {};
 
           Object.entries(fieldRules).forEach(([field, rule]) => {
-            const value = item[field] || "";
-            const defaultValue = defaultItem[field] || "";
+            const isStringItem = typeof item === "string";
+            const value = isStringItem ? item : item[field] || "";
+            const defaultValue = isStringItem
+              ? defaultItem || ""
+              : defaultItem[field] || "";
 
             const cleanValue = getCleanString(value);
             const cleanDefault = getCleanString(defaultValue);
@@ -123,31 +136,45 @@ const getSectionProgress = (section, defaultSection) => {
             totalFields++;
 
             const isImageField =
-              field.toLowerCase().includes("image") ||
-              field.toLowerCase().includes("template") ||
-              field.toLowerCase().includes("icon");
+              !isStringItem &&
+              (field.toLowerCase().includes("image") ||
+                field.toLowerCase().includes("template") ||
+                field.toLowerCase().includes("icon"));
 
-            if (cleanValue !== cleanDefault && cleanValue.length > 0) {
-              if (
-                isImageField ||
-                (rule.min === undefined && rule.max === undefined)
-              ) {
-                filledFields++;
-              } else if (
-                cleanValue.length >= (rule.min ?? 0) &&
-                cleanValue.length <= (rule.max ?? Infinity)
-              ) {
-                filledFields++;
+            let errorMsg = null;
+            const currentLen = cleanValue.length;
+
+            if (isImageField) {
+              if (cleanValue === cleanDefault || currentLen === 0) {
+                errorMsg = "Image selection required";
+              }
+            } else {
+              const min = rule.min ?? 0;
+              if (currentLen === 0) {
+                errorMsg = `Minimum ${min} characters required`;
+              } else if (currentLen < min) {
+                errorMsg = `Need ${min - currentLen} more characters`;
               }
             }
+
+            if (!errorMsg) {
+              filledFields++;
+            } else {
+              itemErrors[field] = errorMsg;
+            }
           });
+          errors[arrayField][index] = itemErrors;
         });
       }
     });
   }
 
-  if (totalFields === 0) return 0;
-  return Math.round((filledFields / totalFields) * 100);
+  const percentage = totalFields === 0 ? 0 : Math.round((filledFields / totalFields) * 100);
+  return {
+    percentage,
+    isValid: filledFields === totalFields,
+    errors
+  };
 };
 
 export default function CreateTheme() {
@@ -163,11 +190,16 @@ export default function CreateTheme() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const sectionProgress = useMemo(() => {
-    return sections.map((sec, i) => ({
-      id: sec.id,
-      label: sec.type.includes("about") ? "About Us" : "Why Buy",
-      value: getSectionProgress(sec, theme.schema[i])
-    }));
+    return sections.map((sec, i) => {
+      const result = getSectionProgress(sec, theme.schema[i]);
+      return {
+        id: sec.id,
+        label: sec.type.includes("about") ? "About Us" : "Why Buy",
+        value: result.percentage,
+        isValid: result.isValid,
+        errors: result.errors,
+      };
+    });
   }, [sections, theme]);
 
   const handleFinalSubmit = async () => {
@@ -317,7 +349,11 @@ export default function CreateTheme() {
           <EngineRenderer
             sections={[sections[activeTab]]}
             mode={mode}
-            onNextTab={() => setActiveTab(prev => Math.min(prev + 1, sections.length - 1))}
+            errors={sectionProgress[activeTab]?.errors}
+            rules={sections[activeTab]?.rules}
+            onNextTab={() =>
+              setActiveTab((prev) => Math.min(prev + 1, sections.length - 1))
+            }
             onUpdate={(i, newData) => {
               const updated = [...sections];
               updated[activeTab].data = newData;
@@ -327,17 +363,18 @@ export default function CreateTheme() {
         )}
 
         {/* Final Submit Button (Only on Why Buy tab) */}
-        {sections.length > 0 && sections[activeTab]?.type?.includes("why_buy") && (
-          <div className="absolute inset-x-0 bottom-0  backdrop-blur-sm p-4 border-t border-third/30 flex justify-end z-10">
-            <Button
-              onClick={handleFinalSubmit}
-              disabled={isSubmitting}
-              variant="ghost"
-            >
-              {isSubmitting ? "Submitting..." : "Final Submit"}
-            </Button>
-          </div>
-        )}
+        {sections.length > 0 &&
+          sections[activeTab]?.type?.includes("why_buy") && (
+            <div className="absolute inset-x-0 bottom-0  backdrop-blur-sm p-4 border-t border-third/30 flex justify-end z-10">
+              <Button
+                onClick={handleFinalSubmit}
+                disabled={isSubmitting || !sectionProgress[activeTab]?.isValid}
+                variant="ghost"
+              >
+                {isSubmitting ? "Submitting..." : "Final Submit"}
+              </Button>
+            </div>
+          )}
       </div>
     </section>
   );

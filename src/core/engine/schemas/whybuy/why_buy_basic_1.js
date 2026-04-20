@@ -84,6 +84,7 @@ Our goal is to maintain a diverse vehicle inventory and provide accurate informa
             "Honest and transparent throughout the entire process. The AVX inspection gave me confidence in my purchase.",
         },
       ],
+      featuredReviews: [],
     },
     rules: {
       whyBuyHeroTitle: { min: 10, max: 100 },
@@ -108,6 +109,9 @@ Our goal is to maintain a diverse vehicle inventory and provide accurate informa
       testimonials: {
         name: { min: 3, max: 50 },
         review: { min: 10, max: 300 },
+      },
+      inspectionPoints: {
+        text: { min: 10, max: 200 },
       },
     },
   },

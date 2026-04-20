@@ -20,6 +20,7 @@ import Image from "next/image";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import { markAsSoldVehicle } from "@/services/vehicle.service";
 import { createSlug } from "@/lib/helper";
+import MarkSoldPopup from "@/components/ui/MarkSoldPopup";
 
 export default function UserVehicleCard({
   data,
@@ -32,6 +33,8 @@ export default function UserVehicleCard({
 }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+  const [isSoldPopupOpen, setIsSoldPopupOpen] = useState(false);
+  const [isSoldLoading, setIsSoldLoading] = useState(false);
 
   const statusBg = {
     live: "bg-green-600",
@@ -70,15 +73,23 @@ export default function UserVehicleCard({
     return s.replaceAll("_", " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
   };
 
-  const handleSoldClick = async (id) => {
+  const handleSoldClick = () => {
+    setIsSoldPopupOpen(true);
+  };
+
+  const handleConfirmSold = async (closingPrice) => {
+    setIsSoldLoading(true);
     try {
-      const res = await markAsSoldVehicle(id);
+      const res = await markAsSoldVehicle(data.id, closingPrice);
       console.log(res);
       if (onRefresh) {
         onRefresh();
       }
+      setIsSoldPopupOpen(false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+    } finally {
+      setIsSoldLoading(false);
     }
   };
 
@@ -312,7 +323,7 @@ export default function UserVehicleCard({
                     <Pencil size={14} className="mr-2" /> Improve Listing
                   </Button>
                   <Button
-                    onClick={() => handleSoldClick(data.id)}
+                    onClick={handleSoldClick}
                     variant="ghost"
                     size="sm"
                     showIcon={false}
@@ -355,6 +366,13 @@ export default function UserVehicleCard({
         isOpen={isDownloadOpen}
         onClose={() => setIsDownloadOpen(false)}
       />
+      {isSoldPopupOpen && (
+        <MarkSoldPopup
+          onClose={() => setIsSoldPopupOpen(false)}
+          onConfirm={handleConfirmSold}
+          loading={isSoldLoading}
+        />
+      )}
     </>
   );
 }

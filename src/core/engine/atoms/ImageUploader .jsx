@@ -19,6 +19,8 @@ export const ImageUploader = ({
   fieldKey,
   sizeText = "Image",
   imageType,
+  error = false,
+  errorMsg = null,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -63,6 +65,11 @@ export const ImageUploader = ({
             </div>
           )}
         </div>
+        {error && errorMsg && (
+          <span className="text-[11px] text-red-400/80 font-medium ml-1">
+            {errorMsg}
+          </span>
+        )}
       </div>
 
       <MediaPickerModal

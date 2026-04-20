@@ -81,7 +81,14 @@ const iconMap = {
   ShieldCheck,
   Handshake,
 };
-export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
+export default function WhyBuyBasic3({
+  data: rawData,
+  isEditing,
+  onUpdate,
+  onNextTab,
+  errors,
+  rules,
+}) {
   const [allReviews, setAllReviews] = useState([]);
   const [selectedReviewIds, setSelectedReviewIds] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
@@ -275,11 +282,17 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
             label="Hero Title"
             value={data.whyBuyHeroTitle}
             onChange={(e) => updateField("whyBuyHeroTitle", e.target.value)}
+            maxLength={rules?.whyBuyHeroTitle?.max}
+            error={!!errors?.whyBuyHeroTitle}
+            errorMsg={errors?.whyBuyHeroTitle}
           />
           <RichTextEditor
             label="Hero Description"
             value={data.whyBuyHeroDescription}
             onChange={(v) => updateField("whyBuyHeroDescription", v)}
+            maxLength={rules?.whyBuyHeroDescription?.max}
+            error={!!errors?.whyBuyHeroDescription}
+            errorMsg={errors?.whyBuyHeroDescription}
           />
         </div>
         <hr className="border-white/10" />
@@ -289,11 +302,17 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
             label="Story Title"
             value={data.storyTitle}
             onChange={(e) => updateField("storyTitle", e.target.value)}
+            maxLength={rules?.storyTitle?.max}
+            error={!!errors?.storyTitle}
+            errorMsg={errors?.storyTitle}
           />
           <RichTextEditor
             label="Story Description"
             value={data.storyDescription}
             onChange={(v) => updateField("storyDescription", v)}
+            maxLength={rules?.storyDescription?.max}
+            error={!!errors?.storyDescription}
+            errorMsg={errors?.storyDescription}
           />
         </div>
         <hr className="border-white/10" />
@@ -307,11 +326,17 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
             onChange={(e) =>
               updateField("vehicleSelectionTitle", e.target.value)
             }
+            maxLength={rules?.vehicleSelectionTitle?.max}
+            error={!!errors?.vehicleSelectionTitle}
+            errorMsg={errors?.vehicleSelectionTitle}
           />
           <RichTextEditor
             label="Vehicle Selection Description"
             value={data.vehicleSelectionDescription}
             onChange={(v) => updateField("vehicleSelectionDescription", v)}
+            maxLength={rules?.vehicleSelectionDescription?.max}
+            error={!!errors?.vehicleSelectionDescription}
+            errorMsg={errors?.vehicleSelectionDescription}
           />
         </div>
         <hr className="border-white/10" />
@@ -321,11 +346,17 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
             label="Process Title"
             value={data.processTitle}
             onChange={(e) => updateField("processTitle", e.target.value)}
+            maxLength={rules?.processTitle?.max}
+            error={!!errors?.processTitle}
+            errorMsg={errors?.processTitle}
           />
           <RichTextEditor
             label="Process Description"
             value={data.processDescription}
             onChange={(v) => updateField("processDescription", v)}
+            maxLength={rules?.processDescription?.max}
+            error={!!errors?.processDescription}
+            errorMsg={errors?.processDescription}
           />
           <h4 className="text-white font-semibold mt-6 mb-4">Process Steps</h4>
           <div className="grid md:grid-cols-2 gap-4">
@@ -348,6 +379,9 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
                         e.target.value,
                       )
                     }
+                    maxLength={rules?.arrayRules?.processSteps?.title?.max}
+                    error={!!errors?.processSteps?.[i]?.title}
+                    errorMsg={errors?.processSteps?.[i]?.title}
                   />
                 </div>
                 <div>
@@ -364,6 +398,9 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
                         e.target.value,
                       )
                     }
+                    maxLength={rules?.arrayRules?.processSteps?.description?.max}
+                    error={!!errors?.processSteps?.[i]?.description}
+                    errorMsg={errors?.processSteps?.[i]?.description}
                   />
                 </div>
                 <div>
@@ -398,11 +435,17 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
             label="Inspection Title"
             value={data.inspectionTitle}
             onChange={(e) => updateField("inspectionTitle", e.target.value)}
+            maxLength={rules?.inspectionTitle?.max}
+            error={!!errors?.inspectionTitle}
+            errorMsg={errors?.inspectionTitle}
           />
           <RichTextEditor
             label="Inspection Text"
             value={data.inspectionText}
             onChange={(v) => updateField("inspectionText", v)}
+            maxLength={rules?.inspectionText?.max}
+            error={!!errors?.inspectionText}
+            errorMsg={errors?.inspectionText}
           />
           <h4 className="text-white font-semibold mt-4">Inspection Points</h4>
           {data.inspectionPoints.map((pt, i) => (
@@ -415,6 +458,9 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
                 newArr[i] = e.target.value;
                 updateField("inspectionPoints", newArr);
               }}
+              maxLength={rules?.arrayRules?.inspectionPoints?.text?.max}
+              error={!!errors?.inspectionPoints?.[i]?.text}
+              errorMsg={errors?.inspectionPoints?.[i]?.text}
             />
           ))}
         </div>
@@ -429,11 +475,17 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
             onChange={(e) =>
               updateField("customerCommitmentTitle", e.target.value)
             }
+            maxLength={rules?.customerCommitmentTitle?.max}
+            error={!!errors?.customerCommitmentTitle}
+            errorMsg={errors?.customerCommitmentTitle}
           />
           <RichTextEditor
             label="Commitment Description"
             value={data.customerCommitmentDescription}
             onChange={(v) => updateField("customerCommitmentDescription", v)}
+            maxLength={rules?.customerCommitmentDescription?.max}
+            error={!!errors?.customerCommitmentDescription}
+            errorMsg={errors?.customerCommitmentDescription}
           />
         </div>
         <hr className="border-white/10" />
@@ -444,6 +496,9 @@ export default function WhyBuyBasic3({ data: rawData, isEditing, onUpdate }) {
             label="Section Title"
             value={data.testimonialTitle}
             onChange={(e) => updateField("testimonialTitle", e.target.value)}
+            maxLength={rules?.testimonialTitle?.max}
+            error={!!errors?.testimonialTitle}
+            errorMsg={errors?.testimonialTitle}
           />
 
           <p className="text-third text-sm mb-4 mt-2">

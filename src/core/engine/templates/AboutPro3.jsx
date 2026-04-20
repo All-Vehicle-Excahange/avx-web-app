@@ -89,7 +89,10 @@ export default function AboutPro3({
   isEditing,
   onUpdate,
   onNextTab,
+  errors,
+  rules,
 }) {
+  const hasErrors = errors && Object.keys(errors).length > 0;
   const [isSaving, setIsSaving] = useState(false);
   const data = rawData
     ? {
@@ -192,12 +195,17 @@ export default function AboutPro3({
             <EditorInput
               bold
               value={data.aboutHeroTitle}
+              error={errors?.aboutHeroTitle}
+              errorMsg={errors?.aboutHeroTitle}
+              maxLength={rules?.aboutHeroTitle?.max}
               onChange={(e) => update("aboutHeroTitle", e.target.value)}
               placeholder="Hero Title"
             />
             <RichTextEditor
               label="Hero Description"
               value={data.aboutHeroDescription}
+              error={errors?.aboutHeroDescription}
+              errorMsg={errors?.aboutHeroDescription}
               onChange={(v) => update("aboutHeroDescription", v)}
             />
           </div>
@@ -207,6 +215,8 @@ export default function AboutPro3({
               <ImageUploader
                 label="Hero Image 1"
                 src={data.aboutHeroTemplate1?.imageUrl}
+                error={errors?.aboutHeroTemplate1}
+                errorMsg={errors?.aboutHeroTemplate1}
                 fieldKey="hero1"
                 imageType="HERO"
                 onChange={({ imageUrl, id }) => {
@@ -229,12 +239,17 @@ export default function AboutPro3({
             <EditorInput
               bold
               value={data.aboutMissionTitle}
+              error={errors?.aboutMissionTitle}
+              errorMsg={errors?.aboutMissionTitle}
+              maxLength={rules?.aboutMissionTitle?.max}
               onChange={(e) => update("aboutMissionTitle", e.target.value)}
               placeholder="Mission Title"
             />
             <RichTextEditor
               label="Mission Description"
               value={data.aboutMissionDescription}
+              error={errors?.aboutMissionDescription}
+              errorMsg={errors?.aboutMissionDescription}
               onChange={(v) => update("aboutMissionDescription", v)}
             />
           </div>
@@ -244,6 +259,8 @@ export default function AboutPro3({
               <ImageUploader
                 label="Mission Image"
                 src={data.aboutMissionTemplate1?.imageUrl}
+                error={errors?.aboutMissionTemplate1}
+                errorMsg={errors?.aboutMissionTemplate1}
                 fieldKey="mission"
                 onChange={({ imageUrl, id }) => {
                   update("aboutMissionTemplate1", {
@@ -265,12 +282,17 @@ export default function AboutPro3({
             <EditorInput
               bold
               value={data.aboutVisionTitle}
+              error={errors?.aboutVisionTitle}
+              errorMsg={errors?.aboutVisionTitle}
+              maxLength={rules?.aboutVisionTitle?.max}
               onChange={(e) => update("aboutVisionTitle", e.target.value)}
               placeholder="Vision Title"
             />
             <RichTextEditor
               label="Vision Description"
               value={data.aboutVisionDescription}
+              error={errors?.aboutVisionDescription}
+              errorMsg={errors?.aboutVisionDescription}
               onChange={(v) => update("aboutVisionDescription", v)}
             />
           </div>
@@ -280,6 +302,8 @@ export default function AboutPro3({
               <ImageUploader
                 label="Vision Image"
                 src={data.aboutVisionTemplate1?.imageUrl}
+                error={errors?.aboutVisionTemplate1}
+                errorMsg={errors?.aboutVisionTemplate1}
                 fieldKey="vision"
                 onChange={({ imageUrl, id }) => {
                   update("aboutVisionTemplate1", {
@@ -299,6 +323,8 @@ export default function AboutPro3({
         <RichTextEditor
           label="Stats Description"
           value={data.aboutStatsDescription}
+          error={errors?.aboutStatsDescription}
+          errorMsg={errors?.aboutStatsDescription}
           onChange={(v) => update("aboutStatsDescription", v)}
         />
         <div className="p-4 bg-primary/5 rounded-lg border border-third/10 mt-4">
@@ -309,6 +335,9 @@ export default function AboutPro3({
                 <EditorInput
                   bold
                   value={s.number}
+                  error={errors?.stats?.[i]?.number}
+                  errorMsg={errors?.stats?.[i]?.number}
+                  maxLength={rules?.stats?.number?.max}
                   onChange={(e) =>
                     updateArr("stats", i, "number", e.target.value)
                   }
@@ -316,6 +345,9 @@ export default function AboutPro3({
                 />
                 <EditorInput
                   value={s.label}
+                  error={errors?.stats?.[i]?.label}
+                  errorMsg={errors?.stats?.[i]?.label}
+                  maxLength={rules?.stats?.label?.max}
                   onChange={(e) =>
                     updateArr("stats", i, "label", e.target.value)
                   }
@@ -335,12 +367,17 @@ export default function AboutPro3({
           <EditorInput
             bold
             value={data.aboutServicesTitle}
+            error={errors?.aboutServicesTitle}
+            errorMsg={errors?.aboutServicesTitle}
+            maxLength={rules?.aboutServicesTitle?.max}
             onChange={(e) => update("aboutServicesTitle", e.target.value)}
             placeholder="Services Title"
           />
           <RichTextEditor
             label="Services Description"
             value={data.aboutServicesDescription}
+            error={errors?.aboutServicesDescription}
+            errorMsg={errors?.aboutServicesDescription}
             onChange={(v) => update("aboutServicesDescription", v)}
           />
         </div>
@@ -376,6 +413,9 @@ export default function AboutPro3({
                 <EditorInput
                   bold
                   value={s.title}
+                  error={errors?.services?.[i]?.title}
+                  errorMsg={errors?.services?.[i]?.title}
+                  maxLength={rules?.services?.title?.max}
                   onChange={(e) =>
                     updateArr("services", i, "title", e.target.value)
                   }
@@ -391,6 +431,9 @@ export default function AboutPro3({
                 <EditorInput
                   size="sm"
                   value={s.desc}
+                  error={errors?.services?.[i]?.desc}
+                  errorMsg={errors?.services?.[i]?.desc}
+                  maxLength={rules?.services?.desc?.max}
                   onChange={(e) =>
                     updateArr("services", i, "desc", e.target.value)
                   }
@@ -404,7 +447,7 @@ export default function AboutPro3({
         <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
           <Button
             onClick={handleSaveAndNext}
-            disabled={isSaving}
+            disabled={isSaving || hasErrors}
             variant="ghost"
           >
             {isSaving ? "Saving..." : "Save and Next"}

@@ -86,7 +86,15 @@ const formatOptionLabel = ({ value, label }) => (
 
 const DEFAULT_DATA = ABOUT_PRO_1[0].data;
 
-function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
+function AboutPro1({
+  data: rawData,
+  isEditing,
+  onUpdate,
+  onNextTab,
+  errors,
+  rules,
+}) {
+  const hasErrors = errors && Object.keys(errors).length > 0;
   const [isSaving, setIsSaving] = useState(false);
   const data = {
     ...DEFAULT_DATA,
@@ -201,12 +209,17 @@ function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
             <EditorInput
               bold
               value={data.heroTitle}
+              error={errors?.heroTitle}
+              errorMsg={errors?.heroTitle}
+              maxLength={rules?.heroTitle?.max}
               onChange={(e) => update("heroTitle", e.target.value)}
               placeholder="Hero Title"
             />
             <RichTextEditor
               label="Hero Description"
               value={data.heroDescription}
+              error={errors?.heroDescription}
+              errorMsg={errors?.heroDescription}
               onChange={(v) => update("heroDescription", v)}
             />
           </div>
@@ -214,6 +227,8 @@ function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
             <ImageUploader
               label="Hero Background Image"
               src={data.heroTemplate1?.imageUrl}
+              error={errors?.heroTemplate1}
+              errorMsg={errors?.heroTemplate1}
               fieldKey="HERO"
               imageType="HERO"
               onChange={({ imageUrl, id }) => {
@@ -235,12 +250,17 @@ function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
             <EditorInput
               bold
               value={data.missionTitle}
+              error={errors?.missionTitle}
+              errorMsg={errors?.missionTitle}
+              maxLength={rules?.missionTitle?.max}
               onChange={(e) => update("missionTitle", e.target.value)}
               placeholder="Mission Title"
             />
             <RichTextEditor
               label="Mission Description"
               value={data.missionDesc}
+              error={errors?.missionDesc}
+              errorMsg={errors?.missionDesc}
               onChange={(v) => update("missionDesc", v)}
             />
           </div>
@@ -250,6 +270,8 @@ function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
               <ImageUploader
                 label="Mission Image"
                 src={data.missionTemplate1?.imageUrl}
+                error={errors?.missionTemplate1}
+                errorMsg={errors?.missionTemplate1}
                 fieldKey="mission"
                 onChange={({ imageUrl, id }) => {
                   update("missionTemplate1", {
@@ -271,12 +293,17 @@ function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
             <EditorInput
               bold
               value={data.visionTitle}
+              error={errors?.visionTitle}
+              errorMsg={errors?.visionTitle}
+              maxLength={rules?.visionTitle?.max}
               onChange={(e) => update("visionTitle", e.target.value)}
               placeholder="Vision Title"
             />
             <RichTextEditor
               label="Vision Description"
               value={data.visionDesc}
+              error={errors?.visionDesc}
+              errorMsg={errors?.visionDesc}
               onChange={(v) => update("visionDesc", v)}
             />
           </div>
@@ -286,6 +313,8 @@ function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
               <ImageUploader
                 label="Vision Image"
                 src={data.visionTemplate1?.imageUrl}
+                error={errors?.visionTemplate1}
+                errorMsg={errors?.visionTemplate1}
                 fieldKey="vision"
                 onChange={({ imageUrl, id }) => {
                   update("visionTemplate1", {
@@ -305,6 +334,8 @@ function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
         <RichTextEditor
           label="About Us Description"
           value={data.aboutUsDescription}
+          error={errors?.aboutUsDescription}
+          errorMsg={errors?.aboutUsDescription}
           onChange={(v) => update("aboutUsDescription", v)}
         />
         <div className="p-4 bg-primary/5 rounded-lg border border-third/10">
@@ -312,9 +343,12 @@ function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
           <div className="grid grid-cols-4 gap-4">
             {(data.stats || []).map((s, i) => (
               <div key={i} className="space-y-2">
-                <EditorInput
+                 <EditorInput
                   bold
                   value={s.number}
+                  error={errors?.stats?.[i]?.number}
+                  errorMsg={errors?.stats?.[i]?.number}
+                  maxLength={rules?.stats?.number?.max}
                   onChange={(e) =>
                     updateArr("stats", i, "number", e.target.value)
                   }
@@ -322,6 +356,9 @@ function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
                 />
                 <EditorInput
                   value={s.label}
+                  error={errors?.stats?.[i]?.label}
+                  errorMsg={errors?.stats?.[i]?.label}
+                  maxLength={rules?.stats?.label?.max}
                   onChange={(e) =>
                     updateArr("stats", i, "label", e.target.value)
                   }
@@ -341,12 +378,17 @@ function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
           <EditorInput
             bold
             value={data.servicesTitle}
+            error={errors?.servicesTitle}
+            errorMsg={errors?.servicesTitle}
+            maxLength={rules?.servicesTitle?.max}
             onChange={(e) => update("servicesTitle", e.target.value)}
             placeholder="Services Title"
           />
           <RichTextEditor
             label="Services Description"
             value={data.servicesDesc}
+            error={errors?.servicesDesc}
+            errorMsg={errors?.servicesDesc}
             onChange={(v) => update("servicesDesc", v)}
           />
         </div>
@@ -382,6 +424,9 @@ function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
                 <EditorInput
                   bold
                   value={s.title}
+                  error={errors?.services?.[i]?.title}
+                  errorMsg={errors?.services?.[i]?.title}
+                  maxLength={rules?.services?.title?.max}
                   onChange={(e) =>
                     updateArr("services", i, "title", e.target.value)
                   }
@@ -397,6 +442,9 @@ function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
                 <EditorInput
                   size="sm"
                   value={s.desc}
+                  error={errors?.services?.[i]?.desc}
+                  errorMsg={errors?.services?.[i]?.desc}
+                  maxLength={rules?.services?.desc?.max}
                   onChange={(e) =>
                     updateArr("services", i, "desc", e.target.value)
                   }
@@ -410,7 +458,7 @@ function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
         <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
           <Button
             onClick={handleSaveAndNext}
-            disabled={isSaving}
+            disabled={isSaving || hasErrors}
             variant="ghost"
           >
             {isSaving ? "Saving..." : "Save and Next"}
