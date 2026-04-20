@@ -20,7 +20,7 @@ const ToolbarBtn = ({ onClick, isActive, label }) => (
   </button>
 );
 
-export default function RichTextEditor({ label, value, onChange, onBlur }) {
+export default function RichTextEditor({ label, value, onChange, onBlur, error, errorMsg }) {
   const editor = useEditor({
     extensions: [StarterKit, Underline],
     immediatelyRender: false,
@@ -77,6 +77,11 @@ export default function RichTextEditor({ label, value, onChange, onBlur }) {
 
         <EditorContent editor={editor} />
       </div>
+      {error && errorMsg && (
+        <span className="text-[11px] text-red-400/80 font-medium ml-1">
+          {errorMsg}
+        </span>
+      )}
     </div>
   );
 }

@@ -102,6 +102,9 @@ provide honest guidance and reliable information for every buyer.`,
         name: { min: 3, max: 50 },
         review: { min: 10, max: 300 },
       },
+      inspectionPoints: {
+        text: { min: 10, max: 200 },
+      },
     },
   },
 ];

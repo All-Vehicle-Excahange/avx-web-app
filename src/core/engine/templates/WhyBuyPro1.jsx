@@ -83,7 +83,14 @@ const formatOptionLabel = ({ value, label }) => (
 
 const DEFAULT_DATA = WHY_BUY_PRO_1[0].data;
 
-export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
+export default function WhyBuyPro1({
+  data: rawData,
+  isEditing,
+  onUpdate,
+  onNextTab,
+  errors,
+  rules,
+}) {
   const scrollRef = useRef(null);
 
   const data = {
@@ -290,11 +297,16 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                 bold
                 label="Hero Title"
                 value={data.whyBuyHeroTitle}
+                error={errors?.whyBuyHeroTitle}
+                errorMsg={errors?.whyBuyHeroTitle}
+                maxLength={rules?.whyBuyHeroTitle?.max}
                 onChange={(e) => updateField("whyBuyHeroTitle", e.target.value)}
               />
               <RichTextEditor
                 label="Hero Description"
                 value={data.whyBuyHeroDescription}
+                error={errors?.whyBuyHeroDescription}
+                errorMsg={errors?.whyBuyHeroDescription}
                 onChange={(v) => updateField("whyBuyHeroDescription", v)}
               />
             </div>
@@ -307,6 +319,8 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                     src={data.whyBuyHeroTemplate1?.imageUrl}
                     fieldKey="heroImg1"
                     imageType="WHY_BUY_HERO"
+                    error={errors?.whyBuyHeroTemplate1}
+                    errorMsg={errors?.whyBuyHeroTemplate1}
                     onChange={({ imageUrl, id }) => {
                       updateField("whyBuyHeroTemplate1", {
                         ...data.whyBuyHeroTemplate1,
@@ -322,6 +336,8 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                     src={data.whyBuyHeroTemplate2?.imageUrl}
                     fieldKey="heroImg2"
                     imageType="WHY_BUY_HERO"
+                    error={errors?.whyBuyHeroTemplate2}
+                    errorMsg={errors?.whyBuyHeroTemplate2}
                     onChange={({ imageUrl, id }) => {
                       updateField("whyBuyHeroTemplate2", {
                         ...data.whyBuyHeroTemplate2,
@@ -337,6 +353,8 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                     src={data.whyBuyHeroTemplate3?.imageUrl}
                     fieldKey="heroImg3"
                     imageType="WHY_BUY_HERO"
+                    error={errors?.whyBuyHeroTemplate3}
+                    errorMsg={errors?.whyBuyHeroTemplate3}
                     onChange={({ imageUrl, id }) => {
                       updateField("whyBuyHeroTemplate3", {
                         ...data.whyBuyHeroTemplate3,
@@ -364,11 +382,16 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                 bold
                 label="Story Title"
                 value={data.storyTitle}
+                error={errors?.storyTitle}
+                errorMsg={errors?.storyTitle}
+                maxLength={rules?.storyTitle?.max}
                 onChange={(e) => updateField("storyTitle", e.target.value)}
               />
               <RichTextEditor
                 label="Story Description"
                 value={data.storyDescription}
+                error={errors?.storyDescription}
+                errorMsg={errors?.storyDescription}
                 onChange={(v) => updateField("storyDescription", v)}
               />
             </div>
@@ -381,6 +404,8 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                     src={data.storyTemplate1?.imageUrl}
                     fieldKey="storyImg1"
                     imageType="CONSULTANT_STORY"
+                    error={errors?.storyTemplate1}
+                    errorMsg={errors?.storyTemplate1}
                     onChange={({ imageUrl, id }) => {
                       updateField("storyTemplate1", {
                         ...data.storyTemplate1,
@@ -396,6 +421,8 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                     src={data.storyTemplate2?.imageUrl}
                     fieldKey="storyImg2"
                     imageType="CONSULTANT_STORY"
+                    error={errors?.storyTemplate2}
+                    errorMsg={errors?.storyTemplate2}
                     onChange={({ imageUrl, id }) => {
                       updateField("storyTemplate2", {
                         ...data.storyTemplate2,
@@ -411,6 +438,8 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                     src={data.storyTemplate3?.imageUrl}
                     fieldKey="storyImg3"
                     imageType="CONSULTANT_STORY"
+                    error={errors?.storyTemplate3}
+                    errorMsg={errors?.storyTemplate3}
                     onChange={({ imageUrl, id }) => {
                       updateField("storyTemplate3", {
                         ...data.storyTemplate3,
@@ -438,6 +467,9 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                 bold
                 label="Selection Title"
                 value={data.vehicleSelectionTitle}
+                error={errors?.vehicleSelectionTitle}
+                errorMsg={errors?.vehicleSelectionTitle}
+                maxLength={rules?.vehicleSelectionTitle?.max}
                 onChange={(e) =>
                   updateField("vehicleSelectionTitle", e.target.value)
                 }
@@ -445,6 +477,8 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
               <RichTextEditor
                 label="Selection Description"
                 value={data.vehicleSelectionDescription}
+                error={errors?.vehicleSelectionDescription}
+                errorMsg={errors?.vehicleSelectionDescription}
                 onChange={(v) => updateField("vehicleSelectionDescription", v)}
               />
             </div>
@@ -459,6 +493,8 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                     src={data.vehicleSelectionTemplate1?.imageUrl}
                     fieldKey="selImg1"
                     imageType="VEHICLE_SELECTION"
+                    error={errors?.vehicleSelectionTemplate1}
+                    errorMsg={errors?.vehicleSelectionTemplate1}
                     onChange={({ imageUrl, id }) => {
                       updateField("vehicleSelectionTemplate1", {
                         ...data.vehicleSelectionTemplate1,
@@ -474,6 +510,8 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                     src={data.vehicleSelectionTemplate2?.imageUrl}
                     fieldKey="selImg2"
                     imageType="VEHICLE_SELECTION"
+                    error={errors?.vehicleSelectionTemplate2}
+                    errorMsg={errors?.vehicleSelectionTemplate2}
                     onChange={({ imageUrl, id }) => {
                       updateField("vehicleSelectionTemplate2", {
                         ...data.vehicleSelectionTemplate2,
@@ -501,11 +539,16 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                 bold
                 label="Process Title"
                 value={data.processTitle}
+                error={errors?.processTitle}
+                errorMsg={errors?.processTitle}
+                maxLength={rules?.processTitle?.max}
                 onChange={(e) => updateField("processTitle", e.target.value)}
               />
               <RichTextEditor
                 label="Process Description"
                 value={data.processDescription}
+                error={errors?.processDescription}
+                errorMsg={errors?.processDescription}
                 onChange={(v) => updateField("processDescription", v)}
               />
             </div>
@@ -522,6 +565,9 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                   </label>
                   <EditorInput
                     value={step.title}
+                    error={errors?.processSteps?.[i]?.title}
+                    errorMsg={errors?.processSteps?.[i]?.title}
+                    maxLength={rules?.processSteps?.title?.max}
                     onChange={(e) =>
                       updateArrayItem(
                         "processSteps",
@@ -538,6 +584,9 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                   </label>
                   <EditorInput
                     value={step.description}
+                    error={errors?.processSteps?.[i]?.description}
+                    errorMsg={errors?.processSteps?.[i]?.description}
+                    maxLength={rules?.processSteps?.description?.max}
                     onChange={(e) =>
                       updateArrayItem(
                         "processSteps",
@@ -587,11 +636,16 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                 bold
                 label="Inspection Title"
                 value={data.inspectionTitle}
+                error={errors?.inspectionTitle}
+                errorMsg={errors?.inspectionTitle}
+                maxLength={rules?.inspectionTitle?.max}
                 onChange={(e) => updateField("inspectionTitle", e.target.value)}
               />
               <RichTextEditor
                 label="Inspection Description"
                 value={data.inspectionText}
+                error={errors?.inspectionText}
+                errorMsg={errors?.inspectionText}
                 onChange={(v) => updateField("inspectionText", v)}
               />
               <div className="space-y-2 mt-4">
@@ -607,6 +661,9 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                       newArr[i] = e.target.value;
                       updateField("inspectionPoints", newArr);
                     }}
+                    maxLength={rules?.arrayRules?.inspectionPoints?.text?.max}
+                    error={!!errors?.inspectionPoints?.[i]?.text}
+                    errorMsg={errors?.inspectionPoints?.[i]?.text}
                   />
                 ))}
               </div>
@@ -621,6 +678,8 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                   src={data.inspectionTemplate1?.imageUrl}
                   fieldKey="inspImg1"
                   imageType="INSPECTION_PROCESS"
+                  error={errors?.inspectionTemplate1}
+                  errorMsg={errors?.inspectionTemplate1}
                   onChange={({ imageUrl, id }) => {
                     updateField("inspectionTemplate1", {
                       ...data.inspectionTemplate1,
@@ -647,6 +706,9 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                 bold
                 label="Commitment Title"
                 value={data.customerCommitmentTitle}
+                error={errors?.customerCommitmentTitle}
+                errorMsg={errors?.customerCommitmentTitle}
+                maxLength={rules?.customerCommitmentTitle?.max}
                 onChange={(e) =>
                   updateField("customerCommitmentTitle", e.target.value)
                 }
@@ -654,6 +716,8 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
               <RichTextEditor
                 label="Commitment Text"
                 value={data.customerCommitmentDescription}
+                error={errors?.customerCommitmentDescription}
+                errorMsg={errors?.customerCommitmentDescription}
                 onChange={(v) =>
                   updateField("customerCommitmentDescription", v)
                 }
@@ -669,6 +733,8 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                   src={data.customerCommitmentTemplate1?.imageUrl}
                   fieldKey="commImg1"
                   imageType="CUSTOMER_COMMITMENT"
+                  error={errors?.customerCommitmentTemplate1}
+                  errorMsg={errors?.customerCommitmentTemplate1}
                   onChange={({ imageUrl, id }) => {
                     updateField("customerCommitmentTemplate1", {
                       ...data.customerCommitmentTemplate1,
@@ -696,6 +762,8 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                 src={data.galleryTemplate1?.imageUrl}
                 fieldKey="galImg1"
                 imageType="GALLERY"
+                error={errors?.galleryTemplate1}
+                errorMsg={errors?.galleryTemplate1}
                 onChange={({ imageUrl, id }) => {
                   updateField("galleryTemplate1", {
                     ...data.galleryTemplate1,
@@ -711,6 +779,8 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                 src={data.galleryTemplate2?.imageUrl}
                 fieldKey="galImg2"
                 imageType="GALLERY"
+                error={errors?.galleryTemplate2}
+                errorMsg={errors?.galleryTemplate2}
                 onChange={({ imageUrl, id }) => {
                   updateField("galleryTemplate2", {
                     ...data.galleryTemplate2,
@@ -726,6 +796,8 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                 src={data.galleryTemplate3?.imageUrl}
                 fieldKey="galImg3"
                 imageType="GALLERY"
+                error={errors?.galleryTemplate3}
+                errorMsg={errors?.galleryTemplate3}
                 onChange={({ imageUrl, id }) => {
                   updateField("galleryTemplate3", {
                     ...data.galleryTemplate3,
@@ -741,6 +813,8 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
                 src={data.galleryTemplate4?.imageUrl}
                 fieldKey="galImg4"
                 imageType="GALLERY"
+                error={errors?.galleryTemplate4}
+                errorMsg={errors?.galleryTemplate4}
                 onChange={({ imageUrl, id }) => {
                   updateField("galleryTemplate4", {
                     ...data.galleryTemplate4,
@@ -764,6 +838,9 @@ export default function WhyBuyPro1({ data: rawData, isEditing, onUpdate }) {
             bold
             label="Section Title"
             value={data.testimonialTitle}
+            error={errors?.testimonialTitle}
+            errorMsg={errors?.testimonialTitle}
+            maxLength={rules?.testimonialTitle?.max}
             onChange={(e) => updateField("testimonialTitle", e.target.value)}
           />
 
