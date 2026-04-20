@@ -328,13 +328,11 @@ export default function WhyBuyPremium3({
   const [howBuyingWorksActive, setHowBuyingWorksActive] = useState(0);
   const [avxInspectionActive, setAvxInspectionActive] = useState(0);
   const [commitmentActive, setCommitmentActive] = useState(0);
-  const [testimonialsactive, setTestimonialsActive] = useState(0);
   const [progress, setProgress] = useState(0);
   const [hoverIndex, setHoverIndex] = useState(null);
   const [paused, setPaused] = useState(false);
   const [hovered, setHovered] = useState(null);
   const [spread, setSpread] = useState(false);
-  const [visible, setVisible] = useState(true);
   const progressRef = useRef(null);
   const startTimeRef = useRef(null);
   const elapsedRef = useRef(0);
@@ -365,7 +363,6 @@ export default function WhyBuyPremium3({
     .map((p) => p.trim())
     .filter(Boolean);
   const displayIndex = hoverIndex !== null ? hoverIndex : activeIndex;
-  const testimonialsTotal = (data.testimonials || []).length;
   const inspectionPoints = data.inspectionPoints || [];
   const current = inspectionPoints[avxInspectionActive];
   const nextStep = () => {
@@ -412,25 +409,7 @@ export default function WhyBuyPremium3({
     }, 5000);
     return () => clearInterval(interval);
   }, []);
-  const transition = (newIndex) => {
-    setVisible(false);
-    clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      setTestimonialsActive(newIndex);
-      setVisible(true);
-    }, 350);
-  };
-  const prev = () =>
-    transition(
-      (testimonialsactive - 1 + testimonialsTotal) % testimonialsTotal,
-    );
-  const next = () => transition((testimonialsactive + 1) % testimonialsTotal);
   useEffect(() => () => clearTimeout(timeoutRef.current), []);
-  const item =
-    (data.featuredReviews || data.testimonials || [])[testimonialsactive] || {};
-  const reviewText = item.reviewText || item.review || "";
-  const reviewerName = item.reviewerName || item.name || "";
-  const rating = item.rating || 5;
   const galleryImages = [
     data.customGallery1 || data.galleryTemplate1?.imageUrl,
     data.customGallery2 || data.galleryTemplate2?.imageUrl,
@@ -1135,9 +1114,7 @@ export default function WhyBuyPremium3({
               <div className="relative h-[460px] sm:h-[520px]">
                 <div className="absolute top-0 left-0 w-[75%] h-[72%] rounded-2xl border border-third/10 shadow-2xl overflow-hidden">
                   <img
-                    src={
-                      data.customStory1 || data.storyTemplate1?.imageUrl
-                    }
+                    src={data.customStory1 || data.storyTemplate1?.imageUrl}
                     alt="Our story"
                     className="w-full h-full object-cover"
                   />
@@ -1145,9 +1122,7 @@ export default function WhyBuyPremium3({
                 </div>
                 <div className="absolute bottom-0 right-0 w-[58%] h-[55%] rounded-2xl shadow-2xl overflow-hidden">
                   <img
-                    src={
-                      data.customStory2 || data.storyTemplate2?.imageUrl
-                    }
+                    src={data.customStory2 || data.storyTemplate2?.imageUrl}
                     alt="Our story"
                     className="w-full h-full object-cover rounded-2xl"
                   />
@@ -1584,54 +1559,53 @@ export default function WhyBuyPremium3({
                   {data.testimonialTitle}
                 </h2>
               </div>
-              <div
-                className="w-full"
-                style={{
-                  opacity: visible ? 1 : 0,
-                  transform: visible ? "translateY(0px)" : "translateY(12px)",
-                  transition: "opacity 0.35s ease, transform 0.35s ease",
-                }}
-              >
-                <div className="relative flex flex-col items-center text-center gap-8 px-10 py-12 border border-third/15 rounded-2xl">
-                  <div className="absolute top-5 right-6 w-9 h-9 rounded-full flex items-center justify-center">
-                    <Quote className="w-6 h-6 text-third/30" />
-                  </div>
-                  <span className="text-[13px] font-bold text-third/30 font-[Montserrat] tracking-[0.5em]">
-                    {String(testimonialsactive + 1).padStart(2, "0")}
-                  </span>
-                  <div
-                    className="text-xl md:text-2xl lg:text-3xl font-light text-primary/70 font-[Poppins] leading-[1.6] max-w-3xl italic"
-                    dangerouslySetInnerHTML={{ __html: reviewText }}
-                  />
-                  <span className="text-xs font-semibold text-primary/90 font-[Montserrat] uppercase tracking-widest">
-                    {reviewerName}
-                  </span>
-                </div>
-              </div>
-              <div className="flex items-center gap-6">
-                <button
-                  onClick={prev}
-                  className="w-10 h-10 rounded-full border border-third/20 flex items-center justify-center hover:border-third/40 hover:bg-third/5 transition-all duration-300 group"
-                >
-                  <ChevronLeft className="w-4 h-4 text-third/50 group-hover:text-third/70 transition-colors duration-300" />
-                </button>
-                <div className="flex items-center gap-2">
-                  {(data.featuredReviews || data.testimonials || []).map(
-                    (_, i) => (
-                      <button
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
+                {(data.featuredReviews || data.testimonials || []).map(
+                  (t, i) => {
+                    const reviewText = t.reviewText || t.review || "";
+                    const reviewerName = t.reviewerName || t.name || "";
+                    const rating = t.rating || 5;
+
+                    return (
+                      <div
                         key={i}
-                        onClick={() => transition(i)}
-                        className={`rounded-full transition-all duration-500 ${i === testimonialsactive ? "w-6 h-1.5 bg-primary" : "w-1.5 h-1.5 bg-third/20 hover:bg-third/40"}`}
-                      />
-                    ),
-                  )}
-                </div>
-                <button
-                  onClick={next}
-                  className="w-10 h-10 rounded-full border border-third/20 flex items-center justify-center hover:border-third/40 hover:bg-third/5 transition-all duration-300 group"
-                >
-                  <ChevronRight className="w-4 h-4 text-third/50 group-hover:text-third/70 transition-colors duration-300" />
-                </button>
+                        className="relative flex flex-col gap-6 p-8 border border-third/15 rounded-2xl bg-secondary/5 hover:bg-secondary/10 transition-colors"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex gap-1">
+                            {[...Array(5)].map((_, idx) => (
+                              <Star
+                                key={idx}
+                                size={16}
+                                className={
+                                  idx < rating
+                                    ? "text-primary fill-primary"
+                                    : "text-third/30"
+                                }
+                              />
+                            ))}
+                          </div>
+                          <Quote className="w-6 h-6 text-third/20 translate-y-[-2px]" />
+                        </div>
+                        <div
+                          className="text-lg text-primary/70 font-[Poppins] leading-relaxed italic"
+                          dangerouslySetInnerHTML={{ __html: reviewText }}
+                        />
+                        <div className="mt-auto pt-6 border-t border-third/10 flex items-center justify-between">
+                          <span className="text-[14px] font-bold text-primary font-[Montserrat] tracking-wider uppercase">
+                            {reviewerName}
+                          </span>
+                          <div className="flex items-center gap-1.5 opacity-40">
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                            <span className="text-[10px] uppercase font-semibold font-[Poppins] tracking-[0.2em]">
+                              Verified Buyer
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  },
+                )}
               </div>
             </div>
           </div>

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { EngineRenderer } from "@/core/engine/Renderer";
 import { THEME_STORE } from "@/core/engine/themeStore";
@@ -58,6 +58,98 @@ function mapApiToTemplateData(api) {
   };
 }
 
+// Progress Calculator for a single section
+const getSectionProgress = (section, defaultSection) => {
+  let totalFields = 0;
+  let filledFields = 0;
+
+  const { rules, arrayRules, data } = section;
+  const defaultData = defaultSection?.data || {};
+
+  // Normal field validation
+  if (rules) {
+    Object.entries(rules).forEach(([field, rule]) => {
+      const value = data[field] || "";
+      const defaultValue = defaultData[field] || "";
+
+      // Count as valid ONLY if it's different from default AND meets length rules
+      const getCleanString = (val) => {
+        if (!val) return "";
+        if (typeof val === "object" && val.imageUrl) return val.imageUrl.trim();
+        return String(val).replace(/<[^>]*>/g, "").trim();
+      };
+
+      const cleanValue = getCleanString(value);
+      const cleanDefault = getCleanString(defaultValue);
+
+      totalFields++;
+
+      const isImageField =
+        field.toLowerCase().includes("image") ||
+        field.toLowerCase().includes("template");
+
+      if (cleanValue !== cleanDefault && cleanValue.length > 0) {
+        if (isImageField || (rule.min === undefined && rule.max === undefined)) {
+          // If it's an image OR the rule has no min/max, existence is enough
+          filledFields++;
+        } else if (
+          cleanValue.length >= (rule.min ?? 0) &&
+          cleanValue.length <= (rule.max ?? Infinity)
+        ) {
+          // Otherwise, respect the provided bounds
+          filledFields++;
+        }
+      }
+    });
+  }
+
+  // Array field validation
+  if (arrayRules) {
+    Object.entries(arrayRules).forEach(([arrayField, fieldRules]) => {
+      const arrayData = data[arrayField];
+      const defaultArrayData = defaultData[arrayField] || [];
+
+      if (Array.isArray(arrayData)) {
+        arrayData.forEach((item, index) => {
+          const defaultItem = defaultArrayData[index] || {};
+
+          Object.entries(fieldRules).forEach(([field, rule]) => {
+            const value = item[field] || "";
+            const defaultValue = defaultItem[field] || "";
+
+            const cleanValue = getCleanString(value);
+            const cleanDefault = getCleanString(defaultValue);
+
+            totalFields++;
+
+            const isImageField =
+              field.toLowerCase().includes("image") ||
+              field.toLowerCase().includes("template") ||
+              field.toLowerCase().includes("icon");
+
+            if (cleanValue !== cleanDefault && cleanValue.length > 0) {
+              if (
+                isImageField ||
+                (rule.min === undefined && rule.max === undefined)
+              ) {
+                filledFields++;
+              } else if (
+                cleanValue.length >= (rule.min ?? 0) &&
+                cleanValue.length <= (rule.max ?? Infinity)
+              ) {
+                filledFields++;
+              }
+            }
+          });
+        });
+      }
+    });
+  }
+
+  if (totalFields === 0) return 0;
+  return Math.round((filledFields / totalFields) * 100);
+};
+
 export default function CreateTheme() {
   const params = useSearchParams();
   const router = useRouter();
@@ -69,6 +161,14 @@ export default function CreateTheme() {
   const [sections, setSections] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const sectionProgress = useMemo(() => {
+    return sections.map((sec, i) => ({
+      id: sec.id,
+      label: sec.type.includes("about") ? "About Us" : "Why Buy",
+      value: getSectionProgress(sec, theme.schema[i])
+    }));
+  }, [sections, theme]);
 
   const handleFinalSubmit = async () => {
     try {
@@ -134,6 +234,32 @@ export default function CreateTheme() {
 
   return (
     <section className="rounded-2xl border border-third/30 overflow-hidden h-full flex flex-col  text-primary">
+      {/* Progress Bar (Dynamic based on Tab) */}
+      {sectionProgress[activeTab] && (
+        <div className=" border-b border-third/30 p-4">
+          <div className="flex justify-between items-center mb-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xs uppercase tracking-wider font-bold text-third">
+                Section Completion:
+              </span>
+              <span className="text-sm font-bold text-primary">
+                {sectionProgress[activeTab].label}
+              </span>
+            </div>
+            <span className="text-sm font-bold text-primary">
+              {sectionProgress[activeTab].value}% Completed
+            </span>
+          </div>
+          <div className="w-full bg-third/20 rounded-full h-2 overflow-hidden">
+            <div
+              className={`h-full transition-all duration-500 ease-out ${sectionProgress[activeTab].value === 100 ? "bg-green-500" : "bg-primary"
+                }`}
+              style={{ width: `${sectionProgress[activeTab].value}%` }}
+            />
+          </div>
+        </div>
+      )}
+
       <div className="flex gap-2 p-3 border-b border-third/30">
         {sections.map((sec, i) => (
           <button

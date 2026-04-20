@@ -575,7 +575,7 @@ export default function WhyBuyPremium2({
           <h3 className="text-primary font-bold text-xl mb-4">
             Process Section
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-8">
             <div className="space-y-4">
               <EditorInput
                 bold
@@ -589,11 +589,11 @@ export default function WhyBuyPremium2({
                 onChange={(v) => updateField("processDescription", v)}
               />
             </div>
-            <div className="space-y-4">
+            {/* <div className="space-y-4">
               <p className="text-sm font-semibold text-primary">
                 Process Images
               </p>
-              <div className="grid grid-cols-2 gap-4">
+               <div className="grid grid-cols-2 gap-4">
                 {[1, 2, 3, 4].map((n) => (
                   <div key={n} className="h-40 relative">
                     <ImageUploader
@@ -621,8 +621,8 @@ export default function WhyBuyPremium2({
                     />
                   </div>
                 ))}
-              </div>
-            </div>
+              </div> 
+            </div> */}
           </div>
           <div className="grid md:grid-cols-2 gap-4 mt-6">
             {data.processSteps.map((step, i) => (
@@ -1114,60 +1114,44 @@ export default function WhyBuyPremium2({
       ═══════════════════════════════════════ */}
       <section className="py-12 px-2 lg:px-4">
         <div className="container">
-          <div className="mb-16 max-w-2xl">
-            <p className="text-sm tracking-[0.4em] uppercase text-third mb-3">
+          <div className="flex flex-col items-center text-center gap-4 sm:gap-6 mb-10 sm:mb-16 mx-auto max-w-3xl px-2">
+            <p className="text-xs sm:text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Process
             </p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-primary font-[Montserrat]">
               {data.processTitle}
             </h2>
             <div
-              className="text-third/60 text-[15px] leading-[1.9]"
+              className="text-third/65 text-sm sm:text-[15px] leading-[1.8] sm:leading-[1.9] font-[Poppins]"
               dangerouslySetInnerHTML={{ __html: data.processDescription }}
             />
           </div>
-          <div className="flex flex-col gap-16">
-            {data.processSteps.map((step, i) => {
-              const isLeft = i % 2 === 0;
-              return (
-                <div
-                  key={i}
-                  className={`grid lg:grid-cols-2 gap-10 items-center ${
-                    !isLeft ? "lg:[&>*:first-child]:order-2" : ""
-                  }`}
-                >
-                  <div className="w-full h-[260px] lg:h-80 rounded-2xl overflow-hidden">
-                    <img
-                      src={
-                        data[`customProcess${i + 1}`] ||
-                        data[`customProcessUrl${i + 1}`] ||
-                        data[`processTemplate${i + 1}`]?.imageUrl
-                      }
-                      loading="lazy"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-4">
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="w-10 h-10 border border-primary/20 flex items-center justify-center [&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-fourth"
-                        dangerouslySetInnerHTML={{ __html: step.icon }}
-                      />
-                      <span className="text-[11px] tracking-[0.2em] text-third/40">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                    </div>
-                    <h3 className="text-xl font-semibold text-primary">
-                      {step.title}
-                    </h3>
-                    <div
-                      className="text-third/65 text-[14px] leading-[1.8] max-w-md"
-                      dangerouslySetInnerHTML={{ __html: step.description }}
-                    />
-                  </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
+            {data.processSteps.map((step, i) => (
+              <div
+                key={i}
+                className="flex flex-col gap-4 sm:gap-6 p-6 sm:p-8 border border-primary/10 rounded-2xl bg-primary/5 hover:bg-primary/10 hover:border-primary/20 transition-all duration-300 group"
+              >
+                <div className="flex items-center justify-between">
+                  <div
+                    className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-primary/10 border border-primary/10 flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5 sm:[&>svg]:w-6 sm:[&>svg]:h-6 [&>svg]:text-fourth group-hover:scale-110 transition-transform duration-300 shadow-sm"
+                    dangerouslySetInnerHTML={{ __html: step.icon }}
+                  />
+                  <span className="text-xs sm:text-[14px] font-bold tracking-[0.2em] text-third/30 font-[Montserrat]">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
                 </div>
-              );
-            })}
+                <div className="flex flex-col gap-2 sm:gap-3">
+                  <h3 className="text-lg sm:text-xl font-semibold text-primary font-[Montserrat]">
+                    {step.title}
+                  </h3>
+                  <div
+                    className="text-third/65 text-xs sm:text-[14px] leading-[1.7] sm:leading-[1.8] font-[Poppins]"
+                    dangerouslySetInnerHTML={{ __html: step.description }}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -1389,20 +1373,6 @@ export default function WhyBuyPremium2({
                 {data.testimonialTitle}
               </h2>
             </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => swiperRef.current?.slidePrev()}
-                className="w-10 h-10 rounded-xl border border-primary/30 flex items-center justify-center text-fourth hover:bg-primary/10"
-              >
-                <ChevronLeft size={18} />
-              </button>
-              <button
-                onClick={() => swiperRef.current?.slideNext()}
-                className="w-10 h-10 rounded-xl border border-primary/30 flex items-center justify-center text-fourth hover:bg-primary/10"
-              >
-                <ChevronRight size={18} />
-              </button>
-            </div>
           </div>
           <Swiper
             modules={[Autoplay]}
@@ -1454,17 +1424,6 @@ export default function WhyBuyPremium2({
               );
             })}
           </Swiper>
-          <div className="flex items-center gap-2 mt-8">
-            {Array.from({ length: maxIndex + 1 }).map((_, i) => (
-              <button
-                key={i}
-                onClick={() => swiperRef.current?.slideToLoop(i)}
-                className={`h-1 rounded-full transition-all duration-300 ${
-                  i === activeIndex ? "w-6 bg-primary/60" : "w-2 bg-primary/15"
-                }`}
-              />
-            ))}
-          </div>
         </div>
       </section>
     </>

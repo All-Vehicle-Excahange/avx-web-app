@@ -49,6 +49,33 @@ export const ABOUT_PRO_3 = [
           desc: "AI powered performance & conversion engines.",
         },
       ],
-    }
+    },
+    rules: {
+      aboutHeroTitle: { min: 10, max: 100 },
+      aboutHeroDescription: { min: 50, max: 2000 },
+      aboutMissionTitle: { min: 10, max: 100 },
+      aboutMissionDescription: { min: 50, max: 2000 },
+      aboutVisionTitle: { min: 10, max: 100 },
+      aboutVisionDescription: { min: 50, max: 2000 },
+      aboutStatsDescription: { min: 50, max: 2000 },
+      aboutServicesTitle: { min: 10, max: 100 },
+      aboutServicesDescription: { min: 50, max: 2000 },
+      aboutHeroTemplate1: { min: 5, max: 2000 },
+      aboutMissionTemplate1: { min: 5, max: 2000 },
+      aboutVisionTemplate1: { min: 5, max: 2000 },
+      customHeroImage1: { min: 5, max: 2000 },
+      customMissionImage1: { min: 5, max: 2000 },
+      customVisionImage1: { min: 5, max: 2000 },
+    },
+    arrayRules: {
+      stats: {
+        number: { min: 1, max: 10 },
+        label: { min: 5, max: 100 },
+      },
+      services: {
+        title: { min: 5, max: 100 },
+        desc: { min: 10, max: 300 },
+      },
+    },
   },
 ];

@@ -136,7 +136,7 @@ function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
       heroData.append("heroTitle", data.heroTitle || "");
       heroData.append("heroDescription", data.heroDescription || "");
       if (data.heroTemplate1?.id) {
-        heroData.append("heroTemplateId1", data.heroTemplate1.id);
+        heroData.append("heroImageTemplateId1", data.heroTemplate1.id);
       }
 
       const missionData = new FormData();
@@ -429,7 +429,11 @@ function AboutPro1({ data: rawData, isEditing, onUpdate, onNextTab }) {
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `url(${data.heroTemplate1?.imageUrl})`,
+            backgroundImage: `url(${
+              data.customHeroImage1 ||
+              data.customHeroImageUrl1 ||
+              data.heroImageTemplateId1?.imageUrl
+            })`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}

@@ -58,8 +58,9 @@ function getStatusBadge(status) {
         cls: "text-green-400 bg-green-400/10 border-green-400/30",
       };
     case "PENDING":
+    case "REQUESTED":
       return {
-        label: "Pending",
+        label: "Requested",
         icon: Clock,
         cls: "text-yellow-400 bg-yellow-400/10 border-yellow-400/30",
       };
@@ -95,6 +96,10 @@ export default function CreateStoreFront({ storeData, onView }) {
     ? getStatusBadge(storeData.verificationStatus)
     : null;
 
+  const isStatusLocked =
+    storeData?.verificationStatus &&
+    !["VERIFIED", "REQUEST_CHANGES"].includes(storeData.verificationStatus);
+
   return (
     <section className="space-y-10">
       {/* HEADER */}
@@ -116,7 +121,9 @@ export default function CreateStoreFront({ storeData, onView }) {
               className={`rounded-xl border p-6 flex flex-col min-h-[320px] md:h-auto lg:h-[340px] transition-all duration-300
                 ${
                   isAllowed
-                    ? "hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] border-primary ring-2 ring-primary/50 shadow-[0_0_20px_rgba(255,255,255,0.1)] cursor-pointer"
+                    ? isStatusLocked
+                      ? "border-primary/50 opacity-80 cursor-not-allowed"
+                      : "hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] border-primary ring-2 ring-primary/50 shadow-[0_0_20px_rgba(255,255,255,0.1)] cursor-pointer"
                     : "border-third/30 opacity-60 pointer-events-none"
                 }`}
             >
@@ -154,9 +161,15 @@ export default function CreateStoreFront({ storeData, onView }) {
                     variant="ghost"
                     full
                     size="sm"
-                    showIcon={true}
+                    showIcon={!isStatusLocked}
+                    locked={isStatusLocked}
                   >
-                    Use {tier.label} Storefront
+                    {isStatusLocked
+                      ? storeData.verificationStatus === "REQUESTED" ||
+                        storeData.verificationStatus === "PENDING"
+                        ? `Use ${tier.label} Storefront`
+                        : "Locked"
+                      : `Use ${tier.label} Storefront`}
                   </Button>
                 ) : (
                   <Button full disabled size="sm" variant="ghost">
@@ -171,7 +184,7 @@ export default function CreateStoreFront({ storeData, onView }) {
 
       {/* ─── STOREFRONT DRAFT TABLE (only when data exists) ─── */}
       {storeData && (
-        <div className="border border-third/30 rounded-xl p-6 space-y-6 transition-all duration-300 hover:border-third/60 hover:shadow-[0_8px_30px_rgb(0,0,0,0.4)]">
+        <div className="border border-third/30 rounded-xl p-6 space-y-6 transition-all duration-300">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="text-xl font-semibold">Your Storefront</h2>
@@ -267,7 +280,7 @@ export default function CreateStoreFront({ storeData, onView }) {
       )}
 
       {/* WHY STOREFRONT MATTERS */}
-      <div className="border border-third/30 rounded-xl p-8 space-y-6 transition-all duration-300 hover:border-third/60 hover:shadow-[0_8px_30px_rgb(0,0,0,0.4)]">
+      <div className="border border-third/30 rounded-xl p-8 space-y-6 transition-all duration-300">
         <h2 className="text-xl font-semibold">Why your Storefront matters</h2>
 
         <p className="text-third text-sm leading-relaxed max-w-4xl">

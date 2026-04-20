@@ -106,6 +106,31 @@ export const WHY_BUY_PRO_2 = [
                 },
             ],
             testimonialIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h4c0 2.2-1.8 4-4 4H3c-.6 0-1 .4-1 1s.4 1 1 1Z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.1-.9-2-2-2h-3c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h4c0 2.2-1.8 4-4 4h-2c-.6 0-1 .4-1 1s.4 1 1 1Z"/></svg>`,
-        }
+        },
+        rules: {
+            whyBuyHeroTitle: { min: 10, max: 100 },
+            whyBuyHeroDescription: { min: 50, max: 2000 },
+            storyTitle: { min: 10, max: 100 },
+            storyDescription: { min: 50, max: 2000 },
+            vehicleSelectionTitle: { min: 10, max: 100 },
+            vehicleSelectionDescription: { min: 50, max: 2000 },
+            processTitle: { min: 10, max: 100 },
+            processDescription: { min: 50, max: 2000 },
+            inspectionTitle: { min: 10, max: 100 },
+            inspectionText: { min: 50, max: 2000 },
+            customerCommitmentTitle: { min: 10, max: 100 },
+            customerCommitmentDescription: { min: 50, max: 2000 },
+            testimonialTitle: { min: 10, max: 100 },
+        },
+        arrayRules: {
+            processSteps: {
+                title: { min: 5, max: 100 },
+                description: { min: 10, max: 300 },
+            },
+            testimonials: {
+                name: { min: 3, max: 50 },
+                review: { min: 10, max: 300 },
+            },
+        },
     },
 ];

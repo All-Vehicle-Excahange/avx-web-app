@@ -131,9 +131,9 @@ export default function KycForm() {
 
         if (bData?.verificationStatus === "VERIFIED") {
           if (router.query?.redirect) {
-            router.push(router.query.redirect);
+            router.replace(router.query.redirect);
           } else {
-            router.push("/consult/dashboard/overview");
+            router.replace("/consult/dashboard/overview");
           }
           return;
         }

@@ -7,8 +7,8 @@ export const ABOUT_PREMIUM_3 = [
       /* ================= HERO ================= */
       heroTitle: "Our Story Built for Buy & Selling a Vehicle",
       heroDescription: `<p>Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.</p>`,
-      heroTemplate1: { id: 1, imageUrl: "/video.mp4" },
-      heroTemplate2: {
+      heroImageTemplateId1: { id: 1, imageUrl: "/video.mp4" },
+      heroImageTemplateId2: {
         id: 2,
         imageUrl:
           "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=90",
@@ -62,6 +62,34 @@ export const ABOUT_PREMIUM_3 = [
           desc: "AI powered performance & conversion engines.",
         },
       ],
+    },
+    rules: {
+      heroTitle: { min: 10, max: 100 },
+      heroDescription: { min: 50, max: 2000 },
+      aboutUsDescription: { min: 50, max: 2000 },
+      missionTitle: { min: 10, max: 100 },
+      missionDesc: { min: 50, max: 2000 },
+      visionTitle: { min: 10, max: 100 },
+      visionDesc: { min: 50, max: 2000 },
+      servicesTitle: { min: 10, max: 100 },
+      servicesDesc: { min: 50, max: 2000 },
+      heroImageTemplateId1: { min: 5, max: 2000 },
+      heroImageTemplateId2: { min: 5, max: 2000 },
+      missionTemplate1: { min: 5, max: 2000 },
+      visionTemplate1: { min: 5, max: 2000 },
+      customHeroImage1: { min: 5, max: 2000 },
+      customMissionImage1: { min: 5, max: 2000 },
+      customVisionImage1: { min: 5, max: 2000 },
+    },
+    arrayRules: {
+      stats: {
+        number: { min: 1, max: 10 },
+        label: { min: 5, max: 100 },
+      },
+      services: {
+        title: { min: 5, max: 100 },
+        desc: { min: 10, max: 300 },
+      },
     },
   },
 ];

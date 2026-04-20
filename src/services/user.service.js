@@ -38,6 +38,8 @@ const ENDPOINT = {
   getGlobalSearch: "/global-search/consultations",
   getUserSellerSuspend: "/users/seller/account-suspend-status",
   getAllTier: "/tier",
+  getAboutUsStoreFrontByUserName: "/consultation/detail-page/about-us",
+  getWhyBuyHereStoreFrontByUserName: "/consultation/detail-page/why-buy-here",
 };
 
 export const getUserHomeFeed = async (data) => {
@@ -514,6 +516,28 @@ export const getUserSellerSuspend = async () => {
 export const getAllTier = async () => {
   try {
     const res = await axiosInstance.get(ENDPOINT.getAllTier);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAboutUsStoreFrontByUserName = async (username) => {
+  try {
+    const res = await axiosInstance.get(
+      `${ENDPOINT.getAboutUsStoreFrontByUserName}/${username}`,
+    );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getWhyBuyHereStoreFrontByUserName = async (username) => {
+  try {
+    const res = await axiosInstance.get(
+      `${ENDPOINT.getWhyBuyHereStoreFrontByUserName}/${username}`,
+    );
     return handleResponse(res);
   } catch (error) {
     throw error;

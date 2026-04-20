@@ -709,7 +709,7 @@ export default function WhyBuyPro3({
           <h3 className="text-primary font-bold text-xl mb-4">
             Process Section
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-8">
             <div className="space-y-4">
               <EditorInput
                 bold
@@ -725,7 +725,7 @@ export default function WhyBuyPro3({
                 onChange={(v) => updateField("whyBuyProcessDescription", v)}
               />
             </div>
-            <div className="space-y-4">
+            {/* <div className="space-y-4">
               <p className="text-sm font-semibold text-primary">
                 Process Images
               </p>
@@ -791,7 +791,7 @@ export default function WhyBuyPro3({
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="grid md:grid-cols-2 gap-4 mt-6">
             {data.processSteps?.map((step, i) => (

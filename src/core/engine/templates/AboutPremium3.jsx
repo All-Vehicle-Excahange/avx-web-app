@@ -3,7 +3,7 @@
 import { Cpu, Globe, ShieldCheck, TrendingUp } from "lucide-react";
 import React, { useState } from "react";
 import EditorInput from "../atoms/EditorInput";
-import { ImageUploader } from "../atoms/ImageUploader "; 
+import { ImageUploader } from "../atoms/ImageUploader ";
 import RichTextEditor from "../atoms/RichTextEditor";
 import Select from "react-select";
 import GlobalLoader from "@/components/ui/GlobalLoader";
@@ -74,7 +74,12 @@ const formatOptionLabel = ({ value, label }) => (
   </div>
 );
 const DEFAULT_DATA = ABOUT_PREMIUM_3[0].data;
-export default function AboutPremium3({ data, isEditing, onUpdate, onNextTab }) {
+export default function AboutPremium3({
+  data,
+  isEditing,
+  onUpdate,
+  onNextTab,
+}) {
   const [isSaving, setIsSaving] = useState(false);
   const fallbackData = { ...DEFAULT_DATA };
   const d = data || fallbackData;
@@ -115,14 +120,7 @@ export default function AboutPremium3({ data, isEditing, onUpdate, onNextTab }) 
         const blob = await getBlobFromUrl(d.customHeroImage1);
         if (blob) heroData.append("customHeroImage1", blob, "hero1.png");
       } else if (d.heroTemplate1?.id) {
-        heroData.append("heroTemplateId1", d.heroTemplate1.id);
-      }
-
-      if (d.customHeroImage2 && d.customHeroImage2.startsWith("blob:")) {
-        const blob = await getBlobFromUrl(d.customHeroImage2);
-        if (blob) heroData.append("customHeroImage2", blob, "hero2.png");
-      } else if (d.heroTemplate2?.id) {
-        heroData.append("heroTemplateId2", d.heroTemplate2.id);
+        heroData.append("heroImageTemplateId1", d.heroTemplate1.id);
       }
 
       // Mission
@@ -192,7 +190,7 @@ export default function AboutPremium3({ data, isEditing, onUpdate, onNextTab }) 
         <GlobalLoader isLoading={isSaving} />
         {/* HERO EDITOR */}
         <h3 className="text-primary text-xl font-bold">Hero Section</h3>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
           <div className="space-y-4">
             <p className="text-sm font-semibold text-primary">
               Background Media
@@ -200,7 +198,11 @@ export default function AboutPremium3({ data, isEditing, onUpdate, onNextTab }) 
             <div className="h-52 relative">
               <ImageUploader
                 label="Hero Background"
-                src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl}
+                src={
+                  d.customHeroImage1 ||
+                  d.customHeroImageUrl1 ||
+                  d.heroTemplate1?.imageUrl
+                }
                 fieldKey="hero_bg"
                 onChange={({ imageUrl, id }) => {
                   const updatedData = { ...d };
@@ -214,31 +216,6 @@ export default function AboutPremium3({ data, isEditing, onUpdate, onNextTab }) 
                     updatedData.customHeroImage1 = imageUrl;
                     delete updatedData.heroTemplate1; // 🔥 IMPORTANT FIX
                     delete updatedData.customHeroImageUrl1;
-                  }
-                  onUpdate(updatedData);
-                }}
-              />
-            </div>
-          </div>
-          <div className="space-y-4">
-            <p className="text-sm font-semibold text-primary">Side Image</p>
-            <div className="h-52 relative">
-              <ImageUploader
-                label="Hero Side Image"
-                src={d.customHeroImage2 || d.customHeroImageUrl2 || d.heroTemplate2?.imageUrl}
-                fieldKey="hero_side"
-                onChange={({ imageUrl, id }) => {
-                  const updatedData = { ...d };
-                  if (id) {
-                    // Template selected
-                    updatedData.heroTemplate2 = { imageUrl, id };
-                    delete updatedData.customHeroImage2;
-                    delete updatedData.customHeroImageUrl2;
-                  } else {
-                    // Custom image uploaded
-                    updatedData.customHeroImage2 = imageUrl;
-                    delete updatedData.heroTemplate2; // 🔥 IMPORTANT FIX
-                    delete updatedData.customHeroImageUrl2;
                   }
                   onUpdate(updatedData);
                 }}
@@ -281,7 +258,11 @@ export default function AboutPremium3({ data, isEditing, onUpdate, onNextTab }) 
             <div className="h-52 relative">
               <ImageUploader
                 label="Mission Image"
-                src={d.customMissionImage1 || d.customMissionUrl1 || d.missionTemplate1?.imageUrl}
+                src={
+                  d.customMissionImage1 ||
+                  d.customMissionUrl1 ||
+                  d.missionTemplate1?.imageUrl
+                }
                 fieldKey="mission"
                 onChange={({ imageUrl, id }) => {
                   const updatedData = { ...d };
@@ -324,7 +305,11 @@ export default function AboutPremium3({ data, isEditing, onUpdate, onNextTab }) 
             <div className="h-52 relative">
               <ImageUploader
                 label="Vision Image"
-                src={d.customVisionImage1 || d.customVisionUrl1 || d.visionTemplate1?.imageUrl}
+                src={
+                  d.customVisionImage1 ||
+                  d.customVisionUrl1 ||
+                  d.visionTemplate1?.imageUrl
+                }
                 fieldKey="vision"
                 onChange={({ imageUrl, id }) => {
                   const updatedData = { ...d };
@@ -447,8 +432,8 @@ export default function AboutPremium3({ data, isEditing, onUpdate, onNextTab }) 
           ))}
         </div>
         <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
-          <Button 
-            onClick={handleSaveAndNext} 
+          <Button
+            onClick={handleSaveAndNext}
             disabled={isSaving}
             variant="ghost"
           >
@@ -465,24 +450,15 @@ export default function AboutPremium3({ data, isEditing, onUpdate, onNextTab }) 
       {/* ═════════ HERO ═════════ */}
       <section className="relative w-full min-h-screen flex flex-col overflow-hidden py-12">
         <div className="absolute inset-0 z-0">
-          {(d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl)?.includes(
-            ".mp4",
-          ) ? (
-            <video
-              src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl}
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <img
-              src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl}
-              className="w-full h-full object-cover"
-              alt="Background"
-            />
-          )}
+          <img
+            src={
+              d.customHeroImage1 ||
+              d.customHeroImageUrl1 ||
+              d.heroImageTemplateId1?.imageUrl
+            }
+            className="w-full h-full object-cover"
+            alt="Background"
+          />
           <div className="absolute inset-0 bg-secondary/60" />
         </div>
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 text-center pt-16 pb-8">
@@ -518,7 +494,11 @@ export default function AboutPremium3({ data, isEditing, onUpdate, onNextTab }) 
             <div className="relative mb-32">
               <div className="w-[85%] lg:w-[70%] md:w-[75%] h-80 rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src={d.customMissionImage1 || d.customMissionUrl1 || d.missionTemplate1?.imageUrl}
+                  src={
+                    d.customMissionImage1 ||
+                    d.customMissionUrl1 ||
+                    d.missionTemplate1?.imageUrl
+                  }
                   alt=""
                   className="w-full h-full object-cover opacity-60"
                 />
@@ -536,7 +516,11 @@ export default function AboutPremium3({ data, isEditing, onUpdate, onNextTab }) 
             <div className="relative">
               <div className="ml-auto w-[85%] lg:w-[70%] md:w-[75%] h-80 rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src={d.customVisionImage1 || d.customVisionUrl1 || d.visionTemplate1?.imageUrl}
+                  src={
+                    d.customVisionImage1 ||
+                    d.customVisionUrl1 ||
+                    d.visionTemplate1?.imageUrl
+                  }
                   alt=""
                   className="w-full h-full object-cover opacity-60"
                 />
@@ -644,7 +628,26 @@ export default function AboutPremium3({ data, isEditing, onUpdate, onNextTab }) 
                           <span
                             className={`transition-colors duration-300 ${isActive ? "text-third" : "text-third/30 group-hover:text-third/60"}`}
                           >
-                            {Icon && <Icon size={16} strokeWidth={1.5} />}
+                            {(() => {
+                              const iconValue = service.icon;
+                              if (
+                                typeof iconValue === "string" &&
+                                iconValue.startsWith("<svg")
+                              ) {
+                                return (
+                                  <div
+                                    className="w-4 h-4 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full"
+                                    dangerouslySetInnerHTML={{
+                                      __html: iconValue,
+                                    }}
+                                  />
+                                );
+                              }
+                              const Icon = iconMap[iconValue];
+                              return Icon ? (
+                                <Icon size={16} strokeWidth={1.5} />
+                              ) : null;
+                            })()}
                           </span>
                           <h3
                             className={`text-sm font-semibold font-[Montserrat] transition-colors duration-300 ${isActive ? "text-primary" : "text-third/50 group-hover:text-third/80"}`}
@@ -673,13 +676,28 @@ export default function AboutPremium3({ data, isEditing, onUpdate, onNextTab }) 
                       onClick={() => setActiveIndex(index)}
                       className={`relative flex items-center gap-2 px-5 py-4 whitespace-nowrap flex-1 justify-center transition-all duration-200 ${isActive ? "text-primary" : "text-third/40"}`}
                     >
-                      {Icon && (
-                        <Icon
-                          size={14}
-                          strokeWidth={1.5}
-                          className={isActive ? "text-third" : ""}
-                        />
-                      )}
+                      {(() => {
+                        const iconValue = service.icon;
+                        if (
+                          typeof iconValue === "string" &&
+                          iconValue.startsWith("<svg")
+                        ) {
+                          return (
+                            <div
+                              className={`w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full ${isActive ? "text-third" : ""}`}
+                              dangerouslySetInnerHTML={{ __html: iconValue }}
+                            />
+                          );
+                        }
+                        const Icon = iconMap[iconValue];
+                        return Icon ? (
+                          <Icon
+                            size={14}
+                            strokeWidth={1.5}
+                            className={isActive ? "text-third" : ""}
+                          />
+                        ) : null;
+                      })()}
                       <span className="text-xs font-semibold font-[Poppins] tracking-wide">
                         {service.title}
                       </span>
@@ -694,9 +712,21 @@ export default function AboutPremium3({ data, isEditing, onUpdate, onNextTab }) 
               <div className="lg:col-span-7 flex flex-col justify-between p-10 lg:p-14 gap-8">
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center justify-center w-16 h-16 rounded-2xl border border-third/20 bg-third/5">
+                    <div className="flex items-center justify-center w-16 h-16 rounded-2xl border border-third/20 bg-third/5 overflow-hidden">
                       {(() => {
-                        const Icon = iconMap[d.services[activeIndex]?.icon];
+                        const iconValue = d.services[activeIndex]?.icon;
+                        if (
+                          typeof iconValue === "string" &&
+                          iconValue.startsWith("<svg")
+                        ) {
+                          return (
+                            <div
+                              className="w-8 h-8 flex items-center justify-center text-third [&>svg]:w-full [&>svg]:h-full"
+                              dangerouslySetInnerHTML={{ __html: iconValue }}
+                            />
+                          );
+                        }
+                        const Icon = iconMap[iconValue];
                         return Icon ? (
                           <Icon
                             size={28}
