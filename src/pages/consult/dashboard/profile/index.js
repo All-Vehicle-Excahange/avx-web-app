@@ -2,7 +2,7 @@ import DashboardLayout from "@/components/features/consult/details/dashboard/Das
 import ProfileComponent from "@/components/features/consult/details/dashboard/ProfileComponent";
 import React from "react";
 
-function profile() {
+function index() {
   return (
     <>
       <DashboardLayout>
@@ -12,7 +12,7 @@ function profile() {
   );
 }
 
-export default profile;
+export default index;
 
 export function getServerSideProps() {
   return {

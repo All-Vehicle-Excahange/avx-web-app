@@ -264,15 +264,6 @@ export default function ProfileComponent() {
       <div className="rounded-xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         <div className="flex justify-between items-center">
           <h2 className="font-semibold">Business Profile</h2>
-          {!isEditing && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsEditing(true)}
-            >
-              Update Profile
-            </Button>
-          )}
         </div>
 
         {/* VIEW MODE */}
@@ -284,7 +275,10 @@ export default function ProfileComponent() {
             <ProfileItem label="Phone" value={profile.phone} />
             {/* <ProfileItem label="City" value={profile.city} /> */}
             <ProfileItem label="Business Type" value={profile.businessType} />
-            <ProfileItem label="Establishment Year" value={profile.establishmentYear} />
+            <ProfileItem
+              label="Establishment Year"
+              value={profile.establishmentYear}
+            />
           </div>
         )}
 
@@ -394,16 +388,6 @@ export default function ProfileComponent() {
         {/* Header */}
         <div className="flex justify-between items-center">
           <h2 className="font-semibold">Business Location & Map</h2>
-
-          {!isEditingLocation && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsEditingLocation(true)}
-            >
-              Edit Address
-            </Button>
-          )}
         </div>
 
         {/* VIEW MODE */}
@@ -607,7 +591,7 @@ export default function ProfileComponent() {
         </div>
       </div>
       {/* FOOTER ACTIONS (CONTEXTUAL) */}
-      <div className="rounded-xl border border-third/30 bg-primary/5 p-5 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
+      <div className="rounded-xl border border-third/30  p-5 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
         {/* ✅ Text Section: Centered on mobile, left-aligned on desktop */}
         <div className="space-y-1 text-left">
           <p className="font-medium text-sm md:text-base text-primary">

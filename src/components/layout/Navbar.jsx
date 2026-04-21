@@ -27,9 +27,12 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
   const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const searchRef = useRef(null);
+  const accountRef = useRef(null);
+  const [persisAccountOpen, setPersisAccountOpen] = useState(false);
 
   /* ================= BANNER STATES ================= */
-  const { isMobileBannerVisible, hideMobileBanner, isMobileBannerTempHidden } = useUIStore();
+  const { isMobileBannerVisible, hideMobileBanner, isMobileBannerTempHidden } =
+    useUIStore();
   const [scrollY, setScrollY] = useState(0);
   const [bannerHeight, setBannerHeight] = useState(0);
   const bannerRef = useRef(null);
@@ -51,7 +54,11 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
   /* ================= BANNER HEIGHT ================= */
   useEffect(() => {
     const updateHeight = () => {
-      if (bannerRef.current && isMobileBannerVisible && !isMobileBannerTempHidden) {
+      if (
+        bannerRef.current &&
+        isMobileBannerVisible &&
+        !isMobileBannerTempHidden
+      ) {
         setBannerHeight(bannerRef.current.offsetHeight);
       } else {
         setBannerHeight(0);
@@ -69,7 +76,10 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
   /* ================= SIGNUP POPUP LISTENER ================= */
   useEffect(() => {
-    const handler = () => setAccountOpen(false);
+    const handler = () => {
+      setAccountOpen(false);
+      setPersisAccountOpen(false);
+    };
     document.addEventListener("signuppopup:open", handler);
     return () => document.removeEventListener("signuppopup:open", handler);
   }, []);
@@ -104,6 +114,10 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
       if (searchRef.current && !searchRef.current.contains(e.target)) {
         setShowDropdown(false);
       }
+      if (accountRef.current && !accountRef.current.contains(e.target)) {
+        setAccountOpen(false);
+        setPersisAccountOpen(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -113,8 +127,8 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
   return (
     <>
       <div
-        className="fixed top-0 inset-x-0 z-[1100] transition-transform duration-300 pointer-events-none"
-      // style={{ transform: `translateY(${transformY}px)` }}
+        className="fixed top-0 inset-x-0 z-1100 transition-transform duration-300 pointer-events-none"
+        // style={{ transform: `translateY(${transformY}px)` }}
       >
         {isMobileBannerVisible && !isMobileBannerTempHidden && atTop && (
           <div ref={bannerRef} className="pointer-events-auto">
@@ -124,15 +138,15 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
         <nav
           className={`pointer-events-auto transition-all duration-300 relative w-full
-          ${heroMode
+          ${
+            heroMode
               ? scrolled
                 ? "bg-white text-black shadow-xl backdrop-blur-lg h-16"
                 : "bg-transparent text-secondary h-20 md:h-24"
               : "bg-primary text-secondary h-16"
-            }`}
+          }`}
         >
           <div className="relative w-full px-4 md:px-8 mx-auto h-full flex items-center justify-between">
-
             {/* LEFT */}
             <Link
               href="/"
@@ -145,7 +159,11 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                   setMenuOpen(true);
                 }}
               />
-              <img src="/logo/logo.webp" alt="Reecomm Logo" className="h-6 md:h-6 w-auto object-contain block" />
+              <img
+                src="/logo/logo.webp"
+                alt="Reecomm Logo"
+                className="h-6 md:h-6 w-auto object-contain block"
+              />
             </Link>
 
             {/* ================= CENTER SEARCH ================= */}
@@ -190,8 +208,11 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
             {/* RIGHT SIDE */}
             <div className="flex items-center gap-2 md:gap-4">
               {(() => {
-                const isConsultant = ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(user?.userRole);
-                
+                const isConsultant = [
+                  "CONSULTATION",
+                  "CONSULTANT_APPLICANT",
+                ].includes(user?.userRole);
+
                 let btnText = "Sell Your Vehicle";
                 let btnPath = "/became-seller";
 
@@ -218,20 +239,26 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
               {/* ACCOUNT */}
               <div
-                className="relative z-[110]"
+                ref={accountRef}
+                className="relative z-110"
                 onMouseEnter={() => setAccountOpen(true)}
-                onMouseLeave={() => setAccountOpen(false)}
+                onMouseLeave={() => {
+                  if (!persisAccountOpen) setAccountOpen(false);
+                }}
               >
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    setAccountOpen(!accountOpen);
+                    const nextPersis = !persisAccountOpen;
+                    setPersisAccountOpen(nextPersis);
+                    setAccountOpen(nextPersis);
                   }}
                   className={`flex cursor-pointer items-center gap-1 px-2 py-1 rounded transition text-xs md:text-sm
-                ${heroMode && !scrolled
-                      ? "text-white hover:outline hover:outline-2 hover:outline-white/40"
-                      : "text-black hover:outline hover:outline-2 hover:outline-black/20"
-                    }`}
+                ${
+                  heroMode && !scrolled
+                    ? "text-white  hover:outline-2 hover:outline-white/40"
+                    : "text-black  hover:outline-2 hover:outline-black/20"
+                }`}
                 >
                   <User className="w-5 h-5 md:w-6 md:h-6" />
 
@@ -251,7 +278,10 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
                 <AccountPopup
                   open={accountOpen}
-                  onClosePopup={() => setAccountOpen(false)}
+                  onClosePopup={() => {
+                    setAccountOpen(false);
+                    setPersisAccountOpen(false);
+                  }}
                 />
               </div>
             </div>
