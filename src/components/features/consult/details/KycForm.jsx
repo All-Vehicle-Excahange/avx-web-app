@@ -194,18 +194,54 @@ export default function KycForm() {
             setStep(2);
             return;
           }
-          const res = await updatebasicDetials(form.business);
+
+          // Build clean FormData
+          const payload = new FormData();
+          const b = form.business;
+          if (b.logo instanceof File) payload.append("logo", b.logo);
+          if (b.banner instanceof File) payload.append("banner", b.banner);
+          payload.append("consultationName", b.consultationName || "");
+          payload.append("ownerName", b.ownerName || "");
+          payload.append("companyEmail", b.companyEmail || "");
+          payload.append("establishmentYear", b.establishmentYear || "");
+          if (Array.isArray(b.vehicleTypes)) {
+            b.vehicleTypes.forEach((v, i) =>
+              payload.append(`vehicleTypes[${i}]`, v),
+            );
+          }
+          if (Array.isArray(b.services)) {
+            b.services.forEach((s, i) => payload.append(`services[${i}]`, s));
+          }
+
+          const res = await updatebasicDetials(payload);
           if (res.data) {
-            // Refresh existing.business so future back-navigation knows to PUT
             setExisting((p) => ({ ...p, business: res.data }));
             toast.success("Details updated");
             setStep(2);
           }
           return;
         }
-        const res = await postbasicDetials(form.business);
+
+        // Post Flow
+        const payload = new FormData();
+        const b = form.business;
+        if (b.logo instanceof File) payload.append("logo", b.logo);
+        if (b.banner instanceof File) payload.append("banner", b.banner);
+        payload.append("consultationName", b.consultationName || "");
+        payload.append("ownerName", b.ownerName || "");
+        payload.append("companyEmail", b.companyEmail || "");
+        payload.append("establishmentYear", b.establishmentYear || "");
+        if (Array.isArray(b.vehicleTypes)) {
+          b.vehicleTypes.forEach((v, i) =>
+            payload.append(`vehicleTypes[${i}]`, v),
+          );
+        }
+        if (Array.isArray(b.services)) {
+          b.services.forEach((s, i) => payload.append(`services[${i}]`, s));
+        }
+
+        const res = await postbasicDetials(payload);
         if (res.data) {
-          // Store saved data so back-navigation can refill and will call PUT next time
           setExisting((p) => ({ ...p, business: res.data }));
           toast.success("Details submitted");
           setStep(2);
@@ -214,12 +250,23 @@ export default function KycForm() {
       }
 
       if (step === 2) {
+        // Build clean object - EXCLUDE cityName and stateName
+        const a = form.address;
+        const payload = {
+          address: a.address || "",
+          stateId: a.stateId,
+          cityId: a.cityId,
+          countryId: a.countryId || 101,
+          latitude: a.latitude || 12.12,
+          longitude: a.longitude || 12.12,
+        };
+
         if (existing.address) {
           if (!changed.address) {
             setStep(3);
             return;
           }
-          const res = await updateAddressDetials(form.address);
+          const res = await updateAddressDetials(payload);
           if (res.data) {
             setExisting((p) => ({ ...p, address: res.data }));
             toast.success("Address updated");
@@ -227,7 +274,7 @@ export default function KycForm() {
           }
           return;
         }
-        const res = await postAddressDetials(form.address);
+        const res = await postAddressDetials(payload);
         if (res.data) {
           setExisting((p) => ({ ...p, address: res.data }));
           toast.success("Address submitted");
@@ -243,7 +290,23 @@ export default function KycForm() {
             setStep(4);
             return;
           }
-          const res = await updateKycDetials(form.kyc);
+
+          // Build clean FormData for KYC
+          const payload = new FormData();
+          const k = form.kyc;
+          payload.append("gstNumber", k.gstNumber || "");
+          payload.append("panCardNumber", k.panNumber || "");
+          payload.append("aadharCardNumber", k.aadharNumber || "");
+          if (k.gstPhoto instanceof File)
+            payload.append("gstCertificateImage", k.gstPhoto);
+          if (k.panPhoto instanceof File)
+            payload.append("panCardFrontImage", k.panPhoto);
+          if (k.aadharFront instanceof File)
+            payload.append("aadharCardFrontImage", k.aadharFront);
+          if (k.aadharBack instanceof File)
+            payload.append("aadharCardBackImage", k.aadharBack);
+
+          const res = await updateKycDetials(payload);
           if (res.data) {
             setExisting((p) => ({ ...p, kyc: res.data }));
             toast.success("KYC updated");
@@ -252,7 +315,23 @@ export default function KycForm() {
           }
           return;
         }
-        const res = await postKycDetials(form.kyc);
+
+        // Post Flow for KYC
+        const payload = new FormData();
+        const k = form.kyc;
+        payload.append("gstNumber", k.gstNumber || "");
+        payload.append("panCardNumber", k.panNumber || "");
+        payload.append("aadharCardNumber", k.aadharNumber || "");
+        if (k.gstPhoto instanceof File)
+          payload.append("gstCertificateImage", k.gstPhoto);
+        if (k.panPhoto instanceof File)
+          payload.append("panCardFrontImage", k.panPhoto);
+        if (k.aadharFront instanceof File)
+          payload.append("aadharCardFrontImage", k.aadharFront);
+        if (k.aadharBack instanceof File)
+          payload.append("aadharCardBackImage", k.aadharBack);
+
+        const res = await postKycDetials(payload);
         if (res.data) {
           setExisting((p) => ({ ...p, kyc: res.data }));
           toast.success("KYC submitted");

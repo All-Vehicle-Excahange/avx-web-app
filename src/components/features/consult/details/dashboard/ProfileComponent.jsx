@@ -255,7 +255,7 @@ export default function ProfileComponent() {
           </p>
         </div>
 
-        <Button variant="outlineSecondary" size="sm">
+        <Button href={"/consult/dashboard/profile/update"} variant="outlineSecondary" size="sm">
           Improve Profile
         </Button>
       </div>
