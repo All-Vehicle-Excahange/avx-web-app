@@ -13,6 +13,7 @@ export default function Subscription() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [tiers, setTiers] = useState([]);
+  const [selectedTierId, setSelectedTierId] = useState(null);
 
   useEffect(() => {
     const initializeData = async () => {
@@ -117,6 +118,8 @@ export default function Subscription() {
           <PlanCard
             key={tier.id}
             popular={tier.title === "PRO"}
+            selected={selectedTierId === tier.id}
+            onSelect={() => setSelectedTierId(tier.id)}
             icon={
               <img
                 src={tier.tierBadgeUrl}
@@ -152,12 +155,16 @@ export default function Subscription() {
 
 
       {/* CTA */}
-      <div className="mt-16 text-center">
+      <div className="mt-16 text-center space-y-2">
+        {!selectedTierId && (
+          <p className="text-third text-sm">Select a plan above to continue</p>
+        )}
         <Button
           onClick={handleClick}
           variant="outlineAnimated"
           size="md"
-          className="px-10 "
+          className={`px-10 transition-opacity ${!selectedTierId ? "opacity-40 pointer-events-none" : ""}`}
+          disabled={!selectedTierId}
         >
           Continue to Payment
         </Button>

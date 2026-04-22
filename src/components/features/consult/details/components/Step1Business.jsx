@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Camera, Plus, X, Check, Loader2 } from "lucide-react";
+import { Plus, X, Check, Camera, Loader2 } from "lucide-react";
 import Image from "next/image";
 import InputField from "@/components/ui/inputField";
 import ChipGroup from "@/components/ui/chipGroup";
@@ -12,6 +12,7 @@ export default function Step1Business({
   onChange,
   initialData,
   readOnly = false,
+  isUpdateMode = false,
 }) {
   const logoRef = useRef();
 
@@ -48,14 +49,23 @@ export default function Step1Business({
         return;
       }
 
-      setUsernameStatus((p) => ({ ...p, loading: true, message: "" }));
+      if (debouncedUsername.length < 3) {
+        setUsernameStatus({
+          loading: false,
+          available: false,
+          message: "Too short",
+        });
+        return;
+      }
+
+      setUsernameStatus({ loading: true, available: null, message: "" });
       try {
         const res = await checkIsUserNameAvailbale(debouncedUsername);
-        if (res.success && res.data === true) {
+        if (res.data === true) {
           setUsernameStatus({
             loading: false,
             available: true,
-            message: "You can use this username",
+            message: "Username available",
           });
         } else {
           setUsernameStatus({
@@ -104,23 +114,35 @@ export default function Step1Business({
     }
     const newItem = { label: serviceInput.trim(), value: trimmed };
     setCustomServices((prev) => [...prev, newItem]);
-    setForm((prev) => ({ ...prev, services: [...prev.services, trimmed] }));
+    setForm((prev) => {
+      const updated = { ...prev, services: [...prev.services, trimmed] };
+      if (onChange) onChange(updated);
+      return updated;
+    });
     setServiceInput("");
     setAddingService(false);
   };
 
   const handleRemoveCustomService = (value) => {
     setCustomServices((prev) => prev.filter((s) => s.value !== value));
-    setForm((prev) => ({
-      ...prev,
-      services: prev.services.filter((s) => s !== value),
-    }));
+    setForm((prev) => {
+      const updated = {
+        ...prev,
+        services: prev.services.filter((s) => s !== value),
+      };
+      if (onChange) onChange(updated);
+      return updated;
+    });
   };
 
   const handleInput = (key, value) => {
     const updatedForm = { ...form, [key]: value };
     setForm(updatedForm);
-    if (onChange) onChange(updatedForm);
+    if (onChange) {
+      const isChanged =
+        JSON.stringify(updatedForm) !== JSON.stringify(initialData);
+      onChange(updatedForm, isChanged);
+    }
 
     // Clear error when user types
     if (errors[key]) {
@@ -139,11 +161,11 @@ export default function Step1Business({
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in fade-in duration-500">
       {/* ===== LOGO ===== */}
       {(!readOnly || logo) && (
         <div className="flex flex-col items-center gap-3">
-          <h3 className="text-sm  font-semibold text-primary uppercase tracking-wider">
+          <h3 className="text-sm font-semibold text-primary uppercase tracking-wider">
             Business Logo
           </h3>
           <div className="relative">
@@ -231,7 +253,8 @@ export default function Step1Business({
               onChange={(e) => handleInput("consultationName", e.target.value)}
             />
           )}
-          {(!readOnly || form.username) && (
+
+          {isUpdateMode && (!readOnly || form.username) && (
             <div className="flex flex-col">
               <InputField
                 label="Username"
@@ -287,7 +310,10 @@ export default function Step1Business({
                   const val = e.target.value.toLowerCase().trim();
                   handleInput("companyEmail", val);
                   if (val && !validateEmail(val)) {
-                    setErrors((p) => ({ ...p, companyEmail: "Invalid email format" }));
+                    setErrors((p) => ({
+                      ...p,
+                      companyEmail: "Invalid email format",
+                    }));
                   } else {
                     setErrors((p) => ({ ...p, companyEmail: "" }));
                   }
@@ -341,8 +367,8 @@ export default function Step1Business({
             { label: "Two Wheelers", value: "TWO_WHEELER" },
             { label: "Four Wheelers", value: "FOUR_WHEELER" },
           ]}
-          selected={form.vehicleTypes} // Use 'selected' instead of 'value'
-          onChange={(v) => handleInput("vehicleTypes", v)}
+          selected={form.vehicleTypes}
+          onChange={(val) => handleInput("vehicleTypes", val)}
         />
       )}
 

@@ -415,8 +415,7 @@ export default function UpdateStatus() {
                     )}
 
                     {/* BUSINESS SECTION */}
-                    {data.business && (
-                      <div className="border border-primary/30 rounded-xl p-6">
+                    <div className="border border-primary/30 rounded-xl p-6">
                         <div className="flex justify-between mb-4">
                           <h3 className="font-semibold text-primary">
                             Business Details
@@ -439,14 +438,13 @@ export default function UpdateStatus() {
                             initialData={data.business}
                             readOnly={!editMode.business}
                             onChange={handleBusinessChange}
+                            isUpdateMode={true}
                           />
                         </div>
                       </div>
-                    )}
 
                     {/* ADDRESS SECTION */}
-                    {data.address && (
-                      <div className="border border-primary/30 rounded-xl p-6">
+                    <div className="border border-primary/30 rounded-xl p-6">
                         <div className="flex justify-between mb-4">
                           <h3 className="font-semibold text-primary">
                             Location Information
@@ -472,11 +470,9 @@ export default function UpdateStatus() {
                           />
                         </div>
                       </div>
-                    )}
 
                     {/* KYC SECTION */}
-                    {data.kyc && (
-                      <div className="border border-primary/30 rounded-xl p-6">
+                    <div className="border border-primary/30 rounded-xl p-6">
                         <div className="flex justify-between mb-4">
                           <h3 className="font-semibold text-primary">
                             KYC Documents
@@ -502,7 +498,6 @@ export default function UpdateStatus() {
                           />
                         </div>
                       </div>
-                    )}
 
                     {isChangesRequested && (
                       <div className="pt-10">

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import InputField from "@/components/ui/inputField";
 import DropzoneUpload from "@/components/ui/DropzoneUpload";
 
@@ -12,8 +12,14 @@ export default function Step3KYC({ onChange, initialData, readOnly = false }) {
   const validatePAN = (pan) => panRegex.test(pan);
 
   const validateAadhaar = (aadhaar) => {
-    const clean = aadhaar.replace(/\s/g, "");
+    const clean = aadhaar.replace(/[\s-]/g, "");
     return /^\d{12}$/.test(clean);
+  };
+
+  // Format raw 12-digit aadhaar → XXXX-XXXX-XXXX for display only
+  const formatAadhaar = (raw) => {
+    const digits = raw.replace(/\D/g, "");
+    return digits.replace(/(\d{4})(?=\d)/g, "$1-");
   };
 
   const [gstPreview, setGstPreview] = useState(
@@ -33,7 +39,8 @@ export default function Step3KYC({ onChange, initialData, readOnly = false }) {
     gstPhoto: null,
     panNumber: initialData?.panCardNumber || "",
     panPhoto: null,
-    aadharNumber: initialData?.aadharCardNumber || "",
+    // Store raw 12 digits — no dashes
+    aadharNumber: (initialData?.aadharCardNumber || "").replace(/\D/g, ""),
     aadharFront: null,
     aadharBack: null,
   });
@@ -47,7 +54,11 @@ export default function Step3KYC({ onChange, initialData, readOnly = false }) {
   const handleInput = (key, value) => {
     const updatedForm = { ...form, [key]: value };
     setForm(updatedForm);
-    if (onChange) onChange(updatedForm);
+    if (onChange) {
+      const isChanged =
+        JSON.stringify(updatedForm) !== JSON.stringify(initialData);
+      onChange(updatedForm, isChanged);
+    }
 
     // Real-time validation
     if (key === "gstNumber") {
@@ -77,124 +88,123 @@ export default function Step3KYC({ onChange, initialData, readOnly = false }) {
     }
   };
 
-
   return (
     <div className="space-y-6">
-      {(!readOnly || form.gstNumber) && (
-        <div className="space-y-1">
-          <InputField
-            label="GST Number"
-            variant="colored"
-            readOnly={readOnly}
-            value={form.gstNumber}
-            maxLength={15}
-            onChange={(e) => handleInput("gstNumber", e.target.value)}
-          />
-          {errors.gst && (
-            <p className="text-red-500 text-xs mt-1 ml-1">{errors.gst}</p>
-          )}
-        </div>
-      )}
-
-      {(!readOnly || gstPreview) && (
-        <DropzoneUpload
-          label="GST Certificate Photo"
-          preview={gstPreview}
+      {/* GST SECTION */}
+      <div className="space-y-1">
+        <InputField
+          label="GST Number"
+          variant="colored"
           readOnly={readOnly}
-          onChange={(file) => {
-            const f = Array.isArray(file) ? file[0] : file;
-            if (f) {
-              setGstPreview(typeof f === "string" ? f : URL.createObjectURL(f));
-              handleInput("gstPhoto", f);
+          value={form.gstNumber}
+          maxLength={15}
+          onChange={(e) => {
+            // Always uppercase, max 15 chars (07ABCDE1234F1Z5)
+            const val = e.target.value.toUpperCase().slice(0, 15);
+            handleInput("gstNumber", val);
+          }}
+        />
+        {errors.gst && (
+          <p className="text-red-500 text-xs mt-1 ml-1">{errors.gst}</p>
+        )}
+      </div>
+
+      <DropzoneUpload
+        label="GST Certificate Photo"
+        preview={gstPreview}
+        readOnly={readOnly}
+        onChange={(file) => {
+          const f = Array.isArray(file) ? file[0] : file;
+          if (f) {
+            setGstPreview(typeof f === "string" ? f : URL.createObjectURL(f));
+            handleInput("gstPhoto", f);
+          }
+        }}
+      />
+
+      {/* PAN SECTION */}
+      <div className="space-y-1">
+        <InputField
+          label="PAN Card Number"
+          variant="colored"
+          readOnly={readOnly}
+          value={form.panNumber}
+          maxLength={10}
+          onChange={(e) => {
+            // Always uppercase, max 10 chars (ABCDE1234F)
+            const val = e.target.value.toUpperCase().slice(0, 10);
+            handleInput("panNumber", val);
+          }}
+        />
+        {errors.pan && (
+          <p className="text-red-500 text-xs mt-1 ml-1">{errors.pan}</p>
+        )}
+      </div>
+
+      <DropzoneUpload
+        label="PAN Card Photo"
+        preview={panPreview}
+        readOnly={readOnly}
+        onChange={(file) => {
+          const f = Array.isArray(file) ? file[0] : file;
+          if (f) {
+            setPanPreview(typeof f === "string" ? f : URL.createObjectURL(f));
+            handleInput("panPhoto", f);
+          }
+        }}
+      />
+
+      {/* AADHAAR SECTION */}
+      <div className="space-y-1">
+        <InputField
+          label="Aadhar Card Number"
+          variant="colored"
+          readOnly={readOnly}
+          placeholder="1234-5678-9012"
+          value={formatAadhaar(form.aadharNumber)}
+          maxLength={14} // 12 digits + 2 dashes
+          onChange={(e) => {
+            // Strip dashes/non-digits → store raw 12 digits
+            const raw = e.target.value.replace(/\D/g, "");
+            if (raw.length <= 12) {
+              handleInput("aadharNumber", raw);
             }
           }}
         />
-      )}
+        {errors.aadhar && (
+          <p className="text-red-500 text-xs mt-1 ml-1">{errors.aadhar}</p>
+        )}
+      </div>
 
-      {(!readOnly || form.panNumber) && (
-        <div className="space-y-1">
-          <InputField
-            label="PAN Card Number"
-            variant="colored"
-            readOnly={readOnly}
-            value={form.panNumber}
-            maxLength={10}
-            onChange={(e) => handleInput("panNumber", e.target.value)}
-          />
-          {errors.pan && (
-            <p className="text-red-500 text-xs mt-1 ml-1">{errors.pan}</p>
-          )}
-        </div>
-      )}
+      <DropzoneUpload
+        label="Aadhar Front Photo"
+        preview={aadharFrontPreview}
+        readOnly={readOnly}
+        onChange={(file) => {
+          const f = Array.isArray(file) ? file[0] : file;
+          if (f) {
+            setAadharFrontPreview(
+              typeof f === "string" ? f : URL.createObjectURL(f),
+            );
+            handleInput("aadharFront", f);
+          }
+        }}
+      />
 
-      {(!readOnly || panPreview) && (
-        <DropzoneUpload
-          label="PAN Card Photo"
-          preview={panPreview}
-          readOnly={readOnly}
-          onChange={(file) => {
-            const f = Array.isArray(file) ? file[0] : file;
-            if (f) {
-              setPanPreview(typeof f === "string" ? f : URL.createObjectURL(f));
-              handleInput("panPhoto", f);
-            }
-          }}
-        />
-      )}
-
-      {(!readOnly || form.aadharNumber) && (
-        <div className="space-y-1">
-          <InputField
-            label="Aadhar Card Number"
-            variant="colored"
-            readOnly={readOnly}
-            value={form.aadharNumber}
-            onChange={(e) => {
-              const val = e.target.value.replace(/\D/g, ""); // Remove non-digits
-              if (val.length <= 12) {
-                handleInput("aadharNumber", val);
-              }
-            }}
-          />
-          {errors.aadhar && (
-            <p className="text-red-500 text-xs mt-1 ml-1">{errors.aadhar}</p>
-          )}
-        </div>
-      )}
-
-      {(!readOnly || aadharFrontPreview) && (
-        <DropzoneUpload
-          label="Aadhar Front Photo"
-          preview={aadharFrontPreview}
-          readOnly={readOnly}
-          onChange={(file) => {
-            const f = Array.isArray(file) ? file[0] : file;
-            if (f) {
-              setAadharFrontPreview(
-                typeof f === "string" ? f : URL.createObjectURL(f),
-              );
-              handleInput("aadharFront", f);
-            }
-          }}
-        />
-      )}
-
-      {(!readOnly || aadharBackPreview) && (
-        <DropzoneUpload
-          label="Aadhar Back Photo"
-          preview={aadharBackPreview}
-          readOnly={readOnly}
-          onChange={(file) => {
-            const f = Array.isArray(file) ? file[0] : file;
-            if (f) {
-              setAadharBackPreview(
-                typeof f === "string" ? f : URL.createObjectURL(f),
-              );
-              handleInput("aadharBack", f);
-            }
-          }}
-        />
-      )}
+      <DropzoneUpload
+        label="Aadhar Back Photo"
+        preview={aadharBackPreview}
+        readOnly={readOnly}
+        onChange={(file) => {
+          const f = Array.isArray(file) ? file[0] : file;
+          if (f) {
+            setAadharBackPreview(
+              typeof f === "string" ? f : URL.createObjectURL(f),
+            );
+            handleInput("aadharBack", f);
+          }
+        }}
+      />
     </div>
   );
 }

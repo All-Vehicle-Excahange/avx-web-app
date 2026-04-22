@@ -330,25 +330,25 @@ export default function AnalyticsComponent() {
           icon={<Car size={20} />}
           label="Vehicle Views"
           value={analyticsData?.totalVehicleView || 0}
-          trend={isBasic ? 0 : analyticsData?.totalVehicleViewChange || 0}
+          trend={isBasic ? null : analyticsData?.totalVehicleViewChange}
         />
         <StatCard
           icon={<StoreIcon size={20} />}
           label="Storefront Visits"
           value={analyticsData?.totalProfileVisit || 0}
-          trend={isBasic ? 0 : analyticsData?.totalProfileVisitChange || 0}
+          trend={isBasic ? null : analyticsData?.totalProfileVisitChange}
         />
         <StatCard
           icon={<SquareMousePointer size={20} />}
           label="Total Inquiries"
           value={analyticsData?.totalInquiry || 0}
-          trend={isBasic ? 0 : analyticsData?.totalInquiryChange || 0}
+          trend={isBasic ? null : analyticsData?.totalInquiryChange}
         />
         <StatCard
           icon={<BadgePercent size={20} />}
           label="Conversion Rate"
           value={analyticsData?.conversionRate || 0}
-          trend={isBasic ? 0 : analyticsData?.conversionRateChange || 0}
+          trend={isBasic ? null : analyticsData?.conversionRateChange}
         />
       </div>
       {/* Traffic */}

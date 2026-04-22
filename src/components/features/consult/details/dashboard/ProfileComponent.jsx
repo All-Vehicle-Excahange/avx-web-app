@@ -21,6 +21,7 @@ import {
   Smartphone,
   XCircle,
   Headphones,
+  AlertCircle,
 } from "lucide-react";
 import {
   getVerificationStatus,
@@ -29,6 +30,7 @@ import {
   getConsualtProfile,
 } from "@/services/profile.service";
 import { getActiveBasicUpdate } from "@/services/consult.profile.service";
+import { getUserProfileStrength } from "@/services/user.service";
 
 // Helper to format vehicleTypes array into readable text
 const formatVehicleTypes = (types) => {
@@ -83,6 +85,10 @@ export default function ProfileComponent() {
   });
 
   const [basicUpdateData, setBasicUpdateData] = useState(null);
+  const [profileStrengthData, setProfileStrengthData] = useState({
+    profileStrength: 0,
+    messages: [],
+  });
 
   useEffect(() => {
     const fetchStatuses = async () => {
@@ -94,13 +100,19 @@ export default function ProfileComponent() {
           addressRes,
           profileRes,
           basicUpdateRes,
+          strengthRes,
         ] = await Promise.all([
           getVerificationStatus().catch(() => null),
           getDocumentStatus().catch(() => null),
           getConsualtAdress().catch(() => null),
           getConsualtProfile().catch(() => null),
           getActiveBasicUpdate().catch(() => null),
+          getUserProfileStrength().catch(() => null),
         ]);
+
+        if (strengthRes?.data) {
+          setProfileStrengthData(strengthRes.data);
+        }
 
         if (basicUpdateRes?.data) {
           setBasicUpdateData(basicUpdateRes.data);
@@ -158,7 +170,7 @@ export default function ProfileComponent() {
             businessName: d.consultationName || "",
             ownerName: d.ownerName || "",
             email: d.companyEmail || "",
-            phone: d.phone || "",
+            phone: d.phoneNumber || "",
             businessType: formatVehicleTypes(d.vehicleTypes),
             establishmentYear: d.establishmentYear || 0,
           });
@@ -231,52 +243,151 @@ export default function ProfileComponent() {
         </p>
       </div>
 
-      <div className="w-full lg:w-1/2 rounded-xl border border-third/40  p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
-        {/* Top Line */}
+
+
+      <div className="w-full lg:w-1/2 border border-third/30 rounded-xl p-6 space-y-6 flex flex-col justify-between h-full hover:border-third/50 transition-all duration-200 shadow-sm">
         <div className="flex items-center justify-between">
-          <p className="font-semibold text-primary">
-            Profile Strength:{" "}
-            <span className="text-green-400 font-bold">82%</span>
+          <p className="text-third text-sm">
+            Profile Completion:{" "}
+            <span
+              className={`font-bold ${
+                profileStrengthData.profileStrength >= 75
+                  ? "text-green-400"
+                  : profileStrengthData.profileStrength >= 40
+                    ? "text-yellow-400"
+                    : "text-red-400"
+              }`}
+            >
+              {Math.round(profileStrengthData.profileStrength)}%
+            </span>
           </p>
 
-          <span className="flex items-center gap-2 text-sm text-green-400 font-semibold">
-            <span className="w-2.5 h-2.5 rounded-full bg-green-400"></span>
-            Strong
+          <span
+            className={`flex items-center gap-2 text-sm font-semibold ${
+              profileStrengthData.profileStrength >= 75
+                ? "text-green-400"
+                : profileStrengthData.profileStrength >= 40
+                  ? "text-yellow-400"
+                  : "text-red-400"
+            }`}
+          >
+            <span
+              className={`w-2.5 h-2.5 rounded-full ${
+                profileStrengthData.profileStrength >= 75
+                  ? "bg-green-400"
+                  : profileStrengthData.profileStrength >= 40
+                    ? "bg-yellow-400"
+                    : "bg-red-400"
+              }`}
+            ></span>
+            {profileStrengthData.profileStrength >= 75
+              ? "Strong"
+              : profileStrengthData.profileStrength >= 40
+                ? "Average"
+                : "Weak"}
           </span>
         </div>
 
         {/* Checklist */}
-        <div className="space-y-2 text-sm">
-          <p className="flex items-center gap-2 text-green-400">
-            <CheckCircle2 size={16} />
-            Verified business
-          </p>
-
-          <p className="flex items-center gap-2 text-green-400">
-            <CheckCircle2 size={16} />
-            KYC complete
-          </p>
-
-          <p className="flex items-center gap-2 text-green-400">
-            <CheckCircle2 size={16} />
-            Logo & cover uploaded
-          </p>
-
-          <p className="flex items-center gap-2 text-yellow-400">
-            <AlertTriangle size={16} />
-            About Us missing
-          </p>
+        <div className="space-y-2 text-sm overflow-y-auto max-h-[160px] custom-scrollbar">
+          {profileStrengthData.messages?.length > 0 ? (
+            profileStrengthData.messages.map((msg, i) => (
+              <p key={i} className="flex items-start gap-2 text-yellow-400">
+                <AlertTriangle size={16} className="shrink-0 mt-0.5" />
+                <span>{msg.text}</span>
+              </p>
+            ))
+          ) : (
+            <p className="flex items-center gap-2 text-green-400">
+              <CheckCircle2 size={16} />
+              Your profile is fully complete!
+            </p>
+          )}
         </div>
 
-        <Button href={"/consult/dashboard/profile/update"} variant="outlineSecondary" size="sm">
-          Improve Profile
-        </Button>
+        <div className="flex flex-wrap gap-3">
+          <Button
+            href={"/consult/dashboard/profile/update"}
+            variant="outlineSecondary"
+            size="sm"
+            className="flex-1 sm:flex-none"
+          >
+            Update Profile
+          </Button>
+
+          {(() => {
+            const messages = profileStrengthData.messages || [];
+            let action = null;
+
+            // 1. Storefront Priority
+            if (messages.some((m) => m.type === "CREATE_STOREFRONT")) {
+              action = {
+                label: "Create Storefront",
+                href: "/consult/dashboard/storefront",
+              };
+            } else if (messages.some((m) => m.type === "FIX_STOREFRONT")) {
+              action = {
+                label: "Fix Storefront",
+                href: "/consult/dashboard/storefront",
+              };
+            }
+            // 2. Inventory Priority
+            else if (messages.some((m) => m.type === "LIST_VEHICLE")) {
+              action = {
+                label: "List First Vehicle",
+                href: "/consult/dashboard/inventory",
+              };
+            }
+            // 3. KYC / Registration Priority
+            else if (messages.some((m) => m.type === "COMPLETE_REGISTRATION")) {
+              action = {
+                label: "Complete Registration",
+                href: "/consult/dashboard/profile/update",
+              };
+            } else if (messages.some((m) => m.type === "ADD_GST")) {
+              action = {
+                label: "Add GST Number",
+                href: "/consult/dashboard/profile/update",
+              };
+            } else if (messages.some((m) => m.type === "UPLOAD_AADHAAR")) {
+              action = {
+                label: "Upload Aadhaar",
+                href: "/consult/dashboard/profile/update",
+              };
+            } else if (messages.some((m) => m.type === "UPLOAD_PAN_CARD")) {
+              action = {
+                label: "Upload PAN Card",
+                href: "/consult/dashboard/profile/update",
+              };
+            }
+            // 4. Default / Complete
+            else if (profileStrengthData.profileStrength >= 100) {
+              action = {
+                label: "View Storefront",
+                href: "/consult/dashboard/storefront",
+              };
+            }
+
+            if (!action) return null;
+
+            return (
+              <Button
+                href={action.href}
+                variant="ghost"
+                size="sm"
+                className="flex-1 sm:flex-none border border-primary/20 hover:border-primary/50"
+              >
+                {action.label}
+              </Button>
+            );
+          })()}
+        </div>
       </div>
 
       {/* BASIC PROFILE UPDATE STATUS TABLE */}
       {basicUpdateData &&
-        ["REQUESTED", "VERIFIED", "REQUEST_CHANGES"].includes(
-          basicUpdateData.verificationStatus
+        ["REQUESTED", "VERIFIED", "REQUEST_CHANGES", "REJECTED"].includes(
+          basicUpdateData.verificationStatus,
         ) && (
           <div className="border border-third/30 rounded-xl p-6 space-y-6 transition-all duration-300">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -306,6 +417,9 @@ export default function ProfileComponent() {
                     <th className="text-left py-3 px-4 font-medium text-third">
                       Admin Remark
                     </th>
+                    <th className="text-left py-3 px-4 font-medium text-third">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -334,6 +448,10 @@ export default function ProfileComponent() {
                           cls =
                             "text-orange-400 bg-orange-400/10 border-orange-400/30";
                           label = "Changes Requested";
+                        } else if (status === "REJECTED") {
+                          cls =
+                            "text-red-400 bg-red-400/10 border-red-400/30";
+                          label = "Rejected";
                         }
 
                         return (
@@ -347,18 +465,28 @@ export default function ProfileComponent() {
                     </td>
                     <td className="py-4 px-4 text-third whitespace-nowrap">
                       {basicUpdateData.createdAt
-                        ? new Date(basicUpdateData.createdAt).toLocaleDateString(
-                            "en-US",
-                            {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                            }
-                          )
+                        ? new Date(
+                            basicUpdateData.createdAt,
+                          ).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })
                         : "—"}
                     </td>
                     <td className="py-4 px-4 text-third min-w-[150px]">
                       {basicUpdateData.adminRemark || "—"}
+                    </td>
+                    <td className="py-4 px-4">
+                      {basicUpdateData.verificationStatus === "REQUEST_CHANGES" && (
+                        <Button
+                          href="/consult/dashboard/profile/update"
+                          variant="outlineSecondary"
+                          size="sm"
+                        >
+                          View
+                        </Button>
+                      )}
                     </td>
                   </tr>
                 </tbody>

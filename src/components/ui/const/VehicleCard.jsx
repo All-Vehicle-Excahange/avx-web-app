@@ -8,7 +8,9 @@ import {
   Star,
   User,
   Users,
+  ArrowLeftRight,
 } from "lucide-react";
+import { useCompareStore } from "@/stores/useCompareStore";
 import Button from "../button";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -32,6 +34,8 @@ export default function VehicleCard({
   );
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const { addToCompare, compareVehicles } = useCompareStore();
+  const isComparing = compareVehicles.some((v) => v.id === data.id);
 
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const lastSyncedValue = useRef(data?.isWishlisted || false);
@@ -74,6 +78,9 @@ export default function VehicleCard({
     }
   };
 
+  const formatText = (text) =>
+    text ? text.charAt(0).toUpperCase() + text.slice(1).toLowerCase() : "";
+
   const mapped = {
     image: data.thumbnailUrl || data.image,
 
@@ -82,8 +89,8 @@ export default function VehicleCard({
       : data.title,
 
     year: data.yearOfMfg || data.year,
-    transmission: data.transmissionType || data.transmission,
-    fuel: data.fuelType || data.fuel,
+    transmission: formatText(data.transmissionType) || formatText(data.transmission),
+    fuel: formatText(data.fuelType) || formatText(data.fuel),
     seats: data.ownership || data.seats,
 
     rating: data.avxInspectionRating || "-",
@@ -148,6 +155,23 @@ export default function VehicleCard({
                 className="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-110"
               />
 
+              {/* ✅ Compare Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addToCompare(data);
+                }}
+                className={`absolute bottom-12 right-2 shrink-0 flex items-center justify-center w-8 h-8 rounded-full transition-all cursor-pointer z-20 
+                  ${
+                    isComparing
+                      ? "bg-fourth text-secondary shadow-lg scale-110"
+                      : "bg-black/50 text-white hover:bg-black/70"
+                  }`}
+                title="Add to compare"
+              >
+                <ArrowLeftRight className="w-4 h-4" />
+              </button>
+
               {/* ✅ Wishlist Button (Bottom-Right of Image) */}
               <button
                 onClick={(e) => {
@@ -157,7 +181,7 @@ export default function VehicleCard({
                 className="absolute bottom-2 right-2 shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-black/50 transition-all cursor-pointer z-20 hover:bg-black/70"
               >
                 <Heart
-                  className={`w-5 h-5 transition-colors ${isFavorite ? "fill-red-500 text-red-500" : "text-primary"}`}
+                  className={`w-5 h-5 transition-colors ${isFavorite ? "fill-red-500 text-red-500" : "text-white"}`}
                 />
               </button>
             </div>
