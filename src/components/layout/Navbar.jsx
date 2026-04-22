@@ -258,7 +258,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                     ) {
                       return {
                         label: "Create Storefront",
-                        href: "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2FstoreFront",
+                        href: "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Fstorefront",
                       };
                     }
                     if (messages.some((m) => m.type === "LIST_VEHICLE")) {
@@ -269,7 +269,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                     }
                     return {
                       label: "Go to Dashboard",
-                      href: "/consult/dashboard/overview",
+                      href: "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Foverview",
                     };
                   }
 
@@ -277,7 +277,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                     if (messages.some((m) => m.type === "LIST_VEHICLE")) {
                       return {
                         label: "List Vehicle",
-                        href: "/user/details/inventory",
+                        href: "/user/details/myvehicle",
                       };
                     }
                     return {
