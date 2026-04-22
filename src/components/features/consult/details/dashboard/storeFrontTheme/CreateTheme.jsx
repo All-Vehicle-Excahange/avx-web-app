@@ -5,7 +5,11 @@ import { useEffect, useState, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { EngineRenderer } from "@/core/engine/Renderer";
 import { THEME_STORE } from "@/core/engine/themeStore";
-import { getConsualtDraft, getStoreFront, makeAsFinalSubmit } from "@/services/theme.service";
+import {
+  getConsualtDraft,
+  getStoreFront,
+  makeAsFinalSubmit,
+} from "@/services/theme.service";
 import Button from "@/components/ui/button";
 
 function mapApiToTemplateData(api) {
@@ -69,7 +73,9 @@ const getSectionProgress = (section, defaultSection) => {
   const getCleanString = (val) => {
     if (!val) return "";
     if (typeof val === "object" && val.imageUrl) return val.imageUrl.trim();
-    return String(val).replace(/<[^>]*>/g, "").trim();
+    return String(val)
+      .replace(/<[^>]*>/g, "")
+      .trim();
   };
 
   // Normal field validation
@@ -169,11 +175,12 @@ const getSectionProgress = (section, defaultSection) => {
     });
   }
 
-  const percentage = totalFields === 0 ? 0 : Math.round((filledFields / totalFields) * 100);
+  const percentage =
+    totalFields === 0 ? 0 : Math.round((filledFields / totalFields) * 100);
   return {
     percentage,
     isValid: filledFields === totalFields,
-    errors
+    errors,
   };
 };
 
@@ -205,8 +212,20 @@ export default function CreateTheme() {
   const handleFinalSubmit = async () => {
     try {
       setIsSubmitting(true);
-      const res = await makeAsFinalSubmit();
-      if (res?.statusCode === 200 || res?.status === "SUCCESS" || res?.status === "OK") {
+
+      // Calculate average score between sections
+      const aboutProgress =
+        sectionProgress.find((p) => p.label === "About Us")?.value || 0;
+      const whyBuyProgress =
+        sectionProgress.find((p) => p.label === "Why Buy")?.value || 0;
+      const finalScore = (aboutProgress + whyBuyProgress) / 2;
+
+      const res = await makeAsFinalSubmit(finalScore);
+      if (
+        res?.statusCode === 200 ||
+        res?.status === "SUCCESS" ||
+        res?.status === "OK"
+      ) {
         router.push("/consult/dashboard/storefront/");
       } else {
         console.error("Failed to submit:", res);
@@ -243,7 +262,7 @@ export default function CreateTheme() {
           ...section,
           data: {
             ...section.data, // defaults as fallback
-            ...mappedData,   // API values populated properly
+            ...mappedData, // API values populated properly
           },
         }));
         setSections(hydratedSections);
@@ -284,8 +303,11 @@ export default function CreateTheme() {
           </div>
           <div className="w-full bg-third/20 rounded-full h-2 overflow-hidden">
             <div
-              className={`h-full transition-all duration-500 ease-out ${sectionProgress[activeTab].value === 100 ? "bg-green-500" : "bg-primary"
-                }`}
+              className={`h-full transition-all duration-500 ease-out ${
+                sectionProgress[activeTab].value === 100
+                  ? "bg-green-500"
+                  : "bg-primary"
+              }`}
               style={{ width: `${sectionProgress[activeTab].value}%` }}
             />
           </div>
@@ -297,10 +319,11 @@ export default function CreateTheme() {
           <button
             key={sec.id}
             onClick={() => setActiveTab(i)}
-            className={`px-4 py-1 rounded-full text-sm ${activeTab === i
+            className={`px-4 py-1 rounded-full text-sm ${
+              activeTab === i
                 ? "bg-primary text-secondary font-bold"
                 : "border border-third/30 text-third"
-              }`}
+            }`}
           >
             {sec.type.includes("about")
               ? "About Us"
@@ -324,19 +347,21 @@ export default function CreateTheme() {
         <div className="flex  rounded-full p-1 border border-third/30">
           <button
             onClick={() => setMode("editor")}
-            className={`px-4 py-1 rounded-full text-sm transition ${mode === "editor"
+            className={`px-4 py-1 rounded-full text-sm transition ${
+              mode === "editor"
                 ? "bg-primary text-secondary font-bold"
                 : "text-third"
-              }`}
+            }`}
           >
             Editor
           </button>
           <button
             onClick={() => setMode("preview")}
-            className={`px-4 py-1 rounded-full text-sm transition ${mode === "preview"
+            className={`px-4 py-1 rounded-full text-sm transition ${
+              mode === "preview"
                 ? "bg-primary text-secondary font-bold"
                 : "text-third"
-              }`}
+            }`}
           >
             Preview
           </button>

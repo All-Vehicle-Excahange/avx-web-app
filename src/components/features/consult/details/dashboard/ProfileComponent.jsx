@@ -28,6 +28,7 @@ import {
   getConsualtAdress,
   getConsualtProfile,
 } from "@/services/profile.service";
+import { getActiveBasicUpdate } from "@/services/consult.profile.service";
 
 // Helper to format vehicleTypes array into readable text
 const formatVehicleTypes = (types) => {
@@ -81,17 +82,29 @@ export default function ProfileComponent() {
     inventoryVisibility: "Active",
   });
 
+  const [basicUpdateData, setBasicUpdateData] = useState(null);
+
   useEffect(() => {
     const fetchStatuses = async () => {
       setLoading(true);
       try {
-        const [verificationRes, documentRes, addressRes, profileRes] =
-          await Promise.all([
-            getVerificationStatus().catch(() => null),
-            getDocumentStatus().catch(() => null),
-            getConsualtAdress().catch(() => null),
-            getConsualtProfile().catch(() => null),
-          ]);
+        const [
+          verificationRes,
+          documentRes,
+          addressRes,
+          profileRes,
+          basicUpdateRes,
+        ] = await Promise.all([
+          getVerificationStatus().catch(() => null),
+          getDocumentStatus().catch(() => null),
+          getConsualtAdress().catch(() => null),
+          getConsualtProfile().catch(() => null),
+          getActiveBasicUpdate().catch(() => null),
+        ]);
+
+        if (basicUpdateRes?.data) {
+          setBasicUpdateData(basicUpdateRes.data);
+        }
 
         if (verificationRes?.data) {
           const { verificationStatus, verifiedAt } = verificationRes.data;
@@ -255,24 +268,109 @@ export default function ProfileComponent() {
           </p>
         </div>
 
-        <Button variant="outlineSecondary" size="sm">
+        <Button href={"/consult/dashboard/profile/update"} variant="outlineSecondary" size="sm">
           Improve Profile
         </Button>
       </div>
+
+      {/* BASIC PROFILE UPDATE STATUS TABLE */}
+      {basicUpdateData &&
+        ["REQUESTED", "VERIFIED", "REQUEST_CHANGES"].includes(
+          basicUpdateData.verificationStatus
+        ) && (
+          <div className="border border-third/30 rounded-xl p-6 space-y-6 transition-all duration-300">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h2 className="text-xl font-semibold">
+                  Profile Update Request
+                </h2>
+                <p className="text-third text-sm mt-1">
+                  Track the status of your recent basic profile update
+                </p>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-third/20">
+                    <th className="text-left py-3 px-4 font-medium text-third">
+                      Name
+                    </th>
+                    <th className="text-left py-3 px-4 font-medium text-third">
+                      Status
+                    </th>
+                    <th className="text-left py-3 px-4 font-medium text-third">
+                      Requested At
+                    </th>
+                    <th className="text-left py-3 px-4 font-medium text-third">
+                      Admin Remark
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-third/10 hover:bg-third/5 transition-colors">
+                    <td className="py-4 px-4 font-medium whitespace-nowrap text-primary">
+                      Profile Update Requested
+                    </td>
+                    <td className="py-4 px-4">
+                      {(() => {
+                        const status = basicUpdateData.verificationStatus;
+                        let cls = "text-third bg-third/10 border-third/30";
+                        let label = status || "Draft";
+
+                        if (status === "VERIFIED") {
+                          cls =
+                            "text-green-400 bg-green-400/10 border-green-400/30";
+                          label = "Verified";
+                        } else if (
+                          status === "PENDING" ||
+                          status === "REQUESTED"
+                        ) {
+                          cls =
+                            "text-yellow-400 bg-yellow-400/10 border-yellow-400/30";
+                          label = "Requested";
+                        } else if (status === "REQUEST_CHANGES") {
+                          cls =
+                            "text-orange-400 bg-orange-400/10 border-orange-400/30";
+                          label = "Changes Requested";
+                        }
+
+                        return (
+                          <span
+                            className={`inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border ${cls}`}
+                          >
+                            {label}
+                          </span>
+                        );
+                      })()}
+                    </td>
+                    <td className="py-4 px-4 text-third whitespace-nowrap">
+                      {basicUpdateData.createdAt
+                        ? new Date(basicUpdateData.createdAt).toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            }
+                          )
+                        : "—"}
+                    </td>
+                    <td className="py-4 px-4 text-third min-w-[150px]">
+                      {basicUpdateData.adminRemark || "—"}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
 
       {/* PROFILE CARD */}
       <div className="rounded-xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         <div className="flex justify-between items-center">
           <h2 className="font-semibold">Business Profile</h2>
-          {!isEditing && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsEditing(true)}
-            >
-              Update Profile
-            </Button>
-          )}
         </div>
 
         {/* VIEW MODE */}
@@ -284,7 +382,10 @@ export default function ProfileComponent() {
             <ProfileItem label="Phone" value={profile.phone} />
             {/* <ProfileItem label="City" value={profile.city} /> */}
             <ProfileItem label="Business Type" value={profile.businessType} />
-            <ProfileItem label="Establishment Year" value={profile.establishmentYear} />
+            <ProfileItem
+              label="Establishment Year"
+              value={profile.establishmentYear}
+            />
           </div>
         )}
 
@@ -394,16 +495,6 @@ export default function ProfileComponent() {
         {/* Header */}
         <div className="flex justify-between items-center">
           <h2 className="font-semibold">Business Location & Map</h2>
-
-          {!isEditingLocation && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsEditingLocation(true)}
-            >
-              Edit Address
-            </Button>
-          )}
         </div>
 
         {/* VIEW MODE */}
@@ -607,7 +698,7 @@ export default function ProfileComponent() {
         </div>
       </div>
       {/* FOOTER ACTIONS (CONTEXTUAL) */}
-      <div className="rounded-xl border border-third/30 bg-primary/5 p-5 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
+      <div className="rounded-xl border border-third/30  p-5 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
         {/* ✅ Text Section: Centered on mobile, left-aligned on desktop */}
         <div className="space-y-1 text-left">
           <p className="font-medium text-sm md:text-base text-primary">

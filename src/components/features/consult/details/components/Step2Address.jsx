@@ -5,7 +5,7 @@ import InputField from "@/components/ui/inputField";
 import { ChevronDown, Search } from "lucide-react";
 import { getState, getCities } from "@/services/user.service";
 
-export default function Step2Address({ onChange, initialData }) {
+export default function Step2Address({ onChange, initialData, readOnly = false }) {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
 
@@ -79,164 +79,169 @@ export default function Step2Address({ onChange, initialData }) {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const isFirstRender = useRef(true);
-
-  // ✅ Memoized payload creation to prevent infinite loops
-  const syncWithParent = useCallback(() => {
-    if (!onChange) return;
-    const payload = {
-      address: form.address,
-      cityId: form.cityId,
-      stateId: form.stateId,
-      countryId: form.countryId,
-      latitude: form.latitude,
-      longitude: form.longitude,
-    };
-    onChange(payload, !isFirstRender.current);
-    if (isFirstRender.current) isFirstRender.current = false;
-  }, [form, onChange]);
-
-  useEffect(() => {
-    syncWithParent();
-  }, [syncWithParent]);
 
   return (
     <div className="space-y-6">
-      <InputField
-        label="Address"
-        variant="colored"
-        value={form.address}
-        onChange={(e) => {
-          const val = e.target.value;
-          setForm((p) => ({ ...p, address: val }));
-        }}
-      />
+      {(!readOnly || form.address) && (
+        <InputField
+          label="Address"
+          variant="colored"
+          readOnly={readOnly}
+          value={form.address}
+          onChange={(e) => {
+            const val = e.target.value;
+            const updated = { ...form, address: val };
+            setForm(updated);
+            if (onChange) onChange(updated);
+          }}
+        />
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* ===== STATE ===== */}
-        <div ref={stateRef}>
-          <label className="text-sm font-semibold text-text-black mb-1.5 ml-1">
-            State
-          </label>
+        {(!readOnly || form.stateName) && (
+          <div ref={stateRef}>
+            <label className="text-sm font-semibold text-primary mb-1.5 ml-1">
+              State
+            </label>
 
-          <div
-            onClick={() => !stateOpen && setStateOpen(true)}
-            className="h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-primary/10 text-primary cursor-text transition-colors"
-          >
-            {stateOpen ? (
-              <input
-                type="text"
-                autoFocus
-                placeholder="Type to search..."
-                value={stateSearch}
-                onChange={(e) => setStateSearch(e.target.value)}
-                className="w-full bg-transparent outline-none text-sm text-primary placeholder:text-primary/60"
-              />
-            ) : (
-              <span className={!form.stateName ? "text-primary/60" : ""}>
-                {form.stateName || "Select State"}
-              </span>
-            )}
-            <ChevronDown
-              className={`w-4 h-4 shrink-0 transition-transform ${
-                stateOpen ? "rotate-180" : ""
+            <div
+              onClick={() => !readOnly && !stateOpen && setStateOpen(true)}
+              className={`h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-primary/10 text-primary transition-colors ${
+                readOnly ? "" : "cursor-text"
               }`}
-            />
-          </div>
-
-          {stateOpen && (
-            <div className="mt-1 border border-primary bg-primary/10 rounded-md overflow-hidden relative z-10 shadow-lg">
-              <div className="max-h-40 overflow-y-auto">
-                {states
-                  .filter((s) =>
-                    s.label.toLowerCase().includes(stateSearch.toLowerCase()),
-                  )
-                  .map((s) => (
-                    <div
-                      key={s.value}
-                      onClick={() => {
-                        setForm((p) => ({
-                          ...p,
-                          stateId: s.value,
-                          stateName: s.label,
-                          cityId: null,
-                          cityName: "",
-                        }));
-                        setStateOpen(false);
-                        setStateSearch(""); // clear search on select
-                      }}
-                      className="px-3 py-2 hover:bg-primary/20 cursor-pointer"
-                    >
-                      {s.label}
-                    </div>
-                  ))}
-              </div>
+            >
+              {stateOpen ? (
+                <input
+                  type="text"
+                  autoFocus
+                  placeholder="Type to search..."
+                  value={stateSearch}
+                  onChange={(e) => setStateSearch(e.target.value)}
+                  className="w-full bg-transparent outline-none text-sm text-primary placeholder:text-primary/60"
+                />
+              ) : (
+                <span className={!form.stateName ? "text-primary/60" : ""}>
+                  {form.stateName || "Select State"}
+                </span>
+              )}
+              {!readOnly && (
+                <ChevronDown
+                  className={`w-4 h-4 shrink-0 transition-transform ${
+                    stateOpen ? "rotate-180" : ""
+                  }`}
+                />
+              )}
             </div>
-          )}
-        </div>
+
+            {stateOpen && (
+              <div className="mt-1 border border-primary bg-primary/10 rounded-md overflow-hidden relative z-10 shadow-lg">
+                <div className="max-h-40 overflow-y-auto">
+                  {states
+                    .filter((s) =>
+                      s.label.toLowerCase().includes(stateSearch.toLowerCase()),
+                    )
+                    .map((s) => (
+                      <div
+                        key={s.value}
+                        onClick={() => {
+                          const updated = {
+                            ...form,
+                            stateId: s.value,
+                            stateName: s.label,
+                            cityId: null,
+                            cityName: "",
+                          };
+                          setForm(updated);
+                          if (onChange) onChange(updated);
+                          setStateOpen(false);
+                          setStateSearch(""); // clear search on select
+                        }}
+                        className="px-3 py-2 hover:bg-primary/20 cursor-pointer"
+                      >
+                        {s.label}
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* ===== CITY ===== */}
-        <div ref={cityRef}>
-          <label className="text-sm font-semibold text-text-black mb-1.5 ml-1">
-            City
-          </label>
+        {(!readOnly || form.cityName) && (
+          <div ref={cityRef}>
+            <label className="text-sm font-semibold text-primary mb-1.5 ml-1">
+              City
+            </label>
 
-          <div
-            onClick={() => form.stateId && !cityOpen && setCityOpen(true)}
-            className={`h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-primary/10 text-primary transition-colors ${
-              !form.stateId ? "opacity-60 cursor-not-allowed" : "cursor-text"
-            }`}
-          >
-            {cityOpen ? (
-              <input
-                type="text"
-                autoFocus
-                placeholder="Type to search..."
-                value={citySearch}
-                onChange={(e) => setCitySearch(e.target.value)}
-                className="w-full bg-transparent outline-none text-sm text-primary placeholder:text-primary/60"
-              />
-            ) : (
-              <span className={!form.cityName ? "text-primary/60" : ""}>
-                {form.cityName ||
-                  (form.stateId ? "Select City" : "Select state first")}
-              </span>
-            )}
-            <ChevronDown
-              className={`w-4 h-4 shrink-0 transition-transform ${
-                cityOpen ? "rotate-180" : ""
+            <div
+              onClick={() =>
+                !readOnly && form.stateId && !cityOpen && setCityOpen(true)
+              }
+              className={`h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-primary/10 text-primary transition-colors ${
+                !form.stateId && !readOnly
+                  ? "opacity-60 cursor-not-allowed"
+                  : readOnly
+                    ? ""
+                    : "cursor-text"
               }`}
-            />
-          </div>
-
-          {cityOpen && (
-            <div className="mt-1 border border-primary bg-primary/10 rounded-md overflow-hidden relative z-10 shadow-lg">
-              <div className="max-h-40 overflow-y-auto">
-                {cities
-                  .filter((c) =>
-                    c.label.toLowerCase().includes(citySearch.toLowerCase()),
-                  )
-                  .map((c) => (
-                    <div
-                      key={c.value}
-                      onClick={() => {
-                        setForm((p) => ({
-                          ...p,
-                          cityId: c.value,
-                          cityName: c.label,
-                        }));
-                        setCityOpen(false);
-                        setCitySearch(""); // clear search on select
-                      }}
-                      className="px-3 py-2 hover:bg-primary/20 cursor-pointer"
-                    >
-                      {c.label}
-                    </div>
-                  ))}
-              </div>
+            >
+              {cityOpen ? (
+                <input
+                  type="text"
+                  autoFocus
+                  placeholder="Type to search..."
+                  value={citySearch}
+                  onChange={(e) => setCitySearch(e.target.value)}
+                  className="w-full bg-transparent outline-none text-sm text-primary placeholder:text-primary/60"
+                />
+              ) : (
+                <span className={!form.cityName ? "text-primary/60" : ""}>
+                  {form.cityName ||
+                    (form.stateId ? "Select City" : "Select state first")}
+                </span>
+              )}
+              {!readOnly && (
+                <ChevronDown
+                  className={`w-4 h-4 shrink-0 transition-transform ${
+                    cityOpen ? "rotate-180" : ""
+                  }`}
+                />
+              )}
             </div>
-          )}
-        </div>
+
+            {cityOpen && (
+              <div className="mt-1 border border-primary bg-primary/10 rounded-md overflow-hidden relative z-10 shadow-lg">
+                <div className="max-h-40 overflow-y-auto">
+                  {cities
+                    .filter((c) =>
+                      c.label.toLowerCase().includes(citySearch.toLowerCase()),
+                    )
+                    .map((c) => (
+                      <div
+                        key={c.value}
+                        onClick={() => {
+                          const updated = {
+                            ...form,
+                            cityId: c.value,
+                            cityName: c.label,
+                          };
+                          setForm(updated);
+                          if (onChange) onChange(updated);
+                          setCityOpen(false);
+                          setCitySearch(""); // clear search on select
+                        }}
+                        className="px-3 py-2 hover:bg-primary/20 cursor-pointer"
+                      >
+                        {c.label}
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

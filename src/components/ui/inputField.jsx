@@ -28,7 +28,7 @@ function InputField({
   return (
     <div>
       {label && (
-        <label className="text-sm font-semibold text-text-black mb-1.5 ml-1">
+        <label className="text-sm font-semibold text-primary mb-1.5 ml-1">
           {label}
           {required && <span className="text-red-500">*</span>}
         </label>

@@ -62,14 +62,34 @@ export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
 
   const updateBusiness = async () => {
     try {
+      if (!form.business) {
+        setEditMode((p) => ({ ...p, business: false }));
+        return;
+      }
       setLoadingStates((p) => ({ ...p, business: true }));
 
-      await updatebasicDetials(form.business);
+      const payload = new FormData();
+      const b = form.business;
+      if (b.logo instanceof File) payload.append("logo", b.logo);
+      if (b.banner instanceof File) payload.append("banner", b.banner);
+      payload.append("consultationName", b.consultationName || "");
+      payload.append("ownerName", b.ownerName || "");
+      payload.append("companyEmail", b.companyEmail || "");
+      payload.append("establishmentYear", b.establishmentYear || "");
+      if (Array.isArray(b.vehicleTypes)) {
+        b.vehicleTypes.forEach((v, i) =>
+          payload.append(`vehicleTypes[${i}]`, v),
+        );
+      }
+      if (Array.isArray(b.services)) {
+        b.services.forEach((s, i) => payload.append(`services[${i}]`, s));
+      }
 
+      await updatebasicDetials(payload);
       setEditMode((p) => ({ ...p, business: false }));
 
-      const b = await getBaiscDetails();
-      setData((p) => ({ ...p, business: b?.data }));
+      const bRes = await getBaiscDetails();
+      setData((p) => ({ ...p, business: bRes?.data }));
     } catch (e) {
       console.error("Update failed", e);
     } finally {
@@ -79,14 +99,27 @@ export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
 
   const updateAddress = async () => {
     try {
+      if (!form.address) {
+        setEditMode((p) => ({ ...p, address: false }));
+        return;
+      }
       setLoadingStates((p) => ({ ...p, address: true }));
 
-      await updateAddressDetials(form.address);
+      const a = form.address;
+      const payload = {
+        address: a.address || "",
+        stateId: a.stateId,
+        cityId: a.cityId,
+        countryId: a.countryId || 101,
+        latitude: a.latitude || 12.12,
+        longitude: a.longitude || 12.12,
+      };
 
+      await updateAddressDetials(payload);
       setEditMode((p) => ({ ...p, address: false }));
 
-      const a = await getAddressDetails();
-      setData((p) => ({ ...p, address: a?.data }));
+      const aRes = await getAddressDetails();
+      setData((p) => ({ ...p, address: aRes?.data }));
     } catch (e) {
       console.error("Update failed", e);
     } finally {
@@ -96,14 +129,31 @@ export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
 
   const updateKyc = async () => {
     try {
+      if (!form.kyc) {
+        setEditMode((p) => ({ ...p, kyc: false }));
+        return;
+      }
       setLoadingStates((p) => ({ ...p, kyc: true }));
 
-      await updateKycDetials(form.kyc);
+      const payload = new FormData();
+      const k = form.kyc;
+      payload.append("gstNumber", k.gstNumber || "");
+      payload.append("panCardNumber", k.panNumber || "");
+      payload.append("aadharCardNumber", k.aadharNumber || "");
+      if (k.gstPhoto instanceof File)
+        payload.append("gstCertificateImage", k.gstPhoto);
+      if (k.panPhoto instanceof File)
+        payload.append("panCardFrontImage", k.panPhoto);
+      if (k.aadharFront instanceof File)
+        payload.append("aadharCardFrontImage", k.aadharFront);
+      if (k.aadharBack instanceof File)
+        payload.append("aadharCardBackImage", k.aadharBack);
 
+      await updateKycDetials(payload);
       setEditMode((p) => ({ ...p, kyc: false }));
 
-      const k = await getKycDocs();
-      setData((p) => ({ ...p, kyc: k?.data }));
+      const kRes = await getKycDocs();
+      setData((p) => ({ ...p, kyc: kRes?.data }));
     } catch (e) {
       console.error("Update failed", e);
     } finally {

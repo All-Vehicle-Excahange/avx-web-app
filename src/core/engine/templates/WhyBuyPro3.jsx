@@ -123,6 +123,19 @@ export default function WhyBuyPro3({
   const [selectedReviewIds, setSelectedReviewIds] = useState(
     rawData?.featuredReviews?.map((r) => r.id) || [],
   );
+  const toggleReviewSelection = (id) => {
+    setSelectedReviewIds((prev) => {
+      const newIds = prev.includes(id)
+        ? prev.filter((item) => item !== id)
+        : [...prev, id];
+
+      // Update data state so it stays in sync
+      const newFeaturedReviews = allReviews.filter((r) => newIds.includes(r.id));
+      updateField("featuredReviews", newFeaturedReviews);
+
+      return newIds;
+    });
+  };
   const [active, setActive] = useState(0);
   const [fading, setFading] = useState(false);
   const [hovered, setHovered] = useState(null);
