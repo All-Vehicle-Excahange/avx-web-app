@@ -28,7 +28,7 @@ import { useRouter } from "next/router";
 import toast, { Toaster } from "react-hot-toast";
 import Navbar from "@/components/layout/Navbar";
 import { SkeletonBox } from "@/components/ui/skeleton";
-import { Clock, AlertCircle } from "lucide-react";
+import { Clock, AlertCircle, XCircle } from "lucide-react";
 
 export default function UpdateProfile() {
   const router = useRouter();
@@ -462,7 +462,7 @@ export default function UpdateProfile() {
       if (res?.success || res?.data) {
         toast.success("Profile submitted for verification");
         sessionStorage.removeItem("consult_update_id");
-        router.push("/consult/dashboard/overview");
+        router.push("/consult/dashboard/profile");
         return;
       } else {
         toast.error(res.message || "Submission failed");
@@ -475,7 +475,11 @@ export default function UpdateProfile() {
     }
   };
 
-  const isRequested = data.business?.verificationStatus === "REQUESTED";
+  const verificationStatus = data.business?.verificationStatus;
+  const isRequested = verificationStatus === "REQUESTED";
+  const isChangesRequested = verificationStatus === "REQUEST_CHANGES";
+  const isRejected = verificationStatus === "REJECTED";
+  const adminRemark = data.business?.adminRemark;
 
   return (
     <>
@@ -576,11 +580,42 @@ export default function UpdateProfile() {
                       </div>
                     )}
 
+                    {isChangesRequested && (
+                      <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-6 space-y-3 mb-10 shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
+                        <div className="flex items-center gap-3 text-yellow-600 font-bold">
+                          <AlertCircle size={20} />
+                          <span>Action Required: Changes Requested</span>
+                        </div>
+                        <p className="text-primary/80 text-sm font-medium">
+                          Admin Feedback:
+                        </p>
+                        <p className="text-primary/70 text-sm italic bg-orange-500/5 p-3 rounded-lg border border-orange-500/10">
+                          {adminRemark || "-"}
+                        </p>
+                      </div>
+                    )}
+
+                    {isRejected && (
+                      <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-6 space-y-3 mb-10 shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
+                        <div className="flex items-center gap-3 text-red-600 font-bold">
+                          <XCircle size={20} />
+                          <span>Update Request Rejected</span>
+                        </div>
+                        <p className="text-primary/80 text-sm font-medium">
+                          Reason for Rejection:
+                        </p>
+                        <p className="text-primary/70 text-sm italic bg-red-500/5 p-3 rounded-lg border border-red-500/10">
+                          {adminRemark ||
+                            "Your update request has been rejected by the administrator. Please contact support for more details."}
+                        </p>
+                      </div>
+                    )}
+
                     {/* BUSINESS SECTION */}
                     <div className="border border-primary/30 rounded-xl p-6">
                       <div className="flex justify-between mb-4">
                         <h3 className="font-semibold">Preview Your Details</h3>
-                        {!editMode.business && !isRequested && (
+                        {!editMode.business && !isRequested && !isRejected && (
                           <Button
                             variant="ghost"
                             onClick={() =>
@@ -617,6 +652,7 @@ export default function UpdateProfile() {
                           initialData={data.business}
                           onChange={handleBusinessChange}
                           readOnly={!editMode.business}
+                          isUpdateMode={true}
                         />
                       </div>
                     </div>
@@ -712,7 +748,7 @@ export default function UpdateProfile() {
                     </div>
 
                     {/* FINAL SUBMIT */}
-                    {!isRequested && (
+                    {!isRequested && !isRejected && (
                       <div className="flex justify-end pt-6">
                         <Button
                           variant="ghost"

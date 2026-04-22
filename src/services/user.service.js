@@ -40,6 +40,7 @@ const ENDPOINT = {
   getAllTier: "/tier",
   getAboutUsStoreFrontByUserName: "/consultation/detail-page/about-us",
   getWhyBuyHereStoreFrontByUserName: "/consultation/detail-page/why-buy-here",
+  getUserProfileStrength: "/users/profile/strength",
 };
 
 export const getUserHomeFeed = async (data) => {
@@ -538,6 +539,15 @@ export const getWhyBuyHereStoreFrontByUserName = async (username) => {
     const res = await axiosInstance.get(
       `${ENDPOINT.getWhyBuyHereStoreFrontByUserName}/${username}`,
     );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getUserProfileStrength = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getUserProfileStrength);
     return handleResponse(res);
   } catch (error) {
     throw error;

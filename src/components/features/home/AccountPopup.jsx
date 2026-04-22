@@ -11,6 +11,7 @@ import { Loader2 } from "lucide-react";
 
 import { useAuthStore } from "@/stores/useAuthStore";
 import { logoutUser } from "@/services/auth.service";
+import { getUserProfileStrength } from "@/services/user.service";
 import Link from "next/link";
 
 export default function AccountPopup({ open, onClosePopup }) {
@@ -58,6 +59,77 @@ export default function AccountPopup({ open, onClosePopup }) {
   const isConsultant = ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(
     user?.userRole,
   );
+  const isUserSeller = user?.userRole === "USER_SELLER";
+
+  const [profileStrength, setProfileStrength] = useState(null);
+  const [isLoadingStrength, setIsLoadingStrength] = useState(false);
+
+  useEffect(() => {
+    if (open && isLoggedIn) {
+      const fetchStrength = async () => {
+        setIsLoadingStrength(true);
+        try {
+          const res = await getUserProfileStrength();
+          if (res?.data) {
+            setProfileStrength(res.data);
+          }
+        } catch (error) {
+          console.error("Failed to fetch profile strength", error);
+        } finally {
+          setIsLoadingStrength(false);
+        }
+      };
+      fetchStrength();
+    }
+  }, [open, isLoggedIn]);
+
+  const getCTA = () => {
+    if (!isLoggedIn) return null;
+
+    const messages = profileStrength?.messages || [];
+
+    if (isConsultant) {
+      // Priority 1: KYC / Verification
+      if (
+        messages.some((m) =>
+          ["ADD_GST", "UPLOAD_AADHAAR", "UPLOAD_PAN_CARD"].includes(m.type),
+        )
+      ) {
+        return {
+          label: "Complete Verification",
+          href: "/consult/subscription",
+        };
+      }
+      // Priority 2: Create Storefront
+      if (messages.some((m) => m.type === "CREATE_STOREFRONT")) {
+        return {
+          label: "Create Storefront",
+          href: "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2FstoreFront",
+        };
+      }
+      // Priority 3: List Vehicle
+      if (messages.some((m) => m.type === "LIST_VEHICLE")) {
+        return {
+          label: "List Vehicle",
+          href: "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Finventory",
+        };
+      }
+      // Default for consultant
+      return { label: "Go to Dashboard", href: "/consult/dashboard/overview" };
+    }
+
+    if (isUserSeller) {
+      if (messages.some((m) => m.type === "LIST_VEHICLE")) {
+        return { label: "List Vehicle", href: "/user/details/inventory" };
+      }
+      return { label: "My Activity", href: "/user/details/activity" };
+    }
+
+    // Normal User
+    return { label: "My Activity", href: "/user/details/activity" };
+  };
+
+  const cta = getCTA();
 
   const router = useRouter();
 
@@ -151,28 +223,38 @@ export default function AccountPopup({ open, onClosePopup }) {
                 Hello, {user?.firstname} {user?.lastname}
               </Link>
 
-              {/* PROGRESS INDICATOR */}
-              <div className="space-y-4 px-2 pt-2">
-                {/* Single Profile Progress */}
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-third/60">
-                    <span>Profile Mastery</span>
-                    <span className="text-secondary bg-primary px-2 py-0.5 rounded-full text-[9px]">60%</span>
+              {/* PROGRESS INDICATOR - Only for Consultants */}
+              {isConsultant && (
+                <div className="space-y-4 px-2 pt-2 text-left">
+                  {/* Single Profile Progress */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-third/60">
+                      <span>Profile Mastery</span>
+                      <span className="text-secondary bg-primary px-2 py-0.5 rounded-full text-[9px]">
+                        {Math.round(profileStrength?.profileStrength || 0)}%
+                      </span>
+                    </div>
+                    <div className="h-1.5 w-full bg-primary/10 rounded-full overflow-hidden border border-white/5">
+                      <div
+                        className="h-full bg-primary rounded-full transition-all duration-1000 ease-out shadow-[0_0_8px_rgba(var(--primary-rgb),0.4)]"
+                        style={{
+                          width: `${profileStrength?.profileStrength || 0}%`,
+                        }}
+                      />
+                    </div>
                   </div>
-                  <div className="h-1.5 w-full bg-primary/10 rounded-full overflow-hidden border border-white/5">
-                    <div 
-                      className="h-full bg-primary rounded-full transition-all duration-1000 ease-out shadow-[0_0_8px_rgba(var(--primary-rgb),0.4)]"
-                      style={{ width: '60%' }}
-                    />
-                  </div>
-                </div>
 
-                {/* Compact Suggestion Text */}
-                <div className="bg-primary/5 px-4 py-2 rounded-xl border border-white/5 text-[11px] text-primary/70">
-                  <span className="text-primary font-bold mr-1.5 uppercase tracking-wider">Next Step:</span>
-                  Complete your KYC to list your vehicle.
+                  {/* Compact Suggestion Text */}
+                  {profileStrength?.messages?.[0] && (
+                    <div className="bg-primary/5 px-4 py-2 rounded-xl border border-white/5 text-[11px] text-primary/70">
+                      <span className="text-primary font-bold mr-1.5 uppercase tracking-wider">
+                        Next Step:
+                      </span>
+                      {profileStrength.messages[0].text}
+                    </div>
+                  )}
                 </div>
-              </div>
+              )}
             </div>
           )}
         </div>

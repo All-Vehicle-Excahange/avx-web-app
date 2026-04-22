@@ -1,4 +1,3 @@
-import Button from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { useState } from "react";
 
@@ -9,17 +8,34 @@ export default function PlanCard({
   yearlyPrice,
   features,
   popular,
+  selected,
+  onSelect,
 }) {
   const [isAnnual, setIsAnnual] = useState(false);
 
   return (
     <div
-      className={`relative rounded-2xl border backdrop-blur-md p-8 flex flex-col justify-between transition-all duration-300
-      ${popular ? "border-primary shadow-2xl" : "border-third/30 "}`}
+      onClick={onSelect}
+      className={`relative rounded-2xl border backdrop-blur-md p-8 flex flex-col justify-between transition-all duration-300 cursor-pointer
+        ${
+          selected
+            ? "border-primary shadow-2xl ring-2 ring-primary/40 scale-[1.02]"
+            : popular
+              ? "border-primary/50 shadow-lg hover:border-primary hover:shadow-2xl hover:scale-[1.01]"
+              : "border-third/30 hover:border-primary/40 hover:shadow-lg hover:scale-[1.01]"
+        }`}
     >
-      {popular && (
+      {/* MOST POPULAR BADGE */}
+      {popular && !selected && (
         <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-secondary text-xs px-4 py-1 rounded-full">
           Most Popular
+        </span>
+      )}
+
+      {/* SELECTED BADGE — same style, same position */}
+      {selected && (
+        <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-secondary text-xs px-4 py-1 rounded-full">
+          Selected
         </span>
       )}
 
@@ -29,9 +45,13 @@ export default function PlanCard({
             {icon}
           </div>
 
-          {/* LOCAL TOGGLE */}
-          <div className="flex flex-col items-end gap-1">
+          {/* LOCAL BILLING TOGGLE */}
+          <div
+            className="flex flex-col items-end gap-1"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
+              type="button"
               onClick={() => setIsAnnual(!isAnnual)}
               className={`relative w-10 h-5 rounded-full transition-colors duration-300 focus:outline-none p-0.5 ${
                 isAnnual ? "bg-fourth" : "bg-third/30"
@@ -68,19 +88,11 @@ export default function PlanCard({
         <ul className="space-y-2 text-sm">
           {features.map((f, i) => (
             <li key={i} className="flex gap-2 items-start text-third">
-              <Check className="text-primary mt-1" size={16} /> {f}
+              <Check className="text-primary mt-1 shrink-0" size={16} /> {f}
             </li>
           ))}
         </ul>
       </div>
-
-      <Button
-        variant="outline"
-        full
-        className={`mt-6  ${popular ? "" : " text-primary border-primary/20 hover:bg-primary/30"}`}
-      >
-        {popular ? "Selected" : "Select Plan"}
-      </Button>
     </div>
   );
 }

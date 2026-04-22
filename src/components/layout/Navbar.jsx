@@ -7,10 +7,11 @@ import AccountPopup from "../features/home/AccountPopup";
 import Link from "next/link";
 import { useAuthStore } from "@/stores/useAuthStore";
 import PreferencesPopup from "../features/user/PreferencesPopup";
-import { getGlobalSearch } from "@/services/user.service";
+import { getGlobalSearch, getUserProfileStrength } from "@/services/user.service";
 import { useRouter } from "next/navigation";
 import { useUIStore } from "@/stores/useUIStore";
 import MobileAppDownloadBanner from "../ui/MobileAppDownloadBanner";
+
 
 export default function Navbar({ heroMode = false, scrolled = false }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -29,6 +30,23 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
   const searchRef = useRef(null);
   const accountRef = useRef(null);
   const [persisAccountOpen, setPersisAccountOpen] = useState(false);
+  const [profileStrength, setProfileStrength] = useState(null);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      const fetchStrength = async () => {
+        try {
+          const res = await getUserProfileStrength();
+          if (res?.data) {
+            setProfileStrength(res.data);
+          }
+        } catch (error) {
+          console.error("Failed to fetch profile strength in Navbar", error);
+        }
+      };
+      fetchStrength();
+    }
+  }, [isLoggedIn]);
 
   /* ================= BANNER STATES ================= */
   const { isMobileBannerVisible, hideMobileBanner, isMobileBannerTempHidden } =
@@ -208,31 +226,81 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
             {/* RIGHT SIDE */}
             <div className="flex items-center gap-2 md:gap-4">
               {(() => {
+                const userRole = user?.userRole;
                 const isConsultant = [
                   "CONSULTATION",
                   "CONSULTANT_APPLICANT",
-                ].includes(user?.userRole);
+                ].includes(userRole);
+                const isUserSeller = userRole === "USER_SELLER";
 
-                let btnText = "Sell Your Vehicle";
-                let btnPath = "/became-seller";
-
-                if (isLoggedIn) {
-                  if (isConsultant) {
-                    btnText = "Go TO Dashboard";
-                    btnPath = "/consult/subscription";
-                  } else {
-                    btnText = "My Activity";
-                    btnPath = "/user/details/myprofile";
+                const getCTA = () => {
+                  if (!isLoggedIn) {
+                    return { label: "Sell Your Vehicle", href: "/became-seller" };
                   }
-                }
+
+                  const messages = profileStrength?.messages || [];
+
+                  if (isConsultant) {
+                    if (
+                      messages.some((m) =>
+                        ["ADD_GST", "UPLOAD_AADHAAR", "UPLOAD_PAN_CARD"].includes(
+                          m.type,
+                        ),
+                      )
+                    ) {
+                      return {
+                        label: "Complete Verification",
+                        href: "/consult/subscription",
+                      };
+                    }
+                    if (
+                      messages.some((m) => m.type === "CREATE_STOREFRONT")
+                    ) {
+                      return {
+                        label: "Create Storefront",
+                        href: "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2FstoreFront",
+                      };
+                    }
+                    if (messages.some((m) => m.type === "LIST_VEHICLE")) {
+                      return {
+                        label: "List Vehicle",
+                        href: "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Finventory",
+                      };
+                    }
+                    return {
+                      label: "Go to Dashboard",
+                      href: "/consult/dashboard/overview",
+                    };
+                  }
+
+                  if (isUserSeller) {
+                    if (messages.some((m) => m.type === "LIST_VEHICLE")) {
+                      return {
+                        label: "List Vehicle",
+                        href: "/user/details/inventory",
+                      };
+                    }
+                    return {
+                      label: "My Activity",
+                      href: "/user/details/myprofile",
+                    };
+                  }
+
+                  return {
+                    label: "My Activity",
+                    href: "/user/details/myprofile",
+                  };
+                };
+
+                const cta = getCTA();
 
                 return (
                   <Button
-                    onClick={() => router.push(btnPath)}
+                    onClick={() => router.push(cta.href)}
                     size="sm"
                     className="hidden md:block text-xs md:text-sm text-primary border border-primary hover:bg-primary hover:text-secondary whitespace-nowrap"
                   >
-                    {btnText}
+                    {cta.label}
                   </Button>
                 );
               })()}

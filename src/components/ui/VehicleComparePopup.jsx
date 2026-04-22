@@ -14,7 +14,7 @@ export default function VehicleComparePopup({
     onClose,
     selectedVehicle
 }) {
-    const isVehicleDetails = useCompareStore((state) => state.isVehicleDetails);
+    const { isVehicleDetails, compareVehicles } = useCompareStore();
     const [isClosing, setIsClosing] = useState(false);
 
     // Independent state for both sides
@@ -54,12 +54,21 @@ export default function VehicleComparePopup({
     useEffect(() => {
         if (isOpen) {
             // Reset states
-            if (isVehicleDetails && selectedVehicle) {
+            if (compareVehicles.length > 0) {
+                setLeftVehicle(compareVehicles[0]);
+                if (compareVehicles.length > 1) {
+                    setRightVehicle(compareVehicles[1]);
+                    // Auto-trigger comparison if two are provided
+                    setTimeout(() => {
+                        handleCompareNowExplicit(compareVehicles[0], compareVehicles[1]);
+                    }, 100);
+                }
+            } else if (isVehicleDetails && selectedVehicle) {
                 setLeftVehicle(selectedVehicle);
             } else {
                 setLeftVehicle(null);
             }
-            setRightVehicle(null);
+            if (compareVehicles.length < 2) setRightVehicle(null);
             setLeftSearch("");
             setRightSearch("");
             setIsClosing(false);
@@ -101,14 +110,14 @@ export default function VehicleComparePopup({
         }, 250);
     }, [onClose]);
 
-    const handleCompareNow = async () => {
-        if (!leftVehicle?.id || !rightVehicle?.id) return;
+    const handleCompareNowExplicit = async (v1, v2) => {
+        if (!v1?.id || !v2?.id) return;
 
         setIsFetchingComparison(true);
         try {
             const [res1, res2] = await Promise.all([
-                getVehicleOverview(leftVehicle.id),
-                getVehicleOverview(rightVehicle.id)
+                getVehicleOverview(v1.id),
+                getVehicleOverview(v2.id)
             ]);
 
             if (res1?.data && res2?.data) {
@@ -125,6 +134,8 @@ export default function VehicleComparePopup({
             setIsFetchingComparison(false);
         }
     };
+
+    const handleCompareNow = () => handleCompareNowExplicit(leftVehicle, rightVehicle);
 
     if (!isOpen && !isClosing) return null;
 
