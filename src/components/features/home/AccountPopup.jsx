@@ -79,7 +79,7 @@ export default function AccountPopup({ open, onClosePopup }) {
       setIsLoggingOut(false);
 
       // Both conditions preserved: Dashboard goes to /consult, others to /
-      if (pathname.includes("/consult/dashboard")) {
+      if (pathname?.includes("/consult/dashboard")) {
         router.push("/consult");
       } else {
         router.push("/");
@@ -141,7 +141,7 @@ export default function AccountPopup({ open, onClosePopup }) {
             <div className="space-y-4">
               <Link
                 href={
-                  pathname.includes("/user/details")
+                  pathname?.includes("/user/details")
                     ? "/user/details"
                     : "/user/details/myprofile"
                 }

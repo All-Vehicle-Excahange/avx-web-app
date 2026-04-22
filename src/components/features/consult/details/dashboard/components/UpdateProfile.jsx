@@ -18,14 +18,17 @@ import {
   updateAddressDetails,
   updateBasicDetails,
   updateKycDocuments,
-  getBaiscDetails as getPendingUpdate
+  getActiveAddressUpdate,
+  getActiveKycUpdate,
+  getBaiscDetails as getPendingUpdate,
+  checkIsUserNameAvailbale,
 } from "@/services/consult.profile.service";
-
 
 import { useRouter } from "next/router";
 import toast, { Toaster } from "react-hot-toast";
 import Navbar from "@/components/layout/Navbar";
 import { SkeletonBox } from "@/components/ui/skeleton";
+import { Clock, AlertCircle } from "lucide-react";
 
 export default function UpdateProfile() {
   const router = useRouter();
@@ -79,14 +82,11 @@ export default function UpdateProfile() {
           if (!res) return null;
           if (res.error || res.statusCode === 404 || res.status === "NOT_FOUND")
             return null;
-          if (
-            res.data &&
-            (res.data.error ||
-              res.data.statusCode === 404 ||
-              res.data.errorCode)
-          )
+          // Handle cases where data might be nested or direct
+          const actualData = res.data || res;
+          if (actualData?.errorCode || actualData?.statusCode === 404)
             return null;
-          return res.data ? res.data : null;
+          return actualData;
         };
 
         const is404Err = (err) => {
@@ -94,58 +94,81 @@ export default function UpdateProfile() {
             err?.response?.status === 404 ||
             err?.statusCode === 404 ||
             err?.status === "NOT_FOUND" ||
-            err?.response?.data?.statusCode === 404
+            err?.response?.data?.statusCode === 404 ||
+            err?.data?.statusCode === 404
           );
         };
 
-        // 1. Check for active update requests FIRST
-        try {
-          const pending = await getPendingUpdate();
-          if (pending?.success && pending.data) {
-            const status = pending.data.verificationStatus;
-            saveUpdateId(pending.data.id || pending.data._id); // ensure ID is saved
+        // 1. Fetch Original Base Data
+        let baseBusiness = null;
+        let baseAddress = null;
+        let baseKyc = null;
 
-            if (status === "REQUESTED" || status === "REQUEST_CHANGES") {
-              router.push("/consult/dashboard/profile/update-status");
-              return;
-            }
+        try {
+          const [bRes, aRes, kRes] = await Promise.all([
+            getBaiscDetails().catch(() => null),
+            getAddressDetails().catch(() => null),
+            getKycDocs().catch(() => null),
+          ]);
+          baseBusiness = parseResponse(bRes);
+          baseAddress = parseResponse(aRes);
+          baseKyc = parseResponse(kRes);
+        } catch (err) {
+          console.error("Error fetching base data:", err);
+        }
+
+        // 2. Check for Active/Pending Update Request
+        let pendingUpdate = null;
+        let activeAddress = null;
+        let activeKyc = null;
+
+        try {
+          const pRes = await getPendingUpdate();
+          pendingUpdate = parseResponse(pRes);
+
+          if (pendingUpdate) {
+            // Save Update ID for further updates
+            const currentUpdateId = pendingUpdate.id || pendingUpdate._id;
+            saveUpdateId(currentUpdateId);
+
+            // Fetch active address and kyc updates if a request exists
+            const [activeARes, activeKRes] = await Promise.all([
+              getActiveAddressUpdate().catch(() => null),
+              getActiveKycUpdate().catch(() => null),
+            ]);
+
+            activeAddress = parseResponse(activeARes);
+            activeKyc = parseResponse(activeKRes);
           }
         } catch (err) {
-          console.error("Error checking pending updates:", err);
+          if (!is404Err(err))
+            console.error("Error checking pending updates:", err);
         }
 
-        let bData = null;
-        let aData = null;
-        let kData = null;
-
-        try {
-          const basic = await getBaiscDetails();
-          bData = parseResponse(basic);
-        } catch (err) {
-          if (!is404Err(err)) throw err;
-        }
-
-        try {
-          const address = await getAddressDetails();
-          aData = parseResponse(address);
-        } catch (err) {
-          if (!is404Err(err)) throw err;
-        }
-
-        try {
-          const kyc = await getKycDocs();
-          kData = parseResponse(kyc);
-        } catch (err) {
-          if (!is404Err(err)) throw err;
-        }
+        // 3. Merge Data: Pending/Active > Base
+        // We only overwrite base values if the update has a valid (non-null/non-empty) value
+        const mergeUpdate = (base, update) => {
+          if (!update) return base;
+          if (!base) return update;
+          const merged = { ...base };
+          Object.keys(update).forEach((key) => {
+            const val = update[key];
+            if (val !== null && val !== undefined && val !== "") {
+              // For arrays, only merge if they aren't empty
+              if (Array.isArray(val) && val.length === 0) return;
+              merged[key] = val;
+            }
+          });
+          return merged;
+        };
 
         setData({
-          business: bData,
-          address: aData,
-          kyc: kData,
+          business: mergeUpdate(baseBusiness, pendingUpdate),
+          address: mergeUpdate(baseAddress, activeAddress),
+          kyc: mergeUpdate(baseKyc, activeKyc),
         });
       } catch (e) {
-        console.error("Error fetching data", e);
+        console.error("Error in data initialization", e);
       } finally {
         setInitialLoading(false);
       }
@@ -195,31 +218,52 @@ export default function UpdateProfile() {
       const orig = data.business || {};
       let hasChanges = false;
 
-      if (b.logo instanceof File) { payload.append("logo", b.logo); hasChanges = true; }
-      if (b.banner instanceof File) { payload.append("banner", b.banner); hasChanges = true; }
+      if (b.logo instanceof File) {
+        payload.append("logo", b.logo);
+        hasChanges = true;
+      }
+      if (b.banner instanceof File) {
+        payload.append("banner", b.banner);
+        hasChanges = true;
+      }
       if (b.consultationName !== (orig.consultationName || "")) {
-        payload.append("consultationName", b.consultationName || ""); hasChanges = true;
+        payload.append("consultationName", b.consultationName || "");
+        hasChanges = true;
+      }
+      if (b.username !== (orig.username || "")) {
+        payload.append("username", b.username || "");
+        hasChanges = true;
       }
       if (b.ownerName !== (orig.ownerName || "")) {
-        payload.append("ownerName", b.ownerName || ""); hasChanges = true;
+        payload.append("ownerName", b.ownerName || "");
+        hasChanges = true;
       }
       if (b.companyEmail !== (orig.companyEmail || "")) {
-        payload.append("companyEmail", b.companyEmail || ""); hasChanges = true;
+        payload.append("companyEmail", b.companyEmail || "");
+        hasChanges = true;
       }
-      if (String(b.establishmentYear || "") !== String(orig.establishmentYear || "")) {
-        payload.append("establishmentYear", b.establishmentYear || ""); hasChanges = true;
+      if (
+        String(b.establishmentYear || "") !==
+        String(orig.establishmentYear || "")
+      ) {
+        payload.append("establishmentYear", b.establishmentYear || "");
+        hasChanges = true;
       }
       // Arrays: compare via JSON
       const origVehicleTypes = JSON.stringify(orig.vehicleTypes || []);
       const newVehicleTypes = JSON.stringify(b.vehicleTypes || []);
       if (origVehicleTypes !== newVehicleTypes) {
-        (b.vehicleTypes || []).forEach((v, i) => payload.append(`vehicleTypes[${i}]`, v));
+        (b.vehicleTypes || []).forEach((v, i) =>
+          payload.append(`vehicleTypes[${i}]`, v),
+        );
         hasChanges = true;
       }
       const origServices = JSON.stringify(orig.services || []);
       const newServices = JSON.stringify(b.services || []);
       if (origServices !== newServices) {
-        (b.services || []).forEach((s, i) => payload.append(`services[${i}]`, s));
+        (b.services || []).forEach((s, i) =>
+          payload.append(`services[${i}]`, s),
+        );
         hasChanges = true;
       }
 
@@ -273,13 +317,20 @@ export default function UpdateProfile() {
       let hasChanges = false;
 
       if (a.address !== (orig.address || "")) {
-        payload.append("address", a.address || ""); hasChanges = true;
+        payload.append("address", a.address || "");
+        hasChanges = true;
       }
-      if (String(a.stateId || "") !== String(orig.state?.id || orig.stateId || "")) {
-        payload.append("stateId", a.stateId || ""); hasChanges = true;
+      if (
+        String(a.stateId || "") !== String(orig.state?.id || orig.stateId || "")
+      ) {
+        payload.append("stateId", a.stateId || "");
+        hasChanges = true;
       }
-      if (String(a.cityId || "") !== String(orig.city?.id || orig.cityId || "")) {
-        payload.append("cityId", a.cityId || ""); hasChanges = true;
+      if (
+        String(a.cityId || "") !== String(orig.city?.id || orig.cityId || "")
+      ) {
+        payload.append("cityId", a.cityId || "");
+        hasChanges = true;
       }
 
       if (!hasChanges) {
@@ -340,18 +391,33 @@ export default function UpdateProfile() {
       let hasChanges = false;
 
       if (k.gstNumber !== (orig.gstNumber || "")) {
-        payload.append("gstNumber", k.gstNumber || ""); hasChanges = true;
+        payload.append("gstNumber", k.gstNumber || "");
+        hasChanges = true;
       }
       if (k.panNumber !== (orig.panCardNumber || "")) {
-        payload.append("panCardNumber", k.panNumber || ""); hasChanges = true;
+        payload.append("panCardNumber", k.panNumber || "");
+        hasChanges = true;
       }
       if (k.aadharNumber !== (orig.aadharCardNumber || "")) {
-        payload.append("aadharCardNumber", k.aadharNumber || ""); hasChanges = true;
+        payload.append("aadharCardNumber", k.aadharNumber || "");
+        hasChanges = true;
       }
-      if (k.gstPhoto instanceof File) { payload.append("gstCertificateImage", k.gstPhoto); hasChanges = true; }
-      if (k.panPhoto instanceof File) { payload.append("panCardFrontImage", k.panPhoto); hasChanges = true; }
-      if (k.aadharFront instanceof File) { payload.append("aadharCardFrontImage", k.aadharFront); hasChanges = true; }
-      if (k.aadharBack instanceof File) { payload.append("aadharCardBackImage", k.aadharBack); hasChanges = true; }
+      if (k.gstPhoto instanceof File) {
+        payload.append("gstCertificateImage", k.gstPhoto);
+        hasChanges = true;
+      }
+      if (k.panPhoto instanceof File) {
+        payload.append("panCardFrontImage", k.panPhoto);
+        hasChanges = true;
+      }
+      if (k.aadharFront instanceof File) {
+        payload.append("aadharCardFrontImage", k.aadharFront);
+        hasChanges = true;
+      }
+      if (k.aadharBack instanceof File) {
+        payload.append("aadharCardBackImage", k.aadharBack);
+        hasChanges = true;
+      }
 
       if (!hasChanges) {
         toast("No changes detected.");
@@ -408,6 +474,8 @@ export default function UpdateProfile() {
       setLoadingStates((p) => ({ ...p, submit: false }));
     }
   };
+
+  const isRequested = data.business?.verificationStatus === "REQUESTED";
 
   return (
     <>
@@ -490,11 +558,29 @@ export default function UpdateProfile() {
                       </p>
                     </div>
 
+                    {isRequested && (
+                      <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-5 flex items-start gap-4 mb-10 animate-in fade-in slide-in-from-top-4 duration-500">
+                        <div className="bg-yellow-500/20 p-2 rounded-lg">
+                          <Clock className="text-yellow-400" size={20} />
+                        </div>
+                        <div>
+                          <p className="text-yellow-400 font-bold tracking-tight">
+                            Your changes are in Review
+                          </p>
+                          <p className="text-third text-sm mt-1">
+                            Your profile update request is currently being
+                            reviewed by our admin team. You cannot make further
+                            changes until the review is complete.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
                     {/* BUSINESS SECTION */}
                     <div className="border border-primary/30 rounded-xl p-6">
                       <div className="flex justify-between mb-4">
                         <h3 className="font-semibold">Preview Your Details</h3>
-                        {!editMode.business ? (
+                        {!editMode.business && !isRequested && (
                           <Button
                             variant="ghost"
                             onClick={() =>
@@ -503,7 +589,8 @@ export default function UpdateProfile() {
                           >
                             Edit
                           </Button>
-                        ) : (
+                        )}
+                        {editMode.business && (
                           <div className="flex gap-3">
                             <Button
                               variant="outlineSecondary"
@@ -538,7 +625,7 @@ export default function UpdateProfile() {
                     <div className="border border-primary/30 rounded-xl p-6">
                       <div className="flex justify-between mb-4">
                         <h3 className="font-semibold">Address Details</h3>
-                        {!editMode.address ? (
+                        {!editMode.address && !isRequested && (
                           <Button
                             variant="ghost"
                             onClick={() =>
@@ -547,7 +634,8 @@ export default function UpdateProfile() {
                           >
                             Edit
                           </Button>
-                        ) : (
+                        )}
+                        {editMode.address && (
                           <div className="flex gap-3">
                             <Button
                               variant="outlineSecondary"
@@ -582,7 +670,7 @@ export default function UpdateProfile() {
                     <div className="border border-primary/30 rounded-xl p-6">
                       <div className="flex justify-between mb-4">
                         <h3 className="font-semibold">KYC Details</h3>
-                        {!editMode.kyc ? (
+                        {!editMode.kyc && !isRequested && (
                           <Button
                             variant="ghost"
                             onClick={() =>
@@ -591,7 +679,8 @@ export default function UpdateProfile() {
                           >
                             Edit
                           </Button>
-                        ) : (
+                        )}
+                        {editMode.kyc && (
                           <div className="flex gap-3">
                             <Button
                               variant="outlineSecondary"
@@ -623,16 +712,18 @@ export default function UpdateProfile() {
                     </div>
 
                     {/* FINAL SUBMIT */}
-                    <div className="flex justify-end pt-6">
-                      <Button
-                        variant="ghost"
-                        onClick={handleSubmit}
-                        loading={loadingStates.submit}
-                        className="px-10"
-                      >
-                        Final Submit
-                      </Button>
-                    </div>
+                    {!isRequested && (
+                      <div className="flex justify-end pt-6">
+                        <Button
+                          variant="ghost"
+                          onClick={handleSubmit}
+                          loading={loadingStates.submit}
+                          className="px-10"
+                        >
+                          Final Submit
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

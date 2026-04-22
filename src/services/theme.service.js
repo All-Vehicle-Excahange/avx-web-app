@@ -290,9 +290,13 @@ export const setFeaturedReviews = async (reviewIds) => {
   }
 };
 
-export const makeAsFinalSubmit = async () => {
+export const makeAsFinalSubmit = async (score) => {
   try {
-    const res = await axiosInstance.patch(ENDPOINT.makeAsFinalSubmit);
+    const res = await axiosInstance.patch(ENDPOINT.makeAsFinalSubmit, null, {
+      params: {
+        storeScore: score,
+      },
+    });
     return handleResponse(res);
   } catch (error) {
     throw error;

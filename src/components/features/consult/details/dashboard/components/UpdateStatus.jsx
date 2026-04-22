@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -391,7 +390,9 @@ export default function UpdateStatus() {
                               : "bg-orange-500/10 text-orange-500"
                           }`}
                         >
-                          {verificationStatus === "REQUESTED" ? "PENDING" : verificationStatus}
+                          {verificationStatus === "REQUESTED"
+                            ? "PENDING"
+                            : verificationStatus}
                         </span>
                         {isRequested && (
                           <span className="text-yellow-600 text-[10px] font-bold animate-pulse">
@@ -408,7 +409,7 @@ export default function UpdateStatus() {
                           <span>Updates Needed</span>
                         </div>
                         <p className="text-primary/70 text-sm italic">
-                          "{adminRemark}"
+                          {adminRemark}
                         </p>
                       </div>
                     )}

@@ -7,6 +7,8 @@ const ENDPOINT = {
   getActiveBasicUpdate: "/consultation/updation/request/active/basic",
   getActiveAddressUpdate: "/consultation/updation/request/active/address",
   getActiveKycUpdate: "/consultation/updation/request/active/documents",
+  checkIsUserNameAvailbale:
+    "/consultation/updation/request/check-username-availability",
 };
 
 export const createUpdateRequest = async (data) => {
@@ -106,6 +108,22 @@ export const getActiveAddressUpdate = async () => {
 export const getActiveKycUpdate = async () => {
   try {
     const response = await axiosInstance.get(ENDPOINT.getActiveKycUpdate);
+    return handleResponse(response);
+  } catch (error) {
+    return handleResponse(error);
+  }
+};
+
+export const checkIsUserNameAvailbale = async (username) => {
+  try {
+    const response = await axiosInstance.get(
+      ENDPOINT.checkIsUserNameAvailbale,
+      {
+        params: {
+          username: username,
+        },
+      },
+    );
     return handleResponse(response);
   } catch (error) {
     return handleResponse(error);

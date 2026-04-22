@@ -1,11 +1,12 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Plus, X, Check } from "lucide-react";
+import { Camera, Plus, X, Check, Loader2 } from "lucide-react";
 import Image from "next/image";
 import InputField from "@/components/ui/inputField";
 import ChipGroup from "@/components/ui/chipGroup";
-import { Camera } from "lucide-react";
 import DropzoneUpload from "@/components/ui/DropzoneUpload";
+import { useDebounceValue } from "@/hooks/useDebounce";
+import { checkIsUserNameAvailbale } from "@/services/consult.profile.service";
 
 export default function Step1Business({
   onChange,
@@ -24,12 +25,55 @@ export default function Step1Business({
     logo: null,
     banner: null,
     consultationName: initialData?.consultationName || "",
+    username: initialData?.username || "",
     ownerName: initialData?.ownerName || "",
     companyEmail: initialData?.companyEmail || "",
     establishmentYear: initialData?.establishmentYear || "",
     vehicleTypes: initialData?.vehicleTypes || [],
     services: initialData?.services || [],
   });
+
+  const [usernameStatus, setUsernameStatus] = useState({
+    loading: false,
+    available: null,
+    message: "",
+  });
+
+  const debouncedUsername = useDebounceValue(form.username, 500);
+
+  useEffect(() => {
+    const check = async () => {
+      if (!debouncedUsername || debouncedUsername === initialData?.username) {
+        setUsernameStatus({ loading: false, available: null, message: "" });
+        return;
+      }
+
+      setUsernameStatus((p) => ({ ...p, loading: true, message: "" }));
+      try {
+        const res = await checkIsUserNameAvailbale(debouncedUsername);
+        if (res.success && res.data === true) {
+          setUsernameStatus({
+            loading: false,
+            available: true,
+            message: "You can use this username",
+          });
+        } else {
+          setUsernameStatus({
+            loading: false,
+            available: false,
+            message: "Username already taken",
+          });
+        }
+      } catch (err) {
+        setUsernameStatus({
+          loading: false,
+          available: false,
+          message: "Error checking availability",
+        });
+      }
+    };
+    check();
+  }, [debouncedUsername, initialData?.username]);
 
   const [errors, setErrors] = useState({
     companyEmail: "",
@@ -186,6 +230,39 @@ export default function Step1Business({
               value={form.consultationName}
               onChange={(e) => handleInput("consultationName", e.target.value)}
             />
+          )}
+          {(!readOnly || form.username) && (
+            <div className="flex flex-col">
+              <InputField
+                label="Username"
+                variant="colored"
+                readOnly={readOnly}
+                value={form.username}
+                onChange={(e) =>
+                  handleInput("username", e.target.value.toLowerCase().trim())
+                }
+              />
+              {usernameStatus.message && (
+                <div
+                  className={`flex items-center gap-1 text-[10px] mt-1 ml-1 ${
+                    usernameStatus.available ? "text-green-500" : "text-red-500"
+                  }`}
+                >
+                  {usernameStatus.available ? (
+                    <Check size={10} />
+                  ) : (
+                    <X size={10} />
+                  )}
+                  {usernameStatus.message}
+                </div>
+              )}
+              {usernameStatus.loading && (
+                <div className="flex items-center gap-1 text-[10px] mt-1 ml-1 text-third">
+                  <Loader2 size={10} className="animate-spin" />
+                  Checking availability...
+                </div>
+              )}
+            </div>
           )}
 
           {(!readOnly || form.ownerName) && (
