@@ -79,10 +79,16 @@ export default function AboutPremium3({
   isEditing,
   onUpdate,
   onNextTab,
+  errors,
+  rules,
 }) {
   const [isSaving, setIsSaving] = useState(false);
-  const fallbackData = { ...DEFAULT_DATA };
-  const d = data || fallbackData;
+  const d = {
+    ...DEFAULT_DATA,
+    ...Object.fromEntries(
+      Object.entries(data || {}).filter(([_, v]) => v !== undefined && v !== null)
+    )
+  };
   const [activeIndex, setActiveIndex] = useState(0);
   /* ================== HELPERS ================== */
   const getBlobFromUrl = async (url) => {
@@ -98,7 +104,11 @@ export default function AboutPremium3({
   const update = (k, v) => onUpdate({ ...d, [k]: v });
   const updateArr = (k, i, f, v) => {
     const copy = [...d[k]];
-    copy[i][f] = v;
+    if (typeof copy[i] === 'object' && copy[i] !== null) {
+      copy[i] = { ...copy[i], [f]: v };
+    } else {
+      copy[i] = v;
+    }
     update(k, copy);
   };
   const addArr = (k, item) => update(k, [...d[k], item]);
@@ -229,11 +239,17 @@ export default function AboutPremium3({
             value={d.heroTitle}
             onChange={(e) => update("heroTitle", e.target.value)}
             placeholder="Hero Title"
+            maxLength={rules?.heroTitle?.max}
+            error={!!errors?.heroTitle}
+            errorMsg={errors?.heroTitle}
           />
           <RichTextEditor
             label="Hero Description"
             value={d.heroDescription}
             onChange={(v) => update("heroDescription", v)}
+            maxLength={rules?.heroDescription?.max}
+            error={!!errors?.heroDescription}
+            errorMsg={errors?.heroDescription}
           />
         </div>
         <hr className="border-third/20" />
@@ -246,11 +262,17 @@ export default function AboutPremium3({
               value={d.missionTitle}
               onChange={(e) => update("missionTitle", e.target.value)}
               placeholder="Mission Title"
+              maxLength={rules?.missionTitle?.max}
+              error={!!errors?.missionTitle}
+              errorMsg={errors?.missionTitle}
             />
             <RichTextEditor
               label="Mission Description"
               value={d.missionDesc}
               onChange={(v) => update("missionDesc", v)}
+              maxLength={rules?.missionDesc?.max}
+              error={!!errors?.missionDesc}
+              errorMsg={errors?.missionDesc}
             />
           </div>
           <div className="space-y-4">
@@ -293,11 +315,17 @@ export default function AboutPremium3({
               value={d.visionTitle}
               onChange={(e) => update("visionTitle", e.target.value)}
               placeholder="Vision Title"
+              maxLength={rules?.visionTitle?.max}
+              error={!!errors?.visionTitle}
+              errorMsg={errors?.visionTitle}
             />
             <RichTextEditor
               label="Vision Description"
               value={d.visionDesc}
               onChange={(v) => update("visionDesc", v)}
+              maxLength={rules?.visionDesc?.max}
+              error={!!errors?.visionDesc}
+              errorMsg={errors?.visionDesc}
             />
           </div>
           <div className="space-y-4">
@@ -337,6 +365,9 @@ export default function AboutPremium3({
           label="About Us Description"
           value={d.aboutUsDescription}
           onChange={(v) => update("aboutUsDescription", v)}
+          maxLength={rules?.aboutUsDescription?.max}
+          error={!!errors?.aboutUsDescription}
+          errorMsg={errors?.aboutUsDescription}
         />
         <div className="p-4 bg-primary/5 rounded-lg border border-third/10">
           <h4 className="text-primary font-semibold mb-4">Stats Numbers</h4>
@@ -350,6 +381,9 @@ export default function AboutPremium3({
                     updateArr("stats", i, "number", e.target.value)
                   }
                   placeholder="Number"
+                  maxLength={rules?.arrayRules?.stats?.number?.max}
+                  error={!!errors?.stats?.[i]?.number}
+                  errorMsg={errors?.stats?.[i]?.number}
                 />
                 <EditorInput
                   value={s.label}
@@ -357,6 +391,9 @@ export default function AboutPremium3({
                     updateArr("stats", i, "label", e.target.value)
                   }
                   placeholder="Label"
+                  maxLength={rules?.arrayRules?.stats?.label?.max}
+                  error={!!errors?.stats?.[i]?.label}
+                  errorMsg={errors?.stats?.[i]?.label}
                 />
               </div>
             ))}
@@ -373,11 +410,17 @@ export default function AboutPremium3({
             value={d.servicesTitle}
             onChange={(e) => update("servicesTitle", e.target.value)}
             placeholder="Services Title"
+            maxLength={rules?.servicesTitle?.max}
+            error={!!errors?.servicesTitle}
+            errorMsg={errors?.servicesTitle}
           />
           <RichTextEditor
             label="Services Description"
             value={d.servicesDesc}
             onChange={(v) => update("servicesDesc", v)}
+            maxLength={rules?.servicesDesc?.max}
+            error={!!errors?.servicesDesc}
+            errorMsg={errors?.servicesDesc}
           />
         </div>
         <div className="grid md:grid-cols-2 gap-4 mt-4">
@@ -413,6 +456,9 @@ export default function AboutPremium3({
                     updateArr("services", i, "title", e.target.value)
                   }
                   placeholder="Service Title"
+                  maxLength={rules?.arrayRules?.services?.title?.max}
+                  error={!!errors?.services?.[i]?.title}
+                  errorMsg={errors?.services?.[i]?.title}
                 />
               </div>
               <div className="mt-4">
@@ -426,6 +472,9 @@ export default function AboutPremium3({
                     updateArr("services", i, "desc", e.target.value)
                   }
                   placeholder="Service Description"
+                  maxLength={rules?.arrayRules?.services?.desc?.max}
+                  error={!!errors?.services?.[i]?.desc}
+                  errorMsg={errors?.services?.[i]?.desc}
                 />
               </div>
             </div>

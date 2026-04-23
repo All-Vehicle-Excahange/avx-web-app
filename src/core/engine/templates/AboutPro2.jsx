@@ -106,20 +106,19 @@ export default function AboutPro2({
   isEditing,
   onUpdate,
   onNextTab,
+  errors,
+  rules,
 }) {
   const [isSaving, setIsSaving] = useState(false);
 
-  const defaultDataLoaded = rawData
-    ? {
-        ...DEFAULT_DATA,
-        ...Object.fromEntries(
-          Object.entries(rawData || {}).filter(
-            ([, v]) => v !== undefined && v !== null,
-          ),
-        ),
-      }
-    : DEFAULT_DATA;
-  const data = defaultDataLoaded;
+  const data = {
+    ...DEFAULT_DATA,
+    ...Object.fromEntries(
+      Object.entries(rawData || {}).filter(
+        ([, v]) => v !== undefined && v !== null,
+      ),
+    ),
+  };
 
   const missionVisionCards = [
     {
@@ -150,7 +149,11 @@ export default function AboutPro2({
 
   const updateArr = (k, i, f, v) => {
     const copy = [...data[k]];
-    copy[i][f] = v;
+    if (typeof copy[i] === 'object' && copy[i] !== null) {
+      copy[i] = { ...copy[i], [f]: v };
+    } else {
+      copy[i] = v;
+    }
     update(k, copy);
   };
   const addArr = (k, item) => update(k, [...(data[k] || []), item]);
@@ -241,11 +244,17 @@ export default function AboutPro2({
               value={data.aboutHeroTitle}
               onChange={(e) => update("aboutHeroTitle", e.target.value)}
               placeholder="Hero Title"
+              maxLength={rules?.aboutHeroTitle?.max}
+              error={!!errors?.aboutHeroTitle}
+              errorMsg={errors?.aboutHeroTitle}
             />
             <RichTextEditor
               label="Hero Description"
               value={data.aboutHeroDescription}
               onChange={(v) => update("aboutHeroDescription", v)}
+              maxLength={rules?.aboutHeroDescription?.max}
+              error={!!errors?.aboutHeroDescription}
+              errorMsg={errors?.aboutHeroDescription}
             />
           </div>
           <div className="space-y-4">
@@ -310,11 +319,17 @@ export default function AboutPro2({
               value={data.aboutMissionTitle}
               onChange={(e) => update("aboutMissionTitle", e.target.value)}
               placeholder="Mission Title"
+              maxLength={rules?.aboutMissionTitle?.max}
+              error={!!errors?.aboutMissionTitle}
+              errorMsg={errors?.aboutMissionTitle}
             />
             <RichTextEditor
               label="Mission Description"
               value={data.aboutMissionDescription}
               onChange={(v) => update("aboutMissionDescription", v)}
+              maxLength={rules?.aboutMissionDescription?.max}
+              error={!!errors?.aboutMissionDescription}
+              errorMsg={errors?.aboutMissionDescription}
             />
           </div>
           <div className="space-y-4">
@@ -346,11 +361,17 @@ export default function AboutPro2({
               value={data.aboutVisionTitle}
               onChange={(e) => update("aboutVisionTitle", e.target.value)}
               placeholder="Vision Title"
+              maxLength={rules?.aboutVisionTitle?.max}
+              error={!!errors?.aboutVisionTitle}
+              errorMsg={errors?.aboutVisionTitle}
             />
             <RichTextEditor
               label="Vision Description"
               value={data.aboutVisionDescription}
               onChange={(v) => update("aboutVisionDescription", v)}
+              maxLength={rules?.aboutVisionDescription?.max}
+              error={!!errors?.aboutVisionDescription}
+              errorMsg={errors?.aboutVisionDescription}
             />
           </div>
           <div className="space-y-4">
@@ -379,6 +400,9 @@ export default function AboutPro2({
           label="Stats Description"
           value={data.aboutStatsDescription}
           onChange={(v) => update("aboutStatsDescription", v)}
+          maxLength={rules?.aboutStatsDescription?.max}
+          error={!!errors?.aboutStatsDescription}
+          errorMsg={errors?.aboutStatsDescription}
         />
         <div className="p-4 bg-primary/5 rounded-lg border border-third/10 mt-4">
           <h4 className="text-primary font-semibold mb-4">Stats Numbers</h4>
@@ -392,6 +416,9 @@ export default function AboutPro2({
                     updateArr("stats", i, "number", e.target.value)
                   }
                   placeholder="Number"
+                  maxLength={rules?.arrayRules?.stats?.number?.max}
+                  error={!!errors?.stats?.[i]?.number}
+                  errorMsg={errors?.stats?.[i]?.number}
                 />
                 <EditorInput
                   value={s.label}
@@ -399,6 +426,9 @@ export default function AboutPro2({
                     updateArr("stats", i, "label", e.target.value)
                   }
                   placeholder="Label"
+                  maxLength={rules?.arrayRules?.stats?.label?.max}
+                  error={!!errors?.stats?.[i]?.label}
+                  errorMsg={errors?.stats?.[i]?.label}
                 />
               </div>
             ))}
@@ -416,11 +446,17 @@ export default function AboutPro2({
             value={data.aboutServicesTitle}
             onChange={(e) => update("aboutServicesTitle", e.target.value)}
             placeholder="Services Title"
+            maxLength={rules?.aboutServicesTitle?.max}
+            error={!!errors?.aboutServicesTitle}
+            errorMsg={errors?.aboutServicesTitle}
           />
           <RichTextEditor
             label="Services Description"
             value={data.aboutServicesDescription}
             onChange={(v) => update("aboutServicesDescription", v)}
+            maxLength={rules?.aboutServicesDescription?.max}
+            error={!!errors?.aboutServicesDescription}
+            errorMsg={errors?.aboutServicesDescription}
           />
         </div>
         <div className="grid md:grid-cols-2 gap-4 mt-4">
@@ -459,6 +495,9 @@ export default function AboutPro2({
                     updateArr("services", i, "title", e.target.value)
                   }
                   placeholder="Service Title"
+                  maxLength={rules?.arrayRules?.services?.title?.max}
+                  error={!!errors?.services?.[i]?.title}
+                  errorMsg={errors?.services?.[i]?.title}
                 />
               </div>
 
@@ -474,6 +513,9 @@ export default function AboutPro2({
                     updateArr("services", i, "desc", e.target.value)
                   }
                   placeholder="Service Description"
+                  maxLength={rules?.arrayRules?.services?.desc?.max}
+                  error={!!errors?.services?.[i]?.desc}
+                  errorMsg={errors?.services?.[i]?.desc}
                 />
               </div>
             </div>

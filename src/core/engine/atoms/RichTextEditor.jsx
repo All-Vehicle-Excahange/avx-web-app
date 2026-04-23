@@ -77,11 +77,7 @@ export default function RichTextEditor({ label, value, onChange, onBlur, error, 
 
         <EditorContent editor={editor} />
       </div>
-      {error && errorMsg && (
-        <span className="text-[11px] text-red-400/80 font-medium ml-1">
-          {errorMsg}
-        </span>
-      )}
+
     </div>
   );
 }

@@ -156,7 +156,11 @@ export default function WhyBuyHereBasic2({
 
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];
-    newArray[index][field] = value;
+    if (typeof newArray[index] === 'object' && newArray[index] !== null) {
+      newArray[index] = { ...newArray[index], [field]: value };
+    } else {
+      newArray[index] = value;
+    }
     updateField(arrayName, newArray);
   };
 
@@ -260,7 +264,7 @@ export default function WhyBuyHereBasic2({
 
   if (isEditing) {
     return (
-      <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10 bg-black/20">
+      <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
         <GlobalLoader isLoading={isSaving} />
         {/* HERO */}
         <div className="space-y-6">

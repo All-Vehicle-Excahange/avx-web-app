@@ -65,7 +65,7 @@ const formatOptionLabel = ({ value, label }) => (
 );
 const DEFAULT_DATA = ABOUT_BASIC_3[0].data;
 
-function AboutBasic3({ isEditing, data: rawData, onUpdate, onNextTab }) {
+function AboutBasic3({ isEditing, data: rawData, onUpdate, onNextTab, errors, rules }) {
   const [isSaving, setIsSaving] = useState(false);
   const data = {
     ...DEFAULT_DATA, ...Object.fromEntries(
@@ -80,9 +80,14 @@ function AboutBasic3({ isEditing, data: rawData, onUpdate, onNextTab }) {
   };
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];
-    newArray[index][field] = value;
+    if (typeof newArray[index] === 'object' && newArray[index] !== null) {
+      newArray[index] = { ...newArray[index], [field]: value };
+    } else {
+      newArray[index] = value;
+    }
     updateField(arrayName, newArray);
   };
+
   const handleSaveAndNext = async () => {
     setIsSaving(true);
     try {
@@ -145,11 +150,17 @@ function AboutBasic3({ isEditing, data: rawData, onUpdate, onNextTab }) {
             label="Hero Title"
             value={data.heroTitle}
             onChange={(e) => updateField("heroTitle", e.target.value)}
+            maxLength={rules?.heroTitle?.max}
+            error={!!errors?.heroTitle}
+            errorMsg={errors?.heroTitle}
           />
           <RichTextEditor
             label="Hero Description"
             value={data.heroDescription}
             onChange={(v) => updateField("heroDescription", v)}
+            maxLength={rules?.heroDescription?.max}
+            error={!!errors?.heroDescription}
+            errorMsg={errors?.heroDescription}
           />
         </div>
         <hr className="border-white/10" />
@@ -159,11 +170,17 @@ function AboutBasic3({ isEditing, data: rawData, onUpdate, onNextTab }) {
             label="Mission Title"
             value={data.missionTitle}
             onChange={(e) => updateField("missionTitle", e.target.value)}
+            maxLength={rules?.missionTitle?.max}
+            error={!!errors?.missionTitle}
+            errorMsg={errors?.missionTitle}
           />
           <RichTextEditor
             label="Mission Description"
             value={data.missionDesc}
             onChange={(v) => updateField("missionDesc", v)}
+            maxLength={rules?.missionDesc?.max}
+            error={!!errors?.missionDesc}
+            errorMsg={errors?.missionDesc}
           />
         </div>
         <div className="space-y-6">
@@ -172,11 +189,17 @@ function AboutBasic3({ isEditing, data: rawData, onUpdate, onNextTab }) {
             label="Vision Title"
             value={data.visionTitle}
             onChange={(e) => updateField("visionTitle", e.target.value)}
+            maxLength={rules?.visionTitle?.max}
+            error={!!errors?.visionTitle}
+            errorMsg={errors?.visionTitle}
           />
           <RichTextEditor
             label="Vision Description"
             value={data.visionDesc}
             onChange={(v) => updateField("visionDesc", v)}
+            maxLength={rules?.visionDesc?.max}
+            error={!!errors?.visionDesc}
+            errorMsg={errors?.visionDesc}
           />
         </div>
         <hr className="border-white/10" />
@@ -186,6 +209,9 @@ function AboutBasic3({ isEditing, data: rawData, onUpdate, onNextTab }) {
             label="About Us Description"
             value={data.aboutUsDescription}
             onChange={(v) => updateField("aboutUsDescription", v)}
+            maxLength={rules?.aboutUsDescription?.max}
+            error={!!errors?.aboutUsDescription}
+            errorMsg={errors?.aboutUsDescription}
           />
           <div className="grid grid-cols-2 gap-4 mt-4">
             {(data.stats || []).map((s, i) => (
@@ -200,6 +226,9 @@ function AboutBasic3({ isEditing, data: rawData, onUpdate, onNextTab }) {
                     onChange={(e) =>
                       updateArrayItem("stats", i, "number", e.target.value)
                     }
+                    maxLength={rules?.arrayRules?.stats?.number?.max}
+                    error={!!errors?.stats?.[i]?.number}
+                    errorMsg={errors?.stats?.[i]?.number}
                   />
                 </div>
                 <div>
@@ -209,6 +238,9 @@ function AboutBasic3({ isEditing, data: rawData, onUpdate, onNextTab }) {
                     onChange={(e) =>
                       updateArrayItem("stats", i, "label", e.target.value)
                     }
+                    maxLength={rules?.arrayRules?.stats?.label?.max}
+                    error={!!errors?.stats?.[i]?.label}
+                    errorMsg={errors?.stats?.[i]?.label}
                   />
                 </div>
               </div>
@@ -222,11 +254,17 @@ function AboutBasic3({ isEditing, data: rawData, onUpdate, onNextTab }) {
             label="Services Title"
             value={data.servicesTitle}
             onChange={(e) => updateField("servicesTitle", e.target.value)}
+            maxLength={rules?.servicesTitle?.max}
+            error={!!errors?.servicesTitle}
+            errorMsg={errors?.servicesTitle}
           />
           <RichTextEditor
             label="Services Description"
             value={data.servicesDesc}
             onChange={(v) => updateField("servicesDesc", v)}
+            maxLength={rules?.servicesDesc?.max}
+            error={!!errors?.servicesDesc}
+            errorMsg={errors?.servicesDesc}
           />
           <h4 className="text-white font-semibold mt-6 mb-4">Service Cards</h4>
           <div className="grid md:grid-cols-2 gap-4">
@@ -265,6 +303,9 @@ function AboutBasic3({ isEditing, data: rawData, onUpdate, onNextTab }) {
                     onChange={(e) =>
                       updateArrayItem("services", i, "title", e.target.value)
                     }
+                    maxLength={rules?.arrayRules?.services?.title?.max}
+                    error={!!errors?.services?.[i]?.title}
+                    errorMsg={errors?.services?.[i]?.title}
                   />
                 </div>
                 <div>
@@ -276,6 +317,9 @@ function AboutBasic3({ isEditing, data: rawData, onUpdate, onNextTab }) {
                     onChange={(e) =>
                       updateArrayItem("services", i, "desc", e.target.value)
                     }
+                    maxLength={rules?.arrayRules?.services?.desc?.max}
+                    error={!!errors?.services?.[i]?.desc}
+                    errorMsg={errors?.services?.[i]?.desc}
                   />
                 </div>
               </div>

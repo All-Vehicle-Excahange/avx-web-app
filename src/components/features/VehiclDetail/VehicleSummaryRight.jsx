@@ -92,6 +92,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
 
   const handleWishlistToggle = () => {
     if (!isLoggedIn) {
+      pendingAction.current = "wishlist";
       setIsLoginOpen(true);
       return;
     }
@@ -112,6 +113,9 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
     if (isLoggedIn && pendingAction.current === "request") {
       pendingAction.current = null;
       handleRequestInquiry();
+    } else if (isLoggedIn && pendingAction.current === "wishlist") {
+      pendingAction.current = null;
+      handleWishlistToggle();
     }
   }, [isLoggedIn]);
 

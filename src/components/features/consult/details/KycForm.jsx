@@ -216,7 +216,6 @@ export default function KycForm() {
           const res = await updatebasicDetials(payload);
           if (res.data) {
             setExisting((p) => ({ ...p, business: res.data }));
-            toast.success("Details updated");
             setStep(2);
           }
           return;
@@ -243,7 +242,6 @@ export default function KycForm() {
         const res = await postbasicDetials(payload);
         if (res.data) {
           setExisting((p) => ({ ...p, business: res.data }));
-          toast.success("Details submitted");
           setStep(2);
         }
         return;
@@ -269,7 +267,6 @@ export default function KycForm() {
           const res = await updateAddressDetials(payload);
           if (res.data) {
             setExisting((p) => ({ ...p, address: res.data }));
-            toast.success("Address updated");
             setStep(3);
           }
           return;
@@ -277,7 +274,6 @@ export default function KycForm() {
         const res = await postAddressDetials(payload);
         if (res.data) {
           setExisting((p) => ({ ...p, address: res.data }));
-          toast.success("Address submitted");
           setStep(3);
         }
         return;
@@ -309,7 +305,6 @@ export default function KycForm() {
           const res = await updateKycDetials(payload);
           if (res.data) {
             setExisting((p) => ({ ...p, kyc: res.data }));
-            toast.success("KYC updated");
             if (existing.business?.isSubmitted === false) setShowPreview(true);
             setStep(4);
           }
@@ -334,7 +329,6 @@ export default function KycForm() {
         const res = await postKycDetials(payload);
         if (res.data) {
           setExisting((p) => ({ ...p, kyc: res.data }));
-          toast.success("KYC submitted");
           setShowPreview(true);
           setStep(4);
         }
@@ -392,7 +386,7 @@ export default function KycForm() {
 
       <section className="w-full pt-[66px]">
         <div className="w-full flex items-start">
-          <div className="hidden lg:flex w-[30%] sticky top-[66px] h-[calc(100vh-66px)] relative flex-col justify-between text-white overflow-hidden">
+          <div className="hidden lg:flex w-[30%] sticky top-[66px] h-[calc(100vh-66px)]  flex-col justify-between text-white overflow-hidden">
             {/* Background Image Setup */}
             <div className="absolute inset-0 z-0">
               <img

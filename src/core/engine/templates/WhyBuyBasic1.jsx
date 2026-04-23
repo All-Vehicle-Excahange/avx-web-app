@@ -151,7 +151,11 @@ function WhyBuyBasic1({
 
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];
-    newArray[index][field] = value;
+    if (typeof newArray[index] === 'object' && newArray[index] !== null) {
+      newArray[index] = { ...newArray[index], [field]: value };
+    } else {
+      newArray[index] = value;
+    }
     updateField(arrayName, newArray);
   };
 

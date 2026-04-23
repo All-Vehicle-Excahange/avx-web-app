@@ -42,6 +42,7 @@ export default function StoreFrontHeroSection() {
   const [currentUrl, setCurrentUrl] = useState("");
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const lastSyncState = useRef(false);
+  const pendingAction = useRef(null);
 
   useEffect(() => {
     const fetchStoreFront = async () => {
@@ -82,6 +83,38 @@ export default function StoreFrontHeroSection() {
     }
   }, 800);
 
+  const handleFollowToggle = () => {
+    if (!comsultDetails?.id) return;
+
+    if (!isLoggedIn) {
+      pendingAction.current = "follow";
+      setIsLoginOpen(true);
+      return;
+    }
+
+    const nextState = !isFollower;
+    setIsFollower(nextState);
+    setComsultDetails((prev) => ({
+      ...prev,
+      followersCount: nextState
+        ? (prev.followersCount || 0) + 1
+        : Math.max(0, (prev.followersCount || 1) - 1),
+    }));
+
+    if (nextState === lastSyncState.current) {
+      debouncedSyncFollow.cancel();
+    } else {
+      debouncedSyncFollow(nextState);
+    }
+  };
+
+  useEffect(() => {
+    if (isLoggedIn && pendingAction.current === "follow") {
+      pendingAction.current = null;
+      handleFollowToggle();
+    }
+  }, [isLoggedIn]);
+
   if (!comsultDetails) return <StoreFrontHeroSkeleton />;
 
   const formatServiceName = (service) =>
@@ -108,30 +141,6 @@ export default function StoreFrontHeroSection() {
       return (count / 1000).toFixed(1).replace(/\.0$/, "") + "K";
     }
     return count.toString();
-  };
-
-  const handleFollowToggle = () => {
-    if (!comsultDetails?.id) return;
-
-    if (!isLoggedIn) {
-      setIsLoginOpen(true);
-      return;
-    }
-
-    const nextState = !isFollower;
-    setIsFollower(nextState);
-    setComsultDetails((prev) => ({
-      ...prev,
-      followersCount: nextState
-        ? (prev.followersCount || 0) + 1
-        : Math.max(0, (prev.followersCount || 1) - 1),
-    }));
-
-    if (nextState === lastSyncState.current) {
-      debouncedSyncFollow.cancel();
-    } else {
-      debouncedSyncFollow(nextState);
-    }
   };
 
   return (

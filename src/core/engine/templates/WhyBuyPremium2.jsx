@@ -170,10 +170,12 @@ export default function WhyBuyPremium2({
   };
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];
-    if (newArray[index]) {
-      newArray[index][field] = value;
-      updateField(arrayName, newArray);
+    if (typeof newArray[index] === 'object' && newArray[index] !== null) {
+      newArray[index] = { ...newArray[index], [field]: value };
+    } else {
+      newArray[index] = value;
     }
+    updateField(arrayName, newArray);
   };
   /* ================== API HANDLERS ================== */
   const handleSaveAndNext = async () => {

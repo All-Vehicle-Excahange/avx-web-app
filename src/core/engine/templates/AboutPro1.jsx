@@ -126,7 +126,11 @@ function AboutPro1({
 
   const updateArr = (k, i, f, v) => {
     const copy = [...data[k]];
-    copy[i][f] = v;
+    if (typeof copy[i] === 'object' && copy[i] !== null) {
+      copy[i] = { ...copy[i], [f]: v };
+    } else {
+      copy[i] = v;
+    }
     update(k, copy);
   };
 
@@ -220,6 +224,7 @@ function AboutPro1({
               value={data.heroDescription}
               error={errors?.heroDescription}
               errorMsg={errors?.heroDescription}
+              maxLength={rules?.heroDescription?.max}
               onChange={(v) => update("heroDescription", v)}
             />
           </div>
@@ -261,6 +266,7 @@ function AboutPro1({
               value={data.missionDesc}
               error={errors?.missionDesc}
               errorMsg={errors?.missionDesc}
+              maxLength={rules?.missionDesc?.max}
               onChange={(v) => update("missionDesc", v)}
             />
           </div>
@@ -304,6 +310,7 @@ function AboutPro1({
               value={data.visionDesc}
               error={errors?.visionDesc}
               errorMsg={errors?.visionDesc}
+              maxLength={rules?.visionDesc?.max}
               onChange={(v) => update("visionDesc", v)}
             />
           </div>
@@ -336,6 +343,7 @@ function AboutPro1({
           value={data.aboutUsDescription}
           error={errors?.aboutUsDescription}
           errorMsg={errors?.aboutUsDescription}
+          maxLength={rules?.aboutUsDescription?.max}
           onChange={(v) => update("aboutUsDescription", v)}
         />
         <div className="p-4 bg-primary/5 rounded-lg border border-third/10">
@@ -389,6 +397,7 @@ function AboutPro1({
             value={data.servicesDesc}
             error={errors?.servicesDesc}
             errorMsg={errors?.servicesDesc}
+            maxLength={rules?.servicesDesc?.max}
             onChange={(v) => update("servicesDesc", v)}
           />
         </div>

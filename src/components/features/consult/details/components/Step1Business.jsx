@@ -88,6 +88,7 @@ export default function Step1Business({
   const [errors, setErrors] = useState({
     companyEmail: "",
     establishmentYear: "",
+    services: "",
   });
 
   // ===== CUSTOM SERVICES =====
@@ -112,6 +113,16 @@ export default function Step1Business({
       setServiceInput("");
       return;
     }
+    if (form.services.length >= 4) {
+      setErrors((prev) => ({
+        ...prev,
+        services: "You can select a maximum of 4 services.",
+      }));
+      setAddingService(false);
+      setServiceInput("");
+      return;
+    }
+    setErrors((prev) => ({ ...prev, services: "" }));
     const newItem = { label: serviceInput.trim(), value: trimmed };
     setCustomServices((prev) => [...prev, newItem]);
     setForm((prev) => {
@@ -130,6 +141,7 @@ export default function Step1Business({
         ...prev,
         services: prev.services.filter((s) => s !== value),
       };
+      setErrors((p) => ({ ...p, services: "" }));
       if (onChange) onChange(updated);
       return updated;
     });
@@ -390,7 +402,16 @@ export default function Step1Business({
                 type="button"
                 disabled={readOnly}
                 onClick={() => {
-                  const updated = form.services.includes(item.value)
+                  const isSelected = form.services.includes(item.value);
+                  if (!isSelected && form.services.length >= 4) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      services: "You can select a maximum of 4 services.",
+                    }));
+                    return;
+                  }
+                  setErrors((prev) => ({ ...prev, services: "" }));
+                  const updated = isSelected
                     ? form.services.filter((s) => s !== item.value)
                     : [...form.services, item.value];
                   handleInput("services", updated);
@@ -425,7 +446,16 @@ export default function Step1Business({
                   type="button"
                   disabled={readOnly}
                   onClick={() => {
-                    const updated = form.services.includes(item.value)
+                    const isSelected = form.services.includes(item.value);
+                    if (!isSelected && form.services.length >= 4) {
+                      setErrors((prev) => ({
+                        ...prev,
+                        services: "You can select a maximum of 4 services.",
+                      }));
+                      return;
+                    }
+                    setErrors((prev) => ({ ...prev, services: "" }));
+                    const updated = isSelected
                       ? form.services.filter((s) => s !== item.value)
                       : [...form.services, item.value];
                     handleInput("services", updated);
@@ -437,7 +467,7 @@ export default function Step1Business({
                   <button
                     type="button"
                     onClick={() => handleRemoveCustomService(item.value)}
-                    className="ml-0.5 opacity-70 hover:opacity-100"
+                    className="ml-0.5 opacity-70 hover:opacity-100 cursor-pointer"
                   >
                     <X className="w-3 h-3" />
                   </button>
@@ -469,7 +499,7 @@ export default function Step1Business({
                     <button
                       type="button"
                       onClick={handleAddCustomService}
-                      className="w-8 h-8 rounded-full bg-primary text-secondary flex items-center justify-center hover:opacity-80 transition"
+                      className="w-8 h-8 rounded-full cursor-pointer bg-primary text-secondary flex items-center justify-center hover:opacity-80 transition"
                     >
                       <Check className="w-4 h-4" />
                     </button>
@@ -479,7 +509,7 @@ export default function Step1Business({
                         setAddingService(false);
                         setServiceInput("");
                       }}
-                      className="w-8 h-8 rounded-full border border-primary/40 text-primary flex items-center justify-center hover:opacity-80 transition"
+                      className="w-8 h-8 cursor-pointer rounded-full border border-primary/40 text-primary flex items-center justify-center hover:opacity-80 transition"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -497,6 +527,11 @@ export default function Step1Business({
               </>
             )}
           </div>
+          {errors.services && (
+            <p className="text-red-500 text-[10px] mt-2 ml-1 animate-in fade-in slide-in-from-top-1">
+              {errors.services}
+            </p>
+          )}
         </div>
       )}
     </div>
