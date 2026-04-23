@@ -28,7 +28,7 @@ export default function VehicleCard({
 }) {
   const router = useRouter();
 
-  // ✅ Initial Favorite State From Backend
+  //  Initial Favorite State From Backend
   const [isFavorite, setIsFavorite] = useState(
     () => data?.isWishlisted || false,
   );
@@ -39,6 +39,7 @@ export default function VehicleCard({
 
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const lastSyncedValue = useRef(data?.isWishlisted || false);
+  const pendingAction = useRef(null);
 
   const debouncedSyncWishlist = useDebouncedCallback(async (nextState) => {
     try {
@@ -64,6 +65,7 @@ export default function VehicleCard({
 
   const handleWishlist = () => {
     if (!isLoggedIn) {
+      pendingAction.current = "wishlist";
       setIsLoginOpen(true);
       return;
     }
@@ -77,6 +79,35 @@ export default function VehicleCard({
       debouncedSyncWishlist(nextState);
     }
   };
+
+  const handleCompare = () => {
+    if (!data?.id) return;
+
+    if (isComparing) {
+      addToCompare(data);
+      return;
+    }
+
+    if (compareVehicles.length >= 1 && !isLoggedIn) {
+      pendingAction.current = "compare";
+      setIsLoginOpen(true);
+      return;
+    }
+
+    addToCompare(data);
+  };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      if (pendingAction.current === "wishlist") {
+        pendingAction.current = null;
+        handleWishlist();
+      } else if (pendingAction.current === "compare") {
+        pendingAction.current = null;
+        handleCompare();
+      }
+    }
+  }, [isLoggedIn]);
 
   const formatText = (text) =>
     text ? text.charAt(0).toUpperCase() + text.slice(1).toLowerCase() : "";
@@ -159,7 +190,7 @@ export default function VehicleCard({
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  addToCompare(data);
+                  handleCompare();
                 }}
                 className={`absolute bottom-12 right-2 shrink-0 flex items-center justify-center w-8 h-8 rounded-full transition-all cursor-pointer z-20 
                   ${

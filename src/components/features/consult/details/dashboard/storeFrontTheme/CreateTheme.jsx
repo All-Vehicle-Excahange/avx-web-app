@@ -463,200 +463,224 @@ export default function CreateTheme() {
   }
 
   return (
-    <section className="rounded-2xl border border-third/30 overflow-hidden h-full flex flex-col  text-primary">
-      {/* Overall Progress Bar */}
-      {sections.length > 0 && (
-        <div className="border-b border-third/30 p-4">
-          <div className="flex justify-between items-end mb-3">
-            <div className="flex flex-col gap-1.5">
-              <div className="flex items-center gap-2">
-                <span className="text-xs uppercase tracking-wider font-bold text-third">
-                  Overall Completion:
-                </span>
-                <span className="text-sm font-black text-primary">
-                  {globalProgress}%
-                </span>
+    <section className="rounded-2xl border border-third/30 text-primary bg-secondary/5 relative">
+      <div className="flex flex-col relative">
+        {/* Overall Progress Bar - Sticky inside the scroll container */}
+        {sections.length > 0 && (
+          <div className="sticky -top-10 z-40  backdrop-blur-md border-b border-third/30 p-4">
+            <div className="flex justify-between items-end mb-3">
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs uppercase tracking-wider font-bold text-third">
+                    Overall Completion:
+                  </span>
+                  <span className="text-sm font-black text-primary">
+                    {globalProgress}%
+                  </span>
+                </div>
+
+                {/* Ultra-minimal Content Quality Inline */}
+                {(() => {
+                  const level =
+                    QUALITY_LEVELS.find((l) => globalProgress <= l.max) ||
+                    QUALITY_LEVELS[0];
+                  return (
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${level.bgColor} ${level.color}`}
+                      >
+                        {level.label}
+                      </span>
+                      <p className="text-[11px] text-third/80 m-0">
+                        {level.message}{" "}
+                        <span className="font-semibold text-primary/80 ml-1">
+                          {level.suggestions[0]}
+                        </span>
+                      </p>
+                    </div>
+                  );
+                })()}
               </div>
 
-              {/* Ultra-minimal Content Quality Inline */}
-              {(() => {
-                const level =
-                  QUALITY_LEVELS.find((l) => globalProgress <= l.max) ||
-                  QUALITY_LEVELS[0];
-                return (
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${level.bgColor} ${level.color}`}
-                    >
-                      {level.label}
-                    </span>
-                    <p className="text-[11px] text-third/80 m-0">
-                      {level.message}{" "}
-                      <span className="font-semibold text-primary/80 ml-1">
-                        {level.suggestions[0]}
-                      </span>
-                    </p>
-                  </div>
-                );
-              })()}
+              {/* Subtle Gamification Badges */}
+              {globalProgress < 100 &&
+                (() => {
+                  const remaining = 100 - globalProgress;
+
+                  let imgC = 0,
+                    txtC = 0,
+                    otherC = 0;
+                  sectionProgress.forEach((sec) => {
+                    const processErrs = (errs) => {
+                      if (!errs) return;
+                      Object.values(errs).forEach((e) => {
+                        if (!e) return;
+                        if (typeof e === "string") {
+                          const lower = e.toLowerCase();
+                          if (lower.includes("image")) imgC++;
+                          else if (lower.includes("character")) txtC++;
+                          else otherC++;
+                        } else if (typeof e === "object") {
+                          processErrs(e);
+                        }
+                      });
+                    };
+                    processErrs(sec.errors);
+                  });
+
+                  const totalErrs = imgC + txtC + otherC;
+                  if (totalErrs === 0) return null;
+
+                  let imgPts = Math.round((imgC / totalErrs) * remaining);
+                  let txtPts = Math.round((txtC / totalErrs) * remaining);
+                  let otherPts = remaining - imgPts - txtPts;
+
+                  // Handle edge cases where rounding leaves a 0 but count is > 0
+                  if (imgC > 0 && imgPts === 0) {
+                    imgPts = 1;
+                    otherPts -= 1;
+                  }
+                  if (txtC > 0 && txtPts === 0) {
+                    txtPts = 1;
+                    otherPts -= 1;
+                  }
+                  if (otherC > 0 && otherPts <= 0) {
+                    otherPts = 1;
+                    if (imgPts > 1) imgPts -= 1;
+                    else txtPts -= 1;
+                  }
+
+                  return (
+                    <div className="hidden md:flex items-center gap-1.5">
+                      {imgC > 0 && (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded border border-third/20 text-third/70 flex items-center gap-1">
+                          <LucideImage
+                            size={10}
+                            className="text-orange-500/80"
+                          />{" "}
+                          +{imgPts} pts
+                        </span>
+                      )}
+                      {txtC > 0 && (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded border border-third/20 text-third/70 flex items-center gap-1">
+                          <FileText size={10} className="text-blue-500/80" /> +
+                          {txtPts} pts
+                        </span>
+                      )}
+                      {otherC > 0 && (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded border border-third/20 text-third/70 flex items-center gap-1">
+                          <LayoutGrid
+                            size={10}
+                            className="text-purple-500/80"
+                          />{" "}
+                          +{otherPts} pts
+                        </span>
+                      )}
+                    </div>
+                  );
+                })()}
             </div>
 
-            {/* Subtle Gamification Badges */}
-            {globalProgress < 100 && (() => {
-              const remaining = 100 - globalProgress;
-              
-              let imgC = 0, txtC = 0, otherC = 0;
-              sectionProgress.forEach(sec => {
-                  const processErrs = (errs) => {
-                     if(!errs) return;
-                     Object.values(errs).forEach(e => {
-                         if(!e) return;
-                         if(typeof e === 'string') {
-                             const lower = e.toLowerCase();
-                             if(lower.includes('image')) imgC++;
-                             else if(lower.includes('character')) txtC++;
-                             else otherC++;
-                         } else if (typeof e === 'object') {
-                             processErrs(e);
-                         }
-                     });
-                  };
-                  processErrs(sec.errors);
-              });
-              
-              const totalErrs = imgC + txtC + otherC;
-              if (totalErrs === 0) return null;
-              
-              let imgPts = Math.round((imgC / totalErrs) * remaining);
-              let txtPts = Math.round((txtC / totalErrs) * remaining);
-              let otherPts = remaining - imgPts - txtPts;
-              
-              // Handle edge cases where rounding leaves a 0 but count is > 0
-              if (imgC > 0 && imgPts === 0) { imgPts = 1; otherPts -= 1; }
-              if (txtC > 0 && txtPts === 0) { txtPts = 1; otherPts -= 1; }
-              if (otherC > 0 && otherPts <= 0) { otherPts = 1; if (imgPts > 1) imgPts -= 1; else txtPts -= 1; }
-
-              return (
-                <div className="hidden md:flex items-center gap-1.5">
-                  {imgC > 0 && (
-                    <span className="text-[10px] px-1.5 py-0.5 rounded border border-third/20 text-third/70 flex items-center gap-1">
-                      <LucideImage size={10} className="text-orange-500/80" /> +{imgPts} pts
-                    </span>
-                  )}
-                  {txtC > 0 && (
-                    <span className="text-[10px] px-1.5 py-0.5 rounded border border-third/20 text-third/70 flex items-center gap-1">
-                      <FileText size={10} className="text-blue-500/80" /> +{txtPts} pts
-                    </span>
-                  )}
-                  {otherC > 0 && (
-                    <span className="text-[10px] px-1.5 py-0.5 rounded border border-third/20 text-third/70 flex items-center gap-1">
-                      <LayoutGrid size={10} className="text-purple-500/80" /> +{otherPts} pts
-                    </span>
-                  )}
-                </div>
-              );
-            })()}
+            <div className="w-full bg-third/20 rounded-full h-1.5 overflow-hidden">
+              <div
+                className={`h-full transition-all duration-500 ease-out ${
+                  globalProgress === 100 ? "bg-green-500" : "bg-primary"
+                }`}
+                style={{ width: `${globalProgress}%` }}
+              />
+            </div>
           </div>
-
-          <div className="w-full bg-third/20 rounded-full h-1.5 overflow-hidden">
-            <div
-              className={`h-full transition-all duration-500 ease-out ${
-                globalProgress === 100 ? "bg-green-500" : "bg-primary"
-              }`}
-              style={{ width: `${globalProgress}%` }}
-            />
-          </div>
-        </div>
-      )}
-
-      <div className="flex gap-2 p-3 border-b border-third/30">
-        {sections.map((sec, i) => (
-          <button
-            key={sec.id}
-            onClick={() => setActiveTab(i)}
-            className={`px-4 py-1 rounded-full text-sm ${
-              activeTab === i
-                ? "bg-primary text-secondary font-bold"
-                : "border border-third/30 text-third"
-            }`}
-          >
-            {sec.type.includes("about")
-              ? "About Us"
-              : sec.type.includes("why_buy")
-                ? "Why Buy"
-                : sec.type}
-          </button>
-        ))}
-      </div>
-
-      {/* Header */}
-      <div className="p-4 border-b border-third/30 flex justify-between items-center">
-        <div>
-          <h3 className="font-bold">Editing: {theme.name}</h3>
-          <span className="text-xs uppercase text-third">
-            {theme.category} Theme
-          </span>
-        </div>
-
-        {/* Mode Switch */}
-        <div className="flex  rounded-full p-1 border border-third/30">
-          <button
-            onClick={() => setMode("editor")}
-            className={`px-4 py-1 rounded-full text-sm transition ${
-              mode === "editor"
-                ? "bg-primary text-secondary font-bold"
-                : "text-third"
-            }`}
-          >
-            Editor
-          </button>
-          <button
-            onClick={() => setMode("preview")}
-            className={`px-4 py-1 rounded-full text-sm transition ${
-              mode === "preview"
-                ? "bg-primary text-secondary font-bold"
-                : "text-third"
-            }`}
-          >
-            Preview
-          </button>
-        </div>
-      </div>
-
-      {/* Renderer */}
-      <div className="flex-1 overflow-auto p-4 flex flex-col relative pb-24">
-        {sections.length > 0 && sections[activeTab] && (
-          <EngineRenderer
-            sections={[sections[activeTab]]}
-            mode={mode}
-            errors={sectionProgress[activeTab]?.errors}
-            rules={sections[activeTab]?.rules}
-            onNextTab={() =>
-              setActiveTab((prev) => Math.min(prev + 1, sections.length - 1))
-            }
-            onUpdate={(i, newData) => {
-              const updated = [...sections];
-              updated[activeTab].data = newData;
-              setSections(updated);
-            }}
-          />
         )}
 
-        {/* Final Submit Button (Only on Why Buy tab) */}
-        {sections.length > 0 &&
-          sections[activeTab]?.type?.includes("why_buy") && (
-            <div className="absolute inset-x-0 bottom-0  backdrop-blur-sm p-4 border-t border-third/30 flex justify-end z-10">
-              <Button
-                onClick={handleFinalSubmit}
-                disabled={
-                  isSubmitting || !sectionProgress.every((s) => s.isValid)
-                }
-                variant="ghost"
-              >
-                {isSubmitting ? "Submitting..." : "Final Submit"}
-              </Button>
-            </div>
+        <div className="flex gap-2 p-3 border-b border-third/30 bg-secondary/30 backdrop-blur-sm">
+          {sections.map((sec, i) => (
+            <button
+              key={sec.id}
+              onClick={() => setActiveTab(i)}
+              className={`px-4 py-1 rounded-full text-sm ${
+                activeTab === i
+                  ? "bg-primary text-secondary font-bold"
+                  : "border border-third/30 text-third"
+              }`}
+            >
+              {sec.type.includes("about")
+                ? "About Us"
+                : sec.type.includes("why_buy")
+                  ? "Why Buy"
+                  : sec.type}
+            </button>
+          ))}
+        </div>
+
+        {/* Header */}
+        <div className="p-4 border-b border-third/30 flex justify-between items-center bg-secondary/10">
+          <div>
+            <h3 className="font-bold">Editing: {theme.name}</h3>
+            <span className="text-xs uppercase text-third">
+              {theme.category} Theme
+            </span>
+          </div>
+
+          {/* Mode Switch */}
+          <div className="flex  rounded-full p-1 border border-third/30">
+            <button
+              onClick={() => setMode("editor")}
+              className={`px-4 py-1 rounded-full text-sm transition ${
+                mode === "editor"
+                  ? "bg-primary text-secondary font-bold"
+                  : "text-third"
+              }`}
+            >
+              Editor
+            </button>
+            <button
+              onClick={() => setMode("preview")}
+              className={`px-4 py-1 rounded-full text-sm transition ${
+                mode === "preview"
+                  ? "bg-primary text-secondary font-bold"
+                  : "text-third"
+              }`}
+            >
+              Preview
+            </button>
+          </div>
+        </div>
+
+        {/* Renderer */}
+        <div className="flex-1 p-4 flex flex-col relative pb-24">
+          {sections.length > 0 && sections[activeTab] && (
+            <EngineRenderer
+              sections={[sections[activeTab]]}
+              mode={mode}
+              errors={sectionProgress[activeTab]?.errors}
+              rules={sections[activeTab]?.rules}
+              onNextTab={() =>
+                setActiveTab((prev) => Math.min(prev + 1, sections.length - 1))
+              }
+              onUpdate={(i, newData) => {
+                const updated = [...sections];
+                updated[activeTab].data = newData;
+                setSections(updated);
+              }}
+            />
           )}
+
+          {/* Final Submit Button (Only on Why Buy tab) */}
+          {sections.length > 0 &&
+            sections[activeTab]?.type?.includes("why_buy") && (
+              <div className="absolute inset-x-0 bottom-0  backdrop-blur-sm p-4 border-t border-third/30 flex justify-end z-10">
+                <Button
+                  onClick={handleFinalSubmit}
+                  disabled={
+                    isSubmitting || !sectionProgress.every((s) => s.isValid)
+                  }
+                  variant="ghost"
+                >
+                  {isSubmitting ? "Submitting..." : "Final Submit"}
+                </Button>
+              </div>
+            )}
+        </div>
       </div>
     </section>
   );
