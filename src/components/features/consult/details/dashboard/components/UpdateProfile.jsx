@@ -25,7 +25,6 @@ import {
 } from "@/services/consult.profile.service";
 
 import { useRouter } from "next/router";
-import toast, { Toaster } from "react-hot-toast";
 import Navbar from "@/components/layout/Navbar";
 import { SkeletonBox } from "@/components/ui/skeleton";
 import { Clock, AlertCircle, XCircle } from "lucide-react";
@@ -61,10 +60,15 @@ export default function UpdateProfile() {
   });
 
   const [loadingStates, setLoadingStates] = useState({
-    business: false,
-    address: false,
     kyc: false,
     submit: false,
+  });
+
+  const [errors, setErrors] = useState({
+    business: "",
+    address: "",
+    kyc: "",
+    submit: "",
   });
 
   const [form, setForm] = useState({
@@ -207,10 +211,14 @@ export default function UpdateProfile() {
           currentId = createRes.data?._id || createRes.data?.id;
           saveUpdateId(currentId);
         } else {
-          toast.error(createRes.message || "Failed to initiate update request");
+          setErrors((p) => ({
+            ...p,
+            business: createRes.message || "Failed to initiate update request",
+          }));
           return;
         }
       }
+      setErrors((p) => ({ ...p, business: "" }));
 
       // Build DELTA payload — only send what changed
       const payload = new FormData();
@@ -268,22 +276,21 @@ export default function UpdateProfile() {
       }
 
       if (!hasChanges) {
-        toast("No changes detected.");
         setEditMode((p) => ({ ...p, business: false }));
         return;
       }
 
       const res = await updateBasicDetails(payload, currentId);
       if (res.success) {
-        toast.success("Business details updated successfully");
+        setErrors((p) => ({ ...p, business: "" }));
         setEditMode((p) => ({ ...p, business: false }));
         setData((p) => ({ ...p, business: { ...p.business, ...b } }));
       } else {
-        toast.error(res.message || "Update failed");
+        setErrors((p) => ({ ...p, business: res.message || "Update failed" }));
       }
     } catch (e) {
       console.error("Update failed", e);
-      toast.error("An unexpected error occurred");
+      setErrors((p) => ({ ...p, business: "An unexpected error occurred" }));
     } finally {
       setLoadingStates((p) => ({ ...p, business: false }));
     }
@@ -305,10 +312,14 @@ export default function UpdateProfile() {
           currentId = createRes.data?._id || createRes.data?.id;
           saveUpdateId(currentId);
         } else {
-          toast.error(createRes.message || "Failed to initiate update request");
+          setErrors((p) => ({
+            ...p,
+            address: createRes.message || "Failed to initiate update request",
+          }));
           return;
         }
       }
+      setErrors((p) => ({ ...p, address: "" }));
 
       // Build DELTA payload — only send what changed
       const payload = new FormData();
@@ -334,14 +345,13 @@ export default function UpdateProfile() {
       }
 
       if (!hasChanges) {
-        toast("No changes detected.");
         setEditMode((p) => ({ ...p, address: false }));
         return;
       }
 
       const res = await updateAddressDetails(payload, currentId);
       if (res.success) {
-        toast.success("Address details updated successfully");
+        setErrors((p) => ({ ...p, address: "" }));
         setEditMode((p) => ({ ...p, address: false }));
         setData((p) => ({
           ...p,
@@ -353,11 +363,11 @@ export default function UpdateProfile() {
           },
         }));
       } else {
-        toast.error(res.message || "Update failed");
+        setErrors((p) => ({ ...p, address: res.message || "Update failed" }));
       }
     } catch (e) {
       console.error("Update failed", e);
-      toast.error("An unexpected error occurred");
+      setErrors((p) => ({ ...p, address: "An unexpected error occurred" }));
     } finally {
       setLoadingStates((p) => ({ ...p, address: false }));
     }
@@ -379,10 +389,14 @@ export default function UpdateProfile() {
           currentId = createRes.data?._id || createRes.data?.id;
           saveUpdateId(currentId);
         } else {
-          toast.error(createRes.message || "Failed to initiate update request");
+          setErrors((p) => ({
+            ...p,
+            kyc: createRes.message || "Failed to initiate update request",
+          }));
           return;
         }
       }
+      setErrors((p) => ({ ...p, kyc: "" }));
 
       // Build DELTA payload — only send what changed
       const payload = new FormData();
@@ -420,14 +434,13 @@ export default function UpdateProfile() {
       }
 
       if (!hasChanges) {
-        toast("No changes detected.");
         setEditMode((p) => ({ ...p, kyc: false }));
         return;
       }
 
       const res = await updateKycDocuments(payload, currentId);
       if (res.success) {
-        toast.success("KYC documents updated successfully");
+        setErrors((p) => ({ ...p, kyc: "" }));
         setEditMode((p) => ({ ...p, kyc: false }));
         setData((p) => ({
           ...p,
@@ -439,11 +452,11 @@ export default function UpdateProfile() {
           },
         }));
       } else {
-        toast.error(res.message || "Update failed");
+        setErrors((p) => ({ ...p, kyc: res.message || "Update failed" }));
       }
     } catch (e) {
       console.error("Update failed", e);
-      toast.error("An unexpected error occurred");
+      setErrors((p) => ({ ...p, kyc: "An unexpected error occurred" }));
     } finally {
       setLoadingStates((p) => ({ ...p, kyc: false }));
     }
@@ -452,24 +465,28 @@ export default function UpdateProfile() {
   const handleSubmit = async () => {
     try {
       if (!updateId) {
-        toast.error("Please update some details first");
+        setErrors((p) => ({
+          ...p,
+          submit: "Please update some details first",
+        }));
         return;
       }
+      setErrors((p) => ({ ...p, submit: "" }));
 
       setLoadingStates((p) => ({ ...p, submit: true }));
       const res = await finalSubmit(updateId);
 
       if (res?.success || res?.data) {
-        toast.success("Profile submitted for verification");
+        setErrors((p) => ({ ...p, submit: "" }));
         sessionStorage.removeItem("consult_update_id");
         router.push("/consult/dashboard/profile");
         return;
       } else {
-        toast.error(res.message || "Submission failed");
+        setErrors((p) => ({ ...p, submit: res.message || "Submission failed" }));
       }
     } catch (error) {
       console.error("Submission failed", error);
-      toast.error("Submission failed");
+      setErrors((p) => ({ ...p, submit: "Submission failed" }));
     } finally {
       setLoadingStates((p) => ({ ...p, submit: false }));
     }
@@ -484,12 +501,11 @@ export default function UpdateProfile() {
   return (
     <>
       <Navbar />
-      <Toaster position="top-right" />
 
       <section className="w-full pt-[66px]">
         <div className="w-full flex items-start">
           {/* LEFT PANEL */}
-          <div className="hidden lg:flex w-[30%] sticky top-[66px] h-[calc(100vh-66px)] relative flex-col justify-between text-white overflow-hidden">
+          <div className="hidden lg:flex w-[30%] sticky top-[66px] h-[calc(100vh-66px)]  flex-col justify-between text-white overflow-hidden">
             <div className="absolute inset-0 z-0">
               <img
                 src="/homeBanner.jpg"
@@ -655,6 +671,11 @@ export default function UpdateProfile() {
                           isUpdateMode={true}
                         />
                       </div>
+                      {errors.business && (
+                        <p className="text-red-500 text-[10px] mt-4 ml-1 animate-in fade-in slide-in-from-top-1">
+                          {errors.business}
+                        </p>
+                      )}
                     </div>
 
                     {/* ADDRESS SECTION */}
@@ -700,6 +721,11 @@ export default function UpdateProfile() {
                           readOnly={!editMode.address}
                         />
                       </div>
+                      {errors.address && (
+                        <p className="text-red-500 text-[10px] mt-4 ml-1 animate-in fade-in slide-in-from-top-1">
+                          {errors.address}
+                        </p>
+                      )}
                     </div>
 
                     {/* KYC SECTION */}
@@ -745,6 +771,11 @@ export default function UpdateProfile() {
                           readOnly={!editMode.kyc}
                         />
                       </div>
+                      {errors.kyc && (
+                        <p className="text-red-500 text-[10px] mt-4 ml-1 animate-in fade-in slide-in-from-top-1">
+                          {errors.kyc}
+                        </p>
+                      )}
                     </div>
 
                     {/* FINAL SUBMIT */}
@@ -759,6 +790,11 @@ export default function UpdateProfile() {
                           Final Submit
                         </Button>
                       </div>
+                    )}
+                    {errors.submit && (
+                      <p className="text-red-500 text-[10px] text-right mt-2 mr-1 animate-in fade-in slide-in-from-top-1">
+                        {errors.submit}
+                      </p>
                     )}
                   </div>
                 )}
