@@ -81,7 +81,7 @@ const formatOptionLabel = ({ value, label }) => (
 
 const DEFAULT_DATA = ABOUT_BASIC_1[0].data;
 
-function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
+function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab, errors, rules }) {
   const [isSaving, setIsSaving] = useState(false);
   const data = {
     ...DEFAULT_DATA, ...Object.fromEntries(
@@ -97,7 +97,11 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
 
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];
-    newArray[index][field] = value;
+    if (typeof newArray[index] === 'object' && newArray[index] !== null) {
+      newArray[index] = { ...newArray[index], [field]: value };
+    } else {
+      newArray[index] = value;
+    }
     updateField(arrayName, newArray);
   };
 
@@ -166,6 +170,9 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
             label="Hero Title"
             value={data.heroTitle}
             onChange={(e) => updateField("heroTitle", e.target.value)}
+            maxLength={rules?.heroTitle?.max}
+            error={!!errors?.heroTitle}
+            errorMsg={errors?.heroTitle}
           />
 
           <h3 className="text-primary font-bold mb-4">Hero Description</h3>
@@ -173,6 +180,9 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
             label="Hero Description"
             value={data.heroDescription}
             onChange={(v) => updateField("heroDescription", v)}
+            maxLength={rules?.heroDescription?.max}
+            error={!!errors?.heroDescription}
+            errorMsg={errors?.heroDescription}
           />
         </div>
 
@@ -186,12 +196,18 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
             bold
             value={data.missionTitle}
             onChange={(e) => updateField("missionTitle", e.target.value)}
+            maxLength={rules?.missionTitle?.max}
+            error={!!errors?.missionTitle}
+            errorMsg={errors?.missionTitle}
           />
 
           <h3 className="text-primary font-bold mb-4">Mission Description</h3>
           <RichTextEditor
             value={data.missionDesc}
             onChange={(v) => updateField("missionDesc", v)}
+            maxLength={rules?.missionDesc?.max}
+            error={!!errors?.missionDesc}
+            errorMsg={errors?.missionDesc}
           />
         </div>
 
@@ -203,12 +219,18 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
             bold
             value={data.visionTitle}
             onChange={(e) => updateField("visionTitle", e.target.value)}
+            maxLength={rules?.visionTitle?.max}
+            error={!!errors?.visionTitle}
+            errorMsg={errors?.visionTitle}
           />
 
           <h3 className="text-primary font-bold mb-4">Vision Description</h3>
           <RichTextEditor
             value={data.visionDesc}
             onChange={(v) => updateField("visionDesc", v)}
+            maxLength={rules?.visionDesc?.max}
+            error={!!errors?.visionDesc}
+            errorMsg={errors?.visionDesc}
           />
         </div>
 
@@ -221,6 +243,9 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
           <RichTextEditor
             value={data.aboutUsDescription || data.statsDesc}
             onChange={(v) => updateField("aboutUsDescription", v)}
+            maxLength={rules?.aboutUsDescription?.max}
+            error={!!errors?.aboutUsDescription}
+            errorMsg={errors?.aboutUsDescription}
           />
 
           <div className="grid grid-cols-2 gap-4 mt-4">
@@ -236,6 +261,9 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
                       const numericValue = e.target.value.replace(/[^0-9]/g, "");
                       updateArrayItem("stats", i, "number", numericValue);
                     }}
+                    maxLength={rules?.arrayRules?.stats?.number?.max}
+                    error={!!errors?.stats?.[i]?.number}
+                    errorMsg={errors?.stats?.[i]?.number}
                   />
                 </div>
 
@@ -247,6 +275,9 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
                     onChange={(e) =>
                       updateArrayItem("stats", i, "label", e.target.value)
                     }
+                    maxLength={rules?.arrayRules?.stats?.label?.max}
+                    error={!!errors?.stats?.[i]?.label}
+                    errorMsg={errors?.stats?.[i]?.label}
                   />
                 </div>
 
@@ -266,12 +297,18 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
             bold
             value={data.servicesTitle}
             onChange={(e) => updateField("servicesTitle", e.target.value)}
+            maxLength={rules?.servicesTitle?.max}
+            error={!!errors?.servicesTitle}
+            errorMsg={errors?.servicesTitle}
           />
 
           <h3 className="text-primary font-bold mb-4">Services Description</h3>
           <RichTextEditor
             value={data.servicesDesc}
             onChange={(v) => updateField("servicesDesc", v)}
+            maxLength={rules?.servicesDesc?.max}
+            error={!!errors?.servicesDesc}
+            errorMsg={errors?.servicesDesc}
           />
 
           <h3 className="text-primary font-bold mb-4">Services Cards</h3>
@@ -305,6 +342,9 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
                     onChange={(e) =>
                       updateArrayItem("services", i, "title", e.target.value)
                     }
+                    maxLength={rules?.arrayRules?.services?.title?.max}
+                    error={!!errors?.services?.[i]?.title}
+                    errorMsg={errors?.services?.[i]?.title}
                   />
                 </div>
 
@@ -318,6 +358,9 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab }) {
                     onChange={(e) =>
                       updateArrayItem("services", i, "desc", e.target.value)
                     }
+                    maxLength={rules?.arrayRules?.services?.desc?.max}
+                    error={!!errors?.services?.[i]?.desc}
+                    errorMsg={errors?.services?.[i]?.desc}
                   />
                 </div>
 

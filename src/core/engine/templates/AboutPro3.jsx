@@ -111,7 +111,11 @@ export default function AboutPro3({
 
   const updateArr = (k, i, f, v) => {
     const copy = [...data[k]];
-    copy[i][f] = v;
+    if (typeof copy[i] === 'object' && copy[i] !== null) {
+      copy[i] = { ...copy[i], [f]: v };
+    } else {
+      copy[i] = v;
+    }
     update(k, copy);
   };
   const addArr = (k, item) => update(k, [...(data[k] || []), item]);
@@ -206,6 +210,7 @@ export default function AboutPro3({
               value={data.aboutHeroDescription}
               error={errors?.aboutHeroDescription}
               errorMsg={errors?.aboutHeroDescription}
+              maxLength={rules?.aboutHeroDescription?.max}
               onChange={(v) => update("aboutHeroDescription", v)}
             />
           </div>
@@ -250,6 +255,7 @@ export default function AboutPro3({
               value={data.aboutMissionDescription}
               error={errors?.aboutMissionDescription}
               errorMsg={errors?.aboutMissionDescription}
+              maxLength={rules?.aboutMissionDescription?.max}
               onChange={(v) => update("aboutMissionDescription", v)}
             />
           </div>
@@ -293,6 +299,7 @@ export default function AboutPro3({
               value={data.aboutVisionDescription}
               error={errors?.aboutVisionDescription}
               errorMsg={errors?.aboutVisionDescription}
+              maxLength={rules?.aboutVisionDescription?.max}
               onChange={(v) => update("aboutVisionDescription", v)}
             />
           </div>
@@ -325,6 +332,7 @@ export default function AboutPro3({
           value={data.aboutStatsDescription}
           error={errors?.aboutStatsDescription}
           errorMsg={errors?.aboutStatsDescription}
+          maxLength={rules?.aboutStatsDescription?.max}
           onChange={(v) => update("aboutStatsDescription", v)}
         />
         <div className="p-4 bg-primary/5 rounded-lg border border-third/10 mt-4">
@@ -378,6 +386,7 @@ export default function AboutPro3({
             value={data.aboutServicesDescription}
             error={errors?.aboutServicesDescription}
             errorMsg={errors?.aboutServicesDescription}
+            maxLength={rules?.aboutServicesDescription?.max}
             onChange={(v) => update("aboutServicesDescription", v)}
           />
         </div>

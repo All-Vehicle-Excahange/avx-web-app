@@ -36,7 +36,7 @@ export const ImageUploader = ({
 
         <div
           onClick={() => setOpen(true)}
-          className="flex-1 min-h-40 border-2 border-dashed border-third/40 bg-secondary rounded-xl cursor-pointer hover:border-primary transition relative overflow-hidden group"
+          className="flex-1 min-h-40 border-2 border-dashed border-third/40  rounded-xl cursor-pointer hover:border-primary transition relative overflow-hidden group"
         >
           {src ? (
             <>
@@ -65,11 +65,7 @@ export const ImageUploader = ({
             </div>
           )}
         </div>
-        {error && errorMsg && (
-          <span className="text-[11px] text-red-400/80 font-medium ml-1">
-            {errorMsg}
-          </span>
-        )}
+
       </div>
 
       <MediaPickerModal

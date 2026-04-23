@@ -31,11 +31,6 @@ export default function EditorInput({
           ${size === "sm" ? "h-9 px-3 text-sm" : "h-11 px-4 text-base"}
         `}
       />
-      {error && errorMsg && (
-        <span className="text-[11px] text-red-400/80 font-medium ml-1">
-          {errorMsg}
-        </span>
-      )}
       {showWarning && (
         <span className="text-[11px] text-fourth/60 font-medium ml-1">
           {charsLeft} characters left

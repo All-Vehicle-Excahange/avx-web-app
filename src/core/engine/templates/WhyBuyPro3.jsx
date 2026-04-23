@@ -114,10 +114,12 @@ export default function WhyBuyPro3({
   };
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];
-    if (newArray[index]) {
-      newArray[index][field] = value;
-      updateField(arrayName, newArray);
+    if (typeof newArray[index] === 'object' && newArray[index] !== null) {
+      newArray[index] = { ...newArray[index], [field]: value };
+    } else {
+      newArray[index] = value;
     }
+    updateField(arrayName, newArray);
   };
   const [allReviews, setAllReviews] = useState([]);
   const [selectedReviewIds, setSelectedReviewIds] = useState(
@@ -1160,6 +1162,9 @@ export default function WhyBuyPro3({
             bold
             label="Section Title"
             value={data.whyBuyTestimonialTitle}
+            maxLength={rules?.whyBuyTestimonialTitle?.max}
+            error={!!errors?.whyBuyTestimonialTitle}
+            errorMsg={errors?.whyBuyTestimonialTitle}
             onChange={(e) =>
               updateField("whyBuyTestimonialTitle", e.target.value)
             }
@@ -1225,10 +1230,10 @@ export default function WhyBuyPro3({
         <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
           <Button
             onClick={handleSaveAndNext}
-            disabled={isSaving}
+            disabled={isSaving || (errors && Object.keys(errors).length > 0)}
             variant="ghost"
           >
-            {isSaving ? "Saving..." : "Save"}
+            {isSaving ? "Saving..." : "Save and Next"}
           </Button>
         </div>
       </div>

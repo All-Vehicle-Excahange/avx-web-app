@@ -139,10 +139,12 @@ export default function WhyBuyPro1({
 
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];
-    if (newArray[index]) {
-      newArray[index][field] = value;
-      updateField(arrayName, newArray);
+    if (typeof newArray[index] === 'object' && newArray[index] !== null) {
+      newArray[index] = { ...newArray[index], [field]: value };
+    } else {
+      newArray[index] = value;
     }
+    updateField(arrayName, newArray);
   };
 
   const handleSave = async () => {
@@ -307,6 +309,7 @@ export default function WhyBuyPro1({
                 value={data.whyBuyHeroDescription}
                 error={errors?.whyBuyHeroDescription}
                 errorMsg={errors?.whyBuyHeroDescription}
+                maxLength={rules?.whyBuyHeroDescription?.max}
                 onChange={(v) => updateField("whyBuyHeroDescription", v)}
               />
             </div>
@@ -392,6 +395,7 @@ export default function WhyBuyPro1({
                 value={data.storyDescription}
                 error={errors?.storyDescription}
                 errorMsg={errors?.storyDescription}
+                maxLength={rules?.storyDescription?.max}
                 onChange={(v) => updateField("storyDescription", v)}
               />
             </div>
@@ -479,6 +483,7 @@ export default function WhyBuyPro1({
                 value={data.vehicleSelectionDescription}
                 error={errors?.vehicleSelectionDescription}
                 errorMsg={errors?.vehicleSelectionDescription}
+                maxLength={rules?.vehicleSelectionDescription?.max}
                 onChange={(v) => updateField("vehicleSelectionDescription", v)}
               />
             </div>
@@ -549,6 +554,7 @@ export default function WhyBuyPro1({
                 value={data.processDescription}
                 error={errors?.processDescription}
                 errorMsg={errors?.processDescription}
+                maxLength={rules?.processDescription?.max}
                 onChange={(v) => updateField("processDescription", v)}
               />
             </div>
@@ -646,6 +652,7 @@ export default function WhyBuyPro1({
                 value={data.inspectionText}
                 error={errors?.inspectionText}
                 errorMsg={errors?.inspectionText}
+                maxLength={rules?.inspectionText?.max}
                 onChange={(v) => updateField("inspectionText", v)}
               />
               <div className="space-y-2 mt-4">
@@ -718,6 +725,7 @@ export default function WhyBuyPro1({
                 value={data.customerCommitmentDescription}
                 error={errors?.customerCommitmentDescription}
                 errorMsg={errors?.customerCommitmentDescription}
+                maxLength={rules?.customerCommitmentDescription?.max}
                 onChange={(v) =>
                   updateField("customerCommitmentDescription", v)
                 }

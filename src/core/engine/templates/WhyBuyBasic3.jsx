@@ -26,6 +26,7 @@ import {
   setFeaturedReviews,
 } from "@/services/theme.service";
 import { getAllReviewById } from "@/services/user.service";
+import { WHY_BUY_BASIC_3 } from "@/core/engine/schemas/whybuy/why_buy_basic_3";
 const SVG_OPTIONS = [
   {
     value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>`,
@@ -93,7 +94,10 @@ export default function WhyBuyBasic3({
   const [selectedReviewIds, setSelectedReviewIds] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
 
+  const DEFAULT_DATA = WHY_BUY_BASIC_3[0].data;
+
   const data = {
+    ...DEFAULT_DATA,
     ...Object.fromEntries(
       Object.entries(rawData || {}).filter(
         ([, v]) => v !== undefined && v !== null,
@@ -141,7 +145,11 @@ export default function WhyBuyBasic3({
   };
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];
-    newArray[index][field] = value;
+    if (typeof newArray[index] === 'object' && newArray[index] !== null) {
+      newArray[index] = { ...newArray[index], [field]: value };
+    } else {
+      newArray[index] = value;
+    }
     updateField(arrayName, newArray);
   };
 
@@ -152,24 +160,15 @@ export default function WhyBuyBasic3({
     try {
       const heroData = new FormData();
       heroData.append("whyBuyHeroTitle", data.whyBuyHeroTitle || "");
-      heroData.append(
-        "whyBuyHeroDescription",
-        data.whyBuyHeroDescription || "",
-      );
+      heroData.append("whyBuyHeroDescription", data.whyBuyHeroDescription || "");
 
       const storyData = new FormData();
       storyData.append("storyTitle", data.storyTitle || "");
       storyData.append("storyDescription", data.storyDescription || "");
 
       const vehicleData = new FormData();
-      vehicleData.append(
-        "vehicleSelectionTitle",
-        data.vehicleSelectionTitle || "",
-      );
-      vehicleData.append(
-        "vehicleSelectionDescription",
-        data.vehicleSelectionDescription || "",
-      );
+      vehicleData.append("vehicleSelectionTitle", data.vehicleSelectionTitle || "");
+      vehicleData.append("vehicleSelectionDescription", data.vehicleSelectionDescription || "");
 
       const processData = new FormData();
       processData.append("processTitle", data.processTitle || "");
@@ -193,14 +192,8 @@ export default function WhyBuyBasic3({
       }
 
       const commitmentData = new FormData();
-      commitmentData.append(
-        "customerCommitmentTitle",
-        data.customerCommitmentTitle || "",
-      );
-      commitmentData.append(
-        "customerCommitmentDescription",
-        data.customerCommitmentDescription || "",
-      );
+      commitmentData.append("customerCommitmentTitle", data.customerCommitmentTitle || "");
+      commitmentData.append("customerCommitmentDescription", data.customerCommitmentDescription || "");
 
       await Promise.all([
         setWhyBuyHero(heroData),
