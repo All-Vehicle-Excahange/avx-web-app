@@ -41,8 +41,12 @@ const SVG_OPTIONS = [
     label: "Clock",
   },
   {
-    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/></svg>`,
-    label: "Shield",
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m646-160-42-42 98-98q-37-53-90.5-84.5T480-420q-83 0-156 31.5T197-331q-54 54-85.5 127T80-480q0 83 31.5 156T197-197q54 54 127 85.5T480-80q64 0 117.5-31.5T706-178l98-98-42-42-98 98q-38 33-80.5-6.5T480-300q-54 0-99-45t-45-99q0-54 45-99t99-45q54 0 99 45t45 99q0 51.5-26.5 94T560-360Z"/></svg>`,
+    label: "ShieldCheck",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-320q93 0 156.5-63.5T700-540q0-93-63.5-156.5T480-760q-93 0-156.5 63.5T260-540q0 93 63.5 156.5T480-320Zm0-160q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm0 374q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-106Zm0 106Q319 217 239.5 334.5T160-552q0 150 96.5 255T480-200q150 0 246-105t96-255q0-100-80.5-217.5T480-500Z"/></svg>`,
+    label: "Globe",
   },
 ];
 
@@ -104,6 +108,49 @@ function AboutPro1({
       ),
     ),
   };
+
+  // Map backend fields to UI fields if UI fields are missing
+  if (!rawData?.missionDesc && rawData?.missionDescription) {
+    data.missionDesc = rawData.missionDescription;
+  }
+  if (!rawData?.visionDesc && rawData?.visionDescription) {
+    data.visionDesc = rawData.visionDescription;
+  }
+  if (!rawData?.servicesTitle && rawData?.serviceTitle) {
+    data.servicesTitle = rawData.serviceTitle;
+  }
+  if (!rawData?.servicesDesc && rawData?.serviceDescription) {
+    data.servicesDesc = rawData.serviceDescription;
+  }
+
+  // Synchronize transformed draft data with the parent state once on load
+  useEffect(() => {
+    if (!rawData) return;
+    
+    let hasChanges = false;
+    const updatedData = { ...data };
+
+    if (!rawData.missionDesc && rawData.missionDescription) {
+      updatedData.missionDesc = rawData.missionDescription;
+      hasChanges = true;
+    }
+    if (!rawData.visionDesc && rawData.visionDescription) {
+      updatedData.visionDesc = rawData.visionDescription;
+      hasChanges = true;
+    }
+    if (!rawData.servicesTitle && rawData.serviceTitle) {
+      updatedData.servicesTitle = rawData.serviceTitle;
+      hasChanges = true;
+    }
+    if (!rawData.servicesDesc && rawData.serviceDescription) {
+      updatedData.servicesDesc = rawData.serviceDescription;
+      hasChanges = true;
+    }
+
+    if (hasChanges && onUpdate) {
+      onUpdate(updatedData);
+    }
+  }, [rawData]);
   const activeRef = useRef(0);
   const intervalRef = useRef(null);
 
@@ -185,13 +232,11 @@ function AboutPro1({
         });
       }
 
-      await Promise.all([
-        setAboutHero(heroData),
-        setAboutMission(missionData),
-        setAboutVision(visionData),
-        setState(statsData),
-        setAboutServices(servicesData),
-      ]);
+      await setAboutHero(heroData);
+      await setAboutMission(missionData);
+      await setAboutVision(visionData);
+      await setState(statsData);
+      await setAboutServices(servicesData);
 
       if (onNextTab) onNextTab();
     } catch (error) {

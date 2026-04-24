@@ -89,6 +89,49 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
     )
   };
 
+  // Map backend fields to UI fields if UI fields are missing
+  if (!rawData?.missionDesc && rawData?.missionDescription) {
+    data.missionDesc = rawData.missionDescription;
+  }
+  if (!rawData?.visionDesc && rawData?.visionDescription) {
+    data.visionDesc = rawData.visionDescription;
+  }
+  if (!rawData?.servicesTitle && rawData?.serviceTitle) {
+    data.servicesTitle = rawData.serviceTitle;
+  }
+  if (!rawData?.servicesDesc && rawData?.serviceDescription) {
+    data.servicesDesc = rawData.serviceDescription;
+  }
+
+  // Synchronize transformed draft data with the parent state once on load
+  React.useEffect(() => {
+    if (!rawData) return;
+    
+    let hasChanges = false;
+    const updatedData = { ...data };
+
+    if (!rawData.missionDesc && rawData.missionDescription) {
+      updatedData.missionDesc = rawData.missionDescription;
+      hasChanges = true;
+    }
+    if (!rawData.visionDesc && rawData.visionDescription) {
+      updatedData.visionDesc = rawData.visionDescription;
+      hasChanges = true;
+    }
+    if (!rawData.servicesTitle && rawData.serviceTitle) {
+      updatedData.servicesTitle = rawData.serviceTitle;
+      hasChanges = true;
+    }
+    if (!rawData.servicesDesc && rawData.serviceDescription) {
+      updatedData.servicesDesc = rawData.serviceDescription;
+      hasChanges = true;
+    }
+
+    if (hasChanges && onUpdate) {
+      onUpdate(updatedData);
+    }
+  }, [rawData]);
+
   if (!rawData) return null;
 
   const updateField = (field, value) => {
@@ -140,13 +183,11 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
         });
       }
 
-      await Promise.all([
-        setAboutHero(heroData),
-        setAboutMission(missionData),
-        setAboutVision(visionData),
-        setState(statsData),
-        setAboutServices(servicesData),
-      ]);
+      await setAboutHero(heroData);
+      await setAboutMission(missionData);
+      await setAboutVision(visionData);
+      await setState(statsData);
+      await setAboutServices(servicesData);
 
       if (onNextTab) {
         onNextTab();

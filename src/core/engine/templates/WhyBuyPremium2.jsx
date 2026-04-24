@@ -104,6 +104,47 @@ export default function WhyBuyPremium2({
       ),
     ),
   };
+
+  // Map 'processes' and 'inspectionDescription' from draft/backend to UI fields
+  // Only apply mapping if the target UI fields don't exist yet to avoid overwriting user edits
+  if (!rawData?.processSteps && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
+    data.processSteps = rawData.processes.map(p => ({
+      title: p.title || "",
+      description: p.desc || p.description || "",
+      icon: p.icon || ""
+    }));
+  }
+  if (!rawData?.inspectionText && rawData?.inspectionDescription) {
+    data.inspectionText = rawData.inspectionDescription;
+  }
+
+  // Synchronize transformed draft data with the parent state once on load
+  useEffect(() => {
+    if (!rawData || !onUpdate) return;
+    
+    let hasChanges = false;
+    const updatedData = { ...data };
+
+    // Sync processes mapping
+    if (!rawData.processSteps && rawData.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
+      updatedData.processSteps = rawData.processes.map(p => ({
+        title: p.title || "",
+        description: p.desc || p.description || "",
+        icon: p.icon || ""
+      }));
+      hasChanges = true;
+    }
+
+    // Sync inspection text mapping
+    if (!rawData.inspectionText && rawData.inspectionDescription) {
+      updatedData.inspectionText = rawData.inspectionDescription;
+      hasChanges = true;
+    }
+
+    if (hasChanges) {
+      onUpdate(updatedData);
+    }
+  }, [rawData]);
   /* ================== REVIEW SELECTION ================== */
   const [allReviews, setAllReviews] = useState([]);
   const [selectedReviewIds, setSelectedReviewIds] = useState(
@@ -170,7 +211,7 @@ export default function WhyBuyPremium2({
   };
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];
-    if (typeof newArray[index] === 'object' && newArray[index] !== null) {
+    if (typeof newArray[index] === "object" && newArray[index] !== null) {
       newArray[index] = { ...newArray[index], [field]: value };
     } else {
       newArray[index] = value;
@@ -314,16 +355,14 @@ export default function WhyBuyPremium2({
         }
       }
 
-      await Promise.all([
-        setWhyBuyHero(heroData),
-        setWhyBuyStory(storyData),
-        setWhyBuyVehicleSelection(vehicleData),
-        setWhyBuyProcess(processData),
-        setWhyBuyInspection(inspectionData),
-        setWhyBuyCustomerCommitment(commitmentData),
-        setWhyBuyGallery(galleryData),
-        setFeaturedReviews(selectedReviewIds),
-      ]);
+      await setWhyBuyHero(heroData);
+      await setWhyBuyStory(storyData);
+      await setWhyBuyVehicleSelection(vehicleData);
+      await setWhyBuyProcess(processData);
+      await setWhyBuyInspection(inspectionData);
+      await setWhyBuyCustomerCommitment(commitmentData);
+      await setWhyBuyGallery(galleryData);
+      await setFeaturedReviews(selectedReviewIds);
 
       if (onNextTab) onNextTab();
     } catch (error) {
@@ -703,7 +742,9 @@ export default function WhyBuyPremium2({
                         e.target.value,
                       )
                     }
-                    maxLength={rules?.arrayRules?.processSteps?.description?.max}
+                    maxLength={
+                      rules?.arrayRules?.processSteps?.description?.max
+                    }
                     error={!!errors?.processSteps?.[i]?.description}
                     errorMsg={errors?.processSteps?.[i]?.description}
                   />

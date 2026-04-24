@@ -94,16 +94,117 @@ export default function AboutPro3({
 }) {
   const hasErrors = errors && Object.keys(errors).length > 0;
   const [isSaving, setIsSaving] = useState(false);
-  const data = rawData
-    ? {
-        ...DEFAULT_DATA,
-        ...Object.fromEntries(
-          Object.entries(rawData || {}).filter(
-            ([, v]) => v !== undefined && v !== null,
-          ),
-        ),
-      }
-    : DEFAULT_DATA;
+  const data = {
+    ...DEFAULT_DATA,
+    ...Object.fromEntries(
+      Object.entries(rawData || {}).filter(
+        ([, v]) => v !== undefined && v !== null,
+      ),
+    ),
+  };
+
+  // Map backend fields to UI fields if UI fields are missing
+  if (!rawData?.aboutHeroTitle && rawData?.heroTitle) {
+    data.aboutHeroTitle = rawData.heroTitle;
+  }
+  if (!rawData?.aboutHeroDescription && rawData?.heroDescription) {
+    data.aboutHeroDescription = rawData.heroDescription;
+  }
+  if (!rawData?.aboutMissionTitle && rawData?.missionTitle) {
+    data.aboutMissionTitle = rawData.missionTitle;
+  }
+  if (!rawData?.aboutMissionDescription && rawData?.missionDescription) {
+    data.aboutMissionDescription = rawData.missionDescription;
+  }
+  if (!rawData?.aboutVisionTitle && rawData?.visionTitle) {
+    data.aboutVisionTitle = rawData.visionTitle;
+  }
+  if (!rawData?.aboutVisionDescription && rawData?.visionDescription) {
+    data.aboutVisionDescription = rawData.visionDescription;
+  }
+  if (!rawData?.aboutStatsDescription && rawData?.aboutUsDescription) {
+    data.aboutStatsDescription = rawData.aboutUsDescription;
+  }
+  if (!rawData?.aboutServicesTitle && rawData?.serviceTitle) {
+    data.aboutServicesTitle = rawData.serviceTitle;
+  }
+  if (!rawData?.aboutServicesDescription && rawData?.serviceDescription) {
+    data.aboutServicesDescription = rawData.serviceDescription;
+  }
+
+  // Map backend image objects if UI fields are missing
+  if (!rawData?.aboutHeroTemplate1 && rawData?.heroImageTemplateId1) {
+    data.aboutHeroTemplate1 = rawData.heroImageTemplateId1;
+  }
+  if (!rawData?.aboutMissionTemplate1 && rawData?.missionTemplateId1) {
+    data.aboutMissionTemplate1 = rawData.missionTemplateId1;
+  }
+  if (!rawData?.aboutVisionTemplate1 && rawData?.visionTemplateId1) {
+    data.aboutVisionTemplate1 = rawData.visionTemplateId1;
+  }
+
+  // Synchronize transformed draft data with the parent state once on load
+  useEffect(() => {
+    if (!rawData) return;
+
+    let hasChanges = false;
+    const updatedData = { ...data };
+
+    if (!rawData.aboutHeroTitle && rawData.heroTitle) {
+      updatedData.aboutHeroTitle = rawData.heroTitle;
+      hasChanges = true;
+    }
+    if (!rawData.aboutHeroDescription && rawData.heroDescription) {
+      updatedData.aboutHeroDescription = rawData.heroDescription;
+      hasChanges = true;
+    }
+    if (!rawData.aboutMissionTitle && rawData.missionTitle) {
+      updatedData.aboutMissionTitle = rawData.missionTitle;
+      hasChanges = true;
+    }
+    if (!rawData.aboutMissionDescription && rawData.missionDescription) {
+      updatedData.aboutMissionDescription = rawData.missionDescription;
+      hasChanges = true;
+    }
+    if (!rawData.aboutVisionTitle && rawData.visionTitle) {
+      updatedData.aboutVisionTitle = rawData.visionTitle;
+      hasChanges = true;
+    }
+    if (!rawData.aboutVisionDescription && rawData.visionDescription) {
+      updatedData.aboutVisionDescription = rawData.visionDescription;
+      hasChanges = true;
+    }
+    if (!rawData.aboutStatsDescription && rawData.aboutUsDescription) {
+      updatedData.aboutStatsDescription = rawData.aboutUsDescription;
+      hasChanges = true;
+    }
+    if (!rawData.aboutServicesTitle && rawData.serviceTitle) {
+      updatedData.aboutServicesTitle = rawData.serviceTitle;
+      hasChanges = true;
+    }
+    if (!rawData.aboutServicesDescription && rawData.serviceDescription) {
+      updatedData.aboutServicesDescription = rawData.serviceDescription;
+      hasChanges = true;
+    }
+
+    // Sync image mappings
+    if (!rawData.aboutHeroTemplate1 && rawData.heroImageTemplateId1) {
+      updatedData.aboutHeroTemplate1 = rawData.heroImageTemplateId1;
+      hasChanges = true;
+    }
+    if (!rawData.aboutMissionTemplate1 && rawData.missionTemplateId1) {
+      updatedData.aboutMissionTemplate1 = rawData.missionTemplateId1;
+      hasChanges = true;
+    }
+    if (!rawData.aboutVisionTemplate1 && rawData.visionTemplateId1) {
+      updatedData.aboutVisionTemplate1 = rawData.visionTemplateId1;
+      hasChanges = true;
+    }
+
+    if (hasChanges && onUpdate) {
+      onUpdate(updatedData);
+    }
+  }, [rawData]);
 
   const update = (k, v) => {
     if (onUpdate) onUpdate({ ...data, [k]: v });
@@ -172,13 +273,11 @@ export default function AboutPro3({
         });
       }
 
-      await Promise.all([
-        setAboutHero(heroData),
-        setAboutMission(missionData),
-        setAboutVision(visionData),
-        setState(statsData),
-        setAboutServices(servicesData),
-      ]);
+      await setAboutHero(heroData);
+      await setAboutMission(missionData);
+      await setAboutVision(visionData);
+      await setState(statsData);
+      await setAboutServices(servicesData);
 
       if (onNextTab) onNextTab();
     } catch (error) {

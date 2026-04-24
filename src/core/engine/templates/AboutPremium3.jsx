@@ -177,13 +177,11 @@ export default function AboutPremium3({
         });
       }
 
-      await Promise.all([
-        setAboutHero(heroData),
-        setAboutMission(missionData),
-        setAboutVision(visionData),
-        setState(statsData),
-        setAboutServices(servicesData),
-      ]);
+      await setAboutHero(heroData);
+      await setAboutMission(missionData);
+      await setAboutVision(visionData);
+      await setState(statsData);
+      await setAboutServices(servicesData);
 
       if (onNextTab) onNextTab();
     } catch (error) {

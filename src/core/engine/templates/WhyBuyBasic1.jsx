@@ -115,6 +115,37 @@ function WhyBuyBasic1({
     ),
   };
 
+  // Map 'processes' from backend/draft to 'processSteps' used in UI
+  // Only apply mapping if the target UI field doesn't exist yet to avoid overwriting user edits
+  if (!rawData?.processSteps && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
+    data.processSteps = rawData.processes.map(p => ({
+      title: p.title || "",
+      description: p.desc || p.description || "",
+      icon: p.icon || ""
+    }));
+  }
+
+  // Synchronize transformed draft data with the parent state once on load
+  useEffect(() => {
+    if (!rawData) return;
+    
+    let hasChanges = false;
+    const updatedData = { ...data };
+
+    if (!rawData.processSteps && rawData.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
+      updatedData.processSteps = rawData.processes.map(p => ({
+        title: p.title || "",
+        description: p.desc || p.description || "",
+        icon: p.icon || ""
+      }));
+      hasChanges = true;
+    }
+
+    if (hasChanges && onUpdate) {
+      onUpdate(updatedData);
+    }
+  }, [rawData]);
+
   const [allReviews, setAllReviews] = useState([]);
   const [selectedReviewIds, setSelectedReviewIds] = useState([]);
 
@@ -214,15 +245,13 @@ function WhyBuyBasic1({
         data.customerCommitmentDescription || "",
       );
 
-      await Promise.all([
-        setWhyBuyHero(heroData),
-        setWhyBuyStory(storyData),
-        setWhyBuyVehicleSelection(vehicleData),
-        setWhyBuyProcess(processData),
-        setWhyBuyInspection(inspectionData),
-        setWhyBuyCustomerCommitment(commitmentData),
-        setFeaturedReviews(selectedReviewIds),
-      ]);
+      await setWhyBuyHero(heroData);
+      await setWhyBuyStory(storyData);
+      await setWhyBuyVehicleSelection(vehicleData);
+      await setWhyBuyProcess(processData);
+      await setWhyBuyInspection(inspectionData);
+      await setWhyBuyCustomerCommitment(commitmentData);
+      await setFeaturedReviews(selectedReviewIds);
     } catch (error) {
       console.error("Error updating Why Buy sections:", error);
     } finally {

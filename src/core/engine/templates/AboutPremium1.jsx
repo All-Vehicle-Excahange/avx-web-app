@@ -91,9 +91,79 @@ export default function AboutPremium1({
   const d = {
     ...DEFAULT_DATA,
     ...Object.fromEntries(
-      Object.entries(data || {}).filter(([_, v]) => v !== undefined && v !== null)
-    )
+      Object.entries(data || {}).filter(
+        ([_, v]) => v !== undefined && v !== null,
+      ),
+    ),
   };
+
+  // Map backend fields to UI fields if UI fields are missing
+  if (!data?.missionDesc && data?.missionDescription) {
+    d.missionDesc = data.missionDescription;
+  }
+  if (!data?.visionDesc && data?.visionDescription) {
+    d.visionDesc = data.visionDescription;
+  }
+  if (!data?.servicesTitle && data?.serviceTitle) {
+    d.servicesTitle = data.serviceTitle;
+  }
+  if (!data?.servicesDesc && data?.serviceDescription) {
+    d.servicesDesc = data.serviceDescription;
+  }
+
+  // Map backend image objects if UI fields are missing
+  if (!data?.heroTemplate1 && data?.heroImageTemplateId1) {
+    d.heroTemplate1 = data.heroImageTemplateId1;
+  }
+  if (!data?.missionTemplate1 && data?.missionTemplateId1) {
+    d.missionTemplate1 = data.missionTemplateId1;
+  }
+  if (!data?.visionTemplate1 && data?.visionTemplateId1) {
+    d.visionTemplate1 = data.visionTemplateId1;
+  }
+
+  // Synchronize transformed draft data with the parent state once on load
+  React.useEffect(() => {
+    if (!data || !onUpdate) return;
+
+    let hasChanges = false;
+    const updatedData = { ...d };
+
+    if (!data.missionDesc && data.missionDescription) {
+      updatedData.missionDesc = data.missionDescription;
+      hasChanges = true;
+    }
+    if (!data.visionDesc && data.visionDescription) {
+      updatedData.visionDesc = data.visionDescription;
+      hasChanges = true;
+    }
+    if (!data.servicesTitle && data.serviceTitle) {
+      updatedData.servicesTitle = data.serviceTitle;
+      hasChanges = true;
+    }
+    if (!data.servicesDesc && data.serviceDescription) {
+      updatedData.servicesDesc = data.serviceDescription;
+      hasChanges = true;
+    }
+
+    // Sync image mappings
+    if (!data.heroTemplate1 && data.heroImageTemplateId1) {
+      updatedData.heroTemplate1 = data.heroImageTemplateId1;
+      hasChanges = true;
+    }
+    if (!data.missionTemplate1 && data.missionTemplateId1) {
+      updatedData.missionTemplate1 = data.missionTemplateId1;
+      hasChanges = true;
+    }
+    if (!data.visionTemplate1 && data.visionTemplateId1) {
+      updatedData.visionTemplate1 = data.visionTemplateId1;
+      hasChanges = true;
+    }
+
+    if (hasChanges) {
+      onUpdate(updatedData);
+    }
+  }, [data]);
   const [active, setActive] = useState(0);
   const [hovered, setHovered] = useState(null);
   const current = hovered !== null ? hovered : active;
@@ -111,7 +181,7 @@ export default function AboutPremium1({
   const update = (k, v) => onUpdate({ ...d, [k]: v });
   const updateArr = (k, i, f, v) => {
     const copy = [...d[k]];
-    if (typeof copy[i] === 'object' && copy[i] !== null) {
+    if (typeof copy[i] === "object" && copy[i] !== null) {
       copy[i] = { ...copy[i], [f]: v };
     } else {
       copy[i] = v;
@@ -183,13 +253,11 @@ export default function AboutPremium1({
         });
       }
 
-      await Promise.all([
-        setAboutHero(heroData),
-        setAboutMission(missionData),
-        setAboutVision(visionData),
-        setState(statsData),
-        setAboutServices(servicesData),
-      ]);
+      await setAboutHero(heroData);
+      await setAboutMission(missionData);
+      await setAboutVision(visionData);
+      await setState(statsData);
+      await setAboutServices(servicesData);
 
       if (onNextTab) onNextTab();
     } catch (error) {
