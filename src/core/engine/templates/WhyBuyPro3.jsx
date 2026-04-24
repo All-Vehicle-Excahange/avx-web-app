@@ -109,12 +109,151 @@ export default function WhyBuyPro3({
       ),
     ),
   };
+
+  // Map backend draft fields to UI fields if UI fields are missing
+  // This handles naming discrepancies between backend JSON and template state keys
+  if (!rawData?.whyBuyStoryTitle && rawData?.storyTitle) {
+    data.whyBuyStoryTitle = rawData.storyTitle;
+  }
+  if (!rawData?.whyBuyStoryDescription && rawData?.storyDescription) {
+    data.whyBuyStoryDescription = rawData.storyDescription;
+  }
+  if (!rawData?.whyBuyVehicleSelectionTitle && rawData?.vehicleSelectionTitle) {
+    data.whyBuyVehicleSelectionTitle = rawData.vehicleSelectionTitle;
+  }
+  if (!rawData?.whyBuyVehicleSelectionDescription && rawData?.vehicleSelectionDescription) {
+    data.whyBuyVehicleSelectionDescription = rawData.vehicleSelectionDescription;
+  }
+  if (!rawData?.whyBuyProcessTitle && rawData?.processTitle) {
+    data.whyBuyProcessTitle = rawData.processTitle;
+  }
+  if (!rawData?.whyBuyProcessDescription && rawData?.processDescription) {
+    data.whyBuyProcessDescription = rawData.processDescription;
+  }
+  if (!rawData?.whyBuyInspectionTitle && rawData?.inspectionTitle) {
+    data.whyBuyInspectionTitle = rawData.inspectionTitle;
+  }
+  if (!rawData?.whyBuyInspectionDescription && rawData?.inspectionDescription) {
+    data.whyBuyInspectionDescription = rawData.inspectionDescription;
+  }
+  if (!rawData?.whyBuyCustomerCommitmentTitle && rawData?.customerCommitmentTitle) {
+    data.whyBuyCustomerCommitmentTitle = rawData.customerCommitmentTitle;
+  }
+  if (!rawData?.whyBuyCustomerCommitmentDescription && rawData?.customerCommitmentDescription) {
+    data.whyBuyCustomerCommitmentDescription = rawData.customerCommitmentDescription;
+  }
+
+  // Map 'processes' array to 'processSteps' if missing
+  if (!rawData?.processSteps && rawData?.processes && Array.isArray(rawData.processes)) {
+    data.processSteps = rawData.processes.map(p => ({
+      title: p.title || "",
+      description: p.desc || p.description || "",
+      icon: p.icon || ""
+    }));
+  }
+
+  // Map backend image objects to template-specific UI image keys
+  for (let i = 1; i <= 5; i++) {
+    if (!rawData?.[`whyBuyHeroTemplate${i}`] && rawData?.[`whyBuyHeroTemplateId${i}`]) {
+      data[`whyBuyHeroTemplate${i}`] = rawData[`whyBuyHeroTemplateId${i}`];
+    }
+    if (!rawData?.[`whyBuyStoryTemplate${i}`] && rawData?.[`storyTemplateId${i}`]) {
+      data[`whyBuyStoryTemplate${i}`] = rawData[`storyTemplateId${i}`];
+    }
+    if (!rawData?.[`whyBuyVehicleSelectionTemplate${i}`] && rawData?.[`vehicleSelectionTemplateId${i}`]) {
+      data[`whyBuyVehicleSelectionTemplate${i}`] = rawData[`vehicleSelectionTemplateId${i}`];
+    }
+  }
+  for (let i = 1; i <= 4; i++) {
+    if (!rawData?.[`whyBuyProcessTemplate${i}`] && rawData?.[`processTemplateId${i}`]) {
+      data[`whyBuyProcessTemplate${i}`] = rawData[`processTemplateId${i}`];
+    }
+    if (!rawData?.[`whyBuyInspectionTemplate${i}`] && rawData?.[`inspectionTemplateId${i}`]) {
+      data[`whyBuyInspectionTemplate${i}`] = rawData[`inspectionTemplateId${i}`];
+    }
+    if (!rawData?.[`whyBuyGalleryTemplate${i}`] && rawData?.[`galleryTemplateId${i}`]) {
+      data[`whyBuyGalleryTemplate${i}`] = rawData[`galleryTemplateId${i}`];
+    }
+  }
+
+  // Synchronize transformed draft data with the parent state once on load
+  useEffect(() => {
+    if (!rawData || !onUpdate) return;
+    
+    let hasChanges = false;
+    const updatedData = { ...data };
+
+    // Check for missing text fields that are available in rawData
+    const textMappings = {
+      whyBuyStoryTitle: 'storyTitle',
+      whyBuyStoryDescription: 'storyDescription',
+      whyBuyVehicleSelectionTitle: 'vehicleSelectionTitle',
+      whyBuyVehicleSelectionDescription: 'vehicleSelectionDescription',
+      whyBuyProcessTitle: 'processTitle',
+      whyBuyProcessDescription: 'processDescription',
+      whyBuyInspectionTitle: 'inspectionTitle',
+      whyBuyInspectionDescription: 'inspectionDescription',
+      whyBuyCustomerCommitmentTitle: 'customerCommitmentTitle',
+      whyBuyCustomerCommitmentDescription: 'customerCommitmentDescription',
+    };
+
+    Object.entries(textMappings).forEach(([uiKey, rawKey]) => {
+      if (!rawData[uiKey] && rawData[rawKey]) {
+        updatedData[uiKey] = rawData[rawKey];
+        hasChanges = true;
+      }
+    });
+
+    // Sync processes mapping
+    if (!rawData.processSteps && rawData.processes && Array.isArray(rawData.processes)) {
+      updatedData.processSteps = rawData.processes.map(p => ({
+        title: p.title || "",
+        description: p.desc || p.description || "",
+        icon: p.icon || ""
+      }));
+      hasChanges = true;
+    }
+
+    // Sync image mappings
+    for (let i = 1; i <= 5; i++) {
+      if (!rawData[`whyBuyHeroTemplate${i}`] && rawData[`whyBuyHeroTemplateId${i}`]) {
+        updatedData[`whyBuyHeroTemplate${i}`] = rawData[`whyBuyHeroTemplateId${i}`];
+        hasChanges = true;
+      }
+      if (!rawData[`whyBuyStoryTemplate${i}`] && rawData[`storyTemplateId${i}`]) {
+        updatedData[`whyBuyStoryTemplate${i}`] = rawData[`storyTemplateId${i}`];
+        hasChanges = true;
+      }
+      if (!rawData[`whyBuyVehicleSelectionTemplate${i}`] && rawData[`vehicleSelectionTemplateId${i}`]) {
+        updatedData[`whyBuyVehicleSelectionTemplate${i}`] = rawData[`vehicleSelectionTemplateId${i}`];
+        hasChanges = true;
+      }
+    }
+    for (let i = 1; i <= 4; i++) {
+      if (!rawData[`whyBuyProcessTemplate${i}`] && rawData[`processTemplateId${i}`]) {
+        updatedData[`whyBuyProcessTemplate${i}`] = rawData[`processTemplateId${i}`];
+        hasChanges = true;
+      }
+      if (!rawData[`whyBuyInspectionTemplate${i}`] && rawData[`inspectionTemplateId${i}`]) {
+        updatedData[`whyBuyInspectionTemplate${i}`] = rawData[`inspectionTemplateId${i}`];
+        hasChanges = true;
+      }
+      if (!rawData[`whyBuyGalleryTemplate${i}`] && rawData[`galleryTemplateId${i}`]) {
+        updatedData[`whyBuyGalleryTemplate${i}`] = rawData[`galleryTemplateId${i}`];
+        hasChanges = true;
+      }
+    }
+
+    if (hasChanges) {
+      onUpdate(updatedData);
+    }
+  }, [rawData]);
   const updateField = (field, value) => {
     if (onUpdate) onUpdate({ ...data, [field]: value });
   };
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];
-    if (typeof newArray[index] === 'object' && newArray[index] !== null) {
+    if (typeof newArray[index] === "object" && newArray[index] !== null) {
       newArray[index] = { ...newArray[index], [field]: value };
     } else {
       newArray[index] = value;
@@ -132,7 +271,9 @@ export default function WhyBuyPro3({
         : [...prev, id];
 
       // Update data state so it stays in sync
-      const newFeaturedReviews = allReviews.filter((r) => newIds.includes(r.id));
+      const newFeaturedReviews = allReviews.filter((r) =>
+        newIds.includes(r.id),
+      );
       updateField("featuredReviews", newFeaturedReviews);
 
       return newIds;
@@ -388,15 +529,13 @@ export default function WhyBuyPro3({
         data.whyBuyCustomerCommitmentDescription || "",
       );
 
-      await Promise.all([
-        setWhyBuyHero(heroData),
-        setWhyBuyStory(storyData),
-        setWhyBuyVehicleSelection(vehicleData),
-        setWhyBuyProcess(processData),
-        setWhyBuyInspection(inspectionData),
-        setWhyBuyCustomerCommitment(commitmentData),
-        setFeaturedReviews(selectedReviewIds),
-      ]);
+      await setWhyBuyHero(heroData);
+      await setWhyBuyStory(storyData);
+      await setWhyBuyVehicleSelection(vehicleData);
+      await setWhyBuyProcess(processData);
+      await setWhyBuyInspection(inspectionData);
+      await setWhyBuyCustomerCommitment(commitmentData);
+      await setFeaturedReviews(selectedReviewIds);
 
       if (onNextTab) onNextTab();
     } catch (error) {
@@ -893,7 +1032,9 @@ export default function WhyBuyPro3({
                         e.target.value,
                       )
                     }
-                    maxLength={rules?.arrayRules?.processSteps?.description?.max}
+                    maxLength={
+                      rules?.arrayRules?.processSteps?.description?.max
+                    }
                     error={!!errors?.processSteps?.[i]?.description}
                     errorMsg={errors?.processSteps?.[i]?.description}
                   />

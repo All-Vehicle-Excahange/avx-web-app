@@ -95,6 +95,47 @@ export default function WhyBuyPremium1({
       ),
     ),
   };
+
+  // Map 'processes' and 'inspectionDescription' from draft/backend to UI fields
+  // Only apply mapping if the target UI fields don't exist yet to avoid overwriting user edits
+  if (!rawData?.processSteps && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
+    data.processSteps = rawData.processes.map(p => ({
+      title: p.title || "",
+      description: p.desc || p.description || "",
+      icon: p.icon || ""
+    }));
+  }
+  if (!rawData?.inspectionText && rawData?.inspectionDescription) {
+    data.inspectionText = rawData.inspectionDescription;
+  }
+
+  // Synchronize transformed draft data with the parent state once on load
+  useEffect(() => {
+    if (!rawData || !onUpdate) return;
+    
+    let hasChanges = false;
+    const updatedData = { ...data };
+
+    // Sync processes mapping
+    if (!rawData.processSteps && rawData.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
+      updatedData.processSteps = rawData.processes.map(p => ({
+        title: p.title || "",
+        description: p.desc || p.description || "",
+        icon: p.icon || ""
+      }));
+      hasChanges = true;
+    }
+
+    // Sync inspection text mapping
+    if (!rawData.inspectionText && rawData.inspectionDescription) {
+      updatedData.inspectionText = rawData.inspectionDescription;
+      hasChanges = true;
+    }
+
+    if (hasChanges) {
+      onUpdate(updatedData);
+    }
+  }, [rawData]);
   const [active, setActive] = useState(0);
   const scrollRef = useRef(null);
   const [hovered, setHovered] = useState(null);
@@ -119,7 +160,7 @@ export default function WhyBuyPremium1({
   };
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];
-    if (typeof newArray[index] === 'object' && newArray[index] !== null) {
+    if (typeof newArray[index] === "object" && newArray[index] !== null) {
       newArray[index] = { ...newArray[index], [field]: value };
     } else {
       newArray[index] = value;
@@ -230,8 +271,7 @@ export default function WhyBuyPremium1({
         );
       else if (data.vehicleSelectionTemplate1?.imageUrl) {
         const b = await getBlobFromUrl(data.vehicleSelectionTemplate1.imageUrl);
-        if (b)
-          vehicleData.append("customVehicleSelection1", b, "sel1.png");
+        if (b) vehicleData.append("customVehicleSelection1", b, "sel1.png");
       }
       if (data.vehicleSelectionTemplate2?.id)
         vehicleData.append(
@@ -240,8 +280,7 @@ export default function WhyBuyPremium1({
         );
       else if (data.vehicleSelectionTemplate2?.imageUrl) {
         const b = await getBlobFromUrl(data.vehicleSelectionTemplate2.imageUrl);
-        if (b)
-          vehicleData.append("customVehicleSelection2", b, "sel2.png");
+        if (b) vehicleData.append("customVehicleSelection2", b, "sel2.png");
       }
 
       const processData = new FormData();
@@ -350,16 +389,14 @@ export default function WhyBuyPremium1({
       }
       // Note: Backend might not use galleryData directly in WhyBuyPremium. Keeping consistent with existing logic.
 
-      await Promise.all([
-        setWhyBuyHero(heroData),
-        setWhyBuyStory(storyData),
-        setWhyBuyVehicleSelection(vehicleData),
-        setWhyBuyProcess(processData),
-        setWhyBuyInspection(inspectionData),
-        setWhyBuyCustomerCommitment(commitmentData),
-        setWhyBuyGallery(galleryData),
-        setFeaturedReviews(selectedReviewIds),
-      ]);
+      await setWhyBuyHero(heroData);
+      await setWhyBuyStory(storyData);
+      await setWhyBuyVehicleSelection(vehicleData);
+      await setWhyBuyProcess(processData);
+      await setWhyBuyInspection(inspectionData);
+      await setWhyBuyCustomerCommitment(commitmentData);
+      await setWhyBuyGallery(galleryData);
+      await setFeaturedReviews(selectedReviewIds);
 
       if (onNextTab) onNextTab();
     } catch (error) {
@@ -912,7 +949,9 @@ export default function WhyBuyPremium1({
                         e.target.value,
                       )
                     }
-                    maxLength={rules?.arrayRules?.processSteps?.description?.max}
+                    maxLength={
+                      rules?.arrayRules?.processSteps?.description?.max
+                    }
                     error={!!errors?.processSteps?.[i]?.description}
                     errorMsg={errors?.processSteps?.[i]?.description}
                   />
@@ -1232,9 +1271,7 @@ export default function WhyBuyPremium1({
             <div className="h-40 relative">
               <ImageUploader
                 label="Gallery Image 1"
-                src={
-                  data.customGallery1 || data.galleryTemplate1?.imageUrl
-                }
+                src={data.customGallery1 || data.galleryTemplate1?.imageUrl}
                 fieldKey="galImg1"
                 imageType="GALLERY"
                 onChange={({ imageUrl, id }) => {
@@ -1255,9 +1292,7 @@ export default function WhyBuyPremium1({
             <div className="h-40 relative">
               <ImageUploader
                 label="Gallery Image 2"
-                src={
-                  data.customGallery2 || data.galleryTemplate2?.imageUrl
-                }
+                src={data.customGallery2 || data.galleryTemplate2?.imageUrl}
                 fieldKey="galImg2"
                 imageType="GALLERY"
                 onChange={({ imageUrl, id }) => {
@@ -1277,9 +1312,7 @@ export default function WhyBuyPremium1({
             <div className="h-40 relative">
               <ImageUploader
                 label="Gallery Image 3"
-                src={
-                  data.customGallery3 || data.galleryTemplate3?.imageUrl
-                }
+                src={data.customGallery3 || data.galleryTemplate3?.imageUrl}
                 fieldKey="galImg3"
                 imageType="GALLERY"
                 onChange={({ imageUrl, id }) => {
@@ -1299,9 +1332,7 @@ export default function WhyBuyPremium1({
             <div className="h-40 relative">
               <ImageUploader
                 label="Gallery Image 4"
-                src={
-                  data.customGallery4 || data.galleryTemplate4?.imageUrl
-                }
+                src={data.customGallery4 || data.galleryTemplate4?.imageUrl}
                 fieldKey="galImg4"
                 imageType="GALLERY"
                 onChange={({ imageUrl, id }) => {
@@ -1321,9 +1352,7 @@ export default function WhyBuyPremium1({
             <div className="h-40 relative col-span-2">
               <ImageUploader
                 label="Gallery Image 5"
-                src={
-                  data.customGallery5 || data.galleryTemplate5?.imageUrl
-                }
+                src={data.customGallery5 || data.galleryTemplate5?.imageUrl}
                 fieldKey="galImg5"
                 imageType="GALLERY"
                 onChange={({ imageUrl, id }) => {

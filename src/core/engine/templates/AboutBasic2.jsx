@@ -44,14 +44,6 @@ const SVG_OPTIONS = [
     value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-320q93 0 156.5-63.5T700-540q0-93-63.5-156.5T480-760q-93 0-156.5 63.5T260-540q0 93 63.5 156.5T480-320Zm0-160q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm0 374q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-106Zm0 106Q319 217 239.5 334.5T160-552q0 150 96.5 255T480-200q150 0 246-105t96-255q0-100-80.5-217.5T480-500Z"/></svg>`,
     label: "Globe",
   },
-  {
-    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M472-160q-104 0-178-74t-74-178q0-63 27.5-115.5T340-614l-18 76q-30 14-47.5 42.5T260-440q0 59 40.5 99.5T400-300h72q29 0 51.5-14t38-38l58-110q71 32 132.5 79T840-256q33 0 63-8t57-24l-52-60q-23 15-48 23.5t-51 8.5zm5-220q36 0 61-25t25-61q0-36-25-61t-61-25q-36 0-61 25t-25 61q0 36 25 61t61 25Zm-97 220-24-50q-30 30-70 46t-80 16q-42 0-80-16t-70-46l-24 50q39 45 93.5 71.5T480-80Z"/></svg>`,
-    label: "TrendingUp",
-  },
-  {
-    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M440-280v-280q0-17-11.5-28.5T400-600h80q17 0 28.5 11.5T520-560v168q0 13-3.5 25t-10.5 21-17 13-21.5 4.5H440Zm-80-320v-40h160v40h-40v160h-80v-160h-40Zm400-80h-80v-80h-80v80h-80v-80h-80v120q0 17 11.5 28.5T240-460h240q17 0 28.5-11.5T520-500v-80Z"/></svg>`,
-    label: "Cpu",
-  },
 ];
 
 const selectStyles = {
@@ -118,6 +110,49 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
     )
   };
 
+  // Map backend fields to UI fields if UI fields are missing
+  if (!rawData?.missionDesc && rawData?.missionDescription) {
+    data.missionDesc = rawData.missionDescription;
+  }
+  if (!rawData?.visionDesc && rawData?.visionDescription) {
+    data.visionDesc = rawData.visionDescription;
+  }
+  if (!rawData?.servicesTitle && rawData?.serviceTitle) {
+    data.servicesTitle = rawData.serviceTitle;
+  }
+  if (!rawData?.servicesDesc && rawData?.serviceDescription) {
+    data.servicesDesc = rawData.serviceDescription;
+  }
+
+  // Synchronize transformed draft data with the parent state once on load
+  React.useEffect(() => {
+    if (!rawData) return;
+    
+    let hasChanges = false;
+    const updatedData = { ...data };
+
+    if (!rawData.missionDesc && rawData.missionDescription) {
+      updatedData.missionDesc = rawData.missionDescription;
+      hasChanges = true;
+    }
+    if (!rawData.visionDesc && rawData.visionDescription) {
+      updatedData.visionDesc = rawData.visionDescription;
+      hasChanges = true;
+    }
+    if (!rawData.servicesTitle && rawData.serviceTitle) {
+      updatedData.servicesTitle = rawData.serviceTitle;
+      hasChanges = true;
+    }
+    if (!rawData.servicesDesc && rawData.serviceDescription) {
+      updatedData.servicesDesc = rawData.serviceDescription;
+      hasChanges = true;
+    }
+
+    if (hasChanges && onUpdate) {
+      onUpdate(updatedData);
+    }
+  }, [rawData]);
+
   if (!rawData) return null;
 
   const updateField = (field, value) => {
@@ -169,13 +204,11 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
         });
       }
 
-      await Promise.all([
-        setAboutHero(heroData),
-        setAboutMission(missionData),
-        setAboutVision(visionData),
-        setState(statsData),
-        setAboutServices(servicesData),
-      ]);
+      await setAboutHero(heroData);
+      await setAboutMission(missionData);
+      await setAboutVision(visionData);
+      await setState(statsData);
+      await setAboutServices(servicesData);
 
       if (onNextTab) {
         onNextTab();

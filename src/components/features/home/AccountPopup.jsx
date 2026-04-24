@@ -146,7 +146,6 @@ export default function AccountPopup({ open, onClosePopup }) {
       setIsLoggingOut(true);
       await logoutUser();
     } catch (err) {
-      console.log("Logout API failed, clearing state anyway...");
     } finally {
       setIsLoggingOut(false);
 
@@ -580,7 +579,7 @@ export default function AccountPopup({ open, onClosePopup }) {
         isOpen={isLoginOpen}
         onClose={() => {
           setIsLoginOpen(false);
-          onClosePopup();
+          // onClosePopup();
         }}
         onSuccess={() => {
           setIsLoginOpen(false);
@@ -596,7 +595,7 @@ export default function AccountPopup({ open, onClosePopup }) {
         isOpen={isSignupOpen}
         onClose={() => {
           setIsSignupOpen(false);
-          onClosePopup();
+          // onClosePopup();
         }}
         onSuccess={() => {
           setIsSignupOpen(false);

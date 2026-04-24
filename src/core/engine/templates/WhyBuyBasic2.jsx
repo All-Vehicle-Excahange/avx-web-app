@@ -25,16 +25,20 @@ const SVG_OPTIONS = [
     label: "Search",
   },
   {
-    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M880-300 760-420l-80 80q-83 0-141.5-58.5T480-620q0-83 58.5-141.5T680-820q83 0 141.5 58.5T880-620v200ZM480-160q33 0 56.5-23.5T560-240v-240q0-33-23.5-56.5T480-560q-33 0-56.5 23.5T400-480v240q0 33 23.5 56.5T480-160Z"/></svg>`,
-    label: "MessageCircle",
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>`,
+    label: "Cancel",
   },
   {
-    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M440-280v-280q0-17-11.5-28.5T400-600h80q17 0 28.5 11.5T520-560v168q0 13-3.5 25t-10.5 21-17 13-21.5 4.5H440Zm-80-320v-40h160v40h-40v160h-80v-160h-40Zm400-80h-80v-80h-80v80h-80v-80h-80v120q0 17 11.5 28.5T240-460h240q17 0 28.5-11.5T520-500v-80Z"/></svg>`,
-    label: "ShieldCheck",
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M300-360q-25 0-42.5-17.5T240-420v-40h60v40h60v-180h60v180q0 25-17.5 42.5T360-360h-60Zm220 0q-17 0-28.5-11.5T480-400v-40h60v20h80v-40H520q-17 0-28.5-11.5T480-500v-60q0-17 11.5-28.5T520-600h120q17 0 28.5 11.5T680-560v40h-60v-20h-80v40h100q17 0 28.5 11.5T680-460v60q0 17-11.5 28.5T640-360H520Z"/></svg>`,
+    label: "Layout",
   },
   {
-    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M760-260q-50 0-85-35t-35-85q0-35 18.5-64.5T700-498l58-118q17 31 49 51.5t69 20.5h30q8 0 14-6t6-14q0-33-23.5-56.5T760-740q-33 0-56.5 23.5T680-660q0 8 6 14t14 6h30q50 0 89.5 25.5T870-547l-58 118q-17-8-37-12.5t-43-4.5q-50 0-85 35t-35 85q0 35 18.5 64.5T700-262l-58 118q-17-31-49-51.5T524-230H494q-8 0-14 6t-6 14q0 33 23.5 56.5T440-120q33 0 56.5-23.5T520-200q0-8-6-14t-14-6h-30q-50 0-89.5-25.5T330-313l58-118q17 8 37 12.5T470-410q50 0 85-35t35-85q0-35-18.5-64.5T520-662l58-118q17 31 49 51.5T696-694h30q8 0 14-6t6-14q0-33-23.5-56.5T760-800q-33 0-56.5 23.5T680-720q0 8 6 14t14 6h30q50 0 89.5 25.5T870-607l-58 118q-17-8-37-12.5T730-510Z"/></svg>`,
-    label: "Handshake",
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M320-240 80-480l240-240 57 57-184 184 183 183-56 56Zm320 0-57-57 184-184-183-183 56-56 240 240-240 240Z"/></svg>`,
+    label: "Code",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-40-360v-240h80v207l154 154-57 57-177-178Z"/></svg>`,
+    label: "Clock",
   },
 ];
 
@@ -118,6 +122,24 @@ export default function WhyBuyHereBasic2({
     ),
   };
 
+  // Map 'processes' and 'inspectionDescription' from draft/backend to UI fields
+  // Only apply mapping if the target UI fields don't exist yet to avoid overwriting user edits
+  if (
+    !rawData?.processSteps &&
+    rawData?.processes &&
+    Array.isArray(rawData.processes) &&
+    rawData.processes.length > 0
+  ) {
+    data.processSteps = rawData.processes.map((p) => ({
+      title: p.title || "",
+      description: p.desc || p.description || "",
+      icon: p.icon || "",
+    }));
+  }
+  if (!rawData?.inspectionText && rawData?.inspectionDescription) {
+    data.inspectionText = rawData.inspectionDescription;
+  }
+
   const [allReviews, setAllReviews] = useState([]);
   const [selectedReviewIds, setSelectedReviewIds] = useState([]);
 
@@ -156,7 +178,7 @@ export default function WhyBuyHereBasic2({
 
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];
-    if (typeof newArray[index] === 'object' && newArray[index] !== null) {
+    if (typeof newArray[index] === "object" && newArray[index] !== null) {
       newArray[index] = { ...newArray[index], [field]: value };
     } else {
       newArray[index] = value;
@@ -219,15 +241,13 @@ export default function WhyBuyHereBasic2({
         data.customerCommitmentDescription || "",
       );
 
-      await Promise.all([
-        setWhyBuyHero(heroData),
-        setWhyBuyStory(storyData),
-        setWhyBuyVehicleSelection(vehicleData),
-        setWhyBuyProcess(processData),
-        setWhyBuyInspection(inspectionData),
-        setWhyBuyCustomerCommitment(commitmentData),
-        setFeaturedReviews(selectedReviewIds),
-      ]);
+      await setWhyBuyHero(heroData);
+      await setWhyBuyStory(storyData);
+      await setWhyBuyVehicleSelection(vehicleData);
+      await setWhyBuyProcess(processData);
+      await setWhyBuyInspection(inspectionData);
+      await setWhyBuyCustomerCommitment(commitmentData);
+      await setFeaturedReviews(selectedReviewIds);
     } catch (error) {
       console.error("Error updating Why Buy sections", error);
     } finally {
@@ -399,7 +419,9 @@ export default function WhyBuyHereBasic2({
                         e.target.value,
                       )
                     }
-                    maxLength={rules?.arrayRules?.processSteps?.description?.max}
+                    maxLength={
+                      rules?.arrayRules?.processSteps?.description?.max
+                    }
                     error={!!errors?.processSteps?.[i]?.description}
                     errorMsg={errors?.processSteps?.[i]?.description}
                   />

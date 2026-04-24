@@ -110,6 +110,117 @@ export default function WhyBuyPro2({
     ),
   };
 
+  // Map 'processes' and 'inspectionDescription' from draft/backend to UI fields
+  // Only apply mapping if the target UI fields don't exist yet to avoid overwriting user edits
+  if (!rawData?.processSteps && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
+    data.processSteps = rawData.processes.map(p => ({
+      title: p.title || "",
+      description: p.desc || p.description || "",
+      icon: p.icon || ""
+    }));
+  }
+  if (!rawData?.inspectionText && rawData?.inspectionDescription) {
+    data.inspectionText = rawData.inspectionDescription;
+  }
+
+  // Map backend image objects if UI fields are missing
+  for (let i = 1; i <= 5; i++) {
+    if (!rawData?.[`whyBuyHeroTemplate${i}`] && rawData?.[`whyBuyHeroTemplateId${i}`]) {
+      data[`whyBuyHeroTemplate${i}`] = rawData[`whyBuyHeroTemplateId${i}`];
+    }
+  }
+  for (let i = 1; i <= 4; i++) {
+    if (!rawData?.[`storyTemplate${i}`] && rawData?.[`storyTemplateId${i}`]) {
+      data[`storyTemplate${i}`] = rawData[`storyTemplateId${i}`];
+    }
+  }
+  for (let i = 1; i <= 3; i++) {
+    if (!rawData?.[`vehicleSelectionTemplate${i}`] && rawData?.[`vehicleSelectionTemplateId${i}`]) {
+      data[`vehicleSelectionTemplate${i}`] = rawData[`vehicleSelectionTemplateId${i}`];
+    }
+  }
+  for (let i = 1; i <= 4; i++) {
+    if (!rawData?.[`processTemplate${i}`] && rawData?.[`processTemplateId${i}`]) {
+      data[`processTemplate${i}`] = rawData[`processTemplateId${i}`];
+    }
+  }
+  for (let i = 1; i <= 4; i++) {
+    if (!rawData?.[`inspectionTemplate${i}`] && rawData?.[`inspectionTemplateId${i}`]) {
+      data[`inspectionTemplate${i}`] = rawData[`inspectionTemplateId${i}`];
+    }
+  }
+  for (let i = 1; i <= 3; i++) {
+    if (!rawData?.[`customerCommitmentTemplate${i}`] && rawData?.[`customerCommitmentTemplateId${i}`]) {
+      data[`customerCommitmentTemplate${i}`] = rawData[`customerCommitmentTemplateId${i}`];
+    }
+  }
+
+  // Synchronize transformed draft data with the parent state once on load
+  useEffect(() => {
+    if (!rawData) return;
+    
+    let hasChanges = false;
+    const updatedData = { ...data };
+
+    // Sync processes mapping
+    if (!rawData.processSteps && rawData.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
+      updatedData.processSteps = rawData.processes.map(p => ({
+        title: p.title || "",
+        description: p.desc || p.description || "",
+        icon: p.icon || ""
+      }));
+      hasChanges = true;
+    }
+
+    // Sync inspection text mapping
+    if (!rawData.inspectionText && rawData.inspectionDescription) {
+      updatedData.inspectionText = rawData.inspectionDescription;
+      hasChanges = true;
+    }
+
+    // Sync image mappings
+    for (let i = 1; i <= 5; i++) {
+      if (!rawData[`whyBuyHeroTemplate${i}`] && rawData[`whyBuyHeroTemplateId${i}`]) {
+        updatedData[`whyBuyHeroTemplate${i}`] = rawData[`whyBuyHeroTemplateId${i}`];
+        hasChanges = true;
+      }
+    }
+    for (let i = 1; i <= 4; i++) {
+      if (!rawData[`storyTemplate${i}`] && rawData[`storyTemplateId${i}`]) {
+        updatedData[`storyTemplate${i}`] = rawData[`storyTemplateId${i}`];
+        hasChanges = true;
+      }
+    }
+    for (let i = 1; i <= 3; i++) {
+      if (!rawData[`vehicleSelectionTemplate${i}`] && rawData[`vehicleSelectionTemplateId${i}`]) {
+        updatedData[`vehicleSelectionTemplate${i}`] = rawData[`vehicleSelectionTemplateId${i}`];
+        hasChanges = true;
+      }
+    }
+    for (let i = 1; i <= 4; i++) {
+      if (!rawData[`processTemplate${i}`] && rawData[`processTemplateId${i}`]) {
+        updatedData[`processTemplate${i}`] = rawData[`processTemplateId${i}`];
+        hasChanges = true;
+      }
+    }
+    for (let i = 1; i <= 4; i++) {
+      if (!rawData[`inspectionTemplate${i}`] && rawData[`inspectionTemplateId${i}`]) {
+        updatedData[`inspectionTemplate${i}`] = rawData[`inspectionTemplateId${i}`];
+        hasChanges = true;
+      }
+    }
+    for (let i = 1; i <= 3; i++) {
+      if (!rawData[`customerCommitmentTemplate${i}`] && rawData[`customerCommitmentTemplateId${i}`]) {
+        updatedData[`customerCommitmentTemplate${i}`] = rawData[`customerCommitmentTemplateId${i}`];
+        hasChanges = true;
+      }
+    }
+
+    if (hasChanges && onUpdate) {
+      onUpdate(updatedData);
+    }
+  }, [rawData]);
+
   const [allReviews, setAllReviews] = useState([]);
   const [selectedReviewIds, setSelectedReviewIds] = useState(
     rawData?.featuredReviews?.map((r) => r.id) || [],
@@ -286,16 +397,15 @@ export default function WhyBuyPro2({
           data.customerCommitmentTemplate3.id,
         );
 
-      await Promise.all([
-        setWhyBuyHero(heroData),
-        setWhyBuyStory(storyData),
-        setWhyBuyVehicleSelection(vehicleData),
-        setWhyBuyProcess(processData),
-        setWhyBuyInspection(inspectionData),
-        setWhyBuyCustomerCommitment(commitmentData),
-        setFeaturedReviews(selectedReviewIds),
-        // Gallery update would go here
-      ]);
+      await setWhyBuyHero(heroData);
+      await setWhyBuyStory(storyData);
+      await setWhyBuyVehicleSelection(vehicleData);
+      await setWhyBuyProcess(processData);
+      await setWhyBuyInspection(inspectionData);
+      await setWhyBuyCustomerCommitment(commitmentData);
+      await setFeaturedReviews(selectedReviewIds);
+      
+      if (onNextTab) onNextTab();
     } catch (error) {
       console.error("Error saving Why Buy sections:", error);
     } finally {

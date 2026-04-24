@@ -11,6 +11,7 @@ import {
   User,
   CreditCard,
   InspectIcon,
+  Star,
 } from "lucide-react";
 
 import { getSellerTierTitle } from "@/lib/helper";
@@ -29,6 +30,11 @@ const menu = [
     label: "Inquiries",
     icon: MessageSquare,
     href: "/consult/dashboard/inquiries",
+  },
+  {
+    label: "Reviews",
+    icon: Star,
+    href: "/consult/dashboard/review",
   },
   { label: "Analytics", icon: BarChart3, href: "/consult/dashboard/analytics" },
   { label: "PPC & Boost", icon: Zap, href: "/consult/dashboard/ppc" },
