@@ -10,27 +10,31 @@ import {
   Zap,
   AlertTriangle,
   AlertCircle,
-  ArrowDown,
-  Info,
-  Tag,
-  Calendar,
   Inbox,
   Shield,
   Rocket,
-  ChevronRight,
   Lightbulb,
   BadgeDollarSign,
-  PlusCircle,
+  User,
 } from "lucide-react";
 import StatCard from "./components/StateCard";
 import Activity from "./components/Activity";
-import Task from "./components/Task";
 import Button from "@/components/ui/button";
-import { ShieldCheck, Star } from "lucide-react";
 import TopPerformingCard from "./components/TopPerformingCard";
 import { useState } from "react";
 import CustomSelect from "@/components/ui/custom-select";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
+import {
+  getInquiryKpis,
+  getNeedAttenctionVehicles,
+  getTopPerformingVehicles,
+} from "@/services/Seller.service";
+import { useEffect } from "react";
+import TopPerformingCardSkeleton from "@/components/ui/skeleton/TopPerformingCardSkeleton";
+import { getInventoryOverview } from "@/services/overview.service";
+import { formatResponseTime, getResponseStatus } from "@/lib/helper";
+import SkeletonBox from "@/components/ui/skeleton/SkeletonBox";
+import StatCardSkeleton from "@/components/ui/skeleton/StatCardSkeleton";
 
 const rangeOptions = [
   { label: "Last 7 days", value: "7" },
@@ -46,15 +50,99 @@ export default function OverviewComponent() {
   const [range, setRange] = useState("30");
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
+  // API Data States
+  const [topPerforming, setTopPerforming] = useState([]);
+  const [needAttention, setNeedAttention] = useState([]);
+  const [inventoryOverview, setInventoryOverview] = useState(null);
+  const [inquiryKpis, setInquiryKpis] = useState(null);
+  const [topPerformingLoading, setTopPerformingLoading] = useState(false);
+  const [needAttentionLoading, setNeedAttentionLoading] = useState(false);
+  const [overviewLoading, setOverviewLoading] = useState(false);
+  const [inquiryLoading, setInquiryLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchInquiryKpis = async () => {
+      try {
+        setInquiryLoading(true);
+        const res = await getInquiryKpis();
+        setInquiryKpis(res.data);
+      } catch (error) {
+        console.error("Error fetching inquiry KPIs:", error);
+      } finally {
+        setInquiryLoading(false);
+      }
+    };
+    const fetchInventoryOverview = async () => {
+      try {
+        setOverviewLoading(true);
+        const res = await getInventoryOverview();
+        setInventoryOverview(res.data);
+      } catch (error) {
+        console.error("Error fetching inventory overview:", error);
+      } finally {
+        setOverviewLoading(false);
+      }
+    };
+    const fetchTopPerforming = async () => {
+      try {
+        setTopPerformingLoading(true);
+        const res = await getTopPerformingVehicles();
+        // Updated to fetch 5 records and show first two (scrollable for rest)
+        setTopPerforming(res.data?.slice(0, 5) || []);
+      } catch (error) {
+        console.error("Error fetching top performing vehicles:", error);
+      } finally {
+        setTopPerformingLoading(false);
+      }
+    };
+
+    const fetchNeedAttention = async () => {
+      try {
+        setNeedAttentionLoading(true);
+        // Updated to fetch 5 records from backend
+        const res = await getNeedAttenctionVehicles({ pageNo: 1, size: 5 });
+        setNeedAttention(res.data || []);
+      } catch (error) {
+        console.error("Error fetching need attention vehicles:", error);
+      } finally {
+        setNeedAttentionLoading(false);
+      }
+    };
+
+    fetchTopPerforming();
+    fetchNeedAttention();
+    fetchInventoryOverview();
+    fetchInquiryKpis();
+  }, []);
+
+  const isInitialLoading =
+    topPerformingLoading &&
+    needAttentionLoading &&
+    overviewLoading &&
+    inquiryLoading;
+
+  const avgTime = inquiryKpis?.averageResponseTime;
+  const formattedTime = formatResponseTime(avgTime);
+  const responseStatus = getResponseStatus(avgTime);
+
+  if (isInitialLoading) {
+    return <OverviewSkeleton />;
+  }
+
   return (
     <>
       <div className="space-y-8">
         {/* HEADER */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <h1 className="text-xl lg:text-2xl font-bold">
-              Welcome, Adarsh Auto Consultants
-            </h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-xl lg:text-2xl font-bold">
+                Welcome, Adarsh Auto Consultants
+              </h1>
+              <span className="w-fit inline-flex items-center px-4 py-1.5 rounded-full bg-primary text-secondary text-[10px] md:text-xs font-bold tracking-wider">
+                PREMIUM PARTNER
+              </span>
+            </div>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs md:text-sm text-third mt-1">
               <span className="flex items-center gap-1 text-green-400 font-medium">
                 <BadgeCheck size={16} />
@@ -78,10 +166,6 @@ export default function OverviewComponent() {
                 variant="transparent"
               />
             </div>
-
-            <span className="w-fit inline-flex items-center px-4 py-1.5 rounded-full bg-primary text-secondary text-[10px] md:text-xs font-bold tracking-wider">
-              PREMIUM PARTNER
-            </span>
           </div>
         </div>
 
@@ -104,7 +188,7 @@ export default function OverviewComponent() {
               trend="+11%"
             />
             <StatCard icon={<BarChart3 />} label="Conversion" value="6.1%" />
-            <StatCard icon={<Car />} label="Active Vehicles" value="28" />
+            <StatCard icon={<User />} label="Follower Count" value="28" />
           </div>
         </div>
 
@@ -188,7 +272,7 @@ export default function OverviewComponent() {
           {/* Inquiries Detail */}
           <div className="rounded-2xl border border-third/20  p-6 flex flex-col space-y-6 transition">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-purple-500/10 rounded-lg text-purple-400">
+              <div className="p-2.5 bg-primary/10 rounded-lg text-primary">
                 <Inbox size={20} />
               </div>
               <h3 className="font-bold text-lg tracking-tight">Inquiries</h3>
@@ -197,28 +281,57 @@ export default function OverviewComponent() {
             <div className="space-y-4 flex-1">
               <div className="flex justify-between items-center text-sm border-b border-third/5 pb-3">
                 <span className="text-third font-medium">New</span>
-                <span className="font-bold text-base">12</span>
+                {inquiryLoading ? (
+                  <SkeletonBox className="h-5 w-10" />
+                ) : (
+                  <span className="font-bold text-base">
+                    {inquiryKpis?.totalPendingInquiries ?? 0}
+                  </span>
+                )}
               </div>
               <div className="flex justify-between items-center text-sm border-b border-third/5 pb-3">
                 <span className="text-third font-medium">Active</span>
-                <span className="font-bold text-base">8</span>
+                {inquiryLoading ? (
+                  <SkeletonBox className="h-5 w-10" />
+                ) : (
+                  <span className="font-bold text-base">
+                    {inquiryKpis?.totalApprovedInquiries ?? 0}
+                  </span>
+                )}
               </div>
               <div className="flex justify-between items-center text-sm pb-2">
                 <span className="text-third font-medium">Closed</span>
-                <span className="font-bold text-base">2</span>
+                {inquiryLoading ? (
+                  <SkeletonBox className="h-5 w-10" />
+                ) : (
+                  <span className="font-bold text-base">
+                    {inquiryKpis?.totalClosedInquiries ?? 0}
+                  </span>
+                )}
               </div>
 
-              <div className="bg-green-500/10 border border-green-500/20 p-3.5 rounded-xl flex items-center gap-3">
-                <Zap size={16} className="text-green-500 fill-green-500/20" />
-                <span className="text-xs font-bold text-green-500 uppercase tracking-wider">
-                  Response Time: 12 min
+              <div className="bg-primary/5 border border-primary/20 p-3.5 rounded-xl flex items-center gap-3">
+                <Zap
+                  size={16}
+                  className={`text-green-500 fill-green-500/20 ${responseStatus.color}`}
+                />
+                <span
+                  className={`text-xs font-bold uppercase tracking-wider ${responseStatus.color}`}
+                >
+                  Response Time:{" "}
+                  {inquiryLoading ? (
+                    <SkeletonBox className="h-3 w-16 inline-block" />
+                  ) : (
+                    formattedTime
+                  )}
                 </span>
               </div>
             </div>
 
             <Button
               href={"/consult/dashboard/inquiries"}
-              className="bg-purple-600 self-end  hover:text-primary hover:border-primary text-white"
+              variant="ghost"
+              className="self-end"
             >
               View All
             </Button>
@@ -227,7 +340,7 @@ export default function OverviewComponent() {
           {/* Chats Detail */}
           <div className="rounded-2xl border border-third/20  p-6 flex flex-col space-y-6 transition ">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-blue-500/10 rounded-lg text-blue-400">
+              <div className="p-2.5 bg-primary/10 rounded-lg text-primary">
                 <MessageSquare size={20} />
               </div>
               <h3 className="font-bold text-lg tracking-tight">Chats</h3>
@@ -250,8 +363,8 @@ export default function OverviewComponent() {
                 </div>
               </div>
 
-              <div className="bg-blue-500/10 border border-blue-500/20 p-3.5 rounded-xl flex items-center gap-3">
-                <span className="text-xs font-bold text-blue-400 uppercase tracking-wider">
+              <div className="bg-primary/10 border border-primary/20 p-3.5 rounded-xl flex items-center gap-3">
+                <span className="text-xs font-bold text-primary uppercase tracking-wider">
                   Response Rate: 89%
                 </span>
               </div>
@@ -259,7 +372,8 @@ export default function OverviewComponent() {
 
             <Button
               onClick={() => setIsDownloadOpen(true)}
-              className="bg-blue-600 self-end  hover:text-primary hover:border-primary text-white"
+              variant="outlineSecondary"
+              className=" self-end"
             >
               Open Inbox
             </Button>
@@ -276,19 +390,37 @@ export default function OverviewComponent() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="flex justify-between items-center text-sm p-4 bg-white/5 rounded-xl border border-third/10">
               <span className="text-third font-medium">Active Vehicles</span>
-              <span className="font-bold text-blue-500 text-lg">28</span>
+              {overviewLoading ? (
+                <SkeletonBox className="h-6 w-10" />
+              ) : (
+                <span className="font-bold text-blue-500 text-lg">
+                  {inventoryOverview?.activeVehicleCount ?? 0}
+                </span>
+              )}
             </div>
             <div className="flex justify-between items-center text-sm p-4 bg-white/5 rounded-xl border border-third/10">
               <span className="text-third font-medium">Inspected Vehicles</span>
-              <span className="font-bold text-green-500 text-lg">9</span>
+              {overviewLoading ? (
+                <SkeletonBox className="h-6 w-10" />
+              ) : (
+                <span className="font-bold text-green-500 text-lg">
+                  {inventoryOverview?.inspectedVehicleCount ?? 0}
+                </span>
+              )}
             </div>
             <div className="flex justify-between items-center text-sm p-4 bg-white/5 rounded-xl border border-third/10">
-              <span className="text-third font-medium">Featured Vehicles</span>
-              <span className="font-bold text-orange-500 text-lg">6</span>
+              <span className="text-third font-medium">Featured Vehicles(DD)</span>
+              <span className="font-bold text-orange-500 text-lg">0</span>
             </div>
             <div className="flex justify-between items-center text-sm p-4 bg-white/5 rounded-xl border border-third/10">
               <span className="text-third font-medium">Low Performance</span>
-              <span className="font-bold text-yellow-500 text-lg">5</span>
+              {overviewLoading ? (
+                <SkeletonBox className="h-6 w-10" />
+              ) : (
+                <span className="font-bold text-yellow-500 text-lg">
+                  {inventoryOverview?.lowVisibilityVehicleCount ?? 0}
+                </span>
+              )}
             </div>
           </div>
 
@@ -319,35 +451,29 @@ export default function OverviewComponent() {
           <div className="rounded-xl border border-third/30  p-6 flex flex-col gap-4">
             <h3 className="font-semibold">Top Performing Listings</h3>
 
-            <div className="flex flex-col gap-4 flex-1">
-              <TopPerformingCard
-                rank={1}
-                vehicle={{
-                  id: "v1",
-                  makerName: "BMW",
-                  modelName: "X1",
-                  variantName: "sDrive20d xLine",
-                  price: 4500000,
-                  totalInquiries: 24,
-                  listingDate: new Date().toISOString(),
-                  inspectionStatus: "INSPECTED",
-                  thumbnailUrl: "/big_card_car.jpg",
-                }}
-              />
-              <TopPerformingCard
-                rank={2}
-                vehicle={{
-                  id: "v2",
-                  makerName: "Honda",
-                  modelName: "City",
-                  variantName: "ZX CVT",
-                  price: 1550000,
-                  totalInquiries: 18,
-                  listingDate: DATE_3_DAYS_AGO,
-                  inspectionStatus: "NOT_INSPECTED",
-                  thumbnailUrl: "/big_card_car.jpg",
-                }}
-              />
+            <div className="flex-1 h-[380px] overflow-y-auto custom-scrollbar pr-1">
+              <div className="flex flex-col gap-4">
+                {topPerformingLoading ? (
+                  <>
+                    <TopPerformingCardSkeleton />
+                    <TopPerformingCardSkeleton />
+                  </>
+                ) : topPerforming.length > 0 ? (
+                  topPerforming.map((vehicle, index) => (
+                    <TopPerformingCard
+                      key={vehicle.id}
+                      rank={index + 1}
+                      vehicle={vehicle}
+                    />
+                  ))
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full text-center py-8">
+                    <p className="text-sm text-third">
+                      No top performing vehicles yet.
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="pt-3 border-t border-third/10 self-end">
@@ -365,33 +491,25 @@ export default function OverviewComponent() {
           <div className="rounded-xl border border-third/30  p-6 flex flex-col gap-4">
             <h3 className="font-semibold text-primary">Needs Attention</h3>
 
-            <div className="flex flex-col gap-4 flex-1">
-              <TopPerformingCard
-                vehicle={{
-                  id: "v3",
-                  makerName: "Maruti",
-                  modelName: "Swift",
-                  variantName: "VXI AMT",
-                  price: 780000,
-                  totalInquiries: 2,
-                  listingDate: DATE_12_DAYS_AGO,
-                  inspectionStatus: "NOT_INSPECTED",
-                  thumbnailUrl: "/big_card_car.jpg",
-                }}
-              />
-              <TopPerformingCard
-                vehicle={{
-                  id: "v4",
-                  makerName: "Hyundai",
-                  modelName: "i20",
-                  variantName: "Asta Turbo",
-                  price: 1020000,
-                  totalInquiries: 1,
-                  listingDate: DATE_18_DAYS_AGO,
-                  inspectionStatus: "NOT_INSPECTED",
-                  thumbnailUrl: "/big_card_car.jpg",
-                }}
-              />
+            <div className="flex-1 h-[380px] overflow-y-auto custom-scrollbar pr-1">
+              <div className="flex flex-col gap-4">
+                {needAttentionLoading ? (
+                  <>
+                    <TopPerformingCardSkeleton />
+                    <TopPerformingCardSkeleton />
+                  </>
+                ) : needAttention.length > 0 ? (
+                  needAttention.map((vehicle) => (
+                    <TopPerformingCard key={vehicle.id} vehicle={vehicle} />
+                  ))
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full text-center py-8">
+                    <p className="text-sm text-third">
+                      No vehicles need attention.
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="pt-3 border-t border-amber-500/20 self-end">
@@ -411,7 +529,7 @@ export default function OverviewComponent() {
           {/* INSPECTION STATUS */}
           <div className="rounded-xl border border-third/30 p-6 flex flex-col gap-5">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-blue-500/10 rounded-lg text-blue-400">
+              <div className="p-2.5 bg-primary/10 rounded-lg text-primary">
                 <Shield size={20} />
               </div>
               <h3 className="font-bold text-lg tracking-tight">
@@ -432,7 +550,7 @@ export default function OverviewComponent() {
                 </div>
               </div>
 
-              <div className="bg-green-500/10 border border-green-500/20 p-3 rounded-xl flex items-center gap-2">
+              <div className="bg-primary/5 border border-primary/20 p-3 rounded-xl flex items-center gap-2">
                 <TrendingUp size={15} className="text-green-500" />
                 <span className="text-xs font-bold text-green-500">
                   +30% better performance
@@ -443,7 +561,7 @@ export default function OverviewComponent() {
             <div className="pt-3 border-t border-third/10 self-end">
               <Button
                 href={"/consult/dashboard/inspection"}
-                className=" bg-blue-600  hover:text-primary hover:border-primary text-white"
+                className=" bg-primary  text-secondary  hover:bg-transparent hover:text-white hover:border-primary "
               >
                 Request Inspection
               </Button>
@@ -453,7 +571,7 @@ export default function OverviewComponent() {
           {/* VISIBILITY */}
           <div className="rounded-xl border border-third/30 p-6 flex flex-col gap-5">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-purple-500/10 rounded-lg text-purple-400">
+              <div className="p-2.5 bg-primary/10 rounded-lg text-primary">
                 <Eye size={20} />
               </div>
               <h3 className="font-bold text-lg tracking-tight">Visibility</h3>
@@ -477,7 +595,7 @@ export default function OverviewComponent() {
             <div className="pt-3 border-t border-third/10 self-end">
               <Button
                 href={"/consult/dashboard/ppc"}
-                className="bg-purple-600   hover:text-primary hover:border-primary text-white"
+                variant="outlineSecondary"
               >
                 Manage Boost
               </Button>
@@ -555,5 +673,118 @@ export default function OverviewComponent() {
         onClose={() => setIsDownloadOpen(false)}
       />
     </>
+  );
+}
+
+function OverviewSkeleton() {
+  return (
+    <div className="space-y-8 animate-pulse">
+      {/* HEADER SKELETON */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="space-y-2">
+          <div className="flex items-center gap-3">
+            <SkeletonBox className="h-8 w-64" />
+            <SkeletonBox className="h-6 w-32 rounded-full" />
+          </div>
+          <SkeletonBox className="h-4 w-48" />
+        </div>
+        <div className="flex items-center gap-3">
+          <SkeletonBox className="h-10 w-44 rounded-xl" />
+        </div>
+      </div>
+
+      {/* PERFORMANCE SNAPSHOT SKELETON */}
+      <div className="rounded-xl border border-third/30 p-6 space-y-5">
+        <SkeletonBox className="h-6 w-48" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StatCardSkeleton />
+          <StatCardSkeleton />
+          <StatCardSkeleton />
+          <StatCardSkeleton />
+        </div>
+      </div>
+
+      {/* RECOMMENDED ACTIONS SKELETON */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[...Array(3)].map((_, i) => (
+          <div
+            key={i}
+            className="rounded-2xl border border-third/20 p-6 space-y-4"
+          >
+            <div className="flex items-center gap-4">
+              <SkeletonBox className="h-11 w-11 rounded-xl" />
+              <SkeletonBox className="h-6 w-32" />
+            </div>
+            <SkeletonBox className="h-4 w-full" />
+            <SkeletonBox className="h-10 w-full rounded-xl" />
+          </div>
+        ))}
+      </div>
+
+      {/* INQUIRIES & CHATS SKELETON */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {[...Array(2)].map((_, i) => (
+          <div
+            key={i}
+            className="rounded-2xl border border-third/20 p-6 space-y-6"
+          >
+            <div className="flex items-center gap-3">
+              <SkeletonBox className="h-10 w-10 rounded-lg" />
+              <SkeletonBox className="h-6 w-24" />
+            </div>
+            <div className="space-y-4">
+              <div className="flex justify-between pb-3 border-b border-third/5">
+                <SkeletonBox className="h-4 w-16" />
+                <SkeletonBox className="h-4 w-8" />
+              </div>
+              <div className="flex justify-between pb-3 border-b border-third/5">
+                <SkeletonBox className="h-4 w-16" />
+                <SkeletonBox className="h-4 w-8" />
+              </div>
+              <div className="flex justify-between">
+                <SkeletonBox className="h-4 w-16" />
+                <SkeletonBox className="h-4 w-8" />
+              </div>
+              <SkeletonBox className="h-12 w-full rounded-xl" />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* INVENTORY STATUS SKELETON */}
+      <div className="rounded-xl border border-third/30 p-6 space-y-6">
+        <SkeletonBox className="h-5 w-40" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="p-4 rounded-xl border border-third/10 flex justify-between items-center">
+            <SkeletonBox className="h-4 w-24" />
+            <SkeletonBox className="h-6 w-10" />
+          </div>
+          <div className="p-4 rounded-xl border border-third/10 flex justify-between items-center">
+            <SkeletonBox className="h-4 w-24" />
+            <SkeletonBox className="h-6 w-10" />
+          </div>
+          <div className="p-4 rounded-xl border border-third/10 flex justify-between items-center">
+            <SkeletonBox className="h-4 w-24" />
+            <SkeletonBox className="h-6 w-10" />
+          </div>
+        </div>
+      </div>
+
+      {/* LISTINGS SKELETON */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {[...Array(2)].map((_, i) => (
+          <div
+            key={i}
+            className="rounded-xl border border-third/30 p-6 space-y-4"
+          >
+            <SkeletonBox className="h-6 w-48" />
+            <div className="space-y-3">
+              <TopPerformingCardSkeleton />
+              <TopPerformingCardSkeleton />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
