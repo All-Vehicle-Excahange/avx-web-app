@@ -65,14 +65,25 @@ function ReviewComponent() {
     fetchSummary();
   }, [range]);
 
+  // Reset page when range changes to fetch fresh data for the new period
+  useEffect(() => {
+    setPage(0);
+  }, [range]);
+
   // Fetch Reviews (Paginated)
   useEffect(() => {
     const fetchReviews = async () => {
       try {
         if (page === 0) setIsLoadingReviews(true);
+        const daysMap = {
+          7: "LAST_7_DAYS",
+          30: "LAST_30_DAYS",
+          90: "LAST_90_DAYS",
+        };
         const response = await getAllConsultationReviews({
           pageNo: page,
           size: 3,
+          daysRange: daysMap[range],
         });
 
         // The API returns { data: [...], pageResponse: { totalPages: X, ... } }
@@ -95,7 +106,7 @@ function ReviewComponent() {
       }
     };
     fetchReviews();
-  }, [page]);
+  }, [page, range]);
 
   const handleReplySubmit = async (review) => {
     if (!replyText.trim()) return;
@@ -172,9 +183,21 @@ function ReviewComponent() {
         <h3 className="text-xl font-bold mb-6 text-white">Customer reviews</h3>
 
         {isLoadingSummary ? (
-          <div className="space-y-6">
-            <SkeletonBox className="h-10 w-48" />
-            <SkeletonBox className="h-32 w-full max-w-xl" />
+          <div className="space-y-8 animate-pulse">
+            <div className="space-y-2">
+              <SkeletonBox className="h-8 w-40" />
+              <SkeletonBox className="h-4 w-32" />
+            </div>
+            
+            <div className="space-y-4 max-w-xl">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="flex items-center gap-4">
+                  <SkeletonBox className="h-4 w-12" />
+                  <SkeletonBox className="h-2 flex-1" rounded="rounded-full" />
+                  <SkeletonBox className="h-4 w-10" />
+                </div>
+              ))}
+            </div>
           </div>
         ) : (
           <div className="space-y-6">
@@ -239,12 +262,33 @@ function ReviewComponent() {
         <div className="grid gap-6">
           {isLoadingReviews && page === 0 ? (
             [1, 2, 3].map((i) => (
-              <SkeletonBox key={i} className="h-64 w-full rounded-3xl" />
+              <div
+                key={i}
+                className="border border-white/5 rounded-3xl p-6 space-y-6"
+              >
+                <div className="flex items-center gap-3">
+                  <SkeletonBox className="w-10 h-10" rounded="rounded-full" />
+                  <SkeletonBox className="h-4 w-32" />
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <SkeletonBox className="h-4 w-24" />
+                    <SkeletonBox className="h-4 w-20" />
+                  </div>
+                  <SkeletonBox className="h-3 w-40" />
+                  <SkeletonBox className="h-5 w-48 mt-2" />
+                  <div className="space-y-2">
+                    <SkeletonBox className="h-3 w-full" />
+                    <SkeletonBox className="h-3 w-[90%]" />
+                    <SkeletonBox className="h-3 w-[70%]" />
+                  </div>
+                </div>
+              </div>
             ))
           ) : reviews.length === 0 ? (
             <div className="text-center py-20 border border-white/10 rounded-3xl">
               <MessageSquare className="mx-auto text-white/20 mb-4" size={48} />
-              <p className="text-third">No reviews found.</p>
+              <p className="text-third">No reviews found for the last {range} days.</p>
             </div>
           ) : (
             reviews.map((review) => (
@@ -327,7 +371,7 @@ function ReviewComponent() {
                 {/* EXISTING REPLY */}
                 {review.consultReply && (
                   <div className="mt-6 flex justify-start">
-                    <div className="flex gap-4 p-5 bg-white/[0.02] border border-white/5 rounded-2xl relative overflow-hidden w-full group/reply">
+                    <div className="flex gap-4 p-5 bg-white/2 border border-white/5 rounded-2xl relative overflow-hidden w-full group/reply">
                       {/* Consultant Avatar */}
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium text-sm border border-primary/20 shrink-0">
                         <User size={16} />
@@ -379,7 +423,7 @@ function ReviewComponent() {
                           value={replyText}
                           onChange={(e) => setReplyText(e.target.value)}
                           placeholder="Type your professional response here..."
-                          className="w-full bg-white/[0.02] border border-white/10 rounded-2xl p-5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-all min-h-[120px] resize-none leading-relaxed shadow-inner"
+                          className="w-full bg-white/2 border border-white/10 rounded-2xl p-5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-all min-h-[120px] resize-none leading-relaxed shadow-inner"
                         />
                         <div className="absolute bottom-4 right-4 text-[10px] text-white/20 font-medium">
                           {replyText.length} characters
@@ -452,7 +496,7 @@ function ReviewComponent() {
       {selectedImage && (
         <div
           onClick={() => setSelectedImage(null)}
-          className="fixed inset-0 z-[1200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
+          className="fixed inset-0 z-1200 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
         >
           <div
             onClick={(e) => e.stopPropagation()}

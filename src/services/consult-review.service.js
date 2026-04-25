@@ -31,6 +31,7 @@ export const getAllConsultationReviews = async (params = {}) => {
         size: params.size || 10,
         sortBy: params.sortBy || "createdAt",
         direction: params.direction || "desc",
+        daysRange: params.daysRange,
       },
     });
     return handleResponse(res);
