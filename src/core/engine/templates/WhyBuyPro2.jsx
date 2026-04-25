@@ -255,7 +255,7 @@ export default function WhyBuyPro2({
       }
     };
     if (consultId) fetchReviews();
-  }, [consultId, rawData]);
+  }, [consultId]);
 
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];

@@ -31,10 +31,12 @@ import {
 } from "@/services/Seller.service";
 import { useEffect } from "react";
 import TopPerformingCardSkeleton from "@/components/ui/skeleton/TopPerformingCardSkeleton";
-import { getInventoryOverview } from "@/services/overview.service";
+import { getInventoryOverview, getOverviewSummaryData } from "@/services/overview.service";
 import { formatResponseTime, getResponseStatus } from "@/lib/helper";
 import SkeletonBox from "@/components/ui/skeleton/SkeletonBox";
 import StatCardSkeleton from "@/components/ui/skeleton/StatCardSkeleton";
+import { getAnalyticsKips } from "@/services/analytics.service";
+  
 
 const rangeOptions = [
   { label: "Last 7 days", value: "7" },
@@ -59,6 +61,10 @@ export default function OverviewComponent() {
   const [needAttentionLoading, setNeedAttentionLoading] = useState(false);
   const [overviewLoading, setOverviewLoading] = useState(false);
   const [inquiryLoading, setInquiryLoading] = useState(false);
+  const [summaryData, setSummaryData] = useState(null);
+  const [summaryLoading, setSummaryLoading] = useState(false);
+  const [analyticsData, setAnalyticsData] = useState(null);
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
 
   useEffect(() => {
     const fetchInquiryKpis = async () => {
@@ -109,17 +115,57 @@ export default function OverviewComponent() {
       }
     };
 
+    const fetchOverviewSummary = async () => {
+      try {
+        setSummaryLoading(true);
+        const res = await getOverviewSummaryData();
+        setSummaryData(res.data);
+      } catch (error) {
+        console.error("Error fetching overview summary data:", error);
+      } finally {
+        setSummaryLoading(false);
+      }
+    };
+
     fetchTopPerforming();
     fetchNeedAttention();
     fetchInventoryOverview();
     fetchInquiryKpis();
+    fetchOverviewSummary();
   }, []);
 
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      let daysParam = "LAST_7_DAYS";
+      if (range === "30") {
+        daysParam = "LAST_30_DAYS";
+      } else if (range === "90") {
+        daysParam = "LAST_90_DAYS";
+      }
+
+      setAnalyticsLoading(true);
+      try {
+        const res = await getAnalyticsKips(daysParam);
+        if (res.success) {
+          setAnalyticsData(res.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch analytics KPIs:", error);
+      } finally {
+        setAnalyticsLoading(false);
+      }
+    };
+
+    fetchAnalytics();
+  }, [range]);
+
   const isInitialLoading =
-    topPerformingLoading &&
-    needAttentionLoading &&
-    overviewLoading &&
-    inquiryLoading;
+    topPerformingLoading ||
+    needAttentionLoading ||
+    overviewLoading ||
+    inquiryLoading ||
+    summaryLoading ||
+    analyticsLoading;
 
   const avgTime = inquiryKpis?.averageResponseTime;
   const formattedTime = formatResponseTime(avgTime);
@@ -172,23 +218,33 @@ export default function OverviewComponent() {
         {/* PERFORMANCE */}
         <div className="rounded-xl border border-third/30  p-6">
           <h3 className="font-semibold mb-5">
-            Performance Snapshot (Last 30 Days)
+            Performance Snapshot (Last {range} Days)
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <StatCard
               icon={<Eye />}
               label="Vehicle Views"
-              value="3,820"
-              trend="+18%"
+              value={analyticsData?.totalVehicleView || 0}
+              trend={analyticsData?.totalVehicleViewChange}
             />
             <StatCard
               icon={<MessageCircle />}
               label="Inquiries"
-              value="86"
-              trend="+11%"
+              value={analyticsData?.totalInquiry || 0}
+              trend={analyticsData?.totalInquiryChange}
             />
-            <StatCard icon={<BarChart3 />} label="Conversion" value="6.1%" />
-            <StatCard icon={<User />} label="Follower Count" value="28" />
+            <StatCard
+              icon={<BarChart3 />}
+              label="Conversion"
+              value={`${analyticsData?.conversionRate || 0}%`}
+              trend={analyticsData?.conversionRateChange}
+            />
+            <StatCard
+              icon={<User />}
+              label="Follower Count"
+              value={analyticsData?.totalFollowerCount || 0}
+              trend={analyticsData?.totalFollowerCountChange}
+            />
           </div>
         </div>
 
@@ -202,7 +258,7 @@ export default function OverviewComponent() {
                   <AlertTriangle size={22} strokeWidth={2.5} />
                 </div>
                 <h4 className="font-bold text-white text-lg tracking-tight">
-                  5 New Inquiries
+                  {summaryData?.totalPendingInquiryCount ?? 0} New Inquiries
                 </h4>
               </div>
               <p className="mb-4 text-xs text-third leading-relaxed font-medium">
@@ -250,7 +306,7 @@ export default function OverviewComponent() {
                   <AlertCircle size={22} strokeWidth={2.5} />
                 </div>
                 <h4 className="font-bold text-white text-lg tracking-tight">
-                  2 Fix Listings
+                  {summaryData?.lowVisibilityVehicleCount ?? 0} Fix Listings
                 </h4>
               </div>
               <p className="mb-4 text-xs text-third leading-relaxed font-medium">

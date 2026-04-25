@@ -29,6 +29,7 @@ import {
 } from "@/services/theme.service";
 import { getAllReviewById } from "@/services/user.service";
 import { WHY_BUY_PREMIUM_2 } from "../schemas/whybuy/why_buy_premium_2";
+import { normalizeWhyBuyData } from "@/lib/helper";
 const SVG_OPTIONS = [
   {
     value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>`,
@@ -96,55 +97,8 @@ export default function WhyBuyPremium2({
   rules,
 }) {
   const [isSaving, setIsSaving] = useState(false);
-  const data = {
-    ...DEFAULT_DATA,
-    ...Object.fromEntries(
-      Object.entries(rawData || {}).filter(
-        ([, v]) => v !== undefined && v !== null,
-      ),
-    ),
-  };
+  const data = normalizeWhyBuyData(rawData, DEFAULT_DATA);
 
-  // Map 'processes' and 'inspectionDescription' from draft/backend to UI fields
-  // Only apply mapping if the target UI fields don't exist yet to avoid overwriting user edits
-  if (!rawData?.processSteps && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
-    data.processSteps = rawData.processes.map(p => ({
-      title: p.title || "",
-      description: p.desc || p.description || "",
-      icon: p.icon || ""
-    }));
-  }
-  if (!rawData?.inspectionText && rawData?.inspectionDescription) {
-    data.inspectionText = rawData.inspectionDescription;
-  }
-
-  // Synchronize transformed draft data with the parent state once on load
-  useEffect(() => {
-    if (!rawData || !onUpdate) return;
-    
-    let hasChanges = false;
-    const updatedData = { ...data };
-
-    // Sync processes mapping
-    if (!rawData.processSteps && rawData.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
-      updatedData.processSteps = rawData.processes.map(p => ({
-        title: p.title || "",
-        description: p.desc || p.description || "",
-        icon: p.icon || ""
-      }));
-      hasChanges = true;
-    }
-
-    // Sync inspection text mapping
-    if (!rawData.inspectionText && rawData.inspectionDescription) {
-      updatedData.inspectionText = rawData.inspectionDescription;
-      hasChanges = true;
-    }
-
-    if (hasChanges) {
-      onUpdate(updatedData);
-    }
-  }, [rawData]);
   /* ================== REVIEW SELECTION ================== */
   const [allReviews, setAllReviews] = useState([]);
   const [selectedReviewIds, setSelectedReviewIds] = useState(
@@ -172,7 +126,7 @@ export default function WhyBuyPremium2({
       }
     };
     if (consultId) fetchReviews();
-  }, [consultId, rawData]);
+  }, [consultId]);
   const toggleReviewSelection = (reviewId) => {
     setSelectedReviewIds((prev) => {
       const updated = prev.includes(reviewId)
@@ -1131,8 +1085,7 @@ export default function WhyBuyPremium2({
               <div className="absolute inset-0 overflow-hidden rounded-2xl">
                 <img
                   src={
-                    data.customStory1 ||
-                    data.customStoryUrl1 ||
+                    data.customWhyBuyStory1 ||
                     data.storyTemplate1?.imageUrl
                   }
                   className="w-full h-full object-cover"
@@ -1142,8 +1095,7 @@ export default function WhyBuyPremium2({
               <div className="absolute bottom-6 right-6 w-[140px] h-[100px] overflow-hidden border rounded-2xl border-white/20">
                 <img
                   src={
-                    data.customStory2 ||
-                    data.customStoryUrl2 ||
+                    data.customWhyBuyStory2 ||
                     data.storyTemplate2?.imageUrl
                   }
                   className="w-full h-full object-cover"
@@ -1405,12 +1357,11 @@ export default function WhyBuyPremium2({
           </div>
           <div className="flex flex-col gap-3 lg:grid lg:grid-cols-12 lg:grid-rows-[400px_220px] lg:gap-3">
             <div className="relative overflow-hidden rounded-2xl h-[300px] lg:h-auto lg:col-span-6 lg:row-span-2">
-              <img
-                src={
-                  data.customGallery1 ||
-                  data.customGalleryUrl1 ||
-                  data.galleryTemplate1?.imageUrl
-                }
+                <img
+                  src={
+                    data.customGallery1 ||
+                    data.galleryTemplate1?.imageUrl
+                  }
                 className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
                 loading="lazy"
               />
@@ -1420,7 +1371,6 @@ export default function WhyBuyPremium2({
                 <img
                   src={
                     data.customGallery2 ||
-                    data.customGalleryUrl2 ||
                     data.galleryTemplate2?.imageUrl
                   }
                   className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
@@ -1431,7 +1381,6 @@ export default function WhyBuyPremium2({
                 <img
                   src={
                     data.customGallery5 ||
-                    data.customGalleryUrl5 ||
                     data.galleryTemplate5?.imageUrl
                   }
                   className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
@@ -1444,7 +1393,6 @@ export default function WhyBuyPremium2({
                 <img
                   src={
                     data.customGallery3 ||
-                    data.customGalleryUrl3 ||
                     data.galleryTemplate3?.imageUrl
                   }
                   className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
@@ -1455,7 +1403,6 @@ export default function WhyBuyPremium2({
                 <img
                   src={
                     data.customGallery4 ||
-                    data.customGalleryUrl4 ||
                     data.galleryTemplate4?.imageUrl
                   }
                   className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"

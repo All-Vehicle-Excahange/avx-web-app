@@ -1,7 +1,6 @@
 import {
   Star,
   MessageSquare,
-  Filter,
   ThumbsUp,
   MapPin,
   Calendar,
@@ -11,6 +10,7 @@ import {
 import Image from "next/image";
 import React, { useState } from "react";
 import Button from "@/components/ui/button";
+import CustomSelect from "@/components/ui/custom-select";
 const mockSummary = {
   averageRating: 4.5,
   totalReviews: 1320,
@@ -60,6 +60,13 @@ const mockReviews = [
 ];
 
 function ReviewComponent() {
+  const [range, setRange] = useState("7");
+  const rangeOptions = [
+    { label: "Last 7 days", value: "7" },
+    { label: "Last 30 days", value: "30" },
+    { label: "Last 90 days", value: "90" },
+  ];
+
   const [activeFilter, setActiveFilter] = useState("All");
   const [selectedImage, setSelectedImage] = useState(null);
   const [replyingTo, setReplyingTo] = useState(null);
@@ -95,13 +102,14 @@ function ReviewComponent() {
             Manage and respond to your client feedback
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="relative group">
-            <button className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-third/20 rounded-xl text-sm font-medium hover:bg-white/10 transition">
-              <Filter size={16} />
-              Sort: Recent
-            </button>
-          </div>
+        <div className="w-48">
+          <CustomSelect
+            value={range}
+            onChange={setRange}
+            options={rangeOptions}
+            placeholder="Select range"
+            variant="transparent"
+          />
         </div>
       </div>
 

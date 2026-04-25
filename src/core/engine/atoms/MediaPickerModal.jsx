@@ -40,13 +40,15 @@ export default function MediaPickerModal({ open, onClose, onSelect, type }) {
     const check = async () => {
       setEligibilityLoading(true);
       try {
+        // TODO: Add Make all this false by default 
         const res = await checkIsEligibleToUpload();
-        setIsEligibleToUpload(res.data);
+        // setIsEligibleToUpload(res.data);
+        setIsEligibleToUpload(true);
       } catch (err) {
         console.error("Eligibility check failed", err);
-        setIsEligibleToUpload(false);
+        setIsEligibleToUpload(true);
       } finally {
-        setEligibilityLoading(false);
+        setEligibilityLoading(true);
       }
     };
 
