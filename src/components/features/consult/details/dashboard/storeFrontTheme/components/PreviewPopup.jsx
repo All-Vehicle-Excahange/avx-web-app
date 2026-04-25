@@ -14,24 +14,29 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
   const [isEligible, setIsEligible] = useState(false);
   const [activeTab, setActiveTab] = useState("about");
 
-  const matchedTheme = THEME_STORE.find((t) => t.id === theme.themeId || t.id === theme.id);
+  const matchedTheme = THEME_STORE.find(
+    (t) => t.id === theme.themeId || t.id === theme.id,
+  );
   const schema = matchedTheme?.schema || [];
   const filteredSections = schema.filter((section) =>
-    section.type.includes(activeTab)
+    section.type.includes(activeTab),
   );
 
   useEffect(() => {
     const fetchEligibility = async () => {
+      const themeId = theme.themeId || theme.id;
+      if (!themeId) return;
+
       try {
-        // const isEligible = await checkIsEligibleToCreate(theme.id);
-        // setIsEligible(isEligible.data);
-        setIsEligible(true);
+        console.log("Checking eligibility for theme:", themeId);
+        const res = await checkIsEligibleToCreate(themeId);
+        setIsEligible(res.data);
       } catch (error) {
         console.error("Failed to fetch eligibility:", error);
       }
     };
     fetchEligibility();
-  }, [theme.id]);
+  }, [theme.id, theme.themeId]);
 
   const handleUseTheme = async () => {
     try {
@@ -46,7 +51,7 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex flex-col">
+    <div className="fixed inset-0 z-9999 bg-black/90 backdrop-blur-sm flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-third/30 bg-black/95 shrink-0">
         <h2 className="text-xl font-semibold text-primary">{theme.name}</h2>
@@ -64,7 +69,10 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
             {!isEligible && <LockIcon className="ml-2" />}
           </Button>
 
-          <button onClick={onClose} className="opacity-60 hover:opacity-100 text-primary">
+          <button
+            onClick={onClose}
+            className="opacity-60 hover:opacity-100 text-primary"
+          >
             <X />
           </button>
         </div>

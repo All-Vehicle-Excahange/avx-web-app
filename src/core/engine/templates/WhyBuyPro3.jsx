@@ -380,7 +380,7 @@ export default function WhyBuyPro3({
       }
     };
     if (consultId) fetchReviews();
-  }, [consultId, rawData]);
+  }, [consultId]);
   const handleSaveAndNext = async () => {
     setIsSaving(true);
     try {

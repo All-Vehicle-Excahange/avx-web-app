@@ -180,7 +180,7 @@ export default function WhyBuyPro1({
       }
     };
     if (consultId) fetchReviews();
-  }, [consultId, rawData]);
+  }, [consultId]);
 
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];

@@ -5,6 +5,7 @@ import {
   addNewReview,
   checkIsEligibleToCreateReview,
   getAllReview,
+  getStoreFrontByUsername,
 } from "@/services/user.service";
 import {
   Star,
@@ -35,6 +36,7 @@ export default function Review() {
   const [media, setMedia] = useState([{ file: null }]);
   const [reviewsLoading, setReviewsLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [consultantName, setConsultantName] = useState("");
 
   const checkEligibility = useCallback(async () => {
     if (!id) return;
@@ -67,7 +69,20 @@ export default function Review() {
 
   useEffect(() => {
     checkEligibility();
-  }, [checkEligibility]);
+    // Fetch consultant name
+    const fetchConsultantName = async () => {
+      if (!id) return;
+      try {
+        const res = await getStoreFrontByUsername(id);
+        if (res?.data?.consultationName) {
+          setConsultantName(res.data.consultationName);
+        }
+      } catch (error) {
+        console.log("Consultant name fetch error:", error);
+      }
+    };
+    fetchConsultantName();
+  }, [checkEligibility, id]);
 
   useEffect(() => {
     fetchReviews();
@@ -455,6 +470,26 @@ export default function Review() {
                           />
                         </div>
                       ))}
+                    </div>
+                  )}
+
+                  {/* CONSULTANT REPLY */}
+                  {review.consultReply && (
+                    <div className="mt-2  pl-4 py-3 bg-primary/3 rounded-xl">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                          <MessageSquare className="w-3.5 h-3.5 text-primary" />
+                        </div>
+                        <span className="text-xs font-semibold text-primary">
+                          {consultantName || "Consultant"}
+                        </span>
+                        {review.isConsultReplyEdited && (
+                          <span className="text-[10px] text-third">(edited)</span>
+                        )}
+                      </div>
+                      <p className="text-sm text-primary/80 leading-relaxed pl-9">
+                        {review.consultReply}
+                      </p>
                     </div>
                   )}
                 </div>

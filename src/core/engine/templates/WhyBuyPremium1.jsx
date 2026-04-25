@@ -20,6 +20,7 @@ import {
 } from "@/services/theme.service";
 import { getAllReviewById } from "@/services/user.service";
 import { WHY_BUY_PREMIUM_1 } from "../schemas/whybuy/why_buy_premium_1";
+import { normalizeWhyBuyData } from "@/lib/helper";
 const SVG_OPTIONS = [
   {
     value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>`,
@@ -87,55 +88,8 @@ export default function WhyBuyPremium1({
   rules,
 }) {
   const [isSaving, setIsSaving] = useState(false);
-  const data = {
-    ...DEFAULT_DATA,
-    ...Object.fromEntries(
-      Object.entries(rawData || {}).filter(
-        ([, v]) => v !== undefined && v !== null,
-      ),
-    ),
-  };
+  const data = normalizeWhyBuyData(rawData, DEFAULT_DATA);
 
-  // Map 'processes' and 'inspectionDescription' from draft/backend to UI fields
-  // Only apply mapping if the target UI fields don't exist yet to avoid overwriting user edits
-  if (!rawData?.processSteps && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
-    data.processSteps = rawData.processes.map(p => ({
-      title: p.title || "",
-      description: p.desc || p.description || "",
-      icon: p.icon || ""
-    }));
-  }
-  if (!rawData?.inspectionText && rawData?.inspectionDescription) {
-    data.inspectionText = rawData.inspectionDescription;
-  }
-
-  // Synchronize transformed draft data with the parent state once on load
-  useEffect(() => {
-    if (!rawData || !onUpdate) return;
-    
-    let hasChanges = false;
-    const updatedData = { ...data };
-
-    // Sync processes mapping
-    if (!rawData.processSteps && rawData.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
-      updatedData.processSteps = rawData.processes.map(p => ({
-        title: p.title || "",
-        description: p.desc || p.description || "",
-        icon: p.icon || ""
-      }));
-      hasChanges = true;
-    }
-
-    // Sync inspection text mapping
-    if (!rawData.inspectionText && rawData.inspectionDescription) {
-      updatedData.inspectionText = rawData.inspectionDescription;
-      hasChanges = true;
-    }
-
-    if (hasChanges) {
-      onUpdate(updatedData);
-    }
-  }, [rawData]);
   const [active, setActive] = useState(0);
   const scrollRef = useRef(null);
   const [hovered, setHovered] = useState(null);
@@ -167,6 +121,7 @@ export default function WhyBuyPremium1({
     }
     updateField(arrayName, newArray);
   };
+
   const addArrayItem = (arrayName, item) => {
     updateField(arrayName, [...(data[arrayName] || []), item]);
   };
@@ -175,6 +130,7 @@ export default function WhyBuyPremium1({
     copy.splice(index, 1);
     updateField(arrayName, copy);
   };
+
   const toggleReviewSelection = (id) => {
     setSelectedReviewIds((prev) =>
       prev.includes(id) ? prev.filter((rid) => rid !== id) : [...prev, id],
@@ -203,7 +159,7 @@ export default function WhyBuyPremium1({
       }
     };
     if (consultId) fetchReviews();
-  }, [consultId, rawData]);
+  }, [consultId]);
   /* ================== API HANDLERS ================== */
   const handleSaveAndNext = async () => {
     setIsSaving(true);
@@ -513,12 +469,12 @@ export default function WhyBuyPremium1({
               <div className="grid grid-cols-2 gap-4">
                 <div className="h-40 relative">
                   <ImageUploader
-                    label="Video"
+                    label="Main Image"
                     src={
                       data.customWhyBuyHero1 ||
                       data.whyBuyHeroTemplate1?.imageUrl
                     }
-                    fieldKey="heroVid"
+                    fieldKey="heroImg1_main"
                     imageType="WHY_BUY_HERO"
                     onChange={({ imageUrl, id }) => {
                       const updated = {
@@ -1460,13 +1416,9 @@ export default function WhyBuyPremium1({
           </div>
           {/* RIGHT SIDE */}
           <div className="flex flex-col gap-5 mt-10 lg:mt-0">
-            {/* VIDEO */}
+            {/* IMAGE/VIDEO */}
             <div className="group relative rounded-2xl overflow-hidden border border-secondary/20 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(184,150,62,0.25)]">
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
+              <img
                 className="w-full h-[220px] sm:h-[260px] object-cover transition-transform duration-700 group-hover:scale-105"
                 src={
                   data.customWhyBuyHero1 || data.whyBuyHeroTemplate1?.imageUrl
@@ -1597,25 +1549,24 @@ export default function WhyBuyPremium1({
             className="absolute inset-0 flex overflow-hidden pointer-events-none"
           >
             {[
-              data.customWhyBuyVehicleSelection1 ||
-                data.vehicleSelectionTemplate1?.imageUrl,
-              data.customWhyBuyVehicleSelection2 ||
-                data.vehicleSelectionTemplate2?.imageUrl,
-              data.customWhyBuyVehicleSelection1 ||
-                data.vehicleSelectionTemplate1?.imageUrl,
-              data.customWhyBuyVehicleSelection2 ||
-                data.vehicleSelectionTemplate2?.imageUrl,
-            ].map((img, i) => (
-              <div
-                key={i}
-                className="min-w-[350px] h-full overflow-hidden rounded-2xl opacity-[0.3]"
-              >
-                <img
-                  src={img}
-                  className="w-full h-full object-cover grayscale"
-                />
-              </div>
-            ))}
+              data.customWhyBuyVehicleSelection1,
+              data.customWhyBuyVehicleSelection2,
+              data.customWhyBuyVehicleSelection1,
+              data.customWhyBuyVehicleSelection2,
+            ].map((img, i) => {
+              if (!img) return null;
+              return (
+                <div
+                  key={i}
+                  className="min-w-[350px] h-full overflow-hidden rounded-2xl opacity-[0.3]"
+                >
+                  <img
+                    src={img}
+                    className="w-full h-full object-cover grayscale"
+                  />
+                </div>
+              );
+            })}
           </div>
           {/* CONTENT */}
           <div className="relative z-20 max-w-7xl mx-auto flex flex-col gap-10">
@@ -1694,7 +1645,9 @@ export default function WhyBuyPremium1({
                   <img
                     src={
                       data[`customWhyBuyProcess${i + 1}`] ||
-                      data[`processTemplate${i + 1}`]?.imageUrl
+                      (rawData?.processes
+                        ? ""
+                        : data[`processTemplate${i + 1}`]?.imageUrl)
                     }
                     className={`absolute inset-0 w-full h-full object-cover transition duration-700
                     ${isActive ? "scale-105" : "scale-100 grayscale"}
@@ -1758,7 +1711,9 @@ export default function WhyBuyPremium1({
                 <img
                   src={
                     data.customWhyBuyInspection1 ||
-                    data.inspectionTemplate1?.imageUrl
+                    (rawData?.processes
+                      ? ""
+                      : data.inspectionTemplate1?.imageUrl)
                   }
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   alt="Main"
@@ -1770,7 +1725,9 @@ export default function WhyBuyPremium1({
                 <img
                   src={
                     data.customWhyBuyInspection2 ||
-                    data.inspectionTemplate2?.imageUrl
+                    (rawData?.processes
+                      ? ""
+                      : data.inspectionTemplate2?.imageUrl)
                   }
                   className="w-full h-full object-cover"
                   alt="Detail"
@@ -1781,7 +1738,9 @@ export default function WhyBuyPremium1({
                 <img
                   src={
                     data.customWhyBuyInspection3 ||
-                    data.inspectionTemplate3?.imageUrl
+                    (rawData?.processes
+                      ? ""
+                      : data.inspectionTemplate3?.imageUrl)
                   }
                   className="w-full h-full object-cover"
                   alt="Mini Detail"
@@ -1792,7 +1751,7 @@ export default function WhyBuyPremium1({
             <div className="lg:col-span-5 flex flex-col gap-10 lg:pt-12">
               <div
                 className="text-third text-[18px] font-[Poppins] leading-relaxed italic border-l-4 border-primary/30 pl-6"
-                dangerouslySetInnerHTML={{ __html: data.inspectionText }}
+                dangerouslySetInnerHTML={{ __html: data.inspectionDescription }}
               />
               {/* ICON-BASED POINTS */}
               <div className="flex flex-col gap-6">
@@ -1861,7 +1820,10 @@ export default function WhyBuyPremium1({
               <img
                 src={
                   data.customWhyBuyCustomerCommitment2 ||
-                  data.customerCommitmentTemplate2?.imageUrl
+                  data.customInspectionUrl1 ||
+                  (rawData?.processes
+                    ? ""
+                    : data.customerCommitmentTemplate2?.imageUrl)
                 }
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 alt=""
@@ -1871,7 +1833,10 @@ export default function WhyBuyPremium1({
                 <img
                   src={
                     data.customWhyBuyCustomerCommitment4 ||
-                    data.customerCommitmentTemplate4?.imageUrl
+                    data.customInspectionUrl4 ||
+                    (rawData?.processes
+                      ? ""
+                      : data.customerCommitmentTemplate4?.imageUrl)
                   }
                   className="w-full h-full object-cover"
                   alt=""
@@ -1883,7 +1848,10 @@ export default function WhyBuyPremium1({
               <img
                 src={
                   data.customWhyBuyCustomerCommitment3 ||
-                  data.customerCommitmentTemplate3?.imageUrl
+                  data.customInspectionUrl3 ||
+                  (rawData?.processes
+                    ? ""
+                    : data.customerCommitmentTemplate3?.imageUrl)
                 }
                 className="w-full h-full object-cover"
                 alt=""
@@ -1894,7 +1862,10 @@ export default function WhyBuyPremium1({
               <img
                 src={
                   data.customWhyBuyCustomerCommitment5 ||
-                  data.customerCommitmentTemplate5?.imageUrl
+                  data.customInspectionUrl5 ||
+                  (rawData?.processes
+                    ? ""
+                    : data.customerCommitmentTemplate5?.imageUrl)
                 }
                 className="w-full h-full object-cover"
                 alt=""
@@ -1906,58 +1877,60 @@ export default function WhyBuyPremium1({
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-fourth/10 rounded-full blur-[120px] pointer-events-none" />
       </section>
       {/* ═════════ GALLERY ═════════ */}
-      <section className="w-full py-12 overflow-hidden px-4 sm:px-8">
-        <div className="container max-w-7xl mx-auto flex flex-col gap-12">
-          {/* HEADER */}
-          <div className="flex flex-col gap-4 max-w-2xl">
-            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-              Gallery
-            </p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-              Our Showroom & <span className="text-primary">Team</span>
-            </h2>
-          </div>
-          {/* STAGE */}
-          <div
-            className="relative flex items-center justify-center h-[300px] sm:h-[380px] md:h-[420px]"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            onMouseEnter={() => clearInterval(timerRef.current)}
-            onMouseLeave={() => {
-              timerRef.current = setInterval(next, 2500);
-            }}
-          >
-            {galleryImages.map((src, i) => {
-              const pos = getPosition(i);
-              return (
+      {galleryImages.length > 0 && (
+        <section className="w-full py-12 overflow-hidden px-4 sm:px-8">
+          <div className="container max-w-7xl mx-auto flex flex-col gap-12">
+            {/* HEADER */}
+            <div className="flex flex-col gap-4 max-w-2xl">
+              <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                Gallery
+              </p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                Our Showroom & <span className="text-primary">Team</span>
+              </h2>
+            </div>
+            {/* STAGE */}
+            <div
+              className="relative flex items-center justify-center h-[300px] sm:h-[380px] md:h-[420px]"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              onMouseEnter={() => clearInterval(timerRef.current)}
+              onMouseLeave={() => {
+                timerRef.current = setInterval(next, 2500);
+              }}
+            >
+              {galleryImages.map((src, i) => {
+                const pos = getPosition(i);
+                return (
+                  <div
+                    key={i}
+                    onClick={() => {
+                      if (pos === "right") next();
+                      else if (pos === "left") prev();
+                    }}
+                    className={`absolute rounded-2xl overflow-hidden shadow-2xl transition-all duration-600 ease-in-out will-change-transform ${positionStyles[pos]}`}
+                  >
+                    <img src={src} className="w-full h-full object-cover" />
+                  </div>
+                );
+              })}
+            </div>
+            {/* DOTS */}
+            <div className="flex justify-center gap-3">
+              {galleryImages.map((_, i) => (
                 <div
                   key={i}
-                  onClick={() => {
-                    if (pos === "right") next();
-                    else if (pos === "left") prev();
-                  }}
-                  className={`absolute rounded-2xl overflow-hidden shadow-2xl transition-all duration-600 ease-in-out will-change-transform ${positionStyles[pos]}`}
-                >
-                  <img src={src} className="w-full h-full object-cover" />
-                </div>
-              );
-            })}
+                  onClick={() => goTo(i)}
+                  className={`w-2.5 h-2.5 rounded-full cursor-pointer transition-all duration-500 ${
+                    active === i ? "bg-primary scale-125" : "bg-primary/30"
+                  }`}
+                />
+              ))}
+            </div>
           </div>
-          {/* DOTS */}
-          <div className="flex justify-center gap-3">
-            {galleryImages.map((_, i) => (
-              <div
-                key={i}
-                onClick={() => goTo(i)}
-                className={`w-2.5 h-2.5 rounded-full cursor-pointer transition-all duration-500 ${
-                  active === i ? "bg-primary scale-125" : "bg-primary/30"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
       {/* ═════════ TESTIMONIALS ═════════ */}
       <section className="w-full py-12 bg-primary px-2 lg:px-4">
         <div className="container max-w-7xl mx-3 flex flex-col gap-12">

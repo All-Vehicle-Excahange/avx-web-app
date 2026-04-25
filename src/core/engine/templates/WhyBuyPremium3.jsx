@@ -25,6 +25,7 @@ import {
 import { getAllReviewById } from "@/services/user.service";
 import { WHY_BUY_PREMIUM_2 } from "../schemas/whybuy/why_buy_premium_2";
 import { WHY_BUY_PREMIUM_3 } from "../schemas/whybuy/why_buy_premium_3";
+import { normalizeWhyBuyData } from "@/lib/helper";
 const SVG_OPTIONS = [
   {
     value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>`,
@@ -93,55 +94,8 @@ export default function WhyBuyPremium3({
   rules,
 }) {
   const [isSaving, setIsSaving] = useState(false);
-  const data = {
-    ...DEFAULT_DATA,
-    ...Object.fromEntries(
-      Object.entries(rawData || {}).filter(
-        ([, v]) => v !== undefined && v !== null,
-      ),
-    ),
-  };
+  const data = normalizeWhyBuyData(rawData, DEFAULT_DATA);
 
-  // Map 'processes' and 'inspectionDescription' from draft/backend to UI fields
-  // Only apply mapping if the target UI fields don't exist yet to avoid overwriting user edits
-  if (!rawData?.processSteps && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
-    data.processSteps = rawData.processes.map(p => ({
-      title: p.title || "",
-      description: p.desc || p.description || "",
-      icon: p.icon || ""
-    }));
-  }
-  if (!rawData?.inspectionText && rawData?.inspectionDescription) {
-    data.inspectionText = rawData.inspectionDescription;
-  }
-
-  // Synchronize transformed draft data with the parent state once on load
-  useEffect(() => {
-    if (!rawData || !onUpdate) return;
-    
-    let hasChanges = false;
-    const updatedData = { ...data };
-
-    // Sync processes mapping
-    if (!rawData.processSteps && rawData.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
-      updatedData.processSteps = rawData.processes.map(p => ({
-        title: p.title || "",
-        description: p.desc || p.description || "",
-        icon: p.icon || ""
-      }));
-      hasChanges = true;
-    }
-
-    // Sync inspection text mapping
-    if (!rawData.inspectionText && rawData.inspectionDescription) {
-      updatedData.inspectionText = rawData.inspectionDescription;
-      hasChanges = true;
-    }
-
-    if (hasChanges) {
-      onUpdate(updatedData);
-    }
-  }, [rawData]);
   /* ================== REVIEW SELECTION ================== */
   const [allReviews, setAllReviews] = useState([]);
   const [selectedReviewIds, setSelectedReviewIds] = useState(
@@ -169,7 +123,7 @@ export default function WhyBuyPremium3({
       }
     };
     if (consultId) fetchReviews();
-  }, [consultId, rawData]);
+  }, [consultId]);
   const toggleReviewSelection = (reviewId) => {
     setSelectedReviewIds((prev) => {
       const updated = prev.includes(reviewId)
@@ -498,7 +452,7 @@ export default function WhyBuyPremium3({
               <div className="grid grid-cols-2 gap-4">
                 <div className="h-40 relative">
                   <ImageUploader
-                    label="Video"
+                    label="Main Media"
                     src={
                       data.customWhyBuyHero1 ||
                       data.whyBuyHeroTemplate1?.imageUrl
@@ -1161,8 +1115,8 @@ export default function WhyBuyPremium3({
                       data.whyBuyHeroTemplate2?.imageUrl,
                     data.customWhyBuyHero3 ||
                       data.whyBuyHeroTemplate3?.imageUrl,
-                    data.customStory1 || data.storyTemplate1?.imageUrl,
-                    data.customStory2 || data.storyTemplate2?.imageUrl,
+                    data.customWhyBuyStory1 || data.storyTemplate1?.imageUrl,
+                    data.customWhyBuyStory2 || data.storyTemplate2?.imageUrl,
                   ]
                     .filter(Boolean)
                     .map((img, index) => (
@@ -1218,7 +1172,7 @@ export default function WhyBuyPremium3({
               <div className="relative h-[460px] sm:h-[520px]">
                 <div className="absolute top-0 left-0 w-[75%] h-[72%] rounded-2xl border border-third/10 shadow-2xl overflow-hidden">
                   <img
-                    src={data.customStory1 || data.storyTemplate1?.imageUrl}
+                    src={data.customWhyBuyStory1 || data.storyTemplate1?.imageUrl}
                     alt="Our story"
                     className="w-full h-full object-cover"
                   />
@@ -1226,7 +1180,7 @@ export default function WhyBuyPremium3({
                 </div>
                 <div className="absolute bottom-0 right-0 w-[58%] h-[55%] rounded-2xl shadow-2xl overflow-hidden">
                   <img
-                    src={data.customStory2 || data.storyTemplate2?.imageUrl}
+                    src={data.customWhyBuyStory2 || data.storyTemplate2?.imageUrl}
                     alt="Our story"
                     className="w-full h-full object-cover rounded-2xl"
                   />
@@ -1243,12 +1197,12 @@ export default function WhyBuyPremium3({
           <div className="mx-auto w-full px-2 lg:px-4">
             <div className="relative w-full h-[500px] sm:h-[460px] lg:h-[520px] rounded-3xl overflow-hidden">
               {[
-                data.customVehicleSelection1 ||
+                data.customWhyBuyVehicleSelection1 ||
                   data.vehicleSelectionTemplate1?.imageUrl,
-                data.customVehicleSelection2 ||
+                data.customWhyBuyVehicleSelection2 ||
                   data.vehicleSelectionTemplate2?.imageUrl,
-                data.customStory3 || data.storyTemplate3?.imageUrl,
-                data.customStory4 || data.storyTemplate4?.imageUrl,
+                data.customWhyBuyStory3 || data.storyTemplate3?.imageUrl,
+                data.customWhyBuyStory4 || data.storyTemplate4?.imageUrl,
                 data.customWhyBuyProcess1 || data.processTemplate1?.imageUrl,
               ]
                 .filter(Boolean)
@@ -1283,12 +1237,12 @@ export default function WhyBuyPremium3({
                   </div>
                   <div className="flex gap-3 shrink-0 overflow-x-scroll no-scrollbar">
                     {[
-                      data.customVehicleSelection1 ||
+                      data.customWhyBuyVehicleSelection1 ||
                         data.vehicleSelectionTemplate1?.imageUrl,
-                      data.customVehicleSelection2 ||
+                      data.customWhyBuyVehicleSelection2 ||
                         data.vehicleSelectionTemplate2?.imageUrl,
-                      data.customStory3 || data.storyTemplate3?.imageUrl,
-                      data.customStory4 || data.storyTemplate4?.imageUrl,
+                      data.customWhyBuyStory3 || data.storyTemplate3?.imageUrl,
+                      data.customWhyBuyStory4 || data.storyTemplate4?.imageUrl,
                       data.customWhyBuyProcess1 ||
                         data.processTemplate1?.imageUrl,
                     ]
