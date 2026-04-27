@@ -174,7 +174,6 @@ export default function KycForm() {
           return;
         }
       } catch (e) {
-        console.log("Real error", e);
         setStep(1);
       } finally {
         setInitialLoading(false);

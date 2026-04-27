@@ -254,7 +254,6 @@ function PreferencesPopup({ isOpen, onClose }) {
       stateIds: selectedStates.map(Number),
     };
 
-    console.log("Final Payload ✅", payload);
 
     try {
       await addUserPefrence(payload);

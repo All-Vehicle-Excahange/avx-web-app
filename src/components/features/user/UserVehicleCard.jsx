@@ -81,7 +81,6 @@ export default function UserVehicleCard({
     setIsSoldLoading(true);
     try {
       const res = await markAsSoldVehicle(data.id, closingPrice);
-      console.log(res);
       if (onRefresh) {
         onRefresh();
       }
