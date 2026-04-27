@@ -19,7 +19,13 @@ import {
 
 import Button from "@/components/ui/button";
 
-export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
+export default function PreviewAndEdite({
+  existing,
+  onBack,
+  onSuccess,
+  hasMadeAnyUpdate,
+  setHasMadeAnyUpdate,
+}) {
   const router = useRouter();
 
   // ===== EDIT MODES =====
@@ -48,21 +54,30 @@ export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
     kyc: null,
   });
 
-  const handleBusinessChange = useCallback((d) => {
+  const [localChanged, setLocalChanged] = useState({
+    business: false,
+    address: false,
+    kyc: false,
+  });
+
+  const handleBusinessChange = useCallback((d, isChanged) => {
     setForm((p) => ({ ...p, business: d }));
+    setLocalChanged((p) => ({ ...p, business: isChanged }));
   }, []);
 
-  const handleAddressChange = useCallback((d) => {
+  const handleAddressChange = useCallback((d, isChanged) => {
     setForm((p) => ({ ...p, address: d }));
+    setLocalChanged((p) => ({ ...p, address: isChanged }));
   }, []);
 
-  const handleKycChange = useCallback((d) => {
+  const handleKycChange = useCallback((d, isChanged) => {
     setForm((p) => ({ ...p, kyc: d }));
+    setLocalChanged((p) => ({ ...p, kyc: isChanged }));
   }, []);
 
   const updateBusiness = async () => {
     try {
-      if (!form.business) {
+      if (!form.business || !localChanged.business) {
         setEditMode((p) => ({ ...p, business: false }));
         return;
       }
@@ -86,6 +101,7 @@ export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
       }
 
       await updatebasicDetials(payload);
+      setHasMadeAnyUpdate(true);
       setEditMode((p) => ({ ...p, business: false }));
 
       const bRes = await getBaiscDetails();
@@ -99,7 +115,7 @@ export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
 
   const updateAddress = async () => {
     try {
-      if (!form.address) {
+      if (!form.address || !localChanged.address) {
         setEditMode((p) => ({ ...p, address: false }));
         return;
       }
@@ -116,6 +132,7 @@ export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
       };
 
       await updateAddressDetials(payload);
+      setHasMadeAnyUpdate(true);
       setEditMode((p) => ({ ...p, address: false }));
 
       const aRes = await getAddressDetails();
@@ -129,7 +146,7 @@ export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
 
   const updateKyc = async () => {
     try {
-      if (!form.kyc) {
+      if (!form.kyc || !localChanged.kyc) {
         setEditMode((p) => ({ ...p, kyc: false }));
         return;
       }
@@ -150,6 +167,7 @@ export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
         payload.append("aadharCardBackImage", k.aadharBack);
 
       await updateKycDetials(payload);
+      setHasMadeAnyUpdate(true);
       setEditMode((p) => ({ ...p, kyc: false }));
 
       const kRes = await getKycDocs();
@@ -214,6 +232,7 @@ export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
                   variant="ghost"
                   onClick={updateBusiness}
                   loading={loadingStates.business}
+                  disabled={!localChanged.business}
                 >
                   Update
                 </Button>
@@ -257,6 +276,7 @@ export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
                   variant="ghost"
                   onClick={updateAddress}
                   loading={loadingStates.address}
+                  disabled={!localChanged.address}
                 >
                   Update
                 </Button>
@@ -297,9 +317,10 @@ export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
                 </Button>
 
                 <Button
-                  variant="ghost" 
-                  onClick={updateKyc} 
+                  variant="ghost"
+                  onClick={updateKyc}
                   loading={loadingStates.kyc}
+                  disabled={!localChanged.kyc}
                 >
                   Update
                 </Button>
@@ -320,10 +341,14 @@ export default function PreviewAndEdite({ existing, onBack, onSuccess }) {
 
         {/* ================= FINAL SUBMIT ================= */}
         <div className="flex justify-end">
-          <Button 
-            variant="ghost" 
-            onClick={handleSubmit} 
+          <Button
+            variant="ghost"
+            onClick={handleSubmit}
             loading={loadingStates.submit}
+            disabled={
+              existing.business?.verificationStatus === "REQUEST_CHANGES" &&
+              !hasMadeAnyUpdate
+            }
           >
             Final Submit
           </Button>

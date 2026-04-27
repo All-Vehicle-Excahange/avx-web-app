@@ -2,7 +2,6 @@ import Image from "next/image";
 import Button from "@/components/ui/button";
 import { BadgeCheck, Bike, Car, Star } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { createSlug } from "@/lib/helper";
 
 export default function ConsultantCard(props) {
   const data = props.data || props;
@@ -174,7 +173,7 @@ export default function ConsultantCard(props) {
 
           <div className="shrink-0">
             <Button
-              href={`/store-front/${createSlug(data?.name)}/${username || "#"}`}
+              href={`/store-front/${username || "#"}`}
               variant="outline"
               size="sm"
               className="whitespace-nowrap"

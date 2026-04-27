@@ -55,6 +55,7 @@ export default function KycForm() {
   const [loading, setLoading] = useState(false);
   const [backLoading, setBackLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [hasMadeAnyUpdate, setHasMadeAnyUpdate] = useState(false);
 
   // ===== VERSION COUNTERS — incrementing forces child remount with fresh initialData =====
   const [dataVersion, setDataVersion] = useState({ 1: 0, 2: 0, 3: 0 });
@@ -214,9 +215,11 @@ export default function KycForm() {
 
           const res = await updatebasicDetials(payload);
           if (res.data) {
+            setHasMadeAnyUpdate(true);
             setExisting((p) => ({ ...p, business: res.data }));
             setStep(2);
           }
+
           return;
         }
 
@@ -265,9 +268,11 @@ export default function KycForm() {
           }
           const res = await updateAddressDetials(payload);
           if (res.data) {
+            setHasMadeAnyUpdate(true);
             setExisting((p) => ({ ...p, address: res.data }));
             setStep(3);
           }
+
           return;
         }
         const res = await postAddressDetials(payload);
@@ -279,7 +284,48 @@ export default function KycForm() {
       }
 
       if (step === 3) {
+        const k = form.kyc;
+        if (!k) {
+          setLoading(false);
+          return;
+        }
+
+        // 1. GST Cross-Validation
+        const hasGstNum = !!k.gstNumber?.trim();
+        const hasGstImg = !!(k.gstPhoto || existing.kyc?.gstCertificateUrl);
+        if ((hasGstNum && !hasGstImg) || (!hasGstNum && hasGstImg)) {
+          setLoading(false);
+          return;
+        }
+
+        // 2. PAN Cross-Validation
+        const hasPanNum = !!k.panNumber?.trim();
+        const hasPanImg = !!(k.panPhoto || existing.kyc?.panCardFrontUrl);
+        if ((hasPanNum && !hasPanImg) || (!hasPanNum && hasPanImg)) {
+          setLoading(false);
+          return;
+        }
+
+        // 3. Aadhaar Cross-Validation
+        const hasAadharNum = !!k.aadharNumber?.trim();
+        const hasAadharFront = !!(
+          k.aadharFront || existing.kyc?.aadharCardFrontUrl
+        );
+        const hasAadharBack = !!(
+          k.aadharBack || existing.kyc?.aadharCardBackUrl
+        );
+        const hasAllAadharImg = hasAadharFront && hasAadharBack;
+
+        if (
+          (hasAadharNum && !hasAllAadharImg) ||
+          (!hasAadharNum && (hasAadharFront || hasAadharBack))
+        ) {
+          setLoading(false);
+          return;
+        }
+
         if (existing.kyc) {
+
           if (!changed.kyc) {
             if (existing.business?.isSubmitted === false) setShowPreview(true);
             setStep(4);
@@ -288,7 +334,6 @@ export default function KycForm() {
 
           // Build clean FormData for KYC
           const payload = new FormData();
-          const k = form.kyc;
           payload.append("gstNumber", k.gstNumber || "");
           payload.append("panCardNumber", k.panNumber || "");
           payload.append("aadharCardNumber", k.aadharNumber || "");
@@ -303,16 +348,17 @@ export default function KycForm() {
 
           const res = await updateKycDetials(payload);
           if (res.data) {
+            setHasMadeAnyUpdate(true);
             setExisting((p) => ({ ...p, kyc: res.data }));
             if (existing.business?.isSubmitted === false) setShowPreview(true);
             setStep(4);
           }
+
           return;
         }
 
         // Post Flow for KYC
         const payload = new FormData();
-        const k = form.kyc;
         payload.append("gstNumber", k.gstNumber || "");
         payload.append("panCardNumber", k.panNumber || "");
         payload.append("aadharCardNumber", k.aadharNumber || "");
@@ -601,6 +647,8 @@ export default function KycForm() {
                           showPreview) && (
                           <PreviewAndEdite
                             existing={existing}
+                            hasMadeAnyUpdate={hasMadeAnyUpdate}
+                            setHasMadeAnyUpdate={setHasMadeAnyUpdate}
                             onBack={() => {
                               if (existing?.business?.isSubmitted === false) {
                                 setStep(3);

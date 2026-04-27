@@ -51,6 +51,58 @@ export default function Step3KYC({ onChange, initialData, readOnly = false }) {
     aadhar: null,
   });
 
+  // ===== CROSS-FIELD VALIDATION =====
+  useEffect(() => {
+    const newErrors = { gst: null, pan: null, aadhar: null };
+
+    // 1. GST Dependency
+    const hasGstNum = !!form.gstNumber.trim();
+    const hasGstImg = !!gstPreview;
+    if (hasGstNum && !hasGstImg) {
+      newErrors.gst = "Both GST number and image are required.";
+    } else if (!hasGstNum && hasGstImg) {
+      newErrors.gst = "Both GST number and image are required.";
+    } else if (hasGstNum && !validateGST(form.gstNumber)) {
+      newErrors.gst = "Invalid GST Number format (e.g. 07ABCDE1234F1Z5)";
+    }
+
+    // 2. PAN Dependency
+    const hasPanNum = !!form.panNumber.trim();
+    const hasPanImg = !!panPreview;
+    if (hasPanNum && !hasPanImg) {
+      newErrors.pan = "Both PAN number and image are required.";
+    } else if (!hasPanNum && hasPanImg) {
+      newErrors.pan = "Both PAN number and image are required.";
+    } else if (hasPanNum && !validatePAN(form.panNumber)) {
+      newErrors.pan = "Invalid PAN format (e.g. ABCDE1234F)";
+    }
+
+    // 3. Aadhaar Dependency
+    const hasAadharNum = !!form.aadharNumber.trim();
+    const hasAadharFront = !!aadharFrontPreview;
+    const hasAadharBack = !!aadharBackPreview;
+    const hasAllAadharImg = hasAadharFront && hasAadharBack;
+
+    if (hasAadharNum && !hasAllAadharImg) {
+      newErrors.aadhar = "Both Aadhaar number and front/back images are required.";
+    } else if (!hasAadharNum && (hasAadharFront || hasAadharBack)) {
+      newErrors.aadhar = "Both Aadhaar number and front/back images are required.";
+    } else if (hasAadharNum && !validateAadhaar(form.aadharNumber)) {
+      newErrors.aadhar = "Invalid Aadhaar (must be 12 digits)";
+    }
+
+
+    setErrors(newErrors);
+  }, [
+    form.gstNumber,
+    form.panNumber,
+    form.aadharNumber,
+    gstPreview,
+    panPreview,
+    aadharFrontPreview,
+    aadharBackPreview,
+  ]);
+
   const handleInput = (key, value) => {
     const updatedForm = { ...form, [key]: value };
     setForm(updatedForm);
@@ -59,152 +111,139 @@ export default function Step3KYC({ onChange, initialData, readOnly = false }) {
         JSON.stringify(updatedForm) !== JSON.stringify(initialData);
       onChange(updatedForm, isChanged);
     }
-
-    // Real-time validation
-    if (key === "gstNumber") {
-      if (value && !validateGST(value)) {
-        setErrors((prev) => ({ ...prev, gst: "Invalid GST Number format" }));
-      } else {
-        setErrors((prev) => ({ ...prev, gst: null }));
-      }
-    } else if (key === "panNumber") {
-      if (value && !validatePAN(value)) {
-        setErrors((prev) => ({
-          ...prev,
-          pan: "Invalid PAN format (e.g. ABCDE1234F)",
-        }));
-      } else {
-        setErrors((prev) => ({ ...prev, pan: null }));
-      }
-    } else if (key === "aadharNumber") {
-      if (value && !validateAadhaar(value)) {
-        setErrors((prev) => ({
-          ...prev,
-          aadhar: "Invalid Aadhaar (must be 12 digits)",
-        }));
-      } else {
-        setErrors((prev) => ({ ...prev, aadhar: null }));
-      }
-    }
   };
+
 
   return (
     <div className="space-y-6">
       {/* GST SECTION */}
-      <div className="space-y-1">
-        <InputField
-          label="GST Number"
-          variant="colored"
+      <div className="space-y-4">
+        <div className="space-y-1">
+          <InputField
+            label="GST Number"
+            variant="colored"
+            readOnly={readOnly}
+            value={form.gstNumber}
+            maxLength={15}
+            onChange={(e) => {
+              const val = e.target.value.toUpperCase().slice(0, 15);
+              handleInput("gstNumber", val);
+            }}
+          />
+        </div>
+
+        <DropzoneUpload
+          label="GST Certificate Photo"
+          preview={gstPreview}
           readOnly={readOnly}
-          value={form.gstNumber}
-          maxLength={15}
-          onChange={(e) => {
-            // Always uppercase, max 15 chars (07ABCDE1234F1Z5)
-            const val = e.target.value.toUpperCase().slice(0, 15);
-            handleInput("gstNumber", val);
+          onChange={(file) => {
+            const f = Array.isArray(file) ? file[0] : file;
+            if (f) {
+              setGstPreview(typeof f === "string" ? f : URL.createObjectURL(f));
+              handleInput("gstPhoto", f);
+            }
           }}
         />
         {errors.gst && (
-          <p className="text-red-500 text-xs mt-1 ml-1">{errors.gst}</p>
+          <p className="text-red-500 text-sm font-medium mt-1 ml-1">
+            {errors.gst}
+          </p>
         )}
       </div>
 
-      <DropzoneUpload
-        label="GST Certificate Photo"
-        preview={gstPreview}
-        readOnly={readOnly}
-        onChange={(file) => {
-          const f = Array.isArray(file) ? file[0] : file;
-          if (f) {
-            setGstPreview(typeof f === "string" ? f : URL.createObjectURL(f));
-            handleInput("gstPhoto", f);
-          }
-        }}
-      />
+      <div className="h-px bg-primary/10 my-6" />
 
       {/* PAN SECTION */}
-      <div className="space-y-1">
-        <InputField
-          label="PAN Card Number"
-          variant="colored"
+      <div className="space-y-4">
+        <div className="space-y-1">
+          <InputField
+            label="PAN Card Number"
+            variant="colored"
+            readOnly={readOnly}
+            value={form.panNumber}
+            maxLength={10}
+            onChange={(e) => {
+              const val = e.target.value.toUpperCase().slice(0, 10);
+              handleInput("panNumber", val);
+            }}
+          />
+        </div>
+
+        <DropzoneUpload
+          label="PAN Card Photo"
+          preview={panPreview}
           readOnly={readOnly}
-          value={form.panNumber}
-          maxLength={10}
-          onChange={(e) => {
-            // Always uppercase, max 10 chars (ABCDE1234F)
-            const val = e.target.value.toUpperCase().slice(0, 10);
-            handleInput("panNumber", val);
+          onChange={(file) => {
+            const f = Array.isArray(file) ? file[0] : file;
+            if (f) {
+              setPanPreview(typeof f === "string" ? f : URL.createObjectURL(f));
+              handleInput("panPhoto", f);
+            }
           }}
         />
         {errors.pan && (
-          <p className="text-red-500 text-xs mt-1 ml-1">{errors.pan}</p>
+          <p className="text-red-500 text-sm font-medium mt-1 ml-1">
+            {errors.pan}
+          </p>
         )}
       </div>
 
-      <DropzoneUpload
-        label="PAN Card Photo"
-        preview={panPreview}
-        readOnly={readOnly}
-        onChange={(file) => {
-          const f = Array.isArray(file) ? file[0] : file;
-          if (f) {
-            setPanPreview(typeof f === "string" ? f : URL.createObjectURL(f));
-            handleInput("panPhoto", f);
-          }
-        }}
-      />
+      <div className="h-px bg-primary/10 my-6" />
 
       {/* AADHAAR SECTION */}
-      <div className="space-y-1">
-        <InputField
-          label="Aadhar Card Number"
-          variant="colored"
+      <div className="space-y-4">
+        <div className="space-y-1">
+          <InputField
+            label="Aadhar Card Number"
+            variant="colored"
+            readOnly={readOnly}
+            placeholder="1234-5678-9012"
+            value={formatAadhaar(form.aadharNumber)}
+            maxLength={14}
+            onChange={(e) => {
+              const raw = e.target.value.replace(/\D/g, "");
+              if (raw.length <= 12) {
+                handleInput("aadharNumber", raw);
+              }
+            }}
+          />
+        </div>
+
+        <DropzoneUpload
+          label="Aadhar Front Photo"
+          preview={aadharFrontPreview}
           readOnly={readOnly}
-          placeholder="1234-5678-9012"
-          value={formatAadhaar(form.aadharNumber)}
-          maxLength={14} // 12 digits + 2 dashes
-          onChange={(e) => {
-            // Strip dashes/non-digits → store raw 12 digits
-            const raw = e.target.value.replace(/\D/g, "");
-            if (raw.length <= 12) {
-              handleInput("aadharNumber", raw);
+          onChange={(file) => {
+            const f = Array.isArray(file) ? file[0] : file;
+            if (f) {
+              setAadharFrontPreview(
+                typeof f === "string" ? f : URL.createObjectURL(f),
+              );
+              handleInput("aadharFront", f);
+            }
+          }}
+        />
+
+        <DropzoneUpload
+          label="Aadhar Back Photo"
+          preview={aadharBackPreview}
+          readOnly={readOnly}
+          onChange={(file) => {
+            const f = Array.isArray(file) ? file[0] : file;
+            if (f) {
+              setAadharBackPreview(
+                typeof f === "string" ? f : URL.createObjectURL(f),
+              );
+              handleInput("aadharBack", f);
             }
           }}
         />
         {errors.aadhar && (
-          <p className="text-red-500 text-xs mt-1 ml-1">{errors.aadhar}</p>
+          <p className="text-red-500 text-sm font-medium mt-1 ml-1">
+            {errors.aadhar}
+          </p>
         )}
       </div>
-
-      <DropzoneUpload
-        label="Aadhar Front Photo"
-        preview={aadharFrontPreview}
-        readOnly={readOnly}
-        onChange={(file) => {
-          const f = Array.isArray(file) ? file[0] : file;
-          if (f) {
-            setAadharFrontPreview(
-              typeof f === "string" ? f : URL.createObjectURL(f),
-            );
-            handleInput("aadharFront", f);
-          }
-        }}
-      />
-
-      <DropzoneUpload
-        label="Aadhar Back Photo"
-        preview={aadharBackPreview}
-        readOnly={readOnly}
-        onChange={(file) => {
-          const f = Array.isArray(file) ? file[0] : file;
-          if (f) {
-            setAadharBackPreview(
-              typeof f === "string" ? f : URL.createObjectURL(f),
-            );
-            handleInput("aadharBack", f);
-          }
-        }}
-      />
     </div>
   );
 }
