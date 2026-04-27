@@ -81,9 +81,7 @@ axiosInstance.interceptors.response.use(
                 refreshAttempts++;
 
                 try {
-                    console.log(
-                        `🔄 Token expired. Refresh attempt ${refreshAttempts}...`,
-                    );
+                   
 
                     const res = await axios.post(
                         `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,

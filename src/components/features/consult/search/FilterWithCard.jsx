@@ -539,7 +539,6 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
     if (qMaxPrice) initialPayload.maxVehiclePrice = Number(qMaxPrice);
 
     fetchConsultants(1, initialPayload);
-    console.log("Initial Payload ", initialPayload);
 
   }, []);
 

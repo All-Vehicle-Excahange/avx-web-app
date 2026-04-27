@@ -28,7 +28,6 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
       if (!themeId) return;
 
       try {
-        console.log("Checking eligibility for theme:", themeId);
         const res = await checkIsEligibleToCreate(themeId);
         setIsEligible(res.data);
       } catch (error) {
@@ -41,8 +40,6 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
   const handleUseTheme = async () => {
     try {
       const res = await setConsualtTheme(theme.themeId);
-
-      console.log("Theme set:", res);
       onSelect?.(theme);
       onClose?.();
     } catch (error) {

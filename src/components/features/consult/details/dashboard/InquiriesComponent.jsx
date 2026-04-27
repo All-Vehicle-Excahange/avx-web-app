@@ -49,7 +49,7 @@ export default function InquiriesComponent() {
         setInquiries(res.data || []);
         setVisibleCount(6);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setInquiriesLoading(false);
       }

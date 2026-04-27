@@ -91,7 +91,7 @@ export default function TopPerformingCard({ vehicle, rank }) {
                                     className="w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
                                     onClick={() => {
                                         setOpen(false);
-                                        console.log("Request Inspection", vehicle.id);
+
                                     }}
                                 >
                                     Request Inspection

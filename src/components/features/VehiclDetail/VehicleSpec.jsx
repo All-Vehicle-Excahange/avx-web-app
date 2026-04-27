@@ -44,7 +44,6 @@ export default function VehicleSpec({ open, setOpen }) {
       }),
     };
 
-    console.log(payload);
   };
   return (
     <section className="relative rounded-2xl overflow-hidden  text-primary border border-third/60">
