@@ -35,7 +35,7 @@ function ReviewComponent() {
   const [reviews, setReviews] = useState([]);
   const [isLoadingSummary, setIsLoadingSummary] = useState(true);
   const [isLoadingReviews, setIsLoadingReviews] = useState(true);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [isLastPage, setIsLastPage] = useState(false);
 
   const [activeFilter, setActiveFilter] = useState("All");
@@ -67,14 +67,14 @@ function ReviewComponent() {
 
   // Reset page when range changes to fetch fresh data for the new period
   useEffect(() => {
-    setPage(0);
+    setPage(1);
   }, [range]);
 
   // Fetch Reviews (Paginated)
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        if (page === 0) setIsLoadingReviews(true);
+        if (page === 1) setIsLoadingReviews(true);
         const daysMap = {
           7: "LAST_7_DAYS",
           30: "LAST_30_DAYS",
@@ -90,7 +90,7 @@ function ReviewComponent() {
         const reviewsData = response.data || [];
         const pageInfo = response.pageResponse || {};
 
-        if (page === 0) {
+        if (page === 1) {
           setReviews(reviewsData);
         } else {
           setReviews((prev) => [...prev, ...reviewsData]);
@@ -188,7 +188,7 @@ function ReviewComponent() {
               <SkeletonBox className="h-8 w-40" />
               <SkeletonBox className="h-4 w-32" />
             </div>
-            
+
             <div className="space-y-4 max-w-xl">
               {[1, 2, 3, 4, 5].map((i) => (
                 <div key={i} className="flex items-center gap-4">
@@ -288,7 +288,9 @@ function ReviewComponent() {
           ) : reviews.length === 0 ? (
             <div className="text-center py-20 border border-white/10 rounded-3xl">
               <MessageSquare className="mx-auto text-white/20 mb-4" size={48} />
-              <p className="text-third">No reviews found for the last {range} days.</p>
+              <p className="text-third">
+                No reviews found for the last {range} days.
+              </p>
             </div>
           ) : (
             reviews.map((review) => (
@@ -368,6 +370,18 @@ function ReviewComponent() {
                   </div>
                 )}
 
+                {/* ADMIN REMARK */}
+                {review.adminRemark && (
+                  <div className="mb-6 p-4 bg-yellow-500/5 border border-yellow-500/30  rounded-2xl relative overflow-hidden">
+                    <p className="text-[10px] font-bold text-yellow-500 uppercase tracking-[0.2em] mb-2 flex items-center gap-2">
+                      Admin Remark
+                    </p>
+                    <p className="text-white/70 text-sm italic leading-relaxed">
+                      {review.adminRemark}
+                    </p>
+                  </div>
+                )}
+
                 {/* EXISTING REPLY */}
                 {review.consultReply && (
                   <div className="mt-6 flex justify-start">
@@ -384,7 +398,9 @@ function ReviewComponent() {
                               Your Response
                             </span>
                             {review.isConsultReplyEdited && (
-                              <span className="text-[9px] text-white/30">(edited)</span>
+                              <span className="text-[9px] text-white/30">
+                                (edited)
+                              </span>
                             )}
                           </div>
                           <div className="flex items-center gap-2 opacity-0 group-hover/reply:opacity-100 transition-all duration-300">

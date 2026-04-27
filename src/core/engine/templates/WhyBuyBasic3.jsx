@@ -93,10 +93,16 @@ export default function WhyBuyBasic3({
   onNextTab,
   errors,
   rules,
+  storeIcons,
 }) {
   const [allReviews, setAllReviews] = useState([]);
   const [selectedReviewIds, setSelectedReviewIds] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
+
+  const iconOptions = storeIcons?.length > 0
+    ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
+    : SVG_OPTIONS;
+
 
   const DEFAULT_DATA = WHY_BUY_BASIC_3[0].data;
 
@@ -466,12 +472,13 @@ export default function WhyBuyBasic3({
                     Icon
                   </label>
                   <Select
-                    options={SVG_OPTIONS}
+                    options={iconOptions}
                     formatOptionLabel={formatOptionLabel}
                     styles={selectStyles}
                     value={
-                      SVG_OPTIONS.find((opt) => opt.value === step.icon) || null
+                      iconOptions.find((opt) => opt.value === step.icon) || null
                     }
+
                     onChange={(selectedOption) => {
                       updateArrayItem(
                         "processSteps",

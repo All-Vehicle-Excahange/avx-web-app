@@ -658,10 +658,12 @@ export default function CreateTheme() {
                 setActiveTab((prev) => Math.min(prev + 1, sections.length - 1))
               }
               onUpdate={(i, newData) => {
-                const updated = [...sections];
-                updated[activeTab].data = newData;
+                const updated = sections.map((sec, idx) =>
+                  idx === activeTab ? { ...sec, data: newData } : sec
+                );
                 setSections(updated);
               }}
+
             />
           )}
 

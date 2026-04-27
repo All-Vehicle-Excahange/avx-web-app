@@ -27,12 +27,11 @@ export const getAllConsultationReviews = async (params = {}) => {
   try {
     const res = await axiosInstance.get(ENDPOINT.all, {
       params: {
-        pageNo: params.pageNo || 0,
+        pageNo: params.pageNo ?? 1,
         size: params.size || 10,
-        sortBy: params.sortBy || "createdAt",
-        direction: params.direction || "desc",
         daysRange: params.daysRange,
       },
+
     });
     return handleResponse(res);
   } catch (error) {

@@ -94,58 +94,51 @@ export default function WhyBuyPro1({
   onNextTab,
   errors,
   rules,
+  storeIcons,
 }) {
   const scrollRef = useRef(null);
 
-  const data = {
-    ...DEFAULT_DATA,
-    ...Object.fromEntries(
-      Object.entries(rawData || {}).filter(
-        ([, v]) => v !== undefined && v !== null,
+  const iconOptions = storeIcons?.length > 0
+    ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
+    : SVG_OPTIONS;
+
+
+  const data = (() => {
+    const merged = {
+      // Structural array defaults only — no dummy content
+      processSteps: [],
+      inspectionPoints: [],
+      testimonials: [],
+      featuredReviews: [],
+      ...Object.fromEntries(
+        Object.entries(rawData || {}).filter(
+          ([, v]) => v !== undefined && v !== null,
+        ),
       ),
-    ),
-  };
+    };
 
-  // Map 'processes' and 'inspectionDescription' from draft/backend to UI fields
-  // Only apply mapping if the target UI fields don't exist yet to avoid overwriting user edits
-  if (!rawData?.processSteps && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
-    data.processSteps = rawData.processes.map(p => ({
-      title: p.title || "",
-      description: p.desc || p.description || "",
-      icon: p.icon || ""
-    }));
-  }
-  if (!rawData?.inspectionText && rawData?.inspectionDescription) {
-    data.inspectionText = rawData.inspectionDescription;
-  }
 
-  // Synchronize transformed draft data with the parent state once on load
-  useEffect(() => {
-    if (!rawData) return;
-    
-    let hasChanges = false;
-    const updatedData = { ...data };
-
-    // Sync processes mapping
-    if (!rawData.processSteps && rawData.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
-      updatedData.processSteps = rawData.processes.map(p => ({
+    // Map backend 'processes' array (with 'desc') → 'processSteps' (with 'description')
+    // Guard checks length, not just existence, because CreateTheme initializes processSteps as []
+    if (!rawData?.processSteps?.length && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
+      merged.processSteps = rawData.processes.map((p) => ({
         title: p.title || "",
         description: p.desc || p.description || "",
-        icon: p.icon || ""
+        icon: p.icon || "",
       }));
-      hasChanges = true;
     }
 
-    // Sync inspection text mapping
-    if (!rawData.inspectionText && rawData.inspectionDescription) {
-      updatedData.inspectionText = rawData.inspectionDescription;
-      hasChanges = true;
+
+
+    // Map 'inspectionDescription' → 'inspectionText'
+    if (rawData?.inspectionDescription && !rawData?.inspectionText) {
+      merged.inspectionText = rawData.inspectionDescription;
     }
 
-    if (hasChanges && onUpdate) {
-      onUpdate(updatedData);
-    }
-  }, [rawData]);
+    return merged;
+  })();
+
+
 
   const [allReviews, setAllReviews] = useState([]);
   const [selectedReviewIds, setSelectedReviewIds] = useState(
@@ -183,7 +176,8 @@ export default function WhyBuyPro1({
   }, [consultId]);
 
   const updateArrayItem = (arrayName, index, field, value) => {
-    const newArray = [...data[arrayName]];
+    const arr = data[arrayName] || [];
+    const newArray = [...arr];
     if (typeof newArray[index] === 'object' && newArray[index] !== null) {
       newArray[index] = { ...newArray[index], [field]: value };
     } else {
@@ -191,6 +185,7 @@ export default function WhyBuyPro1({
     }
     updateField(arrayName, newArray);
   };
+
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -650,12 +645,13 @@ export default function WhyBuyPro1({
                     Icon (Select SVG)
                   </label>
                   <Select
-                    options={SVG_OPTIONS}
+                    options={iconOptions}
                     formatOptionLabel={formatOptionLabel}
                     styles={selectStyles}
                     value={
-                      SVG_OPTIONS.find((opt) => opt.value === step.icon) || null
+                      iconOptions.find((opt) => opt.value === step.icon) || null
                     }
+
                     onChange={(selectedOption) => {
                       updateArrayItem(
                         "processSteps",

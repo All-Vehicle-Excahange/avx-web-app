@@ -99,10 +99,20 @@ export default function WhyBuyPro2({
   onUpdate,
   errors,
   rules,
+  storeIcons,
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const iconOptions = storeIcons?.length > 0
+    ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
+    : SVG_OPTIONS;
+
   const data = {
-    ...DEFAULT_DATA,
+    // Structural array defaults only — no dummy content
+    processSteps: [],
+    inspectionPoints: [],
+    testimonials: [],
+    featuredReviews: [],
     ...Object.fromEntries(
       Object.entries(rawData || {}).filter(
         ([, v]) => v !== undefined && v !== null,
@@ -110,9 +120,8 @@ export default function WhyBuyPro2({
     ),
   };
 
-  // Map 'processes' and 'inspectionDescription' from draft/backend to UI fields
-  // Only apply mapping if the target UI fields don't exist yet to avoid overwriting user edits
-  if (!rawData?.processSteps && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
+  // Map 'processes' → 'processSteps' (guard length, not just existence)
+  if (!rawData?.processSteps?.length && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
     data.processSteps = rawData.processes.map(p => ({
       title: p.title || "",
       description: p.desc || p.description || "",
@@ -122,6 +131,17 @@ export default function WhyBuyPro2({
   if (!rawData?.inspectionText && rawData?.inspectionDescription) {
     data.inspectionText = rawData.inspectionDescription;
   }
+  
+  // Map 'featuredReviews' → 'testimonials' for display
+  if (!rawData?.testimonials?.length && rawData?.featuredReviews && Array.isArray(rawData.featuredReviews) && rawData.featuredReviews.length > 0) {
+    data.testimonials = rawData.featuredReviews.map(r => ({
+      name: r.reviewerName || "",
+      review: r.reviewText || "",
+      rating: r.rating || 0,
+      title: r.reviewTitle || ""
+    }));
+  }
+
 
   // Map backend image objects if UI fields are missing
   for (let i = 1; i <= 5; i++) {
@@ -175,6 +195,17 @@ export default function WhyBuyPro2({
     // Sync inspection text mapping
     if (!rawData.inspectionText && rawData.inspectionDescription) {
       updatedData.inspectionText = rawData.inspectionDescription;
+      hasChanges = true;
+    }
+    
+    // Sync testimonials mapping
+    if (!rawData.testimonials && rawData.featuredReviews && Array.isArray(rawData.featuredReviews) && rawData.featuredReviews.length > 0) {
+      updatedData.testimonials = rawData.featuredReviews.map(r => ({
+        name: r.reviewerName || "",
+        review: r.reviewText || "",
+        rating: r.rating || 0,
+        title: r.reviewTitle || ""
+      }));
       hasChanges = true;
     }
 
@@ -942,12 +973,13 @@ export default function WhyBuyPro2({
                     Icon (Select SVG)
                   </label>
                   <Select
-                    options={SVG_OPTIONS}
+                    options={iconOptions}
                     formatOptionLabel={formatOptionLabel}
                     styles={selectStyles}
                     value={
-                      SVG_OPTIONS.find((opt) => opt.value === step.icon) || null
+                      iconOptions.find((opt) => opt.value === step.icon) || null
                     }
+
                     onChange={(selectedOption) => {
                       updateArrayItem(
                         "processSteps",
@@ -1759,64 +1791,79 @@ export default function WhyBuyPro2({
       {/* ═══════════════════════════════════════
           SECTION 8 — TESTIMONIALS
       ═══════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
-          {/* header */}
-          <div className="flex items-end justify-between mb-12">
-            <div className="flex flex-col gap-3">
-              <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2">
-                Reviews
-              </p>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary">
-                {data.testimonialTitle}
-              </h2>
+      {data.testimonials && data.testimonials.length > 0 && (
+        <section className="py-12 px-2 lg:px-4">
+          <div className="container">
+            {/* header */}
+            <div className="flex items-end justify-between mb-12">
+              <div className="flex flex-col gap-3">
+                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2">
+                  Reviews
+                </p>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary">
+                  {data.testimonialTitle || "What Our Customers Say"}
+                </h2>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {data.testimonials.slice(0, 2).map((t, i) => (
+                <div
+                  key={`${t.name}-${i}`}
+                  className="group relative rounded-2xl p-7 bg-white/5 backdrop-blur-md border border-white/10 hover:border-primary/30 transition-all duration-300 overflow-hidden"
+                >
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-linear-to-br from-primary/10 via-transparent to-transparent" />
+                  
+                  {/* Rating Stars */}
+                  {t.rating && (
+                    <div className="flex gap-1 mb-4 relative z-10">
+                      {[...Array(5)].map((_, idx) => (
+                        <Star
+                          key={idx}
+                          size={16}
+                          className={
+                            idx < t.rating
+                              ? "text-fourth fill-fourth"
+                              : "text-third/30"
+                          }
+                        />
+                      ))}
+                    </div>
+                  )}
+                  
+                  {/* Review Title */}
+                  {t.title && (
+                    <h4 className="font-semibold text-primary mb-3 relative z-10">
+                      {t.title}
+                    </h4>
+                  )}
+                  
+                  {/* Review Text */}
+                  <div
+                    className="font-[Poppins] text-[14px] leading-[1.9] text-third/80 italic relative z-10 mb-6"
+                    dangerouslySetInnerHTML={{ __html: t.review }}
+                  />
+                  
+                  <div className="w-full h-px bg-primary/10 mb-5 relative z-10" />
+                  
+                  {/* Reviewer Info */}
+                  <div className="flex items-center gap-3 relative z-10">
+                    <div className="w-10 h-10 rounded-full bg-linear-to-br from-primary/20 to-primary/5 flex items-center justify-center font-bold text-[14px] text-primary">
+                      {t.name?.[0] || "?"}
+                    </div>
+                    <div>
+                      <p className="font-[Montserrat] font-semibold text-[13px] text-primary">
+                        {t.name}
+                      </p>
+                      <p className="text-[11px] text-third/50">Verified Buyer</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {data.testimonials.slice(0, 2).map((t, i) => (
-              <div
-                key={`${t.name}-${i}`}
-                className="group relative rounded-2xl p-7 bg-white/5 backdrop-blur-md border border-white/10 hover:border-primary/30 transition-all duration-300 overflow-hidden"
-              >
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-linear-to-br from-primary/10 via-transparent to-transparent" />
-                <div className="text-primary [&>svg]:w-[22px] [&>svg]:h-[22px] mb-4 relative z-10">
-                  {typeof data.testimonialIcon === "string" &&
-                  data.testimonialIcon.startsWith("<svg") ? (
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: data.testimonialIcon,
-                      }}
-                    />
-                  ) : (
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h4c0 2.2-1.8 4-4 4H3c-.6 0-1 .4-1 1s.4 1 1 1Z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.1-.9-2-2-2h-3c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h4c0 2.2-1.8 4-4 4h-2c-.6 0-1 .4-1 1s.4 1 1 1Z"/></svg>`,
-                      }}
-                    />
-                  )}
-                </div>
-                <div
-                  className="font-[Poppins] text-[14px] leading-[1.9] text-third/80 italic relative z-10 mb-6"
-                  dangerouslySetInnerHTML={{ __html: t.review }}
-                />
-                <div className="w-full h-px bg-primary/10 mb-5 relative z-10" />
-                <div className="flex items-center gap-3 relative z-10">
-                  <div className="w-10 h-10 rounded-full bg-linear-to-br from-primary/20 to-primary/5 flex items-center justify-center font-bold text-[14px] text-primary">
-                    {t.name?.[0] || "?"}
-                  </div>
-                  <div>
-                    <p className="font-[Montserrat] font-semibold text-[13px] text-primary">
-                      {t.name}
-                    </p>
-                    <p className="text-[11px] text-third/50">Verified Buyer</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

@@ -25,6 +25,7 @@ const ENDPOINT = {
   getConsualtDraft: "/consultation/owner/store/get-draft",
   setFeaturedReviews: "/consultation/owner/store/draft/featured-reviews",
   makeAsFinalSubmit: "/consultation/owner/store/submit-draft",
+  getStoreIcons: "/consultation/owner/store/icons",
 };
 
 export const getThemeListing = async () => {
@@ -297,6 +298,15 @@ export const makeAsFinalSubmit = async (score) => {
         storeScore: score,
       },
     });
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getStoreIcons = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getStoreIcons);
     return handleResponse(res);
   } catch (error) {
     throw error;

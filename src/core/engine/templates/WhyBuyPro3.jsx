@@ -99,10 +99,20 @@ export default function WhyBuyPro3({
   onNextTab,
   errors,
   rules,
+  storeIcons,
 }) {
   const [isSaving, setIsSaving] = useState(false);
+
+  const iconOptions = storeIcons?.length > 0
+    ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
+    : SVG_OPTIONS;
+
   const data = {
-    ...DEFAULT_DATA,
+    // Structural array defaults only — no dummy content
+    processSteps: [],
+    inspectionPoints: [],
+    testimonials: [],
+    featuredReviews: [],
     ...Object.fromEntries(
       Object.entries(rawData || {}).filter(
         ([, v]) => v !== undefined && v !== null,
@@ -111,68 +121,72 @@ export default function WhyBuyPro3({
   };
 
   // Map backend draft fields to UI fields if UI fields are missing
-  // This handles naming discrepancies between backend JSON and template state keys
-  if (!rawData?.whyBuyStoryTitle && rawData?.storyTitle) {
+  if (!rawData?.whyBuyStoryTitle && rawData?.storyTitle)
     data.whyBuyStoryTitle = rawData.storyTitle;
-  }
-  if (!rawData?.whyBuyStoryDescription && rawData?.storyDescription) {
+  if (!rawData?.whyBuyStoryDescription && rawData?.storyDescription)
     data.whyBuyStoryDescription = rawData.storyDescription;
-  }
-  if (!rawData?.whyBuyVehicleSelectionTitle && rawData?.vehicleSelectionTitle) {
+  if (!rawData?.whyBuyVehicleSelectionTitle && rawData?.vehicleSelectionTitle)
     data.whyBuyVehicleSelectionTitle = rawData.vehicleSelectionTitle;
-  }
-  if (!rawData?.whyBuyVehicleSelectionDescription && rawData?.vehicleSelectionDescription) {
+  if (!rawData?.whyBuyVehicleSelectionDescription && rawData?.vehicleSelectionDescription)
     data.whyBuyVehicleSelectionDescription = rawData.vehicleSelectionDescription;
-  }
-  if (!rawData?.whyBuyProcessTitle && rawData?.processTitle) {
+  if (!rawData?.whyBuyProcessTitle && rawData?.processTitle)
     data.whyBuyProcessTitle = rawData.processTitle;
-  }
-  if (!rawData?.whyBuyProcessDescription && rawData?.processDescription) {
+  if (!rawData?.whyBuyProcessDescription && rawData?.processDescription)
     data.whyBuyProcessDescription = rawData.processDescription;
-  }
-  if (!rawData?.whyBuyInspectionTitle && rawData?.inspectionTitle) {
+  if (!rawData?.whyBuyInspectionTitle && rawData?.inspectionTitle)
     data.whyBuyInspectionTitle = rawData.inspectionTitle;
-  }
-  if (!rawData?.whyBuyInspectionDescription && rawData?.inspectionDescription) {
+  if (!rawData?.whyBuyInspectionDescription && rawData?.inspectionDescription)
     data.whyBuyInspectionDescription = rawData.inspectionDescription;
-  }
-  if (!rawData?.whyBuyCustomerCommitmentTitle && rawData?.customerCommitmentTitle) {
+  if (!rawData?.whyBuyCustomerCommitmentTitle && rawData?.customerCommitmentTitle)
     data.whyBuyCustomerCommitmentTitle = rawData.customerCommitmentTitle;
-  }
-  if (!rawData?.whyBuyCustomerCommitmentDescription && rawData?.customerCommitmentDescription) {
+  if (!rawData?.whyBuyCustomerCommitmentDescription && rawData?.customerCommitmentDescription)
     data.whyBuyCustomerCommitmentDescription = rawData.customerCommitmentDescription;
-  }
 
-  // Map 'processes' array to 'processSteps' if missing
-  if (!rawData?.processSteps && rawData?.processes && Array.isArray(rawData.processes)) {
+  // Map 'processes' → 'processSteps' (guard length, not just existence)
+  if (!rawData?.processSteps?.length && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
     data.processSteps = rawData.processes.map(p => ({
       title: p.title || "",
       description: p.desc || p.description || "",
       icon: p.icon || ""
     }));
   }
+  
+  // Map 'featuredReviews' → 'testimonials' for display (if not already mapped)
+  if (!rawData?.testimonials?.length && rawData?.featuredReviews && Array.isArray(rawData.featuredReviews) && rawData.featuredReviews.length > 0) {
+    data.testimonials = rawData.featuredReviews.map(r => ({
+      name: r.reviewerName || "",
+      review: r.reviewText || "",
+      rating: r.rating || 0,
+      title: r.reviewTitle || ""
+    }));
+    // Also ensure featuredReviews is set for the editor
+    if (!data.featuredReviews || data.featuredReviews.length === 0) {
+      data.featuredReviews = rawData.featuredReviews;
+    }
+  }
+
 
   // Map backend image objects to template-specific UI image keys
   for (let i = 1; i <= 5; i++) {
     if (!rawData?.[`whyBuyHeroTemplate${i}`] && rawData?.[`whyBuyHeroTemplateId${i}`]) {
       data[`whyBuyHeroTemplate${i}`] = rawData[`whyBuyHeroTemplateId${i}`];
     }
-    if (!rawData?.[`whyBuyStoryTemplate${i}`] && rawData?.[`storyTemplateId${i}`]) {
-      data[`whyBuyStoryTemplate${i}`] = rawData[`storyTemplateId${i}`];
+    if (!rawData?.[`whyBuyStoryTemplate${i}`] && rawData?.[`storyTemplate${i}`]) {
+      data[`whyBuyStoryTemplate${i}`] = rawData[`storyTemplate${i}`];
     }
-    if (!rawData?.[`whyBuyVehicleSelectionTemplate${i}`] && rawData?.[`vehicleSelectionTemplateId${i}`]) {
-      data[`whyBuyVehicleSelectionTemplate${i}`] = rawData[`vehicleSelectionTemplateId${i}`];
+    if (!rawData?.[`whyBuyVehicleSelectionTemplate${i}`] && rawData?.[`vehicleSelectionTemplate${i}`]) {
+      data[`whyBuyVehicleSelectionTemplate${i}`] = rawData[`vehicleSelectionTemplate${i}`];
+    }
+    if (!rawData?.[`whyBuyGalleryTemplate${i}`] && rawData?.[`galleryTemplate${i}`]) {
+      data[`whyBuyGalleryTemplate${i}`] = rawData[`galleryTemplate${i}`];
     }
   }
   for (let i = 1; i <= 4; i++) {
     if (!rawData?.[`whyBuyProcessTemplate${i}`] && rawData?.[`processTemplateId${i}`]) {
       data[`whyBuyProcessTemplate${i}`] = rawData[`processTemplateId${i}`];
     }
-    if (!rawData?.[`whyBuyInspectionTemplate${i}`] && rawData?.[`inspectionTemplateId${i}`]) {
-      data[`whyBuyInspectionTemplate${i}`] = rawData[`inspectionTemplateId${i}`];
-    }
-    if (!rawData?.[`whyBuyGalleryTemplate${i}`] && rawData?.[`galleryTemplateId${i}`]) {
-      data[`whyBuyGalleryTemplate${i}`] = rawData[`galleryTemplateId${i}`];
+    if (!rawData?.[`whyBuyInspectionTemplate${i}`] && rawData?.[`inspectionTemplate${i}`]) {
+      data[`whyBuyInspectionTemplate${i}`] = rawData[`inspectionTemplate${i}`];
     }
   }
 
@@ -213,6 +227,17 @@ export default function WhyBuyPro3({
       }));
       hasChanges = true;
     }
+    
+    // Sync testimonials mapping
+    if (!rawData.testimonials && rawData.featuredReviews && Array.isArray(rawData.featuredReviews) && rawData.featuredReviews.length > 0) {
+      updatedData.testimonials = rawData.featuredReviews.map(r => ({
+        name: r.reviewerName || "",
+        review: r.reviewText || "",
+        rating: r.rating || 0,
+        title: r.reviewTitle || ""
+      }));
+      hasChanges = true;
+    }
 
     // Sync image mappings
     for (let i = 1; i <= 5; i++) {
@@ -220,12 +245,16 @@ export default function WhyBuyPro3({
         updatedData[`whyBuyHeroTemplate${i}`] = rawData[`whyBuyHeroTemplateId${i}`];
         hasChanges = true;
       }
-      if (!rawData[`whyBuyStoryTemplate${i}`] && rawData[`storyTemplateId${i}`]) {
-        updatedData[`whyBuyStoryTemplate${i}`] = rawData[`storyTemplateId${i}`];
+      if (!rawData[`whyBuyStoryTemplate${i}`] && rawData[`storyTemplate${i}`]) {
+        updatedData[`whyBuyStoryTemplate${i}`] = rawData[`storyTemplate${i}`];
         hasChanges = true;
       }
-      if (!rawData[`whyBuyVehicleSelectionTemplate${i}`] && rawData[`vehicleSelectionTemplateId${i}`]) {
-        updatedData[`whyBuyVehicleSelectionTemplate${i}`] = rawData[`vehicleSelectionTemplateId${i}`];
+      if (!rawData[`whyBuyVehicleSelectionTemplate${i}`] && rawData[`vehicleSelectionTemplate${i}`]) {
+        updatedData[`whyBuyVehicleSelectionTemplate${i}`] = rawData[`vehicleSelectionTemplate${i}`];
+        hasChanges = true;
+      }
+      if (!rawData[`whyBuyGalleryTemplate${i}`] && rawData[`galleryTemplate${i}`]) {
+        updatedData[`whyBuyGalleryTemplate${i}`] = rawData[`galleryTemplate${i}`];
         hasChanges = true;
       }
     }
@@ -234,12 +263,8 @@ export default function WhyBuyPro3({
         updatedData[`whyBuyProcessTemplate${i}`] = rawData[`processTemplateId${i}`];
         hasChanges = true;
       }
-      if (!rawData[`whyBuyInspectionTemplate${i}`] && rawData[`inspectionTemplateId${i}`]) {
-        updatedData[`whyBuyInspectionTemplate${i}`] = rawData[`inspectionTemplateId${i}`];
-        hasChanges = true;
-      }
-      if (!rawData[`whyBuyGalleryTemplate${i}`] && rawData[`galleryTemplateId${i}`]) {
-        updatedData[`whyBuyGalleryTemplate${i}`] = rawData[`galleryTemplateId${i}`];
+      if (!rawData[`whyBuyInspectionTemplate${i}`] && rawData[`inspectionTemplate${i}`]) {
+        updatedData[`whyBuyInspectionTemplate${i}`] = rawData[`inspectionTemplate${i}`];
         hasChanges = true;
       }
     }
@@ -285,7 +310,7 @@ export default function WhyBuyPro3({
   const [avxInspectionHovered, setAvxInspectionHovered] = useState(0);
   const [testimonialsactive, setTestimonialsActive] = useState(0);
   const [visible, setVisible] = useState(true);
-  const testimonialsTotal = data.featuredReviews?.length || 0;
+  const testimonialsTotal = data.testimonials?.length || 0;
   const activeHovered = hovered ?? 0;
   const activeRef = useRef(0);
   const timeoutRef = useRef(null);
@@ -1044,12 +1069,13 @@ export default function WhyBuyPro3({
                     Icon (Select SVG)
                   </label>
                   <Select
-                    options={SVG_OPTIONS}
+                    options={iconOptions}
                     formatOptionLabel={formatOptionLabel}
                     styles={selectStyles}
                     value={
-                      SVG_OPTIONS.find((opt) => opt.value === step.icon) || null
+                      iconOptions.find((opt) => opt.value === step.icon) || null
                     }
+
                     onChange={(selectedOption) => {
                       updateArrayItem(
                         "processSteps",
@@ -1758,75 +1784,77 @@ export default function WhyBuyPro3({
         </div>
       </section>
       {/* ===== Testimonials Section ===== */}
-      <section className="relative py-12 px-2 lg:px-4">
-        <div className="container">
-          <div className="mx-auto w-full">
-            <div className="flex flex-col items-center gap-10">
-              <div className="flex flex-col items-center gap-4 text-center">
-                <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                  Feedback
-                </span>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                  {data.whyBuyTestimonialTitle}
-                </h2>
-              </div>
-              <div
-                className="w-full"
-                style={{
-                  opacity: visible ? 1 : 0,
-                  transform: visible ? "translateY(0px)" : "translateY(12px)",
-                  transition: "opacity 0.35s ease, transform 0.35s ease",
-                }}
-              >
-                <div className="relative flex flex-col items-center text-center gap-8 px-10 py-12 border border-third/15 rounded-2xl">
-                  <div className="absolute top-5 right-6 w-9 h-9 rounded-full flex items-center justify-center">
-                    <Quote className="w-6 h-6 text-third/30" />
-                  </div>
-                  <span className="text-[13px] font-bold text-third/30 font-[Montserrat] tracking-[0.5em]">
-                    {String(testimonialsactive + 1).padStart(2, "0")}
+      {data.testimonials && data.testimonials.length > 0 && (
+        <section className="relative py-12 px-2 lg:px-4">
+          <div className="container">
+            <div className="mx-auto w-full">
+              <div className="flex flex-col items-center gap-10">
+                <div className="flex flex-col items-center gap-4 text-center">
+                  <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                    Feedback
                   </span>
-                  <div
-                    className="text-xl md:text-2xl lg:text-3xl font-light text-primary/70 font-[Poppins] leading-[1.6] max-w-3xl italic"
-                    dangerouslySetInnerHTML={{
-                      __html: item.reviewText || item.review,
-                    }}
-                  />
-                  <span className="text-xs font-semibold text-primary/90 font-[Montserrat] uppercase tracking-widest">
-                    {item.reviewerName || item.name}
-                  </span>
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                    {data.whyBuyTestimonialTitle || "What Our Customers Say"}
+                  </h2>
                 </div>
-              </div>
-              <div className="flex items-center gap-6">
-                <button
-                  onClick={prev}
-                  className="w-10 h-10 rounded-full border border-third/20 flex items-center justify-center hover:border-third/40 hover:bg-third/5 transition-all duration-300 group"
+                <div
+                  className="w-full"
+                  style={{
+                    opacity: visible ? 1 : 0,
+                    transform: visible ? "translateY(0px)" : "translateY(12px)",
+                    transition: "opacity 0.35s ease, transform 0.35s ease",
+                  }}
                 >
-                  <ChevronLeft className="w-4 h-4 text-third/50 group-hover:text-third/70 transition-colors duration-300" />
-                </button>
-                <div className="flex items-center gap-2">
-                  {data.featuredReviews?.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => transition(i)}
-                      className={`rounded-full transition-all duration-500 ${
-                        i === testimonialsactive
-                          ? "w-6 h-1.5 bg-primary"
-                          : "w-1.5 h-1.5 bg-third/20 hover:bg-third/40"
-                      }`}
+                  <div className="relative flex flex-col items-center text-center gap-8 px-10 py-12 border border-third/15 rounded-2xl">
+                    <div className="absolute top-5 right-6 w-9 h-9 rounded-full flex items-center justify-center">
+                      <Quote className="w-6 h-6 text-third/30" />
+                    </div>
+                    <span className="text-[13px] font-bold text-third/30 font-[Montserrat] tracking-[0.5em]">
+                      {String(testimonialsactive + 1).padStart(2, "0")}
+                    </span>
+                    <div
+                      className="text-xl md:text-2xl lg:text-3xl font-light text-primary/70 font-[Poppins] leading-[1.6] max-w-3xl italic"
+                      dangerouslySetInnerHTML={{
+                        __html: item.reviewText || item.review,
+                      }}
                     />
-                  ))}
+                    <span className="text-xs font-semibold text-primary/90 font-[Montserrat] uppercase tracking-widest">
+                      {item.reviewerName || item.name}
+                    </span>
+                  </div>
                 </div>
-                <button
-                  onClick={next}
-                  className="w-10 h-10 rounded-full border border-third/20 flex items-center justify-center hover:border-third/40 hover:bg-third/5 transition-all duration-300 group"
-                >
-                  <ChevronRight className="w-4 h-4 text-third/50 group-hover:text-third/70 transition-colors duration-300" />
-                </button>
+                <div className="flex items-center gap-6">
+                  <button
+                    onClick={prev}
+                    className="w-10 h-10 rounded-full border border-third/20 flex items-center justify-center hover:border-third/40 hover:bg-third/5 transition-all duration-300 group"
+                  >
+                    <ChevronLeft className="w-4 h-4 text-third/50 group-hover:text-third/70 transition-colors duration-300" />
+                  </button>
+                  <div className="flex items-center gap-2">
+                    {data.testimonials?.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => transition(i)}
+                        className={`rounded-full transition-all duration-500 ${
+                          i === testimonialsactive
+                            ? "w-6 h-1.5 bg-primary"
+                            : "w-1.5 h-1.5 bg-third/20 hover:bg-third/40"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <button
+                    onClick={next}
+                    className="w-10 h-10 rounded-full border border-third/20 flex items-center justify-center hover:border-third/40 hover:bg-third/5 transition-all duration-300 group"
+                  >
+                    <ChevronRight className="w-4 h-4 text-third/50 group-hover:text-third/70 transition-colors duration-300" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }
