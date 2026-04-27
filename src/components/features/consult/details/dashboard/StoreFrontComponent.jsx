@@ -13,54 +13,44 @@ import SkeletonBox from "@/components/ui/skeleton/SkeletonBox";
 
 /**
  * Maps raw API response fields → template field names expected by theme components.
+ * Only passes through actual data from the API, no dummy content.
  */
 function mapApiToTemplateData(api) {
-  return {
-    // Hero
-    headline: api.heroTitle,
-    heroTitle: api.heroTitle,
-    subHeadline: api.heroDescription,
-    heroDesc: api.heroDescription,
-    heroImageUrl: api.customHeroImageUrl1 || api.heroImageTemplate1?.imageUrl,
+  // Filter out undefined/null values to prevent overwriting with empty data
+  const cleanData = Object.fromEntries(
+    Object.entries(api || {}).filter(([, v]) => v !== undefined && v !== null)
+  );
 
+  return {
+    // Pass through all API data first
+    ...cleanData,
+    
+    // Then add any specific mappings needed for template compatibility
+    // Hero mappings
+    ...(api.heroTitle && { headline: api.heroTitle }),
+    ...(api.heroDescription && { subHeadline: api.heroDescription, heroDesc: api.heroDescription }),
+    
+    // Mission mappings
+    ...(api.missionDescription && { missionDesc: api.missionDescription }),
+    
+    // Vision mappings
+    ...(api.visionDescription && { visionDesc: api.visionDescription }),
+    
+    // Services mappings
+    ...(api.serviceTitle && { servicesTitle: api.serviceTitle }),
+    ...(api.serviceDescription && { servicesSubtitle: api.serviceDescription, servicesDesc: api.serviceDescription }),
+    
+    // Stats mappings
+    ...(api.aboutUsDescription && { statsDescription: api.aboutUsDescription, statsDesc: api.aboutUsDescription }),
+    
     // Story Images (gallery) — only include images that exist
     storyImages: [
-      api.customHeroImageUrl1 || api.heroImageTemplate1?.imageUrl,
-      api.customHeroImageUrl2 || api.heroImageTemplate2?.imageUrl,
-      api.customMissionUrl1,
-      api.customStoryUrl1,
+      api.heroImageTemplate1?.imageUrl,
+      api.heroImageTemplate2?.imageUrl,
+      api.heroImageTemplate3?.imageUrl,
+      api.missionTemplate1?.imageUrl,
+      api.visionTemplate1?.imageUrl,
     ].filter(Boolean),
-
-    // About Us
-    aboutUsTitle: api.aboutUsTitle,
-    aboutUsDescription: api.aboutUsDescription,
-
-    // Stats
-    stats: api.stats,
-    statsDescription: api.aboutUsDescription,
-    statsDesc: api.aboutUsDescription,
-
-    // Mission
-    missionTitle: api.missionTitle,
-    missionDescription: api.missionDescription,
-    missionDesc: api.missionDescription,
-    missionImageUrl: api.customMissionUrl1,
-    missionImage: api.customMissionUrl1,
-
-    // Vision
-    visionTitle: api.visionTitle,
-    visionDescription: api.visionDescription,
-    visionDesc: api.visionDescription,
-    visionImage: api.visionTemplate1?.imageUrl || "",
-
-    // Services
-    servicesTitle: api.serviceTitle,
-    servicesSubtitle: api.serviceDescription,
-    servicesDesc: api.serviceDescription,
-    services: api.services,
-
-    // WhyBuy (spread all remaining fields)
-    ...api,
   };
 }
 
@@ -112,16 +102,10 @@ export default function StoreFrontComponent() {
 
       const mappedData = mapApiToTemplateData(storeData);
 
+      // Don't merge with schema defaults - only use API data
       const hydratedSections = matchedTheme.schema.map((section) => ({
         ...section,
-        data: {
-          ...section.data, // schema defaults as fallback
-          ...Object.fromEntries(
-            Object.entries(mappedData).filter(
-              ([, v]) => v !== undefined && v !== null,
-            ),
-          ),
-        },
+        data: mappedData, // Use mapped API data directly, no schema defaults
       }));
 
       setSections(hydratedSections);

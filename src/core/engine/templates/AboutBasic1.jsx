@@ -12,32 +12,42 @@ import {
   setAboutMission,
   setAboutVision,
   setState,
-  setAboutServices
+  setAboutServices,
+  getStoreIcons
 } from "@/services/theme.service";
 import Select from "react-select";
 import { ABOUT_BASIC_1 } from "@/core/engine/schemas/about/basic/about_basic_1";
 
+
 const SVG_OPTIONS = [
   {
     value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>`,
-    label: "Search"
+    label: "Search",
   },
   {
     value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>`,
-    label: "Cancel"
+    label: "Cancel",
   },
   {
     value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M300-360q-25 0-42.5-17.5T240-420v-40h60v40h60v-180h60v180q0 25-17.5 42.5T360-360h-60Zm220 0q-17 0-28.5-11.5T480-400v-40h60v20h80v-40H520q-17 0-28.5-11.5T480-500v-60q0-17 11.5-28.5T520-600h120q17 0 28.5 11.5T680-560v40h-60v-20h-80v40h100q17 0 28.5 11.5T680-460v60q0 17-11.5 28.5T640-360H520Z"/></svg>`,
-    label: "Layout"
+    label: "Layout",
   },
   {
     value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M320-240 80-480l240-240 57 57-184 184 183 183-56 56Zm320 0-57-57 184-184-183-183 56-56 240 240-240 240Z"/></svg>`,
-    label: "Code"
+    label: "Code",
   },
   {
     value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-40-360v-240h80v207l154 154-57 57-177-178Z"/></svg>`,
-    label: "Clock"
-  }
+    label: "Clock",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m646-160-42-42 98-98q-37-53-90.5-84.5T480-420q-83 0-156 31.5T197-331q-54 54-85.5 127T80-480q0 83 31.5 156T197-197q54 54 127 85.5T480-80q64 0 117.5-31.5T706-178l98-98-42-42-98 98q-38 33-80.5-6.5T480-300q-54 0-99-45t-45-99q0-54 45-99t99-45q54 0 99 45t45 99q0 51.5-26.5 94T560-360Z"/></svg>`,
+    label: "ShieldCheck",
+  },
+  {
+    value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-320q93 0 156.5-63.5T700-540q0-93-63.5-156.5T480-760q-93 0-156.5 63.5T260-540q0 93 63.5 156.5T480-320Zm0-160q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm0 374q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-106Zm0 106Q319 217 239.5 334.5T160-552q0 150 96.5 255T480-200q150 0 246-105t96-255q0-100-80.5-217.5T480-500Z"/></svg>`,
+    label: "Globe",
+  },
 ];
 
 const selectStyles = {
@@ -81,8 +91,13 @@ const formatOptionLabel = ({ value, label }) => (
 
 const DEFAULT_DATA = ABOUT_BASIC_1[0].data;
 
-function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab, errors, rules }) {
+function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab, errors, rules, storeIcons }) {
   const [isSaving, setIsSaving] = useState(false);
+
+  const iconOptions = storeIcons?.length > 0
+    ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
+    : SVG_OPTIONS;
+
   const data = {
     ...DEFAULT_DATA, ...Object.fromEntries(
       Object.entries(rawData || {}).filter(([, v]) => v !== undefined && v !== null)
@@ -363,10 +378,10 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
                     Select Icon
                   </label>
                   <Select
-                    options={SVG_OPTIONS}
+                    options={iconOptions}
                     formatOptionLabel={formatOptionLabel}
                     styles={selectStyles}
-                    value={SVG_OPTIONS.find(opt => opt.value === s.icon) || null}
+                    value={iconOptions.find(opt => opt.value === s.icon) || null}
                     onChange={(selectedOption) => {
                       updateArrayItem("services", i, "icon", selectedOption.value);
                     }}

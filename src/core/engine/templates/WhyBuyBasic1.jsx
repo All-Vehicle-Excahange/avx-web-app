@@ -104,8 +104,14 @@ function WhyBuyBasic1({
   onNextTab,
   errors,
   rules,
+  storeIcons,
 }) {
   const [isSaving, setIsSaving] = useState(false);
+
+  const iconOptions = storeIcons?.length > 0
+    ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
+    : SVG_OPTIONS;
+
   const data = {
     ...DEFAULT_DATA,
     ...Object.fromEntries(
@@ -117,7 +123,7 @@ function WhyBuyBasic1({
 
   // Map 'processes' from backend/draft to 'processSteps' used in UI
   // Only apply mapping if the target UI field doesn't exist yet to avoid overwriting user edits
-  if (!rawData?.processSteps && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
+  if (!data.processSteps && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
     data.processSteps = rawData.processes.map(p => ({
       title: p.title || "",
       description: p.desc || p.description || "",
@@ -127,7 +133,7 @@ function WhyBuyBasic1({
 
   // Synchronize transformed draft data with the parent state once on load
   useEffect(() => {
-    if (!rawData) return;
+    if (!rawData || !onUpdate) return;
     
     let hasChanges = false;
     const updatedData = { ...data };
@@ -141,10 +147,10 @@ function WhyBuyBasic1({
       hasChanges = true;
     }
 
-    if (hasChanges && onUpdate) {
+    if (hasChanges) {
       onUpdate(updatedData);
     }
-  }, [rawData]);
+  }, []);
 
   const [allReviews, setAllReviews] = useState([]);
   const [selectedReviewIds, setSelectedReviewIds] = useState([]);
@@ -450,12 +456,13 @@ function WhyBuyBasic1({
                     Icon (Select SVG)
                   </label>
                   <Select
-                    options={SVG_OPTIONS}
+                    options={iconOptions}
                     formatOptionLabel={formatOptionLabel}
                     styles={selectStyles}
                     value={
-                      SVG_OPTIONS.find((opt) => opt.value === step.icon) || null
+                      iconOptions.find((opt) => opt.value === step.icon) || null
                     }
+
                     onChange={(selectedOption) => {
                       updateArrayItem(
                         "processSteps",

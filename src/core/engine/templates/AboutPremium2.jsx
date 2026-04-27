@@ -94,8 +94,14 @@ export default function AboutPremium2({
   onNextTab,
   errors,
   rules,
+  storeIcons,
 }) {
   const [isSaving, setIsSaving] = useState(false);
+
+  const iconOptions = storeIcons?.length > 0
+    ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
+    : SVG_OPTIONS;
+
   const d = {
     ...DEFAULT_DATA,
     ...Object.fromEntries(
@@ -120,17 +126,18 @@ export default function AboutPremium2({
   }
 
   // Map backend image objects if UI fields are missing
-  if (!data?.heroTemplate1 && data?.heroImageTemplateId1) {
-    d.heroTemplate1 = data.heroImageTemplateId1;
+  // API returns heroImageTemplate1, heroImageTemplate2, etc.
+  if (!data?.heroTemplate1 && data?.heroImageTemplate1) {
+    d.heroTemplate1 = data.heroImageTemplate1;
   }
-  if (!data?.heroTemplate2 && data?.heroImageTemplateId2) {
-    d.heroTemplate2 = data.heroImageTemplateId2;
+  if (!data?.heroTemplate2 && data?.heroImageTemplate2) {
+    d.heroTemplate2 = data.heroImageTemplate2;
   }
-  if (!data?.missionTemplate1 && data?.missionTemplateId1) {
-    d.missionTemplate1 = data.missionTemplateId1;
+  if (!data?.missionTemplate1 && data?.missionTemplate1) {
+    d.missionTemplate1 = data.missionTemplate1;
   }
-  if (!data?.visionTemplate1 && data?.visionTemplateId1) {
-    d.visionTemplate1 = data.visionTemplateId1;
+  if (!data?.visionTemplate1 && data?.visionTemplate1) {
+    d.visionTemplate1 = data.visionTemplate1;
   }
 
   // Synchronize transformed draft data with the parent state once on load
@@ -158,20 +165,21 @@ export default function AboutPremium2({
     }
 
     // Sync image mappings
-    if (!data.heroTemplate1 && data.heroImageTemplateId1) {
-      updatedData.heroTemplate1 = data.heroImageTemplateId1;
+    // API returns heroImageTemplate1, heroImageTemplate2, not heroImageTemplateId1
+    if (!data.heroTemplate1 && data.heroImageTemplate1) {
+      updatedData.heroTemplate1 = data.heroImageTemplate1;
       hasChanges = true;
     }
-    if (!data.heroTemplate2 && data.heroImageTemplateId2) {
-      updatedData.heroTemplate2 = data.heroImageTemplateId2;
+    if (!data.heroTemplate2 && data.heroImageTemplate2) {
+      updatedData.heroTemplate2 = data.heroImageTemplate2;
       hasChanges = true;
     }
-    if (!data.missionTemplate1 && data.missionTemplateId1) {
-      updatedData.missionTemplate1 = data.missionTemplateId1;
+    if (!data.missionTemplate1 && data.missionTemplate1) {
+      updatedData.missionTemplate1 = data.missionTemplate1;
       hasChanges = true;
     }
-    if (!data.visionTemplate1 && data.visionTemplateId1) {
-      updatedData.visionTemplate1 = data.visionTemplateId1;
+    if (!data.visionTemplate1 && data.visionTemplate1) {
+      updatedData.visionTemplate1 = data.visionTemplate1;
       hasChanges = true;
     }
 
@@ -564,12 +572,13 @@ export default function AboutPremium2({
                   Select Icon
                 </label>
                 <Select
-                  options={SVG_OPTIONS}
+                  options={iconOptions}
                   formatOptionLabel={formatOptionLabel}
                   styles={selectStyles}
                   value={
-                    SVG_OPTIONS.find((opt) => opt.value === s.icon) || null
+                    iconOptions.find((opt) => opt.value === s.icon) || null
                   }
+
                   onChange={(selectedOption) => {
                     updateArr("services", i, "icon", selectedOption.value);
                   }}

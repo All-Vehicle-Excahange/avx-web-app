@@ -101,8 +101,13 @@ const EyeBrow = ({ children }) => (
 
 const DEFAULT_DATA = ABOUT_BASIC_2[0].data;
 
-function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, rules }) {
+function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, rules, storeIcons }) {
   const [isSaving, setIsSaving] = useState(false);
+
+  const iconOptions = storeIcons?.length > 0
+    ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
+    : SVG_OPTIONS;
+
   // Merge schema defaults with incoming data so missing fields use dummy values
   const data = {
     ...DEFAULT_DATA, ...Object.fromEntries(
@@ -366,12 +371,13 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
                     Select Icon
                   </label>
                   <Select
-                    options={SVG_OPTIONS}
+                    options={iconOptions}
                     formatOptionLabel={formatOptionLabel}
                     styles={selectStyles}
                     value={
-                      SVG_OPTIONS.find((opt) => opt.value === s.icon) || null
+                      iconOptions.find((opt) => opt.value === s.icon) || null
                     }
+
                     onChange={(selectedOption) => {
                       updateArrayItem(
                         "services",

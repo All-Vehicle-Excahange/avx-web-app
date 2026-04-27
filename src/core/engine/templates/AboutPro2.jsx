@@ -108,134 +108,58 @@ export default function AboutPro2({
   onNextTab,
   errors,
   rules,
+  storeIcons,
 }) {
   const [isSaving, setIsSaving] = useState(false);
 
-  const data = {
-    ...DEFAULT_DATA,
-    ...Object.fromEntries(
-      Object.entries(rawData || {}).filter(
-        ([, v]) => v !== undefined && v !== null,
+  const iconOptions = storeIcons?.length > 0
+    ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
+    : SVG_OPTIONS;
+
+
+  const data = (() => {
+    const merged = {
+      stats: [],
+      services: [],
+      ...Object.fromEntries(
+        Object.entries(rawData || {}).filter(
+          ([, v]) => v !== undefined && v !== null,
+        ),
       ),
-    ),
-  };
+    };
 
-  // Map backend fields to UI fields if UI fields are missing
-  if (!rawData?.aboutHeroTitle && rawData?.heroTitle) {
-    data.aboutHeroTitle = rawData.heroTitle;
-  }
-  if (!rawData?.aboutHeroDescription && rawData?.heroDescription) {
-    data.aboutHeroDescription = rawData.heroDescription;
-  }
-  if (!rawData?.aboutMissionTitle && rawData?.missionTitle) {
-    data.aboutMissionTitle = rawData.missionTitle;
-  }
-  if (!rawData?.aboutMissionDescription && rawData?.missionDescription) {
-    data.aboutMissionDescription = rawData.missionDescription;
-  }
-  if (!rawData?.aboutVisionTitle && rawData?.visionTitle) {
-    data.aboutVisionTitle = rawData.visionTitle;
-  }
-  if (!rawData?.aboutVisionDescription && rawData?.visionDescription) {
-    data.aboutVisionDescription = rawData.visionDescription;
-  }
-  if (!rawData?.aboutStatsDescription && rawData?.aboutUsDescription) {
-    data.aboutStatsDescription = rawData.aboutUsDescription;
-  }
-  if (!rawData?.aboutServicesTitle && rawData?.serviceTitle) {
-    data.aboutServicesTitle = rawData.serviceTitle;
-  }
-  if (!rawData?.aboutServicesDescription && rawData?.serviceDescription) {
-    data.aboutServicesDescription = rawData.serviceDescription;
-  }
+    // Map backend fields to UI fields
+    if (!merged.aboutHeroTitle && rawData?.heroTitle) merged.aboutHeroTitle = rawData.heroTitle;
+    if (!merged.aboutHeroDescription && rawData?.heroDescription) merged.aboutHeroDescription = rawData.heroDescription;
+    if (!merged.aboutMissionTitle && rawData?.missionTitle) merged.aboutMissionTitle = rawData.missionTitle;
+    if (!merged.aboutMissionDescription && rawData?.missionDescription) merged.aboutMissionDescription = rawData.missionDescription;
+    if (!merged.aboutVisionTitle && rawData?.visionTitle) merged.aboutVisionTitle = rawData.visionTitle;
+    if (!merged.aboutVisionDescription && rawData?.visionDescription) merged.aboutVisionDescription = rawData.visionDescription;
+    if (!merged.aboutStatsDescription && rawData?.aboutUsDescription) merged.aboutStatsDescription = rawData.aboutUsDescription;
+    if (!merged.aboutServicesTitle && rawData?.serviceTitle) merged.aboutServicesTitle = rawData.serviceTitle;
+    if (!merged.aboutServicesDescription && rawData?.serviceDescription) merged.aboutServicesDescription = rawData.serviceDescription;
 
-  // Map backend image objects if UI fields are missing
-  if (!rawData?.aboutHeroTemplate1 && rawData?.heroImageTemplateId1) {
-    data.aboutHeroTemplate1 = rawData.heroImageTemplateId1;
-  }
-  if (!rawData?.aboutHeroTemplate2 && rawData?.heroImageTemplateId2) {
-    data.aboutHeroTemplate2 = rawData.heroImageTemplateId2;
-  }
-  if (!rawData?.aboutHeroTemplate3 && rawData?.heroImageTemplateId3) {
-    data.aboutHeroTemplate3 = rawData.heroImageTemplateId3;
-  }
-  if (!rawData?.aboutMissionTemplate1 && rawData?.missionTemplateId1) {
-    data.aboutMissionTemplate1 = rawData.missionTemplateId1;
-  }
-  if (!rawData?.aboutVisionTemplate1 && rawData?.visionTemplateId1) {
-    data.aboutVisionTemplate1 = rawData.visionTemplateId1;
-  }
-
-  // Synchronize transformed draft data with the parent state once on load
-  useEffect(() => {
-    if (!rawData) return;
-    
-    let hasChanges = false;
-    const updatedData = { ...data };
-
-    if (!rawData.aboutHeroTitle && rawData.heroTitle) {
-      updatedData.aboutHeroTitle = rawData.heroTitle;
-      hasChanges = true;
+    // Map image objects
+    if (!merged.aboutHeroTemplate1?.imageUrl && rawData?.heroImageTemplate1?.imageUrl) {
+      merged.aboutHeroTemplate1 = rawData.heroImageTemplate1;
     }
-    if (!rawData.aboutHeroDescription && rawData.heroDescription) {
-      updatedData.aboutHeroDescription = rawData.heroDescription;
-      hasChanges = true;
+    if (!merged.aboutHeroTemplate2?.imageUrl && rawData?.heroImageTemplate2?.imageUrl) {
+      merged.aboutHeroTemplate2 = rawData.heroImageTemplate2;
     }
-    if (!rawData.aboutMissionTitle && rawData.missionTitle) {
-      updatedData.aboutMissionTitle = rawData.missionTitle;
-      hasChanges = true;
+    if (!merged.aboutHeroTemplate3?.imageUrl && rawData?.heroImageTemplate3?.imageUrl) {
+      merged.aboutHeroTemplate3 = rawData.heroImageTemplate3;
     }
-    if (!rawData.aboutMissionDescription && rawData.missionDescription) {
-      updatedData.aboutMissionDescription = rawData.missionDescription;
-      hasChanges = true;
+    if (!merged.aboutMissionTemplate1?.imageUrl && rawData?.missionTemplate1?.imageUrl) {
+      merged.aboutMissionTemplate1 = rawData.missionTemplate1;
     }
-    if (!rawData.aboutVisionTitle && rawData.visionTitle) {
-      updatedData.aboutVisionTitle = rawData.visionTitle;
-      hasChanges = true;
-    }
-    if (!rawData.aboutVisionDescription && rawData.visionDescription) {
-      updatedData.aboutVisionDescription = rawData.visionDescription;
-      hasChanges = true;
-    }
-    if (!rawData.aboutStatsDescription && rawData.aboutUsDescription) {
-      updatedData.aboutStatsDescription = rawData.aboutUsDescription;
-      hasChanges = true;
-    }
-    if (!rawData.aboutServicesTitle && rawData.serviceTitle) {
-      updatedData.aboutServicesTitle = rawData.serviceTitle;
-      hasChanges = true;
-    }
-    if (!rawData.aboutServicesDescription && rawData.serviceDescription) {
-      updatedData.aboutServicesDescription = rawData.serviceDescription;
-      hasChanges = true;
+    if (!merged.aboutVisionTemplate1?.imageUrl && rawData?.visionTemplate1?.imageUrl) {
+      merged.aboutVisionTemplate1 = rawData.visionTemplate1;
     }
 
-    // Sync image mappings
-    if (!rawData.aboutHeroTemplate1 && rawData.heroImageTemplateId1) {
-      updatedData.aboutHeroTemplate1 = rawData.heroImageTemplateId1;
-      hasChanges = true;
-    }
-    if (!rawData.aboutHeroTemplate2 && rawData.heroImageTemplateId2) {
-      updatedData.aboutHeroTemplate2 = rawData.heroImageTemplateId2;
-      hasChanges = true;
-    }
-    if (!rawData.aboutHeroTemplate3 && rawData.heroImageTemplateId3) {
-      updatedData.aboutHeroTemplate3 = rawData.heroImageTemplateId3;
-      hasChanges = true;
-    }
-    if (!rawData.aboutMissionTemplate1 && rawData.missionTemplateId1) {
-      updatedData.aboutMissionTemplate1 = rawData.missionTemplateId1;
-      hasChanges = true;
-    }
-    if (!rawData.aboutVisionTemplate1 && rawData.visionTemplateId1) {
-      updatedData.aboutVisionTemplate1 = rawData.visionTemplateId1;
-      hasChanges = true;
-    }
+    return merged;
+  })();
 
-    if (hasChanges && onUpdate) {
-      onUpdate(updatedData);
-    }
-  }, [rawData]);
+
 
   const missionVisionCards = [
     {
@@ -586,12 +510,13 @@ export default function AboutPro2({
                   Select Icon
                 </label>
                 <Select
-                  options={SVG_OPTIONS}
+                  options={iconOptions}
                   formatOptionLabel={formatOptionLabel}
                   styles={selectStyles}
                   value={
-                    SVG_OPTIONS.find((opt) => opt.value === s.icon) || null
+                    iconOptions.find((opt) => opt.value === s.icon) || null
                   }
+
                   onChange={(selectedOption) => {
                     updateArr("services", i, "icon", selectedOption.value);
                   }}
@@ -657,19 +582,18 @@ export default function AboutPro2({
           ════════════════════════════════════════ */}
       <section className="relative h-screen px-2 lg:px-4 overflow-hidden">
         {/* BACKGROUND IMAGE */}
-        <div className="absolute inset-0">
-          <img
-            src={
-              data.aboutHeroTemplate1.imageUrl ||
-              data.customHeroImage1 ||
-              data.customHeroImageUrl1 ||
-              data.heroImageTemplate1?.imageUrl
-            }
-            alt="Our story"
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-black/50" />
-        </div>
+        {data.aboutHeroTemplate1?.imageUrl && (
+          <>
+            <div className="absolute inset-0">
+              <img
+                src={data.aboutHeroTemplate1.imageUrl}
+                alt="Our story"
+                className="w-full h-full object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-black/50" />
+            </div>
+          </>
+        )}
         <div className="container relative z-10 h-full flex flex-col justify-center">
           {/* heading + description (stacked) */}
           <div className="flex flex-col gap-6 max-w-2xl">
@@ -726,25 +650,27 @@ export default function AboutPro2({
                     ${item.flip ? "lg:[&>*:first-child]:order-2 lg:[&>*:last-child]:order-1" : ""}`}
                   >
                     {/* image side */}
-                    <div className="relative overflow-hidden min-h-[260px]">
-                      <img
-                        src={item.image}
-                        alt={item.keyword}
-                        className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-linear-to-t from-secondary/60 to-transparent" />
-                      <div className="absolute bottom-5 left-5 flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl border border-fourth/50 bg-secondary/60 backdrop-blur-sm flex items-center justify-center">
-                          <span
-                            className="text-fourth"
-                            dangerouslySetInnerHTML={{ __html: item.icon }}
-                          />
+                    {item.image && (
+                      <div className="relative overflow-hidden min-h-[260px]">
+                        <img
+                          src={item.image}
+                          alt={item.keyword}
+                          className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-linear-to-t from-secondary/60 to-transparent" />
+                        <div className="absolute bottom-5 left-5 flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-xl border border-fourth/50 bg-secondary/60 backdrop-blur-sm flex items-center justify-center">
+                            <span
+                              className="text-fourth"
+                              dangerouslySetInnerHTML={{ __html: item.icon }}
+                            />
+                          </div>
+                          <span className="font-[Montserrat] font-bold text-[10px] tracking-[0.28em] uppercase text-primary/60">
+                            {item.tag}
+                          </span>
                         </div>
-                        <span className="font-[Montserrat] font-bold text-[10px] tracking-[0.28em] uppercase text-primary/60">
-                          {item.tag}
-                        </span>
                       </div>
-                    </div>
+                    )}
                     {/* content side */}
                     <div className="flex flex-col justify-center gap-5 p-8 lg:p-10">
                       <h3 className="text-2xl sm:text-3xl font-semibold font-[Montserrat] leading-[1.1]">

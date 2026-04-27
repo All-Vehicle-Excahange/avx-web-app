@@ -97,60 +97,50 @@ function AboutPro1({
   onNextTab,
   errors,
   rules,
+  storeIcons,
 }) {
   const hasErrors = errors && Object.keys(errors).length > 0;
   const [isSaving, setIsSaving] = useState(false);
-  const data = {
-    ...DEFAULT_DATA,
-    ...Object.fromEntries(
-      Object.entries(rawData || {}).filter(
-        ([, v]) => v !== undefined && v !== null,
+
+  const iconOptions = storeIcons?.length > 0
+    ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
+    : SVG_OPTIONS;
+
+  const data = (() => {
+    const merged = {
+      stats: [],
+      services: [],
+      ...Object.fromEntries(
+        Object.entries(rawData || {}).filter(
+          ([, v]) => v !== undefined && v !== null,
+        ),
       ),
-    ),
-  };
+    };
 
-  // Map backend fields to UI fields if UI fields are missing
-  if (!rawData?.missionDesc && rawData?.missionDescription) {
-    data.missionDesc = rawData.missionDescription;
-  }
-  if (!rawData?.visionDesc && rawData?.visionDescription) {
-    data.visionDesc = rawData.visionDescription;
-  }
-  if (!rawData?.servicesTitle && rawData?.serviceTitle) {
-    data.servicesTitle = rawData.serviceTitle;
-  }
-  if (!rawData?.servicesDesc && rawData?.serviceDescription) {
-    data.servicesDesc = rawData.serviceDescription;
-  }
+    // Map backend fields to UI fields
+    if (!merged.heroTitle && rawData?.heroTitle) merged.heroTitle = rawData.heroTitle;
+    if (!merged.heroDescription && rawData?.heroDescription) merged.heroDescription = rawData.heroDescription;
+    if (!merged.missionDesc && rawData?.missionDescription) merged.missionDesc = rawData.missionDescription;
+    if (!merged.visionDesc && rawData?.visionDescription) merged.visionDesc = rawData.visionDescription;
+    if (!merged.servicesTitle && rawData?.serviceTitle) merged.servicesTitle = rawData.serviceTitle;
+    if (!merged.servicesDesc && rawData?.serviceDescription) merged.servicesDesc = rawData.serviceDescription;
+    if (!merged.aboutUsDescription && rawData?.aboutUsDescription) merged.aboutUsDescription = rawData.aboutUsDescription;
+    if (!merged.missionTitle && rawData?.missionTitle) merged.missionTitle = rawData.missionTitle;
+    if (!merged.visionTitle && rawData?.visionTitle) merged.visionTitle = rawData.visionTitle;
 
-  // Synchronize transformed draft data with the parent state once on load
-  useEffect(() => {
-    if (!rawData) return;
-    
-    let hasChanges = false;
-    const updatedData = { ...data };
-
-    if (!rawData.missionDesc && rawData.missionDescription) {
-      updatedData.missionDesc = rawData.missionDescription;
-      hasChanges = true;
+    // Map image objects
+    if (!merged.heroTemplate1?.imageUrl && rawData?.heroImageTemplate1?.imageUrl) {
+      merged.heroTemplate1 = rawData.heroImageTemplate1;
     }
-    if (!rawData.visionDesc && rawData.visionDescription) {
-      updatedData.visionDesc = rawData.visionDescription;
-      hasChanges = true;
+    if (!merged.missionTemplate1?.imageUrl && rawData?.missionTemplate1?.imageUrl) {
+      merged.missionTemplate1 = rawData.missionTemplate1;
     }
-    if (!rawData.servicesTitle && rawData.serviceTitle) {
-      updatedData.servicesTitle = rawData.serviceTitle;
-      hasChanges = true;
-    }
-    if (!rawData.servicesDesc && rawData.serviceDescription) {
-      updatedData.servicesDesc = rawData.serviceDescription;
-      hasChanges = true;
+    if (!merged.visionTemplate1?.imageUrl && rawData?.visionTemplate1?.imageUrl) {
+      merged.visionTemplate1 = rawData.visionTemplate1;
     }
 
-    if (hasChanges && onUpdate) {
-      onUpdate(updatedData);
-    }
-  }, [rawData]);
+    return merged;
+  })();
   const activeRef = useRef(0);
   const intervalRef = useRef(null);
 
@@ -458,12 +448,13 @@ function AboutPro1({
                   Select Icon
                 </label>
                 <Select
-                  options={SVG_OPTIONS}
+                  options={iconOptions}
                   formatOptionLabel={formatOptionLabel}
                   styles={selectStyles}
                   value={
-                    SVG_OPTIONS.find((opt) => opt.value === s.icon) || null
+                    iconOptions.find((opt) => opt.value === s.icon) || null
                   }
+
                   onChange={(selectedOption) => {
                     updateArr("services", i, "icon", selectedOption.value);
                   }}
@@ -528,21 +519,20 @@ function AboutPro1({
       {/* HERO */}
       <section className="relative w-full min-h-screen overflow-hidden flex  px-4 lg:px-8 py-12">
         {/* BACKGROUND IMAGE */}
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `url(${
-              data.customHeroImage1 ||
-              data.customHeroImageUrl1 ||
-              data.heroImageTemplateId1?.imageUrl
-            })`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
-
-        {/* LIGHT OVERLAY */}
-        <div className="absolute inset-0 bg-black/40" />
+        {data.heroTemplate1?.imageUrl && (
+          <>
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `url(${data.heroTemplate1.imageUrl})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
+            {/* LIGHT OVERLAY */}
+            <div className="absolute inset-0 bg-black/40" />
+          </>
+        )}
 
         {/* CONTENT */}
         <div className="relative z-10 w-full flex items-center justify-center text-center flex-col gap-2 m-w-7xl">
@@ -576,10 +566,13 @@ function AboutPro1({
           <div className="grid lg:grid-cols-2 gap-6">
             {/* MISSION */}
             <div className="relative min-h-80 rounded-2xl overflow-hidden border border-third/10 shadow-2xl">
-              <img
-                src={data.missionTemplate1?.imageUrl}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+              {data.missionTemplate1?.imageUrl && (
+                <img
+                  src={data.missionTemplate1.imageUrl}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  alt="Mission"
+                />
+              )}
 
               <div className="relative bg-secondary/70 flex flex-col justify-end p-6 gap-4 h-full">
                 <h2 className="text-3xl sm:text-4xl font-semibold text-primary font-[Montserrat]">
@@ -597,10 +590,13 @@ function AboutPro1({
 
             {/* VISION */}
             <div className="relative min-h-80 rounded-2xl overflow-hidden border border-third/10 shadow-2xl">
-              <img
-                src={data.visionTemplate1?.imageUrl}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+              {data.visionTemplate1?.imageUrl && (
+                <img
+                  src={data.visionTemplate1.imageUrl}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  alt="Vision"
+                />
+              )}
 
               <div className="relative bg-secondary/70 flex flex-col justify-end p-6 gap-4 h-full">
                 <h2 className="text-3xl sm:text-4xl font-semibold text-primary font-[Montserrat]">

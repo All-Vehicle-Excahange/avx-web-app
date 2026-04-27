@@ -81,14 +81,46 @@ export default function AboutPremium3({
   onNextTab,
   errors,
   rules,
+  storeIcons,
 }) {
   const [isSaving, setIsSaving] = useState(false);
+
+  const iconOptions = storeIcons?.length > 0
+    ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
+    : SVG_OPTIONS;
+
   const d = {
     ...DEFAULT_DATA,
     ...Object.fromEntries(
       Object.entries(data || {}).filter(([_, v]) => v !== undefined && v !== null)
     )
   };
+
+  // Map backend fields to UI fields if UI fields are missing
+  if (!data?.missionDesc && data?.missionDescription) {
+    d.missionDesc = data.missionDescription;
+  }
+  if (!data?.visionDesc && data?.visionDescription) {
+    d.visionDesc = data.visionDescription;
+  }
+  if (!data?.servicesTitle && data?.serviceTitle) {
+    d.servicesTitle = data.serviceTitle;
+  }
+  if (!data?.servicesDesc && data?.serviceDescription) {
+    d.servicesDesc = data.serviceDescription;
+  }
+
+  // Map backend image objects if UI fields are missing
+  // API returns heroImageTemplate1, not heroImageTemplateId1
+  if (!data?.heroTemplate1 && data?.heroImageTemplate1) {
+    d.heroTemplate1 = data.heroImageTemplate1;
+  }
+  if (!data?.missionTemplate1 && data?.missionTemplate1) {
+    d.missionTemplate1 = data.missionTemplate1;
+  }
+  if (!data?.visionTemplate1 && data?.visionTemplate1) {
+    d.visionTemplate1 = data.visionTemplate1;
+  }
   const [activeIndex, setActiveIndex] = useState(0);
   /* ================== HELPERS ================== */
   const getBlobFromUrl = async (url) => {
@@ -432,12 +464,13 @@ export default function AboutPremium3({
                   Select Icon
                 </label>
                 <Select
-                  options={SVG_OPTIONS}
+                  options={iconOptions}
                   formatOptionLabel={formatOptionLabel}
                   styles={selectStyles}
                   value={
-                    SVG_OPTIONS.find((opt) => opt.value === s.icon) || null
+                    iconOptions.find((opt) => opt.value === s.icon) || null
                   }
+
                   onChange={(selectedOption) => {
                     updateArr("services", i, "icon", selectedOption.value);
                   }}
@@ -501,7 +534,7 @@ export default function AboutPremium3({
             src={
               d.customHeroImage1 ||
               d.customHeroImageUrl1 ||
-              d.heroImageTemplateId1?.imageUrl
+              d.heroTemplate1?.imageUrl
             }
             className="w-full h-full object-cover"
             alt="Background"

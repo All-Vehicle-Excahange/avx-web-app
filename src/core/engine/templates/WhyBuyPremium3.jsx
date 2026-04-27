@@ -92,8 +92,15 @@ export default function WhyBuyPremium3({
   onNextTab,
   errors,
   rules,
+  storeIcons,
 }) {
   const [isSaving, setIsSaving] = useState(false);
+
+  const iconOptions =
+    storeIcons?.length > 0
+      ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
+      : SVG_OPTIONS;
+
   const data = normalizeWhyBuyData(rawData, DEFAULT_DATA);
 
   /* ================== REVIEW SELECTION ================== */
@@ -696,7 +703,7 @@ export default function WhyBuyPremium3({
                         data[`processTemplate${n}`]?.imageUrl
                       }
                       fieldKey={`procImg${n}`}
-                      imageType="HOW_BUYING_WORKS"
+                      imageType="BUYING_PROCESS"
                       error={errors?.[`processTemplate${n}`]}
                       errorMsg={errors?.[`processTemplate${n}`]}
                       onChange={({ imageUrl, id }) => {
@@ -770,11 +777,11 @@ export default function WhyBuyPremium3({
                     Icon
                   </label>
                   <Select
-                    options={SVG_OPTIONS}
+                    options={iconOptions}
                     formatOptionLabel={formatOptionLabel}
                     styles={selectStyles}
                     value={
-                      SVG_OPTIONS.find((opt) => opt.value === step.icon) || null
+                      iconOptions.find((opt) => opt.value === step.icon) || null
                     }
                     onChange={(sel) => {
                       updateArrayItem("processSteps", i, "icon", sel.value);
@@ -1172,7 +1179,9 @@ export default function WhyBuyPremium3({
               <div className="relative h-[460px] sm:h-[520px]">
                 <div className="absolute top-0 left-0 w-[75%] h-[72%] rounded-2xl border border-third/10 shadow-2xl overflow-hidden">
                   <img
-                    src={data.customWhyBuyStory1 || data.storyTemplate1?.imageUrl}
+                    src={
+                      data.customWhyBuyStory1 || data.storyTemplate1?.imageUrl
+                    }
                     alt="Our story"
                     className="w-full h-full object-cover"
                   />
@@ -1180,7 +1189,9 @@ export default function WhyBuyPremium3({
                 </div>
                 <div className="absolute bottom-0 right-0 w-[58%] h-[55%] rounded-2xl shadow-2xl overflow-hidden">
                   <img
-                    src={data.customWhyBuyStory2 || data.storyTemplate2?.imageUrl}
+                    src={
+                      data.customWhyBuyStory2 || data.storyTemplate2?.imageUrl
+                    }
                     alt="Our story"
                     className="w-full h-full object-cover rounded-2xl"
                   />

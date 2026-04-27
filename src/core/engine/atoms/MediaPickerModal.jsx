@@ -14,7 +14,23 @@ export default function MediaPickerModal({ open, onClose, onSelect, type }) {
   const [loading, setLoading] = useState(false);
   const [eligibilityLoading, setEligibilityLoading] = useState(false);
 
-  //  Call api with type to get images in useEffect
+  // Read seller tier from localStorage to conditionally show upload tab
+  const sellerTier =
+    typeof window !== "undefined"
+      ? localStorage.getItem("sellerTier")?.toLowerCase()
+      : null;
+
+  // Also check the theme being edited from the URL (e.g. ?theme=why_buy_theme_pro_1)
+  const activeTheme =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("theme")?.toLowerCase()
+      : "";
+
+  const isPro = sellerTier === "pro" || (activeTheme?.includes("pro") && !activeTheme?.includes("premium"));
+
+  // Available tabs — hide upload for pro tier
+  const tabs = isPro ? ["library"] : ["library", "upload"];
+
 
   useEffect(() => {
     if (!open || tab !== "library") return;
@@ -76,7 +92,7 @@ export default function MediaPickerModal({ open, onClose, onSelect, type }) {
 
         {/* TABS */}
         <div className="flex gap-6 mb-8 border-b border-third/20 pb-3">
-          {["library", "upload"].map((t) => (
+          {tabs.map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}

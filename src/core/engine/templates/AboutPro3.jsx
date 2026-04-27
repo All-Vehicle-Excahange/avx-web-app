@@ -91,120 +91,50 @@ export default function AboutPro3({
   onNextTab,
   errors,
   rules,
+  storeIcons,
 }) {
   const hasErrors = errors && Object.keys(errors).length > 0;
   const [isSaving, setIsSaving] = useState(false);
-  const data = {
-    ...DEFAULT_DATA,
-    ...Object.fromEntries(
-      Object.entries(rawData || {}).filter(
-        ([, v]) => v !== undefined && v !== null,
+
+  const iconOptions = storeIcons?.length > 0
+    ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
+    : SVG_OPTIONS;
+
+  const data = (() => {
+    const merged = {
+      stats: [],
+      services: [],
+      ...Object.fromEntries(
+        Object.entries(rawData || {}).filter(
+          ([, v]) => v !== undefined && v !== null,
+        ),
       ),
-    ),
-  };
+    };
 
-  // Map backend fields to UI fields if UI fields are missing
-  if (!rawData?.aboutHeroTitle && rawData?.heroTitle) {
-    data.aboutHeroTitle = rawData.heroTitle;
-  }
-  if (!rawData?.aboutHeroDescription && rawData?.heroDescription) {
-    data.aboutHeroDescription = rawData.heroDescription;
-  }
-  if (!rawData?.aboutMissionTitle && rawData?.missionTitle) {
-    data.aboutMissionTitle = rawData.missionTitle;
-  }
-  if (!rawData?.aboutMissionDescription && rawData?.missionDescription) {
-    data.aboutMissionDescription = rawData.missionDescription;
-  }
-  if (!rawData?.aboutVisionTitle && rawData?.visionTitle) {
-    data.aboutVisionTitle = rawData.visionTitle;
-  }
-  if (!rawData?.aboutVisionDescription && rawData?.visionDescription) {
-    data.aboutVisionDescription = rawData.visionDescription;
-  }
-  if (!rawData?.aboutStatsDescription && rawData?.aboutUsDescription) {
-    data.aboutStatsDescription = rawData.aboutUsDescription;
-  }
-  if (!rawData?.aboutServicesTitle && rawData?.serviceTitle) {
-    data.aboutServicesTitle = rawData.serviceTitle;
-  }
-  if (!rawData?.aboutServicesDescription && rawData?.serviceDescription) {
-    data.aboutServicesDescription = rawData.serviceDescription;
-  }
+    // Map backend fields to UI fields
+    if (!merged.aboutHeroTitle && rawData?.heroTitle) merged.aboutHeroTitle = rawData.heroTitle;
+    if (!merged.aboutHeroDescription && rawData?.heroDescription) merged.aboutHeroDescription = rawData.heroDescription;
+    if (!merged.aboutMissionTitle && rawData?.missionTitle) merged.aboutMissionTitle = rawData.missionTitle;
+    if (!merged.aboutMissionDescription && rawData?.missionDescription) merged.aboutMissionDescription = rawData.missionDescription;
+    if (!merged.aboutVisionTitle && rawData?.visionTitle) merged.aboutVisionTitle = rawData.visionTitle;
+    if (!merged.aboutVisionDescription && rawData?.visionDescription) merged.aboutVisionDescription = rawData.visionDescription;
+    if (!merged.aboutStatsDescription && rawData?.aboutUsDescription) merged.aboutStatsDescription = rawData.aboutUsDescription;
+    if (!merged.aboutServicesTitle && rawData?.serviceTitle) merged.aboutServicesTitle = rawData.serviceTitle;
+    if (!merged.aboutServicesDescription && rawData?.serviceDescription) merged.aboutServicesDescription = rawData.serviceDescription;
 
-  // Map backend image objects if UI fields are missing
-  if (!rawData?.aboutHeroTemplate1 && rawData?.heroImageTemplateId1) {
-    data.aboutHeroTemplate1 = rawData.heroImageTemplateId1;
-  }
-  if (!rawData?.aboutMissionTemplate1 && rawData?.missionTemplateId1) {
-    data.aboutMissionTemplate1 = rawData.missionTemplateId1;
-  }
-  if (!rawData?.aboutVisionTemplate1 && rawData?.visionTemplateId1) {
-    data.aboutVisionTemplate1 = rawData.visionTemplateId1;
-  }
-
-  // Synchronize transformed draft data with the parent state once on load
-  useEffect(() => {
-    if (!rawData) return;
-
-    let hasChanges = false;
-    const updatedData = { ...data };
-
-    if (!rawData.aboutHeroTitle && rawData.heroTitle) {
-      updatedData.aboutHeroTitle = rawData.heroTitle;
-      hasChanges = true;
+    // Map image objects
+    if (!merged.aboutHeroTemplate1?.imageUrl && rawData?.heroImageTemplate1?.imageUrl) {
+      merged.aboutHeroTemplate1 = rawData.heroImageTemplate1;
     }
-    if (!rawData.aboutHeroDescription && rawData.heroDescription) {
-      updatedData.aboutHeroDescription = rawData.heroDescription;
-      hasChanges = true;
+    if (!merged.aboutMissionTemplate1?.imageUrl && rawData?.missionTemplate1?.imageUrl) {
+      merged.aboutMissionTemplate1 = rawData.missionTemplate1;
     }
-    if (!rawData.aboutMissionTitle && rawData.missionTitle) {
-      updatedData.aboutMissionTitle = rawData.missionTitle;
-      hasChanges = true;
-    }
-    if (!rawData.aboutMissionDescription && rawData.missionDescription) {
-      updatedData.aboutMissionDescription = rawData.missionDescription;
-      hasChanges = true;
-    }
-    if (!rawData.aboutVisionTitle && rawData.visionTitle) {
-      updatedData.aboutVisionTitle = rawData.visionTitle;
-      hasChanges = true;
-    }
-    if (!rawData.aboutVisionDescription && rawData.visionDescription) {
-      updatedData.aboutVisionDescription = rawData.visionDescription;
-      hasChanges = true;
-    }
-    if (!rawData.aboutStatsDescription && rawData.aboutUsDescription) {
-      updatedData.aboutStatsDescription = rawData.aboutUsDescription;
-      hasChanges = true;
-    }
-    if (!rawData.aboutServicesTitle && rawData.serviceTitle) {
-      updatedData.aboutServicesTitle = rawData.serviceTitle;
-      hasChanges = true;
-    }
-    if (!rawData.aboutServicesDescription && rawData.serviceDescription) {
-      updatedData.aboutServicesDescription = rawData.serviceDescription;
-      hasChanges = true;
+    if (!merged.aboutVisionTemplate1?.imageUrl && rawData?.visionTemplate1?.imageUrl) {
+      merged.aboutVisionTemplate1 = rawData.visionTemplate1;
     }
 
-    // Sync image mappings
-    if (!rawData.aboutHeroTemplate1 && rawData.heroImageTemplateId1) {
-      updatedData.aboutHeroTemplate1 = rawData.heroImageTemplateId1;
-      hasChanges = true;
-    }
-    if (!rawData.aboutMissionTemplate1 && rawData.missionTemplateId1) {
-      updatedData.aboutMissionTemplate1 = rawData.missionTemplateId1;
-      hasChanges = true;
-    }
-    if (!rawData.aboutVisionTemplate1 && rawData.visionTemplateId1) {
-      updatedData.aboutVisionTemplate1 = rawData.visionTemplateId1;
-      hasChanges = true;
-    }
-
-    if (hasChanges && onUpdate) {
-      onUpdate(updatedData);
-    }
-  }, [rawData]);
+    return merged;
+  })();
 
   const update = (k, v) => {
     if (onUpdate) onUpdate({ ...data, [k]: v });
@@ -501,12 +431,13 @@ export default function AboutPro3({
                   Select Icon
                 </label>
                 <Select
-                  options={SVG_OPTIONS}
+                  options={iconOptions}
                   formatOptionLabel={formatOptionLabel}
                   styles={selectStyles}
                   value={
-                    SVG_OPTIONS.find((opt) => opt.value === s.icon) || null
+                    iconOptions.find((opt) => opt.value === s.icon) || null
                   }
+
                   onChange={(selectedOption) => {
                     updateArr("services", i, "icon", selectedOption.value);
                   }}
@@ -569,18 +500,17 @@ export default function AboutPro3({
     <>
       {/* HERO */}
       <section className="relative min-h-screen py-12 flex flex-col overflow-hidden">
-        <img
-          src={
-            data.aboutHeroTemplate1?.imageUrl ||
-            data.customHeroImage1 ||
-            data.customHeroImageUrl1 ||
-            data.heroImageTemplate1?.imageUrl
-          }
-          className="absolute inset-0 w-full h-full object-cover"
-          alt="Hero"
-        />
-        <div className="absolute inset-0 bg-secondary/65" />
-        <div className="absolute inset-0 bg-linear-to-b from-secondary/20 via-secondary/40 to-secondary" />
+        {data.aboutHeroTemplate1?.imageUrl && (
+          <>
+            <img
+              src={data.aboutHeroTemplate1.imageUrl}
+              className="absolute inset-0 w-full h-full object-cover"
+              alt="Hero"
+            />
+            <div className="absolute inset-0 bg-secondary/65" />
+            <div className="absolute inset-0 bg-linear-to-b from-secondary/20 via-secondary/40 to-secondary" />
+          </>
+        )}
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center gap-8 text-center px-2 lg:px-4 pt-16 pb-6">
           <p className="text-sm tracking-[0.45em] uppercase text-third font-semibold ">
             Hero
@@ -610,12 +540,16 @@ export default function AboutPro3({
           </div>
           <div className="flex flex-col gap-6 max-w-7xl mx-auto">
             <div className="mv-card relative rounded-2xl overflow-hidden shadow-2xl border border-third/10 py-14">
-              <img
-                src={data.aboutMissionTemplate1?.imageUrl}
-                className="absolute inset-0 w-full h-full object-cover"
-                alt="Mission"
-              />
-              <div className="absolute inset-0 bg-linear-to-r from-secondary/95 via-secondary/85 to-secondary/70" />
+              {data.aboutMissionTemplate1?.imageUrl && (
+                <>
+                  <img
+                    src={data.aboutMissionTemplate1.imageUrl}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    alt="Mission"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-r from-secondary/95 via-secondary/85 to-secondary/70" />
+                </>
+              )}
               <div className="relative z-10 px-8 sm:px-12 lg:px-16 max-w-2xl flex flex-col gap-4">
                 <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
                   01
@@ -632,12 +566,16 @@ export default function AboutPro3({
               </div>
             </div>
             <div className="mv-card relative rounded-2xl overflow-hidden shadow-2xl border border-third/10 py-14">
-              <img
-                src={data.aboutVisionTemplate1?.imageUrl}
-                className="absolute inset-0 w-full h-full object-cover"
-                alt="Vision"
-              />
-              <div className="absolute inset-0 bg-linear-to-l from-secondary/95 via-secondary/85 to-secondary/70" />
+              {data.aboutVisionTemplate1?.imageUrl && (
+                <>
+                  <img
+                    src={data.aboutVisionTemplate1.imageUrl}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    alt="Vision"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-l from-secondary/95 via-secondary/85 to-secondary/70" />
+                </>
+              )}
               <div className="relative z-10 px-8 sm:px-12 lg:px-16 text-right ml-auto max-w-2xl flex flex-col gap-4 w-full">
                 <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
                   02

@@ -86,8 +86,15 @@ export default function WhyBuyPremium1({
   onNextTab,
   errors,
   rules,
+  storeIcons,
 }) {
   const [isSaving, setIsSaving] = useState(false);
+
+  const iconOptions =
+    storeIcons?.length > 0
+      ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
+      : SVG_OPTIONS;
+
   const data = normalizeWhyBuyData(rawData, DEFAULT_DATA);
 
   const [active, setActive] = useState(0);
@@ -917,11 +924,11 @@ export default function WhyBuyPremium1({
                     Icon (Select SVG)
                   </label>
                   <Select
-                    options={SVG_OPTIONS}
+                    options={iconOptions}
                     formatOptionLabel={formatOptionLabel}
                     styles={selectStyles}
                     value={
-                      SVG_OPTIONS.find((opt) => opt.value === step.icon) || null
+                      iconOptions.find((opt) => opt.value === step.icon) || null
                     }
                     onChange={(selectedOption) => {
                       updateArrayItem(
@@ -1549,10 +1556,10 @@ export default function WhyBuyPremium1({
             className="absolute inset-0 flex overflow-hidden pointer-events-none"
           >
             {[
-              data.customWhyBuyVehicleSelection1,
-              data.customWhyBuyVehicleSelection2,
-              data.customWhyBuyVehicleSelection1,
-              data.customWhyBuyVehicleSelection2,
+              data.customWhyBuyVehicleSelection1 || data.vehicleSelectionTemplate1?.imageUrl,
+              data.customWhyBuyVehicleSelection2 || data.vehicleSelectionTemplate2?.imageUrl,
+              data.customWhyBuyVehicleSelection1 || data.vehicleSelectionTemplate1?.imageUrl,
+              data.customWhyBuyVehicleSelection2 || data.vehicleSelectionTemplate2?.imageUrl,
             ].map((img, i) => {
               if (!img) return null;
               return (
@@ -1645,9 +1652,7 @@ export default function WhyBuyPremium1({
                   <img
                     src={
                       data[`customWhyBuyProcess${i + 1}`] ||
-                      (rawData?.processes
-                        ? ""
-                        : data[`processTemplate${i + 1}`]?.imageUrl)
+                      data[`processTemplate${i + 1}`]?.imageUrl
                     }
                     className={`absolute inset-0 w-full h-full object-cover transition duration-700
                     ${isActive ? "scale-105" : "scale-100 grayscale"}
@@ -1711,9 +1716,7 @@ export default function WhyBuyPremium1({
                 <img
                   src={
                     data.customWhyBuyInspection1 ||
-                    (rawData?.processes
-                      ? ""
-                      : data.inspectionTemplate1?.imageUrl)
+                    data.inspectionTemplate1?.imageUrl
                   }
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   alt="Main"
@@ -1725,9 +1728,7 @@ export default function WhyBuyPremium1({
                 <img
                   src={
                     data.customWhyBuyInspection2 ||
-                    (rawData?.processes
-                      ? ""
-                      : data.inspectionTemplate2?.imageUrl)
+                    data.inspectionTemplate2?.imageUrl
                   }
                   className="w-full h-full object-cover"
                   alt="Detail"
@@ -1738,9 +1739,7 @@ export default function WhyBuyPremium1({
                 <img
                   src={
                     data.customWhyBuyInspection3 ||
-                    (rawData?.processes
-                      ? ""
-                      : data.inspectionTemplate3?.imageUrl)
+                    data.inspectionTemplate3?.imageUrl
                   }
                   className="w-full h-full object-cover"
                   alt="Mini Detail"
@@ -1820,10 +1819,7 @@ export default function WhyBuyPremium1({
               <img
                 src={
                   data.customWhyBuyCustomerCommitment2 ||
-                  data.customInspectionUrl1 ||
-                  (rawData?.processes
-                    ? ""
-                    : data.customerCommitmentTemplate2?.imageUrl)
+                  data.customerCommitmentTemplate2?.imageUrl
                 }
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 alt=""
@@ -1833,10 +1829,7 @@ export default function WhyBuyPremium1({
                 <img
                   src={
                     data.customWhyBuyCustomerCommitment4 ||
-                    data.customInspectionUrl4 ||
-                    (rawData?.processes
-                      ? ""
-                      : data.customerCommitmentTemplate4?.imageUrl)
+                    data.customerCommitmentTemplate4?.imageUrl
                   }
                   className="w-full h-full object-cover"
                   alt=""
@@ -1848,10 +1841,7 @@ export default function WhyBuyPremium1({
               <img
                 src={
                   data.customWhyBuyCustomerCommitment3 ||
-                  data.customInspectionUrl3 ||
-                  (rawData?.processes
-                    ? ""
-                    : data.customerCommitmentTemplate3?.imageUrl)
+                  data.customerCommitmentTemplate3?.imageUrl
                 }
                 className="w-full h-full object-cover"
                 alt=""
@@ -1862,10 +1852,7 @@ export default function WhyBuyPremium1({
               <img
                 src={
                   data.customWhyBuyCustomerCommitment5 ||
-                  data.customInspectionUrl5 ||
-                  (rawData?.processes
-                    ? ""
-                    : data.customerCommitmentTemplate5?.imageUrl)
+                  data.customerCommitmentTemplate5?.imageUrl
                 }
                 className="w-full h-full object-cover"
                 alt=""
