@@ -942,7 +942,7 @@ export default function WhyBuyPremium2({
           <h3 className="text-primary font-bold text-xl mb-4">
             Select Featured Reviews
           </h3>
-          <EditorInput
+          {/* <EditorInput
             bold
             label="Section Title"
             value={data.testimonialTitle}
@@ -950,7 +950,7 @@ export default function WhyBuyPremium2({
             maxLength={rules?.testimonialTitle?.max}
             error={!!errors?.testimonialTitle}
             errorMsg={errors?.testimonialTitle}
-          />
+          /> */}
           <p className="text-third text-sm">
             Select which customer reviews to feature on your storefront.
           </p>
@@ -1025,34 +1025,19 @@ export default function WhyBuyPremium2({
       <section className="py-12 px-2 lg:px-4 relative min-h-screen flex items-center overflow-hidden">
         {/* HERO BACKGROUND (Video/Image) */}
         <div className="absolute inset-0 w-full h-full">
-          {(
-            data.customWhyBuyHero1 ||
-            data.customWhyBuyHeroUrl1 ||
-            data.whyBuyHeroTemplate1?.imageUrl
-          )?.includes(".mp4") ? (
-            <video
-              src={
-                data.customWhyBuyHero1 ||
-                data.customWhyBuyHeroUrl1 ||
-                data.whyBuyHeroTemplate1?.imageUrl
-              }
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <img
-              src={
-                data.customWhyBuyHero1 ||
-                data.customWhyBuyHeroUrl1 ||
-                data.whyBuyHeroTemplate1?.imageUrl
-              }
-              className="w-full h-full object-cover"
-              alt="Hero Background"
-            />
-          )}
+          {(() => {
+            const src = data.customWhyBuyHero1 || data.customWhyBuyHeroUrl1 || data.whyBuyHeroTemplate1?.imageUrl;
+            if (!src) return (
+              <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                <span className="text-third/40 text-sm">Hero background not set</span>
+              </div>
+            );
+            return src.includes(".mp4") ? (
+              <video src={src} autoPlay muted loop playsInline className="w-full h-full object-cover" />
+            ) : (
+              <img src={src} className="w-full h-full object-cover" alt="Hero Background" />
+            );
+          })()}
         </div>
         <div className="absolute inset-0 bg-black/55" />
         <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/40 to-transparent" />
@@ -1090,24 +1075,22 @@ export default function WhyBuyPremium2({
             </div>
             <div className="relative w-full h-[420px]">
               <div className="absolute inset-0 overflow-hidden rounded-2xl">
-                <img
-                  src={
-                    data.customWhyBuyStory1 ||
-                    data.storyTemplate1?.imageUrl
-                  }
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
+                {(data.customWhyBuyStory1 || data.storyTemplate1?.imageUrl) ? (
+                  <img src={data.customWhyBuyStory1 || data.storyTemplate1?.imageUrl} className="w-full h-full object-cover" loading="lazy" />
+                ) : (
+                  <div className="w-full h-full bg-primary/10 border-2 border-dashed border-primary/20 flex items-center justify-center">
+                    <span className="text-primary/30 text-sm">Story image 1 not set</span>
+                  </div>
+                )}
               </div>
               <div className="absolute bottom-6 right-6 w-[140px] h-[100px] overflow-hidden border rounded-2xl border-white/20">
-                <img
-                  src={
-                    data.customWhyBuyStory2 ||
-                    data.storyTemplate2?.imageUrl
-                  }
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
+                {(data.customWhyBuyStory2 || data.storyTemplate2?.imageUrl) ? (
+                  <img src={data.customWhyBuyStory2 || data.storyTemplate2?.imageUrl} className="w-full h-full object-cover" loading="lazy" />
+                ) : (
+                  <div className="w-full h-full bg-primary/10 border-2 border-dashed border-primary/20 flex items-center justify-center">
+                    <span className="text-primary/30 text-xs">Image 2</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -1136,40 +1119,25 @@ export default function WhyBuyPremium2({
             </div>
             <div className="relative w-full h-80 lg:h-[380px]">
               <div className="absolute top-0 left-0 w-[75%] h-full overflow-hidden">
-                <img
-                  src={
-                    data.customVehicleSelection1 ||
-                    data.customVehicleSelectionUrl1 ||
-                    data.vehicleSelectionTemplate1?.imageUrl
-                  }
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
+                {(data.customVehicleSelection1 || data.customVehicleSelectionUrl1 || data.vehicleSelectionTemplate1?.imageUrl) ? (
+                  <img src={data.customVehicleSelection1 || data.customVehicleSelectionUrl1 || data.vehicleSelectionTemplate1?.imageUrl} className="w-full h-full object-cover" loading="lazy" />
+                ) : (
+                  <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 1</span></div>
+                )}
               </div>
               <div className="absolute top-0 right-0 w-[38%] h-[48%] overflow-hidden">
-                <img
-                  src={
-                    data.customVehicleSelection2 ||
-                    data.customVehicleSelectionUrl2 ||
-                    data.vehicleSelectionTemplate2?.imageUrl
-                  }
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
+                {(data.customVehicleSelection2 || data.customVehicleSelectionUrl2 || data.vehicleSelectionTemplate2?.imageUrl) ? (
+                  <img src={data.customVehicleSelection2 || data.customVehicleSelectionUrl2 || data.vehicleSelectionTemplate2?.imageUrl} className="w-full h-full object-cover" loading="lazy" />
+                ) : (
+                  <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 2</span></div>
+                )}
               </div>
               <div className="absolute bottom-0 right-0 w-[38%] h-[48%] overflow-hidden">
-                <img
-                  src={
-                    data.customStory3 ||
-                    data.customStoryUrl3 ||
-                    data.storyTemplate3?.imageUrl ||
-                    data.customVehicleSelection1 ||
-                    data.customVehicleSelectionUrl1 ||
-                    data.vehicleSelectionTemplate1?.imageUrl
-                  }
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
+                {(data.customStory3 || data.customStoryUrl3 || data.storyTemplate3?.imageUrl || data.vehicleSelectionTemplate1?.imageUrl) ? (
+                  <img src={data.customStory3 || data.customStoryUrl3 || data.storyTemplate3?.imageUrl || data.vehicleSelectionTemplate1?.imageUrl} className="w-full h-full object-cover" loading="lazy" />
+                ) : (
+                  <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 3</span></div>
+                )}
               </div>
             </div>
           </div>
@@ -1247,15 +1215,17 @@ export default function WhyBuyPremium2({
               key={activeInspection}
               className="w-full h-60 sm:h-[300px] md:h-[340px] lg:h-[270px] rounded-2xl overflow-hidden"
             >
-              <img
-                src={
-                  data[`customInspection${activeInspection + 1}`] ||
-                  data[`customInspectionUrl${activeInspection + 1}`] ||
-                  data[`inspectionTemplate${activeInspection + 1}`]?.imageUrl
-                }
-                loading="lazy"
-                className="w-full h-full object-cover"
-              />
+              {(data[`customInspection${activeInspection + 1}`] || data[`customInspectionUrl${activeInspection + 1}`] || data[`inspectionTemplate${activeInspection + 1}`]?.imageUrl) ? (
+                <img
+                  src={data[`customInspection${activeInspection + 1}`] || data[`customInspectionUrl${activeInspection + 1}`] || data[`inspectionTemplate${activeInspection + 1}`]?.imageUrl}
+                  loading="lazy"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-sm">Inspection image not set</span>
+                </div>
+              )}
             </div>
             <div className="flex flex-col gap-8">
               {data.inspectionPoints.map((item, i) => (
@@ -1318,31 +1288,25 @@ export default function WhyBuyPremium2({
               />
             </div>
             <div className="flex gap-3 h-80">
-              {[
-                data.customerCommitmentTemplate2,
-                data.customerCommitmentTemplate3,
-                data.customerCommitmentTemplate4,
-              ].map((tmpl, i) => (
+              {[2, 3, 4].map((n, i) => (
                 <div
                   key={i}
                   onMouseEnter={() => setActiveCommitment(i)}
                   className="relative overflow-hidden rounded-2xl cursor-pointer transition-all duration-500"
                   style={{ flex: i === activeCommitment ? 3 : 1 }}
                 >
-                  <img
-                    src={
-                      data[`customCustomerCommitment${i + 2}`] ||
-                      data[`customCustomerCommitmentUrl${i + 2}`] ||
-                      data[`customerCommitmentTemplate${i + 2}`]?.imageUrl
-                    }
-                    className="w-full h-full object-cover transition duration-700"
-                    loading="lazy"
-                  />
-                  <div
-                    className={`absolute inset-0 transition duration-500 ${
-                      i === activeCommitment ? "bg-black/10" : "bg-black/30"
-                    }`}
-                  />
+                  {(data[`customCustomerCommitment${n}`] || data[`customCustomerCommitmentUrl${n}`] || data[`customerCommitmentTemplate${n}`]?.imageUrl) ? (
+                    <img
+                      src={data[`customCustomerCommitment${n}`] || data[`customCustomerCommitmentUrl${n}`] || data[`customerCommitmentTemplate${n}`]?.imageUrl}
+                      className="w-full h-full object-cover transition duration-700"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-primary/10 border-2 border-dashed border-primary/20 flex items-center justify-center">
+                      <span className="text-primary/30 text-xs">Image {n}</span>
+                    </div>
+                  )}
+                  <div className={`absolute inset-0 transition duration-500 ${i === activeCommitment ? "bg-black/10" : "bg-black/30"}`} />
                 </div>
               ))}
             </div>
@@ -1364,57 +1328,42 @@ export default function WhyBuyPremium2({
           </div>
           <div className="flex flex-col gap-3 lg:grid lg:grid-cols-12 lg:grid-rows-[400px_220px] lg:gap-3">
             <div className="relative overflow-hidden rounded-2xl h-[300px] lg:h-auto lg:col-span-6 lg:row-span-2">
-                <img
-                  src={
-                    data.customGallery1 ||
-                    data.galleryTemplate1?.imageUrl
-                  }
-                className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
-                loading="lazy"
-              />
+              {(data.customGallery1 || data.galleryTemplate1?.imageUrl) ? (
+                <img src={data.customGallery1 || data.galleryTemplate1?.imageUrl} className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105" loading="lazy" />
+              ) : (
+                <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Gallery 1</span></div>
+              )}
             </div>
             <div className="flex gap-3 lg:contents">
               <div className="relative overflow-hidden rounded-2xl h-[180px] flex-1 lg:h-auto lg:col-span-4 lg:row-span-1">
-                <img
-                  src={
-                    data.customGallery2 ||
-                    data.galleryTemplate2?.imageUrl
-                  }
-                  className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
-                  loading="lazy"
-                />
+                {(data.customGallery2 || data.galleryTemplate2?.imageUrl) ? (
+                  <img src={data.customGallery2 || data.galleryTemplate2?.imageUrl} className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105" loading="lazy" />
+                ) : (
+                  <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Gallery 2</span></div>
+                )}
               </div>
               <div className="relative overflow-hidden rounded-2xl h-[180px] w-[30%] lg:h-auto lg:w-auto lg:col-span-2 lg:row-span-1">
-                <img
-                  src={
-                    data.customGallery5 ||
-                    data.galleryTemplate5?.imageUrl
-                  }
-                  className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
-                  loading="lazy"
-                />
+                {(data.customGallery5 || data.galleryTemplate5?.imageUrl) ? (
+                  <img src={data.customGallery5 || data.galleryTemplate5?.imageUrl} className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105" loading="lazy" />
+                ) : (
+                  <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Gallery 5</span></div>
+                )}
               </div>
             </div>
             <div className="flex gap-3 lg:contents">
               <div className="relative overflow-hidden h-40 rounded-2xl flex-1 lg:h-auto lg:col-span-3 lg:row-span-1">
-                <img
-                  src={
-                    data.customGallery3 ||
-                    data.galleryTemplate3?.imageUrl
-                  }
-                  className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
-                  loading="lazy"
-                />
+                {(data.customGallery3 || data.galleryTemplate3?.imageUrl) ? (
+                  <img src={data.customGallery3 || data.galleryTemplate3?.imageUrl} className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105" loading="lazy" />
+                ) : (
+                  <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Gallery 3</span></div>
+                )}
               </div>
               <div className="relative overflow-hidden h-40 rounded-2xl flex-1 lg:h-auto lg:col-span-3 lg:row-span-1">
-                <img
-                  src={
-                    data.customGallery4 ||
-                    data.galleryTemplate4?.imageUrl
-                  }
-                  className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105"
-                  loading="lazy"
-                />
+                {(data.customGallery4 || data.galleryTemplate4?.imageUrl) ? (
+                  <img src={data.customGallery4 || data.galleryTemplate4?.imageUrl} className="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-105" loading="lazy" />
+                ) : (
+                  <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Gallery 4</span></div>
+                )}
               </div>
             </div>
           </div>

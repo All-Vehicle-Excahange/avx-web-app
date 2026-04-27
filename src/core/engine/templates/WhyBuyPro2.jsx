@@ -18,11 +18,9 @@ import {
   setWhyBuyInspection,
   setWhyBuyCustomerCommitment,
   setFeaturedReviews,
+  setWhyBuyGallery,
 } from "@/services/theme.service";
 import { getAllReviewById } from "@/services/user.service";
-import { WHY_BUY_PRO_2 } from "../schemas/whybuy/why_buy_pro_2";
-
-const DEFAULT_DATA = WHY_BUY_PRO_2[0].data;
 
 const SVG_OPTIONS = [
   {
@@ -107,150 +105,45 @@ export default function WhyBuyPro2({
     ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
     : SVG_OPTIONS;
 
-  const data = {
-    // Structural array defaults only — no dummy content
-    processSteps: [],
-    inspectionPoints: [],
-    testimonials: [],
-    featuredReviews: [],
-    ...Object.fromEntries(
-      Object.entries(rawData || {}).filter(
-        ([, v]) => v !== undefined && v !== null,
+  const data = (() => {
+    const merged = {
+      processSteps: [],
+      inspectionPoints: [],
+      testimonials: [],
+      featuredReviews: [],
+      ...Object.fromEntries(
+        Object.entries(rawData || {}).filter(
+          ([, v]) => v !== undefined && v !== null,
+        ),
       ),
-    ),
-  };
+    };
 
-  // Map 'processes' → 'processSteps' (guard length, not just existence)
-  if (!rawData?.processSteps?.length && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
-    data.processSteps = rawData.processes.map(p => ({
-      title: p.title || "",
-      description: p.desc || p.description || "",
-      icon: p.icon || ""
-    }));
-  }
-  if (!rawData?.inspectionText && rawData?.inspectionDescription) {
-    data.inspectionText = rawData.inspectionDescription;
-  }
-  
-  // Map 'featuredReviews' → 'testimonials' for display
-  if (!rawData?.testimonials?.length && rawData?.featuredReviews && Array.isArray(rawData.featuredReviews) && rawData.featuredReviews.length > 0) {
-    data.testimonials = rawData.featuredReviews.map(r => ({
-      name: r.reviewerName || "",
-      review: r.reviewText || "",
-      rating: r.rating || 0,
-      title: r.reviewTitle || ""
-    }));
-  }
-
-
-  // Map backend image objects if UI fields are missing
-  for (let i = 1; i <= 5; i++) {
-    if (!rawData?.[`whyBuyHeroTemplate${i}`] && rawData?.[`whyBuyHeroTemplateId${i}`]) {
-      data[`whyBuyHeroTemplate${i}`] = rawData[`whyBuyHeroTemplateId${i}`];
-    }
-  }
-  for (let i = 1; i <= 4; i++) {
-    if (!rawData?.[`storyTemplate${i}`] && rawData?.[`storyTemplateId${i}`]) {
-      data[`storyTemplate${i}`] = rawData[`storyTemplateId${i}`];
-    }
-  }
-  for (let i = 1; i <= 3; i++) {
-    if (!rawData?.[`vehicleSelectionTemplate${i}`] && rawData?.[`vehicleSelectionTemplateId${i}`]) {
-      data[`vehicleSelectionTemplate${i}`] = rawData[`vehicleSelectionTemplateId${i}`];
-    }
-  }
-  for (let i = 1; i <= 4; i++) {
-    if (!rawData?.[`processTemplate${i}`] && rawData?.[`processTemplateId${i}`]) {
-      data[`processTemplate${i}`] = rawData[`processTemplateId${i}`];
-    }
-  }
-  for (let i = 1; i <= 4; i++) {
-    if (!rawData?.[`inspectionTemplate${i}`] && rawData?.[`inspectionTemplateId${i}`]) {
-      data[`inspectionTemplate${i}`] = rawData[`inspectionTemplateId${i}`];
-    }
-  }
-  for (let i = 1; i <= 3; i++) {
-    if (!rawData?.[`customerCommitmentTemplate${i}`] && rawData?.[`customerCommitmentTemplateId${i}`]) {
-      data[`customerCommitmentTemplate${i}`] = rawData[`customerCommitmentTemplateId${i}`];
-    }
-  }
-
-  // Synchronize transformed draft data with the parent state once on load
-  useEffect(() => {
-    if (!rawData) return;
-    
-    let hasChanges = false;
-    const updatedData = { ...data };
-
-    // Sync processes mapping
-    if (!rawData.processSteps && rawData.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
-      updatedData.processSteps = rawData.processes.map(p => ({
+    // Map backend 'processes' → 'processSteps'
+    if (!rawData?.processSteps?.length && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
+      merged.processSteps = rawData.processes.map(p => ({
         title: p.title || "",
         description: p.desc || p.description || "",
-        icon: p.icon || ""
+        icon: p.icon || "",
       }));
-      hasChanges = true;
     }
 
-    // Sync inspection text mapping
-    if (!rawData.inspectionText && rawData.inspectionDescription) {
-      updatedData.inspectionText = rawData.inspectionDescription;
-      hasChanges = true;
+    // Map 'inspectionDescription' → 'inspectionText'
+    if (rawData?.inspectionDescription && !rawData?.inspectionText) {
+      merged.inspectionText = rawData.inspectionDescription;
     }
-    
-    // Sync testimonials mapping
-    if (!rawData.testimonials && rawData.featuredReviews && Array.isArray(rawData.featuredReviews) && rawData.featuredReviews.length > 0) {
-      updatedData.testimonials = rawData.featuredReviews.map(r => ({
+
+    // Map 'featuredReviews' → 'testimonials' for display
+    if (!rawData?.testimonials?.length && rawData?.featuredReviews && Array.isArray(rawData.featuredReviews) && rawData.featuredReviews.length > 0) {
+      merged.testimonials = rawData.featuredReviews.map(r => ({
         name: r.reviewerName || "",
         review: r.reviewText || "",
         rating: r.rating || 0,
-        title: r.reviewTitle || ""
+        title: r.reviewTitle || "",
       }));
-      hasChanges = true;
     }
 
-    // Sync image mappings
-    for (let i = 1; i <= 5; i++) {
-      if (!rawData[`whyBuyHeroTemplate${i}`] && rawData[`whyBuyHeroTemplateId${i}`]) {
-        updatedData[`whyBuyHeroTemplate${i}`] = rawData[`whyBuyHeroTemplateId${i}`];
-        hasChanges = true;
-      }
-    }
-    for (let i = 1; i <= 4; i++) {
-      if (!rawData[`storyTemplate${i}`] && rawData[`storyTemplateId${i}`]) {
-        updatedData[`storyTemplate${i}`] = rawData[`storyTemplateId${i}`];
-        hasChanges = true;
-      }
-    }
-    for (let i = 1; i <= 3; i++) {
-      if (!rawData[`vehicleSelectionTemplate${i}`] && rawData[`vehicleSelectionTemplateId${i}`]) {
-        updatedData[`vehicleSelectionTemplate${i}`] = rawData[`vehicleSelectionTemplateId${i}`];
-        hasChanges = true;
-      }
-    }
-    for (let i = 1; i <= 4; i++) {
-      if (!rawData[`processTemplate${i}`] && rawData[`processTemplateId${i}`]) {
-        updatedData[`processTemplate${i}`] = rawData[`processTemplateId${i}`];
-        hasChanges = true;
-      }
-    }
-    for (let i = 1; i <= 4; i++) {
-      if (!rawData[`inspectionTemplate${i}`] && rawData[`inspectionTemplateId${i}`]) {
-        updatedData[`inspectionTemplate${i}`] = rawData[`inspectionTemplateId${i}`];
-        hasChanges = true;
-      }
-    }
-    for (let i = 1; i <= 3; i++) {
-      if (!rawData[`customerCommitmentTemplate${i}`] && rawData[`customerCommitmentTemplateId${i}`]) {
-        updatedData[`customerCommitmentTemplate${i}`] = rawData[`customerCommitmentTemplateId${i}`];
-        hasChanges = true;
-      }
-    }
-
-    if (hasChanges && onUpdate) {
-      onUpdate(updatedData);
-    }
-  }, [rawData]);
+    return merged;
+  })();
 
   const [allReviews, setAllReviews] = useState([]);
   const [selectedReviewIds, setSelectedReviewIds] = useState(
@@ -296,6 +189,16 @@ export default function WhyBuyPro2({
       newArray[index] = value;
     }
     updateField(arrayName, newArray);
+  };
+
+  const getBlobFromUrl = async (url) => {
+    if (!url || !url.startsWith("blob:")) return null;
+    try {
+      const res = await fetch(url);
+      return await res.blob();
+    } catch {
+      return null;
+    }
   };
 
   const handleSave = async () => {
@@ -435,7 +338,21 @@ export default function WhyBuyPro2({
       await setWhyBuyInspection(inspectionData);
       await setWhyBuyCustomerCommitment(commitmentData);
       await setFeaturedReviews(selectedReviewIds);
-      
+
+      const galleryData = new FormData();
+      for (let i = 1; i <= 5; i++) {
+        const customField = `customGallery${i}`;
+        const tmpl = data[`galleryTemplate${i}`];
+        const imageUrl = data[customField] || tmpl?.imageUrl;
+        if (imageUrl && imageUrl.startsWith("blob:")) {
+          const blob = await getBlobFromUrl(imageUrl);
+          if (blob) galleryData.append(customField, blob, `gal${i}.png`);
+        } else if (tmpl?.id) {
+          galleryData.append(`galleryTemplateId${i}`, tmpl.id);
+        }
+      }
+      await setWhyBuyGallery(galleryData);
+
       if (onNextTab) onNextTab();
     } catch (error) {
       console.error("Error saving Why Buy sections:", error);
@@ -495,11 +412,11 @@ export default function WhyBuyPro2({
   ].filter(Boolean);
 
   const galleryImages = [
-    data.galleryTemplate1?.imageUrl,
-    data.galleryTemplate2?.imageUrl,
-    data.galleryTemplate3?.imageUrl,
-    data.galleryTemplate4?.imageUrl,
-    data.galleryTemplate5?.imageUrl,
+    data.customGallery1 || data.galleryTemplate1?.imageUrl,
+    data.customGallery2 || data.galleryTemplate2?.imageUrl,
+    data.customGallery3 || data.galleryTemplate3?.imageUrl,
+    data.customGallery4 || data.galleryTemplate4?.imageUrl,
+    data.customGallery5 || data.galleryTemplate5?.imageUrl,
   ].filter(Boolean);
 
   const processImages = [
@@ -1221,15 +1138,13 @@ export default function WhyBuyPro2({
             <div className="h-40 relative">
               <ImageUploader
                 label="Gallery Image 1"
-                src={data.galleryTemplate1?.imageUrl}
+                src={data.customGallery1 || data.galleryTemplate1?.imageUrl}
                 fieldKey="galImg1"
                 imageType="GALLERY"
                 onChange={({ imageUrl, id }) => {
-                  updateField("galleryTemplate1", {
-                    ...data.galleryTemplate1,
-                    imageUrl,
-                    id: id ?? data.galleryTemplate1?.id,
-                  });
+                  const updated = { ...data, galleryTemplate1: { ...data.galleryTemplate1, imageUrl, id: id ?? data.galleryTemplate1?.id } };
+                  if (id) delete updated.customGallery1; else updated.customGallery1 = imageUrl;
+                  if (onUpdate) onUpdate(updated);
                 }}
                 error={!!errors?.galleryTemplate1}
               />
@@ -1237,60 +1152,52 @@ export default function WhyBuyPro2({
             <div className="h-40 relative">
               <ImageUploader
                 label="Gallery Image 2"
-                src={data.galleryTemplate2?.imageUrl}
+                src={data.customGallery2 || data.galleryTemplate2?.imageUrl}
                 fieldKey="galImg2"
                 imageType="GALLERY"
                 onChange={({ imageUrl, id }) => {
-                  updateField("galleryTemplate2", {
-                    ...data.galleryTemplate2,
-                    imageUrl,
-                    id: id ?? data.galleryTemplate2?.id,
-                  });
+                  const updated = { ...data, galleryTemplate2: { ...data.galleryTemplate2, imageUrl, id: id ?? data.galleryTemplate2?.id } };
+                  if (id) delete updated.customGallery2; else updated.customGallery2 = imageUrl;
+                  if (onUpdate) onUpdate(updated);
                 }}
               />
             </div>
             <div className="h-40 relative">
               <ImageUploader
                 label="Gallery Image 3"
-                src={data.galleryTemplate3?.imageUrl}
+                src={data.customGallery3 || data.galleryTemplate3?.imageUrl}
                 fieldKey="galImg3"
                 imageType="GALLERY"
                 onChange={({ imageUrl, id }) => {
-                  updateField("galleryTemplate3", {
-                    ...data.galleryTemplate3,
-                    imageUrl,
-                    id: id ?? data.galleryTemplate3?.id,
-                  });
+                  const updated = { ...data, galleryTemplate3: { ...data.galleryTemplate3, imageUrl, id: id ?? data.galleryTemplate3?.id } };
+                  if (id) delete updated.customGallery3; else updated.customGallery3 = imageUrl;
+                  if (onUpdate) onUpdate(updated);
                 }}
               />
             </div>
             <div className="h-40 relative">
               <ImageUploader
                 label="Gallery Image 4"
-                src={data.galleryTemplate4?.imageUrl}
+                src={data.customGallery4 || data.galleryTemplate4?.imageUrl}
                 fieldKey="galImg4"
                 imageType="GALLERY"
                 onChange={({ imageUrl, id }) => {
-                  updateField("galleryTemplate4", {
-                    ...data.galleryTemplate4,
-                    imageUrl,
-                    id: id ?? data.galleryTemplate4?.id,
-                  });
+                  const updated = { ...data, galleryTemplate4: { ...data.galleryTemplate4, imageUrl, id: id ?? data.galleryTemplate4?.id } };
+                  if (id) delete updated.customGallery4; else updated.customGallery4 = imageUrl;
+                  if (onUpdate) onUpdate(updated);
                 }}
               />
             </div>
             <div className="h-40 relative">
               <ImageUploader
                 label="Gallery Image 5"
-                src={data.galleryTemplate5?.imageUrl}
+                src={data.customGallery5 || data.galleryTemplate5?.imageUrl}
                 fieldKey="galImg5"
                 imageType="GALLERY"
                 onChange={({ imageUrl, id }) => {
-                  updateField("galleryTemplate5", {
-                    ...data.galleryTemplate5,
-                    imageUrl,
-                    id: id ?? data.galleryTemplate5?.id,
-                  });
+                  const updated = { ...data, galleryTemplate5: { ...data.galleryTemplate5, imageUrl, id: id ?? data.galleryTemplate5?.id } };
+                  if (id) delete updated.customGallery5; else updated.customGallery5 = imageUrl;
+                  if (onUpdate) onUpdate(updated);
                 }}
               />
             </div>
@@ -1304,7 +1211,7 @@ export default function WhyBuyPro2({
           <h3 className="text-primary font-bold text-xl mb-4">
             Featured Reviews Title
           </h3>
-          <EditorInput
+          {/* <EditorInput
             bold
             label="Section Title"
             value={data.testimonialTitle}
@@ -1312,7 +1219,7 @@ export default function WhyBuyPro2({
             maxLength={rules?.testimonialTitle?.max}
             error={!!errors?.testimonialTitle}
             errorMsg={errors?.testimonialTitle}
-          />
+          /> */}
 
           <p className="text-third text-sm mb-4 mt-2">
             Select which customer reviews to feature on your storefront.
@@ -1332,11 +1239,10 @@ export default function WhyBuyPro2({
                 <div
                   key={review.id}
                   onClick={() => toggleReviewSelection(review.id)}
-                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
-                    isSelected
-                      ? "border-fourth bg-fourth/10 shadow-md"
-                      : "border-third/20 bg-primary/5 hover:border-third/40"
-                  }`}
+                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${isSelected
+                    ? "border-fourth bg-fourth/10 shadow-md"
+                    : "border-third/20 bg-primary/5 hover:border-third/40"
+                    }`}
                 >
                   <div
                     className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? "border-fourth bg-fourth" : "border-third/40"}`}
@@ -1407,57 +1313,32 @@ export default function WhyBuyPro2({
             <div className="w-full">
               {/* MOBILE: 2-col polaroid grid */}
               <div className="grid grid-cols-2 gap-3 lg:hidden pt-2 pb-4">
-                {heroImages.map((src, i) => (
-                  <div
-                    key={i}
-                    className={i === 2 ? "col-span-2" : "col-span-1"}
-                  >
-                    <div
-                      className="bg-white rounded-xs"
-                      style={{
-                        padding: "6px 6px 22px",
-                        boxShadow:
-                          "0 4px 18px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.07)",
-                        transform: `rotate(${rotations[i] * 0.4}deg)`,
-                      }}
-                    >
-                      <img
-                        src={src}
-                        alt="car"
-                        loading="lazy"
-                        className="w-full object-cover rounded-[1px] block"
-                        style={{ height: i === 2 ? "140px" : "110px" }}
-                      />
+                {heroImages.length > 0 ? heroImages.map((src, i) => (
+                  <div key={i} className={i === 2 ? "col-span-2" : "col-span-1"}>
+                    <div className="bg-white rounded-xs" style={{ padding: "6px 6px 22px", boxShadow: "0 4px 18px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.07)", transform: `rotate(${rotations[i] * 0.4}deg)` }}>
+                      <img src={src} alt="car" loading="lazy" className="w-full object-cover rounded-[1px] block" style={{ height: i === 2 ? "140px" : "110px" }} />
                     </div>
                   </div>
-                ))}
+                )) : (
+                  <div className="col-span-2 h-36 bg-third/10 border-2 border-dashed border-third/20 rounded-xl flex items-center justify-center">
+                    <span className="text-third/40 text-sm">Hero images not set</span>
+                  </div>
+                )}
               </div>
 
               {/* DESKTOP: absolute scatter board */}
               <div className="relative h-[480px] hidden lg:block">
-                {heroImages.map((src, i) => (
-                  <div
-                    key={i}
-                    className="absolute cursor-pointer"
-                    style={{ ...desktopPositions[i], zIndex: 5 + i }}
-                  >
-                    <div
-                      className="bg-white rounded-xs w-[180px]"
-                      style={{
-                        padding: "7px 7px 26px",
-                        boxShadow:
-                          "0 6px 28px rgba(0,0,0,0.14), 0 1px 4px rgba(0,0,0,0.07)",
-                      }}
-                    >
-                      <img
-                        src={src}
-                        alt="car"
-                        loading="lazy"
-                        className="w-full h-[120px] object-cover rounded-[1px] block"
-                      />
+                {heroImages.length > 0 ? heroImages.map((src, i) => (
+                  <div key={i} className="absolute cursor-pointer" style={{ ...desktopPositions[i], zIndex: 5 + i }}>
+                    <div className="bg-white rounded-xs w-[180px]" style={{ padding: "7px 7px 26px", boxShadow: "0 6px 28px rgba(0,0,0,0.14), 0 1px 4px rgba(0,0,0,0.07)" }}>
+                      <img src={src} alt="car" loading="lazy" className="w-full h-[120px] object-cover rounded-[1px] block" />
                     </div>
                   </div>
-                ))}
+                )) : (
+                  <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 rounded-xl flex items-center justify-center">
+                    <span className="text-third/40 text-sm">Hero images not set</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -1486,15 +1367,15 @@ export default function WhyBuyPro2({
 
             {/* RIGHT — stacked images */}
             <div className="flex flex-col gap-4">
-              {storyImages.slice(0, 2).map((img, i) => (
+              {storyImages.length > 0 ? storyImages.slice(0, 2).map((img, i) => (
                 <div key={i} className="w-full h-40 rounded-xl overflow-hidden">
-                  <img
-                    src={img}
-                    loading="lazy"
-                    className="w-full h-full object-cover"
-                  />
+                  <img src={img} loading="lazy" className="w-full h-full object-cover" />
                 </div>
-              ))}
+              )) : (
+                <div className="w-full h-40 bg-primary/10 border-2 border-dashed border-primary/20 rounded-xl flex items-center justify-center">
+                  <span className="text-primary/30 text-sm">Story images not set</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1512,8 +1393,7 @@ export default function WhyBuyPro2({
                 Selection
               </p>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary mb-5">
-                Our Approach to <br />
-                Vehicle Selection
+                {data.vehicleSelectionTitle}
               </h2>
               <div className="w-8 h-px bg-primary/15 my-3" />
               <div
@@ -1528,23 +1408,24 @@ export default function WhyBuyPro2({
             <div className="p-3 rounded-2xl w-full h-full">
               <div className="grid grid-cols-3 gap-3 w-full h-full">
                 <div className="col-span-2 aspect-4/3 rounded-xl overflow-hidden">
-                  <img
-                    src={selectionImages[0]}
-                    loading="lazy"
-                    className="w-full h-full object-cover"
-                  />
+                  {selectionImages[0] ? (
+                    <img src={selectionImages[0]} loading="lazy" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                      <span className="text-third/40 text-xs">Image 1</span>
+                    </div>
+                  )}
                 </div>
                 <div className="flex flex-col gap-3">
-                  {selectionImages.slice(1, 3).map((img, i) => (
-                    <div
-                      key={i}
-                      className="aspect-4/3 rounded-xl overflow-hidden"
-                    >
-                      <img
-                        src={img}
-                        loading="lazy"
-                        className="w-full h-full object-cover"
-                      />
+                  {[1, 2].map((idx) => (
+                    <div key={idx} className="aspect-4/3 rounded-xl overflow-hidden">
+                      {selectionImages[idx] ? (
+                        <img src={selectionImages[idx]} loading="lazy" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                          <span className="text-third/40 text-xs">Image {idx + 1}</span>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -1564,7 +1445,7 @@ export default function WhyBuyPro2({
               Process
             </p>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary">
-              How Buying Works
+              {data.processTitle}
             </h2>
             <div
               className="text-third/60 text-[15px] max-w-md"
@@ -1581,17 +1462,18 @@ export default function WhyBuyPro2({
                 return (
                   <div key={i} className="relative flex flex-col gap-4">
                     <div className="w-full h-[140px] rounded-xl overflow-hidden">
-                      <img
-                        src={processImages[i % processImages.length]}
-                        alt={step.title}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
+                      {processImages[i % Math.max(processImages.length, 1)] ? (
+                        <img src={processImages[i % processImages.length]} alt={step.title} className="w-full h-full object-cover" loading="lazy" />
+                      ) : (
+                        <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                          <span className="text-third/40 text-xs">Image</span>
+                        </div>
+                      )}
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="w-10 h-10 rounded-full border border-third/20 flex items-center justify-center overflow-hidden">
                         {typeof step.icon === "string" &&
-                        step.icon.startsWith("<svg") ? (
+                          step.icon.startsWith("<svg") ? (
                           <div
                             className="text-primary [&>svg]:w-5 [&>svg]:h-5 transition-colors duration-300"
                             dangerouslySetInnerHTML={{ __html: step.icon }}
@@ -1655,11 +1537,10 @@ export default function WhyBuyPro2({
                 <div
                   key={i}
                   onClick={() => setActiveIndex(i)}
-                  className={`flex justify-between items-center px-6 py-5 cursor-pointer transition ${
-                    i === activeIndex
-                      ? "bg-primary/5 border-l-4 border-primary"
-                      : "hover:bg-primary/3"
-                  }`}
+                  className={`flex justify-between items-center px-6 py-5 cursor-pointer transition ${i === activeIndex
+                    ? "bg-primary/5 border-l-4 border-primary"
+                    : "hover:bg-primary/3"
+                    }`}
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-[10px] font-bold text-primary tracking-[0.2em]">
@@ -1678,15 +1559,14 @@ export default function WhyBuyPro2({
             </div>
 
             {/* RIGHT — active image */}
-            <div
-              key={activeIndex}
-              className="w-full h-[260px] rounded-xl overflow-hidden"
-            >
-              <img
-                src={inspectionImages[activeIndex % inspectionImages.length]}
-                loading="lazy"
-                className="w-full h-full object-cover"
-              />
+            <div key={activeIndex} className="w-full h-[260px] rounded-xl overflow-hidden">
+              {inspectionImages[activeIndex % Math.max(inspectionImages.length, 1)] ? (
+                <img src={inspectionImages[activeIndex % inspectionImages.length]} loading="lazy" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-sm">Inspection image not set</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1716,22 +1596,17 @@ export default function WhyBuyPro2({
 
             {/* image strip */}
             <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {commitmentImages.map((img, i) => (
-                <div
-                  key={i}
-                  className={`relative rounded-xl overflow-hidden ${
-                    i === 1 ? "lg:scale-105 lg:-translate-y-2 z-10" : ""
-                  }`}
-                >
+              {commitmentImages.length > 0 ? commitmentImages.map((img, i) => (
+                <div key={i} className={`relative rounded-xl overflow-hidden ${i === 1 ? "lg:scale-105 lg:-translate-y-2 z-10" : ""}`}>
                   <div className="w-full aspect-4/3">
-                    <img
-                      src={img}
-                      loading="lazy"
-                      className="w-full h-full object-cover transition duration-500 hover:scale-105"
-                    />
+                    <img src={img} loading="lazy" className="w-full h-full object-cover transition duration-500 hover:scale-105" />
                   </div>
                 </div>
-              ))}
+              )) : (
+                <div className="col-span-3 h-40 bg-primary/10 border-2 border-dashed border-primary/20 rounded-xl flex items-center justify-center">
+                  <span className="text-primary/30 text-sm">Commitment images not set</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1754,35 +1629,40 @@ export default function WhyBuyPro2({
           {/* masonry grid */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 auto-rows-[120px]">
             <div className="col-span-2 row-span-2 rounded-xl overflow-hidden">
-              <img
-                src={galleryImages[0]}
-                loading="lazy"
-                className="w-full h-full object-cover hover:scale-105 transition duration-500"
-              />
+              {galleryImages[0] ? (
+                <img src={galleryImages[0]} loading="lazy" className="w-full h-full object-cover hover:scale-105 transition duration-500" />
+              ) : (
+                <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-xs">Gallery 1</span>
+                </div>
+              )}
             </div>
-
             <div className="col-span-1 row-span-1 rounded-xl overflow-hidden">
-              <img
-                src={galleryImages[1]}
-                loading="lazy"
-                className="w-full h-full object-cover hover:scale-105 transition duration-500"
-              />
+              {galleryImages[1] ? (
+                <img src={galleryImages[1]} loading="lazy" className="w-full h-full object-cover hover:scale-105 transition duration-500" />
+              ) : (
+                <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-xs">Gallery 2</span>
+                </div>
+              )}
             </div>
-
             <div className="col-span-1 row-span-2 rounded-xl overflow-hidden">
-              <img
-                src={galleryImages[2]}
-                loading="lazy"
-                className="w-full h-full object-cover hover:scale-105 transition duration-500"
-              />
+              {galleryImages[2] ? (
+                <img src={galleryImages[2]} loading="lazy" className="w-full h-full object-cover hover:scale-105 transition duration-500" />
+              ) : (
+                <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-xs">Gallery 3</span>
+                </div>
+              )}
             </div>
-
             <div className="col-span-1 row-span-1 rounded-xl overflow-hidden">
-              <img
-                src={galleryImages[3]}
-                loading="lazy"
-                className="w-full h-full object-cover hover:scale-105 transition duration-500"
-              />
+              {galleryImages[3] ? (
+                <img src={galleryImages[3]} loading="lazy" className="w-full h-full object-cover hover:scale-105 transition duration-500" />
+              ) : (
+                <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-xs">Gallery 4</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1801,7 +1681,7 @@ export default function WhyBuyPro2({
                   Reviews
                 </p>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary">
-                  {data.testimonialTitle || "What Our Customers Say"}
+                  What Our Customers Say
                 </h2>
               </div>
             </div>
@@ -1813,7 +1693,7 @@ export default function WhyBuyPro2({
                   className="group relative rounded-2xl p-7 bg-white/5 backdrop-blur-md border border-white/10 hover:border-primary/30 transition-all duration-300 overflow-hidden"
                 >
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-linear-to-br from-primary/10 via-transparent to-transparent" />
-                  
+
                   {/* Rating Stars */}
                   {t.rating && (
                     <div className="flex gap-1 mb-4 relative z-10">
@@ -1830,22 +1710,22 @@ export default function WhyBuyPro2({
                       ))}
                     </div>
                   )}
-                  
+
                   {/* Review Title */}
                   {t.title && (
                     <h4 className="font-semibold text-primary mb-3 relative z-10">
                       {t.title}
                     </h4>
                   )}
-                  
+
                   {/* Review Text */}
                   <div
                     className="font-[Poppins] text-[14px] leading-[1.9] text-third/80 italic relative z-10 mb-6"
                     dangerouslySetInnerHTML={{ __html: t.review }}
                   />
-                  
+
                   <div className="w-full h-px bg-primary/10 mb-5 relative z-10" />
-                  
+
                   {/* Reviewer Info */}
                   <div className="flex items-center gap-3 relative z-10">
                     <div className="w-10 h-10 rounded-full bg-linear-to-br from-primary/20 to-primary/5 flex items-center justify-center font-bold text-[14px] text-primary">

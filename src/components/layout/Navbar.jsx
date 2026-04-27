@@ -241,32 +241,44 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                   const messages = profileStrength?.messages || [];
 
                   if (isConsultant) {
-                    if (
-                      messages.some((m) =>
-                        ["ADD_GST", "UPLOAD_AADHAAR", "UPLOAD_PAN_CARD"].includes(
-                          m.type,
-                        ),
-                      )
-                    ) {
+                    // 1. Storefront Priority
+                    const storefrontMsg = messages.find((m) =>
+                      ["CREATE_STOREFRONT", "FIX_STOREFRONT"].includes(m.type),
+                    );
+                    if (storefrontMsg) {
                       return {
-                        label: "Complete Verification",
-                        href: "/consult/subscription",
-                      };
-                    }
-                    if (
-                      messages.some((m) => m.type === "CREATE_STOREFRONT")
-                    ) {
-                      return {
-                        label: "Create Storefront",
+                        label: storefrontMsg.text,
                         href: "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Fstorefront",
                       };
                     }
-                    if (messages.some((m) => m.type === "LIST_VEHICLE")) {
+
+                    // 2. Inventory Priority
+                    const inventoryMsg = messages.find(
+                      (m) => m.type === "LIST_VEHICLE",
+                    );
+                    if (inventoryMsg) {
                       return {
-                        label: "List Vehicle",
+                        label: inventoryMsg.text,
                         href: "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Finventory",
                       };
                     }
+
+                    // 3. KYC Priority
+                    const kycMsg = messages.find((m) =>
+                      [
+                        "ADD_GST",
+                        "UPLOAD_AADHAAR",
+                        "UPLOAD_PAN_CARD",
+                        "COMPLETE_REGISTRATION",
+                      ].includes(m.type),
+                    );
+                    if (kycMsg) {
+                      return {
+                        label: kycMsg.text,
+                        href: "/consult/subscription",
+                      };
+                    }
+
                     return {
                       label: "Go to Dashboard",
                       href: "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Foverview",
@@ -274,9 +286,12 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                   }
 
                   if (isUserSeller) {
-                    if (messages.some((m) => m.type === "LIST_VEHICLE")) {
+                    const inventoryMsg = messages.find(
+                      (m) => m.type === "LIST_VEHICLE",
+                    );
+                    if (inventoryMsg) {
                       return {
-                        label: "List Vehicle",
+                        label: inventoryMsg.text,
                         href: "/user/details/myvehicle",
                       };
                     }

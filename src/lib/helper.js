@@ -57,22 +57,52 @@ export const createSlug = (text = "") => {
 };
 
 export const normalizeWhyBuyData = (raw = {}, defaults = {}) => {
-  const hasDraft = raw && Object.keys(raw).length > 0;
+  // Check if the API response has any real content beyond metadata
+  const metaOnlyKeys = new Set([
+    "id", "consultationId", "themePrimaryId", "themeId",
+    "verificationStatus", "isSubmitted", "createdAt", "updatedAt",
+    "featuredReviews",
+  ]);
+  const hasRealContent = raw && Object.entries(raw).some(
+    ([key, value]) =>
+      !metaOnlyKeys.has(key) &&
+      value !== null &&
+      value !== undefined &&
+      value !== "" &&
+      !(Array.isArray(value) && value.length === 0),
+  );
 
-  // Start with defaults, then override with API data (but only non-template fields)
-  // This prevents dummy template images from appearing when API has real data
-  const data = { ...defaults };
-  
-  if (hasDraft) {
-    // Override with API data, but filter out null/undefined
-    Object.entries(raw).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        data[key] = value;
+  // Build empty shell from defaults (preserving array shapes but zeroing values)
+  const getEmptyData = (defaultData) => {
+    const empty = {};
+    Object.entries(defaultData).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        empty[key] = value.map((item) => {
+          if (typeof item === "string") return "";
+          const emptyItem = {};
+          Object.keys(item).forEach((k) => (emptyItem[k] = ""));
+          return emptyItem;
+        });
+      } else if (value !== null && typeof value === "object") {
+        empty[key] = {};
+      } else {
+        empty[key] = "";
       }
     });
-  }
+    return empty;
+  };
 
-  if (!hasDraft) return data;
+  // Start from empty shell — never from dummy defaults
+  const data = getEmptyData(defaults);
+
+  if (!hasRealContent) return data;
+
+  // Override with API data (filter out null/undefined)
+  Object.entries(raw).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      data[key] = value;
+    }
+  });
 
   /* ================= HERO ================= */
   if (raw.heroTitle && !raw.whyBuyHeroTitle)
@@ -122,7 +152,7 @@ export const normalizeWhyBuyData = (raw = {}, defaults = {}) => {
   }
 
   /* ================= PROCESS ================= */
-  if (raw.processes && Array.isArray(raw.processes)) {
+  if (raw.processes && Array.isArray(raw.processes) && !raw.processSteps?.length) {
     data.processSteps = raw.processes.map((p) => ({
       title: p.title || "",
       description: p.desc || p.description || "",

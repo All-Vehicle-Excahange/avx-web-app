@@ -6,7 +6,6 @@ import React, { useEffect, useRef, useState } from "react";
 import EditorInput from "../atoms/EditorInput";
 import { ImageUploader } from "../atoms/ImageUploader ";
 import RichTextEditor from "../atoms/RichTextEditor";
-import { Plus, Trash } from "lucide-react";
 import Button from "@/components/ui/button";
 import GlobalLoader from "@/components/ui/GlobalLoader";
 import Select from "react-select";
@@ -17,7 +16,6 @@ import {
   setState,
   setAboutServices,
 } from "@/services/theme.service";
-import { ABOUT_PRO_1 } from "@/core/engine/schemas/about/pro/about_pro_1";
 
 const SVG_OPTIONS = [
   {
@@ -88,8 +86,6 @@ const formatOptionLabel = ({ value, label }) => (
   </div>
 );
 
-const DEFAULT_DATA = ABOUT_PRO_1[0].data;
-
 function AboutPro1({
   data: rawData,
   isEditing,
@@ -117,18 +113,13 @@ function AboutPro1({
       ),
     };
 
-    // Map backend fields to UI fields
-    if (!merged.heroTitle && rawData?.heroTitle) merged.heroTitle = rawData.heroTitle;
-    if (!merged.heroDescription && rawData?.heroDescription) merged.heroDescription = rawData.heroDescription;
+    // Map backend fields to UI fields (only when target is empty)
     if (!merged.missionDesc && rawData?.missionDescription) merged.missionDesc = rawData.missionDescription;
     if (!merged.visionDesc && rawData?.visionDescription) merged.visionDesc = rawData.visionDescription;
     if (!merged.servicesTitle && rawData?.serviceTitle) merged.servicesTitle = rawData.serviceTitle;
     if (!merged.servicesDesc && rawData?.serviceDescription) merged.servicesDesc = rawData.serviceDescription;
-    if (!merged.aboutUsDescription && rawData?.aboutUsDescription) merged.aboutUsDescription = rawData.aboutUsDescription;
-    if (!merged.missionTitle && rawData?.missionTitle) merged.missionTitle = rawData.missionTitle;
-    if (!merged.visionTitle && rawData?.visionTitle) merged.visionTitle = rawData.visionTitle;
 
-    // Map image objects
+    // Map image objects from backend shape
     if (!merged.heroTemplate1?.imageUrl && rawData?.heroImageTemplate1?.imageUrl) {
       merged.heroTemplate1 = rawData.heroImageTemplate1;
     }
@@ -519,7 +510,7 @@ function AboutPro1({
       {/* HERO */}
       <section className="relative w-full min-h-screen overflow-hidden flex  px-4 lg:px-8 py-12">
         {/* BACKGROUND IMAGE */}
-        {data.heroTemplate1?.imageUrl && (
+        {data.heroTemplate1?.imageUrl ? (
           <>
             <div
               className="absolute inset-0"
@@ -529,9 +520,12 @@ function AboutPro1({
                 backgroundPosition: "center",
               }}
             />
-            {/* LIGHT OVERLAY */}
             <div className="absolute inset-0 bg-black/40" />
           </>
+        ) : (
+          <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+            <span className="text-third/40 text-sm">Hero image not set</span>
+          </div>
         )}
 
         {/* CONTENT */}
@@ -566,12 +560,16 @@ function AboutPro1({
           <div className="grid lg:grid-cols-2 gap-6">
             {/* MISSION */}
             <div className="relative min-h-80 rounded-2xl overflow-hidden border border-third/10 shadow-2xl">
-              {data.missionTemplate1?.imageUrl && (
+              {data.missionTemplate1?.imageUrl ? (
                 <img
                   src={data.missionTemplate1.imageUrl}
                   className="absolute inset-0 w-full h-full object-cover"
                   alt="Mission"
                 />
+              ) : (
+                <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-sm">Mission image not set</span>
+                </div>
               )}
 
               <div className="relative bg-secondary/70 flex flex-col justify-end p-6 gap-4 h-full">
@@ -590,12 +588,16 @@ function AboutPro1({
 
             {/* VISION */}
             <div className="relative min-h-80 rounded-2xl overflow-hidden border border-third/10 shadow-2xl">
-              {data.visionTemplate1?.imageUrl && (
+              {data.visionTemplate1?.imageUrl ? (
                 <img
                   src={data.visionTemplate1.imageUrl}
                   className="absolute inset-0 w-full h-full object-cover"
                   alt="Vision"
                 />
+              ) : (
+                <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-sm">Vision image not set</span>
+                </div>
               )}
 
               <div className="relative bg-secondary/70 flex flex-col justify-end p-6 gap-4 h-full">

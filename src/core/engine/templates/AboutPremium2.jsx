@@ -88,7 +88,7 @@ const Divider = () => <div className="w-8 h-px bg-primary/15 my-2" />;
 const DEFAULT_DATA = ABOUT_PREMIUM_2[0].data;
 
 export default function AboutPremium2({
-  data,
+  data: rawData,
   isEditing,
   onUpdate,
   onNextTab,
@@ -102,91 +102,64 @@ export default function AboutPremium2({
     ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
     : SVG_OPTIONS;
 
-  const d = {
-    ...DEFAULT_DATA,
-    ...Object.fromEntries(
-      Object.entries(data || {}).filter(
-        ([_, v]) => v !== undefined && v !== null,
-      ),
-    ),
+  // Check if API has real content beyond metadata
+  const metaOnlyKeys = new Set([
+    "id", "consultationId", "themePrimaryId", "themeId",
+    "verificationStatus", "isSubmitted", "createdAt", "updatedAt",
+    "featuredReviews",
+  ]);
+  const hasRealContent = rawData && Object.entries(rawData).some(
+    ([key, value]) =>
+      !metaOnlyKeys.has(key) &&
+      value !== null && value !== undefined && value !== "" &&
+      !(Array.isArray(value) && value.length === 0),
+  );
+
+  const getEmptyData = (defaultData) => {
+    const empty = {};
+    Object.entries(defaultData).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        empty[key] = value.map((item) => {
+          if (typeof item === "string") return "";
+          const emptyItem = {};
+          Object.keys(item).forEach((k) => (emptyItem[k] = ""));
+          return emptyItem;
+        });
+      } else if (value !== null && typeof value === "object") {
+        empty[key] = {};
+      } else {
+        empty[key] = "";
+      }
+    });
+    return empty;
   };
 
-  // Map backend fields to UI fields if UI fields are missing
-  if (!data?.missionDesc && data?.missionDescription) {
-    d.missionDesc = data.missionDescription;
-  }
-  if (!data?.visionDesc && data?.visionDescription) {
-    d.visionDesc = data.visionDescription;
-  }
-  if (!data?.servicesTitle && data?.serviceTitle) {
-    d.servicesTitle = data.serviceTitle;
-  }
-  if (!data?.servicesDesc && data?.serviceDescription) {
-    d.servicesDesc = data.serviceDescription;
-  }
+  const d = (() => {
+    const base = getEmptyData(DEFAULT_DATA);
+    if (!hasRealContent) return base;
 
-  // Map backend image objects if UI fields are missing
-  // API returns heroImageTemplate1, heroImageTemplate2, etc.
-  if (!data?.heroTemplate1 && data?.heroImageTemplate1) {
-    d.heroTemplate1 = data.heroImageTemplate1;
-  }
-  if (!data?.heroTemplate2 && data?.heroImageTemplate2) {
-    d.heroTemplate2 = data.heroImageTemplate2;
-  }
-  if (!data?.missionTemplate1 && data?.missionTemplate1) {
-    d.missionTemplate1 = data.missionTemplate1;
-  }
-  if (!data?.visionTemplate1 && data?.visionTemplate1) {
-    d.visionTemplate1 = data.visionTemplate1;
-  }
+    // Overlay API data
+    Object.entries(rawData || {}).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) base[key] = value;
+    });
 
-  // Synchronize transformed draft data with the parent state once on load
-  React.useEffect(() => {
-    if (!data || !onUpdate) return;
+    // Map backend text fields
+    if (!base.missionDesc && rawData?.missionDescription) base.missionDesc = rawData.missionDescription;
+    if (!base.visionDesc && rawData?.visionDescription) base.visionDesc = rawData.visionDescription;
+    if (!base.servicesTitle && rawData?.serviceTitle) base.servicesTitle = rawData.serviceTitle;
+    if (!base.servicesDesc && rawData?.serviceDescription) base.servicesDesc = rawData.serviceDescription;
 
-    let hasChanges = false;
-    const updatedData = { ...d };
-
-    if (!data.missionDesc && data.missionDescription) {
-      updatedData.missionDesc = data.missionDescription;
-      hasChanges = true;
+    // Map hero images — API returns heroImageTemplate1 (object), schema uses heroImageTemplateId1
+    // Normalize both to heroTemplate1/heroTemplate2 for consistent use in editor + preview
+    if (!base.heroTemplate1?.imageUrl) {
+      base.heroTemplate1 = rawData?.heroImageTemplate1 || rawData?.heroTemplate1 || {};
     }
-    if (!data.visionDesc && data.visionDescription) {
-      updatedData.visionDesc = data.visionDescription;
-      hasChanges = true;
-    }
-    if (!data.servicesTitle && data.serviceTitle) {
-      updatedData.servicesTitle = data.serviceTitle;
-      hasChanges = true;
-    }
-    if (!data.servicesDesc && data.serviceDescription) {
-      updatedData.servicesDesc = data.serviceDescription;
-      hasChanges = true;
+    if (!base.heroTemplate2?.imageUrl) {
+      base.heroTemplate2 = rawData?.heroImageTemplate2 || rawData?.heroTemplate2 || {};
     }
 
-    // Sync image mappings
-    // API returns heroImageTemplate1, heroImageTemplate2, not heroImageTemplateId1
-    if (!data.heroTemplate1 && data.heroImageTemplate1) {
-      updatedData.heroTemplate1 = data.heroImageTemplate1;
-      hasChanges = true;
-    }
-    if (!data.heroTemplate2 && data.heroImageTemplate2) {
-      updatedData.heroTemplate2 = data.heroImageTemplate2;
-      hasChanges = true;
-    }
-    if (!data.missionTemplate1 && data.missionTemplate1) {
-      updatedData.missionTemplate1 = data.missionTemplate1;
-      hasChanges = true;
-    }
-    if (!data.visionTemplate1 && data.visionTemplate1) {
-      updatedData.visionTemplate1 = data.visionTemplate1;
-      hasChanges = true;
-    }
-
-    if (hasChanges) {
-      onUpdate(updatedData);
-    }
-  }, [data]);
+    return base;
+  })();
   const [active, setActive] = useState(0);
   const [hovered, setHovered] = useState(null);
   const current = hovered !== null ? hovered : active;
@@ -641,15 +614,17 @@ export default function AboutPremium2({
       <section className="relative px-2 lg:px-4 overflow-hidden">
         {/* HERO BACKGROUND (VIDEO/IMAGE) */}
         <div className="absolute inset-0 h-screen overflow-hidden">
-          <img
-            src={
-              d.customHeroImage1 ||
-              d.customHeroImageUrl1 ||
-              d.heroImageTemplate1?.imageUrl
-            }
-            className="w-full h-full object-cover"
-            alt="Background"
-          />
+          {(d.customHeroImage1 || d.heroTemplate1?.imageUrl) ? (
+            <img
+              src={d.customHeroImage1 || d.heroTemplate1?.imageUrl}
+              className="w-full h-full object-cover"
+              alt="Background"
+            />
+          ) : (
+            <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+              <span className="text-third/40 text-sm">Hero background not set</span>
+            </div>
+          )}
           <div className="absolute inset-0 bg-black/60" />
         </div>
 
@@ -673,15 +648,17 @@ export default function AboutPremium2({
             <div className="hidden lg:block">
               <div className="relative group">
                 <div className="relative rounded-2xl overflow-hidden hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] bg-primary/5">
-                  <img
-                    src={
-                      d.customHeroImage2 ||
-                      d.customHeroImageUrl2 ||
-                      d.heroImageTemplate2?.imageUrl
-                    }
-                    alt="Hero side"
-                    className="w-full h-[450px] object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
+                  {(d.customHeroImage2 || d.heroTemplate2?.imageUrl) ? (
+                    <img
+                      src={d.customHeroImage2 || d.heroTemplate2?.imageUrl}
+                      alt="Hero side"
+                      className="w-full h-[450px] object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="w-full h-[450px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                      <span className="text-third/40 text-sm">Side image not set</span>
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent" />
                 </div>
               </div>
@@ -717,15 +694,17 @@ export default function AboutPremium2({
               {/* IMAGE */}
               <div className="relative group">
                 <div className="relative rounded-2xl overflow-hidden hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] bg-primary/5">
-                  <img
-                    src={
-                      d.customMissionImage1 ||
-                      d.customMissionUrl1 ||
-                      d.missionTemplate1?.imageUrl
-                    }
-                    alt={d.missionTitle}
-                    className="w-full h-80 lg:h-[380px] object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
-                  />
+                  {(d.customMissionImage1 || d.customMissionUrl1 || d.missionTemplate1?.imageUrl) ? (
+                    <img
+                      src={d.customMissionImage1 || d.customMissionUrl1 || d.missionTemplate1?.imageUrl}
+                      alt={d.missionTitle}
+                      className="w-full h-80 lg:h-[380px] object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="w-full h-80 lg:h-[380px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                      <span className="text-third/40 text-sm">Mission image not set</span>
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-linear-to-t from-black/50 via-black/10 to-transparent" />
                 </div>
               </div>
@@ -749,15 +728,17 @@ export default function AboutPremium2({
               {/* IMAGE */}
               <div className="relative group">
                 <div className="relative rounded-2xl overflow-hidden hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] bg-primary/5">
-                  <img
-                    src={
-                      d.customVisionImage1 ||
-                      d.customVisionUrl1 ||
-                      d.visionTemplate1?.imageUrl
-                    }
-                    alt={d.visionTitle}
-                    className="w-full h-80 lg:h-[380px] object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
-                  />
+                  {(d.customVisionImage1 || d.customVisionUrl1 || d.visionTemplate1?.imageUrl) ? (
+                    <img
+                      src={d.customVisionImage1 || d.customVisionUrl1 || d.visionTemplate1?.imageUrl}
+                      alt={d.visionTitle}
+                      className="w-full h-80 lg:h-[380px] object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="w-full h-80 lg:h-[380px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                      <span className="text-third/40 text-sm">Vision image not set</span>
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-linear-to-t from-black/50 via-black/10 to-transparent" />
                 </div>
               </div>

@@ -400,7 +400,7 @@ export default function AboutPro3({
         <h3 className="text-primary font-bold text-xl mb-4">
           Services Section
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
           <EditorInput
             bold
             value={data.aboutServicesTitle}
@@ -410,14 +410,14 @@ export default function AboutPro3({
             onChange={(e) => update("aboutServicesTitle", e.target.value)}
             placeholder="Services Title"
           />
-          <RichTextEditor
+          {/* <RichTextEditor
             label="Services Description"
             value={data.aboutServicesDescription}
             error={errors?.aboutServicesDescription}
             errorMsg={errors?.aboutServicesDescription}
             maxLength={rules?.aboutServicesDescription?.max}
             onChange={(v) => update("aboutServicesDescription", v)}
-          />
+          /> */}
         </div>
         <div className="grid md:grid-cols-2 gap-4 mt-4">
           {(data.services || []).map((s, i) => (

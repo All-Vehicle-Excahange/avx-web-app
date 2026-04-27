@@ -669,7 +669,7 @@ export default function WhyBuyPremium3({
           <h3 className="text-primary font-bold text-xl mb-4">
             Process Section
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-8">
             <div className="space-y-4">
               <EditorInput
                 bold
@@ -689,7 +689,7 @@ export default function WhyBuyPremium3({
                 errorMsg={errors?.processDescription}
               />
             </div>
-            <div className="space-y-4">
+            {/* <div className="space-y-4">
               <p className="text-sm font-semibold text-primary">
                 Process Images
               </p>
@@ -724,7 +724,7 @@ export default function WhyBuyPremium3({
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="grid md:grid-cols-2 gap-4 mt-6">
             {(data.processSteps || []).map((step, i) => (
@@ -994,7 +994,7 @@ export default function WhyBuyPremium3({
           <h3 className="text-primary font-bold text-xl mb-4">
             Select Featured Reviews
           </h3>
-          <EditorInput
+          {/* <EditorInput
             bold
             label="Section Title"
             value={data.testimonialTitle}
@@ -1002,7 +1002,7 @@ export default function WhyBuyPremium3({
             maxLength={rules?.testimonialTitle?.max}
             error={!!errors?.testimonialTitle}
             errorMsg={errors?.testimonialTitle}
-          />
+          /> */}
           <p className="text-third text-sm">
             Select which customer reviews to feature.
           </p>

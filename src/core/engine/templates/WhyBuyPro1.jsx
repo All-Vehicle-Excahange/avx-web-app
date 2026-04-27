@@ -17,9 +17,9 @@ import {
   setWhyBuyInspection,
   setWhyBuyCustomerCommitment,
   setFeaturedReviews,
+  setWhyBuyGallery
 } from "@/services/theme.service";
 import { getAllReviewById } from "@/services/user.service";
-import { WHY_BUY_PRO_1 } from "../schemas/whybuy/why_buy_pro_1";
 
 const SVG_OPTIONS = [
   {
@@ -84,8 +84,6 @@ const formatOptionLabel = ({ value, label }) => (
     <span className="text-sm">{label}</span>
   </div>
 );
-
-const DEFAULT_DATA = WHY_BUY_PRO_1[0].data;
 
 export default function WhyBuyPro1({
   data: rawData,
@@ -186,6 +184,16 @@ export default function WhyBuyPro1({
     updateField(arrayName, newArray);
   };
 
+  const getBlobFromUrl = async (url) => {
+    if (!url || !url.startsWith("blob:")) return null;
+    try {
+      const res = await fetch(url);
+      return await res.blob();
+    } catch {
+      return null;
+    }
+  };
+
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -279,6 +287,22 @@ export default function WhyBuyPro1({
       await setWhyBuyProcess(processData);
       await setWhyBuyInspection(inspectionData);
       await setWhyBuyCustomerCommitment(commitmentData);
+
+      const galleryData = new FormData();
+      for (let i = 1; i <= 4; i++) {
+        const customField = `customGallery${i}`;
+        const tmpl = data[`galleryTemplate${i}`];
+        const imageUrl = data[customField] || tmpl?.imageUrl;
+
+        if (imageUrl && imageUrl.startsWith("blob:")) {
+          const blob = await getBlobFromUrl(imageUrl);
+          if (blob) galleryData.append(customField, blob, `gal${i}.png`);
+        } else if (tmpl?.id) {
+          galleryData.append(`galleryTemplateId${i}`, tmpl.id);
+        }
+      }
+      await setWhyBuyGallery(galleryData);
+
       await setFeaturedReviews(selectedReviewIds);
     } catch (error) {
       console.error("Error saving Why Buy sections:", error);
@@ -805,68 +829,76 @@ export default function WhyBuyPro1({
             <div className="h-40 relative">
               <ImageUploader
                 label="Gallery Image 1"
-                src={data.galleryTemplate1?.imageUrl}
+                src={data.customGallery1 || data.galleryTemplate1?.imageUrl}
                 fieldKey="galImg1"
                 imageType="GALLERY"
                 error={errors?.galleryTemplate1}
                 errorMsg={errors?.galleryTemplate1}
                 onChange={({ imageUrl, id }) => {
-                  updateField("galleryTemplate1", {
-                    ...data.galleryTemplate1,
-                    imageUrl,
-                    id: id ?? data.galleryTemplate1?.id,
-                  });
+                  const updated = {
+                    ...data,
+                    galleryTemplate1: { ...data.galleryTemplate1, imageUrl, id: id ?? data.galleryTemplate1?.id },
+                  };
+                  if (id) delete updated.customGallery1;
+                  else updated.customGallery1 = imageUrl;
+                  if (onUpdate) onUpdate(updated);
                 }}
               />
             </div>
             <div className="h-40 relative">
               <ImageUploader
                 label="Gallery Image 2"
-                src={data.galleryTemplate2?.imageUrl}
+                src={data.customGallery2 || data.galleryTemplate2?.imageUrl}
                 fieldKey="galImg2"
                 imageType="GALLERY"
                 error={errors?.galleryTemplate2}
                 errorMsg={errors?.galleryTemplate2}
                 onChange={({ imageUrl, id }) => {
-                  updateField("galleryTemplate2", {
-                    ...data.galleryTemplate2,
-                    imageUrl,
-                    id: id ?? data.galleryTemplate2?.id,
-                  });
+                  const updated = {
+                    ...data,
+                    galleryTemplate2: { ...data.galleryTemplate2, imageUrl, id: id ?? data.galleryTemplate2?.id },
+                  };
+                  if (id) delete updated.customGallery2;
+                  else updated.customGallery2 = imageUrl;
+                  if (onUpdate) onUpdate(updated);
                 }}
               />
             </div>
             <div className="h-40 relative">
               <ImageUploader
                 label="Gallery Image 3"
-                src={data.galleryTemplate3?.imageUrl}
+                src={data.customGallery3 || data.galleryTemplate3?.imageUrl}
                 fieldKey="galImg3"
                 imageType="GALLERY"
                 error={errors?.galleryTemplate3}
                 errorMsg={errors?.galleryTemplate3}
                 onChange={({ imageUrl, id }) => {
-                  updateField("galleryTemplate3", {
-                    ...data.galleryTemplate3,
-                    imageUrl,
-                    id: id ?? data.galleryTemplate3?.id,
-                  });
+                  const updated = {
+                    ...data,
+                    galleryTemplate3: { ...data.galleryTemplate3, imageUrl, id: id ?? data.galleryTemplate3?.id },
+                  };
+                  if (id) delete updated.customGallery3;
+                  else updated.customGallery3 = imageUrl;
+                  if (onUpdate) onUpdate(updated);
                 }}
               />
             </div>
             <div className="h-40 relative">
               <ImageUploader
                 label="Gallery Image 4"
-                src={data.galleryTemplate4?.imageUrl}
+                src={data.customGallery4 || data.galleryTemplate4?.imageUrl}
                 fieldKey="galImg4"
                 imageType="GALLERY"
                 error={errors?.galleryTemplate4}
                 errorMsg={errors?.galleryTemplate4}
                 onChange={({ imageUrl, id }) => {
-                  updateField("galleryTemplate4", {
-                    ...data.galleryTemplate4,
-                    imageUrl,
-                    id: id ?? data.galleryTemplate4?.id,
-                  });
+                  const updated = {
+                    ...data,
+                    galleryTemplate4: { ...data.galleryTemplate4, imageUrl, id: id ?? data.galleryTemplate4?.id },
+                  };
+                  if (id) delete updated.customGallery4;
+                  else updated.customGallery4 = imageUrl;
+                  if (onUpdate) onUpdate(updated);
                 }}
               />
             </div>
@@ -880,7 +912,8 @@ export default function WhyBuyPro1({
           <h3 className="text-primary font-bold text-xl mb-4">
             Featured Reviews Title
           </h3>
-          <EditorInput
+
+          {/* <EditorInput
             bold
             label="Section Title"
             value={data.testimonialTitle}
@@ -888,7 +921,7 @@ export default function WhyBuyPro1({
             errorMsg={errors?.testimonialTitle}
             maxLength={rules?.testimonialTitle?.max}
             onChange={(e) => updateField("testimonialTitle", e.target.value)}
-          />
+          /> */}
 
           <p className="text-third text-sm mb-4 mt-2">
             Select which customer reviews to feature on your storefront.
@@ -908,11 +941,10 @@ export default function WhyBuyPro1({
                 <div
                   key={review.id}
                   onClick={() => toggleReviewSelection(review.id)}
-                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
-                    isSelected
-                      ? "border-fourth bg-fourth/10 shadow-md"
-                      : "border-third/20 bg-primary/5 hover:border-third/40"
-                  }`}
+                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${isSelected
+                    ? "border-fourth bg-fourth/10 shadow-md"
+                    : "border-third/20 bg-primary/5 hover:border-third/40"
+                    }`}
                 >
                   <div
                     className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? "border-fourth bg-fourth" : "border-third/40"}`}
@@ -981,15 +1013,14 @@ export default function WhyBuyPro1({
             <div className="grid grid-cols-2 gap-3 mt-8 md:hidden">
               {[data.whyBuyHeroTemplate1, data.whyBuyHeroTemplate2].map(
                 (img, i) => (
-                  <div
-                    key={i}
-                    className="w-full h-36 rounded-xl overflow-hidden"
-                  >
-                    <img
-                      src={img?.imageUrl}
-                      className="w-full h-full object-cover"
-                      alt={`car-${i}`}
-                    />
+                  <div key={i} className="w-full h-36 rounded-xl overflow-hidden">
+                    {img?.imageUrl ? (
+                      <img src={img.imageUrl} className="w-full h-full object-cover" alt={`car-${i}`} />
+                    ) : (
+                      <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                        <span className="text-third/40 text-xs">Image {i + 1}</span>
+                      </div>
+                    )}
                   </div>
                 ),
               )}
@@ -1000,24 +1031,33 @@ export default function WhyBuyPro1({
           <div className="relative hidden md:block h-[500px]">
             {/* center main */}
             <div className="absolute top-[10%] left-[20%] w-[55%] h-[60%] rounded-2xl overflow-hidden shadow-xl z-10">
-              <img
-                src={data.whyBuyHeroTemplate1?.imageUrl}
-                className="w-full h-full object-cover"
-              />
+              {data.whyBuyHeroTemplate1?.imageUrl ? (
+                <img src={data.whyBuyHeroTemplate1.imageUrl} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-xs">Image 1</span>
+                </div>
+              )}
             </div>
             {/* tilted right */}
             <div className="absolute top-[5%] right-[0%] w-[38%] h-[42%] rounded-2xl overflow-hidden rotate-6 opacity-90">
-              <img
-                src={data.whyBuyHeroTemplate2?.imageUrl}
-                className="w-full h-full object-cover"
-              />
+              {data.whyBuyHeroTemplate2?.imageUrl ? (
+                <img src={data.whyBuyHeroTemplate2.imageUrl} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-xs">Image 2</span>
+                </div>
+              )}
             </div>
             {/* bottom left */}
             <div className="absolute bottom-[0%] left-[10%] w-[40%] h-[35%] rounded-2xl overflow-hidden rotate-[4deg] opacity-90">
-              <img
-                src={data.whyBuyHeroTemplate3?.imageUrl}
-                className="w-full h-full object-cover"
-              />
+              {data.whyBuyHeroTemplate3?.imageUrl ? (
+                <img src={data.whyBuyHeroTemplate3.imageUrl} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-xs">Image 3</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1044,23 +1084,32 @@ export default function WhyBuyPro1({
           <div className="grid grid-cols-2 gap-4">
             {/* big image */}
             <div className="col-span-2 h-60 overflow-hidden rounded-xl border border-secondary/10">
-              <img
-                src={data.storyTemplate1?.imageUrl}
-                className="w-full h-full object-cover"
-              />
+              {data.storyTemplate1?.imageUrl ? (
+                <img src={data.storyTemplate1.imageUrl} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-secondary/10 border-2 border-dashed border-secondary/20 flex items-center justify-center">
+                  <span className="text-secondary/30 text-sm">Story image 1</span>
+                </div>
+              )}
             </div>
             {/* small images */}
             <div className="h-40 overflow-hidden rounded-xl border border-secondary/10">
-              <img
-                src={data.storyTemplate2?.imageUrl}
-                className="w-full h-full object-cover"
-              />
+              {data.storyTemplate2?.imageUrl ? (
+                <img src={data.storyTemplate2.imageUrl} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-secondary/10 border-2 border-dashed border-secondary/20 flex items-center justify-center">
+                  <span className="text-secondary/30 text-sm">Story image 2</span>
+                </div>
+              )}
             </div>
             <div className="h-40 overflow-hidden rounded-xl border border-secondary/10">
-              <img
-                src={data.storyTemplate3?.imageUrl}
-                className="w-full h-full object-cover"
-              />
+              {data.storyTemplate3?.imageUrl ? (
+                <img src={data.storyTemplate3.imageUrl} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-secondary/10 border-2 border-dashed border-secondary/20 flex items-center justify-center">
+                  <span className="text-secondary/30 text-sm">Story image 3</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1103,11 +1152,13 @@ export default function WhyBuyPro1({
                     key={i}
                     className="min-w-[180px] h-[220px] overflow-hidden rounded-lg border border-third/10 shrink-0"
                   >
-                    <img
-                      src={img}
-                      alt="selection"
-                      className="w-full h-full object-cover"
-                    />
+                    {img ? (
+                      <img src={img} alt="selection" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                        <span className="text-third/40 text-xs">Image</span>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -1146,7 +1197,7 @@ export default function WhyBuyPro1({
                     <div className="flex items-center justify-between">
                       <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center border border-primary/20 rounded-full">
                         {typeof step.icon === "string" &&
-                        step.icon.startsWith("<svg") ? (
+                          step.icon.startsWith("<svg") ? (
                           <div
                             className="text-primary [&>svg]:w-4 [&>svg]:h-4 sm:[&>svg]:w-[18px] sm:[&>svg]:h-[18px]"
                             dangerouslySetInnerHTML={{ __html: step.icon }}
@@ -1213,10 +1264,16 @@ export default function WhyBuyPro1({
           <div className="relative h-[400px] hidden md:block">
             {/* main image */}
             <div className="absolute inset-0 rounded-2xl overflow-hidden border border-third/10 shadow-sm">
-              <img
-                src={data.inspectionTemplate1?.imageUrl}
-                className="w-full h-full object-cover transition duration-500 hover:scale-105"
-              />
+              {data.inspectionTemplate1?.imageUrl ? (
+                <img
+                  src={data.inspectionTemplate1.imageUrl}
+                  className="w-full h-full object-cover transition duration-500 hover:scale-105"
+                />
+              ) : (
+                <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-sm">Inspection image not set</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1227,11 +1284,17 @@ export default function WhyBuyPro1({
         {/* ── BACKGROUND ───────────────── */}
         <div className="absolute inset-0">
           {/* image */}
-          <img
-            src={data.customerCommitmentTemplate1?.imageUrl}
-            className="w-full h-full object-cover scale-105"
-            alt="background"
-          />
+          {data.customerCommitmentTemplate1?.imageUrl ? (
+            <img
+              src={data.customerCommitmentTemplate1.imageUrl}
+              className="w-full h-full object-cover scale-105"
+              alt="background"
+            />
+          ) : (
+            <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+              <span className="text-third/40 text-sm">Background image not set</span>
+            </div>
+          )}
           {/* dark overlay */}
           <div className="absolute inset-0 " />
           {/* left fade */}
@@ -1281,37 +1344,45 @@ export default function WhyBuyPro1({
           <div className="flex flex-col md:grid md:grid-cols-12 md:grid-rows-2 gap-3 h-auto md:h-[600px]">
             {/* Image 1: The Tall Vertical Anchor (Left) */}
             <div className="md:col-span-3 md:row-span-2 group relative overflow-hidden rounded-2xl border border-third/10">
-              <img
-                src={data.galleryTemplate1?.imageUrl}
-                alt="Showroom Vertical"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
+              {(data.customGallery1 || data.galleryTemplate1?.imageUrl) ? (
+                <img src={data.customGallery1 || data.galleryTemplate1.imageUrl} alt="Showroom Vertical" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              ) : (
+                <div className="w-full h-full min-h-[200px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-xs">Gallery 1</span>
+                </div>
+              )}
               <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
             </div>
             {/* Image 2: The Main Landscape Feature (Top Right) */}
             <div className="md:col-span-9 md:row-span-1 group relative overflow-hidden rounded-2xl border border-third/10">
-              <img
-                src={data.galleryTemplate2?.imageUrl}
-                alt="Main Showroom"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
+              {(data.customGallery2 || data.galleryTemplate2?.imageUrl) ? (
+                <img src={data.customGallery2 || data.galleryTemplate2.imageUrl} alt="Main Showroom" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              ) : (
+                <div className="w-full h-full min-h-[200px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-xs">Gallery 2</span>
+                </div>
+              )}
               <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
             </div>
             {/* Image 3: Detail Shot (Bottom Middle) */}
             <div className="md:col-span-5 md:row-span-1 group relative overflow-hidden rounded-2xl border border-third/10">
-              <img
-                src={data.galleryTemplate3?.imageUrl}
-                alt="Team Detail"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
+              {(data.customGallery3 || data.galleryTemplate3?.imageUrl) ? (
+                <img src={data.customGallery3 || data.galleryTemplate3.imageUrl} alt="Team Detail" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              ) : (
+                <div className="w-full h-full min-h-[200px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-xs">Gallery 3</span>
+                </div>
+              )}
             </div>
             {/* Image 4: The Wide End Cap (Bottom Right) */}
             <div className="md:col-span-4 md:row-span-1 group relative overflow-hidden rounded-2xl border border-third/10">
-              <img
-                src={data.galleryTemplate4?.imageUrl}
-                alt="Interior View"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
+              {(data.customGallery4 || data.galleryTemplate4?.imageUrl) ? (
+                <img src={data.customGallery4 || data.galleryTemplate4.imageUrl} alt="Interior View" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              ) : (
+                <div className="w-full h-full min-h-[200px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-xs">Gallery 4</span>
+                </div>
+              )}
               <div className="absolute inset-0 bg-fourth/10 group-hover:bg-transparent transition-colors duration-500" />
             </div>
           </div>
@@ -1319,61 +1390,66 @@ export default function WhyBuyPro1({
       </section>
 
       {/* Testinomal section */}
-      <section className="w-full py-12 bg-primary px-4">
-        <div className=" container max-w-7xl mx-3 px-4 sm:px-6 flex flex-col gap-12">
-          {/* HEADER */}
-          <div className="flex flex-col gap-4 max-w-2xl">
-            <p className="text-sm tracking-[0.35em] uppercase text-secondary/70 font-semibold font-[Montserrat]">
-              Real Buyers
-            </p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1] text-secondary font-[Montserrat]">
-              {data.testimonialTitle}
-            </h2>
-          </div>
+      {data.testimonials && data.testimonials.length > 0 && (
+        <section className="w-full py-12 bg-primary px-4">
 
-          {/* TESTIMONIALS */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {(data.featuredReviews || data.testimonials || []).map((t, i) => {
-              const reviewText = t.reviewText || t.review;
-              const reviewerName = t.reviewerName || t.name;
-              const rating = t.rating || 5;
 
-              return (
-                <div
-                  key={i}
-                  className="p-6 md:p-7 rounded-xl border border-secondary/15 bg-primary flex flex-col gap-4 hover:border-secondary/30 transition-all duration-300"
-                >
-                  {/* Stars */}
-                  <div className="flex gap-1">
-                    {[...Array(5)].map((_, idx) => (
-                      <Star
-                        key={idx}
-                        size={15}
-                        className={
-                          idx < rating
-                            ? "text-fourth fill-fourth"
-                            : "text-fourth"
-                        }
-                      />
-                    ))}
-                  </div>
+          <div className=" container max-w-7xl mx-3 px-4 sm:px-6 flex flex-col gap-12">
+            {/* HEADER */}
+            <div className="flex flex-col gap-4 max-w-2xl">
+              <p className="text-sm tracking-[0.35em] uppercase text-secondary/70 font-semibold font-[Montserrat]">
+                Real Buyers
+              </p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1] text-secondary font-[Montserrat]">
+                What Our Customer Say
+              </h2>
+            </div>
 
-                  {/* Review */}
+            {/* TESTIMONIALS */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {(data.featuredReviews || data.testimonials || []).map((t, i) => {
+                const reviewText = t.reviewText || t.review;
+                const reviewerName = t.reviewerName || t.name;
+                const rating = t.rating || 5;
+
+                return (
                   <div
-                    className="text-secondary/80 font-[Poppins] leading-relaxed text-[15px]"
-                    dangerouslySetInnerHTML={{ __html: reviewText }}
-                  />
+                    key={i}
+                    className="p-6 md:p-7 rounded-xl border border-secondary/15 bg-primary flex flex-col gap-4 hover:border-secondary/30 transition-all duration-300"
+                  >
+                    {/* Stars */}
+                    <div className="flex gap-1">
+                      {[...Array(5)].map((_, idx) => (
+                        <Star
+                          key={idx}
+                          size={15}
+                          className={
+                            idx < rating
+                              ? "text-fourth fill-fourth"
+                              : "text-fourth"
+                          }
+                        />
+                      ))}
+                    </div>
 
-                  {/* Name */}
-                  <h4 className="text-secondary font-[Montserrat] font-semibold text-sm tracking-wide">
-                    {reviewerName}
-                  </h4>
-                </div>
-              );
-            })}
+                    {/* Review */}
+                    <div
+                      className="text-secondary/80 font-[Poppins] leading-relaxed text-[15px]"
+                      dangerouslySetInnerHTML={{ __html: reviewText }}
+                    />
+
+                    {/* Name */}
+                    <h4 className="text-secondary font-[Montserrat] font-semibold text-sm tracking-wide">
+                      {reviewerName}
+                    </h4>
+                  </div>
+                );
+              })}
+
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }
