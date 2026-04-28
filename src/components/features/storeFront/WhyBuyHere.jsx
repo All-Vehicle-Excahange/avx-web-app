@@ -60,13 +60,35 @@ export default function WhyBuyHere({ storeData = null }) {
 
       const mappedData = mapApiToTemplateData(apiData);
 
+      // Build empty shell from schema shape — no dummy content
+      const getEmptyData = (defaultData) => {
+        const empty = {};
+        Object.entries(defaultData).forEach(([key, value]) => {
+          if (Array.isArray(value)) {
+            empty[key] = value.map((item) => {
+              if (typeof item === "string") return "";
+              const emptyItem = {};
+              Object.keys(item).forEach((k) => (emptyItem[k] = ""));
+              return emptyItem;
+            });
+          } else if (value !== null && typeof value === "object") {
+            empty[key] = {};
+          } else {
+            empty[key] = "";
+          }
+        });
+        return empty;
+      };
+
       const hydratedSections = matchedTheme.schema
         .filter((section) => section.type.includes("why_buy"))
         .map((section) => ({
           ...section,
           data: {
-            ...section.data,
-            ...mappedData,
+            ...getEmptyData(section.data), // empty shell — no dummy images/text
+            ...Object.fromEntries(
+              Object.entries(mappedData).filter(([, v]) => v !== undefined && v !== null),
+            ),
           },
         }));
 
