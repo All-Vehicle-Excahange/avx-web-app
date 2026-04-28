@@ -1395,7 +1395,7 @@ export default function WhyBuyPro2({
       ═══════════════════════════════════════ */}
       <section className="py-12 px-2 lg:px-4">
         <div className="container">
-          <div className="flex flex-col gap-3 mb-10">
+          <div className="flex flex-col gap-3 mb-14">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Process
             </p>
@@ -1403,59 +1403,54 @@ export default function WhyBuyPro2({
               {data.processTitle}
             </h2>
             <div
-              className="text-third/60 text-[15px] max-w-md"
+              className="text-third/60 text-[15px] max-w-lg leading-[1.8]"
               dangerouslySetInnerHTML={{ __html: data.processDescription }}
             />
           </div>
 
-          <div className="relative">
-            {/* timeline line */}
-            <div className="hidden lg:block absolute top-8 left-0 right-0 h-px bg-third/10" />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-              {data.processSteps.map((step, i) => {
-                return (
-                  <div key={i} className="relative flex flex-col gap-4">
-                    <div className="w-full h-[140px] rounded-xl overflow-hidden">
-                      {processImages[i % Math.max(processImages.length, 1)] ? (
-                        <img src={processImages[i % processImages.length]} alt={step.title} className="w-full h-full object-cover" loading="lazy" />
-                      ) : (
-                        <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
-                          <span className="text-third/40 text-xs">Image</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="w-10 h-10 rounded-full border border-third/20 flex items-center justify-center overflow-hidden">
-                        {typeof step.icon === "string" &&
-                          step.icon.startsWith("<svg") ? (
-                          <div
-                            className="text-primary [&>svg]:w-5 [&>svg]:h-5 transition-colors duration-300"
-                            dangerouslySetInnerHTML={{ __html: step.icon }}
-                          />
-                        ) : (
-                          <div className="w-5 h-5 bg-third/20 rounded flex items-center justify-center text-[10px] text-third">
-                            Icon
-                          </div>
-                        )}
-                      </div>
-                      <span className="text-[11px] tracking-[0.2em] text-third/40 font-semibold">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8">
+            {data.processSteps.map((step, i) => (
+              <div
+                key={i}
+                className={`group relative flex flex-col gap-5 ${i % 2 === 1 ? "lg:mt-12" : ""}`}
+              >
+                {/* icon */}
+                <div className="relative z-10 flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl border border-third/12 flex items-center justify-center group-hover:border-fourth/40 transition-all duration-300">
+                    {typeof step.icon === "string" &&
+                      step.icon.startsWith("<svg") ? (
+                      <div
+                        className="text-primary [&>svg]:w-5 [&>svg]:h-5 group-hover:text-fourth transition-colors duration-300"
+                        dangerouslySetInnerHTML={{ __html: step.icon }}
+                      />
+                    ) : (
+                      <span className="text-fourth/70 text-sm font-bold font-[Montserrat]">
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                    </div>
-                    <div>
-                      <p className="font-semibold text-[14px] text-primary mb-1">
-                        {step.title}
-                      </p>
-                      <div
-                        className="text-[13px] text-third/65 leading-[1.7]"
-                        dangerouslySetInnerHTML={{ __html: step.description }}
-                      />
-                    </div>
+                    )}
                   </div>
-                );
-              })}
-            </div>
+                  {/* connector dot + line */}
+                  <div className="hidden lg:flex items-center flex-1">
+                    <div className="w-2 h-2 rounded-full bg-fourth/50" />
+                    {i < data.processSteps.length - 1 && (
+                      <div className="flex-1 border-t border-dashed border-third/15" />
+                    )}
+                  </div>
+                </div>
+
+                {/* content */}
+                <div className="relative z-10 pl-1">
+                  <p className="font-semibold text-[16px] text-primary mb-2 font-[Montserrat] leading-snug">
+                    {step.title}
+                  </p>
+                  <div className="w-6 h-0.5 bg-fourth/40 mb-3 group-hover:w-10 transition-all duration-300" />
+                  <div
+                    className="text-[13px] text-third/55 leading-[1.85] font-[Poppins]"
+                    dangerouslySetInnerHTML={{ __html: step.description }}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

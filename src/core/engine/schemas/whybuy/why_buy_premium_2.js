@@ -6,7 +6,11 @@ export const WHY_BUY_PREMIUM_2 = [
       /* ───────── HERO ───────── */
       whyBuyHeroTitle: "Why Choose Adarsh Auto Consultants",
       whyBuyHeroDescription: `<p>Buyers trust Adarsh Auto Consultants for transparent communication, reliable vehicle options, and a smooth buying experience.</p>`,
-      whyBuyHeroTemplate1: { id: 1, imageUrl: "/store-front-template2.mp4" },
+      whyBuyHeroTemplate1: {
+        id: 1,
+        imageUrl:
+          "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&q=80",
+      },
       whyBuyHeroTemplate2: {
         id: 2,
         imageUrl:

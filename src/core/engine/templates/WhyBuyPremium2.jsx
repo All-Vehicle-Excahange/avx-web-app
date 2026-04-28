@@ -495,38 +495,56 @@ export default function WhyBuyPremium2({
             <div className="space-y-4">
               <p className="text-sm font-semibold text-primary">Story Images</p>
               <div className="grid grid-cols-2 gap-4">
-                {[1, 2, 3, 4].map((n) => (
-                  <div
-                    key={n}
-                    className={`h-40 relative ${n === 1 ? "col-span-2" : ""}`}
-                  >
-                    <ImageUploader
-                      label={`Image ${n}`}
-                      src={
-                        data[`customStory${n}`] ||
-                        data[`customStoryUrl${n}`] ||
-                        data[`storyTemplate${n}`]?.imageUrl
+                <div className="h-40 relative col-span-2">
+                  <ImageUploader
+                    label="Image 1"
+                    src={
+                      data[`customStory1`] ||
+                      data[`customStoryUrl1`] ||
+                      data[`storyTemplate1`]?.imageUrl
+                    }
+                    fieldKey="storyImg1"
+                    imageType="CONSULTANT_STORY"
+                    error={errors?.[`storyTemplate1`]}
+                    errorMsg={errors?.[`storyTemplate1`]}
+                    onChange={({ imageUrl, id }) => {
+                      const updatedData = { ...data };
+                      if (id) {
+                        updatedData[`storyTemplate1`] = { imageUrl, id };
+                        delete updatedData[`customStory1`];
+                      } else {
+                        updatedData[`customStory1`] = imageUrl;
+                        delete updatedData[`storyTemplate1`];
                       }
-                      fieldKey={`storyImg${n}`}
-                      imageType="CONSULTANT_STORY"
-                      error={errors?.[`storyTemplate${n}`]}
-                      errorMsg={errors?.[`storyTemplate${n}`]}
-                      onChange={({ imageUrl, id }) => {
-                        const updatedData = { ...data };
-                        if (id) {
-                          // Template selected
-                          updatedData[`storyTemplate${n}`] = { imageUrl, id };
-                          delete updatedData[`customStory${n}`];
-                        } else {
-                          // Custom image uploaded
-                          updatedData[`customStory${n}`] = imageUrl;
-                          delete updatedData[`storyTemplate${n}`];
-                        }
-                        onUpdate(updatedData);
-                      }}
-                    />
-                  </div>
-                ))}
+                      onUpdate(updatedData);
+                    }}
+                  />
+                </div>
+                <div className="h-40 relative col-span-2">
+                  <ImageUploader
+                    label="Image 2"
+                    src={
+                      data[`customStory2`] ||
+                      data[`customStoryUrl2`] ||
+                      data[`storyTemplate2`]?.imageUrl
+                    }
+                    fieldKey="storyImg2"
+                    imageType="CONSULTANT_STORY"
+                    error={errors?.[`storyTemplate2`]}
+                    errorMsg={errors?.[`storyTemplate2`]}
+                    onChange={({ imageUrl, id }) => {
+                      const updatedData = { ...data };
+                      if (id) {
+                        updatedData[`storyTemplate2`] = { imageUrl, id };
+                        delete updatedData[`customStory2`];
+                      } else {
+                        updatedData[`customStory2`] = imageUrl;
+                        delete updatedData[`storyTemplate2`];
+                      }
+                      onUpdate(updatedData);
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>

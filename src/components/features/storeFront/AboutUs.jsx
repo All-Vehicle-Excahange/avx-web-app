@@ -21,11 +21,18 @@ function mapApiToTemplateData(api) {
     // Hero
     headline: api.heroTitle, // Basic1
     heroTitle: api.heroTitle, // Premium3
+    heroDescription: api.heroDescription, // Basic1
     subHeadline: api.aboutUsDescription, // Basic1
     heroDesc: api.aboutUsDescription, // Premium3
     heroImageUrl: images.hero1,
     heroTemplate1: { imageUrl: images.hero1 },
     heroTemplate2: { imageUrl: images.hero2 },
+    // Pro2 uses aboutHeroTemplate keys
+    aboutHeroTitle: api.heroTitle,
+    aboutHeroDescription: api.heroDescription,
+    aboutHeroTemplate1: api.heroImageTemplate1 || { imageUrl: images.hero1 },
+    aboutHeroTemplate2: api.heroImageTemplate2 || { imageUrl: images.hero2 },
+    aboutHeroTemplate3: api.heroImageTemplate3 || {},
 
     // Story Images (Premium3 gallery) — only include images that exist
     storyImages: [
@@ -52,6 +59,10 @@ function mapApiToTemplateData(api) {
     missionImageUrl: images.mission,
     missionImage: images.mission, // Premium3
     missionTemplate1: { imageUrl: images.mission },
+    // Pro2 uses aboutMissionTemplate keys
+    aboutMissionTitle: api.missionTitle,
+    aboutMissionDescription: api.missionDescription,
+    aboutMissionTemplate1: api.missionTemplate1 || { imageUrl: images.mission },
 
     // Vision
     visionTitle: api.visionTitle,
@@ -59,12 +70,20 @@ function mapApiToTemplateData(api) {
     visionDesc: api.visionDescription, // Premium3
     visionImage: images.vision || "", // Premium3
     visionTemplate1: { imageUrl: images.vision },
+    // Pro2 uses aboutVisionTemplate keys
+    aboutVisionTitle: api.visionTitle,
+    aboutVisionDescription: api.visionDescription,
+    aboutVisionTemplate1: api.visionTemplate1 || { imageUrl: images.vision },
 
     // Services
     servicesTitle: api.serviceTitle,
     servicesSubtitle: api.serviceDescription, // Basic1
     servicesDesc: api.serviceDescription, // Premium3
     services: api.services,
+    // Pro2 uses aboutServices keys
+    aboutServicesTitle: api.serviceTitle,
+    aboutServicesDescription: api.serviceDescription,
+    aboutStatsDescription: api.aboutUsDescription,
   };
 }
 

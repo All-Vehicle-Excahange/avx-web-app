@@ -138,21 +138,21 @@ export default function WhyBuyPro3({
     // Map backend image objects (unprefixed) → UI image keys (prefixed)
     // storyTemplate1 → whyBuyStoryTemplate1, etc.
     for (let i = 1; i <= 5; i++) {
-      if (!merged[`whyBuyStoryTemplate${i}`] && rawData?.[`storyTemplate${i}`]?.imageUrl) {
+      if (!merged[`whyBuyStoryTemplate${i}`]?.imageUrl && rawData?.[`storyTemplate${i}`]?.imageUrl) {
         merged[`whyBuyStoryTemplate${i}`] = rawData[`storyTemplate${i}`];
       }
-      if (!merged[`whyBuyVehicleSelectionTemplate${i}`] && rawData?.[`vehicleSelectionTemplate${i}`]?.imageUrl) {
+      if (!merged[`whyBuyVehicleSelectionTemplate${i}`]?.imageUrl && rawData?.[`vehicleSelectionTemplate${i}`]?.imageUrl) {
         merged[`whyBuyVehicleSelectionTemplate${i}`] = rawData[`vehicleSelectionTemplate${i}`];
       }
-      if (!merged[`whyBuyGalleryTemplate${i}`] && rawData?.[`galleryTemplate${i}`]?.imageUrl) {
+      if (!merged[`whyBuyGalleryTemplate${i}`]?.imageUrl && rawData?.[`galleryTemplate${i}`]?.imageUrl) {
         merged[`whyBuyGalleryTemplate${i}`] = rawData[`galleryTemplate${i}`];
       }
     }
     for (let i = 1; i <= 4; i++) {
-      if (!merged[`whyBuyProcessTemplate${i}`] && rawData?.[`processTemplate${i}`]?.imageUrl) {
+      if (!merged[`whyBuyProcessTemplate${i}`]?.imageUrl && rawData?.[`processTemplate${i}`]?.imageUrl) {
         merged[`whyBuyProcessTemplate${i}`] = rawData[`processTemplate${i}`];
       }
-      if (!merged[`whyBuyInspectionTemplate${i}`] && rawData?.[`inspectionTemplate${i}`]?.imageUrl) {
+      if (!merged[`whyBuyInspectionTemplate${i}`]?.imageUrl && rawData?.[`inspectionTemplate${i}`]?.imageUrl) {
         merged[`whyBuyInspectionTemplate${i}`] = rawData[`inspectionTemplate${i}`];
       }
     }
@@ -1112,7 +1112,7 @@ export default function WhyBuyPro3({
           <h3 className="text-primary font-bold text-xl mb-4">
             Customer Commitment Section
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-8">
             <div className="space-y-4">
               <EditorInput
                 bold
@@ -1412,112 +1412,73 @@ export default function WhyBuyPro3({
       <section className="relative py-12 px-2 lg:px-4">
         <div className="container">
           <div className="mx-auto">
-            <div className="flex flex-col gap-4 mb-8 max-w-lg">
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-3">
-                  <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                    Buying Process
-                  </p>
-                </div>
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.6fr] gap-12 lg:gap-20">
+              {/* LEFT — header */}
+              <div className="flex flex-col gap-5 lg:sticky lg:top-24 lg:self-start">
+                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                  Buying Process
+                </p>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                   {data.whyBuyProcessTitle}
                 </h2>
+                <div className="w-10 h-0.5 bg-fourth/50" />
+                <div
+                  className="text-third/55 text-base font-[Poppins] leading-relaxed max-w-sm"
+                  dangerouslySetInnerHTML={{
+                    __html: data.whyBuyProcessDescription,
+                  }}
+                />
               </div>
-              <div
-                className="text-third/55 text-base font-[Poppins] leading-relaxed max-w-xs"
-                dangerouslySetInnerHTML={{
-                  __html: data.whyBuyProcessDescription,
-                }}
-              />
-            </div>
-            <div className="border border-third/10 rounded-3xl shadow-2xl overflow-hidden">
-              <div className="relative w-full h-[280px] md:h-80">
-                {processImages.length > 0 ? processImages.map((src, i) => (
-                  <img
-                    key={i}
-                    src={src}
-                    alt={data.processSteps?.[i]?.title}
-                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-700
-                                            ${activeHovered === i ? "opacity-100 scale-100" : "opacity-0 scale-[1.02]"}`}
-                  />
-                )) : (
-                  <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
-                    <span className="text-third/40 text-sm">Process images not set</span>
-                  </div>
-                )}
-                <div className="absolute inset-0 bg-secondary/50 pointer-events-none" />
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  {data.processSteps?.map((step, i) => {
-                    const Icon = iconMap[step.icon] || Search;
-                    return (
-                      <div
-                        key={i}
-                        className={`absolute flex flex-col items-center gap-3 text-center px-8 max-w-sm transition-all duration-500
-                                                    ${activeHovered === i ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
-                      >
-                        <div className="flex items-center justify-center w-11 h-11 rounded-xl border border-third/50 bg-third/10">
-                          <Icon
-                            size={18}
-                            strokeWidth={1.5}
-                            className="text-third/90"
-                          />
+
+              {/* RIGHT — process steps */}
+              <div className="flex flex-col gap-0">
+                {data.processSteps?.map((step, i) => {
+                  const Icon = iconMap[step.icon] || Search;
+                  return (
+                    <div
+                      key={i}
+                      className="group relative grid grid-cols-[auto_1fr] gap-6 py-8 border-b border-third/8 last:border-b-0"
+                    >
+                      {/* left column: step line + icon */}
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl border border-third/12 flex items-center justify-center group-hover:border-fourth/40 group-hover:bg-fourth/[0.04] transition-all duration-300">
+                          {typeof step.icon === "string" &&
+                            step.icon.startsWith("<svg") ? (
+                            <div
+                              className="text-primary [&>svg]:w-5 [&>svg]:h-5 group-hover:text-fourth transition-colors duration-300"
+                              dangerouslySetInnerHTML={{ __html: step.icon }}
+                            />
+                          ) : (
+                            <Icon
+                              size={18}
+                              strokeWidth={1.5}
+                              className="text-primary/60 group-hover:text-fourth transition-colors duration-300"
+                            />
+                          )}
                         </div>
-                        <h3 className="text-primary text-xl md:text-2xl font-semibold font-[Montserrat] tracking-tighter leading-tight">
+                        {/* vertical connector */}
+                        {i < (data.processSteps?.length || 0) - 1 && (
+                          <div className="flex-1 w-px bg-third/10 group-hover:bg-fourth/20 transition-colors duration-300" />
+                        )}
+                      </div>
+
+                      {/* right column: content */}
+                      <div className="flex flex-col gap-2 pt-1">
+                        <div className="flex items-center gap-3">
+                          <span className="text-[10px] tracking-[0.3em] text-third/30 font-bold font-[Montserrat]">
+                            STEP {String(i + 1).padStart(2, "0")}
+                          </span>
+                          <div className="w-6 h-px bg-third/15 group-hover:w-10 group-hover:bg-fourth/40 transition-all duration-300" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-primary font-[Montserrat] leading-snug group-hover:translate-x-1 transition-transform duration-300">
                           {step.title}
                         </h3>
                         <div
-                          className="text-primary/55 text-sm font-[Poppins] leading-[1.8]"
+                          className="text-[13px] text-third/55 leading-[1.85] font-[Poppins] max-w-md"
                           dangerouslySetInnerHTML={{ __html: step.description }}
                         />
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 border-t border-third/10">
-                {data.processSteps?.map((step, i) => {
-                  const Icon = iconMap[step.icon] || Search;
-                  const isHovered = hovered === i;
-                  return (
-                    <button
-                      key={i}
-                      onMouseEnter={() => setHovered(i)}
-                      onMouseLeave={() => setHovered(null)}
-                      className={`group relative flex flex-col gap-2 px-5 py-5 text-left transition-all duration-400 cursor-pointer
-                                                ${isHovered ? "bg-third/5" : "hover:bg-third/5"}`}
-                    >
-                      <div
-                        className={`absolute top-0 left-0 right-0 h-0.5 transition-all duration-500
-                                                ${isHovered ? "bg-primary/60" : "bg-transparent"}`}
-                      />
-                      <div className="flex items-center justify-between">
-                        <div
-                          className={`flex items-center justify-center w-8 h-8 rounded-lg border transition-all duration-400
-                                                    ${
-                                                      isHovered
-                                                        ? "border-third/40 bg-third/10 text-third/80"
-                                                        : "border-third/15 text-third/35"
-                                                    }`}
-                        >
-                          <Icon size={14} strokeWidth={1.5} />
-                        </div>
-                        <span
-                          className={`text-[10px] font-bold font-[Montserrat] tabular-nums transition-colors duration-300
-                                                    ${isHovered ? "text-third/60" : "text-third/25"}`}
-                        >
-                          0{i + 1}
-                        </span>
-                      </div>
-                      <h3
-                        className={`text-xs font-semibold font-[Montserrat] leading-snug transition-colors duration-300
-                                                ${isHovered ? "text-primary" : "text-third/45"}`}
-                      >
-                        {step.title}
-                      </h3>
-                      {i < (data.processSteps?.length || 0) - 1 && (
-                        <div className="absolute top-4 bottom-4 right-0 w-px bg-third/10" />
-                      )}
-                    </button>
+                    </div>
                   );
                 })}
               </div>

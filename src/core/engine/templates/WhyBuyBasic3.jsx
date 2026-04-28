@@ -557,14 +557,14 @@ export default function WhyBuyBasic3({
         <div>
           <h3 className="text-white font-bold mb-4">Featured Reviews</h3>
 
-          <EditorInput
+          {/* <EditorInput
             label="Section Title"
             value={data.testimonialTitle}
             onChange={(e) => updateField("testimonialTitle", e.target.value)}
             maxLength={rules?.testimonialTitle?.max}
             error={!!errors?.testimonialTitle}
             errorMsg={errors?.testimonialTitle}
-          />
+          /> */}
 
           <p className="text-third text-sm mb-4 mt-2">
             Select which customer reviews to feature on your storefront.
@@ -887,18 +887,18 @@ export default function WhyBuyBasic3({
         </div>
       </section>
       {/* ===== Testimonials Section ===== */}
-      <section className="relative py-12">
-        <div className="mx-auto w-full">
-          <div className="flex flex-col items-center gap-10">
-            <div className="flex flex-col items-center gap-4 text-center">
-              <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                Feedback
-              </span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                {data.testimonialTitle}
-              </h2>
-            </div>
-            {testimonials.length > 0 && (
+      {testimonials && testimonials.length > 0 && (
+        <section className="relative py-12">
+          <div className="mx-auto w-full">
+            <div className="flex flex-col items-center gap-10">
+              <div className="flex flex-col items-center gap-4 text-center">
+                <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                  Feedback
+                </span>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                  {data.testimonialTitle}
+                </h2>
+              </div>
               <>
                 <div
                   className="w-full"
@@ -949,10 +949,10 @@ export default function WhyBuyBasic3({
                   </div>
                 )}
               </>
-            )}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

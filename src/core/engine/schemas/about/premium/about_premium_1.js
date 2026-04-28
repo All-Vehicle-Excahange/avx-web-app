@@ -8,7 +8,7 @@ export const ABOUT_PREMIUM_1 = [
       heroDescription: `<p>Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec.
      Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur.</p>`,
       heroImageTemplateId1: {
-        imageUrl: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=90",
+        imageUrl: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800&auto=format",
         id: 1,
       },
       heroImageTemplateId2: {

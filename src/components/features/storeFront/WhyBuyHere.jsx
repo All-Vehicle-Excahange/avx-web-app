@@ -6,12 +6,8 @@ import { getWhyBuyHereStoreFrontByUserName } from "@/services/user.service";
 import { useParams } from "next/navigation";
 
 function mapApiToTemplateData(api) {
-  return {
+  const mapped = {
     ...api,
-    // Hero
-    whyBuyHeroTemplate1: { imageUrl: api.customWhyBuyHeroUrl1 },
-    whyBuyHeroTemplate2: { imageUrl: api.customWhyBuyHeroUrl2 },
-    whyBuyHeroTemplate3: { imageUrl: api.customWhyBuyHeroUrl3 },
 
     // Process
     processSteps: api.processes?.map((p) => ({
@@ -20,11 +16,8 @@ function mapApiToTemplateData(api) {
       icon: p.icon,
     })),
 
-    // Inspection
+    // Inspection text
     inspectionText: api.inspectionDescription,
-    inspectionTemplate1: { imageUrl: api.customInspectionUrl1 },
-    inspectionTemplate2: { imageUrl: api.customInspectionUrl2 },
-    inspectionTemplate3: { imageUrl: api.customInspectionUrl3 },
 
     // Testimonials (Featured Reviews)
     testimonials: api.featuredReviews?.map((r) => ({
@@ -32,6 +25,18 @@ function mapApiToTemplateData(api) {
       review: r.reviewText,
     })),
   };
+
+  // Only override hero templates with custom URLs if they actually exist
+  if (api.customWhyBuyHeroUrl1) mapped.whyBuyHeroTemplate1 = { imageUrl: api.customWhyBuyHeroUrl1 };
+  if (api.customWhyBuyHeroUrl2) mapped.whyBuyHeroTemplate2 = { imageUrl: api.customWhyBuyHeroUrl2 };
+  if (api.customWhyBuyHeroUrl3) mapped.whyBuyHeroTemplate3 = { imageUrl: api.customWhyBuyHeroUrl3 };
+
+  // Only override inspection templates with custom URLs if they actually exist
+  if (api.customInspectionUrl1) mapped.inspectionTemplate1 = { imageUrl: api.customInspectionUrl1 };
+  if (api.customInspectionUrl2) mapped.inspectionTemplate2 = { imageUrl: api.customInspectionUrl2 };
+  if (api.customInspectionUrl3) mapped.inspectionTemplate3 = { imageUrl: api.customInspectionUrl3 };
+
+  return mapped;
 }
 
 export default function WhyBuyHere({ storeData = null }) {

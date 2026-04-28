@@ -131,6 +131,11 @@ function WhyBuyBasic1({
     }));
   }
 
+  // Map 'inspectionDescription' → 'inspectionText'
+  if (!data.inspectionText && rawData?.inspectionDescription) {
+    data.inspectionText = rawData.inspectionDescription;
+  }
+
   // Synchronize transformed draft data with the parent state once on load
   useEffect(() => {
     if (!rawData || !onUpdate) return;
@@ -562,7 +567,7 @@ function WhyBuyBasic1({
             Featured Reviews Title
           </h3>
 
-          <EditorInput
+          {/* <EditorInput
             bold
             label="Section Title"
             value={data.testimonialTitle}
@@ -570,7 +575,7 @@ function WhyBuyBasic1({
             maxLength={rules?.testimonialTitle?.max}
             error={!!errors?.testimonialTitle}
             errorMsg={errors?.testimonialTitle}
-          />
+          /> */}
 
           <p className="text-third text-sm mb-4 mt-2">
             Select which customer reviews to feature on your storefront.
@@ -840,62 +845,64 @@ function WhyBuyBasic1({
         </div>
       </section>
 
-      <section className="w-full py-12 bg-primary px-4">
-        <div className=" container max-w-7xl mx-3 px-4 sm:px-6 flex flex-col gap-12">
-          {/* HEADER */}
-          <div className="flex flex-col gap-4 max-w-2xl">
-            <p className="text-sm tracking-[0.35em] uppercase text-secondary/70 font-semibold font-[Montserrat]">
-              Real Buyers
-            </p>
+      {data.featuredReviews && data.featuredReviews.length > 0 && (
+        <section className="w-full py-12 bg-primary px-4">
+          <div className=" container max-w-7xl mx-3 px-4 sm:px-6 flex flex-col gap-12">
+            {/* HEADER */}
+            <div className="flex flex-col gap-4 max-w-2xl">
+              <p className="text-sm tracking-[0.35em] uppercase text-secondary/70 font-semibold font-[Montserrat]">
+                Real Buyers
+              </p>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1] text-secondary font-[Montserrat]">
-              {data.testimonialTitle}{" "}
-            </h2>
-          </div>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1] text-secondary font-[Montserrat]">
+                {data.testimonialTitle}{" "}
+              </h2>
+            </div>
 
-          {/* FEATURED REVIEWS */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {(data.featuredReviews || []).map((review, i) => (
-              <div
-                key={review.id || i}
-                className="p-6 md:p-7 rounded-xl border border-secondary/15 bg-primary flex flex-col gap-4 hover:border-secondary/30 transition-all duration-300"
-              >
-                {/* Stars */}
-                <div className="flex gap-1">
-                  {[...Array(5)].map((_, idx) => (
-                    <Star
-                      key={idx}
-                      size={15}
-                      className={
-                        idx < (review.rating || 0)
-                          ? "text-fourth fill-fourth"
-                          : "text-secondary/30"
-                      }
-                    />
-                  ))}
-                </div>
+            {/* FEATURED REVIEWS */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {data.featuredReviews.map((review, i) => (
+                <div
+                  key={review.id || i}
+                  className="p-6 md:p-7 rounded-xl border border-secondary/15 bg-primary flex flex-col gap-4 hover:border-secondary/30 transition-all duration-300"
+                >
+                  {/* Stars */}
+                  <div className="flex gap-1">
+                    {[...Array(5)].map((_, idx) => (
+                      <Star
+                        key={idx}
+                        size={15}
+                        className={
+                          idx < (review.rating || 0)
+                            ? "text-fourth fill-fourth"
+                            : "text-secondary/30"
+                        }
+                      />
+                    ))}
+                  </div>
 
-                {/* Review Title */}
-                {review.reviewTitle && (
-                  <h4 className="text-secondary font-[Montserrat] font-semibold text-sm">
-                    {review.reviewTitle}
+                  {/* Review Title */}
+                  {review.reviewTitle && (
+                    <h4 className="text-secondary font-[Montserrat] font-semibold text-sm">
+                      {review.reviewTitle}
+                    </h4>
+                  )}
+
+                  {/* Review Text */}
+                  <p className="text-secondary/80 font-[Poppins] leading-relaxed text-[15px]">
+                    {review.reviewText}
+                  </p>
+
+                  {/* Reviewer Name */}
+                  <h4 className="text-secondary font-[Montserrat] font-semibold text-sm tracking-wide">
+                    — {review.reviewerName}
                   </h4>
-                )}
-
-                {/* Review Text */}
-                <p className="text-secondary/80 font-[Poppins] leading-relaxed text-[15px]">
-                  {review.reviewText}
-                </p>
-
-                {/* Reviewer Name */}
-                <h4 className="text-secondary font-[Montserrat] font-semibold text-sm tracking-wide">
-                  — {review.reviewerName}
-                </h4>
-              </div>
-            ))}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

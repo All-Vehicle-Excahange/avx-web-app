@@ -119,8 +119,9 @@ export default function AboutPremium1({
 
   // Map backend image objects if UI fields are missing
   // API returns heroImageTemplate1, heroImageTemplate2, etc.
-  if (!data?.heroTemplate1 && data?.heroImageTemplate1) {
-    d.heroTemplate1 = data.heroImageTemplate1;
+  // Schema uses heroImageTemplateId1, heroImageTemplateId2
+  if (!data?.heroTemplate1 && (data?.heroImageTemplate1 || data?.heroImageTemplateId1)) {
+    d.heroTemplate1 = data.heroImageTemplate1 || data.heroImageTemplateId1;
   }
   if (!data?.missionTemplate1 && data?.missionTemplate1) {
     d.missionTemplate1 = data.missionTemplate1;
@@ -155,8 +156,8 @@ export default function AboutPremium1({
 
     // Sync image mappings
     // API returns heroImageTemplate1, not heroImageTemplateId1
-    if (!data.heroTemplate1 && data.heroImageTemplate1) {
-      updatedData.heroTemplate1 = data.heroImageTemplate1;
+    if (!data.heroTemplate1 && (data.heroImageTemplate1 || data.heroImageTemplateId1)) {
+      updatedData.heroTemplate1 = data.heroImageTemplate1 || data.heroImageTemplateId1;
       hasChanges = true;
     }
     if (!data.missionTemplate1 && data.missionTemplate1) {
@@ -592,15 +593,17 @@ export default function AboutPremium1({
           {/* RIGHT IMAGE */}
           <div className="relative">
             <div className="relative rounded-2xl overflow-hidden border border-primary/20">
-              <img
-                src={
-                  d.customHeroImage1 ||
-                  d.customHeroImageUrl1 ||
-                  d.heroImageTemplate1?.imageUrl
-                }
-                alt="Hero"
-                className="w-full h-[300px] sm:h-[400px] lg:h-[400px] object-cover"
-              />
+              {(d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl) ? (
+                <img
+                  src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl}
+                  alt="Hero"
+                  className="w-full h-[300px] sm:h-[400px] lg:h-[400px] object-cover"
+                />
+              ) : (
+                <div className="w-full h-[300px] sm:h-[400px] lg:h-[400px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-sm">Hero image not set</span>
+                </div>
+              )}
               <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent" />
             </div>
           </div>

@@ -111,45 +111,31 @@ export const normalizeWhyBuyData = (raw = {}, defaults = {}) => {
     data.whyBuyHeroDescription = raw.heroDescription;
 
   data.customWhyBuyHero1 =
+    raw.customWhyBuyHero1 ||
     raw.customWhyBuyHeroUrl1 ||
-    raw.customHeroImageUrl1 ||
-    raw.customWhyBuyHero1;
-  data.customWhyBuyHero2 = raw.customWhyBuyHeroUrl2 || raw.customWhyBuyHero2;
-  data.customWhyBuyHero3 = raw.customWhyBuyHeroUrl3 || raw.customWhyBuyHero3;
+    raw.customHeroImageUrl1;
+  data.customWhyBuyHero2 = raw.customWhyBuyHero2 || raw.customWhyBuyHeroUrl2;
+  data.customWhyBuyHero3 = raw.customWhyBuyHero3 || raw.customWhyBuyHeroUrl3;
 
   /* ================= STORY ================= */
   if (raw.aboutUsTitle && !raw.storyTitle) data.storyTitle = raw.aboutUsTitle;
   if (raw.aboutUsDescription && !raw.storyDescription)
     data.storyDescription = raw.aboutUsDescription;
 
-  data.customWhyBuyStory1 = raw.customStoryUrl1 || raw.customWhyBuyStory1;
-  data.customWhyBuyStory2 = raw.customStoryUrl2 || raw.customWhyBuyStory2;
-  data.customWhyBuyStory3 = raw.customStoryUrl3 || raw.customWhyBuyStory3;
+  data.customWhyBuyStory1 = raw.customWhyBuyStory1 || raw.customStoryUrl1;
+  data.customWhyBuyStory2 = raw.customWhyBuyStory2 || raw.customStoryUrl2;
+  data.customWhyBuyStory3 = raw.customWhyBuyStory3 || raw.customStoryUrl3;
 
-  // Map storyTemplate objects if they exist in API
-  if (raw.storyTemplate1) {
-    data.storyTemplate1 = raw.storyTemplate1;
-  }
-  if (raw.storyTemplate2) {
-    data.storyTemplate2 = raw.storyTemplate2;
-  }
-  if (raw.storyTemplate3) {
-    data.storyTemplate3 = raw.storyTemplate3;
-  }
+  // Map storyTemplate objects — already handled by the raw overlay above
+  // (explicit re-assignment removed to prevent overwriting user edits)
 
   /* ================= VEHICLE ================= */
   data.customWhyBuyVehicleSelection1 =
-    raw.customVehicleSelectionUrl1 || raw.customWhyBuyVehicleSelection1;
+    raw.customWhyBuyVehicleSelection1 || raw.customVehicleSelectionUrl1;
   data.customWhyBuyVehicleSelection2 =
-    raw.customVehicleSelectionUrl2 || raw.customWhyBuyVehicleSelection2;
+    raw.customWhyBuyVehicleSelection2 || raw.customVehicleSelectionUrl2;
 
-  // Map vehicleSelectionTemplate objects if they exist in API
-  if (raw.vehicleSelectionTemplate1) {
-    data.vehicleSelectionTemplate1 = raw.vehicleSelectionTemplate1;
-  }
-  if (raw.vehicleSelectionTemplate2) {
-    data.vehicleSelectionTemplate2 = raw.vehicleSelectionTemplate2;
-  }
+  // vehicleSelectionTemplate objects already handled by the raw overlay above
 
   /* ================= PROCESS ================= */
   if (raw.processes && Array.isArray(raw.processes) && !raw.processSteps?.length) {
@@ -168,83 +154,44 @@ export const normalizeWhyBuyData = (raw = {}, defaults = {}) => {
   }
 
   data.customWhyBuyInspection1 =
-    raw.customInspectionUrl1 || raw.customWhyBuyInspection1;
+    raw.customWhyBuyInspection1 || raw.customInspectionUrl1;
   data.customWhyBuyInspection2 =
-    raw.customInspectionUrl2 || raw.customWhyBuyInspection2;
+    raw.customWhyBuyInspection2 || raw.customInspectionUrl2;
   data.customWhyBuyInspection3 =
-    raw.customInspectionUrl3 || raw.customWhyBuyInspection3;
+    raw.customWhyBuyInspection3 || raw.customInspectionUrl3;
 
-  // Map inspectionTemplate objects if they exist in API
-  if (raw.inspectionTemplate1) {
-    data.inspectionTemplate1 = raw.inspectionTemplate1;
-  }
-  if (raw.inspectionTemplate2) {
-    data.inspectionTemplate2 = raw.inspectionTemplate2;
-  }
-  if (raw.inspectionTemplate3) {
-    data.inspectionTemplate3 = raw.inspectionTemplate3;
-  }
-  if (raw.inspectionTemplate4) {
-    data.inspectionTemplate4 = raw.inspectionTemplate4;
-  }
+  // Map inspectionTemplate objects — already handled by the raw overlay above
+  // (explicit re-assignment removed to prevent overwriting user edits)
 
   /* ================= COMMITMENT ================= */
   data.customWhyBuyCustomerCommitment1 =
-    raw.customCustomerCommitmentUrl1 || raw.customWhyBuyCustomerCommitment1;
+    raw.customWhyBuyCustomerCommitment1 || raw.customCustomerCommitmentUrl1;
   data.customWhyBuyCustomerCommitment2 =
-    raw.customCustomerCommitmentUrl2 || raw.customWhyBuyCustomerCommitment2;
+    raw.customWhyBuyCustomerCommitment2 || raw.customCustomerCommitmentUrl2;
   data.customWhyBuyCustomerCommitment3 =
-    raw.customCustomerCommitmentUrl3 || raw.customWhyBuyCustomerCommitment3;
+    raw.customWhyBuyCustomerCommitment3 || raw.customCustomerCommitmentUrl3;
   data.customWhyBuyCustomerCommitment4 =
-    raw.customCustomerCommitmentUrl4 || raw.customWhyBuyCustomerCommitment4;
+    raw.customWhyBuyCustomerCommitment4 || raw.customCustomerCommitmentUrl4;
   data.customWhyBuyCustomerCommitment5 =
-    raw.customCustomerCommitmentUrl5 || raw.customWhyBuyCustomerCommitment5;
+    raw.customWhyBuyCustomerCommitment5 || raw.customCustomerCommitmentUrl5;
 
-  // Map customerCommitmentTemplate objects if they exist in API
-  if (raw.customerCommitmentTemplate1) {
-    data.customerCommitmentTemplate1 = raw.customerCommitmentTemplate1;
-  }
-  if (raw.customerCommitmentTemplate2) {
-    data.customerCommitmentTemplate2 = raw.customerCommitmentTemplate2;
-  }
-  if (raw.customerCommitmentTemplate3) {
-    data.customerCommitmentTemplate3 = raw.customerCommitmentTemplate3;
-  }
-  if (raw.customerCommitmentTemplate4) {
-    data.customerCommitmentTemplate4 = raw.customerCommitmentTemplate4;
-  }
-  if (raw.customerCommitmentTemplate5) {
-    data.customerCommitmentTemplate5 = raw.customerCommitmentTemplate5;
-  }
+  // Map customerCommitmentTemplate objects — already handled by the raw overlay above
+  // (explicit re-assignment removed to prevent overwriting user edits)
 
   /* ================= GALLERY ================= */
   data.customGallery1 =
-    raw.customGalleryUrl1 || raw.customWhyBuyGallery1 || raw.customGallery1;
+    raw.customGallery1 || raw.customWhyBuyGallery1 || raw.customGalleryUrl1;
   data.customGallery2 =
-    raw.customGalleryUrl2 || raw.customWhyBuyGallery2 || raw.customGallery2;
+    raw.customGallery2 || raw.customWhyBuyGallery2 || raw.customGalleryUrl2;
   data.customGallery3 =
-    raw.customGalleryUrl3 || raw.customWhyBuyGallery3 || raw.customGallery3;
+    raw.customGallery3 || raw.customWhyBuyGallery3 || raw.customGalleryUrl3;
   data.customGallery4 =
-    raw.customGalleryUrl4 || raw.customWhyBuyGallery4 || raw.customGallery4;
+    raw.customGallery4 || raw.customWhyBuyGallery4 || raw.customGalleryUrl4;
   data.customGallery5 =
-    raw.customGalleryUrl5 || raw.customWhyBuyGallery5 || raw.customGallery5;
+    raw.customGallery5 || raw.customWhyBuyGallery5 || raw.customGalleryUrl5;
 
-  // Map galleryTemplate objects if they exist in API
-  if (raw.galleryTemplate1) {
-    data.galleryTemplate1 = raw.galleryTemplate1;
-  }
-  if (raw.galleryTemplate2) {
-    data.galleryTemplate2 = raw.galleryTemplate2;
-  }
-  if (raw.galleryTemplate3) {
-    data.galleryTemplate3 = raw.galleryTemplate3;
-  }
-  if (raw.galleryTemplate4) {
-    data.galleryTemplate4 = raw.galleryTemplate4;
-  }
-  if (raw.galleryTemplate5) {
-    data.galleryTemplate5 = raw.galleryTemplate5;
-  }
+  // Map galleryTemplate objects — already handled by the raw overlay above
+  // (explicit re-assignment removed to prevent overwriting user edits)
 
   return data;
 };

@@ -468,14 +468,14 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
               </h2>
             </div>
 
-            <div
+            {/* <div
             >
               <Divider />
               <p className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]">
                 The principles behind everything we build and every decision we
                 make.
               </p>
-            </div>
+            </div> */}
           </div>
 
           <div
