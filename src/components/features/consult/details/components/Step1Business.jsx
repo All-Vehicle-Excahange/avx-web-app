@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Plus, X, Check, Camera, Loader2 } from "lucide-react";

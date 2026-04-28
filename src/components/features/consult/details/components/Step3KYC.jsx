@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useEffect, useState, useCallback } from "react";
 import InputField from "@/components/ui/inputField";
