@@ -692,9 +692,10 @@ export default function WhyBuyHereBasic2({
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
               {data.processTitle} <span className="text-primary">Works</span>
             </h2>
-            <p className="text-third/60 text-[15px] font-[Poppins] leading-relaxed max-w-md">
-              {data.processDescription}
-            </p>
+            <div
+              className="text-third/60 text-[15px] font-[Poppins] leading-relaxed max-w-md"
+              dangerouslySetInnerHTML={{ __html: data.processDescription }}
+            />
           </div>
 
           <div
@@ -746,9 +747,10 @@ export default function WhyBuyHereBasic2({
             </div>
             <div>
               <Divider />
-              <p className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]">
-                {data.inspectionText}
-              </p>
+              <div
+                className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]"
+                dangerouslySetInnerHTML={{ __html: data.inspectionText }}
+              />
             </div>
           </div>
 

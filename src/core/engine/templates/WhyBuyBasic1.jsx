@@ -712,19 +712,10 @@ function WhyBuyBasic1({
           </h2>
 
           {/* ── DESCRIPTION ───────────────── */}
-          <div className="flex flex-col gap-4 border-l-2 border-primary/40 pl-5">
-            {data.vehicleSelectionDescription
-              .trim()
-              .split("\n\n")
-              .map((para, i) => (
-                <p
-                  key={i}
-                  className="text-third text-lg font-[Poppins] leading-relaxed"
-                >
-                  {para.trim()}
-                </p>
-              ))}
-          </div>
+          <div
+            className="flex flex-col gap-4 border-l-2 border-primary/40 pl-5 text-third text-lg font-[Poppins] leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: data.vehicleSelectionDescription }}
+          />
         </div>
       </section>
 

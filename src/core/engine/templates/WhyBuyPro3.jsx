@@ -1144,16 +1144,6 @@ export default function WhyBuyPro3({
           <h3 className="text-primary font-bold text-xl mb-4">
             Gallery Section
           </h3>
-          <EditorInput
-            bold
-            label="Gallery Title"
-            value={data.whyBuyGalleryTitle}
-            onChange={(e) => updateField("whyBuyGalleryTitle", e.target.value)}
-            maxLength={rules?.whyBuyGalleryTitle?.max}
-            error={!!errors?.whyBuyGalleryTitle}
-            errorMsg={errors?.whyBuyGalleryTitle}
-          />
-          <br />
           <div className="grid grid-cols-2 gap-4">
             <div className="h-40 relative">
               <ImageUploader
@@ -1642,7 +1632,7 @@ export default function WhyBuyPro3({
                   </p>
                 </div>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                  {data.whyBuyGalleryTitle}
+                  Our Showcase
                 </h2>
               </div>
               <Camera size={32} className="text-third/10 hidden md:block" />
