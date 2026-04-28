@@ -94,14 +94,36 @@ export default function AboutUs({ storeData = null }) {
       const matchedTheme =
         THEME_STORE.find((t) => t.id === apiData.themeId) || THEME_STORE[0];
 
-      // Map API fields to template field names, then merge with schema defaults as fallback
+      // Map API fields to template field names
       const mappedData = mapApiToTemplateData(apiData);
+
+      // Build empty shell from schema shape — no dummy content
+      const getEmptyData = (defaultData) => {
+        const empty = {};
+        Object.entries(defaultData).forEach(([key, value]) => {
+          if (Array.isArray(value)) {
+            empty[key] = value.map((item) => {
+              if (typeof item === "string") return "";
+              const emptyItem = {};
+              Object.keys(item).forEach((k) => (emptyItem[k] = ""));
+              return emptyItem;
+            });
+          } else if (value !== null && typeof value === "object") {
+            empty[key] = {};
+          } else {
+            empty[key] = "";
+          }
+        });
+        return empty;
+      };
 
       const hydratedSections = matchedTheme.schema.map((section) => ({
         ...section,
         data: {
-          ...section.data, // schema defaults as fallback for any unmapped fields
-          ...mappedData, // real API values with correct field names
+          ...getEmptyData(section.data), // empty shell — no dummy images/text
+          ...Object.fromEntries(
+            Object.entries(mappedData).filter(([, v]) => v !== undefined && v !== null),
+          ),
         },
       }));
 
