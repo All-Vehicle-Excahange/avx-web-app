@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useAuthStore } from "@/stores/useAuthStore";
 import PreferencesPopup from "../features/user/PreferencesPopup";
 import { getGlobalSearch, getUserProfileStrength } from "@/services/user.service";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useUIStore } from "@/stores/useUIStore";
 import MobileAppDownloadBanner from "../ui/MobileAppDownloadBanner";
 
@@ -21,7 +21,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
   const { user, isLoggedIn } = useAuthStore();
   const router = useRouter();
-
+  const pathname = usePathname();
   /* ================= SEARCH STATES ================= */
   const [searchQuery, setSearchQuery] = useState("");
   const [results, setResults] = useState([]);
@@ -247,7 +247,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                     );
                     if (storefrontMsg) {
                       return {
-                        label: storefrontMsg.text,
+                        label: "Create StoreFront",
                         href: "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Fstorefront",
                       };
                     }
@@ -258,7 +258,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                     );
                     if (inventoryMsg) {
                       return {
-                        label: inventoryMsg.text,
+                        label: "List Vehicles",
                         href: "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Finventory",
                       };
                     }
@@ -273,8 +273,12 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                       ].includes(m.type),
                     );
                     if (kycMsg) {
+                      let labelText = "Upload Documents";
+                      if (kycMsg.type === "COMPLETE_REGISTRATION") {
+                        labelText = "Complete Registration";
+                      }
                       return {
-                        label: kycMsg.text,
+                        label: labelText,
                         href: "/consult/subscription",
                       };
                     }
@@ -291,7 +295,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                     );
                     if (inventoryMsg) {
                       return {
-                        label: inventoryMsg.text,
+                        label: "List Vehicles",
                         href: "/user/details/myvehicle",
                       };
                     }
@@ -308,6 +312,10 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                 };
 
                 const cta = getCTA();
+
+                if (pathname?.includes("/dashboard") && cta.label === "Go to Dashboard") {
+                  return null;
+                }
 
                 return (
                   <Button

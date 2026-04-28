@@ -601,7 +601,7 @@ export default function WhyBuyPro2({
                     errorMsg={errors?.storyTemplate1}
                   />
                 </div>
-                <div className="h-40 relative">
+                <div className="h-40 relative col-span-2">
                   <ImageUploader
                     label="Image 2"
                     src={data.storyTemplate2?.imageUrl}
@@ -614,41 +614,6 @@ export default function WhyBuyPro2({
                         id: id ?? data.storyTemplate2?.id,
                       });
                     }}
-                  />
-                </div>
-
-                <div className="h-40 relative">
-                  <ImageUploader
-                    label="Image 3"
-                    src={data.storyTemplate3?.imageUrl}
-                    fieldKey="storyImg3"
-                    imageType="CONSULTANT_STORY"
-                    onChange={({ imageUrl, id }) => {
-                      updateField("storyTemplate3", {
-                        ...data.storyTemplate3,
-                        imageUrl,
-                        id: id ?? data.storyTemplate3?.id,
-                      });
-                    }}
-                    error={errors?.storyTemplate3}
-                    errorMsg={errors?.storyTemplate3}
-                  />
-                </div>
-                <div className="h-40 relative">
-                  <ImageUploader
-                    label="Image 4"
-                    src={data.storyTemplate4?.imageUrl}
-                    fieldKey="storyImg4"
-                    imageType="CONSULTANT_STORY"
-                    onChange={({ imageUrl, id }) => {
-                      updateField("storyTemplate4", {
-                        ...data.storyTemplate4,
-                        imageUrl,
-                        id: id ?? data.storyTemplate4?.id,
-                      });
-                    }}
-                    error={errors?.storyTemplate4}
-                    errorMsg={errors?.storyTemplate4}
                   />
                 </div>
               </div>
@@ -1124,16 +1089,6 @@ export default function WhyBuyPro2({
           <h3 className="text-primary font-bold text-xl mb-4">
             Gallery Section
           </h3>
-          <EditorInput
-            bold
-            label="Gallery Title"
-            value={data.galleryTitle}
-            onChange={(e) => updateField("galleryTitle", e.target.value)}
-            maxLength={rules?.galleryTitle?.max}
-            error={!!errors?.galleryTitle}
-            errorMsg={errors?.galleryTitle}
-          />
-          <br />
           <div className="grid grid-cols-2 gap-4">
             <div className="h-40 relative">
               <ImageUploader
@@ -1622,7 +1577,7 @@ export default function WhyBuyPro2({
               Gallery
             </p>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary">
-              {data.galleryTitle}
+              Our Showcase
             </h2>
           </div>
 

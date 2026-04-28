@@ -27,6 +27,7 @@ function stripHtml(html) {
 }
 
 export default function RichTextEditor({ label, value, onChange, onBlur, error, errorMsg, maxLength, minLength }) {
+  const [touched, setTouched] = React.useState(false);
   const plainLen = stripHtml(value).length;
 
   // Max logic
@@ -36,6 +37,9 @@ export default function RichTextEditor({ label, value, onChange, onBlur, error, 
 
   // Min logic
   const isBelowMin = minLength && plainLen > 0 && plainLen < minLength;
+
+  // Only show validation messages after user has focused the editor
+  const showMessages = touched;
 
   const editor = useEditor({
     extensions: [StarterKit, Underline],
@@ -50,9 +54,18 @@ export default function RichTextEditor({ label, value, onChange, onBlur, error, 
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
       const plain = stripHtml(html);
-      if (maxLength && plain.length > maxLength) return;
+      if (maxLength && plain.length > maxLength) {
+        // Delete excess characters from the end, preserving formatting
+        const excess = plain.length - maxLength;
+        const { doc } = editor.state;
+        const end = doc.content.size - 1; // -1 to stay inside the doc
+        editor.commands.deleteRange({ from: end - excess, to: end });
+        onChange(editor.getHTML());
+        return;
+      }
       onChange(html);
     },
+    onFocus: () => setTouched(true),
     onBlur: ({ editor }) => {
       if (onBlur) onBlur(editor.getHTML());
     },
@@ -63,7 +76,7 @@ export default function RichTextEditor({ label, value, onChange, onBlur, error, 
   return (
     <div className="flex flex-col gap-1 w-full">
       <div className={`border rounded bg-primary/5 overflow-hidden shadow-sm transition
-        ${error ? "border-red-500 focus-within:border-red-500" : "border-third/30 focus-within:border-primary"}
+        ${error ? "border-primary/30 focus-within:border-primary/60" : "border-third/30 focus-within:border-primary"}
       `}>
         {/* Toolbar */}
         <div className="border-b border-third/30 p-1 flex gap-1">
@@ -94,18 +107,18 @@ export default function RichTextEditor({ label, value, onChange, onBlur, error, 
       </div>
 
       <div className="flex items-center justify-between min-h-[16px]">
-        {/* Left: messages in priority order */}
-        {(error && errorMsg) ? (
+        {/* Left: messages in priority order — only after focus */}
+        {showMessages && (error && errorMsg) ? (
           <span className="text-[11px] text-red-500 font-medium ml-1">{errorMsg}</span>
-        ) : isAtMax ? (
+        ) : showMessages && isAtMax ? (
           <span className="text-[11px] text-red-400 font-medium ml-1">
             Maximum character limit reached
           </span>
-        ) : isBelowMin ? (
-          <span className="text-[11px] text-blue-400 font-medium ml-1">
+        ) : showMessages && isBelowMin ? (
+          <span className="text-[11px] text-fourth font-medium ml-1">
             Minimum {minLength} characters required
           </span>
-        ) : showMaxWarning ? (
+        ) : showMessages && showMaxWarning ? (
           <span className="text-[11px] text-yellow-400/80 font-medium ml-1">
             {charsLeft} character{charsLeft === 1 ? "" : "s"} left
           </span>
@@ -113,7 +126,7 @@ export default function RichTextEditor({ label, value, onChange, onBlur, error, 
           <span />
         )}
 
-        {/* Right: counter */}
+        {/* Right: counter — always visible if maxLength set */}
         {maxLength && (
           <span className={`text-[11px] font-medium mr-1 ${isAtMax ? "text-red-400" : "text-third/40"}`}>
             {plainLen}/{maxLength}

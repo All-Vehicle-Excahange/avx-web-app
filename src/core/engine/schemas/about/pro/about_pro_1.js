@@ -66,7 +66,7 @@ export const ABOUT_PRO_1 = [
       ],
     },
     rules: {
-      heroTitle: { min: 10, max: 100 },
+      heroTitle: { min: 10, max: 40 },
       heroDescription: { min: 50, max: 500 },
       missionTitle: { min: 10, max: 40 },
       missionDesc: { min: 50, max: 300 },
@@ -74,7 +74,7 @@ export const ABOUT_PRO_1 = [
       visionDesc: { min: 50, max: 300 },
       aboutUsDescription: { min: 50, max: 600 },
       servicesTitle: { min: 10, max: 50 },
-      servicesDesc: { min: 50, max: 1000 },
+      servicesDesc: { min: 50, max: 600 },
       heroTemplate1: { min: 5, max: 2000 },
       missionTemplate1: { min: 5, max: 2000 },
       visionTemplate1: { min: 5, max: 2000 },
@@ -85,11 +85,11 @@ export const ABOUT_PRO_1 = [
     arrayRules: {
       stats: {
         number: { min: 1, max: 3 },
-        label: { min: 5, max: 100 },
+        label: { min: 5, max: 25 },
       },
       services: {
-        title: { min: 10, max: 100 },
-        desc: { min: 50, max: 300 },
+        title: { min: 5, max: 30 },
+        desc: { min: 10, max: 60 },
       },
     },
   },

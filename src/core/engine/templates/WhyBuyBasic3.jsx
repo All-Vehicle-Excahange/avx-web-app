@@ -708,10 +708,8 @@ export default function WhyBuyBasic3({
                 </p>
               </div>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                {data.vehicleSelectionTitle.split("Vehicle Selection")[0]}
-                <span className="text-primary">
-                  {data.vehicleSelectionTitle}
-                </span>
+                {data.vehicleSelectionTitle}
+                
               </h2>
               <div
                 className="text-third/60 text-base md:text-lg font-[Poppins] leading-[1.9] max-w-2xl"
@@ -736,11 +734,11 @@ export default function WhyBuyBasic3({
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 <span className="text-primary">{data.processTitle}</span>
               </h2>
+              <div
+                className="text-third/55 text-base font-[Poppins] leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: data.processDescription }}
+              />
             </div>
-            <div
-              className="text-third/55 text-base font-[Poppins] leading-relaxed max-w-xs"
-              dangerouslySetInnerHTML={{ __html: data.processDescription }}
-            />
           </div>
           <div className="flex flex-col gap-2">
             {data.processSteps.map((step, i) => {
