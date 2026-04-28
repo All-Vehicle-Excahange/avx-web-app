@@ -136,6 +136,16 @@ export default function AboutPremium2({
 
   const d = (() => {
     const base = getEmptyData(DEFAULT_DATA);
+
+    // Always map schema's heroImageTemplateId1/2 → heroTemplate1/2 so preview works
+    // even on fresh/empty draft (schema defaults provide the images)
+    if (!base.heroTemplate1?.imageUrl && DEFAULT_DATA.heroImageTemplateId1?.imageUrl) {
+      base.heroTemplate1 = DEFAULT_DATA.heroImageTemplateId1;
+    }
+    if (!base.heroTemplate2?.imageUrl && DEFAULT_DATA.heroImageTemplateId2?.imageUrl) {
+      base.heroTemplate2 = DEFAULT_DATA.heroImageTemplateId2;
+    }
+
     if (!hasRealContent) return base;
 
     // Overlay API data
@@ -151,11 +161,12 @@ export default function AboutPremium2({
 
     // Map hero images — API returns heroImageTemplate1 (object), schema uses heroImageTemplateId1
     // Normalize both to heroTemplate1/heroTemplate2 for consistent use in editor + preview
-    if (!base.heroTemplate1?.imageUrl) {
-      base.heroTemplate1 = rawData?.heroImageTemplate1 || rawData?.heroTemplate1 || {};
+    // Only map if rawData doesn't already have heroTemplate1 set (user may have picked a new one)
+    if (!base.heroTemplate1?.imageUrl && !rawData?.heroTemplate1?.imageUrl) {
+      base.heroTemplate1 = rawData?.heroImageTemplate1 || base.heroImageTemplateId1 || {};
     }
-    if (!base.heroTemplate2?.imageUrl) {
-      base.heroTemplate2 = rawData?.heroImageTemplate2 || rawData?.heroTemplate2 || {};
+    if (!base.heroTemplate2?.imageUrl && !rawData?.heroTemplate2?.imageUrl) {
+      base.heroTemplate2 = rawData?.heroImageTemplate2 || base.heroImageTemplateId2 || {};
     }
 
     return base;
@@ -679,13 +690,13 @@ export default function AboutPremium2({
                 Mission & <span className="text-primary">Vision</span>
               </h2>
             </div>
-            <div className="max-w-md">
+            {/* <div className="max-w-md">
               <Divider />
               <p className="text-third/70 text-[15px] leading-[1.9] font-[Poppins] mt-4">
                 The principles behind everything we build and every decision we
                 make.
               </p>
-            </div>
+            </div> */}
           </div>
           {/* cards */}
           <div className="flex flex-col gap-16">

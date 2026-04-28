@@ -10,7 +10,7 @@ export const ABOUT_PREMIUM_2 = [
   `,
       heroImageTemplateId1: {
         id: 1,
-        imageUrl: "/store-front-template2.mp4",
+        imageUrl: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800&auto=format",
       },
       heroImageTemplateId2: {
         id: 2,

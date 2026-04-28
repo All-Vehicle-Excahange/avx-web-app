@@ -619,13 +619,13 @@ export default function AboutPro2({
                   Mission & <span className="text-fourth/80">Vision</span>
                 </h2>
               </div>
-              <div>
+              {/* <div>
                 <Divider />
                 <p className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]">
                   The principles behind everything we build and every decision
                   we make.
                 </p>
-              </div>
+              </div> */}
             </div>
             {/* alternating rows */}
             <div className="flex flex-col gap-5">
@@ -639,11 +639,11 @@ export default function AboutPro2({
                   >
                     {/* image side */}
                     {item.image && (
-                      <div className="relative overflow-hidden min-h-[260px]">
+                      <div className="relative overflow-hidden h-[320px] lg:h-auto">
                         <img
                           src={item.image}
                           alt={item.keyword}
-                          className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                          className="w-full h-full object-cover lg:absolute lg:inset-0 transition-transform duration-700 hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-linear-to-t from-secondary/60 to-transparent" />
                         <div className="absolute bottom-5 left-5 flex items-center gap-3">
@@ -662,8 +662,8 @@ export default function AboutPro2({
                     {/* content side */}
                     <div className="flex flex-col justify-center gap-5 p-8 lg:p-10">
                       <h3 className="text-2xl sm:text-3xl font-semibold font-[Montserrat] leading-[1.1]">
-                        <span className="text-primary">{item.prefix} </span>
-                        <span className="text-fourth">{item.keyword}</span>
+                        <span className="text-primary">{item.title} </span>
+                        {/* <span className="text-fourth">{item.keyword}</span> */}
                       </h3>
                       <div className="w-8 h-0.5 bg-fourth/50" />
                       <div

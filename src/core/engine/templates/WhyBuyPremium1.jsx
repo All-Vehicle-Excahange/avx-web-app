@@ -1525,81 +1525,68 @@ export default function WhyBuyPremium1({
         </div>
       </section>
       {/* ═════════ PROCESS ═════════ */}
-      <section className="w-full py-12 px-2 sm:px-4">
-        <div className="container max-w-7xl mx-auto flex flex-col gap-12 lg:gap-20">
+      <section className="w-full py-12 px-2 sm:px-4 overflow-hidden">
+        <div className="container max-w-7xl mx-auto">
           {/* HEADER */}
-          <div className="max-w-2xl flex flex-col gap-4">
+          <div className="text-center flex flex-col items-center gap-4 mb-16">
             <p className="text-xs tracking-[0.5em] uppercase text-third/60 font-semibold">
               Simple Process
             </p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight text-primary font-[Montserrat]">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight text-primary font-[Montserrat] max-w-2xl">
               {data.processTitle}
             </h2>
+            <div className="h-1 w-16 bg-primary/20 rounded-full" />
             <div
-              className="text-third text-sm sm:text-base lg:text-lg font-[Poppins] leading-relaxed"
+              className="text-third/60 text-base sm:text-lg font-[Poppins] leading-relaxed max-w-xl"
               dangerouslySetInnerHTML={{ __html: data.processDescription }}
             />
           </div>
-          {/* MOBILE VIEW (STACKED) */}
-          <div className="flex flex-col gap-6 lg:hidden">
+
+          {/* STEPS — full-width alternating rows */}
+          <div className="flex flex-col">
             {data.processSteps.map((step, i) => {
-              const src = data[`customWhyBuyProcess${i + 1}`] || data[`processTemplate${i + 1}`]?.imageUrl;
-              return (
-                <div key={i} className="relative rounded-2xl overflow-hidden">
-                  {src ? (
-                    <img src={src} className="w-full h-[220px] object-cover" />
-                  ) : (
-                    <div className="w-full h-[220px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
-                      <span className="text-third/40 text-xs">Step {i + 1} image</span>
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-linear-to-t from-black/70 to-transparent" />
-                  <div className="absolute top-4 left-4">
-                    <div
-                      className="w-10 h-10 flex items-center justify-center rounded-full border border-white/30 bg-white/10 [&>svg]:w-5 [&>svg]:h-5 [&>svg]:text-white"
-                      dangerouslySetInnerHTML={{ __html: step.icon }}
-                    />
-                  </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className="text-base font-semibold text-white font-[Montserrat] mb-1">{step.title}</h3>
-                    <p className="text-xs text-white/80 font-[Poppins] leading-relaxed">{step.description}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          {/* DESKTOP VIEW (INTERACTIVE) */}
-          <div className="hidden lg:flex h-[420px] gap-4">
-            {data.processSteps.map((step, i) => {
-              const isActive = active === i;
-              const src = data[`customWhyBuyProcess${i + 1}`] || data[`processTemplate${i + 1}`]?.imageUrl;
+              const isEven = i % 2 === 0;
               return (
                 <div
                   key={i}
-                  onMouseEnter={() => setActive(i)}
-                  className={`relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 ease-out ${isActive ? "flex-3" : "flex-1"}`}
+                  className="group relative border-t border-third/8 last:border-b"
                 >
-                  {src ? (
-                    <img
-                      src={src}
-                      className={`absolute inset-0 w-full h-full object-cover transition duration-700 ${isActive ? "scale-105" : "scale-100 grayscale"}`}
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
-                      <span className="text-third/40 text-xs">Step {i + 1}</span>
-                    </div>
-                  )}
-                  <div className={`absolute inset-0 transition duration-500 ${isActive ? "bg-linear-to-t from-black/70 via-black/40 to-transparent" : "bg-black/40"}`} />
-                  <div className="relative z-10 h-full p-6 flex flex-col justify-end">
-                    <div className="absolute top-6 left-6">
+                  <div className={`grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] items-center gap-6 lg:gap-0 py-10 lg:py-14 ${isEven ? "" : "lg:[&>*:first-child]:order-3 lg:[&>*:last-child]:order-1"}`}>
+                    {/* TEXT SIDE */}
+                    <div className={`flex flex-col gap-3 ${isEven ? "lg:pr-16 lg:text-right lg:items-end" : "lg:pl-16 lg:text-left lg:items-start"}`}>
+                      <span className="text-[10px] tracking-[0.4em] text-third/30 font-bold font-[Montserrat] uppercase">
+                        Step {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <h3 className="text-xl sm:text-2xl font-semibold text-primary font-[Montserrat] leading-snug group-hover:text-fourth transition-colors duration-300">
+                        {step.title}
+                      </h3>
                       <div
-                        className={`flex items-center justify-center w-10 h-10 rounded-full border transition [&>svg]:w-5 [&>svg]:h-5 [&>svg]:text-white ${isActive ? "border-white/40 bg-white/10" : "border-white/20"}`}
-                        dangerouslySetInnerHTML={{ __html: step.icon }}
+                        className="text-[14px] text-third/55 leading-[1.85] font-[Poppins] max-w-sm"
+                        dangerouslySetInnerHTML={{ __html: step.description }}
                       />
                     </div>
-                    <div className={`transition-all duration-500 ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-                      <h3 className="text-lg font-semibold text-white font-[Montserrat] mb-2">{step.title}</h3>
-                      <p className="text-sm text-white/80 font-[Poppins] leading-relaxed">{step.description}</p>
+
+                    {/* CENTER — icon node */}
+                    <div className="hidden lg:flex flex-col items-center relative">
+                      <div className="w-16 h-16 rounded-2xl border border-third/12 flex items-center justify-center group-hover:border-fourth/40 group-hover:bg-fourth/[0.04] group-hover:scale-110 transition-all duration-400 relative z-10">
+                        {typeof step.icon === "string" && step.icon.startsWith("<svg") ? (
+                          <div
+                            className="text-primary/60 [&>svg]:w-6 [&>svg]:h-6 group-hover:text-fourth transition-colors duration-300"
+                            dangerouslySetInnerHTML={{ __html: step.icon }}
+                          />
+                        ) : (
+                          <span className="text-lg font-bold font-[Montserrat] text-third/30 group-hover:text-fourth transition-colors duration-300">
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* SPACER SIDE — large ghost number */}
+                    <div className={`hidden lg:flex items-center ${isEven ? "lg:pl-16" : "lg:pr-16 lg:justify-end"}`}>
+                      <span className="text-[100px] font-black font-[Montserrat] text-primary/[0.03] leading-none select-none">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
                     </div>
                   </div>
                 </div>

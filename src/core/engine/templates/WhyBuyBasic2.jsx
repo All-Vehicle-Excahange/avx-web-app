@@ -531,14 +531,14 @@ export default function WhyBuyHereBasic2({
         <div>
           <h3 className="text-white font-bold mb-4">Featured Reviews</h3>
 
-          <EditorInput
+          {/* <EditorInput
             label="Section Title"
             value={data.testimonialTitle}
             onChange={(e) => updateField("testimonialTitle", e.target.value)}
             maxLength={rules?.testimonialTitle?.max}
             error={!!errors?.testimonialTitle}
             errorMsg={errors?.testimonialTitle}
-          />
+          /> */}
 
           <p className="text-third text-sm mb-4 mt-2">
             Select which customer reviews to feature on your storefront.
@@ -839,75 +839,77 @@ export default function WhyBuyHereBasic2({
       </section>
 
       {/* SECTION 7 — FEATURED REVIEWS */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
-          <div className="flex flex-col gap-3 mb-12">
-            <EyeBrow>Reviews</EyeBrow>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-              {data.testimonialTitle}
-            </h2>
-          </div>
+      {(data.featuredReviews?.length > 0 || data.testimonials?.length > 0) && (
+        <section className="py-12 px-2 lg:px-4">
+          <div className="container">
+            <div className="flex flex-col gap-3 mb-12">
+              <EyeBrow>Reviews</EyeBrow>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                {data.testimonialTitle}
+              </h2>
+            </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {(data.featuredReviews || data.testimonials || []).map((t, i) => (
-              <div
-                key={t.id || i}
-                className="group border border-primary/40 rounded-2xl p-8 flex flex-col gap-5 hover:border-primary/25 transition-all duration-300 hover:shadow-[0_8px_36px_rgba(0,0,0,0.4)] h-full"
-              >
-                {/* Stars */}
-                {t.rating && (
-                  <div className="flex gap-1">
-                    {[...Array(5)].map((_, idx) => (
-                      <Star
-                        key={idx}
-                        size={15}
-                        className={
-                          idx < (t.rating || 0)
-                            ? "text-fourth fill-fourth"
-                            : "text-third/30"
-                        }
-                      />
-                    ))}
-                  </div>
-                )}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {(data.featuredReviews || data.testimonials || []).map((t, i) => (
+                <div
+                  key={t.id || i}
+                  className="group border border-primary/40 rounded-2xl p-8 flex flex-col gap-5 hover:border-primary/25 transition-all duration-300 hover:shadow-[0_8px_36px_rgba(0,0,0,0.4)] h-full"
+                >
+                  {/* Stars */}
+                  {t.rating && (
+                    <div className="flex gap-1">
+                      {[...Array(5)].map((_, idx) => (
+                        <Star
+                          key={idx}
+                          size={15}
+                          className={
+                            idx < (t.rating || 0)
+                              ? "text-fourth fill-fourth"
+                              : "text-third/30"
+                          }
+                        />
+                      ))}
+                    </div>
+                  )}
 
-                {!t.rating && (
-                  <Quote size={20} className="text-fourth" strokeWidth={1.4} />
-                )}
+                  {!t.rating && (
+                    <Quote size={20} className="text-fourth" strokeWidth={1.4} />
+                  )}
 
-                {/* Review Title */}
-                {t.reviewTitle && (
-                  <h4 className="font-[Montserrat] font-semibold text-[13px] text-primary">
-                    {t.reviewTitle}
-                  </h4>
-                )}
+                  {/* Review Title */}
+                  {t.reviewTitle && (
+                    <h4 className="font-[Montserrat] font-semibold text-[13px] text-primary">
+                      {t.reviewTitle}
+                    </h4>
+                  )}
 
-                {/* Review Text */}
-                <p className="font-[Poppins] text-sm leading-[1.86] text-third/70 italic flex-1">
-                  {t.reviewText || t.review}
-                </p>
+                  {/* Review Text */}
+                  <p className="font-[Poppins] text-sm leading-[1.86] text-third/70 italic flex-1">
+                    {t.reviewText || t.review}
+                  </p>
 
-                <div className="w-full h-px bg-primary/[0.07]" />
+                  <div className="w-full h-px bg-primary/[0.07]" />
 
-                {/* Reviewer Info */}
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full border border-third/20 flex items-center justify-center font-bold text-[13px] text-fourth shrink-0">
-                    {(t.reviewerName || t.name)?.[0] || "?"}{" "}
-                  </div>
-                  <div>
-                    <p className="font-[Montserrat] font-semibold text-[13px] text-primary">
-                      {t.reviewerName || t.name}
-                    </p>
-                    <p className="font-[Poppins] text-[11px] text-third/50">
-                      Verified Buyer
-                    </p>
+                  {/* Reviewer Info */}
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full border border-third/20 flex items-center justify-center font-bold text-[13px] text-fourth shrink-0">
+                      {(t.reviewerName || t.name)?.[0] || "?"}{" "}
+                    </div>
+                    <div>
+                      <p className="font-[Montserrat] font-semibold text-[13px] text-primary">
+                        {t.reviewerName || t.name}
+                      </p>
+                      <p className="font-[Poppins] text-[11px] text-third/50">
+                        Verified Buyer
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

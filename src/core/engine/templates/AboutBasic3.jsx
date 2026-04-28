@@ -485,7 +485,7 @@ function AboutBasic3({
               Numbers that<span className="text-primary"> speak for us</span>
             </h2>
             <div
-              className="text-third/70 text-md font-[Poppins] leading-relaxed max-w-md"
+              className="text-third/70 text-md font-[Poppins] leading-relaxed"
               dangerouslySetInnerHTML={{ __html: data.aboutUsDescription }}
             />
           </div>
