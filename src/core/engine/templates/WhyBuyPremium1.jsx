@@ -1019,7 +1019,7 @@ export default function WhyBuyPremium1({
                     errorMsg={errors?.inspectionTemplate1}
                   />
                 </div>
-                <div className="h-40 relative">
+                <div className="h-40 relative col-span-2">
                   <ImageUploader
                     label="Focus Image"
                     src={
@@ -1038,29 +1038,6 @@ export default function WhyBuyPremium1({
                         },
                       };
                       if (id) delete updated.customWhyBuyInspection2;
-                      if (onUpdate) onUpdate(updated);
-                    }}
-                  />
-                </div>
-                <div className="h-40 relative">
-                  <ImageUploader
-                    label="Mini Image"
-                    src={
-                      data.customWhyBuyInspection3 ||
-                      data.inspectionTemplate3?.imageUrl
-                    }
-                    fieldKey="inspImg3"
-                    imageType="INSPECTION_PROCESS"
-                    onChange={({ imageUrl, id }) => {
-                      const updated = {
-                        ...data,
-                        inspectionTemplate3: {
-                          ...data.inspectionTemplate3,
-                          imageUrl,
-                          id: id || null,
-                        },
-                      };
-                      if (id) delete updated.customWhyBuyInspection3;
                       if (onUpdate) onUpdate(updated);
                     }}
                   />
@@ -1170,52 +1147,6 @@ export default function WhyBuyPremium1({
                         },
                       };
                       if (id) delete updated.customWhyBuyCustomerCommitment3;
-                      if (onUpdate) onUpdate(updated);
-                    }}
-                  />
-                </div>
-                <div className="h-40 relative">
-                  <ImageUploader
-                    label="Circle Image"
-                    src={
-                      data.customWhyBuyCustomerCommitment4 ||
-                      data.customerCommitmentTemplate4?.imageUrl
-                    }
-                    fieldKey="commImg4"
-                    imageType="CUSTOMER_COMMITMENT"
-                    onChange={({ imageUrl, id }) => {
-                      const updated = {
-                        ...data,
-                        customerCommitmentTemplate4: {
-                          ...data.customerCommitmentTemplate4,
-                          imageUrl,
-                          id: id || null,
-                        },
-                      };
-                      if (id) delete updated.customWhyBuyCustomerCommitment4;
-                      if (onUpdate) onUpdate(updated);
-                    }}
-                  />
-                </div>
-                <div className="h-40 relative">
-                  <ImageUploader
-                    label="Accent Image"
-                    src={
-                      data.customWhyBuyCustomerCommitment5 ||
-                      data.customerCommitmentTemplate5?.imageUrl
-                    }
-                    fieldKey="commImg5"
-                    imageType="CUSTOMER_COMMITMENT"
-                    onChange={({ imageUrl, id }) => {
-                      const updated = {
-                        ...data,
-                        customerCommitmentTemplate5: {
-                          ...data.customerCommitmentTemplate5,
-                          imageUrl,
-                          id: id || null,
-                        },
-                      };
-                      if (id) delete updated.customWhyBuyCustomerCommitment5;
                       if (onUpdate) onUpdate(updated);
                     }}
                   />
@@ -1425,34 +1356,35 @@ export default function WhyBuyPremium1({
           <div className="flex flex-col gap-5 mt-10 lg:mt-0">
             {/* IMAGE/VIDEO */}
             <div className="group relative rounded-2xl overflow-hidden border border-secondary/20 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(184,150,62,0.25)]">
-              <img
-                className="w-full h-[220px] sm:h-[260px] object-cover transition-transform duration-700 group-hover:scale-105"
-                src={
-                  data.customWhyBuyHero1 || data.whyBuyHeroTemplate1?.imageUrl
-                }
-              />
+              {(data.customWhyBuyHero1 || data.whyBuyHeroTemplate1?.imageUrl) ? (
+                <img
+                  className="w-full h-[220px] sm:h-[260px] object-cover transition-transform duration-700 group-hover:scale-105"
+                  src={data.customWhyBuyHero1 || data.whyBuyHeroTemplate1?.imageUrl}
+                />
+              ) : (
+                <div className="w-full h-[220px] sm:h-[260px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-sm">Hero image not set</span>
+                </div>
+              )}
               <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0c]/70 to-transparent" />
             </div>
             {/* IMAGE GRID */}
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
               {[
-                {
-                  tmpl: data.whyBuyHeroTemplate2,
-                  custom: data.customWhyBuyHero2,
-                },
-                {
-                  tmpl: data.whyBuyHeroTemplate3,
-                  custom: data.customWhyBuyHero3,
-                },
+                { tmpl: data.whyBuyHeroTemplate2, custom: data.customWhyBuyHero2 },
+                { tmpl: data.whyBuyHeroTemplate3, custom: data.customWhyBuyHero3 },
               ].map((item, i) => (
-                <div
-                  key={i}
-                  className="group relative rounded-xl overflow-hidden border border-secondary/15 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(0,0,0,0.6)]"
-                >
-                  <img
-                    src={item.custom || item.tmpl?.imageUrl}
-                    className="w-full h-[110px] sm:h-[130px] object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
+                <div key={i} className="group relative rounded-xl overflow-hidden border border-secondary/15 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(0,0,0,0.6)]">
+                  {(item.custom || item.tmpl?.imageUrl) ? (
+                    <img
+                      src={item.custom || item.tmpl?.imageUrl}
+                      className="w-full h-[110px] sm:h-[130px] object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="w-full h-[110px] sm:h-[130px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                      <span className="text-third/40 text-xs">Image {i + 2}</span>
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0c]/70 via-secondary/10 to-transparent opacity-70 group-hover:opacity-90 transition duration-300" />
                   <div className="absolute inset-0 border border-transparent group-hover:border-secondary/40 transition-all duration-300 rounded-xl" />
                 </div>
@@ -1610,83 +1542,64 @@ export default function WhyBuyPremium1({
           </div>
           {/* MOBILE VIEW (STACKED) */}
           <div className="flex flex-col gap-6 lg:hidden">
-            {data.processSteps.map((step, i) => (
-              <div key={i} className="relative rounded-2xl overflow-hidden">
-                <img
-                  src={
-                    data[`customWhyBuyProcess${i + 1}`] ||
-                    data[`processTemplate${i + 1}`]?.imageUrl
-                  }
-                  className="w-full h-[220px] object-cover"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-black/70 to-transparent" />
-                <div className="absolute top-4 left-4">
-                  <div
-                    className="w-10 h-10 flex items-center justify-center rounded-full border border-white/30 bg-white/10 [&>svg]:w-5 [&>svg]:h-5 [&>svg]:text-white"
-                    dangerouslySetInnerHTML={{ __html: step.icon }}
-                  />
+            {data.processSteps.map((step, i) => {
+              const src = data[`customWhyBuyProcess${i + 1}`] || data[`processTemplate${i + 1}`]?.imageUrl;
+              return (
+                <div key={i} className="relative rounded-2xl overflow-hidden">
+                  {src ? (
+                    <img src={src} className="w-full h-[220px] object-cover" />
+                  ) : (
+                    <div className="w-full h-[220px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                      <span className="text-third/40 text-xs">Step {i + 1} image</span>
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-linear-to-t from-black/70 to-transparent" />
+                  <div className="absolute top-4 left-4">
+                    <div
+                      className="w-10 h-10 flex items-center justify-center rounded-full border border-white/30 bg-white/10 [&>svg]:w-5 [&>svg]:h-5 [&>svg]:text-white"
+                      dangerouslySetInnerHTML={{ __html: step.icon }}
+                    />
+                  </div>
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <h3 className="text-base font-semibold text-white font-[Montserrat] mb-1">{step.title}</h3>
+                    <p className="text-xs text-white/80 font-[Poppins] leading-relaxed">{step.description}</p>
+                  </div>
                 </div>
-                <div className="absolute bottom-4 left-4 right-4">
-                  <h3 className="text-base font-semibold text-white font-[Montserrat] mb-1">
-                    {step.title}
-                  </h3>
-                  <p className="text-xs text-white/80 font-[Poppins] leading-relaxed">
-                    {step.description}
-                  </p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           {/* DESKTOP VIEW (INTERACTIVE) */}
           <div className="hidden lg:flex h-[420px] gap-4">
             {data.processSteps.map((step, i) => {
               const isActive = active === i;
+              const src = data[`customWhyBuyProcess${i + 1}`] || data[`processTemplate${i + 1}`]?.imageUrl;
               return (
                 <div
                   key={i}
                   onMouseEnter={() => setActive(i)}
-                  className={`relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 ease-out
-                  ${isActive ? "flex-3" : "flex-1"}
-                `}
+                  className={`relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 ease-out ${isActive ? "flex-3" : "flex-1"}`}
                 >
-                  <img
-                    src={
-                      data[`customWhyBuyProcess${i + 1}`] ||
-                      data[`processTemplate${i + 1}`]?.imageUrl
-                    }
-                    className={`absolute inset-0 w-full h-full object-cover transition duration-700
-                    ${isActive ? "scale-105" : "scale-100 grayscale"}
-                  `}
-                  />
-                  <div
-                    className={`absolute inset-0 transition duration-500
-                  ${
-                    isActive
-                      ? "bg-linear-to-t from-black/70 via-black/40 to-transparent"
-                      : "bg-black/40"
-                  }
-                `}
-                  />
+                  {src ? (
+                    <img
+                      src={src}
+                      className={`absolute inset-0 w-full h-full object-cover transition duration-700 ${isActive ? "scale-105" : "scale-100 grayscale"}`}
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                      <span className="text-third/40 text-xs">Step {i + 1}</span>
+                    </div>
+                  )}
+                  <div className={`absolute inset-0 transition duration-500 ${isActive ? "bg-linear-to-t from-black/70 via-black/40 to-transparent" : "bg-black/40"}`} />
                   <div className="relative z-10 h-full p-6 flex flex-col justify-end">
                     <div className="absolute top-6 left-6">
                       <div
-                        className={`flex items-center justify-center w-10 h-10 rounded-full border transition [&>svg]:w-5 [&>svg]:h-5 [&>svg]:text-white
-                      ${isActive ? "border-white/40 bg-white/10" : "border-white/20"}
-                    `}
+                        className={`flex items-center justify-center w-10 h-10 rounded-full border transition [&>svg]:w-5 [&>svg]:h-5 [&>svg]:text-white ${isActive ? "border-white/40 bg-white/10" : "border-white/20"}`}
                         dangerouslySetInnerHTML={{ __html: step.icon }}
                       />
                     </div>
-                    <div
-                      className={`transition-all duration-500
-                    ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
-                  `}
-                    >
-                      <h3 className="text-lg font-semibold text-white font-[Montserrat] mb-2">
-                        {step.title}
-                      </h3>
-                      <p className="text-sm text-white/80 font-[Poppins] leading-relaxed">
-                        {step.description}
-                      </p>
+                    <div className={`transition-all duration-500 ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+                      <h3 className="text-lg font-semibold text-white font-[Montserrat] mb-2">{step.title}</h3>
+                      <p className="text-sm text-white/80 font-[Poppins] leading-relaxed">{step.description}</p>
                     </div>
                   </div>
                 </div>
@@ -1713,37 +1626,32 @@ export default function WhyBuyPremium1({
             <div className="lg:col-span-7 relative h-[500px] lg:h-[650px]">
               {/* 1. The "Base" Image */}
               <div className="absolute top-0 left-0 w-[75%] h-[70%] rounded-4xl overflow-hidden shadow-2xl z-10 group">
-                <img
-                  src={
-                    data.customWhyBuyInspection1 ||
-                    data.inspectionTemplate1?.imageUrl
-                  }
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                  alt="Main"
-                />
+                {(data.customWhyBuyInspection1 || data.inspectionTemplate1?.imageUrl) ? (
+                  <img
+                    src={data.customWhyBuyInspection1 || data.inspectionTemplate1?.imageUrl}
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                    alt="Main"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                    <span className="text-third/40 text-sm">Main image not set</span>
+                  </div>
+                )}
                 <div className="absolute inset-0 group-hover:bg-transparent transition-colors" />
               </div>
               {/* 2. The "Focus" Image */}
               <div className="absolute top-[20%] right-0 w-[45%] h-[60%] rounded-4xl overflow-hidden border-12 border-white shadow-[-20px_20px_60px_rgba(0,0,0,0.15)] z-20 group">
-                <img
-                  src={
-                    data.customWhyBuyInspection2 ||
-                    data.inspectionTemplate2?.imageUrl
-                  }
-                  className="w-full h-full object-cover"
-                  alt="Detail"
-                />
-              </div>
-              {/* 3. The "Abstract" Image */}
-              <div className="absolute bottom-0 left-[15%] w-[35%] h-[25%] rounded-2xl overflow-hidden border-4 border-white shadow-xl z-30 transition-transform hover:-translate-y-2.5">
-                <img
-                  src={
-                    data.customWhyBuyInspection3 ||
-                    data.inspectionTemplate3?.imageUrl
-                  }
-                  className="w-full h-full object-cover"
-                  alt="Mini Detail"
-                />
+                {(data.customWhyBuyInspection2 || data.inspectionTemplate2?.imageUrl) ? (
+                  <img
+                    src={data.customWhyBuyInspection2 || data.inspectionTemplate2?.imageUrl}
+                    className="w-full h-full object-cover"
+                    alt="Detail"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                    <span className="text-third/40 text-sm">Focus image not set</span>
+                  </div>
+                )}
               </div>
             </div>
             {/* RIGHT: INFO & INTERACTIVE LIST */}
@@ -1781,14 +1689,13 @@ export default function WhyBuyPremium1({
       <section className="relative w-full min-h-[800px] flex items-center px-3 justify-center py-12 overflow-hidden bg-secondary">
         {/* BACKGROUND */}
         <div className="absolute inset-0 z-0">
-          <img
-            src={
-              data.customWhyBuyCustomerCommitment1 ||
-              data.customerCommitmentTemplate1?.imageUrl
-            }
-            className="w-full h-full object-cover opacity-40"
-            alt="Main Background"
-          />
+          {(data.customWhyBuyCustomerCommitment1 || data.customerCommitmentTemplate1?.imageUrl) ? (
+            <img
+              src={data.customWhyBuyCustomerCommitment1 || data.customerCommitmentTemplate1?.imageUrl}
+              className="w-full h-full object-cover opacity-40"
+              alt="Main Background"
+            />
+          ) : null}
           <div className="absolute inset-0 bg-linear-to-b from-secondary via-transparent to-secondary" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -1816,47 +1723,31 @@ export default function WhyBuyPremium1({
           <div className="relative h-[500px] hidden md:block">
             {/* Main image */}
             <div className="absolute top-0 left-0 w-4/5 h-[350px] rounded-2xl overflow-hidden border-4 border-primary shadow-2xl z-20 group">
-              <img
-                src={
-                  data.customWhyBuyCustomerCommitment2 ||
-                  data.customerCommitmentTemplate2?.imageUrl
-                }
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                alt=""
-              />
-              {/* Circle overlap */}
-              <div className="absolute bottom-4 left-4 w-28 h-28 rounded-full border-4 border-primary overflow-hidden z-40 transition-transform duration-500 group-hover:translate-x-2 group-hover:-translate-y-1 shadow-xl">
+              {(data.customWhyBuyCustomerCommitment2 || data.customerCommitmentTemplate2?.imageUrl) ? (
                 <img
-                  src={
-                    data.customWhyBuyCustomerCommitment4 ||
-                    data.customerCommitmentTemplate4?.imageUrl
-                  }
-                  className="w-full h-full object-cover"
+                  src={data.customWhyBuyCustomerCommitment2 || data.customerCommitmentTemplate2?.imageUrl}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   alt=""
                 />
-              </div>
+              ) : (
+                <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-sm">Main image not set</span>
+                </div>
+              )}
             </div>
             {/* Offset image */}
             <div className="absolute bottom-0 right-0 w-3/5 h-[280px] rounded-2xl overflow-hidden border-4 border-primary shadow-2xl z-30 transform translate-x-4 -translate-y-10">
-              <img
-                src={
-                  data.customWhyBuyCustomerCommitment3 ||
-                  data.customerCommitmentTemplate3?.imageUrl
-                }
-                className="w-full h-full object-cover"
-                alt=""
-              />
-            </div>
-            {/* Small accent */}
-            <div className="absolute -top-6 right-20 w-24 h-24 rounded-2xl rotate-12 border-2 border-primary overflow-hidden z-10 opacity-60">
-              <img
-                src={
-                  data.customWhyBuyCustomerCommitment5 ||
-                  data.customerCommitmentTemplate5?.imageUrl
-                }
-                className="w-full h-full object-cover"
-                alt=""
-              />
+              {(data.customWhyBuyCustomerCommitment3 || data.customerCommitmentTemplate3?.imageUrl) ? (
+                <img
+                  src={data.customWhyBuyCustomerCommitment3 || data.customerCommitmentTemplate3?.imageUrl}
+                  className="w-full h-full object-cover"
+                  alt=""
+                />
+              ) : (
+                <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-sm">Offset image not set</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1919,21 +1810,21 @@ export default function WhyBuyPremium1({
         </section>
       )}
       {/* ═════════ TESTIMONIALS ═════════ */}
-      <section className="w-full py-12 bg-primary px-2 lg:px-4">
-        <div className="container max-w-7xl mx-3 flex flex-col gap-12">
-          {/* HEADER */}
-          <div className="flex flex-col gap-4 max-w-2xl">
-            <p className="text-sm tracking-[0.35em] uppercase text-secondary/70 font-semibold font-[Montserrat]">
-              Real Buyers
-            </p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1] text-secondary font-[Montserrat]">
-              {data.testimonialTitle}
-            </h2>
-          </div>
-          {/* TESTIMONIALS */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {data.featuredReviews && data.featuredReviews.length > 0 ? (
-              data.featuredReviews.map((r, i) => (
+      {data.featuredReviews && data.featuredReviews.length > 0 && (
+        <section className="w-full py-12 bg-primary px-2 lg:px-4">
+          <div className="container max-w-7xl mx-3 flex flex-col gap-12">
+            {/* HEADER */}
+            <div className="flex flex-col gap-4 max-w-2xl">
+              <p className="text-sm tracking-[0.35em] uppercase text-secondary/70 font-semibold font-[Montserrat]">
+                Real Buyers
+              </p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1] text-secondary font-[Montserrat]">
+                {data.testimonialTitle}
+              </h2>
+            </div>
+            {/* TESTIMONIALS */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {data.featuredReviews.map((r, i) => (
                 <div
                   key={i}
                   className="p-6 md:p-7 rounded-xl border border-secondary/15 bg-primary flex flex-col gap-4 hover:border-secondary/30 transition-all duration-300"
@@ -1959,15 +1850,11 @@ export default function WhyBuyPremium1({
                     {r.reviewerName}
                   </h4>
                 </div>
-              ))
-            ) : (
-              <p className="text-secondary/60 col-span-full py-8 text-center italic">
-                No featured reviews selected.
-              </p>
-            )}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

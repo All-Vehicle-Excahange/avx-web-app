@@ -14,8 +14,6 @@ import {
   Star,
 } from "lucide-react";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { motion } from "framer-motion";
-import { WHY_BUY_PRO_3 } from "../schemas/whybuy/why_buy_pro_3";
 import RichTextEditor from "../atoms/RichTextEditor";
 import Button from "@/components/ui/button";
 import GlobalLoader from "@/components/ui/GlobalLoader";
@@ -30,9 +28,9 @@ import {
   setWhyBuyInspection,
   setWhyBuyCustomerCommitment,
   setFeaturedReviews,
+  setWhyBuyGallery,
 } from "@/services/theme.service";
 import { getAllReviewById } from "@/services/user.service";
-const DEFAULT_DATA = WHY_BUY_PRO_3[0].data;
 const SVG_OPTIONS = [
   {
     value: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>`,
@@ -107,172 +105,84 @@ export default function WhyBuyPro3({
     ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
     : SVG_OPTIONS;
 
-  const data = {
-    // Structural array defaults only — no dummy content
-    processSteps: [],
-    inspectionPoints: [],
-    testimonials: [],
-    featuredReviews: [],
-    ...Object.fromEntries(
-      Object.entries(rawData || {}).filter(
-        ([, v]) => v !== undefined && v !== null,
+  const data = (() => {
+    const merged = {
+      processSteps: [],
+      inspectionPoints: [],
+      testimonials: [],
+      featuredReviews: [],
+      ...Object.fromEntries(
+        Object.entries(rawData || {}).filter(
+          ([, v]) => v !== undefined && v !== null,
+        ),
       ),
-    ),
-  };
-
-  // Map backend draft fields to UI fields if UI fields are missing
-  if (!rawData?.whyBuyStoryTitle && rawData?.storyTitle)
-    data.whyBuyStoryTitle = rawData.storyTitle;
-  if (!rawData?.whyBuyStoryDescription && rawData?.storyDescription)
-    data.whyBuyStoryDescription = rawData.storyDescription;
-  if (!rawData?.whyBuyVehicleSelectionTitle && rawData?.vehicleSelectionTitle)
-    data.whyBuyVehicleSelectionTitle = rawData.vehicleSelectionTitle;
-  if (!rawData?.whyBuyVehicleSelectionDescription && rawData?.vehicleSelectionDescription)
-    data.whyBuyVehicleSelectionDescription = rawData.vehicleSelectionDescription;
-  if (!rawData?.whyBuyProcessTitle && rawData?.processTitle)
-    data.whyBuyProcessTitle = rawData.processTitle;
-  if (!rawData?.whyBuyProcessDescription && rawData?.processDescription)
-    data.whyBuyProcessDescription = rawData.processDescription;
-  if (!rawData?.whyBuyInspectionTitle && rawData?.inspectionTitle)
-    data.whyBuyInspectionTitle = rawData.inspectionTitle;
-  if (!rawData?.whyBuyInspectionDescription && rawData?.inspectionDescription)
-    data.whyBuyInspectionDescription = rawData.inspectionDescription;
-  if (!rawData?.whyBuyCustomerCommitmentTitle && rawData?.customerCommitmentTitle)
-    data.whyBuyCustomerCommitmentTitle = rawData.customerCommitmentTitle;
-  if (!rawData?.whyBuyCustomerCommitmentDescription && rawData?.customerCommitmentDescription)
-    data.whyBuyCustomerCommitmentDescription = rawData.customerCommitmentDescription;
-
-  // Map 'processes' → 'processSteps' (guard length, not just existence)
-  if (!rawData?.processSteps?.length && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
-    data.processSteps = rawData.processes.map(p => ({
-      title: p.title || "",
-      description: p.desc || p.description || "",
-      icon: p.icon || ""
-    }));
-  }
-  
-  // Map 'featuredReviews' → 'testimonials' for display (if not already mapped)
-  if (!rawData?.testimonials?.length && rawData?.featuredReviews && Array.isArray(rawData.featuredReviews) && rawData.featuredReviews.length > 0) {
-    data.testimonials = rawData.featuredReviews.map(r => ({
-      name: r.reviewerName || "",
-      review: r.reviewText || "",
-      rating: r.rating || 0,
-      title: r.reviewTitle || ""
-    }));
-    // Also ensure featuredReviews is set for the editor
-    if (!data.featuredReviews || data.featuredReviews.length === 0) {
-      data.featuredReviews = rawData.featuredReviews;
-    }
-  }
-
-
-  // Map backend image objects to template-specific UI image keys
-  for (let i = 1; i <= 5; i++) {
-    if (!rawData?.[`whyBuyHeroTemplate${i}`] && rawData?.[`whyBuyHeroTemplateId${i}`]) {
-      data[`whyBuyHeroTemplate${i}`] = rawData[`whyBuyHeroTemplateId${i}`];
-    }
-    if (!rawData?.[`whyBuyStoryTemplate${i}`] && rawData?.[`storyTemplate${i}`]) {
-      data[`whyBuyStoryTemplate${i}`] = rawData[`storyTemplate${i}`];
-    }
-    if (!rawData?.[`whyBuyVehicleSelectionTemplate${i}`] && rawData?.[`vehicleSelectionTemplate${i}`]) {
-      data[`whyBuyVehicleSelectionTemplate${i}`] = rawData[`vehicleSelectionTemplate${i}`];
-    }
-    if (!rawData?.[`whyBuyGalleryTemplate${i}`] && rawData?.[`galleryTemplate${i}`]) {
-      data[`whyBuyGalleryTemplate${i}`] = rawData[`galleryTemplate${i}`];
-    }
-  }
-  for (let i = 1; i <= 4; i++) {
-    if (!rawData?.[`whyBuyProcessTemplate${i}`] && rawData?.[`processTemplateId${i}`]) {
-      data[`whyBuyProcessTemplate${i}`] = rawData[`processTemplateId${i}`];
-    }
-    if (!rawData?.[`whyBuyInspectionTemplate${i}`] && rawData?.[`inspectionTemplate${i}`]) {
-      data[`whyBuyInspectionTemplate${i}`] = rawData[`inspectionTemplate${i}`];
-    }
-  }
-
-  // Synchronize transformed draft data with the parent state once on load
-  useEffect(() => {
-    if (!rawData || !onUpdate) return;
-    
-    let hasChanges = false;
-    const updatedData = { ...data };
-
-    // Check for missing text fields that are available in rawData
-    const textMappings = {
-      whyBuyStoryTitle: 'storyTitle',
-      whyBuyStoryDescription: 'storyDescription',
-      whyBuyVehicleSelectionTitle: 'vehicleSelectionTitle',
-      whyBuyVehicleSelectionDescription: 'vehicleSelectionDescription',
-      whyBuyProcessTitle: 'processTitle',
-      whyBuyProcessDescription: 'processDescription',
-      whyBuyInspectionTitle: 'inspectionTitle',
-      whyBuyInspectionDescription: 'inspectionDescription',
-      whyBuyCustomerCommitmentTitle: 'customerCommitmentTitle',
-      whyBuyCustomerCommitmentDescription: 'customerCommitmentDescription',
     };
 
-    Object.entries(textMappings).forEach(([uiKey, rawKey]) => {
-      if (!rawData[uiKey] && rawData[rawKey]) {
-        updatedData[uiKey] = rawData[rawKey];
-        hasChanges = true;
-      }
+    // Map backend text fields (unprefixed) → UI fields (prefixed)
+    const textMap = {
+      whyBuyStoryTitle: "storyTitle",
+      whyBuyStoryDescription: "storyDescription",
+      whyBuyVehicleSelectionTitle: "vehicleSelectionTitle",
+      whyBuyVehicleSelectionDescription: "vehicleSelectionDescription",
+      whyBuyProcessTitle: "processTitle",
+      whyBuyProcessDescription: "processDescription",
+      whyBuyInspectionTitle: "inspectionTitle",
+      whyBuyInspectionDescription: "inspectionDescription",
+      whyBuyCustomerCommitmentTitle: "customerCommitmentTitle",
+      whyBuyCustomerCommitmentDescription: "customerCommitmentDescription",
+    };
+    Object.entries(textMap).forEach(([uiKey, rawKey]) => {
+      if (!merged[uiKey] && rawData?.[rawKey]) merged[uiKey] = rawData[rawKey];
     });
 
-    // Sync processes mapping
-    if (!rawData.processSteps && rawData.processes && Array.isArray(rawData.processes)) {
-      updatedData.processSteps = rawData.processes.map(p => ({
-        title: p.title || "",
-        description: p.desc || p.description || "",
-        icon: p.icon || ""
-      }));
-      hasChanges = true;
-    }
-    
-    // Sync testimonials mapping
-    if (!rawData.testimonials && rawData.featuredReviews && Array.isArray(rawData.featuredReviews) && rawData.featuredReviews.length > 0) {
-      updatedData.testimonials = rawData.featuredReviews.map(r => ({
-        name: r.reviewerName || "",
-        review: r.reviewText || "",
-        rating: r.rating || 0,
-        title: r.reviewTitle || ""
-      }));
-      hasChanges = true;
-    }
-
-    // Sync image mappings
+    // Map backend image objects (unprefixed) → UI image keys (prefixed)
+    // storyTemplate1 → whyBuyStoryTemplate1, etc.
     for (let i = 1; i <= 5; i++) {
-      if (!rawData[`whyBuyHeroTemplate${i}`] && rawData[`whyBuyHeroTemplateId${i}`]) {
-        updatedData[`whyBuyHeroTemplate${i}`] = rawData[`whyBuyHeroTemplateId${i}`];
-        hasChanges = true;
+      if (!merged[`whyBuyStoryTemplate${i}`] && rawData?.[`storyTemplate${i}`]?.imageUrl) {
+        merged[`whyBuyStoryTemplate${i}`] = rawData[`storyTemplate${i}`];
       }
-      if (!rawData[`whyBuyStoryTemplate${i}`] && rawData[`storyTemplate${i}`]) {
-        updatedData[`whyBuyStoryTemplate${i}`] = rawData[`storyTemplate${i}`];
-        hasChanges = true;
+      if (!merged[`whyBuyVehicleSelectionTemplate${i}`] && rawData?.[`vehicleSelectionTemplate${i}`]?.imageUrl) {
+        merged[`whyBuyVehicleSelectionTemplate${i}`] = rawData[`vehicleSelectionTemplate${i}`];
       }
-      if (!rawData[`whyBuyVehicleSelectionTemplate${i}`] && rawData[`vehicleSelectionTemplate${i}`]) {
-        updatedData[`whyBuyVehicleSelectionTemplate${i}`] = rawData[`vehicleSelectionTemplate${i}`];
-        hasChanges = true;
-      }
-      if (!rawData[`whyBuyGalleryTemplate${i}`] && rawData[`galleryTemplate${i}`]) {
-        updatedData[`whyBuyGalleryTemplate${i}`] = rawData[`galleryTemplate${i}`];
-        hasChanges = true;
+      if (!merged[`whyBuyGalleryTemplate${i}`] && rawData?.[`galleryTemplate${i}`]?.imageUrl) {
+        merged[`whyBuyGalleryTemplate${i}`] = rawData[`galleryTemplate${i}`];
       }
     }
     for (let i = 1; i <= 4; i++) {
-      if (!rawData[`whyBuyProcessTemplate${i}`] && rawData[`processTemplateId${i}`]) {
-        updatedData[`whyBuyProcessTemplate${i}`] = rawData[`processTemplateId${i}`];
-        hasChanges = true;
+      if (!merged[`whyBuyProcessTemplate${i}`] && rawData?.[`processTemplate${i}`]?.imageUrl) {
+        merged[`whyBuyProcessTemplate${i}`] = rawData[`processTemplate${i}`];
       }
-      if (!rawData[`whyBuyInspectionTemplate${i}`] && rawData[`inspectionTemplate${i}`]) {
-        updatedData[`whyBuyInspectionTemplate${i}`] = rawData[`inspectionTemplate${i}`];
-        hasChanges = true;
+      if (!merged[`whyBuyInspectionTemplate${i}`] && rawData?.[`inspectionTemplate${i}`]?.imageUrl) {
+        merged[`whyBuyInspectionTemplate${i}`] = rawData[`inspectionTemplate${i}`];
       }
     }
 
-    if (hasChanges) {
-      onUpdate(updatedData);
+    // Map backend 'processes' array → 'processSteps'
+    if (!rawData?.processSteps?.length && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
+      merged.processSteps = rawData.processes.map(p => ({
+        title: p.title || "",
+        description: p.desc || p.description || "",
+        icon: p.icon || "",
+      }));
     }
-  }, [rawData]);
+
+    // Map 'inspectionDescription' → 'whyBuyInspectionDescription' if still missing
+    if (!merged.whyBuyInspectionDescription && rawData?.inspectionDescription) {
+      merged.whyBuyInspectionDescription = rawData.inspectionDescription;
+    }
+
+    // Map 'featuredReviews' → 'testimonials' for display
+    if (!rawData?.testimonials?.length && rawData?.featuredReviews && Array.isArray(rawData.featuredReviews) && rawData.featuredReviews.length > 0) {
+      merged.testimonials = rawData.featuredReviews.map(r => ({
+        name: r.reviewerName || "",
+        review: r.reviewText || "",
+        rating: r.rating || 0,
+        title: r.reviewTitle || "",
+      }));
+    }
+
+    return merged;
+  })();
   const updateField = (field, value) => {
     if (onUpdate) onUpdate({ ...data, [field]: value });
   };
@@ -284,6 +194,15 @@ export default function WhyBuyPro3({
       newArray[index] = value;
     }
     updateField(arrayName, newArray);
+  };
+  const getBlobFromUrl = async (url) => {
+    if (!url || !url.startsWith("blob:")) return null;
+    try {
+      const res = await fetch(url);
+      return await res.blob();
+    } catch {
+      return null;
+    }
   };
   const [allReviews, setAllReviews] = useState([]);
   const [selectedReviewIds, setSelectedReviewIds] = useState(
@@ -348,10 +267,10 @@ export default function WhyBuyPro3({
     data.whyBuyInspectionTemplate4?.imageUrl,
   ].filter(Boolean);
   const galleryImages = [
-    data.whyBuyGalleryTemplate1?.imageUrl,
-    data.whyBuyGalleryTemplate2?.imageUrl,
-    data.whyBuyGalleryTemplate3?.imageUrl,
-    data.whyBuyGalleryTemplate4?.imageUrl,
+    data.customGallery1 || data.whyBuyGalleryTemplate1?.imageUrl,
+    data.customGallery2 || data.whyBuyGalleryTemplate2?.imageUrl,
+    data.customGallery3 || data.whyBuyGalleryTemplate3?.imageUrl,
+    data.customGallery4 || data.whyBuyGalleryTemplate4?.imageUrl,
   ].filter(Boolean);
   const total = heroImages.length;
   const goTo = useCallback((index) => {
@@ -562,6 +481,20 @@ export default function WhyBuyPro3({
       await setWhyBuyCustomerCommitment(commitmentData);
       await setFeaturedReviews(selectedReviewIds);
 
+      const galleryData = new FormData();
+      for (let i = 1; i <= 4; i++) {
+        const customField = `customGallery${i}`;
+        const tmpl = data[`whyBuyGalleryTemplate${i}`];
+        const imageUrl = data[customField] || tmpl?.imageUrl;
+        if (imageUrl && imageUrl.startsWith("blob:")) {
+          const blob = await getBlobFromUrl(imageUrl);
+          if (blob) galleryData.append(customField, blob, `gal${i}.png`);
+        } else if (tmpl?.id) {
+          galleryData.append(`galleryTemplateId${i}`, tmpl.id);
+        }
+      }
+      await setWhyBuyGallery(galleryData);
+
       if (onNextTab) onNextTab();
     } catch (error) {
       console.error("Error saving Why Buy sections:", error);
@@ -768,40 +701,6 @@ export default function WhyBuyPro3({
                     }}
                     error={errors?.whyBuyStoryTemplate3}
                     errorMsg={errors?.whyBuyStoryTemplate3}
-                  />
-                </div>
-                <div className="h-40 relative">
-                  <ImageUploader
-                    label="Image 4"
-                    src={data.whyBuyStoryTemplate4?.imageUrl}
-                    fieldKey="storyImg4"
-                    imageType="CONSULTANT_STORY"
-                    onChange={({ imageUrl, id }) => {
-                      updateField("whyBuyStoryTemplate4", {
-                        ...data.whyBuyStoryTemplate4,
-                        imageUrl,
-                        id: id ?? data.whyBuyStoryTemplate4?.id,
-                      });
-                    }}
-                    error={errors?.whyBuyStoryTemplate4}
-                    errorMsg={errors?.whyBuyStoryTemplate4}
-                  />
-                </div>
-                <div className="h-40 relative">
-                  <ImageUploader
-                    label="Image 5"
-                    src={data.whyBuyStoryTemplate5?.imageUrl}
-                    fieldKey="storyImg5"
-                    imageType="CONSULTANT_STORY"
-                    onChange={({ imageUrl, id }) => {
-                      updateField("whyBuyStoryTemplate5", {
-                        ...data.whyBuyStoryTemplate5,
-                        imageUrl,
-                        id: id ?? data.whyBuyStoryTemplate5?.id,
-                      });
-                    }}
-                    error={errors?.whyBuyStoryTemplate5}
-                    errorMsg={errors?.whyBuyStoryTemplate5}
                   />
                 </div>
               </div>
@@ -1259,15 +1158,13 @@ export default function WhyBuyPro3({
             <div className="h-40 relative">
               <ImageUploader
                 label="Gallery Image 1"
-                src={data.whyBuyGalleryTemplate1?.imageUrl}
+                src={data.customGallery1 || data.whyBuyGalleryTemplate1?.imageUrl}
                 fieldKey="galImg1"
                 imageType="GALLERY"
                 onChange={({ imageUrl, id }) => {
-                  updateField("whyBuyGalleryTemplate1", {
-                    ...data.whyBuyGalleryTemplate1,
-                    imageUrl,
-                    id: id ?? data.whyBuyGalleryTemplate1?.id,
-                  });
+                  const updated = { ...data, whyBuyGalleryTemplate1: { ...data.whyBuyGalleryTemplate1, imageUrl, id: id ?? data.whyBuyGalleryTemplate1?.id } };
+                  if (id) delete updated.customGallery1; else updated.customGallery1 = imageUrl;
+                  if (onUpdate) onUpdate(updated);
                 }}
                 error={!!errors?.whyBuyGalleryTemplate1}
               />
@@ -1275,45 +1172,39 @@ export default function WhyBuyPro3({
             <div className="h-40 relative">
               <ImageUploader
                 label="Gallery Image 2"
-                src={data.whyBuyGalleryTemplate2?.imageUrl}
+                src={data.customGallery2 || data.whyBuyGalleryTemplate2?.imageUrl}
                 fieldKey="galImg2"
                 imageType="GALLERY"
                 onChange={({ imageUrl, id }) => {
-                  updateField("whyBuyGalleryTemplate2", {
-                    ...data.whyBuyGalleryTemplate2,
-                    imageUrl,
-                    id: id ?? data.whyBuyGalleryTemplate2?.id,
-                  });
+                  const updated = { ...data, whyBuyGalleryTemplate2: { ...data.whyBuyGalleryTemplate2, imageUrl, id: id ?? data.whyBuyGalleryTemplate2?.id } };
+                  if (id) delete updated.customGallery2; else updated.customGallery2 = imageUrl;
+                  if (onUpdate) onUpdate(updated);
                 }}
               />
             </div>
             <div className="h-40 relative">
               <ImageUploader
                 label="Gallery Image 3"
-                src={data.whyBuyGalleryTemplate3?.imageUrl}
+                src={data.customGallery3 || data.whyBuyGalleryTemplate3?.imageUrl}
                 fieldKey="galImg3"
                 imageType="GALLERY"
                 onChange={({ imageUrl, id }) => {
-                  updateField("whyBuyGalleryTemplate3", {
-                    ...data.whyBuyGalleryTemplate3,
-                    imageUrl,
-                    id: id ?? data.whyBuyGalleryTemplate3?.id,
-                  });
+                  const updated = { ...data, whyBuyGalleryTemplate3: { ...data.whyBuyGalleryTemplate3, imageUrl, id: id ?? data.whyBuyGalleryTemplate3?.id } };
+                  if (id) delete updated.customGallery3; else updated.customGallery3 = imageUrl;
+                  if (onUpdate) onUpdate(updated);
                 }}
               />
             </div>
             <div className="h-40 relative">
               <ImageUploader
                 label="Gallery Image 4"
-                src={data.whyBuyGalleryTemplate4?.imageUrl}
+                src={data.customGallery4 || data.whyBuyGalleryTemplate4?.imageUrl}
                 fieldKey="galImg4"
                 imageType="GALLERY"
                 onChange={({ imageUrl, id }) => {
-                  updateField("whyBuyGalleryTemplate4", {
-                    ...data.whyBuyGalleryTemplate4,
-                    imageUrl,
-                    id: id ?? data.whyBuyGalleryTemplate4?.id,
-                  });
+                  const updated = { ...data, whyBuyGalleryTemplate4: { ...data.whyBuyGalleryTemplate4, imageUrl, id: id ?? data.whyBuyGalleryTemplate4?.id } };
+                  if (id) delete updated.customGallery4; else updated.customGallery4 = imageUrl;
+                  if (onUpdate) onUpdate(updated);
                 }}
               />
             </div>
@@ -1323,9 +1214,9 @@ export default function WhyBuyPro3({
         {/* TESTIMONIALS */}
         <div>
           <h3 className="text-primary font-bold text-xl mb-4">
-            Featured Reviews Title
+            Featured Reviews 
           </h3>
-          <EditorInput
+          {/* <EditorInput
             bold
             label="Section Title"
             value={data.whyBuyTestimonialTitle}
@@ -1335,7 +1226,7 @@ export default function WhyBuyPro3({
             onChange={(e) =>
               updateField("whyBuyTestimonialTitle", e.target.value)
             }
-          />
+          /> */}
           <p className="text-third text-sm mb-4 mt-2">
             Select which customer reviews to feature on your storefront.
           </p>
@@ -1410,16 +1301,22 @@ export default function WhyBuyPro3({
     <>
       {/* ===== Hero Section ===== */}
       <section className="relative w-full overflow-hidden min-h-screen">
-        <img
-          src={heroImages[active]}
-          alt="vehicle"
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{
-            opacity: fading ? 0 : 1,
-            transform: fading ? "scale(1.04)" : "scale(1)",
-            transition: "opacity 0.5s ease, transform 0.5s ease",
-          }}
-        />
+        {heroImages[active] ? (
+          <img
+            src={heroImages[active]}
+            alt="vehicle"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{
+              opacity: fading ? 0 : 1,
+              transform: fading ? "scale(1.04)" : "scale(1)",
+              transition: "opacity 0.5s ease, transform 0.5s ease",
+            }}
+          />
+        ) : (
+          <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+            <span className="text-third/40 text-sm">Hero images not set</span>
+          </div>
+        )}
         <div className="absolute inset-0 bg-linear-to-t from-secondary/70 via-secondary/50 to-secondary/30" />
         <div className="absolute inset-0 flex items-center justify-center px-8">
           <div className="max-w-3xl w-full flex flex-col items-center text-center gap-6">
@@ -1433,14 +1330,7 @@ export default function WhyBuyPro3({
               className="text-primary/70 text-base font-[Poppins] leading-relaxed"
               dangerouslySetInnerHTML={{ __html: data.whyBuyHeroDescription }}
             />
-            <div className="pt-4">
-              <a
-                href="#"
-                className="font-[Montserrat] font-bold text-sm tracking-[0.15em] uppercase text-primary border-b border-third/40 pb-0.5 hover:border-primary transition-colors duration-200"
-              >
-                Explore Listings →
-              </a>
-            </div>
+            
           </div>
         </div>
       </section>
@@ -1464,24 +1354,25 @@ export default function WhyBuyPro3({
                 />
               </div>
               <div className="relative overflow-hidden rounded-2xl group lg:w-[26.5%] min-h-[500px] ">
-                <img
-                  src={storyImages[0]}
-                  alt=""
-                  className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700"
-                />
+                {storyImages[0] ? (
+                  <img src={storyImages[0]} alt="" className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700" />
+                ) : (
+                  <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                    <span className="text-third/40 text-xs">Story image 1</span>
+                  </div>
+                )}
                 <div className="absolute inset-0 bg-linear-to-t from-secondary/80 via-transparent to-secondary/20" />
               </div>
               <div className="flex lg:flex-col gap-4 lg:w-[26%] ">
-                {storyImages.slice(1, 3).map((src, i) => (
-                  <div
-                    key={i}
-                    className="relative flex-1 overflow-hidden rounded-2xl group min-h-60"
-                  >
-                    <img
-                      src={src}
-                      alt=""
-                      className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700"
-                    />
+                {[1, 2].map((idx) => (
+                  <div key={idx} className="relative flex-1 overflow-hidden rounded-2xl group min-h-60">
+                    {storyImages[idx] ? (
+                      <img src={storyImages[idx]} alt="" className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700" />
+                    ) : (
+                      <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                        <span className="text-third/40 text-xs">Story image {idx + 1}</span>
+                      </div>
+                    )}
                     <div className="absolute inset-0 bg-linear-to-br from-transparent to-secondary/60" />
                   </div>
                 ))}
@@ -1510,30 +1401,18 @@ export default function WhyBuyPro3({
             </div>
             <div className="flex gap-4 h-[260px]">
               <div className="w-[48%] md:w-[35%] rounded-3xl overflow-hidden border border-third/10">
-                <img
-                  src={vehicleSelectionImages[0]}
-                  className="w-full h-full object-cover"
-                />
+                {vehicleSelectionImages[0] ? <img src={vehicleSelectionImages[0]} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 1</span></div>}
               </div>
-              <div className="w-[25%] flex flex-col gap-4  md:block">
+              <div className="w-[25%] flex flex-col gap-4 md:block">
                 <div className="h-1/2 rounded-2xl overflow-hidden border border-third/10">
-                  <img
-                    src={vehicleSelectionImages[1]}
-                    className="w-full h-full object-cover"
-                  />
+                  {vehicleSelectionImages[1] ? <img src={vehicleSelectionImages[1]} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 2</span></div>}
                 </div>
                 <div className="h-1/2 rounded-2xl overflow-hidden border border-third/10">
-                  <img
-                    src={vehicleSelectionImages[2]}
-                    className="w-full h-full object-cover"
-                  />
+                  {vehicleSelectionImages[2] ? <img src={vehicleSelectionImages[2]} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 3</span></div>}
                 </div>
               </div>
               <div className="w-[48%] md:w-[40%] rounded-3xl overflow-hidden border border-third/10">
-                <img
-                  src={vehicleSelectionImages[3]}
-                  className="w-full h-full object-cover"
-                />
+                {vehicleSelectionImages[3] ? <img src={vehicleSelectionImages[3]} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 4</span></div>}
               </div>
             </div>
           </div>
@@ -1563,7 +1442,7 @@ export default function WhyBuyPro3({
             </div>
             <div className="border border-third/10 rounded-3xl shadow-2xl overflow-hidden">
               <div className="relative w-full h-[280px] md:h-80">
-                {processImages.map((src, i) => (
+                {processImages.length > 0 ? processImages.map((src, i) => (
                   <img
                     key={i}
                     src={src}
@@ -1571,7 +1450,11 @@ export default function WhyBuyPro3({
                     className={`absolute inset-0 w-full h-full object-cover transition-all duration-700
                                             ${activeHovered === i ? "opacity-100 scale-100" : "opacity-0 scale-[1.02]"}`}
                   />
-                ))}
+                )) : (
+                  <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                    <span className="text-third/40 text-sm">Process images not set</span>
+                  </div>
+                )}
                 <div className="absolute inset-0 bg-secondary/50 pointer-events-none" />
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   {data.processSteps?.map((step, i) => {
@@ -1682,9 +1565,9 @@ export default function WhyBuyPro3({
                   className="relative bg-secondary/10 p-10 flex flex-col gap-12 transition-colors group cursor-default h-full min-h-60"
                 >
                   <img
-                    src={inspectionImages[i]}
+                    src={inspectionImages[i] || ""}
                     alt={point}
-                    className="absolute inset-0 w-full h-full object-cover grayscale brightness-[0.15] group-hover:brightness-[0.45] transition-all duration-700"
+                    className={`absolute inset-0 w-full h-full object-cover grayscale brightness-[0.15] group-hover:brightness-[0.45] transition-all duration-700 ${!inspectionImages[i] ? "hidden" : ""}`}
                   />
                   <div className="relative z-10 flex flex-col justify-between h-full">
                     <div className="flex justify-between items-start">
@@ -1765,7 +1648,7 @@ export default function WhyBuyPro3({
               <Camera size={32} className="text-third/10 hidden md:block" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {galleryImages.map((img, i) => (
+              {galleryImages.length > 0 ? galleryImages.map((img, i) => (
                 <div
                   key={i}
                   className={`relative rounded-2xl overflow-hidden border border-third/10 group
@@ -1778,7 +1661,11 @@ export default function WhyBuyPro3({
                     alt={`Gallery item ${i + 1}`}
                   />
                 </div>
-              ))}
+              )) : (
+                <div className="col-span-3 h-40 bg-third/10 border-2 border-dashed border-third/20 rounded-2xl flex items-center justify-center">
+                  <span className="text-third/40 text-sm">Gallery images not set</span>
+                </div>
+              )}
             </div>
           </div>
         </div>

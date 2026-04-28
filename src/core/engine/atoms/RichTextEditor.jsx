@@ -20,7 +20,23 @@ const ToolbarBtn = ({ onClick, isActive, label }) => (
   </button>
 );
 
-export default function RichTextEditor({ label, value, onChange, onBlur, error, errorMsg }) {
+// Strip HTML tags to count plain text characters
+function stripHtml(html) {
+  if (!html) return "";
+  return html.replace(/<[^>]*>/g, "");
+}
+
+export default function RichTextEditor({ label, value, onChange, onBlur, error, errorMsg, maxLength, minLength }) {
+  const plainLen = stripHtml(value).length;
+
+  // Max logic
+  const charsLeft = maxLength ? maxLength - plainLen : null;
+  const isAtMax = charsLeft !== null && charsLeft <= 0;
+  const showMaxWarning = !isAtMax && charsLeft !== null && charsLeft <= 20;
+
+  // Min logic
+  const isBelowMin = minLength && plainLen > 0 && plainLen < minLength;
+
   const editor = useEditor({
     extensions: [StarterKit, Underline],
     immediatelyRender: false,
@@ -32,7 +48,10 @@ export default function RichTextEditor({ label, value, onChange, onBlur, error, 
       },
     },
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      const html = editor.getHTML();
+      const plain = stripHtml(html);
+      if (maxLength && plain.length > maxLength) return;
+      onChange(html);
     },
     onBlur: ({ editor }) => {
       if (onBlur) onBlur(editor.getHTML());
@@ -43,15 +62,11 @@ export default function RichTextEditor({ label, value, onChange, onBlur, error, 
 
   return (
     <div className="flex flex-col gap-1 w-full">
-      {/* {label && (
-        <label className="text-xs font-bold uppercase text-third">
-          {label}
-        </label>
-      )} */}
-
-      <div className="border border-third/30 rounded bg-primary/5 overflow-hidden shadow-sm focus-within:border-primary transition">
+      <div className={`border rounded bg-primary/5 overflow-hidden shadow-sm transition
+        ${error ? "border-red-500 focus-within:border-red-500" : "border-third/30 focus-within:border-primary"}
+      `}>
         {/* Toolbar */}
-        <div className="border-b border-third/30 p-1 flex gap-1 ">
+        <div className="border-b border-third/30 p-1 flex gap-1">
           <ToolbarBtn
             label="B"
             onClick={() => editor.chain().focus().toggleBold().run()}
@@ -78,6 +93,33 @@ export default function RichTextEditor({ label, value, onChange, onBlur, error, 
         <EditorContent editor={editor} />
       </div>
 
+      <div className="flex items-center justify-between min-h-[16px]">
+        {/* Left: messages in priority order */}
+        {(error && errorMsg) ? (
+          <span className="text-[11px] text-red-500 font-medium ml-1">{errorMsg}</span>
+        ) : isAtMax ? (
+          <span className="text-[11px] text-red-400 font-medium ml-1">
+            Maximum character limit reached
+          </span>
+        ) : isBelowMin ? (
+          <span className="text-[11px] text-blue-400 font-medium ml-1">
+            Minimum {minLength} characters required
+          </span>
+        ) : showMaxWarning ? (
+          <span className="text-[11px] text-yellow-400/80 font-medium ml-1">
+            {charsLeft} character{charsLeft === 1 ? "" : "s"} left
+          </span>
+        ) : (
+          <span />
+        )}
+
+        {/* Right: counter */}
+        {maxLength && (
+          <span className={`text-[11px] font-medium mr-1 ${isAtMax ? "text-red-400" : "text-third/40"}`}>
+            {plainLen}/{maxLength}
+          </span>
+        )}
+      </div>
     </div>
   );
 }

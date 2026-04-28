@@ -12,7 +12,6 @@ import { checkIsUserEligbleToSendInquary } from "@/services/vehicle.service";
 import SignupPopup from "@/components/auth/SignupPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import RequestAlredySentPopup from "./RequestAlredySentPopup";
-import { createSlug } from "@/lib/helper";
 import { useDebouncedCallback } from "@/hooks/useDebounce";
 
 export default function VehicleSummaryRight({ vehicle, summary }) {
@@ -194,7 +193,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
                   {summary?.consultationName && (
                     <div className="shrink-0">
                       <Button
-                        href={`/store-front/${createSlug(summary.consultationName)}/${summary?.username || 1}`}
+                        href={`/store-front/${summary?.username || 1}`}
                         variant="outline"
                         size="sm"
                         showIcon

@@ -1,13 +1,11 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 "use client";
-import { ABOUT_PRO_2 } from "../schemas";
 
 import React, { useEffect, useRef, useState } from "react";
 import EditorInput from "../atoms/EditorInput";
 import { ImageUploader } from "../atoms/ImageUploader ";
 import RichTextEditor from "../atoms/RichTextEditor";
-import { Plus, Trash } from "lucide-react";
 import Select from "react-select";
 import Button from "@/components/ui/button";
 import GlobalLoader from "@/components/ui/GlobalLoader";
@@ -84,16 +82,6 @@ const formatOptionLabel = ({ value, label }) => (
   </div>
 );
 
-const DEFAULT_DATA = ABOUT_PRO_2[0].data;
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-};
-const stagger = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.12 } },
-};
 const EyeBrow = ({ children }) => (
   <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat] mb-4">
     {children}
@@ -582,17 +570,17 @@ export default function AboutPro2({
           ════════════════════════════════════════ */}
       <section className="relative h-screen px-2 lg:px-4 overflow-hidden">
         {/* BACKGROUND IMAGE */}
-        {data.aboutHeroTemplate1?.imageUrl && (
+        {data.aboutHeroTemplate1?.imageUrl ? (
           <>
             <div className="absolute inset-0">
-              <img
-                src={data.aboutHeroTemplate1.imageUrl}
-                alt="Our story"
-                className="w-full h-full object-cover object-center"
-              />
+              <img src={data.aboutHeroTemplate1.imageUrl} alt="Our story" className="w-full h-full object-cover object-center" />
               <div className="absolute inset-0 bg-black/50" />
             </div>
           </>
+        ) : (
+          <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+            <span className="text-third/40 text-sm">Hero image not set</span>
+          </div>
         )}
         <div className="container relative z-10 h-full flex flex-col justify-center">
           {/* heading + description (stacked) */}
@@ -678,9 +666,10 @@ export default function AboutPro2({
                         <span className="text-fourth">{item.keyword}</span>
                       </h3>
                       <div className="w-8 h-0.5 bg-fourth/50" />
-                      <p className="text-third/65 text-[14px] leading-[1.95] font-[Poppins]">
-                        {item.desc}
-                      </p>
+                      <div
+                        className="text-third/65 text-[14px] leading-[1.95] font-[Poppins]"
+                        dangerouslySetInnerHTML={{ __html: item.desc }}
+                      />
                     </div>
                   </div>
                 );
@@ -766,21 +755,20 @@ export default function AboutPro2({
               </h2>
             </div>
             <div className="flex flex-col justify-center pb-10 lg:pl-16">
-              <p className="font-[Poppins] text-[13.5px] text-third/65 leading-[1.9]">
-                {data.aboutServicesDescription}
-              </p>
+              <div
+                className="font-[Poppins] text-[13.5px] text-third/65 leading-[1.9]"
+                dangerouslySetInnerHTML={{ __html: data.aboutServicesDescription }}
+              />
             </div>
           </div>
           {/* ── 2×2 pro cards ── */}
           <div
             className="grid grid-cols-1 sm:grid-cols-2 gap-[25px]"
-            variants={stagger}
           >
             {data.services.map((svc, i) => {
               return (
                 <div
                   key={i}
-                  variants={fadeUp}
                   className="group relative flex flex-col gap-5 p-7 border border-third/10 rounded-2xl overflow-hidden
                  transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
                 >

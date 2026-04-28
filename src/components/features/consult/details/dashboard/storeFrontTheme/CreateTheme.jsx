@@ -372,16 +372,39 @@ export default function CreateTheme() {
         console.error("Failed to fetch existing theme data", error);
       }
 
+      // Checks if the API data has any real content fields beyond just IDs/status/timestamps
+      const hasRealContent = (apiData) => {
+        if (!apiData) return false;
+        const metaOnlyKeys = new Set([
+          "id", "consultationId", "themePrimaryId", "themeId",
+          "verificationStatus", "isSubmitted", "createdAt", "updatedAt",
+          "featuredReviews",
+        ]);
+        return Object.entries(apiData).some(
+          ([key, value]) =>
+            !metaOnlyKeys.has(key) &&
+            value !== null &&
+            value !== undefined &&
+            value !== "" &&
+            !(Array.isArray(value) && value.length === 0),
+        );
+      };
+
+      // Builds a fully empty data shell matching the schema shape (no dummy content)
       const getEmptyData = (defaultData) => {
         const empty = {};
         Object.entries(defaultData).forEach(([key, value]) => {
           if (Array.isArray(value)) {
+            // Preserve array length/shape but zero out all values
             empty[key] = value.map((item) => {
               if (typeof item === "string") return "";
               const emptyItem = {};
               Object.keys(item).forEach((k) => (emptyItem[k] = ""));
               return emptyItem;
             });
+          } else if (value !== null && typeof value === "object") {
+            // Image template objects — empty them out
+            empty[key] = {};
           } else {
             empty[key] = "";
           }
@@ -389,21 +412,23 @@ export default function CreateTheme() {
         return empty;
       };
 
-      if (apiData) {
+      if (apiData && hasRealContent(apiData)) {
+        // API has real content — map and hydrate
         const mappedData = mapApiToTemplateData(apiData);
         const hydratedSections = theme.schema.map((section) => ({
           ...section,
           data: {
-            ...getEmptyData(section.data), // Initialize explicit empty fields
+            ...getEmptyData(section.data),
             ...Object.fromEntries(
               Object.entries(mappedData).filter(
                 ([, v]) => v !== undefined && v !== null,
               ),
-            ), // API values populated properly
+            ),
           },
         }));
         setSections(hydratedSections);
       } else {
+        // No real content (fresh draft or empty response) — load clean empty UI
         const hydratedSections = theme.schema.map((section) => ({
           ...section,
           data: getEmptyData(section.data),

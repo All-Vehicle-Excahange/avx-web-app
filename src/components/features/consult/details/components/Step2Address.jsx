@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -15,6 +16,9 @@ export default function Step2Address({
 
   const [stateOpen, setStateOpen] = useState(false);
   const [cityOpen, setCityOpen] = useState(false);
+
+  const [stateFocusedIndex, setStateFocusedIndex] = useState(-1);
+  const [cityFocusedIndex, setCityFocusedIndex] = useState(-1);
 
   // These drive the visible text in the input as well as filtering
   const [stateSearch, setStateSearch] = useState(
@@ -99,6 +103,97 @@ export default function Step2Address({
     c.label.toLowerCase().includes(citySearch.toLowerCase()),
   );
 
+  // ===== KEYBOARD NAVIGATION HANDLERS =====
+  const handleStateKeyDown = (e) => {
+    if (!stateOpen) {
+      if (e.key === "ArrowDown" || e.key === "Enter") setStateOpen(true);
+      return;
+    }
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setStateFocusedIndex((prev) =>
+          prev < filteredStates.length - 1 ? prev + 1 : prev,
+        );
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setStateFocusedIndex((prev) => (prev > 0 ? prev - 1 : 0));
+        break;
+      case "Enter":
+        e.preventDefault();
+        if (stateFocusedIndex >= 0 && stateFocusedIndex < filteredStates.length) {
+          const s = filteredStates[stateFocusedIndex];
+          const updated = {
+            ...form,
+            stateId: s.value,
+            stateName: s.label,
+            cityId: null,
+            cityName: "",
+          };
+          setForm(updated);
+          if (onChange) onChange(updated);
+          setStateSearch(s.label);
+          setCitySearch("");
+          setStateOpen(false);
+        }
+        break;
+      case "Escape":
+        setStateOpen(false);
+        break;
+    }
+  };
+
+  const handleCityKeyDown = (e) => {
+    if (!cityOpen) {
+      if (e.key === "ArrowDown" || (e.key === "Enter" && form.stateId))
+        setCityOpen(true);
+      return;
+    }
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setCityFocusedIndex((prev) =>
+          prev < filteredCities.length - 1 ? prev + 1 : prev,
+        );
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setCityFocusedIndex((prev) => (prev > 0 ? prev - 1 : 0));
+        break;
+      case "Enter":
+        e.preventDefault();
+        if (cityFocusedIndex >= 0 && cityFocusedIndex < filteredCities.length) {
+          const c = filteredCities[cityFocusedIndex];
+          const updated = {
+            ...form,
+            cityId: c.value,
+            cityName: c.label,
+          };
+          setForm(updated);
+          if (onChange) onChange(updated);
+          setCitySearch(c.label);
+          setCityOpen(false);
+        }
+        break;
+      case "Escape":
+        setCityOpen(false);
+        break;
+    }
+  };
+
+  // Reset indices when filtering
+  useEffect(() => {
+    setStateFocusedIndex(-1);
+  }, [stateSearch, stateOpen]);
+
+  useEffect(() => {
+    setCityFocusedIndex(-1);
+  }, [citySearch, cityOpen]);
+
+
   return (
     <div className="space-y-6">
       {(!readOnly || form.address) && (
@@ -130,6 +225,7 @@ export default function Step2Address({
                 readOnly={readOnly}
                 value={stateSearch}
                 placeholder="Search state..."
+                onKeyDown={handleStateKeyDown}
                 onChange={(e) => {
                   setStateSearch(e.target.value);
                   setStateOpen(true);
@@ -163,7 +259,7 @@ export default function Step2Address({
             {stateOpen && !readOnly && filteredStates.length > 0 && (
               <div className="absolute top-full left-0 right-0 mt-1 border border-primary bg-primary/10 backdrop-blur-sm rounded-md overflow-hidden z-20 shadow-lg">
                 <div className="max-h-44 overflow-y-auto">
-                  {filteredStates.map((s) => (
+                  {filteredStates.map((s, index) => (
                     <div
                       key={s.value}
                       onMouseDown={(e) => {
@@ -182,10 +278,13 @@ export default function Step2Address({
                         setCitySearch("");
                         setStateOpen(false);
                       }}
-                      className={`px-3 py-2 text-sm cursor-pointer transition-colors hover:bg-primary/20 ${
-                        form.stateId === s.value
-                          ? "bg-primary/20 font-medium text-primary"
-                          : "text-primary"
+                      onMouseEnter={() => setStateFocusedIndex(index)}
+                      className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
+                        stateFocusedIndex === index
+                          ? "bg-primary/30 text-primary"
+                          : form.stateId === s.value
+                            ? "bg-primary/20 font-medium text-primary"
+                            : "text-primary"
                       }`}
                     >
                       {s.label}
@@ -222,6 +321,7 @@ export default function Step2Address({
                       ? "Search city..."
                       : "Select state first"
                 }
+                onKeyDown={handleCityKeyDown}
                 onChange={(e) => {
                   setCitySearch(e.target.value);
                   setCityOpen(true);
@@ -259,7 +359,7 @@ export default function Step2Address({
             {cityOpen && !readOnly && form.stateId && filteredCities.length > 0 && (
               <div className="absolute top-full left-0 right-0 mt-1 border border-primary bg-primary/10 backdrop-blur-sm rounded-md overflow-hidden z-20 shadow-lg">
                 <div className="max-h-44 overflow-y-auto">
-                  {filteredCities.map((c) => (
+                  {filteredCities.map((c, index) => (
                     <div
                       key={c.value}
                       onMouseDown={(e) => {
@@ -274,10 +374,13 @@ export default function Step2Address({
                         setCitySearch(c.label);
                         setCityOpen(false);
                       }}
-                      className={`px-3 py-2 text-sm cursor-pointer transition-colors hover:bg-primary/20 ${
-                        form.cityId === c.value
-                          ? "bg-primary/20 font-medium text-primary"
-                          : "text-primary"
+                      onMouseEnter={() => setCityFocusedIndex(index)}
+                      className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
+                        cityFocusedIndex === index
+                          ? "bg-primary/30 text-primary"
+                          : form.cityId === c.value
+                            ? "bg-primary/20 font-medium text-primary"
+                            : "text-primary"
                       }`}
                     >
                       {c.label}
