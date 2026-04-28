@@ -204,11 +204,11 @@ export default function WhyBuyPremium2({
       storyData.append("storyTitle", data.storyTitle || "");
       storyData.append("storyDescription", data.storyDescription || "");
       for (let i = 1; i <= 4; i++) {
-        const customField = `customStory${i}`;
+        const customField = `customWhyBuyStory${i}`;
         const tmpl = data[`storyTemplate${i}`];
         if (data[customField] && data[customField].startsWith("blob:")) {
           const blob = await getBlobFromUrl(data[customField]);
-          if (blob) storyData.append(customField, blob, `story${i}.png`);
+          if (blob) storyData.append(`customStory${i}`, blob, `story${i}.png`);
         } else if (tmpl?.id) {
           storyData.append(`storyTemplateId${i}`, tmpl.id);
         }
@@ -224,11 +224,11 @@ export default function WhyBuyPremium2({
         data.vehicleSelectionDescription || "",
       );
       for (let i = 1; i <= 2; i++) {
-        const customField = `customVehicleSelection${i}`;
+        const customField = `customWhyBuyVehicleSelection${i}`;
         const tmpl = data[`vehicleSelectionTemplate${i}`];
         if (data[customField] && data[customField].startsWith("blob:")) {
           const blob = await getBlobFromUrl(data[customField]);
-          if (blob) vehicleData.append(customField, blob, `selection${i}.png`);
+          if (blob) vehicleData.append(`customVehicleSelection${i}`, blob, `selection${i}.png`);
         } else if (tmpl?.id) {
           vehicleData.append(`vehicleSelectionTemplateId${i}`, tmpl.id);
         }
@@ -264,12 +264,12 @@ export default function WhyBuyPremium2({
         });
       }
       for (let i = 1; i <= 4; i++) {
-        const customField = `customInspection${i}`;
+        const customField = `customWhyBuyInspection${i}`;
         const tmpl = data[`inspectionTemplate${i}`];
         if (data[customField] && data[customField].startsWith("blob:")) {
           const blob = await getBlobFromUrl(data[customField]);
           if (blob)
-            inspectionData.append(customField, blob, `inspection${i}.png`);
+            inspectionData.append(`customInspection${i}`, blob, `inspection${i}.png`);
         } else if (tmpl?.id) {
           inspectionData.append(`inspectionTemplateId${i}`, tmpl.id);
         }
@@ -285,12 +285,12 @@ export default function WhyBuyPremium2({
         data.customerCommitmentDescription || "",
       );
       for (let i = 1; i <= 5; i++) {
-        const customField = `customCustomerCommitment${i}`;
+        const customField = `customWhyBuyCustomerCommitment${i}`;
         const tmpl = data[`customerCommitmentTemplate${i}`];
         if (data[customField] && data[customField].startsWith("blob:")) {
           const blob = await getBlobFromUrl(data[customField]);
           if (blob)
-            commitmentData.append(customField, blob, `commitment${i}.png`);
+            commitmentData.append(`customCustomerCommitment${i}`, blob, `commitment${i}.png`);
         } else if (tmpl?.id) {
           commitmentData.append(`customerCommitmentTemplateId${i}`, tmpl.id);
         }
@@ -388,7 +388,6 @@ export default function WhyBuyPremium2({
                     label="Video"
                     src={
                       data.customWhyBuyHero1 ||
-                      data.customWhyBuyHeroUrl1 ||
                       data.whyBuyHeroTemplate1?.imageUrl
                     }
                     fieldKey="heroVid"
@@ -415,7 +414,6 @@ export default function WhyBuyPremium2({
                     label="Image 1"
                     src={
                       data.customWhyBuyHero2 ||
-                      data.customWhyBuyHeroUrl2 ||
                       data.whyBuyHeroTemplate2?.imageUrl
                     }
                     fieldKey="heroImg1"
@@ -442,7 +440,6 @@ export default function WhyBuyPremium2({
                     label="Image 2"
                     src={
                       data.customWhyBuyHero3 ||
-                      data.customWhyBuyHeroUrl3 ||
                       data.whyBuyHeroTemplate3?.imageUrl
                     }
                     fieldKey="heroImg2"
@@ -499,22 +496,21 @@ export default function WhyBuyPremium2({
                   <ImageUploader
                     label="Image 1"
                     src={
-                      data[`customStory1`] ||
-                      data[`customStoryUrl1`] ||
-                      data[`storyTemplate1`]?.imageUrl
+                      data.customWhyBuyStory1 ||
+                      data.storyTemplate1?.imageUrl
                     }
                     fieldKey="storyImg1"
                     imageType="CONSULTANT_STORY"
-                    error={errors?.[`storyTemplate1`]}
-                    errorMsg={errors?.[`storyTemplate1`]}
+                    error={errors?.storyTemplate1}
+                    errorMsg={errors?.storyTemplate1}
                     onChange={({ imageUrl, id }) => {
                       const updatedData = { ...data };
                       if (id) {
-                        updatedData[`storyTemplate1`] = { imageUrl, id };
-                        delete updatedData[`customStory1`];
+                        updatedData.storyTemplate1 = { imageUrl, id };
+                        delete updatedData.customWhyBuyStory1;
                       } else {
-                        updatedData[`customStory1`] = imageUrl;
-                        delete updatedData[`storyTemplate1`];
+                        updatedData.customWhyBuyStory1 = imageUrl;
+                        delete updatedData.storyTemplate1;
                       }
                       onUpdate(updatedData);
                     }}
@@ -524,22 +520,21 @@ export default function WhyBuyPremium2({
                   <ImageUploader
                     label="Image 2"
                     src={
-                      data[`customStory2`] ||
-                      data[`customStoryUrl2`] ||
-                      data[`storyTemplate2`]?.imageUrl
+                      data.customWhyBuyStory2 ||
+                      data.storyTemplate2?.imageUrl
                     }
                     fieldKey="storyImg2"
                     imageType="CONSULTANT_STORY"
-                    error={errors?.[`storyTemplate2`]}
-                    errorMsg={errors?.[`storyTemplate2`]}
+                    error={errors?.storyTemplate2}
+                    errorMsg={errors?.storyTemplate2}
                     onChange={({ imageUrl, id }) => {
                       const updatedData = { ...data };
                       if (id) {
-                        updatedData[`storyTemplate2`] = { imageUrl, id };
-                        delete updatedData[`customStory2`];
+                        updatedData.storyTemplate2 = { imageUrl, id };
+                        delete updatedData.customWhyBuyStory2;
                       } else {
-                        updatedData[`customStory2`] = imageUrl;
-                        delete updatedData[`storyTemplate2`];
+                        updatedData.customWhyBuyStory2 = imageUrl;
+                        delete updatedData.storyTemplate2;
                       }
                       onUpdate(updatedData);
                     }}
@@ -587,8 +582,7 @@ export default function WhyBuyPremium2({
                     <ImageUploader
                       label={`Image ${n}`}
                       src={
-                        data[`customVehicleSelection${n}`] ||
-                        data[`customVehicleSelectionUrl${n}`] ||
+                        data[`customWhyBuyVehicleSelection${n}`] ||
                         data[`vehicleSelectionTemplate${n}`]?.imageUrl
                       }
                       fieldKey={`selImg${n}`}
@@ -603,10 +597,10 @@ export default function WhyBuyPremium2({
                             imageUrl,
                             id,
                           };
-                          delete updatedData[`customVehicleSelection${n}`];
+                          delete updatedData[`customWhyBuyVehicleSelection${n}`];
                         } else {
                           // Custom image uploaded
-                          updatedData[`customVehicleSelection${n}`] = imageUrl;
+                          updatedData[`customWhyBuyVehicleSelection${n}`] = imageUrl;
                           delete updatedData[`vehicleSelectionTemplate${n}`];
                         }
                         onUpdate(updatedData);
@@ -811,8 +805,7 @@ export default function WhyBuyPremium2({
                     <ImageUploader
                       label={`Image ${n}`}
                       src={
-                        data[`customInspection${n}`] ||
-                        data[`customInspectionUrl${n}`] ||
+                        data[`customWhyBuyInspection${n}`] ||
                         data[`inspectionTemplate${n}`]?.imageUrl
                       }
                       fieldKey={`inspImg${n}`}
@@ -827,10 +820,10 @@ export default function WhyBuyPremium2({
                             imageUrl,
                             id,
                           };
-                          delete updatedData[`customInspection${n}`];
+                          delete updatedData[`customWhyBuyInspection${n}`];
                         } else {
                           // Custom image uploaded
-                          updatedData[`customInspection${n}`] = imageUrl;
+                          updatedData[`customWhyBuyInspection${n}`] = imageUrl;
                           delete updatedData[`inspectionTemplate${n}`];
                         }
                         onUpdate(updatedData);
@@ -885,8 +878,7 @@ export default function WhyBuyPremium2({
                     <ImageUploader
                       label={`Image ${n}`}
                       src={
-                        data[`customCustomerCommitment${n}`] ||
-                        data[`customCustomerCommitmentUrl${n}`] ||
+                        data[`customWhyBuyCustomerCommitment${n}`] ||
                         data[`customerCommitmentTemplate${n}`]?.imageUrl
                       }
                       fieldKey={`commImg${n}`}
@@ -899,10 +891,10 @@ export default function WhyBuyPremium2({
                             imageUrl,
                             id,
                           };
-                          delete updatedData[`customCustomerCommitment${n}`];
+                          delete updatedData[`customWhyBuyCustomerCommitment${n}`];
                         } else {
                           // Custom image uploaded
-                          updatedData[`customCustomerCommitment${n}`] =
+                          updatedData[`customWhyBuyCustomerCommitment${n}`] =
                             imageUrl;
                           delete updatedData[`customerCommitmentTemplate${n}`];
                         }
@@ -931,7 +923,6 @@ export default function WhyBuyPremium2({
                   label={`Gallery Image ${n}`}
                   src={
                     data[`customGallery${n}`] ||
-                    data[`customGalleryUrl${n}`] ||
                     data[`galleryTemplate${n}`]?.imageUrl
                   }
                   fieldKey={`galImg${n}`}
@@ -1044,7 +1035,7 @@ export default function WhyBuyPremium2({
         {/* HERO BACKGROUND (Video/Image) */}
         <div className="absolute inset-0 w-full h-full">
           {(() => {
-            const src = data.customWhyBuyHero1 || data.customWhyBuyHeroUrl1 || data.whyBuyHeroTemplate1?.imageUrl;
+            const src = data.customWhyBuyHero1 || data.whyBuyHeroTemplate1?.imageUrl;
             if (!src) return (
               <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                 <span className="text-third/40 text-sm">Hero background not set</span>
@@ -1137,22 +1128,22 @@ export default function WhyBuyPremium2({
             </div>
             <div className="relative w-full h-80 lg:h-[380px]">
               <div className="absolute top-0 left-0 w-[75%] h-full overflow-hidden">
-                {(data.customVehicleSelection1 || data.customVehicleSelectionUrl1 || data.vehicleSelectionTemplate1?.imageUrl) ? (
-                  <img src={data.customVehicleSelection1 || data.customVehicleSelectionUrl1 || data.vehicleSelectionTemplate1?.imageUrl} className="w-full h-full object-cover" loading="lazy" />
+                {(data.customWhyBuyVehicleSelection1 || data.vehicleSelectionTemplate1?.imageUrl) ? (
+                  <img src={data.customWhyBuyVehicleSelection1 || data.vehicleSelectionTemplate1?.imageUrl} className="w-full h-full object-cover" loading="lazy" />
                 ) : (
                   <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 1</span></div>
                 )}
               </div>
               <div className="absolute top-0 right-0 w-[38%] h-[48%] overflow-hidden">
-                {(data.customVehicleSelection2 || data.customVehicleSelectionUrl2 || data.vehicleSelectionTemplate2?.imageUrl) ? (
-                  <img src={data.customVehicleSelection2 || data.customVehicleSelectionUrl2 || data.vehicleSelectionTemplate2?.imageUrl} className="w-full h-full object-cover" loading="lazy" />
+                {(data.customWhyBuyVehicleSelection2 || data.vehicleSelectionTemplate2?.imageUrl) ? (
+                  <img src={data.customWhyBuyVehicleSelection2 || data.vehicleSelectionTemplate2?.imageUrl} className="w-full h-full object-cover" loading="lazy" />
                 ) : (
                   <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 2</span></div>
                 )}
               </div>
               <div className="absolute bottom-0 right-0 w-[38%] h-[48%] overflow-hidden">
-                {(data.customStory3 || data.customStoryUrl3 || data.storyTemplate3?.imageUrl || data.vehicleSelectionTemplate1?.imageUrl) ? (
-                  <img src={data.customStory3 || data.customStoryUrl3 || data.storyTemplate3?.imageUrl || data.vehicleSelectionTemplate1?.imageUrl} className="w-full h-full object-cover" loading="lazy" />
+                {(data.customWhyBuyStory3 || data.storyTemplate3?.imageUrl || data.vehicleSelectionTemplate1?.imageUrl) ? (
+                  <img src={data.customWhyBuyStory3 || data.storyTemplate3?.imageUrl || data.vehicleSelectionTemplate1?.imageUrl} className="w-full h-full object-cover" loading="lazy" />
                 ) : (
                   <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 3</span></div>
                 )}
@@ -1233,9 +1224,9 @@ export default function WhyBuyPremium2({
               key={activeInspection}
               className="w-full h-60 sm:h-[300px] md:h-[340px] lg:h-[270px] rounded-2xl overflow-hidden"
             >
-              {(data[`customInspection${activeInspection + 1}`] || data[`customInspectionUrl${activeInspection + 1}`] || data[`inspectionTemplate${activeInspection + 1}`]?.imageUrl) ? (
+              {(data[`customWhyBuyInspection${activeInspection + 1}`] || data[`inspectionTemplate${activeInspection + 1}`]?.imageUrl) ? (
                 <img
-                  src={data[`customInspection${activeInspection + 1}`] || data[`customInspectionUrl${activeInspection + 1}`] || data[`inspectionTemplate${activeInspection + 1}`]?.imageUrl}
+                  src={data[`customWhyBuyInspection${activeInspection + 1}`] || data[`inspectionTemplate${activeInspection + 1}`]?.imageUrl}
                   loading="lazy"
                   className="w-full h-full object-cover"
                 />
@@ -1313,9 +1304,9 @@ export default function WhyBuyPremium2({
                   className="relative overflow-hidden rounded-2xl cursor-pointer transition-all duration-500"
                   style={{ flex: i === activeCommitment ? 3 : 1 }}
                 >
-                  {(data[`customCustomerCommitment${n}`] || data[`customCustomerCommitmentUrl${n}`] || data[`customerCommitmentTemplate${n}`]?.imageUrl) ? (
+                  {(data[`customWhyBuyCustomerCommitment${n}`] || data[`customerCommitmentTemplate${n}`]?.imageUrl) ? (
                     <img
-                      src={data[`customCustomerCommitment${n}`] || data[`customCustomerCommitmentUrl${n}`] || data[`customerCommitmentTemplate${n}`]?.imageUrl}
+                      src={data[`customWhyBuyCustomerCommitment${n}`] || data[`customerCommitmentTemplate${n}`]?.imageUrl}
                       className="w-full h-full object-cover transition duration-700"
                       loading="lazy"
                     />

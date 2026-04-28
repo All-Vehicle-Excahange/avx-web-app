@@ -467,17 +467,17 @@ export default function WhyBuyPremium3({
                     fieldKey="heroVid"
                     imageType="WHY_BUY_HERO"
                     onChange={({ imageUrl, id }) => {
-                      const u = {
-                        ...data,
-                        whyBuyHeroTemplate1: {
-                          ...data.whyBuyHeroTemplate1,
-                          imageUrl,
-                          id: id ?? null,
-                        },
-                      };
-                      if (!id) u.customWhyBuyHero1 = imageUrl;
-                      else delete u.customWhyBuyHero1;
-                      onUpdate(u);
+                      const updatedData = { ...data };
+                      if (id) {
+                        // Template selected
+                        updatedData.whyBuyHeroTemplate1 = { imageUrl, id };
+                        delete updatedData.customWhyBuyHero1;
+                      } else {
+                        // Custom image uploaded
+                        updatedData.customWhyBuyHero1 = imageUrl;
+                        delete updatedData.whyBuyHeroTemplate1;
+                      }
+                      onUpdate(updatedData);
                     }}
                     error={!!errors?.whyBuyHeroTemplate1}
                   />
@@ -492,17 +492,17 @@ export default function WhyBuyPremium3({
                     fieldKey="heroImg1"
                     imageType="WHY_BUY_HERO"
                     onChange={({ imageUrl, id }) => {
-                      const u = {
-                        ...data,
-                        whyBuyHeroTemplate2: {
-                          ...data.whyBuyHeroTemplate2,
-                          imageUrl,
-                          id: id ?? null,
-                        },
-                      };
-                      if (!id) u.customWhyBuyHero2 = imageUrl;
-                      else delete u.customWhyBuyHero2;
-                      onUpdate(u);
+                      const updatedData = { ...data };
+                      if (id) {
+                        // Template selected
+                        updatedData.whyBuyHeroTemplate2 = { imageUrl, id };
+                        delete updatedData.customWhyBuyHero2;
+                      } else {
+                        // Custom image uploaded
+                        updatedData.customWhyBuyHero2 = imageUrl;
+                        delete updatedData.whyBuyHeroTemplate2;
+                      }
+                      onUpdate(updatedData);
                     }}
                   />
                 </div>
@@ -516,17 +516,17 @@ export default function WhyBuyPremium3({
                     fieldKey="heroImg2"
                     imageType="WHY_BUY_HERO"
                     onChange={({ imageUrl, id }) => {
-                      const u = {
-                        ...data,
-                        whyBuyHeroTemplate3: {
-                          ...data.whyBuyHeroTemplate3,
-                          imageUrl,
-                          id: id ?? null,
-                        },
-                      };
-                      if (!id) u.customWhyBuyHero3 = imageUrl;
-                      else delete u.customWhyBuyHero3;
-                      onUpdate(u);
+                      const updatedData = { ...data };
+                      if (id) {
+                        // Template selected
+                        updatedData.whyBuyHeroTemplate3 = { imageUrl, id };
+                        delete updatedData.customWhyBuyHero3;
+                      } else {
+                        // Custom image uploaded
+                        updatedData.customWhyBuyHero3 = imageUrl;
+                        delete updatedData.whyBuyHeroTemplate3;
+                      }
+                      onUpdate(updatedData);
                     }}
                   />
                 </div>
@@ -577,18 +577,17 @@ export default function WhyBuyPremium3({
                       error={errors?.[`storyTemplate${n}`]}
                       errorMsg={errors?.[`storyTemplate${n}`]}
                       onChange={({ imageUrl, id }) => {
-                        const u = {
-                          ...data,
-                          [`storyTemplate${n}`]: {
-                            ...data[`storyTemplate${n}`],
-                            imageUrl,
-                            id: id ?? null,
-                          },
-                        };
-                        const cf = `customStory${n}`;
-                        if (!id) u[cf] = imageUrl;
-                        else delete u[cf];
-                        onUpdate(u);
+                        const updatedData = { ...data };
+                        if (id) {
+                          // Template selected
+                          updatedData[`storyTemplate${n}`] = { imageUrl, id };
+                          delete updatedData[`customStory${n}`];
+                        } else {
+                          // Custom image uploaded
+                          updatedData[`customStory${n}`] = imageUrl;
+                          delete updatedData[`storyTemplate${n}`];
+                        }
+                        onUpdate(updatedData);
                       }}
                     />
                   </div>
@@ -643,18 +642,17 @@ export default function WhyBuyPremium3({
                       error={errors?.[`vehicleSelectionTemplate${n}`]}
                       errorMsg={errors?.[`vehicleSelectionTemplate${n}`]}
                       onChange={({ imageUrl, id }) => {
-                        const u = {
-                          ...data,
-                          [`vehicleSelectionTemplate${n}`]: {
-                            ...data[`vehicleSelectionTemplate${n}`],
-                            imageUrl,
-                            id: id ?? null,
-                          },
-                        };
-                        const cf = `customVehicleSelection${n}`;
-                        if (!id) u[cf] = imageUrl;
-                        else delete u[cf];
-                        onUpdate(u);
+                        const updatedData = { ...data };
+                        if (id) {
+                          // Template selected
+                          updatedData[`vehicleSelectionTemplate${n}`] = { imageUrl, id };
+                          delete updatedData[`customVehicleSelection${n}`];
+                        } else {
+                          // Custom image uploaded
+                          updatedData[`customVehicleSelection${n}`] = imageUrl;
+                          delete updatedData[`vehicleSelectionTemplate${n}`];
+                        }
+                        onUpdate(updatedData);
                       }}
                     />
                   </div>
@@ -858,18 +856,17 @@ export default function WhyBuyPremium3({
                       error={errors?.[`inspectionTemplate${n}`]}
                       errorMsg={errors?.[`inspectionTemplate${n}`]}
                       onChange={({ imageUrl, id }) => {
-                        const u = {
-                          ...data,
-                          [`inspectionTemplate${n}`]: {
-                            ...data[`inspectionTemplate${n}`],
-                            imageUrl,
-                            id: id ?? null,
-                          },
-                        };
-                        const cf = `customInspection${n}`;
-                        if (!id) u[cf] = imageUrl;
-                        else delete u[cf];
-                        onUpdate(u);
+                        const updatedData = { ...data };
+                        if (id) {
+                          // Template selected
+                          updatedData[`inspectionTemplate${n}`] = { imageUrl, id };
+                          delete updatedData[`customInspection${n}`];
+                        } else {
+                          // Custom image uploaded
+                          updatedData[`customInspection${n}`] = imageUrl;
+                          delete updatedData[`inspectionTemplate${n}`];
+                        }
+                        onUpdate(updatedData);
                       }}
                     />
                   </div>
@@ -929,18 +926,17 @@ export default function WhyBuyPremium3({
                       error={errors?.[`customerCommitmentTemplate${n}`]}
                       errorMsg={errors?.[`customerCommitmentTemplate${n}`]}
                       onChange={({ imageUrl, id }) => {
-                        const u = {
-                          ...data,
-                          [`customerCommitmentTemplate${n}`]: {
-                            ...data[`customerCommitmentTemplate${n}`],
-                            imageUrl,
-                            id: id ?? null,
-                          },
-                        };
-                        const cf = `customCustomerCommitment${n}`;
-                        if (!id) u[cf] = imageUrl;
-                        else delete u[cf];
-                        onUpdate(u);
+                        const updatedData = { ...data };
+                        if (id) {
+                          // Template selected
+                          updatedData[`customerCommitmentTemplate${n}`] = { imageUrl, id };
+                          delete updatedData[`customCustomerCommitment${n}`];
+                        } else {
+                          // Custom image uploaded
+                          updatedData[`customCustomerCommitment${n}`] = imageUrl;
+                          delete updatedData[`customerCommitmentTemplate${n}`];
+                        }
+                        onUpdate(updatedData);
                       }}
                     />
                   </div>
@@ -970,18 +966,17 @@ export default function WhyBuyPremium3({
                   fieldKey={`galImg${n}`}
                   imageType="GALLERY"
                   onChange={({ imageUrl, id }) => {
-                    const u = {
-                      ...data,
-                      [`galleryTemplate${n}`]: {
-                        ...data[`galleryTemplate${n}`],
-                        imageUrl,
-                        id: id ?? null,
-                      },
-                    };
-                    const cf = `customGallery${n}`;
-                    if (!id) u[cf] = imageUrl;
-                    else delete u[cf];
-                    onUpdate(u);
+                    const updatedData = { ...data };
+                    if (id) {
+                      // Template selected
+                      updatedData[`galleryTemplate${n}`] = { imageUrl, id };
+                      delete updatedData[`customGallery${n}`];
+                    } else {
+                      // Custom image uploaded
+                      updatedData[`customGallery${n}`] = imageUrl;
+                      delete updatedData[`galleryTemplate${n}`];
+                    }
+                    onUpdate(updatedData);
                   }}
                 />
               </div>
