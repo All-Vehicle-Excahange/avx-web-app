@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import InputField from "@/components/ui/inputField";
 import DropzoneUpload from "@/components/ui/DropzoneUpload";
 
-export default function Step3KYC({ onChange, initialData, readOnly = false }) {
+export default function Step3KYC({ onChange, initialData, readOnly = false, submitAttempted = false }) {
   // ===== VALIDATION LOGIC =====
   const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
   const validateGST = (gst) => gstRegex.test(gst);
@@ -50,11 +50,12 @@ export default function Step3KYC({ onChange, initialData, readOnly = false }) {
     gst: null,
     pan: null,
     aadhar: null,
+    atLeastOne: null,
   });
 
   // ===== CROSS-FIELD VALIDATION =====
   useEffect(() => {
-    const newErrors = { gst: null, pan: null, aadhar: null };
+    const newErrors = { gst: null, pan: null, aadhar: null, atLeastOne: null };
 
     // 1. GST Dependency
     const hasGstNum = !!form.gstNumber.trim();
@@ -92,6 +93,13 @@ export default function Step3KYC({ onChange, initialData, readOnly = false }) {
       newErrors.aadhar = "Invalid Aadhaar (must be 12 digits)";
     }
 
+    // 4. At-least-one: PAN or Aadhaar must be fully provided
+    const panComplete = hasPanNum && hasPanImg && !newErrors.pan;
+    const aadharComplete = hasAadharNum && hasAllAadharImg && !newErrors.aadhar;
+    if (!panComplete && !aadharComplete) {
+      newErrors.atLeastOne =
+        "At least one identity document is required — please provide either your PAN Card or Aadhaar Card (number + photo).";
+    }
 
     setErrors(newErrors);
   }, [
@@ -110,7 +118,8 @@ export default function Step3KYC({ onChange, initialData, readOnly = false }) {
     if (onChange) {
       const isChanged =
         JSON.stringify(updatedForm) !== JSON.stringify(initialData);
-      onChange(updatedForm, isChanged);
+      // Pass errors so the parent can block submission
+      onChange(updatedForm, isChanged, errors);
     }
   };
 
@@ -242,6 +251,11 @@ export default function Step3KYC({ onChange, initialData, readOnly = false }) {
         {errors.aadhar && (
           <p className="text-red-500 text-sm font-medium mt-1 ml-1">
             {errors.aadhar}
+          </p>
+        )}
+        {!errors.aadhar && submitAttempted && errors.atLeastOne && (
+          <p className="text-red-500 text-sm font-medium mt-1 ml-1">
+            {errors.atLeastOne}
           </p>
         )}
       </div>
