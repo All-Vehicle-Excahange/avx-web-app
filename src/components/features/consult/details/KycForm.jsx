@@ -56,6 +56,8 @@ export default function KycForm() {
   const [backLoading, setBackLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [hasMadeAnyUpdate, setHasMadeAnyUpdate] = useState(false);
+  const [kycErrors, setKycErrors] = useState(null);
+  const [kycSubmitAttempted, setKycSubmitAttempted] = useState(false);
 
   // ===== VERSION COUNTERS — incrementing forces child remount with fresh initialData =====
   const [dataVersion, setDataVersion] = useState({ 1: 0, 2: 0, 3: 0 });
@@ -73,9 +75,10 @@ export default function KycForm() {
     setChanged((p) => ({ ...p, address: isChanged }));
   }, []);
 
-  const handleKycChange = useCallback((data, isChanged) => {
+  const handleKycChange = useCallback((data, isChanged, errors) => {
     setForm((p) => ({ ...p, kyc: data }));
     setChanged((p) => ({ ...p, kyc: isChanged }));
+    if (errors !== undefined) setKycErrors(errors);
   }, []);
 
   useEffect(() => {
@@ -284,6 +287,7 @@ export default function KycForm() {
       }
 
       if (step === 3) {
+        setKycSubmitAttempted(true);
         const k = form.kyc;
         if (!k) {
           setLoading(false);
@@ -357,7 +361,15 @@ export default function KycForm() {
           return;
         }
 
-        // Post Flow for KYC
+        // Post Flow for KYC — creation only, so enforce at-least-one identity doc
+        if (kycErrors?.atLeastOne) {
+          toast.error(
+            "Please provide at least one identity document: PAN Card or Aadhaar Card (number + photo).",
+          );
+          setLoading(false);
+          return;
+        }
+
         const payload = new FormData();
         payload.append("gstNumber", k.gstNumber || "");
         payload.append("panCardNumber", k.panNumber || "");
@@ -626,6 +638,7 @@ export default function KycForm() {
                           key={`kyc-v${dataVersion[3]}-${existing.kyc ? "exist" : "new"}`}
                           initialData={existing.kyc}
                           onChange={handleKycChange}
+                          submitAttempted={kycSubmitAttempted}
                         />
                       )}
 
