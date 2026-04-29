@@ -122,18 +122,18 @@ export const normalizeWhyBuyData = (raw = {}, defaults = {}) => {
   if (raw.aboutUsDescription && !raw.storyDescription)
     data.storyDescription = raw.aboutUsDescription;
 
-  data.customWhyBuyStory1 = raw.customWhyBuyStory1 || raw.customStoryUrl1;
-  data.customWhyBuyStory2 = raw.customWhyBuyStory2 || raw.customStoryUrl2;
-  data.customWhyBuyStory3 = raw.customWhyBuyStory3 || raw.customStoryUrl3;
+  data.customWhyBuyStory1 = raw.customWhyBuyStory1 || raw.customStoryUrl1 || raw.customStory1;
+  data.customWhyBuyStory2 = raw.customWhyBuyStory2 || raw.customStoryUrl2 || raw.customStory2;
+  data.customWhyBuyStory3 = raw.customWhyBuyStory3 || raw.customStoryUrl3 || raw.customStory3;
 
   // Map storyTemplate objects — already handled by the raw overlay above
   // (explicit re-assignment removed to prevent overwriting user edits)
 
   /* ================= VEHICLE ================= */
   data.customWhyBuyVehicleSelection1 =
-    raw.customWhyBuyVehicleSelection1 || raw.customVehicleSelectionUrl1;
+    raw.customWhyBuyVehicleSelection1 || raw.customVehicleSelectionUrl1 || raw.customVehicleSelection1;
   data.customWhyBuyVehicleSelection2 =
-    raw.customWhyBuyVehicleSelection2 || raw.customVehicleSelectionUrl2;
+    raw.customWhyBuyVehicleSelection2 || raw.customVehicleSelectionUrl2 || raw.customVehicleSelection2;
 
   // vehicleSelectionTemplate objects already handled by the raw overlay above
 
@@ -154,26 +154,26 @@ export const normalizeWhyBuyData = (raw = {}, defaults = {}) => {
   }
 
   data.customWhyBuyInspection1 =
-    raw.customWhyBuyInspection1 || raw.customInspectionUrl1;
+    raw.customWhyBuyInspection1 || raw.customInspectionUrl1 || raw.customInspection1;
   data.customWhyBuyInspection2 =
-    raw.customWhyBuyInspection2 || raw.customInspectionUrl2;
+    raw.customWhyBuyInspection2 || raw.customInspectionUrl2 || raw.customInspection2;
   data.customWhyBuyInspection3 =
-    raw.customWhyBuyInspection3 || raw.customInspectionUrl3;
+    raw.customWhyBuyInspection3 || raw.customInspectionUrl3 || raw.customInspection3;
 
   // Map inspectionTemplate objects — already handled by the raw overlay above
   // (explicit re-assignment removed to prevent overwriting user edits)
 
   /* ================= COMMITMENT ================= */
   data.customWhyBuyCustomerCommitment1 =
-    raw.customWhyBuyCustomerCommitment1 || raw.customCustomerCommitmentUrl1;
+    raw.customWhyBuyCustomerCommitment1 || raw.customCustomerCommitmentUrl1 || raw.customCustomerCommitment1;
   data.customWhyBuyCustomerCommitment2 =
-    raw.customWhyBuyCustomerCommitment2 || raw.customCustomerCommitmentUrl2;
+    raw.customWhyBuyCustomerCommitment2 || raw.customCustomerCommitmentUrl2 || raw.customCustomerCommitment2;
   data.customWhyBuyCustomerCommitment3 =
-    raw.customWhyBuyCustomerCommitment3 || raw.customCustomerCommitmentUrl3;
+    raw.customWhyBuyCustomerCommitment3 || raw.customCustomerCommitmentUrl3 || raw.customCustomerCommitment3;
   data.customWhyBuyCustomerCommitment4 =
-    raw.customWhyBuyCustomerCommitment4 || raw.customCustomerCommitmentUrl4;
+    raw.customWhyBuyCustomerCommitment4 || raw.customCustomerCommitmentUrl4 || raw.customCustomerCommitment4;
   data.customWhyBuyCustomerCommitment5 =
-    raw.customWhyBuyCustomerCommitment5 || raw.customCustomerCommitmentUrl5;
+    raw.customWhyBuyCustomerCommitment5 || raw.customCustomerCommitmentUrl5 || raw.customCustomerCommitment5;
 
   // Map customerCommitmentTemplate objects — already handled by the raw overlay above
   // (explicit re-assignment removed to prevent overwriting user edits)
@@ -192,6 +192,37 @@ export const normalizeWhyBuyData = (raw = {}, defaults = {}) => {
 
   // Map galleryTemplate objects — already handled by the raw overlay above
   // (explicit re-assignment removed to prevent overwriting user edits)
+
+  /* ================= CLEANUP ALIAS KEYS ================= */
+  // The raw overlay (Object.entries(raw)) copies ALL API keys into data,
+  // including alias variants (e.g. customWhyBuyHeroUrl2, customStoryUrl2).
+  // These must be removed so only canonical keys remain. Otherwise, onChange
+  // handlers that delete the canonical key leave the alias behind, causing
+  // stale images to persist in the editor UI.
+  const aliasKeys = [];
+  for (let i = 1; i <= 5; i++) {
+    // Hero aliases (slots 1-3)
+    if (i <= 3) {
+      aliasKeys.push(`customWhyBuyHeroUrl${i}`, `customHeroImageUrl${i}`);
+    }
+    // Story aliases (slots 1-4)
+    if (i <= 4) {
+      aliasKeys.push(`customStoryUrl${i}`, `customStory${i}`);
+    }
+    // Vehicle aliases (slots 1-2)
+    if (i <= 2) {
+      aliasKeys.push(`customVehicleSelectionUrl${i}`, `customVehicleSelection${i}`);
+    }
+    // Inspection aliases (slots 1-4)
+    if (i <= 4) {
+      aliasKeys.push(`customInspectionUrl${i}`, `customInspection${i}`);
+    }
+    // Commitment aliases (slots 1-5)
+    aliasKeys.push(`customCustomerCommitmentUrl${i}`, `customCustomerCommitment${i}`);
+    // Gallery aliases (slots 1-5)
+    aliasKeys.push(`customWhyBuyGallery${i}`, `customGalleryUrl${i}`);
+  }
+  aliasKeys.forEach((key) => delete data[key]);
 
   return data;
 };

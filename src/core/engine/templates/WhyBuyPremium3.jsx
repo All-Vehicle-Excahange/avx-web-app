@@ -260,7 +260,7 @@ export default function WhyBuyPremium3({
       }
       for (let i = 1; i <= 4; i++) {
         const tmpl = data[`inspectionTemplate${i}`];
-        const customField = `customInspection${i}`;
+        const customField = `customWhyBuyInspection${i}`;
         if (tmpl?.id)
           inspectionData.append(`inspectionTemplateId${i}`, tmpl.id);
         else if (data[customField] && data[customField].startsWith("blob:")) {
@@ -281,7 +281,7 @@ export default function WhyBuyPremium3({
       );
       for (let i = 1; i <= 3; i++) {
         const tmpl = data[`customerCommitmentTemplate${i}`];
-        const customField = `customCustomerCommitment${i}`;
+        const customField = `customWhyBuyCustomerCommitment${i}`;
         if (tmpl?.id)
           commitmentData.append(`customerCommitmentTemplateId${i}`, tmpl.id);
         else if (data[customField] && data[customField].startsWith("blob:")) {
@@ -467,17 +467,17 @@ export default function WhyBuyPremium3({
                     fieldKey="heroVid"
                     imageType="WHY_BUY_HERO"
                     onChange={({ imageUrl, id }) => {
-                      const u = {
-                        ...data,
-                        whyBuyHeroTemplate1: {
-                          ...data.whyBuyHeroTemplate1,
-                          imageUrl,
-                          id: id ?? null,
-                        },
-                      };
-                      if (!id) u.customWhyBuyHero1 = imageUrl;
-                      else delete u.customWhyBuyHero1;
-                      onUpdate(u);
+                      const updatedData = { ...data };
+                      if (id) {
+                        // Template selected
+                        updatedData.whyBuyHeroTemplate1 = { imageUrl, id };
+                        delete updatedData.customWhyBuyHero1;
+                      } else {
+                        // Custom image uploaded
+                        updatedData.customWhyBuyHero1 = imageUrl;
+                        delete updatedData.whyBuyHeroTemplate1;
+                      }
+                      onUpdate(updatedData);
                     }}
                     error={!!errors?.whyBuyHeroTemplate1}
                   />
@@ -492,17 +492,17 @@ export default function WhyBuyPremium3({
                     fieldKey="heroImg1"
                     imageType="WHY_BUY_HERO"
                     onChange={({ imageUrl, id }) => {
-                      const u = {
-                        ...data,
-                        whyBuyHeroTemplate2: {
-                          ...data.whyBuyHeroTemplate2,
-                          imageUrl,
-                          id: id ?? null,
-                        },
-                      };
-                      if (!id) u.customWhyBuyHero2 = imageUrl;
-                      else delete u.customWhyBuyHero2;
-                      onUpdate(u);
+                      const updatedData = { ...data };
+                      if (id) {
+                        // Template selected
+                        updatedData.whyBuyHeroTemplate2 = { imageUrl, id };
+                        delete updatedData.customWhyBuyHero2;
+                      } else {
+                        // Custom image uploaded
+                        updatedData.customWhyBuyHero2 = imageUrl;
+                        delete updatedData.whyBuyHeroTemplate2;
+                      }
+                      onUpdate(updatedData);
                     }}
                   />
                 </div>
@@ -516,17 +516,17 @@ export default function WhyBuyPremium3({
                     fieldKey="heroImg2"
                     imageType="WHY_BUY_HERO"
                     onChange={({ imageUrl, id }) => {
-                      const u = {
-                        ...data,
-                        whyBuyHeroTemplate3: {
-                          ...data.whyBuyHeroTemplate3,
-                          imageUrl,
-                          id: id ?? null,
-                        },
-                      };
-                      if (!id) u.customWhyBuyHero3 = imageUrl;
-                      else delete u.customWhyBuyHero3;
-                      onUpdate(u);
+                      const updatedData = { ...data };
+                      if (id) {
+                        // Template selected
+                        updatedData.whyBuyHeroTemplate3 = { imageUrl, id };
+                        delete updatedData.customWhyBuyHero3;
+                      } else {
+                        // Custom image uploaded
+                        updatedData.customWhyBuyHero3 = imageUrl;
+                        delete updatedData.whyBuyHeroTemplate3;
+                      }
+                      onUpdate(updatedData);
                     }}
                   />
                 </div>
@@ -561,38 +561,54 @@ export default function WhyBuyPremium3({
             <div className="space-y-4">
               <p className="text-sm font-semibold text-primary">Story Images</p>
               <div className="grid grid-cols-2 gap-4">
-                {[1, 2, 3, 4].map((n) => (
-                  <div
-                    key={n}
-                    className={`h-40 relative ${n === 1 ? "col-span-2" : ""}`}
-                  >
-                    <ImageUploader
-                      label={`Image ${n}`}
-                      src={
-                        data[`customStory${n}`] ||
-                        data[`storyTemplate${n}`]?.imageUrl
+                <div className="h-40 relative col-span-2">
+                  <ImageUploader
+                    label="Image 1 (large)"
+                    src={
+                      data[`customWhyBuyStory1`] ||
+                      data[`storyTemplate1`]?.imageUrl
+                    }
+                    fieldKey="storyImg1"
+                    imageType="CONSULTANT_STORY"
+                    error={errors?.[`storyTemplate1`]}
+                    errorMsg={errors?.[`storyTemplate1`]}
+                    onChange={({ imageUrl, id }) => {
+                      const updatedData = { ...data };
+                      if (id) {
+                        updatedData[`storyTemplate1`] = { imageUrl, id };
+                        delete updatedData[`customWhyBuyStory1`];
+                      } else {
+                        updatedData[`customWhyBuyStory1`] = imageUrl;
+                        delete updatedData[`storyTemplate1`];
                       }
-                      fieldKey={`storyImg${n}`}
-                      imageType="CONSULTANT_STORY"
-                      error={errors?.[`storyTemplate${n}`]}
-                      errorMsg={errors?.[`storyTemplate${n}`]}
-                      onChange={({ imageUrl, id }) => {
-                        const u = {
-                          ...data,
-                          [`storyTemplate${n}`]: {
-                            ...data[`storyTemplate${n}`],
-                            imageUrl,
-                            id: id ?? null,
-                          },
-                        };
-                        const cf = `customStory${n}`;
-                        if (!id) u[cf] = imageUrl;
-                        else delete u[cf];
-                        onUpdate(u);
-                      }}
-                    />
-                  </div>
-                ))}
+                      onUpdate(updatedData);
+                    }}
+                  />
+                </div>
+                <div className="h-40 relative col-span-2">
+                  <ImageUploader
+                    label="Image 2 (small)"
+                    src={
+                      data[`customWhyBuyStory2`] ||
+                      data[`storyTemplate2`]?.imageUrl
+                    }
+                    fieldKey="storyImg2"
+                    imageType="CONSULTANT_STORY"
+                    error={errors?.[`storyTemplate2`]}
+                    errorMsg={errors?.[`storyTemplate2`]}
+                    onChange={({ imageUrl, id }) => {
+                      const updatedData = { ...data };
+                      if (id) {
+                        updatedData[`storyTemplate2`] = { imageUrl, id };
+                        delete updatedData[`customWhyBuyStory2`];
+                      } else {
+                        updatedData[`customWhyBuyStory2`] = imageUrl;
+                        delete updatedData[`storyTemplate2`];
+                      }
+                      onUpdate(updatedData);
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -635,7 +651,7 @@ export default function WhyBuyPremium3({
                     <ImageUploader
                       label={`Image ${n}`}
                       src={
-                        data[`customVehicleSelection${n}`] ||
+                        data[`customWhyBuyVehicleSelection${n}`] ||
                         data[`vehicleSelectionTemplate${n}`]?.imageUrl
                       }
                       fieldKey={`selImg${n}`}
@@ -643,18 +659,23 @@ export default function WhyBuyPremium3({
                       error={errors?.[`vehicleSelectionTemplate${n}`]}
                       errorMsg={errors?.[`vehicleSelectionTemplate${n}`]}
                       onChange={({ imageUrl, id }) => {
-                        const u = {
-                          ...data,
-                          [`vehicleSelectionTemplate${n}`]: {
-                            ...data[`vehicleSelectionTemplate${n}`],
+                        const updatedData = { ...data };
+                        if (id) {
+                          // Template selected
+                          updatedData[`vehicleSelectionTemplate${n}`] = {
                             imageUrl,
-                            id: id ?? null,
-                          },
-                        };
-                        const cf = `customVehicleSelection${n}`;
-                        if (!id) u[cf] = imageUrl;
-                        else delete u[cf];
-                        onUpdate(u);
+                            id,
+                          };
+                          delete updatedData[
+                            `customWhyBuyVehicleSelection${n}`
+                          ];
+                        } else {
+                          // Custom image uploaded
+                          updatedData[`customWhyBuyVehicleSelection${n}`] =
+                            imageUrl;
+                          delete updatedData[`vehicleSelectionTemplate${n}`];
+                        }
+                        onUpdate(updatedData);
                       }}
                     />
                   </div>
@@ -850,7 +871,7 @@ export default function WhyBuyPremium3({
                     <ImageUploader
                       label={`Image ${n}`}
                       src={
-                        data[`customInspection${n}`] ||
+                        data[`customWhyBuyInspection${n}`] ||
                         data[`inspectionTemplate${n}`]?.imageUrl
                       }
                       fieldKey={`inspImg${n}`}
@@ -858,18 +879,20 @@ export default function WhyBuyPremium3({
                       error={errors?.[`inspectionTemplate${n}`]}
                       errorMsg={errors?.[`inspectionTemplate${n}`]}
                       onChange={({ imageUrl, id }) => {
-                        const u = {
-                          ...data,
-                          [`inspectionTemplate${n}`]: {
-                            ...data[`inspectionTemplate${n}`],
+                        const updatedData = { ...data };
+                        if (id) {
+                          // Template selected
+                          updatedData[`inspectionTemplate${n}`] = {
                             imageUrl,
-                            id: id ?? null,
-                          },
-                        };
-                        const cf = `customInspection${n}`;
-                        if (!id) u[cf] = imageUrl;
-                        else delete u[cf];
-                        onUpdate(u);
+                            id,
+                          };
+                          delete updatedData[`customWhyBuyInspection${n}`];
+                        } else {
+                          // Custom image uploaded
+                          updatedData[`customWhyBuyInspection${n}`] = imageUrl;
+                          delete updatedData[`inspectionTemplate${n}`];
+                        }
+                        onUpdate(updatedData);
                       }}
                     />
                   </div>
@@ -921,7 +944,7 @@ export default function WhyBuyPremium3({
                     <ImageUploader
                       label={`Image ${n}`}
                       src={
-                        data[`customCustomerCommitment${n}`] ||
+                        data[`customWhyBuyCustomerCommitment${n}`] ||
                         data[`customerCommitmentTemplate${n}`]?.imageUrl
                       }
                       fieldKey={`commImg${n}`}
@@ -929,18 +952,23 @@ export default function WhyBuyPremium3({
                       error={errors?.[`customerCommitmentTemplate${n}`]}
                       errorMsg={errors?.[`customerCommitmentTemplate${n}`]}
                       onChange={({ imageUrl, id }) => {
-                        const u = {
-                          ...data,
-                          [`customerCommitmentTemplate${n}`]: {
-                            ...data[`customerCommitmentTemplate${n}`],
+                        const updatedData = { ...data };
+                        if (id) {
+                          // Template selected
+                          updatedData[`customerCommitmentTemplate${n}`] = {
                             imageUrl,
-                            id: id ?? null,
-                          },
-                        };
-                        const cf = `customCustomerCommitment${n}`;
-                        if (!id) u[cf] = imageUrl;
-                        else delete u[cf];
-                        onUpdate(u);
+                            id,
+                          };
+                          delete updatedData[
+                            `customWhyBuyCustomerCommitment${n}`
+                          ];
+                        } else {
+                          // Custom image uploaded
+                          updatedData[`customWhyBuyCustomerCommitment${n}`] =
+                            imageUrl;
+                          delete updatedData[`customerCommitmentTemplate${n}`];
+                        }
+                        onUpdate(updatedData);
                       }}
                     />
                   </div>
@@ -970,18 +998,17 @@ export default function WhyBuyPremium3({
                   fieldKey={`galImg${n}`}
                   imageType="GALLERY"
                   onChange={({ imageUrl, id }) => {
-                    const u = {
-                      ...data,
-                      [`galleryTemplate${n}`]: {
-                        ...data[`galleryTemplate${n}`],
-                        imageUrl,
-                        id: id ?? null,
-                      },
-                    };
-                    const cf = `customGallery${n}`;
-                    if (!id) u[cf] = imageUrl;
-                    else delete u[cf];
-                    onUpdate(u);
+                    const updatedData = { ...data };
+                    if (id) {
+                      // Template selected
+                      updatedData[`galleryTemplate${n}`] = { imageUrl, id };
+                      delete updatedData[`customGallery${n}`];
+                    } else {
+                      // Custom image uploaded
+                      updatedData[`customGallery${n}`] = imageUrl;
+                      delete updatedData[`galleryTemplate${n}`];
+                    }
+                    onUpdate(updatedData);
                   }}
                 />
               </div>
@@ -1160,7 +1187,7 @@ export default function WhyBuyPremium3({
                 </div>
                 <div className="flex flex-col gap-3">
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                    Our <span className="text-primary">Experience</span>
+                    {data.storyTitle}
                   </h2>
                 </div>
                 <div className="flex flex-col gap-6">
@@ -1190,7 +1217,10 @@ export default function WhyBuyPremium3({
                 <div className="absolute bottom-0 right-0 w-[58%] h-[55%] rounded-2xl shadow-2xl overflow-hidden">
                   <img
                     src={
-                      data.customWhyBuyStory2 || data.storyTemplate2?.imageUrl
+                      data.customWhyBuyStory2 ||
+                      data.storyTemplate2?.imageUrl ||
+                      data.storyTemplate3?.imageUrl ||
+                      data.customWhyBuyStory3
                     }
                     alt="Our story"
                     className="w-full h-full object-cover rounded-2xl"
@@ -1285,76 +1315,205 @@ export default function WhyBuyPremium3({
         </div>
       </section>
       {/* ===== How Buying Work Section ===== */}
-      <section className="w-full py-12 flex justify-center px-2 lg:px-4">
+      <section className="w-full py-20 flex justify-center px-2 lg:px-4">
         <div className="container">
-          <div className="w-full flex flex-col gap-8">
-            <div className="max-w-2xl flex flex-col gap-4">
-              <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                Buying Process
-              </p>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                {data.processTitle}
-              </h2>
-              <div
-                className="text-white/60 text-lg font-[Poppins]"
-                dangerouslySetInnerHTML={{ __html: data.processDescription }}
-              />
-            </div>
-            <div className="relative w-full max-h-[350px] h-[60vh] overflow-hidden rounded-3xl">
-              {(data.processSteps || []).map((step, index) => (
+          <div className="flex flex-col gap-12">
+            {/* Section header */}
+            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+              <div className="flex flex-col gap-4 max-w-xl">
+                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                  Buying Process
+                </p>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                  {data.processTitle}
+                </h2>
                 <div
-                  key={index}
-                  className={`absolute inset-0 transition-all duration-700 ease-in-out ${index === howBuyingWorksActive ? "translate-y-0 z-20" : index < howBuyingWorksActive ? "-translate-y-full z-10" : "translate-y-full z-0"}`}
-                >
-                  <img
-                    src={
-                      data[`customWhyBuyProcess${index + 1}`] ||
-                      data[`processTemplate${index + 1}`]?.imageUrl
-                    }
-                    alt="step"
-                    className="w-full h-full object-cover"
+                  className="text-third/50 text-base font-[Poppins] leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: data.processDescription }}
+                />
+              </div>
+              <div className="hidden lg:flex items-center gap-2">
+                {(data.processSteps || []).map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setHowBuyingWorksActive(i)}
+                    className={`rounded-full transition-all duration-500 ${i === howBuyingWorksActive ? "w-7 h-2 bg-fourth" : "w-2 h-2 bg-third/15 hover:bg-third/30"}`}
                   />
-                  <div className="absolute inset-0 bg-black/60" />
-                  <div className="absolute bottom-10 left-10 max-w-md flex flex-col gap-4">
-                    <div className="flex items-center gap-3">
-                      <p className="text-white/30 text-sm font-[Poppins]">{`0${index + 1}`}</p>
-                      <div
-                        className="w-5 h-5 text-white/70 [&>svg]:w-5 [&>svg]:h-5"
-                        dangerouslySetInnerHTML={{ __html: step.icon }}
-                      />
-                    </div>
-                    <h3 className="text-2xl sm:text-3xl font-semibold text-white font-[Montserrat]">
-                      {step.title}
-                    </h3>
+                ))}
+              </div>
+            </div>
+
+            {/* Desktop: Horizontal accordion columns */}
+            <div className="hidden lg:flex gap-2 h-[420px] rounded-2xl overflow-hidden border border-third/8">
+              {(data.processSteps || []).map((step, i) => {
+                const isActive = i === howBuyingWorksActive;
+                const stepsLen = (data.processSteps || []).length;
+                return (
+                  <div
+                    key={i}
+                    onClick={() => setHowBuyingWorksActive(i)}
+                    className={`relative cursor-pointer overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.25,0.8,0.25,1)] ${i < stepsLen - 1 ? "border-r border-third/8" : ""}`}
+                    style={{
+                      flex: isActive ? "3" : "0.6",
+                    }}
+                  >
+                    {/* Subtle gradient background */}
                     <div
-                      className="text-white/60 text-sm sm:text-base font-[Poppins] leading-relaxed"
-                      dangerouslySetInnerHTML={{ __html: step.description }}
+                      className={`absolute inset-0 bg-gradient-to-br from-fourth/[0.03] to-transparent transition-opacity duration-700 ${isActive ? "opacity-100" : "opacity-0"}`}
+                    />
+
+                    {/* Collapsed state — rotated title strip */}
+                    <div
+                      className="absolute inset-0 flex flex-col items-center justify-center gap-6 transition-all duration-500"
+                      style={{
+                        opacity: isActive ? 0 : 1,
+                        pointerEvents: isActive ? "none" : "auto",
+                      }}
+                    >
+                      <span className="text-[11px] tracking-[0.3em] font-bold font-[Montserrat] text-third/20">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <div className="w-10 h-10 rounded-xl border border-third/10 flex items-center justify-center">
+                        {typeof step.icon === "string" &&
+                        step.icon.startsWith("<svg") ? (
+                          <div
+                            className="[&>svg]:w-4.5 [&>svg]:h-4.5 text-third/30"
+                            dangerouslySetInnerHTML={{ __html: step.icon }}
+                          />
+                        ) : (
+                          <div className="w-4 h-4 rounded-full bg-third/15" />
+                        )}
+                      </div>
+                      <h4
+                        className="text-primary/40 text-sm font-semibold font-[Montserrat] tracking-wide whitespace-nowrap"
+                        style={{
+                          writingMode: "vertical-lr",
+                          textOrientation: "mixed",
+                        }}
+                      >
+                        {step.title}
+                      </h4>
+                    </div>
+
+                    {/* Expanded state — full content */}
+                    <div
+                      className="absolute inset-0 flex flex-col justify-end p-10 transition-all duration-500"
+                      style={{
+                        opacity: isActive ? 1 : 0,
+                        transform: isActive
+                          ? "translateY(0)"
+                          : "translateY(16px)",
+                        pointerEvents: isActive ? "auto" : "none",
+                      }}
+                    >
+                      {/* Large watermark number */}
+                      <div className="absolute top-4 right-6 text-[140px] font-black font-[Montserrat] leading-none text-fourth/[0.04] select-none pointer-events-none">
+                        {String(i + 1).padStart(2, "0")}
+                      </div>
+
+                      {/* Content */}
+                      <div className="relative z-10 flex flex-col gap-5">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-xl border border-fourth/25 bg-fourth/[0.06] flex items-center justify-center">
+                            {typeof step.icon === "string" &&
+                            step.icon.startsWith("<svg") ? (
+                              <div
+                                className="[&>svg]:w-5 [&>svg]:h-5 text-fourth"
+                                dangerouslySetInnerHTML={{ __html: step.icon }}
+                              />
+                            ) : (
+                              <div className="w-5 h-5 rounded-full bg-fourth/40" />
+                            )}
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-[10px] tracking-[0.35em] font-bold font-[Montserrat] text-fourth/40">
+                              STEP {String(i + 1).padStart(2, "0")}
+                            </span>
+                            <div className="w-8 h-px bg-fourth/20 mt-1" />
+                          </div>
+                        </div>
+
+                        <h3 className="text-2xl font-semibold font-[Montserrat] leading-snug text-primary">
+                          {step.title}
+                        </h3>
+
+                        <div
+                          className="text-[13px] text-third/50 leading-[1.85] font-[Poppins] max-w-md"
+                          dangerouslySetInnerHTML={{ __html: step.description }}
+                        />
+
+                        {/* Bottom accent */}
+                        <div className="w-16 h-px bg-gradient-to-r from-fourth/30 to-transparent mt-2" />
+                      </div>
+                    </div>
+
+                    {/* Bottom accent bar */}
+                    <div
+                      className={`absolute bottom-0 left-0 right-0 h-0.5 transition-all duration-500 ${isActive ? "bg-gradient-to-r from-fourth/30 to-transparent" : "bg-transparent"}`}
                     />
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
-            <div className="flex justify-between items-center">
-              <div className="text-white/40 text-sm">{`0${howBuyingWorksActive + 1} / 0${(data.processSteps || []).length}`}</div>
-              <div className="flex gap-4">
-                <button
-                  onClick={prevStep}
-                  disabled={howBuyingWorksActive === 0}
-                  className={`text-sm px-5 py-2 rounded-full border transition ${howBuyingWorksActive === 0 ? "border-white/10 text-white/20 cursor-not-allowed" : "border-white/20 text-white hover:bg-white/10"}`}
-                >
-                  Prev
-                </button>
-                <button
-                  onClick={nextStep}
-                  disabled={
-                    howBuyingWorksActive ===
-                    (data.processSteps || []).length - 1
-                  }
-                  className={`text-sm px-5 py-2 rounded-full border transition ${howBuyingWorksActive === (data.processSteps || []).length - 1 ? "border-white/10 text-white/20 cursor-not-allowed" : "border-white/20 text-white hover:bg-white/10"}`}
-                >
-                  Next
-                </button>
-              </div>
+
+            {/* Mobile: Stacked expandable cards */}
+            <div className="flex lg:hidden flex-col gap-3">
+              {(data.processSteps || []).map((step, i) => {
+                const isActive = i === howBuyingWorksActive;
+                return (
+                  <div
+                    key={i}
+                    onClick={() => setHowBuyingWorksActive(i)}
+                    className={`relative rounded-xl border overflow-hidden cursor-pointer transition-all duration-400 ${isActive ? "border-fourth/20 bg-fourth/[0.03]" : "border-third/10 hover:border-third/20"}`}
+                  >
+                    <div className="flex items-center gap-4 p-5">
+                      <div
+                        className={`w-10 h-10 rounded-lg border flex items-center justify-center shrink-0 transition-all duration-400 ${isActive ? "border-fourth/30 bg-fourth/[0.08]" : "border-third/12"}`}
+                      >
+                        {typeof step.icon === "string" &&
+                        step.icon.startsWith("<svg") ? (
+                          <div
+                            className={`[&>svg]:w-4 [&>svg]:h-4 transition-colors duration-400 ${isActive ? "text-fourth" : "text-third/30"}`}
+                            dangerouslySetInnerHTML={{ __html: step.icon }}
+                          />
+                        ) : (
+                          <div
+                            className={`w-4 h-4 rounded-full ${isActive ? "bg-fourth/40" : "bg-third/15"}`}
+                          />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <span
+                          className={`text-[9px] tracking-[0.3em] font-bold font-[Montserrat] ${isActive ? "text-fourth/50" : "text-third/20"}`}
+                        >
+                          STEP {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <h3
+                          className={`text-base font-semibold font-[Montserrat] leading-snug truncate ${isActive ? "text-primary" : "text-primary/60"}`}
+                        >
+                          {step.title}
+                        </h3>
+                      </div>
+                      <ChevronRight
+                        size={16}
+                        className={`shrink-0 transition-transform duration-400 text-third/25 ${isActive ? "rotate-90" : ""}`}
+                      />
+                    </div>
+                    <div
+                      className="overflow-hidden transition-all duration-500 ease-out"
+                      style={{
+                        maxHeight: isActive ? "180px" : "0px",
+                        opacity: isActive ? 1 : 0,
+                      }}
+                    >
+                      <div
+                        className="text-[13px] text-third/50 leading-[1.85] font-[Poppins] px-5 pb-5 pl-[4.25rem]"
+                        dangerouslySetInnerHTML={{ __html: step.description }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -1387,7 +1546,7 @@ export default function WhyBuyPremium3({
                   <img
                     key={i}
                     src={
-                      data[`customInspection${i + 1}`] ||
+                      data[`customWhyBuyInspection${i + 1}`] ||
                       data[`inspectionTemplate${i + 1}`]?.imageUrl
                     }
                     alt={inspectionPoints[i]}
@@ -1464,7 +1623,7 @@ export default function WhyBuyPremium3({
                     <div className="shrink-0 w-14 h-14 rounded-lg overflow-hidden">
                       <img
                         src={
-                          data[`customInspection${i + 1}`] ||
+                          data[`customWhyBuyInspection${i + 1}`] ||
                           data[`inspectionTemplate${i + 1}`]?.imageUrl
                         }
                         alt={point}
@@ -1496,11 +1655,11 @@ export default function WhyBuyPremium3({
           <div className="relative flex items-center justify-center">
             <div className="absolute inset-0 overflow-hidden rounded-2xl">
               {[
-                data.customCustomerCommitment1 ||
+                data.customWhyBuyCustomerCommitment1 ||
                   data.customerCommitmentTemplate1?.imageUrl,
-                data.customCustomerCommitment2 ||
+                data.customWhyBuyCustomerCommitment2 ||
                   data.customerCommitmentTemplate2?.imageUrl,
-                data.customCustomerCommitment3 ||
+                data.customWhyBuyCustomerCommitment3 ||
                   data.customerCommitmentTemplate3?.imageUrl,
               ]
                 .filter(Boolean)

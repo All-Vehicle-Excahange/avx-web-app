@@ -7,7 +7,11 @@ export const ABOUT_PREMIUM_3 = [
       /* ================= HERO ================= */
       heroTitle: "Our Story Built for Buy & Selling a Vehicle",
       heroDescription: `<p>Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed. Lorem ipsum dolor sit amet consectetur. Odio at dolor ut donec. Sapien platea nec urna ut est sed.</p>`,
-      heroImageTemplateId1: { id: 1, imageUrl: "/video.mp4" },
+      heroImageTemplateId1: {
+        id: 1,
+        imageUrl:
+          "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=90",
+      },
       heroImageTemplateId2: {
         id: 2,
         imageUrl:
