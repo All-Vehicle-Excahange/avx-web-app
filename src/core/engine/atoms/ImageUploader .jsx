@@ -29,14 +29,14 @@ export const ImageUploader = ({
     <>
       <div className="flex flex-col gap-1 w-full h-full">
         {label && (
-          <label className="text-xs font-bold uppercase text-third">
+          <label className="text-xs font-bold uppercase text-third shrink-0">
             {label}
           </label>
         )}
 
         <div
           onClick={() => setOpen(true)}
-          className="flex-1 min-h-40 border-2 border-dashed border-third/40  rounded-xl cursor-pointer hover:border-primary transition relative overflow-hidden group"
+          className="flex-1 min-h-32 border-2 border-dashed border-third/40 rounded-xl cursor-pointer hover:border-primary transition relative overflow-hidden group"
         >
           {src ? (
             <>

@@ -89,38 +89,81 @@ export default function AboutPremium3({
     ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
     : SVG_OPTIONS;
 
-  const d = {
-    ...DEFAULT_DATA,
-    ...Object.fromEntries(
-      Object.entries(data || {}).filter(([_, v]) => v !== undefined && v !== null)
-    )
+  const metaOnlyKeys = new Set([
+    "id", "consultationId", "themePrimaryId", "themeId",
+    "verificationStatus", "isSubmitted", "createdAt", "updatedAt",
+    "featuredReviews",
+  ]);
+  const hasRealContent = data && Object.entries(data).some(
+    ([key, value]) =>
+      !metaOnlyKeys.has(key) &&
+      value !== null && value !== undefined && value !== "" &&
+      !(Array.isArray(value) && value.length === 0),
+  );
+
+  const getEmptyData = (defaultData) => {
+    const empty = {};
+    Object.entries(defaultData).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        empty[key] = value.map((item) => {
+          if (typeof item === "string") return "";
+          const emptyItem = {};
+          Object.keys(item).forEach((k) => (emptyItem[k] = ""));
+          return emptyItem;
+        });
+      } else if (value !== null && typeof value === "object") {
+        empty[key] = {};
+      } else {
+        empty[key] = "";
+      }
+    });
+    return empty;
   };
 
-  // Map backend fields to UI fields if UI fields are missing
-  if (!data?.missionDesc && data?.missionDescription) {
-    d.missionDesc = data.missionDescription;
-  }
-  if (!data?.visionDesc && data?.visionDescription) {
-    d.visionDesc = data.visionDescription;
-  }
-  if (!data?.servicesTitle && data?.serviceTitle) {
-    d.servicesTitle = data.serviceTitle;
-  }
-  if (!data?.servicesDesc && data?.serviceDescription) {
-    d.servicesDesc = data.serviceDescription;
-  }
+  const d = (() => {
+    const base = getEmptyData(DEFAULT_DATA);
 
-  // Map backend image objects if UI fields are missing
-  // API returns heroImageTemplate1, not heroImageTemplateId1
-  if (!data?.heroTemplate1 && data?.heroImageTemplate1) {
-    d.heroTemplate1 = data.heroImageTemplate1;
-  }
-  if (!data?.missionTemplate1 && data?.missionTemplate1) {
-    d.missionTemplate1 = data.missionTemplate1;
-  }
-  if (!data?.visionTemplate1 && data?.visionTemplate1) {
-    d.visionTemplate1 = data.visionTemplate1;
-  }
+    if (!hasRealContent) {
+      // No real API data — use schema defaults for preview
+      if (!base.heroTemplate1?.imageUrl && DEFAULT_DATA.heroImageTemplateId1?.imageUrl) {
+        base.heroTemplate1 = DEFAULT_DATA.heroImageTemplateId1;
+      }
+      if (!base.missionTemplate1?.imageUrl && DEFAULT_DATA.missionTemplate1?.imageUrl) {
+        base.missionTemplate1 = DEFAULT_DATA.missionTemplate1;
+      }
+      if (!base.visionTemplate1?.imageUrl && DEFAULT_DATA.visionTemplate1?.imageUrl) {
+        base.visionTemplate1 = DEFAULT_DATA.visionTemplate1;
+      }
+      // Use schema defaults for text fields too
+      Object.entries(DEFAULT_DATA).forEach(([key, value]) => {
+        if (typeof value === "string" && value) base[key] = value;
+        if (Array.isArray(value) && value.length) base[key] = value;
+      });
+      return base;
+    }
+
+    // Overlay API data
+    Object.entries(data || {}).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) base[key] = value;
+    });
+
+    // Map backend text fields
+    if (!base.missionDesc && data?.missionDescription) base.missionDesc = data.missionDescription;
+    if (!base.visionDesc && data?.visionDescription) base.visionDesc = data.visionDescription;
+    if (!base.servicesTitle && data?.serviceTitle) base.servicesTitle = data.serviceTitle;
+    if (!base.servicesDesc && data?.serviceDescription) base.servicesDesc = data.serviceDescription;
+
+    // Map hero image — API returns heroImageTemplate1 (object)
+    if (!base.heroTemplate1?.imageUrl && !data?.heroTemplate1?.imageUrl) {
+      base.heroTemplate1 = data?.heroImageTemplate1 || data?.heroImageTemplateId1 || {};
+    }
+    // customHeroImageUrl1 fallback (persisted S3 URL)
+    if (!base.heroTemplate1?.imageUrl && !base.customHeroImage1) {
+      base.customHeroImage1 = data?.customHeroImageUrl1 || "";
+    }
+
+    return base;
+  })();
   const [activeIndex, setActiveIndex] = useState(0);
   /* ================== HELPERS ================== */
   const getBlobFromUrl = async (url) => {

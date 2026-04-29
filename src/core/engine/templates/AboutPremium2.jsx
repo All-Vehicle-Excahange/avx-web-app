@@ -137,16 +137,16 @@ export default function AboutPremium2({
   const d = (() => {
     const base = getEmptyData(DEFAULT_DATA);
 
-    // Always map schema's heroImageTemplateId1/2 → heroTemplate1/2 so preview works
-    // even on fresh/empty draft (schema defaults provide the images)
-    if (!base.heroTemplate1?.imageUrl && DEFAULT_DATA.heroImageTemplateId1?.imageUrl) {
-      base.heroTemplate1 = DEFAULT_DATA.heroImageTemplateId1;
+    if (!hasRealContent) {
+      // No real API data — use schema defaults for preview
+      if (!base.heroTemplate1?.imageUrl && DEFAULT_DATA.heroImageTemplateId1?.imageUrl) {
+        base.heroTemplate1 = DEFAULT_DATA.heroImageTemplateId1;
+      }
+      if (!base.heroTemplate2?.imageUrl && DEFAULT_DATA.heroImageTemplateId2?.imageUrl) {
+        base.heroTemplate2 = DEFAULT_DATA.heroImageTemplateId2;
+      }
+      return base;
     }
-    if (!base.heroTemplate2?.imageUrl && DEFAULT_DATA.heroImageTemplateId2?.imageUrl) {
-      base.heroTemplate2 = DEFAULT_DATA.heroImageTemplateId2;
-    }
-
-    if (!hasRealContent) return base;
 
     // Overlay API data
     Object.entries(rawData || {}).forEach(([key, value]) => {
@@ -160,13 +160,12 @@ export default function AboutPremium2({
     if (!base.servicesDesc && rawData?.serviceDescription) base.servicesDesc = rawData.serviceDescription;
 
     // Map hero images — API returns heroImageTemplate1 (object), schema uses heroImageTemplateId1
-    // Normalize both to heroTemplate1/heroTemplate2 for consistent use in editor + preview
-    // Only map if rawData doesn't already have heroTemplate1 set (user may have picked a new one)
+    // Only apply if no real image is already set from the overlay
     if (!base.heroTemplate1?.imageUrl && !rawData?.heroTemplate1?.imageUrl) {
-      base.heroTemplate1 = rawData?.heroImageTemplate1 || base.heroImageTemplateId1 || {};
+      base.heroTemplate1 = rawData?.heroImageTemplate1 || rawData?.heroImageTemplateId1 || {};
     }
     if (!base.heroTemplate2?.imageUrl && !rawData?.heroTemplate2?.imageUrl) {
-      base.heroTemplate2 = rawData?.heroImageTemplate2 || base.heroImageTemplateId2 || {};
+      base.heroTemplate2 = rawData?.heroImageTemplate2 || rawData?.heroImageTemplateId2 || {};
     }
 
     return base;
@@ -625,9 +624,9 @@ export default function AboutPremium2({
       <section className="relative px-2 lg:px-4 overflow-hidden">
         {/* HERO BACKGROUND (VIDEO/IMAGE) */}
         <div className="absolute inset-0 h-screen overflow-hidden">
-          {(d.customHeroImage1 || d.heroTemplate1?.imageUrl) ? (
+          {(d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl) ? (
             <img
-              src={d.customHeroImage1 || d.heroTemplate1?.imageUrl}
+              src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl}
               className="w-full h-full object-cover"
               alt="Background"
             />
@@ -659,9 +658,9 @@ export default function AboutPremium2({
             <div className="hidden lg:block">
               <div className="relative group">
                 <div className="relative rounded-2xl overflow-hidden hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] bg-primary/5">
-                  {(d.customHeroImage2 || d.heroTemplate2?.imageUrl) ? (
+                  {(d.customHeroImage2 || d.customHeroImageUrl2 || d.heroTemplate2?.imageUrl) ? (
                     <img
-                      src={d.customHeroImage2 || d.heroTemplate2?.imageUrl}
+                      src={d.customHeroImage2 || d.customHeroImageUrl2 || d.heroTemplate2?.imageUrl}
                       alt="Hero side"
                       className="w-full h-[450px] object-cover transition-transform duration-700 group-hover:scale-110"
                     />
