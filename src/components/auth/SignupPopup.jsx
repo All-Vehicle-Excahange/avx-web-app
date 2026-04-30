@@ -151,6 +151,11 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         setTimeout(() => {
           if (accountType === "consultant") {
             router.push("/consult");
+          } else {
+            const hasShownPref = localStorage.getItem("hasShownPreferencesPopup");
+            if (!hasShownPref) {
+              document.dispatchEvent(new Event("preferencespopup:open"));
+            }
           }
           handleClosePopup();
         }, 500);

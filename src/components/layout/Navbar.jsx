@@ -102,6 +102,15 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
     return () => document.removeEventListener("signuppopup:open", handler);
   }, []);
 
+  /* ================= PREFERENCES POPUP LISTENER ================= */
+  useEffect(() => {
+    const handler = () => {
+      setOpen(true);
+    };
+    document.addEventListener("preferencespopup:open", handler);
+    return () => document.removeEventListener("preferencespopup:open", handler);
+  }, []);
+
   /* ================= DEBOUNCED SEARCH ================= */
   useEffect(() => {
     if (!searchQuery.trim()) {
@@ -225,19 +234,6 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
             {/* RIGHT SIDE */}
             <div className="flex items-center gap-2 md:gap-4">
-              {/* Preferences Button */}
-              <button
-                onClick={() => setOpen(true)}
-                className={`flex cursor-pointer items-center gap-1 px-2 py-1 rounded transition text-xs md:text-sm
-                ${
-                  heroMode && !scrolled
-                    ? "text-white hover:outline-2 hover:outline-white/40"
-                    : "text-black hover:outline-2 hover:outline-black/20"
-                }`}
-              >
-                <Settings className="w-5 h-5 md:w-6 md:h-6" />
-                <span className="hidden sm:block font-semibold">Preferences</span>
-              </button>
 
               {(() => {
                 const userRole = user?.userRole;

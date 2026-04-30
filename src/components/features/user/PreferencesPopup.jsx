@@ -45,7 +45,7 @@ const STEP_TAGLINES = [
   { title: "Set Your\nBudget", sub: "Min & max price range" },
 ];
 
-function PreferencesPopup({ isOpen, onClose }) {
+function PreferencesPopup({ isOpen, onClose, initialData = null, onSubmit = null }) {
   const [activeStep, setActiveStep] = useState(0);
   const [isClosing, setIsClosing] = useState(false);
 
@@ -78,12 +78,39 @@ function PreferencesPopup({ isOpen, onClose }) {
   /* ─── close with animation ─── */
   const handleClose = useCallback(() => {
     setIsClosing(true);
+    localStorage.setItem("hasShownPreferencesPopup", "true");
     setTimeout(() => {
       setIsClosing(false);
       setActiveStep(0);
       if (onClose) onClose();
     }, 250);
   }, [onClose]);
+
+  /* ─── sync initialData ─── */
+  useEffect(() => {
+    if (isOpen && initialData) {
+      setSelectedStates(initialData.stateIds?.map(String) || []);
+      setSelectedCities(initialData.cityIds?.map(String) || []);
+      setSelectedBrands(initialData.makerDetails?.map(m => m.makerId) || []);
+      setSelectedModels(initialData.modelDetails?.map(m => m.modelId) || []);
+      setSelectedFuelTypes(initialData.fuelTypes || []);
+      setSelectedTransmissionTypes(initialData.transmissionTypes || []);
+      setSelectedVehicleTypes(initialData.vehicleTypes || []);
+      setMinPrice(initialData.minPrice ? String(initialData.minPrice) : "");
+      setMaxPrice(initialData.maxPrice ? String(initialData.maxPrice) : "");
+    } else if (isOpen && !initialData) {
+      // Reset if opened without initial data
+      setSelectedStates([]);
+      setSelectedCities([]);
+      setSelectedBrands([]);
+      setSelectedModels([]);
+      setSelectedFuelTypes([]);
+      setSelectedTransmissionTypes([]);
+      setSelectedVehicleTypes([]);
+      setMinPrice("");
+      setMaxPrice("");
+    }
+  }, [isOpen, initialData]);
 
   /* ─── dropdown close on outside click ─── */
   useEffect(() => {
@@ -290,7 +317,11 @@ function PreferencesPopup({ isOpen, onClose }) {
       stateIds: selectedStates.map(Number),
     };
     try {
-      await addUserPefrence(payload);
+      if (onSubmit) {
+        await onSubmit(payload);
+      } else {
+        await addUserPefrence(payload);
+      }
       handleClose();
     } catch (error) {
       console.error("Failed to save preferences", error);
