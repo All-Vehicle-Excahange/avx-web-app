@@ -1,11 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import Image from "next/image";
-import { useRef, useState, useMemo } from "react";
-import { UploadCloud, CheckCircle2 } from "lucide-react";
+import { useRef, useState, useMemo, useEffect } from "react";
+import { UploadCloud, CheckCircle2, Trash2 } from "lucide-react";
 
 export default function DropzoneUpload({ label, onChange, preview }) {
   const inputRef = useRef();
   const [localFile, setLocalFile] = useState(null);
+
+  useEffect(() => {
+    if (preview === null || preview === undefined) {
+      setLocalFile(null);
+    }
+  }, [preview]);
 
   // ✅ Derived State: Use local selection if it exists, otherwise use parent preview
   const currentFile = localFile || preview;
@@ -33,7 +40,7 @@ export default function DropzoneUpload({ label, onChange, preview }) {
 
       <div
         onClick={() => inputRef.current.click()}
-        className="cursor-pointer rounded-xl border-2 border-dashed border-third/40 bg-primary/5 hover:border-primary transition p-6 text-center w-full"
+        className="cursor-pointer rounded-xl border-2 border-dashed border-third/40 bg-primary/5 hover:border-primary transition p-6 text-center w-full relative"
       >
         {!currentFile ? (
           <div className="flex flex-col items-center justify-center space-y-3 py-4">
@@ -44,7 +51,21 @@ export default function DropzoneUpload({ label, onChange, preview }) {
             <p className="text-xs text-third/70">Supports: JPG, PNG, PDF</p>
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-4 w-full">
+          <div className="flex flex-col items-center gap-4 w-full relative ">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setLocalFile(null);
+                if (onChange) onChange(null);
+                if (inputRef.current) inputRef.current.value = "";
+              }}
+              className="cursor-pointer absolute -top-4 -right-4 p-2 bg-red-500/40 hover:bg-red-600 text-white rounded-full transition-colors z-10 shadow-md"
+              title="Clear"
+            >
+              <Trash2 size={16} />
+            </button>
+
             <div className="relative w-full max-w-sm h-48 rounded-lg overflow-hidden bg-black/5 shadow-inner">
               <Image
                 src={displayUrl}
@@ -53,7 +74,7 @@ export default function DropzoneUpload({ label, onChange, preview }) {
                 className="object-contain p-2"
                 unoptimized
               />
-            </div> 
+            </div>
 
             <div className="flex flex-col items-center justify-center gap-1">
               <div className="flex items-center justify-center gap-2 text-primary">
@@ -64,7 +85,9 @@ export default function DropzoneUpload({ label, onChange, preview }) {
                     : currentFile.name}
                 </p>
               </div>
-              <p className="text-xs text-third/80">Click anywhere here to change</p>
+              <p className="text-xs text-third/80">
+                Click anywhere here to change
+              </p>
             </div>
           </div>
         )}
@@ -80,4 +103,3 @@ export default function DropzoneUpload({ label, onChange, preview }) {
     </div>
   );
 }
- 

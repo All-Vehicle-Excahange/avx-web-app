@@ -6,19 +6,11 @@ import InputField from "@/components/ui/inputField";
 import Button from "@/components/ui/button";
 import ChipGroup from "@/components/ui/chipGroup";
 import Chip from "@/components/ui/chip";
-import {
-  FilterIcon,
-  ChevronDown,
-  Search,
-  ChevronRight,
-  ChevronLeft,
-  MapPin,
-  XCircle,
-  X,
-} from "lucide-react";
+import { FilterIcon, MapPin, X } from "lucide-react";
 import ConsultantGridSection from "./ConsultantGridSection";
 import ConsultantSliderSection from "./ConsultantSliderSection";
 import FilterSection from "../../search/FilterSection";
+import CustomSelect from "@/components/ui/custom-select";
 import {
   getAllConsultService,
   getFilteredConsult,
@@ -46,7 +38,10 @@ function useIsMobile() {
   return isMobile;
 }
 
-export default function FilterWithCard({ onFilterChange, onPageResponseChange }) {
+export default function FilterWithCard({
+  onFilterChange,
+  onPageResponseChange,
+}) {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [activeFilterTab, setActiveFilterTab] = useState("Location");
   const [avxAssumed, setAvxAssumed] = useState(false);
@@ -86,21 +81,10 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
   const [selectedCityId, setSelectedCityId] = useState(null);
   const [selectedCityName, setSelectedCityName] = useState("");
 
-  const [stateOpen, setStateOpen] = useState(false);
-  const [cityOpen, setCityOpen] = useState(false);
-
-  const [stateSearch, setStateSearch] = useState("");
-  const [citySearch, setCitySearch] = useState("");
-
-  const stateRef = useRef(null);
-  const cityRef = useRef(null);
   const prevPageRef = useRef(1);
   const prevSortRef = useRef(sort);
   const autoFetchTimerRef = useRef(null);
   const hasMountedForAutoFetch = useRef(false);
-
-  const [highlightedStateIndex, setHighlightedStateIndex] = useState(-1);
-  const [highlightedCityIndex, setHighlightedCityIndex] = useState(-1);
 
   const isMobile = useIsMobile();
 
@@ -146,8 +130,9 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
       name: item.consultationName || "Unknown Consultant",
 
       location: item.address
-        ? `${item.address.city || ""}${item.address.city && item.address.state ? ", " : ""
-        }${item.address.state || ""}`
+        ? `${item.address.city || ""}${
+            item.address.city && item.address.state ? ", " : ""
+          }${item.address.state || ""}`
         : "-",
 
       rating: item.averageRating || 0,
@@ -169,8 +154,6 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
       isSponsored: item.tierTitle === "PRO",
     }));
   };
-
-
 
   // ── Lock body scroll when mobile filter is open ──
   useEffect(() => {
@@ -373,7 +356,8 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
           : [];
 
       if (filteredRes?.pagination) {
-        const { totalPages, totalElements, currentPage } = filteredRes.pagination;
+        const { totalPages, totalElements, currentPage } =
+          filteredRes.pagination;
 
         setTotalPages(totalPages);
         onPageResponseChange?.({
@@ -518,7 +502,8 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
         if (!val) return null;
         val = val.trim().toUpperCase();
         if (val.endsWith("L")) return parseFloat(val.replace("L", "")) * 100000;
-        if (val.endsWith("CR")) return parseFloat(val.replace("CR", "")) * 10000000;
+        if (val.endsWith("CR"))
+          return parseFloat(val.replace("CR", "")) * 10000000;
         if (val.endsWith("K")) return parseFloat(val.replace("K", "")) * 1000;
         return parseFloat(val) || null;
       };
@@ -533,16 +518,14 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
 
     if (qMakerIds) initialPayload.makerIds = qMakerIds.split(",").map(Number);
     if (qModelIds) initialPayload.modelIds = qModelIds.split(",").map(Number);
-    if (qVehicleSubTypes) initialPayload.vehicleSubTypes = qVehicleSubTypes.split(",");
+    if (qVehicleSubTypes)
+      initialPayload.vehicleSubTypes = qVehicleSubTypes.split(",");
 
     if (qMinPrice) initialPayload.minVehiclePrice = Number(qMinPrice);
     if (qMaxPrice) initialPayload.maxVehiclePrice = Number(qMaxPrice);
 
     fetchConsultants(1, initialPayload);
-
   }, []);
-
-
 
   const buildPayload = () => {
     const payload = {};
@@ -552,7 +535,8 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
 
     if (hiddenMakerIds.length > 0) payload.makerIds = hiddenMakerIds;
     if (hiddenModelIds.length > 0) payload.modelIds = hiddenModelIds;
-    if (hiddenVehicleSubTypes.length > 0) payload.vehicleSubTypes = hiddenVehicleSubTypes;
+    if (hiddenVehicleSubTypes.length > 0)
+      payload.vehicleSubTypes = hiddenVehicleSubTypes;
 
     if (latitude !== null && longitude !== null) {
       payload.latitude = latitude;
@@ -639,8 +623,6 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
     fetchConsultants(currentPage, payload);
   }, [currentPage]);
 
-
-
   const handleApplyFilter = async () => {
     if (selectedStateId && selectedStateName) {
       const locationData = {
@@ -684,14 +666,20 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
       setCurrentPage(1);
       fetchConsultants(1, payload);
     }, 300);
-    return () => { if (autoFetchTimerRef.current) clearTimeout(autoFetchTimerRef.current); };
+    return () => {
+      if (autoFetchTimerRef.current) clearTimeout(autoFetchTimerRef.current);
+    };
   }, [
-    selectedVehicleTypes, selectedServices, selectedRating,
-    selectedInventory, selectedDistance,
-    selectedCityId, selectedStateId,
-    minPrice, maxPrice,
+    selectedVehicleTypes,
+    selectedServices,
+    selectedRating,
+    selectedInventory,
+    selectedDistance,
+    selectedCityId,
+    selectedStateId,
+    minPrice,
+    maxPrice,
   ]);
-
 
   const handleClearFilters = async () => {
     // Remove query parameters from URL to clear top search bar
@@ -721,8 +709,6 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
     setHiddenMakerIds([]);
     setHiddenModelIds([]);
     setHiddenVehicleSubTypes([]);
-
-
 
     // Reset pagination
     setCurrentPage(1);
@@ -757,96 +743,57 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
     { value: "3.0", label: "⭐ 3.0+ Rating" },
   ];
 
-
-
   // ── Real-time filter tag emission ──
   useEffect(() => {
     const tags = [];
-    const vtLabels = { TWO_WHEELER: 'Two-Wheeler', FOUR_WHEELER: 'Four-Wheeler' };
-    if (selectedVehicleTypes.length > 0) tags.push(...selectedVehicleTypes.map(v => vtLabels[v] || v));
-    if (selectedServices.length > 0) tags.push(...selectedServices.map(s => s.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')));
+    const vtLabels = {
+      TWO_WHEELER: "Two-Wheeler",
+      FOUR_WHEELER: "Four-Wheeler",
+    };
+    if (selectedVehicleTypes.length > 0)
+      tags.push(...selectedVehicleTypes.map((v) => vtLabels[v] || v));
+    if (selectedServices.length > 0)
+      tags.push(
+        ...selectedServices.map((s) =>
+          s
+            .split("_")
+            .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+            .join(" "),
+        ),
+      );
     if (selectedRating.length > 0) tags.push(`${selectedRating[0]}+ ⭐`);
-    if (selectedInventory.length > 0) tags.push(inventorySizes.find(d => d.value === selectedInventory[0])?.label || selectedInventory[0]);
-    if (selectedDistance.length > 0) tags.push(distances.find(d => d.value === selectedDistance[0])?.label || selectedDistance[0]);
+    if (selectedInventory.length > 0)
+      tags.push(
+        inventorySizes.find((d) => d.value === selectedInventory[0])?.label ||
+          selectedInventory[0],
+      );
+    if (selectedDistance.length > 0)
+      tags.push(
+        distances.find((d) => d.value === selectedDistance[0])?.label ||
+          selectedDistance[0],
+      );
     if (selectedCityName || selectedStateName) {
       const locationParts = [];
       if (selectedCityName) locationParts.push(selectedCityName);
       if (selectedStateName) locationParts.push(selectedStateName);
-      tags.push(locationParts.join(', '));
+      tags.push(locationParts.join(", "));
     }
-    if (minPrice !== MIN || maxPrice !== MAX) tags.push(`₹${(minPrice / 100000).toFixed(1)}L–₹${(maxPrice / 100000).toFixed(1)}L`);
+    if (minPrice !== MIN || maxPrice !== MAX)
+      tags.push(
+        `₹${(minPrice / 100000).toFixed(1)}L–₹${(maxPrice / 100000).toFixed(1)}L`,
+      );
     onFilterChange?.(tags);
   }, [
-    selectedVehicleTypes, selectedServices, selectedRating,
-    selectedInventory, selectedDistance, selectedCityName, selectedStateName,
-    minPrice, maxPrice
+    selectedVehicleTypes,
+    selectedServices,
+    selectedRating,
+    selectedInventory,
+    selectedDistance,
+    selectedCityName,
+    selectedStateName,
+    minPrice,
+    maxPrice,
   ]);
-
-  const filteredStates = states.filter((s) =>
-    s.label.toLowerCase().includes(stateSearch.toLowerCase()),
-  );
-
-  const filteredCities = cities.filter((c) =>
-    c.label.toLowerCase().includes(citySearch.toLowerCase()),
-  );
-
-  const handleStateKeyDown = (e) => {
-    if (!filteredStates.length) return;
-
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setHighlightedStateIndex((prev) =>
-        prev < filteredStates.length - 1 ? prev + 1 : prev,
-      );
-    }
-
-    if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setHighlightedStateIndex((prev) => (prev > 0 ? prev - 1 : 0));
-    }
-
-    if (e.key === "Enter") {
-      e.preventDefault();
-      if (highlightedStateIndex >= 0) {
-        const selected = filteredStates[highlightedStateIndex];
-        setSelectedStateId(selected.value);
-        setSelectedStateName(selected.label);
-        setSelectedCityId(null);
-        setSelectedCityName("");
-        setStateSearch("");
-        setStateOpen(false);
-        setHighlightedStateIndex(-1);
-      }
-    }
-  };
-
-  const handleCityKeyDown = (e) => {
-    if (!filteredCities.length) return;
-
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setHighlightedCityIndex((prev) =>
-        prev < filteredCities.length - 1 ? prev + 1 : prev,
-      );
-    }
-
-    if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setHighlightedCityIndex((prev) => (prev > 0 ? prev - 1 : 0));
-    }
-
-    if (e.key === "Enter") {
-      e.preventDefault();
-      if (highlightedCityIndex >= 0) {
-        const selected = filteredCities[highlightedCityIndex];
-        setSelectedCityId(selected.value);
-        setSelectedCityName(selected.label);
-        setCitySearch("");
-        setCityOpen(false);
-        setHighlightedCityIndex(-1);
-      }
-    }
-  };
 
   return (
     <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-[20px] gap-4">
@@ -885,11 +832,10 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
             </button>
           </div>
 
-
           {/* State & City Dropdowns */}
           <div className="space-y-4 mb-6">
             {/* State Dropdown */}
-            <div ref={stateRef} className="relative">
+            <div className="relative">
               <div className="flex items-center justify-between mb-1">
                 <label className="text-xs text-third">State</label>
                 <button
@@ -902,151 +848,38 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
                   <span>Detect</span>
                 </button>
               </div>
-
-              {stateOpen ? (
-                <div className="relative">
-                  <Search
-                    size={16}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-primary/70 z-10"
-                  />
-                  <input
-                    type="text"
-                    value={stateSearch}
-                    onKeyDown={handleStateKeyDown}
-                    onChange={(e) => {
-                      setStateSearch(e.target.value);
-                      setHighlightedStateIndex(0);
-                    }}
-                    placeholder={
-                      selectedStateName || "Search or select state..."
-                    }
-                    className="w-full pl-10 pr-10 py-2.5 bg-transparent border border-primary/60 rounded-md text-primary placeholder:text-primary/60 focus:outline-none focus:border-primary text-sm"
-                    autoFocus
-                  />
-                  <ChevronDown
-                    size={16}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-primary/70 cursor-pointer"
-                    onClick={() => setStateOpen(false)}
-                  />
-                </div>
-              ) : (
-                <div
-                  onClick={() => setStateOpen(true)}
-                  className="h-10 px-3 flex items-center justify-between rounded-md border border-primary/60 bg-transparent text-primary cursor-pointer backdrop-blur-sm"
-                >
-                  <span className="truncate">
-                    {selectedStateName || "Select State"}
-                  </span>
-                  <ChevronDown size={16} />
-                </div>
-              )}
-
-              {stateOpen && (
-                <div className="absolute z-50 mt-1 w-full border border-primary/60 rounded-md bg-black/40 backdrop-blur-md text-primary shadow-xl max-h-64 overflow-hidden">
-                  <div className="max-h-52 overflow-y-auto pt-1">
-                    {filteredStates.length > 0 ? (
-                      filteredStates.map((s, index) => (
-                        <div
-                          key={s.value}
-                          onClick={() => {
-                            setSelectedStateId(s.value);
-                            setSelectedStateName(s.label);
-                            setSelectedCityId(null);
-                            setSelectedCityName("");
-                            setStateSearch("");
-                            setStateOpen(false);
-                          }}
-                          className={`px-4 py-2.5 cursor-pointer text-sm ${highlightedStateIndex === index
-                            ? "bg-primary/30"
-                            : "hover:bg-primary/20"
-                            }`}
-                        >
-                          {s.label}
-                        </div>
-                      ))
-                    ) : (
-                      <div className="px-4 py-6 text-center text-sm text-primary/60">
-                        No states found
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
+              <CustomSelect
+                value={selectedStateId}
+                options={states}
+                placeholder="Select State"
+                variant="transparent"
+                onChange={(val) => {
+                  const s = states.find((st) => st.value === val);
+                  setSelectedStateId(val);
+                  setSelectedStateName(s ? s.label : "");
+                  setSelectedCityId(null);
+                  setSelectedCityName("");
+                }}
+              />
             </div>
 
             {/* City Dropdown */}
-            <div ref={cityRef} className="relative">
+            <div className="relative">
               <label className="text-xs text-third block mb-1">City</label>
-
-              {cityOpen && selectedStateId ? (
-                <div className="relative">
-                  <Search
-                    size={16}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-primary/70 z-10"
-                  />
-                  <input
-                    type="text"
-                    value={citySearch}
-                    onKeyDown={handleCityKeyDown}
-                    onChange={(e) => {
-                      setCitySearch(e.target.value);
-                      setHighlightedCityIndex(0);
-                    }}
-                    placeholder={selectedCityName || "Search or select city..."}
-                    className="w-full pl-10 pr-10 py-2.5 bg-transparent border border-primary/60 rounded-md text-primary placeholder:text-primary/60 focus:outline-none focus:border-primary text-sm"
-                    autoFocus
-                  />
-                  <ChevronDown
-                    size={16}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-primary/70 cursor-pointer"
-                    onClick={() => setCityOpen(false)}
-                  />
-                </div>
-              ) : (
-                <div
-                  onClick={() => selectedStateId && setCityOpen(true)}
-                  className={`h-10 px-3 flex items-center justify-between rounded-md border border-primary/60 bg-transparent text-primary ${!selectedStateId
-                    ? "opacity-50 cursor-not-allowed"
-                    : "cursor-pointer"
-                    } backdrop-blur-sm`}
-                >
-                  <span className="truncate">
-                    {selectedCityName ||
-                      (selectedStateId ? "Select City" : "Select state first")}
-                  </span>
-                  <ChevronDown size={16} />
-                </div>
-              )}
-
-              {cityOpen && selectedStateId && (
-                <div className="absolute z-50 mt-1 w-full border border-primary/60 rounded-md bg-black/40 backdrop-blur-md text-primary shadow-xl max-h-64 overflow-hidden">
-                  <div className="max-h-52 overflow-y-auto pt-1">
-                    {filteredCities.length > 0 ? (
-                      filteredCities.map((c, index) => (
-                        <div
-                          key={c.value}
-                          onClick={() => {
-                            setSelectedCityId(c.value);
-                            setSelectedCityName(c.label);
-                            setCitySearch("");
-                            setCityOpen(false);
-                          }}
-                          className={`px-4 py-2.5 cursor-pointer text-sm ${highlightedCityIndex === index
-                            ? "bg-primary/30"
-                            : "hover:bg-primary/20"
-                            }`}
-                        >
-                          {c.label}
-                        </div>
-                      ))
-                    ) : (
-                      <div className="px-4 py-6 text-center text-sm text-primary/60">
-                        No cities found
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
+              <CustomSelect
+                value={selectedCityId}
+                options={cities}
+                placeholder={
+                  selectedStateId ? "Select City" : "Select state first"
+                }
+                variant="transparent"
+                disabled={!selectedStateId}
+                onChange={(val) => {
+                  const c = cities.find((ct) => ct.value === val);
+                  setSelectedCityId(val);
+                  setSelectedCityName(c ? c.label : "");
+                }}
+              />
             </div>
           </div>
 
@@ -1098,7 +931,6 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
                 onChange={setSelectedServices}
               />
             </FilterSection>
-
 
             <FilterSection title="Price Range" defaultOpen={true}>
               <div className="flex flex-col gap-2 mt-3">
@@ -1156,7 +988,6 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
               Apply Filter
             </Button>
           </div> */}
-
         </div>
       </aside>
 
@@ -1196,7 +1027,9 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
               variant="outline"
               onClick={() => {
                 setSelectedVehicleTypes((prev) =>
-                  prev.includes("FOUR_WHEELER") ? prev.filter((v) => v !== "FOUR_WHEELER") : [...prev, "FOUR_WHEELER"]
+                  prev.includes("FOUR_WHEELER")
+                    ? prev.filter((v) => v !== "FOUR_WHEELER")
+                    : [...prev, "FOUR_WHEELER"],
                 );
               }}
             />
@@ -1208,7 +1041,9 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
               variant="outline"
               onClick={() => {
                 setSelectedRating((prev) =>
-                  prev.includes("4.5") ? prev.filter((r) => r !== "4.5") : ["4.5"]
+                  prev.includes("4.5")
+                    ? prev.filter((r) => r !== "4.5")
+                    : ["4.5"],
                 );
               }}
             />
@@ -1220,7 +1055,9 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
               variant="outline"
               onClick={() => {
                 setSelectedInventory((prev) =>
-                  prev.includes("30+") ? prev.filter((i) => i !== "30+") : ["30+"]
+                  prev.includes("30+")
+                    ? prev.filter((i) => i !== "30+")
+                    : ["30+"],
                 );
               }}
             />
@@ -1238,7 +1075,7 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
 
         <ConsultantSliderSection
           title="Sponsored Consultant"
-          data={consultants}
+          data={[]}
           loading={consultantsLoading}
         />
 
@@ -1256,7 +1093,6 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
           onPageChange={handlePageChange}
         />
       </main>
-
 
       {/* ================= MOBILE FILTER DRAWER ================= */}
       <div
@@ -1323,122 +1159,39 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
                       <span>Detect</span>
                     </button>
                   </div>
-                  {stateOpen ? (
-                    <div className="relative">
-                      <input
-                        type="text"
-                        value={stateSearch}
-                        onKeyDown={handleStateKeyDown}
-                        onChange={(e) => {
-                          setStateSearch(e.target.value);
-                          setHighlightedStateIndex(0);
-                        }}
-                        placeholder={selectedStateName || "Search state..."}
-                        className="w-full pl-3 pr-10 py-2.5 bg-transparent border border-secondary/40 rounded-md text-secondary placeholder:text-secondary/50 focus:outline-none text-sm"
-                        autoFocus
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setStateOpen(false)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary/70"
-                      >
-                        <ChevronDown size={16} />
-                      </button>
-                    </div>
-                  ) : (
-                    <div
-                      onClick={() => setStateOpen(true)}
-                      className="h-10 px-3 flex items-center justify-between rounded-md border border-secondary/40 bg-transparent text-secondary cursor-pointer"
-                    >
-                      <span className="truncate text-sm">{selectedStateName || "Select State"}</span>
-                      <ChevronDown size={16} />
-                    </div>
-                  )}
-                  {stateOpen && (
-                    <div className="absolute z-50 mt-1 w-full border border-secondary/40 rounded-md bg-primary text-secondary shadow-xl max-h-48 overflow-hidden">
-                      <div className="max-h-44 overflow-y-auto pt-1">
-                        {filteredStates.map((s, index) => (
-                          <div
-                            key={s.value}
-                            onClick={() => {
-                              setSelectedStateId(s.value);
-                              setSelectedStateName(s.label);
-                              setSelectedCityId(null);
-                              setSelectedCityName("");
-                              setStateSearch("");
-                              setStateOpen(false);
-                            }}
-                            className={`px-4 py-2.5 cursor-pointer text-sm ${
-                              highlightedStateIndex === index ? "bg-secondary/20" : "hover:bg-secondary/10"
-                            }`}
-                          >
-                            {s.label}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  <CustomSelect
+                    value={selectedStateId}
+                    options={states}
+                    placeholder="Select State"
+                    variant="default"
+                    onChange={(val) => {
+                      const s = states.find((st) => st.value === val);
+                      setSelectedStateId(val);
+                      setSelectedStateName(s ? s.label : "");
+                      setSelectedCityId(null);
+                      setSelectedCityName("");
+                    }}
+                  />
                 </div>
 
                 <div className="relative">
-                  <label className="text-xs text-secondary/60 block mb-1">City</label>
-                  {cityOpen && selectedStateId ? (
-                    <div className="relative">
-                      <input
-                        type="text"
-                        value={citySearch}
-                        onKeyDown={handleCityKeyDown}
-                        onChange={(e) => {
-                          setCitySearch(e.target.value);
-                          setHighlightedCityIndex(0);
-                        }}
-                        placeholder={selectedCityName || "Search city..."}
-                        className="w-full pl-3 pr-10 py-2.5 bg-transparent border border-secondary/40 rounded-md text-secondary placeholder:text-secondary/50 focus:outline-none text-sm"
-                        autoFocus
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setCityOpen(false)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary/70"
-                      >
-                        <ChevronDown size={16} />
-                      </button>
-                    </div>
-                  ) : (
-                    <div
-                      onClick={() => selectedStateId && setCityOpen(true)}
-                      className={`h-10 px-3 flex items-center justify-between rounded-md border border-secondary/40 bg-transparent text-secondary ${
-                        !selectedStateId ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
-                      }`}
-                    >
-                      <span className="truncate text-sm">
-                        {selectedCityName || (selectedStateId ? "Select City" : "Select state first")}
-                      </span>
-                      <ChevronDown size={16} />
-                    </div>
-                  )}
-                  {cityOpen && selectedStateId && (
-                    <div className="absolute z-50 mt-1 w-full border border-secondary/40 rounded-md bg-primary text-secondary shadow-xl max-h-48 overflow-hidden">
-                      <div className="max-h-44 overflow-y-auto pt-1">
-                        {filteredCities.map((c, index) => (
-                          <div
-                            key={c.value}
-                            onClick={() => {
-                              setSelectedCityId(c.value);
-                              setSelectedCityName(c.label);
-                              setCitySearch("");
-                              setCityOpen(false);
-                            }}
-                            className={`px-4 py-2.5 cursor-pointer text-sm ${
-                              highlightedCityIndex === index ? "bg-secondary/20" : "hover:bg-secondary/10"
-                            }`}
-                          >
-                            {c.label}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  <label className="text-xs text-secondary/60 block mb-1">
+                    City
+                  </label>
+                  <CustomSelect
+                    value={selectedCityId}
+                    options={cities}
+                    placeholder={
+                      selectedStateId ? "Select City" : "Select state first"
+                    }
+                    variant="default"
+                    disabled={!selectedStateId}
+                    onChange={(val) => {
+                      const c = cities.find((ct) => ct.value === val);
+                      setSelectedCityId(val);
+                      setSelectedCityName(c ? c.label : "");
+                    }}
+                  />
                 </div>
               </div>
             )}
@@ -1519,8 +1272,14 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
                     max={MAX}
                     step={50000}
                     value={minPrice}
-                    onChange={(e) => setMinPrice(Math.min(+e.target.value, maxPrice - 50000))}
-                    onTouchEnd={() => { const p = buildPayload(); setCurrentPage(1); fetchConsultants(1, p); }}
+                    onChange={(e) =>
+                      setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
+                    }
+                    onTouchEnd={() => {
+                      const p = buildPayload();
+                      setCurrentPage(1);
+                      fetchConsultants(1, p);
+                    }}
                     className="dual-range z-30"
                   />
                   <input
@@ -1529,8 +1288,14 @@ export default function FilterWithCard({ onFilterChange, onPageResponseChange })
                     max={MAX}
                     step={50000}
                     value={maxPrice}
-                    onChange={(e) => setMaxPrice(Math.max(+e.target.value, minPrice + 50000))}
-                    onTouchEnd={() => { const p = buildPayload(); setCurrentPage(1); fetchConsultants(1, p); }}
+                    onChange={(e) =>
+                      setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
+                    }
+                    onTouchEnd={() => {
+                      const p = buildPayload();
+                      setCurrentPage(1);
+                      fetchConsultants(1, p);
+                    }}
                     className="dual-range z-40"
                   />
                 </div>

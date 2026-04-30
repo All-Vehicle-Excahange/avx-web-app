@@ -17,7 +17,7 @@ export default function GlobalCompareButton() {
     return (
         <>
             {/* Draggable Button Wrapper */}
-            <div className="fixed inset-x-0 bottom-0 top-16 pointer-events-none z-[2000]" ref={dragConstraintsRef}>
+            <div className="fixed inset-x-0 bottom-12 top-16 pointer-events-none z-[2000]" ref={dragConstraintsRef}>
                 <motion.button
                     drag
                     dragConstraints={dragConstraintsRef}

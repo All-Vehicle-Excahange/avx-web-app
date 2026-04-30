@@ -73,6 +73,7 @@ export default function ProfileComponent() {
     email: "",
     phone: "",
     businessType: "",
+    username: "", 
     establishmentYear: 0,
   });
 
@@ -171,6 +172,7 @@ export default function ProfileComponent() {
             ownerName: d.ownerName || "",
             email: d.companyEmail || "",
             phone: d.phoneNumber || "",
+            username: d.username || "",
             businessType: formatVehicleTypes(d.vehicleTypes),
             establishmentYear: d.establishmentYear || 0,
           });
@@ -508,6 +510,7 @@ export default function ProfileComponent() {
             <ProfileItem label="Owner Name" value={profile.ownerName} />
             <ProfileItem label="Email" value={profile.email} />
             <ProfileItem label="Phone" value={profile.phone} />
+            <ProfileItem label="Username" value={profile.username} />
             {/* <ProfileItem label="City" value={profile.city} /> */}
             <ProfileItem label="Business Type" value={profile.businessType} />
             <ProfileItem

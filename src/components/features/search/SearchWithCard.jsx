@@ -22,6 +22,7 @@ import {
 import SponsoredCars from "./SponsoredCars";
 import FilterSection from "./FilterSection";
 import PriceBased from "./PriceBased";
+import CustomSelect from "@/components/ui/custom-select";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import {
   getAndSearchMakers,
@@ -101,20 +102,8 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
   const [selectedRating, setSelectedRating] = useState([]);
   const [selectedSellerType, setSelectedSellerType] = useState([]);
 
-  const [stateOpen, setStateOpen] = useState(false);
-  const [cityOpen, setCityOpen] = useState(false);
-
-  const [stateSearch, setStateSearch] = useState("");
-  const [citySearch, setCitySearch] = useState("");
-
-  const stateRef = useRef(null);
-  const cityRef = useRef(null);
-
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-
-  const [highlightedStateIndex, setHighlightedStateIndex] = useState(-1);
-  const [highlightedCityIndex, setHighlightedCityIndex] = useState(-1);
 
   // ── Add these ──
   const [selectedTransmissionTypes, setSelectedTransmissionTypes] = useState(
@@ -1150,77 +1139,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
     loadBrands(1, "");
   };
 
-  const filteredStates = states.filter((s) =>
-    s.label.toLowerCase().includes(stateSearch.toLowerCase()),
-  );
 
-  const filteredCities = cities.filter((c) =>
-    c.label.toLowerCase().includes(citySearch.toLowerCase()),
-  );
-
-  const handleStateKeyDown = (e) => {
-    if (!filteredStates.length) return;
-
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setHighlightedStateIndex((prev) =>
-        prev < filteredStates.length - 1 ? prev + 1 : prev,
-      );
-    }
-
-    if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setHighlightedStateIndex((prev) => (prev > 0 ? prev - 1 : 0));
-    }
-
-    if (e.key === "Enter") {
-      e.preventDefault();
-
-      if (highlightedStateIndex >= 0) {
-        const selected = filteredStates[highlightedStateIndex];
-
-        setSelectedStateId(selected.value);
-        setSelectedStateName(selected.label);
-        setSelectedCityId(null);
-        setSelectedCityName("");
-
-        setStateSearch("");
-        setStateOpen(false);
-        setHighlightedStateIndex(-1);
-      }
-    }
-  };
-
-  const handleCityKeyDown = (e) => {
-    if (!filteredCities.length) return;
-
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setHighlightedCityIndex((prev) =>
-        prev < filteredCities.length - 1 ? prev + 1 : prev,
-      );
-    }
-
-    if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setHighlightedCityIndex((prev) => (prev > 0 ? prev - 1 : 0));
-    }
-
-    if (e.key === "Enter") {
-      e.preventDefault();
-
-      if (highlightedCityIndex >= 0) {
-        const selected = filteredCities[highlightedCityIndex];
-
-        setSelectedCityId(selected.value);
-        setSelectedCityName(selected.label);
-
-        setCitySearch("");
-        setCityOpen(false);
-        setHighlightedCityIndex(-1);
-      }
-    }
-  };
 
   return (
     <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-[20px] gap-4">
@@ -1264,7 +1183,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
             {/* ================= STATE & CITY SELECTOR ================= */}
             <div className="space-y-4">
               {/* ---------- STATE DROPDOWN ---------- */}
-              <div ref={stateRef} className="relative">
+              <div className="relative">
                 <div className="flex items-center justify-between mb-1">
                   <label className="text-xs text-third">State</label>
                   <button
@@ -1277,143 +1196,36 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                     <span>Detect</span>
                   </button>
                 </div>
-
-                {stateOpen ? (
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={stateSearch}
-                      onKeyDown={handleStateKeyDown}
-                      onChange={(e) => {
-                        setStateSearch(e.target.value);
-                        setHighlightedStateIndex(0);
-                      }}
-                      placeholder={
-                        selectedStateName || "Search or select state..."
-                      }
-                      className="w-full pl-3 pr-10 py-2.5 bg-transparent border border-primary/60 rounded-md text-primary placeholder:text-primary/60 focus:outline-none focus:border-primary text-sm"
-                      autoFocus
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setStateOpen(false)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-primary/70"
-                    >
-                      <ChevronUpIcon />
-                    </button>
-                  </div>
-                ) : (
-                  <div
-                    onClick={() => setStateOpen(true)}
-                    className="h-10 px-3 flex items-center justify-between rounded-md border border-primary/60 bg-transparent text-primary cursor-pointer backdrop-blur-sm"
-                  >
-                    <span className="truncate">
-                      {selectedStateName || "Select State"}
-                    </span>
-                    <span>
-                      <ChevronDownIcon />
-                    </span>
-                  </div>
-                )}
-
-                {stateOpen && (
-                  <div className="absolute z-50 mt-1 w-full border border-primary/60 rounded-md bg-black/40 backdrop-blur-md text-primary shadow-xl max-h-64 overflow-hidden">
-                    <div className="max-h-52 overflow-y-auto pt-1">
-                      {filteredStates.map((s, index) => (
-                        <div
-                          key={s.value}
-                          onClick={() => {
-                            setSelectedStateId(s.value);
-                            setSelectedStateName(s.label);
-                            setSelectedCityId(null);
-                            setSelectedCityName("");
-                            setStateSearch("");
-                            setStateOpen(false);
-                          }}
-                          className={`px-4 py-2.5 cursor-pointer text-sm ${highlightedStateIndex === index
-                            ? "bg-primary/30"
-                            : "hover:bg-primary/20"
-                            }`}
-                        >
-                          {s.label}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                <CustomSelect
+                  value={selectedStateId}
+                  options={states}
+                  placeholder="Select State"
+                  variant="transparent"
+                  onChange={(val) => {
+                    const s = states.find((st) => st.value === val);
+                    setSelectedStateId(val);
+                    setSelectedStateName(s ? s.label : "");
+                    setSelectedCityId(null);
+                    setSelectedCityName("");
+                  }}
+                />
               </div>
 
               {/* ---------- CITY DROPDOWN ---------- */}
-              <div ref={cityRef} className="relative">
+              <div className="relative">
                 <label className="text-xs text-third block mb-1">City</label>
-
-                {cityOpen && selectedStateId ? (
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={citySearch}
-                      onKeyDown={handleCityKeyDown}
-                      onChange={(e) => {
-                        setCitySearch(e.target.value);
-                        setHighlightedCityIndex(0);
-                      }}
-                      placeholder={
-                        selectedCityName || "Search or select city..."
-                      }
-                      className="w-full pl-3 pr-10 py-2.5 bg-transparent border border-primary/60 rounded-md text-primary placeholder:text-primary/60 focus:outline-none focus:border-primary text-sm"
-                      autoFocus
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setCityOpen(false)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-primary/70"
-                    >
-                      <ChevronUpIcon />
-                    </button>
-                  </div>
-                ) : (
-                  <div
-                    onClick={() => selectedStateId && setCityOpen(true)}
-                    className={`h-10 px-3 flex items-center justify-between rounded-md border border-primary/60 bg-transparent text-primary ${!selectedStateId
-                      ? "opacity-50 cursor-not-allowed"
-                      : "cursor-pointer"
-                      } backdrop-blur-sm`}
-                  >
-                    <span className="truncate">
-                      {selectedCityName ||
-                        (selectedStateId
-                          ? "Select City"
-                          : "Select state first")}
-                    </span>
-                    <span>
-                      <ChevronDownIcon />
-                    </span>
-                  </div>
-                )}
-
-                {cityOpen && selectedStateId && (
-                  <div className="absolute z-50 mt-1 w-full border border-primary/60 rounded-md bg-black/40 backdrop-blur-md text-primary shadow-xl max-h-64 overflow-hidden">
-                    <div className="max-h-52 overflow-y-auto pt-1">
-                      {filteredCities.map((c, index) => (
-                        <div
-                          key={c.value}
-                          onClick={() => {
-                            setSelectedCityId(c.value);
-                            setSelectedCityName(c.label);
-                            setCitySearch("");
-                            setCityOpen(false);
-                          }}
-                          className={`px-4 py-2.5 cursor-pointer text-sm ${highlightedCityIndex === index
-                            ? "bg-primary/30"
-                            : "hover:bg-primary/20"
-                            }`}
-                        >
-                          {c.label}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                <CustomSelect
+                  value={selectedCityId}
+                  options={cities}
+                  placeholder={selectedStateId ? "Select City" : "Select state first"}
+                  variant="transparent"
+                  disabled={!selectedStateId}
+                  onChange={(val) => {
+                    const c = cities.find((ct) => ct.value === val);
+                    setSelectedCityId(val);
+                    setSelectedCityName(c ? c.label : "");
+                  }}
+                />
               </div>
 
 
@@ -1936,123 +1748,36 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                       <span>Detect</span>
                     </button>
                   </div>
-                  {stateOpen ? (
-                    <div className="relative">
-                      <input
-                        type="text"
-                        value={stateSearch}
-                        onKeyDown={handleStateKeyDown}
-                        onChange={(e) => {
-                          setStateSearch(e.target.value);
-                          setHighlightedStateIndex(0);
-                        }}
-                        placeholder={selectedStateName || "Search state..."}
-                        className="w-full pl-3 pr-10 py-2.5 bg-transparent border border-secondary/40 rounded-md text-secondary placeholder:text-secondary/50 focus:outline-none text-sm"
-                        autoFocus
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setStateOpen(false)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary/70"
-                      >
-                        <ChevronUpIcon size={18} />
-                      </button>
-                    </div>
-                  ) : (
-                    <div
-                      onClick={() => setStateOpen(true)}
-                      className="h-10 px-3 flex items-center justify-between rounded-md border border-secondary/40 bg-transparent text-secondary cursor-pointer"
-                    >
-                      <span className="truncate text-sm">{selectedStateName || "Select State"}</span>
-                      <ChevronDownIcon size={18} />
-                    </div>
-                  )}
-                  {stateOpen && (
-                    <div className="absolute z-50 mt-1 w-full border border-secondary/40 rounded-md bg-primary text-secondary shadow-xl max-h-48 overflow-hidden">
-                      <div className="max-h-44 overflow-y-auto pt-1">
-                        {filteredStates.map((s, index) => (
-                          <div
-                            key={s.value}
-                            onClick={() => {
-                              setSelectedStateId(s.value);
-                              setSelectedStateName(s.label);
-                              setSelectedCityId(null);
-                              setSelectedCityName("");
-                              setStateSearch("");
-                              setStateOpen(false);
-                            }}
-                            className={`px-4 py-2.5 cursor-pointer text-sm ${
-                              highlightedStateIndex === index ? "bg-secondary/20" : "hover:bg-secondary/10"
-                            }`}
-                          >
-                            {s.label}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  <CustomSelect
+                    value={selectedStateId}
+                    options={states}
+                    placeholder="Select State"
+                    variant="default"
+                    onChange={(val) => {
+                      const s = states.find((st) => st.value === val);
+                      setSelectedStateId(val);
+                      setSelectedStateName(s ? s.label : "");
+                      setSelectedCityId(null);
+                      setSelectedCityName("");
+                    }}
+                  />
                 </div>
 
                 {/* City */}
                 <div className="relative">
                   <label className="text-xs text-secondary/60 block mb-1">City</label>
-                  {cityOpen && selectedStateId ? (
-                    <div className="relative">
-                      <input
-                        type="text"
-                        value={citySearch}
-                        onKeyDown={handleCityKeyDown}
-                        onChange={(e) => {
-                          setCitySearch(e.target.value);
-                          setHighlightedCityIndex(0);
-                        }}
-                        placeholder={selectedCityName || "Search city..."}
-                        className="w-full pl-3 pr-10 py-2.5 bg-transparent border border-secondary/40 rounded-md text-secondary placeholder:text-secondary/50 focus:outline-none text-sm"
-                        autoFocus
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setCityOpen(false)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary/70"
-                      >
-                        <ChevronUpIcon size={18} />
-                      </button>
-                    </div>
-                  ) : (
-                    <div
-                      onClick={() => selectedStateId && setCityOpen(true)}
-                      className={`h-10 px-3 flex items-center justify-between rounded-md border border-secondary/40 bg-transparent text-secondary ${
-                        !selectedStateId ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
-                      }`}
-                    >
-                      <span className="truncate text-sm">
-                        {selectedCityName || (selectedStateId ? "Select City" : "Select state first")}
-                      </span>
-                      <ChevronDownIcon size={18} />
-                    </div>
-                  )}
-                  {cityOpen && selectedStateId && (
-                    <div className="absolute z-50 mt-1 w-full border border-secondary/40 rounded-md bg-primary text-secondary shadow-xl max-h-48 overflow-hidden">
-                      <div className="max-h-44 overflow-y-auto pt-1">
-                        {filteredCities.map((c, index) => (
-                          <div
-                            key={c.value}
-                            onClick={() => {
-                              setSelectedCityId(c.value);
-                              setSelectedCityName(c.label);
-                              setCitySearch("");
-                              setCityOpen(false);
-                            }}
-                            className={`px-4 py-2.5 cursor-pointer text-sm ${
-                              highlightedCityIndex === index ? "bg-secondary/20" : "hover:bg-secondary/10"
-                            }`}
-                          >
-                            {c.label}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  <CustomSelect
+                    value={selectedCityId}
+                    options={cities}
+                    placeholder={selectedStateId ? "Select City" : "Select state first"}
+                    variant="default"
+                    disabled={!selectedStateId}
+                    onChange={(val) => {
+                      const c = cities.find((ct) => ct.value === val);
+                      setSelectedCityId(val);
+                      setSelectedCityName(c ? c.label : "");
+                    }}
+                  />
                 </div>
               </div>
             )}

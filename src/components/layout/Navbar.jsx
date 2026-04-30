@@ -275,7 +275,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                     if (kycMsg) {
                       let labelText = "Upload Documents";
                       if (kycMsg.type === "COMPLETE_REGISTRATION") {
-                        labelText = "Complete Registration";
+                        labelText = "Complete KYC";
                       }
                       return {
                         label: labelText,

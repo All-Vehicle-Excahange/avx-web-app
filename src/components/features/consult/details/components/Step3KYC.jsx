@@ -3,8 +3,16 @@
 import { useEffect, useState, useCallback } from "react";
 import InputField from "@/components/ui/inputField";
 import DropzoneUpload from "@/components/ui/DropzoneUpload";
+import { X } from "lucide-react";
 
-export default function Step3KYC({ onChange, initialData, readOnly = false, submitAttempted = false }) {
+export default function Step3KYC({
+  onChange,
+  initialData,
+  readOnly = false,
+  isUpdateMode = false,
+  submitAttempted = false,
+  backendError = "",
+}) {
   // ===== VALIDATION LOGIC =====
   const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
   const validateGST = (gst) => gstRegex.test(gst);
@@ -86,9 +94,11 @@ export default function Step3KYC({ onChange, initialData, readOnly = false, subm
     const hasAllAadharImg = hasAadharFront && hasAadharBack;
 
     if (hasAadharNum && !hasAllAadharImg) {
-      newErrors.aadhar = "Both Aadhaar number and front/back images are required.";
+      newErrors.aadhar =
+        "Both Aadhaar number and front/back images are required.";
     } else if (!hasAadharNum && (hasAadharFront || hasAadharBack)) {
-      newErrors.aadhar = "Both Aadhaar number and front/back images are required.";
+      newErrors.aadhar =
+        "Both Aadhaar number and front/back images are required.";
     } else if (hasAadharNum && !validateAadhaar(form.aadharNumber)) {
       newErrors.aadhar = "Invalid Aadhaar (must be 12 digits)";
     }
@@ -102,66 +112,51 @@ export default function Step3KYC({ onChange, initialData, readOnly = false, subm
     }
 
     setErrors(newErrors);
-  }, [
-    form.gstNumber,
-    form.panNumber,
-    form.aadharNumber,
-    gstPreview,
-    panPreview,
-    aadharFrontPreview,
-    aadharBackPreview,
-  ]);
+
+    if (onChange) {
+      const isChanged = JSON.stringify(form) !== JSON.stringify(initialData);
+      onChange(form, isChanged, newErrors);
+    }
+  }, [form, gstPreview, panPreview, aadharFrontPreview, aadharBackPreview]);
 
   const handleInput = (key, value) => {
     const updatedForm = { ...form, [key]: value };
     setForm(updatedForm);
-    if (onChange) {
-      const isChanged =
-        JSON.stringify(updatedForm) !== JSON.stringify(initialData);
-      // Pass errors so the parent can block submission
-      onChange(updatedForm, isChanged, errors);
-    }
   };
 
+  const handleClear = () => {
+    const emptyForm = {
+      gstNumber: "",
+      gstPhoto: null,
+      panNumber: "",
+      panPhoto: null,
+      aadharNumber: "",
+      aadharFront: null,
+      aadharBack: null,
+    };
+    setForm(emptyForm);
+    setGstPreview(null);
+    setPanPreview(null);
+    setAadharFrontPreview(null);
+    setAadharBackPreview(null);
+    if (onChange) onChange(emptyForm, true);
+  };
 
   return (
-    <div className="space-y-6">
-      {/* GST SECTION */}
-      <div className="space-y-4">
-        <div className="space-y-1">
-          <InputField
-            label="GST Number"
-            variant="colored"
-            readOnly={readOnly}
-            value={form.gstNumber}
-            maxLength={15}
-            onChange={(e) => {
-              const val = e.target.value.toUpperCase().slice(0, 15);
-              handleInput("gstNumber", val);
-            }}
-          />
+    <div className="space-y-6 relative">
+      {/* CLEAR BUTTON */}
+      {/* {!readOnly && !isUpdateMode && !initialData && (
+        <div className="absolute -top-6 right-0 z-10">
+          <button
+            type="button"
+            onClick={handleClear}
+            className="text-xs font-medium border cursor-pointer border-primary/40 rounded-2xl text-red-500 hover:text-red-600 transition flex items-center gap-1  px-2 py-1 "
+          >
+            <X size={14} />
+            Clear Form
+          </button>
         </div>
-
-        <DropzoneUpload
-          label="GST Certificate Photo"
-          preview={gstPreview}
-          readOnly={readOnly}
-          onChange={(file) => {
-            const f = Array.isArray(file) ? file[0] : file;
-            if (f) {
-              setGstPreview(typeof f === "string" ? f : URL.createObjectURL(f));
-              handleInput("gstPhoto", f);
-            }
-          }}
-        />
-        {errors.gst && (
-          <p className="text-red-500 text-sm font-medium mt-1 ml-1">
-            {errors.gst}
-          </p>
-        )}
-      </div>
-
-      <div className="h-px bg-primary/10 my-6" />
+      )} */}
 
       {/* PAN SECTION */}
       <div className="space-y-4">
@@ -184,6 +179,11 @@ export default function Step3KYC({ onChange, initialData, readOnly = false, subm
           preview={panPreview}
           readOnly={readOnly}
           onChange={(file) => {
+            if (!file) {
+              setPanPreview(null);
+              handleInput("panPhoto", null);
+              return;
+            }
             const f = Array.isArray(file) ? file[0] : file;
             if (f) {
               setPanPreview(typeof f === "string" ? f : URL.createObjectURL(f));
@@ -197,8 +197,16 @@ export default function Step3KYC({ onChange, initialData, readOnly = false, subm
           </p>
         )}
       </div>
-
-      <div className="h-px bg-primary/10 my-6" />
+      <div className="relative my-8">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-primary/10" />
+        </div>
+        <div className="relative flex justify-center">
+          <span className=" px-4 text-sm font-semibold text-primary/40 uppercase tracking-widest">
+            OR
+          </span>
+        </div>
+      </div>
 
       {/* AADHAAR SECTION */}
       <div className="space-y-4">
@@ -224,6 +232,11 @@ export default function Step3KYC({ onChange, initialData, readOnly = false, subm
           preview={aadharFrontPreview}
           readOnly={readOnly}
           onChange={(file) => {
+            if (!file) {
+              setAadharFrontPreview(null);
+              handleInput("aadharFront", null);
+              return;
+            }
             const f = Array.isArray(file) ? file[0] : file;
             if (f) {
               setAadharFrontPreview(
@@ -239,6 +252,11 @@ export default function Step3KYC({ onChange, initialData, readOnly = false, subm
           preview={aadharBackPreview}
           readOnly={readOnly}
           onChange={(file) => {
+            if (!file) {
+              setAadharBackPreview(null);
+              handleInput("aadharBack", null);
+              return;
+            }
             const f = Array.isArray(file) ? file[0] : file;
             if (f) {
               setAadharBackPreview(
@@ -259,6 +277,53 @@ export default function Step3KYC({ onChange, initialData, readOnly = false, subm
           </p>
         )}
       </div>
+
+      {/* GST SECTION */}
+      <div className="space-y-4">
+        <div className="space-y-1">
+          <InputField
+            label="GST Number"
+            variant="colored"
+            readOnly={readOnly}
+            value={form.gstNumber}
+            maxLength={15}
+            onChange={(e) => {
+              const val = e.target.value.toUpperCase().slice(0, 15);
+              handleInput("gstNumber", val);
+            }}
+          />
+        </div>
+
+        <DropzoneUpload
+          label="GST Certificate Photo"
+          preview={gstPreview}
+          readOnly={readOnly}
+          onChange={(file) => {
+            if (!file) {
+              setGstPreview(null);
+              handleInput("gstPhoto", null);
+              return;
+            }
+            const f = Array.isArray(file) ? file[0] : file;
+            if (f) {
+              setGstPreview(typeof f === "string" ? f : URL.createObjectURL(f));
+              handleInput("gstPhoto", f);
+            }
+          }}
+        />
+        {errors.gst && (
+          <p className="text-red-500 text-sm font-medium mt-1 ml-1">
+            {errors.gst}
+          </p>
+        )}
+      </div>
+
+      {/* ===== BACKEND ERROR ===== */}
+      {backendError && (
+        <p className="text-red-500 text-sm font-medium mt-4 ml-1 animate-in fade-in slide-in-from-top-1">
+          {backendError}
+        </p>
+      )}
     </div>
   );
 }
