@@ -1,5 +1,5 @@
 "use client";
-import { Menu, Search, User } from "lucide-react";
+import { Menu, Search, User, Settings } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import Button from "../ui/button";
 import HamburgerDrawer from "../features/home/HamburgerDrawer";
@@ -225,6 +225,20 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
             {/* RIGHT SIDE */}
             <div className="flex items-center gap-2 md:gap-4">
+              {/* Preferences Button */}
+              <button
+                onClick={() => setOpen(true)}
+                className={`flex cursor-pointer items-center gap-1 px-2 py-1 rounded transition text-xs md:text-sm
+                ${
+                  heroMode && !scrolled
+                    ? "text-white hover:outline-2 hover:outline-white/40"
+                    : "text-black hover:outline-2 hover:outline-black/20"
+                }`}
+              >
+                <Settings className="w-5 h-5 md:w-6 md:h-6" />
+                <span className="hidden sm:block font-semibold">Preferences</span>
+              </button>
+
               {(() => {
                 const userRole = user?.userRole;
                 const isConsultant = [
