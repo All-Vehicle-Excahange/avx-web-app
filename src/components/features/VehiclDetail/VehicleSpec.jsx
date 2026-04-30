@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FeatureGroup from "@/components/ui/FeatureGroup";
 import { Calendar, ChevronDown, Clock, X } from "lucide-react";
 import Button from "@/components/ui/button";
@@ -14,6 +15,23 @@ export default function VehicleSpec({ open, setOpen }) {
   const [inspectionType, setInspectionType] = useState("report");
   const [inspectionDate, setInspectionDate] = useState(null);
   const [inspectionTime, setInspectionTime] = useState(null);
+  const [mobileNumber, setMobileNumber] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedUser = localStorage.getItem("user");
+      if (savedUser) {
+        try {
+          const userObj = JSON.parse(savedUser);
+          if (userObj) {
+            setMobileNumber(userObj.phoneNumber || userObj.phone || userObj.mobile || "");
+          }
+        } catch (e) {
+          console.error("Error parsing user from localStorage", e);
+        }
+      }
+    }
+  }, []);
 
   const generateTimeSlots = () => {
     const slots = [];
@@ -38,6 +56,7 @@ export default function VehicleSpec({ open, setOpen }) {
   const handleConfirm = () => {
     const payload = {
       inspectionType,
+      mobileNumber,
       ...(inspectionType === "video" && {
         inspectionDate: inspectionDate ? inspectionDate.toLocaleDateString() : "",
         inspectionTime: inspectionTime ? inspectionTime.value : "",
@@ -403,16 +422,50 @@ export default function VehicleSpec({ open, setOpen }) {
                 </div>
               </div>
 
-              {/* Schedule Video Inspection */}
+              {/* Video Inspection Conditional Content */}
               {inspectionType === "video" && (
-                <div
-                  className="
-      mt-5 rounded-xl border border-third/40
-      bg-secondary/60 p-4 space-y-4
-    "
-                >
-                  {/* Header */}
-                  <div className="flex items-center gap-2">
+                <>
+                  {/* WhatsApp Number Box */}
+                  <div
+                    className="
+        mt-5 rounded-xl border border-third/40
+        bg-secondary/60 p-4 space-y-4
+      "
+                  >
+                    {/* Header */}
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-semibold">WhatsApp Number</p>
+                    </div>
+
+                    {/* Input */}
+                    <div className="space-y-1.5 text-primary">
+                      <div
+                        className="
+              flex items-center gap-2 px-3 py-2 rounded-lg
+              border border-third/40 bg-secondary
+              focus-within:border-primary
+            "
+                      >
+                        <input
+                          type="tel"
+                          value={mobileNumber}
+                          onChange={(e) => setMobileNumber(e.target.value)}
+                          placeholder="Enter WhatsApp number"
+                          className="w-full text-sm bg-transparent focus:outline-none text-primary"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Schedule Video Inspection Box */}
+                  <div
+                    className="
+        mt-5 rounded-xl border border-third/40
+        bg-secondary/60 p-4 space-y-4
+      "
+                  >
+                    {/* Header */}
+                    <div className="flex items-center gap-2">
                     <Calendar size={16} className="text-primary" />
                     <p className="text-sm font-semibold">
                       Schedule Video Inspection
@@ -528,6 +581,7 @@ export default function VehicleSpec({ open, setOpen }) {
                     availability.
                   </p>
                 </div>
+              </>
               )}
 
               {/* Actions */}

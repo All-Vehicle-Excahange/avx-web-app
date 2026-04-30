@@ -1,9 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import Button from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
+import { useAuthStore } from "@/stores/useAuthStore";
+import ConsualtPopup from "./ConsualtPopup";
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
 const Avatar = ({ initials, color }) => (
@@ -101,6 +104,18 @@ export default function ConsultantHeroSection() {
   const poolIndex = useRef(3);
   const keyRef = useRef(100);
 
+  const { user } = useAuthStore();
+  const [showConsultPopup, setShowConsultPopup] = useState(false);
+
+  useEffect(() => {
+    if (
+      user?.userRole &&
+      ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(user.userRole)
+    ) {
+      setShowConsultPopup(true);
+    }
+  }, [user]);
+
   const views = useCountUp(245, 1400, 300);
   const rate = useCountUp(92, 1000, 700);
 
@@ -122,6 +137,9 @@ export default function ConsultantHeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-5">
+      {showConsultPopup && (
+        <ConsualtPopup onClose={() => setShowConsultPopup(false)} />
+      )}
       <div className="absolute inset-0" />
       <motion.div
         animate={{ y: [0, -25, 0] }}
@@ -220,10 +238,11 @@ export default function ConsultantHeroSection() {
                   <button
                     key={tab}
                     onClick={() => setActiveTab(i)}
-                    className={`relative px-3.5 py-1.5 text-[11px] font-semibold rounded-lg transition-colors duration-200 ${activeTab === i
+                    className={`relative px-3.5 py-1.5 text-[11px] font-semibold rounded-lg transition-colors duration-200 ${
+                      activeTab === i
                         ? "text-primary"
                         : "text-third hover:text-primary/70"
-                      }`}
+                    }`}
                   >
                     {activeTab === i && (
                       <motion.div

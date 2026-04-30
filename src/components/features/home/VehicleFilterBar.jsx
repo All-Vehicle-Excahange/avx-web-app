@@ -304,6 +304,47 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     return () => window.removeEventListener("scroll", handleScrollClose);
   }, [activeTab]);
 
+  // Handle keyboard navigation for dropdowns
+  useEffect(() => {
+    if (!activeTab && !showTypeDropdown) return;
+
+    const handleKeyDown = (e) => {
+      if (['ArrowDown', 'ArrowUp', 'Enter'].includes(e.key)) {
+        const containers = Array.from(document.querySelectorAll('.dropdown-active'));
+        const container = containers.find(c => c.offsetParent !== null);
+        if (!container) return;
+
+        const items = Array.from(container.querySelectorAll('button'));
+        if (items.length === 0) return;
+
+        const currentIndex = items.indexOf(document.activeElement);
+
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          const next = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+          items[next]?.focus();
+          items[next]?.scrollIntoView({ block: 'nearest' });
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          const next = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+          items[next]?.focus();
+          items[next]?.scrollIntoView({ block: 'nearest' });
+        } else if (e.key === 'Enter') {
+          if (currentIndex !== -1) {
+            e.preventDefault();
+            items[currentIndex].click();
+          } else if (items.length > 0 && document.activeElement.tagName === 'INPUT') {
+            e.preventDefault();
+            items[0].click();
+          }
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [activeTab, showTypeDropdown]);
+
   const handleSearch = () => {
 
     if (!vehicleType) {
@@ -374,6 +415,13 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
   return (
     <>
+      <style>{`
+        .dropdown-active button:focus {
+          background-color: #262626 !important;
+          outline: 1px solid #525252 !important;
+          outline-offset: -1px;
+        }
+      `}</style>
       <div className="hidden lg:flex absolute bottom-[20vh] left-0 right-0 z-30 justify-center items-center px-4">
         <div className="w-full max-w-[1400px] animated-gradient-border shadow-2xl relative overflow-visible">
           <div
@@ -396,13 +444,13 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 </div>
                 <input
                   type="text"
-                  placeholder="Search destinations"
+                  placeholder="Search city"
                   className="w-full bg-transparent border-none outline-none text-sm text-gray-200 placeholder-gray-400 font-medium text-left truncate"
                   value={location}
                   onChange={handleLocationChange}
                 />
                 {activeTab === "location" && (
-                  <div className="absolute top-[110%] left-0 z-50 w-[360px] bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                  <div className="absolute top-[110%] left-0 z-50 dropdown-active w-[360px] bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
                     <div className="flex flex-col gap-1 max-h-[300px] overflow-y-auto custom-scrollbar">
                       {locationSuggestions.length > 0 ? (
                         locationSuggestions.map((item) => (
@@ -445,7 +493,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   {vehicleTypeError ? "* Required" : (vehicleType || "Add type")}
                 </div>
                 {activeTab === "vehicle" && (
-                  <div className="absolute top-[110%] left-0 z-50 w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                  <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
                     {VEHICLE_TYPES.map((type) => (
                       <button
                         key={type.id}
@@ -481,7 +529,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       {priceRange || "Select price"}
                     </div>
                     {activeTab === "priceRange" && (
-                      <div className="absolute top-[110%] left-0 z-50 w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
                         {CONSULT_PRICE_RANGE.map((range) => (
                           <button
                             key={range}
@@ -511,7 +559,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       {service || "Select service"}
                     </div>
                     {activeTab === "service" && (
-                      <div className="absolute top-[110%] left-0 z-50 w-[280px] bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-[280px] bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
                         <div className="flex flex-col max-h-[250px] overflow-y-auto custom-scrollbar">
                           {serviceOptions.length > 0 ? (
                             serviceOptions.map((svc) => (
@@ -549,7 +597,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       {availability || "Select availability"}
                     </div>
                     {activeTab === "availability" && (
-                      <div className="absolute top-[110%] left-0 z-50 w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
                         {AVAILABILITY_OPTIONS.map((opt) => (
                           <button
                             key={opt.value}
@@ -587,7 +635,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       {bodyType || "Add type"}
                     </div>
                     {activeTab === "bodyType" && (
-                      <div className="absolute top-[110%] left-0 z-50 w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800 max-h-[250px] overflow-y-auto custom-scrollbar">
+                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800 max-h-[250px] overflow-y-auto custom-scrollbar">
                         {(vehicleType === "4 Wheeler"
                           ? FOUR_WHEELER_TYPES
                           : TWO_WHEELER_TYPES
@@ -620,7 +668,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       {fuelType || "Select fuel"}
                     </div>
                     {activeTab === "fuel" && (
-                      <div className="absolute top-[110%] left-0 z-50 w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
                         {FUEL_TYPES.map((f) => (
                           <button
                             key={f}
@@ -656,7 +704,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       onClick={(e) => e.stopPropagation()}
                     />
                     {activeTab === "brand" && (
-                      <div className="absolute top-[110%] left-0 z-50 w-[300px] bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-[300px] bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
                         <div className="flex flex-col max-h-[250px] overflow-y-auto custom-scrollbar">
                           {filteredBrands.map((b) => (
                             <button
@@ -690,7 +738,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       {budget || "Select budget"}
                     </div>
                     {activeTab === "budget" && (
-                      <div className="absolute top-[110%] left-0 z-50 w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
                         {BUDGET_RANGE.map((range) => (
                           <button
                             key={range}
@@ -732,7 +780,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       >
         <div className="relative">
           {showTypeDropdown && (
-            <div className={`absolute bottom-[110%] mb-4 bg-neutral-900 border border-neutral-800 rounded-2xl p-2 shadow-2xl animate-in slide-in-from-bottom-4 duration-300 ${isScrolled ? "right-0 w-[280px]" : "left-0 right-0"}`}>
+            <div className={`absolute bottom-[110%] mb-4 bg-neutral-900 border border-neutral-800 rounded-2xl p-2 shadow-2xl animate-in slide-in-from-bottom-4 duration-300 ${isScrolled ? "right-0 w-[280px]" : "left-0 right-0"} dropdown-active`}>
               <button
                 onClick={() => {
                   setInternalActiveType("vehicle");
@@ -820,7 +868,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 </div>
               </button>
               {activeTab === "location" && (
-                <div className="p-4 pt-0 border-t border-neutral-800 border-opacity-50">
+                <div className="p-4 pt-0 border-t border-neutral-800 border-opacity-50 dropdown-active">
                   <input
                     type="text"
                     placeholder="Search destinations"
@@ -865,7 +913,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 </div>
               </button>
               {activeTab === "vehicle" && (
-                <div className="p-4 pt-0 border-t border-neutral-800 border-opacity-50 flex gap-2">
+                <div className="p-4 pt-0 border-t border-neutral-800 border-opacity-50 flex gap-2 dropdown-active">
                   {VEHICLE_TYPES.map((type) => (
                     <button
                       key={type.id}
@@ -890,7 +938,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     </div>
                   </button>
                   {activeTab === "priceRange" && (
-                    <div className="p-2 border-t border-neutral-800 border-opacity-50">
+                    <div className="p-2 border-t border-neutral-800 border-opacity-50 dropdown-active">
                       {CONSULT_PRICE_RANGE.map(range => (
                         <button
                           key={range}
@@ -913,7 +961,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     </div>
                   </button>
                   {activeTab === "service" && (
-                    <div className="p-2 border-t border-neutral-800 border-opacity-50 max-h-64 overflow-y-auto">
+                    <div className="p-2 border-t border-neutral-800 border-opacity-50 max-h-64 overflow-y-auto dropdown-active">
                       {serviceOptions.length > 0 ? serviceOptions.map(opt => (
                         <button
                           key={opt.value}
@@ -936,7 +984,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     </div>
                   </button>
                   {activeTab === "availability" && (
-                    <div className="p-2 border-t border-neutral-800 border-opacity-50">
+                    <div className="p-2 border-t border-neutral-800 border-opacity-50 dropdown-active">
                       {AVAILABILITY_OPTIONS.map(opt => (
                         <button
                           key={opt.value}
@@ -961,7 +1009,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     </div>
                   </button>
                   {activeTab === "bodyType" && (
-                    <div className="p-2 border-t border-neutral-800 border-opacity-50 max-h-64 overflow-y-auto custom-scrollbar">
+                    <div className="p-2 border-t border-neutral-800 border-opacity-50 max-h-64 overflow-y-auto custom-scrollbar dropdown-active">
                       {(vehicleType === "4 Wheeler" ? FOUR_WHEELER_TYPES : TWO_WHEELER_TYPES).map(type => (
                         <button
                           key={type.key}
@@ -984,7 +1032,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     </div>
                   </button>
                   {activeTab === "fuel" && (
-                    <div className="p-2 border-t border-neutral-800 border-opacity-50">
+                    <div className="p-2 border-t border-neutral-800 border-opacity-50 dropdown-active">
                       {FUEL_TYPES.map(fuel => (
                         <button
                           key={fuel}
@@ -1007,7 +1055,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     </div>
                   </button>
                   {activeTab === "brand" && (
-                    <div className="p-4 pt-0 border-t border-neutral-800 border-opacity-50 flex flex-col items-center">
+                    <div className="p-4 pt-0 border-t border-neutral-800 border-opacity-50 flex flex-col items-center dropdown-active">
                       <input
                         type="text"
                         placeholder="Search brand"
@@ -1047,7 +1095,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     </div>
                   </button>
                   {activeTab === "budget" && (
-                    <div className="p-2 border-t border-neutral-800 border-opacity-50">
+                    <div className="p-2 border-t border-neutral-800 border-opacity-50 dropdown-active">
                       {BUDGET_RANGE.map(range => (
                         <button
                           key={range}

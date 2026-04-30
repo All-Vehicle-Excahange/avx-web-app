@@ -81,10 +81,8 @@ function MyProfile() {
 
         // Check if meta exists
         const metaExistsRes = await checkIsMetaExist();
-        console.log("Meta Exists Response:", metaExistsRes);
         const metaExists =
           metaExistsRes.data?.exists || metaExistsRes.data === true;
-        console.log("Meta Exists:", metaExists);
         setIsMetaExist(metaExists);
 
         // Load profile
@@ -99,6 +97,17 @@ function MyProfile() {
         };
         setProfile(userData);
         setProfileForm(userData);
+
+        //  Sync localStorage role with the latest role from API
+        const apiRole = profileRes.data.userRole;
+        const savedUser = localStorage.getItem("user");
+        if (savedUser) {
+          const parsedUser = JSON.parse(savedUser);
+          if (parsedUser.userRole !== apiRole) {
+            const updatedUser = { ...parsedUser, userRole: apiRole };
+            localStorage.setItem("user", JSON.stringify(updatedUser));
+          }
+        }
 
         // Load meta only if exists
         if (metaExists) {
@@ -128,7 +137,6 @@ function MyProfile() {
         }
         // Check suspension status
         const suspendRes = await getUserSellerSuspend();
-        console.log("Suspend Status:", suspendRes);
         if (suspendRes.success) {
           setSuspendData(suspendRes.data);
         }

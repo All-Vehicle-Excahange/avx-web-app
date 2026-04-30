@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Plus, X, Check, Camera, Loader2 } from "lucide-react";
+import { Plus, X, Check, Camera, Loader2, Trash2 } from "lucide-react";
 import Image from "next/image";
 import InputField from "@/components/ui/inputField";
+import CustomSelect from "@/components/ui/custom-select";
 import ChipGroup from "@/components/ui/chipGroup";
 import DropzoneUpload from "@/components/ui/DropzoneUpload";
 import { useDebounceValue } from "@/hooks/useDebounce";
@@ -14,6 +15,7 @@ export default function Step1Business({
   initialData,
   readOnly = false,
   isUpdateMode = false,
+  backendError = "",
 }) {
   const logoRef = useRef();
 
@@ -22,6 +24,12 @@ export default function Step1Business({
   const [bannerPreview, setBannerPreview] = useState(
     initialData?.bannerUrl || null,
   );
+
+  const currentYear = new Date().getFullYear();
+  const yearOptions = Array.from({ length: currentYear - 1975 + 1 }, (_, i) => {
+    const year = (currentYear - i).toString();
+    return { label: year, value: year };
+  });
 
   const [form, setForm] = useState({
     logo: null,
@@ -163,6 +171,31 @@ export default function Step1Business({
     }
   };
 
+  const handleClear = () => {
+    const emptyForm = {
+      logo: null,
+      banner: null,
+      consultationName: "",
+      username: "",
+      ownerName: "",
+      companyEmail: "",
+      establishmentYear: "",
+      vehicleTypes: [],
+      services: [],
+    };
+    setForm(emptyForm);
+    setLogo(null);
+    setBannerPreview(null);
+    setCustomServices([]);
+    setErrors({
+      companyEmail: "",
+      establishmentYear: "",
+      services: "",
+    });
+    setUsernameStatus({ loading: false, available: null, message: "" });
+    if (onChange) onChange(emptyForm, true);
+  };
+
   const validateEmail = (companyEmail) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(companyEmail);
@@ -174,7 +207,21 @@ export default function Step1Business({
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-8 animate-in fade-in duration-500 relative">
+      {/* CLEAR BUTTON */}
+      {!readOnly && !isUpdateMode && !initialData && (
+        <div className="absolute -top-4 right-0 z-10">
+          <button
+            type="button"
+            onClick={handleClear}
+            className="text-xs font-medium border border-primary/40 rounded-2xl text-red-500 hover:text-red-600 transition flex items-center gap-1 cursor-pointer px-2 py-1 "
+          >
+            <X size={14} />
+            Clear Form
+          </button>
+        </div>
+      )}
+
       {/* ===== LOGO ===== */}
       {(!readOnly || logo) && (
         <div className="flex flex-col items-center gap-3">
@@ -195,24 +242,43 @@ export default function Step1Business({
                   <Camera size={32} strokeWidth={1.5} />
                 </span>
               ) : (
-                <Image
-                  src={
-                    typeof logo === "string" ? logo : URL.createObjectURL(logo)
-                  }
-                  alt="logo"
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
-              )}
-
-              {/* Overlay on hover when logo exists */}
-              {logo && !readOnly && (
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <Camera className="text-white w-8 h-8" />
-                </div>
+                <>
+                  <Image
+                    src={
+                      typeof logo === "string"
+                        ? logo
+                        : URL.createObjectURL(logo)
+                    }
+                    alt="logo"
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                  {/* Overlay on hover when logo exists */}
+                  {!readOnly && (
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <Camera className="text-white w-8 h-8" />
+                    </div>
+                  )}
+                </>
               )}
             </div>
+
+            {logo && !readOnly && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLogo(null);
+                  handleInput("logo", null);
+                  if (logoRef.current) logoRef.current.value = "";
+                }}
+                className="cursor-pointer absolute bottom-2 right-2 p-1.5 bg-red-500/40 hover:bg-red-600 text-white rounded-full transition-colors z-10 "
+                title="Clear Logo"
+              >
+                <Trash2 size={14} />
+              </button>
+            )}
 
             <input
               ref={logoRef}
@@ -238,6 +304,11 @@ export default function Step1Business({
           preview={bannerPreview}
           readOnly={readOnly}
           onChange={(file) => {
+            if (!file) {
+              setBannerPreview(null);
+              handleInput("banner", null);
+              return;
+            }
             const f = Array.isArray(file) ? file[0] : file;
             if (f) {
               setBannerPreview(
@@ -342,26 +413,29 @@ export default function Step1Business({
 
           {(!readOnly || form.establishmentYear) && (
             <div className="flex flex-col">
-              <InputField
-                label="Establishment Year"
-                variant="colored"
-                readOnly={readOnly}
-                value={form.establishmentYear}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  if (val === "" || (/^\d+$/.test(val) && val.length <= 4)) {
-                    handleInput("establishmentYear", val);
-                  }
-                }}
-                onBlur={(e) => {
-                  if (e.target.value && !validateYear(e.target.value)) {
-                    setErrors((p) => ({
-                      ...p,
-                      establishmentYear: "Must be 4 digits & > 1850",
-                    }));
-                  }
-                }}
-              />
+              <label className="text-sm font-semibold text-primary mb-1.5 ml-1">
+                Establishment Year
+              </label>
+              <div className="relative">
+                {readOnly ? (
+                  <InputField
+                    variant="colored"
+                    readOnly={true}
+                    value={form.establishmentYear}
+                  />
+                ) : (
+                  <CustomSelect
+                    value={form.establishmentYear}
+                    onChange={(val) => {
+                      handleInput("establishmentYear", val);
+                      setErrors((p) => ({ ...p, establishmentYear: "" }));
+                    }}
+                    options={yearOptions}
+                    placeholder="Select Year"
+                    variant="colored"
+                  />
+                )}
+              </div>
               {errors.establishmentYear && (
                 <span className="text-red-500 text-[10px] mt-1 ml-1">
                   {errors.establishmentYear}
@@ -534,6 +608,13 @@ export default function Step1Business({
             </p>
           )}
         </div>
+      )}
+
+      {/* ===== BACKEND ERROR ===== */}
+      {backendError && (
+        <p className="text-red-500 text-sm font-medium mt-2 ml-1 animate-in fade-in slide-in-from-top-1">
+          {backendError}
+        </p>
       )}
     </div>
   );

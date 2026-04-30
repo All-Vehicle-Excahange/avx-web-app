@@ -58,6 +58,7 @@ export default function KycForm() {
   const [hasMadeAnyUpdate, setHasMadeAnyUpdate] = useState(false);
   const [kycErrors, setKycErrors] = useState(null);
   const [kycSubmitAttempted, setKycSubmitAttempted] = useState(false);
+  const [backendError, setBackendError] = useState("");
 
   // ===== VERSION COUNTERS — incrementing forces child remount with fresh initialData =====
   const [dataVersion, setDataVersion] = useState({ 1: 0, 2: 0, 3: 0 });
@@ -187,9 +188,20 @@ export default function KycForm() {
     check();
   }, [router]);
 
+  // Extract a human-readable message from a backend error the same way showBackendError does
+  const extractBackendMessage = (error) => {
+    const api = error?.response?.data;
+    if (!api) return "Something went wrong";
+    if (api?.data?.validationErrors) {
+      return Object.values(api.data.validationErrors)[0];
+    }
+    return api?.message || "Request failed";
+  };
+
   const handleNext = async () => {
     try {
       setLoading(true);
+      setBackendError("");
 
       if (step === 1) {
         if (existing.business) {
@@ -338,9 +350,9 @@ export default function KycForm() {
 
           // Build clean FormData for KYC
           const payload = new FormData();
-          payload.append("gstNumber", k.gstNumber || "");
-          payload.append("panCardNumber", k.panNumber || "");
-          payload.append("aadharCardNumber", k.aadharNumber || "");
+          if (k.gstNumber?.trim()) payload.append("gstNumber", k.gstNumber.trim());
+          if (k.panNumber?.trim()) payload.append("panCardNumber", k.panNumber.trim());
+          if (k.aadharNumber?.trim()) payload.append("aadharCardNumber", k.aadharNumber.trim());
           if (k.gstPhoto instanceof File)
             payload.append("gstCertificateImage", k.gstPhoto);
           if (k.panPhoto instanceof File)
@@ -363,17 +375,14 @@ export default function KycForm() {
 
         // Post Flow for KYC — creation only, so enforce at-least-one identity doc
         if (kycErrors?.atLeastOne) {
-          toast.error(
-            "Please provide at least one identity document: PAN Card or Aadhaar Card (number + photo).",
-          );
           setLoading(false);
           return;
         }
 
         const payload = new FormData();
-        payload.append("gstNumber", k.gstNumber || "");
-        payload.append("panCardNumber", k.panNumber || "");
-        payload.append("aadharCardNumber", k.aadharNumber || "");
+        if (k.gstNumber?.trim()) payload.append("gstNumber", k.gstNumber.trim());
+        if (k.panNumber?.trim()) payload.append("panCardNumber", k.panNumber.trim());
+        if (k.aadharNumber?.trim()) payload.append("aadharCardNumber", k.aadharNumber.trim());
         if (k.gstPhoto instanceof File)
           payload.append("gstCertificateImage", k.gstPhoto);
         if (k.panPhoto instanceof File)
@@ -392,7 +401,7 @@ export default function KycForm() {
         return;
       }
     } catch (error) {
-      showBackendError(error);
+      setBackendError(extractBackendMessage(error));
     } finally {
       setLoading(false);
     }
@@ -622,6 +631,7 @@ export default function KycForm() {
                           key={`biz-v${dataVersion[1]}-${existing.business ? "exist" : "new"}`}
                           initialData={existing.business}
                           onChange={handleBusinessChange}
+                          backendError={backendError}
                         />
                       )}
 
@@ -630,6 +640,7 @@ export default function KycForm() {
                           key={`addr-v${dataVersion[2]}-${existing.address ? "exist" : "new"}`}
                           initialData={existing.address}
                           onChange={handleAddressChange}
+                          backendError={backendError}
                         />
                       )}
 
@@ -639,6 +650,7 @@ export default function KycForm() {
                           initialData={existing.kyc}
                           onChange={handleKycChange}
                           submitAttempted={kycSubmitAttempted}
+                          backendError={backendError}
                         />
                       )}
 

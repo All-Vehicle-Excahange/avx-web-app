@@ -61,27 +61,32 @@ export default function ConsultantSliderSection({ title, data, loading = false }
           ref={sliderRef}
           className="flex gap-4 overflow-x-auto scrollbar-hide max-w-full"
         >
-          {loading
-            ? [...Array(3)].map((_, idx) => (
-                <div key={`skel-${idx}`} className="min-w-[350px]">
-                  <ConsultantCardSkeleton />
-                </div>
-              ))
-            : data.map((c) => (
-                <div key={c.id} className="min-w-[350px]">
-                  <ConsultantCard
-                    image={c.image}
-                    logo={c.logo}
-                    name={c.name}
-                    location={c.location}
-                    rating={c.rating}
-                    vehicleCount={c.vehicleCount}
-                    priceRange={c.priceRange}
-                    isSponsored={c.isSponsored}
-                  />
-                </div>
-              ))
-          }
+          {loading ? (
+            [...Array(3)].map((_, idx) => (
+              <div key={`skel-${idx}`} className="min-w-[350px]">
+                <ConsultantCardSkeleton />
+              </div>
+            ))
+          ) : data && data.length > 0 ? (
+            data.map((c) => (
+              <div key={c.id} className="min-w-[350px]">
+                <ConsultantCard
+                  image={c.image}
+                  logo={c.logo}
+                  name={c.name}
+                  location={c.location}
+                  rating={c.rating}
+                  vehicleCount={c.vehicleCount}
+                  priceRange={c.priceRange}
+                  isSponsored={c.isSponsored}
+                />
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-sm text-third w-full py-4">
+              No consultants found.
+            </p>
+          )}
         </div>
       </div>
     </section>
