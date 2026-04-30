@@ -41,6 +41,8 @@ const ENDPOINT = {
   getAboutUsStoreFrontByUserName: "/consultation/detail-page/about-us",
   getWhyBuyHereStoreFrontByUserName: "/consultation/detail-page/why-buy-here",
   getUserProfileStrength: "/users/profile/strength",
+  getUserPreference: "/users/preference",
+  updatePreference: "/users/preference",
 };
 
 export const getUserHomeFeed = async (data) => {
@@ -548,6 +550,24 @@ export const getWhyBuyHereStoreFrontByUserName = async (username) => {
 export const getUserProfileStrength = async () => {
   try {
     const res = await axiosInstance.get(ENDPOINT.getUserProfileStrength);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getUserPreference = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getUserPreference);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updatePreference = async (payload) => {
+  try {
+    const res = await axiosInstance.put(ENDPOINT.updatePreference, payload);
     return handleResponse(res);
   } catch (error) {
     throw error;

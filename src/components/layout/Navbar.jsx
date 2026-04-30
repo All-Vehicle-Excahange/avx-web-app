@@ -1,5 +1,5 @@
 "use client";
-import { Menu, Search, User } from "lucide-react";
+import { Menu, Search, User, Settings } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import Button from "../ui/button";
 import HamburgerDrawer from "../features/home/HamburgerDrawer";
@@ -100,6 +100,15 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
     };
     document.addEventListener("signuppopup:open", handler);
     return () => document.removeEventListener("signuppopup:open", handler);
+  }, []);
+
+  /* ================= PREFERENCES POPUP LISTENER ================= */
+  useEffect(() => {
+    const handler = () => {
+      setOpen(true);
+    };
+    document.addEventListener("preferencespopup:open", handler);
+    return () => document.removeEventListener("preferencespopup:open", handler);
   }, []);
 
   /* ================= DEBOUNCED SEARCH ================= */
@@ -225,6 +234,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
             {/* RIGHT SIDE */}
             <div className="flex items-center gap-2 md:gap-4">
+
               {(() => {
                 const userRole = user?.userRole;
                 const isConsultant = [
