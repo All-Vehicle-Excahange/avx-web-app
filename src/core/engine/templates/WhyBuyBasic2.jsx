@@ -558,17 +558,15 @@ export default function WhyBuyHereBasic2({
                 <div
                   key={review.id}
                   onClick={() => toggleReviewSelection(review.id)}
-                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
-                    isSelected
-                      ? "border-fourth bg-fourth/10 shadow-md"
-                      : "border-third/20 bg-primary/5 hover:border-third/40"
-                  }`}
+                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${isSelected
+                    ? "border-fourth bg-fourth/10 shadow-md"
+                    : "border-third/20 bg-primary/5 hover:border-third/40"
+                    }`}
                 >
                   {/* Selection indicator */}
                   <div
-                    className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                      isSelected ? "border-fourth bg-fourth" : "border-third/40"
-                    }`}
+                    className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? "border-fourth bg-fourth" : "border-third/40"
+                      }`}
                   >
                     {isSelected && (
                       <CheckCircle2 size={14} className="text-secondary" />
@@ -886,7 +884,7 @@ export default function WhyBuyHereBasic2({
 
                   {/* Review Text */}
                   <div className="relative">
-                    <span className="absolute -top-2 -left-2 text-4xl text-primary/10 font-serif leading-none">"</span>
+                    <span className="absolute -top-2 -left-2 text-4xl text-primary/10 font-serif leading-none">&quot;</span>
                     <p className="font-[Poppins] text-sm md:text-base leading-[1.86] text-third/70 italic flex-1 pl-2">
                       {t.reviewText || t.review}
                     </p>

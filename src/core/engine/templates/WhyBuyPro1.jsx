@@ -1434,7 +1434,7 @@ export default function WhyBuyPro1({
 
                     {/* Review */}
                     <div className="relative">
-                      <span className="absolute -top-2 -left-2 text-4xl text-secondary/10 font-serif leading-none">"</span>
+                      <span className="absolute -top-2 -left-2 text-4xl text-secondary/10 font-serif leading-none">&quot;</span>
                       <div
                         className="text-secondary/80 font-[Poppins] leading-relaxed text-[15px] md:text-base italic pl-2"
                         dangerouslySetInnerHTML={{ __html: reviewText }}

@@ -136,7 +136,7 @@ export default function WhyBuyBasic3({
   // Synchronize transformed draft data with the parent state once on load
   useEffect(() => {
     if (!rawData || !onUpdate) return;
-    
+
     let hasChanges = false;
     const updatedData = { ...data };
 
@@ -584,17 +584,15 @@ export default function WhyBuyBasic3({
                 <div
                   key={review.id}
                   onClick={() => toggleReviewSelection(review.id)}
-                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
-                    isSelected
-                      ? "border-fourth bg-fourth/10 shadow-md"
-                      : "border-third/20 bg-primary/5 hover:border-third/40"
-                  }`}
+                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${isSelected
+                    ? "border-fourth bg-fourth/10 shadow-md"
+                    : "border-third/20 bg-primary/5 hover:border-third/40"
+                    }`}
                 >
                   {/* Selection indicator */}
                   <div
-                    className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                      isSelected ? "border-fourth bg-fourth" : "border-third/40"
-                    }`}
+                    className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? "border-fourth bg-fourth" : "border-third/40"
+                      }`}
                   >
                     {isSelected && (
                       <CheckCircle2 size={14} className="text-secondary" />
@@ -709,7 +707,7 @@ export default function WhyBuyBasic3({
               </div>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 {data.vehicleSelectionTitle}
-                
+
               </h2>
               <div
                 className="text-third/60 text-base md:text-lg font-[Poppins] leading-[1.9] max-w-2xl"
@@ -754,9 +752,9 @@ export default function WhyBuyBasic3({
                       isEven
                         ? {}
                         : {
-                            borderRight: "none",
-                            borderLeft: "1px solid rgba(190,190,190,0.1)",
-                          }
+                          borderRight: "none",
+                          borderLeft: "1px solid rgba(190,190,190,0.1)",
+                        }
                     }
                   >
                     <span className="text-[13px] font-bold tracking-[3px] text-third/25 font-[Montserrat]">
@@ -929,7 +927,7 @@ export default function WhyBuyBasic3({
                     </div>
 
                     <div className="relative flex-1">
-                      <span className="absolute -top-3 -left-3 text-5xl text-primary/10 font-serif leading-none pointer-events-none">"</span>
+                      <span className="absolute -top-3 -left-3 text-5xl text-primary/10 font-serif leading-none pointer-events-none">&quot;</span>
                       <p className="text-lg md:text-xl font-light text-primary/70 font-[Poppins] leading-[1.7] italic pl-2">
                         {t.review || t.reviewText}
                       </p>

@@ -139,7 +139,7 @@ function WhyBuyBasic1({
   // Synchronize transformed draft data with the parent state once on load
   useEffect(() => {
     if (!rawData || !onUpdate) return;
-    
+
     let hasChanges = false;
     const updatedData = { ...data };
 
@@ -595,17 +595,15 @@ function WhyBuyBasic1({
                 <div
                   key={review.id}
                   onClick={() => toggleReviewSelection(review.id)}
-                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
-                    isSelected
-                      ? "border-fourth bg-fourth/10 shadow-md"
-                      : "border-third/20 bg-primary/5 hover:border-third/40"
-                  }`}
+                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${isSelected
+                    ? "border-fourth bg-fourth/10 shadow-md"
+                    : "border-third/20 bg-primary/5 hover:border-third/40"
+                    }`}
                 >
                   {/* Selection indicator */}
                   <div
-                    className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                      isSelected ? "border-fourth bg-fourth" : "border-third/40"
-                    }`}
+                    className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? "border-fourth bg-fourth" : "border-third/40"
+                      }`}
                   >
                     {isSelected && (
                       <CheckCircle2 size={14} className="text-secondary" />
@@ -755,7 +753,7 @@ function WhyBuyBasic1({
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 md:h-11 md:w-11 lg:h-12 lg:w-12 items-center justify-center border border-primary/20 rounded-lg">
                       {typeof step.icon === "string" &&
-                      step.icon.startsWith("<svg") ? (
+                        step.icon.startsWith("<svg") ? (
                         <div
                           className="text-primary [&>svg]:w-5 [&>svg]:h-5 transition-colors duration-300"
                           dangerouslySetInnerHTML={{ __html: step.icon }}
@@ -890,7 +888,7 @@ function WhyBuyBasic1({
 
                   {/* Review Text */}
                   <div className="relative">
-                    <span className="absolute -top-2 -left-2 text-4xl text-secondary/10 font-serif leading-none">"</span>
+                    <span className="absolute -top-2 -left-2 text-4xl text-secondary/10 font-serif leading-none">&quot;</span>
                     <p className="text-secondary/80 font-[Poppins] leading-relaxed text-[15px] md:text-base italic pl-2">
                       {review.reviewText}
                     </p>

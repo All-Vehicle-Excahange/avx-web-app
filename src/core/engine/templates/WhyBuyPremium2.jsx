@@ -299,7 +299,7 @@ export default function WhyBuyPremium2({
       // Testimonial
       try {
         updateField("testimonialTitle", data.testimonialTitle || "");
-      } catch (e) {}
+      } catch (e) { }
 
       const galleryData = new FormData();
       for (let i = 1; i <= 5; i++) {
@@ -1245,30 +1245,27 @@ export default function WhyBuyPremium2({
                 >
                   <div className="flex items-start gap-4">
                     <span
-                      className={`text-[14px] font-bold ${
-                        i === activeInspection
+                      className={`text-[14px] font-bold ${i === activeInspection
                           ? "text-fourth"
                           : "text-primary/40 group-hover:text-primary"
-                      }`}
+                        }`}
                     >
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span
-                      className={`text-[16px] leading-[1.6] transition ${
-                        i === activeInspection
+                      className={`text-[16px] leading-[1.6] transition ${i === activeInspection
                           ? "text-primary font-medium"
                           : "text-primary/60 group-hover:text-primary"
-                      }`}
+                        }`}
                     >
                       {item}
                     </span>
                   </div>
                   <div
-                    className={`mt-3 h-px transition-all duration-300 ${
-                      i === activeInspection
+                    className={`mt-3 h-px transition-all duration-300 ${i === activeInspection
                         ? "bg-fourth w-full"
                         : "bg-primary/10 w-0 group-hover:w-full"
-                    }`}
+                      }`}
                   />
                 </div>
               ))}
@@ -1400,12 +1397,12 @@ export default function WhyBuyPremium2({
               const reviewerName = t.reviewerName || t.name;
               const rating = t.rating || 5;
               return (
-                <div 
+                <div
                   key={`${reviewerName}-${i}`}
                   className="min-w-[300px] md:min-w-[450px] snap-center group relative rounded-3xl p-8 md:p-10 bg-white/5 backdrop-blur-md border border-white/10 hover:border-primary/30 transition-all duration-500 overflow-hidden h-full flex flex-col shadow-xl hover:shadow-primary/5"
                 >
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-linear-to-br from-primary/10 via-transparent to-transparent pointer-events-none" />
-                  
+
                   <div className="flex justify-between items-start mb-6 relative z-10">
                     <div className="flex gap-1.5">
                       {[...Array(5)].map((_, idx) => (
@@ -1428,7 +1425,7 @@ export default function WhyBuyPremium2({
                   </div>
 
                   <div className="relative z-10 flex-1 mb-8">
-                    <span className="absolute -top-3 -left-3 text-5xl text-primary/10 font-serif leading-none">"</span>
+                    <span className="absolute -top-3 -left-3 text-5xl text-primary/10 font-serif leading-none">&quot;</span>
                     <div
                       className="font-[Poppins] text-[15px] md:text-lg leading-[1.8] text-third/80 italic pl-2"
                       dangerouslySetInnerHTML={{ __html: reviewText }}

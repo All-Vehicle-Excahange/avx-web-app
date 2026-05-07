@@ -1252,11 +1252,10 @@ export default function WhyBuyPremium1({
                   <div
                     key={review.id}
                     onClick={() => toggleReviewSelection(review.id)}
-                    className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                      isSelected
-                        ? "border-fourth bg-fourth/10"
-                        : "border-primary/20 bg-primary/5 hover:border-primary/40"
-                    }`}
+                    className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${isSelected
+                      ? "border-fourth bg-fourth/10"
+                      : "border-primary/20 bg-primary/5 hover:border-primary/40"
+                      }`}
                   >
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="font-bold text-primary truncate">
@@ -1433,9 +1432,8 @@ export default function WhyBuyPremium1({
                   />
                   <div className="absolute inset-0 border border-white/10 rounded-xl pointer-events-none" />
                   <div
-                    className={`absolute inset-0 bg-black/30 transition-opacity duration-500 ${
-                      hovered === i ? "opacity-0" : "opacity-100"
-                    }`}
+                    className={`absolute inset-0 bg-black/30 transition-opacity duration-500 ${hovered === i ? "opacity-0" : "opacity-100"
+                      }`}
                   />
                 </div>
               );
@@ -1760,9 +1758,8 @@ export default function WhyBuyPremium1({
                 <div
                   key={i}
                   onClick={() => goTo(i)}
-                  className={`w-2.5 h-2.5 rounded-full cursor-pointer transition-all duration-500 ${
-                    active === i ? "bg-primary scale-125" : "bg-primary/30"
-                  }`}
+                  className={`w-2.5 h-2.5 rounded-full cursor-pointer transition-all duration-500 ${active === i ? "bg-primary scale-125" : "bg-primary/30"
+                    }`}
                 />
               ))}
             </div>
@@ -1803,7 +1800,7 @@ export default function WhyBuyPremium1({
                     ))}
                   </div>
                   <div className="relative">
-                    <span className="absolute -top-2 -left-2 text-4xl text-secondary/10 font-serif leading-none">"</span>
+                    <span className="absolute -top-2 -left-2 text-4xl text-secondary/10 font-serif leading-none">&quot;</span>
                     <div
                       className="text-secondary/80 font-[Poppins] leading-relaxed text-[15px] md:text-base italic pl-2"
                       dangerouslySetInnerHTML={{ __html: r.reviewText }}

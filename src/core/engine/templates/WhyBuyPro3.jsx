@@ -1204,7 +1204,7 @@ export default function WhyBuyPro3({
         {/* TESTIMONIALS */}
         <div>
           <h3 className="text-primary font-bold text-xl mb-4">
-            Featured Reviews 
+            Featured Reviews
           </h3>
           {/* <EditorInput
             bold
@@ -1232,11 +1232,10 @@ export default function WhyBuyPro3({
                 <div
                   key={review.id}
                   onClick={() => toggleReviewSelection(review.id)}
-                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
-                    isSelected
-                      ? "border-fourth bg-fourth/10 shadow-md"
-                      : "border-third/20 bg-primary/5 hover:border-third/40"
-                  }`}
+                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${isSelected
+                    ? "border-fourth bg-fourth/10 shadow-md"
+                    : "border-third/20 bg-primary/5 hover:border-third/40"
+                    }`}
                 >
                   <div
                     className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? "border-fourth bg-fourth" : "border-third/40"}`}
@@ -1320,7 +1319,7 @@ export default function WhyBuyPro3({
               className="text-primary/70 text-base font-[Poppins] leading-relaxed"
               dangerouslySetInnerHTML={{ __html: data.whyBuyHeroDescription }}
             />
-            
+
           </div>
         </div>
       </section>
@@ -1645,7 +1644,7 @@ export default function WhyBuyPro3({
                       <div className="absolute top-6 right-8 w-10 h-10 rounded-full flex items-center justify-center bg-primary/5 group-hover:bg-primary/10 transition-colors">
                         <Quote className="w-5 h-5 text-third/30 group-hover:text-primary/40 transition-colors" />
                       </div>
-                      
+
                       <span className="text-[12px] font-bold text-third/20 font-[Montserrat] tracking-[0.4em] uppercase">
                         Review {String(i + 1).padStart(2, "0")}
                       </span>
@@ -1666,7 +1665,7 @@ export default function WhyBuyPro3({
                       </div>
 
                       <div className="relative flex-1">
-                        <span className="absolute -top-3 -left-3 text-5xl text-primary/10 font-serif leading-none pointer-events-none">"</span>
+                        <span className="absolute -top-3 -left-3 text-5xl text-primary/10 font-serif leading-none pointer-events-none">&quot;</span>
                         <div
                           className="text-lg md:text-xl font-light text-primary/80 font-[Poppins] leading-[1.7] italic pl-2"
                           dangerouslySetInnerHTML={{

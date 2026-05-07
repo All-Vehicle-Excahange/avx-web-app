@@ -293,7 +293,7 @@ export default function WhyBuyPremium3({
 
       try {
         updateField("testimonialTitle", data.testimonialTitle || "");
-      } catch (e) {}
+      } catch (e) { }
 
       const galleryData = new FormData();
       for (let i = 1; i <= 5; i++) {
@@ -1146,9 +1146,9 @@ export default function WhyBuyPremium3({
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 px-2 lg:px-4">
                   {[
                     data.customWhyBuyHero2 ||
-                      data.whyBuyHeroTemplate2?.imageUrl,
+                    data.whyBuyHeroTemplate2?.imageUrl,
                     data.customWhyBuyHero3 ||
-                      data.whyBuyHeroTemplate3?.imageUrl,
+                    data.whyBuyHeroTemplate3?.imageUrl,
                     data.customWhyBuyStory1 || data.storyTemplate1?.imageUrl,
                     data.customWhyBuyStory2 || data.storyTemplate2?.imageUrl,
                   ]
@@ -1239,9 +1239,9 @@ export default function WhyBuyPremium3({
             <div className="relative w-full h-[500px] sm:h-[460px] lg:h-[520px] rounded-3xl overflow-hidden">
               {[
                 data.customWhyBuyVehicleSelection1 ||
-                  data.vehicleSelectionTemplate1?.imageUrl,
+                data.vehicleSelectionTemplate1?.imageUrl,
                 data.customWhyBuyVehicleSelection2 ||
-                  data.vehicleSelectionTemplate2?.imageUrl,
+                data.vehicleSelectionTemplate2?.imageUrl,
                 data.customWhyBuyStory3 || data.storyTemplate3?.imageUrl,
                 data.customWhyBuyStory4 || data.storyTemplate4?.imageUrl,
                 data.customWhyBuyProcess1 || data.processTemplate1?.imageUrl,
@@ -1279,13 +1279,13 @@ export default function WhyBuyPremium3({
                   <div className="flex gap-3 shrink-0 overflow-x-scroll no-scrollbar">
                     {[
                       data.customWhyBuyVehicleSelection1 ||
-                        data.vehicleSelectionTemplate1?.imageUrl,
+                      data.vehicleSelectionTemplate1?.imageUrl,
                       data.customWhyBuyVehicleSelection2 ||
-                        data.vehicleSelectionTemplate2?.imageUrl,
+                      data.vehicleSelectionTemplate2?.imageUrl,
                       data.customWhyBuyStory3 || data.storyTemplate3?.imageUrl,
                       data.customWhyBuyStory4 || data.storyTemplate4?.imageUrl,
                       data.customWhyBuyProcess1 ||
-                        data.processTemplate1?.imageUrl,
+                      data.processTemplate1?.imageUrl,
                     ]
                       .filter(Boolean)
                       .map((img, i) => (
@@ -1375,7 +1375,7 @@ export default function WhyBuyPremium3({
                       </span>
                       <div className="w-10 h-10 rounded-xl border border-third/10 flex items-center justify-center">
                         {typeof step.icon === "string" &&
-                        step.icon.startsWith("<svg") ? (
+                          step.icon.startsWith("<svg") ? (
                           <div
                             className="[&>svg]:w-4.5 [&>svg]:h-4.5 text-third/30"
                             dangerouslySetInnerHTML={{ __html: step.icon }}
@@ -1416,7 +1416,7 @@ export default function WhyBuyPremium3({
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 rounded-xl border border-fourth/25 bg-fourth/[0.06] flex items-center justify-center">
                             {typeof step.icon === "string" &&
-                            step.icon.startsWith("<svg") ? (
+                              step.icon.startsWith("<svg") ? (
                               <div
                                 className="[&>svg]:w-5 [&>svg]:h-5 text-fourth"
                                 dangerouslySetInnerHTML={{ __html: step.icon }}
@@ -1471,7 +1471,7 @@ export default function WhyBuyPremium3({
                         className={`w-10 h-10 rounded-lg border flex items-center justify-center shrink-0 transition-all duration-400 ${isActive ? "border-fourth/30 bg-fourth/[0.08]" : "border-third/12"}`}
                       >
                         {typeof step.icon === "string" &&
-                        step.icon.startsWith("<svg") ? (
+                          step.icon.startsWith("<svg") ? (
                           <div
                             className={`[&>svg]:w-4 [&>svg]:h-4 transition-colors duration-400 ${isActive ? "text-fourth" : "text-third/30"}`}
                             dangerouslySetInnerHTML={{ __html: step.icon }}
@@ -1656,11 +1656,11 @@ export default function WhyBuyPremium3({
             <div className="absolute inset-0 overflow-hidden rounded-2xl">
               {[
                 data.customWhyBuyCustomerCommitment1 ||
-                  data.customerCommitmentTemplate1?.imageUrl,
+                data.customerCommitmentTemplate1?.imageUrl,
                 data.customWhyBuyCustomerCommitment2 ||
-                  data.customerCommitmentTemplate2?.imageUrl,
+                data.customerCommitmentTemplate2?.imageUrl,
                 data.customWhyBuyCustomerCommitment3 ||
-                  data.customerCommitmentTemplate3?.imageUrl,
+                data.customerCommitmentTemplate3?.imageUrl,
               ]
                 .filter(Boolean)
                 .map((src, i) => (
@@ -1817,7 +1817,7 @@ export default function WhyBuyPremium3({
                           <Quote className="w-6 h-6 text-third/20 translate-y-[-2px]" />
                         </div>
                         <div className="relative flex-1">
-                          <span className="absolute -top-3 -left-3 text-5xl text-primary/10 font-serif leading-none pointer-events-none">"</span>
+                          <span className="absolute -top-3 -left-3 text-5xl text-primary/10 font-serif leading-none pointer-events-none">&quot;</span>
                           <div
                             className="text-lg md:text-xl text-primary/80 font-[Poppins] leading-[1.7] italic pl-2"
                             dangerouslySetInnerHTML={{ __html: reviewText }}
