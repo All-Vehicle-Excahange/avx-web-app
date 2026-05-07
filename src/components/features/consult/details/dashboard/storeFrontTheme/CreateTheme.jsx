@@ -181,7 +181,13 @@ const getSectionProgress = (section, defaultSection) => {
 
   const getCleanString = (val) => {
     if (!val) return "";
-    if (typeof val === "object" && val.imageUrl) return val.imageUrl.trim();
+    if (typeof val === "object") {
+      if (Array.isArray(val)) return "";
+      if (val.imageUrl) return val.imageUrl.trim();
+      // Empty objects like {} (from getEmptyData) should return ""
+      // Otherwise String({}) returns "[object Object]" which falsely passes validation
+      return "";
+    }
     return String(val)
       .replace(/<[^>]*>/g, "")
       .trim();
