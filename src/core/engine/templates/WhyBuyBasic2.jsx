@@ -849,15 +849,16 @@ export default function WhyBuyHereBasic2({
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* FEATURED REVIEWS - Horizontal Scrollable */}
+            <div className="flex overflow-x-auto gap-6 pb-12 no-scrollbar snap-x snap-mandatory">
               {(data.featuredReviews || data.testimonials || []).map((t, i) => (
                 <div
                   key={t.id || i}
-                  className="group border border-primary/40 rounded-2xl p-8 flex flex-col gap-5 hover:border-primary/25 transition-all duration-300 hover:shadow-[0_8px_36px_rgba(0,0,0,0.4)] h-full"
+                  className="min-w-[300px] md:min-w-[450px] snap-center group border border-primary/40 rounded-2xl p-8 flex flex-col gap-5 hover:border-primary/25 transition-all duration-500 hover:shadow-[0_8px_36px_rgba(0,0,0,0.4)] h-full"
                 >
                   {/* Stars */}
                   {t.rating && (
-                    <div className="flex gap-1">
+                    <div className="flex gap-1.5">
                       {[...Array(5)].map((_, idx) => (
                         <Star
                           key={idx}
@@ -878,28 +879,31 @@ export default function WhyBuyHereBasic2({
 
                   {/* Review Title */}
                   {t.reviewTitle && (
-                    <h4 className="font-[Montserrat] font-semibold text-[13px] text-primary">
+                    <h4 className="font-[Montserrat] font-bold text-base text-primary">
                       {t.reviewTitle}
                     </h4>
                   )}
 
                   {/* Review Text */}
-                  <p className="font-[Poppins] text-sm leading-[1.86] text-third/70 italic flex-1">
-                    {t.reviewText || t.review}
-                  </p>
+                  <div className="relative">
+                    <span className="absolute -top-2 -left-2 text-4xl text-primary/10 font-serif leading-none">"</span>
+                    <p className="font-[Poppins] text-sm md:text-base leading-[1.86] text-third/70 italic flex-1 pl-2">
+                      {t.reviewText || t.review}
+                    </p>
+                  </div>
 
-                  <div className="w-full h-px bg-primary/[0.07]" />
+                  <div className="w-full h-px bg-primary/[0.07] mt-auto" />
 
                   {/* Reviewer Info */}
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full border border-third/20 flex items-center justify-center font-bold text-[13px] text-fourth shrink-0">
-                      {(t.reviewerName || t.name)?.[0] || "?"}{" "}
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-full border border-third/20 flex items-center justify-center font-bold text-sm text-fourth shrink-0 bg-primary/5">
+                      {(t.reviewerName || t.name)?.[0] || "?"}
                     </div>
                     <div>
-                      <p className="font-[Montserrat] font-semibold text-[13px] text-primary">
+                      <p className="font-[Montserrat] font-semibold text-sm text-primary">
                         {t.reviewerName || t.name}
                       </p>
-                      <p className="font-[Poppins] text-[11px] text-third/50">
+                      <p className="font-[Poppins] text-[11px] text-third/50 uppercase tracking-wider">
                         Verified Buyer
                       </p>
                     </div>

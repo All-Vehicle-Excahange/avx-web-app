@@ -1787,7 +1787,8 @@ export default function WhyBuyPremium3({
                   {data.testimonialTitle}
                 </h2>
               </div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
+              {/* TESTIMONIALS - Horizontal Scrollable */}
+              <div className="flex overflow-x-auto gap-6 pb-12 no-scrollbar snap-x snap-mandatory w-full">
                 {(data.featuredReviews || data.testimonials || []).map(
                   (t, i) => {
                     const reviewText = t.reviewText || t.review || "";
@@ -1797,10 +1798,10 @@ export default function WhyBuyPremium3({
                     return (
                       <div
                         key={i}
-                        className="relative flex flex-col gap-6 p-8 border border-third/15 rounded-2xl bg-secondary/5 hover:bg-secondary/10 transition-colors"
+                        className="min-w-[300px] md:min-w-[450px] snap-center relative flex flex-col gap-6 p-8 md:p-10 border border-third/15 rounded-3xl bg-secondary/5 backdrop-blur-sm hover:border-primary/30 transition-all duration-500 shadow-xl hover:shadow-primary/5"
                       >
                         <div className="flex items-center justify-between">
-                          <div className="flex gap-1">
+                          <div className="flex gap-1.5">
                             {[...Array(5)].map((_, idx) => (
                               <Star
                                 key={idx}
@@ -1808,25 +1809,28 @@ export default function WhyBuyPremium3({
                                 className={
                                   idx < rating
                                     ? "text-primary fill-primary"
-                                    : "text-third/30"
+                                    : "text-third/10"
                                 }
                               />
                             ))}
                           </div>
                           <Quote className="w-6 h-6 text-third/20 translate-y-[-2px]" />
                         </div>
-                        <div
-                          className="text-lg text-primary/70 font-[Poppins] leading-relaxed italic"
-                          dangerouslySetInnerHTML={{ __html: reviewText }}
-                        />
+                        <div className="relative flex-1">
+                          <span className="absolute -top-3 -left-3 text-5xl text-primary/10 font-serif leading-none pointer-events-none">"</span>
+                          <div
+                            className="text-lg md:text-xl text-primary/80 font-[Poppins] leading-[1.7] italic pl-2"
+                            dangerouslySetInnerHTML={{ __html: reviewText }}
+                          />
+                        </div>
                         <div className="mt-auto pt-6 border-t border-third/10 flex items-center justify-between">
-                          <span className="text-[14px] font-bold text-primary font-[Montserrat] tracking-wider uppercase">
+                          <span className="text-[13px] font-bold text-primary font-[Montserrat] tracking-wider uppercase">
                             {reviewerName}
                           </span>
-                          <div className="flex items-center gap-1.5 opacity-40">
+                          <div className="flex items-center gap-2 opacity-60">
                             <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                            <span className="text-[10px] uppercase font-semibold font-[Poppins] tracking-[0.2em]">
-                              Verified Buyer
+                            <span className="text-[10px] uppercase font-bold font-[Montserrat] tracking-[0.2em]">
+                              Verified
                             </span>
                           </div>
                         </div>

@@ -1782,33 +1782,41 @@ export default function WhyBuyPremium1({
                 {data.testimonialTitle}
               </h2>
             </div>
-            {/* TESTIMONIALS */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* TESTIMONIALS - Horizontal Scrollable */}
+            <div className="flex overflow-x-auto gap-6 pb-12 no-scrollbar snap-x snap-mandatory">
               {data.featuredReviews.map((r, i) => (
                 <div
                   key={i}
-                  className="p-6 md:p-7 rounded-xl border border-secondary/15 bg-primary flex flex-col gap-4 hover:border-secondary/30 transition-all duration-300"
+                  className="min-w-[300px] md:min-w-[450px] snap-center p-6 md:p-8 rounded-2xl border border-secondary/15 bg-primary flex flex-col gap-5 hover:border-secondary/30 transition-all duration-500 shadow-lg hover:shadow-secondary/5"
                 >
-                  <div className="flex gap-1">
+                  <div className="flex gap-1.5">
                     {[...Array(5)].map((_, idx) => (
                       <Star
                         key={idx}
-                        size={15}
+                        size={16}
                         className={
                           idx < r.rating
                             ? "fill-fourth text-fourth"
-                            : "text-gray-400"
+                            : "text-secondary/20"
                         }
                       />
                     ))}
                   </div>
-                  <div
-                    className="text-secondary/80 font-[Poppins] leading-relaxed text-[15px]"
-                    dangerouslySetInnerHTML={{ __html: r.reviewText }}
-                  />
-                  <h4 className="text-secondary font-[Montserrat] font-semibold text-sm tracking-wide">
-                    {r.reviewerName}
-                  </h4>
+                  <div className="relative">
+                    <span className="absolute -top-2 -left-2 text-4xl text-secondary/10 font-serif leading-none">"</span>
+                    <div
+                      className="text-secondary/80 font-[Poppins] leading-relaxed text-[15px] md:text-base italic pl-2"
+                      dangerouslySetInnerHTML={{ __html: r.reviewText }}
+                    />
+                  </div>
+                  <div className="mt-auto pt-4 border-t border-secondary/10 flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center text-secondary text-xs font-bold font-[Montserrat]">
+                      {r.reviewerName?.charAt(0) || "U"}
+                    </div>
+                    <h4 className="text-secondary font-[Montserrat] font-semibold text-sm tracking-wide">
+                      {r.reviewerName}
+                    </h4>
+                  </div>
                 </div>
               ))}
             </div>

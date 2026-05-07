@@ -899,56 +899,50 @@ export default function WhyBuyBasic3({
                   {data.testimonialTitle}
                 </h2>
               </div>
-              <>
-                <div
-                  className="w-full"
-                  style={{
-                    opacity: visible ? 1 : 0,
-                    transform: visible ? "translateY(0px)" : "translateY(12px)",
-                    transition: "opacity 0.35s ease, transform 0.35s ease",
-                  }}
-                >
-                  <div className="relative flex flex-col items-center text-center gap-8 px-10 py-12 border border-third/15 rounded-2xl">
-                    <div className="absolute top-5 right-6 w-9 h-9 rounded-full flex items-center justify-center">
-                      <Quote className="w-6 h-6 text-third/30" />
+              {/* TESTIMONIALS - Horizontal Scrollable */}
+              <div className="flex overflow-x-auto gap-6 pb-12 no-scrollbar snap-x snap-mandatory w-full">
+                {testimonials.map((t, i) => (
+                  <div
+                    key={i}
+                    className="min-w-[300px] md:min-w-[450px] snap-center relative flex flex-col items-center text-center gap-8 p-8 md:p-12 border border-third/15 rounded-2xl bg-primary/5 backdrop-blur-sm hover:border-primary/30 transition-all duration-500 shadow-xl hover:shadow-primary/5"
+                  >
+                    <div className="absolute top-6 right-8 w-10 h-10 rounded-full flex items-center justify-center bg-primary/5">
+                      <Quote className="w-5 h-5 text-third/30" />
                     </div>
-                    <span className="text-[13px] font-bold text-third/30 font-[Montserrat] tracking-[0.5em]">
-                      {String(active + 1).padStart(2, "0")}
+                    <span className="text-[12px] font-bold text-third/20 font-[Montserrat] tracking-[0.4em] uppercase">
+                      Review {String(i + 1).padStart(2, "0")}
                     </span>
-                    <p className="text-xl md:text-2xl lg:text-3xl font-light text-primary/70 font-[Poppins] leading-[1.6] max-w-3xl italic">
-                      {item.review || item.reviewText}
-                    </p>
-                    <span className="text-xs font-semibold text-primary/90 font-[Montserrat] uppercase tracking-widest">
-                      {item.name || item.reviewerName}
-                    </span>
-                  </div>
-                </div>
-                {testimonials.length > 1 && (
-                  <div className="flex items-center gap-6">
-                    <button
-                      onClick={prev}
-                      className="w-10 h-10 rounded-full border border-third/20 flex items-center justify-center hover:border-third/40 hover:bg-third/5 transition-all duration-300 group"
-                    >
-                      <ChevronLeft className="w-4 h-4 text-third/50 group-hover:text-third/70 transition-colors duration-300" />
-                    </button>
-                    <div className="flex items-center gap-2">
-                      {testimonials.map((_, i) => (
-                        <button
-                          key={i}
-                          onClick={() => transition(i)}
-                          className={`rounded-full transition-all duration-500 ${i === active ? "w-6 h-1.5 bg-primary" : "w-1.5 h-1.5 bg-third/20 hover:bg-third/40"}`}
+
+                    {/* Stars */}
+                    <div className="flex gap-1">
+                      {[...Array(5)].map((_, idx) => (
+                        <Star
+                          key={idx}
+                          size={15}
+                          className={
+                            idx < (t.rating || 5)
+                              ? "text-fourth fill-fourth"
+                              : "text-third/10"
+                          }
                         />
                       ))}
                     </div>
-                    <button
-                      onClick={next}
-                      className="w-10 h-10 rounded-full border border-third/20 flex items-center justify-center hover:border-third/40 hover:bg-third/5 transition-all duration-300 group"
-                    >
-                      <ChevronRight className="w-4 h-4 text-third/50 group-hover:text-third/70 transition-colors duration-300" />
-                    </button>
+
+                    <div className="relative flex-1">
+                      <span className="absolute -top-3 -left-3 text-5xl text-primary/10 font-serif leading-none pointer-events-none">"</span>
+                      <p className="text-lg md:text-xl font-light text-primary/70 font-[Poppins] leading-[1.7] italic pl-2">
+                        {t.review || t.reviewText}
+                      </p>
+                    </div>
+
+                    <div className="w-16 h-px bg-primary/20 mt-auto" />
+
+                    <span className="text-xs font-bold text-primary/90 font-[Montserrat] uppercase tracking-widest">
+                      {t.name || t.reviewerName}
+                    </span>
                   </div>
-                )}
-              </>
+                ))}
+              </div>
             </div>
           </div>
         </section>
