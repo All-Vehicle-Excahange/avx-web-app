@@ -299,7 +299,7 @@ export default function WhyBuyPremium2({
       // Testimonial
       try {
         updateField("testimonialTitle", data.testimonialTitle || "");
-      } catch (e) {}
+      } catch (e) { }
 
       const galleryData = new FormData();
       for (let i = 1; i <= 5; i++) {
@@ -1245,30 +1245,27 @@ export default function WhyBuyPremium2({
                 >
                   <div className="flex items-start gap-4">
                     <span
-                      className={`text-[14px] font-bold ${
-                        i === activeInspection
+                      className={`text-[14px] font-bold ${i === activeInspection
                           ? "text-fourth"
                           : "text-primary/40 group-hover:text-primary"
-                      }`}
+                        }`}
                     >
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span
-                      className={`text-[16px] leading-[1.6] transition ${
-                        i === activeInspection
+                      className={`text-[16px] leading-[1.6] transition ${i === activeInspection
                           ? "text-primary font-medium"
                           : "text-primary/60 group-hover:text-primary"
-                      }`}
+                        }`}
                     >
                       {item}
                     </span>
                   </div>
                   <div
-                    className={`mt-3 h-px transition-all duration-300 ${
-                      i === activeInspection
+                    className={`mt-3 h-px transition-all duration-300 ${i === activeInspection
                         ? "bg-fourth w-full"
                         : "bg-primary/10 w-0 group-hover:w-full"
-                    }`}
+                      }`}
                   />
                 </div>
               ))}
@@ -1393,56 +1390,67 @@ export default function WhyBuyPremium2({
               </h2>
             </div>
           </div>
-          <Swiper
-            modules={[Autoplay]}
-            slidesPerView={slidesPerView}
-            spaceBetween={24}
-            loop={true}
-            autoplay={{
-              delay: 3500,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
-            }}
-            onSwiper={(swiper) => (swiperRef.current = swiper)}
-            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-            className="rounded-2xl overflow-hidden"
-          >
+          {/* TESTIMONIALS - Horizontal Scrollable */}
+          <div className="flex overflow-x-auto gap-6 pb-12 no-scrollbar snap-x snap-mandatory">
             {(data.featuredReviews || data.testimonials || []).map((t, i) => {
               const reviewText = t.reviewText || t.review;
               const reviewerName = t.reviewerName || t.name;
               const rating = t.rating || 5;
               return (
-                <SwiperSlide key={`${reviewerName}-${i}`}>
-                  <div className="group relative rounded-2xl p-7 bg-white/5 backdrop-blur-md border border-white/10 hover:border-primary/30 transition-all duration-300 overflow-hidden">
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-linear-to-br from-primary/10 via-transparent to-transparent" />
+                <div
+                  key={`${reviewerName}-${i}`}
+                  className="min-w-[300px] md:min-w-[450px] snap-center group relative rounded-3xl p-8 md:p-10 bg-white/5 backdrop-blur-md border border-white/10 hover:border-primary/30 transition-all duration-500 overflow-hidden h-full flex flex-col shadow-xl hover:shadow-primary/5"
+                >
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-linear-to-br from-primary/10 via-transparent to-transparent pointer-events-none" />
+
+                  <div className="flex justify-between items-start mb-6 relative z-10">
+                    <div className="flex gap-1.5">
+                      {[...Array(5)].map((_, idx) => (
+                        <Star
+                          key={idx}
+                          size={16}
+                          className={
+                            idx < rating
+                              ? "text-fourth fill-fourth"
+                              : "text-third/10"
+                          }
+                        />
+                      ))}
+                    </div>
                     <Quote
-                      size={22}
-                      className="text-fourth mb-4 relative z-10"
+                      size={24}
+                      className="text-fourth/40 group-hover:text-fourth transition-colors"
                       strokeWidth={1.4}
                     />
+                  </div>
+
+                  <div className="relative z-10 flex-1 mb-8">
+                    <span className="absolute -top-3 -left-3 text-5xl text-primary/10 font-serif leading-none">&quot;</span>
                     <div
-                      className="font-[Poppins] text-[14px] leading-[1.9] text-third/80 italic relative z-10 mb-6"
+                      className="font-[Poppins] text-[15px] md:text-lg leading-[1.8] text-third/80 italic pl-2"
                       dangerouslySetInnerHTML={{ __html: reviewText }}
                     />
-                    <div className="w-full h-px bg-primary/10 mb-5 relative z-10" />
-                    <div className="flex items-center gap-3 relative z-10">
-                      <div className="w-10 h-10 rounded-full bg-linear-to-br from-fourth/30 to-fourth/10 flex items-center justify-center font-bold text-[14px] text-fourth">
-                        {reviewerName?.[0] || "?"}
-                      </div>
-                      <div>
-                        <p className="font-[Montserrat] font-semibold text-[13px] text-primary">
-                          {reviewerName}
-                        </p>
-                        <p className="text-[11px] text-third/50">
-                          Verified Buyer
-                        </p>
-                      </div>
+                  </div>
+
+                  <div className="w-full h-px bg-primary/10 mb-6 relative z-10 mt-auto" />
+
+                  <div className="flex items-center gap-4 relative z-10">
+                    <div className="w-11 h-11 rounded-full bg-linear-to-br from-fourth/40 to-fourth/10 flex items-center justify-center font-bold text-sm text-fourth border border-fourth/20">
+                      {reviewerName?.[0] || "?"}
+                    </div>
+                    <div>
+                      <p className="font-[Montserrat] font-semibold text-sm text-primary uppercase tracking-wider">
+                        {reviewerName}
+                      </p>
+                      <p className="text-[10px] text-third/40 uppercase tracking-[0.2em] font-medium">
+                        Verified Buyer
+                      </p>
                     </div>
                   </div>
-                </SwiperSlide>
+                </div>
               );
             })}
-          </Swiper>
+          </div>
         </div>
       </section>
     </>

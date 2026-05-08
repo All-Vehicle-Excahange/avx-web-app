@@ -156,14 +156,55 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
   const vehicleType = searchParams.get("vehicleType");
   const bodyType = searchParams.get("bodyType");
   const fuelType = searchParams.get("fuelType");
-  const brandParam = searchParams.get("brand");
-  const makerId = searchParams.get("makerId");
+
+  const MAKER_NAME_MAPPING = {
+    1: 'Ashok Leyland', 2: 'Aston Martin', 3: 'Audi', 4: 'Bentley', 5: 'BMW', 
+    6: 'Bugatti', 7: 'Chevrolet', 8: 'Datsun', 9: 'Ferrari', 10: 'Fiat', 
+    11: 'Force Motors', 12: 'Ford', 13: 'Hindustan Motors', 14: 'Honda', 
+    15: 'Hyundai', 16: 'ICML', 17: 'Jaguar', 18: 'Lamborghini', 19: 'Land Rover', 
+    20: 'Mahindra', 21: 'Maruti Suzuki', 22: 'Maserati', 23: 'Maybach', 
+    24: 'Mercedes Benz', 25: 'Mitsubishi', 26: 'Nissan', 27: 'Porsche', 
+    28: 'Premier', 29: 'Renault', 30: 'Rolls Royce', 31: 'San', 32: 'Skoda', 
+    33: 'Ssangyong', 34: 'Tata', 35: 'Toyota', 36: 'Volkswagen', 37: 'Volvo', 
+    38: 'Mahindra Renault', 39: 'Opel', 40: 'Daewoo', 41: 'Jeep', 42: 'ISUZU', 
+    43: 'DC', 44: 'Subaru', 49: 'CRYSLER', 50: 'MG', 51: 'KIA', 52: 'BAJAJ', 
+    53: 'EICHER', 55: 'CADILLAC', 57: 'SMPIL', 58: 'HUMMER', 59: 'WILLYS', 
+    60: 'ROVAR', 61: 'CITROEN', 62: 'BYD', 64: 'PMV'
+  };
+  const rawBrand = searchParams.get("brand");
+  const rawMakerId = searchParams.get("makerId");
+  const isNumeric = (val) => val && !isNaN(val) && val.trim() !== "";
+
+  // 1. Resolve makerId (the numeric ID needed by the API)
+  let makerId = rawMakerId;
+  if (!makerId) {
+    if (isNumeric(rawBrand)) {
+      makerId = rawBrand;
+    } else if (rawBrand) {
+      // Reverse lookup: Name -> ID
+      const entries = Object.entries(MAKER_NAME_MAPPING);
+      const found = entries.find(([id, name]) => name.toLowerCase() === rawBrand.toLowerCase());
+      if (found) makerId = found[0];
+    }
+  }
+
+  // 2. Resolve brandParam (the string name needed for UI labels)
+  let brandParam = searchParams.get("brandName");
+  if (!brandParam) {
+    if (isNumeric(rawBrand)) {
+      brandParam = MAKER_NAME_MAPPING[rawBrand];
+    } else {
+      brandParam = rawBrand;
+    }
+  }
   const modelIdParam = searchParams.get("modelId");
+  const modelParam = searchParams.get("model");
   const variantIdParam = searchParams.get("variantId");
   const variantParam = searchParams.get("variant");
   const budget = searchParams.get("budget");
   const sortBy = searchParams.get("sortBy");
   const direction = searchParams.get("direction");
+  const transmission = searchParams.get("transmission");
 
   let mPrice = 0;
   let mxPrice = 0;
@@ -197,7 +238,8 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
     if (selectedCityId) payload.cityId = selectedCityId;
     if (selectedStateId) payload.stateId = selectedStateId;
 
-    if (selectedBodyType.length > 0) payload.vehicleSubTypes = selectedBodyType;
+    if (selectedBodyType.length > 0)
+      payload.vehicleSubTypes = selectedBodyType.map((b) => b.toUpperCase());
 
     if (selectedBrands.length > 0)
       payload.makerIds = selectedBrands.map(Number);
@@ -245,6 +287,15 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
     if (selectedBodyType.length > 0) payload.vehicleSubTypes = selectedBodyType.map(b => b.toUpperCase());
     if (selectedBrands.length > 0) payload.makerIds = selectedBrands.map(Number);
     if (selectedModels.length > 0) payload.modelIds = selectedModels.map(Number);
+
+    if (selectedFuelTypes.length > 0)
+      payload.fuelTypes = selectedFuelTypes.map((f) => f.toUpperCase());
+
+    if (selectedTransmissionTypes.length > 0)
+      payload.transmissionTypes = selectedTransmissionTypes.map((t) =>
+        t.toUpperCase(),
+      );
+
     if (minPrice > MIN) payload.minPrice = minPrice;
     if (maxPrice < MAX) payload.maxPrice = maxPrice;
     return payload;
@@ -355,7 +406,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
 
     // Body type from URL
     if (bodyType) {
-      initialPayload.vehicleSubTypes = [bodyType];
+      initialPayload.vehicleSubTypes = [bodyType.toUpperCase()];
       setSelectedBodyType([bodyType.toLowerCase()]);
     }
 
@@ -377,6 +428,14 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
     if (modelIdParam) {
       initialPayload.modelIds = [Number(modelIdParam)];
       setSelectedModels([modelIdParam]);
+      if (modelParam) {
+        setModels(prev => {
+          if (!prev.find(m => m.value === modelIdParam)) {
+            return [{ value: modelIdParam, label: modelParam }, ...prev];
+          }
+          return prev;
+        });
+      }
     }
 
     // Variant from URL
@@ -399,6 +458,12 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
       setSelectedFuelTypes([fuelType]);
     }
 
+    // Transmission from URL
+    if (transmission) {
+      initialPayload.transmissionTypes = [transmission.toUpperCase()];
+      setSelectedTransmissionTypes([transmission.toLowerCase()]);
+    }
+
     // Budget from URL
     if (budget) {
       if (mPrice > 0) {
@@ -412,7 +477,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
     }
 
     fetchVehicles(1, initialPayload);
-  }, []);
+  }, [searchParams]);
 
   /* ================= RE-FETCH ON SORT CHANGE ================= */
   const prevSortByRef = useRef(sortBy);
@@ -528,20 +593,19 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
     const qStateName = searchParams.get("stateName");
     const qCityName = searchParams.get("cityName");
 
+    // Handle location names even without IDs
+    if (qLocation) {
+      const parts = qLocation.split(",").map((s) => s.trim());
+      if (parts[0]) setSelectedCityName(parts[0]);
+      if (parts[1]) setSelectedStateName(parts[1]);
+    } else {
+      if (qStateName) setSelectedStateName(qStateName);
+      if (qCityName) setSelectedCityName(qCityName);
+    }
+
     if (qStateId) {
       setSelectedStateId(Number(qStateId));
       if (qCityId) setSelectedCityId(Number(qCityId));
-
-      // Parse "cityName, stateName" from location param (homepage filter bar)
-      if (qLocation) {
-        const parts = qLocation.split(",").map((s) => s.trim());
-        setSelectedCityName(parts[0] || "");
-        setSelectedStateName(parts[1] || "");
-      } else {
-        // Fallback: read individual name params (from VDP navigation)
-        if (qStateName) setSelectedStateName(qStateName);
-        if (qCityName) setSelectedCityName(qCityName);
-      }
       return; // skip localStorage fallback
     }
 
@@ -852,11 +916,8 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
         return;
       }
 
-      // Standardize fuel type (first letter capital)
-      let fuelTypeToSend = selectedFuelTypes[0];
-      fuelTypeToSend =
-        fuelTypeToSend.charAt(0).toUpperCase() +
-        fuelTypeToSend.slice(1).toLowerCase();
+      // Standardize fuel type (ALL CAPS for backend)
+      let fuelTypeToSend = selectedFuelTypes[0].toUpperCase();
 
       const payload = {
         searchTerm: searchTerm.trim() || undefined,

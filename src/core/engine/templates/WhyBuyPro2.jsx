@@ -1636,17 +1636,18 @@ export default function WhyBuyPro2({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {data.testimonials.slice(0, 2).map((t, i) => (
+            {/* TESTIMONIALS - Horizontal Scrollable */}
+            <div className="flex overflow-x-auto gap-6 pb-12 no-scrollbar snap-x snap-mandatory">
+              {(data.featuredReviews || data.testimonials || []).map((t, i) => (
                 <div
-                  key={`${t.name}-${i}`}
-                  className="group relative rounded-2xl p-7 bg-white/5 backdrop-blur-md border border-white/10 hover:border-primary/30 transition-all duration-300 overflow-hidden"
+                  key={i}
+                  className="min-w-[300px] md:min-w-[450px] snap-center group relative rounded-2xl p-8 bg-white/5 backdrop-blur-md border border-white/10 hover:border-primary/30 transition-all duration-500 overflow-hidden h-full flex flex-col shadow-lg hover:shadow-primary/5"
                 >
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-linear-to-br from-primary/10 via-transparent to-transparent" />
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-linear-to-br from-primary/10 via-transparent to-transparent pointer-events-none" />
 
                   {/* Rating Stars */}
                   {t.rating && (
-                    <div className="flex gap-1 mb-4 relative z-10">
+                    <div className="flex gap-1.5 mb-5 relative z-10">
                       {[...Array(5)].map((_, idx) => (
                         <Star
                           key={idx}
@@ -1654,7 +1655,7 @@ export default function WhyBuyPro2({
                           className={
                             idx < t.rating
                               ? "text-fourth fill-fourth"
-                              : "text-third/30"
+                              : "text-third/20"
                           }
                         />
                       ))}
@@ -1662,30 +1663,33 @@ export default function WhyBuyPro2({
                   )}
 
                   {/* Review Title */}
-                  {t.title && (
-                    <h4 className="font-semibold text-primary mb-3 relative z-10">
-                      {t.title}
+                  {(t.title || t.reviewTitle) && (
+                    <h4 className="font-bold text-primary mb-3 relative z-10 text-lg">
+                      {t.title || t.reviewTitle}
                     </h4>
                   )}
 
                   {/* Review Text */}
-                  <div
-                    className="font-[Poppins] text-[14px] leading-[1.9] text-third/80 italic relative z-10 mb-6"
-                    dangerouslySetInnerHTML={{ __html: t.review }}
-                  />
+                  <div className="relative z-10 flex-1 mb-8">
+                    <span className="absolute -top-2 -left-2 text-4xl text-primary/10 font-serif leading-none">&quot;</span>
+                    <div
+                      className="font-[Poppins] text-[15px] md:text-base leading-[1.9] text-third/80 italic pl-2"
+                      dangerouslySetInnerHTML={{ __html: t.review || t.reviewText }}
+                    />
+                  </div>
 
-                  <div className="w-full h-px bg-primary/10 mb-5 relative z-10" />
+                  <div className="w-full h-px bg-primary/10 mb-6 relative z-10 mt-auto" />
 
                   {/* Reviewer Info */}
-                  <div className="flex items-center gap-3 relative z-10">
-                    <div className="w-10 h-10 rounded-full bg-linear-to-br from-primary/20 to-primary/5 flex items-center justify-center font-bold text-[14px] text-primary">
-                      {t.name?.[0] || "?"}
+                  <div className="flex items-center gap-4 relative z-10">
+                    <div className="w-10 h-10 rounded-full bg-linear-to-br from-primary/20 to-primary/5 flex items-center justify-center font-bold text-sm text-primary shrink-0 border border-primary/10">
+                      {(t.name || t.reviewerName)?.[0] || "?"}
                     </div>
                     <div>
-                      <p className="font-[Montserrat] font-semibold text-[13px] text-primary">
-                        {t.name}
+                      <p className="font-[Montserrat] font-semibold text-sm text-primary">
+                        {t.name || t.reviewerName}
                       </p>
-                      <p className="text-[11px] text-third/50">Verified Buyer</p>
+                      <p className="text-[11px] text-third/50 uppercase tracking-wider font-medium">Verified Buyer</p>
                     </div>
                   </div>
                 </div>

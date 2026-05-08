@@ -181,7 +181,13 @@ const getSectionProgress = (section, defaultSection) => {
 
   const getCleanString = (val) => {
     if (!val) return "";
-    if (typeof val === "object" && val.imageUrl) return val.imageUrl.trim();
+    if (typeof val === "object") {
+      if (Array.isArray(val)) return "";
+      if (val.imageUrl) return val.imageUrl.trim();
+      // Empty objects like {} (from getEmptyData) should return ""
+      // Otherwise String({}) returns "[object Object]" which falsely passes validation
+      return "";
+    }
     return String(val)
       .replace(/<[^>]*>/g, "")
       .trim();
@@ -608,9 +614,8 @@ export default function CreateTheme() {
 
             <div className="w-full bg-third/20 rounded-full h-1.5 overflow-hidden">
               <div
-                className={`h-full transition-all duration-500 ease-out ${
-                  globalProgress === 100 ? "bg-green-500" : "bg-primary"
-                }`}
+                className={`h-full transition-all duration-500 ease-out ${globalProgress === 100 ? "bg-green-500" : "bg-primary"
+                  }`}
                 style={{ width: `${globalProgress}%` }}
               />
             </div>
@@ -622,11 +627,10 @@ export default function CreateTheme() {
             <button
               key={sec.id}
               onClick={() => setActiveTab(i)}
-              className={`px-4 py-1 rounded-full text-sm ${
-                activeTab === i
+              className={`px-4 py-1 rounded-full text-sm ${activeTab === i
                   ? "bg-primary text-secondary font-bold"
                   : "border border-third/30 text-third"
-              }`}
+                }`}
             >
               {sec.type.includes("about")
                 ? "About Us"
@@ -650,21 +654,19 @@ export default function CreateTheme() {
           <div className="flex  rounded-full p-1 border border-third/30">
             <button
               onClick={() => setMode("editor")}
-              className={`px-4 py-1 rounded-full text-sm transition ${
-                mode === "editor"
+              className={`px-4 py-1 rounded-full text-sm transition ${mode === "editor"
                   ? "bg-primary text-secondary font-bold"
                   : "text-third"
-              }`}
+                }`}
             >
               Editor
             </button>
             <button
               onClick={() => setMode("preview")}
-              className={`px-4 py-1 rounded-full text-sm transition ${
-                mode === "preview"
+              className={`px-4 py-1 rounded-full text-sm transition ${mode === "preview"
                   ? "bg-primary text-secondary font-bold"
                   : "text-third"
-              }`}
+                }`}
             >
               Preview
             </button>

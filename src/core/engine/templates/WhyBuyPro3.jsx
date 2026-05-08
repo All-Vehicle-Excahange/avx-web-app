@@ -1204,7 +1204,7 @@ export default function WhyBuyPro3({
         {/* TESTIMONIALS */}
         <div>
           <h3 className="text-primary font-bold text-xl mb-4">
-            Featured Reviews 
+            Featured Reviews
           </h3>
           {/* <EditorInput
             bold
@@ -1232,11 +1232,10 @@ export default function WhyBuyPro3({
                 <div
                   key={review.id}
                   onClick={() => toggleReviewSelection(review.id)}
-                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
-                    isSelected
-                      ? "border-fourth bg-fourth/10 shadow-md"
-                      : "border-third/20 bg-primary/5 hover:border-third/40"
-                  }`}
+                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${isSelected
+                    ? "border-fourth bg-fourth/10 shadow-md"
+                    : "border-third/20 bg-primary/5 hover:border-third/40"
+                    }`}
                 >
                   <div
                     className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? "border-fourth bg-fourth" : "border-third/40"}`}
@@ -1320,7 +1319,7 @@ export default function WhyBuyPro3({
               className="text-primary/70 text-base font-[Poppins] leading-relaxed"
               dangerouslySetInnerHTML={{ __html: data.whyBuyHeroDescription }}
             />
-            
+
           </div>
         </div>
       </section>
@@ -1635,58 +1634,56 @@ export default function WhyBuyPro3({
                     {data.whyBuyTestimonialTitle || "What Our Customers Say"}
                   </h2>
                 </div>
-                <div
-                  className="w-full"
-                  style={{
-                    opacity: visible ? 1 : 0,
-                    transform: visible ? "translateY(0px)" : "translateY(12px)",
-                    transition: "opacity 0.35s ease, transform 0.35s ease",
-                  }}
-                >
-                  <div className="relative flex flex-col items-center text-center gap-8 px-10 py-12 border border-third/15 rounded-2xl">
-                    <div className="absolute top-5 right-6 w-9 h-9 rounded-full flex items-center justify-center">
-                      <Quote className="w-6 h-6 text-third/30" />
-                    </div>
-                    <span className="text-[13px] font-bold text-third/30 font-[Montserrat] tracking-[0.5em]">
-                      {String(testimonialsactive + 1).padStart(2, "0")}
-                    </span>
+                {/* TESTIMONIALS - Horizontal Scrollable */}
+                <div className="flex overflow-x-auto gap-6 pb-12 no-scrollbar snap-x snap-mandatory w-full">
+                  {(data.featuredReviews || data.testimonials || []).map((t, i) => (
                     <div
-                      className="text-xl md:text-2xl lg:text-3xl font-light text-primary/70 font-[Poppins] leading-[1.6] max-w-3xl italic"
-                      dangerouslySetInnerHTML={{
-                        __html: item.reviewText || item.review,
-                      }}
-                    />
-                    <span className="text-xs font-semibold text-primary/90 font-[Montserrat] uppercase tracking-widest">
-                      {item.reviewerName || item.name}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-6">
-                  <button
-                    onClick={prev}
-                    className="w-10 h-10 rounded-full border border-third/20 flex items-center justify-center hover:border-third/40 hover:bg-third/5 transition-all duration-300 group"
-                  >
-                    <ChevronLeft className="w-4 h-4 text-third/50 group-hover:text-third/70 transition-colors duration-300" />
-                  </button>
-                  <div className="flex items-center gap-2">
-                    {data.testimonials?.map((_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => transition(i)}
-                        className={`rounded-full transition-all duration-500 ${
-                          i === testimonialsactive
-                            ? "w-6 h-1.5 bg-primary"
-                            : "w-1.5 h-1.5 bg-third/20 hover:bg-third/40"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <button
-                    onClick={next}
-                    className="w-10 h-10 rounded-full border border-third/20 flex items-center justify-center hover:border-third/40 hover:bg-third/5 transition-all duration-300 group"
-                  >
-                    <ChevronRight className="w-4 h-4 text-third/50 group-hover:text-third/70 transition-colors duration-300" />
-                  </button>
+                      key={i}
+                      className="min-w-[300px] md:min-w-[450px] snap-center group relative flex flex-col items-center text-center gap-6 p-8 md:p-10 border border-third/15 rounded-3xl bg-secondary/5 backdrop-blur-sm hover:border-primary/30 transition-all duration-500 shadow-xl hover:shadow-primary/5"
+                    >
+                      <div className="absolute top-6 right-8 w-10 h-10 rounded-full flex items-center justify-center bg-primary/5 group-hover:bg-primary/10 transition-colors">
+                        <Quote className="w-5 h-5 text-third/30 group-hover:text-primary/40 transition-colors" />
+                      </div>
+
+                      <span className="text-[12px] font-bold text-third/20 font-[Montserrat] tracking-[0.4em] uppercase">
+                        Review {String(i + 1).padStart(2, "0")}
+                      </span>
+
+                      {/* Stars */}
+                      <div className="flex gap-1.5">
+                        {[...Array(5)].map((_, idx) => (
+                          <Star
+                            key={idx}
+                            size={16}
+                            className={
+                              idx < (t.rating || 5)
+                                ? "text-fourth fill-fourth"
+                                : "text-third/10"
+                            }
+                          />
+                        ))}
+                      </div>
+
+                      <div className="relative flex-1">
+                        <span className="absolute -top-3 -left-3 text-5xl text-primary/10 font-serif leading-none pointer-events-none">&quot;</span>
+                        <div
+                          className="text-lg md:text-xl font-light text-primary/80 font-[Poppins] leading-[1.7] italic pl-2"
+                          dangerouslySetInnerHTML={{
+                            __html: t.reviewText || t.review,
+                          }}
+                        />
+                      </div>
+
+                      <div className="w-16 h-px bg-primary/20 mt-auto" />
+
+                      <div className="flex flex-col items-center gap-1">
+                        <span className="text-sm font-bold text-primary font-[Montserrat] uppercase tracking-widest">
+                          {t.reviewerName || t.name}
+                        </span>
+                        <span className="text-[10px] text-third/40 uppercase tracking-[0.2em] font-medium">Verified Customer</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

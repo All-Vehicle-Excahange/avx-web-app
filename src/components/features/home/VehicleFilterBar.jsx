@@ -136,8 +136,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     try {
       if (currentFuel && currentBody) {
         const res = await getMakersByFuelOrBodyType({
-          fuelType: currentFuel,
-          bodyType: currentBody,
+          fuelType: currentFuel.toUpperCase(),
+          bodyType: currentBody.toUpperCase(),
           page: 1,
           limit: 100,
         });
@@ -401,8 +401,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         ...(cityId && { cityId }),
         ...(stateId && { stateId }),
         ...(vehicleType && { vehicleType }),
-        ...(bodyType && { bodyType }),
-        ...(fuelType && { fuelType }),
+        ...(bodyType && { bodyType: bodyType.toUpperCase() }),
+        ...(fuelType && { fuelType: fuelType.toUpperCase() }),
         ...(brand && { brand }),
         ...(makerId && { makerId }),
         ...(budget && { budget }),

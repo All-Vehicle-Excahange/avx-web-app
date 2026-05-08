@@ -293,7 +293,7 @@ export default function WhyBuyPremium3({
 
       try {
         updateField("testimonialTitle", data.testimonialTitle || "");
-      } catch (e) {}
+      } catch (e) { }
 
       const galleryData = new FormData();
       for (let i = 1; i <= 5; i++) {
@@ -1146,9 +1146,9 @@ export default function WhyBuyPremium3({
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 px-2 lg:px-4">
                   {[
                     data.customWhyBuyHero2 ||
-                      data.whyBuyHeroTemplate2?.imageUrl,
+                    data.whyBuyHeroTemplate2?.imageUrl,
                     data.customWhyBuyHero3 ||
-                      data.whyBuyHeroTemplate3?.imageUrl,
+                    data.whyBuyHeroTemplate3?.imageUrl,
                     data.customWhyBuyStory1 || data.storyTemplate1?.imageUrl,
                     data.customWhyBuyStory2 || data.storyTemplate2?.imageUrl,
                   ]
@@ -1239,9 +1239,9 @@ export default function WhyBuyPremium3({
             <div className="relative w-full h-[500px] sm:h-[460px] lg:h-[520px] rounded-3xl overflow-hidden">
               {[
                 data.customWhyBuyVehicleSelection1 ||
-                  data.vehicleSelectionTemplate1?.imageUrl,
+                data.vehicleSelectionTemplate1?.imageUrl,
                 data.customWhyBuyVehicleSelection2 ||
-                  data.vehicleSelectionTemplate2?.imageUrl,
+                data.vehicleSelectionTemplate2?.imageUrl,
                 data.customWhyBuyStory3 || data.storyTemplate3?.imageUrl,
                 data.customWhyBuyStory4 || data.storyTemplate4?.imageUrl,
                 data.customWhyBuyProcess1 || data.processTemplate1?.imageUrl,
@@ -1279,13 +1279,13 @@ export default function WhyBuyPremium3({
                   <div className="flex gap-3 shrink-0 overflow-x-scroll no-scrollbar">
                     {[
                       data.customWhyBuyVehicleSelection1 ||
-                        data.vehicleSelectionTemplate1?.imageUrl,
+                      data.vehicleSelectionTemplate1?.imageUrl,
                       data.customWhyBuyVehicleSelection2 ||
-                        data.vehicleSelectionTemplate2?.imageUrl,
+                      data.vehicleSelectionTemplate2?.imageUrl,
                       data.customWhyBuyStory3 || data.storyTemplate3?.imageUrl,
                       data.customWhyBuyStory4 || data.storyTemplate4?.imageUrl,
                       data.customWhyBuyProcess1 ||
-                        data.processTemplate1?.imageUrl,
+                      data.processTemplate1?.imageUrl,
                     ]
                       .filter(Boolean)
                       .map((img, i) => (
@@ -1375,7 +1375,7 @@ export default function WhyBuyPremium3({
                       </span>
                       <div className="w-10 h-10 rounded-xl border border-third/10 flex items-center justify-center">
                         {typeof step.icon === "string" &&
-                        step.icon.startsWith("<svg") ? (
+                          step.icon.startsWith("<svg") ? (
                           <div
                             className="[&>svg]:w-4.5 [&>svg]:h-4.5 text-third/30"
                             dangerouslySetInnerHTML={{ __html: step.icon }}
@@ -1416,7 +1416,7 @@ export default function WhyBuyPremium3({
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 rounded-xl border border-fourth/25 bg-fourth/[0.06] flex items-center justify-center">
                             {typeof step.icon === "string" &&
-                            step.icon.startsWith("<svg") ? (
+                              step.icon.startsWith("<svg") ? (
                               <div
                                 className="[&>svg]:w-5 [&>svg]:h-5 text-fourth"
                                 dangerouslySetInnerHTML={{ __html: step.icon }}
@@ -1471,7 +1471,7 @@ export default function WhyBuyPremium3({
                         className={`w-10 h-10 rounded-lg border flex items-center justify-center shrink-0 transition-all duration-400 ${isActive ? "border-fourth/30 bg-fourth/[0.08]" : "border-third/12"}`}
                       >
                         {typeof step.icon === "string" &&
-                        step.icon.startsWith("<svg") ? (
+                          step.icon.startsWith("<svg") ? (
                           <div
                             className={`[&>svg]:w-4 [&>svg]:h-4 transition-colors duration-400 ${isActive ? "text-fourth" : "text-third/30"}`}
                             dangerouslySetInnerHTML={{ __html: step.icon }}
@@ -1656,11 +1656,11 @@ export default function WhyBuyPremium3({
             <div className="absolute inset-0 overflow-hidden rounded-2xl">
               {[
                 data.customWhyBuyCustomerCommitment1 ||
-                  data.customerCommitmentTemplate1?.imageUrl,
+                data.customerCommitmentTemplate1?.imageUrl,
                 data.customWhyBuyCustomerCommitment2 ||
-                  data.customerCommitmentTemplate2?.imageUrl,
+                data.customerCommitmentTemplate2?.imageUrl,
                 data.customWhyBuyCustomerCommitment3 ||
-                  data.customerCommitmentTemplate3?.imageUrl,
+                data.customerCommitmentTemplate3?.imageUrl,
               ]
                 .filter(Boolean)
                 .map((src, i) => (
@@ -1787,7 +1787,8 @@ export default function WhyBuyPremium3({
                   {data.testimonialTitle}
                 </h2>
               </div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
+              {/* TESTIMONIALS - Horizontal Scrollable */}
+              <div className="flex overflow-x-auto gap-6 pb-12 no-scrollbar snap-x snap-mandatory w-full">
                 {(data.featuredReviews || data.testimonials || []).map(
                   (t, i) => {
                     const reviewText = t.reviewText || t.review || "";
@@ -1797,10 +1798,10 @@ export default function WhyBuyPremium3({
                     return (
                       <div
                         key={i}
-                        className="relative flex flex-col gap-6 p-8 border border-third/15 rounded-2xl bg-secondary/5 hover:bg-secondary/10 transition-colors"
+                        className="min-w-[300px] md:min-w-[450px] snap-center relative flex flex-col gap-6 p-8 md:p-10 border border-third/15 rounded-3xl bg-secondary/5 backdrop-blur-sm hover:border-primary/30 transition-all duration-500 shadow-xl hover:shadow-primary/5"
                       >
                         <div className="flex items-center justify-between">
-                          <div className="flex gap-1">
+                          <div className="flex gap-1.5">
                             {[...Array(5)].map((_, idx) => (
                               <Star
                                 key={idx}
@@ -1808,25 +1809,28 @@ export default function WhyBuyPremium3({
                                 className={
                                   idx < rating
                                     ? "text-primary fill-primary"
-                                    : "text-third/30"
+                                    : "text-third/10"
                                 }
                               />
                             ))}
                           </div>
                           <Quote className="w-6 h-6 text-third/20 translate-y-[-2px]" />
                         </div>
-                        <div
-                          className="text-lg text-primary/70 font-[Poppins] leading-relaxed italic"
-                          dangerouslySetInnerHTML={{ __html: reviewText }}
-                        />
+                        <div className="relative flex-1">
+                          <span className="absolute -top-3 -left-3 text-5xl text-primary/10 font-serif leading-none pointer-events-none">&quot;</span>
+                          <div
+                            className="text-lg md:text-xl text-primary/80 font-[Poppins] leading-[1.7] italic pl-2"
+                            dangerouslySetInnerHTML={{ __html: reviewText }}
+                          />
+                        </div>
                         <div className="mt-auto pt-6 border-t border-third/10 flex items-center justify-between">
-                          <span className="text-[14px] font-bold text-primary font-[Montserrat] tracking-wider uppercase">
+                          <span className="text-[13px] font-bold text-primary font-[Montserrat] tracking-wider uppercase">
                             {reviewerName}
                           </span>
-                          <div className="flex items-center gap-1.5 opacity-40">
+                          <div className="flex items-center gap-2 opacity-60">
                             <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                            <span className="text-[10px] uppercase font-semibold font-[Poppins] tracking-[0.2em]">
-                              Verified Buyer
+                            <span className="text-[10px] uppercase font-bold font-[Montserrat] tracking-[0.2em]">
+                              Verified
                             </span>
                           </div>
                         </div>
