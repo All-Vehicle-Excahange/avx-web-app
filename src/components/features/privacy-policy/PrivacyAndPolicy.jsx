@@ -152,7 +152,7 @@ export default function PrivacyPolicy() {
             Privacy <spam className="text-fourth/80">Policy</spam>
           </h1>
           <p className="text-lg font-light text-primary/50 leading-[1.85] max-w-[480px] mb-7">
-           {" Your data, your control. Here's how AVX collects, uses, and protects your information — plain language, no legal maze."}
+           {" Your data, your control. Here's how Reecomm collects, uses, and protects your information — plain language, no legal maze."}
           </p>
           <div className="flex items-center gap-5 text-sm tracking-wide text-primary/45">
             <span>Last Updated: January 2025</span>
@@ -262,7 +262,7 @@ export default function PrivacyPolicy() {
             <div id="collect" className="py-11 border-b border-primary/7">
               <SectionNum n="01" />
               <SectionTitle>Information We Collect</SectionTitle>
-              <Body>{"We collect what's needed to run AVX services — nothing extra."}</Body>
+              <Body>{"We collect what's needed to run Reecomm services — nothing extra."}</Body>
               <SubLabel>Personal Info</SubLabel>
               <BulletList items={["Name, phone number, email address", "Location (city / region)"]} />
               <SubLabel>Account Info</SubLabel>
@@ -323,7 +323,7 @@ export default function PrivacyPolicy() {
               ]} />
               <Body className="mt-5">
                 For requests, reach us at{" "}
-                <span className="text-primary/65">support@avx.com</span>
+                <span className="text-primary/65">support@reecomm.com</span>
               </Body>
             </div>
 
@@ -342,7 +342,7 @@ export default function PrivacyPolicy() {
             <div id="third" className="py-11 border-b border-primary/7">
               <SectionNum n="07" />
               <SectionTitle>Third-Party Services</SectionTitle>
-              <Body className="mb-5">AVX uses third-party tools for core infrastructure only.</Body>
+              <Body className="mb-5">Reecomm uses third-party tools for core infrastructure only.</Body>
               <BulletList items={[
                 "Hosting and content delivery",
                 "Analytics and performance monitoring",
@@ -366,14 +366,14 @@ export default function PrivacyPolicy() {
               <SectionNum n="09" />
               <SectionTitle>{"Children's Privacy"}</SectionTitle>
               <Body>
-                AVX is not intended for users under 18. We do not knowingly collect data from minors. If discovered, such data is deleted immediately.
+                Reecomm is not intended for users under 18. We do not knowingly collect data from minors. If discovered, such data is deleted immediately.
               </Body>
             </div>
 
             <div id="changes" className="py-11 border-b border-primary/7">
               <SectionNum n="10" />
               <SectionTitle>Changes to Policy</SectionTitle>
-              <Body className="mb-5">We may update this policy as AVX evolves.</Body>
+              <Body className="mb-5">We may update this policy as Reecomm evolves.</Body>
               <BulletList items={[
                 "Users notified of material changes",
                 "Last Updated date reflects the latest version",
@@ -388,7 +388,7 @@ export default function PrivacyPolicy() {
               <div className="border border-primary/8 rounded-md overflow-hidden">
                 <div className="flex items-center gap-5 px-5 py-4 border-b border-primary/7">
                   <span className="text-[11px] tracking-[0.15em] uppercase text-primary/22 min-w-[68px]">Email</span>
-                  <span className="text-lg text-primary/55 font-light">support@avx.com</span>
+                  <span className="text-lg text-primary/55 font-light">support@reecomm.com</span>
                 </div>
                 <div className="flex items-center gap-5 px-5 py-4">
                   <span className="text-[11px] tracking-[0.15em] uppercase text-primary/22 min-w-[68px]">Address</span>

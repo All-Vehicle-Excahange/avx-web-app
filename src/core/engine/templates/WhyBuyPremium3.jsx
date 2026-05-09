@@ -1518,13 +1518,13 @@ export default function WhyBuyPremium3({
           </div>
         </div>
       </section>
-      {/* ===== Avx Inspection Section ===== */}
+      {/* ===== Reecomm Inspection Section ===== */}
       <section className="relative flex flex-col justify-center items-center py-12 overflow-hidden px-2 lg:px-4">
         <div className="container">
           <div className="mx-auto w-full flex flex-col gap-8 relative z-10">
             <div className="flex flex-col gap-4">
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                Avx Inspection
+                Reecomm Inspection
               </p>
               <div className="flex flex-col gap-4">
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">

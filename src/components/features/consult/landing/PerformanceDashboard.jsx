@@ -185,7 +185,7 @@ export default function PerformanceDashboard() {
 
           <div className="lg:max-w-xs">
             <p className="text-third text-[14px] leading-relaxed mb-8">
-              AVX gives every consultant a real-time visibility layer — from
+              Reecomm gives every consultant a real-time visibility layer — from
               first view to final sale.
             </p>
             <div className="flex gap-10">

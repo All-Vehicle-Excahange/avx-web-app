@@ -75,7 +75,7 @@ export default function DownloadAppPopup({ isOpen, onClose }) {
             The Reecomm app is the fastest way to buy, sell, and manage your
             vehicles. Enjoy exclusive mobile-only features, instant price drop
             alerts, and seamless communication. Download now and experience the
-            Reecomm
+            Reecomm way.
           </p>
 
           {/* App Buttons */}

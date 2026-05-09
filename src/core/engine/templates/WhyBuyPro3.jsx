@@ -1485,7 +1485,7 @@ export default function WhyBuyPro3({
           </div>
         </div>
       </section>
-      {/* ===== Avx Inspection Section ===== */}
+      {/* ===== Reecomm Inspection Section ===== */}
       <section className="py-12 px-2 lg:px-4">
         <div className="container">
           <div className="mx-auto">
@@ -1493,7 +1493,7 @@ export default function WhyBuyPro3({
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                    Avx Inspection
+                    Reecomm Inspection
                   </p>
                 </div>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">

@@ -56,7 +56,7 @@ export default function InspectionWorkFlow() {
     },
     {
       title: "Physical Evaluation",
-      desc: "Vehicle inspected using AVX checklist.",
+      desc: "Vehicle inspected using Reecomm checklist.",
       icon: <Search className="w-5 h-5" />,
       color: "bg-primary/10",
     },
@@ -167,7 +167,7 @@ export default function InspectionWorkFlow() {
                   CORE
                 </span>
                 <span className="text-third font-bold text-2xl md:text-3xl">
-                  AVX
+                  Reecomm
                 </span>
               </div>
             </div>

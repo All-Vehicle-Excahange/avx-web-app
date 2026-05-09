@@ -16,7 +16,7 @@ export default function DisputeHandling() {
     },
     {
       title: "Inspection logs reviewed",
-      desc: "AVX reviews inspection media, checklist data, and inspector notes.",
+      desc: "Reecomm reviews inspection media, checklist data, and inspector notes.",
       icon: FileSearch,
     },
     {
@@ -45,7 +45,7 @@ export default function DisputeHandling() {
             </h2>
 
           <p className="text-lg text-third leading-relaxed">
-            AVX maintains a defined review workflow to address inspection-related
+            Reecomm maintains a defined review workflow to address inspection-related
             discrepancies with full audit visibility and procedural clarity.
           </p>
         </div>
@@ -118,7 +118,7 @@ export default function DisputeHandling() {
             </h3>
 
             <p className="text-sm text-third leading-relaxed">
-              AVX maintains detailed inspection logs including media, checklist
+              Reecomm maintains detailed inspection logs including media, checklist
               inputs, timestamps, and inspector attribution. This ensures every
               review is backed by verifiable historical data.
             </p>
@@ -129,7 +129,7 @@ export default function DisputeHandling() {
             <div className="relative rounded-2xl overflow-hidden border border-primary/10">
               <img
                 src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1600&auto=format&fit=crop"
-                alt="AVX audit trail and inspection data review dashboard"
+                alt="Reecomm audit trail and inspection data review dashboard"
                 className="w-full h-55 md:h-65 object-cover opacity-95"
               />
               <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />

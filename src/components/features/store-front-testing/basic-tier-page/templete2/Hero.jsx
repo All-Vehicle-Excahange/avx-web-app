@@ -328,7 +328,7 @@ export default function WhyBuyHereBasic() {
             <div >
               <EyeBrow>Inspection</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                AVX Inspection <span className="text-fourth/80">Assurance</span>
+                Reecomm Inspection <span className="text-fourth/80">Assurance</span>
               </h2>
             </div>
             <div>

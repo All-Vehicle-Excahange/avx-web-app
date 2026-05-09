@@ -10,7 +10,7 @@ const smallCars = [
   {
     id: "1",
     title: "Maruti Fronx",
-    subtitle: "35 D6 Powerful lorem isump",
+    subtitle: "Elite Selection",
     year: "2022",
     transmission: "Manual",
     fuel: "Diesel",
@@ -23,7 +23,7 @@ const smallCars = [
   {
     id: "2",
     title: "Maruti Fronx",
-    subtitle: "35 D6 Powerful lorem isump",
+    subtitle: "Elite Selection",
     year: "2022",
     transmission: "Manual",
     fuel: "Diesel",
@@ -36,7 +36,7 @@ const smallCars = [
   {
     id: "3",
     title: "Maruti Fronx",
-    subtitle: "35 D6 Powerful lorem isump",
+    subtitle: "Elite Selection",
     year: "2022",
     transmission: "Manual",
     fuel: "Diesel",

@@ -316,7 +316,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                     onClosePopup();
                   }}
                 >
-                  Request AVX Inspection
+                  Request Reecomm Inspection
                 </Item>
               </Section>
 
@@ -334,7 +334,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                   Help Center
                 </Item>
                 <Item href="/contact" onClick={onClosePopup}>
-                  Contact AVX
+                  Contact Reecomm
                 </Item>
               </Section>
             </div>
@@ -366,7 +366,7 @@ export default function AccountPopup({ open, onClosePopup }) {
 
                   <Section title="Buying Tools">
                     <Item href="/inspection-request" onClick={onClosePopup}>
-                      Request AVX Inspection
+                      Request Reecomm Inspection
                     </Item>
                     <Item href="/track-bookings" onClick={onClosePopup}>
                       Track Bookings
@@ -393,7 +393,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                       Help Center
                     </Item>
                     <Item href="/contact" onClick={onClosePopup}>
-                      Contact AVX
+                      Contact Reecomm
                     </Item>
                   </Section>
                 </>

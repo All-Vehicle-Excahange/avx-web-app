@@ -25,7 +25,7 @@ export default function TrustSignals() {
             </h2>
 
               <p className="mt-10 max-w-xl text-xl leading-relaxed text-third">
-                AVX doesn’t rely on claims or testimonials. Trust emerges from
+                Reecomm doesnt rely on claims or testimonials. Trust emerges from
                 structured participation, transparent performance, and verifiable
                 activity across the marketplace.
               </p>

@@ -67,7 +67,7 @@ export default function TierStructure() {
           </h2>
 
           <p className="mt-6 text-third text-[15px] leading-relaxed">
-            AVX operates on flexible subscription tiers designed to support
+            Reecomm operates on flexible subscription tiers designed to support
             consultants at every stage of growth.
           </p>
         </motion.div>

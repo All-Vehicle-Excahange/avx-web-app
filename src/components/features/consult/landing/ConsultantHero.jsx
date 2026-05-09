@@ -164,11 +164,11 @@ export default function ConsultantHeroSection() {
                 Grow Your Automotive
               </h1>
               <h1 className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl text-fourth/80 font-semibold leading-[1.05]">
-                Business on AVX
+                Business on Reecomm
               </h1>
             </div>
             <p className="text-[15px] text-third leading-relaxed max-w-lg">
-              AVX helps automotive consultants build visibility, generate
+              Reecomm helps automotive consultants build visibility, generate
               serious inquiries, and operate with structured performance
               transparency.
             </p>
@@ -537,7 +537,7 @@ export default function ConsultantHeroSection() {
                             Excellent
                           </p>
                           <p className="text-[10px] text-third mb-2">
-                            Top 8% of consultants on AVX
+                            Top 8% of consultants on Reecomm
                           </p>
                           <span className="text-[9px] bg-primary/10 text-primary/80 border border-primary/20 px-2 py-1 rounded-full">
                             +4 pts this month

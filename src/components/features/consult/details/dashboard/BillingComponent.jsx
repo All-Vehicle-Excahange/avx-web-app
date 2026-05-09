@@ -96,7 +96,7 @@ export default function BillingComponent() {
             <div className="space-y-2">
               <div className="flex items-center gap-2 font-semibold">
                 <CreditCard size={16} />
-                AVX Wallet
+                Reecomm Wallet
               </div>
 
               <p className="text-xs text-third">Available Balance</p>
@@ -278,7 +278,7 @@ export default function BillingComponent() {
               <tr>
                 <td className="py-3">11 Oct</td>
                 <td>Inspection</td>
-                <td className="text-primary">AVX-INS-2381</td>
+                <td className="text-primary">REC-INS-2381</td>
                 <td className="text-right">₹360</td>
               </tr>
 

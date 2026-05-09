@@ -58,7 +58,7 @@ export default function GrowthTools() {
             </h2>
 
             <p className="mt-5 text-third text-[15px] leading-relaxed">
-              AVX provides structured growth tools designed to increase
+              Reecomm provides structured growth tools designed to increase
               exposure, improve discovery, and drive measurable performance
               across the marketplace.
             </p>
