@@ -72,12 +72,12 @@ const ComplianceAndTransparency = () => {
                   leading-relaxed
                 "
                   >
-                    AVX is a marketplace platform. Transactions, pricing, and
+                    Reecomm is a marketplace platform. Transactions, pricing, and
                     negotiation occur{" "}
                   
                     directly
                
-                    between buyers and consultants. AVX does not hold or process
+                    between buyers and consultants. Reecomm does not hold or process
                     payments between parties.
                   </p>
 

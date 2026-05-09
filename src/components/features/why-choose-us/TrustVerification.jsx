@@ -14,7 +14,7 @@ const pillars = [
     id: "01",
     icon: Fingerprint,
     title: "Verified Identities",
-    body: "Every consultant on AVX undergoes identity verification before listing a single vehicle. No anonymous actors.",
+    body: "Every consultant on Reecomm undergoes identity verification before listing a single vehicle. No anonymous actors.",
     tag: "KYC Layer",
   },
   {
@@ -80,7 +80,7 @@ export default function TrustVerification() {
           {/* Right statement */}
           <div className="lg:max-w-xs">
             <p className="text-third/60 text-sm leading-relaxed border-l-2 border-fourth/30 pl-4">
-              AVX focuses on reducing ambiguity before financial decisions. Every layer below exists to protect that commitment.
+              Reecomm focuses on reducing ambiguity before financial decisions. Every layer below exists to protect that commitment.
             </p>
           </div>
         </div>

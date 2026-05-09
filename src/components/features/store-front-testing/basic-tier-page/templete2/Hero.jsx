@@ -42,13 +42,13 @@ const data = {
     {
       title: "Connect With Our Team",
       description:
-        "Use AVX chat to discuss vehicle condition, pricing, and availability.",
+        "Use Reecomm chat to discuss vehicle condition, pricing, and availability.",
       icon: "MessageCircle",
     },
     {
-      title: "AVX Inspection Option",
+      title: "Reecomm Inspection Option",
       description:
-        "Buyers can request AVX inspection to receive an independent condition report.",
+        "Buyers can request Reecomm inspection to receive an independent condition report.",
       icon: "ShieldCheck",
     },
     {
@@ -59,9 +59,9 @@ const data = {
     },
   ],
   /* AVX INSPECTION */
-  inspectionTitle: "AVX Inspection Assurance",
+  inspectionTitle: "Reecomm Inspection Assurance",
   inspectionText:
-    "AVX inspection services provide additional transparency by documenting key aspects of the vehicle's condition before purchase.",
+    "Reecomm inspection services provide additional transparency by documenting key aspects of the vehicle's condition before purchase.",
   inspectionPoints: [
     "Exterior condition check",
     "Interior condition check",
@@ -83,7 +83,7 @@ const data = {
     {
       name: "Amit Shah",
       review:
-        "Transparent communication and good vehicle options. I appreciated the AVX inspection support.",
+        "Transparent communication and good vehicle options. I appreciated the Reecomm inspection support.",
     },
     {
       name: "Priya Mehta",
@@ -93,7 +93,7 @@ const data = {
     {
       name: "Suresh Joshi",
       review:
-        "Honest and transparent throughout the entire process. The AVX inspection gave me confidence in my purchase.",
+        "Honest and transparent throughout the entire process. The Reecomm inspection gave me confidence in my purchase.",
     },
   ],
 };
@@ -328,7 +328,7 @@ export default function WhyBuyHereBasic() {
             <div >
               <EyeBrow>Inspection</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                AVX Inspection <span className="text-fourth/80">Assurance</span>
+                Reecomm Inspection <span className="text-fourth/80">Assurance</span>
               </h2>
             </div>
             <div>

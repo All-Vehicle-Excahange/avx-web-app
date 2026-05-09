@@ -60,7 +60,7 @@ export default function CoreDifferentiatorsMatrix() {
           {/* Center Label */}
           <div className="hidden md:flex absolute inset-50 items-center justify-center pointer-events-none">
             <div className="px-8 py-3 border border-third/30 text-xs uppercase tracking-[0.3em] text-third bg-secondary">
-              AVX SYSTEM CORE
+              Reecomm SYSTEM CORE
             </div>
           </div>
 

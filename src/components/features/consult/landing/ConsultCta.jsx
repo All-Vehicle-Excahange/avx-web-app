@@ -15,7 +15,7 @@ export default function ConsultCta() {
           "
           >
             Ready to build your presence
-            <span className="block mt-3 text-fourth">on AVX?</span>
+            <span className="block mt-3 text-fourth">on Reecomm?</span>
           </h2>
         </div>
 
@@ -82,7 +82,7 @@ export default function ConsultCta() {
               leading-relaxed
             "
             >
-              Join AVX to build visibility, gain trust, and grow your automotive
+              Join Reecomm to build visibility, gain trust, and grow your automotive
               business.
             </p>
 

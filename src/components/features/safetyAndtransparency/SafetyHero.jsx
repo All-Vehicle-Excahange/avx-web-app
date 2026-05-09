@@ -59,7 +59,7 @@ export default function SafetyHero() {
           >
             <div className="w-8 h-px bg-fourth/60 mb-4" />
             <p className="text-[15px] leading-[1.9] text-third">
-              AVX brings structured verification and platform accountability to
+              Reecomm brings structured verification and platform accountability to
               the pre-owned vehicle marketplace — reducing ambiguity through
               visibility before financial decisions are made.
             </p>

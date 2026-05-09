@@ -836,7 +836,7 @@ export default function ProfileComponent() {
             Need help updating your profile?
           </p>
           <p className="text-xs md:text-sm text-third max-w-md">
-            Contact AVX Support or view platform guidelines for assistance.
+            Contact Reecomm Support or view platform guidelines for assistance.
           </p>
         </div>
 

@@ -30,7 +30,7 @@ const topics = [
   },
   {
     id: "inspection",
-    label: "AVX Inspection",
+    label: "Reecomm Inspection",
     icon: ClipboardCheck,
     index: "03",
     desc: "Understand our 200-point inspection layer and what it covers.",

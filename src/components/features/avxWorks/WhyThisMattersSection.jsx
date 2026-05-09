@@ -62,7 +62,7 @@ export default function WhyThisMattersSection() {
 
                         <p className="text-[17px] text-primary/85 leading-relaxed">
                             Buying a pre-owned vehicle is a significant financial decision.
-                            AVX exists to reduce ambiguity — by making seller identity
+                            Reecomm exists to reduce ambiguity — by making seller identity
                             visible, vehicle information structured, and inspection optional
                             but accessible.
                         </p>

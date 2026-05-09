@@ -55,7 +55,7 @@ export default function HeroSection() {
 
             <div className="space-y-3">
               <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-bold leading-[1.05] text-[#f8fafc] tracking-tight">
-                How AVX
+                How Reecomm
               </h1>
               <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-bold leading-[1.05] tracking-tight text-fourth">
                 Works

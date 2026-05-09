@@ -99,7 +99,7 @@ export default function InspectionCovers() {
 
           
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat">
-            What AVX Inspection
+            What Reecomm Inspection
               <br />
               <span className="text-fourth/80">
            Covers

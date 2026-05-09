@@ -72,7 +72,7 @@ export default function InspectionNotCovered() {
             {/* BODY */}
             <div className="space-y-6">
               <p className="text-base md:text-lg text-third/85 leading-relaxed max-w-xl">
-                AVX inspection maintains strict neutrality. To ensure full
+                Reecomm inspection maintains strict neutrality. To ensure full
                 clarity for buyers and sellers, the following areas remain
                 outside the scope of our evaluation.
               </p>

@@ -10,7 +10,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 z-0 pt-16 md:pt-20">
         <img
           src="/car-hero-21.jpg"
-          alt="AVX Inspection"
+          alt="Reecomm Inspection"
           className="w-full h-full object-cover object-center opacity-60 md:opacity-70"
         />
 
@@ -27,7 +27,7 @@ export default function HeroSection() {
             
             <div className="flex items-center gap-3 mb-5 md:mb-6 justify-center lg:justify-start">
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                AVX Inspection Framework
+                Reecomm Inspection Framework
               </p>
             </div>
 
@@ -41,7 +41,7 @@ export default function HeroSection() {
 
             <div className="max-w-xl mx-auto lg:mx-0 space-y-4 md:space-y-6 mt-6">
               <p className="text-sm sm:text-base md:text-[18px] text-third leading-relaxed">
-                AVX offers a{" "}
+                Reecomm offers a{" "}
                 <span className="text-primary font-medium">
                   standardized multi-point vehicle inspection
                 </span>{" "}

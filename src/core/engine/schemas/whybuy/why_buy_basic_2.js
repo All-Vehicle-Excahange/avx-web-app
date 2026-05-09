@@ -29,13 +29,13 @@ export const WHY_BUY_BASIC_2 = [
         {
           title: "Connect With Our Team",
           description:
-            "Use AVX chat to discuss vehicle condition, pricing, and availability.",
+            "Use Reecomm chat to discuss vehicle condition, pricing, and availability.",
           icon: `<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="currentColor"><path d="M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/></svg>`,
         },
         {
-          title: "AVX Inspection Option",
+          title: "Reecomm Inspection Option",
           description:
-            "Buyers can request AVX inspection to receive an independent condition report.",
+            "Buyers can request Reecomm inspection to receive an independent condition report.",
           icon: `<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="currentColor"><path d="M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/></svg>`,
         },
         {
@@ -45,10 +45,10 @@ export const WHY_BUY_BASIC_2 = [
           icon: `<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="currentColor"><path d="M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/></svg>`,
         },
       ],
-      /* AVX INSPECTION */
-      inspectionTitle: "AVX Inspection Assurance",
+      /* Reecomm INSPECTION */
+      inspectionTitle: "Reecomm Inspection Assurance",
       inspectionText:
-        "AVX inspection services provide additional transparency by documenting key aspects of the vehicle's condition before purchase.",
+        "Reecomm inspection services provide additional transparency by documenting key aspects of the vehicle's condition before purchase.",
       inspectionPoints: [
         "Exterior condition check",
         "Interior condition check",
@@ -70,7 +70,7 @@ export const WHY_BUY_BASIC_2 = [
         {
           name: "Amit Shah",
           review:
-            "Transparent communication and good vehicle options. I appreciated the AVX inspection support.",
+            "Transparent communication and good vehicle options. I appreciated the Reecomm inspection support.",
         },
         {
           name: "Priya Mehta",
@@ -80,7 +80,7 @@ export const WHY_BUY_BASIC_2 = [
         {
           name: "Suresh Joshi",
           review:
-            "Honest and transparent throughout the entire process. The AVX inspection gave me confidence in my purchase.",
+            "Honest and transparent throughout the entire process. The Reecomm inspection gave me confidence in my purchase.",
         },
       ],
       featuredReviews: [],

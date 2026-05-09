@@ -89,7 +89,7 @@ export default function ConsultantAccountability() {
                       <h4 className="text-lg font-bold text-primary mb-1 uppercase tracking-tight">Verified Consultant</h4>
                       <div className="flex items-center gap-2">
                         <ShieldCheck size={14} className="text-third" />
-                        <span className="text-[10px] uppercase tracking-widest text-third/60 font-bold">ID: AVX-9920-X</span>
+                        <span className="text-[10px] uppercase tracking-widest text-third/60 font-bold">ID: REE-9920-X</span>
                       </div>
                     </div>
                   </div>

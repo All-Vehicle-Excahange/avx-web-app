@@ -39,20 +39,20 @@ export default function MarketplaceModel() {
             </span>
 
             <h2 className="text-[34px] sm:text-[42px] md:text-[50px] font-bold leading-[1.08] text-primary mt-4">
-              AVX{" "}
+              Reecomm{" "}
               <span className="bg-linear-to-r text-fourth/80 bg-clip-text">
                 Marketplace Model
               </span>
             </h2>
 
             <p className="mt-5 text-third text-[15px] leading-relaxed">
-              AVX is a discovery and interaction platform. Vehicle pricing,
+              Reecomm is a discovery and interaction platform. Vehicle pricing,
               negotiation, and final transactions occur directly between buyers
               and consultants.
             </p>
 
             <p className="mt-4 text-third text-[15px] leading-relaxed">
-              AVX does not process payments between parties. Our role is to
+              Reecomm does not process payments between parties. Our role is to
               provide visibility, structured data, and platform-level
               interaction support.
             </p>
@@ -61,7 +61,7 @@ export default function MarketplaceModel() {
 
             <div className="border-l-2 border-fourth pl-5">
               <p className="text-primary text-[15px] font-medium leading-relaxed">
-                This structure avoids legal misrepresentation — AVX acts as a
+                This structure avoids legal misrepresentation — Reecomm acts as a
                 platform, not a transacting party.
               </p>
             </div>

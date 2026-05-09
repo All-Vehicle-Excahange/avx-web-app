@@ -33,7 +33,7 @@ export default function CategoryPage() {
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm tracking-[0.4em] uppercase text-third font-semibold mb-5">
 
-            <span className="text-primary/60">AVX Inspection</span>
+            <span className="text-primary/60">Reecomm Inspection</span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
@@ -59,7 +59,7 @@ export default function CategoryPage() {
               font-[Montserrat]
             "
               >
-               AVX
+               Reecomm
                 <span className="text-fourth/80"> Inspection
                 </span>
               </h2>

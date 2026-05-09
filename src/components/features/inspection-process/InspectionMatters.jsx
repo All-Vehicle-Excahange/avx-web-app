@@ -47,7 +47,7 @@ export default function InspectionMatters() {
                 </p>
 
                 <p className="text-[13px] md:text-[15px] font-light leading-relaxed border-l border-fourth/40 pl-4 md:pl-6">
-                  AVX inspection focuses on identifying hidden risks through a
+                  Reecomm inspection focuses on identifying hidden risks through a
                   data-driven protocol. Transparency is the core of our
                   ecosystem.
                 </p>
@@ -121,7 +121,7 @@ export default function InspectionMatters() {
 
               {/* corner */}
               <div className="absolute bottom-3 right-3 md:bottom-4 md:right-4 text-third/10 font-mono text-[40px] md:text-[60px] select-none uppercase">
-                AVX
+                Reecomm
               </div>
             </div>
           </div>

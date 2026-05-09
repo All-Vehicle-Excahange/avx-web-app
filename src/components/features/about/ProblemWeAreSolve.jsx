@@ -80,7 +80,7 @@ const ProblemWeAreSolve = () => {
           {/* Closing Line */}
           <div className="mt-10 text-center">
             <p className="text-lg md:text-xl font-medium text-primary">
-              AVX was built to solve this
+              Reecomm was built to solve this
               <span className="text-fourth opacity-90">
               {" "}
                 structurally

@@ -12,13 +12,13 @@ const steps = [
   {
     title: "Connect With Our Team",
     description:
-      "Use AVX chat to discuss vehicle condition, pricing, and availability.",
+      "Use Reecomm chat to discuss vehicle condition, pricing, and availability.",
     icon: MessageCircle,
   },
   {
-    title: "AVX Inspection Option",
+    title: "Reecomm Inspection Option",
     description:
-      "Buyers can request AVX inspection to receive an independent condition report.",
+      "Buyers can request Reecomm inspection to receive an independent condition report.",
     icon: ShieldCheck,
   },
   {

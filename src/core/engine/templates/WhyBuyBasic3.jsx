@@ -778,13 +778,13 @@ export default function WhyBuyBasic3({
           </div>
         </div>
       </section>
-      {/* ===== Avx Inspection Section ===== */}
+      {/* ===== Reecomm Inspection Section ===== */}
       <section className="py-12 overflow-hidden">
         <div className="max-w-7xl mx-auto flex flex-col gap-16">
           <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-20 items-start">
             <div className="flex flex-col gap-8">
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat]">
-                Avx Inspection
+                Reecomm Inspection
               </p>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 {data.inspectionTitle}

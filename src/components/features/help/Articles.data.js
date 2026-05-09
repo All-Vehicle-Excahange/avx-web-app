@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // articles.data.js
-// Shared data for AVX Inspection articles.
+// Shared data for Reecomm Inspection articles.
 // Used by:
 //   - Category page  → /help/avx-inspection
 //   - Article page   → /help/avx-inspection/[slug]
@@ -13,14 +13,14 @@ export const articles = [
     tag: "Overview",
     readTime: "2 min",
     lastUpdated: "Jan 15, 2025",
-    question: "What is AVX Inspection?",
+    question: "What is Reecomm Inspection?",
     excerpt:
       "A comprehensive 200-point vehicle audit conducted by certified inspectors to verify condition, history, and performance metrics.",
-    content: `AVX Inspection is our proprietary 200-point vehicle audit system, designed to provide buyers and sellers with complete transparency on a vehicle's true condition.
+    content: `Reecomm Inspection is our proprietary 200-point vehicle audit system, designed to provide buyers and sellers with complete transparency on a vehicle's true condition.
 
-Every inspection is conducted by a certified AVX inspector — trained professionals who follow a standardized evaluation protocol covering structural integrity, mechanical performance, cosmetic condition, and documentation verification.
+Every inspection is conducted by a certified Reecomm inspector — trained professionals who follow a standardized evaluation protocol covering structural integrity, mechanical performance, cosmetic condition, and documentation verification.
 
-The process was built to eliminate guesswork from high-value vehicle transactions. Whether you're purchasing remotely or evaluating a trade-in, the AVX report gives you a verified, timestamped record of what the vehicle actually is — not what the listing claims it to be.
+The process was built to eliminate guesswork from high-value vehicle transactions. Whether you're purchasing remotely or evaluating a trade-in, the Reecomm report gives you a verified, timestamped record of what the vehicle actually is — not what the listing claims it to be.
 
 **What gets inspected?**
 
@@ -28,7 +28,7 @@ The 200-point audit spans four core categories: structural (frame, body panels, 
 
 **Who conducts it?**
 
-Only AVX-certified inspectors may submit official reports. Certification requires completion of our training protocol and passing a field assessment under a senior inspector.
+Only Reecomm-certified inspectors may submit official reports. Certification requires completion of our training protocol and passing a field assessment under a senior inspector.
 
 The result is a single, tamper-proof digital report — shareable, printable, and permanently archived to your transaction record.`,
   },
@@ -41,7 +41,7 @@ The result is a single, tamper-proof digital report — shareable, printable, an
     question: "What does the inspection report include?",
     excerpt:
       "Full structural, mechanical, cosmetic, and documentation review — delivered as a standardized, shareable digital report.",
-    content: `The AVX Inspection Report is a comprehensive digital document delivered within 24 hours of the completed on-site audit. It is structured into four primary sections, each covering a distinct area of the vehicle.
+    content: `The Reecomm Inspection Report is a comprehensive digital document delivered within 24 hours of the completed on-site audit. It is structured into four primary sections, each covering a distinct area of the vehicle.
 
 **Structural Section**
 
@@ -74,7 +74,7 @@ The final report includes a numeric overall score, a pass/flag/fail designation 
 
 **Seller-Listed Vehicles**
 
-When a seller lists a vehicle on AVX with inspection enabled, the inspection fee is deducted from the final transaction settlement. The seller bears the cost unless otherwise negotiated through the platform's cost-share feature.
+When a seller lists a vehicle on Reecomm with inspection enabled, the inspection fee is deducted from the final transaction settlement. The seller bears the cost unless otherwise negotiated through the platform's cost-share feature.
 
 **Buyer-Requested Inspections**
 
@@ -157,7 +157,7 @@ Requests made beyond the 7-day window require supervisor approval and are subjec
     question: "Can inspection be requested by the buyer?",
     excerpt:
       "Buyers may initiate inspection requests directly through the platform before committing to a purchase.",
-    content: `Yes. Buyers have full authority to initiate an AVX inspection request on any active listing, regardless of whether the seller has enabled inspection or not.
+    content: `Yes. Buyers have full authority to initiate an Reecomm inspection request on any active listing, regardless of whether the seller has enabled inspection or not.
 
 **How Buyer-Initiated Inspection Works**
 
@@ -186,11 +186,11 @@ This process gives buyers confidence and sellers accountability — a foundation
     question: "Will inspection guarantee vehicle condition?",
     excerpt:
       "Inspections provide verified condition data at the time of review — not a warranty or future-condition guarantee.",
-    content: `AVX Inspection reports reflect the verified condition of a vehicle at the exact time and date of the audit. They are not warranties, guarantees, or representations of future condition.
+    content: `Reecomm Inspection reports reflect the verified condition of a vehicle at the exact time and date of the audit. They are not warranties, guarantees, or representations of future condition.
 
 **What the Report Certifies**
 
-The report certifies that a trained, certified inspector examined the vehicle according to the 200-point AVX protocol on a specific date. It documents findings accurately and objectively based on what was observable at that time.
+The report certifies that a trained, certified inspector examined the vehicle according to the 200-point Reecomm protocol on a specific date. It documents findings accurately and objectively based on what was observable at that time.
 
 **What It Does Not Cover**
 
@@ -198,7 +198,7 @@ The inspection does not account for: mechanical failures that occur after the in
 
 **Liability Scope**
 
-AVX and its certified inspectors are liable for the accuracy of documented findings at the time of inspection. Disputes regarding inspector error must be filed within 7 days of the report. Claims of concealment are handled through the platform dispute process.
+Reecomm and its certified inspectors are liable for the accuracy of documented findings at the time of inspection. Disputes regarding inspector error must be filed within 7 days of the report. Claims of concealment are handled through the platform dispute process.
 
 **Best Practice**
 
@@ -215,7 +215,7 @@ We are committed to transparency about what our inspections do and don't cover. 
     question: "Can inspection be edited later?",
     excerpt:
       "Reports are locked post-submission to maintain integrity. Amendments require a formal re-inspection request.",
-    content: `No. Once an inspection report is submitted by the inspector, it is permanently locked. This is a core design principle of the AVX system — report integrity depends on immutability.
+    content: `No. Once an inspection report is submitted by the inspector, it is permanently locked. This is a core design principle of the Reecomm system — report integrity depends on immutability.
 
 **Why Reports Are Locked**
 
@@ -223,7 +223,7 @@ Any post-submission modification would undermine the evidentiary value of the re
 
 **Inspector Corrections**
 
-In rare cases where an inspector submits a report with a verifiable clerical error (wrong VIN recorded, incorrect odometer digit), a formal correction request can be submitted within 48 hours of submission. These corrections are reviewed by AVX staff, documented as amendments, and appended to — not replacing — the original report.
+In rare cases where an inspector submits a report with a verifiable clerical error (wrong VIN recorded, incorrect odometer digit), a formal correction request can be submitted within 48 hours of submission. These corrections are reviewed by Reecomm staff, documented as amendments, and appended to — not replacing — the original report.
 
 **How to Amend Findings**
 
@@ -233,7 +233,7 @@ If vehicle condition has genuinely changed and re-documentation is needed, the c
 
 Neither buyers nor sellers can request edits to inspection reports. Only the submitting inspector, within the 48-hour correction window, may submit a clerical amendment request. All changes are transparently logged.
 
-This policy protects all parties and maintains the trustworthiness of the AVX report standard.`,
+This policy protects all parties and maintains the trustworthiness of the Reecomm report standard.`,
   },
   {
     id: 9,
@@ -244,11 +244,11 @@ This policy protects all parties and maintains the trustworthiness of the AVX re
     question: "Is video inspection available?",
     excerpt:
       "Remote video inspections are available for select vehicle categories and geographic zones through verified inspectors.",
-    content: `Yes. AVX Remote Video Inspection is available as an alternative to on-site audits for qualifying vehicles and locations.
+    content: `Yes. Reecomm Remote Video Inspection is available as an alternative to on-site audits for qualifying vehicles and locations.
 
 **How It Works**
 
-A certified AVX inspector conducts a live video session with the seller or a designated proxy present with the vehicle. The inspector guides them through a structured visual checklist, requesting specific angles, movements, and close-ups based on the vehicle's category profile.
+A certified Reecomm inspector conducts a live video session with the seller or a designated proxy present with the vehicle. The inspector guides them through a structured visual checklist, requesting specific angles, movements, and close-ups based on the vehicle's category profile.
 
 **What It Covers**
 

@@ -9,7 +9,7 @@ const features = [
     tag: "Buyers",
     title: "Reach Verified Buyers",
     description:
-      "Every buyer on AVX is verified before they can contact a seller. Your listing reaches only serious, qualified prospects — no spam, no time wasters, just real deals.",
+      "Every buyer on Reecomm is verified before they can contact a seller. Your listing reaches only serious, qualified prospects — no spam, no time wasters, just real deals.",
     image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     icon: (
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,7 +37,7 @@ const features = [
     tag: "Inspection",
     title: "Optional Inspection",
     description:
-      "Get your vehicle inspected by an AVX-certified partner at your convenience. Inspected listings build instant buyer trust and consistently close faster than unverified ones.",
+      "Get your vehicle inspected by a Reecomm-certified partner at your convenience. Inspected listings build instant buyer trust and consistently close faster than unverified ones.",
     image: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     icon: (
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,7 +70,7 @@ function WhySellOnAvx() {
         <div className="flex flex-col gap-5">
           <div className="flex items-center gap-3">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-              Why AVX
+              Why Reecomm
             </p>
           </div>
           <div className="lg:flex-row lg:items-end lg:justify-between gap-4">
@@ -79,7 +79,7 @@ function WhySellOnAvx() {
                 leading-[1.05]
                 text-primary
                 font-[Montserrat]">
-              Why Sell on AVX?
+              Why Sell on Reecomm?
               <br />
               <span className="text-fourth/80">Built for Serious Sellers</span>
             </h2>

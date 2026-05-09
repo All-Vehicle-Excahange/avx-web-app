@@ -24,7 +24,7 @@ export default function AvxHero() {
 
           <div className="max-w-xl">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-6">
-              AVX Marketplace
+              Reecomm Marketplace
             </p>
 
             
@@ -44,9 +44,9 @@ export default function AvxHero() {
             </h2>
 
             <p className="mt-6 text-[16px] leading-relaxed text-third max-w-lg">
-              AVX is built for clarity, accountability, and performance
+              Reecomm is built for clarity, accountability, and performance
               transparency in the pre-owned vehicle ecosystem. Unlike open
-              classifieds, AVX operates through verified consultants, structured
+              classifieds, Reecomm operates through verified consultants, structured
               listings, and optional inspection assurance.
             </p>
 

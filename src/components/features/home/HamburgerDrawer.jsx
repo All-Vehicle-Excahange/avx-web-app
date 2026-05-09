@@ -82,7 +82,7 @@ export default function HamburgerDrawer({ open, onClose, role }) {
         <div className="hidden md:flex flex-col justify-center items-center text-center text-third">
           <p className="text-xl mb-2">Trusted by 10,000+ Dealers</p>
           <p className="text-sm max-w-md">
-            AVX is India’s fastest growing verified automotive marketplace.
+            Reecomm is India’s fastest growing verified automotive marketplace.
           </p>
         </div>
       </div>

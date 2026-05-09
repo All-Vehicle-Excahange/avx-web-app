@@ -40,7 +40,7 @@ export default function InspectionReportFormat() {
             </h2>
 
   <p className="text-lg text-third/80 leading-relaxed max-w-3xl">
-    Every AVX inspection generates a structured digital report built
+    Every Reecomm inspection generates a structured digital report built
     for clarity, traceability, and professional review.
   </p>
 </div>
@@ -57,7 +57,7 @@ export default function InspectionReportFormat() {
               <div className="flex items-center justify-between px-6 py-4 border-b border-primary/20 ">
                 <div>
                   <p className="text-[10px] tracking-widest text-third/60 uppercase">
-                    AVX Inspection Report
+                    Reecomm Inspection Report
                   </p>
                   <p className="text-sm font-semibold text-primary">
                     Vehicle Condition Summary
@@ -79,7 +79,7 @@ export default function InspectionReportFormat() {
 
 "
 
-                  alt="AVX inspection digital report preview"
+                  alt="Reecomm inspection digital report preview"
                 className="w-full h-60 md:h-112.5 object-cover opacity-90"
 
                 />
@@ -92,7 +92,7 @@ export default function InspectionReportFormat() {
               <div className="grid grid-cols-3 gap-4 px-6 py-5 border-t border-primary/20 text-xs text-third/70">
                 <div>
                   <p className="uppercase tracking-wider">Report ID</p>
-                  <p className="text-primary font-medium">AVX-IR-20481</p>
+                  <p className="text-primary font-medium">RC-IR-20481</p>
                 </div>
                 <div>
                   <p className="uppercase tracking-wider">Inspector</p>

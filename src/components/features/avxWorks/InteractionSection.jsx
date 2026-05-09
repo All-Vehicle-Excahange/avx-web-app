@@ -6,7 +6,7 @@ export default function InteractionSection() {
             <div className="mx-auto w-full">
 
                 <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-10">
-                    AVX Inspection Layer
+                    Reecomm Inspection Layer
                 </p>
 
                 {/* HEADER */}
@@ -19,7 +19,7 @@ export default function InteractionSection() {
                     </h2>
 
                     <p className="mt-6 text-lg text-third leading-relaxed">
-                        Buyers and consultants communicate directly inside AVX.
+                        Buyers and consultants communicate directly inside Reecomm.
                         All interactions are recorded, creating a transparent activity trail.
                     </p>
                 </div>
@@ -76,7 +76,7 @@ export default function InteractionSection() {
 
                 {/* FOOTNOTE */}
                 <p className="mt-16 max-w-3xl text-sm text-third leading-relaxed">
-                    AVX facilitates structured communication — but negotiations
+                    Reecomm facilitates structured communication — but negotiations
                     and final decisions happen directly between buyer and consultant.
                 </p>
 

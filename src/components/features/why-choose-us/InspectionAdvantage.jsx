@@ -22,7 +22,7 @@ const steps = [
     color: "rgba(255,254,247,0.15)",
     short: "200-point inspection report with every listing.",
     detail:
-      "Every AVX listing comes with a structured 200-point inspection report as standard — covering engine health, bodywork, electricals, and documentation. No extra steps needed.",
+      "Every Reecomm listing comes with a structured 200-point inspection report as standard — covering engine health, bodywork, electricals, and documentation. No extra steps needed.",
     proof: [
       { icon: CheckCircle2, label: "200 checkpoints" },
       { icon: Star, label: "Condition rated" },

@@ -125,7 +125,7 @@ export default function InspectionInitiated() {
           <div className="inline-flex items-start gap-3 px-6 py-4 rounded-2xl bg-primary/3 border border-primary/10">
             <Zap className="text-primary w-5 h-5 mt-1 shrink-0" />
             <p className="text-sm text-primary/80 italic leading-relaxed">
-              AVX inspected vehicles consistently convert faster and build
+              Reecomm inspected vehicles consistently convert faster and build
               stronger buyer confidence across the marketplace.
             </p>
           </div>

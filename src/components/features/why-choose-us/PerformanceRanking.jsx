@@ -94,7 +94,7 @@ export default function RankingDiagram() {
               </div>
 
               <h3 className="text-sm font-bold uppercase tracking-[0.3em] mt-6">
-                AVX Engine
+                Reecomm Engine
               </h3>
 
               <p className="text-[10px] text-third/50 uppercase mt-2">

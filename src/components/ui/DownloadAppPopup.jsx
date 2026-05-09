@@ -59,7 +59,7 @@ export default function DownloadAppPopup({ isOpen, onClose }) {
         <div className="hidden lg:block w-5/12 relative">
           <Image
             src="/mobile_CTA_sm.png"
-            alt="AVX App"
+            alt="Reecomm App"
             fill
             className="object-cover"
           />
@@ -72,10 +72,10 @@ export default function DownloadAppPopup({ isOpen, onClose }) {
           </h3>
 
           <p className="text-third text-sm leading-7 mb-12">
-            The AVX app is the fastest way to buy, sell, and manage your
+            The Reecomm app is the fastest way to buy, sell, and manage your
             vehicles. Enjoy exclusive mobile-only features, instant price drop
             alerts, and seamless communication. Download now and experience the
-            AVX
+            Reecomm way.
           </p>
 
           {/* App Buttons */}

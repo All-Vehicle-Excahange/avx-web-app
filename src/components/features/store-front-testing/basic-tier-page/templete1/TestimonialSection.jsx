@@ -11,7 +11,7 @@ const testimonials = [
   {
     name: "Amit Shah",
     review:
-      "Transparent communication and good vehicle options. I appreciated the AVX inspection support.",
+      "Transparent communication and good vehicle options. I appreciated the Reecomm inspection support.",
   },
 ];
 

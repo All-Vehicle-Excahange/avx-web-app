@@ -197,7 +197,7 @@ function MyVehicle() {
           {activeType === "all" ? (
             <>
               <h3 className="text-xl font-bold mb-2">No vehicles listed yet</h3>
-              <p className="text-third mb-6">Sell your first vehicle on AVX.</p>
+              <p className="text-third mb-6">Sell your first vehicle on Reecomm.</p>
               <Button
                 onClick={() => {
                   if (user?.userRole === "USER") {

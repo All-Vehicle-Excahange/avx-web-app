@@ -70,7 +70,7 @@ const SuspendedAccount = ({ data }) => {
               Suspension Details
             </h3>
             <p className="text-primary/70 text-sm leading-relaxed max-w-2xl">
-              We have detected activity that violates the AVX platform
+              We have detected activity that violates the Reecomm platform
               guidelines. Below is the official reason provided by the
               moderation team.
             </p>
@@ -138,7 +138,7 @@ const SuspendedAccount = ({ data }) => {
         <h2 className="text-xl font-bold text-primary text-left">Need Help?</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <button
-            onClick={() => (window.location.href = "mailto:compliance@avx.com")}
+            onClick={() => (window.location.href = "mailto:compliance@reecomm.com")}
             className="cursor-pointer flex items-center justify-between p-5 rounded-xl border border-third/10 hover:border-primary/40 hover:bg-primary/5 transition-all text-left group"
           >
             <div className="flex items-center gap-4">

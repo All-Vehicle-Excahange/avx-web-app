@@ -30,7 +30,7 @@ const pillars = [
   {
     icon: <MessageSquare />,
     title: "Recorded Interactions",
-    desc: "Every buyer interaction is logged through AVX ensuring accountability across the platform.",
+    desc: "Every buyer interaction is logged through Reecomm ensuring accountability across the platform.",
     color: "#a78bfa",
   },
 ];
@@ -53,7 +53,7 @@ export default function AccountabilityTrust() {
           </h2>
 
           <p className="text-gray-400 text-[14px] mt-4 leading-relaxed">
-            Identity, reviews, performance, and communication signals are verified and visible across AVX.
+            Identity, reviews, performance, and communication signals are verified and visible across Reecomm.
           </p>
         </div>
 

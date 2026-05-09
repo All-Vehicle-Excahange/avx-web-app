@@ -301,7 +301,7 @@ function LoginPopup({
 
           {/* TERMS */}
           <div className="text-[10px] text-primary/50 mt-6 text-center">
-            By logging in, you agree to AVXs Privacy Policy & Terms
+            By logging in, you agree to Reecomms Privacy Policy & Terms
           </div>
         </form>
       </div>

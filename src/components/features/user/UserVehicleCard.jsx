@@ -107,7 +107,7 @@ export default function UserVehicleCard({
         {/* AVX INSPECTED BADGE */}
         {/* {avxInspected && (
         <div className="absolute top-2 right-2 z-30 px-3 py-1 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center gap-1">
-          AVX Inspected <CheckCircle size={14} />
+          Reecomm Inspected <CheckCircle size={14} />
         </div>
       )} */}
 

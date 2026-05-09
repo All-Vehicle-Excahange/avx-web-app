@@ -47,7 +47,7 @@ export default function WhoItsFor() {
           </h2>
 
           <p className="text-third mt-5 text-[15px] md:text-[16px] max-w-xl mx-auto leading-relaxed">
-            If you sell vehicles seriously, AVX is structured for scale.
+            If you sell vehicles seriously, Reecomm is structured for scale.
           </p>
         </div>
 

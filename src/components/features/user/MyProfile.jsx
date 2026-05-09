@@ -364,7 +364,7 @@ function MyProfile() {
                       Account Restricted
                     </h2>
                     <p className="text-sm text-third mt-1">
-                      Your access to the AVX platform has been temporarily or
+                      Your access to the Reecomm platform has been temporarily or
                       permanently limited.
                     </p>
                   </div>
@@ -438,10 +438,10 @@ function MyProfile() {
                   If you believe this enforcement is an error or wish to appeal
                   the decision, please contact our support team at{" "}
                   <a
-                    href="mailto:support@avx.com"
+                    href="mailto:support@reecomm.com"
                     className="text-primary font-bold hover:underline ml-1"
                   >
-                    support@avx.com
+                    support@reecomm.com
                   </a>
                 </p>
               </div>
@@ -485,7 +485,7 @@ function MyProfile() {
                     </h3>
                     <p className="text-third text-xs leading-relaxed">
                       {sellerData.verificationStatus === "REQUEST_CHANGES"
-                        ? "The AVX verification team has requested some changes to your application."
+                        ? "The Reecomm verification team has requested some changes to your application."
                         : "Your application was not approved for the following reason:"}
                     </p>
                   </div>
@@ -570,7 +570,7 @@ function MyProfile() {
                     },
                     {
                       id: "rev",
-                      label: "AVX Admin Review",
+                      label: "Reecomm Admin Review",
                       status:
                         sellerData.verificationStatus === "REQUEST_CHANGES"
                           ? "Request Changes"

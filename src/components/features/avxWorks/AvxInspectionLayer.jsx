@@ -58,7 +58,7 @@ export default function AvxInspectionLayer() {
                 {/* HEADER */}
                 <div className="max-w-4xl mb-14">
                     <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                        AVX Inspection Layer
+                        Reecomm Inspection Layer
                     </p>
 
                     <h2 className="mt-6 text-5xl xl:text-6xl font-medium leading-tight">
@@ -67,7 +67,7 @@ export default function AvxInspectionLayer() {
                     </h2>
 
                     <p className="mt-6 text-xl leading-relaxed text-third">
-                        AVX applies a structured 200-point inspection framework to surface
+                        Reecomm applies a structured 200-point inspection framework to surface
                         vehicle condition clearly — beyond seller claims.
                     </p>
                 </div>

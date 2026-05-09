@@ -63,7 +63,7 @@ const faqData = {
   buying: [
     {
       q: "How do I inquire about a vehicle?",
-      a: "Open the vehicle listing and click Inquire. Your inquiry is sent directly to the verified consultant managing that listing. AVX records the interaction for transparency but does not participate in negotiation or pricing.",
+      a: "Open the vehicle listing and click Inquire. Your inquiry is sent directly to the verified consultant managing that listing. Reecomm records the interaction for transparency but does not participate in negotiation or pricing.",
     },
     {
       q: "Can I chat with a consultant on web?",
@@ -87,7 +87,7 @@ const faqData = {
     },
     {
       q: "Are vehicle prices negotiable?",
-      a: "Pricing and negotiation occur directly between buyer and consultant. AVX does not process transactions.",
+      a: "Pricing and negotiation occur directly between buyer and consultant. Reecomm does not process transactions.",
     },
     {
       q: "Can I see consultant reviews?",
@@ -258,7 +258,7 @@ const faqData = {
       a: "Platform reviews documentation and interaction history.",
     },
     {
-      q: "Can AVX suspend a consultant?",
+      q: "Can Reecomm suspend a consultant?",
       a: "Yes. Accounts violating policy may be restricted or suspended.",
     },
     {

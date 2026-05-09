@@ -406,7 +406,7 @@ export default function AnalyticsComponent() {
           <b>Inspection Impact</b>
 
           <p className="text-xs mt-1 text-green-200">
-            Vehicles with AVX inspection:
+            Vehicles with Reecomm inspection:
           </p>
 
           <ul className="text-xs mt-2 space-y-1 list-disc list-inside text-green-200">

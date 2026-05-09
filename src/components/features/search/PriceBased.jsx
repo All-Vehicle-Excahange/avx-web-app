@@ -30,8 +30,7 @@ const PriceBased = ({ data, title, loading = false }) => {
             {title || "SUVs Between ₹8L – ₹12L"}
           </h2>
           <p className="text-third">
-            Lorem ipsum dolor sit amet consectetur dolor sit amet
-            consectetur..
+            Discover vehicles tailored to your budget and body type preferences.
           </p>
         </div>
 

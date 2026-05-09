@@ -28,7 +28,7 @@ export default function TransactionStructureSection() {
                     <div className="space-y-6 max-w-xl">
 
                         <p className="text-[15px] text-third leading-relaxed">
-                            AVX operates as a structured marketplace connecting buyers and consultants
+                            Reecomm operates as a structured marketplace connecting buyers and consultants
                             through verified listings, performance metrics, and transparent activity visibility.
                         </p>
 
@@ -52,7 +52,7 @@ export default function TransactionStructureSection() {
             ">
 
                             <p className="text-primary text-lg leading-relaxed">
-                                AVX does
+                                Reecomm does
                                 <span className="text-fourth font-semibold"> not process payments </span>
                                 between parties.
                             </p>
@@ -82,7 +82,7 @@ export default function TransactionStructureSection() {
                             Marketplace Connector
                         </h3>
                         <p className="text-sm text-third">
-                            AVX connects verified buyers and professional consultants through structured listings.
+                            Reecomm connects verified buyers and professional consultants through structured listings.
                         </p>
                     </div>
 
@@ -112,7 +112,7 @@ export default function TransactionStructureSection() {
                             No Payment Handling
                         </h3>
                         <p className="text-sm text-third">
-                            AVX does not process transactions between buyers and consultants.
+                            Reecomm does not process transactions between buyers and consultants.
                         </p>
                     </div>
 

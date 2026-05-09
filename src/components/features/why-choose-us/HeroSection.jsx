@@ -38,7 +38,7 @@ export default function ProfessionalHero() {
                     </div>
 
                     <p className="text-sm md:text-base text-third max-w-md leading-relaxed mb-8 opacity-80">
-                        AVX is built for <span className="text-primary font-medium">clarity, accountability, and performance transparency</span> in the pre-owned vehicle ecosystem.
+                        Reecomm is built for <span className="text-primary font-medium">clarity, accountability, and performance transparency</span> in the pre-owned vehicle ecosystem.
                         Unlike open classifieds, we operate through verified consultants and structured listings.
                     </p>
 

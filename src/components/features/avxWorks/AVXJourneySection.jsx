@@ -42,7 +42,7 @@ export default function AVXJourneySection() {
                     </p>
 
                     <h2 className="text-3xl md:text-[42px] font-bold text-primary mb-4">
-                        The AVX Buying Flow
+                        The Reecomm Buying Flow
                     </h2>
 
                     <p className="text-fourth max-w-xl mx-auto text-[14px]">

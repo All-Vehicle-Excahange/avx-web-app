@@ -26,7 +26,7 @@ function UserDetails() {
           { id: "myvehicle", label: "My Vehicles" },
           { id: "inquaries", label: "Recive Inquiries" },
           { id: "myinquary", label: "Send Inquiry" },
-          { id: "inspections", label: "AVX Inspections" },
+          { id: "inspections", label: "Reecomm Inspections" },
           { id: "wishlist", label: "My Activity & Preference" },
           { id: "myprofile", label: "My Profile" },
         ]

@@ -104,10 +104,10 @@ function SendInquaryPopup({ onClose, consultName = "Consultant", vehicleId, onSu
                             {/* Details Box */}
                             <div className="text-center space-y-2 mt-4 max-w-sm w-full">
                                 <p className="text-primary font-medium text-base">
-                                    They will contact you shortly through AVX chat.
+                                    They will contact you shortly through Reecomm chat.
                                 </p>
                                 <p className="text-third text-sm leading-relaxed">
-                                    You can also continue the conversation in the AVX app anytime.
+                                    You can also continue the conversation in the Reecomm app anytime.
                                 </p>
                             </div>
                         </div>

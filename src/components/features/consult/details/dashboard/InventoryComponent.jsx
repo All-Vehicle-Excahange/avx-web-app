@@ -364,12 +364,12 @@ export default function InventoryComponent() {
 
             {/* CONTENT */}
             <p className="text-sm md:text-base leading-relaxed text-white/90">
-              <span className="text-primary font-semibold">AVX</span> inspected
+              <span className="text-primary font-semibold">Reecomm</span> inspected
               vehicles are converting significantly better than regular
               listings.
             </p>
             <p className="text-sm md:text-base leading-relaxed text-white/90">
-              <span className="text-primary font-semibold">AVX</span> inspected
+              <span className="text-primary font-semibold">Reecomm</span> inspected
               vehicles are converting significantly better than regular
               listings.
             </p>
@@ -455,7 +455,7 @@ export default function InventoryComponent() {
                       You havent listed any vehicles yet.
                     </h3>
                     <p className="text-third mb-6">
-                      Add vehicles in the AVX mobile app to start receiving
+                      Add vehicles in the Reecomm mobile app to start receiving
                       inquiries.
                     </p>
                     <Button variant="ghost" size="sm" showIcon={false}>

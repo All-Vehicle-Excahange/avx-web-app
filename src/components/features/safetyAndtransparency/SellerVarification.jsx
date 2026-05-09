@@ -13,7 +13,7 @@ const cards = [
   {
     title: "Structured Verification Framework",
     highlight: "Verification",
-    desc: "AVX maintains a layered verification process designed to ensure consultants meet identity, operational, and documentation standards before becoming visible to buyers.",
+    desc: "Reecomm maintains a layered verification process designed to ensure consultants meet identity, operational, and documentation standards before becoming visible to buyers.",
     span: "lg:row-span-5",
     icon: ShieldCheck,
     big: true,
@@ -95,7 +95,7 @@ export default function SellerVerification() {
           </h2>
 
           <p className="mt-5 text-third text-[15px] leading-relaxed w-full md:w-[50%]">
-            Consultants on AVX undergo structured verification checks to reduce
+            Consultants on Reecomm undergo structured verification checks to reduce
             anonymous listings and improve accountability across the marketplace.
           </p>
         </motion.div>

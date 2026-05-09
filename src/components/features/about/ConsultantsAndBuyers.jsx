@@ -22,7 +22,7 @@ const DATA = {
     label: "For Buyers",
     titleTop: "A marketplace designed",
     titleBottom: "for confident buying decisions",
-    desc: "AVX helps buyers navigate pre-owned vehicles with clarity. Verified consultants, structured listings, and transparent communication replace guesswork with confidence.",
+    desc: "Reecomm helps buyers navigate pre-owned vehicles with clarity. Verified consultants, structured listings, and transparent communication replace guesswork with confidence.",
     cta: { text: "Browse Vehicles →", href: "/vehicles" },
     features: [
       {
@@ -57,7 +57,7 @@ const DATA = {
     label: "For Consultants",
     titleTop: "A platform built",
     titleBottom: "for serious automotive consultants",
-    desc: "AVX empowers consultants with structured visibility, measurable performance, and scalable growth — without compromising credibility.",
+    desc: "Reecomm empowers consultants with structured visibility, measurable performance, and scalable growth — without compromising credibility.",
     cta: { text: "Become a Consultant →", href: "/consultant" },
     features: [
       {

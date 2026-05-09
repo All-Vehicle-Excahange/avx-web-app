@@ -130,7 +130,7 @@ export default function ConsultantProgramPage() {
               </h1>
 
               <p className="text-third text-lg md:text-xl leading-relaxed">
-                AVX helps automotive consultants build visibility, generate
+                Reecomm helps automotive consultants build visibility, generate
                 serious inquiries, and operate with structured performance
                 transparency.
               </p>
@@ -182,7 +182,7 @@ export default function ConsultantProgramPage() {
                   Built for Professional Automotive Consultants
                 </h2>
                 <p className="text-third/70 text-base md:text-lg leading-relaxed max-w-md mt-4">
-                  If you sell vehicles seriously, AVX is structured for scale.
+                  If you sell vehicles seriously, Reecomm is structured for scale.
                   Purpose-built for professionals who want more than just a
                   listing.
                 </p>
@@ -244,7 +244,7 @@ export default function ConsultantProgramPage() {
               Your Digital Storefront — Structured & Visible
             </h2>
             <p className="text-third/60 text-base md:text-lg leading-relaxed">
-              Every consultant on AVX receives a complete business presence.
+              Every consultant on Reecomm receives a complete business presence.
               Your brand lives beyond a listing.
             </p>
           </div>
@@ -317,7 +317,7 @@ export default function ConsultantProgramPage() {
                 Operate with Data, Not Guesswork
               </h2>
               <p className="text-third/60 text-base md:text-lg leading-relaxed">
-                AVX provides visibility tools to measure growth. Every metric is
+                Reecomm provides visibility tools to measure growth. Every metric is
                 designed to give you actionable insights — not vanity numbers.
                 Know what works, double down on it.
               </p>
@@ -424,7 +424,7 @@ export default function ConsultantProgramPage() {
             {[
               {
                 num: "01",
-                title: "Request AVX Inspection",
+                title: "Request Reecomm Inspection",
                 desc: "Initiate professional third-party vehicle assessments directly through the platform. Our certified inspectors ensure every detail is documented for buyer confidence.",
                 icon: <ClipboardCheck size={22} />,
               },
@@ -484,7 +484,7 @@ export default function ConsultantProgramPage() {
               Boost Your Visibility
             </h2>
             <p className="text-third/60 text-base md:text-lg leading-relaxed">
-              AVX provides structured growth tools — measurable and
+              Reecomm provides structured growth tools — measurable and
               performance-based. Every tool is designed to drive real results.
             </p>
           </div>
@@ -618,7 +618,7 @@ export default function ConsultantProgramPage() {
               </h2>
               <p className="text-third/60 text-base md:text-lg leading-relaxed max-w-md">
                 Trust is not optional — it is structured into every layer of the
-                AVX system. From identity verification to performance tracking,
+                Reecomm system. From identity verification to performance tracking,
                 everything is transparent.
               </p>
             </div>
@@ -673,7 +673,7 @@ export default function ConsultantProgramPage() {
       <section className="px-6 md:px-12 py-24 md:py-32">
         <div className="max-w-3xl mx-auto text-center space-y-8">
           <h2 className="text-3xl md:text-4xl lg:text-[44px] font-bold text-primary leading-[1.15]">
-            Ready to build your presence on AVX?
+            Ready to build your presence on Reecomm?
           </h2>
           <p className="text-third/60 text-base md:text-lg max-w-lg mx-auto leading-relaxed">
             Join a growing network of professional automotive consultants. Your

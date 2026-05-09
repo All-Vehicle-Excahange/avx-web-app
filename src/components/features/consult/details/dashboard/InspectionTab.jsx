@@ -378,7 +378,7 @@ function InspectionTab() {
 
           <ul className="text-sm text-third space-y-1 list-disc pl-6">
             <li>Consultant must approve slot</li>
-            <li>AVX inspector will be assigned</li>
+            <li>Reecomm inspector will be assigned</li>
             <li>Payment collected before scheduling</li>
           </ul>
         </div>

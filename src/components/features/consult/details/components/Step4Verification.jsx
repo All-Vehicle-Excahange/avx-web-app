@@ -65,7 +65,7 @@ export default function Step4Verification({ existing, onEdit }) {
     },
     {
       id: "rev",
-      label: "AVX Admin Review",
+      label: "Reecomm Admin Review",
       status: isVerified
         ? "Completed"
         : isRejected
@@ -151,7 +151,7 @@ export default function Step4Verification({ existing, onEdit }) {
                 Updates Needed
               </h3>
               <p className="text-primary/70 text-sm leading-relaxed">
-                The AVX verification team has requested some changes to your
+                The Reecomm verification team has requested some changes to your
                 application. Please review the feedback below:
               </p>
             </div>
@@ -268,7 +268,7 @@ export default function Step4Verification({ existing, onEdit }) {
             What happens next?
           </h2>
           <p className="text-third text-sm">
-            Follow your journey to becoming an AVX Verified Dealer
+            Follow your journey to becoming a Reecomm Verified Dealer
           </p>
         </div>
 
@@ -292,7 +292,7 @@ export default function Step4Verification({ existing, onEdit }) {
             },
             {
               id: "03",
-              title: "Live on AVX",
+              title: "Live on Reecomm",
               desc: "Start listing your inventory and reach thousands of buyers.",
               icon: LayoutDashboard,
               color: "text-green-500",

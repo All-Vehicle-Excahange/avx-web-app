@@ -284,7 +284,7 @@ export default function CreateStoreFront({ storeData, onView }) {
         <h2 className="text-xl font-semibold">Why your Storefront matters</h2>
 
         <p className="text-third text-sm leading-relaxed max-w-4xl">
-          Your Storefront is your public brand page on AVX. This is what buyers
+          Your Storefront is your public brand page on Reecomm. This is what buyers
           see when they click your profile, listings, and ads. A well-designed
           storefront builds instant trust, improves conversions, and positions
           your dealership as a verified premium seller.
