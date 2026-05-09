@@ -75,14 +75,14 @@ function Hero() {
             {
                 title: "Connect With Our Team",
                 description:
-                    "Use AVX chat to discuss vehicle condition, pricing, and availability.",
+                    "Use Reecomm chat to discuss vehicle condition, pricing, and availability.",
                 icon: "MessageCircle",
                 image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8",
             },
             {
-                title: "AVX Inspection Option",
+                title: "Reecomm Inspection Option",
                 description:
-                    "Buyers can request AVX inspection to receive an independent condition report.",
+                    "Buyers can request Reecomm inspection to receive an independent condition report.",
                 icon: "ShieldCheck",
                 image: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c",
             },
@@ -95,10 +95,10 @@ function Hero() {
             },
         ],
 
-        // ===== Avx Inspection Section =====
-        inspectionTitle: "AVX Inspection Assurance",
+        // ===== Reecomm Inspection Section =====
+        inspectionTitle: "Reecomm Inspection Assurance",
         inspectionText:
-            "AVX inspection services provide additional transparency by documenting key aspects of the vehicle's condition before purchase.",
+            "Reecomm inspection services provide additional transparency by documenting key aspects of the vehicle's condition before purchase.",
         inspectionPoints: [
             {
                 label: "Exterior condition check",
@@ -158,7 +158,7 @@ function Hero() {
             {
                 name: "Amit Shah",
                 review:
-                    "Transparent communication and good vehicle options. I appreciated the AVX inspection support.",
+                    "Transparent communication and good vehicle options. I appreciated the Reecomm inspection support.",
             },
         ],
     };
@@ -182,7 +182,7 @@ function Hero() {
     const { galleryTitle, galleryImages } = data;
     const [activeIndex, setActiveIndex] = useState(0)
     const [howBuyingWorksActive, setHowBuyingWorksActive] = useState(0);
-    const [avxInspectionActive, setAvxInspectionActive] = useState(0);
+    const [reecommInspectionActive, setReecommInspectionActive] = useState(0);
     const [commitmentActive, setCommitmentActive] = useState(0);
     const [testimonialsactive, setTestimonialsActive] = useState(0);
     const [progress, setProgress] = useState(0);
@@ -223,7 +223,7 @@ function Hero() {
                 progressRef.current = requestAnimationFrame(tick);
             } else {
                 elapsedRef.current = 0;
-                setAvxInspectionActive((prev) => (prev + 1) % inspectionPoints.length);
+                setReecommInspectionActive((prev) => (prev + 1) % inspectionPoints.length);
             }
         });
     };
@@ -235,13 +235,13 @@ function Hero() {
     useEffect(() => {
         if (!paused) startProgress();
         return () => stopProgress();
-    }, [avxInspectionActive, paused]);
+    }, [reecommInspectionActive, paused]);
 
     const handleSelect = (i) => {
         stopProgress();
         elapsedRef.current = 0;
         setProgress(0);
-        setAvxInspectionActive(i);
+        setReecommInspectionActive(i);
         setPaused(false);
     };
 
@@ -252,7 +252,7 @@ function Hero() {
         return () => clearInterval(interval);
     }, []);
 
-    const current = inspectionPoints[avxInspectionActive];
+    const current = inspectionPoints[reecommInspectionActive];
 
     const transition = (newIndex) => {
         setVisible(false);
@@ -631,7 +631,7 @@ function Hero() {
                 </div>
 
             </section>
-            {/* ===== Avx Inspection Section ===== */}
+            {/* ===== Reecomm Inspection Section ===== */}
             <section className="relative flex flex-col justify-center items-center py-12 overflow-hidden  px-2 lg:px-4">
                 {/* ambient glow */}
                 <div className="container">
@@ -640,7 +640,7 @@ function Hero() {
                         {/* ── Top header ── */}
                         <div className="flex flex-col gap-4">
                             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                                Avx Inspection
+                                Reecomm Inspection
                             </p>
                             <div className="flex flex-col gap-4">
                                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
@@ -667,7 +667,7 @@ function Hero() {
                                         key={i}
                                         src={point.image}
                                         alt={point.label}
-                                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${i === avxInspectionActive ? "opacity-100" : "opacity-0"
+                                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${i === reecommInspectionActive ? "opacity-100" : "opacity-0"
                                             }`}
                                     />
                                 ))}
@@ -714,7 +714,7 @@ function Hero() {
                                             <button
                                                 key={i}
                                                 onClick={() => handleSelect(i)}
-                                                className={`rounded-full transition-all duration-300 ${i === avxInspectionActive
+                                                className={`rounded-full transition-all duration-300 ${i === reecommInspectionActive
                                                     ? "w-6 h-1.5 bg-primary"
                                                     : "w-1.5 h-1.5 bg-white/30 hover:bg-white/60"
                                                     }`}
@@ -730,14 +730,14 @@ function Hero() {
                                     <button
                                         key={i}
                                         onClick={() => handleSelect(i)}
-                                        className={`relative flex items-start gap-4 rounded-xl px-5 py-4 text-left transition-all duration-300 overflow-hidden border cursor-pointer ${i === avxInspectionActive
+                                        className={`relative flex items-start gap-4 rounded-xl px-5 py-4 text-left transition-all duration-300 overflow-hidden border cursor-pointer ${i === reecommInspectionActive
                                             ? "border-third/30 bg-third/5"
                                             : "border-white/6 bg-white/2 hover:border-white/12"
                                             }`}
                                     >
-                                        {/* avxInspectionActive left accent bar */}
+                                        {/* reecommInspectionActive left accent bar */}
                                         <div
-                                            className={`absolute left-0 top-3 bottom-3 w-0.5 rounded-full transition-all duration-300 ${i === avxInspectionActive ? "bg-third" : "bg-transparent"
+                                            className={`absolute left-0 top-3 bottom-3 w-0.5 rounded-full transition-all duration-300 ${i === reecommInspectionActive ? "bg-third" : "bg-transparent"
                                                 }`}
                                         />
 
@@ -746,20 +746,20 @@ function Hero() {
                                             <img
                                                 src={point.image}
                                                 alt={point.label}
-                                                className={`w-full h-full object-cover transition-all duration-500 ${i === avxInspectionActive ? "scale-110" : "scale-100 grayscale opacity-50"
+                                                className={`w-full h-full object-cover transition-all duration-500 ${i === reecommInspectionActive ? "scale-110" : "scale-100 grayscale opacity-50"
                                                     }`}
                                             />
                                         </div>
 
                                         <div className="flex flex-col gap-1 flex-1 min-w-0">
                                             <span
-                                                className={`text-[10px] tracking-[0.3em] uppercase font-[Poppins] font-medium transition-colors duration-300 ${i === avxInspectionActive ? "text-primary/90" : "text-third/40"
+                                                className={`text-[10px] tracking-[0.3em] uppercase font-[Poppins] font-medium transition-colors duration-300 ${i === reecommInspectionActive ? "text-primary/90" : "text-third/40"
                                                     }`}
                                             >
                                                 {point.tag}
                                             </span>
                                             <span
-                                                className={`text-sm font-[Poppins] leading-snug transition-colors duration-300 ${i === avxInspectionActive ? "text-primary" : "text-third/60"
+                                                className={`text-sm font-[Poppins] leading-snug transition-colors duration-300 ${i === reecommInspectionActive ? "text-primary" : "text-third/60"
                                                     }`}
                                             >
                                                 {point.label}

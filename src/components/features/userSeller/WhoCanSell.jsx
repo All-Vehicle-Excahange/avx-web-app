@@ -7,7 +7,7 @@ const sellers = [
   },
   {
     title: "First-Time Sellers",
-    description: "Never sold before? AVX walks you through every step simply.",
+    description: "Never sold before? Reecomm walks you through every step simply.",
   },
   {
     title: "Buyers Selling Their Own Car",
@@ -34,10 +34,10 @@ function WhoCanSell() {
               font-[Montserrat]">
             Who Can Sell
             <br />
-            <span className="text-fourth/80">on AVX?</span>
+            <span className="text-fourth/80">on Reecomm?</span>
           </h2>
           <p className="text-third/60 text-lg font-[Poppins] leading-relaxed max-w-md">
-            AVX is built for real people selling their own vehicles — not dealers or aggregators.
+            Reecomm is built for real people selling their own vehicles — not dealers or aggregators.
           </p>
         </div>
 

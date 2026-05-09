@@ -97,7 +97,7 @@ export default function DataPrivacy() {
             </h2>
 
             <p className="text-[16px] text-third leading-relaxed w-[50%] md-[100%]">
-              AVX maintains secure infrastructure covering authentication,
+              Reecomm maintains secure infrastructure covering authentication,
               encryption, document access control, and role-based admin
               permissions to protect sensitive user data.
             </p>

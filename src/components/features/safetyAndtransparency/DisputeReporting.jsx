@@ -68,7 +68,7 @@ export default function DisputeReporting() {
 
             <p className="text-[16px] text-third leading-relaxed w-[50%] md-[100%]">
               Buyers can raise concerns through a structured dispute process.
-              AVX reviews platform-recorded interactions to ensure fair and
+              Reecomm reviews platform-recorded interactions to ensure fair and
               transparent resolution.
             </p>
           </div>

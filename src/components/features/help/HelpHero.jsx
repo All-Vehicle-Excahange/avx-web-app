@@ -15,7 +15,7 @@ import SupportFlowModal from "./SupportFlowModal";
 
 const QUICK_LINKS = [
   {
-    label: "AVX Inspection Process",
+    label: "Reecomm Inspection Process",
     href: "/help/what-is-avx-inspection",
     tag: "Popular",
   },
@@ -146,7 +146,7 @@ export default function HelpHero() {
                 <div className="flex items-center gap-3 self-start">
                   <div>
                     <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                      AVX Help Center
+                      Reecomm Help Center
                     </span>
                   </div>
 

@@ -1571,7 +1571,7 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
 
               <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-third/40 shrink-0">
                 <span className="text-sm text-primary font-semibold">
-                  AVX Assumed
+                  Reecomm Inspected
                 </span>
                 <button
                   onClick={() => setAvxAssumed(!avxAssumed)}

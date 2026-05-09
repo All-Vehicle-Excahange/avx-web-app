@@ -152,7 +152,7 @@ export default function SafetyCta() {
               leading-relaxed
             "
             >
-              Understand how AVX inspection reports improve clarity before
+              Understand how Reecomm inspection reports improve clarity before
               commitment.
             </p>
 

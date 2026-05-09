@@ -73,7 +73,7 @@ export default function VehicleSpec({ open, setOpen }) {
           className="flex justify-between items-center px-6 py-3 text-primary cursor-pointer"
           onClick={() => setOpen((prev) => !prev)}
         >
-          <h3 className="text-xl font-semibold">AVX Inspection Report</h3>
+          <h3 className="text-xl font-semibold">Reecomm Inspection Report</h3>
           <div className="text-xl">
             <ChevronDown
               size={20}
@@ -92,7 +92,7 @@ export default function VehicleSpec({ open, setOpen }) {
                 {inspectionAvailable ? (
                   <>
                     <p className="text-xs text-third font-normal mt-1">
-                      AVX Inspection Available Last verified on: 12 Jan 2025
+                      Reecomm Inspection Available Last verified on: 12 Jan 2025
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
                       <FeatureGroup
@@ -121,7 +121,7 @@ export default function VehicleSpec({ open, setOpen }) {
                     <div className="md:col-span-3 border-t border border-third/40" />
                     <div>
                       <h3 className="text-xl font-semibold">
-                        AVX Inspection Avialable
+                        Reecomm Inspection Available
                       </h3>
                     </div>
                     <div>
@@ -238,7 +238,7 @@ export default function VehicleSpec({ open, setOpen }) {
                         Want deeper verification before deciding?
                       </p>
                       <p className="text-sm text-third mt-1">
-                        Request a fresh AVX inspection to get a complete picture of
+                        Request a fresh Reecomm inspection to get a complete picture of
                         the vehicle’s condition.
                       </p>
                     </div>
@@ -275,7 +275,7 @@ export default function VehicleSpec({ open, setOpen }) {
                           setTimeout(() => setAnimateModal(true), 10);
                         }}
                       >
-                        Request AVX Inspection
+                        Request Reecomm Inspection
                       </Button>
                     </div>
                   </div>
@@ -332,7 +332,7 @@ export default function VehicleSpec({ open, setOpen }) {
 
               {/* Header */}
               <h2 className="text-xl font-semibold">
-                Request Fresh AVX Inspection
+                Request Fresh Reecomm Inspection
               </h2>
 
               <div className="border-t border-third/40" />
@@ -601,7 +601,7 @@ export default function VehicleSpec({ open, setOpen }) {
                 width={500}
                 height={500}
                 src="/bg.jpg"
-                alt="avx-payment"
+                alt="reecomm-payment"
                 className="w-full h-full object-cover"
               />
             </div>

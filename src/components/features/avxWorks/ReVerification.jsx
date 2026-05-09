@@ -112,7 +112,7 @@ const ReVerification = () => {
                         <div className="flex items-center gap-2 pt-2 opacity-70">
                             <ShieldCheck size={15} className="text-fourth" />
                             <span className="text-[11px] tracking-wide uppercase text-third">
-                    Verified by AVX
+                    Verified by Reecomm
                 </span>
                         </div>
 

@@ -47,7 +47,7 @@ export default function UserResponsibility() {
             </h2>
 
             <p className="text-[16px] text-third leading-relaxed w-[50%] md-[100%]">
-              AVX encourages all users to take an active role in due diligence.
+              Reecomm encourages all users to take an active role in due diligence.
               Informed decisions lead to safer and more transparent outcomes.
             </p>
           </div>
@@ -99,7 +99,7 @@ export default function UserResponsibility() {
               </h5>
 
               <p className="text-white/50 text-sm leading-relaxed">
-                Never agree to transactions outside of AVX. Off-platform
+                Never agree to transactions outside of Reecomm. Off-platform
                 payments are not covered by our verification and dispute
                 resolution systems. Report any consultant who suggests moving
                 communication or payment off-platform.

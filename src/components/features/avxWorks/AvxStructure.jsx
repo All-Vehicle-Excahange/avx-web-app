@@ -13,7 +13,7 @@ export default function AvxStructure() {
                 {/* HEADER */}
                 <div className="text-center max-w-3xl mx-auto mb-15 mt-[30]">
                     <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                        The AVX Structure
+                        The Reecomm Structure
                     </p>
 
                     <h2 className="mt-6 text-5xl xl:text-6xl font-medium leading-tight">
@@ -24,7 +24,7 @@ export default function AvxStructure() {
                     </h2>
 
                     <p className="mt-8 text-lg leading-relaxed text-third">
-                        Posting on AVX follows a required verification flow.
+                        Posting on Reecomm follows a required verification flow.
                         Access exists under platform ownership and control.
                     </p>
                 </div>
@@ -66,7 +66,7 @@ export default function AvxStructure() {
 
                             <div className="text-center px-10">
                                 <p className="text-xs tracking-[0.35em] uppercase text-neutral-500">
-                                    AVX Core
+                                    Reecomm Core
                                 </p>
 
                                 <p className="mt-4 text-2xl font-semibold leading-tight">
@@ -77,7 +77,7 @@ export default function AvxStructure() {
                                 </p>
 
                                 <p className="mt-4 text-sm leading-relaxed text-third">
-                                    All activity operates under AVX rules,
+                                    All activity operates under Reecomm rules,
                                     visibility logic, and enforcement.
                                 </p>
                             </div>

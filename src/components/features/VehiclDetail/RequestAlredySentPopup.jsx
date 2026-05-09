@@ -31,7 +31,7 @@ function RequestAlredySentPopup({ onClose, status = "PENDING" }) {
                     title: "Request Approved",
                     description: "Your inquiry has been approved by the seller.",
                     subText1: "The consultant will call you shortly to proceed.",
-                    subText2: "You can continue the conversation in the AVX app."
+                    subText2: "You can continue the conversation in the Reecomm app."
                 };
             case "REJECTED":
                 return {

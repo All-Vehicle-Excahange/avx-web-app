@@ -43,7 +43,7 @@ const VisionAndApproach = () => {
                     isVision={false}
                     title="Our"
                     highlight="Approach"
-                    description="AVX does not replace consultants. It empowers them with visibility, structure, and measurable performance signals — while giving buyers the confidence of verified identity and inspection clarity."
+                    description="Reecomm does not replace consultants. It empowers them with visibility, structure, and measurable performance signals — while giving buyers the confidence of verified identity and inspection clarity."
                 />
 
             </div>

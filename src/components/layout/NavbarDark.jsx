@@ -26,7 +26,7 @@ export default function NavbarDark() {
             <div className="bg-primary px-3 py-1.5 rounded shadow-md flex items-center gap-3 border border-third/40">
               <Menu className="w-5 h-5 text-secondary" />
               <span className="font-black text-xl italic tracking-tight text-secondary">
-                AVX
+                Reecomm
               </span>
             </div>
           </div>

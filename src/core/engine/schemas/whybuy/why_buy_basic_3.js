@@ -31,13 +31,13 @@ transparent, and convenient for buyers.`,
         {
           title: "Connect With Our Team",
           description:
-            "Use AVX chat to discuss vehicle condition, pricing, and availability.",
+            "Use Reecomm chat to discuss vehicle condition, pricing, and availability.",
           icon: "MessageCircle",
         },
         {
-          title: "AVX Inspection Option",
+          title: "Reecomm Inspection Option",
           description:
-            "Buyers can request AVX inspection to receive an independent condition report.",
+            "Buyers can request Reecomm inspection to receive an independent condition report.",
           icon: "ShieldCheck",
         },
         {
@@ -47,9 +47,9 @@ transparent, and convenient for buyers.`,
           icon: "Handshake",
         },
       ],
-      // ====== AVX INSPECTION ======
-      inspectionTitle: "AVX Inspection Assurance",
-      inspectionText: `AVX inspection services provide additional transparency by documenting
+      // ====== Reecomm INSPECTION ======
+      inspectionTitle: "Reecomm Inspection Assurance",
+      inspectionText: `Reecomm inspection services provide additional transparency by documenting
 key aspects of the vehicle's condition before purchase.`,
       inspectionPoints: [
         "Exterior condition check",
@@ -73,7 +73,7 @@ provide honest guidance and reliable information for every buyer.`,
         {
           name: "Amit Shah",
           review:
-            "Transparent communication and good vehicle options. I appreciated the AVX inspection support.",
+            "Transparent communication and good vehicle options. I appreciated the Reecomm inspection support.",
         },
       ],
       featuredReviews: [],

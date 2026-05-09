@@ -48,12 +48,12 @@ provides a smoother vehicle buying experience.`,
         },
         {
             title: "Connect With Our Team",
-            description: "Use AVX chat to discuss vehicle condition, pricing, and availability.",
+            description: "Use Reecomm chat to discuss vehicle condition, pricing, and availability.",
             icon: "MessageCircle",
         },
         {
-            title: "AVX Inspection Option",
-            description: "Buyers can request AVX inspection to receive an independent condition report.",
+            title: "Reecomm Inspection Option",
+            description: "Buyers can request Reecomm inspection to receive an independent condition report.",
             icon: "ShieldCheck",
         },
         {
@@ -63,8 +63,8 @@ provides a smoother vehicle buying experience.`,
         },
     ],
     // ====== Inspection Section ======
-    whyBuyInspectionTitle: "AVX Inspection Assurance",
-    whyBuyInspectionDescription: `AVX inspection services provide additional transparency by documenting key aspects of the vehicle's condition before purchase.`,
+    whyBuyInspectionTitle: "Reecomm Inspection Assurance",
+    whyBuyInspectionDescription: `Reecomm inspection services provide additional transparency by documenting key aspects of the vehicle's condition before purchase.`,
     whyBuyInspectionTemplate1: { id: 1, imageUrl: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=1600&q=90" },
     whyBuyInspectionTemplate2: { id: 2, imageUrl: "https://images.unsplash.com/photo-1542362567-b07e54358753?w=1600&q=90" },
     whyBuyInspectionTemplate3: { id: 3, imageUrl: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1600&q=90" },
@@ -95,7 +95,7 @@ provide honest guidance and reliable information for every buyer.`,
         },
         {
             name: "Amit Shah",
-            review: "Transparent communication and good vehicle options. I appreciated the AVX inspection support.",
+            review: "Transparent communication and good vehicle options. I appreciated the Reecomm inspection support.",
         },
     ],
 };
@@ -144,7 +144,7 @@ function Hero() {
     const [active, setActive] = useState(0);
     const [fading, setFading] = useState(false);
     const [hovered, setHovered] = useState(null);
-    const [avxInspectionHovered, setAvxInspectionHovered] = useState(0);
+    const [reecommInspectionHovered, setReecommInspectionHovered] = useState(0);
     const [testimonialsactive, setTestimonialsActive] = useState(0);
     const [visible, setVisible] = useState(true);
     const testimonialsTotal = data.testimonials.length;
@@ -431,7 +431,7 @@ function Hero() {
                             <div className="space-y-4">
                                 <div className="flex items-center gap-3">
                                     <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                                        Avx Inspection
+                                        Reecomm Inspection
                                     </p>
                                 </div>
                                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
@@ -448,7 +448,7 @@ function Hero() {
                             {data.inspectionPoints.map((point, i) => (
                                 <div
                                     key={i}
-                                    onMouseEnter={() => setAvxInspectionHovered(i)}
+                                    onMouseEnter={() => setReecommInspectionHovered(i)}
                                     className="relative bg-secondary/10 p-10 flex flex-col gap-12 transition-colors group cursor-default h-full min-h-60"
                                 >
                                     {/* Background Image Layer */}
@@ -463,8 +463,8 @@ function Hero() {
                                             <span className="text-2xl font-black font-[Montserrat] text-third/10 group-hover:text-third/20 transition-colors">
                                                 0{i + 1}
                                             </span>
-                                            <div className={`w-10 h-10 rounded-xl border border-third/10 flex items-center justify-center transition-all ${avxInspectionHovered === i ? 'bg-third/5 border-third' : 'bg-secondary/40 backdrop-blur-md'}`}>
-                                                <Check size={16} className={avxInspectionHovered === i ? 'text-primary' : 'text-third/20'} />
+                                            <div className={`w-10 h-10 rounded-xl border border-third/10 flex items-center justify-center transition-all ${reecommInspectionHovered === i ? 'bg-third/5 border-third' : 'bg-secondary/40 backdrop-blur-md'}`}>
+                                                <Check size={16} className={reecommInspectionHovered === i ? 'text-primary' : 'text-third/20'} />
                                             </div>
                                         </div>
                                         <div className="space-y-4">
@@ -478,7 +478,7 @@ function Hero() {
                                         </div>
                                     </div>
                                     {/* Bottom Accent */}
-                                    <div className={`absolute bottom-0 left-0 h-1 bg-third transition-all duration-500 ${avxInspectionHovered === i ? 'w-full' : 'w-0'}`} />
+                                    <div className={`absolute bottom-0 left-0 h-1 bg-third transition-all duration-500 ${reecommInspectionHovered === i ? 'w-full' : 'w-0'}`} />
                                 </div>
                             ))}
                         </div>

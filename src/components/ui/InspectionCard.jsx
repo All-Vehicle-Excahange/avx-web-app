@@ -34,7 +34,7 @@ export default function InspectionCard({ status = "processing" }) {
           <div className="pt-3">
             <Button variant="ghost" showIcon={false}>
               <Check size={16} className="mr-2" />
-              Request AVX Inspection
+              Request Reecomm Inspection
             </Button>
           </div>
         )}

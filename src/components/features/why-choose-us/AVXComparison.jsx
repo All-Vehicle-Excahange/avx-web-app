@@ -77,7 +77,7 @@ export default function AVXComparison() {
           </p>
           <h2 className=" font-[Montserrat] text-4xl sm:text-5xl xl:text-5xl font-semibold leading-[1.05] mb-4">
             Why{" "}
-            AVX{" "}
+            Reecomm{" "}
             <span
               className="text-fourth/80 pb-0.5"
             >
@@ -112,7 +112,7 @@ export default function AVXComparison() {
             <div className="px-7 py-5 bg-primary/5">
               <div className="inline-flex items-center gap-2 text-[12px] tracking-[0.25em] uppercase text-primary font-bold">
                 <Check size={13} />
-                AVX Platform
+                Reecomm Platform
               </div>
             </div>
           </div>

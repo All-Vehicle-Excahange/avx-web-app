@@ -98,7 +98,7 @@ export default function InspectionAdvantage() {
             <div className="space-y-5">
               <p className="text-[15px] leading-[1.9] text-third">
                 Buyers make decisions under uncertainty. When your listing
-                carries a certified AVX inspection — documented, timestamped,
+                carries a certified Reecomm inspection — documented, timestamped,
                 and publicly visible — that uncertainty collapses. What remains
                 is confidence, and confidence converts.
               </p>

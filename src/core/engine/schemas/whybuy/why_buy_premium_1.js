@@ -36,12 +36,12 @@ export const WHY_BUY_PREMIUM_1 = [
                 },
                 {
                     title: "Connect With Our Team",
-                    description: `Use AVX chat to discuss vehicle condition, pricing, and availability.`,
-                    icon: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"/></svg>`,
+                    description: `Use Reecomm chat to discuss vehicle condition, pricing, and availability.`,
+                    icon: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T880-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"/></svg>`,
                 },
                 {
-                    title: "AVX Inspection Option",
-                    description: `Buyers can request AVX inspection to receive an independent condition report.`,
+                    title: "Reecomm Inspection Option",
+                    description: `Buyers can request Reecomm inspection to receive an independent condition report.`,
                     icon: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Zm-76 112 198-198-57-56-141 142-70-71-57 56 127 127Z"/></svg>`,
                 },
                 {
@@ -51,8 +51,8 @@ export const WHY_BUY_PREMIUM_1 = [
                 },
             ],
             /* ───────── INSPECTION ───────── */
-            inspectionTitle: "AVX Inspection Assurance",
-            inspectionText: `AVX inspection services provide additional transparency by documenting key aspects of the vehicle's condition before purchase.`,
+            inspectionTitle: "Reecomm Inspection Assurance",
+            inspectionText: `Reecomm inspection services provide additional transparency by documenting key aspects of the vehicle's condition before purchase.`,
             inspectionTemplate1: { id: 1, imageUrl: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?q=80&w=1200&auto=format&fit=crop" },
             inspectionTemplate2: { id: 2, imageUrl: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop" },
             inspectionTemplate3: { id: 3, imageUrl: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1200&auto=format&fit=crop" },
@@ -86,7 +86,7 @@ export const WHY_BUY_PREMIUM_1 = [
                 },
                 {
                     name: "Amit Shah",
-                    review: "Transparent communication and good vehicle options. I appreciated the AVX inspection support.",
+                    review: "Transparent communication and good vehicle options. I appreciated the Reecomm inspection support.",
                 },
             ],
         },

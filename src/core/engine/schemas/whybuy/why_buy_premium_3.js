@@ -79,12 +79,12 @@ export const WHY_BUY_PREMIUM_3 = [
         },
         {
           title: "Connect With Our Team",
-          description: `<p>Use AVX chat to discuss vehicle condition, pricing, and availability.</p>`,
+          description: `<p>Use Reecomm chat to discuss vehicle condition, pricing, and availability.</p>`,
           icon: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"/></svg>`,
         },
         {
-          title: "AVX Inspection Option",
-          description: `<p>Buyers can request AVX inspection to receive an independent condition report.</p>`,
+          title: "Reecomm Inspection Option",
+          description: `<p>Buyers can request Reecomm inspection to receive an independent condition report.</p>`,
           icon: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Zm-76 112 198-198-57-56-141 142-70-71-57 56 127 127Z"/></svg>`,
         },
         {
@@ -94,8 +94,8 @@ export const WHY_BUY_PREMIUM_3 = [
         },
       ],
       /* ───────── INSPECTION ───────── */
-      inspectionTitle: "AVX Inspection Assurance",
-      inspectionText: `<p>AVX inspection services provide additional transparency by documenting key aspects of the vehicle's condition before purchase.</p>`,
+      inspectionTitle: "Reecomm Inspection Assurance",
+      inspectionText: `<p>Reecomm inspection services provide additional transparency by documenting key aspects of the vehicle's condition before purchase.</p>`,
       inspectionTemplate1: {
         id: 1,
         imageUrl:
@@ -182,7 +182,7 @@ export const WHY_BUY_PREMIUM_3 = [
         {
           name: "Amit Shah",
           review:
-            "Transparent communication and good vehicle options. I appreciated the AVX inspection support.",
+            "Transparent communication and good vehicle options. I appreciated the Reecomm inspection support.",
         },
         {
           name: "Priya Mehta",
@@ -192,7 +192,7 @@ export const WHY_BUY_PREMIUM_3 = [
         {
           name: "Suresh Joshi",
           review:
-            "Honest and transparent throughout the entire process. The AVX inspection gave me confidence in my purchase.",
+            "Honest and transparent throughout the entire process. The Reecomm inspection gave me confidence in my purchase.",
         },
       ],
     },

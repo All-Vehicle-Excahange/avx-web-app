@@ -32,13 +32,13 @@ const data = {
     {
       title: "Connect With Our Team",
       description:
-        "Use AVX chat to discuss vehicle condition, pricing, and availability.",
+        "Use Reecomm chat to discuss vehicle condition, pricing, and availability.",
       icon: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-400h480v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"/></svg>`,
     },
     {
-      title: "AVX Inspection Option",
+      title: "Reecomm Inspection Option",
       description:
-        "Buyers can request AVX inspection to receive an independent condition report.",
+        "Buyers can request Reecomm inspection to receive an independent condition report.",
       icon: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80ZM160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480Zm320 0Z"/></svg>`,
     },
     {
@@ -54,9 +54,9 @@ const data = {
   vehicleSelectionTemplate1: { id: 1, imageUrl: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format" },
   vehicleSelectionTemplate2: { id: 2, imageUrl: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=500&auto=format" },
   vehicleSelectionTemplate3: { id: 3, imageUrl: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=500&auto=format" },
-  inspectionTitle: "AVX Inspection Assurance",
+  inspectionTitle: "Reecomm Inspection Assurance",
   inspectionText:
-    "AVX inspection services provide additional transparency by documenting key aspects of the vehicle's condition before purchase.",
+    "Reecomm inspection services provide additional transparency by documenting key aspects of the vehicle's condition before purchase.",
   inspectionTemplate1: { id: 1, imageUrl: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format" },
   inspectionTemplate2: { id: 2, imageUrl: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=500&auto=format" },
   inspectionTemplate3: { id: 3, imageUrl: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format" },
@@ -96,7 +96,7 @@ const data = {
     {
       name: "Amit Shah",
       review:
-        "Transparent communication and good vehicle options. I appreciated the AVX inspection support.",
+        "Transparent communication and good vehicle options. I appreciated the Reecomm inspection support.",
     },
     {
       name: "Priya Mehta",
@@ -106,7 +106,7 @@ const data = {
     {
       name: "Suresh Joshi",
       review:
-        "Honest and transparent throughout the entire process. The AVX inspection gave me confidence in my purchase.",
+        "Honest and transparent throughout the entire process. The Reecomm inspection gave me confidence in my purchase.",
     },
   ],
   testimonialIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h4c0 2.2-1.8 4-4 4H3c-.6 0-1 .4-1 1s.4 1 1 1Z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.1-.9-2-2-2h-3c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h4c0 2.2-1.8 4-4 4h-2c-.6 0-1 .4-1 1s.4 1 1 1Z"/></svg>`,

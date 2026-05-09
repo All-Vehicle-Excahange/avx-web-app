@@ -4,7 +4,7 @@ const features = [
   {
     id: "01",
     title: "Verified Consultant Identity",
-    desc: "Every consultant on AVX operates through a public storefront backed by structured business information and accountability signals.",
+    desc: "Every consultant on Reecomm operates through a public storefront backed by structured business information and accountability signals.",
   },
   {
     id: "02",
@@ -30,7 +30,7 @@ export default function WhyAvxDifferent() {
         {/* Header */}
         <div className=" mb-28">
           <p className="mb-6 text-sm tracking-[0.4em] uppercase text-third font-semibold ">
-            Why AVX
+            Why Reecomm
           </p>
 
            <h2
@@ -48,7 +48,7 @@ export default function WhyAvxDifferent() {
             </h2>
 
           <p className="mt-8 text-xl text-third  leading-relaxed">
-            AVX is engineered to remove ambiguity from the used-vehicle market
+            Reecomm is engineered to remove ambiguity from the used-vehicle market
             by introducing structure, accountability, and measurable trust.
           </p>
         </div>

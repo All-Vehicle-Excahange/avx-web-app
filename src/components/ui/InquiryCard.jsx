@@ -203,7 +203,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
           {isInspected && isApproved && (
             <p className="text-xs flex items-center gap-2 text-green-500 font-semibold pt-1">
               <BadgeCheck size={15} className="text-green-500" />
-              AVX Inspection Completed
+              Reecomm Inspection Completed
             </p>
           )}
 
@@ -211,7 +211,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
           {isApproved && !isInspected && (
             <p className="text-xs flex items-center gap-2 text-yellow-400 font-semibold pt-1">
               <Clock size={14} />
-              Tip: AVX-inspected vehicles close faster
+              Tip: Reecomm-inspected vehicles close faster
             </p>
           )}
 

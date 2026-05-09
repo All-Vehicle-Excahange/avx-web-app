@@ -132,7 +132,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
     }
 
     const query = searchQuery.toLowerCase().trim();
-    
+
     // 1. Direct matches from JSON
     const directMatches = suggestionsData.filter((s) =>
       s.label.toLowerCase().includes(query)
@@ -165,9 +165,9 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
       if (query.includes(label) || label.includes(query)) return true;
 
       // Word-based fuzzy match (handles "tata nexton" matching "tata nexon")
-      const matches = lWords.filter(lw => 
-        qWords.some(qw => 
-          qw.includes(lw) || lw.includes(qw) || 
+      const matches = lWords.filter(lw =>
+        qWords.some(qw =>
+          qw.includes(lw) || lw.includes(qw) ||
           // Handle one character difference (simple typo)
           (qw.length > 3 && lw.length > 3 && (qw.slice(0, -2) === lw.slice(0, -2) || qw.slice(2) === lw.slice(2)))
         )
@@ -178,7 +178,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
     if (matchedItem && query.length >= 2) {
       const baseLabel = matchedItem.label;
       const q = query.toLowerCase();
-      
+
       // Intent detection
       const isLocationIntent = q.includes(" in") || q.includes(" near") || q.includes(" at");
       const isBudgetIntent = q.includes(" under") || q.includes(" below") || q.includes(" price") || q.includes(" budget");
@@ -242,7 +242,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
     // Combine and remove duplicates by label
     const combined = [...directMatches, ...dynamicRelated];
     const unique = Array.from(new Map(combined.map(item => [item.label.toLowerCase(), item])).values());
-    
+
     setFilteredSuggestions(unique);
   }, [searchQuery]);
 
@@ -288,9 +288,16 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
   return (
     <>
+      {/* Background Overlay for Search */}
+      {showDropdown && (
+        <div
+          className="fixed inset-0 bg-black/60 z-[1090] transition-opacity"
+          onClick={() => setShowDropdown(false)}
+        />
+      )}
       <div
         className="fixed top-0 inset-x-0 z-1100 transition-transform duration-300 pointer-events-none"
-        // style={{ transform: `translateY(${transformY}px)` }}
+      // style={{ transform: `translateY(${transformY}px)` }}
       >
         {isMobileBannerVisible && !isMobileBannerTempHidden && atTop && (
           <div ref={bannerRef} className="pointer-events-auto">
@@ -300,13 +307,12 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
         <nav
           className={`pointer-events-auto transition-all duration-300 relative w-full
-          ${
-            heroMode
+          ${heroMode
               ? scrolled
                 ? "bg-white text-black shadow-xl backdrop-blur-lg h-16"
                 : "bg-transparent text-secondary h-20 md:h-24"
               : "bg-primary text-secondary h-16"
-          }`}
+            }`}
         >
           <div className="relative w-full px-4 md:px-8 mx-auto h-full flex items-center justify-between">
             {/* LEFT */}
@@ -351,7 +357,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                     placeholder="Search vehicles, brands..."
                   />
 
-                  <div 
+                  <div
                     onClick={() => {
                       if (searchQuery.trim()) {
                         router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
@@ -364,12 +370,12 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                   </div>
 
                   {showDropdown && (
-                    <div className="absolute top-14 left-0 w-full bg-white shadow-2xl rounded-2xl border border-gray-100 max-h-[450px] overflow-y-auto z-50 p-2 scrollbar-hide">
+                    <div className="absolute top-14 left-0 w-full bg-[#e8e8e8] shadow-2xl  border border-gray-100 max-h-[350px] overflow-y-auto z-50 p-2 scrollbar-hide">
                       {/* Suggestions Section */}
                       {filteredSuggestions.length > 0 && (
                         <div className="mb-3">
                           <div className="px-3 py-2 flex items-center justify-between">
-                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                            <span className="text-[12px] font-bold text-gray-600 ">
                               {searchQuery ? "Matching & Related Searches" : "Trending Searches"}
                             </span>
                           </div>
@@ -382,7 +388,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                                   setShowDropdown(false);
                                   setSearchQuery(s.label);
                                 }}
-                                className="group flex items-center gap-3 p-3 hover:bg-fourth/5 cursor-pointer text-sm transition-all duration-200 rounded-xl"
+                                className="group flex items-center gap-3 p-1 hover:bg-fourth/5 cursor-pointer text-sm transition-all duration-200 rounded-sm"
                               >
                                 <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-fourth/10 transition-colors">
                                   {(() => {
@@ -430,7 +436,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                                   }
                                   setShowDropdown(false);
                                 }}
-                                className="flex items-center gap-4 p-3 hover:bg-fourth/5 cursor-pointer transition-all duration-200 rounded-xl group"
+                                className="flex items-center gap-4 p-3 hover:bg-fourth/5 cursor-pointer transition-all duration-200 rounded-sm group"
                               >
                                 <div className="relative">
                                   <img
@@ -608,11 +614,10 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                     setAccountOpen(nextPersis);
                   }}
                   className={`flex cursor-pointer items-center gap-1 px-2 py-1 rounded transition text-xs md:text-sm
-                ${
-                  heroMode && !scrolled
-                    ? "text-white  hover:outline-2 hover:outline-white/40"
-                    : "text-black  hover:outline-2 hover:outline-black/20"
-                }`}
+                ${heroMode && !scrolled
+                      ? "text-white  hover:outline-2 hover:outline-white/40"
+                      : "text-black  hover:outline-2 hover:outline-black/20"
+                    }`}
                 >
                   <User className="w-5 h-5 md:w-6 md:h-6" />
 

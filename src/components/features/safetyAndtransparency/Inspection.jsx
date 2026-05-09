@@ -47,7 +47,7 @@ export default function InspectionTransparency() {
           </h2>
 
           <p className="text-[16px] text-third leading-relaxed mt-4 w-full md:w-[50%]">
-            AVX supports a standardized inspection framework. Vehicles may include
+            Reecomm supports a standardized inspection framework. Vehicles may include
             detailed inspection reports to improve clarity before commitment.
           </p>
         </div>
@@ -88,7 +88,7 @@ export default function InspectionTransparency() {
                 {[
                   ["Vehicle", "2021 Sedan — 48,000 km"],
                   ["Inspection Type", "Full mechanical"],
-                  ["Inspector ID", "AVX-INSP-2041"],
+                  ["Inspector ID", "RE-INSP-2041"],
                   ["Status", "Completed"],
                 ].map((row, i) => (
                   <div key={i} className="border border-primary/20 rounded-xl p-3">

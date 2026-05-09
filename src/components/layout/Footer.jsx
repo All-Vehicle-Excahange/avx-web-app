@@ -7,7 +7,7 @@ const footerLinks = {
         { label: 'Design', href: '#' },
         { label: 'Development', href: '#' },
         { label: 'Enterprise', href: '#' },
-        { label: 'Figma to AVX', href: '#' },
+        { label: 'Figma to Reecomm', href: '#' },
         { label: 'AI Features', href: '#' },
         { label: 'Visual Sitemap', href: '#' },
         { label: 'Business Solutions', href: '#' },

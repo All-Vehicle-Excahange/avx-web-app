@@ -33,7 +33,7 @@ export default function VehiclesListed() {
                             </h2>
 
                             <p className="text-third text-sm md:text-base leading-relaxed mb-10 max-w-lg">
-                                We eliminate ambiguity. Every vehicle on AVX undergoes a structured verification protocol,
+                                We eliminate ambiguity. Every vehicle on Reecomm undergoes a structured verification protocol,
                                 transforming raw data into reliable, decision-ready information.
                             </p>
 
@@ -120,7 +120,7 @@ export default function VehiclesListed() {
                                                     <Verified size={24} className="text-fourth" />
                                                 </motion.div>
                                             </div>
-                                            <h3 className="text-4xl font-primary font-black text-primary tracking-tighter mb-1">AVX<span className="text-fourth">.</span></h3>
+                                            <h3 className="text-4xl font-primary font-black text-primary tracking-tighter mb-1">Reecomm<span className="text-fourth">.</span></h3>
                                             <p className="text-[11px] font-bold text-primary/40 uppercase tracking-[0.2em]">Verified Asset</p>
                                         </div>
 

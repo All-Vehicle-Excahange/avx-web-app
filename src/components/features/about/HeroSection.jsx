@@ -32,7 +32,7 @@ export default function HeroSection() {
             </h2>
 
             <p className="mt-8 text-lg text-third max-w-lg leading-relaxed">
-              AVX brings structure, performance visibility, and trust into the
+              Reecomm brings structure, performance visibility, and trust into the
               used vehicle ecosystem — connecting serious buyers with verified
               consultants and inspected inventory.
             </p>

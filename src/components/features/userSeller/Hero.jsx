@@ -49,7 +49,7 @@ function Hero() {
         <div className="absolute inset-0 z-0">
           <Image
             src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90"
-            alt="AVX Premium Vehicle"
+            alt="Reecomm Premium Vehicle"
             fill
             className="object-cover object-center scale-105"
             priority
