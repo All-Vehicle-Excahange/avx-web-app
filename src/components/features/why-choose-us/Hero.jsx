@@ -27,7 +27,7 @@ export default function AvxHero() {
               Reecomm Marketplace
             </p>
 
-            
+
 
             <h2
               className="
@@ -53,8 +53,8 @@ export default function AvxHero() {
             <div className="mt-8 w-24 h-0.5 bg-linear-to-r from-primary to-primary/40" />
 
             <div className="mt-10 flex flex-col sm:flex-row gap-4">
-              <Button variant="ghost">Browse Vehicles</Button>
-              <Button variant="outlineSecondary">Become a Consultant</Button>
+              <Button href={"/search"} variant="ghost">Browse Vehicles</Button>
+              <Button href={"/consult"} variant="outlineSecondary">Become a Consultant</Button>
             </div>
           </div>
 

@@ -209,7 +209,7 @@ export default function Step1Business({
   return (
     <div className="space-y-8 animate-in fade-in duration-500 relative">
       {/* CLEAR BUTTON */}
-      {!readOnly && !isUpdateMode && !initialData && (
+      {/* {!readOnly && !isUpdateMode && !initialData && (
         <div className="absolute -top-4 right-0 z-10">
           <button
             type="button"
@@ -220,7 +220,7 @@ export default function Step1Business({
             Clear Form
           </button>
         </div>
-      )}
+      )} */}
 
       {/* ===== LOGO ===== */}
       {(!readOnly || logo) && (

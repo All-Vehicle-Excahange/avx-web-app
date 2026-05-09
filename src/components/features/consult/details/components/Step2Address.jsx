@@ -81,7 +81,7 @@ export default function Step2Address({
   return (
     <div className="space-y-6 relative">
       {/* CLEAR BUTTON */}
-      {!readOnly && !isUpdateMode && !initialData && (
+      {/* {!readOnly && !isUpdateMode && !initialData && (
         <div className="absolute -top-6 right-0 z-10">
           <button
             type="button"
@@ -92,7 +92,7 @@ export default function Step2Address({
             Clear Form
           </button>
         </div>
-      )}
+      )} */}
 
       {(!readOnly || form.address) && (
         <InputField
