@@ -56,8 +56,8 @@ export default function TopPicsSection() {
                         <span className="text-fourth"> Top picks</span> Vehicle For You
                     </h2>
 
-                    <p className="text-third ">
-                        Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
+                    <p className="text-third w-4xl">
+                        Handpicked verified vehicles across Gujarat and Maharashtra — updated every day.
                     </p>
                 </div>
 

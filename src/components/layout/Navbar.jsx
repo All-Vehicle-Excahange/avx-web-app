@@ -13,6 +13,37 @@ import { useUIStore } from "@/stores/useUIStore";
 import MobileAppDownloadBanner from "../ui/MobileAppDownloadBanner";
 import suggestionsData from "@/data/searchSuggestions.json";
 
+const MAKER_NAME_MAPPING = {
+  1: 'Ashok Leyland', 2: 'Aston Martin', 3: 'Audi', 4: 'Bentley', 5: 'BMW',
+  6: 'Bugatti', 7: 'Chevrolet', 8: 'Datsun', 9: 'Ferrari', 10: 'Fiat',
+  11: 'Force Motors', 12: 'Ford', 13: 'Hindustan Motors', 14: 'Honda',
+  15: 'Hyundai', 16: 'ICML', 17: 'Jaguar', 18: 'Lamborghini', 19: 'Land Rover',
+  20: 'Mahindra', 21: 'Maruti Suzuki', 22: 'Maserati', 23: 'Maybach',
+  24: 'Mercedes Benz', 25: 'Mitsubishi', 26: 'Nissan', 27: 'Porsche',
+  28: 'Premier', 29: 'Renault', 30: 'Rolls Royce', 31: 'San', 32: 'Skoda',
+  33: 'Ssangyong', 34: 'Tata', 35: 'Toyota', 36: 'Volkswagen', 37: 'Volvo',
+  38: 'Mahindra Renault', 39: 'Opel', 40: 'Daewoo', 41: 'Jeep', 42: 'ISUZU',
+  43: 'DC', 44: 'Subaru', 49: 'CRYSLER', 50: 'MG', 51: 'KIA', 52: 'BAJAJ',
+  53: 'EICHER', 55: 'CADILLAC', 57: 'SMPIL', 58: 'HUMMER', 59: 'WILLYS',
+  60: 'ROVAR', 61: 'CITROEN', 62: 'BYD', 64: 'PMV'
+};
+
+const rawBrands = suggestionsData.reduce((acc, s) => {
+  if (s.type === "brand") acc.push(s.label);
+  if (s.brand) acc.push(s.brand);
+  if (s.makerId && MAKER_NAME_MAPPING[s.makerId]) acc.push(MAKER_NAME_MAPPING[s.makerId]);
+  return acc;
+}, []);
+
+const brandMap = new Map();
+rawBrands.forEach(b => {
+  const normalized = b.toLowerCase();
+  if (normalized === 'kia') brandMap.set('kia', 'Kia');
+  else if (normalized === 'mercedes benz' || normalized === 'mercedes') brandMap.set('mercedes', 'Mercedes Benz');
+  else if (!brandMap.has(normalized)) brandMap.set(normalized, b);
+});
+
+const BRANDS_LIST = Array.from(brandMap.values()).sort();
 
 export default function Navbar({ heroMode = false, scrolled = false }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -25,6 +56,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
   const pathname = usePathname();
   /* ================= SEARCH STATES ================= */
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState("All");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -126,36 +158,34 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
   /* ================= SUGGESTIONS LOGIC ================= */
   useEffect(() => {
+    let baseSuggestions = suggestionsData;
+
+    // Filter by brand if a brand is selected
+    if (selectedBrand !== "All") {
+      baseSuggestions = suggestionsData.filter(s => {
+        const brandMatch = s.brand && s.brand.toLowerCase() === selectedBrand.toLowerCase();
+        const makerIdMatch = s.makerId && MAKER_NAME_MAPPING[s.makerId] && MAKER_NAME_MAPPING[s.makerId].toLowerCase() === selectedBrand.toLowerCase();
+        // If it's a model of the selected brand, or the brand itself
+        return brandMatch || makerIdMatch || (s.type === "brand" && s.label.toLowerCase() === selectedBrand.toLowerCase());
+      });
+    }
+
     if (!searchQuery.trim()) {
-      setFilteredSuggestions(suggestionsData.slice(0, 10)); // Show popular items
+      setFilteredSuggestions(baseSuggestions.slice(0, 10)); // Show popular items
       return;
     }
 
     const query = searchQuery.toLowerCase().trim();
 
     // 1. Direct matches from JSON
-    const directMatches = suggestionsData.filter((s) =>
+    const directMatches = baseSuggestions.filter((s) =>
       s.label.toLowerCase().includes(query)
     ).slice(0, 5);
 
     // 2. Generate Dynamic Related Searches
-    const MAKER_NAME_MAPPING = {
-      1: 'Ashok Leyland', 2: 'Aston Martin', 3: 'Audi', 4: 'Bentley', 5: 'BMW',
-      6: 'Bugatti', 7: 'Chevrolet', 8: 'Datsun', 9: 'Ferrari', 10: 'Fiat',
-      11: 'Force Motors', 12: 'Ford', 13: 'Hindustan Motors', 14: 'Honda',
-      15: 'Hyundai', 16: 'ICML', 17: 'Jaguar', 18: 'Lamborghini', 19: 'Land Rover',
-      20: 'Mahindra', 21: 'Maruti Suzuki', 22: 'Maserati', 23: 'Maybach',
-      24: 'Mercedes Benz', 25: 'Mitsubishi', 26: 'Nissan', 27: 'Porsche',
-      28: 'Premier', 29: 'Renault', 30: 'Rolls Royce', 31: 'San', 32: 'Skoda',
-      33: 'Ssangyong', 34: 'Tata', 35: 'Toyota', 36: 'Volkswagen', 37: 'Volvo',
-      38: 'Mahindra Renault', 39: 'Opel', 40: 'Daewoo', 41: 'Jeep', 42: 'ISUZU',
-      43: 'DC', 44: 'Subaru', 49: 'CRYSLER', 50: 'MG', 51: 'KIA', 52: 'BAJAJ',
-      53: 'EICHER', 55: 'CADILLAC', 57: 'SMPIL', 58: 'HUMMER', 59: 'WILLYS',
-      60: 'ROVAR', 61: 'CITROEN', 62: 'BYD', 64: 'PMV'
-    };
     const dynamicRelated = [];
     // Improved matching logic: handles typos and word order better
-    const matchedItem = suggestionsData.find(s => {
+    const matchedItem = baseSuggestions.find(s => {
       if (s.type !== "brand" && s.type !== "model") return false;
       const label = s.label.toLowerCase();
       const qWords = query.split(/\s+/).filter(w => w.length > 1);
@@ -244,7 +274,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
     const unique = Array.from(new Map(combined.map(item => [item.label.toLowerCase(), item])).values());
 
     setFilteredSuggestions(unique);
-  }, [searchQuery]);
+  }, [searchQuery, selectedBrand]);
 
   /* ================= DEBOUNCED SEARCH ================= */
   useEffect(() => {
@@ -340,17 +370,40 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                 ref={searchRef}
                 className="absolute left-1/2 -translate-x-1/2 hidden lg:flex"
               >
-                <div className="relative flex items-center h-12 w-[420px] xl:w-[520px] rounded-full px-6 bg-secondary/10 border border-gray-200">
-                  <Search className="w-4 h-4 mr-3 text-gray-600" />
+                <div className="relative flex items-center h-12 w-[420px] xl:w-[520px] rounded-full bg-secondary/10 border border-gray-200">
+                  <div className="relative h-full flex items-center bg-gray-100/50 rounded-l-full border-r border-gray-200 hover:bg-gray-200/50 transition-colors">
+                    <select
+                      value={selectedBrand}
+                      onChange={(e) => {
+                        setSelectedBrand(e.target.value);
+                        setShowDropdown(true);
+                      }}
+                      className="h-full w-full bg-transparent text-sm text-gray-700 font-medium pl-4 pr-6 cursor-pointer focus:outline-none appearance-none z-10"
+                    >
+                      <option value="All">All</option>
+                      {BRANDS_LIST.map((brand, idx) => (
+                        <option key={idx} value={brand}>{brand}</option>
+                      ))}
+                    </select>
+                    <ChevronRight className="w-3 h-3 text-gray-500 absolute right-2 top-1/2 -translate-y-1/2 rotate-90 pointer-events-none" />
+                  </div>
+                  
+                  <Search className="w-4 h-4 ml-3 mr-2 text-gray-600 shrink-0" />
 
                   <input
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={() => setShowDropdown(true)}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter" && searchQuery.trim()) {
-                        router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
-                        setShowDropdown(false);
+                      if (e.key === "Enter") {
+                        if (searchQuery.trim()) {
+                          const brandParam = selectedBrand !== "All" ? `&brand=${encodeURIComponent(selectedBrand)}` : "";
+                          router.push(`/search?q=${encodeURIComponent(searchQuery)}${brandParam}`);
+                          setShowDropdown(false);
+                        } else if (selectedBrand !== "All") {
+                          router.push(`/search?brand=${encodeURIComponent(selectedBrand)}`);
+                          setShowDropdown(false);
+                        }
                       }
                     }}
                     className="w-full bg-transparent focus:outline-none text-black placeholder:text-gray-400 text-sm"
@@ -360,11 +413,15 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                   <div
                     onClick={() => {
                       if (searchQuery.trim()) {
-                        router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+                        const brandParam = selectedBrand !== "All" ? `&brand=${encodeURIComponent(selectedBrand)}` : "";
+                        router.push(`/search?q=${encodeURIComponent(searchQuery)}${brandParam}`);
+                        setShowDropdown(false);
+                      } else if (selectedBrand !== "All") {
+                        router.push(`/search?brand=${encodeURIComponent(selectedBrand)}`);
                         setShowDropdown(false);
                       }
                     }}
-                    className="ml-auto p-2 rounded-full bg-primary text-secondary cursor-pointer hover:bg-primary/90 transition-colors"
+                    className="ml-auto p-2 mr-1 rounded-full bg-primary text-secondary cursor-pointer hover:bg-primary/90 transition-colors shrink-0"
                   >
                     <Search size={14} />
                   </div>

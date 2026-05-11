@@ -41,8 +41,9 @@ const RecentrlySold = () => {
           <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
             <span className="text-fourth">Recently</span>   Sold on Reecomm
           </h2>
-          <p className="text-third ">
-            Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
+          <p className="text-third w-4xl">
+            Real cars. Real buyers. Real prices. See what&apos;s been selling on Reecomm lately.
+
           </p>
         </div>
       </div>

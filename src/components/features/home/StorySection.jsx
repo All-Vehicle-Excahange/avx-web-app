@@ -5,21 +5,33 @@ import CommonSwiper from "@/components/ui/CommonSwiper";
 // Story Card Component (replacing Review Card)
 const StoryCard = ({ story }) => {
   return (
-    <div className="relative rounded-2xl overflow-hidden h-[400px] group cursor-pointer">
+    <div className="relative rounded-2xl overflow-hidden h-[450px] group cursor-pointer border border-white/10 shadow-2xl">
       {/* Background Image */}
       <img
         src={story.image}
         alt={story.title}
-        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
       />
 
       {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent"></div>
 
       {/* Content */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-        <h3 className="text-2xl font-bold mb-2">{story.title}</h3>
-        <p className="text-white/90 text-sm">{story.description}</p>
+      <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform transition-transform duration-300 group-hover:-translate-y-2">
+        <div className="mb-2">
+          <span className="inline-block px-3 py-1 bg-fourth text-primary text-[10px] font-bold uppercase tracking-wider rounded-full mb-3 shadow-lg">
+            {story.category}
+          </span>
+        </div>
+        <p className="text-white/95 text-sm md:text-base italic mb-4 leading-relaxed font-medium line-clamp-4">
+          &quot;{story.description}&quot;
+        </p>
+        <div className="pt-4 border-t border-white/20">
+          <h3 className="text-xl font-bold text-fourth mb-0.5">{story.title}</h3>
+          <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest">
+            {story.subtitle}
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -32,59 +44,51 @@ export default function StorySection() {
   const stories = [
     {
       id: 1,
-      title: "Mahesh Patel",
-      description: "bookings all in one place",
-      image:
-        "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&q=80&w=800",
+      title: "Karan Mehta",
+      description: "I was nervous about buying a used car online — but the Reecomm inspection report gave me all the confidence I needed. Bought a 2021 Swift in Ahmedabad, zero surprises.",
+      image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=800",
+      subtitle: "28 · First-time car buyer · Ahmedabad",
+      category: "Buyer"
     },
     {
       id: 2,
-      title: "Mahesh Patel",
-      description: "bookings all in one place",
-      image:
-        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&q=80&w=800",
+      title: "Sneha Patil",
+      description: "A dealer offered me ₹2.5 lakh less than what I got on Reecomm. The platform brought serious buyers directly to me — no spam, no wasted weekends.",
+      image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=800",
+      subtitle: "34 · Sold her Honda City · Pune",
+      category: "Seller"
     },
     {
       id: 3,
-      title: "Mahesh Patel",
-      description: "bookings all in one place",
-      image:
-        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=800",
+      title: "Rajesh Desai",
+      description: "I've been in this business for 12 years but always relied on word of mouth. Reecomm gave my inventory a proper online presence. Inquiries doubled in the first month.",
+      image: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&q=80&w=800",
+      subtitle: "46 · Auto consultant · Surat",
+      category: "Consultant"
     },
     {
       id: 4,
-      title: "Mahesh Patel",
-      description: "bookings all in one place",
-      image:
-        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=800",
+      title: "Anjali Sharma",
+      description: "Finding a car that fit my budget and had low mileage felt impossible until I used Reecomm. The filters made it so easy to narrow down my options. I'm now a proud owner of a Baleno!",
+      image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=800",
+      subtitle: "25 · Software Engineer · Mumbai",
+      category: "Buyer"
     },
     {
       id: 5,
-      title: "Mahesh Patel",
-      description: "bookings all in one place",
-      image:
-        "https://images.unsplash.com/photo-1500835556837-99ac94a94552?auto=format&fit=crop&q=80&w=800",
+      title: "Vikram Singh",
+      description: "Reecomm's valuation tool gave me a realistic price for my car. The verification process was quick, and I sold my Creta within a week of listing. Highly recommended!",
+      image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&q=80&w=800",
+      subtitle: "40 · Business Owner · Jaipur",
+      category: "Seller"
     },
     {
       id: 6,
-      title: "Mahesh Patel",
-      description: "bookings all in one place",
-      image:
-        "https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?auto=format&fit=crop&q=80&w=800",
-    },
-    {
-      id: 7,
-      title: "Mahesh Patel",
-      description: "bookings all in one place",
-      image:
-        "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&q=80&w=800",
-    },
-    {
-      id: 8,
-      title: "Mahesh Patel",
-      description: "bookings all in one place",
-      image:
-        "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&q=80&w=800",
+      title: "Amit Shah",
+      description: "Being a consultant, trust is everything. The detailed inspection reports on Reecomm build immediate trust with buyers, making the closing process much smoother. It's a game-changer for my business.",
+      image: "https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&q=80&w=800",
+      subtitle: "38 · Pro Auto Consultant · Vadodara",
+      category: "Consultant"
     },
   ];
 

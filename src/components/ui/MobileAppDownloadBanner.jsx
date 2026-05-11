@@ -16,12 +16,13 @@ export default function MobileAppDownloadBanner({ onClose }) {
       <div className="flex flex-col gap-1 pr-6">
         {/* Top Small Label */}
         <span className="text-[10px] font-medium uppercase tracking-wider text-white/90">
-          REECOMM APP DOWNLOAD FOR
+          Buy and sell used cars from your phone.
         </span>
 
         {/* Main Heading */}
         <h2 className="text-lg font-black uppercase leading-tight text-white">
-          Lorem ipsum dolor sit amet  adipisci?
+          Search verified listings, chat with sellers, and book test drives — all in the Reecomm app.
+
         </h2>
       </div>
 

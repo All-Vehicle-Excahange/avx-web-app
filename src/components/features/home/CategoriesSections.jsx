@@ -134,8 +134,9 @@ const CategoriesSections = () => {
               Not sure what to buy? <span className="text-fourth">Start here</span>
             </h2>
 
-            <p className="text-third ">
-              Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
+            <p className="text-third w-4xl">
+              Not sure where to start? Browse by the type of car that fits your life — and your budget.
+
             </p>
           </div>
 
