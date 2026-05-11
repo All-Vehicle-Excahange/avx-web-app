@@ -10,8 +10,8 @@ export default function SellVehicleBanner() {
         >
           <Banner
             title="Sell Your Vehicles"
-            description="Easily showcase your available cars and reach more clients instantly. Manage listings, inquiries, and bookings all in one place."
-            buttonText="Sell Your Vehicles"
+            description="Stop settling for lowball offers. List your car on Reecomm and reach thousands of genuine buyers across Gujarat and Maharashtra — for free."
+            buttonText="List your car — it's free"
             navigationPath={"/became-seller"}
           />
         </div>

@@ -90,7 +90,7 @@ function SearchContent({
     <>
       <Head>
         <title>{dynamicTitle}</title>
-        <meta name="description" content={`Explore ${pageResponse.totalElements || ""} ${brand || ""} ${bodyType || ""} ${vehicleType || "used cars"} for sale${location ? ` in ${location}` : ""}. Certified and verified with Reecomm.`} />
+        <meta name="description" content={`Explore${pageResponse.totalElements || ""} ${brand || ""} ${bodyType || ""} ${vehicleType || "used cars"} for sale${location ? ` in ${location}` : ""}. Certified and verified with Reecomm.`} />
       </Head>
       <SearchHeader pageResponse={pageResponse} activeFilters={activeFilters} />
 

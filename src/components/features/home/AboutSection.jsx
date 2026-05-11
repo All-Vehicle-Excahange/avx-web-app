@@ -81,26 +81,19 @@ const AboutSection = () => {
           <div className="flex flex-col justify-center gap-5 py-4 lg:py-0 lg:p-8 lg:col-span-6">
             <div>
               <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
-               About Us
+                About Us
                 <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
               </p>
               <h2 className="text-3xl mt-2 md:text-4xl lg:text-4xl font-semibold text-primary tracking-tight leading-tight">
-                <span className="text-fourth"> Driving </span> the Future of E-Commerce
+                <span className="text-fourth"> Built</span>  to fix what&apos;s broken.
               </h2>
             </div>
             <p className="text-primary/70 text-sm leading-relaxed text-justify">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Repellendus, error unde? Cum eveniet vitae, non sapiente eligendi
-              nihil. Numquam cumque aliquam consectetur, incidunt possimus
-              doloribus maiores laboriosam ipsam est perferendis magni molestias
-              facilis aliquid harum sit et ipsum dicta quidem quae dolor debitis
-              porro, non nisi? At obcaecati odio repellat molestias architecto
-              culpa eos. Veritatis nam tempora iure neque soluta sapiente
-              numquam est excepturi, id ab unde cumque eaque ullam impedit
-              veniam qui dignissimos ex obcaecati. Illo molestiae, officia nemo
-              beatae minima architecto blanditiis odit soluta voluptatum
-              sapiente dolor harum modi, aperiam illum deleniti quas veniam
-              magni? Exercitationem, nemo hic.
+              India&apos;s used car market is massive — but buying or selling a second-hand vehicle has always felt like a gamble. Buyers can&apos;t trust what they see. Sellers don&apos;t get what their car is worth. And the auto consultants who&apos;ve spent years building expertise? They&apos;re still running their entire business on phone calls.
+              <br />
+              We started Reecomm in 2025 to change all three. A platform where every vehicle is verified, every price is transparent, and every consultant has the digital tools to grow their business properly.
+              <br />
+              We&apos;re starting in Gujarat and Maharashtra — and we&apos;re just getting started.
             </p>
           </div>
 

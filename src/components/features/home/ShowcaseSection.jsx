@@ -49,8 +49,8 @@ const ShowcaseSection = () => {
           <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
             <span className="text-fourth">Continue </span> Where you Left Off
           </h2>
-          <p className="text-third ">
-            Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
+          <p className="text-third w-4xl">
+            your saved searches, wishlisted vehicles, and recent views are all here waiting.
           </p>
         </div>
       </div>
@@ -60,8 +60,8 @@ const ShowcaseSection = () => {
         {loading
           ? [...Array(4)].map((_, i) => <VehicleCardSkeleton key={`skel-${i}`} />)
           : vehicle.map((car) => (
-              <VehicleCard data={car} key={car.id} source="home" />
-            ))
+            <VehicleCard data={car} key={car.id} source="home" />
+          ))
         }
       </div>
 

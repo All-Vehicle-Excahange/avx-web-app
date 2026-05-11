@@ -98,17 +98,17 @@ export default function InquiriesComponent() {
         </div>
 
         {kpiLoading ? (
-          <div className="rounded-xl bg-primary p-3 space-y-2 min-w-[200px]">
+          <div className="rounded-xl bg-transparent p-3 space-y-2 min-w-[200px]">
             <SkeletonBox className="h-4 w-3/4 opacity-20" rounded="rounded-md" />
             <SkeletonBox className="h-4 w-full opacity-20" rounded="rounded-md" />
           </div>
         ) : (
-          <div className="rounded-xl bg-primary p-3 space-y-2">
+          <div className="rounded-xl border border-primary/20 bg-primary/5 p-3 space-y-2">
             <p className={`text-sm ${status.color}`}>
               Avg response time: {formattedTime} ({status.label})
             </p>
 
-            <p className="text-sm text-secondary">
+            <p className="text-sm text-primary/70">
               Fast responses increase chances of closing.
             </p>
           </div>
