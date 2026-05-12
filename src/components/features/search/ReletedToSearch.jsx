@@ -32,7 +32,7 @@ export default function ReletedToSearch({ data, loading = false }) {
         </h2>
 
         <p className="text-third">
-          Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
+          Listings similar to what you&apos;re looking for — verified, inspected, and ready to view.
         </p>
       </div>
 
