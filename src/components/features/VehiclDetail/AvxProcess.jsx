@@ -106,39 +106,39 @@ export default function AvxProcess() {
   const steps = [
     {
       id: 1,
-      title: "Estimate Your Rate",
+      title: "Browse & shortlist ",
       description:
-        "Tell us what you need to insure, how much it's worth, and where you live and estimate your rate (with different options for deductibles) in less than one minute.",
+        "Search verified listings, save your favourites, and compare vehicles side by side.",
       contentAlign: "right",
     },
     {
       id: 2,
-      title: "Apply For Coverage",
+      title: "Chat & inspect",
       description:
-        "Tell us a bit more about yourself and your jewelry and, in most cases, your coverage starts immediately. If someone else actually wears the jewelry, tell us about them too.",
+        "Message the seller directly or request a Reecomm Inspection before you commit.",
       contentAlign: "left",
     },
     {
       id: 3,
-      title: "Review Your Policy",
+      title: "Book a test drive ",
       description:
-        "Take a moment to look over the details of your protection plan. We make sure everything is transparent and easy to understand before you commit.",
+        "Schedule a test drive at a time that works for you. No pressure, no spam calls.",
       contentAlign: "right",
     },
-    {
-      id: 4,
-      title: "Security & Protection",
-      description:
-        "Your items are now protected against theft, loss, and damage. We provide world-class security for your most precious belongings.",
-      contentAlign: "left",
-    },
-    {
-      id: 5,
-      title: "Instant Verification",
-      description:
-        "Receive your digital certificate of insurance instantly. Share it with jewelers or keep it for your records with a simple click.",
-      contentAlign: "right",
-    },
+    // {
+    //   id: 4,
+    //   title: "Security & Protection",
+    //   description:
+    //     "Your items are now protected against theft, loss, and damage. We provide world-class security for your most precious belongings.",
+    //   contentAlign: "left",
+    // },
+    // {
+    //   id: 5,
+    //   title: "Instant Verification",
+    //   description:
+    //     "Receive your digital certificate of insurance instantly. Share it with jewelers or keep it for your records with a simple click.",
+    //   contentAlign: "right",
+    // },
   ];
 
   return (
