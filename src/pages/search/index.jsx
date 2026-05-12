@@ -13,7 +13,7 @@ import FooterLink from "@/components/layout/FooterLink";
 import ReletedToSearch from "@/components/features/search/ReletedToSearch";
 import AutoConsualt from "@/components/features/search/AutoConsualt";
 
-export default function Index() {
+export default function Index({ seo }) {
   const [pageResponse, setPageResponse] = useState({
     totalElements: 0,
     totalPages: 0,
@@ -26,20 +26,26 @@ export default function Index() {
   const [consultPayload, setConsultPayload] = useState(null);
 
   return (
-    <Suspense fallback={null}>
-      <SearchContent
-        pageResponse={pageResponse}
-        setPageResponse={setPageResponse}
-        activeFilters={activeFilters}
-        setActiveFilters={setActiveFilters}
-        relatedVehicles={relatedVehicles}
-        setRelatedVehicles={setRelatedVehicles}
-        consultants={consultants}
-        setConsultants={setConsultants}
-        consultPayload={consultPayload}
-        setConsultPayload={setConsultPayload}
-      />
-    </Suspense>
+    <>
+      <Head>
+        <title>{seo?.title || "Used Cars for Sale | Reecomm"}</title>
+        <meta name="description" content={seo?.description || "Browse verified used vehicles for sale."} />
+      </Head>
+      <Suspense fallback={null}>
+        <SearchContent
+          pageResponse={pageResponse}
+          setPageResponse={setPageResponse}
+          activeFilters={activeFilters}
+          setActiveFilters={setActiveFilters}
+          relatedVehicles={relatedVehicles}
+          setRelatedVehicles={setRelatedVehicles}
+          consultants={consultants}
+          setConsultants={setConsultants}
+          consultPayload={consultPayload}
+          setConsultPayload={setConsultPayload}
+        />
+      </Suspense>
+    </>
   );
 }
 
@@ -51,47 +57,9 @@ function SearchContent({
   consultPayload, setConsultPayload
 }) {
   const [isLoading, setIsLoading] = useState(true);
-  const searchParams = useSearchParams();
-
-  const brand = searchParams.get("brand");
-  const bodyType = searchParams.get("bodyType");
-  const vehicleType = searchParams.get("vehicleType");
-  const location = searchParams.get("location");
-  const fuelType = searchParams.get("fuelType");
-
-  const getDynamicTitle = () => {
-    const count = pageResponse.totalElements || 0;
-    const parts = [];
-
-    // Constructing the primary vehicle description
-    let vehicleDesc = "";
-    if (brand) vehicleDesc += brand + " ";
-    if (bodyType) vehicleDesc += bodyType + " ";
-    if (fuelType) vehicleDesc += fuelType + " ";
-    vehicleDesc += vehicleType || "Used Cars";
-
-    // Format: "Used [Brand] [BodyType] Cars in [Location] for Sale | Reecomm"
-    const titleParts = [];
-
-    let mainTitle = `${vehicleDesc.trim()} Used`;
-    if (location) {
-      mainTitle += ` in ${location}`;
-    }
-    mainTitle += " for Sale";
-
-    titleParts.push(mainTitle);
-
-    return `${titleParts.join(" ")} | Reecomm`;
-  };
-
-  const dynamicTitle = getDynamicTitle();
 
   return (
     <>
-      <Head>
-        <title>{dynamicTitle}</title>
-        <meta name="description" content={`Explore${pageResponse.totalElements || ""} ${brand || ""} ${bodyType || ""} ${vehicleType || "used cars"} for sale${location ? ` in ${location}` : ""}. Certified and verified with Reecomm.`} />
-      </Head>
       <SearchHeader pageResponse={pageResponse} activeFilters={activeFilters} />
 
       <Layout>
@@ -122,8 +90,40 @@ function SearchContent({
   );
 }
 
-export function getServerSideProps() {
+export async function getServerSideProps(context) {
+  const { query } = context;
+
+  const brand = query.brand || "";
+  const bodyType = query.bodyType || "";
+  const vehicleType = query.vehicleType || "";
+  const location = query.location || "";
+
+  const vtLower = vehicleType.toLowerCase();
+  const isTwoWheeler = vtLower.includes("2") || vtLower.includes("two");
+
+  const label = isTwoWheeler ? "Two-Wheelers" : "Cars";
+  const locPart = location ? ` in ${location}` : "";
+
+  const brandPart = brand ? `${brand} ` : "";
+  const bodyPart = bodyType ? `${bodyType} ` : "";
+
+  const dynamicTitle = `Used ${brandPart}${bodyPart}${label} for Sale${locPart} | Reecomm`;
+
+  const descLocPart = location ? ` across ${location}` : "";
+  let dynamicDescription = "";
+  if (isTwoWheeler) {
+    dynamicDescription = `Browse verified used two-wheelers for sale${descLocPart}. Inspected scooters, commuter bikes, and sports bikes — all with transparent pricing.`;
+  } else {
+    dynamicDescription = `Browse verified used cars for sale${descLocPart}. Every Reecomm listing is certified, inspected, and fairly priced. Find your next car today.`;
+  }
+
   return {
-    props: { fullWidth: true },
+    props: {
+      fullWidth: true,
+      seo: {
+        title: dynamicTitle,
+        description: dynamicDescription,
+      },
+    },
   };
 }

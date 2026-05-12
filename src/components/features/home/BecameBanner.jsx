@@ -53,7 +53,7 @@ function BecameBanner() {
                             <p className="mt-4 max-w-lg text-base text-left text-primary/80 mx-auto leading-relaxed">
                                 Stop settling for lowball offers. List your car on
                                 Reecomm and reach thousands of genuine buyers across
-                                Gujarat and Maharashtra — for free.
+                                all India  — for free.
                             </p>
                         </div>
 
@@ -109,8 +109,8 @@ function BecameBanner() {
                             </div>
 
                             <p className="mt-4 text-base text-primary/80 max-w-lg mx-auto leading-relaxed text-left">
-                                Explore vehicles from trusted auto consultants —
-                                all through their digital storefronts on Reecomm.
+                                
+                                Reecomm gives you a digital storefront to list your inventory, manage inquiries, and reach buyers you&apos;d never find offline.
                             </p>
                         </div>
 

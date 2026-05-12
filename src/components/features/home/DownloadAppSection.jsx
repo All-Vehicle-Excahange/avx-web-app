@@ -7,14 +7,11 @@ export default function DownloadAppSection() {
                 {/* LEFT CONTENT */}
                 <div className="flex-1 p-6 md:p-8 md:mb-30 flex flex-col justify-center z-10 relative">
                     <h2 className="text-2xl max-w-2xl xl:max-w-3xl  md:text-4xl font-bold text-primary mb-4 leading-tight">
-                        Reecomm App Download For
-                        All Vehicle <br />
-                        Sell & Buy
+                        Buy & sell vehicles on the go.
                     </h2>
 
                     <p className="text-primary text-lg mb-8 max-w-lg">
-                        Unlock exclusive discounts, special offers, and price drops every
-                        day
+                        Search listings, chat with sellers, and book test drives — all from the Reecomm app.
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4">
