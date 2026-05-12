@@ -25,7 +25,7 @@ import ReletedConsualt from "./ReletedConsualt";
 import VehicleDetailsSkeleton from "@/components/ui/skeleton/VehicleDetailsSkeleton";
 import SpecialOffer from "./SpecialOffer";
 
-export default function VehicleDetails() {
+export default function VehicleDetails({ initialOverview = null, initialSummary = null }) {
   const specificationRef = useRef(null);
   const conditionRef = useRef(null);
   const inspectionRef = useRef(null);
@@ -85,12 +85,19 @@ export default function VehicleDetails() {
   };
   const params = useParams();
   const id = params.id;
-  const [vehicleOverview, setVehicleOverview] = useState({});
-  const [vehicleSummary, setVehicleSummary] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [vehicleOverview, setVehicleOverview] = useState(initialOverview || {});
+  const [vehicleSummary, setVehicleSummary] = useState(initialSummary || {});
+  const [loading, setLoading] = useState(!initialOverview);
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     const fetchAll = async () => {
+      // If we already have initial data and it's the first render, skip fetching
+      if (isFirstRender.current && initialOverview && id) {
+        isFirstRender.current = false;
+        return;
+      }
+
       setLoading(true);
       try {
         // Step 1: Always fetch overview first
@@ -118,7 +125,7 @@ export default function VehicleDetails() {
       }
     };
     if (id) fetchAll();
-  }, [id]);
+  }, [id, initialOverview]);
 
   //  Stricter loading check to prevent "Labels without values" UI flash
   if (loading || !vehicleOverview?.id) {
