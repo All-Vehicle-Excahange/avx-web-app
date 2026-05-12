@@ -94,6 +94,7 @@ export async function getServerSideProps(context) {
   const { query } = context;
 
   const brand = query.brand || "";
+  const model = query.model || "";
   const bodyType = query.bodyType || "";
   const vehicleType = query.vehicleType || "";
   const location = query.location || "";
@@ -105,9 +106,10 @@ export async function getServerSideProps(context) {
   const locPart = location ? ` in ${location}` : "";
 
   const brandPart = brand ? `${brand} ` : "";
+  const modelPart = model ? `${model} ` : "";
   const bodyPart = bodyType ? `${bodyType} ` : "";
 
-  const dynamicTitle = `Used ${brandPart}${bodyPart}${label} for Sale${locPart} | Reecomm`;
+  const dynamicTitle = `Used ${brandPart}${modelPart}${bodyPart}${label} for Sale${locPart} | Reecomm`;
 
   const descLocPart = location ? ` across ${location}` : "";
   let dynamicDescription = "";

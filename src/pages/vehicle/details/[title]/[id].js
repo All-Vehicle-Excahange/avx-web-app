@@ -14,7 +14,7 @@ function Index({ seo }) {
       <Head>
         <title>{seo?.title || "Vehicle Details | Reecomm"}</title>
         <meta name="description" content={seo?.description || "View detailed vehicle information, specs, price, and more."} />
-        
+
         {/* OpenGraph Tags for WhatsApp, Facebook, LinkedIn sharing */}
         <meta property="og:title" content={seo?.title || "Vehicle Details | Reecomm"} />
         <meta property="og:description" content={seo?.description || "View detailed vehicle information, specs, price, and more."} />
@@ -72,7 +72,7 @@ export async function getServerSideProps(context) {
   // Fallback image if none found or API not hooked up yet
   if (!vehicleImageUrl) {
     // Defaulting to the Reecomm logo if no vehicle image is provided
-    vehicleImageUrl = `${protocol}://${host}/logo/logo.webp`; 
+    vehicleImageUrl = `${protocol}://${host}/logo/logo.webp`;
   }
 
   return {
