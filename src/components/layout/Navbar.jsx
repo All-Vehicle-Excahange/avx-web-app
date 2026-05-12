@@ -5,14 +5,13 @@ import Button from "../ui/button";
 import HamburgerDrawer from "../features/home/HamburgerDrawer";
 import AccountPopup from "../features/home/AccountPopup";
 import Link from "next/link";
+import Image from "next/image";
 import { useAuthStore } from "@/stores/useAuthStore";
 import PreferencesPopup from "../features/user/PreferencesPopup";
 import { getGlobalSearch, getUserProfileStrength } from "@/services/user.service";
 import { useRouter, usePathname } from "next/navigation";
 import { useUIStore } from "@/stores/useUIStore";
 import MobileAppDownloadBanner from "../ui/MobileAppDownloadBanner";
-import suggestionsData from "@/data/searchSuggestions.json";
-
 const MAKER_NAME_MAPPING = {
   1: 'Ashok Leyland', 2: 'Aston Martin', 3: 'Audi', 4: 'Bentley', 5: 'BMW',
   6: 'Bugatti', 7: 'Chevrolet', 8: 'Datsun', 9: 'Ferrari', 10: 'Fiat',
@@ -27,23 +26,6 @@ const MAKER_NAME_MAPPING = {
   53: 'EICHER', 55: 'CADILLAC', 57: 'SMPIL', 58: 'HUMMER', 59: 'WILLYS',
   60: 'ROVAR', 61: 'CITROEN', 62: 'BYD', 64: 'PMV'
 };
-
-const rawBrands = suggestionsData.reduce((acc, s) => {
-  if (s.type === "brand") acc.push(s.label);
-  if (s.brand) acc.push(s.brand);
-  if (s.makerId && MAKER_NAME_MAPPING[s.makerId]) acc.push(MAKER_NAME_MAPPING[s.makerId]);
-  return acc;
-}, []);
-
-const brandMap = new Map();
-rawBrands.forEach(b => {
-  const normalized = b.toLowerCase();
-  if (normalized === 'kia') brandMap.set('kia', 'Kia');
-  else if (normalized === 'mercedes benz' || normalized === 'mercedes') brandMap.set('mercedes', 'Mercedes Benz');
-  else if (!brandMap.has(normalized)) brandMap.set(normalized, b);
-});
-
-const BRANDS_LIST = Array.from(brandMap.values()).sort();
 
 export default function Navbar({ heroMode = false, scrolled = false }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -65,6 +47,48 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
   const accountRef = useRef(null);
   const [persisAccountOpen, setPersisAccountOpen] = useState(false);
   const [profileStrength, setProfileStrength] = useState(null);
+
+  // Dynamic Import States for Search Suggestions
+  const [suggestionsData, setSuggestionsData] = useState([]);
+  const [brandsList, setBrandsList] = useState([]);
+  const [isSuggestionsLoaded, setIsSuggestionsLoaded] = useState(false);
+
+  const loadSuggestions = async () => {
+    if (isSuggestionsLoaded) return;
+    try {
+      const data = await import("@/data/searchSuggestions.json");
+      const loadedSuggestions = data.default || data;
+      setSuggestionsData(loadedSuggestions);
+      
+      const rawBrands = loadedSuggestions.reduce((acc, s) => {
+        if (s.type === "brand") acc.push(s.label);
+        if (s.brand) acc.push(s.brand);
+        if (s.makerId && MAKER_NAME_MAPPING[s.makerId]) acc.push(MAKER_NAME_MAPPING[s.makerId]);
+        return acc;
+      }, []);
+      
+      const bMap = new Map();
+      rawBrands.forEach(b => {
+        const normalized = b.toLowerCase();
+        if (normalized === 'kia') bMap.set('kia', 'Kia');
+        else if (normalized === 'mercedes benz' || normalized === 'mercedes') bMap.set('mercedes', 'Mercedes Benz');
+        else if (!bMap.has(normalized)) bMap.set(normalized, b);
+      });
+      
+      setBrandsList(Array.from(bMap.values()).sort());
+      setIsSuggestionsLoaded(true);
+    } catch (e) {
+      console.error("Failed to load search suggestions", e);
+    }
+  };
+
+  // Preload gracefully in the background after initial paint
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      loadSuggestions();
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -274,7 +298,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
     const unique = Array.from(new Map(combined.map(item => [item.label.toLowerCase(), item])).values());
 
     setFilteredSuggestions(unique);
-  }, [searchQuery, selectedBrand]);
+  }, [searchQuery, selectedBrand, suggestionsData]);
 
   /* ================= DEBOUNCED SEARCH ================= */
   useEffect(() => {
@@ -357,9 +381,11 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                   setMenuOpen(true);
                 }}
               />
-              <img
+              <Image
                 src="/logo/logo.webp"
                 alt="Reecomm Logo"
+                width={120}
+                height={24}
                 className="h-6 md:h-6 w-auto object-contain block"
               />
             </Link>
@@ -374,6 +400,8 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                   <div className="relative h-full flex items-center bg-gray-100/50 rounded-l-full border-r border-gray-200 hover:bg-gray-200/50 transition-colors">
                     <select
                       value={selectedBrand}
+                      onMouseEnter={loadSuggestions}
+                      onClick={loadSuggestions}
                       onChange={(e) => {
                         setSelectedBrand(e.target.value);
                         setShowDropdown(true);
@@ -381,7 +409,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                       className="h-full w-full bg-transparent text-sm text-gray-700 font-medium pl-4 pr-6 cursor-pointer focus:outline-none appearance-none z-10"
                     >
                       <option value="All">All</option>
-                      {BRANDS_LIST.map((brand, idx) => (
+                      {brandsList.map((brand, idx) => (
                         <option key={idx} value={brand}>{brand}</option>
                       ))}
                     </select>
@@ -393,7 +421,11 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                   <input
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    onFocus={() => setShowDropdown(true)}
+                    onMouseEnter={loadSuggestions}
+                    onFocus={() => {
+                      loadSuggestions();
+                      setShowDropdown(true);
+                    }}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         if (searchQuery.trim()) {
@@ -496,11 +528,13 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                                 className="flex items-center gap-4 p-3 hover:bg-fourth/5 cursor-pointer transition-all duration-200 rounded-sm group"
                               >
                                 <div className="relative">
-                                  <img
+                                  <Image
                                     src={
                                       item.profilePicture ||
                                       "/images/default-avatar.png"
                                     }
+                                    width={40}
+                                    height={40}
                                     className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
                                     alt={item.fullName || "User"}
                                   />
