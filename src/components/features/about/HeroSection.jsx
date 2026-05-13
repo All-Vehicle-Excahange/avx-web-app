@@ -11,7 +11,7 @@ export default function HeroSection() {
 
       <div className="relative  mx-auto w-full pt-14 lg:pt-10 pb-5">
         <div className="flex flex-col  lg:flex-row items-center gap-6 lg:gap-4 ">
-          {/* LEFT TEXT */}
+          {/* LEFT TEXT */} 
           <div className="w-full  lg:w-[40%]">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-6">
               About Reecomm

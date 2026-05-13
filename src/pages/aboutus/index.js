@@ -56,7 +56,7 @@ function index() {
 
 export default index;
 
-export function getServerSideProps() {
+export function getStaticProps() {
     return {
         props: { fullWidth: true },
     };
