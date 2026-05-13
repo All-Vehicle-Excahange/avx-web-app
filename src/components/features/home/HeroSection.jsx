@@ -1,8 +1,8 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import StickyHeroNavbar from "./StickyHeroNavbar";
 import VehicleFilterBar from "./VehicleFilterBar";
-import { Car, User2, ChevronDown } from "lucide-react";
+import { Car, User2 } from "lucide-react";
 
 export default function HeroSection() {
   const [collapsed, setCollapsed] = useState(false);
@@ -29,8 +29,9 @@ export default function HeroSection() {
 
       {/* Hero Content */}
       <div
-        className={`relative z-10 flex flex-col items-center justify-center h-full transition-opacity duration-300 ${collapsed ? "opacity-0" : "opacity-100"
-          }`}
+        className={`relative z-10 flex flex-col items-center justify-center h-full transition-opacity duration-300 ${
+          collapsed ? "opacity-0" : "opacity-100"
+        }`}
       >
         <p className="text-primary tracking-widest uppercase font-primary">
           Welcome to reecomm

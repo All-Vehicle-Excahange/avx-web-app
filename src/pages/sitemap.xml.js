@@ -20,7 +20,7 @@ function generateSiteMap(baseUrl, vehicles) {
        <priority>0.5</priority>
      </url>
      <url>
-       <loc>${baseUrl}/avx-works</loc>
+       <loc>${baseUrl}/reecomm-works</loc>
        <changefreq>monthly</changefreq>
        <priority>0.5</priority>
      </url>
@@ -69,13 +69,15 @@ function generateSiteMap(baseUrl, vehicles) {
        </url>
      `;
        })
-       .join('')}
+       .join("")}
 
      <!-- Dynamic Vehicle Pages -->
      ${vehicles
        .map(({ id, title }) => {
          // Create a slug out of the vehicle title, e.g. "Honda City" -> "honda-city"
-         const slug = title ? title.replace(/\s+/g, '-').toLowerCase() : 'vehicle-details';
+         const slug = title
+           ? title.replace(/\s+/g, "-").toLowerCase()
+           : "vehicle-details";
          return `
        <url>
            <loc>${baseUrl}/vehicle/details/${slug}/${id}</loc>
@@ -84,7 +86,7 @@ function generateSiteMap(baseUrl, vehicles) {
        </url>
      `;
        })
-       .join('')}
+       .join("")}
    </urlset>
  `;
 }
