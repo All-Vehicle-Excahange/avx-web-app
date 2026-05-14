@@ -1,16 +1,18 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useRef } from "react";
 import CommonSwiper from "@/components/ui/CommonSwiper";
+import Image from "next/image";
 
 // Story Card Component (replacing Review Card)
 const StoryCard = ({ story }) => {
   return (
     <div className="relative rounded-2xl overflow-hidden h-[450px] group cursor-pointer border border-white/10 shadow-2xl">
       {/* Background Image */}
-      <img
+      <Image
         src={story.image}
         alt={story.title}
-        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        fill
+        className="object-cover transition-transform duration-700 group-hover:scale-110"
       />
 
       {/* Gradient Overlay */}

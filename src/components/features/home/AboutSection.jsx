@@ -45,6 +45,7 @@
 // export default AboutSection
 
 import React from "react";
+import Image from "next/image";
 
 const stats = [
   { label: "Satisfied clients", value: "130K" },
@@ -64,16 +65,17 @@ const AboutSection = () => {
         <div className="grid lg:grid-cols-12 grid-cols-1 items-stretch">
           {/* LEFT SIDE: Image Features */}
           <div className="relative min-h-[350px] lg:min-h-full lg:col-span-6 group overflow-hidden">
-            <img
+            <Image
               src="/business-verification.webp"
               alt="Reecomm Platform"
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              fill
+              className="absolute inset-0 object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/10 to-transparent pointer-events-none"></div>
 
             {/* Logo Overlay on Image */}
             <div className="absolute bottom-6 left-6 lg:bottom-10 lg:left-10 bg-secondary backdrop-blur-md px-6 py-3 rounded-2xl shadow-xl border border-white/20">
-              <img src="/logo/logo.webp" alt="Reecomm Logo" className="h-6 md:h-10 w-auto object-contain" />
+              <Image src="/logo/logo.webp" alt="Reecomm Logo" width={160} height={40} className="h-6 md:h-10 w-auto object-contain" />
             </div>
           </div>
 

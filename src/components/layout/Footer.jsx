@@ -1,6 +1,7 @@
 import { Facebook, Instagram, X, Youtube, ArrowUp } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import Image from "next/image";
 
 const footerLinks = {
   buy: [
@@ -51,10 +52,12 @@ const Footer = () => {
           <div className="lg:w-[25%] flex flex-col gap-6">
             <Link href="/" className="flex items-center  gap-2">
               <div className="p-2 bg-secondary">
-                <img
+                <Image
                   src="/logo/logo.webp"
                   alt="Reecomm Logo"
-                  className="h-6 md:h-8  w-auto object-contain block  "
+                  width={130}
+                  height={32}
+                  className="h-6 md:h-8 w-auto object-contain block"
                 />
               </div>
             </Link>

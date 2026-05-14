@@ -13,6 +13,7 @@ import LoginPopup from "@/components/auth/LoginPopup";
 import GlobalLoader from "@/components/ui/GlobalLoader";
 import SplashScreen from "@/components/ui/SplashScreen";
 import GlobalCompareButton from "@/components/ui/GlobalCompareButton";
+import { exo, inter, lexendDeca, montserrat, poppins, raleway, roboto } from "@/lib/fonts";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -91,7 +92,9 @@ export default function App({ Component, pageProps }) {
   }, []);
 
   return (
-    <>
+    <div
+      className={`${exo.variable} ${inter.variable} ${lexendDeca.variable} ${montserrat.variable} ${poppins.variable} ${raleway.variable} ${roboto.variable} font-sans`}
+    >
       <Head>
         {/* PREVENT FLICKER BEFORE REACT LOADS */}
         <script
@@ -135,10 +138,9 @@ export default function App({ Component, pageProps }) {
         </div>
       )}
 
-      {/* GLOBAL COMPARE BUTTON */}
       {!showSplash &&
         !router.asPath.startsWith("/consult/dashboard/") &&
         !router.asPath.startsWith("/consult/kyc") && <GlobalCompareButton />}
-    </>
+    </div>
   );
 }

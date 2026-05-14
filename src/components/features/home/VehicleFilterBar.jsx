@@ -4,7 +4,12 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Search, X } from "lucide-react";
 import { useRouter } from "next/router";
-import { getMakersByFuelOrBodyType, getAndSearchMakers, SearchCityAndState, getPopularCityAndState } from "@/services/filter";
+import {
+  getMakersByFuelOrBodyType,
+  getAndSearchMakers,
+  SearchCityAndState,
+  getPopularCityAndState,
+} from "@/services/filter";
 import { getAllConsultService } from "@/services/consult.filter.service";
 import { useUIStore } from "@/stores/useUIStore";
 
@@ -77,7 +82,6 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const [availability, setAvailability] = useState("");
   const [serviceOptions, setServiceOptions] = useState([]);
   const [showTypeDropdown, setShowTypeDropdown] = useState(false);
-
 
   const containerRef = useRef(null);
   const brandInputRef = useRef(null);
@@ -208,7 +212,10 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
         setActiveTab(null);
       }
-      if (mobileTriggerRef.current && !mobileTriggerRef.current.contains(e.target)) {
+      if (
+        mobileTriggerRef.current &&
+        !mobileTriggerRef.current.contains(e.target)
+      ) {
         setShowTypeDropdown(false);
       }
     };
@@ -309,31 +316,36 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     if (!activeTab && !showTypeDropdown) return;
 
     const handleKeyDown = (e) => {
-      if (['ArrowDown', 'ArrowUp', 'Enter'].includes(e.key)) {
-        const containers = Array.from(document.querySelectorAll('.dropdown-active'));
-        const container = containers.find(c => c.offsetParent !== null);
+      if (["ArrowDown", "ArrowUp", "Enter"].includes(e.key)) {
+        const containers = Array.from(
+          document.querySelectorAll(".dropdown-active"),
+        );
+        const container = containers.find((c) => c.offsetParent !== null);
         if (!container) return;
 
-        const items = Array.from(container.querySelectorAll('button'));
+        const items = Array.from(container.querySelectorAll("button"));
         if (items.length === 0) return;
 
         const currentIndex = items.indexOf(document.activeElement);
 
-        if (e.key === 'ArrowDown') {
+        if (e.key === "ArrowDown") {
           e.preventDefault();
           const next = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
           items[next]?.focus();
-          items[next]?.scrollIntoView({ block: 'nearest' });
-        } else if (e.key === 'ArrowUp') {
+          items[next]?.scrollIntoView({ block: "nearest" });
+        } else if (e.key === "ArrowUp") {
           e.preventDefault();
           const next = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
           items[next]?.focus();
-          items[next]?.scrollIntoView({ block: 'nearest' });
-        } else if (e.key === 'Enter') {
+          items[next]?.scrollIntoView({ block: "nearest" });
+        } else if (e.key === "Enter") {
           if (currentIndex !== -1) {
             e.preventDefault();
             items[currentIndex].click();
-          } else if (items.length > 0 && document.activeElement.tagName === 'INPUT') {
+          } else if (
+            items.length > 0 &&
+            document.activeElement.tagName === "INPUT"
+          ) {
             e.preventDefault();
             items[0].click();
           }
@@ -341,12 +353,11 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [activeTab, showTypeDropdown]);
 
   const handleSearch = () => {
-
     if (!vehicleType) {
       setVehicleTypeError(true);
       return;
@@ -356,7 +367,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
     // Save/overwrite selected location to localStorage
     if (stateId && cityId && location) {
-      const [cityName, stateName] = location.split(", ").map((str) => str.trim());
+      const [cityName, stateName] = location
+        .split(", ")
+        .map((str) => str.trim());
       if (cityName && stateName) {
         const locationData = {
           stateId,
@@ -364,12 +377,17 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           cityId,
           cityName,
         };
-        localStorage.setItem("avx_saved_location", JSON.stringify(locationData));
+        localStorage.setItem(
+          "avx_saved_location",
+          JSON.stringify(locationData),
+        );
       }
     } else if (locationSuggestions?.length > 0 && location) {
       // In case they just typed an exact match but didn't click the dropdown
       const locMatch = locationSuggestions.find(
-        (l) => `${l.cityName}, ${l.stateName}`.toLowerCase() === location.toLowerCase()
+        (l) =>
+          `${l.cityName}, ${l.stateName}`.toLowerCase() ===
+          location.toLowerCase(),
       );
       if (locMatch) {
         const locationData = {
@@ -378,7 +396,10 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           cityId: locMatch.cityId,
           cityName: locMatch.cityName,
         };
-        localStorage.setItem("avx_saved_location", JSON.stringify(locationData));
+        localStorage.setItem(
+          "avx_saved_location",
+          JSON.stringify(locationData),
+        );
       }
     }
 
@@ -429,7 +450,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
             className="inner-container w-full h-16 relative"
           >
             <div className="clip-layer absolute inset-0 rounded-full overflow-hidden z-0">
-              <div className="absolute inset-0 bg-[url('/bg_blur_2.jpg')] bg-cover bg-center bg-no-repeat" />
+              <div className="absolute inset-0 bg-[url('/bg_blur_2.webp')] bg-cover bg-center bg-no-repeat" />
               <div className="absolute inset-0 backdrop-blur-xl bg-secondary" />
             </div>
 
@@ -458,20 +479,28 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                             key={item.cityId}
                             onClick={(e) => {
                               e.stopPropagation();
-                              setLocation(`${item.cityName}, ${item.stateName}`);
+                              setLocation(
+                                `${item.cityName}, ${item.stateName}`,
+                              );
                               setCityId(item.cityId);
                               setStateId(item.stateId);
                               openNextAvailableTab("location");
                             }}
                             className="flex items-center justify-between gap-4 py-2 px-3 hover:bg-neutral-800 rounded-lg text-left cursor-pointer"
                           >
-                            <span className="text-sm font-semibold text-white">{item.cityName}</span>
-                            <span className="text-xs text-gray-400">{item.stateName}</span>
+                            <span className="text-sm font-semibold text-white">
+                              {item.cityName}
+                            </span>
+                            <span className="text-xs text-gray-400">
+                              {item.stateName}
+                            </span>
                           </button>
                         ))
                       ) : (
                         <div className="py-3 px-3 text-sm text-gray-400 text-center">
-                          {location.length > 0 ? "No cities found" : "Loading..."}
+                          {location.length > 0
+                            ? "No cities found"
+                            : "Loading..."}
                         </div>
                       )}
                     </div>
@@ -489,8 +518,10 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 <div className="text-md font-semibold text-primary tracking-wide">
                   Vehicle Type
                 </div>
-                <div className={`text-sm font-medium ${vehicleTypeError ? "text-red-500" : "text-gray-200"}`}>
-                  {vehicleTypeError ? "* Required" : (vehicleType || "Add type")}
+                <div
+                  className={`text-sm font-medium ${vehicleTypeError ? "text-red-500" : "text-gray-200"}`}
+                >
+                  {vehicleTypeError ? "* Required" : vehicleType || "Add type"}
                 </div>
                 {activeTab === "vehicle" && (
                   <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
@@ -773,14 +804,17 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       {/* MOBILE FILTER SEARCH BAR */}
       <div
         ref={mobileTriggerRef}
-        className={`lg:hidden fixed z-40 transition-all duration-500 ease-in-out ${isScrolled
-          ? "bottom-4 right-4 w-14"
-          : "bottom-4 left-0 right-0 px-4 w-full md:max-w-md md:left-1/2 md:-translate-x-1/2"
-          }`}
+        className={`lg:hidden fixed z-40 transition-all duration-500 ease-in-out ${
+          isScrolled
+            ? "bottom-4 right-4 w-14"
+            : "bottom-4 left-0 right-0 px-4 w-full md:max-w-md md:left-1/2 md:-translate-x-1/2"
+        }`}
       >
         <div className="relative">
           {showTypeDropdown && (
-            <div className={`absolute bottom-[110%] mb-4 bg-neutral-900 border border-neutral-800 rounded-2xl p-2 shadow-2xl animate-in slide-in-from-bottom-4 duration-300 ${isScrolled ? "right-0 w-[280px]" : "left-0 right-0"} dropdown-active`}>
+            <div
+              className={`absolute bottom-[110%] mb-4 bg-neutral-900 border border-neutral-800 rounded-2xl p-2 shadow-2xl animate-in slide-in-from-bottom-4 duration-300 ${isScrolled ? "right-0 w-[280px]" : "left-0 right-0"} dropdown-active`}
+            >
               <button
                 onClick={() => {
                   setInternalActiveType("vehicle");
@@ -794,7 +828,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 </div>
                 <div>
                   <div className="text-white font-bold">Search Vehicle</div>
-                  <div className="text-gray-400 text-xs mt-0.5">Find your dream car or bike</div>
+                  <div className="text-gray-400 text-xs mt-0.5">
+                    Find your dream car or bike
+                  </div>
                 </div>
               </button>
               <div className="h-px bg-neutral-800 mx-2 my-1" />
@@ -810,28 +846,37 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   <Search size={18} />
                 </div>
                 <div>
-                  <div className="text-white font-bold">Search Consultation</div>
-                  <div className="text-gray-400 text-xs mt-0.5">Expert advice for your vehicle</div>
+                  <div className="text-white font-bold">
+                    Search Consultation
+                  </div>
+                  <div className="text-gray-400 text-xs mt-0.5">
+                    Expert advice for your vehicle
+                  </div>
                 </div>
               </button>
             </div>
           )}
           <button
             onClick={() => setShowTypeDropdown(!showTypeDropdown)}
-            className={`flex items-center justify-center gap-2 shadow-lg transition-all duration-500 ease-in-out cursor-pointer ${isScrolled
-              ? "w-14 h-14 bg-fourth rounded-full"
-              : "w-full py-4 bg-neutral-900 border border-neutral-800 rounded-full"
-              }`}
+            className={`flex items-center justify-center gap-2 shadow-lg transition-all duration-500 ease-in-out cursor-pointer ${
+              isScrolled
+                ? "w-14 h-14 bg-fourth rounded-full"
+                : "w-full py-4 bg-neutral-900 border border-neutral-800 rounded-full"
+            }`}
           >
             <Search size={22} className="text-white" />
-            {!isScrolled && <span className="font-medium text-white transition-opacity duration-300">Start your search</span>}
+            {!isScrolled && (
+              <span className="font-medium text-white transition-opacity duration-300">
+                Start your search
+              </span>
+            )}
           </button>
         </div>
       </div>
 
       {/* MOBILE FULLSCREEN DRAWER -> NOW A PROPER MODAL BOX */}
       <div
-        className={`lg:hidden fixed inset-0 z-[100] flex items-end sm:items-center justify-center transition-opacity duration-300 ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        className={`lg:hidden fixed inset-0 z-[100] flex items-end sm:items-center justify-center transition-opacity duration-300 ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
       >
         {/* Backdrop for click-outside to close */}
         <div
@@ -845,26 +890,44 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         {/* Proper Box */}
         <div
           id="mobile-drawer"
-          className={`relative w-full sm:w-[90%] max-w-md bg-secondary rounded-t-3xl sm:rounded-3xl flex flex-col transition-transform duration-300 ${mobileOpen ? 'translate-y-0' : 'translate-y-full sm:scale-95'} max-h-[85vh]`}
+          className={`relative w-full sm:w-[90%] max-w-md bg-secondary rounded-t-3xl sm:rounded-3xl flex flex-col transition-transform duration-300 ${mobileOpen ? "translate-y-0" : "translate-y-full sm:scale-95"} max-h-[85vh]`}
         >
           {/* Header */}
           <div className="p-4 border-b border-neutral-800 flex justify-between items-center bg-secondary rounded-t-3xl sm:rounded-3xl shrink-0">
             <h2 className="text-xl font-bold text-primary">Search Filters</h2>
-            <button onClick={() => { setMobileOpen(false); setActiveTab(null); }} className="p-1 bg-white cursor-pointer rounded-full hover:opacity-70 text-secondary">
+            <button
+              onClick={() => {
+                setMobileOpen(false);
+                setActiveTab(null);
+              }}
+              className="p-1 bg-white cursor-pointer rounded-full hover:opacity-70 text-secondary"
+            >
               <X size={20} />
             </button>
           </div>
 
           <div className="p-4 space-y-3 overflow-y-auto flex-1 text-primary custom-scrollbar pb-6">
             {/* Location */}
-            <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "location" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
+            <div
+              className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "location" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
+            >
               <button
-                onClick={() => handleActiveTabChange(activeTab === "location" ? null : "location")}
+                onClick={() =>
+                  handleActiveTabChange(
+                    activeTab === "location" ? null : "location",
+                  )
+                }
                 className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
               >
                 <div className="flex flex-col items-start w-full">
-                  <span className="text-xs font-semibold text-primary">Location</span>
-                  <span className={`font-medium text-sm mt-1 truncate w-full ${location ? "text-white" : "text-gray-500"}`}>{location || "Search destinations"}</span>
+                  <span className="text-xs font-semibold text-primary">
+                    Location
+                  </span>
+                  <span
+                    className={`font-medium text-sm mt-1 truncate w-full ${location ? "text-white" : "text-gray-500"}`}
+                  >
+                    {location || "Search destinations"}
+                  </span>
                 </div>
               </button>
               {activeTab === "location" && (
@@ -891,8 +954,12 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                           }}
                           className="w-full flex items-center justify-between gap-4 py-3 px-4 border-b border-neutral-700 last:border-0 hover:bg-neutral-700 text-left cursor-pointer"
                         >
-                          <span className="text-sm font-semibold text-white">{item.cityName}</span>
-                          <span className="text-xs text-gray-400">{item.stateName}</span>
+                          <span className="text-sm font-semibold text-white">
+                            {item.cityName}
+                          </span>
+                          <span className="text-xs text-gray-400">
+                            {item.stateName}
+                          </span>
                         </button>
                       ))}
                     </div>
@@ -902,14 +969,26 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
             </div>
 
             {/* Vehicle Type */}
-            <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "vehicle" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
+            <div
+              className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "vehicle" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
+            >
               <button
-                onClick={() => handleActiveTabChange(activeTab === "vehicle" ? null : "vehicle")}
+                onClick={() =>
+                  handleActiveTabChange(
+                    activeTab === "vehicle" ? null : "vehicle",
+                  )
+                }
                 className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
               >
                 <div className="flex flex-col items-start w-full">
-                  <span className="text-xs font-semibold text-primary">Vehicle Type</span>
-                  <span className={`font-medium text-sm mt-1 truncate w-full ${vehicleTypeError ? "text-red-500" : (vehicleType ? "text-white" : "text-gray-500")}`}>{vehicleTypeError ? "*Required" : (vehicleType || "Add type")}</span>
+                  <span className="text-xs font-semibold text-primary">
+                    Vehicle Type
+                  </span>
+                  <span
+                    className={`font-medium text-sm mt-1 truncate w-full ${vehicleTypeError ? "text-red-500" : vehicleType ? "text-white" : "text-gray-500"}`}
+                  >
+                    {vehicleTypeError ? "*Required" : vehicleType || "Add type"}
+                  </span>
                 </div>
               </button>
               {activeTab === "vehicle" && (
@@ -917,8 +996,12 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   {VEHICLE_TYPES.map((type) => (
                     <button
                       key={type.id}
-                      onClick={() => { setVehicleType(type.label); setVehicleTypeError(false); openNextAvailableTab("vehicle"); }}
-                      className={`flex-1 mt-3 py-3 text-sm font-bold rounded-lg transition-colors cursor-pointer ${vehicleType === type.label ? 'bg-white text-black' : 'bg-neutral-800 text-gray-400 hover:text-white'}`}
+                      onClick={() => {
+                        setVehicleType(type.label);
+                        setVehicleTypeError(false);
+                        openNextAvailableTab("vehicle");
+                      }}
+                      className={`flex-1 mt-3 py-3 text-sm font-bold rounded-lg transition-colors cursor-pointer ${vehicleType === type.label ? "bg-white text-black" : "bg-neutral-800 text-gray-400 hover:text-white"}`}
                     >
                       {type.label}
                     </button>
@@ -930,20 +1013,38 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
             {internalActiveType === "consult" ? (
               <>
                 {/* Price Range */}
-                <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "priceRange" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
-                  <button onClick={() => handleActiveTabChange(activeTab === "priceRange" ? null : "priceRange")} className="w-full flex items-center justify-between p-4 text-left cursor-pointer">
+                <div
+                  className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "priceRange" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
+                >
+                  <button
+                    onClick={() =>
+                      handleActiveTabChange(
+                        activeTab === "priceRange" ? null : "priceRange",
+                      )
+                    }
+                    className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
+                  >
                     <div className="flex flex-col items-start w-full">
-                      <span className="text-xs font-semibold text-primary">Price Range</span>
-                      <span className={`font-medium text-sm mt-1 truncate w-full ${priceRange ? "text-white" : "text-gray-500"}`}>{priceRange || "Select price"}</span>
+                      <span className="text-xs font-semibold text-primary">
+                        Price Range
+                      </span>
+                      <span
+                        className={`font-medium text-sm mt-1 truncate w-full ${priceRange ? "text-white" : "text-gray-500"}`}
+                      >
+                        {priceRange || "Select price"}
+                      </span>
                     </div>
                   </button>
                   {activeTab === "priceRange" && (
                     <div className="p-2 border-t border-neutral-800 border-opacity-50 dropdown-active">
-                      {CONSULT_PRICE_RANGE.map(range => (
+                      {CONSULT_PRICE_RANGE.map((range) => (
                         <button
                           key={range}
-                          onClick={() => { setPriceRange(range); openNextAvailableTab("priceRange"); }}
-                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${priceRange === range ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
+                          onClick={() => {
+                            setPriceRange(range);
+                            openNextAvailableTab("priceRange");
+                          }}
+                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${priceRange === range ? "bg-white text-black" : "hover:bg-neutral-800 text-white"}`}
                         >
                           {range}
                         </button>
@@ -953,43 +1054,85 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 </div>
 
                 {/* Service */}
-                <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "service" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
-                  <button onClick={() => handleActiveTabChange(activeTab === "service" ? null : "service")} className="w-full flex items-center justify-between p-4 text-left cursor-pointer">
+                <div
+                  className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "service" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
+                >
+                  <button
+                    onClick={() =>
+                      handleActiveTabChange(
+                        activeTab === "service" ? null : "service",
+                      )
+                    }
+                    className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
+                  >
                     <div className="flex flex-col items-start w-full">
-                      <span className="text-xs font-semibold text-primary">Service</span>
-                      <span className={`font-medium text-sm mt-1 truncate w-full ${service ? "text-white" : "text-gray-500"}`}>{service || "Select service"}</span>
+                      <span className="text-xs font-semibold text-primary">
+                        Service
+                      </span>
+                      <span
+                        className={`font-medium text-sm mt-1 truncate w-full ${service ? "text-white" : "text-gray-500"}`}
+                      >
+                        {service || "Select service"}
+                      </span>
                     </div>
                   </button>
                   {activeTab === "service" && (
                     <div className="p-2 border-t border-neutral-800 border-opacity-50 max-h-64 overflow-y-auto dropdown-active">
-                      {serviceOptions.length > 0 ? serviceOptions.map(opt => (
-                        <button
-                          key={opt.value}
-                          onClick={() => { setService(opt.value); openNextAvailableTab("service"); }}
-                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${service === opt.value ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
-                        >
-                          {opt.label}
-                        </button>
-                      )) : <div className="p-4 text-sm text-center text-gray-400">Loading...</div>}
+                      {serviceOptions.length > 0 ? (
+                        serviceOptions.map((opt) => (
+                          <button
+                            key={opt.value}
+                            onClick={() => {
+                              setService(opt.value);
+                              openNextAvailableTab("service");
+                            }}
+                            className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${service === opt.value ? "bg-white text-black" : "hover:bg-neutral-800 text-white"}`}
+                          >
+                            {opt.label}
+                          </button>
+                        ))
+                      ) : (
+                        <div className="p-4 text-sm text-center text-gray-400">
+                          Loading...
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
 
                 {/* Availability */}
-                <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "availability" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
-                  <button onClick={() => handleActiveTabChange(activeTab === "availability" ? null : "availability")} className="w-full flex items-center justify-between p-4 text-left cursor-pointer">
+                <div
+                  className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "availability" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
+                >
+                  <button
+                    onClick={() =>
+                      handleActiveTabChange(
+                        activeTab === "availability" ? null : "availability",
+                      )
+                    }
+                    className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
+                  >
                     <div className="flex flex-col items-start w-full">
-                      <span className="text-xs font-semibold text-primary">Availability</span>
-                      <span className={`font-medium text-sm mt-1 truncate w-full ${availability ? "text-white" : "text-gray-500"}`}>{availability || "Select availability"}</span>
+                      <span className="text-xs font-semibold text-primary">
+                        Availability
+                      </span>
+                      <span
+                        className={`font-medium text-sm mt-1 truncate w-full ${availability ? "text-white" : "text-gray-500"}`}
+                      >
+                        {availability || "Select availability"}
+                      </span>
                     </div>
                   </button>
                   {activeTab === "availability" && (
                     <div className="p-2 border-t border-neutral-800 border-opacity-50 dropdown-active">
-                      {AVAILABILITY_OPTIONS.map(opt => (
+                      {AVAILABILITY_OPTIONS.map((opt) => (
                         <button
                           key={opt.value}
-                          onClick={() => { setAvailability(opt.label); openNextAvailableTab("availability"); }}
-                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${availability === opt.label ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
+                          onClick={() => {
+                            setAvailability(opt.label);
+                            openNextAvailableTab("availability");
+                          }}
+                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${availability === opt.label ? "bg-white text-black" : "hover:bg-neutral-800 text-white"}`}
                         >
                           {opt.label}
                         </button>
@@ -1001,20 +1144,41 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
             ) : (
               <>
                 {/* Body Type */}
-                <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "bodyType" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
-                  <button onClick={() => handleActiveTabChange(activeTab === "bodyType" ? null : "bodyType")} className="w-full flex items-center justify-between p-4 text-left cursor-pointer">
+                <div
+                  className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "bodyType" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
+                >
+                  <button
+                    onClick={() =>
+                      handleActiveTabChange(
+                        activeTab === "bodyType" ? null : "bodyType",
+                      )
+                    }
+                    className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
+                  >
                     <div className="flex flex-col items-start w-full">
-                      <span className="text-xs font-semibold text-primary">Body Type</span>
-                      <span className={`font-medium text-sm mt-1 truncate w-full ${bodyType ? "text-white" : "text-gray-500"}`}>{bodyType || "Add type"}</span>
+                      <span className="text-xs font-semibold text-primary">
+                        Body Type
+                      </span>
+                      <span
+                        className={`font-medium text-sm mt-1 truncate w-full ${bodyType ? "text-white" : "text-gray-500"}`}
+                      >
+                        {bodyType || "Add type"}
+                      </span>
                     </div>
                   </button>
                   {activeTab === "bodyType" && (
                     <div className="p-2 border-t border-neutral-800 border-opacity-50 max-h-64 overflow-y-auto custom-scrollbar dropdown-active">
-                      {(vehicleType === "4 Wheeler" ? FOUR_WHEELER_TYPES : TWO_WHEELER_TYPES).map(type => (
+                      {(vehicleType === "4 Wheeler"
+                        ? FOUR_WHEELER_TYPES
+                        : TWO_WHEELER_TYPES
+                      ).map((type) => (
                         <button
                           key={type.key}
-                          onClick={() => { setBodyType(type.label); openNextAvailableTab("bodyType", type.label); }}
-                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${bodyType === type.label ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
+                          onClick={() => {
+                            setBodyType(type.label);
+                            openNextAvailableTab("bodyType", type.label);
+                          }}
+                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${bodyType === type.label ? "bg-white text-black" : "hover:bg-neutral-800 text-white"}`}
                         >
                           {type.label}
                         </button>
@@ -1024,20 +1188,38 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 </div>
 
                 {/* Fuel Type */}
-                <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "fuel" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
-                  <button onClick={() => handleActiveTabChange(activeTab === "fuel" ? null : "fuel")} className="w-full flex items-center justify-between p-4 text-left cursor-pointer">
+                <div
+                  className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "fuel" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
+                >
+                  <button
+                    onClick={() =>
+                      handleActiveTabChange(
+                        activeTab === "fuel" ? null : "fuel",
+                      )
+                    }
+                    className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
+                  >
                     <div className="flex flex-col items-start w-full">
-                      <span className="text-xs font-semibold text-primary">Fuel Type</span>
-                      <span className={`font-medium text-sm mt-1 truncate w-full ${fuelType ? "text-white" : "text-gray-500"}`}>{fuelType || "Select fuel"}</span>
+                      <span className="text-xs font-semibold text-primary">
+                        Fuel Type
+                      </span>
+                      <span
+                        className={`font-medium text-sm mt-1 truncate w-full ${fuelType ? "text-white" : "text-gray-500"}`}
+                      >
+                        {fuelType || "Select fuel"}
+                      </span>
                     </div>
                   </button>
                   {activeTab === "fuel" && (
                     <div className="p-2 border-t border-neutral-800 border-opacity-50 dropdown-active">
-                      {FUEL_TYPES.map(fuel => (
+                      {FUEL_TYPES.map((fuel) => (
                         <button
                           key={fuel}
-                          onClick={() => { setFuelType(fuel); openNextAvailableTab("fuel", fuel); }}
-                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${fuelType === fuel ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
+                          onClick={() => {
+                            setFuelType(fuel);
+                            openNextAvailableTab("fuel", fuel);
+                          }}
+                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${fuelType === fuel ? "bg-white text-black" : "hover:bg-neutral-800 text-white"}`}
                         >
                           {fuel}
                         </button>
@@ -1047,11 +1229,26 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 </div>
 
                 {/* Brand Search */}
-                <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "brand" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
-                  <button onClick={() => handleActiveTabChange(activeTab === "brand" ? null : "brand")} className="w-full flex items-center justify-between p-4 text-left cursor-pointer">
+                <div
+                  className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "brand" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
+                >
+                  <button
+                    onClick={() =>
+                      handleActiveTabChange(
+                        activeTab === "brand" ? null : "brand",
+                      )
+                    }
+                    className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
+                  >
                     <div className="flex flex-col items-start w-full">
-                      <span className="text-xs font-semibold text-primary">Brand</span>
-                      <span className={`font-medium text-sm mt-1 truncate w-full ${brand ? "text-white" : "text-gray-500"}`}>{brand || "Search brand"}</span>
+                      <span className="text-xs font-semibold text-primary">
+                        Brand
+                      </span>
+                      <span
+                        className={`font-medium text-sm mt-1 truncate w-full ${brand ? "text-white" : "text-gray-500"}`}
+                      >
+                        {brand || "Search brand"}
+                      </span>
                     </div>
                   </button>
                   {activeTab === "brand" && (
@@ -1063,11 +1260,14 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                         value={brandSearch || brand}
                         onChange={(e) => {
                           setBrandSearch(e.target.value);
-                          if (!e.target.value) { setBrand(''); setMakerId(null); }
+                          if (!e.target.value) {
+                            setBrand("");
+                            setMakerId(null);
+                          }
                         }}
                       />
                       <div className="mt-2 w-full max-h-48 overflow-y-auto rounded-xl">
-                        {filteredBrands.map(b => (
+                        {filteredBrands.map((b) => (
                           <button
                             key={b.makeId}
                             onClick={() => {
@@ -1076,7 +1276,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                               setBrandSearch("");
                               openNextAvailableTab("brand");
                             }}
-                            className={`w-full py-3 px-4 border-b border-neutral-700 last:border-none text-left text-sm font-semibold text-white cursor-pointer ${brand === b.makeName ? 'bg-white text-black' : 'hover:bg-neutral-800'}`}
+                            className={`w-full py-3 px-4 border-b border-neutral-700 last:border-none text-left text-sm font-semibold text-white cursor-pointer ${brand === b.makeName ? "bg-white text-black" : "hover:bg-neutral-800"}`}
                           >
                             {b.makeDisplay}
                           </button>
@@ -1087,20 +1287,38 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 </div>
 
                 {/* Budget */}
-                <div className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "budget" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}>
-                  <button onClick={() => handleActiveTabChange(activeTab === "budget" ? null : "budget")} className="w-full flex items-center justify-between p-4 text-left cursor-pointer">
+                <div
+                  className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "budget" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
+                >
+                  <button
+                    onClick={() =>
+                      handleActiveTabChange(
+                        activeTab === "budget" ? null : "budget",
+                      )
+                    }
+                    className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
+                  >
                     <div className="flex flex-col items-start w-full">
-                      <span className="text-xs font-semibold text-primary">Budget</span>
-                      <span className={`font-medium text-sm mt-1 truncate w-full ${budget ? "text-white" : "text-gray-500"}`}>{budget || "Select budget"}</span>
+                      <span className="text-xs font-semibold text-primary">
+                        Budget
+                      </span>
+                      <span
+                        className={`font-medium text-sm mt-1 truncate w-full ${budget ? "text-white" : "text-gray-500"}`}
+                      >
+                        {budget || "Select budget"}
+                      </span>
                     </div>
                   </button>
                   {activeTab === "budget" && (
                     <div className="p-2 border-t border-neutral-800 border-opacity-50 dropdown-active">
-                      {BUDGET_RANGE.map(range => (
+                      {BUDGET_RANGE.map((range) => (
                         <button
                           key={range}
-                          onClick={() => { setBudget(range); openNextAvailableTab("budget"); }}
-                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${budget === range ? 'bg-white text-black' : 'hover:bg-neutral-800 text-white'}`}
+                          onClick={() => {
+                            setBudget(range);
+                            openNextAvailableTab("budget");
+                          }}
+                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${budget === range ? "bg-white text-black" : "hover:bg-neutral-800 text-white"}`}
                         >
                           {range}
                         </button>
