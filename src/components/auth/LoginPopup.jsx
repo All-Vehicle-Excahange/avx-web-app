@@ -169,7 +169,13 @@ function LoginPopup({
 
         {/* LEFT IMAGE */}
         <div className="hidden md:block w-5/12 relative">
-          <Image src="/cs.png" alt="Cars" fill className="object-cover" />
+          <Image
+            src="/cs.webp"
+            priority
+            alt="Cars"
+            fill
+            className="object-cover"
+          />
           <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
           <div className="absolute bottom-8 left-8">
             <h2 className="text-4xl font-bold text-primary leading-tight">
