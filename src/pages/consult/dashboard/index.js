@@ -1,14 +1,12 @@
-function index() {
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+
+export default function Index() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/consult/dashboard/overview");
+  }, []);
+
   return null;
-}
-
-export default index;
-
-export function getServerSideProps() {
-  return {
-    redirect: {
-      destination: "/consult/dashboard/overview",
-      permanent: false,
-    },
-  };
 }

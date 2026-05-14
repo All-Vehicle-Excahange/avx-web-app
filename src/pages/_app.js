@@ -15,88 +15,88 @@ import SplashScreen from "@/components/ui/SplashScreen";
 import GlobalCompareButton from "@/components/ui/GlobalCompareButton";
 
 export default function App({ Component, pageProps }) {
-    const router = useRouter();
-    const hasFullWidth = pageProps?.fullWidth;
+  const router = useRouter();
+  // const hasFullWidth = pageProps?.fullWidth;
+  const hasFullWidth = Component.fullWidth;
+  const initializeAuth = useAuthStore((state) => state.initializeAuth);
+  const isLoginPopupOpen = useAuthStore((state) => state.isLoginPopupOpen);
+  const closeLoginPopup = useAuthStore((state) => state.closeLoginPopup);
 
-    const initializeAuth = useAuthStore((state) => state.initializeAuth);
-    const isLoginPopupOpen = useAuthStore((state) => state.isLoginPopupOpen);
-    const closeLoginPopup = useAuthStore((state) => state.closeLoginPopup);
+  const [loading, setLoading] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
 
-    const [loading, setLoading] = useState(false);
-    const [showSplash, setShowSplash] = useState(true);
+  // HANDLE FIRST LOAD (localStorage + sessionStorage)
+  useEffect(() => {
+    try {
+      const hasSeenSplash = localStorage.getItem("splashSeen");
+      const sessionSeen = sessionStorage.getItem("splashSession");
 
-    // HANDLE FIRST LOAD (localStorage + sessionStorage)
-    useEffect(() => {
-        try {
-            const hasSeenSplash = localStorage.getItem("splashSeen");
-            const sessionSeen = sessionStorage.getItem("splashSession");
-
-            if (hasSeenSplash || sessionSeen) {
-                setShowSplash(false);
-            }
-        } catch (e) {
-            setShowSplash(false);
-        }
-    }, []);
-
-    // CROSS-TAB SYNC (BroadcastChannel)
-    useEffect(() => {
-        const channel = new BroadcastChannel("splash_channel");
-
-        channel.onmessage = (event) => {
-            if (event.data === "SPLASH_DONE") {
-                setShowSplash(false);
-            }
-        };
-
-        return () => channel.close();
-    }, []);
-
-    // WHEN SPLASH FINISHES
-    const handleSplashComplete = () => {
-        try {
-            localStorage.setItem("splashSeen", "true");     // permanent
-            sessionStorage.setItem("splashSession", "true"); // current tab
-        } catch (e) { }
-
-        // notify other tabs instantly
-        const channel = new BroadcastChannel("splash_channel");
-        channel.postMessage("SPLASH_DONE");
-        channel.close();
-
+      if (hasSeenSplash || sessionSeen) {
         setShowSplash(false);
+      }
+    } catch (e) {
+      setShowSplash(false);
+    }
+  }, []);
+
+  // CROSS-TAB SYNC (BroadcastChannel)
+  useEffect(() => {
+    const channel = new BroadcastChannel("splash_channel");
+
+    channel.onmessage = (event) => {
+      if (event.data === "SPLASH_DONE") {
+        setShowSplash(false);
+      }
     };
 
-    //  INIT AUTH
-    useEffect(() => {
-        initializeAuth();
-    }, [initializeAuth]);
+    return () => channel.close();
+  }, []);
 
-    useGuestSetup();
+  // WHEN SPLASH FINISHES
+  const handleSplashComplete = () => {
+    try {
+      localStorage.setItem("splashSeen", "true"); // permanent
+      sessionStorage.setItem("splashSession", "true"); // current tab
+    } catch (e) {}
 
-    //  ROUTE LOADER
-    useEffect(() => {
-        const handleStart = () => setLoading(true);
-        const handleStop = () => setLoading(false);
+    // notify other tabs instantly
+    const channel = new BroadcastChannel("splash_channel");
+    channel.postMessage("SPLASH_DONE");
+    channel.close();
 
-        Router.events.on("routeChangeStart", handleStart);
-        Router.events.on("routeChangeComplete", handleStop);
-        Router.events.on("routeChangeError", handleStop);
+    setShowSplash(false);
+  };
 
-        return () => {
-            Router.events.off("routeChangeStart", handleStart);
-            Router.events.off("routeChangeComplete", handleStop);
-            Router.events.off("routeChangeError", handleStop);
-        };
-    }, []);
+  //  INIT AUTH
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
 
-    return (
-        <>
-            <Head>
-                {/* PREVENT FLICKER BEFORE REACT LOADS */}
-                <script
-                    dangerouslySetInnerHTML={{
-                        __html: `
+  useGuestSetup();
+
+  //  ROUTE LOADER
+  useEffect(() => {
+    const handleStart = () => setLoading(true);
+    const handleStop = () => setLoading(false);
+
+    Router.events.on("routeChangeStart", handleStart);
+    Router.events.on("routeChangeComplete", handleStop);
+    Router.events.on("routeChangeError", handleStop);
+
+    return () => {
+      Router.events.off("routeChangeStart", handleStart);
+      Router.events.off("routeChangeComplete", handleStop);
+      Router.events.off("routeChangeError", handleStop);
+    };
+  }, []);
+
+  return (
+    <>
+      <Head>
+        {/* PREVENT FLICKER BEFORE REACT LOADS */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
                         try {
                             const hasSeen = localStorage.getItem('splashSeen');
                             const sessionSeen = sessionStorage.getItem('splashSession');
@@ -106,41 +106,39 @@ export default function App({ Component, pageProps }) {
                             }
                         } catch (e) {}
                         `,
-                    }}
-                />
-            </Head>
+          }}
+        />
+      </Head>
 
-            {/* GLOBAL LOADER */}
-            {/* <GlobalLoader isLoading={loading} /> */}
+      {/* GLOBAL LOADER */}
+      {/* <GlobalLoader isLoading={loading} /> */}
 
-            {/* MAIN APP */}
-            {hasFullWidth ? (
-                <Component {...pageProps} />
-            ) : (
-                <Layout>
-                    <Component {...pageProps} />
-                </Layout>
-            )}
+      {/* MAIN APP */}
+      {hasFullWidth ? (
+        <Component {...pageProps} />
+      ) : (
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      )}
 
-            {/* LOGIN POPUP */}
-            <LoginPopup
-                isOpen={isLoginPopupOpen && !showSplash}
-                onClose={closeLoginPopup}
-            />
+      {/* LOGIN POPUP */}
+      <LoginPopup
+        isOpen={isLoginPopupOpen && !showSplash}
+        onClose={closeLoginPopup}
+      />
 
-            {/* SPLASH SCREEN */}
-            {showSplash && (
-                <div style={{ display: "var(--splash-display, contents)" }}>
-                    <SplashScreen onComplete={handleSplashComplete} />
-                </div>
-            )}
+      {/* SPLASH SCREEN */}
+      {showSplash && (
+        <div style={{ display: "var(--splash-display, contents)" }}>
+          <SplashScreen onComplete={handleSplashComplete} />
+        </div>
+      )}
 
-            {/* GLOBAL COMPARE BUTTON */}
-            {!showSplash &&
-                !router.asPath.startsWith("/consult/dashboard/") &&
-                !router.asPath.startsWith("/consult/kyc") && (
-                    <GlobalCompareButton />
-                )}
-        </>
-    );
+      {/* GLOBAL COMPARE BUTTON */}
+      {!showSplash &&
+        !router.asPath.startsWith("/consult/dashboard/") &&
+        !router.asPath.startsWith("/consult/kyc") && <GlobalCompareButton />}
+    </>
+  );
 }

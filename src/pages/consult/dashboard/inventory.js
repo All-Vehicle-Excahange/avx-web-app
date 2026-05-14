@@ -12,10 +12,6 @@ function inventory() {
   );
 }
 
-export default inventory;
+inventory.fullWidth = true;
 
-export function getServerSideProps() {
-  return {
-    props: { fullWidth: true },
-  };
-}
+export default inventory;

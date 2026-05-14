@@ -16,61 +16,58 @@ import FooterLink from "@/components/layout/FooterLink";
 import Footer from "@/components/layout/Footer";
 
 function index() {
-    return (
-        <>
-            <Navbar scrolled={true} />
+  return (
+    <>
+      <Navbar scrolled={true} />
 
-            <Layout>
-                <HeroSection />
-            </Layout>
+      <Layout>
+        <HeroSection />
+      </Layout>
 
-            <Layout>
-                <AvxStructure />
-            </Layout>
-            <Layout>
-                <VehiclesListed />
-            </Layout>
+      <Layout>
+        <AvxStructure />
+      </Layout>
+      <Layout>
+        <VehiclesListed />
+      </Layout>
 
-            <Layout>
-                <AvxInspectionLayer />
-            </Layout>
+      <Layout>
+        <AvxInspectionLayer />
+      </Layout>
 
-            <Layout>
-                <InteractionSection />
-            </Layout>
+      <Layout>
+        <InteractionSection />
+      </Layout>
 
-            <Layout>
-                <PerformanceVisibilitySection />
-            </Layout>
+      <Layout>
+        <PerformanceVisibilitySection />
+      </Layout>
 
-            <Layout>
-                <ReVerification />
-            </Layout>
+      <Layout>
+        <ReVerification />
+      </Layout>
 
-            <Layout>
-                <TransactionStructureSection />
-            </Layout>
+      <Layout>
+        <TransactionStructureSection />
+      </Layout>
 
-            <Layout>
-                <AVXJourneySection />
-            </Layout>
+      <Layout>
+        <AVXJourneySection />
+      </Layout>
 
-            <Layout>
-                <WhyThisMattersSection />
-            </Layout>
+      <Layout>
+        <WhyThisMattersSection />
+      </Layout>
 
-            <Layout>
-                <Cta />
-            </Layout>
-            <FooterLink />
-            <Footer />
-        </>);
+      <Layout>
+        <Cta />
+      </Layout>
+      <FooterLink />
+      <Footer />
+    </>
+  );
 }
+
+index.fullWidth = true;
 
 export default index;
-
-export function getServerSideProps() {
-    return {
-        props: { fullWidth: true },
-    };
-}

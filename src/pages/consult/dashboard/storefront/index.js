@@ -12,10 +12,7 @@ function storefront() {
   );
 }
 
+storefront.fullWidth = true;
+
 export default storefront;
 
-export function getServerSideProps() {
-  return {
-    props: { fullWidth: true },
-  };
-}

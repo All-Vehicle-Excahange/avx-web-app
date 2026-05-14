@@ -2,7 +2,7 @@ import CreateAd from "@/components/features/consult/details/dashboard/ads/Create
 import DashboardLayout from "@/components/features/consult/details/dashboard/DashboardLayout";
 import React from "react";
 
-export default function create() {
+function create() {
   return (
     <>
       <DashboardLayout>
@@ -12,8 +12,6 @@ export default function create() {
   );
 }
 
-export function getServerSideProps() {
-  return {
-    props: { fullWidth: true },
-  };
-}
+create.fullWidth = true;
+
+export default create;

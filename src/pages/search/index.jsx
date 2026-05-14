@@ -13,7 +13,7 @@ import FooterLink from "@/components/layout/FooterLink";
 import ReletedToSearch from "@/components/features/search/ReletedToSearch";
 import AutoConsualt from "@/components/features/search/AutoConsualt";
 
-export default function Index({ seo }) {
+function Index({ seo }) {
   const [pageResponse, setPageResponse] = useState({
     totalElements: 0,
     totalPages: 0,
@@ -29,7 +29,12 @@ export default function Index({ seo }) {
     <>
       <Head>
         <title>{seo?.title || "Used Cars for Sale | Reecomm"}</title>
-        <meta name="description" content={seo?.description || "Browse verified used vehicles for sale."} />
+        <meta
+          name="description"
+          content={
+            seo?.description || "Browse verified used vehicles for sale."
+          }
+        />
       </Head>
       <Suspense fallback={null}>
         <SearchContent
@@ -49,12 +54,21 @@ export default function Index({ seo }) {
   );
 }
 
+Index.fullWidth = true;
+
+export default Index;
+
 function SearchContent({
-  pageResponse, setPageResponse,
-  activeFilters, setActiveFilters,
-  relatedVehicles, setRelatedVehicles,
-  consultants, setConsultants,
-  consultPayload, setConsultPayload
+  pageResponse,
+  setPageResponse,
+  activeFilters,
+  setActiveFilters,
+  relatedVehicles,
+  setRelatedVehicles,
+  consultants,
+  setConsultants,
+  consultPayload,
+  setConsultPayload,
 }) {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -77,7 +91,12 @@ function SearchContent({
         <ReletedToSearch data={relatedVehicles} loading={isLoading} />
       </Layout>
       <Layout>
-        <AutoConsualt limit={4} data={consultants} filterPayload={consultPayload} loading={isLoading} />
+        <AutoConsualt
+          limit={4}
+          data={consultants}
+          filterPayload={consultPayload}
+          loading={isLoading}
+        />
       </Layout>
 
       <DownloadAppSection />
@@ -121,7 +140,6 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      fullWidth: true,
       seo: {
         title: dynamicTitle,
         description: dynamicDescription,

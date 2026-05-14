@@ -12,7 +12,7 @@ export default function HeroSection() {
     <section
       className="relative h-screen bg-cover bg-center"
       style={{
-        backgroundImage: "url(/hero-back.png)",
+        backgroundImage: "url(/hero-back.webp)",
       }}
     >
       {/* Dark overlay */}

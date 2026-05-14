@@ -21,7 +21,10 @@ function index() {
     <>
       <Head>
         <title>Become a Consultant | Reecomm</title>
-        <meta name="description" content="Join Reecomm as a consultant and earn through vehicle inspections while growing your business with our advanced tools." />
+        <meta
+          name="description"
+          content="Join Reecomm as a consultant and earn through vehicle inspections while growing your business with our advanced tools."
+        />
       </Head>
       <Navbar />
 
@@ -44,11 +47,6 @@ function index() {
     </>
   );
 }
-
+index.fullWidth = true;
 export default index;
 
-export function getServerSideProps() {
-  return {
-    props: { fullWidth: true },
-  };
-}

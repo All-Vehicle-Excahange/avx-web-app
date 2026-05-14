@@ -12,10 +12,6 @@ function create() {
   );
 }
 
-export default create;
+create.fullWidth = true;
 
-export function getServerSideProps() {
-  return {
-    props: { fullWidth: true },
-  };
-}
+export default create;

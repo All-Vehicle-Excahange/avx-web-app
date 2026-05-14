@@ -2,7 +2,7 @@ import DashboardLayout from "@/components/features/consult/details/dashboard/Das
 import ThemeListing from "@/components/features/consult/details/dashboard/storeFrontTheme/ThemeListing";
 import React from "react";
 
-export default function index() {
+function index() {
   return (
     <>
       <DashboardLayout>
@@ -12,8 +12,6 @@ export default function index() {
   );
 }
 
-export function getServerSideProps() {
-  return {
-    props: { fullWidth: true },
-  };
-}
+index.fullWidth = true;
+
+export default index;

@@ -12,10 +12,6 @@ function ppc() {
   );
 }
 
-export default ppc;
+ppc.fullWidth = true;
 
-export function getServerSideProps() {
-  return {
-    props: { fullWidth: true },
-  };
-}
+export default ppc;

@@ -9,11 +9,6 @@ function index() {
   );
 }
 
-export default index;
+index.fullWidth = true;
 
-// Pass a flag so _app.js knows to remove Layout
-export function getServerSideProps() {
-  return {
-    props: { fullWidth: true },
-  };
-}
+export default index;

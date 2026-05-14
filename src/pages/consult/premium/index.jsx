@@ -14,7 +14,11 @@ import Footer from "@/components/layout/Footer";
 
 function Index() {
   const [activeFilters, setActiveFilters] = useState([]);
-  const [pageResponse, setPageResponse] = useState({ totalElements: 0, totalPages: 0, currentPage: 1 });
+  const [pageResponse, setPageResponse] = useState({
+    totalElements: 0,
+    totalPages: 0,
+    currentPage: 1,
+  });
 
   return (
     <Suspense fallback={null}>
@@ -28,7 +32,12 @@ function Index() {
   );
 }
 
-function SearchContent({ activeFilters, setActiveFilters, pageResponse, setPageResponse }) {
+function SearchContent({
+  activeFilters,
+  setActiveFilters,
+  pageResponse,
+  setPageResponse,
+}) {
   const searchParams = useSearchParams();
   const location = searchParams.get("location");
   const serviceParam = searchParams.get("service");
@@ -36,10 +45,11 @@ function SearchContent({ activeFilters, setActiveFilters, pageResponse, setPageR
   const getDynamicTitle = () => {
     let serviceText = "";
     if (serviceParam) {
-      serviceText = serviceParam
-        .split("_")
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-        .join(" ") + " ";
+      serviceText =
+        serviceParam
+          .split("_")
+          .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+          .join(" ") + " ";
     }
 
     let title = `${serviceText}Premium Auto Consultants`;
@@ -55,12 +65,21 @@ function SearchContent({ activeFilters, setActiveFilters, pageResponse, setPageR
     <>
       <Head>
         <title>{dynamicTitle}</title>
-        <meta name="description" content={`Experience elite expertise with ${serviceParam || "premium auto consultants"}${location ? ` in ${location}` : ""}. Reliable and top-rated car buying help with Reecomm.`} />
+        <meta
+          name="description"
+          content={`Experience elite expertise with ${serviceParam || "premium auto consultants"}${location ? ` in ${location}` : ""}. Reliable and top-rated car buying help with Reecomm.`}
+        />
       </Head>
-      <SearchWithHeader activeFilters={activeFilters} pageResponse={pageResponse} />
+      <SearchWithHeader
+        activeFilters={activeFilters}
+        pageResponse={pageResponse}
+      />
 
       <Layout>
-        <PremiumFilterWithCard onFilterChange={setActiveFilters} onPageResponseChange={setPageResponse} />
+        <PremiumFilterWithCard
+          onFilterChange={setActiveFilters}
+          onPageResponseChange={setPageResponse}
+        />
       </Layout>
 
       <SellVehicleBanner fullWidth />
@@ -77,11 +96,6 @@ function SearchContent({ activeFilters, setActiveFilters, pageResponse, setPageR
   );
 }
 
+Index.fullWidth = true;
+
 export default Index;
-
-
-export function getServerSideProps() {
-  return {
-    props: { fullWidth: true },
-  };
-}

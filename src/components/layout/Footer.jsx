@@ -22,7 +22,7 @@ const footerLinks = {
   ],
   consultants: [
     { label: "Become a consultant", href: "/consult" },
-    { label: "Consultant pricing", href: "#" },
+    { label: "Consultant pricing", href: "/consult/pricing" },
     { label: "Manage my inventory", href: "/consult/subscription" },
     { label: "Consultant success guide", href: "#" },
     { label: "Partner with Reecomm", href: "#" },

@@ -12,10 +12,13 @@ import ScrollDownArrow from "@/components/ui/ScrollDownArrow";
 import FooterLink from "@/components/layout/FooterLink";
 import Footer from "@/components/layout/Footer";
 
-
 function Index() {
   const [activeFilters, setActiveFilters] = useState([]);
-  const [pageResponse, setPageResponse] = useState({ totalElements: 0, totalPages: 0, currentPage: 1 });
+  const [pageResponse, setPageResponse] = useState({
+    totalElements: 0,
+    totalPages: 0,
+    currentPage: 1,
+  });
 
   return (
     <Suspense fallback={null}>
@@ -29,7 +32,12 @@ function Index() {
   );
 }
 
-function SearchContent({ activeFilters, setActiveFilters, pageResponse, setPageResponse }) {
+function SearchContent({
+  activeFilters,
+  setActiveFilters,
+  pageResponse,
+  setPageResponse,
+}) {
   const searchParams = useSearchParams();
   const location = searchParams.get("location");
   const serviceParam = searchParams.get("service");
@@ -37,10 +45,11 @@ function SearchContent({ activeFilters, setActiveFilters, pageResponse, setPageR
   const getDynamicTitle = () => {
     let serviceText = "";
     if (serviceParam) {
-      serviceText = serviceParam
-        .split("_")
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-        .join(" ") + " ";
+      serviceText =
+        serviceParam
+          .split("_")
+          .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+          .join(" ") + " ";
     }
 
     let title = `${serviceText}Expert Car Consultants`;
@@ -56,12 +65,21 @@ function SearchContent({ activeFilters, setActiveFilters, pageResponse, setPageR
     <>
       <Head>
         <title>{dynamicTitle}</title>
-        <meta name="description" content={`Find the best ${serviceParam || "expert car consultants"}${location ? ` in ${location}` : ""}. Personalized and expert assistance with Reecomm.`} />
+        <meta
+          name="description"
+          content={`Find the best ${serviceParam || "expert car consultants"}${location ? ` in ${location}` : ""}. Personalized and expert assistance with Reecomm.`}
+        />
       </Head>
-      <SearchWithHeader activeFilters={activeFilters} pageResponse={pageResponse} />
+      <SearchWithHeader
+        activeFilters={activeFilters}
+        pageResponse={pageResponse}
+      />
 
       <Layout>
-        <FilterWithCard onFilterChange={setActiveFilters} onPageResponseChange={setPageResponse} />
+        <FilterWithCard
+          onFilterChange={setActiveFilters}
+          onPageResponseChange={setPageResponse}
+        />
       </Layout>
 
       <SellVehicleBanner fullWidth />
@@ -78,11 +96,6 @@ function SearchContent({ activeFilters, setActiveFilters, pageResponse, setPageR
   );
 }
 
+Index.fullWidth = true;
+
 export default Index;
-
-
-export function getServerSideProps() {
-  return {
-    props: { fullWidth: true },
-  };
-}

@@ -12,10 +12,6 @@ function inquiries() {
   );
 }
 
-export default inquiries;
+inquiries.fullWidth = true;
 
-export function getServerSideProps() {
-  return {
-    props: { fullWidth: true },
-  };
-}
+export default inquiries;

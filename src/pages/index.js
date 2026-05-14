@@ -19,13 +19,22 @@ import Layout from "@/components/layout/Layout";
 import BecameBanner from "@/components/features/home/BecameBanner";
 import Head from "next/head";
 
-export default function Home() {
+function Home() {
   return (
     <>
       <Head>
-        <title>Reecomm - Buy & Sell Used Cars Online in India | Best Deals on Second Hand Cars</title>
-        <meta name="description" content="Certified and verified second-hand cars for sale. Buy and sell used cars online at best prices with Reecomm. Expert inspection and transparent process." />
-        <meta name="keywords" content="buy used cars, sell used cars, second hand cars, certified pre-owned cars, car inspection, Reecomm" />
+        <title>
+          Reecomm - Buy & Sell Used Cars Online in India | Best Deals on Second
+          Hand Cars
+        </title>
+        <meta
+          name="description"
+          content="Certified and verified second-hand cars for sale. Buy and sell used cars online at best prices with Reecomm. Expert inspection and transparent process."
+        />
+        <meta
+          name="keywords"
+          content="buy used cars, sell used cars, second hand cars, certified pre-owned cars, car inspection, Reecomm"
+        />
       </Head>
       <HeroSection fullWidth />
       {/* <RecentlyVisitedSection /> */}
@@ -51,11 +60,9 @@ export default function Home() {
         <AutoConsultPicsSection limit={8} />
       </Layout>
 
-
       {/* <Layout>
         <BecameBanner />
       </Layout> */}
-
 
       <div className="hidden md:block">
         <BecameBanner />
@@ -63,7 +70,6 @@ export default function Home() {
       <div className="block md:hidden">
         <ConsultBanner />
       </div>
-
 
       <Layout>
         <RecentrlySold />
@@ -82,9 +88,6 @@ export default function Home() {
   );
 }
 
-// Pass a flag so _app.js knows to remove Layout
-export function getServerSideProps() {
-  return {
-    props: { fullWidth: true },
-  };
-}
+Home.fullWidth = true;
+
+export default Home;
