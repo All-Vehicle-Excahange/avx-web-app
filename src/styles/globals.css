@@ -6,8 +6,8 @@
   --color-secondary: #121212;
   --color-third: #bebebe;
   --color-fourth: #007bff;
-  --primary-font: "Exo", sans-serif;
-  --secondary-font: "Poppins", sans-serif;
+  --primary-font: var(--font-exo), sans-serif;
+  --secondary-font: var(--font-poppins), sans-serif;
 }
 
 @theme {
@@ -16,8 +16,8 @@
   --color-third: #bebebe;
   --breakpoint-3xl: 120rem;
   --color-fourth: #007bff;
-  --primary: "Exo", sans-serif;
-  --secondary: "Poppins", sans-serif;
+  --primary: var(--font-exo), sans-serif;
+  --secondary: var(--font-poppins), sans-serif;
 
   --animate-spin-slow: spin 3s linear infinite;
 }

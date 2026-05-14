@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import { useEffect } from "react";
+import Image from "next/image";
 
 export default function HamburgerDrawer({ open, onClose, role }) {
   // close on Esc key
@@ -27,7 +28,7 @@ export default function HamburgerDrawer({ open, onClose, role }) {
         <button onClick={onClose} className="text-2xl cursor-pointer">
           <X className="w-5 h-5" />
         </button>
-        <img src="/logo/logo.webp" alt="Reecomm Logo" className="h-6 md:h-6 w-auto object-contain block" />
+        <Image src="/logo/logo.webp" alt="Reecomm Logo" width={120} height={24} className="h-6 w-auto object-contain block" />
       </div>
 
       {/* CONTENT */}

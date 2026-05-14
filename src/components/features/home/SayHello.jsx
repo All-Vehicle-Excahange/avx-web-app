@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Image from "next/image";
 
 const SayHello = () => {
     const [activeTab, setActiveTab] = useState("Book a Test Drive");
@@ -132,9 +133,11 @@ const SayHello = () => {
                 {/* Image Composition Section */}
                 <div className="relative flex justify-center items-start gap-4 lg:gap-8">
                     <div className="flex flex-col items-start gap-12">
-                        <img
+                        <Image
                             src="https://a.hwstatic.com/image/upload/f_auto,h_480,w_320,q_50/v1644506520/pwa/chat/chat-image-1.jpg"
-                            alt=""
+                            alt="Chat feature preview"
+                            width={320}
+                            height={480}
                             className={`
                             rounded-xl lg:rounded-2xl shadow-2xl lg:shadow-3xl w-[80px] sm:w-[130px] md:w-[180px] lg:w-[250px] h-auto
                             transform transition-all duration-500 ease-out
@@ -145,17 +148,19 @@ const SayHello = () => {
 
                     {/* Center Image (Mobile Phone View) */}
                     <div className="flex shrink-0 relative w-[130px] sm:w-[180px] md:w-[240px] lg:w-[300px] h-[260px] sm:h-[360px] md:h-[480px] lg:h-[550px] top-4 lg:top-8 ">
-                        <img
-                            key={activeTab}
-                            src={images[activeTab]}
-                            alt=""
-                            className="
-                                absolute inset-0
-                                rounded-2xl lg:rounded-3xl shadow-xl lg:shadow-2xl
-                                w-full h-auto
-                                animate-fade-slide
-                            "
-                        />
+                        <Image
+                                key={activeTab}
+                                src={images[activeTab]}
+                                alt="App screen preview"
+                                width={375}
+                                height={656}
+                                className="
+                                    absolute inset-0
+                                    rounded-2xl lg:rounded-3xl shadow-xl lg:shadow-2xl
+                                    w-full h-auto
+                                    animate-fade-slide
+                                "
+                            />
                     </div>
 
                     {/* Right Stepper & Image Group */}
@@ -218,9 +223,11 @@ const SayHello = () => {
                         </div>
 
                         {/* Right Image */}
-                        <img
+                        <Image
                             src="https://a.hwstatic.com/image/upload/f_auto,h_480,w_320,q_50/v1644506518/pwa/chat/chat-image-2.jpg"
-                            alt=""
+                            alt="Chat feature preview"
+                            width={320}
+                            height={480}
                             className={`
                                 rounded-xl lg:rounded-2xl shadow-2xl lg:shadow-3xl w-[80px] sm:w-[130px] md:w-[180px] lg:w-[250px] h-auto
                                 transform transition-all duration-500 ease-out
