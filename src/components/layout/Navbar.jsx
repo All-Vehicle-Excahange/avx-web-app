@@ -110,8 +110,6 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
   const { isMobileBannerVisible, hideMobileBanner, isMobileBannerTempHidden } =
     useUIStore();
   const [scrollY, setScrollY] = useState(0);
-  const [bannerHeight, setBannerHeight] = useState(0);
-  const bannerRef = useRef(null);
 
   /* ================= SCROLL DETECTION ================= */
   useEffect(() => {
@@ -127,28 +125,8 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  /* ================= BANNER HEIGHT ================= */
-  useEffect(() => {
-    const updateHeight = () => {
-      if (
-        bannerRef.current &&
-        isMobileBannerVisible &&
-        !isMobileBannerTempHidden
-      ) {
-        setBannerHeight(bannerRef.current.offsetHeight);
-      } else {
-        setBannerHeight(0);
-      }
-    };
-
-    updateHeight();
-    window.addEventListener("resize", updateHeight);
-    return () => window.removeEventListener("resize", updateHeight);
-  }, [isMobileBannerVisible, isMobileBannerTempHidden]);
-
   /* ================= BANNER TRANSFORM ================= */
-  // const transformY =
-  //   isMobileBannerVisible && atTop ? 0 : -bannerHeight;
+  // Logic removed to fix forced reflows.
 
   /* ================= SEARCH OUTSIDE CLICK ================= */
   useEffect(() => {
@@ -354,7 +332,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
       // style={{ transform: `translateY(${transformY}px)` }}
       >
         {isMobileBannerVisible && !isMobileBannerTempHidden && atTop && (
-          <div ref={bannerRef} className="pointer-events-auto">
+          <div className="pointer-events-auto">
             <MobileAppDownloadBanner onClose={hideMobileBanner} />
           </div>
         )}
