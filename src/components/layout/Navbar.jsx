@@ -1,6 +1,6 @@
 "use client";
 import { Menu, Search, User, Settings, MapPin, ChevronRight, Tag, Car, Fuel, Zap, Star } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import Button from "../ui/button";
 import HamburgerDrawer from "../features/home/HamburgerDrawer";
 import AccountPopup from "../features/home/AccountPopup";
@@ -43,6 +43,16 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
   const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+
+  const combinedItems = useMemo(() => {
+    return [...filteredSuggestions, ...results];
+  }, [filteredSuggestions, results]);
+
+  useEffect(() => {
+    setSelectedIndex(-1);
+  }, [searchQuery, showDropdown, combinedItems]);
+
   const searchRef = useRef(null);
   const accountRef = useRef(null);
   const [persisAccountOpen, setPersisAccountOpen] = useState(false);
@@ -405,8 +415,26 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                       setShowDropdown(true);
                     }}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        if (searchQuery.trim()) {
+                      if (e.key === "ArrowDown") {
+                        e.preventDefault();
+                        setSelectedIndex((prev) =>
+                          prev < combinedItems.length - 1 ? prev + 1 : prev
+                        );
+                      } else if (e.key === "ArrowUp") {
+                        e.preventDefault();
+                        setSelectedIndex((prev) => (prev > -1 ? prev - 1 : -1));
+                      } else if (e.key === "Enter") {
+                        if (selectedIndex >= 0 && combinedItems[selectedIndex]) {
+                          const selected = combinedItems[selectedIndex];
+                          if (selected.link) {
+                            router.push(selected.link);
+                            setSearchQuery(selected.label);
+                          } else if (selected.username) {
+                            router.push(`/store-front/${selected.username}`);
+                          }
+                          setShowDropdown(false);
+                          setSelectedIndex(-1);
+                        } else if (searchQuery.trim()) {
                           const brandParam = selectedBrand !== "All" ? `&brand=${encodeURIComponent(selectedBrand)}` : "";
                           router.push(`/search?q=${encodeURIComponent(searchQuery)}${brandParam}`);
                           setShowDropdown(false);
@@ -414,6 +442,8 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                           router.push(`/search?brand=${encodeURIComponent(selectedBrand)}`);
                           setShowDropdown(false);
                         }
+                      } else if (e.key === "Escape") {
+                        setShowDropdown(false);
                       }
                     }}
                     className="w-full bg-transparent focus:outline-none text-black placeholder:text-gray-400 text-sm"
@@ -447,7 +477,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                             </span>
                           </div>
                           <div className="grid grid-cols-1 gap-0.5">
-                            {filteredSuggestions.map((s) => (
+                            {filteredSuggestions.map((s, idx) => (
                               <div
                                 key={s.id}
                                 onClick={() => {
@@ -455,7 +485,8 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                                   setShowDropdown(false);
                                   setSearchQuery(s.label);
                                 }}
-                                className="group flex items-center gap-3 p-1 hover:bg-fourth/5 cursor-pointer text-sm transition-all duration-200 rounded-sm"
+                                className={`group flex items-center gap-3 p-1 cursor-pointer text-sm transition-all duration-200 rounded-sm
+                                  ${selectedIndex === idx ? "bg-fourth/10 border-l-4 border-fourth pl-2" : "hover:bg-fourth/5"}`}
                               >
                                 <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-fourth/10 transition-colors">
                                   {(() => {
@@ -494,44 +525,48 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                             </span>
                           </div>
                           <div className="grid grid-cols-1 gap-1">
-                            {results.map((item, index) => (
-                              <div
-                                key={item.id || index}
-                                onClick={() => {
-                                  if (item.username) {
-                                    router.push(`/store-front/${item.username}`);
-                                  }
-                                  setShowDropdown(false);
-                                }}
-                                className="flex items-center gap-4 p-3 hover:bg-fourth/5 cursor-pointer transition-all duration-200 rounded-sm group"
-                              >
-                                <div className="relative">
-                                  <Image
-                                    src={
-                                      item.profilePicture ||
-                                      "/images/default-avatar.png"
+                            {results.map((item, index) => {
+                              const globalIndex = filteredSuggestions.length + index;
+                              return (
+                                <div
+                                  key={item.id || index}
+                                  onClick={() => {
+                                    if (item.username) {
+                                      router.push(`/store-front/${item.username}`);
                                     }
-                                    width={40}
-                                    height={40}
-                                    className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
-                                    alt={item.fullName || "User"}
-                                  />
-                                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <div className="font-semibold text-gray-900 truncate group-hover:text-primary transition-colors">
-                                    {item.fullName || item.name}
+                                    setShowDropdown(false);
+                                  }}
+                                  className={`flex items-center gap-4 p-3 cursor-pointer transition-all duration-200 rounded-sm group
+                                    ${selectedIndex === globalIndex ? "bg-fourth/10 border-l-4 border-fourth pl-4" : "hover:bg-fourth/5"}`}
+                                >
+                                  <div className="relative">
+                                    <Image
+                                      src={
+                                        item.profilePicture ||
+                                        "/images/default-avatar.png"
+                                      }
+                                      width={40}
+                                      height={40}
+                                      className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
+                                      alt={item.fullName || "User"}
+                                    />
+                                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
                                   </div>
-                                  <div className="text-xs text-gray-500 flex items-center gap-1">
-                                    <MapPin className="w-3 h-3" />
-                                    {item.city}, {item.state}
+                                  <div className="flex-1 min-w-0">
+                                    <div className="font-semibold text-gray-900 truncate group-hover:text-primary transition-colors">
+                                      {item.fullName || item.name}
+                                    </div>
+                                    <div className="text-xs text-gray-500 flex items-center gap-1">
+                                      <MapPin className="w-3 h-3" />
+                                      {item.city}, {item.state}
+                                    </div>
+                                  </div>
+                                  <div className="opacity-0 group-hover:opacity-100 transition-opacity pr-2">
+                                    <ChevronRight className="w-4 h-4 text-fourth" />
                                   </div>
                                 </div>
-                                <div className="opacity-0 group-hover:opacity-100 transition-opacity pr-2">
-                                  <ChevronRight className="w-4 h-4 text-fourth" />
-                                </div>
-                              </div>
-                            ))}
+                              );
+                            })}
                           </div>
                         </div>
                       )}
