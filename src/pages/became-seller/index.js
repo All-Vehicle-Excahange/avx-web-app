@@ -13,13 +13,16 @@ import Faq from "@/components/features/userSeller/Faq";
 import WhySellOnAvx from "@/components/features/userSeller/WhySellOnAvx";
 
 function index() {
-   return (
-     <>
-       <Head>
-         <title>Become a Seller | Reecomm</title>
-         <meta name="description" content="Join Reecomm as a seller and reach thousands of verified buyers with no commission." />
-       </Head>
-       <Navbar heroMod scrolled />
+  return (
+    <>
+      <Head>
+        <title>Become a Seller | Reecomm</title>
+        <meta
+          name="description"
+          content="Join Reecomm as a seller and reach thousands of verified buyers with no commission."
+        />
+      </Head>
+      <Navbar heroMod scrolled />
       <Hero />
       <Layout>
         <WhySellOnAvx />
@@ -31,15 +34,11 @@ function index() {
       </Layout>
       <FooterLink />
       <Footer />
-
     </>
   );
 }
+index.fullWidth = true;
 
 export default index;
 
-export function getServerSideProps() {
-  return {
-    props: { fullWidth: true },
-  };
-}
+

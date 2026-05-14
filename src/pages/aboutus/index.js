@@ -14,50 +14,47 @@ import FooterLink from "@/components/layout/FooterLink";
 import Footer from "@/components/layout/Footer";
 
 function index() {
-    return (
-        <>
-            <Navbar scrolled={true} />
+  return (
+    <>
+      <Navbar scrolled={true} />
 
-            <Layout>
-                <HeroSection />
-            </Layout>
+      <Layout>
+        <HeroSection />
+      </Layout>
 
-            <Layout>
-                <ProblemWeAreSolve />
-            </Layout>
-            <Layout>
-                <WhyAvxDifferent />
-            </Layout>
-            <Layout>
-                <HowAvxWorks />
-            </Layout>
-            <Layout>
-                <ConsultantsAndBuyers />
-            </Layout>
-            <Layout>
-                <TrustSignals />
-            </Layout>
-            <Layout>
-                <VisionAndApproach />
-            </Layout>
-            <Layout>
-                <ComplianceAndTransparency />
-            </Layout>
-            <Layout>
-                <Cta />
-            </Layout>
+      <Layout>
+        <ProblemWeAreSolve />
+      </Layout>
+      <Layout>
+        <WhyAvxDifferent />
+      </Layout>
+      <Layout>
+        <HowAvxWorks />
+      </Layout>
+      <Layout>
+        <ConsultantsAndBuyers />
+      </Layout>
+      <Layout>
+        <TrustSignals />
+      </Layout>
+      <Layout>
+        <VisionAndApproach />
+      </Layout>
+      <Layout>
+        <ComplianceAndTransparency />
+      </Layout>
+      <Layout>
+        <Cta />
+      </Layout>
 
-            <FooterLink />
-            <Footer />
-
-        </>
-    );
+      <FooterLink />
+      <Footer />
+    </>
+  );
 }
+
+index.fullWidth = true;
 
 export default index;
 
-export function getStaticProps() {
-    return {
-        props: { fullWidth: true },
-    };
-}
+

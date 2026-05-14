@@ -32,7 +32,7 @@ const STEPS = [
 
 /* ─── hero images per step ─── */
 const STEP_IMAGES = [
-  "/hero-back.png",
+  "/hero-back.webp",
   "/engine-core.jpg",
   "/big_card_car.jpg",
   "/homeBanner.jpg",
@@ -45,7 +45,12 @@ const STEP_TAGLINES = [
   { title: "Set Your\nBudget", sub: "Min & max price range" },
 ];
 
-function PreferencesPopup({ isOpen, onClose, initialData = null, onSubmit = null }) {
+function PreferencesPopup({
+  isOpen,
+  onClose,
+  initialData = null,
+  onSubmit = null,
+}) {
   const [activeStep, setActiveStep] = useState(0);
   const [isClosing, setIsClosing] = useState(false);
 
@@ -91,8 +96,8 @@ function PreferencesPopup({ isOpen, onClose, initialData = null, onSubmit = null
     if (isOpen && initialData) {
       setSelectedStates(initialData.stateIds?.map(String) || []);
       setSelectedCities(initialData.cityIds?.map(String) || []);
-      setSelectedBrands(initialData.makerDetails?.map(m => m.makerId) || []);
-      setSelectedModels(initialData.modelDetails?.map(m => m.modelId) || []);
+      setSelectedBrands(initialData.makerDetails?.map((m) => m.makerId) || []);
+      setSelectedModels(initialData.modelDetails?.map((m) => m.modelId) || []);
       setSelectedFuelTypes(initialData.fuelTypes || []);
       setSelectedTransmissionTypes(initialData.transmissionTypes || []);
       setSelectedVehicleTypes(initialData.vehicleTypes || []);

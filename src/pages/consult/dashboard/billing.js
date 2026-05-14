@@ -12,10 +12,6 @@ function billing() {
   );
 }
 
-export default billing;
+billing.fullWidth = true;
 
-export function getServerSideProps() {
-  return {
-    props: { fullWidth: true },
-  };
-}
+export default billing;

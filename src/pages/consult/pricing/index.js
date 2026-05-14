@@ -10,30 +10,29 @@ import FAQ from "@/components/features/consult/pricing/Faq";
 import TierCta from "@/components/features/consult/pricing/TierCta";
 
 function index() {
-    return (
-        <>
-            <Head>
-                <title>Pricing Plans | Reecomm</title>
-                <meta name="description" content="Join Reecomm as a consultant and earn through vehicle inspections while growing your business with our advanced tools." />
-            </Head>
-            <Navbar />
+  return (
+    <>
+      <Head>
+        <title>Pricing Plans | Reecomm</title>
+        <meta
+          name="description"
+          content="Join Reecomm as a consultant and earn through vehicle inspections while growing your business with our advanced tools."
+        />
+      </Head>
+      <Navbar />
 
-            <FullPricing />
-            <Layout>
-                <NoCommissionModel />
-                <FAQ />
-                <TierCta />
-                <FooterLink />
-            </Layout>
-            <Footer />
-        </>
-    );
+      <FullPricing />
+      <Layout>
+        <NoCommissionModel />
+        <FAQ />
+        <TierCta />
+        <FooterLink />
+      </Layout>
+      <Footer />
+    </>
+  );
 }
+
+index.fullWidth = true;
 
 export default index;
-
-export function getStaticProps() {
-    return {
-        props: { fullWidth: true },
-    };
-}

@@ -40,10 +40,6 @@ function index() {
   );
 }
 
-export default index;
+index.fullWidth = true;
 
-export function getServerSideProps() {
-  return {
-    props: { fullWidth: true },
-  };
-}
+export default index;
