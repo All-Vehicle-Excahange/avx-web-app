@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Disallow private user dashboards and account pages
+Disallow: /consult/dashboard/
+Disallow: /consult/account/
+Disallow: /user/details/
+
+# Disallow utility pages that don't need SEO
+Disallow: /register/
+
+# Point search engines to the dynamically generated sitemap
+Sitemap: https://www.reecomm.com/sitemap.xml

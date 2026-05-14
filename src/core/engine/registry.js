@@ -1,4 +1,3 @@
-import WhyBuyHerePro2 from "@/components/features/store-front-testing/pro-tier-page/template2/Hero";
 import AboutBasic1 from "./templates/AboutBasic1";
 import AboutBasic2 from "./templates/AboutBasic2";
 import AboutBasic3 from "./templates/AboutBasic3";
