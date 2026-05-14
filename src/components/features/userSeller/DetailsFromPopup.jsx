@@ -258,7 +258,7 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
         {/* LEFT IMAGE */}
         <div className="hidden md:block w-5/12 relative bg-black shrink-0">
           <Image
-            src="/cs.png"
+            src="/cs.webp"
             alt="Document Verification"
             fill
             className="object-cover"
