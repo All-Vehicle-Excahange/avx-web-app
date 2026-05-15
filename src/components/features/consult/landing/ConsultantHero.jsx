@@ -108,10 +108,7 @@ export default function ConsultantHeroSection() {
   const [showConsultPopup, setShowConsultPopup] = useState(false);
 
   useEffect(() => {
-    if (
-      user?.userRole &&
-      ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(user.userRole)
-    ) {
+    if (user?.userRole && ["CONSULTATION"].includes(user.userRole)) {
       setShowConsultPopup(true);
     }
   }, [user]);
