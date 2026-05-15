@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/set-state-in-effect */
+
 import Image from "next/image";
 import {
     MessageSquare,

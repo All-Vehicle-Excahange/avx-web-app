@@ -1,26 +1,15 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 
-// --- Utility for Tailwind classes ---
-const cn = (...classes) => classes.filter(Boolean).join(" ");
+// // --- Utility for Tailwind classes ---
+// const cn = (...classes) => classes.filter(Boolean).join(" ");
 
 export default function ReletedToSearch({ data, loading = false }) {
-  const [cardData, setCardData] = useState(data || []);
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
-
-  useEffect(() => {
-    setCardData(data || []);
-  }, [data]);
-
-
+  const cardData = data || [];
 
   return (
     <div className="">
-
       <div className="flex flex-col items-start gap-2">
         <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
           Top Related
@@ -32,15 +21,18 @@ export default function ReletedToSearch({ data, loading = false }) {
         </h2>
 
         <p className="text-third">
-          Listings similar to what you&apos;re looking for — verified, inspected, and ready to view.
+          Listings similar to what you&apos;re looking for — verified,
+          inspected, and ready to view.
         </p>
       </div>
 
-      <div
-        className="flex-1 min-h-0 mt-6 grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-1">
+      <div className="flex-1 min-h-0 mt-6 grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-1">
         {loading ? (
           [...Array(4)].map((_, i) => (
-            <div key={`skel-${i}`} className="lg:col-span-1 lg:row-span-1 h-full">
+            <div
+              key={`skel-${i}`}
+              className="lg:col-span-1 lg:row-span-1 h-full"
+            >
               <VehicleCardSkeleton />
             </div>
           ))
@@ -52,7 +44,10 @@ export default function ReletedToSearch({ data, loading = false }) {
           </div>
         ) : (
           cardData.map((vehicle) => (
-            <div key={vehicle.id} className="lg:col-span-1 lg:row-span-1 h-full">
+            <div
+              key={vehicle.id}
+              className="lg:col-span-1 lg:row-span-1 h-full"
+            >
               <VehicleCard data={vehicle} source="home" />
             </div>
           ))

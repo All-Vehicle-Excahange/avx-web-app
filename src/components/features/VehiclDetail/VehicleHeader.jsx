@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { ChevronRight, Star } from "lucide-react";
@@ -10,22 +9,18 @@ import { useCompareStore } from "@/stores/useCompareStore";
 export default function VehicleHeader({ vehicle, vehicleSummary }) {
   const searchParams = useSearchParams();
   const source = searchParams.get("source"); // "home" | "search" | undefined
-  const [mounted, setMounted] = useState(false);
 
   // Global Comparison Store
   const { openCompare, setSelectedVehicle } = useCompareStore();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Sync vehicle with store when viewing details
   useEffect(() => {
     if (vehicle) {
       setSelectedVehicle(vehicle);
     }
-  }, [vehicle]);
+  }, [vehicle, setSelectedVehicle]);
 
+  
   const vehicleNameBase =
     [vehicle?.makerName, vehicle?.modelName, vehicle?.variantName]
       .filter(Boolean)

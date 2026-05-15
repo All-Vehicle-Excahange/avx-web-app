@@ -1,8 +1,6 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import {
   MapPin,
   MessageCircle,
@@ -85,7 +83,7 @@ export default function StoreFrontHeroSection() {
     }
   }, 800);
 
-  const handleFollowToggle = () => {
+  const handleFollowToggle = useCallback(() => {
     if (!comsultDetails?.id) return;
 
     if (!isLoggedIn) {
@@ -108,14 +106,17 @@ export default function StoreFrontHeroSection() {
     } else {
       debouncedSyncFollow(nextState);
     }
-  };
+  }, [comsultDetails?.id, isLoggedIn, isFollower, debouncedSyncFollow]);
 
   useEffect(() => {
     if (isLoggedIn && pendingAction.current === "follow") {
       pendingAction.current = null;
-      handleFollowToggle();
+      const timeoutId = setTimeout(() => {
+        handleFollowToggle();
+      }, 0);
+      return () => clearTimeout(timeoutId);
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, handleFollowToggle]);
 
   if (!comsultDetails) return <StoreFrontHeroSkeleton />;
 

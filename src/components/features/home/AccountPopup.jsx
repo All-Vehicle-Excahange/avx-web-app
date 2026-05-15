@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import LoginPopup from "@/components/auth/LoginPopup";
@@ -219,7 +218,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                 onClick={onClosePopup}
                 className="text-lg font-bold text-primary hover:text-third transition-colors block"
               >
-                Hello, {user?.firstname} {user?.lastname}
+                Hello, {user?.consultationName || `${user?.firstname} ${user?.lastname}`}
               </Link>
 
               {/* PROGRESS INDICATOR - Only for Consultants */}

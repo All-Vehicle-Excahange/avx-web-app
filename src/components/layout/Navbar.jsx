@@ -1,5 +1,17 @@
 "use client";
-import { Menu, Search, User, Settings, MapPin, ChevronRight, Tag, Car, Fuel, Zap, Star } from "lucide-react";
+import {
+  Menu,
+  Search,
+  User,
+  Settings,
+  MapPin,
+  ChevronRight,
+  Tag,
+  Car,
+  Fuel,
+  Zap,
+  Star,
+} from "lucide-react";
 import { useState, useEffect, useRef, useMemo } from "react";
 import Button from "../ui/button";
 import HamburgerDrawer from "../features/home/HamburgerDrawer";
@@ -8,23 +20,71 @@ import Link from "next/link";
 import Image from "next/image";
 import { useAuthStore } from "@/stores/useAuthStore";
 import PreferencesPopup from "../features/user/PreferencesPopup";
-import { getGlobalSearch, getUserProfileStrength } from "@/services/user.service";
+import {
+  getGlobalSearch,
+  getUserProfileStrength,
+} from "@/services/user.service";
 import { useRouter, usePathname } from "next/navigation";
 import { useUIStore } from "@/stores/useUIStore";
 import MobileAppDownloadBanner from "../ui/MobileAppDownloadBanner";
 const MAKER_NAME_MAPPING = {
-  1: 'Ashok Leyland', 2: 'Aston Martin', 3: 'Audi', 4: 'Bentley', 5: 'BMW',
-  6: 'Bugatti', 7: 'Chevrolet', 8: 'Datsun', 9: 'Ferrari', 10: 'Fiat',
-  11: 'Force Motors', 12: 'Ford', 13: 'Hindustan Motors', 14: 'Honda',
-  15: 'Hyundai', 16: 'ICML', 17: 'Jaguar', 18: 'Lamborghini', 19: 'Land Rover',
-  20: 'Mahindra', 21: 'Maruti Suzuki', 22: 'Maserati', 23: 'Maybach',
-  24: 'Mercedes Benz', 25: 'Mitsubishi', 26: 'Nissan', 27: 'Porsche',
-  28: 'Premier', 29: 'Renault', 30: 'Rolls Royce', 31: 'San', 32: 'Skoda',
-  33: 'Ssangyong', 34: 'Tata', 35: 'Toyota', 36: 'Volkswagen', 37: 'Volvo',
-  38: 'Mahindra Renault', 39: 'Opel', 40: 'Daewoo', 41: 'Jeep', 42: 'ISUZU',
-  43: 'DC', 44: 'Subaru', 49: 'CRYSLER', 50: 'MG', 51: 'KIA', 52: 'BAJAJ',
-  53: 'EICHER', 55: 'CADILLAC', 57: 'SMPIL', 58: 'HUMMER', 59: 'WILLYS',
-  60: 'ROVAR', 61: 'CITROEN', 62: 'BYD', 64: 'PMV'
+  1: "Ashok Leyland",
+  2: "Aston Martin",
+  3: "Audi",
+  4: "Bentley",
+  5: "BMW",
+  6: "Bugatti",
+  7: "Chevrolet",
+  8: "Datsun",
+  9: "Ferrari",
+  10: "Fiat",
+  11: "Force Motors",
+  12: "Ford",
+  13: "Hindustan Motors",
+  14: "Honda",
+  15: "Hyundai",
+  16: "ICML",
+  17: "Jaguar",
+  18: "Lamborghini",
+  19: "Land Rover",
+  20: "Mahindra",
+  21: "Maruti Suzuki",
+  22: "Maserati",
+  23: "Maybach",
+  24: "Mercedes Benz",
+  25: "Mitsubishi",
+  26: "Nissan",
+  27: "Porsche",
+  28: "Premier",
+  29: "Renault",
+  30: "Rolls Royce",
+  31: "San",
+  32: "Skoda",
+  33: "Ssangyong",
+  34: "Tata",
+  35: "Toyota",
+  36: "Volkswagen",
+  37: "Volvo",
+  38: "Mahindra Renault",
+  39: "Opel",
+  40: "Daewoo",
+  41: "Jeep",
+  42: "ISUZU",
+  43: "DC",
+  44: "Subaru",
+  49: "CRYSLER",
+  50: "MG",
+  51: "KIA",
+  52: "BAJAJ",
+  53: "EICHER",
+  55: "CADILLAC",
+  57: "SMPIL",
+  58: "HUMMER",
+  59: "WILLYS",
+  60: "ROVAR",
+  61: "CITROEN",
+  62: "BYD",
+  64: "PMV",
 };
 
 export default function Navbar({ heroMode = false, scrolled = false }) {
@@ -69,22 +129,24 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
       const data = await import("@/data/searchSuggestions.json");
       const loadedSuggestions = data.default || data;
       setSuggestionsData(loadedSuggestions);
-      
+
       const rawBrands = loadedSuggestions.reduce((acc, s) => {
         if (s.type === "brand") acc.push(s.label);
         if (s.brand) acc.push(s.brand);
-        if (s.makerId && MAKER_NAME_MAPPING[s.makerId]) acc.push(MAKER_NAME_MAPPING[s.makerId]);
+        if (s.makerId && MAKER_NAME_MAPPING[s.makerId])
+          acc.push(MAKER_NAME_MAPPING[s.makerId]);
         return acc;
       }, []);
-      
+
       const bMap = new Map();
-      rawBrands.forEach(b => {
+      rawBrands.forEach((b) => {
         const normalized = b.toLowerCase();
-        if (normalized === 'kia') bMap.set('kia', 'Kia');
-        else if (normalized === 'mercedes benz' || normalized === 'mercedes') bMap.set('mercedes', 'Mercedes Benz');
+        if (normalized === "kia") bMap.set("kia", "Kia");
+        else if (normalized === "mercedes benz" || normalized === "mercedes")
+          bMap.set("mercedes", "Mercedes Benz");
         else if (!bMap.has(normalized)) bMap.set(normalized, b);
       });
-      
+
       setBrandsList(Array.from(bMap.values()).sort());
       setIsSuggestionsLoaded(true);
     } catch (e) {
@@ -174,11 +236,21 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
     // Filter by brand if a brand is selected
     if (selectedBrand !== "All") {
-      baseSuggestions = suggestionsData.filter(s => {
-        const brandMatch = s.brand && s.brand.toLowerCase() === selectedBrand.toLowerCase();
-        const makerIdMatch = s.makerId && MAKER_NAME_MAPPING[s.makerId] && MAKER_NAME_MAPPING[s.makerId].toLowerCase() === selectedBrand.toLowerCase();
+      baseSuggestions = suggestionsData.filter((s) => {
+        const brandMatch =
+          s.brand && s.brand.toLowerCase() === selectedBrand.toLowerCase();
+        const makerIdMatch =
+          s.makerId &&
+          MAKER_NAME_MAPPING[s.makerId] &&
+          MAKER_NAME_MAPPING[s.makerId].toLowerCase() ===
+            selectedBrand.toLowerCase();
         // If it's a model of the selected brand, or the brand itself
-        return brandMatch || makerIdMatch || (s.type === "brand" && s.label.toLowerCase() === selectedBrand.toLowerCase());
+        return (
+          brandMatch ||
+          makerIdMatch ||
+          (s.type === "brand" &&
+            s.label.toLowerCase() === selectedBrand.toLowerCase())
+        );
       });
     }
 
@@ -190,29 +262,34 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
     const query = searchQuery.toLowerCase().trim();
 
     // 1. Direct matches from JSON
-    const directMatches = baseSuggestions.filter((s) =>
-      s.label.toLowerCase().includes(query)
-    ).slice(0, 5);
+    const directMatches = baseSuggestions
+      .filter((s) => s.label.toLowerCase().includes(query))
+      .slice(0, 5);
 
     // 2. Generate Dynamic Related Searches
     const dynamicRelated = [];
     // Improved matching logic: handles typos and word order better
-    const matchedItem = baseSuggestions.find(s => {
+    const matchedItem = baseSuggestions.find((s) => {
       if (s.type !== "brand" && s.type !== "model") return false;
       const label = s.label.toLowerCase();
-      const qWords = query.split(/\s+/).filter(w => w.length > 1);
-      const lWords = label.split(/\s+/).filter(w => w.length > 1);
+      const qWords = query.split(/\s+/).filter((w) => w.length > 1);
+      const lWords = label.split(/\s+/).filter((w) => w.length > 1);
 
       // Direct match or substring
       if (query.includes(label) || label.includes(query)) return true;
 
       // Word-based fuzzy match (handles "tata nexton" matching "tata nexon")
-      const matches = lWords.filter(lw =>
-        qWords.some(qw =>
-          qw.includes(lw) || lw.includes(qw) ||
-          // Handle one character difference (simple typo)
-          (qw.length > 3 && lw.length > 3 && (qw.slice(0, -2) === lw.slice(0, -2) || qw.slice(2) === lw.slice(2)))
-        )
+      const matches = lWords.filter((lw) =>
+        qWords.some(
+          (qw) =>
+            qw.includes(lw) ||
+            lw.includes(qw) ||
+            // Handle one character difference (simple typo)
+            (qw.length > 3 &&
+              lw.length > 3 &&
+              (qw.slice(0, -2) === lw.slice(0, -2) ||
+                qw.slice(2) === lw.slice(2))),
+        ),
       );
       return matches.length >= lWords.length;
     });
@@ -222,15 +299,38 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
       const q = query.toLowerCase();
 
       // Intent detection
-      const isLocationIntent = q.includes(" in") || q.includes(" near") || q.includes(" at");
-      const isBudgetIntent = q.includes(" under") || q.includes(" below") || q.includes(" price") || q.includes(" budget");
-      const isFuelIntent = q.includes(" diesel") || q.includes(" petrol") || q.includes(" ev") || q.includes(" cng");
-      const isFeatureIntent = q.includes(" auto") || q.includes(" sunroof") || q.includes(" 7 seater");
+      const isLocationIntent =
+        q.includes(" in") || q.includes(" near") || q.includes(" at");
+      const isBudgetIntent =
+        q.includes(" under") ||
+        q.includes(" below") ||
+        q.includes(" price") ||
+        q.includes(" budget");
+      const isFuelIntent =
+        q.includes(" diesel") ||
+        q.includes(" petrol") ||
+        q.includes(" ev") ||
+        q.includes(" cng");
+      const isFeatureIntent =
+        q.includes(" auto") ||
+        q.includes(" sunroof") ||
+        q.includes(" 7 seater");
 
-      const brandParam = matchedItem.brand || (matchedItem.makerId ? MAKER_NAME_MAPPING[matchedItem.makerId] : baseLabel);
-      const modelIdParam = matchedItem.modelId || (matchedItem.type === "model" ? matchedItem.id.replace('m_', '') : null);
-      const modelNameParam = matchedItem.model || (matchedItem.type === "model" ? baseLabel : "");
-      const modelQueryParam = modelIdParam ? `&modelId=${modelIdParam}&model=${encodeURIComponent(modelNameParam)}` : "";
+      const brandParam =
+        matchedItem.brand ||
+        (matchedItem.makerId
+          ? MAKER_NAME_MAPPING[matchedItem.makerId]
+          : baseLabel);
+      const modelIdParam =
+        matchedItem.modelId ||
+        (matchedItem.type === "model"
+          ? matchedItem.id.replace("m_", "")
+          : null);
+      const modelNameParam =
+        matchedItem.model || (matchedItem.type === "model" ? baseLabel : "");
+      const modelQueryParam = modelIdParam
+        ? `&modelId=${modelIdParam}&model=${encodeURIComponent(modelNameParam)}`
+        : "";
 
       // 1. Location Suggestion
       if (!isBudgetIntent && !isFuelIntent && !isFeatureIntent) {
@@ -238,52 +338,63 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
           id: `rel-loc-ah-${query}`,
           label: `${baseLabel} in Ahmedabad`,
           type: "related",
-          link: `/search?location=Ahmedabad&brand=${brandParam}${modelQueryParam}`
+          link: `/search?location=Ahmedabad&brand=${brandParam}${modelQueryParam}`,
         });
         dynamicRelated.push({
           id: `rel-loc-mu-${query}`,
           label: `${baseLabel} in Mumbai`,
           type: "related",
-          link: `/search?location=Mumbai&brand=${brandParam}${modelQueryParam}`
+          link: `/search?location=Mumbai&brand=${brandParam}${modelQueryParam}`,
         });
       }
 
       // 2. Budget Suggestion
-      if (isBudgetIntent || (!isLocationIntent && !isFuelIntent && !isFeatureIntent)) {
+      if (
+        isBudgetIntent ||
+        (!isLocationIntent && !isFuelIntent && !isFeatureIntent)
+      ) {
         dynamicRelated.push({
           id: `rel-p2-${query}`,
           label: `${brandParam} under 10 Lakh`,
           type: "related",
-          link: `/search?budget=0-10&brand=${brandParam}${modelQueryParam}`
+          link: `/search?budget=0-10&brand=${brandParam}${modelQueryParam}`,
         });
         dynamicRelated.push({
           id: `rel-p1-${query}`,
           label: `${brandParam} under 5 Lakh`,
           type: "related",
-          link: `/search?budget=0-5&brand=${brandParam}${modelQueryParam}`
+          link: `/search?budget=0-5&brand=${brandParam}${modelQueryParam}`,
         });
       }
 
       // 3. Fuel/Feature Suggestion
-      if (isFuelIntent || isFeatureIntent || (!isLocationIntent && !isBudgetIntent)) {
+      if (
+        isFuelIntent ||
+        isFeatureIntent ||
+        (!isLocationIntent && !isBudgetIntent)
+      ) {
         dynamicRelated.push({
           id: `rel-fuel-${query}`,
           label: `Diesel ${brandParam}`,
           type: "related",
-          link: `/search?fuelType=Diesel&brand=${brandParam}${modelQueryParam}`
+          link: `/search?fuelType=Diesel&brand=${brandParam}${modelQueryParam}`,
         });
         dynamicRelated.push({
           id: `rel-auto-${query}`,
           label: `Automatic ${brandParam}`,
           type: "related",
-          link: `/search?transmission=Automatic&brand=${brandParam}${modelQueryParam}`
+          link: `/search?transmission=Automatic&brand=${brandParam}${modelQueryParam}`,
         });
       }
     }
 
     // Combine and remove duplicates by label
     const combined = [...directMatches, ...dynamicRelated];
-    const unique = Array.from(new Map(combined.map(item => [item.label.toLowerCase(), item])).values());
+    const unique = Array.from(
+      new Map(
+        combined.map((item) => [item.label.toLowerCase(), item]),
+      ).values(),
+    );
 
     setFilteredSuggestions(unique);
   }, [searchQuery, selectedBrand, suggestionsData]);
@@ -339,7 +450,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
       )}
       <div
         className="fixed top-0 inset-x-0 z-1100 transition-transform duration-300 pointer-events-none"
-      // style={{ transform: `translateY(${transformY}px)` }}
+        // style={{ transform: `translateY(${transformY}px)` }}
       >
         {isMobileBannerVisible && !isMobileBannerTempHidden && atTop && (
           <div className="pointer-events-auto">
@@ -349,12 +460,13 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
         <nav
           className={`pointer-events-auto transition-all duration-300 relative w-full
-          ${heroMode
+          ${
+            heroMode
               ? scrolled
                 ? "bg-white text-black shadow-xl backdrop-blur-lg h-16"
                 : "bg-transparent text-secondary h-20 md:h-24"
               : "bg-primary text-secondary h-16"
-            }`}
+          }`}
         >
           <div className="relative w-full px-4 md:px-8 mx-auto h-full flex items-center justify-between">
             {/* LEFT */}
@@ -398,12 +510,14 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                     >
                       <option value="All">All</option>
                       {brandsList.map((brand, idx) => (
-                        <option key={idx} value={brand}>{brand}</option>
+                        <option key={idx} value={brand}>
+                          {brand}
+                        </option>
                       ))}
                     </select>
                     <ChevronRight className="w-3 h-3 text-gray-500 absolute right-2 top-1/2 -translate-y-1/2 rotate-90 pointer-events-none" />
                   </div>
-                  
+
                   <Search className="w-4 h-4 ml-3 mr-2 text-gray-600 shrink-0" />
 
                   <input
@@ -418,13 +532,16 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                       if (e.key === "ArrowDown") {
                         e.preventDefault();
                         setSelectedIndex((prev) =>
-                          prev < combinedItems.length - 1 ? prev + 1 : prev
+                          prev < combinedItems.length - 1 ? prev + 1 : prev,
                         );
                       } else if (e.key === "ArrowUp") {
                         e.preventDefault();
                         setSelectedIndex((prev) => (prev > -1 ? prev - 1 : -1));
                       } else if (e.key === "Enter") {
-                        if (selectedIndex >= 0 && combinedItems[selectedIndex]) {
+                        if (
+                          selectedIndex >= 0 &&
+                          combinedItems[selectedIndex]
+                        ) {
                           const selected = combinedItems[selectedIndex];
                           if (selected.link) {
                             router.push(selected.link);
@@ -435,11 +552,18 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                           setShowDropdown(false);
                           setSelectedIndex(-1);
                         } else if (searchQuery.trim()) {
-                          const brandParam = selectedBrand !== "All" ? `&brand=${encodeURIComponent(selectedBrand)}` : "";
-                          router.push(`/search?q=${encodeURIComponent(searchQuery)}${brandParam}`);
+                          const brandParam =
+                            selectedBrand !== "All"
+                              ? `&brand=${encodeURIComponent(selectedBrand)}`
+                              : "";
+                          router.push(
+                            `/search?q=${encodeURIComponent(searchQuery)}${brandParam}`,
+                          );
                           setShowDropdown(false);
                         } else if (selectedBrand !== "All") {
-                          router.push(`/search?brand=${encodeURIComponent(selectedBrand)}`);
+                          router.push(
+                            `/search?brand=${encodeURIComponent(selectedBrand)}`,
+                          );
                           setShowDropdown(false);
                         }
                       } else if (e.key === "Escape") {
@@ -453,11 +577,18 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                   <div
                     onClick={() => {
                       if (searchQuery.trim()) {
-                        const brandParam = selectedBrand !== "All" ? `&brand=${encodeURIComponent(selectedBrand)}` : "";
-                        router.push(`/search?q=${encodeURIComponent(searchQuery)}${brandParam}`);
+                        const brandParam =
+                          selectedBrand !== "All"
+                            ? `&brand=${encodeURIComponent(selectedBrand)}`
+                            : "";
+                        router.push(
+                          `/search?q=${encodeURIComponent(searchQuery)}${brandParam}`,
+                        );
                         setShowDropdown(false);
                       } else if (selectedBrand !== "All") {
-                        router.push(`/search?brand=${encodeURIComponent(selectedBrand)}`);
+                        router.push(
+                          `/search?brand=${encodeURIComponent(selectedBrand)}`,
+                        );
                         setShowDropdown(false);
                       }
                     }}
@@ -473,7 +604,9 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                         <div className="mb-3">
                           <div className="px-3 py-2 flex items-center justify-between">
                             <span className="text-[12px] font-bold text-gray-600 ">
-                              {searchQuery ? "Matching & Related Searches" : "Trending Searches"}
+                              {searchQuery
+                                ? "Matching & Related Searches"
+                                : "Trending Searches"}
                             </span>
                           </div>
                           <div className="grid grid-cols-1 gap-0.5">
@@ -490,14 +623,43 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                               >
                                 <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-fourth/10 transition-colors">
                                   {(() => {
-                                    if (s.type === "related") return <Search className="w-3.5 h-3.5 text-fourth" />;
-                                    if (s.type === "price") return <Tag className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
-                                    if (s.type === "location") return <MapPin className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
-                                    if (s.type === "brand" || s.type === "model") return <Car className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
-                                    if (s.type === "fuel") return <Fuel className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
-                                    if (s.type === "feature" || s.type === "bodyType") return <Zap className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
-                                    if (s.type === "popular") return <Star className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
-                                    return <Search className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
+                                    if (s.type === "related")
+                                      return (
+                                        <Search className="w-3.5 h-3.5 text-fourth" />
+                                      );
+                                    if (s.type === "price")
+                                      return (
+                                        <Tag className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
+                                      );
+                                    if (s.type === "location")
+                                      return (
+                                        <MapPin className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
+                                      );
+                                    if (
+                                      s.type === "brand" ||
+                                      s.type === "model"
+                                    )
+                                      return (
+                                        <Car className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
+                                      );
+                                    if (s.type === "fuel")
+                                      return (
+                                        <Fuel className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
+                                      );
+                                    if (
+                                      s.type === "feature" ||
+                                      s.type === "bodyType"
+                                    )
+                                      return (
+                                        <Zap className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
+                                      );
+                                    if (s.type === "popular")
+                                      return (
+                                        <Star className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
+                                      );
+                                    return (
+                                      <Search className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
+                                    );
                                   })()}
                                 </div>
                                 <div className="flex flex-col">
@@ -526,13 +688,16 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                           </div>
                           <div className="grid grid-cols-1 gap-1">
                             {results.map((item, index) => {
-                              const globalIndex = filteredSuggestions.length + index;
+                              const globalIndex =
+                                filteredSuggestions.length + index;
                               return (
                                 <div
                                   key={item.id || index}
                                   onClick={() => {
                                     if (item.username) {
-                                      router.push(`/store-front/${item.username}`);
+                                      router.push(
+                                        `/store-front/${item.username}`,
+                                      );
                                     }
                                     setShowDropdown(false);
                                   }}
@@ -586,7 +751,9 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                         searchQuery && (
                           <div className="p-8 text-center text-gray-400">
                             <Search className="w-10 h-10 mx-auto mb-3 opacity-20" />
-                            <p className="text-sm">No results found for &quot;{searchQuery}&quot;</p>
+                            <p className="text-sm">
+                              No results found for &quot;{searchQuery}&quot;
+                            </p>
                           </div>
                         )}
                     </div>
@@ -597,7 +764,6 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
             {/* RIGHT SIDE */}
             <div className="flex items-center gap-2 md:gap-4">
-
               {(() => {
                 const userRole = user?.userRole;
                 const isConsultant = [
@@ -608,7 +774,10 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
                 const getCTA = () => {
                   if (!isLoggedIn) {
-                    return { label: "Sell Your Vehicle", href: "/became-seller" };
+                    return {
+                      label: "Sell Your Vehicle",
+                      href: "/became-seller",
+                    };
                   }
 
                   const messages = profileStrength?.messages || [];
@@ -686,7 +855,10 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
                 const cta = getCTA();
 
-                if (pathname?.includes("/dashboard") && cta.label === "Go to Dashboard") {
+                if (
+                  pathname?.includes("/dashboard") &&
+                  cta.label === "Go to Dashboard"
+                ) {
                   return null;
                 }
 
@@ -718,10 +890,11 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                     setAccountOpen(nextPersis);
                   }}
                   className={`flex cursor-pointer items-center gap-1 px-2 py-1 rounded transition text-xs md:text-sm
-                ${heroMode && !scrolled
-                      ? "text-white  hover:outline-2 hover:outline-white/40"
-                      : "text-black  hover:outline-2 hover:outline-black/20"
-                    }`}
+                ${
+                  heroMode && !scrolled
+                    ? "text-white  hover:outline-2 hover:outline-white/40"
+                    : "text-black  hover:outline-2 hover:outline-black/20"
+                }`}
                 >
                   <User className="w-5 h-5 md:w-6 md:h-6" />
 
@@ -731,7 +904,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                         <span className="font-bold">Sign in</span>
                       ) : (
                         <span className="font-bold">
-                          Hello, {user?.firstname}
+                          Hello, {user?.consultationName || user?.firstname}
                         </span>
                       )}
                     </span>

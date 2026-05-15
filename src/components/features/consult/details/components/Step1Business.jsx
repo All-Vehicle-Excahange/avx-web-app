@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Plus, X, Check, Camera, Loader2, Trash2 } from "lucide-react";
@@ -92,6 +92,7 @@ export default function Step1Business({
       }
     };
     check();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedUsername, initialData?.username]);
 
   const [errors, setErrors] = useState({

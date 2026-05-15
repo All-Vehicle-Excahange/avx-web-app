@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-
 import { useEffect, useState } from "react";
 import Router, { useRouter } from "next/router";
 import Head from "next/head";
@@ -13,69 +11,73 @@ import LoginPopup from "@/components/auth/LoginPopup";
 import GlobalLoader from "@/components/ui/GlobalLoader";
 import SplashScreen from "@/components/ui/SplashScreen";
 import GlobalCompareButton from "@/components/ui/GlobalCompareButton";
-import { exo, inter, lexendDeca, montserrat, poppins, raleway, roboto } from "@/lib/fonts";
+import {
+  exo,
+  inter,
+  lexendDeca,
+  montserrat,
+  poppins,
+  raleway,
+  roboto,
+} from "@/lib/fonts";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
-  // const hasFullWidth = pageProps?.fullWidth;
   const hasFullWidth = Component.fullWidth;
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
   const isLoginPopupOpen = useAuthStore((state) => state.isLoginPopupOpen);
   const closeLoginPopup = useAuthStore((state) => state.closeLoginPopup);
 
   const [loading, setLoading] = useState(false);
-  const [showSplash, setShowSplash] = useState(true);
 
-  // HANDLE FIRST LOAD (localStorage + sessionStorage)
+  // 1. Start with 'null' or a neutral state to avoid the cascading render warning
+  const [showSplash, setShowSplash] = useState(null);
+
+  // HANDLE INITIAL MOUNT AND SPLASH LOGIC
   useEffect(() => {
-    try {
-      const hasSeenSplash = localStorage.getItem("splashSeen");
-      const sessionSeen = sessionStorage.getItem("splashSession");
+    const checkSplash = () => {
+      try {
+        const hasSeenSplash = localStorage.getItem("splashSeen");
+        const sessionSeen = sessionStorage.getItem("splashSession");
 
-      if (hasSeenSplash || sessionSeen) {
-        setShowSplash(false);
-      }
-    } catch (e) {
-      setShowSplash(false);
-    }
-  }, []);
-
-  // CROSS-TAB SYNC (BroadcastChannel)
-  useEffect(() => {
-    const channel = new BroadcastChannel("splash_channel");
-
-    channel.onmessage = (event) => {
-      if (event.data === "SPLASH_DONE") {
+        if (hasSeenSplash || sessionSeen) {
+          setShowSplash(false);
+        } else {
+          setShowSplash(true);
+        }
+      } catch (e) {
         setShowSplash(false);
       }
     };
 
-    return () => channel.close();
-  }, []);
-
-  // WHEN SPLASH FINISHES
-  const handleSplashComplete = () => {
-    try {
-      localStorage.setItem("splashSeen", "true"); // permanent
-      sessionStorage.setItem("splashSession", "true"); // current tab
-    } catch (e) {}
-
-    // notify other tabs instantly
-    const channel = new BroadcastChannel("splash_channel");
-    channel.postMessage("SPLASH_DONE");
-    channel.close();
-
-    setShowSplash(false);
-  };
-
-  //  INIT AUTH
-  useEffect(() => {
+    checkSplash();
     initializeAuth();
   }, [initializeAuth]);
 
+  // CROSS-TAB SYNC
+  useEffect(() => {
+    const channel = new BroadcastChannel("splash_channel");
+    channel.onmessage = (event) => {
+      if (event.data === "SPLASH_DONE") setShowSplash(false);
+    };
+    return () => channel.close();
+  }, []);
+
+  const handleSplashComplete = () => {
+    try {
+      localStorage.setItem("splashSeen", "true");
+      sessionStorage.setItem("splashSession", "true");
+    } catch (e) {}
+
+    const channel = new BroadcastChannel("splash_channel");
+    channel.postMessage("SPLASH_DONE");
+    channel.close();
+    setShowSplash(false);
+  };
+
   useGuestSetup();
 
-  //  ROUTE LOADER
+  // ROUTE LOADER
   useEffect(() => {
     const handleStart = () => setLoading(true);
     const handleStop = () => setLoading(false);
@@ -91,32 +93,32 @@ export default function App({ Component, pageProps }) {
     };
   }, []);
 
+  // 2. While showSplash is null, we render a shell or nothing.
+  // This prevents the "cascading render" because we aren't changing from true to false instantly.
+  if (showSplash === null) {
+    return null; // Or a simple loading spinner
+  }
+
   return (
     <div
       className={`${exo.variable} ${inter.variable} ${lexendDeca.variable} ${montserrat.variable} ${poppins.variable} ${raleway.variable} ${roboto.variable} font-sans`}
     >
       <Head>
-        {/* PREVENT FLICKER BEFORE REACT LOADS */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
-                        try {
-                            const hasSeen = localStorage.getItem('splashSeen');
-                            const sessionSeen = sessionStorage.getItem('splashSession');
-
-                            if (hasSeen || sessionSeen) {
-                                document.documentElement.style.setProperty('--splash-display', 'none');
-                            }
-                        } catch (e) {}
-                        `,
+              try {
+                const hasSeen = localStorage.getItem('splashSeen');
+                const sessionSeen = sessionStorage.getItem('splashSession');
+                if (hasSeen || sessionSeen) {
+                  document.documentElement.style.setProperty('--splash-display', 'none');
+                }
+              } catch (e) {}
+            `,
           }}
         />
       </Head>
 
-      {/* GLOBAL LOADER */}
-      {/* <GlobalLoader isLoading={loading} /> */}
-
-      {/* MAIN APP */}
       {hasFullWidth ? (
         <Component {...pageProps} />
       ) : (
@@ -125,13 +127,11 @@ export default function App({ Component, pageProps }) {
         </Layout>
       )}
 
-      {/* LOGIN POPUP */}
       <LoginPopup
         isOpen={isLoginPopupOpen && !showSplash}
         onClose={closeLoginPopup}
       />
 
-      {/* SPLASH SCREEN */}
       {showSplash && (
         <div style={{ display: "var(--splash-display, contents)" }}>
           <SplashScreen onComplete={handleSplashComplete} />

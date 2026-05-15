@@ -28,6 +28,7 @@ import {
   getInquiryKpis,
   getNeedAttenctionVehicles,
   getTopPerformingVehicles,
+  getSellerTier,
 } from "@/services/Seller.service";
 import { useEffect } from "react";
 import TopPerformingCardSkeleton from "@/components/ui/skeleton/TopPerformingCardSkeleton";
@@ -36,6 +37,7 @@ import { formatResponseTime, getResponseStatus } from "@/lib/helper";
 import SkeletonBox from "@/components/ui/skeleton/SkeletonBox";
 import StatCardSkeleton from "@/components/ui/skeleton/StatCardSkeleton";
 import { getAnalyticsKips } from "@/services/analytics.service";
+import { useAuthStore } from "@/stores/useAuthStore";
   
 
 const rangeOptions = [
@@ -49,6 +51,7 @@ const DATE_12_DAYS_AGO = new Date(Date.now() - 86400000 * 12).toISOString();
 const DATE_18_DAYS_AGO = new Date(Date.now() - 86400000 * 18).toISOString();
 
 export default function OverviewComponent() {
+  const user = useAuthStore((state) => state.user);
   const [range, setRange] = useState("30");
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
@@ -57,6 +60,7 @@ export default function OverviewComponent() {
   const [needAttention, setNeedAttention] = useState([]);
   const [inventoryOverview, setInventoryOverview] = useState(null);
   const [inquiryKpis, setInquiryKpis] = useState(null);
+  const [sellerTier, setSellerTier] = useState(null);
   const [topPerformingLoading, setTopPerformingLoading] = useState(false);
   const [needAttentionLoading, setNeedAttentionLoading] = useState(false);
   const [overviewLoading, setOverviewLoading] = useState(false);
@@ -127,11 +131,26 @@ export default function OverviewComponent() {
       }
     };
 
+    const fetchSellerTier = async () => {
+      try {
+        const res = await getSellerTier();
+        if (res?.data) {
+          setSellerTier(res.data.tierTitle);
+        }
+      } catch (error) {
+        console.error("Error fetching seller tier:", error);
+        // Fallback to localStorage if API fails
+        if (typeof window !== "undefined") {
+          setSellerTier(localStorage.getItem("sellerTier"));
+        }
+      }
+    };
     fetchTopPerforming();
     fetchNeedAttention();
     fetchInventoryOverview();
     fetchInquiryKpis();
     fetchOverviewSummary();
+    fetchSellerTier();
   }, []);
 
   useEffect(() => {
@@ -183,10 +202,10 @@ export default function OverviewComponent() {
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-xl lg:text-2xl font-bold">
-                Welcome, Adarsh Auto Consultants
+                Welcome, {user?.consultationName || `${user?.firstname || ''} ${user?.lastname || ''}`.trim() || 'Guest'}
               </h1>
-              <span className="w-fit inline-flex items-center px-4 py-1.5 rounded-full bg-primary text-secondary text-[10px] md:text-xs font-bold tracking-wider">
-                PREMIUM PARTNER
+              <span className="w-fit inline-flex items-center px-4 py-1.5 rounded-full bg-primary text-secondary text-[10px] md:text-xs font-bold tracking-wider uppercase">
+                {sellerTier || user?.sellerTier || ''} 
               </span>
             </div>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs md:text-sm text-third mt-1">
@@ -194,10 +213,10 @@ export default function OverviewComponent() {
                 <BadgeCheck size={16} />
                 Verified
               </span>
-              <span className="flex items-center gap-2">
+              {/* <span className="flex items-center gap-2">
                 <MapPin size={16} />
                 City: Ahmedabad
-              </span>
+              </span> */}
             </div>
           </div>
 

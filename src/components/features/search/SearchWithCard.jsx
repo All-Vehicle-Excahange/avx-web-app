@@ -1,24 +1,14 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useState, useEffect, useRef } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
-import InputField from "@/components/ui/inputField";
 import Button from "@/components/ui/button";
 import ChipGroup from "@/components/ui/chipGroup";
 import PromoCardRow from "./PromoCardRow";
 import Chip from "@/components/ui/chip";
 import Pagination from "@/components/ui/Pagination";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
-import {
-  ChevronDownIcon,
-  ChevronLeft,
-  ChevronRight,
-  ChevronUpIcon,
-  FilterIcon,
-  MapPin,
-  X,
-} from "lucide-react";
+import { FilterIcon, MapPin, X } from "lucide-react";
 import SponsoredCars from "./SponsoredCars";
 import FilterSection from "./FilterSection";
 import PriceBased from "./PriceBased";
@@ -39,13 +29,16 @@ import { getUserCityAndStateByLatLong } from "@/services/consult.filter.service"
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(max-width: 1023px)").matches;
+  });
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 1023px)");
-    setIsMobile(media.matches);
 
     const listener = (e) => setIsMobile(e.matches);
+
     media.addEventListener("change", listener);
 
     return () => media.removeEventListener("change", listener);
@@ -54,7 +47,14 @@ function useIsMobile() {
   return isMobile;
 }
 
-export default function SearchWithCard({ onPageResponseChange, onFilterChange, onRelatedChange, onConsultChange, onConsultPayloadChange, onLoadingChange }) {
+export default function SearchWithCard({
+  onPageResponseChange,
+  onFilterChange,
+  onRelatedChange,
+  onConsultChange,
+  onConsultPayloadChange,
+  onLoadingChange,
+}) {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [activeFilterTab, setActiveFilterTab] = useState("Location");
   const [avxAssumed, setAvxAssumed] = useState(false);
@@ -158,18 +158,63 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
   const fuelType = searchParams.get("fuelType");
 
   const MAKER_NAME_MAPPING = {
-    1: 'Ashok Leyland', 2: 'Aston Martin', 3: 'Audi', 4: 'Bentley', 5: 'BMW', 
-    6: 'Bugatti', 7: 'Chevrolet', 8: 'Datsun', 9: 'Ferrari', 10: 'Fiat', 
-    11: 'Force Motors', 12: 'Ford', 13: 'Hindustan Motors', 14: 'Honda', 
-    15: 'Hyundai', 16: 'ICML', 17: 'Jaguar', 18: 'Lamborghini', 19: 'Land Rover', 
-    20: 'Mahindra', 21: 'Maruti Suzuki', 22: 'Maserati', 23: 'Maybach', 
-    24: 'Mercedes Benz', 25: 'Mitsubishi', 26: 'Nissan', 27: 'Porsche', 
-    28: 'Premier', 29: 'Renault', 30: 'Rolls Royce', 31: 'San', 32: 'Skoda', 
-    33: 'Ssangyong', 34: 'Tata', 35: 'Toyota', 36: 'Volkswagen', 37: 'Volvo', 
-    38: 'Mahindra Renault', 39: 'Opel', 40: 'Daewoo', 41: 'Jeep', 42: 'ISUZU', 
-    43: 'DC', 44: 'Subaru', 49: 'CRYSLER', 50: 'MG', 51: 'KIA', 52: 'BAJAJ', 
-    53: 'EICHER', 55: 'CADILLAC', 57: 'SMPIL', 58: 'HUMMER', 59: 'WILLYS', 
-    60: 'ROVAR', 61: 'CITROEN', 62: 'BYD', 64: 'PMV'
+    1: "Ashok Leyland",
+    2: "Aston Martin",
+    3: "Audi",
+    4: "Bentley",
+    5: "BMW",
+    6: "Bugatti",
+    7: "Chevrolet",
+    8: "Datsun",
+    9: "Ferrari",
+    10: "Fiat",
+    11: "Force Motors",
+    12: "Ford",
+    13: "Hindustan Motors",
+    14: "Honda",
+    15: "Hyundai",
+    16: "ICML",
+    17: "Jaguar",
+    18: "Lamborghini",
+    19: "Land Rover",
+    20: "Mahindra",
+    21: "Maruti Suzuki",
+    22: "Maserati",
+    23: "Maybach",
+    24: "Mercedes Benz",
+    25: "Mitsubishi",
+    26: "Nissan",
+    27: "Porsche",
+    28: "Premier",
+    29: "Renault",
+    30: "Rolls Royce",
+    31: "San",
+    32: "Skoda",
+    33: "Ssangyong",
+    34: "Tata",
+    35: "Toyota",
+    36: "Volkswagen",
+    37: "Volvo",
+    38: "Mahindra Renault",
+    39: "Opel",
+    40: "Daewoo",
+    41: "Jeep",
+    42: "ISUZU",
+    43: "DC",
+    44: "Subaru",
+    49: "CRYSLER",
+    50: "MG",
+    51: "KIA",
+    52: "BAJAJ",
+    53: "EICHER",
+    55: "CADILLAC",
+    57: "SMPIL",
+    58: "HUMMER",
+    59: "WILLYS",
+    60: "ROVAR",
+    61: "CITROEN",
+    62: "BYD",
+    64: "PMV",
   };
   const rawBrand = searchParams.get("brand");
   const rawMakerId = searchParams.get("makerId");
@@ -183,7 +228,9 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
     } else if (rawBrand) {
       // Reverse lookup: Name -> ID
       const entries = Object.entries(MAKER_NAME_MAPPING);
-      const found = entries.find(([id, name]) => name.toLowerCase() === rawBrand.toLowerCase());
+      const found = entries.find(
+        ([id, name]) => name.toLowerCase() === rawBrand.toLowerCase(),
+      );
       if (found) makerId = found[0];
     }
   }
@@ -229,7 +276,6 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
       document.body.style.overflow = "";
     };
   }, [mobileFilterOpen]);
-
 
   /* ================= BUILD PAYLOAD ================= */
   const buildPayload = () => {
@@ -284,9 +330,12 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
     const payload = {};
     if (selectedCityId) payload.cityId = selectedCityId;
     if (selectedStateId) payload.stateId = selectedStateId;
-    if (selectedBodyType.length > 0) payload.vehicleSubTypes = selectedBodyType.map(b => b.toUpperCase());
-    if (selectedBrands.length > 0) payload.makerIds = selectedBrands.map(Number);
-    if (selectedModels.length > 0) payload.modelIds = selectedModels.map(Number);
+    if (selectedBodyType.length > 0)
+      payload.vehicleSubTypes = selectedBodyType.map((b) => b.toUpperCase());
+    if (selectedBrands.length > 0)
+      payload.makerIds = selectedBrands.map(Number);
+    if (selectedModels.length > 0)
+      payload.modelIds = selectedModels.map(Number);
 
     if (selectedFuelTypes.length > 0)
       payload.fuelTypes = selectedFuelTypes.map((f) => f.toUpperCase());
@@ -317,27 +366,40 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
     if (!onConsultPayloadChange) return;
 
     const payload = buildConsultPayload();
-    const safeStr = (v) => v != null ? String(v) : "";
+    const safeStr = (v) => (v != null ? String(v) : "");
 
-    const brandLabel = selectedBrands.length > 0
-      ? (brands.find((b) => safeStr(b.value) === safeStr(selectedBrands[0]))?.label || "")
-      : "";
+    const brandLabel =
+      selectedBrands.length > 0
+        ? brands.find((b) => safeStr(b.value) === safeStr(selectedBrands[0]))
+            ?.label || ""
+        : "";
 
-    const modelLabel = selectedModels.length > 0
-      ? (models.find((m) => safeStr(m.value) === safeStr(selectedModels[0]))?.label || "")
-      : "";
+    const modelLabel =
+      selectedModels.length > 0
+        ? models.find((m) => safeStr(m.value) === safeStr(selectedModels[0]))
+            ?.label || ""
+        : "";
 
-    const bodyTypeLabel = selectedBodyType.length > 0
-      ? selectedBodyType[0].charAt(0).toUpperCase() + selectedBodyType[0].slice(1).toLowerCase()
-      : "";
+    const bodyTypeLabel =
+      selectedBodyType.length > 0
+        ? selectedBodyType[0].charAt(0).toUpperCase() +
+          selectedBodyType[0].slice(1).toLowerCase()
+        : "";
 
     onConsultPayloadChange({
       ...payload,
-      _labels: { brandLabel, modelLabel, bodyTypeLabel }
+      _labels: { brandLabel, modelLabel, bodyTypeLabel },
     });
   }, [
-    selectedBrands, selectedModels, selectedBodyType,
-    brands, models, minPrice, maxPrice, selectedCityId, selectedStateId
+    selectedBrands,
+    selectedModels,
+    selectedBodyType,
+    brands,
+    models,
+    minPrice,
+    maxPrice,
+    selectedCityId,
+    selectedStateId,
   ]);
 
   /* ================= FETCH VEHICLES ================= */
@@ -385,7 +447,6 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
 
       // Also fetch filtered consultants in parallel
       fetchConsultants();
-
     } catch (error) {
       console.error("Error fetching vehicles:", error);
       setVehicles([]);
@@ -415,8 +476,8 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
       initialPayload.makerIds = [Number(makerId)];
       setSelectedBrands([makerId]);
       if (brandParam) {
-        setBrands(prev => {
-          if (!prev.find(b => b.value === makerId)) {
+        setBrands((prev) => {
+          if (!prev.find((b) => b.value === makerId)) {
             return [{ value: makerId, label: brandParam }, ...prev];
           }
           return prev;
@@ -429,8 +490,8 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
       initialPayload.modelIds = [Number(modelIdParam)];
       setSelectedModels([modelIdParam]);
       if (modelParam) {
-        setModels(prev => {
-          if (!prev.find(m => m.value === modelIdParam)) {
+        setModels((prev) => {
+          if (!prev.find((m) => m.value === modelIdParam)) {
             return [{ value: modelIdParam, label: modelParam }, ...prev];
           }
           return prev;
@@ -443,8 +504,8 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
       initialPayload.variantIds = [Number(variantIdParam)];
       setSelectedVariants([variantIdParam]);
       if (variantParam) {
-        setVariants(prev => {
-          if (!prev.find(v => v.value === variantIdParam)) {
+        setVariants((prev) => {
+          if (!prev.find((v) => v.value === variantIdParam)) {
             return [{ value: variantIdParam, label: variantParam }, ...prev];
           }
           return prev;
@@ -483,7 +544,11 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
   const prevSortByRef = useRef(sortBy);
   const prevDirectionRef = useRef(direction);
   useEffect(() => {
-    if (prevSortByRef.current === sortBy && prevDirectionRef.current === direction) return;
+    if (
+      prevSortByRef.current === sortBy &&
+      prevDirectionRef.current === direction
+    )
+      return;
     prevSortByRef.current = sortBy;
     prevDirectionRef.current = direction;
     setCurrentPage(1);
@@ -982,8 +1047,6 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
     loadVariants(variantPage + 1, variantSearch);
   };
 
-
-
   const getTrackBackground = () => {
     const minPercent = ((minPrice - MIN) / (MAX - MIN)) * 100;
     const maxPercent = ((maxPrice - MIN) / (MAX - MIN)) * 100;
@@ -1041,46 +1104,75 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
     setSelectedVariants(values);
   };
 
-
-
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
   // ── Real-time filter tag emission ──
   useEffect(() => {
     const tags = [];
-    const brandLabels = brands.filter(b => selectedBrands.includes(b.value)).map(b => b.label);
-    const modelLabels = models.filter(m => selectedModels.includes(m.value)).map(m => m.label);
-    const variantLabels = variants.filter(v => selectedVariants.includes(v.value)).map(v => v.label);
+    const brandLabels = brands
+      .filter((b) => selectedBrands.includes(b.value))
+      .map((b) => b.label);
+    const modelLabels = models
+      .filter((m) => selectedModels.includes(m.value))
+      .map((m) => m.label);
+    const variantLabels = variants
+      .filter((v) => selectedVariants.includes(v.value))
+      .map((v) => v.label);
     if (brandLabels.length > 0) tags.push(...brandLabels);
     if (modelLabels.length > 0) tags.push(...modelLabels);
     if (variantLabels.length > 0) tags.push(...variantLabels);
     if (selectedFuelTypes.length > 0) tags.push(...selectedFuelTypes);
-    if (selectedTransmissionTypes.length > 0) tags.push(...selectedTransmissionTypes);
-    if (selectedBodyType.length > 0) tags.push(...selectedBodyType.map(b => b.charAt(0).toUpperCase() + b.slice(1).toLowerCase()));
+    if (selectedTransmissionTypes.length > 0)
+      tags.push(...selectedTransmissionTypes);
+    if (selectedBodyType.length > 0)
+      tags.push(
+        ...selectedBodyType.map(
+          (b) => b.charAt(0).toUpperCase() + b.slice(1).toLowerCase(),
+        ),
+      );
     if (selectedYear.length > 0) tags.push(...selectedYear);
     // Show both city and state
     const locationParts = [];
     if (selectedCityName) locationParts.push(selectedCityName);
     if (selectedStateName) locationParts.push(selectedStateName);
-    if (locationParts.length > 0) tags.push(locationParts.join(', '));
-    if (minPrice > MIN || maxPrice < MAX) tags.push(`₹${(minPrice / 100000).toFixed(1)}L–₹${(maxPrice / 100000).toFixed(1)}L`);
+    if (locationParts.length > 0) tags.push(locationParts.join(", "));
+    if (minPrice > MIN || maxPrice < MAX)
+      tags.push(
+        `₹${(minPrice / 100000).toFixed(1)}L–₹${(maxPrice / 100000).toFixed(1)}L`,
+      );
     if (kmDistance > 0) tags.push(`≤${kmDistance.toLocaleString()} km`);
     if (selectedRating.length > 0) tags.push(`${selectedRating[0]}+ ⭐`);
-    if (selectedSellerType.length > 0) tags.push(selectedSellerType[0] === 'CONSULTANT' ? 'Consultant' : 'Individual');
+    if (selectedSellerType.length > 0)
+      tags.push(
+        selectedSellerType[0] === "CONSULTANT" ? "Consultant" : "Individual",
+      );
     onFilterChange?.(tags);
   }, [
-    selectedBrands, selectedModels, selectedVariants, selectedFuelTypes, selectedTransmissionTypes,
-    selectedBodyType, selectedYear, selectedCityName, selectedStateName,
-    minPrice, maxPrice, kmDistance, selectedRating, selectedSellerType,
-    brands, models, variants
+    selectedBrands,
+    selectedModels,
+    selectedVariants,
+    selectedFuelTypes,
+    selectedTransmissionTypes,
+    selectedBodyType,
+    selectedYear,
+    selectedCityName,
+    selectedStateName,
+    minPrice,
+    maxPrice,
+    kmDistance,
+    selectedRating,
+    selectedSellerType,
+    brands,
+    models,
+    variants,
   ]);
 
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
     fetchVehicles(page);
-    console.log("7")
+    console.log("7");
 
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -1098,14 +1190,23 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
       fetchVehicles(1);
       fetchConsultants();
     }, 300);
-    return () => { if (autoFetchTimerRef.current) clearTimeout(autoFetchTimerRef.current); };
+    return () => {
+      if (autoFetchTimerRef.current) clearTimeout(autoFetchTimerRef.current);
+    };
   }, [
-    selectedBrands, selectedModels, selectedVariants, selectedFuelTypes,
-    selectedTransmissionTypes, selectedBodyType, selectedYear,
-    selectedCityId, selectedStateId,
-    selectedRating, selectedSellerType, avxAssumed,
+    selectedBrands,
+    selectedModels,
+    selectedVariants,
+    selectedFuelTypes,
+    selectedTransmissionTypes,
+    selectedBodyType,
+    selectedYear,
+    selectedCityId,
+    selectedStateId,
+    selectedRating,
+    selectedSellerType,
+    avxAssumed,
   ]);
-
 
   // Save/overwrite selected location to localStorage on Apply
   const handleApplyFilter = async () => {
@@ -1187,8 +1288,6 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
     setMaxPrice(2000000);
     setKmDistance(0);
 
-
-
     // Reset pagination
     setCurrentPage(1);
 
@@ -1199,8 +1298,6 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
     // Reload brands
     loadBrands(1, "");
   };
-
-
 
   return (
     <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-[20px] gap-4">
@@ -1222,7 +1319,6 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
         "
       >
         <div className="relative z-10">
-
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-bold text-primary mb-4">
               Filter Your Result
@@ -1278,7 +1374,9 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                 <CustomSelect
                   value={selectedCityId}
                   options={cities}
-                  placeholder={selectedStateId ? "Select City" : "Select state first"}
+                  placeholder={
+                    selectedStateId ? "Select City" : "Select state first"
+                  }
                   variant="transparent"
                   disabled={!selectedStateId}
                   onChange={(val) => {
@@ -1288,7 +1386,6 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                   }}
                 />
               </div>
-
 
               <div className="hidden lg:flex items-center justify-between px-4 py-3 rounded-xl border border-white/20 backdrop-blur-md bg-transparent">
                 <span className="text-primary font-semibold text-sm">
@@ -1304,7 +1401,6 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                   />
                 </button>
               </div>
-
 
               <FilterSection title="Budget" defaultOpen={true}>
                 <div className="flex flex-col gap-2 mt-3">
@@ -1464,7 +1560,6 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
               />
             </FilterSection>
 
-
             <FilterSection title=" KM Driven" defaultOpen={true}>
               <div className="flex flex-col gap-2 mt-3">
                 <div className="relative h-6 flex items-center">
@@ -1501,8 +1596,6 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                 </div>
               </div>
             </FilterSection>
-
-
 
             <FilterSection title="Body Type">
               <ChipGroup
@@ -1605,7 +1698,9 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                 variant="outline"
                 onClick={() => {
                   setSelectedBodyType((prev) =>
-                    prev.includes("suv") ? prev.filter((b) => b !== "suv") : [...prev, "suv"]
+                    prev.includes("suv")
+                      ? prev.filter((b) => b !== "suv")
+                      : [...prev, "suv"],
                   );
                 }}
               />
@@ -1615,7 +1710,9 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                 variant="outline"
                 onClick={() => {
                   setSelectedFuelTypes((prev) =>
-                    prev.includes("Diesel") ? prev.filter((f) => f !== "Diesel") : [...prev, "Diesel"]
+                    prev.includes("Diesel")
+                      ? prev.filter((f) => f !== "Diesel")
+                      : [...prev, "Diesel"],
                   );
                 }}
               />
@@ -1625,7 +1722,9 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                 variant="outline"
                 onClick={() => {
                   setSelectedRating((prev) =>
-                    prev.includes("4.0") ? prev.filter((r) => r !== "4.0") : [...prev, "4.0"]
+                    prev.includes("4.0")
+                      ? prev.filter((r) => r !== "4.0")
+                      : [...prev, "4.0"],
                   );
                 }}
               />
@@ -1644,7 +1743,9 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
               let priceMax = maxPrice;
 
               if (!userSetPrice && priceBasedVehicles.length > 0) {
-                const prices = priceBasedVehicles.map((v) => v.price).filter(Boolean);
+                const prices = priceBasedVehicles
+                  .map((v) => v.price)
+                  .filter(Boolean);
                 priceMin = Math.min(...prices);
                 priceMax = Math.max(...prices);
               }
@@ -1653,20 +1754,28 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
               const priceLabel = `Between ${toL(priceMin)} – ${toL(priceMax)}`;
 
               // --- Subject label ---
-              const safeStr = (v) => v != null ? String(v) : "";
-              const brandLabel = selectedBrands.length > 0
-                ? (brands.find((b) => safeStr(b.value) === safeStr(selectedBrands[0]))?.label || "")
-                : "";
+              const safeStr = (v) => (v != null ? String(v) : "");
+              const brandLabel =
+                selectedBrands.length > 0
+                  ? brands.find(
+                      (b) => safeStr(b.value) === safeStr(selectedBrands[0]),
+                    )?.label || ""
+                  : "";
 
               // Resolve model label from selected model id
-              const modelLabel = selectedModels.length > 0
-                ? (models.find((m) => safeStr(m.value) === safeStr(selectedModels[0]))?.label || "")
-                : "";
+              const modelLabel =
+                selectedModels.length > 0
+                  ? models.find(
+                      (m) => safeStr(m.value) === safeStr(selectedModels[0]),
+                    )?.label || ""
+                  : "";
 
               // Resolve body type label (capitalise first letter)
-              const bodyTypeLabel = selectedBodyType.length > 0
-                ? selectedBodyType[0].charAt(0).toUpperCase() + selectedBodyType[0].slice(1).toLowerCase()
-                : "";
+              const bodyTypeLabel =
+                selectedBodyType.length > 0
+                  ? selectedBodyType[0].charAt(0).toUpperCase() +
+                    selectedBodyType[0].slice(1).toLowerCase()
+                  : "";
 
               let subject = "Vehicles";
               if (bodyTypeLabel) {
@@ -1679,14 +1788,19 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
 
               const dynamicTitle = (
                 <>
-                  {subject}{" "}
-                  Between{" "}
+                  {subject} Between{" "}
                   <span className="text-fourth font-semibold">
                     {toL(priceMin)} – {toL(priceMax)}
                   </span>
                 </>
               );
-              return <PriceBased data={priceBasedVehicles} title={dynamicTitle} loading={vehiclesLoading} />;
+              return (
+                <PriceBased
+                  data={priceBasedVehicles}
+                  title={dynamicTitle}
+                  loading={vehiclesLoading}
+                />
+              );
             })()}
           </div>
 
@@ -1703,37 +1817,40 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                 <VehicleCardSkeleton key={`skel-${i}`} />
               ))}
             </>
-          ) : vehicles?.length > 0 && (
-            <>
-              <div className="col-span-full">
-                <div className="flex flex-col items-start gap-2">
-                  <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
-                    Top Vehicle
-                    <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
-                  </p>
+          ) : (
+            vehicles?.length > 0 && (
+              <>
+                <div className="col-span-full">
+                  <div className="flex flex-col items-start gap-2">
+                    <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
+                      Top Vehicle
+                      <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+                    </p>
 
-                  <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-                    <span className="text-fourth"> Top Vehicle</span> For You
-                  </h2>
+                    <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
+                      <span className="text-fourth"> Top Vehicle</span> For You
+                    </h2>
 
-                  <p className="text-third">
-                    Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
-                  </p>
+                    <p className="text-third">
+                      Lorem ipsum dolor sit amet consectetur dolor sit amet
+                      consectetur..
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-              {vehicles.map((vehicle) => (
-                <VehicleCard key={vehicle.id} data={vehicle} />
-              ))}
+                {vehicles.map((vehicle) => (
+                  <VehicleCard key={vehicle.id} data={vehicle} />
+                ))}
 
-              {topPicksPageResponse?.totalElements > 9 && (
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={handlePageChange}
-                />
-              )}
-            </>
+                {topPicksPageResponse?.totalElements > 9 && (
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                )}
+              </>
+            )
           )}
         </div>
       </main>
@@ -1826,11 +1943,15 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
 
                 {/* City */}
                 <div className="relative">
-                  <label className="text-xs text-secondary/60 block mb-1">City</label>
+                  <label className="text-xs text-secondary/60 block mb-1">
+                    City
+                  </label>
                   <CustomSelect
                     value={selectedCityId}
                     options={cities}
-                    placeholder={selectedStateId ? "Select City" : "Select state first"}
+                    placeholder={
+                      selectedStateId ? "Select City" : "Select state first"
+                    }
                     variant="default"
                     disabled={!selectedStateId}
                     onChange={(val) => {
@@ -1861,8 +1982,13 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                     max={MAX}
                     step={1}
                     value={minPrice}
-                    onChange={(e) => setMinPrice(Math.min(+e.target.value, maxPrice - 50000))}
-                    onTouchEnd={() => { setCurrentPage(1); fetchVehicles(1); }}
+                    onChange={(e) =>
+                      setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
+                    }
+                    onTouchEnd={() => {
+                      setCurrentPage(1);
+                      fetchVehicles(1);
+                    }}
                     className="dual-range z-30"
                   />
                   <input
@@ -1871,8 +1997,13 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                     max={MAX}
                     step={1}
                     value={maxPrice}
-                    onChange={(e) => setMaxPrice(Math.max(+e.target.value, minPrice + 50000))}
-                    onTouchEnd={() => { setCurrentPage(1); fetchVehicles(1); }}
+                    onChange={(e) =>
+                      setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
+                    }
+                    onTouchEnd={() => {
+                      setCurrentPage(1);
+                      fetchVehicles(1);
+                    }}
                     className="dual-range z-40"
                   />
                 </div>
@@ -1958,7 +2089,9 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                 isLoading={yearLoading}
                 variant="outlineDark"
                 customEmptyMessage={
-                  selectedModels.length === 0 ? "Please first select a Model" : undefined
+                  selectedModels.length === 0
+                    ? "Please first select a Model"
+                    : undefined
                 }
               />
             )}
@@ -2002,12 +2135,17 @@ export default function SearchWithCard({ onPageResponseChange, onFilterChange, o
                     step={1}
                     value={kmDistance}
                     onChange={(e) => setKmDistance(Number(e.target.value))}
-                    onTouchEnd={() => { setCurrentPage(1); fetchVehicles(1); }}
+                    onTouchEnd={() => {
+                      setCurrentPage(1);
+                      fetchVehicles(1);
+                    }}
                     className="dual-range z-30"
                   />
                 </div>
                 <div className="flex justify-between text-xs text-secondary/70 mb-1">
-                  <span><strong>{kmDistance.toLocaleString()} km</strong></span>
+                  <span>
+                    <strong>{kmDistance.toLocaleString()} km</strong>
+                  </span>
                 </div>
               </div>
             )}

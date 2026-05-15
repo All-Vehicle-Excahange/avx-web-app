@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -60,12 +59,15 @@ export default function SharePopup({
     };
   }, [isOpen, triggerClose]);
 
-  useEffect(() => {
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
     if (!isOpen) {
       setCopied(false);
       setInstagramCopied(false);
     }
-  }, [isOpen]);
+  }
 
   if (!isOpen && !isClosing) return null;
 
@@ -132,7 +134,7 @@ export default function SharePopup({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
       onClick={triggerClose}
       style={{
         animation: isClosing
