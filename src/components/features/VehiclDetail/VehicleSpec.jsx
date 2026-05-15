@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 import { useState, useEffect } from "react";
 import FeatureGroup from "@/components/ui/FeatureGroup";
@@ -18,19 +17,22 @@ export default function VehicleSpec({ open, setOpen }) {
   const [mobileNumber, setMobileNumber] = useState("");
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const savedUser = localStorage.getItem("user");
-      if (savedUser) {
-        try {
-          const userObj = JSON.parse(savedUser);
-          if (userObj) {
-            setMobileNumber(userObj.phoneNumber || userObj.phone || userObj.mobile || "");
+    const initUser = () => {
+      if (typeof window !== "undefined") {
+        const savedUser = localStorage.getItem("user");
+        if (savedUser) {
+          try {
+            const userObj = JSON.parse(savedUser);
+            if (userObj) {
+              setMobileNumber(userObj.phoneNumber || userObj.phone || userObj.mobile || "");
+            }
+          } catch (e) {
+            console.error("Error parsing user from localStorage", e);
           }
-        } catch (e) {
-          console.error("Error parsing user from localStorage", e);
         }
       }
-    }
+    };
+    initUser();
   }, []);
 
   const generateTimeSlots = () => {

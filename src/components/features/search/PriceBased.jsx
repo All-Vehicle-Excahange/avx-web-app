@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-
 import Button from "@/components/ui/button";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import React, { useRef, useState, useEffect } from "react";
@@ -10,11 +8,7 @@ import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 const PriceBased = ({ data, title, loading = false }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-  const [cardData, setCardData] = useState(data || []);
-
-  useEffect(() => {
-    setCardData(data || []);
-  }, [data]);
+  const cardData = data || [];
 
   return (
     <div className="">

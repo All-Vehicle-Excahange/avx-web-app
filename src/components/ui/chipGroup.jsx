@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 
 "use client";
 
@@ -28,8 +27,13 @@ export default function ChipGroup({
   const [search, setSearch] = useState(""); // local fallback
   const [knownSelectedItems, setKnownSelectedItems] = useState([]);
 
-  // Cache selected items so they don't disappear when items list changes (e.g. search cleared)
-  useEffect(() => {
+  const [prevSelected, setPrevSelected] = useState(selected);
+  const [prevItems, setPrevItems] = useState(items);
+
+  if (selected !== prevSelected || items !== prevItems) {
+    setPrevSelected(selected);
+    setPrevItems(items);
+
     setKnownSelectedItems((prev) => {
       const newKnown = items.filter((i) => selected.includes(i.value));
       const merged = [...prev];
@@ -53,7 +57,7 @@ export default function ChipGroup({
 
       return finalKnown;
     });
-  }, [selected, items]);
+  }
 
   const toggleSelect = (val) => {
     let updated;

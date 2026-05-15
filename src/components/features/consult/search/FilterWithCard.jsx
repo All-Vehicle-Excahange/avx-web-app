@@ -1,8 +1,6 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import InputField from "@/components/ui/inputField";
 import Button from "@/components/ui/button";
 import ChipGroup from "@/components/ui/chipGroup";
 import Chip from "@/components/ui/chip";
@@ -23,13 +21,16 @@ import Pagination from "@/components/ui/Pagination";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(max-width: 1023px)").matches;
+  });
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 1023px)");
-    setIsMobile(media.matches);
 
     const listener = (e) => setIsMobile(e.matches);
+
     media.addEventListener("change", listener);
 
     return () => media.removeEventListener("change", listener);

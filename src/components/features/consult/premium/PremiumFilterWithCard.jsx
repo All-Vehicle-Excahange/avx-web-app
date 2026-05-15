@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -6,15 +5,7 @@ import InputField from "@/components/ui/inputField";
 import Button from "@/components/ui/button";
 import ChipGroup from "@/components/ui/chipGroup";
 import Chip from "@/components/ui/chip";
-import {
-  FilterIcon,
-  ChevronDown,
-  Search,
-  ChevronRight,
-  ChevronLeft,
-  MapPin,
-  X,
-} from "lucide-react";
+import { FilterIcon, MapPin, X } from "lucide-react";
 import FilterSection from "../../search/FilterSection";
 import CustomSelect from "@/components/ui/custom-select";
 import {
@@ -29,13 +20,16 @@ import Pagination from "@/components/ui/Pagination";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(max-width: 1023px)").matches;
+  });
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 1023px)");
-    setIsMobile(media.matches);
 
     const listener = (e) => setIsMobile(e.matches);
+
     media.addEventListener("change", listener);
 
     return () => media.removeEventListener("change", listener);
@@ -124,8 +118,9 @@ export default function FilterWithCard({ onFilterChange }) {
       name: item.consultationName || "Unknown Consultant",
 
       location: item.address
-        ? `${item.address.city || ""}${item.address.city && item.address.state ? ", " : ""
-        }${item.address.state || ""}`
+        ? `${item.address.city || ""}${
+            item.address.city && item.address.state ? ", " : ""
+          }${item.address.state || ""}`
         : "-",
 
       rating: item.averageRating || 0,
@@ -147,8 +142,6 @@ export default function FilterWithCard({ onFilterChange }) {
       isSponsored: item.tierTitle === "PRO",
     }));
   };
-
-
 
   // ── Lock body scroll when mobile filter is open ──
   useEffect(() => {
@@ -464,8 +457,6 @@ export default function FilterWithCard({ onFilterChange }) {
     setSelectedCityId(null);
     setSelectedCityName("");
 
-
-
     // Reset pagination
     setCurrentPage(1);
 
@@ -493,14 +484,20 @@ export default function FilterWithCard({ onFilterChange }) {
       setCurrentPage(1);
       fetchConsultants(1, payload);
     }, 300);
-    return () => { if (autoFetchTimerRef.current) clearTimeout(autoFetchTimerRef.current); };
+    return () => {
+      if (autoFetchTimerRef.current) clearTimeout(autoFetchTimerRef.current);
+    };
   }, [
-    selectedVehicleTypes, selectedServices, selectedRating,
-    selectedInventory, selectedDistance,
-    selectedCityId, selectedStateId,
-    minPrice, maxPrice,
+    selectedVehicleTypes,
+    selectedServices,
+    selectedRating,
+    selectedInventory,
+    selectedDistance,
+    selectedCityId,
+    selectedStateId,
+    minPrice,
+    maxPrice,
   ]);
-
 
   /* ================= FILTER CHIP DATA ================= */
   const distances = [
@@ -527,32 +524,57 @@ export default function FilterWithCard({ onFilterChange }) {
     { value: "3.0", label: "⭐ 3.0+ Rating" },
   ];
 
-
-
   // ── Real-time filter tag emission ──
   useEffect(() => {
     const tags = [];
-    const vtLabels = { TWO_WHEELER: 'Two-Wheeler', FOUR_WHEELER: 'Four-Wheeler' };
-    if (selectedVehicleTypes.length > 0) tags.push(...selectedVehicleTypes.map(v => vtLabels[v] || v));
-    if (selectedServices.length > 0) tags.push(...selectedServices.map(s => s.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')));
+    const vtLabels = {
+      TWO_WHEELER: "Two-Wheeler",
+      FOUR_WHEELER: "Four-Wheeler",
+    };
+    if (selectedVehicleTypes.length > 0)
+      tags.push(...selectedVehicleTypes.map((v) => vtLabels[v] || v));
+    if (selectedServices.length > 0)
+      tags.push(
+        ...selectedServices.map((s) =>
+          s
+            .split("_")
+            .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+            .join(" "),
+        ),
+      );
     if (selectedRating.length > 0) tags.push(`${selectedRating[0]}+ ⭐`);
-    if (selectedInventory.length > 0) tags.push(inventorySizes.find(d => d.value === selectedInventory[0])?.label || selectedInventory[0]);
-    if (selectedDistance.length > 0) tags.push(distances.find(d => d.value === selectedDistance[0])?.label || selectedDistance[0]);
+    if (selectedInventory.length > 0)
+      tags.push(
+        inventorySizes.find((d) => d.value === selectedInventory[0])?.label ||
+          selectedInventory[0],
+      );
+    if (selectedDistance.length > 0)
+      tags.push(
+        distances.find((d) => d.value === selectedDistance[0])?.label ||
+          selectedDistance[0],
+      );
     if (selectedCityName || selectedStateName) {
       const locationParts = [];
       if (selectedCityName) locationParts.push(selectedCityName);
       if (selectedStateName) locationParts.push(selectedStateName);
-      tags.push(locationParts.join(', '));
+      tags.push(locationParts.join(", "));
     }
-    if (minPrice !== MIN || maxPrice !== MAX) tags.push(`₹${(minPrice / 100000).toFixed(1)}L–₹${(maxPrice / 100000).toFixed(1)}L`);
+    if (minPrice !== MIN || maxPrice !== MAX)
+      tags.push(
+        `₹${(minPrice / 100000).toFixed(1)}L–₹${(maxPrice / 100000).toFixed(1)}L`,
+      );
     onFilterChange?.(tags);
   }, [
-    selectedVehicleTypes, selectedServices, selectedRating,
-    selectedInventory, selectedDistance, selectedCityName, selectedStateName,
-    minPrice, maxPrice
+    selectedVehicleTypes,
+    selectedServices,
+    selectedRating,
+    selectedInventory,
+    selectedDistance,
+    selectedCityName,
+    selectedStateName,
+    minPrice,
+    maxPrice,
   ]);
-
-
 
   return (
     <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-[20px] gap-4">
@@ -574,7 +596,6 @@ export default function FilterWithCard({ onFilterChange }) {
         "
       >
         <div className="relative z-10">
-
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-bold text-primary mb-4">
               Filter Your Result
@@ -629,7 +650,9 @@ export default function FilterWithCard({ onFilterChange }) {
               <CustomSelect
                 value={selectedCityId}
                 options={cities}
-                placeholder={selectedStateId ? "Select City" : "Select state first"}
+                placeholder={
+                  selectedStateId ? "Select City" : "Select state first"
+                }
                 variant="transparent"
                 disabled={!selectedStateId}
                 onChange={(val) => {
@@ -689,7 +712,6 @@ export default function FilterWithCard({ onFilterChange }) {
                 onChange={setSelectedServices}
               />
             </FilterSection>
-
 
             <FilterSection title="Budget" defaultOpen={true}>
               <div className="flex flex-col gap-2 mt-3">
@@ -786,7 +808,9 @@ export default function FilterWithCard({ onFilterChange }) {
               variant="outline"
               onClick={() => {
                 setSelectedVehicleTypes((prev) =>
-                  prev.includes("FOUR_WHEELER") ? prev.filter((v) => v !== "FOUR_WHEELER") : [...prev, "FOUR_WHEELER"]
+                  prev.includes("FOUR_WHEELER")
+                    ? prev.filter((v) => v !== "FOUR_WHEELER")
+                    : [...prev, "FOUR_WHEELER"],
                 );
               }}
             />
@@ -798,7 +822,9 @@ export default function FilterWithCard({ onFilterChange }) {
               variant="outline"
               onClick={() => {
                 setSelectedRating((prev) =>
-                  prev.includes("4.5") ? prev.filter((r) => r !== "4.5") : ["4.5"]
+                  prev.includes("4.5")
+                    ? prev.filter((r) => r !== "4.5")
+                    : ["4.5"],
                 );
               }}
             />
@@ -810,7 +836,9 @@ export default function FilterWithCard({ onFilterChange }) {
               variant="outline"
               onClick={() => {
                 setSelectedInventory((prev) =>
-                  prev.includes("30+") ? prev.filter((i) => i !== "30+") : ["30+"]
+                  prev.includes("30+")
+                    ? prev.filter((i) => i !== "30+")
+                    : ["30+"],
                 );
               }}
             />
@@ -914,11 +942,15 @@ export default function FilterWithCard({ onFilterChange }) {
                 </div>
 
                 <div className="relative">
-                  <label className="text-xs text-secondary/60 block mb-1">City</label>
+                  <label className="text-xs text-secondary/60 block mb-1">
+                    City
+                  </label>
                   <CustomSelect
                     value={selectedCityId}
                     options={cities}
-                    placeholder={selectedStateId ? "Select City" : "Select state first"}
+                    placeholder={
+                      selectedStateId ? "Select City" : "Select state first"
+                    }
                     variant="default"
                     disabled={!selectedStateId}
                     onChange={(val) => {
@@ -1007,8 +1039,14 @@ export default function FilterWithCard({ onFilterChange }) {
                     max={MAX}
                     step={50000}
                     value={minPrice}
-                    onChange={(e) => setMinPrice(Math.min(+e.target.value, maxPrice - 50000))}
-                    onTouchEnd={() => { const p = buildPayload(); setCurrentPage(1); fetchConsultants(1, p); }}
+                    onChange={(e) =>
+                      setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
+                    }
+                    onTouchEnd={() => {
+                      const p = buildPayload();
+                      setCurrentPage(1);
+                      fetchConsultants(1, p);
+                    }}
                     className="dual-range z-30"
                   />
                   <input
@@ -1017,8 +1055,14 @@ export default function FilterWithCard({ onFilterChange }) {
                     max={MAX}
                     step={50000}
                     value={maxPrice}
-                    onChange={(e) => setMaxPrice(Math.max(+e.target.value, minPrice + 50000))}
-                    onTouchEnd={() => { const p = buildPayload(); setCurrentPage(1); fetchConsultants(1, p); }}
+                    onChange={(e) =>
+                      setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
+                    }
+                    onTouchEnd={() => {
+                      const p = buildPayload();
+                      setCurrentPage(1);
+                      fetchConsultants(1, p);
+                    }}
                     className="dual-range z-40"
                   />
                 </div>

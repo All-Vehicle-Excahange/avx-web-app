@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useState, useRef, useMemo, useEffect } from "react";
@@ -38,11 +37,7 @@ export default function CustomSelect({
     [value, options]
   );
 
-  useEffect(() => {
-    if (!open) {
-      setSearch(selectedOption ? selectedOption.label : "");
-    }
-  }, [selectedOption, open]);
+
 
   // 🔹 Close dropdown on outside click
   useEffect(() => {
@@ -63,9 +58,25 @@ export default function CustomSelect({
           opt.label.toLowerCase().includes(search.toLowerCase())
         );
 
-  useEffect(() => {
-    setFocusedIndex(-1);
-  }, [search, open]);
+  const [prevSelectedOption, setPrevSelectedOption] = useState(selectedOption);
+  const [prevSearch, setPrevSearch] = useState(search);
+  const [prevOpen, setPrevOpen] = useState(open);
+
+  if (selectedOption !== prevSelectedOption || search !== prevSearch || open !== prevOpen) {
+    setPrevSelectedOption(selectedOption);
+    setPrevSearch(search);
+    setPrevOpen(open);
+
+    if (search !== prevSearch || open !== prevOpen) {
+      setFocusedIndex(-1);
+    }
+
+    if (selectedOption !== prevSelectedOption || open !== prevOpen) {
+      if (!open) {
+        setSearch(selectedOption ? selectedOption.label : "");
+      }
+    }
+  }
 
   useEffect(() => {
     if (focusedIndex >= 0 && listRef.current) {
