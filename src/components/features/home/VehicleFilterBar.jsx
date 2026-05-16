@@ -416,20 +416,54 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       setMobileOpen(false);
       router.push(`/consult/discovery${query ? `?${query}` : ""}`);
     } else {
-      const query = new URLSearchParams({
-        ...(location && { location }),
-        ...(cityId && { cityId }),
-        ...(stateId && { stateId }),
-        ...(vehicleType && { vehicleType }),
-        ...(bodyType && { bodyType: bodyType.toUpperCase() }),
-        ...(fuelType && { fuelType: fuelType.toUpperCase() }),
-        ...(brand && { brand }),
-        ...(makerId && { makerId }),
-        ...(budget && { budget }),
-      }).toString();
-      setActiveTab(null);
-      setMobileOpen(false);
-      router.push(`/search?${query}`);
+      const vtLower = vehicleType.toLowerCase().replace(/_/g, " ");
+      const isCar = vtLower.includes("car") || vtLower.includes("4 wheeler") || vtLower.includes("four wheeler") || vtLower.includes("4-wheeler") || vtLower.includes("four-wheeler");
+
+      if (isCar) {
+        // Generate SEO-friendly slug
+        let slug = "buy-used-";
+        if (brand) {
+          slug += brand.toLowerCase().replace(/\s+/g, "-") + "-";
+        }
+        slug += "cars";
+        if (location) {
+          const cityName = location
+            .split(",")[0]
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, "-");
+          slug += "-" + cityName;
+        }
+
+        // Other filters as query params
+        const queryParams = new URLSearchParams({
+          ...(cityId && { cityId }),
+          ...(stateId && { stateId }),
+          ...(bodyType && { bodyType: bodyType.toUpperCase() }),
+          ...(fuelType && { fuelType: fuelType.toUpperCase() }),
+          ...(makerId && { makerId }),
+          ...(budget && { budget }),
+        }).toString();
+
+        setActiveTab(null);
+        setMobileOpen(false);
+        router.push(`/search/${slug}${queryParams ? `?${queryParams}` : ""}`);
+      } else {
+        const query = new URLSearchParams({
+          ...(location && { location }),
+          ...(cityId && { cityId }),
+          ...(stateId && { stateId }),
+          ...(vehicleType && { vehicleType }),
+          ...(bodyType && { bodyType: bodyType.toUpperCase() }),
+          ...(fuelType && { fuelType: fuelType.toUpperCase() }),
+          ...(brand && { brand }),
+          ...(makerId && { makerId }),
+          ...(budget && { budget }),
+        }).toString();
+        setActiveTab(null);
+        setMobileOpen(false);
+        router.push(`/search?${query}`);
+      }
     }
   };
 

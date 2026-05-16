@@ -24,6 +24,7 @@ import {
   getYearByModelId,
   getFilterConsualt,
 } from "@/services/filter";
+import { MAKER_NAME_MAPPING } from "@/data/makers";
 import { getState, getCities } from "@/services/user.service";
 import { getUserCityAndStateByLatLong } from "@/services/consult.filter.service";
 
@@ -54,6 +55,7 @@ export default function SearchWithCard({
   onConsultChange,
   onConsultPayloadChange,
   onLoadingChange,
+  initialFilters = {},
 }) {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [activeFilterTab, setActiveFilterTab] = useState("Location");
@@ -157,67 +159,8 @@ export default function SearchWithCard({
   const bodyType = searchParams.get("bodyType");
   const fuelType = searchParams.get("fuelType");
 
-  const MAKER_NAME_MAPPING = {
-    1: "Ashok Leyland",
-    2: "Aston Martin",
-    3: "Audi",
-    4: "Bentley",
-    5: "BMW",
-    6: "Bugatti",
-    7: "Chevrolet",
-    8: "Datsun",
-    9: "Ferrari",
-    10: "Fiat",
-    11: "Force Motors",
-    12: "Ford",
-    13: "Hindustan Motors",
-    14: "Honda",
-    15: "Hyundai",
-    16: "ICML",
-    17: "Jaguar",
-    18: "Lamborghini",
-    19: "Land Rover",
-    20: "Mahindra",
-    21: "Maruti Suzuki",
-    22: "Maserati",
-    23: "Maybach",
-    24: "Mercedes Benz",
-    25: "Mitsubishi",
-    26: "Nissan",
-    27: "Porsche",
-    28: "Premier",
-    29: "Renault",
-    30: "Rolls Royce",
-    31: "San",
-    32: "Skoda",
-    33: "Ssangyong",
-    34: "Tata",
-    35: "Toyota",
-    36: "Volkswagen",
-    37: "Volvo",
-    38: "Mahindra Renault",
-    39: "Opel",
-    40: "Daewoo",
-    41: "Jeep",
-    42: "ISUZU",
-    43: "DC",
-    44: "Subaru",
-    49: "CRYSLER",
-    50: "MG",
-    51: "KIA",
-    52: "BAJAJ",
-    53: "EICHER",
-    55: "CADILLAC",
-    57: "SMPIL",
-    58: "HUMMER",
-    59: "WILLYS",
-    60: "ROVAR",
-    61: "CITROEN",
-    62: "BYD",
-    64: "PMV",
-  };
-  const rawBrand = searchParams.get("brand");
-  const rawMakerId = searchParams.get("makerId");
+  const rawBrand = searchParams.get("brand") || initialFilters.brand;
+  const rawMakerId = searchParams.get("makerId") || initialFilters.makerId;
   const isNumeric = (val) => val && !isNaN(val) && val.trim() !== "";
 
   // 1. Resolve makerId (the numeric ID needed by the API)
@@ -236,7 +179,7 @@ export default function SearchWithCard({
   }
 
   // 2. Resolve brandParam (the string name needed for UI labels)
-  let brandParam = searchParams.get("brandName");
+  let brandParam = searchParams.get("brandName") || initialFilters.brandName;
   if (!brandParam) {
     if (isNumeric(rawBrand)) {
       brandParam = MAKER_NAME_MAPPING[rawBrand];
@@ -244,14 +187,14 @@ export default function SearchWithCard({
       brandParam = rawBrand;
     }
   }
-  const modelIdParam = searchParams.get("modelId");
-  const modelParam = searchParams.get("model");
-  const variantIdParam = searchParams.get("variantId");
-  const variantParam = searchParams.get("variant");
-  const budget = searchParams.get("budget");
-  const sortBy = searchParams.get("sortBy");
-  const direction = searchParams.get("direction");
-  const transmission = searchParams.get("transmission");
+  const modelIdParam = searchParams.get("modelId") || initialFilters.modelId;
+  const modelParam = searchParams.get("model") || initialFilters.model;
+  const variantIdParam = searchParams.get("variantId") || initialFilters.variantId;
+  const variantParam = searchParams.get("variant") || initialFilters.variant;
+  const budget = searchParams.get("budget") || initialFilters.budget;
+  const sortBy = searchParams.get("sortBy") || initialFilters.sortBy;
+  const direction = searchParams.get("direction") || initialFilters.direction;
+  const transmission = searchParams.get("transmission") || initialFilters.transmission;
 
   let mPrice = 0;
   let mxPrice = 0;
@@ -465,10 +408,11 @@ export default function SearchWithCard({
     if (qCityId) initialPayload.cityId = Number(qCityId);
     if (qStateId) initialPayload.stateId = Number(qStateId);
 
-    // Body type from URL
-    if (bodyType) {
-      initialPayload.vehicleSubTypes = [bodyType.toUpperCase()];
-      setSelectedBodyType([bodyType.toLowerCase()]);
+    // Body type from URL or initialFilters
+    const qBodyType = bodyType || initialFilters.bodyType;
+    if (qBodyType) {
+      initialPayload.vehicleSubTypes = [qBodyType.toUpperCase()];
+      setSelectedBodyType([qBodyType.toLowerCase()]);
     }
 
     // Brand / maker from URL
@@ -651,12 +595,12 @@ export default function SearchWithCard({
   }, [selectedStateId]);
 
   useEffect(() => {
-    // Priority 1: Read location from URL query params (from homepage filter bar or VDP)
-    const qCityId = searchParams.get("cityId");
-    const qStateId = searchParams.get("stateId");
-    const qLocation = searchParams.get("location");
-    const qStateName = searchParams.get("stateName");
-    const qCityName = searchParams.get("cityName");
+    // Priority 1: Read location from URL query params or initialFilters
+    const qCityId = searchParams.get("cityId") || initialFilters.cityId;
+    const qStateId = searchParams.get("stateId") || initialFilters.stateId;
+    const qLocation = searchParams.get("location") || initialFilters.location;
+    const qStateName = searchParams.get("stateName") || initialFilters.stateName;
+    const qCityName = searchParams.get("cityName") || initialFilters.cityName;
 
     // Handle location names even without IDs
     if (qLocation) {

@@ -140,7 +140,23 @@ export default function VehicleCard({
 
     sponsored: data.sponsored || false,
   };
-  const slug = createSlug(mapped.title);
+  const brandPart = data.makerName
+    ? data.makerName.toLowerCase().replace(/\s+/g, "-")
+    : "";
+  const modelPart = data.modelName
+    ? data.modelName.toLowerCase().replace(/\s+/g, "-")
+    : "";
+  const yearPart = mapped.year || "";
+  const cityPart = mapped.location
+    .split(",")[0]
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-");
+
+  const slug = `buy-used-${brandPart}-${modelPart}-${yearPart}-cars-${cityPart}`
+    .replace(/-+/g, "-")
+    .replace(/-$/, "")
+    .replace(/^-/, "");
   const handleCardClick = () => {
     router.push(`/vehicle/details/${slug}/${data.id}?source=${source}`);
   };

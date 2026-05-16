@@ -56,6 +56,34 @@ export const createSlug = (text = "") => {
     .replace(/--+/g, "-"); // remove multiple -
 };
 
+export const generateVehicleSlug = (data) => {
+  if (!data) return "vehicle";
+
+  const brandPart = (data.makerName || data.makeName || "")
+    .toLowerCase()
+    .replace(/\s+/g, "-");
+  const modelPart = (data.modelName || "")
+    .toLowerCase()
+    .replace(/\s+/g, "-");
+  const yearPart = data.yearOfMfg || data.year || "";
+  const cityPart = (
+    data.cityName ||
+    data.city ||
+    data.address?.city ||
+    data.location ||
+    ""
+  )
+    .split(",")[0]
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-");
+
+  return `buy-used-${brandPart}-${modelPart}-${yearPart}-cars-${cityPart}`
+    .replace(/-+/g, "-")
+    .replace(/-$/, "")
+    .replace(/^-/, "");
+};
+
 export const normalizeWhyBuyData = (raw = {}, defaults = {}) => {
   // Check if the API response has any real content beyond metadata
   const metaOnlyKeys = new Set([
