@@ -426,7 +426,7 @@ function PreferencesPopup({
               setStateSearch(e.target.value);
               setShowStateDropdown(true);
             }}
-            className="w-full pl-11 pr-4 py-3 text-sm rounded-xl bg-primary/[0.03] border border-primary/10 focus:border-third focus:ring-2 focus:ring-third/10 outline-none transition-all placeholder:text-primary/30 text-primary"
+            className="w-full pl-11 pr-4 py-3 text-sm rounded-xl bg-primary/3 border border-primary/10 focus:border-third focus:ring-2 focus:ring-third/10 outline-none transition-all placeholder:text-primary/30 text-primary"
           />
           {showStateDropdown && (
             <div className="absolute z-50 mt-2 w-full max-h-52 overflow-y-auto rounded-xl border border-primary/10 bg-secondary shadow-2xl custom-scrollbar py-1">
@@ -501,7 +501,7 @@ function PreferencesPopup({
               setCitySearch(e.target.value);
               setShowCityDropdown(true);
             }}
-            className="w-full pl-11 pr-4 py-3 text-sm rounded-xl bg-primary/[0.03] border border-primary/10 focus:border-third focus:ring-2 focus:ring-third/10 outline-none transition-all placeholder:text-primary/30 text-primary"
+            className="w-full pl-11 pr-4 py-3 text-sm rounded-xl bg-primary/3 border border-primary/10 focus:border-third focus:ring-2 focus:ring-third/10 outline-none transition-all placeholder:text-primary/30 text-primary"
           />
           {showCityDropdown && (
             <div className="absolute z-50 mt-2 w-full max-h-52 overflow-y-auto rounded-xl border border-primary/10 bg-secondary shadow-2xl custom-scrollbar py-1">
@@ -573,7 +573,7 @@ function PreferencesPopup({
             value={minPrice}
             onChange={(e) => setMinPrice(e.target.value)}
             placeholder="e.g. 500000"
-            className="w-full pl-10 pr-4 py-3 text-sm rounded-xl bg-primary/[0.03] border border-primary/10 focus:border-third focus:ring-2 focus:ring-third/10 outline-none transition-all placeholder:text-primary/30 text-primary font-medium"
+            className="w-full pl-10 pr-4 py-3 text-sm rounded-xl bg-primary/3 border border-primary/10 focus:border-third focus:ring-2 focus:ring-third/10 outline-none transition-all placeholder:text-primary/30 text-primary font-medium"
           />
         </div>
       </div>
@@ -592,7 +592,7 @@ function PreferencesPopup({
             value={maxPrice}
             onChange={(e) => setMaxPrice(e.target.value)}
             placeholder="e.g. 1500000"
-            className="w-full pl-10 pr-4 py-3 text-sm rounded-xl bg-primary/[0.03] border border-primary/10 focus:border-third focus:ring-2 focus:ring-third/10 outline-none transition-all placeholder:text-primary/30 text-primary font-medium"
+            className="w-full pl-10 pr-4 py-3 text-sm rounded-xl bg-primary/3 border border-primary/10 focus:border-third focus:ring-2 focus:ring-third/10 outline-none transition-all placeholder:text-primary/30 text-primary font-medium"
           />
         </div>
       </div>
@@ -606,7 +606,7 @@ function PreferencesPopup({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
       onClick={handleClose}
       style={{
         animation: isClosing
@@ -640,7 +640,7 @@ function PreferencesPopup({
           </div>
 
           {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20 z-10" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-black/20 z-10" />
 
           {/* Step nav dots - top */}
           <div className="relative z-20 p-6 flex items-center gap-2">
