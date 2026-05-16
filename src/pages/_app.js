@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Router, { useRouter } from "next/router";
 import Head from "next/head";
+import Script from "next/script";
 
 import Layout from "@/components/layout/Layout";
 import "@/styles/globals.css";
@@ -11,6 +12,9 @@ import LoginPopup from "@/components/auth/LoginPopup";
 import GlobalLoader from "@/components/ui/GlobalLoader";
 import SplashScreen from "@/components/ui/SplashScreen";
 import GlobalCompareButton from "@/components/ui/GlobalCompareButton";
+
+import * as gtag from "@/lib/gtag";
+
 import {
   exo,
   inter,
@@ -23,17 +27,21 @@ import {
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
+
   const hasFullWidth = Component.fullWidth;
+
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
+
   const isLoginPopupOpen = useAuthStore((state) => state.isLoginPopupOpen);
+
   const closeLoginPopup = useAuthStore((state) => state.closeLoginPopup);
 
   const [loading, setLoading] = useState(false);
 
-  // 1. Start with 'null' or a neutral state to avoid the cascading render warning
+  // Splash Screen State
   const [showSplash, setShowSplash] = useState(null);
 
-  // HANDLE INITIAL MOUNT AND SPLASH LOGIC
+  // INITIAL SETUP
   useEffect(() => {
     const checkSplash = () => {
       try {
@@ -51,18 +59,24 @@ export default function App({ Component, pageProps }) {
     };
 
     checkSplash();
+
     initializeAuth();
   }, [initializeAuth]);
 
-  // CROSS-TAB SYNC
+  // CROSS TAB SPLASH SYNC
   useEffect(() => {
     const channel = new BroadcastChannel("splash_channel");
+
     channel.onmessage = (event) => {
-      if (event.data === "SPLASH_DONE") setShowSplash(false);
+      if (event.data === "SPLASH_DONE") {
+        setShowSplash(false);
+      }
     };
+
     return () => channel.close();
   }, []);
 
+  // SPLASH COMPLETE
   const handleSplashComplete = () => {
     try {
       localStorage.setItem("splashSeen", "true");
@@ -70,33 +84,47 @@ export default function App({ Component, pageProps }) {
     } catch (e) {}
 
     const channel = new BroadcastChannel("splash_channel");
+
     channel.postMessage("SPLASH_DONE");
+
     channel.close();
+
     setShowSplash(false);
   };
 
   useGuestSetup();
 
-  // ROUTE LOADER
+  // ROUTE LOADER + GOOGLE ANALYTICS
   useEffect(() => {
-    const handleStart = () => setLoading(true);
-    const handleStop = () => setLoading(false);
+    const handleStart = () => {
+      setLoading(true);
+    };
+
+    const handleStop = (url) => {
+      setLoading(false);
+
+      // Track page views
+      gtag.pageview(url);
+    };
 
     Router.events.on("routeChangeStart", handleStart);
+
     Router.events.on("routeChangeComplete", handleStop);
+
     Router.events.on("routeChangeError", handleStop);
 
     return () => {
       Router.events.off("routeChangeStart", handleStart);
+
       Router.events.off("routeChangeComplete", handleStop);
+
       Router.events.off("routeChangeError", handleStop);
     };
   }, []);
 
-  // 2. While showSplash is null, we render a shell or nothing.
-  // This prevents the "cascading render" because we aren't changing from true to false instantly.
+  // Prevent hydration flashing
   if (showSplash === null) {
-    return null; // Or a simple loading spinner
+    return null;
   }
 
   return (
@@ -110,6 +138,7 @@ export default function App({ Component, pageProps }) {
               try {
                 const hasSeen = localStorage.getItem('splashSeen');
                 const sessionSeen = sessionStorage.getItem('splashSession');
+
                 if (hasSeen || sessionSeen) {
                   document.documentElement.style.setProperty('--splash-display', 'none');
                 }
@@ -119,6 +148,30 @@ export default function App({ Component, pageProps }) {
         />
       </Head>
 
+      {/* GOOGLE ANALYTICS */}
+      <Script
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
+      />
+
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+
+          function gtag(){dataLayer.push(arguments);}
+
+          gtag('js', new Date());
+
+          gtag('config', '${gtag.GA_TRACKING_ID}', {
+            page_path: window.location.pathname,
+          });
+        `}
+      </Script>
+
+      {/* GLOBAL LOADER */}
+      {loading && <GlobalLoader />}
+
+      {/* PAGE RENDER */}
       {hasFullWidth ? (
         <Component {...pageProps} />
       ) : (
@@ -127,17 +180,20 @@ export default function App({ Component, pageProps }) {
         </Layout>
       )}
 
+      {/* LOGIN POPUP */}
       <LoginPopup
         isOpen={isLoginPopupOpen && !showSplash}
         onClose={closeLoginPopup}
       />
 
+      {/* SPLASH SCREEN */}
       {showSplash && (
         <div style={{ display: "var(--splash-display, contents)" }}>
           <SplashScreen onComplete={handleSplashComplete} />
         </div>
       )}
 
+      {/* GLOBAL COMPARE BUTTON */}
       {!showSplash &&
         !router.asPath.startsWith("/consult/dashboard/") &&
         !router.asPath.startsWith("/consult/kyc") && <GlobalCompareButton />}
