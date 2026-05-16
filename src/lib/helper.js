@@ -1,5 +1,9 @@
 export const getSellerTierTitle = () => {
   try {
+    if (typeof window === "undefined") {
+      return null;
+    }
+
     const tier = localStorage.getItem("sellerTier");
 
     if (!tier) return null;
@@ -62,9 +66,7 @@ export const generateVehicleSlug = (data) => {
   const brandPart = (data.makerName || data.makeName || "")
     .toLowerCase()
     .replace(/\s+/g, "-");
-  const modelPart = (data.modelName || "")
-    .toLowerCase()
-    .replace(/\s+/g, "-");
+  const modelPart = (data.modelName || "").toLowerCase().replace(/\s+/g, "-");
   const yearPart = data.yearOfMfg || data.year || "";
   const cityPart = (
     data.cityName ||
@@ -87,18 +89,26 @@ export const generateVehicleSlug = (data) => {
 export const normalizeWhyBuyData = (raw = {}, defaults = {}) => {
   // Check if the API response has any real content beyond metadata
   const metaOnlyKeys = new Set([
-    "id", "consultationId", "themePrimaryId", "themeId",
-    "verificationStatus", "isSubmitted", "createdAt", "updatedAt",
+    "id",
+    "consultationId",
+    "themePrimaryId",
+    "themeId",
+    "verificationStatus",
+    "isSubmitted",
+    "createdAt",
+    "updatedAt",
     "featuredReviews",
   ]);
-  const hasRealContent = raw && Object.entries(raw).some(
-    ([key, value]) =>
-      !metaOnlyKeys.has(key) &&
-      value !== null &&
-      value !== undefined &&
-      value !== "" &&
-      !(Array.isArray(value) && value.length === 0),
-  );
+  const hasRealContent =
+    raw &&
+    Object.entries(raw).some(
+      ([key, value]) =>
+        !metaOnlyKeys.has(key) &&
+        value !== null &&
+        value !== undefined &&
+        value !== "" &&
+        !(Array.isArray(value) && value.length === 0),
+    );
 
   // Build empty shell from defaults (preserving array shapes but zeroing values)
   const getEmptyData = (defaultData) => {
@@ -150,23 +160,34 @@ export const normalizeWhyBuyData = (raw = {}, defaults = {}) => {
   if (raw.aboutUsDescription && !raw.storyDescription)
     data.storyDescription = raw.aboutUsDescription;
 
-  data.customWhyBuyStory1 = raw.customWhyBuyStory1 || raw.customStoryUrl1 || raw.customStory1;
-  data.customWhyBuyStory2 = raw.customWhyBuyStory2 || raw.customStoryUrl2 || raw.customStory2;
-  data.customWhyBuyStory3 = raw.customWhyBuyStory3 || raw.customStoryUrl3 || raw.customStory3;
+  data.customWhyBuyStory1 =
+    raw.customWhyBuyStory1 || raw.customStoryUrl1 || raw.customStory1;
+  data.customWhyBuyStory2 =
+    raw.customWhyBuyStory2 || raw.customStoryUrl2 || raw.customStory2;
+  data.customWhyBuyStory3 =
+    raw.customWhyBuyStory3 || raw.customStoryUrl3 || raw.customStory3;
 
   // Map storyTemplate objects — already handled by the raw overlay above
   // (explicit re-assignment removed to prevent overwriting user edits)
 
   /* ================= VEHICLE ================= */
   data.customWhyBuyVehicleSelection1 =
-    raw.customWhyBuyVehicleSelection1 || raw.customVehicleSelectionUrl1 || raw.customVehicleSelection1;
+    raw.customWhyBuyVehicleSelection1 ||
+    raw.customVehicleSelectionUrl1 ||
+    raw.customVehicleSelection1;
   data.customWhyBuyVehicleSelection2 =
-    raw.customWhyBuyVehicleSelection2 || raw.customVehicleSelectionUrl2 || raw.customVehicleSelection2;
+    raw.customWhyBuyVehicleSelection2 ||
+    raw.customVehicleSelectionUrl2 ||
+    raw.customVehicleSelection2;
 
   // vehicleSelectionTemplate objects already handled by the raw overlay above
 
   /* ================= PROCESS ================= */
-  if (raw.processes && Array.isArray(raw.processes) && !raw.processSteps?.length) {
+  if (
+    raw.processes &&
+    Array.isArray(raw.processes) &&
+    !raw.processSteps?.length
+  ) {
     data.processSteps = raw.processes.map((p) => ({
       title: p.title || "",
       description: p.desc || p.description || "",
@@ -182,26 +203,42 @@ export const normalizeWhyBuyData = (raw = {}, defaults = {}) => {
   }
 
   data.customWhyBuyInspection1 =
-    raw.customWhyBuyInspection1 || raw.customInspectionUrl1 || raw.customInspection1;
+    raw.customWhyBuyInspection1 ||
+    raw.customInspectionUrl1 ||
+    raw.customInspection1;
   data.customWhyBuyInspection2 =
-    raw.customWhyBuyInspection2 || raw.customInspectionUrl2 || raw.customInspection2;
+    raw.customWhyBuyInspection2 ||
+    raw.customInspectionUrl2 ||
+    raw.customInspection2;
   data.customWhyBuyInspection3 =
-    raw.customWhyBuyInspection3 || raw.customInspectionUrl3 || raw.customInspection3;
+    raw.customWhyBuyInspection3 ||
+    raw.customInspectionUrl3 ||
+    raw.customInspection3;
 
   // Map inspectionTemplate objects — already handled by the raw overlay above
   // (explicit re-assignment removed to prevent overwriting user edits)
 
   /* ================= COMMITMENT ================= */
   data.customWhyBuyCustomerCommitment1 =
-    raw.customWhyBuyCustomerCommitment1 || raw.customCustomerCommitmentUrl1 || raw.customCustomerCommitment1;
+    raw.customWhyBuyCustomerCommitment1 ||
+    raw.customCustomerCommitmentUrl1 ||
+    raw.customCustomerCommitment1;
   data.customWhyBuyCustomerCommitment2 =
-    raw.customWhyBuyCustomerCommitment2 || raw.customCustomerCommitmentUrl2 || raw.customCustomerCommitment2;
+    raw.customWhyBuyCustomerCommitment2 ||
+    raw.customCustomerCommitmentUrl2 ||
+    raw.customCustomerCommitment2;
   data.customWhyBuyCustomerCommitment3 =
-    raw.customWhyBuyCustomerCommitment3 || raw.customCustomerCommitmentUrl3 || raw.customCustomerCommitment3;
+    raw.customWhyBuyCustomerCommitment3 ||
+    raw.customCustomerCommitmentUrl3 ||
+    raw.customCustomerCommitment3;
   data.customWhyBuyCustomerCommitment4 =
-    raw.customWhyBuyCustomerCommitment4 || raw.customCustomerCommitmentUrl4 || raw.customCustomerCommitment4;
+    raw.customWhyBuyCustomerCommitment4 ||
+    raw.customCustomerCommitmentUrl4 ||
+    raw.customCustomerCommitment4;
   data.customWhyBuyCustomerCommitment5 =
-    raw.customWhyBuyCustomerCommitment5 || raw.customCustomerCommitmentUrl5 || raw.customCustomerCommitment5;
+    raw.customWhyBuyCustomerCommitment5 ||
+    raw.customCustomerCommitmentUrl5 ||
+    raw.customCustomerCommitment5;
 
   // Map customerCommitmentTemplate objects — already handled by the raw overlay above
   // (explicit re-assignment removed to prevent overwriting user edits)
@@ -239,14 +276,20 @@ export const normalizeWhyBuyData = (raw = {}, defaults = {}) => {
     }
     // Vehicle aliases (slots 1-2)
     if (i <= 2) {
-      aliasKeys.push(`customVehicleSelectionUrl${i}`, `customVehicleSelection${i}`);
+      aliasKeys.push(
+        `customVehicleSelectionUrl${i}`,
+        `customVehicleSelection${i}`,
+      );
     }
     // Inspection aliases (slots 1-4)
     if (i <= 4) {
       aliasKeys.push(`customInspectionUrl${i}`, `customInspection${i}`);
     }
     // Commitment aliases (slots 1-5)
-    aliasKeys.push(`customCustomerCommitmentUrl${i}`, `customCustomerCommitment${i}`);
+    aliasKeys.push(
+      `customCustomerCommitmentUrl${i}`,
+      `customCustomerCommitment${i}`,
+    );
     // Gallery aliases (slots 1-5)
     aliasKeys.push(`customWhyBuyGallery${i}`, `customGalleryUrl${i}`);
   }

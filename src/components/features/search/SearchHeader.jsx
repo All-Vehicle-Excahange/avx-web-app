@@ -14,7 +14,10 @@ const sortOptions = [
   { sortBy: "totalInquiryCount", direction: "desc", label: "Most Inquired" },
 ];
 
-export default function SearchHeader({ pageResponse = {}, activeFilters = [] }) {
+export default function SearchHeader({
+  pageResponse = {},
+  activeFilters = [],
+}) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(sortOptions[0]);
   const dropdownRef = useRef(null);
@@ -29,7 +32,6 @@ export default function SearchHeader({ pageResponse = {}, activeFilters = [] }) 
   const budget = searchParams.get("budget");
   const sort = searchParams.get("sort");
   const location = searchParams.get("location");
-
 
   /* Close on outside click */
   useEffect(() => {
@@ -53,7 +55,6 @@ export default function SearchHeader({ pageResponse = {}, activeFilters = [] }) 
       <section className="w-full h-[145px] bg-fourth flex items-center pt-16">
         <div className="max-w-screen-2xl w-full mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between gap-4">
-
             {/* LEFT */}
             <div className="flex items-center gap-2 flex-wrap text-primary  text-sm md:text-base">
               {/* Show URL query params only when no filters are selected */}
@@ -76,7 +77,11 @@ export default function SearchHeader({ pageResponse = {}, activeFilters = [] }) 
               <span className="text-primary/70">
                 • {pageResponse.totalElements ?? 0} Total Results
                 {pageResponse.totalPages > 0 && (
-                  <> • Page {pageResponse.currentPage ?? 1} of {pageResponse.totalPages}</>
+                  <>
+                    {" "}
+                    • Page {pageResponse.currentPage ?? 1} of{" "}
+                    {pageResponse.totalPages}
+                  </>
                 )}
               </span>
             </div>
@@ -112,14 +117,16 @@ export default function SearchHeader({ pageResponse = {}, activeFilters = [] }) 
                 {/* Match dual-chevron behavior */}
                 <ChevronDown
                   size={14}
-                  className={`sm:hidden transition-transform ${open ? "rotate-180" : ""
-                    }`}
+                  className={`sm:hidden transition-transform ${
+                    open ? "rotate-180" : ""
+                  }`}
                 />
 
                 <ChevronDown
                   size={14}
-                  className={`hidden sm:block transition-transform ${open ? "rotate-180" : ""
-                    }`}
+                  className={`hidden sm:block transition-transform ${
+                    open ? "rotate-180" : ""
+                  }`}
                 />
               </button>
 
@@ -134,7 +141,7 @@ export default function SearchHeader({ pageResponse = {}, activeFilters = [] }) 
         border border-primary/20
         rounded-lg
         shadow-lg
-        z-[9999]
+        z-9999
       "
                 >
                   {sortOptions.map((option) => (
@@ -163,10 +170,11 @@ export default function SearchHeader({ pageResponse = {}, activeFilters = [] }) 
             w-full text-left px-3 py-2
             text-[12px] cursor-pointer
             hover:bg-secondary/10
-            ${selected.label === option.label
-                          ? "bg-primary/10 font-semibold"
-                          : ""
-                        }
+            ${
+              selected.label === option.label
+                ? "bg-primary/10 font-semibold"
+                : ""
+            }
           `}
                     >
                       {option.label}
