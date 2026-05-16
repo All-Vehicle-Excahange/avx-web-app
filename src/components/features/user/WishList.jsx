@@ -1,11 +1,26 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import ConsultantCard from "@/components/ui/const/ConsultCard";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import React, { useCallback, useEffect, useState } from "react";
 import Button from "@/components/ui/button";
-import { Settings2, Car, Fuel, MapPin, Wallet, LayoutGrid, Edit3 } from "lucide-react";
-import { getWishList, getFollowedConsultant, getUserPreference, updatePreference } from "@/services/user.service";
-import { VehicleCardSkeleton, ConsultantCardSkeleton } from "@/components/ui/skeleton";
+import {
+  Settings2,
+  Car,
+  Fuel,
+  MapPin,
+  Wallet,
+  LayoutGrid,
+  Edit3,
+} from "lucide-react";
+import {
+  getWishList,
+  getFollowedConsultant,
+  getUserPreference,
+  updatePreference,
+} from "@/services/user.service";
+import {
+  VehicleCardSkeleton,
+  ConsultantCardSkeleton,
+} from "@/components/ui/skeleton";
 import PreferencesPopup from "@/components/features/user/PreferencesPopup";
 import { toast } from "react-hot-toast";
 function Wishlist() {
@@ -59,7 +74,7 @@ function Wishlist() {
   const fetchWishList = useCallback(async (page = 1) => {
     try {
       if (page === 1) setIsLoading(true);
-      const pageNumber = typeof page === 'number' ? page : 1;
+      const pageNumber = typeof page === "number" ? page : 1;
       const res = await getWishList({ pageNo: pageNumber, size: 8 });
       if (res.success && res.data) {
         if (pageNumber === 1) {
@@ -82,7 +97,7 @@ function Wishlist() {
   const fetchFollowedConsultant = useCallback(async (page = 1) => {
     try {
       if (page === 1) setIsLoading(true);
-      const pageNumber = typeof page === 'number' ? page : 1;
+      const pageNumber = typeof page === "number" ? page : 1;
       const data = { pageNo: pageNumber, size: 4 };
       const res = await getFollowedConsultant(data);
 
@@ -150,8 +165,6 @@ function Wishlist() {
     fetchFollowedConsultant(nextPage);
   };
 
-
-
   return (
     <>
       <section className="w-full container rounded-2xl p-6 space-y-6">
@@ -162,9 +175,10 @@ function Wishlist() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`px-4 py-2 rounded-full text-sm font-medium border transition
-                ${activeTab === tab.id
-                  ? "bg-primary text-secondary border-primary"
-                  : "border-third/50 text-primary hover:bg-third/20"
+                ${
+                  activeTab === tab.id
+                    ? "bg-primary text-secondary border-primary"
+                    : "border-third/50 text-primary hover:bg-third/20"
                 }`}
             >
               {tab.label}
@@ -175,7 +189,9 @@ function Wishlist() {
         {/* VEHICLE WISHLIST */}
         {activeTab === "wishlist" && (
           <div>
-            <h1 className="text-3xl font-extrabold mb-6 hidden">Vehicle Wishlist</h1>
+            <h1 className="text-3xl font-extrabold mb-6 hidden">
+              Vehicle Wishlist
+            </h1>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
               {isLoading ? (
                 Array.from({ length: 4 }).map((_, i) => (
@@ -187,21 +203,34 @@ function Wishlist() {
                     key={vehicle.id}
                     className="lg:col-span-1 lg:row-span-1 h-full"
                   >
-                    <VehicleCard data={vehicle} onWishlistChange={() => { setWishlistPage(1); fetchWishList(1); }} />
+                    <VehicleCard
+                      data={vehicle}
+                      onWishlistChange={() => {
+                        setWishlistPage(1);
+                        fetchWishList(1);
+                      }}
+                    />
                   </div>
                 ))
               ) : (
                 <div className="col-span-full py-16 flex flex-col items-center justify-center text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5 mt-4">
-                  <h3 className="text-xl font-bold mb-2 text-primary">Your wishlist is empty.</h3>
+                  <h3 className="text-xl font-bold mb-2 text-primary">
+                    Your wishlist is empty.
+                  </h3>
                   <p className="text-third text-sm max-w-sm">
-                    Browse our vehicle marketplace and add your favorites to your wishlist.
+                    Browse our vehicle marketplace and add your favorites to
+                    your wishlist.
                   </p>
                 </div>
               )}
             </div>
             {hasMoreWishlist && cardData.length > 0 && !isLoading && (
               <div className="flex justify-end mt-6">
-                <Button variant="outline" showIcon={false} onClick={handleLoadMoreWishlist}>
+                <Button
+                  variant="outline"
+                  showIcon={false}
+                  onClick={handleLoadMoreWishlist}
+                >
                   See More
                 </Button>
               </div>
@@ -229,16 +258,23 @@ function Wishlist() {
                 ))
               ) : (
                 <div className="col-span-full py-16 flex flex-col items-center justify-center text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5 mt-4">
-                  <h3 className="text-xl font-bold mb-2 text-primary">You haven&apos;t subscribed to any consultants yet.</h3>
+                  <h3 className="text-xl font-bold mb-2 text-primary">
+                    You haven&apos;t subscribed to any consultants yet.
+                  </h3>
                   <p className="text-third text-sm max-w-sm">
-                    Follow  consultants to get expert advice and exclusive deal updates.
+                    Follow consultants to get expert advice and exclusive deal
+                    updates.
                   </p>
                 </div>
               )}
             </div>
             {hasMoreConsultant && followedConsualt.length > 0 && !isLoading && (
               <div className="flex justify-end mt-6">
-                <Button variant="outline" showIcon={false} onClick={handleLoadMoreConsultant}>
+                <Button
+                  variant="outline"
+                  showIcon={false}
+                  onClick={handleLoadMoreConsultant}
+                >
                   See More
                 </Button>
               </div>
@@ -257,7 +293,8 @@ function Wishlist() {
                   Your Preferences
                 </h2>
                 <p className="text-sm text-third mt-1">
-                  We will use these details to show you the most relevant vehicles.
+                  We will use these details to show you the most relevant
+                  vehicles.
                 </p>
               </div>
               <Button
@@ -267,14 +304,19 @@ function Wishlist() {
                 className="shrink-0"
               >
                 <Edit3 size={16} className="mr-2" />
-                {userPref && Object.keys(userPref).length > 0 ? "Edit Preferences" : "Set Preferences"}
+                {userPref && Object.keys(userPref).length > 0
+                  ? "Edit Preferences"
+                  : "Set Preferences"}
               </Button>
             </div>
-            
+
             {isLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="p-6 rounded-2xl border border-third/10 bg-primary/5 animate-pulse">
+                  <div
+                    key={i}
+                    className="p-6 rounded-2xl border border-third/10 bg-primary/5 animate-pulse"
+                  >
                     <div className="h-6 w-8 bg-third/20 rounded mb-4"></div>
                     <div className="h-5 w-1/2 bg-third/20 rounded mb-4"></div>
                     <div className="flex gap-2">
@@ -286,20 +328,31 @@ function Wishlist() {
               </div>
             ) : userPref && Object.keys(userPref).length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                
                 {/* Brands & Models */}
-                {(userPref.makerDetails?.length > 0 || userPref.modelDetails?.length > 0) && (
-                  <div className="p-6 rounded-2xl border border-third/20 bg-primary/[0.02] hover:bg-primary/[0.04] transition-colors group">
-                    <Car className="text-third mb-3 group-hover:scale-110 transition-transform" size={24} />
-                    <h3 className="font-semibold text-primary mb-4">Brands & Models</h3>
+                {(userPref.makerDetails?.length > 0 ||
+                  userPref.modelDetails?.length > 0) && (
+                  <div className="p-6 rounded-2xl border border-third/20 bg-primary/2 hover:bg-primary/4 transition-colors group">
+                    <Car
+                      className="text-third mb-3 group-hover:scale-110 transition-transform"
+                      size={24}
+                    />
+                    <h3 className="font-semibold text-primary mb-4">
+                      Brands & Models
+                    </h3>
                     <div className="flex flex-wrap gap-2">
-                      {userPref.makerDetails?.map(m => (
-                        <span key={m.makerId} className="px-3 py-1.5 text-xs font-medium bg-primary/10 text-primary rounded-full">
+                      {userPref.makerDetails?.map((m) => (
+                        <span
+                          key={m.makerId}
+                          className="px-3 py-1.5 text-xs font-medium bg-primary/10 text-primary rounded-full"
+                        >
                           {m.makerName}
                         </span>
                       ))}
-                      {userPref.modelDetails?.map(m => (
-                        <span key={m.modelId} className="px-3 py-1.5 text-xs font-medium border border-primary/20 text-primary/70 rounded-full">
+                      {userPref.modelDetails?.map((m) => (
+                        <span
+                          key={m.modelId}
+                          className="px-3 py-1.5 text-xs font-medium border border-primary/20 text-primary/70 rounded-full"
+                        >
                           {m.modelName}
                         </span>
                       ))}
@@ -309,13 +362,21 @@ function Wishlist() {
 
                 {/* Vehicle Types */}
                 {userPref.vehicleTypes?.length > 0 && (
-                  <div className="p-6 rounded-2xl border border-third/20 bg-primary/[0.02] hover:bg-primary/[0.04] transition-colors group">
-                    <LayoutGrid className="text-third mb-3 group-hover:scale-110 transition-transform" size={24} />
-                    <h3 className="font-semibold text-primary mb-4">Body Types</h3>
+                  <div className="p-6 rounded-2xl border border-third/20 bg-primary/2 hover:bg-primary/4 transition-colors group">
+                    <LayoutGrid
+                      className="text-third mb-3 group-hover:scale-110 transition-transform"
+                      size={24}
+                    />
+                    <h3 className="font-semibold text-primary mb-4">
+                      Body Types
+                    </h3>
                     <div className="flex flex-wrap gap-2">
-                      {userPref.vehicleTypes.map(t => (
-                        <span key={t} className="px-3 py-1.5 text-xs font-medium bg-third/10 text-third rounded-full capitalize">
-                          {t.replace('_', ' ').toLowerCase()}
+                      {userPref.vehicleTypes.map((t) => (
+                        <span
+                          key={t}
+                          className="px-3 py-1.5 text-xs font-medium bg-third/10 text-third rounded-full capitalize"
+                        >
+                          {t.replace("_", " ").toLowerCase()}
                         </span>
                       ))}
                     </div>
@@ -323,18 +384,28 @@ function Wishlist() {
                 )}
 
                 {/* Fuel & Transmission */}
-                {(userPref.fuelTypes?.length > 0 || userPref.transmissionTypes?.length > 0) && (
-                  <div className="p-6 rounded-2xl border border-third/20 bg-primary/[0.02] hover:bg-primary/[0.04] transition-colors group">
-                    <Fuel className="text-third mb-3 group-hover:scale-110 transition-transform" size={24} />
+                {(userPref.fuelTypes?.length > 0 ||
+                  userPref.transmissionTypes?.length > 0) && (
+                  <div className="p-6 rounded-2xl border border-third/20 bg-primary/2 hover:bg-primary/4 transition-colors group">
+                    <Fuel
+                      className="text-third mb-3 group-hover:scale-110 transition-transform"
+                      size={24}
+                    />
                     <h3 className="font-semibold text-primary mb-4">Specs</h3>
                     <div className="flex flex-wrap gap-2">
-                      {userPref.fuelTypes?.map(f => (
-                        <span key={f} className="px-3 py-1.5 text-xs font-medium bg-secondary text-primary border border-primary/10 rounded-full capitalize">
+                      {userPref.fuelTypes?.map((f) => (
+                        <span
+                          key={f}
+                          className="px-3 py-1.5 text-xs font-medium bg-secondary text-primary border border-primary/10 rounded-full capitalize"
+                        >
                           {f.toLowerCase()}
                         </span>
                       ))}
-                      {userPref.transmissionTypes?.map(t => (
-                        <span key={t} className="px-3 py-1.5 text-xs font-medium bg-secondary text-primary border border-primary/10 rounded-full capitalize">
+                      {userPref.transmissionTypes?.map((t) => (
+                        <span
+                          key={t}
+                          className="px-3 py-1.5 text-xs font-medium bg-secondary text-primary border border-primary/10 rounded-full capitalize"
+                        >
                           {t.toLowerCase()}
                         </span>
                       ))}
@@ -344,16 +415,25 @@ function Wishlist() {
 
                 {/* Budget */}
                 {(userPref.minPrice || userPref.maxPrice) && (
-                  <div className="p-6 rounded-2xl border border-third/20 bg-primary/[0.02] hover:bg-primary/[0.04] transition-colors group">
-                    <Wallet className="text-third mb-3 group-hover:scale-110 transition-transform" size={24} />
-                    <h3 className="font-semibold text-primary mb-4">Budget Range</h3>
+                  <div className="p-6 rounded-2xl border border-third/20 bg-primary/2 hover:bg-primary/4 transition-colors group">
+                    <Wallet
+                      className="text-third mb-3 group-hover:scale-110 transition-transform"
+                      size={24}
+                    />
+                    <h3 className="font-semibold text-primary mb-4">
+                      Budget Range
+                    </h3>
                     <div className="flex items-center gap-3">
                       <div className="px-4 py-2 bg-primary/5 rounded-xl border border-primary/10 text-primary font-semibold">
-                        {userPref.minPrice ? `₹${userPref.minPrice.toLocaleString()}` : '₹0'}
+                        {userPref.minPrice
+                          ? `₹${userPref.minPrice.toLocaleString()}`
+                          : "₹0"}
                       </div>
                       <span className="text-third/50 font-bold">-</span>
                       <div className="px-4 py-2 bg-primary/5 rounded-xl border border-primary/10 text-primary font-semibold">
-                        {userPref.maxPrice ? `₹${userPref.maxPrice.toLocaleString()}` : 'Any'}
+                        {userPref.maxPrice
+                          ? `₹${userPref.maxPrice.toLocaleString()}`
+                          : "Any"}
                       </div>
                     </div>
                   </div>
@@ -361,12 +441,20 @@ function Wishlist() {
 
                 {/* Locations */}
                 {userPref.cityDetails?.length > 0 && (
-                  <div className="p-6 rounded-2xl border border-third/20 bg-primary/[0.02] hover:bg-primary/[0.04] transition-colors group md:col-span-2 lg:col-span-1">
-                    <MapPin className="text-third mb-3 group-hover:scale-110 transition-transform" size={24} />
-                    <h3 className="font-semibold text-primary mb-4">Locations</h3>
+                  <div className="p-6 rounded-2xl border border-third/20 bg-primary/2 hover:bg-primary/4 transition-colors group md:col-span-2 lg:col-span-1">
+                    <MapPin
+                      className="text-third mb-3 group-hover:scale-110 transition-transform"
+                      size={24}
+                    />
+                    <h3 className="font-semibold text-primary mb-4">
+                      Locations
+                    </h3>
                     <div className="flex flex-wrap gap-2">
-                      {userPref.cityDetails.map(c => (
-                        <span key={c.cityId || c.cityName} className="px-3 py-1.5 text-xs font-medium bg-third/5 text-third border border-third/20 rounded-full">
+                      {userPref.cityDetails.map((c) => (
+                        <span
+                          key={c.cityId || c.cityName}
+                          className="px-3 py-1.5 text-xs font-medium bg-third/5 text-third border border-third/20 rounded-full"
+                        >
                           {c.cityName}
                         </span>
                       ))}
@@ -375,21 +463,28 @@ function Wishlist() {
                 )}
               </div>
             ) : (
-              <div className="w-full py-20 flex flex-col items-center justify-center text-center rounded-3xl border border-dashed border-third/30 bg-primary/[0.02]">
+              <div className="w-full py-20 flex flex-col items-center justify-center text-center rounded-3xl border border-dashed border-third/30 bg-primary/2">
                 <Settings2 size={48} className="text-third/40 mb-4" />
-                <h3 className="text-xl font-bold mb-2 text-primary">No preferences set</h3>
+                <h3 className="text-xl font-bold mb-2 text-primary">
+                  No preferences set
+                </h3>
                 <p className="text-primary/50 text-sm max-w-sm mb-6">
-                  Tell us what kind of vehicles you&apos;re looking for, and we&apos;ll personalize your experience.
+                  Tell us what kind of vehicles you&apos;re looking for, and
+                  we&apos;ll personalize your experience.
                 </p>
-                <Button variant="primary" showIcon={false} onClick={() => setEditMode(true)}>
+                <Button
+                  variant="primary"
+                  showIcon={false}
+                  onClick={() => setEditMode(true)}
+                >
                   Set Preferences
                 </Button>
               </div>
             )}
 
             {/* Reusing the popup for editing */}
-            <PreferencesPopup 
-              isOpen={editMode} 
+            <PreferencesPopup
+              isOpen={editMode}
               onClose={() => setEditMode(false)}
               initialData={userPref}
               onSubmit={handleUpdatePreference}

@@ -189,12 +189,14 @@ export default function SearchWithCard({
   }
   const modelIdParam = searchParams.get("modelId") || initialFilters.modelId;
   const modelParam = searchParams.get("model") || initialFilters.model;
-  const variantIdParam = searchParams.get("variantId") || initialFilters.variantId;
+  const variantIdParam =
+    searchParams.get("variantId") || initialFilters.variantId;
   const variantParam = searchParams.get("variant") || initialFilters.variant;
   const budget = searchParams.get("budget") || initialFilters.budget;
   const sortBy = searchParams.get("sortBy") || initialFilters.sortBy;
   const direction = searchParams.get("direction") || initialFilters.direction;
-  const transmission = searchParams.get("transmission") || initialFilters.transmission;
+  const transmission =
+    searchParams.get("transmission") || initialFilters.transmission;
 
   let mPrice = 0;
   let mxPrice = 0;
@@ -599,7 +601,8 @@ export default function SearchWithCard({
     const qCityId = searchParams.get("cityId") || initialFilters.cityId;
     const qStateId = searchParams.get("stateId") || initialFilters.stateId;
     const qLocation = searchParams.get("location") || initialFilters.location;
-    const qStateName = searchParams.get("stateName") || initialFilters.stateName;
+    const qStateName =
+      searchParams.get("stateName") || initialFilters.stateName;
     const qCityName = searchParams.get("cityName") || initialFilters.cityName;
 
     // Handle location names even without IDs
@@ -1768,7 +1771,7 @@ export default function SearchWithCard({
                   <div className="flex flex-col items-start gap-2">
                     <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
                       Top Vehicle
-                      <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+                      <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
                     </p>
 
                     <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
@@ -1801,7 +1804,7 @@ export default function SearchWithCard({
 
       {/* MOBILE FILTER DRAWER */}
       <div
-        className={`fixed top-[64px] inset-x-0 bottom-0 z-[100] bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${
+        className={`fixed top-[64px] inset-x-0 bottom-0 z-100 bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${
           mobileFilterOpen ? "translate-y-0" : "translate-y-full"
         }`}
       >

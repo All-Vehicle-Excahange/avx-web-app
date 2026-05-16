@@ -218,7 +218,9 @@ export default function AccountPopup({ open, onClosePopup }) {
                 onClick={onClosePopup}
                 className="text-lg font-bold text-primary hover:text-third transition-colors block"
               >
-                Hello, {user?.consultationName || `${user?.firstname} ${user?.lastname}`}
+                Hello,{" "}
+                {user?.consultationName ||
+                  `${user?.firstname} ${user?.lastname}`}
               </Link>
 
               {/* PROGRESS INDICATOR - Only for Consultants */}
@@ -517,7 +519,7 @@ export default function AccountPopup({ open, onClosePopup }) {
         typeof document !== "undefined" &&
         createPortal(
           <div
-            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
             onClick={handleCancelLogout}
             style={{
               animation: isLogoutClosing
@@ -549,7 +551,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                   size="sm"
                   onClick={handleCancelLogout}
                   disabled={isLoggingOut}
-                  className="border border-white/10  text-primary border border-primary hover:bg-primary hover:text-secondary disabled:opacity-50"
+                  className="border border-primary  text-primary hover:bg-primary hover:text-secondary disabled:opacity-50"
                 >
                   Cancel
                 </Button>

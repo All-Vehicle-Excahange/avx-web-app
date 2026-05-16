@@ -84,7 +84,7 @@ const AboutSection = () => {
             <div>
               <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
                 About Us
-                <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+                <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
               </p>
               <h2 className="text-3xl mt-2 md:text-4xl lg:text-4xl font-semibold text-primary tracking-tight leading-tight">
                 <span className="text-fourth"> Built</span>  to fix what&apos;s broken.
@@ -109,7 +109,7 @@ const AboutSection = () => {
           <div className="flex flex-col items-start gap-2">
             <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
               Company
-              <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+              <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
             </p>
 
             <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
@@ -138,7 +138,7 @@ const AboutSection = () => {
               </p>
 
               {/* Divider */}
-              <div className="w-full h-[2px] bg-gradient-to-r from-primary/60 to-transparent mb-6 transition-all group-hover:from-primary" />
+              <div className="w-full h-[2px] bg-linear-to-r from-primary/60 to-transparent mb-6 transition-all group-hover:from-primary" />
 
               {/* Value */}
               <p className="text-4xl md:text-5xl font-bold tracking-tight transition-transform">
