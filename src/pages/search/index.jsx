@@ -28,7 +28,7 @@ function Index({ seo }) {
   return (
     <>
       <Head>
-        <title>{seo?.title || "Used Cars for Sale | Reecomm"}</title>
+        <title>{seo?.title || "Used Cars  | Reecomm"}</title>
         <meta
           name="description"
           content={
@@ -128,14 +128,14 @@ export async function getServerSideProps(context) {
   const modelPart = model ? `${model} ` : "";
   const bodyPart = bodyType ? `${bodyType} ` : "";
 
-  const dynamicTitle = `Used ${brandPart}${modelPart}${bodyPart}${label} for Sale${locPart} | Reecomm`;
+  const dynamicTitle = `Used ${brandPart}${modelPart}${bodyPart}${label} | Reecomm`;
 
   const descLocPart = location ? ` across ${location}` : "";
   let dynamicDescription = "";
   if (isTwoWheeler) {
-    dynamicDescription = `Browse verified used two-wheelers for sale${descLocPart}. Inspected scooters, commuter bikes, and sports bikes — all with transparent pricing.`;
+    dynamicDescription = `Browse verified used two-wheelers${descLocPart}. Inspected scooters, commuter bikes, and sports bikes — all with transparent pricing.`;
   } else {
-    dynamicDescription = `Browse verified used cars for sale${descLocPart}. Every Reecomm listing is certified, inspected, and fairly priced. Find your next car today.`;
+    dynamicDescription = `Browse verified used cars${descLocPart}. Every Reecomm listing is certified, inspected, and fairly priced. Find your next car today.`;
   }
 
   return {

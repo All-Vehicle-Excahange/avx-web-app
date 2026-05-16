@@ -17,7 +17,7 @@ import {
 import Image from "next/image";
 import CloseInqPopup from "../features/consult/details/dashboard/components/CloseInqPopup";
 import { useState } from "react";
-import { createSlug } from "@/lib/helper";
+import { generateVehicleSlug } from "@/lib/helper";
 import { markAsSoldVehicle } from "@/services/vehicle.service";
 import MarkSoldPopup from "./MarkSoldPopup";
 
@@ -134,7 +134,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
 
         {/*   Vehicle Image (Full width on mobile/tablet, fixed on desktop) */}
         <Link
-          href={`/vehicle/details/${createSlug(vehicleTitle)}/${inquiryVehicleResponse.id}`}
+          href={`/vehicle/details/${generateVehicleSlug(inquiryVehicleResponse)}/${inquiryVehicleResponse.id}`}
           className="w-full lg:w-48 h-48 lg:h-42 rounded-xl overflow-hidden border border-third/30 bg-primary/5 shrink-0 relative block cursor-pointer transition hover:opacity-90"
         >
           <Image

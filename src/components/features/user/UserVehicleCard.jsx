@@ -19,7 +19,7 @@ import Button from "@/components/ui/button";
 import Image from "next/image";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import { markAsSoldVehicle } from "@/services/vehicle.service";
-import { createSlug } from "@/lib/helper";
+import { generateVehicleSlug } from "@/lib/helper";
 import MarkSoldPopup from "@/components/ui/MarkSoldPopup";
 
 export default function UserVehicleCard({
@@ -302,7 +302,7 @@ export default function UserVehicleCard({
                   ₹ {data?.price || "-"}
                 </h3>
                 <Button
-                  href={`/vehicle/details/${createSlug(data?.title)}/${data.id}`}
+                  href={`/vehicle/details/${generateVehicleSlug(data)}/${data.id}`}
                   variant="roundedOutline"
                   size="sm"
                   className="w-8 h-8 p-0 group"

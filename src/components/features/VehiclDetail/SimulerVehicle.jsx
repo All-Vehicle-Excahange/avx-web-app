@@ -35,22 +35,50 @@ function SimulerVehicle({ vehicleOverview }) {
     }, [id]);
 
     const handleViewMore = () => {
-        const queryParams = new URLSearchParams();
-        if (vehicleOverview?.makerId || vehicleOverview?.makeId) {
-            queryParams.set("makerId", vehicleOverview.makerId || vehicleOverview.makeId);
-        }
-        if (vehicleOverview?.makerName) queryParams.set("brand", vehicleOverview.makerName);
-        if (vehicleOverview?.modelId) queryParams.set("modelId", vehicleOverview.modelId);
-        if (vehicleOverview?.variantId) queryParams.set("variantId", vehicleOverview.variantId);
-        if (vehicleOverview?.variantName) queryParams.set("variant", vehicleOverview.variantName);
+        const brand = vehicleOverview?.makerName || "";
+        const vtLower = (vehicleOverview?.vehicleType || "4 Wheeler").toLowerCase().replace(/_/g, " ");
+        const isCar = vtLower.includes("car") || vtLower.includes("4 wheeler") || vtLower.includes("four wheeler") || vtLower.includes("4-wheeler") || vtLower.includes("four-wheeler");
 
-        if (vehicleOverview?.price) {
-            const minPriceLakhs = Math.max(0, (vehicleOverview.price * 0.8) / 100000).toFixed(2);
-            const maxPriceLakhs = ((vehicleOverview.price * 1.2) / 100000).toFixed(2);
-            queryParams.set("budget", `${minPriceLakhs}-${maxPriceLakhs}`);
-        }
+        if (isCar) {
+            let slug = "buy-used-";
+            if (brand) {
+                slug += brand.toLowerCase().replace(/\s+/g, "-") + "-";
+            }
+            if (vehicleOverview?.modelName) {
+                slug += vehicleOverview.modelName.toLowerCase().replace(/\s+/g, "-") + "-";
+            }
+            slug += "cars";
+            if (vehicleOverview?.cityName) {
+                slug += "-" + vehicleOverview.cityName.toLowerCase().replace(/\s+/g, "-");
+            }
 
-        router.push(`/search?${queryParams.toString()}`);
+            const queryParams = new URLSearchParams();
+            // All primary IDs are now resolved server-side from the slug
+            if (vehicleOverview?.price) {
+                const minPriceLakhs = Math.max(0, (vehicleOverview.price * 0.8) / 100000).toFixed(2);
+                const maxPriceLakhs = ((vehicleOverview.price * 1.2) / 100000).toFixed(2);
+                queryParams.set("budget", `${minPriceLakhs}-${maxPriceLakhs}`);
+            }
+
+            router.push(`/search/${slug}?${queryParams.toString()}`);
+        } else {
+            const queryParams = new URLSearchParams();
+            if (vehicleOverview?.makerId || vehicleOverview?.makeId) {
+                queryParams.set("makerId", vehicleOverview.makerId || vehicleOverview.makeId);
+            }
+            if (vehicleOverview?.makerName) queryParams.set("brand", vehicleOverview.makerName);
+            if (vehicleOverview?.modelId) queryParams.set("modelId", vehicleOverview.modelId);
+            if (vehicleOverview?.variantId) queryParams.set("variantId", vehicleOverview.variantId);
+            if (vehicleOverview?.variantName) queryParams.set("variant", vehicleOverview.variantName);
+
+            if (vehicleOverview?.price) {
+                const minPriceLakhs = Math.max(0, (vehicleOverview.price * 0.8) / 100000).toFixed(2);
+                const maxPriceLakhs = ((vehicleOverview.price * 1.2) / 100000).toFixed(2);
+                queryParams.set("budget", `${minPriceLakhs}-${maxPriceLakhs}`);
+            }
+
+            router.push(`/search?${queryParams.toString()}`);
+        }
     };
 
     return (
