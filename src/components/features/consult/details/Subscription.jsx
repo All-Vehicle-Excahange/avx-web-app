@@ -8,12 +8,17 @@ import { useRouter } from "next/router";
 import { getSellerTier } from "@/services/Seller.service";
 import { SkeletonBox } from "@/components/ui/skeleton";
 import { getAllTier } from "@/services/user.service";
+import {
+  createRazorpayOrder,
+  verifyRazorpayPayment,
+} from "@/services/payment.service";
 
 export default function Subscription() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [tiers, setTiers] = useState([]);
   const [selectedTierId, setSelectedTierId] = useState(null);
+  const [paymentLoading, setPaymentLoading] = useState(false);
 
   useEffect(() => {
     const initializeData = async () => {
@@ -54,13 +59,101 @@ export default function Subscription() {
     initializeData();
   }, [router]);
 
-  const handleClick = () => {
-    if (router.query?.redirect) {
-      router.push(
-        `/consult/kyc?redirect=${encodeURIComponent(router.query.redirect)}`,
-      );
-    } else {
-      router.push("/consult/kyc");
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleClick = async () => {
+    if (!selectedTierId) return;
+
+    try {
+      setPaymentLoading(true);
+
+      const isScriptLoaded = await loadRazorpayScript();
+      if (!isScriptLoaded) {
+        alert("Razorpay SDK failed to load. Please check your connection.");
+        setPaymentLoading(false);
+        return;
+      }
+
+      const selectedTier = tiers.find((t) => t.id === selectedTierId);
+      const price = selectedTier.monthlyPrice || 100;
+      const amountInPaise = Math.max(price * 100, 100);
+
+      // 1. Create order
+      const orderResponse = await createRazorpayOrder({
+        amount: amountInPaise,
+        currency: "INR",
+        receipt: `receipt_${Date.now()}`,
+      });
+
+      if (!orderResponse.success) {
+        throw new Error(
+          orderResponse.message ||
+            "Failed to create order. Please check backend integration.",
+        );
+      }
+
+      const orderData = orderResponse.data;
+
+      // 2. Open Razorpay Modal
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: "AVX",
+        description: `Subscription for ${selectedTier.title} plan`,
+        order_id: orderData.order_id || orderData.orderId || orderData.id,
+        handler: async function (response) {
+          try {
+            // 3. Verify Payment
+            const verifyRes = await verifyRazorpayPayment({
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+
+            if (verifyRes.success) {
+              if (router.query?.redirect) {
+                router.push(
+                  `/consult/kyc?redirect=${encodeURIComponent(router.query.redirect)}`,
+                );
+              } else {
+                router.push("/consult/kyc");
+              }
+            } else {
+              alert(verifyRes.message || "Payment verification failed.");
+            }
+          } catch (error) {
+            console.error("Verification error:", error);
+            alert("Error verifying payment.");
+          }
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.on("payment.failed", function (response) {
+        alert("Payment failed: " + response.error.description);
+      });
+      rzp.open();
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Error initiating payment: " + error.message);
+    } finally {
+      setPaymentLoading(false);
     }
   };
 
@@ -153,7 +246,6 @@ export default function Subscription() {
         )}
       </div>
 
-
       {/* CTA */}
       <div className="mt-16 text-center space-y-2">
         {!selectedTierId && (
@@ -164,9 +256,15 @@ export default function Subscription() {
           variant="outlineAnimated"
           size="md"
           className={`px-10 transition-opacity ${!selectedTierId ? "opacity-40 pointer-events-none" : ""}`}
-          disabled={!selectedTierId}
+          disabled={!selectedTierId || paymentLoading}
         >
-          Continue to Payment
+          {paymentLoading ? (
+            <span className="flex items-center gap-2">
+              <Loader2 className="w-5 h-5 animate-spin" /> Processing...
+            </span>
+          ) : (
+            "Continue to Payment"
+          )}
         </Button>
       </div>
     </section>
