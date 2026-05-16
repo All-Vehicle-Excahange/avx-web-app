@@ -402,9 +402,9 @@ export default function SearchWithCard({
   useEffect(() => {
     const initialPayload = {};
 
-    // Location from URL
-    const qCityId = searchParams.get("cityId");
-    const qStateId = searchParams.get("stateId");
+    // Location from URL or initialFilters
+    const qCityId = searchParams.get("cityId") || initialFilters.cityId;
+    const qStateId = searchParams.get("stateId") || initialFilters.stateId;
     if (qCityId) initialPayload.cityId = Number(qCityId);
     if (qStateId) initialPayload.stateId = Number(qStateId);
 

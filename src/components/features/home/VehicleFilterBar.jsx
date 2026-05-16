@@ -435,13 +435,10 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           slug += "-" + cityName;
         }
 
-        // Other filters as query params
+        // Other filters as query params (excluding brand/model/city IDs as they are resolved from the slug)
         const queryParams = new URLSearchParams({
-          ...(cityId && { cityId }),
-          ...(stateId && { stateId }),
           ...(bodyType && { bodyType: bodyType.toUpperCase() }),
           ...(fuelType && { fuelType: fuelType.toUpperCase() }),
-          ...(makerId && { makerId }),
           ...(budget && { budget }),
         }).toString();
 

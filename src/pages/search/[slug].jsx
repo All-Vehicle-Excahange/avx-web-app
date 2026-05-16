@@ -109,8 +109,6 @@ export async function getServerSideProps(context) {
     return { notFound: true };
   }
 
-  // Regex to extract brand/model part and city part
-  // Pattern: buy-used-{brand-model}-cars-{city}
   const regex = /^buy-used-(?:(.+)-)?cars(?:-(.+))?$/;
   const match = slug.match(regex);
 
@@ -118,16 +116,36 @@ export async function getServerSideProps(context) {
     return { notFound: true };
   }
 
-  const details = match[1] || ""; // e.g. "toyota" or "toyota-camry"
-  const city = match[2] || ""; // e.g. "ahmedabad"
+  const details = match[1] || "";
+  const city = match[2] || "";
 
   const initialFilters = {
     vehicleType: "cars",
   };
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.reecomm.com/api/v1";
+  const nodeApiUrl = process.env.NEXT_PUBLIC_NODE_API_URL || "https://api.reecomm.com/api/v1";
+
+  // 1. Resolve City ID
   if (city) {
     initialFilters.cityName = city.charAt(0).toUpperCase() + city.slice(1);
     initialFilters.location = initialFilters.cityName;
+    
+    try {
+      const cityRes = await fetch(`${apiUrl}/util/address/search-cities-states?searchText=${city}`);
+      if (cityRes.ok) {
+        const cityJson = await cityRes.json();
+        const foundCity = cityJson?.data?.find(c => c.cityName.toLowerCase() === city.toLowerCase());
+        if (foundCity) {
+          initialFilters.cityId = foundCity.cityId;
+          initialFilters.stateId = foundCity.stateId;
+          initialFilters.cityName = foundCity.cityName;
+          initialFilters.location = foundCity.cityName;
+        }
+      }
+    } catch (e) {
+      console.error("City resolution failed:", e);
+    }
   }
 
   let brandName = "";
@@ -137,9 +155,7 @@ export async function getServerSideProps(context) {
     const normalize = (s) => s.toLowerCase().replace(/[\s-]/g, "");
     const detailsNormalized = normalize(details);
 
-    // Sort brands by length (descending) to match the longest name first (e.g., "Mercedes Benz" before "Mercedes")
     const brandEntries = Object.entries(MAKER_NAME_MAPPING).sort((a, b) => b[1].length - a[1].length);
-
     const brandEntry = brandEntries.find(([id, name]) => {
       const nameNorm = normalize(name);
       return detailsNormalized === nameNorm || detailsNormalized.startsWith(nameNorm);
@@ -153,21 +169,33 @@ export async function getServerSideProps(context) {
 
       const nameNorm = normalize(name);
       if (detailsNormalized.length > nameNorm.length) {
-        // Extract model by removing brand prefix from the original details string
-        // We need to be careful with hyphens.
         const slugPrefix = name.toLowerCase().replace(/\s+/g, "-");
         if (details.startsWith(slugPrefix + "-")) {
           modelName = details.slice(slugPrefix.length + 1);
         } else if (details.startsWith(slugPrefix)) {
           modelName = details.slice(slugPrefix.length);
         } else {
-          // Fallback if formatting is weird
           modelName = details.replace(new RegExp(name.split(" ").join("|"), "gi"), "").replace(/^-+|-+$/g, "");
         }
 
         if (modelName) {
-          modelName = modelName.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
-          initialFilters.model = modelName;
+          const rawModelName = modelName.replace(/-/g, " ");
+          initialFilters.model = rawModelName.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+          
+          // 2. Resolve Model ID
+          try {
+            const modelRes = await fetch(`${nodeApiUrl}/search/models?search=${rawModelName}&makerId=${id}`);
+            if (modelRes.ok) {
+              const modelJson = await modelRes.json();
+              const foundModel = modelJson?.data?.find(m => m.model_name.toLowerCase() === rawModelName.toLowerCase());
+              if (foundModel) {
+                initialFilters.modelId = foundModel.model_id;
+                initialFilters.model = foundModel.model_name;
+              }
+            }
+          } catch (e) {
+            console.error("Model resolution failed:", e);
+          }
         }
       }
     } else {
@@ -176,10 +204,9 @@ export async function getServerSideProps(context) {
     }
   }
 
-  // SEO Logic
   const brandPart = brandName ? `${brandName} ` : "";
-  const modelPart = modelName ? `${modelName} ` : "";
-  const cityPart = city ? ` in ${initialFilters.cityName}` : "";
+  const modelPart = initialFilters.model ? `${initialFilters.model} ` : (modelName ? `${modelName} ` : "");
+  const cityPart = initialFilters.cityName ? ` in ${initialFilters.cityName}` : "";
   
   const dynamicTitle = `Used ${brandPart}${modelPart}Cars${cityPart} | Reecomm`;
   const dynamicDescription = `Browse verified used ${brandPart}${modelPart}cars${cityPart}. Every Reecomm listing is certified, inspected, and fairly priced.`;

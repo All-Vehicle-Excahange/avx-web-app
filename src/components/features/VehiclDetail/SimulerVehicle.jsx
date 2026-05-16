@@ -53,15 +53,7 @@ function SimulerVehicle({ vehicleOverview }) {
             }
 
             const queryParams = new URLSearchParams();
-            if (vehicleOverview?.makerId || vehicleOverview?.makeId) {
-                queryParams.set("makerId", vehicleOverview.makerId || vehicleOverview.makeId);
-            }
-            if (brand) queryParams.set("brand", brand);
-            if (vehicleOverview?.modelId) queryParams.set("modelId", vehicleOverview.modelId);
-            if (vehicleOverview?.modelName) queryParams.set("model", vehicleOverview.modelName);
-            if (vehicleOverview?.variantId) queryParams.set("variantId", vehicleOverview.variantId);
-            if (vehicleOverview?.variantName) queryParams.set("variant", vehicleOverview.variantName);
-
+            // All primary IDs are now resolved server-side from the slug
             if (vehicleOverview?.price) {
                 const minPriceLakhs = Math.max(0, (vehicleOverview.price * 0.8) / 100000).toFixed(2);
                 const maxPriceLakhs = ((vehicleOverview.price * 1.2) / 100000).toFixed(2);
