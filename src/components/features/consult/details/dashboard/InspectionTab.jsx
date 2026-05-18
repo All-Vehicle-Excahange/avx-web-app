@@ -757,82 +757,9 @@ function InspectionTab() {
       </div>
 
       {/* ================= UPGRADE YOUR TRUST VISIBILITY ================= */}
-      <div className="rounded-xl border border-third/30  p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
-        {/* Header */}
-        <div>
-          <h2 className="text-xl font-semibold">
-            Upgrade Your Trust Visibility
-          </h2>
-          <p className="text-sm text-third">
-            Premium inspection features to increase buyer confidence and
-            conversions
-          </p>
-        </div>
+      
+    
 
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Feature 1 */}
-          <PremiumFeatureCard
-            icon={<Video size={22} className="text-primary" />}
-            title="Inspection Video Walkthrough"
-            desc="Complete 360° video documentation"
-            tag="+15% trust"
-          />
-
-          {/* Feature 2 */}
-          <PremiumFeatureCard
-            icon={<FileText size={22} className="text-primary" />}
-            title="360° Damage Mapping"
-            desc="Interactive damage visualization"
-            tag="+12% visibility"
-          />
-
-          {/* Feature 3 */}
-          <PremiumFeatureCard
-            icon={<Shield size={22} className="text-primary" />}
-            title="Engine Compression Test"
-            desc="Detailed engine health report"
-            tag="+10% conversion"
-          />
-
-          {/* Feature 4 */}
-          <PremiumFeatureCard
-            icon={<BadgeCheck size={22} className="text-primary" />}
-            title="Extended Warranty Badge"
-            desc="Premium trust indicator"
-            tag="+20% buyer confidence"
-          />
-        </div>
-
-        {/* Bundle Banner */}
-        {/* Bundle Banner */}
-        <div className="rounded-xl border border-primary/20 bg-primary/5 px-4 sm:px-6 py-4 sm:py-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-
-          {/* Left */}
-          <div className="flex items-start gap-3">
-            <BadgeCheck size={20} className="text-primary mt-0.5 shrink-0" />
-
-            <div>
-              <p className="font-semibold text-sm sm:text-base leading-tight">
-                Bundle All Premium Features
-              </p>
-              <p className="text-xs sm:text-sm text-third mt-0.5">
-                Save 25% when you add all premium inspection features
-              </p>
-            </div>
-          </div>
-
-          {/* Button */}
-          <Button
-            variant="ghost"
-            size="sm"
-            className="w-auto sm:w-auto px-6"
-          >
-            Get Bundle
-          </Button>
-
-        </div>
-      </div>
     </section>
   );
 }
