@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   TrendingUp,
   MousePointerClick,
@@ -16,7 +18,9 @@ import {
   Clock,
   CircleDollarSign,
   CheckCircle,
+  Lock,
 } from "lucide-react";
+import { getSellerTierTitle } from "@/lib/helper";
 import Button from "@/components/ui/button";
 import CustomSelect from "@/components/ui/custom-select";
 import Image from "next/image";
@@ -121,6 +125,11 @@ const initialRecentAds = [
 export default function PpcComponent() {
   const [range, setRange] = useState("60");
   const [openCustomize, setOpenCustomize] = useState(false);
+  const [tier, setTier] = useState(null);
+
+  useEffect(() => {
+    setTier(getSellerTierTitle() || "BASIC");
+  }, []);
 
   // State for the new "View Results" modal
   const [showResults, setShowResults] = useState(false);
@@ -196,9 +205,15 @@ export default function PpcComponent() {
           <h1 className="text-2xl font-bold">PPC & Visibility Boosts</h1>
           <p className="text-third text-sm">Dominance with guardrails</p>
         </div>
-        <Button onClick={handleClick} size="sm" variant="ghost">
-          <Plus size={16} /> Create New Boost
-        </Button>
+        {tier === "BASIC" ? (
+          <Button size="sm" variant="outlineSecondary" disabled className="opacity-60 cursor-not-allowed flex items-center gap-1.5 border-third/30 text-third">
+            <Lock size={14} /> Create New Boost (Premium)
+          </Button>
+        ) : (
+          <Button onClick={handleClick} size="sm" variant="ghost">
+            <Plus size={16} /> Create New Boost
+          </Button>
+        )}
       </div>
 
       {/* AD SUMMARY */}
@@ -267,15 +282,15 @@ export default function PpcComponent() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-4">
           <h3 className="font-semibold text-lg text-white">Recent ads</h3>
           
-          <div className="flex flex-wrap items-center gap-5 sm:gap-6 text-xs sm:text-sm">
+          <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide max-w-full md:max-w-2xl py-1">
             {["All", "Homepage", "Search result", "Consultant page", "CPC", "CPI"].map((f) => (
               <button
                 key={f}
                 onClick={() => setActiveFilter(f)}
-                className={`transition-all cursor-pointer font-medium hover:text-white pb-1 relative ${
+                className={`px-4 py-2 cursor-pointer rounded-full text-xs font-semibold border transition shrink-0 ${
                   activeFilter === f
-                    ? "text-white font-semibold after:absolute after:bottom-[-17px] after:left-0 after:right-0 after:h-[2px] after:bg-primary"
-                    : "text-zinc-500"
+                    ? "bg-primary text-secondary border-primary"
+                    : "border-third/50 text-primary hover:bg-primary/10"
                 }`}
               >
                 {f}
@@ -631,6 +646,8 @@ function RecentAdCard({ ad, onOpenResults }) {
     statusClass = "bg-amber-500/10 text-amber-400";
   }
 
+  const displayTitle = ad.placement === "Consultant page" ? "Adarsh Auto Consultant" : ad.title;
+
   return (
     <div 
       onClick={onOpenResults}
@@ -639,7 +656,7 @@ function RecentAdCard({ ad, onOpenResults }) {
       {/* Left side: Vehicle title, placement tag and billing info */}
       <div className="space-y-2 select-none">
         <h4 className="font-semibold text-sm sm:text-base text-white leading-tight">
-          {ad.title}
+          {displayTitle}
         </h4>
         <div className="flex items-center gap-2 flex-wrap">
           <span className={`px-2 py-0.5 rounded text-[11px] font-medium ${tagClass}`}>

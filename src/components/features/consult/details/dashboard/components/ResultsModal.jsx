@@ -73,7 +73,7 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
   };
 
   // Safe Fallback Values from Clicked Card
-  const campaignName = ad?.title || "BMW X1 — 2023 xDrive20d";
+  const campaignName = ad?.placement === "Consultant page" ? "Adarsh Auto Consultant" : (ad?.title || "BMW X1 — 2023 xDrive20d");
   const campaignType = ad?.model || "CPC";
   const campaignPlacement = ad?.placement || "Homepage featured";
   const campaignBudget = ad?.budget ? `${ad.budget} budget` : "₹500/day budget";
@@ -327,7 +327,7 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/75 backdrop-blur-sm p-3 sm:p-4 select-none"
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/75 backdrop-blur-sm p-3 sm:p-4 select-none"
       onClick={onClose}
       style={{
         animation: isClosing
@@ -337,7 +337,7 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
     >
       {/* Central Modal container */}
       <div
-        className="w-full max-w-7xl bg-zinc-950 border border-white/10 rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden"
+        className="w-full max-w-7xl bg-secondary border border-third/15 rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
         style={{
           animation: isClosing
@@ -346,18 +346,18 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
         }}
       >
         {/* Top Sticky Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-5 border-b border-white/10 gap-4 bg-zinc-900/50">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-5 border-b border-third/15 gap-4 bg-secondary/40">
           <div className="flex items-center gap-3">
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:bg-white/5 hover:text-white transition-all cursor-pointer"
+              className="w-8 h-8 rounded-full border border-third/15 flex items-center justify-center text-third hover:bg-secondary hover:text-primary transition-all cursor-pointer"
               aria-label="Back"
             >
               <ArrowLeft size={16} />
             </button>
             <div className="space-y-0.5">
               <div className="flex items-center flex-wrap gap-2">
-                <span className="font-semibold text-sm sm:text-base text-white">{campaignName}</span>
+                <span className="font-semibold text-sm sm:text-base text-primary">{campaignName}</span>
                 <span
                   className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
                     isCampaignPaused
@@ -373,15 +373,15 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                   {isCampaignPaused ? "Paused" : "Active"}
                 </span>
               </div>
-              <div className="flex items-center flex-wrap gap-x-2 gap-y-1 text-xs text-zinc-400">
+              <div className="flex items-center flex-wrap gap-x-2 gap-y-1 text-xs text-third">
                 <span className="bg-blue-500/15 text-blue-400 font-bold px-1.5 py-0.5 rounded text-[10px] uppercase">
                   {campaignType}
                 </span>
-                <span className="text-zinc-500 font-semibold">{campaignPlacement}</span>
-                <span className="text-zinc-600 font-semibold">•</span>
+                <span className="text-third/80 font-semibold">{campaignPlacement}</span>
+                <span className="text-third/50 font-semibold">•</span>
                 <span>18 May – 17 Jun 2026</span>
-                <span className="text-zinc-600 font-semibold">•</span>
-                <span className="text-zinc-300 font-semibold">{campaignBudget}</span>
+                <span className="text-third/50 font-semibold">•</span>
+                <span className="text-third/95 font-semibold">{campaignBudget}</span>
               </div>
             </div>
           </div>
@@ -422,7 +422,7 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
             </Button>
             <button
               onClick={onClose}
-              className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:bg-white/5 hover:text-white transition-all cursor-pointer ml-1"
+              className="w-9 h-9 rounded-full border border-third/15 flex items-center justify-center text-third hover:bg-secondary hover:text-primary transition-all cursor-pointer ml-1"
             >
               <X size={18} />
             </button>
@@ -430,41 +430,41 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
         </div>
 
         {/* Scrollable Layout Body */}
-        <div className="overflow-y-auto p-4 sm:p-5 space-y-5 custom-scrollbar bg-zinc-950">
+        <div className="overflow-y-auto p-4 sm:p-5 space-y-5 custom-scrollbar bg-secondary">
           
           {/* Vehicle Metadata Header Card */}
-          <div className="bg-zinc-900/60 border border-white/5 rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center text-zinc-400 border border-white/5">
+              <div className="w-12 h-12 rounded-lg bg-secondary flex items-center justify-center text-third border border-third/10">
                 <Car size={24} />
               </div>
               <div>
-                <h4 className="font-semibold text-sm sm:text-base text-white">{campaignName}</h4>
-                <p className="text-xs text-zinc-400 font-medium mt-0.5">
+                <h4 className="font-semibold text-sm sm:text-base text-primary">{campaignName}</h4>
+                <p className="text-xs text-third font-medium mt-0.5">
                   12,400 km · Petrol · Auto · ₹42.0L
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-6 sm:gap-10 border-t border-white/5 md:border-t-0 pt-3 md:pt-0 w-full md:w-auto">
+            <div className="flex items-center gap-6 sm:gap-10 border-t border-third/10 md:border-t-0 pt-3 md:pt-0 w-full md:w-auto">
               <div className="space-y-0.5">
-                <span className="text-[10px] text-zinc-500 block uppercase font-bold tracking-wider">
+                <span className="text-[10px] text-third block uppercase font-bold tracking-wider opacity-60">
                   Campaign
                 </span>
-                <span className="text-sm font-semibold text-white block">Day 1 of 30</span>
+                <span className="text-sm font-semibold text-primary block">Day 1 of 30</span>
               </div>
               <div className="space-y-0.5">
-                <span className="text-[10px] text-zinc-500 block uppercase font-bold tracking-wider">
+                <span className="text-[10px] text-third block uppercase font-bold tracking-wider opacity-60">
                   Avg Position
                 </span>
                 <span className="text-sm font-bold text-[#26b29b] block">#2</span>
               </div>
               <div className="space-y-0.5">
-                <span className="text-[10px] text-zinc-500 block uppercase font-bold tracking-wider">
+                <span className="text-[10px] text-third block uppercase font-bold tracking-wider opacity-60">
                   Spent
                 </span>
-                <span className="text-sm font-semibold text-zinc-300 block">
-                  {currentData.spend_s} / <span className="text-zinc-500">₹15,000</span>
+                <span className="text-sm font-semibold text-third block">
+                  {currentData.spend_s} / <span className="text-third/60">₹15,000</span>
                 </span>
               </div>
             </div>
@@ -472,18 +472,18 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
 
           {/* Performance Overview section title and tabs */}
           <div className="flex items-center justify-between gap-4">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+            <h3 className="text-sm font-bold text-primary uppercase tracking-wider">
               Performance Overview
             </h3>
-            <div className="bg-zinc-900 p-0.5 rounded-lg border border-white/5 flex items-center gap-0.5">
+            <div className="bg-secondary p-0.5 rounded-lg border border-third/10 flex items-center gap-0.5">
               {["7d", "14d", "30d"].map((t) => (
                 <button
                   key={t}
                   onClick={() => setRange(t)}
                   className={`text-[11px] px-3 py-1 rounded-md font-semibold transition-all cursor-pointer ${
                     range === t
-                      ? "bg-zinc-800 text-white shadow-md border border-white/10"
-                      : "text-zinc-400 hover:text-white"
+                      ? "bg-secondary/80 text-primary shadow-md border border-third/15"
+                      : "text-third hover:text-primary"
                   }`}
                 >
                   {t === "7d" ? "7 Days" : t === "14d" ? "14 Days" : "30 Days"}
@@ -494,47 +494,47 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
 
           {/* 4 Cards Stats Grid */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <div className="bg-zinc-900/40 border border-white/5 rounded-xl p-4 space-y-1 hover:border-white/10 transition-colors">
-              <span className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider block">
+            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">
+              <span className="text-[10px] text-third uppercase font-bold tracking-wider block opacity-70">
                 Impressions
               </span>
-              <span className="text-xl sm:text-2xl font-black text-white block">
+              <span className="text-xl sm:text-2xl font-black text-primary block">
                 {currentData.imp_s}
               </span>
               <span className="text-[11px] text-[#26b29b] font-semibold block">
                 ↑ 18% vs last week
               </span>
             </div>
-            <div className="bg-zinc-900/40 border border-white/5 rounded-xl p-4 space-y-1 hover:border-white/10 transition-colors">
-              <span className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider block">
+            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">
+              <span className="text-[10px] text-third uppercase font-bold tracking-wider block opacity-70">
                 {campaignType === "CPI" ? "Inquiries" : "Clicks"}
               </span>
-              <span className="text-xl sm:text-2xl font-black text-white block">
+              <span className="text-xl sm:text-2xl font-black text-primary block">
                 {currentData.click_s}
               </span>
               <span className="text-[11px] text-[#26b29b] font-semibold block">
                 ↑ 12% vs last week
               </span>
             </div>
-            <div className="bg-zinc-900/40 border border-white/5 rounded-xl p-4 space-y-1 hover:border-white/10 transition-colors">
-              <span className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider block">
+            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">
+              <span className="text-[10px] text-third uppercase font-bold tracking-wider block opacity-70">
                 {campaignType === "CPI" ? "INQ Rate" : "CTR"}
               </span>
-              <span className="text-xl sm:text-2xl font-black text-white block">
+              <span className="text-xl sm:text-2xl font-black text-primary block">
                 {currentData.ctr_s}
               </span>
               <span className="text-[11px] text-[#26b29b] font-semibold block">
                 Above average (2.1%)
               </span>
             </div>
-            <div className="bg-zinc-900/40 border border-white/5 rounded-xl p-4 space-y-1 hover:border-white/10 transition-colors">
-              <span className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider block">
+            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">
+              <span className="text-[10px] text-third uppercase font-bold tracking-wider block opacity-70">
                 Total Spend
               </span>
-              <span className="text-xl sm:text-2xl font-black text-white block">
+              <span className="text-xl sm:text-2xl font-black text-primary block">
                 {currentData.spend_s}
               </span>
-              <span className="text-[11px] text-zinc-400 font-medium block">
+              <span className="text-[11px] text-third font-medium block">
                 {currentData.cpc_s} avg CPC
               </span>
             </div>
@@ -543,25 +543,25 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
           {/* First Two-Column Grid: SVG Line Chart & Conversion Funnel */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {/* Impressions vs Clicks Chart */}
-            <div className="bg-zinc-900/40 border border-white/5 rounded-xl p-4 space-y-3">
+            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-3">
               <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+                <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
                   Daily Impressions vs Clicks
                 </h4>
                 {hoveredLineIndex !== null ? (
-                  <div className="text-[10px] font-bold text-zinc-300 flex items-center gap-2 bg-white/5 px-2 py-0.5 rounded border border-white/5 animate-pulse">
-                    <span className="text-zinc-400 font-semibold">{currentData.labels[hoveredLineIndex]}:</span>
+                  <div className="text-[10px] font-bold text-third flex items-center gap-2 bg-secondary/20 px-2 py-0.5 rounded border border-third/10 animate-pulse">
+                    <span className="text-third/80 font-semibold">{currentData.labels[hoveredLineIndex]}:</span>
                     <span className="text-[#26b29b]">{currentData.imp[hoveredLineIndex]} Imp</span>
-                    <span className="text-[#007bff]">{currentData.clicks[hoveredLineIndex]} Clicks</span>
+                    <span className="text-fourth">{currentData.clicks[hoveredLineIndex]} Clicks</span>
                   </div>
                 ) : (
                   <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1.5 text-[10px] text-zinc-400 font-semibold">
+                    <div className="flex items-center gap-1.5 text-[10px] text-third font-semibold">
                       <span className="w-2.5 h-2.5 rounded bg-[#26b29b] opacity-80 inline-block" />
                       Impressions
                     </div>
-                    <div className="flex items-center gap-1.5 text-[10px] text-zinc-400 font-semibold">
-                      <span className="w-2.5 h-2.5 rounded bg-[#007bff] inline-block" />
+                    <div className="flex items-center gap-1.5 text-[10px] text-third font-semibold">
+                      <span className="w-2.5 h-2.5 rounded bg-fourth inline-block" />
                       Clicks
                     </div>
                   </div>
@@ -574,23 +574,23 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                 {renderLineChartSVG()}
                 {hoveredLineIndex !== null && (
                   <div 
-                    className="absolute z-20 bg-zinc-950/95 border border-white/10 p-2.5 rounded-lg shadow-xl text-[10px] space-y-1 pointer-events-none transition-all duration-75"
+                    className="absolute z-20 bg-secondary/95 border border-third/15 p-2.5 rounded-lg shadow-xl text-[10px] space-y-1 pointer-events-none transition-all duration-75"
                     style={{
                       left: `${((24 + hoveredLineIndex * ((500 - 48) / (currentData.labels.length - 1 || 1))) / 500) * 100}%`,
                       top: "10%",
                       transform: `translateX(-50%)`,
                     }}
                   >
-                    <p className="font-bold text-zinc-400 border-b border-white/5 pb-1 mb-1 text-center">
+                    <p className="font-bold text-third border-b border-third/10 pb-1 mb-1 text-center">
                       {currentData.labels[hoveredLineIndex]}
                     </p>
                     <div className="flex items-center gap-2 justify-between">
-                      <span className="text-zinc-500 font-medium">Impressions:</span>
+                      <span className="text-third/80 font-medium">Impressions:</span>
                       <span className="text-[#26b29b] font-bold">{currentData.imp[hoveredLineIndex]}</span>
                     </div>
                     <div className="flex items-center gap-2 justify-between">
-                      <span className="text-zinc-500 font-medium">Clicks:</span>
-                      <span className="text-[#007bff] font-bold">{currentData.clicks[hoveredLineIndex]}</span>
+                      <span className="text-third/80 font-medium">Clicks:</span>
+                      <span className="text-fourth font-bold">{currentData.clicks[hoveredLineIndex]}</span>
                     </div>
                   </div>
                 )}
@@ -598,56 +598,56 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
             </div>
 
             {/* Conversion Funnel */}
-            <div className="bg-zinc-900/40 border border-white/5 rounded-xl p-4 space-y-4">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-4">
+              <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
                 Conversion Funnel
               </h4>
               <div className="space-y-3">
                 {/* Imp */}
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-zinc-400 w-20 shrink-0 font-medium">Impressions</span>
-                  <div className="flex-1 h-5 bg-white/5 rounded overflow-hidden relative border border-white/5">
+                  <span className="text-xs text-third w-20 shrink-0 font-medium">Impressions</span>
+                  <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
                     <div className="h-full bg-[#26b29b]/10 rounded flex items-center px-2" style={{ width: "100%" }}>
                       <span className="text-[11px] font-bold text-[#26b29b]">{currentData.imp_s}</span>
                     </div>
                   </div>
-                  <span className="text-[11px] text-zinc-400 font-bold w-9 text-right shrink-0">100%</span>
+                  <span className="text-[11px] text-third font-bold w-9 text-right shrink-0">100%</span>
                 </div>
                 {/* Clicks */}
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-zinc-400 w-20 shrink-0 font-medium">Clicks</span>
-                  <div className="flex-1 h-5 bg-white/5 rounded overflow-hidden relative border border-white/5">
-                    <div className="h-full bg-[#007bff]/20 rounded flex items-center px-2" style={{ width: "44%" }}>
-                      <span className="text-[11px] font-bold text-[#007bff]">{currentData.click_s}</span>
+                  <span className="text-xs text-third w-20 shrink-0 font-medium">Clicks</span>
+                  <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
+                    <div className="h-full bg-fourth/20 rounded flex items-center px-2" style={{ width: "44%" }}>
+                      <span className="text-[11px] font-bold text-fourth">{currentData.click_s}</span>
                     </div>
                   </div>
                   <span className="text-[11px] text-[#26b29b] font-bold w-9 text-right shrink-0">{currentData.ctr_s}</span>
                 </div>
                 {/* Detail views */}
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-zinc-400 w-20 shrink-0 font-medium">Detail Views</span>
-                  <div className="flex-1 h-5 bg-white/5 rounded overflow-hidden relative border border-white/5">
+                  <span className="text-xs text-third w-20 shrink-0 font-medium">Detail Views</span>
+                  <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
                     <div className="h-full bg-[#26b29b]/35 rounded flex items-center px-2" style={{ width: "26%" }}>
                       <span className="text-[11px] font-bold text-[#26b29b]">{currentData.click_s ? "74" : "0"}</span>
                     </div>
                   </div>
-                  <span className="text-[11px] text-[#007bff] font-bold w-9 text-right shrink-0">2.6%</span>
+                  <span className="text-[11px] text-fourth font-bold w-9 text-right shrink-0">2.6%</span>
                 </div>
                 {/* Inquiries */}
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-zinc-400 w-20 shrink-0 font-medium">Inquiries</span>
-                  <div className="flex-1 h-5 bg-white/5 rounded overflow-hidden relative border border-white/5">
-                    <div className="h-full bg-[#007bff] rounded flex items-center px-2" style={{ width: "9%" }}>
-                      <span className="text-[11px] font-bold text-white">8</span>
+                  <span className="text-xs text-third w-20 shrink-0 font-medium">Inquiries</span>
+                  <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
+                    <div className="h-full bg-fourth rounded flex items-center px-2" style={{ width: "9%" }}>
+                      <span className="text-[11px] font-bold text-primary">8</span>
                     </div>
                   </div>
                   <span className="text-[11px] text-[#26b29b] font-bold w-9 text-right shrink-0">0.3%</span>
                 </div>
                 {/* Calls */}
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-zinc-400 w-20 shrink-0 font-medium">Calls</span>
-                  <div className="flex-1 h-5 bg-white/5 rounded overflow-hidden relative border border-white/5">
-                    <div className="h-full bg-[#007bff]/85 rounded flex items-center px-2" style={{ width: "4%" }}>
+                  <span className="text-xs text-third w-20 shrink-0 font-medium">Calls</span>
+                  <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
+                    <div className="h-full bg-fourth/85 rounded flex items-center px-2" style={{ width: "4%" }}>
                       <span className="text-[11px] font-bold text-blue-100">3</span>
                     </div>
                   </div>
@@ -660,54 +660,54 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
           {/* Second Two-Column Grid: Budget Usage vs Daily Spend Bar Chart */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {/* Budget Details & Breakdown */}
-            <div className="bg-zinc-900/40 border border-white/5 rounded-xl p-4 space-y-4">
+            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-4">
               <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+                <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
                   Budget Usage
                 </h4>
-                <span className="text-[10px] text-zinc-400 font-semibold uppercase tracking-wider">
+                <span className="text-[10px] text-third font-semibold uppercase tracking-wider opacity-85">
                   Today
                 </span>
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between text-xs text-zinc-400 font-semibold">
+                <div className="flex justify-between text-xs text-third font-semibold">
                   <span>₹0</span>
-                  <span className="text-white">₹340 spent today</span>
+                  <span className="text-primary">₹340 spent today</span>
                   <span>₹500 limit</span>
                 </div>
-                <div className="w-full bg-zinc-800 h-2 rounded-full overflow-hidden border border-white/5">
-                  <div className="h-full bg-[#007bff] rounded-full" style={{ width: "68%" }} />
+                <div className="w-full bg-secondary h-2 rounded-full overflow-hidden border border-third/10">
+                  <div className="h-full bg-fourth rounded-full" style={{ width: "68%" }} />
                 </div>
-                <span className="text-[11px] text-zinc-500 block font-medium">
+                <span className="text-[11px] text-third/60 block font-medium">
                   68% of daily budget used · resets at midnight
                 </span>
               </div>
 
-              <div className="h-px bg-white/5" />
+              <div className="h-px bg-third/10" />
 
               <div className="space-y-2.5">
-                <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider block">
+                <span className="text-[10px] text-third font-bold uppercase tracking-wider block opacity-70">
                   Spend Breakdown
                 </span>
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center text-xs py-2 px-3 bg-zinc-900/40 border border-white/5 rounded-lg">
-                    <span className="text-zinc-400 font-medium">Total Spent (Campaign)</span>
-                    <span className="text-white font-bold">{currentData.spend_s}</span>
+                  <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
+                    <span className="text-third font-medium">Total Spent (Campaign)</span>
+                    <span className="text-primary font-bold">{currentData.spend_s}</span>
                   </div>
-                  <div className="flex justify-between items-center text-xs py-2 px-3 bg-zinc-900/40 border border-white/5 rounded-lg">
-                    <span className="text-zinc-400 font-medium">Remaining Budget</span>
+                  <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
+                    <span className="text-third font-medium">Remaining Budget</span>
                     <span className="text-[#26b29b] font-bold">₹14,442</span>
                   </div>
-                  <div className="flex justify-between items-center text-xs py-2 px-3 bg-zinc-900/40 border border-white/5 rounded-lg">
-                    <span className="text-zinc-400 font-medium">Avg. CPC Paid</span>
-                    <span className="text-white font-bold">{rateValue}</span>
+                  <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
+                    <span className="text-third font-medium">Avg. CPC Paid</span>
+                    <span className="text-primary font-bold">{rateValue}</span>
                   </div>
-                  <div className="flex justify-between items-center text-xs py-2 px-3 bg-zinc-900/40 border border-white/5 rounded-lg">
-                    <span className="text-zinc-400 font-medium">Cost Per Inquiry</span>
-                    <span className="text-white font-bold">₹69.75</span>
+                  <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
+                    <span className="text-third font-medium">Cost Per Inquiry</span>
+                    <span className="text-primary font-bold">₹69.75</span>
                   </div>
-                  <div className="flex justify-between items-center text-xs py-2 px-3 bg-zinc-900/40 border border-white/5 rounded-lg">
-                    <span className="text-zinc-400 font-medium">Wallet Balance</span>
+                  <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
+                    <span className="text-third font-medium">Wallet Balance</span>
                     <span className="text-[#26b29b] font-bold">₹7,682</span>
                   </div>
                 </div>
@@ -715,15 +715,15 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
             </div>
 
             {/* Spend by Day Bar Chart */}
-            <div className="bg-zinc-900/40 border border-white/5 rounded-xl p-4 space-y-3">
+            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-3">
               <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+                <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
                   Spend By Day
                 </h4>
                 {hoveredSpendIndex !== null && (
-                  <div className="text-[10px] font-bold text-zinc-300 flex items-center gap-1.5 bg-white/5 px-2 py-0.5 rounded border border-white/5 animate-pulse">
-                    <span className="text-zinc-400 font-semibold">{currentData.labels[hoveredSpendIndex]}:</span>
-                    <span className="text-[#007bff]">₹{currentData.spend[hoveredSpendIndex]} spent</span>
+                  <div className="text-[10px] font-bold text-third flex items-center gap-1.5 bg-secondary/20 px-2 py-0.5 rounded border border-third/10 animate-pulse">
+                    <span className="text-third/80 font-semibold">{currentData.labels[hoveredSpendIndex]}:</span>
+                    <span className="text-fourth">₹{currentData.spend[hoveredSpendIndex]} spent</span>
                   </div>
                 )}
               </div>
@@ -734,19 +734,19 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                 {renderSpendBarChartSVG()}
                 {hoveredSpendIndex !== null && (
                   <div 
-                    className="absolute z-20 bg-zinc-950/95 border border-white/10 p-2.5 rounded-lg shadow-xl text-[10px] space-y-1 pointer-events-none transition-all duration-75"
+                    className="absolute z-20 bg-secondary/95 border border-third/15 p-2.5 rounded-lg shadow-xl text-[10px] space-y-1 pointer-events-none transition-all duration-75"
                     style={{
                       left: `${((24 + hoveredSpendIndex * ((500 - 48) / (currentData.labels.length - 1 || 1))) / 500) * 100}%`,
                       bottom: "35%",
                       transform: `translateX(-50%)`,
                     }}
                   >
-                    <p className="font-bold text-zinc-400 border-b border-white/5 pb-1 mb-1 text-center">
+                    <p className="font-bold text-third border-b border-third/10 pb-1 mb-1 text-center">
                       {currentData.labels[hoveredSpendIndex]}
                     </p>
                     <div className="flex items-center gap-2 justify-between">
-                      <span className="text-zinc-500 font-medium">Daily Spend:</span>
-                      <span className="text-[#007bff] font-bold">₹{currentData.spend[hoveredSpendIndex]}</span>
+                      <span className="text-third/80 font-medium">Daily Spend:</span>
+                      <span className="text-fourth font-bold">₹{currentData.spend[hoveredSpendIndex]}</span>
                     </div>
                   </div>
                 )}
@@ -757,72 +757,72 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
           {/* Third Two-Column Grid: Recent Activity vs AI Insights */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {/* Live Activity Timeline */}
-            <div className="bg-zinc-900/40 border border-white/5 rounded-xl p-4 space-y-4">
+            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-4">
               <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+                <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
                   Recent Activity
                 </h4>
-                <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">
+                <span className="text-[10px] text-third font-bold uppercase tracking-wider opacity-70">
                   Live Feed
                 </span>
               </div>
 
               <div className="space-y-4">
-                <div className="flex gap-3 items-start text-xs border-b border-white/5 pb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#007bff] mt-1 shrink-0" />
+                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-fourth mt-1 shrink-0" />
                   <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-white">New inquiry received</p>
-                    <p className="text-zinc-400">Buyer asked about service history</p>
+                    <p className="font-semibold text-primary">New inquiry received</p>
+                    <p className="text-third">Buyer asked about service history</p>
                   </div>
-                  <span className="text-[10px] text-zinc-500 font-semibold whitespace-nowrap">2 min ago</span>
+                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">2 min ago</span>
                 </div>
-                <div className="flex gap-3 items-start text-xs border-b border-white/5 pb-3">
+                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
                   <div className="w-2.5 h-2.5 rounded-full bg-[#26b29b] mt-1 shrink-0" />
                   <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-white">6 new clicks</p>
-                    <p className="text-zinc-400">Homepage featured slot · ₹27 spent</p>
+                    <p className="font-semibold text-primary">6 new clicks</p>
+                    <p className="text-third">Homepage featured slot · ₹27 spent</p>
                   </div>
-                  <span className="text-[10px] text-zinc-500 font-semibold whitespace-nowrap">14 min ago</span>
+                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">14 min ago</span>
                 </div>
-                <div className="flex gap-3 items-start text-xs border-b border-white/5 pb-3">
+                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
                   <div className="w-2.5 h-2.5 rounded-full bg-[#26b29b] mt-1 shrink-0" />
                   <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-white">11 new clicks</p>
-                    <p className="text-zinc-400">Homepage featured slot · ₹49.50 spent</p>
+                    <p className="font-semibold text-primary">11 new clicks</p>
+                    <p className="text-third">Homepage featured slot · ₹49.50 spent</p>
                   </div>
-                  <span className="text-[10px] text-zinc-500 font-semibold whitespace-nowrap">1 hr ago</span>
+                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">1 hr ago</span>
                 </div>
-                <div className="flex gap-3 items-start text-xs border-b border-white/5 pb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-zinc-500 mt-1 shrink-0" />
+                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-third mt-1 shrink-0" />
                   <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-white">340 impressions</p>
-                    <p className="text-zinc-400">Morning peak traffic window</p>
+                    <p className="font-semibold text-primary">340 impressions</p>
+                    <p className="text-third">Morning peak traffic window</p>
                   </div>
-                  <span className="text-[10px] text-zinc-500 font-semibold whitespace-nowrap">3 hrs ago</span>
+                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">3 hrs ago</span>
                 </div>
-                <div className="flex gap-3 items-start text-xs border-b border-white/5 pb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#007bff] mt-1 shrink-0" />
+                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-fourth mt-1 shrink-0" />
                   <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-white">New inquiry received</p>
-                    <p className="text-zinc-400">Buyer requested test drive</p>
+                    <p className="font-semibold text-primary">New inquiry received</p>
+                    <p className="text-third">Buyer requested test drive</p>
                   </div>
-                  <span className="text-[10px] text-zinc-500 font-semibold whitespace-nowrap">5 hrs ago</span>
+                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">5 hrs ago</span>
                 </div>
                 <div className="flex gap-3 items-start text-xs pb-1">
                   <div className="w-2.5 h-2.5 rounded-full bg-amber-500 mt-1 shrink-0" />
                   <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-white">Ad resumed automatically</p>
-                    <p className="text-zinc-400">Wallet topped up · budget reset at midnight</p>
+                    <p className="font-semibold text-primary">Ad resumed automatically</p>
+                    <p className="text-third">Wallet topped up · budget reset at midnight</p>
                   </div>
-                  <span className="text-[10px] text-zinc-500 font-semibold whitespace-nowrap">Yesterday</span>
+                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">Yesterday</span>
                 </div>
               </div>
             </div>
 
             {/* AI Insights */}
-            <div className="bg-zinc-900/40 border border-white/5 rounded-xl p-4 space-y-4">
+            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-4">
               <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+                <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
                   AI Insights
                 </h4>
                 <TrendingUp size={16} className="text-amber-500" />
@@ -833,7 +833,7 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                   <TrendingUp className="text-[#26b29b] shrink-0 mt-0.5" size={16} />
                   <div>
                     <h5 className="font-bold text-[#26b29b]">CTR is 2× the platform average</h5>
-                    <p className="text-zinc-300 mt-0.5 leading-relaxed font-medium">
+                    <p className="text-third mt-0.5 leading-relaxed font-medium">
                       Homepage placement is working well for this vehicle. Consider increasing daily budget to ₹750 for more reach.
                     </p>
                   </div>
@@ -843,17 +843,17 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                   <AlertTriangle className="text-amber-400 shrink-0 mt-0.5" size={16} />
                   <div>
                     <h5 className="font-bold text-amber-400">Budget runs out by 4 PM daily</h5>
-                    <p className="text-amber-300/80 mt-0.5 leading-relaxed font-medium">
+                    <p className="text-amber-200/80 mt-0.5 leading-relaxed font-medium">
                       You&apos;re missing evening traffic. Raise daily budget or reduce max CPC bid to stretch further.
                     </p>
                   </div>
                 </div>
 
-                <div className="flex gap-3 items-start p-3 rounded-lg bg-[#007bff]/10 border border-[#007bff]/20 text-xs">
-                  <MessageSquare className="text-[#007bff] shrink-0 mt-0.5" size={16} />
+                <div className="flex gap-3 items-start p-3 rounded-lg bg-fourth/10 border border-fourth/20 text-xs">
+                  <MessageSquare className="text-fourth shrink-0 mt-0.5" size={16} />
                   <div>
-                    <h5 className="font-bold text-[#007bff]">8 inquiries in 7 days</h5>
-                    <p className="text-zinc-300 mt-0.5 leading-relaxed font-medium">
+                    <h5 className="font-bold text-fourth">8 inquiries in 7 days</h5>
+                    <p className="text-third mt-0.5 leading-relaxed font-medium">
                       Effective cost per inquiry is ₹69.75. Switching to CPI billing could reduce cost if inquiry rate holds.
                     </p>
                   </div>
@@ -863,7 +863,7 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                   <Calendar className="text-[#26b29b] shrink-0 mt-0.5" size={16} />
                   <div>
                     <h5 className="font-bold text-[#26b29b]">Weekends drive 34% more clicks</h5>
-                    <p className="text-zinc-300 mt-0.5 leading-relaxed font-medium">
+                    <p className="text-third mt-0.5 leading-relaxed font-medium">
                       Sat–Sun peak confirmed. You have weekend boosting active — good.
                     </p>
                   </div>
