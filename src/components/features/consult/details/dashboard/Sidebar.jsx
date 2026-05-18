@@ -66,10 +66,11 @@ export default function Sidebar({ isOpen, onClose }) {
     <aside
       className={`
         fixed md:sticky top-16 h-[calc(100vh-64px)] z-40
-        w-64 bg-secondary md:bg-transparent
-        transition-transform duration-300 ease-in-out
+        w-64 md:w-16 md:hover:w-64 bg-secondary md:bg-transparent
+        transition-all duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
-        border-r border-third/30 p-3 space-y-2.5 overflow-y-auto custom-scrollbar
+        border-r border-third/30 p-3 md:p-2 space-y-2.5 overflow-y-auto overflow-x-hidden custom-scrollbar
+        group
       `}
     >
       {/* <h1 className="text-xl font-bold mt-4 mb-4">Reecomm Dashboard</h1> */}
@@ -78,6 +79,7 @@ export default function Sidebar({ isOpen, onClose }) {
         const isActive =
           router.pathname === m.href ||
           router.pathname.startsWith(m.href + "/") ||
+          (m.href === "/consult/dashboard/ppc" && router.pathname.startsWith("/consult/dashboard/ads")) ||
           (router.pathname === "/consult/dashboard" &&
             m.href === "/consult/dashboard/overview");
 
@@ -86,14 +88,18 @@ export default function Sidebar({ isOpen, onClose }) {
             key={i}
             href={m.href}
             onClick={onClose}
-            className={`flex items-center gap-3 p-3 rounded-lg transition
+            className={`flex items-center p-3 md:p-2 rounded-lg transition-all duration-300
         ${isActive
                 ? "bg-primary text-secondary shadow-lg"
                 : "hover:bg-primary/10 text-primary"
               }`}
           >
-            <m.icon size={18} />
-            {m.label}
+            <div className="flex-shrink-0 flex items-center justify-center w-6 h-6">
+              <m.icon size={18} />
+            </div>
+            <span className="ml-3 md:ml-0 md:group-hover:ml-3 md:opacity-0 md:group-hover:opacity-100 max-w-full md:max-w-0 md:group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden">
+              {m.label}
+            </span>
           </Link>
         );
       })}

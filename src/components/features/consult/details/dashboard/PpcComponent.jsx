@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   TrendingUp,
   MousePointerClick,
@@ -16,13 +18,16 @@ import {
   Clock,
   CircleDollarSign,
   CheckCircle,
+  Lock,
 } from "lucide-react";
+import { getSellerTierTitle } from "@/lib/helper";
 import Button from "@/components/ui/button";
 import CustomSelect from "@/components/ui/custom-select";
 import Image from "next/image";
 import {
   BarChart,
   Bar,
+  Cell,
   XAxis,
   YAxis,
   Tooltip,
@@ -32,23 +37,114 @@ import {
 } from "recharts";
 import { useRouter } from "next/navigation";
 import StatCard from "./components/StateCard";
+import ResultsModal from "./components/ResultsModal";
 
 // --- Mock Data ---
 const audienceData = [
-  { age: "18-24", women: 5, men: 10, unknown: 1 },
-  { age: "25-34", women: 15, men: 22, unknown: 2 },
-  { age: "35-44", women: 16, men: 14, unknown: 1 },
-  { age: "45-54", women: 6, men: 5, unknown: 0.5 },
-  { age: "55-64", women: 1.2, men: 1.5, unknown: 0.2 },
-  { age: "65+", women: 0.5, men: 0.8, unknown: 0.1 },
+  { day: "M", value: 450, color: "#82ebd9" },
+  { day: "T", value: 650, color: "#50d4be" },
+  { day: "W", value: 520, color: "#82ebd9" },
+  { day: "T", value: 750, color: "#26b29b" },
+  { day: "F", value: 850, color: "#1c9682" },
+  { day: "S", value: 980, color: "#10695b" },
+  { day: "S", value: 800, color: "#1c9682" },
+];
+
+// --- Mock Recent Ads Data ---
+const initialRecentAds = [
+  {
+    id: 1,
+    title: "BMW X1 — 2023 xDrive20d",
+    type: "Homepage featured CPC",
+    rate: "₹4.50/click",
+    placement: "Homepage featured",
+    model: "CPC",
+    impressions: "2,840",
+    clicksLabel: "Clicks",
+    clicksValue: "124",
+    ctrLabel: "CTR",
+    ctrValue: "4.4%",
+    spent: "₹558",
+    budget: "₹750/day",
+    status: "Active",
+    image: "/big_card_car.jpg",
+  },
+  {
+    id: 2,
+    title: "Mercedes C-Class — 2022 C200",
+    type: "Search result CPI",
+    rate: "₹18/inquiry",
+    placement: "Search result",
+    model: "CPI",
+    impressions: "1,640",
+    clicksLabel: "Inquiries",
+    clicksValue: "12",
+    ctrLabel: "INQ rate",
+    ctrValue: "0.7%",
+    spent: "₹216",
+    budget: "₹400/day",
+    status: "Active",
+    image: "/big_card_car.jpg",
+  },
+  {
+    id: 3,
+    title: "Audi A4 — 2021 40 TFSI",
+    type: "Consultant page CPC",
+    rate: "₹3.20/click",
+    placement: "Consultant page",
+    model: "CPC",
+    impressions: "980",
+    clicksLabel: "Clicks",
+    clicksValue: "61",
+    ctrLabel: "CTR",
+    ctrValue: "6.2%",
+    spent: "₹195",
+    budget: "₹300/day",
+    status: "Paused",
+    image: "/big_card_car.jpg",
+  },
+  {
+    id: 4,
+    title: "Toyota Fortuner — 2022 Legender",
+    type: "Search result CPI",
+    rate: "₹22/inquiry",
+    placement: "Search result",
+    model: "CPI",
+    impressions: "3,120",
+    clicksLabel: "Inquiries",
+    clicksValue: "8",
+    ctrLabel: "INQ rate",
+    ctrValue: "0.3%",
+    spent: "₹176",
+    budget: "₹500/day",
+    status: "Completed",
+    image: "/big_card_car.jpg",
+  },
 ];
 
 export default function PpcComponent() {
   const [range, setRange] = useState("60");
   const [openCustomize, setOpenCustomize] = useState(false);
+  const [tier, setTier] = useState(null);
+
+  useEffect(() => {
+    setTier(getSellerTierTitle() || "BASIC");
+  }, []);
 
   // State for the new "View Results" modal
   const [showResults, setShowResults] = useState(false);
+  const [selectedAd, setSelectedAd] = useState(null);
+
+  // States for Recent Ads filtering
+  const [activeFilter, setActiveFilter] = useState("All");
+
+  const filteredAds = initialRecentAds.filter((ad) => {
+    if (activeFilter === "All") return true;
+    if (activeFilter === "CPC" || activeFilter === "CPI") {
+      return ad.model === activeFilter;
+    }
+    return ad.placement.toLowerCase().includes(activeFilter.toLowerCase());
+  });
 
   // Animated close for Customize modal (mirrors LoginPopup pattern)
   const [isClosingCustomize, setIsClosingCustomize] = useState(false);
@@ -109,9 +205,15 @@ export default function PpcComponent() {
           <h1 className="text-2xl font-bold">PPC & Visibility Boosts</h1>
           <p className="text-third text-sm">Dominance with guardrails</p>
         </div>
-        <Button onClick={handleClick} size="sm" variant="ghost">
-          <Plus size={16} /> Create New Boost
-        </Button>
+        {tier === "BASIC" ? (
+          <Button size="sm" variant="outlineSecondary" disabled className="opacity-60 cursor-not-allowed flex items-center gap-1.5 border-third/30 text-third">
+            <Lock size={14} /> Create New Boost (Premium)
+          </Button>
+        ) : (
+          <Button onClick={handleClick} size="sm" variant="ghost">
+            <Plus size={16} /> Create New Boost
+          </Button>
+        )}
       </div>
 
       {/* AD SUMMARY */}
@@ -141,14 +243,14 @@ export default function PpcComponent() {
             </div>
 
             {/* Filter Button (square, not rounded) */}
-            <Button
+            {/* <Button
               variant="ghost"
               size="icon"
               className="h-10 w-12 shrink-0 rounded-md"
               onClick={() => setOpenCustomize(true)}
             >
               <SlidersHorizontal size={16} />
-            </Button>
+            </Button> */}
 
           </div>
         </div>
@@ -175,190 +277,265 @@ export default function PpcComponent() {
       </div>
 
       {/* RECENT ADS */}
-      <div className="rounded-xl border border-third/30  p-6 space-y-6">
-        <h3 className="font-semibold text-lg">Recent Ads</h3>
-        {/* Pass the handler to open the modal */}
-        <RecentAdCard onOpenResults={() => setShowResults(true)} />
-        <RecentAdCard paused onOpenResults={() => setShowResults(true)} />
-      </div>
-
-      {/* AUDIENCE SECTION */}
-      <div className="rounded-xl border border-third/30 p-4 sm:p-6 space-y-5 sm:space-y-6">
-
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div>
-            <h3 className="font-semibold text-lg">Audience</h3>
-            <p className="text-xs text-third">Post engagement</p>
-            <p className="text-2xl font-bold mt-1">3.9K</p>
-          </div>
-
-          <div className="w-full sm:w-56">
-            <CustomSelect
-              value={range}
-              onChange={setRange}
-              variant="transparent"
-              options={[
-                { label: "Last 30 days", value: "30" },
-                { label: "Last 60 days", value: "60" },
-                { label: "Last 90 days", value: "90" },
-                { label: "Lifetime", value: "life" },
-              ]}
-            />
+      <div className="rounded-xl border border-third/30 p-6 space-y-6">
+        {/* Filter Controls Header */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-4">
+          <h3 className="font-semibold text-lg text-white">Recent ads</h3>
+          
+          <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide max-w-full md:max-w-2xl py-1">
+            {["All", "Homepage", "Search result", "Consultant page", "CPC", "CPI"].map((f) => (
+              <button
+                key={f}
+                onClick={() => setActiveFilter(f)}
+                className={`px-4 py-2 cursor-pointer rounded-full text-xs font-semibold border transition shrink-0 ${
+                  activeFilter === f
+                    ? "bg-primary text-secondary border-primary"
+                    : "border-third/50 text-primary hover:bg-primary/10"
+                }`}
+              >
+                {f}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Filter Tabs */}
-        <div className="flex gap-2 sm:gap-3 text-sm overflow-x-auto scrollbar-hide pb-1">
-          <button className="px-4 py-1.5 rounded-full bg-primary/10 text-primary whitespace-nowrap cursor-pointer transition-colors">
-            Age & Gender
-          </button>
-          <button className="px-4 py-1.5 rounded-full border border-third/30 hover:bg-primary/10 hover:text-primary whitespace-nowrap cursor-pointer transition-colors">
-            Placements
-          </button>
-          <button className="px-4 py-1.5 rounded-full border border-third/30 hover:bg-primary/10 hover:text-primary whitespace-nowrap cursor-pointer transition-colors">
-            Locations
-          </button>
-        </div>
-
-        {/* Chart */}
-        <div className="w-full h-56 sm:h-64 md:h-72 -ml-2 sm:ml-0">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={audienceData}
-              margin={{ top: 5, right: 5, left: -15, bottom: 0 }}
-              barCategoryGap="20%"
-              barGap={2}
-            >
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="rgba(255,255,255,0.06)"
-                vertical={false}
-              />
-              <XAxis
-                dataKey="age"
-                stroke="#555"
-                tick={{ fill: '#888', fontSize: 12 }}
-                tickLine={false}
-                axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
-              />
-              <YAxis
-                stroke="#555"
-                tick={{ fill: '#888', fontSize: 12 }}
-                tickLine={false}
-                axisLine={false}
-                width={35}
-              />
-              <Tooltip
-                cursor={{ fill: 'rgba(255,255,255,0.04)' }}
-                contentStyle={{
-                  backgroundColor: '#1a1a1a',
-                  border: 'none',
-                  borderRadius: '10px',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
-                  padding: '10px 14px',
-                }}
-                itemStyle={{ color: '#ccc', fontSize: '12px' }}
-                labelStyle={{ color: '#fff', fontWeight: 600, marginBottom: '4px', fontSize: '13px' }}
-              />
-              <Legend
-                iconType="circle"
-                iconSize={8}
-                wrapperStyle={{ fontSize: '12px', color: '#888', paddingTop: '12px' }}
-              />
-              <Bar dataKey="women" fill="#22c55e" radius={[6, 6, 0, 0]} />
-              <Bar dataKey="men" fill="#6366f1" radius={[6, 6, 0, 0]} />
-              <Bar dataKey="unknown" fill="#0ea5e9" radius={[6, 6, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+        {/* Recent Ads List */}
+        <div className="space-y-4">
+          {filteredAds.length > 0 ? (
+            filteredAds.map((ad) => (
+              <RecentAdCard key={ad.id} ad={ad} onOpenResults={() => { setSelectedAd(ad); setShowResults(true); }} />
+            ))
+          ) : (
+            <div className="py-8 text-center text-zinc-500 text-sm">
+              No recent ads match your filter criteria.
+            </div>
+          )}
         </div>
       </div>
 
-      {/* AI CAMPAIGN PERFORMANCE */}
-      <div className="rounded-xl border border-third/30  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
-        <h3 className="font-semibold text-lg">
-          Campaign Performance (Last 7 Days)
-        </h3>
-
-        {/* Metric Cards */}
-        <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="rounded-xl bg-purple-500/10 p-5 space-y-1">
-            <div className="flex items-center justify-between text-purple-300">
-              <span className="text-sm">Total Impressions</span>
-              <Eye size={16} />
-            </div>
-            <p className="text-2xl font-bold text-white">12,450</p>
-            <p className="text-xs text-purple-300">+18% from last week</p>
-          </div>
-
-          <div className="rounded-xl bg-blue-500/10 p-5 space-y-1">
-            <div className="flex items-center justify-between text-blue-300">
-              <span className="text-sm">Total Clicks</span>
-              <MousePointerClick size={16} />
-            </div>
-            <p className="text-2xl font-bold text-white">486</p>
-            <p className="text-xs text-blue-300">+12% from last week</p>
-          </div>
-
-          <div className="rounded-xl bg-green-500/10 p-5 space-y-1">
-            <div className="flex items-center justify-between text-green-300">
-              <span className="text-sm">Click-through Rate</span>
-              <TrendingUp size={16} />
-            </div>
-            <p className="text-2xl font-bold text-white">3.9%</p>
-            <p className="text-xs text-green-300">Above industry avg</p>
-          </div>
-        </div>
-
-        {/* BOOST RECOMMENDATIONS */}
-        <div className="rounded-xl bg-blue-500/10 border border-blue-500/20 p-6 space-y-4">
-          <h4 className="font-semibold text-blue-300 flex items-center gap-2">
-            💡 Boost Recommendations
-          </h4>
-
-          <div className="space-y-4 text-sm text-blue-100">
-            <div className="flex gap-3">
-              <span className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold">
-                1
-              </span>
-              <div>
-                <p>
-                  Your <b>BMW X1</b> campaign is performing well
-                </p>
-                <p className="text-xs text-blue-300">
-                  Consider increasing daily budget to ₹750 for maximum reach
-                </p>
+      {/* UNIFIED CAMPAIGN INSIGHTS & RECOMMENDATIONS */}
+      <div className="rounded-xl border border-third/30 p-6 lg:p-8 space-y-8  backdrop-blur-sm shadow-sm transition-colors duration-200 hover:border-third/40">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* LEFT SIDE: Campaign Performance & Daily Impressions */}
+          <div className="lg:col-span-7 space-y-8">
+            {/* Header */}
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold text-lg sm:text-xl text-white">Campaign performance</h3>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 text-xs sm:text-sm hover:bg-white/5 cursor-pointer transition-colors text-zinc-300">
+                Last 7 days <ChevronDown size={14} />
               </div>
             </div>
 
-            <div className="flex gap-3">
-              <span className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold">
-                2
-              </span>
-              <div>
-                <p>
-                  Weekend traffic is <b>23% higher</b>
-                </p>
-                <p className="text-xs text-blue-300">
-                  Schedule boosts for Friday–Sunday for better ROI
-                </p>
+            {/* Grid of 6 Metrics */}
+            <div className="grid grid-cols-3 gap-6 pt-2">
+              {/* Total impressions */}
+              <div className="space-y-1">
+                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">Total impressions</span>
+                <span className="text-xl sm:text-2xl font-bold text-white block">12,450</span>
+                <span className="text-[10px] sm:text-xs text-emerald-400 flex items-center gap-1 font-medium">
+                  ↑ 18% vs last week
+                </span>
+              </div>
+
+              {/* Total clicks */}
+              <div className="space-y-1">
+                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">Total clicks</span>
+                <span className="text-xl sm:text-2xl font-bold text-white block">486</span>
+                <span className="text-[10px] sm:text-xs text-emerald-400 flex items-center gap-1 font-medium">
+                  ↑ 12% vs last week
+                </span>
+              </div>
+
+              {/* Click-through rate */}
+              <div className="space-y-1">
+                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">Click-through rate</span>
+                <span className="text-xl sm:text-2xl font-bold text-white block">3.9%</span>
+                <span className="text-[10px] sm:text-xs text-emerald-400 block font-medium">
+                  Above industry avg
+                </span>
+              </div>
+
+              {/* Total inquiries */}
+              <div className="space-y-1">
+                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">Total inquiries</span>
+                <span className="text-xl sm:text-2xl font-bold text-white block">20</span>
+                <span className="text-[10px] sm:text-xs text-emerald-400 flex items-center gap-1 font-medium">
+                  ↑ 5 vs last week
+                </span>
+              </div>
+
+              {/* Inquiry rate */}
+              <div className="space-y-1">
+                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">Inquiry rate</span>
+                <span className="text-xl sm:text-2xl font-bold text-white block">0.16%</span>
+                <span className="text-[10px] sm:text-xs text-zinc-500 block font-medium">
+                  Benchmark: 0.2%
+                </span>
+              </div>
+
+              {/* Total spend */}
+              <div className="space-y-1">
+                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">Total spend</span>
+                <span className="text-xl sm:text-2xl font-bold text-white block">₹1,145</span>
+                <span className="text-[10px] sm:text-xs text-rose-400 flex items-center gap-1 font-medium">
+                  ↑ ₹220 vs last week
+                </span>
               </div>
             </div>
 
-            <div className="flex gap-3">
-              <span className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold">
-                3
-              </span>
-              <div>
-                <p>
-                  Feature your <b>Mercedes C-Class</b>
-                </p>
-                <p className="text-xs text-blue-300">
-                  Luxury vehicles convert 1.8× better when boosted
-                </p>
+            {/* Daily Impressions Chart */}
+            <div className="pt-4 border-t border-white/5 space-y-4">
+              <h4 className="text-sm font-semibold text-zinc-300">Daily impressions</h4>
+              <div className="w-full h-56 sm:h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={audienceData}
+                    margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
+                    barCategoryGap="28%"
+                  >
+                    <XAxis
+                      dataKey="day"
+                      stroke="#555"
+                      tick={{ fill: '#888', fontSize: 13, fontWeight: 600 }}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <YAxis hide />
+                    <Tooltip
+                      cursor={{ fill: 'rgba(255,255,255,0.03)' }}
+                      contentStyle={{
+                        backgroundColor: '#1a1a1a',
+                        border: 'none',
+                        borderRadius: '10px',
+                        boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+                        padding: '10px 14px',
+                      }}
+                      itemStyle={{ color: '#ccc', fontSize: '12px' }}
+                      labelStyle={{ color: '#fff', fontWeight: 600, marginBottom: '4px', fontSize: '13px' }}
+                    />
+                    <Bar
+                      dataKey="value"
+                      radius={[6, 6, 0, 0]}
+                      name="Impressions"
+                    >
+                      {audienceData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </div>
           </div>
+
+          {/* RIGHT SIDE: Boost Recommendations & Placement Performance Breakdown */}
+          <div className="lg:col-span-5 space-y-6 lg:border-l lg:border-white/10 lg:pl-8">
+            <div>
+              <h3 className="font-semibold text-lg sm:text-xl text-white">Boost recommendations</h3>
+            </div>
+
+            {/* Recommendations List */}
+            <div className="space-y-4">
+              {/* Recommendation 1 */}
+              <div className="flex gap-3">
+                <span className="w-6 h-6 flex items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold shrink-0 mt-0.5">
+                  1
+                </span>
+                <div>
+                  <p className="text-xs sm:text-sm font-semibold text-white">Your BMW X1 campaign is performing well</p>
+                  <p className="text-[10px] sm:text-xs text-emerald-400 font-medium mt-0.5">
+                    Consider increasing daily budget to ₹750 for maximum reach
+                  </p>
+                </div>
+              </div>
+
+              {/* Recommendation 2 */}
+              <div className="flex gap-3">
+                <span className="w-6 h-6 flex items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold shrink-0 mt-0.5">
+                  2
+                </span>
+                <div>
+                  <p className="text-xs sm:text-sm font-semibold text-white">Weekend traffic is 23% higher</p>
+                  <p className="text-[10px] sm:text-xs text-emerald-400 font-medium mt-0.5">
+                    Schedule boosts for Friday–Sunday for better ROI
+                  </p>
+                </div>
+              </div>
+
+              {/* Recommendation 3 */}
+              <div className="flex gap-3">
+                <span className="w-6 h-6 flex items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold shrink-0 mt-0.5">
+                  3
+                </span>
+                <div>
+                  <p className="text-xs sm:text-sm font-semibold text-white">Feature your Mercedes C-Class on homepage</p>
+                  <p className="text-[10px] sm:text-xs text-emerald-400 font-medium mt-0.5">
+                    Luxury vehicles convert 1.8× better when boosted
+                  </p>
+                </div>
+              </div>
+
+              {/* Recommendation 4 */}
+              <div className="flex gap-3">
+                <span className="w-6 h-6 flex items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold shrink-0 mt-0.5">
+                  4
+                </span>
+                <div>
+                  <p className="text-xs sm:text-sm font-semibold text-white">Switch Fortuner to CPI billing</p>
+                  <p className="text-[10px] sm:text-xs text-emerald-400 font-medium mt-0.5">
+                    High impressions but low clicks — pay per inquiry instead
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Placement Performance Breakdown */}
+            <div className="space-y-4 pt-6 border-t border-white/10">
+              <div>
+                <h4 className="font-semibold text-sm sm:text-base text-zinc-300">Placement performance breakdown</h4>
+              </div>
+
+              <div className="space-y-3.5">
+                {/* Homepage */}
+                <div className="flex items-center gap-4 group">
+                  <span className="text-xs font-medium text-zinc-400 w-24 group-hover:text-white transition-colors shrink-0">Homepage</span>
+                  <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden p-[1px]">
+                    <div
+                      className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-1000 ease-out"
+                      style={{ width: '72%' }}
+                    />
+                  </div>
+                  <span className="text-xs font-bold text-zinc-300 group-hover:text-white transition-colors w-8 text-right shrink-0">72%</span>
+                </div>
+
+                {/* Search result */}
+                <div className="flex items-center gap-4 group">
+                  <span className="text-xs font-medium text-zinc-400 w-24 group-hover:text-white transition-colors shrink-0">Search result</span>
+                  <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden p-[1px]">
+                    <div
+                      className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full transition-all duration-1000 ease-out"
+                      style={{ width: '54%' }}
+                    />
+                  </div>
+                  <span className="text-xs font-bold text-zinc-300 group-hover:text-white transition-colors w-8 text-right shrink-0">54%</span>
+                </div>
+
+                {/* Consultant page */}
+                <div className="flex items-center gap-4 group">
+                  <span className="text-xs font-medium text-zinc-400 w-24 group-hover:text-white transition-colors shrink-0">Consultant page</span>
+                  <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden p-[1px]">
+                    <div
+                      className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-1000 ease-out"
+                      style={{ width: '38%' }}
+                    />
+                  </div>
+                  <span className="text-xs font-bold text-zinc-300 group-hover:text-white transition-colors w-8 text-right shrink-0">38%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -440,7 +617,7 @@ export default function PpcComponent() {
 
       {/* RESULTS MODAL (THE NEW COMPONENT) */}
       {(showResults || isClosingResults) && (
-        <ResultsModal onClose={triggerCloseResults} isClosing={isClosingResults} />
+        <ResultsModal onClose={triggerCloseResults} isClosing={isClosingResults} ad={selectedAd} />
       )}
     </section>
   );
@@ -449,98 +626,80 @@ export default function PpcComponent() {
 /* -------------------------------------------------------------------------- */
 /* SUB COMPONENTS                              */
 /* -------------------------------------------------------------------------- */
-function RecentAdCard({ paused, onOpenResults }) {
+function RecentAdCard({ ad, onOpenResults }) {
+  const isPaused = ad.status === "Paused";
+  const isActive = ad.status === "Active";
+
+  // Custom colors for tags based on placement
+  let tagClass = "bg-blue-500/10 text-blue-400";
+  if (ad.placement === "Search result") {
+    tagClass = "bg-emerald-500/10 text-emerald-400";
+  } else if (ad.placement === "Consultant page") {
+    tagClass = "bg-amber-500/10 text-amber-400";
+  }
+
+  // Custom colors for status
+  let statusClass = "bg-zinc-500/10 text-zinc-300";
+  if (isActive) {
+    statusClass = "bg-emerald-500/10 text-emerald-400";
+  } else if (isPaused) {
+    statusClass = "bg-amber-500/10 text-amber-400";
+  }
+
+  const displayTitle = ad.placement === "Consultant page" ? "Adarsh Auto Consultant" : ad.title;
+
   return (
-    <div className="rounded-xl border border-third/30 p-4 md:p-6 space-y-5 shadow-sm transition-all duration-200 hover:border-third/40 bg-white/5 backdrop-blur-sm">
-
-      {/* --- HEADER SECTION --- */}
-      <div className="flex flex-col gap-3">
-
-        {/* Top Row */}
-        <div className="flex justify-between items-center gap-3">
-          <div className="flex items-center gap-2">
-            <span
-              className={`px-3 py-1 text-xs rounded-full whitespace-nowrap ${paused
-                ? "bg-yellow-500/20 text-yellow-400"
-                : "bg-primary/10 text-primary"
-                }`}
-            >
-              {paused ? "Paused" : "Completed"}
-            </span>
-            <span className="text-xs text-third">Dec 10</span>
-          </div>
-        </div>
-
-        {/* Buttons Row → ALWAYS ONE LINE */}
-        <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-          {paused ? (
-            <Button variant="outlineSecondary" size="sm" className="whitespace-nowrap shrink-0">
-              Resume
-            </Button>
-          ) : (
-            <>
-              <Button variant="outlineSecondary" size="sm" className="whitespace-nowrap shrink-0">
-                Edit
-              </Button>
-              <Button variant="outlineSecondary" size="sm" className="whitespace-nowrap shrink-0">
-                Boost again
-              </Button>
-            </>
-          )}
-          <Button
-            variant="outlineSecondary"
-            size="sm"
-            onClick={onOpenResults}
-            className="whitespace-nowrap shrink-0"
-          >
-            View results
-          </Button>
+    <div 
+      onClick={onOpenResults}
+      className="flex flex-col md:flex-row justify-between items-start md:items-center py-5 border-b border-white/5 hover:bg-white/5 px-2 rounded-xl transition-all duration-200 cursor-pointer gap-6"
+    >
+      {/* Left side: Vehicle title, placement tag and billing info */}
+      <div className="space-y-2 select-none">
+        <h4 className="font-semibold text-sm sm:text-base text-white leading-tight">
+          {displayTitle}
+        </h4>
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className={`px-2 py-0.5 rounded text-[11px] font-medium ${tagClass}`}>
+            {ad.placement}
+          </span>
+          <span className="text-xs text-zinc-400 font-medium">
+            {ad.model} · {ad.rate}
+          </span>
         </div>
       </div>
 
-      {/* --- MAIN CONTENT --- */}
-      <div className="flex flex-col sm:flex-row gap-4">
+      {/* Right side: Stats, Budget & Status Columns */}
+      <div className="flex flex-wrap items-center gap-6 sm:gap-10 md:gap-12 w-full md:w-auto justify-between md:justify-end">
+        
+        {/* Stats Column 1, 2, 3 */}
+        <div className="flex items-center gap-6 sm:gap-8 text-center">
+          <div className="space-y-0.5 min-w-[70px]">
+            <span className="text-sm sm:text-base font-bold text-white block">{ad.impressions}</span>
+            <span className="text-[10px] text-zinc-500 block font-medium">Impressions</span>
+          </div>
 
-        {/* Image */}
-        <div className="shrink-0">
-          <Image
-            alt="card image"
-            src="/big_card_car.jpg"
-            width={80}
-            height={80}
-            className="w-20 h-20 rounded-xl object-cover border border-third/10"
-          />
-        </div>
+          <div className="space-y-0.5 min-w-[70px]">
+            <span className="text-sm sm:text-base font-bold text-white block">{ad.clicksValue}</span>
+            <span className="text-[10px] text-zinc-500 block font-medium">{ad.clicksLabel}</span>
+          </div>
 
-        {/* Content */}
-        <div className="flex-1 space-y-2">
-          <p className="text-xs text-third">Boosted Instagram reel</p>
-
-          <h4 className="font-semibold text-sm sm:text-base leading-tight">
-            Boosted Instagram media
-          </h4>
-
-          <p className="text-xs text-third line-clamp-2">
-            Time to Act: Is Your Clinic Ready for Growth?...
-          </p>
-
-          {/* Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 text-sm">
-            <StatMini label="Views" value="6,220" />
-            <StatMini label="Viewers" value="5,761" />
-            <StatMini label="Follows" value="8" />
-            <StatMini label="Link Clicks" value="45" />
+          <div className="space-y-0.5 min-w-[70px]">
+            <span className="text-sm sm:text-base font-bold text-white block">{ad.ctrValue}</span>
+            <span className="text-[10px] text-zinc-500 block font-medium">{ad.ctrLabel}</span>
           </div>
         </div>
 
-        {/* Pricing */}
-        <div className="flex sm:flex-col justify-between sm:justify-start items-start sm:items-end text-sm border-t sm:border-none border-third/10 pt-3 sm:pt-0">
-          <p className="text-base font-semibold text-primary sm:text-inherit">
-            ₹82.11
-          </p>
-          <p className="text-xs text-third">
-            Spent at ₹200/day
-          </p>
+        {/* Budget Column */}
+        <div className="text-right min-w-[80px] space-y-0.5">
+          <span className="text-sm sm:text-base font-bold text-white block">{ad.spent}</span>
+          <span className="text-[11px] text-zinc-400 block font-medium">{ad.budget}</span>
+        </div>
+
+        {/* Status Column */}
+        <div className="min-w-[90px] text-right sm:text-center">
+          <span className={`px-3 py-1 rounded text-xs font-semibold inline-block ${statusClass}`}>
+            {ad.status}
+          </span>
         </div>
 
       </div>
@@ -557,241 +716,5 @@ function StatMini({ label, value }) {
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* NEW RESULTS MODAL                               */
-/* -------------------------------------------------------------------------- */
+// ResultsModal and its sub-components have been modularized to components/ResultsModal.jsx
 
-function ResultsModal({ onClose, isClosing }) {
-  return (
-    <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-4"
-      onClick={onClose}
-      style={{
-        animation: isClosing
-          ? 'modalBackdropOut 0.25s ease-in forwards'
-          : 'modalBackdropIn 0.25s ease-out',
-      }}
-    >
-      {/* Container */}
-      <div
-        className="w-full max-w-5xl bg-secondary border border-white/10 rounded-2xl shadow-2xl flex flex-col max-h-[90vh]"
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          animation: isClosing
-            ? 'modalCardOut 0.25s ease-in forwards'
-            : 'modalCardIn 0.3s ease-out',
-        }}
-      >
-        {/* Header */}
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-white/10">
-          <h2 className="text-lg sm:text-xl font-bold">View results</h2>
-
-          <div className="flex items-center gap-2 sm:gap-3">
-
-            {/* Mobile Layout */}
-            <div className="flex sm:hidden items-center gap-2">
-              <Button
-                variant="outlineSecondary"
-                size="sm"
-                className="h-8 px-3 text-xs"
-              >
-                Boost again
-              </Button>
-
-              <Button
-                variant="outlineSecondary"
-                size="icon"
-                className="h-8 w-8"
-              >
-                <MoreHorizontal size={16} />
-              </Button>
-            </div>
-
-            {/* Desktop Layout (unchanged) */}
-            <Button
-              variant="outlineSecondary"
-              size="sm"
-              className="cursor-pointer hidden sm:inline-flex"
-            >
-              Boost again
-            </Button>
-
-            <Button
-              variant="outlineSecondary"
-              size="icon"
-              className="cursor-pointer p-1 hidden sm:inline-flex"
-            >
-              <MoreHorizontal size={20} />
-            </Button>
-
-            {/* Close Button */}
-            <button
-              onClick={onClose}
-              className="bg-white cursor-pointer p-1 rounded-full hover:opacity-70 text-secondary transition-opacity"
-            >
-              <X size={20} />
-            </button>
-          </div>
-        </div>
-
-        {/* Scrollable Content */}
-        <div className="overflow-y-auto p-4 sm:p-6 custom-scrollbar">
-
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
-            {/* LEFT COLUMN: Performance */}
-            <div className="space-y-6">
-              {/* Header Section */}
-              <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-semibold text-lg">Performance</h3>
-                    <Info size={14} className="text-zinc-500" />
-                  </div>
-                  <p className="text-sm text-zinc-400">
-                    ₹82.11 spent over 2 days.
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/10 text-sm hover:bg-white/5 cursor-pointer transition-colors">
-                  Lifetime <ChevronDown size={14} />
-                </div>
-              </div>
-
-              {/* Metrics Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <MetricBox label="Link clicks" value="45" />
-                <MetricBox label="Cost per Link Click" value="₹1.82" />
-                <MetricBox label="Views" value="6,220" />
-                <MetricBox label="Viewers" value="5,761" />
-              </div>
-
-              {/* Activity Section */}
-              <div className="space-y-4 pt-4">
-                <h4 className="text-zinc-400 text-sm font-medium">Activity</h4>
-                <div className="space-y-4">
-                  <ActivityRow label="3-second video plays" />
-                  <ActivityRow label="Link clicks" />
-                  <ActivityRow label="Post reactions" />
-                  <ActivityRow label="Follows" />
-                </div>
-                <button className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-white/10 hover:bg-white/5 text-sm font-medium transition-colors cursor-pointer">
-                  See all <ChevronDown size={14} />
-                </button>
-              </div>
-
-              {/* Audience Placeholder */}
-              <div className="pt-4 border-t border-white/10">
-                <h4 className="font-semibold mb-2">Audience</h4>
-                <div className="h-32 bg-white/5 rounded-xl flex items-center justify-center text-zinc-500 text-sm border border-white/5">
-                  Audience Demographics Chart
-                </div>
-              </div>
-            </div>
-
-            {/* RIGHT COLUMN: Sidebar */}
-            <div className="space-y-6">
-              {/* Ad Rating Card */}
-              <div className="rounded-xl bg-[#121214] border border-white/10 p-4 sm:p-5 space-y-4">
-                <div className="space-y-1">
-                  <h4 className="font-semibold text-sm">Ad rating</h4>
-                  <p className="text-sm text-zinc-400">
-                    Are you satisfied with this ad?
-                  </p>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <button className="py-2 rounded-lg border border-white/10 hover:bg-white/5 text-sm font-medium cursor-pointer transition-colors">
-                    No
-                  </button>
-                  <button className="py-2 rounded-lg border border-white/10 hover:bg-white/5 text-sm font-medium cursor-pointer transition-colors">
-                    Yes
-                  </button>
-                </div>
-              </div>
-
-              {/* Details Card */}
-              <div className="rounded-xl bg-[#121214] border border-white/10 p-4 sm:p-5 space-y-5">
-                <div className="flex items-center justify-between">
-                  <h4 className="font-semibold text-base">Details</h4>
-                </div>
-
-                <div className="space-y-5">
-                  <DetailRow
-                    icon={<CheckCircle2 size={18} className="text-zinc-400" />}
-                    label="Status"
-                    value="Completed"
-                  />
-                  <div className="h-px bg-white/5" />
-
-                  <DetailRow
-                    icon={<Heart size={18} className="text-zinc-400" />}
-                    label="Goal"
-                    value="Get more profile visits"
-                  />
-                  <div className="h-px bg-white/5" />
-
-                  <DetailRow
-                    icon={
-                      <CircleDollarSign size={18} className="text-zinc-400" />
-                    }
-                    label="Daily budget"
-                    value="₹200.00"
-                  />
-                  <div className="h-px bg-white/5" />
-
-                  <DetailRow
-                    icon={<Clock size={18} className="text-zinc-400" />}
-                    label="Duration"
-                    value="2 days"
-                  />
-                </div>
-
-                <button className="w-full flex items-center justify-center gap-2 py-2 mt-2 rounded-lg border border-white/10 hover:bg-white/5 text-sm transition-colors cursor-pointer">
-                  See all <ChevronDown size={14} />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Helper for the gray metric boxes in the modal
-function MetricBox({ label, value }) {
-  return (
-    <div className="bg-[#18181b] p-4 rounded-xl flex flex-col justify-between h-24 border border-white/5">
-      <div className="flex items-center justify-between text-zinc-400">
-        <span className="text-xs font-medium">{label}</span>
-        <Info size={12} />
-      </div>
-      <span className="text-xl font-bold">{value}</span>
-    </div>
-  );
-}
-
-// Helper for Activity rows
-function ActivityRow({ label }) {
-  return (
-    <div className="flex items-center justify-between text-sm group cursor-pointer">
-      <span className="text-zinc-300">{label}</span>
-      {/* Visual placeholder for the bar/graph usually seen here, hidden initially */}
-      <div className="w-32 h-2 bg-white/5 rounded-full overflow-hidden">
-        <div className="h-full bg-blue-500/50 w-1/2"></div>
-      </div>
-    </div>
-  );
-}
-
-// Helper for Details rows
-function DetailRow({ icon, label, value }) {
-  return (
-    <div className="flex items-start gap-3">
-      <div className="mt-0.5">{icon}</div>
-      <div>
-        <p className="text-xs text-zinc-500 mb-0.5">{label}</p>
-        <p className="text-sm font-medium">{value}</p>
-      </div>
-    </div>
-  );
-}
