@@ -12,6 +12,7 @@ import {
   CreditCard,
   InspectIcon,
   Star,
+  Ticket,
 } from "lucide-react";
 
 import { getSellerTierTitle } from "@/lib/helper";
@@ -43,6 +44,11 @@ const menu = [
     label: "Wallet & Billing",
     icon: CreditCard,
     href: "/consult/dashboard/billing",
+  },
+  {
+    label: "Help Center",
+    icon: Ticket,
+    href: "/consult/dashboard/help-center",
   },
 ];
 
