@@ -24,19 +24,22 @@ import TopPerformingCard from "./components/TopPerformingCard";
 import { useState } from "react";
 import CustomSelect from "@/components/ui/custom-select";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  getInquiryKpis,
-  getNeedAttenctionVehicles,
-  getTopPerformingVehicles,
-  getSellerTier,
-} from "@/services/Seller.service";
-import { useEffect } from "react";
+  getInquiryKpisQuery,
+  getNeedAttenctionVehiclesQuery,
+  getTopPerformingVehiclesQuery,
+  getSellerTierQuery,
+} from "@/queries/Seller.queries";
+import {
+  getInventoryOverviewQuery,
+  getOverviewSummaryDataQuery,
+} from "@/queries/overview.queries";
+import { getAnalyticsKipsQuery } from "@/queries/analytics.queries";
 import TopPerformingCardSkeleton from "@/components/ui/skeleton/TopPerformingCardSkeleton";
-import { getInventoryOverview, getOverviewSummaryData } from "@/services/overview.service";
 import { formatResponseTime, getResponseStatus } from "@/lib/helper";
 import SkeletonBox from "@/components/ui/skeleton/SkeletonBox";
 import StatCardSkeleton from "@/components/ui/skeleton/StatCardSkeleton";
-import { getAnalyticsKips } from "@/services/analytics.service";
 import { useAuthStore } from "@/stores/useAuthStore";
   
 
@@ -46,137 +49,45 @@ const rangeOptions = [
   { label: "Last 90 days", value: "90" },
 ];
 
-const DATE_3_DAYS_AGO = new Date(Date.now() - 86400000 * 3).toISOString();
-const DATE_12_DAYS_AGO = new Date(Date.now() - 86400000 * 12).toISOString();
-const DATE_18_DAYS_AGO = new Date(Date.now() - 86400000 * 18).toISOString();
+
 
 export default function OverviewComponent() {
   const user = useAuthStore((state) => state.user);
   const [range, setRange] = useState("30");
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+  const queryClient = useQueryClient();
 
-  // API Data States
-  const [topPerforming, setTopPerforming] = useState([]);
-  const [needAttention, setNeedAttention] = useState([]);
-  const [inventoryOverview, setInventoryOverview] = useState(null);
-  const [inquiryKpis, setInquiryKpis] = useState(null);
-  const [sellerTier, setSellerTier] = useState(null);
-  const [topPerformingLoading, setTopPerformingLoading] = useState(false);
-  const [needAttentionLoading, setNeedAttentionLoading] = useState(false);
-  const [overviewLoading, setOverviewLoading] = useState(false);
-  const [inquiryLoading, setInquiryLoading] = useState(false);
-  const [summaryData, setSummaryData] = useState(null);
-  const [summaryLoading, setSummaryLoading] = useState(false);
-  const [analyticsData, setAnalyticsData] = useState(null);
-  const [analyticsLoading, setAnalyticsLoading] = useState(false);
+  const handleRangeChange = (newRange) => {
+    setRange(newRange);
+    let daysParam = "LAST_7_DAYS";
+    if (newRange === "30") {
+      daysParam = "LAST_30_DAYS";
+    } else if (newRange === "90") {
+      daysParam = "LAST_90_DAYS";
+    }
+    queryClient.invalidateQueries({ queryKey: ["analytics-kips", daysParam] });
+  };
 
-  useEffect(() => {
-    const fetchInquiryKpis = async () => {
-      try {
-        setInquiryLoading(true);
-        const res = await getInquiryKpis();
-        setInquiryKpis(res.data);
-      } catch (error) {
-        console.error("Error fetching inquiry KPIs:", error);
-      } finally {
-        setInquiryLoading(false);
-      }
-    };
-    const fetchInventoryOverview = async () => {
-      try {
-        setOverviewLoading(true);
-        const res = await getInventoryOverview();
-        setInventoryOverview(res.data);
-      } catch (error) {
-        console.error("Error fetching inventory overview:", error);
-      } finally {
-        setOverviewLoading(false);
-      }
-    };
-    const fetchTopPerforming = async () => {
-      try {
-        setTopPerformingLoading(true);
-        const res = await getTopPerformingVehicles();
-        // Updated to fetch 5 records and show first two (scrollable for rest)
-        setTopPerforming(res.data?.slice(0, 5) || []);
-      } catch (error) {
-        console.error("Error fetching top performing vehicles:", error);
-      } finally {
-        setTopPerformingLoading(false);
-      }
-    };
+  // React Query calls
+  const { data: inquiryKpis, isLoading: inquiryLoading } = useQuery(getInquiryKpisQuery());
+  const { data: inventoryOverview, isLoading: overviewLoading } = useQuery(getInventoryOverviewQuery());
+  const { data: topPerformingVehiclesData, isLoading: topPerformingLoading } = useQuery(getTopPerformingVehiclesQuery());
+  const { data: needAttentionData, isLoading: needAttentionLoading } = useQuery(getNeedAttenctionVehiclesQuery({ pageNo: 1, size: 5 }));
+  const { data: summaryData, isLoading: summaryLoading } = useQuery(getOverviewSummaryDataQuery());
+  const { data: sellerTierData } = useQuery(getSellerTierQuery());
 
-    const fetchNeedAttention = async () => {
-      try {
-        setNeedAttentionLoading(true);
-        // Updated to fetch 5 records from backend
-        const res = await getNeedAttenctionVehicles({ pageNo: 1, size: 5 });
-        setNeedAttention(res.data || []);
-      } catch (error) {
-        console.error("Error fetching need attention vehicles:", error);
-      } finally {
-        setNeedAttentionLoading(false);
-      }
-    };
+  let daysParam = "LAST_7_DAYS";
+  if (range === "30") {
+    daysParam = "LAST_30_DAYS";
+  } else if (range === "90") {
+    daysParam = "LAST_90_DAYS";
+  }
+  const { data: analyticsData, isLoading: analyticsLoading } = useQuery(getAnalyticsKipsQuery(daysParam));
 
-    const fetchOverviewSummary = async () => {
-      try {
-        setSummaryLoading(true);
-        const res = await getOverviewSummaryData();
-        setSummaryData(res.data);
-      } catch (error) {
-        console.error("Error fetching overview summary data:", error);
-      } finally {
-        setSummaryLoading(false);
-      }
-    };
-
-    const fetchSellerTier = async () => {
-      try {
-        const res = await getSellerTier();
-        if (res?.data) {
-          setSellerTier(res.data.tierTitle);
-        }
-      } catch (error) {
-        console.error("Error fetching seller tier:", error);
-        // Fallback to localStorage if API fails
-        if (typeof window !== "undefined") {
-          setSellerTier(localStorage.getItem("sellerTier"));
-        }
-      }
-    };
-    fetchTopPerforming();
-    fetchNeedAttention();
-    fetchInventoryOverview();
-    fetchInquiryKpis();
-    fetchOverviewSummary();
-    fetchSellerTier();
-  }, []);
-
-  useEffect(() => {
-    const fetchAnalytics = async () => {
-      let daysParam = "LAST_7_DAYS";
-      if (range === "30") {
-        daysParam = "LAST_30_DAYS";
-      } else if (range === "90") {
-        daysParam = "LAST_90_DAYS";
-      }
-
-      setAnalyticsLoading(true);
-      try {
-        const res = await getAnalyticsKips(daysParam);
-        if (res.success) {
-          setAnalyticsData(res.data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch analytics KPIs:", error);
-      } finally {
-        setAnalyticsLoading(false);
-      }
-    };
-
-    fetchAnalytics();
-  }, [range]);
+  // Mapped/Derived variables
+  const topPerforming = topPerformingVehiclesData?.slice(0, 5) || [];
+  const needAttention = needAttentionData || [];
+  const sellerTier = sellerTierData?.tierTitle || (typeof window !== "undefined" ? localStorage.getItem("sellerTier") : null);
 
   const isInitialLoading =
     topPerformingLoading ||
@@ -225,7 +136,7 @@ export default function OverviewComponent() {
             <div className="w-44">
               <CustomSelect
                 value={range}
-                onChange={setRange}
+                onChange={handleRangeChange}
                 options={rangeOptions}
                 placeholder="Select range"
                 variant="transparent"
