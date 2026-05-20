@@ -52,13 +52,15 @@ function InspectionTab() {
         </div>
 
         {/* IQI Badge */}
-        <div className="flex items-center gap-2 px-4 py-2 rounded-xl border border-third/30 bg-secondary w-fit shadow-sm transition-colors duration-200 hover:border-third/40">
+        {/* <div className="flex items-center gap-2 px-4 py-2 rounded-xl border border-third/30 bg-secondary w-fit shadow-sm transition-colors duration-200 hover:border-third/40">
           <BadgeCheck size={18} className="text-primary" />
           <p className="text-xs md:text-sm font-medium">
             IQI: <span className="text-primary font-bold">78%</span>
           </p>
           <span className="text-third text-xs md:text-sm">Trust Health</span>
-        </div>
+        </div> */}
+
+
       </div>
 
       {/* ================= SNAPSHOT ================= */}
@@ -69,7 +71,7 @@ function InspectionTab() {
 
         {/* Stat Cards */}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
           <StatCard
             icon={<Car className="text-primary" size={20} />}
             label="Vehicles with Reecomm Inspection"
@@ -88,11 +90,11 @@ function InspectionTab() {
             value="6"
           />
 
-          <StatCard
+          {/* <StatCard
             icon={<RefreshCcw className="text-purple-400" size={20} />}
             label="Re-inspection Requests"
             value="2"
-          />
+          /> */}
 
           <StatCard
             icon={<Star className="text-yellow-400" size={20} />}
@@ -104,63 +106,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= TRUST SCORE BANNER ================= */}
-      <div className="rounded-xl border border-primary/20 bg-primary/5 px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-
-          <div className="flex items-center gap-3">
-
-            {/* Circle Progress */}
-            <div className="relative w-10 h-10 md:w-12 md:h-12">
-              <svg className="w-full h-full -rotate-90">
-                {/* Background */}
-                <circle
-                  cx="50%"
-                  cy="50%"
-                  r="18"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  className="text-neutral-200"
-                  fill="transparent"
-                />
-                {/* Progress */}
-                <circle
-                  cx="50%"
-                  cy="50%"
-                  r="18"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  strokeDasharray={113} // circumference
-                  strokeDashoffset={113 - (113 * 82) / 100}
-                  strokeLinecap="round"
-                  className="text-green-500"
-                  fill="transparent"
-                />
-              </svg>
-
-              {/* Center Text */}
-              <span className="absolute inset-0 flex items-center justify-center text-[10px] md:text-xs font-semibold text-primary">
-                82%
-              </span>
-            </div>
-
-            {/* Text */}
-            <div>
-              <p className="font-semibold text-xs md:text-sm leading-tight text-primary">
-                Your trust score is{" "}
-                <span className="font-bold">82%</span>
-              </p>
-
-              <p className="text-[11px] md:text-xs text-third mt-0.5">
-                Keep inspections updated to improve ranking
-              </p>
-            </div>
-
-          </div>
-        </div>
-
-        <TrendingUp size={20} className="text-primary shrink-0 transition-transform sm:rotate-0" />
-      </div>
-
+    
       {/* ================= HOW INSPECTION AFFECTS RANKING ================= */}
       <div className="rounded-xl border border-third/30  p-5 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         <h3 className="font-semibold flex items-center gap-2">
