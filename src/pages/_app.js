@@ -24,6 +24,10 @@ import {
   raleway,
   roboto,
 } from "@/lib/fonts";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -128,6 +132,8 @@ export default function App({ Component, pageProps }) {
   }
 
   return (
+    <>
+     <QueryClientProvider client={queryClient}>
     <div
       className={`${exo.variable} ${inter.variable} ${lexendDeca.variable} ${montserrat.variable} ${poppins.variable} ${raleway.variable} ${roboto.variable} font-sans`}
     >
@@ -198,5 +204,8 @@ export default function App({ Component, pageProps }) {
         !router.asPath.startsWith("/consult/dashboard/") &&
         !router.asPath.startsWith("/consult/kyc") && <GlobalCompareButton />}
     </div>
+     <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+    </>
   );
 }
