@@ -23,14 +23,15 @@ import {
   Headphones,
   AlertCircle,
 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import {
-  getVerificationStatus,
-  getDocumentStatus,
-  getConsualtAdress,
-  getConsualtProfile,
-} from "@/services/profile.service";
-import { getActiveBasicUpdate } from "@/services/consult.profile.service";
-import { getUserProfileStrength } from "@/services/user.service";
+  getVerificationStatusQuery,
+  getDocumentStatusQuery,
+  getConsultantAddressQuery,
+  getConsultantProfileQuery,
+  getActiveBasicUpdateQuery,
+  getUserProfileStrengthQuery,
+} from "@/queries/profile.queries";
 
 // Helper to format vehicleTypes array into readable text
 const formatVehicleTypes = (types) => {
@@ -48,183 +49,186 @@ const formatVehicleTypes = (types) => {
 export default function ProfileComponent() {
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingLocation, setIsEditingLocation] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
 
-  const [verificationData, setVerificationData] = useState({
-    status: "Pending",
-    verifiedAt: "Not verified yet",
-  });
+  // TanStack Queries
+  const { data: verificationDataRaw, isFetching: verificationLoading } =
+    useQuery(getVerificationStatusQuery());
 
-  const [documentData, setDocumentData] = useState({
-    gst: "PENDING",
-    panCard: "PENDING",
-    aadharCard: "PENDING",
-  });
+  const { data: documentDataRaw, isFetching: documentLoading } = useQuery(
+    getDocumentStatusQuery(),
+  );
 
-  const [businessLocation, setBusinessLocation] = useState({
-    address: "Chaapi",
-    city: "Ahmedabad",
-    state: "Gujarat",
-  });
+  const { data: addressDataRaw, isFetching: addressLoading } = useQuery(
+    getConsultantAddressQuery(),
+  );
 
-  const [profile, setProfile] = useState({
-    businessName: "",
-    ownerName: "",
-    email: "",
-    phone: "",
-    businessType: "",
-    username: "", 
-    establishmentYear: 0,
-  });
+  const { data: profileDataRaw, isFetching: profileLoading } = useQuery(
+    getConsultantProfileQuery(),
+  );
 
-  const [accountDetails, setAccountDetails] = useState({
-    accountType: "Consultant",
-    tier: "Premium Partner",
-    joinedOn: "",
-    storefrontStatus: "Live",
-    inventoryVisibility: "Active",
-  });
+  const { data: basicUpdateDataRaw, isFetching: basicUpdateLoading } = useQuery(
+    getActiveBasicUpdateQuery(),
+  );
 
-  const [basicUpdateData, setBasicUpdateData] = useState(null);
-  const [profileStrengthData, setProfileStrengthData] = useState({
+  const { data: strengthDataRaw, isFetching: strengthLoading } = useQuery(
+    getUserProfileStrengthQuery(),
+  );
+
+  const isLoading =
+    (!verificationDataRaw && verificationLoading) ||
+    (!documentDataRaw && documentLoading) ||
+    (!addressDataRaw && addressLoading) ||
+    (!profileDataRaw && profileLoading) ||
+    (!basicUpdateDataRaw && basicUpdateLoading) ||
+    (!strengthDataRaw && strengthLoading);
+
+  React.useEffect(() => {
+    if (!isLoading) {
+      setHasLoadedOnce(true);
+    }
+  }, [isLoading]);
+
+  // Derived / Formatted states
+  const profileStrengthData = strengthDataRaw || {
     profileStrength: 0,
     messages: [],
-  });
+  };
 
-  useEffect(() => {
-    const fetchStatuses = async () => {
-      setLoading(true);
-      try {
-        const [
-          verificationRes,
-          documentRes,
-          addressRes,
-          profileRes,
-          basicUpdateRes,
-          strengthRes,
-        ] = await Promise.all([
-          getVerificationStatus().catch(() => null),
-          getDocumentStatus().catch(() => null),
-          getConsualtAdress().catch(() => null),
-          getConsualtProfile().catch(() => null),
-          getActiveBasicUpdate().catch(() => null),
-          getUserProfileStrength().catch(() => null),
-        ]);
+  const basicUpdateData = basicUpdateDataRaw || null;
 
-        if (strengthRes?.data) {
-          setProfileStrengthData(strengthRes.data);
-        }
-
-        if (basicUpdateRes?.data) {
-          setBasicUpdateData(basicUpdateRes.data);
-        }
-
-        if (verificationRes?.data) {
-          const { verificationStatus, verifiedAt } = verificationRes.data;
-
-          let formattedDate = "Not verified yet";
-          if (verifiedAt) {
-            const dateObj = new Date(verifiedAt);
-            formattedDate =
-              dateObj.toLocaleDateString("en-US", {
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-              }) +
-              " at " +
-              dateObj.toLocaleTimeString("en-US", {
-                hour: "2-digit",
-                minute: "2-digit",
-              });
-          }
-
-          setVerificationData({
-            status:
-              verificationStatus === "VERIFIED"
-                ? "Verified"
-                : verificationStatus || "Pending",
-            verifiedAt: formattedDate,
-          });
-        }
-
-        if (documentRes?.data) {
-          setDocumentData({
-            gst: documentRes.data.gst || "PENDING",
-            panCard: documentRes.data.panCard || "PENDING",
-            aadharCard: documentRes.data.aadharCard || "PENDING",
-          });
-        }
-
-        if (addressRes?.data) {
-          const { address, city, state } = addressRes.data;
-          setBusinessLocation({
-            address: address || "",
-            city: city?.name || "",
-            state: state?.name || "",
-          });
-        }
-
-        // Populate Business Profile from getConsultProfile API
-        if (profileRes?.data) {
-          const d = profileRes.data;
-          setProfile({
-            businessName: d.consultationName || "",
-            ownerName: d.ownerName || "",
-            email: d.companyEmail || "",
-            phone: d.phoneNumber || "",
-            username: d.username || "",
-            businessType: formatVehicleTypes(d.vehicleTypes),
-            establishmentYear: d.establishmentYear || 0,
-          });
-
-          // Format createdAt for Joined On
-          let joinedFormatted = "";
-          if (d.createdAt) {
-            const dateObj = new Date(d.createdAt);
-            joinedFormatted = dateObj.toLocaleDateString("en-US", {
-              day: "2-digit",
-              month: "long",
-              year: "numeric",
-            });
-          }
-
-          setAccountDetails((prev) => ({
-            ...prev,
-            joinedOn: joinedFormatted,
-            storefrontStatus:
-              d.status === "ACTIVE" ? "Live" : d.status || "Live",
-            tier: d.isActiveTier ? "Premium Partner" : "Standard",
-          }));
-        }
-      } catch (error) {
-        console.error("Failed to fetch statuses:", error);
-      } finally {
-        setLoading(false);
-      }
+  const verificationData = React.useMemo(() => {
+    if (!verificationDataRaw) {
+      return {
+        status: "Pending",
+        verifiedAt: "Not verified yet",
+      };
+    }
+    const { verificationStatus, verifiedAt } = verificationDataRaw;
+    let formattedDate = "Not verified yet";
+    if (verifiedAt) {
+      const dateObj = new Date(verifiedAt);
+      formattedDate =
+        dateObj.toLocaleDateString("en-US", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        }) +
+        " at " +
+        dateObj.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+    }
+    return {
+      status:
+        verificationStatus === "VERIFIED"
+          ? "Verified"
+          : verificationStatus || "Pending",
+      verifiedAt: formattedDate,
     };
-    fetchStatuses();
+  }, [verificationDataRaw]);
 
-    // Read user data from localStorage for Account & Role Details
+  const documentData = React.useMemo(() => {
+    if (!documentDataRaw) {
+      return {
+        gst: "PENDING",
+        panCard: "PENDING",
+        aadharCard: "PENDING",
+      };
+    }
+    return {
+      gst: documentDataRaw.gst || "PENDING",
+      panCard: documentDataRaw.panCard || "PENDING",
+      aadharCard: documentDataRaw.aadharCard || "PENDING",
+    };
+  }, [documentDataRaw]);
+
+  const businessLocation = React.useMemo(() => {
+    if (!addressDataRaw) {
+      return {
+        address: "Chaapi",
+        city: "Ahmedabad",
+        state: "Gujarat",
+      };
+    }
+    const { address, city, state } = addressDataRaw;
+    return {
+      address: address || "",
+      city: city?.name || "",
+      state: state?.name || "",
+    };
+  }, [addressDataRaw]);
+
+  const profile = React.useMemo(() => {
+    if (!profileDataRaw) {
+      return {
+        businessName: "",
+        ownerName: "",
+        email: "",
+        phone: "",
+        businessType: "",
+        username: "",
+        establishmentYear: 0,
+      };
+    }
+    const d = profileDataRaw;
+    return {
+      businessName: d.consultationName || "",
+      ownerName: d.ownerName || "",
+      email: d.companyEmail || "",
+      phone: d.phoneNumber || "",
+      username: d.username || "",
+      businessType: formatVehicleTypes(d.vehicleTypes),
+      establishmentYear: d.establishmentYear || 0,
+    };
+  }, [profileDataRaw]);
+
+  const accountDetails = React.useMemo(() => {
+    let joinedFormatted = "";
+    let storefrontStatus = "Live";
+    let tier = "Standard";
+
+    if (profileDataRaw) {
+      const d = profileDataRaw;
+      if (d.createdAt) {
+        const dateObj = new Date(d.createdAt);
+        joinedFormatted = dateObj.toLocaleDateString("en-US", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        });
+      }
+      storefrontStatus = d.status === "ACTIVE" ? "Live" : d.status || "Live";
+      tier = d.isActiveTier ? "Premium Partner" : "Standard";
+    }
+
+    let accountType = "Consultant";
     if (typeof window !== "undefined") {
       const savedUser = localStorage.getItem("user");
       if (savedUser) {
         try {
           const userData = JSON.parse(savedUser);
-          setAccountDetails((prev) => ({
-            ...prev,
-            accountType: userData.role
-              ? userData.role.charAt(0).toUpperCase() +
-                userData.role.slice(1).toLowerCase()
-              : "Consultant",
-          }));
+          accountType = userData.role
+            ? userData.role.charAt(0).toUpperCase() +
+              userData.role.slice(1).toLowerCase()
+            : "Consultant";
         } catch (e) {
           console.error("Failed to parse user from localStorage", e);
         }
       }
     }
-  }, []);
 
-  if (loading) {
+    return {
+      accountType,
+      tier,
+      joinedOn: joinedFormatted,
+      storefrontStatus,
+      inventoryVisibility: "Active",
+    };
+  }, [profileDataRaw]);
+
+  if (isLoading && !hasLoadedOnce) {
     return <ProfileSkeleton />;
   }
 
@@ -244,8 +248,6 @@ export default function ProfileComponent() {
           Manage identity, verification & storefront credibility
         </p>
       </div>
-
-
 
       <div className="w-full lg:w-1/2 border border-third/30 rounded-xl p-6 space-y-6 flex flex-col justify-between h-full hover:border-third/50 transition-all duration-200 shadow-sm">
         <div className="flex items-center justify-between">
@@ -451,8 +453,7 @@ export default function ProfileComponent() {
                             "text-orange-400 bg-orange-400/10 border-orange-400/30";
                           label = "Changes Requested";
                         } else if (status === "REJECTED") {
-                          cls =
-                            "text-red-400 bg-red-400/10 border-red-400/30";
+                          cls = "text-red-400 bg-red-400/10 border-red-400/30";
                           label = "Rejected";
                         }
 
@@ -480,7 +481,8 @@ export default function ProfileComponent() {
                       {basicUpdateData.adminRemark || "—"}
                     </td>
                     <td className="py-4 px-4">
-                      {basicUpdateData.verificationStatus === "REQUEST_CHANGES" && (
+                      {basicUpdateData.verificationStatus ===
+                        "REQUEST_CHANGES" && (
                         <Button
                           href="/consult/dashboard/profile/update"
                           variant="outlineSecondary"
@@ -596,9 +598,9 @@ export default function ProfileComponent() {
                   .join(" / ")}
               </span>
             </p>
-            <Button variant="outlineSecondary" size="sm" className="mt-2">
+            {/* <Button variant="outlineSecondary" size="sm" className="mt-2">
               Complete Verification
-            </Button>
+            </Button> */}
           </div>
         )}
 

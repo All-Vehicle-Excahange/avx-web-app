@@ -17,13 +17,14 @@ import {
   ChevronDown,
 } from "lucide-react";
 import Button from "@/components/ui/button";
+import { useQuery, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import {
-  getInventoryVehicle,
-  getTopPerformingVehicles,
-  getInventorySnapShotCount,
-  getNeedAttenctionVehicles,
-  getSusPendedVehicles,
-} from "@/services/Seller.service";
+  getInventoryVehicleInfiniteQuery,
+  getTopPerformingVehiclesQuery,
+  getInventorySnapShotCountQuery,
+  getNeedAttenctionVehiclesInfiniteQuery,
+  getSusPendedVehiclesInfiniteQuery,
+} from "@/queries/Seller.queries";
 import TopPerformingCard from "./components/TopPerformingCard";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import StatCardSkeleton from "@/components/ui/skeleton/StatCardSkeleton";
@@ -67,145 +68,89 @@ export default function InventoryComponent() {
   });
 
   const [activeType, setActiveType] = useState("all");
-  const [vehicles, setVehicles] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(9);
-  const [topPerforming, setTopPerforming] = useState([]);
-  const [inventorySnapShotCount, setInventorySnapShotCount] = useState([]);
-
-  // Loading states
-  const [vehiclesLoading, setVehiclesLoading] = useState(false);
-  const [topPerformingLoading, setTopPerformingLoading] = useState(false);
-  const [snapshotLoading, setSnapshotLoading] = useState(false);
-
-  // Need Attention vehicles state
-  const [needAttentionVehicles, setNeedAttentionVehicles] = useState([]);
-  const [needAttentionPage, setNeedAttentionPage] = useState(1);
-  const [needAttentionTotalPages, setNeedAttentionTotalPages] = useState(1);
-  const [needAttentionLoading, setNeedAttentionLoading] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
-  // Suspended vehicles state
-  const [suspendedVehicles, setSuspendedVehicles] = useState([]);
-  const [suspendedPage, setSuspendedPage] = useState(1);
-  const [suspendedPageSize] = useState(9);
-  const [suspendedTotalPages, setSuspendedTotalPages] = useState(1);
-  const [suspendedLoading, setSuspendedLoading] = useState(false);
-
-
+  const queryClient = useQueryClient();
   const router = useRouter();
 
-  const fetchVehicles = async () => {
-    try {
-      setVehiclesLoading(true);
-      let status;
-      if (activeType === "all") {
-        status = undefined;
-      } else if (activeType === "PENDING") {
-        status = "REQUESTED";
-      } else {
-        status = activeType;
-      }
-      const res = await getInventoryVehicle(status);
-      setVehicles(res.data || []);
-      setVisibleCount(9);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setVehiclesLoading(false);
-    }
-  };
+  // 1. Inventory Vehicles Query (Paginated / Load More via Infinite Query)
+  let vehicleStatus;
+  if (activeType === "all") {
+    vehicleStatus = undefined;
+  } else if (activeType === "PENDING") {
+    vehicleStatus = "REQUESTED";
+  } else {
+    vehicleStatus = activeType;
+  }
 
-  const fetchSuspendedVehicles = async (pageNo = 1) => {
-    try {
-      setSuspendedLoading(true);
-      const res = await getSusPendedVehicles({
-        pageNo,
-        pageSize: suspendedPageSize,
-      });
-      if (pageNo === 1) {
-        setSuspendedVehicles(res.data || []);
-      } else {
-        setSuspendedVehicles((prev) => [...prev, ...(res.data || [])]);
-      }
-      setSuspendedTotalPages(res.pageResponse?.totalPages || 1);
-      setSuspendedPage(pageNo);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setSuspendedLoading(false);
-    }
-  };
+  const {
+    data: vehiclesInfiniteData,
+    isFetching: vehiclesLoading,
+    fetchNextPage: fetchNextVehiclesPage,
+    hasNextPage: hasNextVehiclesPage,
+    refetch: refetchVehicles,
+  } = useInfiniteQuery({
+    ...getInventoryVehicleInfiniteQuery({
+      listingStatus: vehicleStatus,
+      pageSize: 9,
+    }),
+    enabled: activeType !== "SUSPENDED",
+  });
 
-  useEffect(() => {
-    if (activeType === "SUSPENDED") {
-      setSuspendedVehicles([]);
-      setSuspendedPage(1);
-      fetchSuspendedVehicles(1);
-    } else {
-      fetchVehicles();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeType]);
+  const vehicles = vehiclesInfiniteData?.pages.flatMap((page) => page.data || []) || [];
 
-  useEffect(() => {
-    const fetchTopPerforming = async () => {
-      try {
-        setTopPerformingLoading(true);
-        const res = await getTopPerformingVehicles();
-        setTopPerforming(res.data || []);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setTopPerformingLoading(false);
-      }
-    };
-    fetchTopPerforming();
-  }, []);
+  // 2. Top Performing Vehicles Query
+  const {
+    data: topPerformingData,
+    isLoading: topPerformingLoading,
+  } = useQuery(getTopPerformingVehiclesQuery());
 
-  const fetchInventorySnapShotCount = async () => {
-    try {
-      setSnapshotLoading(true);
-      const res = await getInventorySnapShotCount();
-      setInventorySnapShotCount(res.data || []);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setSnapshotLoading(false);
-    }
-  };
+  const topPerforming = topPerformingData || [];
 
-  useEffect(() => {
-    fetchInventorySnapShotCount();
-  }, []);
+  // 3. Inventory Snapshot Count Query
+  const {
+    data: snapshotData,
+    isLoading: snapshotLoading,
+    refetch: refetchSnapshot,
+  } = useQuery(getInventorySnapShotCountQuery());
 
-  // Fetch Need Attention Vehicles (paginated)
-  const fetchNeedAttentionVehicles = async (pageNo = 1) => {
-    try {
-      setNeedAttentionLoading(true);
-      const res = await getNeedAttenctionVehicles({ pageNo, size: 6 });
-      if (pageNo === 1) {
-        setNeedAttentionVehicles(res.data || []);
-      } else {
-        setNeedAttentionVehicles((prev) => [...prev, ...(res.data || [])]);
-      }
-      setNeedAttentionTotalPages(res.pageResponse?.totalPages || 1);
-      setNeedAttentionPage(pageNo);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setNeedAttentionLoading(false);
-    }
-  };
+  const inventorySnapShotCount = snapshotData || {};
 
-  useEffect(() => {
-    fetchNeedAttentionVehicles(1);
-  }, []);
+  // 4. Need Attention Vehicles Query (Paginated / Load More via Infinite Query)
+  const {
+    data: needAttentionInfiniteData,
+    isFetching: needAttentionLoading,
+    fetchNextPage: fetchNextNeedAttentionPage,
+    hasNextPage: hasNextNeedAttentionPage,
+  } = useInfiniteQuery(getNeedAttenctionVehiclesInfiniteQuery({ pageSize: 6 }));
+
+  const needAttentionVehicles = needAttentionInfiniteData?.pages.flatMap((page) => page.data || []) || [];
 
   const handleViewMoreNeedAttention = () => {
-    if (needAttentionPage < needAttentionTotalPages) {
-      fetchNeedAttentionVehicles(needAttentionPage + 1);
+    if (hasNextNeedAttentionPage) {
+      fetchNextNeedAttentionPage();
     }
   };
+
+  // 5. Suspended Vehicles Query (Paginated / Load More via Infinite Query)
+  const {
+    data: suspendedInfiniteData,
+    isFetching: suspendedLoading,
+    fetchNextPage: fetchNextSuspendedPage,
+    hasNextPage: hasNextSuspendedPage,
+  } = useInfiniteQuery({
+    ...getSusPendedVehiclesInfiniteQuery({ pageSize: 9 }),
+    enabled: activeType === "SUSPENDED",
+  });
+
+  const suspendedVehicles = suspendedInfiniteData?.pages.flatMap((page) => page.data || []) || [];
+
+  // Reset page and list when activeType changes
+  useEffect(() => {
+    if (activeType === "SUSPENDED") {
+      queryClient.invalidateQueries({ queryKey: ["seller-suspended-vehicles-infinite"] });
+    }
+  }, [activeType]);
 
   return (
     <>
@@ -419,7 +364,7 @@ export default function InventoryComponent() {
             ) : vehicles?.length > 0 ? (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 gap-6">
-                  {vehicles.slice(0, visibleCount).map((car) => (
+                  {vehicles.map((car) => (
                     <UserVehicleCard
                       key={car.id}
                       data={mapVehicle(car)}
@@ -428,21 +373,22 @@ export default function InventoryComponent() {
                       inquiries={car.totalInquiries}
                       chats={car.approvedInquiries}
                       onRefresh={() => {
-                        fetchVehicles();
-                        fetchInventorySnapShotCount();
+                        refetchVehicles();
+                        refetchSnapshot();
                       }}
                     />
                   ))}
                 </div>
 
-                {visibleCount < vehicles.length && (
+                {hasNextVehiclesPage && (
                   <div className="flex justify-end mt-4">
                     <Button
                       variant="outline"
-                      onClick={() => setVisibleCount((prev) => prev + 9)}
+                      onClick={() => fetchNextVehiclesPage()}
+                      disabled={vehiclesLoading}
                       className="px-6 py-2 rounded-full text-sm font-semibold shadow-md"
                     >
-                      View More
+                      {vehiclesLoading ? "Loading..." : "View More"}
                     </Button>
                   </div>
                 )}
@@ -480,7 +426,7 @@ export default function InventoryComponent() {
         {/* 5️⃣ SUSPENDED VEHICLES SECTION */}
         {activeType === "SUSPENDED" && (
           <div className="w-full space-y-4">
-            {suspendedLoading && suspendedPage === 1 ? (
+            {suspendedLoading && suspendedVehicles.length === 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
                 {[...Array(3)].map((_, i) => (
                   <UserVehicleCardSkeleton key={i} />
@@ -497,16 +443,18 @@ export default function InventoryComponent() {
                       avxInspected={car.inspectionStatus === "AI_INSPECTED"}
                       inquiries={car.totalInquiries}
                       chats={car.approvedInquiries}
-                      onRefresh={() => fetchSuspendedVehicles(1)}
+                      onRefresh={() => {
+                        queryClient.invalidateQueries({ queryKey: ["seller-suspended-vehicles-infinite"] });
+                      }}
                     />
                   ))}{" "}
                 </div>
 
-                {suspendedPage < suspendedTotalPages && (
+                {hasNextSuspendedPage && (
                   <div className="flex justify-end mt-4">
                     <Button
                       variant="outline"
-                      onClick={() => fetchSuspendedVehicles(suspendedPage + 1)}
+                      onClick={() => fetchNextSuspendedPage()}
                       disabled={suspendedLoading}
                       className="px-6 py-2 rounded-full text-sm font-semibold shadow-md"
                     >
@@ -534,7 +482,7 @@ export default function InventoryComponent() {
             <h3 className="font-semibold">Vehicles Needing Attention</h3>
           </div>
 
-          {needAttentionLoading && needAttentionPage === 1 ? (
+          {needAttentionLoading && needAttentionVehicles.length === 0 ? (
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
               <TopPerformingCardSkeleton />
               <TopPerformingCardSkeleton />
@@ -547,7 +495,7 @@ export default function InventoryComponent() {
                 ))}
               </div>
 
-              {needAttentionPage < needAttentionTotalPages && (
+              {hasNextNeedAttentionPage && (
                 <div className="flex justify-center mt-4">
                   <Button
                     variant="outline"

@@ -11,12 +11,18 @@ const ENDPOINT = {
   rejectInquiry: "/vehicles/inquiry/reject",
 };
 
-export const getInquiries = async (inquiryStatus) => {
+export const getInquiries = async (payload) => {
   try {
     const params = {};
 
-    if (inquiryStatus) {
-      params.inquiryStatus = inquiryStatus;
+    if (payload?.inquiryStatus) {
+      params.inquiryStatus = payload.inquiryStatus;
+    }
+    if (payload?.pageNo !== undefined) {
+      params.pageNo = payload.pageNo;
+    }
+    if (payload?.pageSize !== undefined) {
+      params.size = payload.pageSize;
     }
 
     const res = await axiosInstance.get(ENDPOINT.getInquiries, {
@@ -30,12 +36,18 @@ export const getInquiries = async (inquiryStatus) => {
   }
 };
 
-export const getMyInquiries = async (inquiryStatus) => {
+export const getMyInquiries = async (payload) => {
   try {
     const params = {};
 
-    if (inquiryStatus) {
-      params.inquiryStatus = inquiryStatus;
+    if (payload?.inquiryStatus) {
+      params.inquiryStatus = payload.inquiryStatus;
+    }
+    if (payload?.pageNo !== undefined) {
+      params.pageNo = payload.pageNo;
+    }
+    if (payload?.pageSize !== undefined) {
+      params.size = payload.pageSize;
     }
 
     const res = await axiosInstance.get(ENDPOINT.getMyInquiries, {

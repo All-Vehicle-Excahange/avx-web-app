@@ -86,7 +86,7 @@ export default function OverviewComponent() {
 
   // Mapped/Derived variables
   const topPerforming = topPerformingVehiclesData?.slice(0, 5) || [];
-  const needAttention = needAttentionData || [];
+  const needAttention = needAttentionData?.data || [];
   const sellerTier = sellerTierData?.tierTitle || (typeof window !== "undefined" ? localStorage.getItem("sellerTier") : null);
 
   const isInitialLoading =

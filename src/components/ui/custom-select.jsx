@@ -25,7 +25,10 @@ export default function CustomSelect({
   readOnly = false,
 }) {
   const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(() => {
+    const selected = options.find((o) => o.value === value);
+    return selected ? selected.label : "";
+  });
   const [focusedIndex, setFocusedIndex] = useState(-1);
 
   const wrapperRef = useRef(null);

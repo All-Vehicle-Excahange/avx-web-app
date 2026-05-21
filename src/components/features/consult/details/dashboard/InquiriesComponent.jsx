@@ -6,8 +6,9 @@ import { useEffect, useState } from "react";
 import InquiryCard from "@/components/ui/InquiryCard";
 import StatCard from "./components/StateCard";
 import { AlertTriangle, EyeOff, Flame, TrendingUp } from "lucide-react";
-import { getInquiryKpis } from "@/services/Seller.service";
-import { getInquiries } from "@/services/inquiry.service";
+import { useQuery, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
+import { getInquiryKpisQuery } from "@/queries/Seller.queries";
+import { getInquiriesInfiniteQuery } from "@/queries/inquiry.queries";
 import { formatResponseTime, getResponseStatus } from "@/lib/helper";
 import Button from "@/components/ui/button";
 import StatCardSkeleton from "@/components/ui/skeleton/StatCardSkeleton";
@@ -16,61 +17,34 @@ import SkeletonBox from "@/components/ui/skeleton/SkeletonBox";
 
 export default function InquiriesComponent() {
   const [activeType, setActiveType] = useState("all");
-  const [inquiryKpis, setInquiryKpis] = useState([]);
-  const [inquiries, setInquiries] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(6);
 
-  // Loading states
-  const [kpiLoading, setKpiLoading] = useState(false);
-  const [inquiriesLoading, setInquiriesLoading] = useState(false);
+  const queryClient = useQueryClient();
 
-  const fetchInquiryKpis = async () => {
-    try {
-      setKpiLoading(true);
-      const response = await getInquiryKpis();
-      setInquiryKpis(response.data);
-    } catch (error) {
-      console.error("Error fetching inquiry KPIs:", error);
-    } finally {
-      setKpiLoading(false);
-    }
-  };
+  // Fetch KPIs
+  const { data: inquiryKpis, isLoading: kpiLoading } = useQuery(getInquiryKpisQuery());
 
-  // Fetch inquiries from API (same as Inquiries.jsx)
-  useEffect(() => {
-    const fetchInquiries = async () => {
-      try {
-        setInquiriesLoading(true);
-        const status = activeType === "all" ? undefined
-          : activeType === "closed" ? "CLOSED_BY_INQUIRER"
-            : activeType.toUpperCase();
+  // Fetch inquiries based on active status type
+  const inquiryStatusFilter = activeType === "all" ? undefined
+    : activeType === "closed" ? "CLOSED_BY_INQUIRER"
+      : activeType.toUpperCase();
 
-        const res = await getInquiries(status);
-        setInquiries(res.data || []);
-        setVisibleCount(6);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setInquiriesLoading(false);
-      }
-    };
+  const {
+    data: inquiriesInfiniteData,
+    isLoading: inquiriesLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery(
+    getInquiriesInfiniteQuery({
+      inquiryStatus: inquiryStatusFilter,
+      pageSize: 6,
+    })
+  );
+  const inquiries = inquiriesInfiniteData?.pages.flatMap((page) => page.data || []) || [];
 
-    fetchInquiries();
-  }, [activeType]);
-
-  // Fetch KPIs on mount
-  useEffect(() => {
-    fetchInquiryKpis();
-  }, []);
-
-  const handleStatusChange = (id, newStatus) => {
-    setInquiries((prev) =>
-      prev.map((inq) =>
-        inq.id === id ? { ...inq, inquiryStatus: newStatus } : inq,
-      ),
-    );
-    // Re-fetch KPIs after any status change
-    fetchInquiryKpis();
+  const handleStatusChange = () => {
+    queryClient.invalidateQueries({ queryKey: ["inquiries-infinite"] });
+    queryClient.invalidateQueries({ queryKey: ["seller-inquiry-kpis"] });
   };
 
   const avgTime = inquiryKpis?.averageResponseTime;
@@ -204,7 +178,7 @@ export default function InquiriesComponent() {
 
       {/* INQUIRY LIST */}
       <div className="grid grid-cols-1 gap-6">
-        {inquiriesLoading ? (
+        {inquiriesLoading && inquiries.length === 0 ? (
           <>
             <InquiryCardSkeleton />
             <InquiryCardSkeleton />
@@ -212,7 +186,7 @@ export default function InquiriesComponent() {
           </>
         ) : inquiries?.length > 0 ? (
           <>
-            {inquiries.slice(0, visibleCount).map((inq) => (
+            {inquiries.map((inq) => (
               <InquiryCard
                 key={inq.id}
                 inquiry={inq}
@@ -220,14 +194,15 @@ export default function InquiriesComponent() {
               />
             ))}
 
-            {visibleCount < inquiries.length && (
+            {hasNextPage && (
               <div className="flex justify-end mt-4">
                 <Button
                   variant="outline"
-                  onClick={() => setVisibleCount((prev) => prev + 6)}
+                  onClick={() => fetchNextPage()}
+                  disabled={isFetchingNextPage}
                   className="px-6 py-2 rounded-full text-sm font-semibold shadow-md"
                 >
-                  Load More
+                  {isFetchingNextPage ? "Loading..." : "Load More"}
                 </Button>
               </div>
             )}

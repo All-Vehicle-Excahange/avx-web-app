@@ -22,22 +22,236 @@ import {
 import StatCard from "./components/StateCard";
 import Button from "@/components/ui/button";
 import CustomSelect from "@/components/ui/custom-select";
+import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+import { InspectionSkeleton } from "@/components/ui/skeleton";
+import { generateVehicleSlug } from "@/lib/helper";
+import {
+  getInspectionSnapShotQuery,
+  getVehiclesRequiringAttentionQuery,
+  getRequestedFromBuyersQuary,
+  getScoreBreakdownInfiniteQuery,
+  getReportHistoryInfiniteQuery,
+} from "@/queries/inspection.queries";
 
 function InspectionTab() {
-  const [range, setRange] = React.useState("all");
-  const [statusFilter, setStatusFilter] = React.useState("passed");
+  const router = useRouter();
+  const [range, setRange] = React.useState("");
+  const [statusFilter, setStatusFilter] = React.useState("");
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [hasLoadedOnce, setHasLoadedOnce] = React.useState(false);
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "N/A";
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return dateStr;
+    const day = date.getDate();
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+  };
+
+  const getStatusStyles = (status) => {
+    const s = status?.toLowerCase() || "";
+    if (s.includes("progress")) {
+      return "bg-yellow-500/10 text-yellow-400";
+    }
+    if (s.includes("request")) {
+      return "bg-primary/10 text-primary";
+    }
+    if (s.includes("expired") || s.includes("fail")) {
+      return "bg-red-500/10 text-red-400";
+    }
+    return "bg-primary/10 text-primary";
+  };
+
+  const formatType = (type) => {
+    if (!type) return "N/A";
+    if (type === "VIDEO_CALL_WITH_REPORT") return "Video + Report";
+    if (type === "REPORT_ONLY") return "Report Only";
+    return type
+      .split("_")
+      .map((w) => w.charAt(0) + w.slice(1).toLowerCase())
+      .join(" ");
+  };
+
+  const getTypeIcon = (type) => {
+    if (type?.toLowerCase().includes("video")) {
+      return <Video size={16} className="text-purple-400" />;
+    }
+    return <FileText size={16} className="text-blue-400" />;
+  };
+
+  const { data: snapShotData, isFetching: snapShotIsFetching } = useQuery(
+    getInspectionSnapShotQuery(),
+  );
+
+  const {
+    data: vehiclesRequiringAttentionData,
+    isFetching: vehiclesRequiringAttentionIsFetching,
+  } = useQuery(getVehiclesRequiringAttentionQuery());
+
+  const {
+    data: requestedFromBuyersData,
+    isFetching: requestedFromBuyersIsFetching,
+  } = useQuery(getRequestedFromBuyersQuary());
+
+  const {
+    data: scoreBreakdownInfiniteData,
+    isFetching: scoreBreakdownLoading,
+    isFetchingNextPage: scoreBreakdownFetchingNextPage,
+    fetchNextPage: fetchNextScoreBreakdownPage,
+    hasNextPage: hasNextScoreBreakdownPage,
+  } = useInfiniteQuery(
+    getScoreBreakdownInfiniteQuery({
+      pageSize: 4,
+    }),
+  );
+
+  const scoreBreakdowns =
+    scoreBreakdownInfiniteData?.pages?.flatMap((page) => page?.data || []) ||
+    [];
+
+  const handleScoreScroll = (e) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+    if (
+      scrollHeight - scrollTop - clientHeight < 10 &&
+      hasNextScoreBreakdownPage &&
+      !scoreBreakdownLoading &&
+      !scoreBreakdownFetchingNextPage
+    ) {
+      fetchNextScoreBreakdownPage();
+    }
+  };
+
+  const {
+    data: historyInfiniteData,
+    isFetching: historyLoading,
+    isFetchingNextPage: historyFetchingNextPage,
+    fetchNextPage: fetchNextHistoryPage,
+    hasNextPage: hasNextHistoryPage,
+  } = useInfiniteQuery(
+    getReportHistoryInfiniteQuery({
+      pageSize: 10,
+      daysRange: range,
+      overallRiskLevel: statusFilter || undefined,
+    }),
+  );
+
+  const reports =
+    historyInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
+
+  const filteredReports = reports.filter((r) => {
+    if (!searchQuery) return true;
+    const q = searchQuery.toLowerCase();
+    const maker = r.makerName?.toLowerCase() || "";
+    const model = r.modelName?.toLowerCase() || "";
+    const variant = r.variantName?.toLowerCase() || "";
+    const inspector = r.inspectorName?.toLowerCase() || "";
+    return (
+      maker.includes(q) ||
+      model.includes(q) ||
+      variant.includes(q) ||
+      inspector.includes(q)
+    );
+  });
+
+  const handleHistoryScroll = (e) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+    if (
+      scrollHeight - scrollTop - clientHeight < 10 &&
+      hasNextHistoryPage &&
+      !historyLoading &&
+      !historyFetchingNextPage
+    ) {
+      fetchNextHistoryPage();
+    }
+  };
+
+  const getAgeStatus = (dateStr) => {
+    if (!dateStr) return { label: "Unknown", styles: "bg-third/10 text-third" };
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime()))
+      return { label: "Unknown", styles: "bg-third/10 text-third" };
+
+    const now = new Date();
+    const diffTime = Math.abs(now - date);
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays <= 30) {
+      return {
+        label: "Fresh (0–30 days)",
+        styles: "bg-green-500/10 text-green-400 border border-green-500/20",
+      };
+    }
+    if (diffDays <= 60) {
+      return {
+        label: "Aging (31–60 days)",
+        styles: "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20",
+      };
+    }
+    return {
+      label: "Expired (60+ days)",
+      styles: "bg-red-500/10 text-red-400 border border-red-500/20",
+    };
+  };
+
+  const getRiskStyles = (risk) => {
+    const r = risk?.toUpperCase() || "";
+    if (r === "LOW")
+      return "bg-green-500/10 text-green-400 border border-green-500/20";
+    if (r === "MODERATE")
+      return "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20";
+    if (r === "HIGH")
+      return "bg-red-500/10 text-red-400 border border-red-500/20";
+    return "bg-third/10 text-third border border-third/20";
+  };
 
   const rangeOptions = [
-    { label: "All Time", value: "all" },
-    { label: "Last 7 Days", value: "7" },
-    { label: "Last 30 Days", value: "30" },
+    { label: "All Time", value: "" },
+    { label: "Last 7 days", value: "LAST_7_DAYS" },
+    { label: "Last 30 days", value: "LAST_30_DAYS" },
+    { label: "Last 90 days", value: "LAST_90_DAYS" },
   ];
 
   const statusOptions = [
-    { label: "Passed", value: "passed" },
-    { label: "Failed", value: "failed" },
-    { label: "Pending", value: "pending" },
+    { label: "All Risks", value: "" },
+    { label: "Low Risk", value: "LOW" },
+    { label: "Moderate Risk", value: "MODERATE" },
+    { label: "High Risk", value: "HIGH" },
   ];
+
+  const isLoading =
+    (!snapShotData && snapShotIsFetching) ||
+    (!vehiclesRequiringAttentionData && vehiclesRequiringAttentionIsFetching) ||
+    (!requestedFromBuyersData && requestedFromBuyersIsFetching) ||
+    (scoreBreakdowns.length === 0 && scoreBreakdownLoading) ||
+    (reports.length === 0 && historyLoading);
+
+  React.useEffect(() => {
+    if (!isLoading) {
+      setHasLoadedOnce(true);
+    }
+  }, [isLoading]);
+
+  if (isLoading && !hasLoadedOnce) {
+    return <InspectionSkeleton />;
+  }
+
   return (
     <section className="w-full space-y-10">
       {/* ================= HEADER ================= */}
@@ -50,17 +264,6 @@ function InspectionTab() {
             Manage vehicle inspections and maintain trust score
           </p>
         </div>
-
-        {/* IQI Badge */}
-        {/* <div className="flex items-center gap-2 px-4 py-2 rounded-xl border border-third/30 bg-secondary w-fit shadow-sm transition-colors duration-200 hover:border-third/40">
-          <BadgeCheck size={18} className="text-primary" />
-          <p className="text-xs md:text-sm font-medium">
-            IQI: <span className="text-primary font-bold">78%</span>
-          </p>
-          <span className="text-third text-xs md:text-sm">Trust Health</span>
-        </div> */}
-
-
       </div>
 
       {/* ================= SNAPSHOT ================= */}
@@ -75,19 +278,19 @@ function InspectionTab() {
           <StatCard
             icon={<Car className="text-primary" size={20} />}
             label="Vehicles with Reecomm Inspection"
-            value="18"
+            value={snapShotData?.vehiclesWithAvxInspection}
           />
 
           <StatCard
             icon={<Clock className="text-orange-400" size={20} />}
             label="Pending Inspections"
-            value="4"
+            value={snapShotData?.pendingInspections}
           />
 
           <StatCard
             icon={<AlertTriangle className="text-red-400" size={20} />}
             label="Expired Reports"
-            value="6"
+            value={snapShotData?.expiredReports}
           />
 
           {/* <StatCard
@@ -99,14 +302,13 @@ function InspectionTab() {
           <StatCard
             icon={<Star className="text-yellow-400" size={20} />}
             label="Inspection Rating Score"
-            value="4.6/5"
+            value={snapShotData?.inspectionRatingScore}
           />
         </div>
-
       </div>
 
       {/* ================= TRUST SCORE BANNER ================= */}
-    
+
       {/* ================= HOW INSPECTION AFFECTS RANKING ================= */}
       <div className="rounded-xl border border-third/30  p-5 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
         <h3 className="font-semibold flex items-center gap-2">
@@ -147,7 +349,7 @@ function InspectionTab() {
 
           {/* Urgent Badge */}
           <span className="px-4 py-1 rounded-full bg-red-500/10 text-red-400 text-sm font-semibold">
-            3 Urgent
+            {vehiclesRequiringAttentionData?.urgentCount || 0} Urgent
           </span>
         </div>
 
@@ -166,71 +368,76 @@ function InspectionTab() {
 
             {/* Table Body */}
             <tbody className="divide-y divide-third/20 whitespace-nowrap">
-              {/* Row 1 */}
-              <tr>
-                <td className="py-4 pr-4 flex items-center gap-2 font-medium">
-                  <Car size={16} className="text-third" />
-                  Tata Harrier
-                </td>
+              {vehiclesRequiringAttentionIsFetching ? (
+                [...Array(3)].map((_, i) => (
+                  <tr key={i} className="animate-pulse">
+                    <td className="py-4 pr-4 flex items-center gap-2">
+                      <div className="w-4 h-4 bg-third/20 rounded-full animate-pulse" />
+                      <div className="h-4 bg-third/20 rounded w-32 animate-pulse" />
+                    </td>
+                    <td className="pr-4">
+                      <div className="h-6 bg-third/20 rounded-full w-24 animate-pulse" />
+                    </td>
+                    <td className="pr-4">
+                      <div className="h-4 bg-third/20 rounded w-20 animate-pulse" />
+                    </td>
+                    <td className="text-right">
+                      <div className="h-8 bg-third/20 rounded ml-auto w-24 animate-pulse" />
+                    </td>
+                  </tr>
+                ))
+              ) : !vehiclesRequiringAttentionData?.vehicles ||
+                vehiclesRequiringAttentionData.vehicles.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="py-8 text-center text-third">
+                    No vehicles require attention.
+                  </td>
+                </tr>
+              ) : (
+                vehiclesRequiringAttentionData.vehicles.map((vehicle, idx) => (
+                  <tr key={vehicle.vehicleId || idx}>
+                    <td className="py-4 pr-4 flex items-center gap-2 font-medium">
+                      <div
+                        className="flex flex-col cursor-pointer hover:text-primary transition-colors"
+                        onClick={() =>
+                          router.push(
+                            `/vehicle/details/${generateVehicleSlug(vehicle)}/${vehicle.vehicleId}`,
+                          )
+                        }
+                      >
+                        <span className="text-white font-semibold">
+                          {vehicle.makerName} {vehicle.modelName}
+                        </span>
+                        {vehicle.variantName && (
+                          <span className="text-[11px] text-third font-normal">
+                            {vehicle.variantName}
+                          </span>
+                        )}
+                      </div>
+                    </td>
 
-                <td className="pr-4">
-                  <span className="px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-[11px] font-medium">
-                    Expired (45 days)
-                  </span>
-                </td>
+                    <td className="pr-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-[11px] font-medium ${getStatusStyles(
+                          vehicle.status,
+                        )}`}
+                      >
+                        {vehicle.status}
+                      </span>
+                    </td>
 
-                <td className="text-third pr-4">12 Jan</td>
+                    <td className="text-third pr-4">
+                      {formatDate(vehicle.lastInspection)}
+                    </td>
 
-                <td className="text-right">
-                  <Button variant="ghost" className="px-5 text-xs h-8">
-                    Renew Inspection
-                  </Button>
-                </td>
-              </tr>
-
-              {/* Row 2 */}
-              <tr className="bg-primary/5">
-                <td className="py-4 pr-4 flex items-center gap-2 font-medium">
-                  <Car size={16} className="text-third" />
-                  BMW X1
-                </td>
-
-                <td className="pr-4">
-                  <span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-[11px] font-medium">
-                    Buyer Re-requested
-                  </span>
-                </td>
-
-                <td className="text-third pr-4">30 days</td>
-
-                <td className="text-right">
-                  <Button variant="ghost" className="px-5 text-xs h-8">
-                    Approve Re-check
-                  </Button>
-                </td>
-              </tr>
-
-              {/* Row 3 */}
-              <tr>
-                <td className="py-4 pr-4 flex items-center gap-2 font-medium">
-                  <Car size={16} className="text-third" />
-                  Audi A6
-                </td>
-
-                <td className="pr-4">
-                  <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-[11px] font-medium">
-                    Inspection Scheduled
-                  </span>
-                </td>
-
-                <td className="text-third pr-4">Tomorrow</td>
-
-                <td className="text-right">
-                  <Button variant="ghost" className="px-5 text-xs h-8">
-                    View Details
-                  </Button>
-                </td>
-              </tr>
+                    <td className="text-right">
+                      <Button variant="ghost" className="px-5 text-xs h-8">
+                        {vehicle.action || "View Details"}
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -240,7 +447,6 @@ function InspectionTab() {
       <div className="rounded-xl border border-third/30  p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-
           {/* Title */}
           <div>
             <h2 className="text-base sm:text-lg font-semibold leading-tight">
@@ -253,9 +459,8 @@ function InspectionTab() {
 
           {/* Badge */}
           <span className="w-fit px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-500 text-xs sm:text-sm font-semibold">
-            1 Pending
+            {requestedFromBuyersData?.count || 0} Pending
           </span>
-
         </div>
         {/* Table */}
         <div className="overflow-x-auto">
@@ -266,7 +471,7 @@ function InspectionTab() {
                 <th className="py-3 pr-4">Vehicle</th>
                 <th className="pr-4">Buyer</th>
                 <th className="pr-4">Type</th>
-                <th className="pr-4">Price</th>
+
                 <th className="pr-4">Status</th>
                 <th className="text-right">Action</th>
               </tr>
@@ -274,43 +479,99 @@ function InspectionTab() {
 
             {/* Body */}
             <tbody className="whitespace-nowrap">
-              <tr className="border-b border-third/20">
-                {/* Vehicle */}
-                <td className="py-4 pr-4 flex items-center gap-2 font-medium">
-                  <Car size={16} className="text-third" />
-                  Harrier
-                </td>
+              {requestedFromBuyersIsFetching ? (
+                [...Array(2)].map((_, i) => (
+                  <tr
+                    key={i}
+                    className="border-b border-third/20 animate-pulse"
+                  >
+                    <td className="py-4 pr-4 flex items-center gap-2">
+                      <div className="w-4 h-4 bg-third/20 rounded-full animate-pulse" />
+                      <div className="h-4 bg-third/20 rounded w-32 animate-pulse" />
+                    </td>
+                    <td className="pr-4">
+                      <div className="h-4 bg-third/20 rounded w-20 animate-pulse" />
+                    </td>
+                    <td className="pr-4">
+                      <div className="h-4 bg-third/20 rounded w-24 animate-pulse" />
+                    </td>
+                    <td className="pr-4">
+                      <div className="h-6 bg-third/20 rounded-full w-24 animate-pulse" />
+                    </td>
+                    <td className="flex justify-end gap-3 py-4">
+                      <div className="h-8 bg-third/20 rounded w-16 animate-pulse" />
+                      <div className="h-8 bg-third/20 rounded w-16 animate-pulse" />
+                    </td>
+                  </tr>
+                ))
+              ) : !requestedFromBuyersData?.requests ||
+                requestedFromBuyersData.requests.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center text-third">
+                    No pending inspection requests.
+                  </td>
+                </tr>
+              ) : (
+                requestedFromBuyersData.requests.map((request, idx) => (
+                  <tr
+                    key={request.id || idx}
+                    className="border-b border-third/20"
+                  >
+                    {/* Vehicle */}
+                    <td className="py-4 pr-4 flex items-center gap-2 font-medium">
+                      <div
+                        className="flex flex-col cursor-pointer hover:text-primary transition-colors"
+                        onClick={() =>
+                          router.push(
+                            `/vehicle/details/${generateVehicleSlug(request)}/${request.vehicleId}`,
+                          )
+                        }
+                      >
+                        <span className="text-white font-semibold">
+                          {request.makerName} {request.modelName}
+                        </span>
+                        {request.variantName && (
+                          <span className="text-[11px] text-third font-normal">
+                            {request.variantName}
+                          </span>
+                        )}
+                      </div>
+                    </td>
 
-                {/* Buyer */}
-                <td className="text-third pr-4">Rahul S.</td>
+                    {/* Buyer */}
+                    <td className="text-third pr-4">
+                      {request.requestedUserName || "N/A"}
+                    </td>
 
-                {/* Type */}
-                <td className="flex items-center gap-2 text-primary font-medium pr-4">
-                  <Video size={16} className="text-purple-400" />
-                  Video + Report
-                </td>
+                    {/* Type */}
+                    <td className="flex items-center gap-2 text-primary font-medium pr-4">
+                      {getTypeIcon(request.inspectionType)}
+                      {formatType(request.inspectionType)}
+                    </td>
 
-                {/* Price */}
-                <td className="font-semibold pr-4">₹1,999</td>
+                    {/* Status */}
+                    <td className="pr-4">
+                      <span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-[11px] font-medium">
+                        Awaiting approval
+                      </span>
+                    </td>
 
-                {/* Status */}
-                <td className="pr-4">
-                  <span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-[11px] font-medium">
-                    Awaiting approval
-                  </span>
-                </td>
+                    {/* Action Buttons */}
+                    <td className="flex justify-end gap-3 py-4">
+                      <Button variant="ghost" className="px-6 text-xs h-8">
+                        Accept
+                      </Button>
 
-                {/* Action Buttons */}
-                <td className="flex justify-end gap-3 py-4">
-                  <Button variant="ghost" className="px-6 text-xs h-8">
-                    Accept
-                  </Button>
-
-                  <Button variant="outlineSecondary" className="px-6 text-xs h-8">
-                    Decline
-                  </Button>
-                </td>
-              </tr>
+                      <Button
+                        variant="outlineSecondary"
+                        className="px-6 text-xs h-8"
+                      >
+                        Decline
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -350,6 +611,8 @@ function InspectionTab() {
             />
             <input
               type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by vehicle..."
               className="w-full pl-10 pr-4 py-3 rounded-xl border border-third/30 bg-transparent text-sm outline-none focus:border-primary/50"
             />
@@ -376,16 +639,19 @@ function InspectionTab() {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto">
+        <div
+          className="overflow-auto max-h-[400px] custom-scrollbar pr-2"
+          onScroll={handleHistoryScroll}
+        >
           <table className="w-full text-sm">
             {/* Table Head */}
-            <thead className="border-b border-third/30 text-third text-left whitespace-nowrap">
+            <thead className="border-b border-third/30 text-third text-left whitespace-nowrap sticky top-0  backdrop-blur-sm z-10">
               <tr>
                 <th className="py-3 pr-4">Vehicle</th>
                 <th className="pr-4">Inspection Date</th>
                 <th className="pr-4">Inspector Name</th>
                 <th className="pr-4">Score</th>
-                <th className="pr-4">Report Version</th>
+                <th className="pr-4">Age Status</th>
                 <th className="pr-4">Status</th>
                 <th className="text-right">Action</th>
               </tr>
@@ -393,125 +659,156 @@ function InspectionTab() {
 
             {/* Table Body */}
             <tbody className="divide-y divide-third/20 whitespace-nowrap">
-              {/* Row 1 */}
-              <tr>
-                <td className="py-4 pr-6 flex items-center gap-2 font-medium">
-                  <Car size={16} className="text-third" />
-                  Mercedes C-Class
-                </td>
-                <td className="text-third pr-6">28 Jan 2026</td>
-                <td className="text-third pr-6">Amit Verma</td>
+              {historyLoading && reports.length === 0 ? (
+                [...Array(4)].map((_, i) => (
+                  <tr key={i} className="animate-pulse">
+                    <td className="py-4 pr-6 flex items-center gap-2">
+                      <div className="w-4 h-4 bg-third/20 rounded-full animate-pulse" />
+                      <div className="h-4 bg-third/20 rounded w-24 animate-pulse" />
+                    </td>
+                    <td className="pr-6">
+                      <div className="h-4 bg-third/20 rounded w-20 animate-pulse" />
+                    </td>
+                    <td className="pr-6">
+                      <div className="h-4 bg-third/20 rounded w-28 animate-pulse" />
+                    </td>
+                    <td className="pr-6">
+                      <div className="h-4 bg-third/20 rounded w-16 animate-pulse" />
+                    </td>
+                    <td className="pr-6">
+                      <div className="h-6 bg-third/20 rounded-full w-32 animate-pulse" />
+                    </td>
+                    <td className="pr-6">
+                      <div className="h-6 bg-third/20 rounded-full w-20 animate-pulse" />
+                    </td>
+                    <td className="text-right">
+                      <div className="h-8 bg-third/20 rounded ml-auto w-16 animate-pulse" />
+                    </td>
+                  </tr>
+                ))
+              ) : filteredReports.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="py-8 text-center text-third">
+                    {reports.length === 0
+                      ? "No reports found in history."
+                      : "No reports match your search query."}
+                  </td>
+                </tr>
+              ) : (
+                filteredReports.map((report, idx) => {
+                  const ageStatus = getAgeStatus(report.inspectionSubmittedAt);
+                  const isOutOfFive = report.inspectionScore <= 5;
+                  const maxScore = isOutOfFive ? 5 : 100;
+                  const showOrange =
+                    report.inspectionScore < (isOutOfFive ? 3.5 : 75);
 
-                <td className="font-semibold flex items-center gap-2 pr-6">
-                  92/100
-                  <CheckCircle2 size={16} className="text-green-500" />
-                </td>
+                  return (
+                    <tr
+                      key={report.vehicleId || idx}
+                      className="hover:bg-primary/5 transition-colors"
+                    >
+                      {/* Vehicle */}
+                      <td className="py-4 pr-6 flex items-center gap-2 font-medium">
+                        <Car size={16} className="text-third" />
+                        <div
+                          className="flex flex-col cursor-pointer hover:text-primary transition-colors"
+                          onClick={() =>
+                            router.push(
+                              `/vehicle/details/${generateVehicleSlug(report)}/${report.vehicleId}`,
+                            )
+                          }
+                        >
+                          <span className="text-white">
+                            {report.makerName} {report.modelName}
+                          </span>
+                          {report.variantName && (
+                            <span className="text-[11px] text-third font-normal">
+                              {report.variantName}
+                            </span>
+                          )}
+                        </div>
+                      </td>
 
-                <td className="text-third pr-6">v2.1</td>
+                      {/* Inspection Date */}
+                      <td className="text-third pr-6">
+                        {formatDate(report.inspectionSubmittedAt)}
+                      </td>
 
-                <td className="pr-6">
-                  <span className="px-4 py-1 rounded-full bg-green-500/10 text-green-400 text-[11px] font-medium">
-                    Passed
-                  </span>
-                </td>
+                      {/* Inspector Name */}
+                      <td className="text-third pr-6">
+                        {report.inspectorName || "N/A"}
+                      </td>
 
-                <td className="text-right">
-                  <button className="flex items-center gap-2 text-primary hover:underline ml-auto text-xs">
-                    <Download size={14} />
-                    Download
-                  </button>
-                </td>
-              </tr>
+                      {/* Score */}
+                      <td className="font-semibold flex items-center gap-2 pr-6">
+                        {report.inspectionScore !== undefined &&
+                        report.inspectionScore !== null
+                          ? `${report.inspectionScore}/${maxScore}`
+                          : "N/A"}
+                        {report.inspectionScore !== undefined &&
+                          report.inspectionScore !== null && (
+                            <CheckCircle2
+                              size={16}
+                              className={
+                                showOrange
+                                  ? "text-orange-400"
+                                  : "text-green-500"
+                              }
+                            />
+                          )}
+                      </td>
 
-              {/* Row 2 */}
-              <tr>
-                <td className="py-4 pr-6 flex items-center gap-2 font-medium">
-                  <Car size={16} className="text-third" />
-                  Honda City
-                </td>
-                <td className="text-third pr-6">25 Jan 2026</td>
-                <td className="text-third pr-6">Priya Shah</td>
+                      {/* Age Status */}
+                      <td className="pr-6">
+                        <span
+                          className={`px-3 py-1 rounded-full text-[11px] font-medium ${ageStatus.styles}`}
+                        >
+                          {ageStatus.label}
+                        </span>
+                      </td>
 
-                <td className="font-semibold flex items-center gap-2 pr-6">
-                  85/100
-                  <CheckCircle2 size={16} className="text-orange-400" />
-                </td>
+                      {/* Status */}
+                      <td className="pr-6">
+                        <span
+                          className={`px-3 py-1 rounded-full text-[11px] font-medium uppercase ${getRiskStyles(
+                            report.overallRiskLevel,
+                          )}`}
+                        >
+                          {report.overallRiskLevel || "N/A"}
+                        </span>
+                      </td>
 
-                <td className="text-third pr-6">v2.0</td>
+                      {/* Action */}
+                      <td className="text-right">
+                        {report.reportPdfUrl ? (
+                          <a
+                            href={report.reportPdfUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-primary hover:underline ml-auto text-xs"
+                          >
+                            <Download size={14} />
+                            Download
+                          </a>
+                        ) : (
+                          <span className="text-xs text-third">N/A</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
 
-                <td className="pr-6">
-                  <span className="px-4 py-1 rounded-full bg-green-500/10 text-green-400 text-[11px] font-medium">
-                    Passed
-                  </span>
-                </td>
-
-                <td className="text-right">
-                  <button className="flex items-center gap-2 text-primary hover:underline ml-auto text-xs">
-                    <Download size={14} />
-                    Download
-                  </button>
-                </td>
-              </tr>
-
-              {/* Row 3 */}
-              <tr>
-                <td className="py-4 pr-6 flex items-center gap-2 font-medium">
-                  <Car size={16} className="text-third" />
-                  Toyota Fortuner
-                </td>
-                <td className="text-third pr-6">20 Jan 2026</td>
-                <td className="text-third pr-6">Rajesh Kumar</td>
-
-                <td className="font-semibold flex items-center gap-2 pr-6">
-                  78/100
-                  <CheckCircle2 size={16} className="text-orange-400" />
-                </td>
-
-                <td className="text-third pr-6">v2.0</td>
-
-                <td className="pr-6">
-                  <span className="px-4 py-1 rounded-full bg-green-500/10 text-green-400 text-[11px] font-medium">
-                    Passed
-                  </span>
-                </td>
-
-                <td className="text-right">
-                  <button className="flex items-center gap-2 text-primary hover:underline ml-auto text-xs">
-                    <Download size={14} />
-                    Download
-                  </button>
-                </td>
-              </tr>
-
-              {/* Row 4 */}
-              <tr>
-                <td className="py-4 pr-6 flex items-center gap-2 font-medium">
-                  <Car size={16} className="text-third" />
-                  Hyundai Creta
-                </td>
-                <td className="text-third pr-6">15 Jan 2026</td>
-                <td className="text-third pr-6">Sneha Patil</td>
-
-                <td className="font-semibold flex items-center gap-2 pr-6">
-                  88/100
-                  <CheckCircle2 size={16} className="text-orange-400" />
-                </td>
-
-                <td className="text-third pr-6">v1.9</td>
-
-                <td className="pr-6">
-                  <span className="px-4 py-1 rounded-full bg-green-500/10 text-green-400 text-[11px] font-medium">
-                    Passed
-                  </span>
-                </td>
-
-                <td className="text-right">
-                  <button className="flex items-center gap-2 text-primary hover:underline ml-auto text-xs">
-                    <Download size={14} />
-                    Download
-                  </button>
-                </td>
-              </tr>
+              {historyFetchingNextPage && (
+                <tr>
+                  <td
+                    colSpan={7}
+                    className="py-4 text-center text-xs text-third animate-pulse"
+                  >
+                    Loading more...
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -571,10 +868,6 @@ function InspectionTab() {
             </div>
 
             {/* Schedule Button */}
-            <Button variant="ghost" size="sm" full>
-              <RefreshCcw className="mr-4" size={18} />
-              Schedule Re-Inspection
-            </Button>
 
             {/* Warning Note */}
             <div className="rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 flex items-center gap-2 text-sm text-yellow-400">
@@ -591,22 +884,57 @@ function InspectionTab() {
               <h3 className="font-semibold text-lg">
                 Inspection Score Breakdown
               </h3>
-              <span className="font-bold text-primary">88/100</span>
+              {snapShotData?.inspectionRatingScore && (
+                <span className="font-bold text-primary">
+                  {snapShotData.inspectionRatingScore}
+                </span>
+              )}
             </div>
 
             {/* Cars Breakdown */}
-            <div className="space-y-6">
-              {/* BMW */}
-              <VehicleScore name="BMW X1" score={92} />
+            <div
+              className="space-y-6 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar"
+              onScroll={handleScoreScroll}
+            >
+              {scoreBreakdowns.map((vehicle, idx) => (
+                <div
+                  key={vehicle.vehicleId || idx}
+                  className="cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={() =>
+                    router.push(
+                      `/vehicle/details/${generateVehicleSlug(vehicle)}/${vehicle.vehicleId}`,
+                    )
+                  }
+                >
+                  <VehicleScore
+                    name={`${vehicle.makerName} ${vehicle.modelName}`}
+                    score={vehicle.inspectionScore}
+                  />
+                </div>
+              ))}
 
-              {/* Audi */}
-              <VehicleScore name="Audi A6" score={85} />
+              {scoreBreakdownFetchingNextPage && (
+                <div className="py-2 text-center text-xs text-third animate-pulse">
+                  Loading more...
+                </div>
+              )}
 
-              {/* Mercedes */}
-              <VehicleScore name="Mercedes C-Class" score={90} />
+              {!scoreBreakdownLoading && scoreBreakdowns.length === 0 && (
+                <div className="py-8 text-center text-sm text-third">
+                  No vehicle scores found.
+                </div>
+              )}
 
-              {/* Hyundai */}
-              <VehicleScore name="Hyundai Creta" score={76} orange />
+              {scoreBreakdownLoading && (
+                <div className="space-y-6">
+                  {[...Array(3)].map((_, i) => (
+                    <div key={i} className="animate-pulse space-y-2">
+                      <div className="h-4 bg-third/20 rounded w-24" />
+                      <div className="w-full h-3 rounded-full bg-third/20" />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Insight Box */}
@@ -619,12 +947,10 @@ function InspectionTab() {
         </div>
       </div>
 
-
       {/* ================= DISPUTE & ISSUE CENTER ================= */}
       <div className="rounded-xl border border-third/30 p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-
           {/* Left */}
           <div>
             <h2 className="text-base sm:text-xl font-semibold leading-tight">
@@ -639,7 +965,6 @@ function InspectionTab() {
           <span className="w-fit px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-xs sm:text-sm font-semibold">
             1 Open
           </span>
-
         </div>
 
         {/* Table */}
@@ -703,29 +1028,36 @@ function InspectionTab() {
       </div>
 
       {/* ================= UPGRADE YOUR TRUST VISIBILITY ================= */}
-      
-    
-
     </section>
   );
 }
 
 export default InspectionTab;
+
 function VehicleScore({ name, score, orange }) {
+  const isOutOfFive = score <= 5;
+  const maxScore = isOutOfFive ? 5 : 100;
+  const percentage = (score / maxScore) * 100;
+  const showOrange =
+    orange !== undefined ? orange : score < (isOutOfFive ? 3.5 : 75);
+
   return (
     <div className="space-y-2 ">
       {/* Top Line */}
       <div className="flex justify-between text-sm font-medium">
         <span>{name}</span>
-        <span>{score}/100</span>
+        <span>
+          {score}/{maxScore}
+        </span>
       </div>
 
       {/* Progress Bar */}
       <div className="w-full h-3 rounded-full bg-third/20 overflow-hidden">
         <div
-          className={`h-full rounded-full ${orange ? "bg-orange-400" : "bg-green-500"
-            }`}
-          style={{ width: `${score}%` }}
+          className={`h-full rounded-full ${
+            showOrange ? "bg-orange-400" : "bg-green-500"
+          }`}
+          style={{ width: `${percentage}%` }}
         />
       </div>
     </div>
@@ -735,10 +1067,8 @@ function VehicleScore({ name, score, orange }) {
 function PremiumFeatureCard({ icon, title, desc, tag }) {
   return (
     <div className="group rounded-2xl border border-zinc-800 bg-primary/5 p-5 transition-all hover:border-zinc-700">
-
       {/* Top Row: Icon + Text + Badge */}
       <div className="flex items-start gap-4">
-
         {/* 1. Icon */}
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/5 text-white border border-zinc-800">
           {icon}
@@ -749,9 +1079,7 @@ function PremiumFeatureCard({ icon, title, desc, tag }) {
           <h3 className="text-base font-semibold text-white leading-tight">
             {title}
           </h3>
-          <p className="mt-1 text-sm text-zinc-400 line-clamp-2">
-            {desc}
-          </p>
+          <p className="mt-1 text-sm text-zinc-400 line-clamp-2">{desc}</p>
         </div>
 
         {/* 3. The Badge - shrink-0 prevents it from getting crushed */}
@@ -766,11 +1094,7 @@ function PremiumFeatureCard({ icon, title, desc, tag }) {
 
       {/* Bottom Row: CTA Button */}
       <div className="mt-6 flex justify-end">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="w-auto sm:w-auto px-6"
-        >
+        <Button variant="ghost" size="sm" className="w-auto sm:w-auto px-6">
           Add to Inspection
         </Button>
       </div>

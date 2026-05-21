@@ -16,12 +16,18 @@ const ENDPOINT = {
   getSusPendedVehicles: "/consultation/dashboard/inventory/suspended-vehicles",
 };
 
-export const getInventoryVehicle = async (listingStatus) => {
+export const getInventoryVehicle = async (payload) => {
   try {
     const params = {};
 
-    if (listingStatus) {
-      params.listingStatus = listingStatus;
+    if (payload?.listingStatus) {
+      params.listingStatus = payload.listingStatus;
+    }
+    if (payload?.pageNo !== undefined) {
+      params.pageNo = payload.pageNo;
+    }
+    if (payload?.size !== undefined || payload?.pageSize !== undefined) {
+      params.size = payload.size || payload.pageSize;
     }
 
     const res = await axiosInstance.get(ENDPOINT.getInventoryVehicle, {
