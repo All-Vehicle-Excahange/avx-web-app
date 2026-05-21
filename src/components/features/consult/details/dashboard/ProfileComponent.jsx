@@ -596,9 +596,9 @@ export default function ProfileComponent() {
                   .join(" / ")}
               </span>
             </p>
-            <Button variant="outlineSecondary" size="sm" className="mt-2">
+            {/* <Button variant="outlineSecondary" size="sm" className="mt-2">
               Complete Verification
-            </Button>
+            </Button> */}
           </div>
         )}
 
