@@ -24,6 +24,7 @@ import Button from "@/components/ui/button";
 import CustomSelect from "@/components/ui/custom-select";
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import { InspectionSkeleton } from "@/components/ui/skeleton";
 import { generateVehicleSlug } from "@/lib/helper";
 import {
   getInspectionSnapShotQuery,
@@ -35,9 +36,10 @@ import {
 
 function InspectionTab() {
   const router = useRouter();
-  const [range, setRange] = React.useState("LAST_7_DAYS");
+  const [range, setRange] = React.useState("");
   const [statusFilter, setStatusFilter] = React.useState("");
   const [searchQuery, setSearchQuery] = React.useState("");
+  const [hasLoadedOnce, setHasLoadedOnce] = React.useState(false);
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "N/A";
@@ -183,7 +185,8 @@ function InspectionTab() {
   const getAgeStatus = (dateStr) => {
     if (!dateStr) return { label: "Unknown", styles: "bg-third/10 text-third" };
     const date = new Date(dateStr);
-    if (isNaN(date.getTime())) return { label: "Unknown", styles: "bg-third/10 text-third" };
+    if (isNaN(date.getTime()))
+      return { label: "Unknown", styles: "bg-third/10 text-third" };
 
     const now = new Date();
     const diffTime = Math.abs(now - date);
@@ -219,6 +222,7 @@ function InspectionTab() {
   };
 
   const rangeOptions = [
+    { label: "All Time", value: "" },
     { label: "Last 7 days", value: "LAST_7_DAYS" },
     { label: "Last 30 days", value: "LAST_30_DAYS" },
     { label: "Last 90 days", value: "LAST_90_DAYS" },
@@ -230,6 +234,24 @@ function InspectionTab() {
     { label: "Moderate Risk", value: "MODERATE" },
     { label: "High Risk", value: "HIGH" },
   ];
+
+  const isLoading =
+    (!snapShotData && snapShotIsFetching) ||
+    (!vehiclesRequiringAttentionData && vehiclesRequiringAttentionIsFetching) ||
+    (!requestedFromBuyersData && requestedFromBuyersIsFetching) ||
+    (scoreBreakdowns.length === 0 && scoreBreakdownLoading) ||
+    (reports.length === 0 && historyLoading);
+
+  React.useEffect(() => {
+    if (!isLoading) {
+      setHasLoadedOnce(true);
+    }
+  }, [isLoading]);
+
+  if (isLoading && !hasLoadedOnce) {
+    return <InspectionSkeleton />;
+  }
+
   return (
     <section className="w-full space-y-10">
       {/* ================= HEADER ================= */}
@@ -667,7 +689,9 @@ function InspectionTab() {
               ) : filteredReports.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="py-8 text-center text-third">
-                    {reports.length === 0 ? "No reports found in history." : "No reports match your search query."}
+                    {reports.length === 0
+                      ? "No reports found in history."
+                      : "No reports match your search query."}
                   </td>
                 </tr>
               ) : (
@@ -675,10 +699,14 @@ function InspectionTab() {
                   const ageStatus = getAgeStatus(report.inspectionSubmittedAt);
                   const isOutOfFive = report.inspectionScore <= 5;
                   const maxScore = isOutOfFive ? 5 : 100;
-                  const showOrange = report.inspectionScore < (isOutOfFive ? 3.5 : 75);
+                  const showOrange =
+                    report.inspectionScore < (isOutOfFive ? 3.5 : 75);
 
                   return (
-                    <tr key={report.vehicleId || idx} className="hover:bg-primary/5 transition-colors">
+                    <tr
+                      key={report.vehicleId || idx}
+                      className="hover:bg-primary/5 transition-colors"
+                    >
                       {/* Vehicle */}
                       <td className="py-4 pr-6 flex items-center gap-2 font-medium">
                         <Car size={16} className="text-third" />
@@ -713,15 +741,21 @@ function InspectionTab() {
 
                       {/* Score */}
                       <td className="font-semibold flex items-center gap-2 pr-6">
-                        {report.inspectionScore !== undefined && report.inspectionScore !== null
+                        {report.inspectionScore !== undefined &&
+                        report.inspectionScore !== null
                           ? `${report.inspectionScore}/${maxScore}`
                           : "N/A"}
-                        {report.inspectionScore !== undefined && report.inspectionScore !== null && (
-                          <CheckCircle2
-                            size={16}
-                            className={showOrange ? "text-orange-400" : "text-green-500"}
-                          />
-                        )}
+                        {report.inspectionScore !== undefined &&
+                          report.inspectionScore !== null && (
+                            <CheckCircle2
+                              size={16}
+                              className={
+                                showOrange
+                                  ? "text-orange-400"
+                                  : "text-green-500"
+                              }
+                            />
+                          )}
                       </td>
 
                       {/* Age Status */}
@@ -767,7 +801,10 @@ function InspectionTab() {
 
               {historyFetchingNextPage && (
                 <tr>
-                  <td colSpan={7} className="py-4 text-center text-xs text-third animate-pulse">
+                  <td
+                    colSpan={7}
+                    className="py-4 text-center text-xs text-third animate-pulse"
+                  >
                     Loading more...
                   </td>
                 </tr>

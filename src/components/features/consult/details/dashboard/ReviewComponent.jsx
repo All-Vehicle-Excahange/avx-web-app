@@ -9,20 +9,24 @@ import {
   Trash2,
 } from "lucide-react";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Button from "@/components/ui/button";
 import CustomSelect from "@/components/ui/custom-select";
 import {
-  getConsultationReviewSummary,
-  getAllConsultationReviews,
   replyToReview,
   updateReviewReply,
   deleteReviewReply,
 } from "@/services/consult-review.service";
+import {
+  getConsultationReviewSummaryQuery,
+  getConsultationReviewsInfiniteQuery,
+} from "@/queries/consult-review.queries";
+import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { SkeletonBox } from "@/components/ui/skeleton";
 
 function ReviewComponent() {
+  const queryClient = useQueryClient();
   const [range, setRange] = useState("7");
   const rangeOptions = [
     { label: "7 days", value: "7" },
@@ -30,130 +34,95 @@ function ReviewComponent() {
     { label: "90 days", value: "90" },
   ];
 
-  // API STATE
-  const [summary, setSummary] = useState(null);
-  const [reviews, setReviews] = useState([]);
-  const [isLoadingSummary, setIsLoadingSummary] = useState(true);
-  const [isLoadingReviews, setIsLoadingReviews] = useState(true);
-  const [page, setPage] = useState(1);
-  const [isLastPage, setIsLastPage] = useState(false);
+  const daysMap = {
+    7: "LAST_7_DAYS",
+    30: "LAST_30_DAYS",
+    90: "LAST_90_DAYS",
+  };
+
+  // Queries
+  const { data: summary, isFetching: isLoadingSummary } = useQuery(
+    getConsultationReviewSummaryQuery(daysMap[range])
+  );
+
+  const {
+    data: reviewsInfiniteData,
+    isFetching: isLoadingReviews,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery(
+    getConsultationReviewsInfiniteQuery({
+      daysRange: daysMap[range],
+      size: 3,
+    })
+  );
+
+  const reviews =
+    reviewsInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
 
   const [activeFilter, setActiveFilter] = useState("All");
   const [selectedImage, setSelectedImage] = useState(null);
   const [replyingTo, setReplyingTo] = useState(null);
   const [replyText, setReplyText] = useState("");
-  const [isSubmittingReply, setIsSubmittingReply] = useState(false);
 
-  // Fetch Summary
-  useEffect(() => {
-    const fetchSummary = async () => {
-      try {
-        setIsLoadingSummary(true);
-        const daysMap = {
-          7: "LAST_7_DAYS",
-          30: "LAST_30_DAYS",
-          90: "LAST_90_DAYS",
-        };
-        const response = await getConsultationReviewSummary(daysMap[range]);
-        setSummary(response.data);
-      } catch (error) {
-        toast.error("Failed to fetch review summary");
-      } finally {
-        setIsLoadingSummary(false);
-      }
-    };
-    fetchSummary();
-  }, [range]);
-
-  // Reset page when range changes to fetch fresh data for the new period
-  useEffect(() => {
-    setPage(1);
-  }, [range]);
-
-  // Fetch Reviews (Paginated)
-  useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        if (page === 1) setIsLoadingReviews(true);
-        const daysMap = {
-          7: "LAST_7_DAYS",
-          30: "LAST_30_DAYS",
-          90: "LAST_90_DAYS",
-        };
-        const response = await getAllConsultationReviews({
-          pageNo: page,
-          size: 3,
-          daysRange: daysMap[range],
-        });
-
-        // The API returns { data: [...], pageResponse: { totalPages: X, ... } }
-        const reviewsData = response.data || [];
-        const pageInfo = response.pageResponse || {};
-
-        if (page === 1) {
-          setReviews(reviewsData);
-        } else {
-          setReviews((prev) => [...prev, ...reviewsData]);
-        }
-
-        setIsLastPage(
-          (pageInfo.currentPage || 0) >= (pageInfo.totalPages || 0),
-        );
-      } catch (error) {
-        toast.error("Failed to fetch reviews");
-      } finally {
-        setIsLoadingReviews(false);
-      }
-    };
-    fetchReviews();
-  }, [page, range]);
-
-  const handleReplySubmit = async (review) => {
-    if (!replyText.trim()) return;
-    try {
-      setIsSubmittingReply(true);
-      const isEdit = !!review.consultReply;
-
+  // Mutations
+  const replyMutation = useMutation({
+    mutationFn: async ({ reviewId, replyText, isEdit }) => {
       if (isEdit) {
-        await updateReviewReply(review.id, replyText);
-        toast.success("Reply updated successfully");
+        return updateReviewReply(reviewId, replyText);
       } else {
-        await replyToReview(review.id, replyText);
-        toast.success("Reply posted successfully");
+        return replyToReview(reviewId, replyText);
       }
-
-      // Update the review in local state so UI reflects immediately
-      setReviews((prev) =>
-        prev.map((r) =>
-          r.id === review.id
-            ? { ...r, consultReply: replyText, isConsultReplyEdited: isEdit }
-            : r,
-        ),
+    },
+    onSuccess: (data, variables) => {
+      toast.success(
+        variables.isEdit
+          ? "Reply updated successfully"
+          : "Reply posted successfully"
       );
+      queryClient.invalidateQueries({
+        queryKey: ["consultation-reviews-infinite"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["consultation-review-summary"],
+      });
       setReplyText("");
       setReplyingTo(null);
-    } catch (error) {
+    },
+    onError: () => {
       toast.error("Failed to submit reply");
-    } finally {
-      setIsSubmittingReply(false);
-    }
+    },
+  });
+
+  const deleteReplyMutation = useMutation({
+    mutationFn: async (reviewId) => {
+      return deleteReviewReply(reviewId);
+    },
+    onSuccess: () => {
+      toast.success("Reply removed successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["consultation-reviews-infinite"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["consultation-review-summary"],
+      });
+    },
+    onError: () => {
+      toast.error("Failed to remove reply");
+    },
+  });
+
+  const handleReplySubmit = (review) => {
+    if (!replyText.trim()) return;
+    const isEdit = !!review.consultReply;
+    replyMutation.mutate({ reviewId: review.id, replyText, isEdit });
   };
 
-  const handleDeleteReply = async (reviewId) => {
-    try {
-      await deleteReviewReply(reviewId);
-      toast.success("Reply removed successfully");
-      setReviews((prev) =>
-        prev.map((r) =>
-          r.id === reviewId
-            ? { ...r, consultReply: null, isConsultReplyEdited: false }
-            : r,
-        ),
-      );
-    } catch (error) {
-      toast.error("Failed to remove reply");
-    }
+  const handleDeleteReply = (reviewId) => {
+    deleteReplyMutation.mutate(reviewId);
   };
+
+  const isSubmittingReply = replyMutation.isPending;
 
   return (
     <div className="space-y-8 animate-in fade-in duration-700">
@@ -260,7 +229,7 @@ function ReviewComponent() {
       {/* REVIEWS LIST */}
       <div className="space-y-6">
         <div className="grid gap-6">
-          {isLoadingReviews && page === 0 ? (
+          {isLoadingReviews && reviews.length === 0 ? (
             [1, 2, 3].map((i) => (
               <div
                 key={i}
@@ -495,12 +464,12 @@ function ReviewComponent() {
         </div>
 
         {/* LOAD MORE BUTTON */}
-        {!isLastPage && reviews.length > 0 && (
+        {hasNextPage && reviews.length > 0 && (
           <div className="flex justify-end mt-4">
             <Button
               variant="outlineSecondary"
               className="text-xs font-bold border-white/10"
-              onClick={() => setPage((prev) => prev + 1)}
+              onClick={() => fetchNextPage()}
             >
               Load More Reviews
             </Button>
