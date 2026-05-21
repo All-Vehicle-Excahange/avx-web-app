@@ -13,11 +13,36 @@ export const getInventoryVehicleQuery = (listingStatus) => {
   return queryOptions({
     queryKey: ["seller-inventory-vehicles", listingStatus],
     queryFn: async () => {
-      const res = await getInventoryVehicle(listingStatus);
+      const res = await getInventoryVehicle({ listingStatus });
       return res?.data;
     },
     staleTime: Infinity,
   });
+};
+
+export const getInventoryVehicleInfiniteQuery = (payload) => {
+  return {
+    queryKey: ["seller-inventory-vehicles-infinite", payload],
+    queryFn: async ({ pageParam = 1 }) => {
+      const { pageSize, size, ...rest } = payload || {};
+      const res = await getInventoryVehicle({
+        ...rest,
+        pageNo: pageParam,
+        size: pageSize || size || 9,
+      });
+      return res;
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      const totalPages =
+        lastPage.pagination?.totalPages ||
+        lastPage.pageResponse?.totalPages ||
+        1;
+      const nextPage = allPages.length + 1;
+      return nextPage <= totalPages ? nextPage : undefined;
+    },
+    staleTime: Infinity,
+  };
 };
 
 export const getSusPendedVehiclesQuery = (payload) => {
@@ -25,7 +50,7 @@ export const getSusPendedVehiclesQuery = (payload) => {
     queryKey: ["seller-suspended-vehicles", payload],
     queryFn: async () => {
       const res = await getSusPendedVehicles(payload);
-      return res?.data;
+      return res;
     },
     staleTime: Infinity,
   });
@@ -58,7 +83,7 @@ export const getNeedAttenctionVehiclesQuery = (payload) => {
     queryKey: ["seller-need-attention-vehicles", payload],
     queryFn: async () => {
       const res = await getNeedAttenctionVehicles(payload);
-      return res?.data;
+      return res;
     },
     staleTime: Infinity,
   });
@@ -84,4 +109,54 @@ export const getInquiryKpisQuery = () => {
     },
     staleTime: Infinity,
   });
+};
+
+export const getNeedAttenctionVehiclesInfiniteQuery = (payload) => {
+  return {
+    queryKey: ["seller-need-attention-vehicles-infinite", payload],
+    queryFn: async ({ pageParam = 1 }) => {
+      const { pageSize, size, ...rest } = payload || {};
+      const res = await getNeedAttenctionVehicles({
+        ...rest,
+        pageNo: pageParam,
+        size: pageSize || size || 6,
+      });
+      return res;
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      const totalPages =
+        lastPage.pagination?.totalPages ||
+        lastPage.pageResponse?.totalPages ||
+        1;
+      const nextPage = allPages.length + 1;
+      return nextPage <= totalPages ? nextPage : undefined;
+    },
+    staleTime: Infinity,
+  };
+};
+
+export const getSusPendedVehiclesInfiniteQuery = (payload) => {
+  return {
+    queryKey: ["seller-suspended-vehicles-infinite", payload],
+    queryFn: async ({ pageParam = 1 }) => {
+      const { pageSize, size, ...rest } = payload || {};
+      const res = await getSusPendedVehicles({
+        ...rest,
+        pageNo: pageParam,
+        size: pageSize || size || 9,
+      });
+      return res;
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      const totalPages =
+        lastPage.pagination?.totalPages ||
+        lastPage.pageResponse?.totalPages ||
+        1;
+      const nextPage = allPages.length + 1;
+      return nextPage <= totalPages ? nextPage : undefined;
+    },
+    staleTime: Infinity,
+  };
 };

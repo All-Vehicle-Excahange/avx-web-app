@@ -17,75 +17,50 @@ import { useEffect, useState } from "react";
 import CustomSelect from "@/components/ui/custom-select";
 import Button from "@/components/ui/button";
 import { getSellerTierTitle } from "@/lib/helper";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  getAnalyticsKips,
-  getCityDemandBreakdown,
-  getKeyInsights,
-  getSubTypeDemandBreakdown,
-  getTrafficConversion,
-  getWeeklyAnalytics,
-} from "@/services/analytics.service";
+  getAnalyticsKipsQuery,
+  getTrafficConversionQuery,
+  getWeeklyAnalyticsQuery,
+  getSubTypeDemandBreakdownQuery,
+  getCityDemandBreakdownQuery,
+  getKeyInsightsQuery,
+} from "@/queries/analytics.queries";
 import AnalyticsSkeleton from "@/components/ui/skeleton/AnalyticsSkeleton";
 
 export default function AnalyticsComponent() {
   const [range, setRange] = useState("7");
   const [tier, setTier] = useState(null);
-  const [analyticsData, setAnalyticsData] = useState(null);
-  const [trafficData, setTrafficData] = useState(null);
-  const [weeklyData, setWeeklyData] = useState([]);
-  const [demandBreakdown, setDemandBreakdown] = useState([]);
-  const [cityDemand, setCityDemand] = useState([]);
-  const [insights, setInsights] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchAnalytics = async () => {
-      let daysParam = "LAST_7_DAYS";
-      if (range === "30") {
-        daysParam = "LAST_30_DAYS";
-      } else if (range === "90") {
-        daysParam = "LAST_90_DAYS";
-      }
+  const queryClient = useQueryClient();
 
-      setIsLoading(true);
-      try {
-        const [kpiRes, trafficRes, weeklyRes, demandRes, cityRes, insightRes] =
-          await Promise.all([
-            getAnalyticsKips(daysParam),
-            getTrafficConversion(daysParam),
-            getWeeklyAnalytics(daysParam),
-            getSubTypeDemandBreakdown(daysParam),
-            getCityDemandBreakdown(daysParam),
-            getKeyInsights(daysParam),
-          ]);
+  const daysParam = range === "30" ? "LAST_30_DAYS" : range === "90" ? "LAST_90_DAYS" : "LAST_7_DAYS";
 
-        if (kpiRes.success) {
-          setAnalyticsData(kpiRes.data);
-        }
-        if (trafficRes.success) {
-          setTrafficData(trafficRes.data);
-        }
-        if (weeklyRes.success) {
-          setWeeklyData(weeklyRes.data || []);
-        }
-        if (demandRes.success) {
-          setDemandBreakdown(demandRes.data || []);
-        }
-        if (cityRes.success) {
-          setCityDemand(cityRes.data || []);
-        }
-        if (insightRes.success) {
-          setInsights(insightRes.data || []);
-        }
-      } catch (error) {
-        console.error("Failed to fetch analytics:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const { data: analyticsData, isFetching: kpisLoading } = useQuery(getAnalyticsKipsQuery(daysParam));
+  const { data: trafficData, isFetching: trafficLoading } = useQuery(getTrafficConversionQuery(daysParam));
+  const { data: weeklyData = [], isFetching: weeklyLoading } = useQuery(getWeeklyAnalyticsQuery(daysParam));
+  const { data: demandBreakdown = [], isFetching: demandLoading } = useQuery(getSubTypeDemandBreakdownQuery(daysParam));
+  const { data: cityDemand = [], isFetching: cityLoading } = useQuery(getCityDemandBreakdownQuery(daysParam));
+  const { data: insights = [], isFetching: insightsLoading } = useQuery(getKeyInsightsQuery(daysParam));
 
-    fetchAnalytics();
-  }, [range]);
+  const isLoading = kpisLoading || trafficLoading || weeklyLoading || demandLoading || cityLoading || insightsLoading;
+
+  const handleRangeChange = (newRange) => {
+    setRange(newRange);
+    let targetDaysParam = "LAST_7_DAYS";
+    if (newRange === "30") {
+      targetDaysParam = "LAST_30_DAYS";
+    } else if (newRange === "90") {
+      targetDaysParam = "LAST_90_DAYS";
+    }
+
+    queryClient.invalidateQueries({ queryKey: ["analytics-kips", targetDaysParam] });
+    queryClient.invalidateQueries({ queryKey: ["analytics-traffic-conversion", targetDaysParam] });
+    queryClient.invalidateQueries({ queryKey: ["analytics-weekly-performance", targetDaysParam] });
+    queryClient.invalidateQueries({ queryKey: ["analytics-subtype-demand-breakdown", targetDaysParam] });
+    queryClient.invalidateQueries({ queryKey: ["analytics-city-demand-breakdown", targetDaysParam] });
+    queryClient.invalidateQueries({ queryKey: ["analytics-key-insights", targetDaysParam] });
+  };
   const isProOrPremium = tier === "PRO" || tier === "PREMIUM";
   const isBasic = tier === "BASIC";
   const isPro = tier === "PRO";
@@ -312,7 +287,7 @@ export default function AnalyticsComponent() {
         <div className="w-48">
           <CustomSelect
             value={range}
-            onChange={setRange}
+            onChange={handleRangeChange}
             options={rangeOptions}
             placeholder="Select range"
             variant="transparent"
