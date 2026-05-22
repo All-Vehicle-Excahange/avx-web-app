@@ -12,6 +12,10 @@ const ENDPOINT = {
     "/consultation/dashboard/inspection/requested-from-buyers",
   getScoreBreakdown: "/consultation/dashboard/inspection/score-breakdown",
   getReportHistory: "/consultation/dashboard/inspection/report-history",
+  getAllRequestedInspection: "/vehicle/inspection/requested",
+  getAllInsprectionRequest: "/vehicle/inspection/owner/pending",
+  acceptInspectionRequest: "/vehicle/inspection/owner/request",
+  rejectInspectionRequest: "/vehicle/inspection/owner/request",
 };
 
 export const getInspectionByVehicleId = async (vehicleId) => {
@@ -119,6 +123,70 @@ export const getReportHistory = async (payload) => {
       params,
     });
 
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllRequestedInspection = async (payload) => {
+  try {
+    const params = {};
+
+    if (payload?.pageNo !== undefined) {
+      params.pageNo = payload.pageNo;
+    }
+    if (payload?.pageSize !== undefined) {
+      params.size = payload.pageSize;
+    }
+
+    const res = await axiosInstance.get(ENDPOINT.getAllRequestedInspection, {
+      params,
+    });
+
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllInsprectionRequest = async (payload) => {
+  try {
+    const params = {};
+
+    if (payload?.pageNo !== undefined) {
+      params.pageNo = payload.pageNo;
+    }
+    if (payload?.pageSize !== undefined) {
+      params.size = payload.pageSize;
+    }
+
+    const res = await axiosInstance.get(ENDPOINT.getAllInsprectionRequest, {
+      params,
+    });
+
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const acceptInspectionRequest = async (requestId) => {
+  try {
+    const res = await axiosInstance.put(
+      `${ENDPOINT.acceptInspectionRequest}/${requestId}/accept`,
+    );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const rejectInspectionRequest = async (requestId) => {
+  try {
+    const res = await axiosInstance.put(
+      `${ENDPOINT.rejectInspectionRequest}/${requestId}/reject`,
+    );
     return handleResponse(res);
   } catch (error) {
     throw error;

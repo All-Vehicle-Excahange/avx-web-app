@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Button from "@/components/ui/button";
 import { Check, File } from "lucide-react";
 
@@ -12,12 +13,50 @@ export default function InspectionCard({
   onReject,
   onViewReport,
 }) {
+  const [activeLoading, setActiveLoading] = useState(null);
+
+  const handleAccept = async () => {
+    if (!onAccept) return;
+    try {
+      setActiveLoading("accept");
+      await onAccept();
+    } finally {
+      setActiveLoading(null);
+    }
+  };
+
+  const handleReject = async () => {
+    if (!onReject) return;
+    try {
+      setActiveLoading("reject");
+      await onReject();
+    } finally {
+      setActiveLoading(null);
+    }
+  };
+
   const lowerStatus = status?.toLowerCase();
-  const isPending = lowerStatus === "pending" || lowerStatus === "requested";
-  const isAccepted = lowerStatus === "accepted" || lowerStatus === "processing";
-  const isInspected = lowerStatus === "inspected" || lowerStatus === "done";
+  const isPending =
+    lowerStatus === "pending" ||
+    lowerStatus === "pending_owner_approval";
+  const isAccepted =
+    lowerStatus === "accepted" ||
+    lowerStatus === "processing" ||
+    lowerStatus === "in_progress" ||
+    lowerStatus === "assigned" ||
+    lowerStatus === "scheduled" ||
+    lowerStatus === "requested" ||
+    lowerStatus === "payment_pending";
+  const isInspected =
+    lowerStatus === "inspected" ||
+    lowerStatus === "done" ||
+    lowerStatus === "completed" ||
+    lowerStatus === "submitted";
   const isNotInspected =
-    lowerStatus === "not_inspected" || lowerStatus === "rejected";
+    lowerStatus === "not_inspected" ||
+    lowerStatus === "rejected" ||
+    lowerStatus === "rejected_by_owner" ||
+    lowerStatus === "cancelled";
 
   return (
     <div className="rounded-2xl border border-third/40 px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-6 min-h-34">
@@ -43,20 +82,28 @@ export default function InspectionCard({
         {/* ACTIONS */}
         {isPending && type !== "sent" && (
           <div className="pt-3 flex flex-wrap items-center gap-3">
-            <Button variant="ghost" showIcon={false} onClick={onAccept}>
+            <Button
+              variant="ghost"
+              showIcon={false}
+              onClick={handleAccept}
+              loading={activeLoading === "accept"}
+              locked={!!activeLoading}
+            >
               Accept
             </Button>
             <Button
               variant="outlineSecondary"
               showIcon={false}
-              onClick={onReject}
+              onClick={handleReject}
+              loading={activeLoading === "reject"}
+              locked={!!activeLoading}
             >
               Reject
             </Button>
           </div>
         )}
 
-        {isAccepted && (
+        {isAccepted && !(type === "received" && lowerStatus === "accepted") && (
           <div className="pt-3">
             <Button
               variant="outline"
@@ -83,7 +130,7 @@ export default function InspectionCard({
           </div>
         )}
 
-        {isNotInspected && (
+        {isNotInspected && type !== "received" && (
           <div className="pt-3">
             <Button
               variant="ghost"
@@ -111,22 +158,30 @@ function StatusPill({ status }) {
   const map = {
     pending: "bg-blue-500/15 text-blue-400 border-blue-500/40",
     requested: "bg-blue-500/15 text-blue-400 border-blue-500/40",
-    accepted: "bg-yellow-400/15 text-yellow-400 border-yellow-400/40",
+    pending_owner_approval: "bg-blue-500/15 text-blue-400 border-blue-500/40",
+    payment_pending: "bg-yellow-500/15 text-yellow-500 border-yellow-500/40",
+    assigned: "bg-yellow-400/15 text-yellow-400 border-yellow-400/40",
+    scheduled: "bg-yellow-400/15 text-yellow-400 border-yellow-400/40",
+    in_progress: "bg-yellow-400/15 text-yellow-400 border-yellow-400/40",
     processing: "bg-yellow-400/15 text-yellow-400 border-yellow-400/40",
-    inspected: "bg-green-500/15 text-green-500 border-green-500/40",
+    accepted: "bg-green-500/15 text-green-500 border-green-500/40",
+    completed: "bg-green-500/15 text-green-500 border-green-500/40",
+    submitted: "bg-green-500/15 text-green-500 border-green-500/40",
     done: "bg-green-500/15 text-green-500 border-green-500/40",
-    not_inspected: "bg-red-500/15 text-red-500 border-red-500/40",
+    inspected: "bg-green-500/15 text-green-500 border-green-500/40",
     rejected: "bg-red-500/15 text-red-500 border-red-500/40",
+    rejected_by_owner: "bg-red-500/15 text-red-500 border-red-500/40",
+    cancelled: "bg-red-500/15 text-red-500 border-red-500/40",
   };
 
   const displayText =
-    status === "done"
+    status === "done" || status === "completed"
       ? "INSPECTED"
-      : status === "processing"
+      : status === "processing" || status === "in_progress"
         ? "IN PROGRESS"
         : status === "accepted"
           ? "ACCEPTED"
-          : status.replace("_", " ").toUpperCase();
+          : status.replaceAll("_", " ").toUpperCase();
 
   return (
     <span

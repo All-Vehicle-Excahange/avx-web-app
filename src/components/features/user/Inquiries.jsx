@@ -1,33 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import InquiryCard from "@/components/ui/InquiryCard";
-import { getInquiries } from "@/services/inquiry.service";
 import Button from "@/components/ui/button";
 import { InquiryCardSkeleton } from "@/components/ui/skeleton";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { getInquiriesInfiniteQuery } from "@/queries/inquiry.queries";
 
 function Inquiries() {
+  const queryClient = useQueryClient();
   const [activeType, setActiveType] = useState("all");
-  const [inquiries, setInquiries] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(6);
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchInquiries = async () => {
-      try {
-        setIsLoading(true);
-        const status = activeType === "all" ? undefined : activeType;
+  const {
+    data: inquiriesInfiniteData,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    ...getInquiriesInfiniteQuery({
+      inquiryStatus: activeType === "all" ? undefined : activeType,
+      pageSize: 6,
+    }),
+    staleTime: 15 * 60 * 1000, // 15 minutes
+  });
 
-        const res = await getInquiries(status);
-        setInquiries(res.data || []);
-        setVisibleCount(6);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchInquiries();
-  }, [activeType]);
+  const inquiries = inquiriesInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
 
   const vehicleTypes = [
     { id: "all", label: "All" },
@@ -37,12 +33,8 @@ function Inquiries() {
     { id: "CLOSED_BY_INQUIRER", label: "Closed" },
   ];
 
-  const handleUpdateStatus = (id, newStatus) => {
-    setInquiries((prev) =>
-      prev.map((inq) =>
-        inq.id === id ? { ...inq, inquiryStatus: newStatus } : inq
-      )
-    );
+  const handleUpdateStatus = () => {
+    queryClient.invalidateQueries({ queryKey: ["inquiries-infinite"] });
   };
 
   return (
@@ -54,9 +46,10 @@ function Inquiries() {
             key={type.id}
             onClick={() => setActiveType(type.id)}
             className={`px-4 py-2 rounded-full text-sm font-medium border transition
-              ${activeType === type.id
-                ? "bg-primary text-secondary border-primary"
-                : "border-third/50 text-primary hover:bg-third/20"
+              ${
+                activeType === type.id
+                  ? "bg-primary text-secondary border-primary"
+                  : "border-third/50 text-primary hover:bg-third/20"
               }`}
           >
             {type.label}
@@ -72,7 +65,7 @@ function Inquiries() {
           ))
         ) : inquiries?.length > 0 ? (
           <>
-            {inquiries.slice(0, visibleCount).map((inq) => (
+            {inquiries.map((inq) => (
               <InquiryCard
                 key={inq.id}
                 inquiry={inq}
@@ -80,11 +73,12 @@ function Inquiries() {
               />
             ))}
 
-            {visibleCount < inquiries.length && (
+            {hasNextPage && (
               <div className="flex justify-end mt-4">
                 <Button
                   variant="outline"
-                  onClick={() => setVisibleCount((prev) => prev + 6)}
+                  onClick={() => fetchNextPage()}
+                  loading={isFetchingNextPage}
                   className="px-6 py-2 rounded-full text-sm font-semibold  shadow-md"
                 >
                   Load More
@@ -98,17 +92,21 @@ function Inquiries() {
               <>
                 <h3 className="text-xl font-bold mb-2">No inquiries yet.</h3>
                 <p className="text-third mb-6 max-w-sm">
-                  Once buyers show interest in your vehicle,<br />
+                  Once buyers show interest in your vehicle,
+                  <br />
                   their requests will appear here.
                 </p>
                 <p className="text-sm text-third/70 max-w-sm font-medium">
-                  Tip:<br />
+                  Tip:
+                  <br />
                   Listings with more photos receive 3x more inquiries.
                 </p>
               </>
             ) : (
               <>
-                <h3 className="text-xl font-bold mb-2">No {activeType.toLowerCase()} inquiries found.</h3>
+                <h3 className="text-xl font-bold mb-2">
+                  No {activeType.toLowerCase()} inquiries found.
+                </h3>
                 <p className="text-third max-w-sm">
                   There are currently no inquiries with this status.
                 </p>

@@ -1,25 +1,21 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import UserVehicleCard from "./UserVehicleCard";
-import { getSellerInventory } from "@/services/user.service";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import DetailsFromPopup from "../userSeller/DetailsFromPopup";
 import { useAuthStore } from "@/stores/useAuthStore";
 import Button from "@/components/ui/button";
 import { Clock, Ban } from "lucide-react";
 import { UserVehicleCardSkeleton } from "@/components/ui/skeleton";
-import { getSusPendedVehicles } from "@/services/Seller.service";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { getSellerInventoryInfiniteQuery } from "@/queries/user.queries";
+import { getSusPendedVehiclesInfiniteQuery } from "@/queries/Seller.queries";
 
 function MyVehicle() {
-  const [vehicles, setVehicles] = useState([]);
   const [activeType, setActiveType] = useState("all");
-  const [pageNo, setPageNo] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const user = useAuthStore((state) => state.user);
 
   const vehicleTypes = [
@@ -33,56 +29,57 @@ function MyVehicle() {
     { id: "suspended", label: "Suspended" },
   ];
 
-  const fetchVehicles = async (page = 1, isLoadMore = false) => {
-    try {
-      if (isLoadMore) setIsFetchingMore(true);
-      else {
-        setIsLoading(true);
-        setVehicles([]); // Clear list on tab change
-      }
+  const isSuspendedTab = activeType === "suspended";
 
-      let res;
-      if (activeType === "suspended") {
-        res = await getSusPendedVehicles({
-          pageNo: page,
-          pageSize: 4,
-        });
-      } else {
-        const payload = {
-          pageNo: page,
-          size: 4,
-          listingStatus:
-            activeType === "all"
-              ? null
-              : activeType === "PENDING"
-                ? "REQUESTED"
-                : activeType.toUpperCase(),
-        };
-        res = await getSellerInventory(payload);
-      }
+  // Suspended tab infinite query
+  const {
+    data: suspendedData,
+    fetchNextPage: fetchNextPageSuspended,
+    hasNextPage: hasNextPageSuspended,
+    isLoading: isLoadingSuspended,
+    isFetchingNextPage: isFetchingNextPageSuspended,
+  } = useInfiniteQuery({
+    ...getSusPendedVehiclesInfiniteQuery({
+      pageSize: 4,
+    }),
+    enabled: isSuspendedTab,
+    staleTime: 15 * 60 * 1000,
+  });
 
-      const newData = res?.data || [];
-      const pagination = res?.pagination;
+  // Regular seller inventory infinite query
+  const {
+    data: inventoryData,
+    fetchNextPage: fetchNextPageInventory,
+    hasNextPage: hasNextPageInventory,
+    isLoading: isLoadingInventory,
+    isFetchingNextPage: isFetchingNextPageInventory,
+  } = useInfiniteQuery({
+    ...getSellerInventoryInfiniteQuery({
+      size: 4,
+      listingStatus:
+        activeType === "all"
+          ? null
+          : activeType === "PENDING"
+            ? "REQUESTED"
+            : activeType.toUpperCase(),
+    }),
+    enabled: !isSuspendedTab,
+  });
 
-      if (isLoadMore) {
-        setVehicles((prev) => [...prev, ...newData]);
-      } else {
-        setVehicles(newData);
-      }
+  const vehicles = isSuspendedTab
+    ? suspendedData?.pages?.flatMap((page) => page?.data || []) || []
+    : inventoryData?.pages?.flatMap((page) => page?.data || []) || [];
 
-      setTotalPages(Number(pagination?.totalPages) || 1);
-      setPageNo(Number(page));
-    } catch (error) {
-      console.error("Error fetching vehicles:", error);
-    } finally {
-      setIsLoading(false);
-      setIsFetchingMore(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchVehicles(1, false);
-  }, [activeType]);
+  const isLoading = isSuspendedTab ? isLoadingSuspended : isLoadingInventory;
+  const isFetchingMore = isSuspendedTab
+    ? isFetchingNextPageSuspended
+    : isFetchingNextPageInventory;
+  const hasNextPage = isSuspendedTab
+    ? hasNextPageSuspended
+    : hasNextPageInventory;
+  const fetchNextPage = isSuspendedTab
+    ? fetchNextPageSuspended
+    : fetchNextPageInventory;
 
   // Map API → Card Structure
   const mappedVehicles = vehicles.map((v) => ({
@@ -178,15 +175,15 @@ function MyVehicle() {
       </div>
 
       {/* Load More Button */}
-      {!isLoading && pageNo < totalPages && (
+      {!isLoading && hasNextPage && (
         <div className="flex justify-end mt-6">
           <Button
             variant="outline"
-            disabled={isFetchingMore}
-            onClick={() => fetchVehicles(pageNo + 1, true)}
+            loading={isFetchingMore}
+            onClick={() => fetchNextPage()}
             className="px-8 py-2 rounded-full text-sm font-semibold shadow-md border-primary text-primary hover:bg-primary hover:text-white transition-all"
           >
-            {isFetchingMore ? "Loading..." : "Load More"}
+            Load More
           </Button>
         </div>
       )}
@@ -197,7 +194,9 @@ function MyVehicle() {
           {activeType === "all" ? (
             <>
               <h3 className="text-xl font-bold mb-2">No vehicles listed yet</h3>
-              <p className="text-third mb-6">Sell your first vehicle on Reecomm.</p>
+              <p className="text-third mb-6">
+                Sell your first vehicle on Reecomm.
+              </p>
               <Button
                 onClick={() => {
                   if (user?.userRole === "USER") {

@@ -1,34 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import MyInquiryCard from "@/components/ui/MyInquiryCard";
-import { getMyInquiries } from "@/services/inquiry.service";
 import Button from "@/components/ui/button";
 import Link from "next/link";
 import { InquiryCardSkeleton } from "@/components/ui/skeleton";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { getMyInquiriesInfiniteQuery } from "@/queries/inquiry.queries";
 
 function MyInquary() {
+  const queryClient = useQueryClient();
   const [activeType, setActiveType] = useState("all");
-  const [inquiries, setInquiries] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(6);
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchInquiries = async () => {
-      try {
-        setIsLoading(true);
-        const status = activeType === "all" ? undefined : activeType;
+  const {
+    data: inquiriesInfiniteData,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    ...getMyInquiriesInfiniteQuery({
+      inquiryStatus: activeType === "all" ? undefined : activeType,
+      pageSize: 6,
+    }),
+    staleTime: 15 * 60 * 1000, // 15 minutes
+  });
 
-        const res = await getMyInquiries(status);
-        setInquiries(res.data || []);
-        setVisibleCount(6);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchInquiries();
-  }, [activeType]);
+  const inquiries = inquiriesInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
 
   const vehicleTypes = [
     { id: "all", label: "All" },
@@ -38,12 +34,8 @@ function MyInquary() {
     { id: "CLOSED_BY_INQUIRER", label: "Closed" },
   ];
 
-  const handleUpdateStatus = (id, newStatus) => {
-    setInquiries((prev) =>
-      prev.map((inq) =>
-        inq.id === id ? { ...inq, inquiryStatus: newStatus } : inq
-      )
-    );
+  const handleUpdateStatus = () => {
+    queryClient.invalidateQueries({ queryKey: ["my-inquiries-infinite"] });
   };
 
   return (
@@ -73,7 +65,7 @@ function MyInquary() {
           ))
         ) : inquiries?.length > 0 ? (
           <>
-            {inquiries.slice(0, visibleCount).map((inq) => (
+            {inquiries.map((inq) => (
               <MyInquiryCard
                 key={inq.id}
                 inquiry={inq}
@@ -81,11 +73,12 @@ function MyInquary() {
               />
             ))}
 
-            {visibleCount < inquiries.length && (
+            {hasNextPage && (
               <div className="flex justify-end mt-4">
                 <Button
                   variant="outline"
-                  onClick={() => setVisibleCount((prev) => prev + 6)}
+                  onClick={() => fetchNextPage()}
+                  loading={isFetchingNextPage}
                   className="px-6 py-2 rounded-full text-sm font-semibold  shadow-md"
                 >
                   Load More

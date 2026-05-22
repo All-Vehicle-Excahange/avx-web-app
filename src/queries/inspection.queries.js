@@ -1,4 +1,6 @@
 import {
+  getAllInsprectionRequest,
+  getAllRequestedInspection,
   getInspectionSnapShot,
   getReportHistory,
   getRequestedFromBuyers,
@@ -77,5 +79,51 @@ export const getReportHistoryInfiniteQuery = (payload) => {
       return nextPage <= totalPages ? nextPage : undefined;
     },
     staleTime: Infinity,
+  };
+};
+
+export const getAllRequestedInspectionInfiniteQuery = (payload) => {
+  return {
+    queryKey: ["all-requested-inspection-infinite", payload],
+    queryFn: async ({ pageParam = 1 }) => {
+      const res = await getAllRequestedInspection({
+        ...payload,
+        pageNo: pageParam,
+      });
+      return res;
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      const totalPages =
+        lastPage.pagination?.totalPages ||
+        lastPage.pageResponse?.totalPages ||
+        1;
+      const nextPage = allPages.length + 1;
+      return nextPage <= totalPages ? nextPage : undefined;
+    },
+    staleTime: 1000 * 10 * 60, // 10 minits
+  };
+};
+
+export const getAllInsprectionRequestInfiniteQuery = (payload) => {
+  return {
+    queryKey: ["all-inspection-request-infinite", payload],
+    queryFn: async ({ pageParam = 1 }) => {
+      const res = await getAllInsprectionRequest({
+        ...payload,
+        pageNo: pageParam,
+      });
+      return res;
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      const totalPages =
+        lastPage.pagination?.totalPages ||
+        lastPage.pageResponse?.totalPages ||
+        1;
+      const nextPage = allPages.length + 1;
+      return nextPage <= totalPages ? nextPage : undefined;
+    },
+    staleTime: 1000 * 10 * 60, // 10 minits
   };
 };

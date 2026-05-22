@@ -33,6 +33,10 @@ import {
   getScoreBreakdownInfiniteQuery,
   getReportHistoryInfiniteQuery,
 } from "@/queries/inspection.queries";
+import {
+  acceptInspectionRequest,
+  rejectInspectionRequest,
+} from "@/services/inspection.service";
 
 function InspectionTab() {
   const router = useRouter();
@@ -40,6 +44,8 @@ function InspectionTab() {
   const [statusFilter, setStatusFilter] = React.useState("");
   const [searchQuery, setSearchQuery] = React.useState("");
   const [hasLoadedOnce, setHasLoadedOnce] = React.useState(false);
+  const [localRequestStatuses, setLocalRequestStatuses] = React.useState({});
+  const [loadingRequests, setLoadingRequests] = React.useState({});
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "N/A";
@@ -551,23 +557,110 @@ function InspectionTab() {
 
                     {/* Status */}
                     <td className="pr-4">
-                      <span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-[11px] font-medium">
-                        Awaiting approval
-                      </span>
+                      {(() => {
+                        const currentStatus = localRequestStatuses[request.id] || request.inspectionRequestStatus || "PENDING_OWNER_APPROVAL";
+                        if (currentStatus === "ACCEPTED" || currentStatus === "APPROVED") {
+                          return (
+                            <span className="px-3 py-1 rounded-full bg-green-500/10 text-green-500 text-[11px] font-medium">
+                              ACCEPTED
+                            </span>
+                          );
+                        } else if (currentStatus === "REJECTED") {
+                          return (
+                            <span className="px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-[11px] font-medium">
+                              REJECTED
+                            </span>
+                          );
+                        } else {
+                          return (
+                            <span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-[11px] font-medium">
+                              Awaiting approval
+                            </span>
+                          );
+                        }
+                      })()}
                     </td>
 
                     {/* Action Buttons */}
                     <td className="flex justify-end gap-3 py-4">
-                      <Button variant="ghost" className="px-6 text-xs h-8">
-                        Accept
-                      </Button>
+                      {(() => {
+                        const currentStatus = localRequestStatuses[request.id] || request.inspectionRequestStatus || "PENDING_OWNER_APPROVAL";
+                        if (currentStatus === "ACCEPTED" || currentStatus === "APPROVED") {
+                          return (
+                            <span className="text-green-500 text-xs font-semibold px-4 py-1.5">
+                              Accepted
+                            </span>
+                          );
+                        } else if (currentStatus === "REJECTED") {
+                          return (
+                            <span className="text-red-500 text-xs font-semibold px-4 py-1.5">
+                              Rejected
+                            </span>
+                          );
+                        } else {
+                          return (
+                            <>
+                              <Button
+                                variant="ghost"
+                                className="px-6 text-xs h-8"
+                                loading={loadingRequests[request.id] === "accept"}
+                                locked={!!loadingRequests[request.id]}
+                                onClick={async () => {
+                                  try {
+                                    setLoadingRequests((prev) => ({
+                                      ...prev,
+                                      [request.id]: "accept",
+                                    }));
+                                    await acceptInspectionRequest(request.id);
+                                    setLocalRequestStatuses((prev) => ({
+                                      ...prev,
+                                      [request.id]: "ACCEPTED",
+                                    }));
+                                  } catch (err) {
+                                    console.error(err);
+                                  } finally {
+                                    setLoadingRequests((prev) => ({
+                                      ...prev,
+                                      [request.id]: null,
+                                    }));
+                                  }
+                                }}
+                              >
+                                Accept
+                              </Button>
 
-                      <Button
-                        variant="outlineSecondary"
-                        className="px-6 text-xs h-8"
-                      >
-                        Decline
-                      </Button>
+                              <Button
+                                variant="outlineSecondary"
+                                className="px-6 text-xs h-8"
+                                loading={loadingRequests[request.id] === "reject"}
+                                locked={!!loadingRequests[request.id]}
+                                onClick={async () => {
+                                  try {
+                                    setLoadingRequests((prev) => ({
+                                      ...prev,
+                                      [request.id]: "reject",
+                                    }));
+                                    await rejectInspectionRequest(request.id);
+                                    setLocalRequestStatuses((prev) => ({
+                                      ...prev,
+                                      [request.id]: "REJECTED",
+                                    }));
+                                  } catch (err) {
+                                    console.error(err);
+                                  } finally {
+                                    setLoadingRequests((prev) => ({
+                                      ...prev,
+                                      [request.id]: null,
+                                    }));
+                                  }
+                                }}
+                              >
+                                Reject
+                              </Button>
+                            </>
+                          );
+                        }
+                      })()}
                     </td>
                   </tr>
                 ))
@@ -948,9 +1041,6 @@ function InspectionTab() {
       </div>
 
       {/* ================= DISPUTE & ISSUE CENTER ================= */}
-      
-   
-
 
       {/* ================= UPGRADE YOUR TRUST VISIBILITY ================= */}
     </section>
