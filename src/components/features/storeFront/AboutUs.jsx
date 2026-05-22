@@ -2,8 +2,9 @@ import { EngineRenderer } from "@/core/engine/Renderer";
 import { THEME_STORE } from "@/core/engine/themeStore";
 import { useEffect, useState } from "react";
 import StoreFrontAboutSkeleton from "@/components/ui/skeleton/StoreFrontAboutSkeleton";
-import { getAboutUsStoreFrontByUserName } from "@/services/user.service";
 import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { getAboutUsStoreFrontByUserNameQuery } from "@/queries/user.queries";
 
 /**
  * Maps raw API response fields → template field names expected by theme components.
@@ -90,73 +91,64 @@ function mapApiToTemplateData(api) {
 export default function AboutUs({ storeData = null }) {
   const id = useParams()?.id;
 
-
   const [sections, setSections] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  const { data: aboutUsData, isLoading } = useQuery({
+    ...getAboutUsStoreFrontByUserNameQuery(id),
+    enabled: !storeData && !!id,
+  });
+
+  const apiData = storeData || aboutUsData;
+  const loading = !storeData && !!id ? isLoading : false;
 
   useEffect(() => {
-    const fetchTheme = async () => {
-      let apiData = storeData;
+    if (!apiData) return;
 
-      if (!apiData && id) {
-        try {
-          const res = await getAboutUsStoreFrontByUserName(id);
-          apiData = res?.data;
-        } catch (error) {
-          console.error("Error fetching about us data:", error);
+    // Find the matching theme schema from THEME_STORE using themeId from API
+    const matchedTheme =
+      THEME_STORE.find((t) => t.id === apiData.themeId) || THEME_STORE[0];
+
+    // Map API fields to template field names
+    const mappedData = mapApiToTemplateData(apiData);
+
+    // Build empty shell from schema shape — no dummy content
+    const getEmptyData = (defaultData) => {
+      const empty = {};
+      Object.entries(defaultData).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          empty[key] = value.map((item) => {
+            if (typeof item === "string") return "";
+            const emptyItem = {};
+            Object.keys(item).forEach((k) => (emptyItem[k] = ""));
+            return emptyItem;
+          });
+        } else if (value !== null && typeof value === "object") {
+          empty[key] = {};
+        } else {
+          empty[key] = "";
         }
-      }
-
-      if (!apiData) return;
-
-      // Find the matching theme schema from THEME_STORE using themeId from API
-      const matchedTheme =
-        THEME_STORE.find((t) => t.id === apiData.themeId) || THEME_STORE[0];
-
-      // Map API fields to template field names
-      const mappedData = mapApiToTemplateData(apiData);
-
-      // Build empty shell from schema shape — no dummy content
-      const getEmptyData = (defaultData) => {
-        const empty = {};
-        Object.entries(defaultData).forEach(([key, value]) => {
-          if (Array.isArray(value)) {
-            empty[key] = value.map((item) => {
-              if (typeof item === "string") return "";
-              const emptyItem = {};
-              Object.keys(item).forEach((k) => (emptyItem[k] = ""));
-              return emptyItem;
-            });
-          } else if (value !== null && typeof value === "object") {
-            empty[key] = {};
-          } else {
-            empty[key] = "";
-          }
-        });
-        return empty;
-      };
-
-      const hydratedSections = matchedTheme.schema.map((section) => ({
-        ...section,
-        data: {
-          ...getEmptyData(section.data), // empty shell — no dummy images/text
-          ...Object.fromEntries(
-            Object.entries(mappedData).filter(([, v]) => v !== undefined && v !== null),
-          ),
-        },
-      }));
-
-      setSections(hydratedSections);
+      });
+      return empty;
     };
 
-    fetchTheme().finally(() => setLoading(false));
-  }, [storeData, id]);
+    const hydratedSections = matchedTheme.schema.map((section) => ({
+      ...section,
+      data: {
+        ...getEmptyData(section.data), // empty shell — no dummy images/text
+        ...Object.fromEntries(
+          Object.entries(mappedData).filter(([, v]) => v !== undefined && v !== null),
+        ),
+      },
+    }));
+
+    setSections(hydratedSections);
+  }, [apiData]);
 
   const filteredSections = sections.filter((section) =>
     section.type.includes("about"),
   );
 
-  if (loading) return <StoreFrontAboutSkeleton />;
+  if (loading && sections.length === 0) return <StoreFrontAboutSkeleton />;
 
   return (
     <section className="w-full container rounded-2xl p-6 space-y-8">

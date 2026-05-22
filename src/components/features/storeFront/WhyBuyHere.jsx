@@ -2,8 +2,9 @@ import { EngineRenderer } from "@/core/engine/Renderer";
 import { THEME_STORE } from "@/core/engine/themeStore";
 import { useEffect, useState } from "react";
 import StoreFrontAboutSkeleton from "@/components/ui/skeleton/StoreFrontAboutSkeleton";
-import { getWhyBuyHereStoreFrontByUserName } from "@/services/user.service";
 import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { getWhyBuyHereStoreFrontByUserNameQuery } from "@/queries/user.queries";
 
 function mapApiToTemplateData(api) {
   const mapped = {
@@ -43,67 +44,59 @@ export default function WhyBuyHere({ storeData = null }) {
   const id = useParams()?.id;
 
   const [sections, setSections] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  const { data: whyBuyData, isLoading } = useQuery({
+    ...getWhyBuyHereStoreFrontByUserNameQuery(id),
+    enabled: !storeData && !!id,
+  });
+
+  const apiData = storeData || whyBuyData;
+  const loading = !storeData && !!id ? isLoading : false;
 
   useEffect(() => {
-    const fetchTheme = async () => {
-      let apiData = storeData;
+    if (!apiData) return;
 
-      if (!apiData && id) {
-        try {
-          const res = await getWhyBuyHereStoreFrontByUserName(id);
-          apiData = res?.data;
-        } catch (error) {
-          console.error("Error fetching why buy here data:", error);
+    const matchedTheme =
+      THEME_STORE.find((t) => t.id === apiData.themeId) || THEME_STORE[0];
+
+    const mappedData = mapApiToTemplateData(apiData);
+
+    // Build empty shell from schema shape — no dummy content
+    const getEmptyData = (defaultData) => {
+      const empty = {};
+      Object.entries(defaultData).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          empty[key] = value.map((item) => {
+            if (typeof item === "string") return "";
+            const emptyItem = {};
+            Object.keys(item).forEach((k) => (emptyItem[k] = ""));
+            return emptyItem;
+          });
+        } else if (value !== null && typeof value === "object") {
+          empty[key] = {};
+        } else {
+          empty[key] = "";
         }
-      }
-
-      if (!apiData) return;
-
-      const matchedTheme =
-        THEME_STORE.find((t) => t.id === apiData.themeId) || THEME_STORE[0];
-
-      const mappedData = mapApiToTemplateData(apiData);
-
-      // Build empty shell from schema shape — no dummy content
-      const getEmptyData = (defaultData) => {
-        const empty = {};
-        Object.entries(defaultData).forEach(([key, value]) => {
-          if (Array.isArray(value)) {
-            empty[key] = value.map((item) => {
-              if (typeof item === "string") return "";
-              const emptyItem = {};
-              Object.keys(item).forEach((k) => (emptyItem[k] = ""));
-              return emptyItem;
-            });
-          } else if (value !== null && typeof value === "object") {
-            empty[key] = {};
-          } else {
-            empty[key] = "";
-          }
-        });
-        return empty;
-      };
-
-      const hydratedSections = matchedTheme.schema
-        .filter((section) => section.type.includes("why_buy"))
-        .map((section) => ({
-          ...section,
-          data: {
-            ...getEmptyData(section.data), // empty shell — no dummy images/text
-            ...Object.fromEntries(
-              Object.entries(mappedData).filter(([, v]) => v !== undefined && v !== null),
-            ),
-          },
-        }));
-
-      setSections(hydratedSections);
+      });
+      return empty;
     };
 
-    fetchTheme().finally(() => setLoading(false));
-  }, [storeData, id]);
+    const hydratedSections = matchedTheme.schema
+      .filter((section) => section.type.includes("why_buy"))
+      .map((section) => ({
+        ...section,
+        data: {
+          ...getEmptyData(section.data), // empty shell — no dummy images/text
+          ...Object.fromEntries(
+            Object.entries(mappedData).filter(([, v]) => v !== undefined && v !== null),
+          ),
+        },
+      }));
 
-  if (loading) return <StoreFrontAboutSkeleton />;
+    setSections(hydratedSections);
+  }, [apiData]);
+
+  if (loading && sections.length === 0) return <StoreFrontAboutSkeleton />;
 
   return (
     <section className="w-full container rounded-2xl p-6 space-y-8">

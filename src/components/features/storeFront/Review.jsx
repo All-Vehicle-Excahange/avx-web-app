@@ -4,7 +4,6 @@ import Button from "@/components/ui/button";
 import {
   addNewReview,
   checkIsEligibleToCreateReview,
-  getAllReview,
   getStoreFrontByUsername,
 } from "@/services/user.service";
 import {
@@ -20,9 +19,12 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import StoreFrontReviewSkeleton from "@/components/ui/skeleton/StoreFrontReviewSkeleton";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { getStoreFrontReviewsInfiniteQuery } from "@/queries/user.queries";
 
 export default function Review() {
   const id = useParams()?.id;
+  const queryClient = useQueryClient();
 
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
@@ -30,13 +32,27 @@ export default function Review() {
 
   const [isEligibleToCreateReview, setIsEligibleToCreateReview] =
     useState(false);
-  const [reviews, setReviews] = useState([]);
-  const [reviewSummary, setReviewSummary] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [media, setMedia] = useState([{ file: null }]);
-  const [reviewsLoading, setReviewsLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [consultantName, setConsultantName] = useState("");
+
+  // TanStack Query for storefront reviews (Infinite scroll / pagination)
+  const {
+    data: reviewsInfiniteData,
+    isLoading: reviewsLoading,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(
+    getStoreFrontReviewsInfiniteQuery(id, { size: 10 })
+  );
+
+  const reviews =
+    reviewsInfiniteData?.pages?.flatMap((page) => page?.data?.reviews || []) || [];
+
+  const reviewSummary =
+    reviewsInfiniteData?.pages?.[0]?.data?.reviewSummary || null;
 
   const checkEligibility = useCallback(async () => {
     if (!id) return;
@@ -45,25 +61,6 @@ export default function Review() {
       setIsEligibleToCreateReview(isEligible.data);
     } catch (error) {
       console.log("Check Eligibility Error:", error);
-    }
-  }, [id]);
-
-  const fetchReviews = useCallback(async () => {
-    if (!id) return;
-    try {
-      const res = await getAllReview(id, {
-        pageNo: 1,
-        size: 10,
-      });
-
-      const apiData = res?.data;
-
-      setReviews(apiData?.reviews || []);
-      setReviewSummary(apiData?.reviewSummary || null);
-    } catch (error) {
-      console.log("Review Fetch Error:", error);
-    } finally {
-      setReviewsLoading(false);
     }
   }, [id]);
 
@@ -83,10 +80,6 @@ export default function Review() {
     };
     fetchConsultantName();
   }, [checkEligibility, id]);
-
-  useEffect(() => {
-    fetchReviews();
-  }, [fetchReviews]);
 
   useEffect(() => {
     const handleEsc = (e) => {
@@ -150,8 +143,13 @@ export default function Review() {
       setReviewText("");
       setMedia([{ file: null }]);
 
-      // Refresh data
-      await Promise.all([fetchReviews(), checkEligibility()]);
+      // Invalidate the query to fetch fresh reviews
+      queryClient.invalidateQueries({
+        queryKey: ["storefront-reviews-infinite", id],
+      });
+
+      // Refresh eligibility
+      await checkEligibility();
     } catch (error) {
       console.log("❌ Submit Error:", error);
     } finally {
@@ -495,6 +493,21 @@ export default function Review() {
                 </div>
               );
             })
+          )}
+
+          {/* LOAD MORE BUTTON */}
+          {hasNextPage && reviews.length > 0 && (
+            <div className="flex justify-end mt-4">
+              <Button
+                type="button"
+                variant="outlineSecondary"
+                className="text-xs font-bold border-third/40"
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+              >
+                {isFetchingNextPage ? "Loading..." : "Load More Reviews"}
+              </Button>
+            </div>
           )}
         </div>
 

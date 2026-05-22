@@ -15,10 +15,9 @@ import {
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 import {
   followConsultant,
-  getStoreFrontByUsername,
   unFollowConsultant,
 } from "@/services/user.service";
 import LoginPopup from "@/components/auth/LoginPopup";
@@ -28,13 +27,19 @@ import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import SharePopup from "@/components/ui/SharePopup";
 import StoreFrontHeroSkeleton from "@/components/ui/skeleton/StoreFrontHeroSkeleton";
 import { useDebouncedCallback } from "@/hooks/useDebounce";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getStoreFrontByUsernameQuery } from "@/queries/user.queries";
 
 export default function StoreFrontHeroSection() {
-  const router = useRouter();
-  const { id } = router.query;
+  const id = useParams()?.id;
+  const queryClient = useQueryClient();
 
-  const [comsultDetails, setComsultDetails] = useState(null);
+  const { data: storeDetails, isLoading } = useQuery(
+    getStoreFrontByUsernameQuery(id)
+  );
+
   const [isFollower, setIsFollower] = useState(false);
+  const [localFollowersCount, setLocalFollowersCount] = useState(0);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isDownloadAppOpen, setIsDownloadAppOpen] = useState(false);
@@ -44,47 +49,39 @@ export default function StoreFrontHeroSection() {
   const lastSyncState = useRef(false);
   const pendingAction = useRef(null);
 
+  // Sync internal follower states when storeDetails updates
   useEffect(() => {
-    const fetchStoreFront = async () => {
-      try {
-        const res = await getStoreFrontByUsername(id);
-
-        if (res?.data) {
-          setComsultDetails(res.data);
-          setIsFollower(res.data.isFollower || false);
-          lastSyncState.current = res.data.isFollower || false;
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    if (id) fetchStoreFront();
-  }, [id]);
+    if (storeDetails) {
+      setIsFollower(storeDetails.isFollower || false);
+      lastSyncState.current = storeDetails.isFollower || false;
+      setLocalFollowersCount(storeDetails.followersCount || 0);
+    }
+  }, [storeDetails]);
 
   const debouncedSyncFollow = useDebouncedCallback(async (nextState) => {
     try {
       if (nextState) {
-        await followConsultant(comsultDetails?.id);
+        await followConsultant(storeDetails?.id);
       } else {
-        await unFollowConsultant(comsultDetails?.id);
+        await unFollowConsultant(storeDetails?.id);
       }
       lastSyncState.current = nextState;
+      // Invalidate query to sync back with actual server state
+      queryClient.invalidateQueries({
+        queryKey: ["storefront-by-username", id],
+      });
     } catch (error) {
       console.log("Follow/Unfollow error:", error);
       // Revert UI if API fails
       setIsFollower(!nextState);
-      setComsultDetails((prev) => ({
-        ...prev,
-        followersCount: !nextState
-          ? (prev.followersCount || 0) + 1
-          : Math.max(0, (prev.followersCount || 1) - 1),
-      }));
+      setLocalFollowersCount((prev) =>
+        !nextState ? (prev || 0) + 1 : Math.max(0, (prev || 1) - 1)
+      );
     }
   }, 800);
 
   const handleFollowToggle = useCallback(() => {
-    if (!comsultDetails?.id) return;
+    if (!storeDetails?.id) return;
 
     if (!isLoggedIn) {
       pendingAction.current = "follow";
@@ -94,19 +91,16 @@ export default function StoreFrontHeroSection() {
 
     const nextState = !isFollower;
     setIsFollower(nextState);
-    setComsultDetails((prev) => ({
-      ...prev,
-      followersCount: nextState
-        ? (prev.followersCount || 0) + 1
-        : Math.max(0, (prev.followersCount || 1) - 1),
-    }));
+    setLocalFollowersCount((prev) =>
+      nextState ? (prev || 0) + 1 : Math.max(0, (prev || 1) - 1)
+    );
 
     if (nextState === lastSyncState.current) {
       debouncedSyncFollow.cancel();
     } else {
       debouncedSyncFollow(nextState);
     }
-  }, [comsultDetails?.id, isLoggedIn, isFollower, debouncedSyncFollow]);
+  }, [storeDetails?.id, isLoggedIn, isFollower, debouncedSyncFollow]);
 
   useEffect(() => {
     if (isLoggedIn && pendingAction.current === "follow") {
@@ -118,7 +112,7 @@ export default function StoreFrontHeroSection() {
     }
   }, [isLoggedIn, handleFollowToggle]);
 
-  if (!comsultDetails) return <StoreFrontHeroSkeleton />;
+  if (isLoading || !storeDetails) return <StoreFrontHeroSkeleton />;
 
   const formatServiceName = (service) =>
     service
@@ -128,11 +122,11 @@ export default function StoreFrontHeroSection() {
       ?.join(" ");
 
   const formattedPrice =
-    comsultDetails.minVehiclePrice && comsultDetails.maxVehiclePrice
+    storeDetails.minVehiclePrice && storeDetails.maxVehiclePrice
       ? `₹${Number(
-          comsultDetails.minVehiclePrice,
+          storeDetails.minVehiclePrice,
         ).toLocaleString()} - ₹${Number(
-          comsultDetails.maxVehiclePrice,
+          storeDetails.maxVehiclePrice,
         ).toLocaleString()}`
       : "-";
 
@@ -153,7 +147,7 @@ export default function StoreFrontHeroSection() {
         <div
           className="w-full h-54 md:h-80 bg-cover bg-center"
           style={{
-            backgroundImage: `url(${comsultDetails.bannerUrl})`,
+            backgroundImage: `url(${storeDetails.bannerUrl})`,
           }}
         />
 
@@ -164,7 +158,7 @@ export default function StoreFrontHeroSection() {
             <div className="flex flex-col items-center -mt-20 z-30 w-full lg:w-48 shrink-0">
               <div className="relative w-42 h-42 rounded-full overflow-hidden bg-primary border-4 border-white shadow-xl">
                 <Image
-                  src={comsultDetails.logoUrl}
+                  src={storeDetails.logoUrl}
                   alt="Consultant Logo"
                   fill
                   className="object-cover"
@@ -194,7 +188,7 @@ export default function StoreFrontHeroSection() {
                         : "bg-secondary/10 text-secondary group-hover:bg-primary/10 group-hover:text-primary"
                     }`}
                   >
-                    {formatFollowerCount(comsultDetails.followersCount)}
+                    {formatFollowerCount(localFollowersCount)}
                   </span>
                 </button>
               </div>
@@ -205,7 +199,7 @@ export default function StoreFrontHeroSection() {
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-3xl font-semibold text-primary leading-tight">
-                    {comsultDetails.consultationName}
+                    {storeDetails.consultationName}
                   </h1>
 
                   <Button
@@ -221,9 +215,9 @@ export default function StoreFrontHeroSection() {
                   <MapPin className="w-4 h-4 shrink-0" />
                   <span className="text-sm">
                     {[
-                      comsultDetails?.address?.address,
-                      comsultDetails?.address?.city,
-                      comsultDetails?.address?.state,
+                      storeDetails?.address?.address,
+                      storeDetails?.address?.city,
+                      storeDetails?.address?.state,
                     ]
                       .filter(Boolean)
                       .join(", ") || "N/A"}
@@ -236,17 +230,17 @@ export default function StoreFrontHeroSection() {
                 {[
                   {
                     label: "Rating",
-                    value: comsultDetails.averageRating ?? 0,
+                    value: storeDetails.averageRating ?? 0,
                     icon: Star,
                   },
                   {
                     label: "Available Vehicles",
-                    value: comsultDetails.availableVehicles ?? 0,
+                    value: storeDetails.availableVehicles ?? 0,
                     icon: Car,
                   },
                   {
                     label: "Sold Vehicles",
-                    value: comsultDetails.soldVehiclesCount ?? 0,
+                    value: storeDetails.soldVehiclesCount ?? 0,
                     icon: CheckCircle,
                   },
                   {
@@ -256,7 +250,7 @@ export default function StoreFrontHeroSection() {
                   },
                   {
                     label: "Since",
-                    value: comsultDetails.establishmentYear || "N/A",
+                    value: storeDetails.establishmentYear || "N/A",
                     icon: Briefcase,
                   },
                 ].map(({ label, value, icon: Icon }) => (
@@ -285,8 +279,8 @@ export default function StoreFrontHeroSection() {
                 </p>
 
                 <div className="flex flex-wrap gap-2">
-                  {comsultDetails?.services?.length > 0 ? (
-                    comsultDetails.services.map((service) => (
+                  {storeDetails?.services?.length > 0 ? (
+                    storeDetails.services.map((service) => (
                       <span
                         key={service}
                         className="px-3 py-1.5 text-[11px] font-medium border border-third rounded-full text-primary hover:bg-primary/5 transition-colors cursor-default"
@@ -345,7 +339,7 @@ export default function StoreFrontHeroSection() {
         isOpen={isShareOpen}
         onClose={() => setIsShareOpen(false)}
         shareUrl={currentUrl}
-        title={comsultDetails?.consultationName || "Check this store"}
+        title={storeDetails?.consultationName || "Check this store"}
       />
     </>
   );
