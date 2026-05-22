@@ -41,13 +41,13 @@ import ResultsModal from "./components/ResultsModal";
 
 // --- Mock Data ---
 const audienceData = [
-  { day: "M", value: 450, color: "#82ebd9" },
-  { day: "T", value: 650, color: "#50d4be" },
-  { day: "W", value: 520, color: "#82ebd9" },
-  { day: "T", value: 750, color: "#26b29b" },
-  { day: "F", value: 850, color: "#1c9682" },
-  { day: "S", value: 980, color: "#10695b" },
-  { day: "S", value: 800, color: "#1c9682" },
+  { day: "M", value: 450, color: "#7cb5ff" },
+  { day: "T", value: 650, color: "#4da6ff" },
+  { day: "W", value: 520, color: "#7cb5ff" },
+  { day: "T", value: 750, color: "#007bff" },
+  { day: "F", value: 850, color: "#0062cc" },
+  { day: "S", value: 980, color: "#004b9b" },
+  { day: "S", value: 800, color: "#0062cc" },
 ];
 
 // --- Mock Recent Ads Data ---

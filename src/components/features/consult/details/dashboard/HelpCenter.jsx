@@ -52,16 +52,7 @@ export default function HelpCenter() {
           )} */}
         </button>
 
-        <button
-          onClick={() => setView("create")}
-          className={`flex cursor-pointer items-center gap-2 pb-3 text-xs sm:text-sm font-semibold border-b-2 transition-all whitespace-nowrap ${
-            isCreateActive
-              ? "border-primary text-primary"
-              : "border-transparent text-third hover:text-primary"
-          }`}
-        >
-          <PlusCircle size={16} /> New Support Ticket
-        </button>
+      
       </div>
 
       {/* Main View Container */}

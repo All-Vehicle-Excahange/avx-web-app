@@ -1,5 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import {
+  getInspectionStatus,
   getInventoryOverview,
   getOverviewSummaryData,
 } from "@/services/overview.service";
@@ -11,7 +12,7 @@ export const getInventoryOverviewQuery = () => {
       const res = await getInventoryOverview();
       return res?.data;
     },
-     staleTime: Infinity,
+    staleTime: Infinity,
   });
 };
 
@@ -22,6 +23,17 @@ export const getOverviewSummaryDataQuery = () => {
       const res = await getOverviewSummaryData();
       return res?.data;
     },
-     staleTime: Infinity,
+    staleTime: Infinity,
+  });
+};
+
+export const getInspectionStatusQuery = () => {
+  return queryOptions({
+    queryKey: ["overview-inspection-status"],
+    queryFn: async () => {
+      const res = await getInspectionStatus();
+      return res?.data;
+    },
+    staleTime: Infinity,
   });
 };

@@ -6,6 +6,7 @@ import axiosInstance, {
 const ENDPOINT = {
   getInventoryOverview: "/consultation/dashboard/overview/inventory-data",
   getOverviewSummaryData: "/consultation/dashboard/overview/summary-data",
+  getInspectionStatus: "/consultation/dashboard/overview/inspection-status",
 };
 
 export const getInventoryOverview = async () => {
@@ -21,6 +22,16 @@ export const getInventoryOverview = async () => {
 export const getOverviewSummaryData = async () => {
   try {
     const res = await axiosInstance.get(ENDPOINT.getOverviewSummaryData);
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const getInspectionStatus = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getInspectionStatus);
     return handleResponse(res);
   } catch (error) {
     handleError(error);

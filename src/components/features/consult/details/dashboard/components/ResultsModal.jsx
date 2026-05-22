@@ -47,10 +47,33 @@ const rangeData = {
     cpc_s: "₹4.71",
   },
   "30d": {
-    labels: ["1", "3", "5", "7", "9", "11", "13", "15", "17", "19", "21", "23", "25", "27", "29", "30"],
-    imp: [280, 350, 320, 420, 390, 480, 460, 510, 530, 490, 560, 540, 500, 470, 520, 580],
+    labels: [
+      "1",
+      "3",
+      "5",
+      "7",
+      "9",
+      "11",
+      "13",
+      "15",
+      "17",
+      "19",
+      "21",
+      "23",
+      "25",
+      "27",
+      "29",
+      "30",
+    ],
+    imp: [
+      280, 350, 320, 420, 390, 480, 460, 510, 530, 490, 560, 540, 500, 470, 520,
+      580,
+    ],
     clicks: [11, 15, 13, 18, 16, 21, 19, 22, 23, 20, 24, 23, 21, 19, 22, 25],
-    spend: [180, 220, 190, 250, 220, 290, 270, 310, 330, 290, 340, 320, 290, 270, 310, 350],
+    spend: [
+      180, 220, 190, 250, 220, 290, 270, 310, 330, 290, 340, 320, 290, 270, 310,
+      350,
+    ],
     imp_s: "12,450",
     click_s: "486",
     ctr_s: "3.9%",
@@ -62,7 +85,9 @@ const rangeData = {
 export default function ResultsModal({ onClose, isClosing, ad }) {
   const router = useRouter();
   const [range, setRange] = useState("7d");
-  const [isCampaignPaused, setIsCampaignPaused] = useState(ad?.status === "Paused");
+  const [isCampaignPaused, setIsCampaignPaused] = useState(
+    ad?.status === "Paused",
+  );
   const [hoveredLineIndex, setHoveredLineIndex] = useState(null);
   const [hoveredSpendIndex, setHoveredSpendIndex] = useState(null);
 
@@ -73,7 +98,10 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
   };
 
   // Safe Fallback Values from Clicked Card
-  const campaignName = ad?.placement === "Consultant page" ? "Adarsh Auto Consultant" : (ad?.title || "BMW X1 — 2023 xDrive20d");
+  const campaignName =
+    ad?.placement === "Consultant page"
+      ? "Adarsh Auto Consultant"
+      : ad?.title || "BMW X1 — 2023 xDrive20d";
   const campaignType = ad?.model || "CPC";
   const campaignPlacement = ad?.placement || "Homepage featured";
   const campaignBudget = ad?.budget ? `${ad.budget} budget` : "₹500/day budget";
@@ -131,11 +159,15 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
     clicksAreaPath += ` L ${getX(pointsCount - 1)} ${height - padding} Z`;
 
     return (
-      <svg className="w-full h-full" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none">
+      <svg
+        className="w-full h-full"
+        viewBox={`0 0 ${width} ${height}`}
+        preserveAspectRatio="none"
+      >
         <defs>
           <linearGradient id="impGlow" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#26b29b" stopOpacity="0.15" />
-            <stop offset="100%" stopColor="#26b29b" stopOpacity="0.0" />
+            <stop offset="0%" stopColor="#7cb5ff" stopOpacity="0.15" />
+            <stop offset="100%" stopColor="#7cb5ff" stopOpacity="0.0" />
           </linearGradient>
           <linearGradient id="clicksGlow" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#007bff" stopOpacity="0.15" />
@@ -180,7 +212,13 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
         )}
 
         {/* Line Paths */}
-        <path d={impPath} fill="none" stroke="#26b29b" strokeWidth="2" strokeDasharray="3,3" />
+        <path
+          d={impPath}
+          fill="none"
+          stroke="#7cb5ff"
+          strokeWidth="2"
+          strokeDasharray="3,3"
+        />
         <path d={clicksPath} fill="none" stroke="#007bff" strokeWidth="2.5" />
 
         {/* Point Circles */}
@@ -190,7 +228,7 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
             cx={getX(idx)}
             cy={getY(val, maxImp, minImp)}
             r={hoveredLineIndex === idx ? "5" : "3"}
-            fill="#26b29b"
+            fill="#7cb5ff"
             stroke={hoveredLineIndex === idx ? "white" : "none"}
             strokeWidth={hoveredLineIndex === idx ? "1.5" : "0"}
             className="transition-all duration-300"
@@ -253,18 +291,24 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
 
     const maxSpend = Math.max(...currentData.spend);
     const pointsCount = currentData.labels.length;
-    
+
     const availableWidth = width - padding * 2;
     const barWidth = Math.max(10, (availableWidth / pointsCount) * 0.65);
     const stepX = availableWidth / (pointsCount - 1 || 1);
 
     const getX = (index) => padding + index * stepX - barWidth / 2;
     const getY = (val) => {
-      return height - padding - (val / (maxSpend || 1)) * (height - padding * 2 - 10);
+      return (
+        height - padding - (val / (maxSpend || 1)) * (height - padding * 2 - 10)
+      );
     };
 
     return (
-      <svg className="w-full h-full" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none">
+      <svg
+        className="w-full h-full"
+        viewBox={`0 0 ${width} ${height}`}
+        preserveAspectRatio="none"
+      >
         {/* Grid lines */}
         {[0, 1, 2, 3].map((i) => {
           const yVal = padding + (i * (height - padding * 2 - 10)) / 3;
@@ -296,7 +340,7 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
               width={barWidth}
               height={barHeight}
               rx={2}
-              fill={hoveredSpendIndex === idx ? "#26b29b" : "#007bff"}
+              fill={hoveredSpendIndex === idx ? "#005ecb" : "#007bff"}
               fillOpacity={hoveredSpendIndex === idx ? 1.0 : 0.85}
               className="transition-all duration-150 cursor-pointer"
               onMouseEnter={() => setHoveredSpendIndex(idx)}
@@ -357,17 +401,21 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
             </button>
             <div className="space-y-0.5">
               <div className="flex items-center flex-wrap gap-2">
-                <span className="font-semibold text-sm sm:text-base text-primary">{campaignName}</span>
+                <span className="font-semibold text-sm sm:text-base text-primary">
+                  {campaignName}
+                </span>
                 <span
                   className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
                     isCampaignPaused
                       ? "bg-amber-500/10 text-amber-400"
-                      : "bg-[#26b29b]/10 text-[#26b29b]"
+                      : "bg-fourth/10 text-fourth"
                   }`}
                 >
                   <span
                     className={`w-1.5 h-1.5 rounded-full ${
-                      isCampaignPaused ? "bg-amber-400" : "bg-[#26b29b] animate-pulse"
+                      isCampaignPaused
+                        ? "bg-amber-400"
+                        : "bg-fourth animate-pulse"
                     }`}
                   />
                   {isCampaignPaused ? "Paused" : "Active"}
@@ -377,11 +425,15 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                 <span className="bg-blue-500/15 text-blue-400 font-bold px-1.5 py-0.5 rounded text-[10px] uppercase">
                   {campaignType}
                 </span>
-                <span className="text-third/80 font-semibold">{campaignPlacement}</span>
+                <span className="text-third/80 font-semibold">
+                  {campaignPlacement}
+                </span>
                 <span className="text-third/50 font-semibold">•</span>
                 <span>18 May – 17 Jun 2026</span>
                 <span className="text-third/50 font-semibold">•</span>
-                <span className="text-third/95 font-semibold">{campaignBudget}</span>
+                <span className="text-third/95 font-semibold">
+                  {campaignBudget}
+                </span>
               </div>
             </div>
           </div>
@@ -418,7 +470,8 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
               onClick={() => router.push("/consult/dashboard/ads/create")}
               className="h-9 px-4 text-xs font-bold flex items-center gap-1.5"
             >
-              <RefreshCw className="mr-2" size={14} strokeWidth={3} /> Boost again
+              <RefreshCw className="mr-2" size={14} strokeWidth={3} /> Boost
+              again
             </Button>
             <button
               onClick={onClose}
@@ -431,7 +484,6 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
 
         {/* Scrollable Layout Body */}
         <div className="overflow-y-auto p-4 sm:p-5 space-y-5 custom-scrollbar bg-secondary">
-          
           {/* Vehicle Metadata Header Card */}
           <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
@@ -439,7 +491,9 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                 <Car size={24} />
               </div>
               <div>
-                <h4 className="font-semibold text-sm sm:text-base text-primary">{campaignName}</h4>
+                <h4 className="font-semibold text-sm sm:text-base text-primary">
+                  {campaignName}
+                </h4>
                 <p className="text-xs text-third font-medium mt-0.5">
                   12,400 km · Petrol · Auto · ₹42.0L
                 </p>
@@ -451,20 +505,23 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                 <span className="text-[10px] text-third block uppercase font-bold tracking-wider opacity-60">
                   Campaign
                 </span>
-                <span className="text-sm font-semibold text-primary block">Day 1 of 30</span>
+                <span className="text-sm font-semibold text-primary block">
+                  Day 1 of 30
+                </span>
               </div>
               <div className="space-y-0.5">
                 <span className="text-[10px] text-third block uppercase font-bold tracking-wider opacity-60">
                   Avg Position
                 </span>
-                <span className="text-sm font-bold text-[#26b29b] block">#2</span>
+                <span className="text-sm font-bold text-fourth block">#2</span>
               </div>
               <div className="space-y-0.5">
                 <span className="text-[10px] text-third block uppercase font-bold tracking-wider opacity-60">
                   Spent
                 </span>
                 <span className="text-sm font-semibold text-third block">
-                  {currentData.spend_s} / <span className="text-third/60">₹15,000</span>
+                  {currentData.spend_s} /{" "}
+                  <span className="text-third/60">₹15,000</span>
                 </span>
               </div>
             </div>
@@ -501,7 +558,7 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
               <span className="text-xl sm:text-2xl font-black text-primary block">
                 {currentData.imp_s}
               </span>
-              <span className="text-[11px] text-[#26b29b] font-semibold block">
+              <span className="text-[11px] text-fourth font-semibold block">
                 ↑ 18% vs last week
               </span>
             </div>
@@ -512,7 +569,7 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
               <span className="text-xl sm:text-2xl font-black text-primary block">
                 {currentData.click_s}
               </span>
-              <span className="text-[11px] text-[#26b29b] font-semibold block">
+              <span className="text-[11px] text-fourth font-semibold block">
                 ↑ 12% vs last week
               </span>
             </div>
@@ -523,7 +580,7 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
               <span className="text-xl sm:text-2xl font-black text-primary block">
                 {currentData.ctr_s}
               </span>
-              <span className="text-[11px] text-[#26b29b] font-semibold block">
+              <span className="text-[11px] text-fourth font-semibold block">
                 Above average (2.1%)
               </span>
             </div>
@@ -550,14 +607,20 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                 </h4>
                 {hoveredLineIndex !== null ? (
                   <div className="text-[10px] font-bold text-third flex items-center gap-2 bg-secondary/20 px-2 py-0.5 rounded border border-third/10 animate-pulse">
-                    <span className="text-third/80 font-semibold">{currentData.labels[hoveredLineIndex]}:</span>
-                    <span className="text-[#26b29b]">{currentData.imp[hoveredLineIndex]} Imp</span>
-                    <span className="text-fourth">{currentData.clicks[hoveredLineIndex]} Clicks</span>
+                    <span className="text-third/80 font-semibold">
+                      {currentData.labels[hoveredLineIndex]}:
+                    </span>
+                    <span className="text-[#7cb5ff]">
+                      {currentData.imp[hoveredLineIndex]} Imp
+                    </span>
+                    <span className="text-fourth">
+                      {currentData.clicks[hoveredLineIndex]} Clicks
+                    </span>
                   </div>
                 ) : (
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1.5 text-[10px] text-third font-semibold">
-                      <span className="w-2.5 h-2.5 rounded bg-[#26b29b] opacity-80 inline-block" />
+                      <span className="w-2.5 h-2.5 rounded bg-[#7cb5ff] opacity-80 inline-block" />
                       Impressions
                     </div>
                     <div className="flex items-center gap-1.5 text-[10px] text-third font-semibold">
@@ -567,13 +630,13 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                   </div>
                 )}
               </div>
-              <div 
+              <div
                 className="h-44 w-full relative group"
                 onMouseLeave={() => setHoveredLineIndex(null)}
               >
                 {renderLineChartSVG()}
                 {hoveredLineIndex !== null && (
-                  <div 
+                  <div
                     className="absolute z-20 bg-secondary/95 border border-third/15 p-2.5 rounded-lg shadow-xl text-[10px] space-y-1 pointer-events-none transition-all duration-75"
                     style={{
                       left: `${((24 + hoveredLineIndex * ((500 - 48) / (currentData.labels.length - 1 || 1))) / 500) * 100}%`,
@@ -585,12 +648,18 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                       {currentData.labels[hoveredLineIndex]}
                     </p>
                     <div className="flex items-center gap-2 justify-between">
-                      <span className="text-third/80 font-medium">Impressions:</span>
-                      <span className="text-[#26b29b] font-bold">{currentData.imp[hoveredLineIndex]}</span>
+                      <span className="text-third/80 font-medium">
+                        Impressions:
+                      </span>
+                      <span className="text-[#7cb5ff] font-bold">
+                        {currentData.imp[hoveredLineIndex]}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2 justify-between">
                       <span className="text-third/80 font-medium">Clicks:</span>
-                      <span className="text-fourth font-bold">{currentData.clicks[hoveredLineIndex]}</span>
+                      <span className="text-fourth font-bold">
+                        {currentData.clicks[hoveredLineIndex]}
+                      </span>
                     </div>
                   </div>
                 )}
@@ -605,53 +674,79 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
               <div className="space-y-3">
                 {/* Imp */}
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-third w-20 shrink-0 font-medium">Impressions</span>
+                  <span className="text-xs text-third w-20 shrink-0 font-medium">
+                    Impressions
+                  </span>
                   <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
-                    <div className="h-full bg-[#26b29b]/10 rounded flex items-center px-2" style={{ width: "100%" }}>
-                      <span className="text-[11px] font-bold text-[#26b29b]">{currentData.imp_s}</span>
+                    <div
+                      className="h-full bg-[#7cb5ff]/15 rounded flex items-center px-2"
+                      style={{ width: "100%" }}
+                    >
+                      <span className="text-[11px] font-bold text-[#7cb5ff]">
+                        {currentData.imp_s}
+                      </span>
                     </div>
                   </div>
-                  <span className="text-[11px] text-third font-bold w-9 text-right shrink-0">100%</span>
+                  <span className="text-[11px] text-third font-bold w-9 text-right shrink-0">
+                    100%
+                  </span>
                 </div>
                 {/* Clicks */}
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-third w-20 shrink-0 font-medium">Clicks</span>
+                  <span className="text-xs text-third w-20 shrink-0 font-medium">
+                    Clicks
+                  </span>
                   <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
-                    <div className="h-full bg-fourth/20 rounded flex items-center px-2" style={{ width: "44%" }}>
-                      <span className="text-[11px] font-bold text-fourth">{currentData.click_s}</span>
+                    <div
+                      className="h-full bg-fourth/20 rounded flex items-center px-2"
+                      style={{ width: "44%" }}
+                    >
+                      <span className="text-[11px] font-bold text-fourth">
+                        {currentData.click_s}
+                      </span>
                     </div>
                   </div>
-                  <span className="text-[11px] text-[#26b29b] font-bold w-9 text-right shrink-0">{currentData.ctr_s}</span>
+                  <span className="text-[11px] text-fourth font-bold w-9 text-right shrink-0">
+                    {currentData.ctr_s}
+                  </span>
                 </div>
                 {/* Detail views */}
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-third w-20 shrink-0 font-medium">Detail Views</span>
+                  <span className="text-xs text-third w-20 shrink-0 font-medium">
+                    Detail Views
+                  </span>
                   <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
-                    <div className="h-full bg-[#26b29b]/35 rounded flex items-center px-2" style={{ width: "26%" }}>
-                      <span className="text-[11px] font-bold text-[#26b29b]">{currentData.click_s ? "74" : "0"}</span>
+                    <div
+                      className="h-full bg-[#7cb5ff]/35 rounded flex items-center px-2"
+                      style={{ width: "26%" }}
+                    >
+                      <span className="text-[11px] font-bold text-[#7cb5ff]">
+                        {currentData.click_s ? "74" : "0"}
+                      </span>
                     </div>
                   </div>
-                  <span className="text-[11px] text-fourth font-bold w-9 text-right shrink-0">2.6%</span>
+                  <span className="text-[11px] text-fourth font-bold w-9 text-right shrink-0">
+                    2.6%
+                  </span>
                 </div>
                 {/* Inquiries */}
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-third w-20 shrink-0 font-medium">Inquiries</span>
+                  <span className="text-xs text-third w-20 shrink-0 font-medium">
+                    Inquiries
+                  </span>
                   <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
-                    <div className="h-full bg-fourth rounded flex items-center px-2" style={{ width: "9%" }}>
-                      <span className="text-[11px] font-bold text-primary">8</span>
+                    <div
+                      className="h-full bg-fourth rounded flex items-center px-2"
+                      style={{ width: "9%" }}
+                    >
+                      <span className="text-[11px] font-bold text-primary">
+                        8
+                      </span>
                     </div>
                   </div>
-                  <span className="text-[11px] text-[#26b29b] font-bold w-9 text-right shrink-0">0.3%</span>
-                </div>
-                {/* Calls */}
-                <div className="flex items-center gap-3">
-                  <span className="text-xs text-third w-20 shrink-0 font-medium">Calls</span>
-                  <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
-                    <div className="h-full bg-fourth/85 rounded flex items-center px-2" style={{ width: "4%" }}>
-                      <span className="text-[11px] font-bold text-blue-100">3</span>
-                    </div>
-                  </div>
-                  <span className="text-[11px] text-[#26b29b] font-bold w-9 text-right shrink-0">0.1%</span>
+                  <span className="text-[11px] text-fourth font-bold w-9 text-right shrink-0">
+                    0.3%
+                  </span>
                 </div>
               </div>
             </div>
@@ -676,7 +771,10 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                   <span>₹500 limit</span>
                 </div>
                 <div className="w-full bg-secondary h-2 rounded-full overflow-hidden border border-third/10">
-                  <div className="h-full bg-fourth rounded-full" style={{ width: "68%" }} />
+                  <div
+                    className="h-full bg-fourth rounded-full"
+                    style={{ width: "68%" }}
+                  />
                 </div>
                 <span className="text-[11px] text-third/60 block font-medium">
                   68% of daily budget used · resets at midnight
@@ -691,24 +789,36 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                 </span>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
-                    <span className="text-third font-medium">Total Spent (Campaign)</span>
-                    <span className="text-primary font-bold">{currentData.spend_s}</span>
+                    <span className="text-third font-medium">
+                      Total Spent (Campaign)
+                    </span>
+                    <span className="text-primary font-bold">
+                      {currentData.spend_s}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
-                    <span className="text-third font-medium">Remaining Budget</span>
-                    <span className="text-[#26b29b] font-bold">₹14,442</span>
+                    <span className="text-third font-medium">
+                      Remaining Budget
+                    </span>
+                    <span className="text-fourth font-bold">₹14,442</span>
                   </div>
                   <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
-                    <span className="text-third font-medium">Avg. CPC Paid</span>
+                    <span className="text-third font-medium">
+                      Avg. CPC Paid
+                    </span>
                     <span className="text-primary font-bold">{rateValue}</span>
                   </div>
                   <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
-                    <span className="text-third font-medium">Cost Per Inquiry</span>
+                    <span className="text-third font-medium">
+                      Cost Per Inquiry
+                    </span>
                     <span className="text-primary font-bold">₹69.75</span>
                   </div>
                   <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
-                    <span className="text-third font-medium">Wallet Balance</span>
-                    <span className="text-[#26b29b] font-bold">₹7,682</span>
+                    <span className="text-third font-medium">
+                      Wallet Balance
+                    </span>
+                    <span className="text-fourth font-bold">₹7,682</span>
                   </div>
                 </div>
               </div>
@@ -722,18 +832,22 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                 </h4>
                 {hoveredSpendIndex !== null && (
                   <div className="text-[10px] font-bold text-third flex items-center gap-1.5 bg-secondary/20 px-2 py-0.5 rounded border border-third/10 animate-pulse">
-                    <span className="text-third/80 font-semibold">{currentData.labels[hoveredSpendIndex]}:</span>
-                    <span className="text-fourth">₹{currentData.spend[hoveredSpendIndex]} spent</span>
+                    <span className="text-third/80 font-semibold">
+                      {currentData.labels[hoveredSpendIndex]}:
+                    </span>
+                    <span className="text-fourth">
+                      ₹{currentData.spend[hoveredSpendIndex]} spent
+                    </span>
                   </div>
                 )}
               </div>
-              <div 
+              <div
                 className="h-48 w-full relative"
                 onMouseLeave={() => setHoveredSpendIndex(null)}
               >
                 {renderSpendBarChartSVG()}
                 {hoveredSpendIndex !== null && (
-                  <div 
+                  <div
                     className="absolute z-20 bg-secondary/95 border border-third/15 p-2.5 rounded-lg shadow-xl text-[10px] space-y-1 pointer-events-none transition-all duration-75"
                     style={{
                       left: `${((24 + hoveredSpendIndex * ((500 - 48) / (currentData.labels.length - 1 || 1))) / 500) * 100}%`,
@@ -745,8 +859,12 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                       {currentData.labels[hoveredSpendIndex]}
                     </p>
                     <div className="flex items-center gap-2 justify-between">
-                      <span className="text-third/80 font-medium">Daily Spend:</span>
-                      <span className="text-fourth font-bold">₹{currentData.spend[hoveredSpendIndex]}</span>
+                      <span className="text-third/80 font-medium">
+                        Daily Spend:
+                      </span>
+                      <span className="text-fourth font-bold">
+                        ₹{currentData.spend[hoveredSpendIndex]}
+                      </span>
                     </div>
                   </div>
                 )}
@@ -771,50 +889,78 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                 <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
                   <div className="w-2.5 h-2.5 rounded-full bg-fourth mt-1 shrink-0" />
                   <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">New inquiry received</p>
-                    <p className="text-third">Buyer asked about service history</p>
+                    <p className="font-semibold text-primary">
+                      New inquiry received
+                    </p>
+                    <p className="text-third">
+                      Buyer asked about service history
+                    </p>
                   </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">2 min ago</span>
-                </div>
-                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#26b29b] mt-1 shrink-0" />
-                  <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">6 new clicks</p>
-                    <p className="text-third">Homepage featured slot · ₹27 spent</p>
-                  </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">14 min ago</span>
-                </div>
-                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#26b29b] mt-1 shrink-0" />
-                  <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">11 new clicks</p>
-                    <p className="text-third">Homepage featured slot · ₹49.50 spent</p>
-                  </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">1 hr ago</span>
-                </div>
-                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-third mt-1 shrink-0" />
-                  <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">340 impressions</p>
-                    <p className="text-third">Morning peak traffic window</p>
-                  </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">3 hrs ago</span>
+                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
+                    2 min ago
+                  </span>
                 </div>
                 <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
                   <div className="w-2.5 h-2.5 rounded-full bg-fourth mt-1 shrink-0" />
                   <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">New inquiry received</p>
+                    <p className="font-semibold text-primary">6 new clicks</p>
+                    <p className="text-third">
+                      Homepage featured slot · ₹27 spent
+                    </p>
+                  </div>
+                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
+                    14 min ago
+                  </span>
+                </div>
+                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-fourth mt-1 shrink-0" />
+                  <div className="flex-1 space-y-0.5">
+                    <p className="font-semibold text-primary">11 new clicks</p>
+                    <p className="text-third">
+                      Homepage featured slot · ₹49.50 spent
+                    </p>
+                  </div>
+                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
+                    1 hr ago
+                  </span>
+                </div>
+                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-third mt-1 shrink-0" />
+                  <div className="flex-1 space-y-0.5">
+                    <p className="font-semibold text-primary">
+                      340 impressions
+                    </p>
+                    <p className="text-third">Morning peak traffic window</p>
+                  </div>
+                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
+                    3 hrs ago
+                  </span>
+                </div>
+                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-fourth mt-1 shrink-0" />
+                  <div className="flex-1 space-y-0.5">
+                    <p className="font-semibold text-primary">
+                      New inquiry received
+                    </p>
                     <p className="text-third">Buyer requested test drive</p>
                   </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">5 hrs ago</span>
+                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
+                    5 hrs ago
+                  </span>
                 </div>
                 <div className="flex gap-3 items-start text-xs pb-1">
                   <div className="w-2.5 h-2.5 rounded-full bg-amber-500 mt-1 shrink-0" />
                   <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">Ad resumed automatically</p>
-                    <p className="text-third">Wallet topped up · budget reset at midnight</p>
+                    <p className="font-semibold text-primary">
+                      Ad resumed automatically
+                    </p>
+                    <p className="text-third">
+                      Wallet topped up · budget reset at midnight
+                    </p>
                   </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">Yesterday</span>
+                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
+                    Yesterday
+                  </span>
                 </div>
               </div>
             </div>
@@ -823,55 +969,75 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
             <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-4">
               <div className="flex items-center justify-between">
                 <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
-                  AI Insights
+                  Insights
                 </h4>
                 <TrendingUp size={16} className="text-amber-500" />
               </div>
 
               <div className="space-y-3">
-                <div className="flex gap-3 items-start p-3 rounded-lg bg-[#26b29b]/10 border border-[#26b29b]/20 text-xs">
-                  <TrendingUp className="text-[#26b29b] shrink-0 mt-0.5" size={16} />
+                <div className="flex gap-3 items-start p-3 rounded-lg bg-fourth/10 border border-fourth/20 text-xs">
+                  <TrendingUp
+                    className="text-fourth shrink-0 mt-0.5"
+                    size={16}
+                  />
                   <div>
-                    <h5 className="font-bold text-[#26b29b]">CTR is 2× the platform average</h5>
+                    <h5 className="font-bold text-fourth">
+                      CTR is 2× the platform average
+                    </h5>
                     <p className="text-third mt-0.5 leading-relaxed font-medium">
-                      Homepage placement is working well for this vehicle. Consider increasing daily budget to ₹750 for more reach.
+                      Homepage placement is working well for this vehicle.
+                      Consider increasing daily budget to ₹750 for more reach.
                     </p>
                   </div>
                 </div>
 
                 <div className="flex gap-3 items-start p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs">
-                  <AlertTriangle className="text-amber-400 shrink-0 mt-0.5" size={16} />
+                  <AlertTriangle
+                    className="text-amber-400 shrink-0 mt-0.5"
+                    size={16}
+                  />
                   <div>
-                    <h5 className="font-bold text-amber-400">Budget runs out by 4 PM daily</h5>
+                    <h5 className="font-bold text-amber-400">
+                      Budget runs out by 4 PM daily
+                    </h5>
                     <p className="text-amber-200/80 mt-0.5 leading-relaxed font-medium">
-                      You&apos;re missing evening traffic. Raise daily budget or reduce max CPC bid to stretch further.
+                      You&apos;re missing evening traffic. Raise daily budget or
+                      reduce max CPC bid to stretch further.
                     </p>
                   </div>
                 </div>
 
                 <div className="flex gap-3 items-start p-3 rounded-lg bg-fourth/10 border border-fourth/20 text-xs">
-                  <MessageSquare className="text-fourth shrink-0 mt-0.5" size={16} />
+                  <MessageSquare
+                    className="text-fourth shrink-0 mt-0.5"
+                    size={16}
+                  />
                   <div>
-                    <h5 className="font-bold text-fourth">8 inquiries in 7 days</h5>
+                    <h5 className="font-bold text-fourth">
+                      8 inquiries in 7 days
+                    </h5>
                     <p className="text-third mt-0.5 leading-relaxed font-medium">
-                      Effective cost per inquiry is ₹69.75. Switching to CPI billing could reduce cost if inquiry rate holds.
+                      Effective cost per inquiry is ₹69.75. Switching to CPI
+                      billing could reduce cost if inquiry rate holds.
                     </p>
                   </div>
                 </div>
 
-                <div className="flex gap-3 items-start p-3 rounded-lg bg-[#26b29b]/10 border border-[#26b29b]/20 text-xs">
-                  <Calendar className="text-[#26b29b] shrink-0 mt-0.5" size={16} />
+                <div className="flex gap-3 items-start p-3 rounded-lg bg-fourth/10 border border-fourth/20 text-xs">
+                  <Calendar className="text-fourth shrink-0 mt-0.5" size={16} />
                   <div>
-                    <h5 className="font-bold text-[#26b29b]">Weekends drive 34% more clicks</h5>
+                    <h5 className="font-bold text-fourth">
+                      Weekends drive 34% more clicks
+                    </h5>
                     <p className="text-third mt-0.5 leading-relaxed font-medium">
-                      Sat–Sun peak confirmed. You have weekend boosting active — good.
+                      Sat–Sun peak confirmed. You have weekend boosting active —
+                      good.
                     </p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>

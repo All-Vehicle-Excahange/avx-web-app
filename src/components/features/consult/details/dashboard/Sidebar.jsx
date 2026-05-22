@@ -13,6 +13,7 @@ import {
   InspectIcon,
   Star,
   Ticket,
+  Car,
 } from "lucide-react";
 
 import { getSellerTierTitle } from "@/lib/helper";
@@ -21,7 +22,7 @@ import { getSellerTier } from "@/services/Seller.service";
 const menu = [
   { label: "Overview", icon: LayoutGrid, href: "/consult/dashboard/overview" },
   { label: "Storefront", icon: Store, href: "/consult/dashboard/storefront" },
-  { label: "Inventory", icon: Box, href: "/consult/dashboard/inventory" },
+  { label: "Inventory", icon: Car, href: "/consult/dashboard/inventory" },
   {
     label: "Inspection",
     icon: InspectIcon,
