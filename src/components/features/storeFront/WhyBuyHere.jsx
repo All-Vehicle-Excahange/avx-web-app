@@ -44,6 +44,7 @@ export default function WhyBuyHere({ storeData = null }) {
   const id = useParams()?.id;
 
   const [sections, setSections] = useState([]);
+  const [prevApiData, setPrevApiData] = useState(null);
 
   const { data: whyBuyData, isLoading } = useQuery({
     ...getWhyBuyHereStoreFrontByUserNameQuery(id),
@@ -53,8 +54,8 @@ export default function WhyBuyHere({ storeData = null }) {
   const apiData = storeData || whyBuyData;
   const loading = !storeData && !!id ? isLoading : false;
 
-  useEffect(() => {
-    if (!apiData) return;
+  if (apiData && apiData !== prevApiData) {
+    setPrevApiData(apiData);
 
     const matchedTheme =
       THEME_STORE.find((t) => t.id === apiData.themeId) || THEME_STORE[0];
@@ -94,7 +95,7 @@ export default function WhyBuyHere({ storeData = null }) {
       }));
 
     setSections(hydratedSections);
-  }, [apiData]);
+  }
 
   if (loading && sections.length === 0) return <StoreFrontAboutSkeleton />;
 

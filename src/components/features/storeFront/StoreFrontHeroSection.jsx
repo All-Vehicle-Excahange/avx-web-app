@@ -38,25 +38,41 @@ export default function StoreFrontHeroSection() {
     getStoreFrontByUsernameQuery(id)
   );
 
-  const [isFollower, setIsFollower] = useState(false);
-  const [localFollowersCount, setLocalFollowersCount] = useState(0);
+  const [optimisticFollowState, setOptimisticFollowState] = useState(null);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isDownloadAppOpen, setIsDownloadAppOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-  const lastSyncState = useRef(false);
   const pendingAction = useRef(null);
 
-  // Sync internal follower states when storeDetails updates
-  useEffect(() => {
-    if (storeDetails) {
-      setIsFollower(storeDetails.isFollower || false);
-      lastSyncState.current = storeDetails.isFollower || false;
-      setLocalFollowersCount(storeDetails.followersCount || 0);
-    }
-  }, [storeDetails]);
+  const [lastSyncState, setLastSyncState] = useState(false);
+  const [prevIsFollower, setPrevIsFollower] = useState(null);
+
+  if (storeDetails && storeDetails.isFollower !== prevIsFollower) {
+    setPrevIsFollower(storeDetails.isFollower || false);
+    setLastSyncState(storeDetails.isFollower || false);
+  }
+
+  const isFollower =
+    optimisticFollowState !== null
+      ? optimisticFollowState
+      : storeDetails?.isFollower || false;
+
+  const localFollowersCount = Math.max(
+    0,
+    (storeDetails?.followersCount || 0) +
+      (optimisticFollowState === null
+        ? 0
+        : optimisticFollowState
+        ? storeDetails?.isFollower
+          ? 0
+          : 1
+        : storeDetails?.isFollower
+        ? -1
+        : 0)
+  );
 
   const debouncedSyncFollow = useDebouncedCallback(async (nextState) => {
     try {
@@ -65,18 +81,16 @@ export default function StoreFrontHeroSection() {
       } else {
         await unFollowConsultant(storeDetails?.id);
       }
-      lastSyncState.current = nextState;
+      setLastSyncState(nextState);
       // Invalidate query to sync back with actual server state
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["storefront-by-username", id],
       });
+      setOptimisticFollowState(null);
     } catch (error) {
       console.log("Follow/Unfollow error:", error);
       // Revert UI if API fails
-      setIsFollower(!nextState);
-      setLocalFollowersCount((prev) =>
-        !nextState ? (prev || 0) + 1 : Math.max(0, (prev || 1) - 1)
-      );
+      setOptimisticFollowState(null);
     }
   }, 800);
 
@@ -90,17 +104,14 @@ export default function StoreFrontHeroSection() {
     }
 
     const nextState = !isFollower;
-    setIsFollower(nextState);
-    setLocalFollowersCount((prev) =>
-      nextState ? (prev || 0) + 1 : Math.max(0, (prev || 1) - 1)
-    );
+    setOptimisticFollowState(nextState);
 
-    if (nextState === lastSyncState.current) {
+    if (nextState === lastSyncState) {
       debouncedSyncFollow.cancel();
     } else {
       debouncedSyncFollow(nextState);
     }
-  }, [storeDetails?.id, isLoggedIn, isFollower, debouncedSyncFollow]);
+  }, [storeDetails?.id, isLoggedIn, isFollower, lastSyncState, debouncedSyncFollow]);
 
   useEffect(() => {
     if (isLoggedIn && pendingAction.current === "follow") {

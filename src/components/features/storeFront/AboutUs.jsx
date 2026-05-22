@@ -92,6 +92,7 @@ export default function AboutUs({ storeData = null }) {
   const id = useParams()?.id;
 
   const [sections, setSections] = useState([]);
+  const [prevApiData, setPrevApiData] = useState(null);
 
   const { data: aboutUsData, isLoading } = useQuery({
     ...getAboutUsStoreFrontByUserNameQuery(id),
@@ -101,8 +102,8 @@ export default function AboutUs({ storeData = null }) {
   const apiData = storeData || aboutUsData;
   const loading = !storeData && !!id ? isLoading : false;
 
-  useEffect(() => {
-    if (!apiData) return;
+  if (apiData && apiData !== prevApiData) {
+    setPrevApiData(apiData);
 
     // Find the matching theme schema from THEME_STORE using themeId from API
     const matchedTheme =
@@ -142,7 +143,7 @@ export default function AboutUs({ storeData = null }) {
     }));
 
     setSections(hydratedSections);
-  }, [apiData]);
+  }
 
   const filteredSections = sections.filter((section) =>
     section.type.includes("about"),
