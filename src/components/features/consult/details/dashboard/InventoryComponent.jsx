@@ -138,12 +138,10 @@ export default function InventoryComponent() {
     isFetching: suspendedLoading,
     fetchNextPage: fetchNextSuspendedPage,
     hasNextPage: hasNextSuspendedPage,
-  } = useInfiniteQuery({
-    ...getSusPendedVehiclesInfiniteQuery({ pageSize: 9 }),
-    enabled: activeType === "SUSPENDED",
-  });
+  } = useInfiniteQuery(getSusPendedVehiclesInfiniteQuery({ pageSize: 9 }));
 
   const suspendedVehicles = suspendedInfiniteData?.pages.flatMap((page) => page.data || []) || [];
+  const suspendedCount = suspendedInfiniteData?.pages[0]?.pagination?.totalElements ?? suspendedInfiniteData?.pages[0]?.pageResponse?.totalElements ?? 0;
 
   // Reset page and list when activeType changes
   useEffect(() => {
@@ -347,6 +345,7 @@ export default function InventoryComponent() {
                   <Ban size={12} className="inline mr-1.5 -mt-0.5" />
                 )}
                 {type.label}
+                {type.id === "SUSPENDED" && ` (${suspendedCount})`}
               </button>
             ))}
           </div>

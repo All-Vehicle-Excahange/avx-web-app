@@ -948,84 +948,9 @@ function InspectionTab() {
       </div>
 
       {/* ================= DISPUTE & ISSUE CENTER ================= */}
-      <div className="rounded-xl border border-third/30 p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          {/* Left */}
-          <div>
-            <h2 className="text-base sm:text-xl font-semibold leading-tight">
-              Dispute & Issue Center
-            </h2>
-            <p className="text-sm text-third">
-              Manage buyer disputes and inspection issues
-            </p>
-          </div>
+      
+   
 
-          {/* Badge */}
-          <span className="w-fit px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-xs sm:text-sm font-semibold">
-            1 Open
-          </span>
-        </div>
-
-        {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            {/* Head */}
-            <thead className="border-b border-third/30 text-third text-left whitespace-nowrap">
-              <tr>
-                <th className="py-3 pr-4">Vehicle</th>
-                <th className="pr-4">Buyer</th>
-                <th className="pr-4">Issue</th>
-                <th className="pr-4">Status</th>
-                <th className="text-right">Action</th>
-              </tr>
-            </thead>
-
-            {/* Body */}
-            <tbody className="divide-y divide-third/20 whitespace-nowrap">
-              <tr>
-                {/* Vehicle */}
-                <td className="py-4 pr-6 flex items-center gap-2 font-medium">
-                  <Car size={16} className="text-third" />
-                  Audi A6
-                </td>
-
-                {/* Buyer */}
-                <td className="text-third pr-6">Raj P.</td>
-
-                {/* Issue */}
-                <td className="flex items-center gap-2 text-third pr-6">
-                  <MessageSquare size={16} className="text-third" />
-                  Scratch mismatch
-                </td>
-
-                {/* Status */}
-                <td className="pr-6">
-                  <span className="px-4 py-1 rounded-full bg-red-500/10 text-red-400 text-[11px] font-medium">
-                    Open
-                  </span>
-                </td>
-
-                {/* Action */}
-                <td className="text-right">
-                  <Button variant="ghost" className="px-6 text-xs h-8">
-                    Respond
-                  </Button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        {/* Info Note */}
-        <div className="rounded-xl border border-third/30 bg-primary/5 p-5 flex items-center gap-3 text-sm text-third">
-          <Shield size={18} className="text-primary" />
-          Quick resolution of disputes reduces fraud and prevents chargebacks.
-          Respond within{" "}
-          <span className="font-semibold text-primary">24 hours</span> for best
-          results.
-        </div>
-      </div>
 
       {/* ================= UPGRADE YOUR TRUST VISIBILITY ================= */}
     </section>

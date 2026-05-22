@@ -488,9 +488,9 @@ export default function AnalyticsComponent() {
                 }`}
               >
                 {currentCityDemand.map((item, i) => (
-                  <div key={item.subtype || i}>
+                  <div key={item.city || i}>
                     <div className="flex justify-between text-xs text-third">
-                      <span>{item.subtype}</span>
+                      <span>{item.city}</span>
                       <span>
                         {parseFloat(item.demandPercentage || 0).toFixed(1)}%
                       </span>

@@ -16,6 +16,7 @@ import {
   Lightbulb,
   BadgeDollarSign,
   User,
+  Smartphone,
 } from "lucide-react";
 import StatCard from "./components/StateCard";
 import Activity from "./components/Activity";
@@ -32,6 +33,7 @@ import {
   getSellerTierQuery,
 } from "@/queries/Seller.queries";
 import {
+  getInspectionStatusQuery,
   getInventoryOverviewQuery,
   getOverviewSummaryDataQuery,
 } from "@/queries/overview.queries";
@@ -41,15 +43,12 @@ import { formatResponseTime, getResponseStatus } from "@/lib/helper";
 import SkeletonBox from "@/components/ui/skeleton/SkeletonBox";
 import StatCardSkeleton from "@/components/ui/skeleton/StatCardSkeleton";
 import { useAuthStore } from "@/stores/useAuthStore";
-  
 
 const rangeOptions = [
   { label: "Last 7 days", value: "7" },
   { label: "Last 30 days", value: "30" },
   { label: "Last 90 days", value: "90" },
 ];
-
-
 
 export default function OverviewComponent() {
   const user = useAuthStore((state) => state.user);
@@ -69,12 +68,24 @@ export default function OverviewComponent() {
   };
 
   // React Query calls
-  const { data: inquiryKpis, isLoading: inquiryLoading } = useQuery(getInquiryKpisQuery());
-  const { data: inventoryOverview, isLoading: overviewLoading } = useQuery(getInventoryOverviewQuery());
-  const { data: topPerformingVehiclesData, isLoading: topPerformingLoading } = useQuery(getTopPerformingVehiclesQuery());
-  const { data: needAttentionData, isLoading: needAttentionLoading } = useQuery(getNeedAttenctionVehiclesQuery({ pageNo: 1, size: 5 }));
-  const { data: summaryData, isLoading: summaryLoading } = useQuery(getOverviewSummaryDataQuery());
+  const { data: inquiryKpis, isLoading: inquiryLoading } = useQuery(
+    getInquiryKpisQuery(),
+  );
+  const { data: inventoryOverview, isLoading: overviewLoading } = useQuery(
+    getInventoryOverviewQuery(),
+  );
+  const { data: topPerformingVehiclesData, isLoading: topPerformingLoading } =
+    useQuery(getTopPerformingVehiclesQuery());
+  const { data: needAttentionData, isLoading: needAttentionLoading } = useQuery(
+    getNeedAttenctionVehiclesQuery({ pageNo: 1, size: 5 }),
+  );
+  const { data: summaryData, isLoading: summaryLoading } = useQuery(
+    getOverviewSummaryDataQuery(),
+  );
   const { data: sellerTierData } = useQuery(getSellerTierQuery());
+
+  const { data: inspectionStatusData, isLoading: inspectionStatusLoading } =
+    useQuery(getInspectionStatusQuery());
 
   let daysParam = "LAST_7_DAYS";
   if (range === "30") {
@@ -82,12 +93,16 @@ export default function OverviewComponent() {
   } else if (range === "90") {
     daysParam = "LAST_90_DAYS";
   }
-  const { data: analyticsData, isLoading: analyticsLoading } = useQuery(getAnalyticsKipsQuery(daysParam));
+  const { data: analyticsData, isLoading: analyticsLoading } = useQuery(
+    getAnalyticsKipsQuery(daysParam),
+  );
 
   // Mapped/Derived variables
   const topPerforming = topPerformingVehiclesData?.slice(0, 5) || [];
   const needAttention = needAttentionData?.data || [];
-  const sellerTier = sellerTierData?.tierTitle || (typeof window !== "undefined" ? localStorage.getItem("sellerTier") : null);
+  const sellerTier =
+    sellerTierData?.tierTitle ||
+    (typeof window !== "undefined" ? localStorage.getItem("sellerTier") : null);
 
   const isInitialLoading =
     topPerformingLoading ||
@@ -95,7 +110,8 @@ export default function OverviewComponent() {
     overviewLoading ||
     inquiryLoading ||
     summaryLoading ||
-    analyticsLoading;
+    analyticsLoading ||
+    inspectionStatusLoading;
 
   const avgTime = inquiryKpis?.averageResponseTime;
   const formattedTime = formatResponseTime(avgTime);
@@ -113,10 +129,13 @@ export default function OverviewComponent() {
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-xl lg:text-2xl font-bold">
-                Welcome, {user?.consultationName || `${user?.firstname || ''} ${user?.lastname || ''}`.trim() || 'Guest'}
+                Welcome,{" "}
+                {user?.consultationName ||
+                  `${user?.firstname || ""} ${user?.lastname || ""}`.trim() ||
+                  "Guest"}
               </h1>
               <span className="w-fit inline-flex items-center px-4 py-1.5 rounded-full bg-primary text-secondary text-[10px] md:text-xs font-bold tracking-wider uppercase">
-                {sellerTier || user?.sellerTier || ''} 
+                {sellerTier || user?.sellerTier || ""}
               </span>
             </div>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs md:text-sm text-third mt-1">
@@ -179,9 +198,9 @@ export default function OverviewComponent() {
         </div>
 
         {/* RECOMMENDED ACTIONS */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Action 1: New Inquiries */}
-          <div className="rounded-2xl border border-primary/20  p-6 flex flex-col justify-between transition hover:border-primary/40 group">
+          {/* <div className="rounded-2xl border border-primary/20  p-6 flex flex-col justify-between transition hover:border-primary/40 group">
             <div className="space-y-4">
               <div className="flex items-center gap-4">
                 <div className="h-11 w-11 shrink-0 rounded-xl bg-rose-500/20 flex items-center justify-center text-rose-500 border border-rose-500/20">
@@ -202,7 +221,7 @@ export default function OverviewComponent() {
             >
               Respond Now
             </Button>
-          </div>
+          </div> */}
 
           {/* Action 2: Chats Pending */}
           <div className="rounded-2xl border border-primary/20  p-6 flex flex-col justify-between transition hover:border-primary/40 group">
@@ -212,7 +231,7 @@ export default function OverviewComponent() {
                   <MessageSquare size={22} strokeWidth={2.5} />
                 </div>
                 <h4 className="font-bold text-white text-lg tracking-tight">
-                  3 Chats Pending
+                  N/A Chats Pending
                 </h4>
               </div>
               <p className="mb-4 text-xs text-third leading-relaxed font-medium">
@@ -222,7 +241,7 @@ export default function OverviewComponent() {
             <Button
               onClick={() => setIsDownloadOpen(true)}
               variant="ghost"
-              className="w-full"
+              className="self-end"
             >
               View Chats
             </Button>
@@ -246,7 +265,7 @@ export default function OverviewComponent() {
             <Button
               href={"/consult/dashboard/inventory"}
               variant="ghost"
-              className="w-full"
+              className="self-end"
             >
               Fix Listings
             </Button>
@@ -332,36 +351,26 @@ export default function OverviewComponent() {
               <h3 className="font-bold text-lg tracking-tight">Chats</h3>
             </div>
 
-            <div className="space-y-4 flex-1">
-              <div className="flex justify-between items-center text-sm border-b border-third/5 pb-3">
-                <span className="text-third font-medium">Started</span>
-                <span className="font-bold text-base">18</span>
-              </div>
-              <div className="flex justify-between items-center text-sm border-b border-third/5 pb-3">
-                <span className="text-third font-medium">Replied</span>
-                <span className="font-bold text-base">16</span>
-              </div>
-              <div className="flex justify-between items-center text-sm pb-2">
-                <span className="text-third font-medium">Pending</span>
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-base">2</span>
-                  <AlertTriangle size={16} className="text-orange-500" />
+            <div className="flex-1 flex flex-col justify-center">
+              <div className="flex flex-col items-center justify-center text-center p-6 border border-dashed border-third/20 rounded-xl bg-white/2 space-y-3 my-auto">
+                <div className="p-3 bg-primary/10 rounded-full text-primary">
+                  <Smartphone size={24} />
                 </div>
-              </div>
-
-              <div className="bg-primary/10 border border-primary/20 p-3.5 rounded-xl flex items-center gap-3">
-                <span className="text-xs font-bold text-primary uppercase tracking-wider">
-                  Response Rate: 89%
-                </span>
+                <div className="space-y-1">
+                  <h4 className="font-semibold text-sm text-white">Chats are Mobile Only</h4>
+                  <p className="text-xs text-third max-w-[280px] leading-relaxed mx-auto">
+                    Download the Reecomm mobile app to chat with buyers in real-time and get instant notifications.
+                  </p>
+                </div>
               </div>
             </div>
 
             <Button
               onClick={() => setIsDownloadOpen(true)}
               variant="outlineSecondary"
-              className=" self-end"
+              className="self-end"
             >
-              Open Inbox
+              Download App
             </Button>
           </div>
         </div>
@@ -395,7 +404,9 @@ export default function OverviewComponent() {
               )}
             </div>
             <div className="flex justify-between items-center text-sm p-4 bg-white/5 rounded-xl border border-third/10">
-              <span className="text-third font-medium">Featured Vehicles(DD)</span>
+              <span className="text-third font-medium">
+                Featured Vehicles(DD)
+              </span>
               <span className="font-bold text-orange-500 text-lg">0</span>
             </div>
             <div className="flex justify-between items-center text-sm p-4 bg-white/5 rounded-xl border border-third/10">
@@ -526,13 +537,24 @@ export default function OverviewComponent() {
             <div className="flex flex-col gap-3 flex-1">
               <div className="flex justify-between items-center text-sm border-b border-third/10 pb-3">
                 <span className="text-third font-medium">Inspected</span>
-                <span className="font-bold text-base">9</span>
+                {inspectionStatusLoading ? (
+                  <SkeletonBox className="h-5 w-10" />
+                ) : (
+                  <span className="font-bold text-base">
+                    {inspectionStatusData?.avxInspectedVehicleCount ?? 0}
+                  </span>
+                )}
               </div>
               <div className="flex justify-between items-center text-sm pb-3">
                 <span className="text-third font-medium">Not Inspected</span>
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-base">19</span>
-                  <AlertTriangle size={15} className="text-amber-400" />
+                  {inspectionStatusLoading ? (
+                    <SkeletonBox className="h-5 w-10" />
+                  ) : (
+                    <span className="font-bold text-base">
+                      {inspectionStatusData?.avxNotInspectedVehicleCount ?? 0}
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -566,15 +588,15 @@ export default function OverviewComponent() {
             <div className="flex flex-col gap-3 flex-1">
               <div className="flex justify-between items-center text-sm border-b border-third/10 pb-3">
                 <span className="text-third font-medium">Featured</span>
-                <span className="font-bold text-base">6</span>
+                <span className="font-bold text-base">N/A</span>
               </div>
               <div className="flex justify-between items-center text-sm border-b border-third/10 pb-3">
                 <span className="text-third font-medium">Boost Active</span>
-                <span className="font-bold text-base">3</span>
+                <span className="font-bold text-base">N/A</span>
               </div>
               <div className="flex justify-between items-center text-sm pb-3">
                 <span className="text-third font-medium">Impressions</span>
-                <span className="font-bold text-base">8,300</span>
+                <span className="font-bold text-base">N/A</span>
               </div>
             </div>
 
@@ -691,56 +713,80 @@ function OverviewSkeleton() {
       </div>
 
       {/* RECOMMENDED ACTIONS SKELETON */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[...Array(3)].map((_, i) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {[...Array(2)].map((_, i) => (
           <div
             key={i}
-            className="rounded-2xl border border-third/20 p-6 space-y-4"
+            className="rounded-2xl border border-third/20 p-6 flex flex-col justify-between space-y-4"
           >
-            <div className="flex items-center gap-4">
-              <SkeletonBox className="h-11 w-11 rounded-xl" />
-              <SkeletonBox className="h-6 w-32" />
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <SkeletonBox className="h-11 w-11 rounded-xl" />
+                <SkeletonBox className="h-6 w-32" />
+              </div>
+              <SkeletonBox className="h-4 w-full" />
             </div>
-            <SkeletonBox className="h-4 w-full" />
-            <SkeletonBox className="h-10 w-full rounded-xl" />
+            <SkeletonBox className="h-10 w-28 rounded-xl self-end" />
           </div>
         ))}
       </div>
 
       {/* INQUIRIES & CHATS SKELETON */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {[...Array(2)].map((_, i) => (
-          <div
-            key={i}
-            className="rounded-2xl border border-third/20 p-6 space-y-6"
-          >
-            <div className="flex items-center gap-3">
-              <SkeletonBox className="h-10 w-10 rounded-lg" />
-              <SkeletonBox className="h-6 w-24" />
+        {/* Inquiries Skeleton */}
+        <div className="rounded-2xl border border-third/20 p-6 flex flex-col space-y-6">
+          <div className="flex items-center gap-3">
+            <SkeletonBox className="h-10 w-10 rounded-lg" />
+            <SkeletonBox className="h-6 w-24" />
+          </div>
+          <div className="space-y-4 flex-1">
+            <div className="flex justify-between pb-3 border-b border-third/5">
+              <SkeletonBox className="h-4 w-16" />
+              <SkeletonBox className="h-4 w-8" />
             </div>
-            <div className="space-y-4">
-              <div className="flex justify-between pb-3 border-b border-third/5">
-                <SkeletonBox className="h-4 w-16" />
-                <SkeletonBox className="h-4 w-8" />
-              </div>
-              <div className="flex justify-between pb-3 border-b border-third/5">
-                <SkeletonBox className="h-4 w-16" />
-                <SkeletonBox className="h-4 w-8" />
-              </div>
-              <div className="flex justify-between">
-                <SkeletonBox className="h-4 w-16" />
-                <SkeletonBox className="h-4 w-8" />
-              </div>
-              <SkeletonBox className="h-12 w-full rounded-xl" />
+            <div className="flex justify-between pb-3 border-b border-third/5">
+              <SkeletonBox className="h-4 w-16" />
+              <SkeletonBox className="h-4 w-8" />
+            </div>
+            <div className="flex justify-between pb-2">
+              <SkeletonBox className="h-4 w-16" />
+              <SkeletonBox className="h-4 w-8" />
+            </div>
+            <SkeletonBox className="h-12 w-full rounded-xl" />
+          </div>
+          <div className="self-end">
+            <SkeletonBox className="h-10 w-24 rounded-lg" />
+          </div>
+        </div>
+
+        {/* Chats Skeleton */}
+        <div className="rounded-2xl border border-third/20 p-6 flex flex-col space-y-6">
+          <div className="flex items-center gap-3">
+            <SkeletonBox className="h-10 w-10 rounded-lg" />
+            <SkeletonBox className="h-6 w-24" />
+          </div>
+          <div className="flex flex-col items-center justify-center text-center p-6 border border-dashed border-third/20 rounded-xl bg-white/2 flex-1 space-y-4">
+            <SkeletonBox className="h-12 w-12 rounded-full" />
+            <div className="space-y-2 flex flex-col items-center">
+              <SkeletonBox className="h-4 w-32" />
+              <SkeletonBox className="h-3 w-56" />
+              <SkeletonBox className="h-3 w-40" />
             </div>
           </div>
-        ))}
+          <div className="self-end">
+            <SkeletonBox className="h-10 w-28 rounded-lg" />
+          </div>
+        </div>
       </div>
 
       {/* INVENTORY STATUS SKELETON */}
       <div className="rounded-xl border border-third/30 p-6 space-y-6">
         <SkeletonBox className="h-5 w-40" />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="p-4 rounded-xl border border-third/10 flex justify-between items-center">
+            <SkeletonBox className="h-4 w-24" />
+            <SkeletonBox className="h-6 w-10" />
+          </div>
           <div className="p-4 rounded-xl border border-third/10 flex justify-between items-center">
             <SkeletonBox className="h-4 w-24" />
             <SkeletonBox className="h-6 w-10" />
@@ -770,6 +816,60 @@ function OverviewSkeleton() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* INSPECTION STATUS + VISIBILITY SKELETON */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Inspection Status Skeleton */}
+        <div className="rounded-xl border border-third/30 p-6 space-y-5 flex flex-col justify-between">
+          <div className="space-y-5">
+            <div className="flex items-center gap-3">
+              <SkeletonBox className="h-10 w-10 rounded-lg" />
+              <SkeletonBox className="h-6 w-36" />
+            </div>
+            <div className="space-y-4">
+              <div className="flex justify-between pb-3 border-b border-third/10">
+                <SkeletonBox className="h-4 w-20" />
+                <SkeletonBox className="h-4 w-8" />
+              </div>
+              <div className="flex justify-between pb-3">
+                <SkeletonBox className="h-4 w-24" />
+                <SkeletonBox className="h-4 w-8" />
+              </div>
+              <SkeletonBox className="h-10 w-full rounded-xl" />
+            </div>
+          </div>
+          <div className="pt-3 border-t border-third/10 self-end w-full flex justify-end">
+            <SkeletonBox className="h-10 w-36 rounded-lg" />
+          </div>
+        </div>
+
+        {/* Visibility Skeleton */}
+        <div className="rounded-xl border border-third/30 p-6 space-y-5 flex flex-col justify-between">
+          <div className="space-y-5">
+            <div className="flex items-center gap-3">
+              <SkeletonBox className="h-10 w-10 rounded-lg" />
+              <SkeletonBox className="h-6 w-24" />
+            </div>
+            <div className="space-y-4">
+              <div className="flex justify-between pb-3 border-b border-third/10">
+                <SkeletonBox className="h-4 w-16" />
+                <SkeletonBox className="h-4 w-8" />
+              </div>
+              <div className="flex justify-between pb-3 border-b border-third/10">
+                <SkeletonBox className="h-4 w-20" />
+                <SkeletonBox className="h-4 w-8" />
+              </div>
+              <div className="flex justify-between pb-3">
+                <SkeletonBox className="h-4 w-24" />
+                <SkeletonBox className="h-4 w-8" />
+              </div>
+            </div>
+          </div>
+          <div className="pt-3 border-t border-third/10 self-end w-full flex justify-end">
+            <SkeletonBox className="h-10 w-28 rounded-lg" />
+          </div>
+        </div>
       </div>
     </div>
   );
