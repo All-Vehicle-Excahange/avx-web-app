@@ -10,7 +10,8 @@ import { Loader2 } from "lucide-react";
 
 import { useAuthStore } from "@/stores/useAuthStore";
 import { logoutUser } from "@/services/auth.service";
-import { getUserProfileStrength } from "@/services/user.service";
+import { useQuery } from "@tanstack/react-query";
+import { getUserProfileStrengthQuery } from "@/queries/user.queries";
 import Link from "next/link";
 
 export default function AccountPopup({ open, onClosePopup }) {
@@ -60,27 +61,11 @@ export default function AccountPopup({ open, onClosePopup }) {
   );
   const isUserSeller = user?.userRole === "USER_SELLER";
 
-  const [profileStrength, setProfileStrength] = useState(null);
-  const [isLoadingStrength, setIsLoadingStrength] = useState(false);
-
-  useEffect(() => {
-    if (open && isLoggedIn) {
-      const fetchStrength = async () => {
-        setIsLoadingStrength(true);
-        try {
-          const res = await getUserProfileStrength();
-          if (res?.data) {
-            setProfileStrength(res.data);
-          }
-        } catch (error) {
-          console.error("Failed to fetch profile strength", error);
-        } finally {
-          setIsLoadingStrength(false);
-        }
-      };
-      fetchStrength();
-    }
-  }, [open, isLoggedIn]);
+  const { data: strengthRes, isLoading: isLoadingStrength } = useQuery({
+    ...getUserProfileStrengthQuery(),
+    enabled: !!(open && isLoggedIn),
+  });
+  const profileStrength = strengthRes?.data || null;
 
   const getCTA = () => {
     if (!isLoggedIn) return null;

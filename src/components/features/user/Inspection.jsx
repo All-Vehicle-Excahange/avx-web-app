@@ -1,11 +1,53 @@
 import { useState } from "react";
-import InquiryCard from "@/components/ui/InquiryCard";
 import InspectionCard from "@/components/ui/InspectionCard";
 import Image from "next/image";
 import React from "react";
+import Button from "@/components/ui/button";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import {
+  getAllRequestedInspectionInfiniteQuery,
+  getAllInsprectionRequestInfiniteQuery,
+} from "@/queries/inspection.queries";
+import {
+  acceptInspectionRequest,
+  rejectInspectionRequest,
+} from "@/services/inspection.service";
 
 function Inspection() {
   const [activeTab, setActiveTab] = useState("sent");
+  const [localStatuses, setLocalStatuses] = useState({});
+
+  // Sent Inspections Query
+  const {
+    data: inspectionsInfiniteData,
+    fetchNextPage: fetchNextPageSent,
+    hasNextPage: hasNextPageSent,
+    isLoading: isLoadingSent,
+    isFetchingNextPage: isFetchingNextPageSent,
+  } = useInfiniteQuery({
+    ...getAllRequestedInspectionInfiniteQuery({
+      pageSize: 6,
+    }),
+  });
+
+  const inspections =
+    inspectionsInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
+
+  // Received Inspections Query
+  const {
+    data: receivedInfiniteData,
+    fetchNextPage: fetchNextPageReceived,
+    hasNextPage: hasNextPageReceived,
+    isLoading: isLoadingReceived,
+    isFetchingNextPage: isFetchingNextPageReceived,
+  } = useInfiniteQuery({
+    ...getAllInsprectionRequestInfiniteQuery({
+      pageSize: 6,
+    }),
+  });
+
+  const receivedRequests =
+    receivedInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
 
   return (
     <>
@@ -47,35 +89,150 @@ function Inspection() {
 
         <div className="grid grid-cols-1 gap-6">
           {activeTab === "sent" ? (
+            isLoadingSent ? (
+              Array.from({ length: 3 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="animate-pulse rounded-2xl border border-third/10 bg-primary/5 p-6 h-34"
+                >
+                  <div className="h-5 w-1/3 bg-third/20 rounded mb-3"></div>
+                  <div className="h-4 w-1/4 bg-third/20 rounded mb-3"></div>
+                  <div className="h-4 w-1/5 bg-third/20 rounded"></div>
+                </div>
+              ))
+            ) : inspections.length > 0 ? (
+              <>
+                {inspections.map((item) => (
+                  <InspectionCard
+                    key={item.id}
+                    status={
+                      localStatuses[item.id] || item.inspectionRequestStatus
+                    }
+                    type="sent"
+                    inspectionType={
+                      item.inspectionType === "VIDEO_CALL_WITH_REPORT"
+                        ? "Video + Report"
+                        : item.inspectionType === "REPORT_ONLY"
+                          ? "Report Only"
+                          : item.inspectionType?.replaceAll("_", " ")
+                    }
+                    vehicleName={`${item.makerName} ${item.modelName} ${item.variantName || ""}`}
+                    date={
+                      item.createdAt
+                        ? new Date(item.createdAt).toLocaleDateString("en-IN", {
+                            day: "2-digit",
+                            month: "short",
+                          })
+                        : "-"
+                    }
+                    onViewReport={() => {
+                      if (item.reportUrl) {
+                        window.open(item.reportUrl, "_blank");
+                      }
+                    }}
+                  />
+                ))}
+
+                {hasNextPageSent && (
+                  <div className="flex justify-end mt-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => fetchNextPageSent()}
+                      loading={isFetchingNextPageSent}
+                      className="px-6 py-2 rounded-full text-sm font-semibold shadow-md"
+                    >
+                      Load More
+                    </Button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-16 text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5">
+                <h3 className="text-xl font-bold mb-2">
+                  No sent inspection requests.
+                </h3>
+                <p className="text-third max-w-sm">
+                  You haven&apos;t requested any vehicle inspections yet.
+                </p>
+              </div>
+            )
+          ) : isLoadingReceived ? (
+            Array.from({ length: 3 }).map((_, i) => (
+              <div
+                key={i}
+                className="animate-pulse rounded-2xl border border-third/10 bg-primary/5 p-6 h-34"
+              >
+                <div className="h-5 w-1/3 bg-third/20 rounded mb-3"></div>
+                <div className="h-4 w-1/4 bg-third/20 rounded mb-3"></div>
+                <div className="h-4 w-1/5 bg-third/20 rounded"></div>
+              </div>
+            ))
+          ) : receivedRequests.length > 0 ? (
             <>
-              <InspectionCard
-                status="pending"
-                type="sent"
-                inspectionType="Video + Report"
-              />
-              <InspectionCard
-                status="accepted"
-                type="sent"
-                inspectionType="Report Only"
-              />
-              <InspectionCard
-                status="done"
-                type="sent"
-                inspectionType="Video + Report"
-              />
-              <InspectionCard
-                status="cancelled"
-                type="sent"
-                inspectionType="Report Only"
-              />
+              {receivedRequests.map((item) => (
+                <InspectionCard
+                  key={item.id}
+                  status={
+                    localStatuses[item.id] || item.inspectionRequestStatus
+                  }
+                  type="received"
+                  vehicleName={`${item.makerName} ${item.modelName} ${item.variantName || ""}`}
+                  fromName={item.requestedUserName || "Buyer"}
+                  date={
+                    item.createdAt
+                      ? new Date(item.createdAt).toLocaleDateString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                        })
+                      : "-"
+                  }
+                  onAccept={async () => {
+                    try {
+                      await acceptInspectionRequest(item.id);
+                      setLocalStatuses((prev) => ({
+                        ...prev,
+                        [item.id]: "ACCEPTED",
+                      }));
+                    } catch (err) {
+                      console.error(err);
+                    }
+                  }}
+                  onReject={async () => {
+                    try {
+                      await rejectInspectionRequest(item.id);
+                      setLocalStatuses((prev) => ({
+                        ...prev,
+                        [item.id]: "REJECTED",
+                      }));
+                    } catch (err) {
+                      console.error(err);
+                    }
+                  }}
+                />
+              ))}
+
+              {hasNextPageReceived && (
+                <div className="flex justify-end mt-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => fetchNextPageReceived()}
+                    loading={isFetchingNextPageReceived}
+                    className="px-6 py-2 rounded-full text-sm font-semibold shadow-md"
+                  >
+                    Load More
+                  </Button>
+                </div>
+              )}
             </>
           ) : (
-            <>
-              <InspectionCard status="pending" type="received" />
-              <InspectionCard status="accepted" type="received" />
-              <InspectionCard status="done" type="received" />
-              <InspectionCard status="cancelled" type="received" />
-            </>
+            <div className="flex flex-col items-center justify-center py-16 text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5">
+              <h3 className="text-xl font-bold mb-2">
+                No received inspection requests.
+              </h3>
+              <p className="text-third max-w-sm">
+                You haven&apos;t received any vehicle inspection requests yet.
+              </p>
+            </div>
           )}
         </div>
       </section>

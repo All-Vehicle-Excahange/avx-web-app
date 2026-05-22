@@ -3,14 +3,7 @@
 import Button from "@/components/ui/button";
 import InputField from "@/components/ui/inputField";
 import {
-  checkIsMetaExist,
   createUserMeta,
-  getBecameSeller,
-  getCities,
-  getState,
-  getuserProfile,
-  getuserProfileMeta,
-  getUserSellerSuspend,
   updateuserProfile,
   updateuserProfileMeta,
 } from "@/services/user.service";
@@ -22,183 +15,135 @@ import {
   AlertCircle,
   Ban,
 } from "lucide-react";
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ProfileSkeleton } from "@/components/ui/skeleton";
 import DetailsFromPopup from "../userSeller/DetailsFromPopup";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import CustomSelect from "@/components/ui/custom-select";
+import {
+  getUserProfileQuery,
+  checkIsMetaExistQuery,
+  getUserProfileMetaQuery,
+  getUserSellerSuspendQuery,
+  getBecameSellerQuery,
+  getStatesQuery,
+  getCitiesQuery,
+} from "@/queries/user.queries";
 
 function MyProfile() {
+  const queryClient = useQueryClient();
+
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [isEditingMeta, setIsEditingMeta] = useState(false);
-  const [isMetaExist, setIsMetaExist] = useState(false);
   const [isCreatingMeta, setIsCreatingMeta] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [sellerData, setSellerData] = useState(null);
-  const [suspendData, setSuspendData] = useState(null);
   const [isSellerPopupOpen, setIsSellerPopupOpen] = useState(false);
 
-  const [profile, setProfile] = useState({});
   const [profileForm, setProfileForm] = useState({});
-
-  const [profileMetaData, setProfileMetaData] = useState({});
   const [metaForm, setMetaForm] = useState({});
 
   const [profileError, setProfileError] = useState("");
   const [metaError, setMetaError] = useState("");
 
-  const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
-
-  const [stateOpen, setStateOpen] = useState(false);
-  const [cityOpen, setCityOpen] = useState(false);
   const [genderOpen, setGenderOpen] = useState(false);
 
-  const [stateSearch, setStateSearch] = useState("");
-  const [citySearch, setCitySearch] = useState("");
-
-  const stateRef = useRef(null);
-  const cityRef = useRef(null);
   const genderRef = useRef(null);
 
+  // TanStack Queries
+  const { data: profileRes, isLoading: isLoadingProfile } = useQuery(
+    getUserProfileQuery(),
+  );
+  const { data: metaExistsRes, isLoading: isLoadingMetaExists } = useQuery(
+    checkIsMetaExistQuery(),
+  );
+
+  const metaExists =
+    metaExistsRes?.data?.exists || metaExistsRes?.data === true;
+
+  const { data: metaRes, isLoading: isLoadingMeta } = useQuery({
+    ...getUserProfileMetaQuery(),
+    enabled: !!metaExists,
+  });
+
+  const { data: suspendRes, isLoading: isLoadingSuspend } = useQuery(
+    getUserSellerSuspendQuery(),
+  );
+  const { data: sellerRes, isLoading: isLoadingSeller } = useQuery(
+    getBecameSellerQuery(),
+  );
+  const { data: statesRes, isLoading: isLoadingStates } =
+    useQuery(getStatesQuery());
+
+  const { data: citiesRes, isLoading: isLoadingCities } = useQuery({
+    ...getCitiesQuery(metaForm.stateId),
+    enabled: !!metaForm.stateId,
+  });
+
+  const isLoading =
+    isLoadingProfile ||
+    isLoadingMetaExists ||
+    (metaExists && isLoadingMeta) ||
+    isLoadingSuspend ||
+    isLoadingSeller ||
+    isLoadingStates;
+
+  // Derived values / Computed states
+  const profile = React.useMemo(() => {
+    if (!profileRes?.data) return {};
+    return {
+      firstName: profileRes.data.firstname,
+      lastName: profileRes.data.lastname,
+      email: profileRes.data.email,
+      phoneNumber: profileRes.data.phoneNumber,
+      countryCode: profileRes.data.countryCode,
+      role: profileRes.data.userRole,
+    };
+  }, [profileRes]);
+
+  const profileMetaData = React.useMemo(() => {
+    return metaRes?.data || {};
+  }, [metaRes]);
+
+  const states = React.useMemo(() => {
+    return (
+      statesRes?.data?.map((s) => ({
+        label: s.name,
+        value: s.id,
+      })) || []
+    );
+  }, [statesRes]);
+
+  const cities = React.useMemo(() => {
+    return (
+      citiesRes?.data?.map((c) => ({
+        label: c.name,
+        value: c.id,
+      })) || []
+    );
+  }, [citiesRes]);
+
+  const suspendData = suspendRes?.data || null;
+  const sellerData = sellerRes?.data || null;
+  const isMetaExist = metaExists;
+
+  // Sync user role to localStorage
+  useEffect(() => {
+    if (profileRes?.data) {
+      const apiRole = profileRes.data.userRole;
+      const savedUser = localStorage.getItem("user");
+      if (savedUser) {
+        const parsedUser = JSON.parse(savedUser);
+        if (parsedUser.userRole !== apiRole) {
+          const updatedUser = { ...parsedUser, userRole: apiRole };
+          localStorage.setItem("user", JSON.stringify(updatedUser));
+        }
+      }
+    }
+  }, [profileRes]);
+
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (stateRef.current && !stateRef.current.contains(e.target))
-        setStateOpen(false);
-      if (cityRef.current && !cityRef.current.contains(e.target))
-        setCityOpen(false);
-      // Add this gender check
       if (genderRef.current && !genderRef.current.contains(e.target))
         setGenderOpen(false);
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        setIsLoading(true);
-
-        // Check if meta exists
-        const metaExistsRes = await checkIsMetaExist();
-        const metaExists =
-          metaExistsRes.data?.exists || metaExistsRes.data === true;
-        setIsMetaExist(metaExists);
-
-        // Load profile
-        const profileRes = await getuserProfile();
-        const userData = {
-          firstName: profileRes.data.firstname,
-          lastName: profileRes.data.lastname,
-          email: profileRes.data.email,
-          phoneNumber: profileRes.data.phoneNumber,
-          countryCode: profileRes.data.countryCode,
-          role: profileRes.data.userRole,
-        };
-        setProfile(userData);
-        setProfileForm(userData);
-
-        //  Sync localStorage role with the latest role from API
-        const apiRole = profileRes.data.userRole;
-        const savedUser = localStorage.getItem("user");
-        if (savedUser) {
-          const parsedUser = JSON.parse(savedUser);
-          if (parsedUser.userRole !== apiRole) {
-            const updatedUser = { ...parsedUser, userRole: apiRole };
-            localStorage.setItem("user", JSON.stringify(updatedUser));
-          }
-        }
-
-        // Load meta only if exists
-        if (metaExists) {
-          const metaRes = await getuserProfileMeta();
-          console.log("Meta Data:", metaRes.data);
-          setProfileMetaData(metaRes.data);
-
-          setMetaForm({
-            ...metaRes.data,
-            stateId: metaRes.data.state?.id,
-            cityId: metaRes.data.city?.id,
-            stateName: metaRes.data.state?.name,
-            cityName: metaRes.data.city?.name,
-          });
-        } else {
-          // Initialize empty form for creation
-          setMetaForm({
-            age: "",
-            gender: "",
-            profession: "",
-            address: "",
-            stateId: null,
-            cityId: null,
-            stateName: "",
-            cityName: "",
-          });
-        }
-        // Check suspension status
-        const suspendRes = await getUserSellerSuspend();
-        if (suspendRes.success) {
-          setSuspendData(suspendRes.data);
-        }
-      } catch (error) {
-        console.log("Fetch Error:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadData();
-  }, []);
-
-  useEffect(() => {
-    const fetchStates = async () => {
-      const res = await getState();
-      setStates(
-        res.data.map((s) => ({
-          label: s.name,
-          value: s.id,
-        })),
-      );
-    };
-    fetchStates();
-  }, []);
-
-  const fetchSellerStatus = useCallback(async () => {
-    try {
-      const res = await getBecameSeller();
-      if (res.success) {
-        setSellerData(res.data);
-      }
-    } catch (error) {
-      console.error("Fetch Seller Status Error:", error);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchSellerStatus();
-  }, [fetchSellerStatus]);
-
-  useEffect(() => {
-    const fetchCities = async () => {
-      if (!metaForm.stateId) return;
-      const res = await getCities(metaForm.stateId);
-
-      setCities(
-        res.data.map((c) => ({
-          label: c.name,
-          value: c.id,
-        })),
-      );
-    };
-    fetchCities();
-  }, [metaForm.stateId]);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (stateRef.current && !stateRef.current.contains(e.target))
-        setStateOpen(false);
-      if (cityRef.current && !cityRef.current.contains(e.target))
-        setCityOpen(false);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -286,8 +231,9 @@ function MyProfile() {
       };
 
       await updateuserProfile(payload);
+      queryClient.invalidateQueries({ queryKey: ["user-profile"] });
+      queryClient.invalidateQueries({ queryKey: ["user-profile-strength"] });
 
-      setProfile(profileForm);
       setIsEditingProfile(false);
     } catch (error) {
       setProfileError(error?.response?.data?.message || "Something went wrong");
@@ -313,21 +259,12 @@ function MyProfile() {
       // Call create or update based on isCreatingMeta
       if (isCreatingMeta) {
         await createUserMeta(payload);
-        setIsMetaExist(true);
+        queryClient.invalidateQueries({ queryKey: ["user-meta-exists"] });
       } else {
         await updateuserProfileMeta(payload);
       }
-
-      const metaRes = await getuserProfileMeta();
-      setProfileMetaData(metaRes.data);
-
-      setMetaForm({
-        ...metaRes.data,
-        stateId: metaRes.data.state?.id,
-        cityId: metaRes.data.city?.id,
-        stateName: metaRes.data.state?.name,
-        cityName: metaRes.data.city?.name,
-      });
+      queryClient.invalidateQueries({ queryKey: ["user-profile-meta"] });
+      queryClient.invalidateQueries({ queryKey: ["user-profile-strength"] });
 
       setIsEditingMeta(false);
       setIsCreatingMeta(false);
@@ -364,8 +301,8 @@ function MyProfile() {
                       Account Restricted
                     </h2>
                     <p className="text-sm text-third mt-1">
-                      Your access to the Reecomm platform has been temporarily or
-                      permanently limited.
+                      Your access to the Reecomm platform has been temporarily
+                      or permanently limited.
                     </p>
                   </div>
                   <div className="inline-flex px-4 py-1.5 bg-transparent border border-primary/40 rounded-full text-[11px] font-bold text-primary/70 tracking-widest shadow-sm">
@@ -744,11 +681,11 @@ function MyProfile() {
               <button
                 disabled={!isProfileFormValid}
                 onClick={handleSaveProfile}
-                className={`flex items-center gap-2 px-6 py-2 rounded-xl font-medium transition
+                className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium transition
                   ${
                     !isProfileFormValid
                       ? "bg-gray-400 cursor-not-allowed text-white"
-                      : "bg-primary text-secondary hover:opacity-90"
+                      : "bg-primary border text-secondary hover:bg-transparent hover:text-primary hover:border-primary hover:border "
                   }`}
               >
                 {!isProfileFormValid ? (
@@ -858,170 +795,46 @@ function MyProfile() {
               />
 
               {/* ✅ STATE DROPDOWN */}
-              <div ref={stateRef} className="relative">
-                <label className="text-xs text-third">State</label>
-
-                <div className="h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-secondary text-primary cursor-pointer relative">
-                  {stateOpen ? (
-                    <input
-                      type="text"
-                      autoFocus
-                      placeholder="Search state..."
-                      value={stateSearch}
-                      onChange={(e) => setStateSearch(e.target.value)}
-                      className="w-full bg-transparent outline-none h-full text-sm placeholder:text-primary/40"
-                      onClick={(e) => e.stopPropagation()}
-                    />
-                  ) : (
-                    <span
-                      onClick={() => {
-                        setStateOpen(true);
-                        setCityOpen(false);
-                        setGenderOpen(false);
-                      }}
-                      className="flex-1 h-full flex items-center"
-                    >
-                      {metaForm.stateName || "Select State"}
-                    </span>
-                  )}
-                  <ChevronDown
-                    size={16}
-                    className={`transition-transform duration-200 ${stateOpen ? "rotate-180" : ""}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setStateOpen(!stateOpen);
-                    }}
-                  />
-                </div>
-
-                {stateOpen && (
-                  <div className="absolute z-9999 mt-1 w-full border border-primary rounded-md bg-secondary text-primary shadow-lg shadow-black/20 overflow-hidden flex flex-col">
-                    <div className="max-h-40 overflow-y-auto custom-scrollbar">
-                      {states
-                        .filter((s) =>
-                          s.label
-                            .toLowerCase()
-                            .includes(stateSearch.toLowerCase()),
-                        )
-                        .map((s) => (
-                          <div
-                            key={s.value}
-                            onClick={() => {
-                              setMetaForm((p) => ({
-                                ...p,
-                                stateId: s.value,
-                                stateName: s.label,
-                                cityId: null,
-                                cityName: "",
-                              }));
-                              setStateOpen(false);
-                              setStateSearch("");
-                            }}
-                            className="px-3 py-2 hover:bg-primary/20 cursor-pointer text-sm"
-                          >
-                            {s.label}
-                          </div>
-                        ))}
-                      {states.filter((s) =>
-                        s.label
-                          .toLowerCase()
-                          .includes(stateSearch.toLowerCase()),
-                      ).length === 0 && (
-                        <div className="px-3 py-4 text-center text-xs text-third italic border-t border-primary/10">
-                          No states found
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
+              <div>
+                <label className="text-xs text-third mb-1.5 block">State</label>
+                <CustomSelect
+                  value={metaForm.stateId}
+                  options={states}
+                  placeholder="Search state..."
+                  variant="colored"
+                  onChange={(val) => {
+                    const s = states.find((st) => st.value === val);
+                    setMetaForm((p) => ({
+                      ...p,
+                      stateId: val,
+                      stateName: s ? s.label : "",
+                      cityId: null,
+                      cityName: "",
+                    }));
+                  }}
+                />
               </div>
 
               {/* ✅ CITY DROPDOWN */}
-              <div ref={cityRef} className="relative">
-                <label className="text-xs text-third">City</label>
-
-                <div
-                  className={`h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-secondary text-primary ${
-                    !metaForm.stateId
-                      ? "opacity-50 cursor-not-allowed"
-                      : "cursor-pointer"
-                  }`}
-                >
-                  {cityOpen ? (
-                    <input
-                      type="text"
-                      autoFocus
-                      placeholder="Search city..."
-                      value={citySearch}
-                      onChange={(e) => setCitySearch(e.target.value)}
-                      className="w-full bg-transparent outline-none h-full text-sm placeholder:text-primary/40"
-                      onClick={(e) => e.stopPropagation()}
-                    />
-                  ) : (
-                    <span
-                      onClick={() => {
-                        if (metaForm.stateId) {
-                          setCityOpen(true);
-                          setStateOpen(false);
-                          setGenderOpen(false);
-                        }
-                      }}
-                      className="flex-1 h-full flex items-center"
-                    >
-                      {metaForm.cityName ||
-                        (metaForm.stateId
-                          ? "Select City"
-                          : "Select state first")}
-                    </span>
-                  )}
-                  <ChevronDown
-                    size={16}
-                    className={`transition-transform duration-200 ${cityOpen ? "rotate-180" : ""}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (metaForm.stateId) setCityOpen(!cityOpen);
-                    }}
-                  />
-                </div>
-
-                {cityOpen && (
-                  <div className="absolute z-9999 mt-1 w-full border border-primary rounded-md bg-secondary text-primary shadow-lg shadow-black/20 overflow-hidden flex flex-col">
-                    <div className="max-h-40 overflow-y-auto custom-scrollbar">
-                      {cities
-                        .filter((c) =>
-                          c.label
-                            .toLowerCase()
-                            .includes(citySearch.toLowerCase()),
-                        )
-                        .map((c) => (
-                          <div
-                            key={c.value}
-                            onClick={() => {
-                              setMetaForm((p) => ({
-                                ...p,
-                                cityId: c.value,
-                                cityName: c.label,
-                              }));
-                              setCityOpen(false);
-                              setCitySearch("");
-                            }}
-                            className="px-3 py-2 hover:bg-primary/20 cursor-pointer text-sm"
-                          >
-                            {c.label}
-                          </div>
-                        ))}
-                      {cities.filter((c) =>
-                        c.label
-                          .toLowerCase()
-                          .includes(citySearch.toLowerCase()),
-                      ).length === 0 && (
-                        <div className="px-3 py-4 text-center text-xs text-third italic border-t border-primary/10">
-                          No cities found
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
+              <div>
+                <label className="text-xs text-third mb-1.5 block">City</label>
+                <CustomSelect
+                  value={metaForm.cityId}
+                  options={cities}
+                  placeholder={
+                    metaForm.stateId ? "Search city..." : "Select state first"
+                  }
+                  variant="colored"
+                  disabled={!metaForm.stateId}
+                  onChange={(val) => {
+                    const c = cities.find((ct) => ct.value === val);
+                    setMetaForm((p) => ({
+                      ...p,
+                      cityId: val,
+                      cityName: c ? c.label : "",
+                    }));
+                  }}
+                />
               </div>
             </div>
 
@@ -1043,11 +856,11 @@ function MyProfile() {
               <button
                 disabled={!isMetaFormValid}
                 onClick={handleSaveMeta}
-                className={`flex items-center gap-2 px-6 py-2 rounded-xl font-medium transition-all
+                className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium transition-all
     ${
       !isMetaFormValid
         ? "bg-gray-400 cursor-not-allowed text-secondary"
-        : "bg-primary text-secondary hover:opacity-90"
+        : "bg-primary border text-secondary hover:bg-transparent hover:text-primary hover:border-primary hover:border"
     }`}
               >
                 {!isMetaFormValid ? (
@@ -1067,7 +880,7 @@ function MyProfile() {
         isOpen={isSellerPopupOpen}
         onClose={() => {
           setIsSellerPopupOpen(false);
-          fetchSellerStatus();
+          queryClient.invalidateQueries({ queryKey: ["user-became-seller"] });
         }}
         existing={sellerData}
       />

@@ -22,11 +22,12 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import PreferencesPopup from "../features/user/PreferencesPopup";
 import {
   getGlobalSearch,
-  getUserProfileStrength,
 } from "@/services/user.service";
 import { useRouter, usePathname } from "next/navigation";
 import { useUIStore } from "@/stores/useUIStore";
 import MobileAppDownloadBanner from "../ui/MobileAppDownloadBanner";
+import { useQuery } from "@tanstack/react-query";
+import { getUserProfileStrengthQuery } from "@/queries/user.queries";
 const MAKER_NAME_MAPPING = {
   1: "Ashok Leyland",
   2: "Aston Martin",
@@ -116,7 +117,11 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
   const searchRef = useRef(null);
   const accountRef = useRef(null);
   const [persisAccountOpen, setPersisAccountOpen] = useState(false);
-  const [profileStrength, setProfileStrength] = useState(null);
+  const { data: strengthRes } = useQuery({
+    ...getUserProfileStrengthQuery(),
+    enabled: isLoggedIn,
+  });
+  const profileStrength = strengthRes?.data || null;
 
   // Dynamic Import States for Search Suggestions
   const [suggestionsData, setSuggestionsData] = useState([]);
@@ -161,22 +166,6 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
     }, 1500);
     return () => clearTimeout(timer);
   }, []);
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      const fetchStrength = async () => {
-        try {
-          const res = await getUserProfileStrength();
-          if (res?.data) {
-            setProfileStrength(res.data);
-          }
-        } catch (error) {
-          console.error("Failed to fetch profile strength in Navbar", error);
-        }
-      };
-      fetchStrength();
-    }
-  }, [isLoggedIn]);
 
   /* ================= BANNER STATES ================= */
   const { isMobileBannerVisible, hideMobileBanner, isMobileBannerTempHidden } =

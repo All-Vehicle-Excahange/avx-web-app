@@ -1,6 +1,6 @@
 import ConsultantCard from "@/components/ui/const/ConsultCard";
 import VehicleCard from "@/components/ui/const/VehicleCard";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "@/components/ui/button";
 import {
   Settings2,
@@ -11,20 +11,23 @@ import {
   LayoutGrid,
   Edit3,
 } from "lucide-react";
-import {
-  getWishList,
-  getFollowedConsultant,
-  getUserPreference,
-  updatePreference,
-} from "@/services/user.service";
+import { updatePreference } from "@/services/user.service";
 import {
   VehicleCardSkeleton,
   ConsultantCardSkeleton,
 } from "@/components/ui/skeleton";
 import PreferencesPopup from "@/components/features/user/PreferencesPopup";
-import { toast } from "react-hot-toast";
+import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  getUserWishlistInfiniteQuery,
+  getFollowedConsultantsInfiniteQuery,
+  getUserPreferencesQuery,
+} from "@/queries/user.queries";
+
 function Wishlist() {
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("wishlist");
+  const [editMode, setEditMode] = useState(false);
 
   const tabs = [
     { id: "wishlist", label: "Wishlist" },
@@ -32,138 +35,72 @@ function Wishlist() {
     { id: "preference", label: "Preferences" },
   ];
 
-  const [userPref, setUserPref] = useState(null);
-  const [editMode, setEditMode] = useState(false);
+  // Queries
+  const {
+    data: wishlistInfiniteData,
+    fetchNextPage: fetchNextPageWishlist,
+    hasNextPage: hasNextPageWishlist,
+    isLoading: isLoadingWishlist,
+    isFetchingNextPage: isFetchingNextPageWishlist,
+  } = useInfiniteQuery(
+    getUserWishlistInfiniteQuery({ size: 8 })
+  );
 
-  const [cardData, setCardData] = useState([]);
-  const [wishlistPage, setWishlistPage] = useState(1);
-  const [hasMoreWishlist, setHasMoreWishlist] = useState(true);
+  const {
+    data: consultantsInfiniteData,
+    fetchNextPage: fetchNextPageConsultants,
+    hasNextPage: hasNextPageConsultants,
+    isLoading: isLoadingConsultants,
+    isFetchingNextPage: isFetchingNextPageConsultants,
+  } = useInfiniteQuery(
+    getFollowedConsultantsInfiniteQuery({ size: 4 })
+  );
 
-  const [followedConsualt, setFollowedConsualt] = useState([]);
-  const [consultantPage, setConsultantPage] = useState(1);
-  const [hasMoreConsultant, setHasMoreConsultant] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
+  const {
+    data: userPref,
+    isLoading: isLoadingPref,
+  } = useQuery(getUserPreferencesQuery());
 
-  const fetchPreferences = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const res = await getUserPreference();
-      if (res.success && res.data) {
-        setUserPref(res.data);
+  // Mutations
+  const updatePreferenceMutation = useMutation({
+    mutationFn: updatePreference,
+    onSuccess: (res) => {
+      if (res?.success) {
+        queryClient.invalidateQueries({ queryKey: ["user-preferences"] });
+        setEditMode(false);
       }
-    } catch (error) {
-      console.error("Failed to fetch preferences:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  const handleUpdatePreference = async (payload) => {
-    try {
-      const res = await updatePreference(payload);
-      if (res.success) {
-        toast.success("Preferences updated successfully");
-        fetchPreferences(); // Refetch to get updated data
-      }
-    } catch (error) {
+    },
+    onError: (error) => {
       console.error("Failed to update preferences:", error);
-      toast.error("Failed to update preferences");
-    }
-  };
+    },
+  });
 
-  const fetchWishList = useCallback(async (page = 1) => {
-    try {
-      if (page === 1) setIsLoading(true);
-      const pageNumber = typeof page === "number" ? page : 1;
-      const res = await getWishList({ pageNo: pageNumber, size: 8 });
-      if (res.success && res.data) {
-        if (pageNumber === 1) {
-          setCardData(res.data);
-        } else {
-          setCardData((prev) => [...prev, ...res.data]);
-        }
-        setHasMoreWishlist(res.data.length === 8);
-      } else {
-        setHasMoreWishlist(false);
-      }
-    } catch (error) {
-      console.error("Failed to fetch wishlist:", error);
-      setHasMoreWishlist(false);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  // Extract / Map Data
+  const cardData = wishlistInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
 
-  const fetchFollowedConsultant = useCallback(async (page = 1) => {
-    try {
-      if (page === 1) setIsLoading(true);
-      const pageNumber = typeof page === "number" ? page : 1;
-      const data = { pageNo: pageNumber, size: 4 };
-      const res = await getFollowedConsultant(data);
+  const rawConsultants = consultantsInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
 
-      if (res?.data && Array.isArray(res.data)) {
-        const formattedConsultants = res.data.map((item) => ({
-          id: item.id,
-          username: item.username,
-          name: item.consultationName || "-",
-          image: item.bannerUrl || "/cs.webp",
-          logo: item.logoUrl || "/cs.webp",
-          rating: item.averageRating ?? 0,
-          reviews: item.totalReviews ?? 0,
-          vehicleCount: item.availableVehicles ?? 0,
-          services: item.services || [],
-          vehicleTypes: item.vehicleTypes || [],
-          location:
-            item.address?.city && item.address?.country
-              ? `${item.address.city}, ${item.address.country}`
-              : "-",
-          priceRange:
-            item.minVehiclePrice && item.maxVehiclePrice
-              ? `₹${Number(item.minVehiclePrice).toLocaleString()} - ₹${Number(item.maxVehiclePrice).toLocaleString()}`
-              : "-",
-          isSponsored: item.isActiveTier || false,
-        }));
-
-        if (pageNumber === 1) {
-          setFollowedConsualt(formattedConsultants);
-        } else {
-          setFollowedConsualt((prev) => [...prev, ...formattedConsultants]);
-        }
-        setHasMoreConsultant(formattedConsultants.length === 4);
-      } else {
-        setHasMoreConsultant(false);
-      }
-    } catch (error) {
-      console.error("Failed to fetch followed consultants:", error);
-      setHasMoreConsultant(false);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (activeTab === "wishlist") {
-      fetchWishList(1);
-      setWishlistPage(1);
-    } else if (activeTab === "subscribed") {
-      fetchFollowedConsultant(1);
-      setConsultantPage(1);
-    } else if (activeTab === "preference") {
-      fetchPreferences();
-    }
-  }, [activeTab, fetchWishList, fetchFollowedConsultant, fetchPreferences]);
-
-  const handleLoadMoreWishlist = () => {
-    const nextPage = wishlistPage + 1;
-    setWishlistPage(nextPage);
-    fetchWishList(nextPage);
-  };
-
-  const handleLoadMoreConsultant = () => {
-    const nextPage = consultantPage + 1;
-    setConsultantPage(nextPage);
-    fetchFollowedConsultant(nextPage);
-  };
+  const followedConsualt = rawConsultants.map((item) => ({
+    id: item.id,
+    username: item.username,
+    name: item.consultationName || "-",
+    image: item.bannerUrl || "/cs.webp",
+    logo: item.logoUrl || "/cs.webp",
+    rating: item.averageRating ?? 0,
+    reviews: item.totalReviews ?? 0,
+    vehicleCount: item.availableVehicles ?? 0,
+    services: item.services || [],
+    vehicleTypes: item.vehicleTypes || [],
+    location:
+      item.address?.city && item.address?.country
+        ? `${item.address.city}, ${item.address.country}`
+        : "-",
+    priceRange:
+      item.minVehiclePrice && item.maxVehiclePrice
+        ? `₹${Number(item.minVehiclePrice).toLocaleString()} - ₹${Number(item.maxVehiclePrice).toLocaleString()}`
+        : "-",
+    isSponsored: item.isActiveTier || false,
+  }));
 
   return (
     <>
@@ -193,7 +130,7 @@ function Wishlist() {
               Vehicle Wishlist
             </h1>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-              {isLoading ? (
+              {isLoadingWishlist ? (
                 Array.from({ length: 4 }).map((_, i) => (
                   <VehicleCardSkeleton key={i} />
                 ))
@@ -206,8 +143,9 @@ function Wishlist() {
                     <VehicleCard
                       data={vehicle}
                       onWishlistChange={() => {
-                        setWishlistPage(1);
-                        fetchWishList(1);
+                        queryClient.invalidateQueries({
+                          queryKey: ["user-wishlist-infinite"],
+                        });
                       }}
                     />
                   </div>
@@ -224,12 +162,13 @@ function Wishlist() {
                 </div>
               )}
             </div>
-            {hasMoreWishlist && cardData.length > 0 && !isLoading && (
+             {hasNextPageWishlist && cardData.length > 0 && !isLoadingWishlist && (
               <div className="flex justify-end mt-6">
                 <Button
                   variant="outline"
                   showIcon={false}
-                  onClick={handleLoadMoreWishlist}
+                  onClick={() => fetchNextPageWishlist()}
+                  loading={isFetchingNextPageWishlist}
                 >
                   See More
                 </Button>
@@ -245,7 +184,7 @@ function Wishlist() {
               Subscribed Consultant
             </h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {isLoading ? (
+              {isLoadingConsultants ? (
                 Array.from({ length: 4 }).map((_, i) => (
                   <ConsultantCardSkeleton key={i} />
                 ))
@@ -268,12 +207,13 @@ function Wishlist() {
                 </div>
               )}
             </div>
-            {hasMoreConsultant && followedConsualt.length > 0 && !isLoading && (
+            {hasNextPageConsultants && followedConsualt.length > 0 && !isLoadingConsultants && (
               <div className="flex justify-end mt-6">
                 <Button
                   variant="outline"
                   showIcon={false}
-                  onClick={handleLoadMoreConsultant}
+                  onClick={() => fetchNextPageConsultants()}
+                  loading={isFetchingNextPageConsultants}
                 >
                   See More
                 </Button>
@@ -310,7 +250,7 @@ function Wishlist() {
               </Button>
             </div>
 
-            {isLoading ? (
+            {isLoadingPref ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[1, 2, 3, 4, 5].map((i) => (
                   <div
@@ -487,7 +427,7 @@ function Wishlist() {
               isOpen={editMode}
               onClose={() => setEditMode(false)}
               initialData={userPref}
-              onSubmit={handleUpdatePreference}
+              onSubmit={(payload) => updatePreferenceMutation.mutate(payload)}
             />
           </div>
         )}
