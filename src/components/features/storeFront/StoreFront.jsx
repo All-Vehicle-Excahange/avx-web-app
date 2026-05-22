@@ -10,7 +10,6 @@ import WhyBuyHere from "./WhyBuyHere";
 import Review from "./Review";
 import Navbar from "@/components/layout/Navbar";
 
-
 export default function StoreFront() {
   const [activeTab, setActiveTab] = useState("inventory");
 
@@ -34,12 +33,6 @@ export default function StoreFront() {
 
         <div className=" py-6">
           <section className="w-full">
-            {/*
-            <aside className="flex flex-col gap-6 xl:sticky xl:top-24 h-fit">
-              <StoreSummaryAside />
-            </aside>
-            */}
-
             <div className="flex flex-col gap-6 3xl:max-w-[1480px] 3xl:mx-auto">
               {/* TABS */}
               <div className="w-full px-2 mx-auto 3xl:container overflow-x-auto no-scrollbar">
@@ -54,10 +47,11 @@ export default function StoreFront() {
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
                       className={`hover:cursor-pointer relative py-4 text-sm font-medium transition whitespace-nowrap
-        ${activeTab === tab.id
-                          ? "text-primary"
-                          : "text-third hover:text-primary"
-                        }`}
+        ${
+          activeTab === tab.id
+            ? "text-primary"
+            : "text-third hover:text-primary"
+        }`}
                     >
                       {tab.label}
 

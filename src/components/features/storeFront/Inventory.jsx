@@ -1,22 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Select from "react-select";
-import { getConsualtInventory } from "@/services/user.service";
 import { useParams } from "next/navigation";
 import Button from "@/components/ui/button";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { getStoreFrontInventoryInfiniteQuery } from "@/queries/user.queries";
 
 export default function Inventory() {
     const id = useParams()?.id;
 
     const [activeType, setActiveType] = useState("all");
-    const [vehicles, setVehicles] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [pageNo, setPageNo] = useState(1);
-    const [pageInfo, setPageInfo] = useState(null);
-
 
     const vehicleTypes = [
         { id: "all", label: "All" },
@@ -34,37 +30,25 @@ export default function Inventory() {
 
     const [selectedSort, setSelectedSort] = useState(sortOptions[0]);
 
-    useEffect(() => {
-        const fetchInventory = async () => {
-            setLoading(true);
-            try {
-                const data = {
-                    pageNo: pageNo,
-                    size: 4,
-                    sortBy: selectedSort.value.sortBy,
-                    direction: selectedSort.value.direction,
-                    id: id,
-                    vehicleType: activeType === "all" ? null : activeType,
-                };
+    // TanStack Query for storefront inventory (Infinite scroll / pagination)
+    const {
+        data: inventoryInfiniteData,
+        isLoading: loading,
+        isFetchingNextPage,
+        fetchNextPage,
+        hasNextPage,
+    } = useInfiniteQuery(
+        getStoreFrontInventoryInfiniteQuery({
+            id,
+            sortBy: selectedSort.value.sortBy,
+            direction: selectedSort.value.direction,
+            vehicleType: activeType === "all" ? null : activeType,
+            size: 4,
+        })
+    );
 
-                const res = await getConsualtInventory(data);
-                if (pageNo === 1) {
-                    setVehicles(res.data);
-                } else {
-                    setVehicles((prev) => [...prev, ...res.data]);
-                }
-                setPageInfo(res.pagination);
-            } catch (error) {
-                console.error("Error fetching inventory:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (id) {
-            fetchInventory();
-        }
-    }, [selectedSort, id, pageNo, activeType]);
+    const vehicles =
+        inventoryInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
 
 
 
@@ -77,7 +61,6 @@ export default function Inventory() {
                             key={type.id}
                             onClick={() => {
                                 setActiveType(type.id);
-                                setPageNo(1);
                             }}
                             className={`cursor-pointer px-4 border border-third/50 py-2 rounded-full text-sm font-medium transition
                 ${activeType === type.id
@@ -97,7 +80,6 @@ export default function Inventory() {
                         value={selectedSort}
                         onChange={(option) => {
                             setSelectedSort(option);
-                            setPageNo(1);
                         }}
                         isSearchable={false}
                         className="text-sm"
@@ -173,18 +155,14 @@ export default function Inventory() {
                     )
                 }
             </div>
-            {pageInfo?.totalElements > 4 && (
+            {hasNextPage && (
                 <div className="mt-8 flex justify-end">
                     <Button
                         variant="outline"
-                        onClick={() => {
-                            if (pageInfo && pageNo < pageInfo.totalPages) {
-                                setPageNo((prev) => prev + 1);
-                            }
-                        }}
-                        disabled={pageInfo && pageNo >= pageInfo.totalPages}
+                        onClick={() => fetchNextPage()}
+                        disabled={isFetchingNextPage}
                     >
-                        View More
+                        {isFetchingNextPage ? "Loading..." : "View More"}
                     </Button>
                 </div>
             )}

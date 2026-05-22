@@ -11,6 +11,11 @@ import {
   getState,
   getCities,
   getUserProfileStrength,
+  getAllReview,
+  getConsualtInventory,
+  getStoreFrontByUsername,
+  getAboutUsStoreFrontByUserName,
+  getWhyBuyHereStoreFrontByUserName,
 } from "@/services/user.service";
 import { queryOptions } from "@tanstack/react-query";
 
@@ -190,6 +195,94 @@ export const getUserProfileStrengthQuery = () => {
     queryFn: async () => {
       const res = await getUserProfileStrength();
       return res;
+    },
+    staleTime: 15 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+export const getStoreFrontReviewsInfiniteQuery = (username, payload = {}) => {
+  const size = payload.size || 10;
+  return {
+    queryKey: ["storefront-reviews-infinite", username, payload],
+    queryFn: async ({ pageParam = 1 }) => {
+      if (!username) return { data: { reviews: [], reviewSummary: null } };
+      const res = await getAllReview(username, {
+        ...payload,
+        pageNo: pageParam,
+        size,
+      });
+      return res;
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      const pageInfo = lastPage?.pagination || {};
+      const totalPages = pageInfo.totalPages || 1;
+      const nextPage = allPages.length + 1;
+      return nextPage <= totalPages ? nextPage : undefined;
+    },
+    staleTime: 15 * 60 * 1000,
+    retry: shouldRetry,
+  };
+};
+
+export const getStoreFrontInventoryInfiniteQuery = (payload = {}) => {
+  const size = payload.size || 4;
+  return {
+    queryKey: ["storefront-inventory-infinite", payload],
+    queryFn: async ({ pageParam = 1 }) => {
+      const res = await getConsualtInventory({
+        ...payload,
+        pageNo: pageParam,
+        size,
+      });
+      return res;
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      const pageInfo = lastPage?.pagination || {};
+      const totalPages = pageInfo.totalPages || 1;
+      const nextPage = allPages.length + 1;
+      return nextPage <= totalPages ? nextPage : undefined;
+    },
+    staleTime: 15 * 60 * 1000,
+    retry: shouldRetry,
+  };
+};
+
+export const getStoreFrontByUsernameQuery = (username) => {
+  return queryOptions({
+    queryKey: ["storefront-by-username", username],
+    queryFn: async () => {
+      if (!username) return null;
+      const res = await getStoreFrontByUsername(username);
+      return res?.data || null;
+    },
+    staleTime: 15 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+export const getAboutUsStoreFrontByUserNameQuery = (username) => {
+  return queryOptions({
+    queryKey: ["about-us-storefront", username],
+    queryFn: async () => {
+      if (!username) return null;
+      const res = await getAboutUsStoreFrontByUserName(username);
+      return res?.data || null;
+    },
+    staleTime: 15 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+export const getWhyBuyHereStoreFrontByUserNameQuery = (username) => {
+  return queryOptions({
+    queryKey: ["why-buy-here-storefront", username],
+    queryFn: async () => {
+      if (!username) return null;
+      const res = await getWhyBuyHereStoreFrontByUserName(username);
+      return res?.data || null;
     },
     staleTime: 15 * 60 * 1000,
     retry: shouldRetry,
