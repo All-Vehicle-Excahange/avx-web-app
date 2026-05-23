@@ -1,91 +1,72 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import ConsultantCard from "@/components/ui/const/ConsultCard";
 import Button from "@/components/ui/button";
-import { getHomeFeedConsult } from "@/services/user.service";
-import { getFilterConsualt } from "@/services/filter";
 import ConsultantCardSkeleton from "@/components/ui/skeleton/ConsultantCardSkeleton";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { getRelatedConsultantsQuery } from "@/queries/vehicle.queries";
 
 export default function ReletedConsualt(props) {
     // ✅ HARD SAFE DEFAULT
     const safeLimit = typeof props.limit === "number" ? props.limit : 4;
     const router = useRouter();
 
-    const [consultants, setConsultants] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        let mounted = true;
-
-        const fetchConsultants = async () => {
-            try {
-                // Build payload dynamically
-                const payload = {};
-                if (props.vehicleSummary?.address?.cityId) {
-                    payload.cityId = props.vehicleSummary.address.cityId;
-                }
-                if (props.vehicleSummary?.address?.stateId) {
-                    payload.stateId = props.vehicleSummary.address.stateId;
-                }
-                if (props.vehicleOverview?.makerId) {
-                    payload.makerIds = [props.vehicleOverview.makerId];
-                }
-                if (props.vehicleOverview?.modelId) {
-                    payload.modelIds = [props.vehicleOverview.modelId];
-                }
-                if (props.vehicleOverview?.vehicleSubType) {
-                    payload.vehicleSubTypes = [props.vehicleOverview.vehicleSubType.toUpperCase()];
-                }
-                if (props.vehicleOverview?.price) {
-                    payload.minPrice = props.vehicleOverview.price;
-                    payload.maxPrice = props.vehicleOverview.price;
-                }
-
-                // If we have filters, use getFilterConsualt, otherwise fallback to home feed
-                const res = Object.keys(payload).length > 0
-                    ? await getFilterConsualt(payload)
-                    : await getHomeFeedConsult({ pageNo: 1, size: safeLimit });
-
-                if (mounted && Array.isArray(res?.data) && res.data.length > 0) {
-                    setConsultants(
-                        res.data.map((item) => ({
-                            id: item.id,
-                            username: item.username,
-                            name: item.consultationName || "-",
-                            image: item.bannerUrl || "/cs.webp",
-                            logo: item.logoUrl || "/cs.webp",
-                            rating: item.averageRating ?? 0,
-                            reviews: item.totalReviews ?? 0,
-                            vehicleCount: item.availableVehicles ?? 0,
-                            services: item.services || [],
-                            vehicleTypes: item.vehicleTypes || [],
-                            location:
-                                item.address?.city && item.address?.country
-                                    ? `${item.address.city}, ${item.address.country}`
-                                    : "-",
-                            priceRange:
-                                item.minVehiclePrice && item.maxVehiclePrice
-                                    ? `${(item.minVehiclePrice / 100000).toFixed(1)}L - ${(item.maxVehiclePrice / 100000).toFixed(1)}L`
-                                    : "-",
-                            isSponsored: item.isActiveTier || false,
-                        }))
-                    );
-                }
-            } catch (err) {
-                console.error("Consultant fetch failed:", err);
-            } finally {
-                if (mounted) setLoading(false);
-            }
-        };
-
-        if (props.vehicleOverview && Object.keys(props.vehicleOverview).length > 0) {
-            fetchConsultants();
+    // Build payload dynamically
+    const payload = useMemo(() => {
+        const p = {};
+        if (props.vehicleSummary?.address?.cityId) {
+            p.cityId = props.vehicleSummary.address.cityId;
         }
+        if (props.vehicleSummary?.address?.stateId) {
+            p.stateId = props.vehicleSummary.address.stateId;
+        }
+        if (props.vehicleOverview?.makerId) {
+            p.makerIds = [props.vehicleOverview.makerId];
+        }
+        if (props.vehicleOverview?.modelId) {
+            p.modelIds = [props.vehicleOverview.modelId];
+        }
+        if (props.vehicleOverview?.vehicleSubType) {
+            p.vehicleSubTypes = [props.vehicleOverview.vehicleSubType.toUpperCase()];
+        }
+        if (props.vehicleOverview?.price) {
+            p.minPrice = props.vehicleOverview.price;
+            p.maxPrice = props.vehicleOverview.price;
+        }
+        return p;
+    }, [props.vehicleSummary, props.vehicleOverview]);
 
-        return () => (mounted = false);
-    }, [safeLimit, props.vehicleOverview, props.vehicleSummary]);
+    const hasOverview = props.vehicleOverview && Object.keys(props.vehicleOverview).length > 0;
+
+    const { data: rawConsultants = [], isLoading: loading } = useQuery({
+        ...getRelatedConsultantsQuery(payload, safeLimit),
+        enabled: hasOverview,
+    });
+
+    const consultants = useMemo(() => {
+        if (!Array.isArray(rawConsultants) || rawConsultants.length === 0) return [];
+        return rawConsultants.map((item) => ({
+            id: item.id,
+            username: item.username,
+            name: item.consultationName || "-",
+            image: item.bannerUrl || "/cs.webp",
+            logo: item.logoUrl || "/cs.webp",
+            rating: item.averageRating ?? 0,
+            reviews: item.totalReviews ?? 0,
+            vehicleCount: item.availableVehicles ?? 0,
+            services: item.services || [],
+            vehicleTypes: item.vehicleTypes || [],
+            location:
+                item.address?.city && item.address?.country
+                    ? `${item.address.city}, ${item.address.country}`
+                    : "-",
+            priceRange:
+                item.minVehiclePrice && item.maxVehiclePrice
+                    ? `${(item.minVehiclePrice / 100000).toFixed(1)}L - ${(item.maxVehiclePrice / 100000).toFixed(1)}L`
+                    : "-",
+            isSponsored: item.isActiveTier || false,
+        }));
+    }, [rawConsultants]);
 
     const finalConsultants = consultants;
 

@@ -73,6 +73,9 @@ export default function AccountPopup({ open, onClosePopup }) {
     const messages = profileStrength?.messages || [];
 
     if (isConsultant) {
+      if (user?.userRole === "CONSULTATION") {
+        return { label: "Go to Dashboard", href: "/consult/dashboard/overview" };
+      }
       // Priority 1: KYC / Verification
       if (
         messages.some((m) =>
@@ -122,8 +125,12 @@ export default function AccountPopup({ open, onClosePopup }) {
     onClosePopup();
   };
 
-  const wrapConsultAuth = (path) =>
-    `/consult/subscription?redirect=${encodeURIComponent(path)}`;
+  const wrapConsultAuth = (path) => {
+    if (user?.userRole === "CONSULTATION") {
+      return path;
+    }
+    return `/consult/subscription?redirect=${encodeURIComponent(path)}`;
+  };
 
   const handleLogout = async () => {
     try {

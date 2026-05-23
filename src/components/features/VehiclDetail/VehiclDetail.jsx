@@ -20,7 +20,8 @@ import VehicleOverviewMain from "./VehicleOverviewMain";
 
 
 import { useParams } from "next/navigation";
-import { getVehicleOverview, getVehicleSummary } from "@/services/vehicle.service";
+import { useQuery } from "@tanstack/react-query";
+import { getVehicleOverviewQuery, getVehicleSummaryQuery } from "@/queries/vehicle.queries";
 import ReletedConsualt from "./ReletedConsualt";
 import VehicleDetailsSkeleton from "@/components/ui/skeleton/VehicleDetailsSkeleton";
 import SpecialOffer from "./SpecialOffer";
@@ -85,47 +86,24 @@ export default function VehicleDetails({ initialOverview = null, initialSummary 
   };
   const params = useParams();
   const id = params.id;
-  const [vehicleOverview, setVehicleOverview] = useState(initialOverview || {});
-  const [vehicleSummary, setVehicleSummary] = useState(initialSummary || {});
-  const [loading, setLoading] = useState(!initialOverview);
-  const isFirstRender = useRef(true);
 
-  useEffect(() => {
-    const fetchAll = async () => {
-      // If we already have initial data and it's the first render, skip fetching
-      if (isFirstRender.current && initialOverview && id) {
-        isFirstRender.current = false;
-        return;
-      }
+  const { data: vehicleOverview, isLoading: isOverviewLoading } = useQuery({
+    ...getVehicleOverviewQuery(id),
+    initialData: initialOverview || undefined,
+    enabled: !!id,
+  });
 
-      setLoading(true);
-      try {
-        // Step 1: Always fetch overview first
-        const overviewRes = await getVehicleOverview(id);
-        const overviewData = overviewRes.data;
-        setVehicleOverview(overviewData);
+  const ownerRole = vehicleOverview?.vehicleOwner?.userRole;
+  const isConsultation = ownerRole === "CONSULTATION";
 
-        // Step 2: Only fetch consultation meta if the owner is a CONSULTATION
-        const ownerRole = overviewData?.vehicleOwner?.userRole;
-        if (ownerRole === "CONSULTATION") {
-          try {
-            const summaryRes = await getVehicleSummary(id);
-            setVehicleSummary(summaryRes.data);
-          } catch (summaryErr) {
-            console.warn("Consultation meta not available:", summaryErr?.message);
-            setVehicleSummary({});
-          }
-        } else {
-          setVehicleSummary({});
-        }
-      } catch (error) {
-        console.error("Failed to load vehicle details:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (id) fetchAll();
-  }, [id, initialOverview]);
+  const { data: vehicleSummaryData, isLoading: isSummaryLoading } = useQuery({
+    ...getVehicleSummaryQuery(id),
+    initialData: initialSummary || undefined,
+    enabled: !!id && isConsultation,
+  });
+
+  const vehicleSummary = vehicleSummaryData || {};
+  const loading = isOverviewLoading || (isConsultation && isSummaryLoading);
 
   //  Stricter loading check to prevent "Labels without values" UI flash
   if (loading || !vehicleOverview?.id) {

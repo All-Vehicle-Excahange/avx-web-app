@@ -8,7 +8,8 @@ import { addWishList, removeWishList } from "@/services/user.service";
 import { useAuthStore } from "@/stores/useAuthStore";
 import LoginPopup from "@/components/auth/LoginPopup";
 import SendInquaryPopup from "./SendInquaryPopup";
-import { checkIsUserEligbleToSendInquary } from "@/services/vehicle.service";
+import { useQuery } from "@tanstack/react-query";
+import { getInquiryEligibilityQuery } from "@/queries/vehicle.queries";
 import SignupPopup from "@/components/auth/SignupPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import RequestAlredySentPopup from "./RequestAlredySentPopup";
@@ -24,7 +25,6 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isAlreadySentOpen, setIsAlreadySentOpen] = useState(false);
   const [inquiryStatus, setInquiryStatus] = useState(null);
-  const [isCheckingInquiry, setIsCheckingInquiry] = useState(false);
   const [localInquiryCount, setLocalInquiryCount] = useState(
     vehicle?.totalInquiryCount || 0,
   );
@@ -33,6 +33,11 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
   const pendingAction = useRef(null);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const lastSyncedValue = useRef(vehicle?.isWishlisted || false);
+
+  const { data: eligibilityData, refetch: refetchEligibility, isFetching: isCheckingInquiry } = useQuery({
+    ...getInquiryEligibilityQuery(vehicleId),
+    enabled: !!vehicleId && isLoggedIn,
+  });
 
   const debouncedSyncWishlist = useDebouncedCallback(async (nextState) => {
     try {
@@ -68,24 +73,25 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
     if (!vehicleId || isCheckingInquiry) return;
 
     try {
-      setIsCheckingInquiry(true);
-      const res = await checkIsUserEligbleToSendInquary(vehicleId);
+      let data = eligibilityData;
+      if (data === undefined) {
+        const refetched = await refetchEligibility();
+        data = refetched.data;
+      }
 
       if (
-        res?.data === null ||
-        res?.data?.inquiryStatus === "CLOSED_BY_VEHICLE_OWNER" ||
-        res?.data?.inquiryStatus === "CLOSED_BY_INQUIRER"
+        data === null ||
+        data?.inquiryStatus === "CLOSED_BY_VEHICLE_OWNER" ||
+        data?.inquiryStatus === "CLOSED_BY_INQUIRER"
       ) {
         setIsPopupOpen(true);
       } else {
-        setInquiryStatus(res?.data?.inquiryStatus || "PENDING");
+        setInquiryStatus(data?.inquiryStatus || "PENDING");
         setIsAlreadySentOpen(true);
       }
     } catch (error) {
       console.error("Error checking inquiry eligibility:", error);
       setIsPopupOpen(true); // Fallback
-    } finally {
-      setIsCheckingInquiry(false);
     }
   };
 

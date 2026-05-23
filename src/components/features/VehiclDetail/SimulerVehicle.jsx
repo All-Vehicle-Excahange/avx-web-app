@@ -1,38 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
-import { getSimularVehicles } from "@/services/user.service";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 import { useParams, useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { getSimularVehiclesQuery } from "@/queries/vehicle.queries";
 
 function SimulerVehicle({ vehicleOverview }) {
 
-    const [vehicle, setVehicle] = useState([])
-    const [loading, setLoading] = useState(true);
     const params = useParams();
     const router = useRouter();
     const id = params.id;
 
-    useEffect(() => {
-        const fetchVehicles = async () => {
-            setLoading(true);
-            try {
-                const data = {
-                    pageNo: 1, size: 8, id: id
-                }
-                const res = await getSimularVehicles(data)
-                setVehicle(res.data)
-            } catch (error) {
-                console.log(error);
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        if (id) {
-            fetchVehicles();
-        }
-    }, [id]);
+    const { data: vehicle = [], isLoading: loading } = useQuery({
+        ...getSimularVehiclesQuery(id),
+        enabled: !!id,
+    });
 
     const handleViewMore = () => {
         const brand = vehicleOverview?.makerName || "";
