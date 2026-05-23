@@ -10,11 +10,13 @@ import Select from "react-select";
 import {
   complateInspectionPayment,
   createInpection,
-  getInspectionByVehicleId
 } from "@/services/inspection.service";
 import toast from "react-hot-toast";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getInspectionByVehicleIdQuery } from "@/queries/vehicle.queries";
 
 export default function VehicleSpec({ open, setOpen, vehicle }) {
+  const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
   const [animateModal, setAnimateModal] = useState(false);
   const [inspectionType, setInspectionType] = useState("report");
@@ -24,8 +26,11 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
   const [step, setStep] = useState(1);
   const [createdInspectionId, setCreatedInspectionId] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [existingInspection, setExistingInspection] = useState(null);
-  const [isCheckingInspection, setIsCheckingInspection] = useState(false);
+
+  const { data: existingInspection, isFetching: isCheckingInspection } = useQuery({
+    ...getInspectionByVehicleIdQuery(vehicle?.id),
+    enabled: !!vehicle?.id,
+  });
 
   useEffect(() => {
     const initUser = () => {
@@ -70,31 +75,18 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
       setStep(1);
       setCreatedInspectionId("");
       setIsSubmitting(false);
-      setExistingInspection(null);
     }, 300);
   };
 
-  const handleOpenModal = async () => {
+  const handleOpenModal = () => {
     if (!vehicle?.id) { toast.error("Vehicle information is not available."); return; }
-    setIsCheckingInspection(true);
-    try {
-      const response = await getInspectionByVehicleId(vehicle.id);
-      if (response?.success && response?.data) {
-        setExistingInspection(response.data);
-        setStep(0);
-      } else {
-        setExistingInspection(null);
-        setStep(1);
-      }
-    } catch (err) {
-      // 404 = no existing request → show normal form
-      setExistingInspection(null);
+    if (existingInspection) {
+      setStep(0);
+    } else {
       setStep(1);
-    } finally {
-      setIsCheckingInspection(false);
-      setShowModal(true);
-      setTimeout(() => setAnimateModal(true), 10);
     }
+    setShowModal(true);
+    setTimeout(() => setAnimateModal(true), 10);
   };
 
   const parseTime = (timeStr) => {
@@ -132,7 +124,11 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
       const response = await createInpection(vehicle.id, payload);
       if (response?.success) {
         const id = response.data?.id || response.id;
-        if (id) { setCreatedInspectionId(id); setStep(2); }
+        if (id) {
+          setCreatedInspectionId(id);
+          setStep(2);
+          queryClient.invalidateQueries({ queryKey: ["inspection-by-vehicle", vehicle.id] });
+        }
         else toast.error("Failed to retrieve request ID.");
       } else {
         toast.error(response?.message || "Failed to create inspection request.");
@@ -149,7 +145,10 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
     setIsSubmitting(true);
     try {
       const response = await complateInspectionPayment(createdInspectionId);
-      if (response?.success) { setStep(3); }
+      if (response?.success) {
+        setStep(3);
+        queryClient.invalidateQueries({ queryKey: ["inspection-by-vehicle", vehicle.id] });
+      }
       else toast.error(response?.message || "Payment completion failed.");
     } catch (err) {
       toast.error(err?.response?.data?.message || "Payment completion failed.");

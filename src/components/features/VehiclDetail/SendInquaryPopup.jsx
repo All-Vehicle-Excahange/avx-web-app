@@ -7,8 +7,10 @@ import Select from "react-select";
 import Button from "@/components/ui/button";
 import { X, CheckCircle2, Loader2 } from "lucide-react";
 import { sendInquary } from "@/services/vehicle.service";
+import { useQueryClient } from "@tanstack/react-query";
 
 function SendInquaryPopup({ onClose, consultName = "Consultant", vehicleId, onSuccess }) {
+    const queryClient = useQueryClient();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
@@ -46,6 +48,11 @@ function SendInquaryPopup({ onClose, consultName = "Consultant", vehicleId, onSu
             if (description.trim()) payload.inquiryDescription = description.trim();
             await sendInquary(vehicleId, payload);
             setIsSuccess(true);
+            
+            // Invalidate query caches to trigger automatic UI updates
+            queryClient.invalidateQueries({ queryKey: ["inquiry-eligibility", vehicleId] });
+            queryClient.invalidateQueries({ queryKey: ["vehicle-overview", vehicleId] });
+
             if (onSuccess) onSuccess();
             setTimeout(() => handleClose(), 60000);
         } catch (error) {
