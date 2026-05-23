@@ -422,7 +422,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                       My Inquiries
                     </Item>
                     <Item
-                      href="/user/details/inspections"
+                      href="/user/details/inspection"
                       onClick={onClosePopup}
                     >
                       Inspection Requests
@@ -486,7 +486,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                       Inquiries
                     </Item>
                     <Item
-                      href={wrapConsultAuth("/consult/dashboard/inspections")}
+                      href={wrapConsultAuth("/consult/dashboard/inspection")}
                       onClick={onClosePopup}
                     >
                       Inspections
@@ -505,23 +505,31 @@ export default function AccountPopup({ open, onClosePopup }) {
                     </Item>
                   </Section>
 
-                  <Section title="Storefront">
-                    <Item href="/store-front" onClick={onClosePopup}>
-                      View Storefront
-                    </Item>
-                    <Item
-                      href={wrapConsultAuth("/consult/dashboard/storefront")}
-                      onClick={onClosePopup}
-                    >
-                      Edit Storefront
-                    </Item>
-                    <Item
-                      href={wrapConsultAuth("/consult/dashboard/storefront")}
-                      onClick={onClosePopup}
-                    >
-                      Theme Settings
-                    </Item>
-                  </Section>
+                  <div className="space-y-4">
+                    <Section title="Storefront">
+                      <Item href="/store-front" onClick={onClosePopup}>
+                        View Storefront
+                      </Item>
+                      <Item
+                        href={wrapConsultAuth("/consult/dashboard/storefront")}
+                        onClick={onClosePopup}
+                      >
+                        Edit Storefront
+                      </Item>
+                      <Item
+                        href={wrapConsultAuth("/consult/dashboard/storefront")}
+                        onClick={onClosePopup}
+                      >
+                        Theme Settings
+                      </Item>
+                    </Section>
+
+                    <Section title="Buyer">
+                      <Item href="/user/details/myinquary" onClick={onClosePopup}>
+                        My Activity
+                      </Item>
+                    </Section>
+                  </div>
 
                   <Section title="Billing">
                     <Item
@@ -550,10 +558,16 @@ export default function AccountPopup({ open, onClosePopup }) {
                   {/*</Section>*/}
 
                   <Section title="Support">
-                    <Item href="/consultant-help" onClick={onClosePopup}>
+                    <Item
+                      href="/consult/dashboard/help-center"
+                      onClick={onClosePopup}
+                    >
                       Consultant Help
                     </Item>
-                    <Item href="/raise-ticket" onClick={onClosePopup}>
+                    <Item
+                      href="/consult/dashboard/help-center"
+                      onClick={onClosePopup}
+                    >
                       Raise Ticket
                     </Item>
                   </Section>

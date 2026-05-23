@@ -4,6 +4,8 @@ import Image from "next/image";
 import React from "react";
 import Button from "@/components/ui/button";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useAuthStore } from "@/stores/useAuthStore";
+import InspectionTrackingModal from "./InspectionTrackingModal";
 import {
   getAllRequestedInspectionInfiniteQuery,
   getAllInsprectionRequestInfiniteQuery,
@@ -16,6 +18,22 @@ import {
 function Inspection() {
   const [activeTab, setActiveTab] = useState("sent");
   const [localStatuses, setLocalStatuses] = useState({});
+  const [selectedInspection, setSelectedInspection] = useState(null);
+  const [animateModal, setAnimateModal] = useState(false);
+
+  const handleOpenTracking = (item) => {
+    setSelectedInspection(item);
+    setTimeout(() => setAnimateModal(true), 10);
+  };
+
+  const handleCloseTracking = () => {
+    setAnimateModal(false);
+    setTimeout(() => {
+      setSelectedInspection(null);
+    }, 300);
+  };
+
+  const user = useAuthStore((state) => state.user);
 
   // Sent Inspections Query
   const {
@@ -68,7 +86,8 @@ function Inspection() {
           {[
             { id: "sent", label: "Sent Inspections" },
             { id: "received", label: "Received Inspection Requests" },
-          ].map((tab) => (
+          ].filter(tab => !(user?.userRole === "CONSULTATION" && tab.id === "received"))
+          .map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
@@ -102,9 +121,10 @@ function Inspection() {
               ))
             ) : inspections.length > 0 ? (
               <>
-                {inspections.map((item) => (
+                 {inspections.map((item) => (
                   <InspectionCard
                     key={item.id}
+                    onClick={() => handleOpenTracking(item)}
                     status={
                       localStatuses[item.id] || item.inspectionRequestStatus
                     }
@@ -172,6 +192,7 @@ function Inspection() {
               {receivedRequests.map((item) => (
                 <InspectionCard
                   key={item.id}
+                  onClick={() => handleOpenTracking(item)}
                   status={
                     localStatuses[item.id] || item.inspectionRequestStatus
                   }
@@ -236,6 +257,14 @@ function Inspection() {
           )}
         </div>
       </section>
+
+      {selectedInspection && (
+        <InspectionTrackingModal
+          inspection={selectedInspection}
+          onClose={handleCloseTracking}
+          animateModal={animateModal}
+        />
+      )}
     </>
   );
 }

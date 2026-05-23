@@ -15,7 +15,8 @@ function UserDetails() {
   const params = useParams();
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
-  const activeTab = params?.id || "myvehicle";
+  const isConsultant = user?.userRole === "CONSULTATION";
+  const activeTab = params?.id || (isConsultant ? "myprofile" : "myvehicle");
 
   return (
     <section className="pt-12">
@@ -31,6 +32,11 @@ function UserDetails() {
           { id: "myprofile", label: "My Profile" },
         ]
           .filter((tab) => {
+            if (isConsultant) {
+              if (tab.id === "myvehicle" || tab.id === "inquaries") {
+                return false;
+              }
+            }
             if (tab.id === "inquaries") {
               const allowedRoles = ["USER_SELLER", "USER_SELLER_APPLICANT", "CONSULTATION"];
               return allowedRoles.includes(user?.userRole);
