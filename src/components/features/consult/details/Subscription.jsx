@@ -9,9 +9,9 @@ import { getSellerTier } from "@/services/Seller.service";
 import { SkeletonBox } from "@/components/ui/skeleton";
 import { getAllTier } from "@/services/user.service";
 import {
-  createRazorpayOrder,
-  verifyRazorpayPayment,
-} from "@/services/payment.service";
+  createSubscription,
+  getActiveSubscription,
+} from "@/services/subscription.service";
 
 export default function Subscription() {
   const router = useRouter();
@@ -19,6 +19,7 @@ export default function Subscription() {
   const [tiers, setTiers] = useState([]);
   const [selectedTierId, setSelectedTierId] = useState(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
+  const [billingCycle, setBillingCycle] = useState("MONTHLY");
 
   useEffect(() => {
     const initializeData = async () => {
@@ -87,66 +88,73 @@ export default function Subscription() {
       }
 
       const selectedTier = tiers.find((t) => t.id === selectedTierId);
-      const price = selectedTier.monthlyPrice || 100;
-      const amountInPaise = Math.max(price * 100, 100);
 
-      // 1. Create order
-      const orderResponse = await createRazorpayOrder({
-        amount: amountInPaise,
-        currency: "INR",
-        receipt: `receipt_${Date.now()}`,
-      });
+      // Create subscription in the backend
+      let response;
+      try {
+        response = await createSubscription({
+          planId: selectedTierId,
+          billingCycle: billingCycle,
+        });
+      } catch (err) {
+        if (err.response?.status === 409 || err.status === 409) {
+          const activeRes = await getActiveSubscription();
+          if (activeRes && activeRes.success && activeRes.data) {
+            response = activeRes;
+          } else {
+            throw err;
+          }
+        } else {
+          throw err;
+        }
+      }
 
-      if (!orderResponse.success) {
+      if (!response.success) {
         throw new Error(
-          orderResponse.message ||
-            "Failed to create order. Please check backend integration.",
+          response.message || "Failed to create subscription order.",
         );
       }
 
-      const orderData = orderResponse.data;
+      const { razorpaySubscriptionId, shortUrl } = response.data;
 
-      // 2. Open Razorpay Modal
+      // If SDK subscription ID is not available but shortUrl is, open hosted checkout in a popup window
+      if (!razorpaySubscriptionId && shortUrl) {
+        const width = 500;
+        const height = 700;
+        const left = window.screen.width / 2 - width / 2;
+        const top = window.screen.height / 2 - height / 2;
+        window.open(
+          shortUrl,
+          "AVX Subscription Payment",
+          `width=${width},height=${height},top=${top},left=${left},scrollbars=yes,resizable=yes`,
+        );
+        return;
+      }
+
+      // Open Razorpay subscription checkout modal
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: orderData.amount,
-        currency: orderData.currency,
+        subscription_id: razorpaySubscriptionId,
         name: "AVX",
         description: `Subscription for ${selectedTier.title} plan`,
-        order_id: orderData.order_id || orderData.orderId || orderData.id,
-        handler: async function (response) {
-          try {
-            // 3. Verify Payment
-            const verifyRes = await verifyRazorpayPayment({
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_signature: response.razorpay_signature,
-            });
-
-            if (verifyRes.success) {
-              if (router.query?.redirect) {
-                router.push(
-                  `/consult/kyc?redirect=${encodeURIComponent(router.query.redirect)}`,
-                );
-              } else {
-                router.push("/consult/kyc");
-              }
-            } else {
-              alert(verifyRes.message || "Payment verification failed.");
-            }
-          } catch (error) {
-            console.error("Verification error:", error);
-            alert("Error verifying payment.");
+        handler: async function (paymentResponse) {
+          if (router.query?.redirect) {
+            router.push(
+              `/consult/kyc?redirect=${encodeURIComponent(router.query.redirect)}`,
+            );
+          } else {
+            router.push("/consult/kyc");
           }
         },
+        name: "AVX",
         theme: {
           color: "#3399cc",
         },
       };
 
       const rzp = new window.Razorpay(options);
-      rzp.on("payment.failed", function (response) {
-        alert("Payment failed: " + response.error.description);
+      rzp.on("payment.failed", function (failResponse) {
+        alert("Payment failed: " + failResponse.error.description);
       });
       rzp.open();
     } catch (error) {
@@ -223,6 +231,8 @@ export default function Subscription() {
             title={tier.title}
             monthlyPrice={tier.monthlyPrice}
             yearlyPrice={tier.yearlyPrice}
+            billingCycle={billingCycle}
+            onBillingCycleChange={(cycle) => setBillingCycle(cycle)}
             features={
               tier.features?.map((f) => (
                 <span key={f.id}>

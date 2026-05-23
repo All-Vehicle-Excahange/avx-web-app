@@ -1,13 +1,9 @@
-
-
 import React, { useEffect, useState } from "react";
 import { Car, Bike } from "lucide-react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
-import {
-  getFourWheelWithTag,
-  getTwoWheelWithTag,
-} from "@/services/user.service";
+import { useQuery } from "@tanstack/react-query";
+import { getVehiclesByTagQuery } from "@/queries/user.queries";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 import { useDebounceValue } from "@/hooks/useDebounce";
 
@@ -58,66 +54,47 @@ const categoriesByType = {
 const CategoriesSections = () => {
   const [activeType, setActiveType] = useState("4-Wheeler");
   const [active, setActive] = useState("urban-rides");
-  const [vehicles, setVehicles] = useState([]);
-  const [loading, setLoading] = useState(true);
   const checkedCategories = React.useRef(new Set());
 
   const debouncedType = useDebounceValue(activeType, 400);
   const debouncedActive = useDebounceValue(active, 400);
 
-  const fetchVehicles = React.useCallback(async () => {
-    // We keep loading here for robustness, though we also set it in useEffect
-    setLoading(true);
-    try {
-      const selectedTag = vehicleTagMap[debouncedType]?.[debouncedActive];
-      if (!selectedTag) return;
+  const selectedTag = vehicleTagMap[debouncedType]?.[debouncedActive];
+  const queryPayload = {
+    pageNo: 1,
+    size: 4,
+    vehicleTag: selectedTag,
+  };
 
-      const data = {
-        pageNo: 1,
-        size: 4,
-        vehicleTag: selectedTag,
-      };
+  const { data: vehicles = [], isFetching } = useQuery(
+    getVehiclesByTagQuery(debouncedType, queryPayload)
+  );
 
-      let res;
+  const showSkeleton =
+    isFetching ||
+    active !== debouncedActive ||
+    activeType !== debouncedType;
 
-      if (activeType === "4-Wheeler") {
-        res = await getFourWheelWithTag(data);
-      } else {
-        res = await getTwoWheelWithTag(data);
-      }
-
-      const fetchedVehicles = res?.data || [];
+  // Auto-play / switch to next category if currently loaded category is empty
+  useEffect(() => {
+    if (!isFetching && vehicles.length === 0 && selectedTag) {
       checkedCategories.current.add(selectedTag);
 
-      if (fetchedVehicles.length === 0) {
-        // Find next category
-        const categories = categoriesByType[activeType];
-        const currentIndex = categories.findIndex((c) => c.id === active);
-        const nextCategoryIndex = (currentIndex + 1) % categories.length;
-        const nextCategory = categories[nextCategoryIndex];
+      // Find next category based on the debounced category that just completed
+      const categories = categoriesByType[debouncedType];
+      const currentIndex = categories.findIndex((c) => c.id === debouncedActive);
+      const nextCategoryIndex = (currentIndex + 1) % categories.length;
+      const nextCategory = categories[nextCategoryIndex];
 
-        const nextTag = vehicleTagMap[activeType]?.[nextCategory.id];
+      const nextTag = vehicleTagMap[debouncedType]?.[nextCategory.id];
 
-        // If we haven't checked the next tag yet, switch to it
-        if (!checkedCategories.current.has(nextTag)) {
-          setActive(nextCategory.id);
-          return; // The useEffect will re-trigger fetchVehicles
-        }
+      // If we haven't checked the next tag yet, switch to it
+      if (!checkedCategories.current.has(nextTag)) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setActive(nextCategory.id);
       }
-
-      setVehicles(fetchedVehicles);
-    } catch (error) {
-      console.error("Error fetching vehicles:", error);
-    } finally {
-      setLoading(false);
     }
-  }, [debouncedActive, debouncedType]);
-
-  useEffect(() => {
-    // Immediate visual feedback
-    setLoading(true);
-    fetchVehicles();
-  }, [debouncedActive, debouncedType, fetchVehicles]);
+  }, [vehicles, isFetching, debouncedType, debouncedActive, selectedTag]);
 
   return (
     <section className="w-full h-full flex flex-col text-primary">
@@ -130,12 +107,13 @@ const CategoriesSections = () => {
             </p>
 
             <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-              Not sure what to buy? <span className="text-fourth">Start here</span>
+              Not sure what to buy?{" "}
+              <span className="text-fourth">Start here</span>
             </h2>
 
             <p className="text-third w-full max-w-2xl">
-              Not sure where to start? Browse by the type of car that fits your life — and your budget.
-
+              Not sure where to start? Browse by the type of car that fits your
+              life — and your budget.
             </p>
           </div>
 
@@ -195,7 +173,7 @@ const CategoriesSections = () => {
                     "flex items-center gap-2 shrink-0 px-5 py-2 text-sm font-semibold rounded-full border transition-all cursor-pointer",
                     isActive
                       ? "bg-fourth text-primary border-fourth shadow-sm"
-                      : "text-primary border-white/20 hover:border-primary/40"
+                      : "text-primary border-white/20 hover:border-primary/40",
                   )}
                 >
                   {cat.icon && <cat.icon size={18} />}
@@ -208,7 +186,7 @@ const CategoriesSections = () => {
 
         {/* Vehicle Grid */}
         <div className="flex-1 min-h-0 grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {loading ? (
+          {showSkeleton ? (
             [...Array(4)].map((_, i) => (
               <VehicleCardSkeleton key={`skel-${i}`} />
             ))
@@ -223,11 +201,15 @@ const CategoriesSections = () => {
             </div>
           ) : (
             vehicles.map((car) => (
-              <VehicleCard key={car.id} data={car} className="lg:col-span-3" source="home" />
+              <VehicleCard
+                key={car.id}
+                data={car}
+                className="lg:col-span-3"
+                source="home"
+              />
             ))
           )}
         </div>
-
 
         {/* Bottom Button */}
         <div className="mt-7 flex justify-end">

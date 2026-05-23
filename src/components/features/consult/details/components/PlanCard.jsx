@@ -1,5 +1,4 @@
 import { Check } from "lucide-react";
-import { useState } from "react";
 
 export default function PlanCard({
   icon,
@@ -10,8 +9,10 @@ export default function PlanCard({
   popular,
   selected,
   onSelect,
+  billingCycle = "MONTHLY",
+  onBillingCycleChange,
 }) {
-  const [isAnnual, setIsAnnual] = useState(false);
+  const isAnnual = billingCycle === "YEARLY";
 
   return (
     <div
@@ -52,7 +53,7 @@ export default function PlanCard({
           >
             <button
               type="button"
-              onClick={() => setIsAnnual(!isAnnual)}
+              onClick={() => onBillingCycleChange(isAnnual ? "MONTHLY" : "YEARLY")}
               className={`relative w-10 h-5 rounded-full transition-colors duration-300 focus:outline-none p-0.5 ${
                 isAnnual ? "bg-fourth" : "bg-third/30"
               }`}

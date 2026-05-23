@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
 import { Bike, Car } from "lucide-react";
-import { getTopPicsFour, getTopPicsTwo, getUserHomeFeed } from "@/services/user.service";
+import { useQuery } from "@tanstack/react-query";
+import { getTopPicsQuery } from "@/queries/user.queries";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 import { useDebounceValue } from "@/hooks/useDebounce";
 
@@ -11,35 +12,18 @@ const cn = (...classes) => classes.filter(Boolean).join(" ");
 
 export default function TopPicsSection() {
     const [activeType, setActiveType] = useState("4-Wheeler");
-    const [cardData, setCardData] = useState([]);
-    const [loading, setLoading] = useState(true);
     const debouncedType = useDebounceValue(activeType, 400);
 
+    const queryPayload = {
+        pageNo: 1,
+        size: 4,
+    };
 
-    useEffect(() => {
-        const fetchHomeFeed = async () => {
-            setLoading(true);
-            try {
-                const data = {
-                    pageNo: 1,
-                    size: 4,
-                }
-                let res;
-                if (debouncedType === "4-Wheeler") {
-                    res = await getTopPicsFour(data)
-                } else {
-                    res = await getTopPicsTwo(data)
-                }
-                setCardData(res.data)
-            } catch (error) {
-                console.error("Failed to fetch themes:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const { data: cardData = [], isFetching } = useQuery(
+        getTopPicsQuery(debouncedType, queryPayload)
+    );
 
-        fetchHomeFeed();
-    }, [debouncedType]);
+    const showSkeleton = isFetching || activeType !== debouncedType;
 
     return (
         <div className="w-full h-full flex flex-col  text-primary">
@@ -91,7 +75,7 @@ export default function TopPicsSection() {
             {/* Grid Layout */}
             <div
                 className="flex-1 min-h-0 grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-1">
-                {loading ? (
+                {showSkeleton ? (
                     [...Array(4)].map((_, i) => (
                         <div key={`skel-${i}`} className="lg:col-span-1 lg:row-span-1 h-full">
                             <VehicleCardSkeleton />

@@ -1,63 +1,24 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ConsultantCard from "@/components/ui/const/ConsultCard";
 import Button from "@/components/ui/button";
-import { getHomeFeedConsult } from "@/services/user.service";
 import ConsultantCardSkeleton from "@/components/ui/skeleton/ConsultantCardSkeleton";
+import { useQuery } from "@tanstack/react-query";
+import { getHomeFeedConsultQuery } from "@/queries/user.queries";
 
 export default function AutoConsultPicsSection(props) {
   // ✅ HARD SAFE DEFAULT
   const safeLimit = typeof props.limit === "number" ? props.limit : 4;
 
-  const [consultants, setConsultants] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const queryPayload = {
+    pageNo: 1,
+    size: safeLimit,
+  };
 
-  useEffect(() => {
-    let mounted = true;
-
-    const fetchConsultants = async () => {
-      try {
-        const res = await getHomeFeedConsult({
-          pageNo: 1,
-          size: safeLimit,
-        });
-
-        if (mounted && Array.isArray(res?.data) && res.data.length > 0) {
-          setConsultants(
-            res.data.map((item) => ({
-              id: item.id,
-              username: item.username,
-              name: item.consultationName || "-",
-              image: item.bannerUrl || "/cs.webp",
-              logo: item.logoUrl || "/cs.webp",
-              rating: item.averageRating ?? 0,
-              reviews: item.totalReviews ?? 0,
-              vehicleCount: item.availableVehicles ?? 0,
-              services: item.services || [],
-              vehicleTypes: item.vehicleTypes || [],
-              location:
-                item.address?.city && item.address?.country
-                  ? `${item.address.city}, ${item.address.country}`
-                  : "-",
-              priceRange:
-                item.minVehiclePrice && item.maxVehiclePrice
-                  ? `${(item.minVehiclePrice / 100000).toFixed(1)}L - ${(item.maxVehiclePrice / 100000).toFixed(1)}L`
-                  : "-",
-              isSponsored: item.isActiveTier || false,
-            })),
-          );
-        }
-      } catch (err) {
-        console.error("Consultant fetch failed:", err);
-      } finally {
-        mounted && setLoading(false);
-      }
-    };
-
-    fetchConsultants();
-    return () => (mounted = false);
-  }, [safeLimit]);
+  const { data: consultants = [], isLoading } = useQuery(
+    getHomeFeedConsultQuery(queryPayload)
+  );
 
   // ✅ FINAL DATA SOURCE
   const finalConsultants = consultants;
@@ -79,7 +40,7 @@ export default function AutoConsultPicsSection(props) {
         </p>
       </div>
 
-      {loading && (
+      {isLoading && (
         <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {[...Array(safeLimit)].map((_, i) => (
             <ConsultantCardSkeleton key={`skel-${i}`} />
@@ -87,7 +48,7 @@ export default function AutoConsultPicsSection(props) {
         </div>
       )}
 
-      {!loading && (
+      {!isLoading && (
         <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {finalConsultants.length === 0 ? (
             <div className="col-span-full flex justify-center py-16">

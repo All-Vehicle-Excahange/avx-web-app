@@ -16,7 +16,19 @@ import {
   getStoreFrontByUsername,
   getAboutUsStoreFrontByUserName,
   getWhyBuyHereStoreFrontByUserName,
+  getFourWheelWithTag,
+  getTwoWheelWithTag,
+  getTopPicsFour,
+  getTopPicsTwo,
+  getAvxIsnpectedFourWheel,
+  getAvxIsnpectedTwoWheel,
+  getHomeFeedConsult,
+  getRecentlySold,
 } from "@/services/user.service";
+import {
+  getFilteredVehicles,
+  getFilterConsualt,
+} from "@/services/filter";
 import { queryOptions } from "@tanstack/react-query";
 
 const shouldRetry = (failureCount, error) => {
@@ -285,6 +297,127 @@ export const getWhyBuyHereStoreFrontByUserNameQuery = (username) => {
       return res?.data || null;
     },
     staleTime: 15 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+export const getVehiclesByTagQuery = (activeType, payload) => {
+  return queryOptions({
+    queryKey: ["vehicles-by-tag", activeType, payload],
+    queryFn: async () => {
+      if (!payload?.vehicleTag) return [];
+      let res;
+      if (activeType === "4-Wheeler") {
+        res = await getFourWheelWithTag(payload);
+      } else {
+        res = await getTwoWheelWithTag(payload);
+      }
+      return res?.data || [];
+    },
+    staleTime: 10 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+export const getTopPicsQuery = (activeType, payload) => {
+  return queryOptions({
+    queryKey: ["top-pics", activeType, payload],
+    queryFn: async () => {
+      let res;
+      if (activeType === "4-Wheeler") {
+        res = await getTopPicsFour(payload);
+      } else {
+        res = await getTopPicsTwo(payload);
+      }
+      return res?.data || [];
+    },
+    staleTime: 10 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+export const getAvxInspectedQuery = (activeType, payload) => {
+  return queryOptions({
+    queryKey: ["avx-inspected", activeType, payload],
+    queryFn: async () => {
+      let res;
+      if (activeType === "2-Wheeler") {
+        res = await getAvxIsnpectedTwoWheel(payload);
+      } else {
+        res = await getAvxIsnpectedFourWheel(payload);
+      }
+      return res?.data || [];
+    },
+    staleTime: 10 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+export const getHomeFeedConsultQuery = (payload) => {
+  return queryOptions({
+    queryKey: ["home-feed-consult", payload],
+    queryFn: async () => {
+      const res = await getHomeFeedConsult(payload);
+      const fetchedData = res?.data || [];
+      return fetchedData.map((item) => ({
+        id: item.id,
+        username: item.username,
+        name: item.consultationName || "-",
+        image: item.bannerUrl || "/cs.webp",
+        logo: item.logoUrl || "/cs.webp",
+        rating: item.averageRating ?? 0,
+        reviews: item.totalReviews ?? 0,
+        vehicleCount: item.availableVehicles ?? 0,
+        services: item.services || [],
+        vehicleTypes: item.vehicleTypes || [],
+        location:
+          item.address?.city && item.address?.country
+            ? `${item.address.city}, ${item.address.country}`
+            : "-",
+        priceRange:
+          item.minVehiclePrice && item.maxVehiclePrice
+            ? `${(item.minVehiclePrice / 100000).toFixed(1)}L - ${(item.maxVehiclePrice / 100000).toFixed(1)}L`
+            : "-",
+        isSponsored: item.isActiveTier || false,
+      }));
+    },
+    staleTime: 10 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+export const getRecentlySoldQuery = (payload) => {
+  return queryOptions({
+    queryKey: ["recently-sold", payload],
+    queryFn: async () => {
+      const res = await getRecentlySold(payload);
+      return res?.data || [];
+    },
+    staleTime: 10 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+export const getFilteredVehiclesQuery = (body, params) => {
+  return queryOptions({
+    queryKey: ["filtered-vehicles", body, params],
+    queryFn: async () => {
+      const res = await getFilteredVehicles(body, params);
+      return res?.data || {};
+    },
+    staleTime: 5 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+export const getFilterConsualtQuery = (payload) => {
+  return queryOptions({
+    queryKey: ["filtered-consultants", payload],
+    queryFn: async () => {
+      const res = await getFilterConsualt(payload);
+      return res?.data || [];
+    },
+    staleTime: 5 * 60 * 1000,
     retry: shouldRetry,
   });
 };
