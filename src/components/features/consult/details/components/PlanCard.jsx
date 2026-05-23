@@ -1,7 +1,7 @@
-import { Check } from "lucide-react";
+import { Info, Check, Loader2 } from "lucide-react";
+import Button from "@/components/ui/button";
 
 export default function PlanCard({
-  icon,
   title,
   monthlyPrice,
   yearlyPrice,
@@ -10,86 +10,97 @@ export default function PlanCard({
   selected,
   onSelect,
   billingCycle = "MONTHLY",
-  onBillingCycleChange,
+  onSubscribe,
+  paymentLoading,
 }) {
   const isAnnual = billingCycle === "YEARLY";
+  const displayPrice = isAnnual ? yearlyPrice : monthlyPrice;
+
+  // Dynamic descriptions for each tier using third (grey) or fourth (blue)
+  const getDescription = () => {
+    switch (title?.toUpperCase()) {
+      case "BASIC":
+        return "For solo consultants";
+      case "PREMIUM":
+        return "For small teams & growing businesses";
+      case "PRO":
+        return "For high-volume consulting firms";
+      default:
+        return "For professional consultants";
+    }
+  };
+
+  const handleAction = (e) => {
+    e.stopPropagation();
+    if (!selected) {
+      onSelect();
+    } else {
+      onSubscribe();
+    }
+  };
 
   return (
     <div
       onClick={onSelect}
-      className={`relative rounded-2xl border backdrop-blur-md p-8 flex flex-col justify-between transition-all duration-300 cursor-pointer
+      className={`relative rounded-2xl bg-transparent p-7 flex flex-col justify-between transition-all duration-300 hover:scale-[1.02] transform border cursor-pointer group
         ${
-          selected
-            ? "border-primary shadow-2xl ring-2 ring-primary/40 scale-[1.02]"
-            : popular
-              ? "border-primary/50 shadow-lg hover:border-primary hover:shadow-2xl hover:scale-[1.01]"
-              : "border-third/30 hover:border-primary/40 hover:shadow-lg hover:scale-[1.01]"
+          popular
+            ? "border-white/10 shadow-lg"
+            : "border-white/5 hover:border-white/15"
         }`}
     >
-      {/* MOST POPULAR BADGE */}
-      {popular && !selected && (
-        <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-secondary text-xs px-4 py-1 rounded-full">
+      {/* POPULAR BADGE */}
+      {popular && (
+        <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-secondary border border-fourth/30 text-fourth text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full whitespace-nowrap">
           Most Popular
         </span>
       )}
 
-      {/* SELECTED BADGE — same style, same position */}
-      {selected && (
-        <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-secondary text-xs px-4 py-1 rounded-full">
-          Selected
-        </span>
-      )}
+    
 
-      <div className="space-y-5">
-        <div className="flex justify-between items-start">
-          <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
-            {icon}
+      <div className="space-y-6">
+        {/* HEADER SECTION */}
+        <div className="flex justify-between items-baseline">
+          <div>
+            <h3 className="text-xl font-bold font-primary tracking-tight text-primary transition-colors">
+              {title}
+            </h3>
+            <p className="text-fourth/90 text-xs font-medium mt-1">
+              {getDescription()}
+            </p>
           </div>
-
-          {/* LOCAL BILLING TOGGLE */}
-          <div
-            className="flex flex-col items-end gap-1"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={() => onBillingCycleChange(isAnnual ? "MONTHLY" : "YEARLY")}
-              className={`relative w-10 h-5 rounded-full transition-colors duration-300 focus:outline-none p-0.5 ${
-                isAnnual ? "bg-fourth" : "bg-third/30"
-              }`}
-            >
-              <div
-                className={`w-4 h-4 rounded-full transition-all duration-300 shadow-sm ${
-                  isAnnual
-                    ? "translate-x-5 bg-primary"
-                    : "translate-x-0 bg-white"
-                }`}
-              />
-            </button>
-            <span
-              className={`text-[9px] font-bold tracking-tighter ${
-                isAnnual ? "text-primary" : "text-third"
-              }`}
-            >
-              YEARLY
+          <div className="text-right">
+            <div className="text-xl font-extrabold text-primary font-primary">
+              ₹{displayPrice?.toLocaleString()}
+            </div>
+            <span className="text-[10px] text-third/60 font-medium">
+              /{isAnnual ? "year" : "month"}
             </span>
           </div>
         </div>
 
-        <div>
-          <h3 className="text-lg font-semibold">{title}</h3>
-          <p className="text-third">
-            <span className="text-2xl text-primary font-bold">
-              ₹{isAnnual ? yearlyPrice : monthlyPrice}
-            </span>
-            /{isAnnual ? "year" : "month"}
-          </p>
-        </div>
+        <Button
+          type="button"
+          onClick={handleAction}
+          variant="ghost"
+          full
+          loading={selected && paymentLoading}
+          className="text-xs uppercase tracking-wider font-semibold cursor-pointer"
+        >
+          Continue
+        </Button>
 
-        <ul className="space-y-2 text-sm">
+        {/* FEATURES LIST */}
+        <ul className="space-y-0 text-xs border-t border-white/5 pt-2">
           {features.map((f, i) => (
-            <li key={i} className="flex gap-2 items-start text-third">
-              <Check className="text-primary mt-1 shrink-0" size={16} /> {f}
+            <li
+              key={i}
+              className="py-3 border-b border-white/5 text-third/95 flex justify-between items-start gap-3 last:border-b-0"
+            >
+              <div className="flex gap-2.5 items-start">
+                <Check className="text-fourth shrink-0 mt-0.5" size={14} />
+                <span className="leading-relaxed">{f}</span>
+              </div>
             </li>
           ))}
         </ul>

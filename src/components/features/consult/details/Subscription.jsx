@@ -148,7 +148,7 @@ export default function Subscription() {
         },
         name: "AVX",
         theme: {
-          color: "#3399cc",
+          color: "#007bff",
         },
       };
 
@@ -203,79 +203,81 @@ export default function Subscription() {
   }
 
   return (
-    <section className="w-full text-primary mt-20">
+    <section className="w-full text-primary mt-28 px-4 max-w-7xl mx-auto">
       {/* HEADER */}
-      <div className="text-center space-y-3">
-        <h2 className="text-3xl font-bold">Choose Your Plan</h2>
-        <p className="text-third max-w-xl mx-auto text-sm">
-          Select the tier that best fits your consulting business needs. You can
-          upgrade or downgrade at any time.
+      <div className="text-center space-y-4">
+        <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white font-primary">
+          Chose your plans
+        </h2>
+        <p className="text-zinc-400 max-w-2xl mx-auto text-sm md:text-base">
+          Choose the professional tier that best fits your consulting business
+          needs.
         </p>
       </div>
 
-      {/* PLANS */}
-      <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-8">
-        {tiers.map((tier) => (
+      {/* BILLING TOGGLE & COMPARISON LINK */}
+      <div className="flex flex-col sm:flex-row justify-between items-center max-w-5xl mx-auto mt-12 mb-8 gap-4">
+        <div className="flex items-center gap-3">
+          <span
+            className={`text-xs font-bold tracking-wider uppercase transition-colors duration-300 ${billingCycle === "MONTHLY" ? "text-white" : "text-white/40"}`}
+          >
+            Monthly
+          </span>
+          <button
+            type="button"
+            onClick={() =>
+              setBillingCycle((prev) =>
+                prev === "MONTHLY" ? "YEARLY" : "MONTHLY",
+              )
+            }
+            className={`relative w-11 h-6 rounded-full transition-all duration-300 p-0.5 cursor-pointer ${
+              billingCycle === "YEARLY" ? "bg-fourth" : "bg-white/10"
+            }`}
+          >
+            <div
+              className={`w-5 h-5 rounded-full bg-white transition-all duration-300 shadow-sm ${
+                billingCycle === "YEARLY" ? "translate-x-5" : "translate-x-0"
+              }`}
+            />
+          </button>
+          <span
+            className={`text-xs font-bold tracking-wider uppercase transition-colors duration-300 ${billingCycle === "YEARLY" ? "text-primary" : "text-white/40"}`}
+          >
+            Yearly
+          </span>
+        </div>
+      </div>
+
+      {/* PLANS GRID */}
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        {tiers.slice(0, 3).map((tier) => (
           <PlanCard
             key={tier.id}
             popular={tier.title === "PRO"}
             selected={selectedTierId === tier.id}
             onSelect={() => setSelectedTierId(tier.id)}
-            icon={
-              <img
-                src={tier.tierBadgeUrl}
-                alt={tier.title}
-                className="w-10 h-10 object-contain"
-              />
-            }
             title={tier.title}
             monthlyPrice={tier.monthlyPrice}
             yearlyPrice={tier.yearlyPrice}
             billingCycle={billingCycle}
-            onBillingCycleChange={(cycle) => setBillingCycle(cycle)}
+            onSubscribe={handleClick}
+            paymentLoading={paymentLoading}
             features={
-              tier.features?.map((f) => (
-                <span key={f.id}>
-                  {f.featureName}
-                  {f.featureDescription && (
-                    <span className="text-[11px] opacity-60 ml-1 font-normal">
-                      ({f.featureDescription})
-                    </span>
-                  )}
-                </span>
-              )) || []
+              tier.features?.map((f) =>
+                f.featureDescription
+                  ? `${f.featureName} (${f.featureDescription})`
+                  : f.featureName,
+              ) || []
             }
           />
         ))}
 
         {/* Fallback if no tiers loaded */}
         {tiers.length === 0 && (
-          <div className="col-span-full text-center py-20 text-third font-medium">
+          <div className="col-span-full text-center py-20 text-zinc-500 font-medium">
             No subscription plans available at the moment.
           </div>
         )}
-      </div>
-
-      {/* CTA */}
-      <div className="mt-16 text-center space-y-2">
-        {!selectedTierId && (
-          <p className="text-third text-sm">Select a plan above to continue</p>
-        )}
-        <Button
-          onClick={handleClick}
-          variant="outlineAnimated"
-          size="md"
-          className={`px-10 transition-opacity ${!selectedTierId ? "opacity-40 pointer-events-none" : ""}`}
-          disabled={!selectedTierId || paymentLoading}
-        >
-          {paymentLoading ? (
-            <span className="flex items-center gap-2">
-              <Loader2 className="w-5 h-5 animate-spin" /> Processing...
-            </span>
-          ) : (
-            "Continue to Payment"
-          )}
-        </Button>
       </div>
     </section>
   );
