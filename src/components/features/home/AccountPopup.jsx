@@ -6,12 +6,13 @@ import Button from "@/components/ui/button";
 import { createPortal } from "react-dom";
 import { useState, useRef, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { Loader2, Crown } from "lucide-react";
 
 import { useAuthStore } from "@/stores/useAuthStore";
 import { logoutUser } from "@/services/auth.service";
 import { useQuery } from "@tanstack/react-query";
 import { getUserProfileStrengthQuery } from "@/queries/user.queries";
+import { getSellerTierQuery } from "@/queries/Seller.queries";
 import Link from "next/link";
 
 export default function AccountPopup({ open, onClosePopup }) {
@@ -67,6 +68,11 @@ export default function AccountPopup({ open, onClosePopup }) {
   });
   const profileStrength = strengthRes?.data || null;
 
+  const { data: sellerTier } = useQuery({
+    ...getSellerTierQuery(),
+    enabled: !!(open && isLoggedIn && isConsultant),
+  });
+
   const getCTA = () => {
     if (!isLoggedIn) return null;
 
@@ -74,7 +80,10 @@ export default function AccountPopup({ open, onClosePopup }) {
 
     if (isConsultant) {
       if (user?.userRole === "CONSULTATION") {
-        return { label: "Go to Dashboard", href: "/consult/dashboard/overview" };
+        return {
+          label: "Go to Dashboard",
+          href: "/consult/dashboard/overview",
+        };
       }
       // Priority 1: KYC / Verification
       if (
@@ -201,19 +210,82 @@ export default function AccountPopup({ open, onClosePopup }) {
             </>
           ) : (
             <div className="space-y-4">
-              <Link
-                href={
-                  pathname?.includes("/user/details")
-                    ? "/user/details"
-                    : "/user/details/myprofile"
-                }
-                onClick={onClosePopup}
-                className="text-lg font-bold text-primary hover:text-third transition-colors block"
-              >
-                Hello,{" "}
-                {user?.consultationName ||
-                  `${user?.firstname} ${user?.lastname}`}
-              </Link>
+              {isConsultant ? (
+                <div className="flex flex-col items-center justify-center gap-1.5 pt-1">
+                  <Link
+                    href={
+                      pathname?.includes("/user/details")
+                        ? "/user/details"
+                        : "/user/details/myprofile"
+                    }
+                    onClick={onClosePopup}
+                    className="text-lg font-bold text-primary hover:text-third transition-colors block text-center"
+                  >
+                    Hello,{" "}
+                    {user?.consultationName ||
+                      `${user?.firstname} ${user?.lastname}`}
+                  </Link>
+                  {(() => {
+                    if (!isLoggedIn) return null;
+                    const tierTitle = sellerTier?.tierTitle || "CONSULTANT";
+                    const badgeText =
+                      tierTitle === "CONSULTANT"
+                        ? "CONSULTANT"
+                        : `${tierTitle} CONSULTANT`;
+                    let badgeClasses = "";
+
+                    if (tierTitle === "PRO" || tierTitle === "PREMIUM") {
+                      badgeClasses =
+                        "bg-amber-400/15 text-amber-400 border border-amber-500/30 shadow-[0_2px_12px_rgba(245,158,11,0.1)]";
+                    } else {
+                      badgeClasses =
+                        "bg-blue-500/15 text-blue-400 border border-blue-500/30";
+                    }
+
+                    return (
+                      <span
+                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${badgeClasses}`}
+                      >
+                        <Crown size={11} className="fill-current" />
+                        {badgeText}
+                      </span>
+                    );
+                  })()}
+                </div>
+              ) : (
+                <div className="flex items-center justify-center">
+                  <Link
+                    href={
+                      pathname?.includes("/user/details")
+                        ? "/user/details"
+                        : "/user/details/myprofile"
+                    }
+                    onClick={onClosePopup}
+                    className="text-lg font-bold text-primary hover:text-third transition-colors inline-flex items-center gap-2"
+                  >
+                    <span>
+                      Hello,{" "}
+                      {user?.consultationName ||
+                        `${user?.firstname} ${user?.lastname}`}
+                    </span>
+                    {(() => {
+                      if (!isLoggedIn) return null;
+                      let badgeText = isUserSeller ? "SELLER" : "USER";
+                      let badgeClasses = isUserSeller
+                        ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                        : "bg-zinc-700/35 text-zinc-400 border border-zinc-700/50";
+
+                      return (
+                        <span
+                          className={`inline-flex items-center px-1.5 py-0.5 rounded-md text-[8px] font-black uppercase tracking-widest ${badgeClasses}`}
+                        >
+                          {badgeText}
+                        </span>
+                      );
+                    })()}
+                  </Link>
+                </div>
+              )}
 
               {/* PROGRESS INDICATOR - Only for Consultants */}
               {isConsultant && (
@@ -350,7 +422,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                       My Inquiries
                     </Item>
                     <Item
-                      href="/user/details/inspections"
+                      href="/user/details/inspection"
                       onClick={onClosePopup}
                     >
                       Inspection Requests
@@ -414,7 +486,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                       Inquiries
                     </Item>
                     <Item
-                      href={wrapConsultAuth("/consult/dashboard/inspections")}
+                      href={wrapConsultAuth("/consult/dashboard/inspection")}
                       onClick={onClosePopup}
                     >
                       Inspections
@@ -433,23 +505,31 @@ export default function AccountPopup({ open, onClosePopup }) {
                     </Item>
                   </Section>
 
-                  <Section title="Storefront">
-                    <Item href="/store-front" onClick={onClosePopup}>
-                      View Storefront
-                    </Item>
-                    <Item
-                      href={wrapConsultAuth("/consult/dashboard/storefront")}
-                      onClick={onClosePopup}
-                    >
-                      Edit Storefront
-                    </Item>
-                    <Item
-                      href={wrapConsultAuth("/consult/dashboard/storefront")}
-                      onClick={onClosePopup}
-                    >
-                      Theme Settings
-                    </Item>
-                  </Section>
+                  <div className="space-y-4">
+                    <Section title="Storefront">
+                      <Item href="/store-front" onClick={onClosePopup}>
+                        View Storefront
+                      </Item>
+                      <Item
+                        href={wrapConsultAuth("/consult/dashboard/storefront")}
+                        onClick={onClosePopup}
+                      >
+                        Edit Storefront
+                      </Item>
+                      <Item
+                        href={wrapConsultAuth("/consult/dashboard/storefront")}
+                        onClick={onClosePopup}
+                      >
+                        Theme Settings
+                      </Item>
+                    </Section>
+
+                    <Section title="Buyer">
+                      <Item href="/user/details/myinquary" onClick={onClosePopup}>
+                        My Activity
+                      </Item>
+                    </Section>
+                  </div>
 
                   <Section title="Billing">
                     <Item
@@ -478,10 +558,16 @@ export default function AccountPopup({ open, onClosePopup }) {
                   {/*</Section>*/}
 
                   <Section title="Support">
-                    <Item href="/consultant-help" onClick={onClosePopup}>
+                    <Item
+                      href="/consult/dashboard/help-center"
+                      onClick={onClosePopup}
+                    >
                       Consultant Help
                     </Item>
-                    <Item href="/raise-ticket" onClick={onClosePopup}>
+                    <Item
+                      href="/consult/dashboard/help-center"
+                      onClick={onClosePopup}
+                    >
                       Raise Ticket
                     </Item>
                   </Section>

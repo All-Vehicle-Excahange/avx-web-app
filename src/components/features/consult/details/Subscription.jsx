@@ -9,9 +9,9 @@ import { getSellerTier } from "@/services/Seller.service";
 import { SkeletonBox } from "@/components/ui/skeleton";
 import { getAllTier } from "@/services/user.service";
 import {
-  createRazorpayOrder,
-  verifyRazorpayPayment,
-} from "@/services/payment.service";
+  createSubscription,
+  getActiveSubscription,
+} from "@/services/subscription.service";
 
 export default function Subscription() {
   const router = useRouter();
@@ -19,6 +19,7 @@ export default function Subscription() {
   const [tiers, setTiers] = useState([]);
   const [selectedTierId, setSelectedTierId] = useState(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
+  const [billingCycle, setBillingCycle] = useState("MONTHLY");
 
   useEffect(() => {
     const initializeData = async () => {
@@ -87,66 +88,73 @@ export default function Subscription() {
       }
 
       const selectedTier = tiers.find((t) => t.id === selectedTierId);
-      const price = selectedTier.monthlyPrice || 100;
-      const amountInPaise = Math.max(price * 100, 100);
 
-      // 1. Create order
-      const orderResponse = await createRazorpayOrder({
-        amount: amountInPaise,
-        currency: "INR",
-        receipt: `receipt_${Date.now()}`,
-      });
+      // Create subscription in the backend
+      let response;
+      try {
+        response = await createSubscription({
+          planId: selectedTierId,
+          billingCycle: billingCycle,
+        });
+      } catch (err) {
+        if (err.response?.status === 409 || err.status === 409) {
+          const activeRes = await getActiveSubscription();
+          if (activeRes && activeRes.success && activeRes.data) {
+            response = activeRes;
+          } else {
+            throw err;
+          }
+        } else {
+          throw err;
+        }
+      }
 
-      if (!orderResponse.success) {
+      if (!response.success) {
         throw new Error(
-          orderResponse.message ||
-            "Failed to create order. Please check backend integration.",
+          response.message || "Failed to create subscription order.",
         );
       }
 
-      const orderData = orderResponse.data;
+      const { razorpaySubscriptionId, shortUrl } = response.data;
 
-      // 2. Open Razorpay Modal
+      // If SDK subscription ID is not available but shortUrl is, open hosted checkout in a popup window
+      if (!razorpaySubscriptionId && shortUrl) {
+        const width = 500;
+        const height = 700;
+        const left = window.screen.width / 2 - width / 2;
+        const top = window.screen.height / 2 - height / 2;
+        window.open(
+          shortUrl,
+          "AVX Subscription Payment",
+          `width=${width},height=${height},top=${top},left=${left},scrollbars=yes,resizable=yes`,
+        );
+        return;
+      }
+
+      // Open Razorpay subscription checkout modal
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: orderData.amount,
-        currency: orderData.currency,
+        subscription_id: razorpaySubscriptionId,
         name: "AVX",
         description: `Subscription for ${selectedTier.title} plan`,
-        order_id: orderData.order_id || orderData.orderId || orderData.id,
-        handler: async function (response) {
-          try {
-            // 3. Verify Payment
-            const verifyRes = await verifyRazorpayPayment({
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_signature: response.razorpay_signature,
-            });
-
-            if (verifyRes.success) {
-              if (router.query?.redirect) {
-                router.push(
-                  `/consult/kyc?redirect=${encodeURIComponent(router.query.redirect)}`,
-                );
-              } else {
-                router.push("/consult/kyc");
-              }
-            } else {
-              alert(verifyRes.message || "Payment verification failed.");
-            }
-          } catch (error) {
-            console.error("Verification error:", error);
-            alert("Error verifying payment.");
+        handler: async function (paymentResponse) {
+          if (router.query?.redirect) {
+            router.push(
+              `/consult/kyc?redirect=${encodeURIComponent(router.query.redirect)}`,
+            );
+          } else {
+            router.push("/consult/kyc");
           }
         },
+        name: "AVX",
         theme: {
-          color: "#3399cc",
+          color: "#007bff",
         },
       };
 
       const rzp = new window.Razorpay(options);
-      rzp.on("payment.failed", function (response) {
-        alert("Payment failed: " + response.error.description);
+      rzp.on("payment.failed", function (failResponse) {
+        alert("Payment failed: " + failResponse.error.description);
       });
       rzp.open();
     } catch (error) {
@@ -195,77 +203,81 @@ export default function Subscription() {
   }
 
   return (
-    <section className="w-full text-primary mt-20">
+    <section className="w-full text-primary mt-28 px-4 max-w-7xl mx-auto">
       {/* HEADER */}
-      <div className="text-center space-y-3">
-        <h2 className="text-3xl font-bold">Choose Your Plan</h2>
-        <p className="text-third max-w-xl mx-auto text-sm">
-          Select the tier that best fits your consulting business needs. You can
-          upgrade or downgrade at any time.
+      <div className="text-center space-y-4">
+        <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white font-primary">
+          Chose your plans
+        </h2>
+        <p className="text-zinc-400 max-w-2xl mx-auto text-sm md:text-base">
+          Choose the professional tier that best fits your consulting business
+          needs.
         </p>
       </div>
 
-      {/* PLANS */}
-      <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-8">
-        {tiers.map((tier) => (
+      {/* BILLING TOGGLE & COMPARISON LINK */}
+      <div className="flex flex-col sm:flex-row justify-between items-center max-w-5xl mx-auto mt-12 mb-8 gap-4">
+        <div className="flex items-center gap-3">
+          <span
+            className={`text-xs font-bold tracking-wider uppercase transition-colors duration-300 ${billingCycle === "MONTHLY" ? "text-white" : "text-white/40"}`}
+          >
+            Monthly
+          </span>
+          <button
+            type="button"
+            onClick={() =>
+              setBillingCycle((prev) =>
+                prev === "MONTHLY" ? "YEARLY" : "MONTHLY",
+              )
+            }
+            className={`relative w-11 h-6 rounded-full transition-all duration-300 p-0.5 cursor-pointer ${
+              billingCycle === "YEARLY" ? "bg-fourth" : "bg-white/10"
+            }`}
+          >
+            <div
+              className={`w-5 h-5 rounded-full bg-white transition-all duration-300 shadow-sm ${
+                billingCycle === "YEARLY" ? "translate-x-5" : "translate-x-0"
+              }`}
+            />
+          </button>
+          <span
+            className={`text-xs font-bold tracking-wider uppercase transition-colors duration-300 ${billingCycle === "YEARLY" ? "text-primary" : "text-white/40"}`}
+          >
+            Yearly
+          </span>
+        </div>
+      </div>
+
+      {/* PLANS GRID */}
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        {tiers.slice(0, 3).map((tier) => (
           <PlanCard
             key={tier.id}
             popular={tier.title === "PRO"}
             selected={selectedTierId === tier.id}
             onSelect={() => setSelectedTierId(tier.id)}
-            icon={
-              <img
-                src={tier.tierBadgeUrl}
-                alt={tier.title}
-                className="w-10 h-10 object-contain"
-              />
-            }
             title={tier.title}
             monthlyPrice={tier.monthlyPrice}
             yearlyPrice={tier.yearlyPrice}
+            billingCycle={billingCycle}
+            onSubscribe={handleClick}
+            paymentLoading={paymentLoading}
             features={
-              tier.features?.map((f) => (
-                <span key={f.id}>
-                  {f.featureName}
-                  {f.featureDescription && (
-                    <span className="text-[11px] opacity-60 ml-1 font-normal">
-                      ({f.featureDescription})
-                    </span>
-                  )}
-                </span>
-              )) || []
+              tier.features?.map((f) =>
+                f.featureDescription
+                  ? `${f.featureName} (${f.featureDescription})`
+                  : f.featureName,
+              ) || []
             }
           />
         ))}
 
         {/* Fallback if no tiers loaded */}
         {tiers.length === 0 && (
-          <div className="col-span-full text-center py-20 text-third font-medium">
+          <div className="col-span-full text-center py-20 text-zinc-500 font-medium">
             No subscription plans available at the moment.
           </div>
         )}
-      </div>
-
-      {/* CTA */}
-      <div className="mt-16 text-center space-y-2">
-        {!selectedTierId && (
-          <p className="text-third text-sm">Select a plan above to continue</p>
-        )}
-        <Button
-          onClick={handleClick}
-          variant="outlineAnimated"
-          size="md"
-          className={`px-10 transition-opacity ${!selectedTierId ? "opacity-40 pointer-events-none" : ""}`}
-          disabled={!selectedTierId || paymentLoading}
-        >
-          {paymentLoading ? (
-            <span className="flex items-center gap-2">
-              <Loader2 className="w-5 h-5 animate-spin" /> Processing...
-            </span>
-          ) : (
-            "Continue to Payment"
-          )}
-        </Button>
       </div>
     </section>
   );

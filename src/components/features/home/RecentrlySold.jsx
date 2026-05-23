@@ -1,32 +1,22 @@
-import { useState, useEffect } from "react";
+import React from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
-import { getRecentlySold } from "@/services/user.service";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
+import { useQuery } from "@tanstack/react-query";
+import { getRecentlySoldQuery } from "@/queries/user.queries";
 
 
 const RecentrlySold = () => {
-  const [vehicle, setVehicle] = useState([])
-  const [loading, setLoading] = useState(true)
+  const queryPayload = {
+    pageNo: 1,
+    size: 4,
+  };
 
-  useEffect(() => {
-    const fetchVehicles = async () => {
-      try {
-        const data = {
-          pageNo: 1, size: 4
-        }
-        const res = await getRecentlySold(data)
-        setVehicle(res.data)
-      } catch (error) {
-        throw error;
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchVehicles()
-  }, [])
+  const { data: vehicle = [], isLoading } = useQuery(
+    getRecentlySoldQuery(queryPayload)
+  );
 
-  if (!loading && !vehicle.length) return null;
+  if (!isLoading && !vehicle.length) return null;
 
   return (
     <div className="w-full py-10">
@@ -49,7 +39,7 @@ const RecentrlySold = () => {
       </div>
 
       <div className="flex-1 min-h-0 grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {loading
+        {isLoading
           ? [...Array(4)].map((_, i) => <VehicleCardSkeleton key={`skel-${i}`} />)
           : vehicle.map((car) => (
             <VehicleCard data={car} key={car.id} source="home" />

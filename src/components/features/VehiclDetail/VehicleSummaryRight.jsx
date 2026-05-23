@@ -34,7 +34,11 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const lastSyncedValue = useRef(vehicle?.isWishlisted || false);
 
-  const { data: eligibilityData, refetch: refetchEligibility, isFetching: isCheckingInquiry } = useQuery({
+  const {
+    data: eligibilityData,
+    refetch: refetchEligibility,
+    isFetching: isCheckingInquiry,
+  } = useQuery({
     ...getInquiryEligibilityQuery(vehicleId),
     enabled: !!vehicleId && isLoggedIn,
   });
@@ -70,11 +74,12 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
   };
 
   const handleRequestInquiry = async () => {
-    if (!vehicleId || isCheckingInquiry) return;
+    if (!vehicleId) return;
 
+    setLoading(true);
     try {
       let data = eligibilityData;
-      if (data === undefined) {
+      if (data === undefined || data === null) {
         const refetched = await refetchEligibility();
         data = refetched.data;
       }
@@ -92,6 +97,8 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
     } catch (error) {
       console.error("Error checking inquiry eligibility:", error);
       setIsPopupOpen(true); // Fallback
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -111,6 +118,18 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
       debouncedSyncWishlist.cancel();
     } else {
       debouncedSyncWishlist(nextState);
+    }
+  };
+
+  const handleAuthSuccess = () => {
+    setIsLoginOpen(false);
+    setIsSignupOpen(false);
+    if (pendingAction.current === "request") {
+      pendingAction.current = null;
+      handleRequestInquiry();
+    } else if (pendingAction.current === "wishlist") {
+      pendingAction.current = null;
+      handleWishlistToggle();
     }
   };
 
@@ -310,8 +329,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
               size="sm"
               showIcon={false}
               className="rounded-full"
-              loading={isCheckingInquiry}
-              locked={loading}
+              loading={loading || isCheckingInquiry}
               onClick={() => {
                 if (!isLoggedIn) {
                   pendingAction.current = "request";
@@ -353,8 +371,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
             size="sm"
             showIcon={false}
             className=""
-            loading={isCheckingInquiry}
-            locked={loading}
+            loading={loading || isCheckingInquiry}
             onClick={() => {
               if (!isLoggedIn) {
                 pendingAction.current = "request";
@@ -382,6 +399,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
       <LoginPopup
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
+        onSuccess={handleAuthSuccess}
         onSignup={() => {
           setIsLoginOpen(false);
           setIsSignupOpen(true);
@@ -390,6 +408,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
       <SignupPopup
         isOpen={isSignupOpen}
         onClose={() => setIsSignupOpen(false)}
+        onSuccess={handleAuthSuccess}
         onLogin={() => {
           setIsSignupOpen(false);
           setIsLoginOpen(true);

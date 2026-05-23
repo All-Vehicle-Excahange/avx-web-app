@@ -1,49 +1,29 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
 import { Bike, Car } from "lucide-react";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 import { useDebounceValue } from "@/hooks/useDebounce";
+import { useQuery } from "@tanstack/react-query";
+import { getAvxInspectedQuery } from "@/queries/user.queries";
 
 import "swiper/css";
-import {
-  getAvxIsnpectedFourWheel,
-  getAvxIsnpectedTwoWheel,
-} from "@/services/user.service";
 
 const cn = (...classes) => classes.filter(Boolean).join(" ");
 
 export default function AvxInspected() {
   const [activeType, setActiveType] = useState("4-Wheeler");
-  const [vehicles, setVehicles] = useState([]);
-  const [loading, setLoading] = useState(true);
   const debouncedType = useDebounceValue(activeType, 400);
 
-  useEffect(() => {
-    const fetchVehicles = async () => {
-      setLoading(true);
-      try {
-        const data = { pageNo: 1, size: 4 };
-        let res;
+  const queryPayload = { pageNo: 1, size: 4 };
 
-        if (debouncedType === "2-Wheeler") {
-          res = await getAvxIsnpectedTwoWheel(data);
-        } else {
-          res = await getAvxIsnpectedFourWheel(data);
-        }
+  const { data: vehicles = [], isFetching } = useQuery(
+    getAvxInspectedQuery(debouncedType, queryPayload)
+  );
 
-        setVehicles(res?.data || []);
-      } catch (error) {
-        console.log("API ERROR:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchVehicles();
-  }, [debouncedType]);
+  const showSkeleton = isFetching || activeType !== debouncedType;
 
   return (
     <div className="w-full h-full flex flex-col text-secondary">
@@ -93,7 +73,7 @@ export default function AvxInspected() {
 
         {/* Grid */}
         <div className="grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {loading ? (
+          {showSkeleton ? (
             [...Array(4)].map((_, i) => (
               <VehicleCardSkeleton key={`skel-${i}`} />
             ))

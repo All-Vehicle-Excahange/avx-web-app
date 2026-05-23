@@ -12,10 +12,12 @@ export default function InspectionCard({
   onAccept,
   onReject,
   onViewReport,
+  onClick,
 }) {
   const [activeLoading, setActiveLoading] = useState(null);
 
-  const handleAccept = async () => {
+  const handleAccept = async (e) => {
+    if (e) e.stopPropagation();
     if (!onAccept) return;
     try {
       setActiveLoading("accept");
@@ -25,7 +27,8 @@ export default function InspectionCard({
     }
   };
 
-  const handleReject = async () => {
+  const handleReject = async (e) => {
+    if (e) e.stopPropagation();
     if (!onReject) return;
     try {
       setActiveLoading("reject");
@@ -59,7 +62,10 @@ export default function InspectionCard({
     lowerStatus === "cancelled";
 
   return (
-    <div className="rounded-2xl border border-third/40 px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-6 min-h-34">
+    <div
+      onClick={onClick}
+      className={`rounded-2xl border border-third/40 px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-6 min-h-34 cursor-pointer hover:border-third/65 transition-colors`}
+    >
       {/* LEFT INFO */}
       <div className="space-y-2">
         <p className="text-sm text-third">
@@ -85,7 +91,7 @@ export default function InspectionCard({
             <Button
               variant="ghost"
               showIcon={false}
-              onClick={handleAccept}
+              onClick={(e) => handleAccept(e)}
               loading={activeLoading === "accept"}
               locked={!!activeLoading}
             >
@@ -94,7 +100,7 @@ export default function InspectionCard({
             <Button
               variant="outlineSecondary"
               showIcon={false}
-              onClick={handleReject}
+              onClick={(e) => handleReject(e)}
               loading={activeLoading === "reject"}
               locked={!!activeLoading}
             >
@@ -121,7 +127,10 @@ export default function InspectionCard({
             <Button
               variant="ghost"
               showIcon={false}
-              onClick={onViewReport}
+              onClick={(e) => {
+                if (e) e.stopPropagation();
+                onViewReport();
+              }}
               className="py-1.5 px-4 text-sm"
             >
               <File size={16} className="mr-2" />
@@ -135,6 +144,9 @@ export default function InspectionCard({
             <Button
               variant="ghost"
               showIcon={false}
+              onClick={(e) => {
+                if (e) e.stopPropagation();
+              }}
               className="py-1.5 px-4 text-sm"
             >
               <Check size={16} className="mr-2" />
