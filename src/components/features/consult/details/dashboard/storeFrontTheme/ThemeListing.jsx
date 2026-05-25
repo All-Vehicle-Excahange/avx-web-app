@@ -62,21 +62,31 @@ export default function ThemeListing() {
               <div
                 key={theme.id}
                 onClick={() => setPreviewTheme(theme)}
-                className="relative group rounded-xl border border-third/30 overflow-hidden hover:border-primary transition cursor-pointer"
+                className="relative group rounded-xl border border-third/30 overflow-hidden hover:border-primary transition cursor-pointer flex flex-col bg-secondary/20"
               >
-                <div className="relative h-[170px]">
+                <div className="relative h-[170px] w-full">
                   <Image
                     src={theme.thumbnail}
                     alt={theme.name}
                     fill
                     className="object-cover"
                   />
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                    <span className="flex items-center gap-2 text-sm text-primary">
+                      <CheckCircle2 size={16} /> Preview Theme
+                    </span>
+                  </div>
                 </div>
 
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                  <span className="flex items-center gap-2 text-sm">
-                    <CheckCircle2 size={16} /> Preview Theme
+                <div className="p-3 border-t border-third/30 bg-secondary/40 flex justify-between items-center">
+                  <span className="text-sm font-semibold text-primary truncate max-w-[70%]">
+                    {theme.name}
                   </span>
+                  {theme.category && (
+                    <span className="text-[10px] uppercase font-bold text-third border border-third/20 px-1.5 py-0.5 rounded">
+                      {theme.category}
+                    </span>
+                  )}
                 </div>
               </div>
             ))

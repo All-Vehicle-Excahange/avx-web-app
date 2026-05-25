@@ -113,7 +113,13 @@ export default function ConsualtVehicleDetails({
     try {
       const data = await queryClient.fetchQuery(getActiveInspectionQuery(id));
       if (data) {
-        handleOpenTracking(data);
+        if (data.inspectionRequestStatus === "PAYMENT_PENDING") {
+          if (inspectionSpecsRef.current) {
+            inspectionSpecsRef.current.openModal();
+          }
+        } else {
+          handleOpenTracking(data);
+        }
       } else {
         if (inspectionSpecsRef.current) {
           inspectionSpecsRef.current.openModal();
@@ -125,7 +131,10 @@ export default function ConsualtVehicleDetails({
           inspectionSpecsRef.current.openModal();
         }
       } else {
-        toast.error(error?.response?.data?.message || "Failed to check inspection status.");
+        toast.error(
+          error?.response?.data?.message ||
+            "Failed to check inspection status.",
+        );
       }
     } finally {
       setIsCheckingInspection(false);
