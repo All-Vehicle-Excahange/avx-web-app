@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import FeatureGroup from "@/components/ui/FeatureGroup";
 import { Calendar, ChevronDown, Clock, X } from "lucide-react";
 import Button from "@/components/ui/button";
@@ -13,7 +13,11 @@ import {
 } from "@/services/inspection.service";
 import toast from "react-hot-toast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getInspectionByVehicleIdQuery } from "@/queries/vehicle.queries";
+import {
+  getInspectionByVehicleIdQuery,
+  getActiveInspectionQuery,
+} from "@/queries/vehicle.queries";
+import InspectionTrackingModal from "@/components/features/user/InspectionTrackingModal";
 
 export default function VehicleSpec({ open, setOpen, vehicle }) {
   const queryClient = useQueryClient();
@@ -27,10 +31,11 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
   const [createdInspectionId, setCreatedInspectionId] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { data: existingInspection, isFetching: isCheckingInspection } = useQuery({
-    ...getInspectionByVehicleIdQuery(vehicle?.id),
-    enabled: !!vehicle?.id,
-  });
+  const { data: existingInspection, isFetching: isCheckingInspection } =
+    useQuery({
+      ...getInspectionByVehicleIdQuery(vehicle?.id),
+      enabled: !!vehicle?.id,
+    });
 
   useEffect(() => {
     const initUser = () => {
@@ -78,15 +83,60 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
     }, 300);
   };
 
-  const handleOpenModal = () => {
-    if (!vehicle?.id) { toast.error("Vehicle information is not available."); return; }
-    if (existingInspection) {
-      setStep(0);
-    } else {
-      setStep(1);
+  const [trackingInspection, setTrackingInspection] = useState(null);
+  const [animateTrackingModal, setAnimateTrackingModal] = useState(false);
+  const [isCheckingActiveInspection, setIsCheckingActiveInspection] =
+    useState(false);
+
+  const handleOpenTracking = (data) => {
+    setTrackingInspection(data);
+    setTimeout(() => setAnimateTrackingModal(true), 10);
+  };
+
+  const handleCloseTracking = () => {
+    setAnimateTrackingModal(false);
+    setTimeout(() => {
+      setTrackingInspection(null);
+    }, 300);
+  };
+
+  const handleOpenModal = async () => {
+    if (!vehicle?.id) {
+      toast.error("Vehicle information is not available.");
+      return;
     }
-    setShowModal(true);
-    setTimeout(() => setAnimateModal(true), 10);
+    setIsCheckingActiveInspection(true);
+    try {
+      const data = await queryClient.fetchQuery(
+        getActiveInspectionQuery(vehicle.id),
+      );
+      if (data) {
+        if (data.inspectionRequestStatus === "PAYMENT_PENDING") {
+          setStep(1);
+          setShowModal(true);
+          setTimeout(() => setAnimateModal(true), 10);
+        } else {
+          handleOpenTracking(data);
+        }
+      } else {
+        setStep(1);
+        setShowModal(true);
+        setTimeout(() => setAnimateModal(true), 10);
+      }
+    } catch (error) {
+      if (error?.response?.status === 404 || error?.status === 404) {
+        setStep(1);
+        setShowModal(true);
+        setTimeout(() => setAnimateModal(true), 10);
+      } else {
+        toast.error(
+          error?.response?.data?.message ||
+            "Failed to check inspection status.",
+        );
+      }
+    } finally {
+      setIsCheckingActiveInspection(false);
+    }
   };
 
   const parseTime = (timeStr) => {
@@ -110,28 +160,51 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
   };
 
   const handleConfirm = async () => {
-    if (!vehicle?.id) { toast.error("Vehicle information is not available."); return; }
+    if (!vehicle?.id) {
+      toast.error("Vehicle information is not available.");
+      return;
+    }
     if (inspectionType === "video") {
-      if (!mobileNumber.trim()) { toast.error("Please enter your WhatsApp number."); return; }
-      if (!inspectionDate) { toast.error("Please select a preferred date."); return; }
-      if (!inspectionTime) { toast.error("Please select a preferred time."); return; }
+      if (!mobileNumber.trim()) {
+        toast.error("Please enter your WhatsApp number.");
+        return;
+      }
+      if (!inspectionDate) {
+        toast.error("Please select a preferred date.");
+        return;
+      }
+      if (!inspectionTime) {
+        toast.error("Please select a preferred time.");
+        return;
+      }
     }
     setIsSubmitting(true);
     try {
-      const payload = inspectionType === "video"
-        ? { inspectionType: "VIDEO_CALL_WITH_REPORT", whatsappNumber: mobileNumber, videoCallScheduledAt: formatLocalDateTime(inspectionDate, inspectionTime) }
-        : { inspectionType: "REPORT_ONLY" };
+      const payload =
+        inspectionType === "video"
+          ? {
+              inspectionType: "VIDEO_CALL_WITH_REPORT",
+              whatsappNumber: mobileNumber,
+              videoCallScheduledAt: formatLocalDateTime(
+                inspectionDate,
+                inspectionTime,
+              ),
+            }
+          : { inspectionType: "REPORT_ONLY" };
       const response = await createInpection(vehicle.id, payload);
       if (response?.success) {
         const id = response.data?.id || response.id;
         if (id) {
           setCreatedInspectionId(id);
           setStep(2);
-          queryClient.invalidateQueries({ queryKey: ["inspection-by-vehicle", vehicle.id] });
-        }
-        else toast.error("Failed to retrieve request ID.");
+          queryClient.invalidateQueries({
+            queryKey: ["inspection-by-vehicle", vehicle.id],
+          });
+        } else toast.error("Failed to retrieve request ID.");
       } else {
-        toast.error(response?.message || "Failed to create inspection request.");
+        toast.error(
+          response?.message || "Failed to create inspection request.",
+        );
       }
     } catch (err) {
       toast.error(err?.response?.data?.message || "Something went wrong.");
@@ -140,16 +213,75 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
     }
   };
 
-  const handlePayment = async () => {
-    if (!createdInspectionId) { toast.error("Inspection request ID not found."); return; }
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handlePayment = async (idToPay) => {
+    const targetId =
+      typeof idToPay === "string" ? idToPay : createdInspectionId;
+    if (!targetId) {
+      toast.error("Inspection request ID not found.");
+      return;
+    }
     setIsSubmitting(true);
     try {
-      const response = await complateInspectionPayment(createdInspectionId);
-      if (response?.success) {
-        setStep(3);
-        queryClient.invalidateQueries({ queryKey: ["inspection-by-vehicle", vehicle.id] });
+      const isScriptLoaded = await loadRazorpayScript();
+      if (!isScriptLoaded) {
+        toast.error(
+          "Razorpay SDK failed to load. Please check your connection.",
+        );
+        return;
       }
-      else toast.error(response?.message || "Payment completion failed.");
+
+      const response = await complateInspectionPayment(targetId);
+      if (response?.success && response?.data) {
+        const orderData = response.data;
+        const options = {
+          key: orderData.keyId,
+          amount: Math.round(orderData.amount * 100), // Razorpay expects amount in paise
+          currency: orderData.currency || "INR",
+          name: "Reecomm",
+          description: "Vehicle Inspection Payment",
+          order_id: orderData.razorpayOrderId,
+          handler: async function (paymentResponse) {
+            setStep(3);
+            queryClient.invalidateQueries({
+              queryKey: ["inspection-by-vehicle", vehicle.id],
+            });
+            toast.success("Payment completed successfully!");
+            setTimeout(() => {
+              closeModal();
+            }, 3000);
+          },
+          theme: {
+            color: "#007bff",
+          },
+          modal: {
+            ondismiss: function () {
+              toast.error("Payment cancelled.");
+            },
+          },
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.on("payment.failed", function (failResponse) {
+          toast.error("Payment failed: " + failResponse.error.description);
+        });
+        rzp.open();
+      } else {
+        toast.error(response?.message || "Payment completion failed.");
+      }
     } catch (err) {
       toast.error(err?.response?.data?.message || "Payment completion failed.");
     } finally {
@@ -308,7 +440,7 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                           size="sm"
                           showIcon={false}
                           onClick={handleOpenModal}
-                          loading={isCheckingInspection}
+                          loading={isCheckingActiveInspection}
                         >
                           Request New Reecomm Inspection
                         </Button>
@@ -366,7 +498,7 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                         size="md"
                         showIcon={false}
                         onClick={handleOpenModal}
-                        loading={isCheckingInspection}
+                        loading={isCheckingActiveInspection}
                       >
                         Request Reecomm Inspection
                       </Button>
@@ -421,19 +553,31 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
 
             {/* CONTENT */}
             <div className="p-4 md:p-6 space-y-5 w-full md:w-[50%] overflow-y-auto custom-scrollbar">
-
               {/* ---- STEP 0: Already Submitted ---- */}
               {step === 0 && existingInspection && (
                 <>
                   <div className="flex flex-col items-center justify-center text-center py-6 space-y-3">
                     <div className="w-16 h-16 rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-400 border border-yellow-500/20">
-                      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      <svg
+                        className="w-8 h-8"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
                       </svg>
                     </div>
-                    <h2 className="text-xl font-bold">Request Already Submitted</h2>
+                    <h2 className="text-xl font-bold">
+                      Request Already Submitted
+                    </h2>
                     <p className="text-sm text-third max-w-sm">
-                      You have already submitted an inspection request for this vehicle. Our team is processing it.
+                      You have already submitted an inspection request for this
+                      vehicle. Our team is processing it.
                     </p>
                   </div>
 
@@ -441,20 +585,28 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                     <div className="flex justify-between items-center text-sm">
                       <span className="text-third">Inspection Type</span>
                       <span className="font-semibold">
-                        {existingInspection.inspectionType === "VIDEO_CALL_WITH_REPORT" ? "Video Call + Report" : "Report Only"}
+                        {existingInspection.inspectionType ===
+                        "VIDEO_CALL_WITH_REPORT"
+                          ? "Video Call + Report"
+                          : "Report Only"}
                       </span>
                     </div>
-                    {existingInspection.inspectionType === "VIDEO_CALL_WITH_REPORT" && (
+                    {existingInspection.inspectionType ===
+                      "VIDEO_CALL_WITH_REPORT" && (
                       <>
                         <div className="flex justify-between items-center text-sm">
                           <span className="text-third">WhatsApp Number</span>
-                          <span className="font-semibold">{existingInspection.whatsappNumber}</span>
+                          <span className="font-semibold">
+                            {existingInspection.whatsappNumber}
+                          </span>
                         </div>
                         {existingInspection.videoCallScheduledAt && (
                           <div className="flex justify-between items-center text-sm">
                             <span className="text-third">Scheduled At</span>
                             <span className="font-semibold">
-                              {new Date(existingInspection.videoCallScheduledAt).toLocaleDateString("en-GB").replace(/\//g, "/")}
+                              {new Date(existingInspection.videoCallScheduledAt)
+                                .toLocaleDateString("en-GB")
+                                .replace(/\//g, "/")}
                             </span>
                           </div>
                         )}
@@ -463,13 +615,18 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                     <div className="flex justify-between items-center text-sm">
                       <span className="text-third">Status</span>
                       <span className="px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400 font-medium text-xs">
-                        {existingInspection.inspectionRequestStatus?.replace(/_/g, " ")}
+                        {existingInspection.inspectionRequestStatus?.replace(
+                          /_/g,
+                          " ",
+                        )}
                       </span>
                     </div>
                     <div className="flex justify-between items-center text-sm">
                       <span className="text-third">Submitted On</span>
                       <span className="font-semibold">
-                        {new Date(existingInspection.createdAt).toLocaleDateString("en-GB")}
+                        {new Date(
+                          existingInspection.createdAt,
+                        ).toLocaleDateString("en-GB")}
                       </span>
                     </div>
                   </div>
@@ -483,7 +640,9 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
               {/* ---- STEP 1: Inspection Form ---- */}
               {step === 1 && (
                 <>
-                  <h2 className="text-xl font-semibold">Request Fresh Reecomm Inspection</h2>
+                  <h2 className="text-xl font-semibold">
+                    Request Fresh Reecomm Inspection
+                  </h2>
                   <div className="border-t border-third/40" />
 
                   <div className="text-sm space-y-2">
@@ -496,21 +655,50 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                   </div>
 
                   <div className="space-y-3">
-                    <p className="text-sm font-medium">Choose inspection type</p>
+                    <p className="text-sm font-medium">
+                      Choose inspection type
+                    </p>
                     <div className="space-y-3">
-                      <label className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all ${inspectionType === "report" ? "border-primary bg-primary/5" : "border-third/40 hover:bg-secondary/80"}`}>
-                        <input type="radio" name="inspection" value="report" checked={inspectionType === "report"} onChange={() => setInspectionType("report")} className="mt-1 accent-primary" />
+                      <label
+                        className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all ${inspectionType === "report" ? "border-primary bg-primary/5" : "border-third/40 hover:bg-secondary/80"}`}
+                      >
+                        <input
+                          type="radio"
+                          name="inspection"
+                          value="report"
+                          checked={inspectionType === "report"}
+                          onChange={() => setInspectionType("report")}
+                          className="mt-1 accent-primary"
+                        />
                         <div className="flex-1">
-                          <p className="text-sm font-semibold">Inspection Report Only</p>
-                          <p className="text-xs text-third mt-0.5">Complete physical inspection with digital report</p>
+                          <p className="text-sm font-semibold">
+                            Inspection Report Only
+                          </p>
+                          <p className="text-xs text-third mt-0.5">
+                            Complete physical inspection with digital report
+                          </p>
                           <p className="text-sm font-medium mt-1">₹1,499</p>
                         </div>
                       </label>
-                      <label className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all ${inspectionType === "video" ? "border-primary bg-primary/5" : "border-third/40 hover:bg-secondary/80"}`}>
-                        <input type="radio" name="inspection" value="video" checked={inspectionType === "video"} onChange={() => setInspectionType("video")} className="mt-1 accent-primary" />
+                      <label
+                        className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all ${inspectionType === "video" ? "border-primary bg-primary/5" : "border-third/40 hover:bg-secondary/80"}`}
+                      >
+                        <input
+                          type="radio"
+                          name="inspection"
+                          value="video"
+                          checked={inspectionType === "video"}
+                          onChange={() => setInspectionType("video")}
+                          className="mt-1 accent-primary"
+                        />
                         <div className="flex-1">
-                          <p className="text-sm font-semibold">Personalize Video Call + Inspection Report</p>
-                          <p className="text-xs text-third mt-0.5">Live video walkthrough with inspector + detailed digital report</p>
+                          <p className="text-sm font-semibold">
+                            Personalize Video Call + Inspection Report
+                          </p>
+                          <p className="text-xs text-third mt-0.5">
+                            Live video walkthrough with inspector + detailed
+                            digital report
+                          </p>
                           <p className="text-sm font-medium mt-1">₹1,999</p>
                         </div>
                       </label>
@@ -522,37 +710,115 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                       <div className="rounded-xl border border-third/40 bg-secondary/60 p-4 space-y-4">
                         <p className="text-sm font-semibold">WhatsApp Number</p>
                         <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-third/40 bg-secondary focus-within:border-primary">
-                          <input type="tel" value={mobileNumber} onChange={(e) => setMobileNumber(e.target.value)} placeholder="Enter WhatsApp number" className="w-full text-sm bg-transparent focus:outline-none text-primary" />
+                          <input
+                            type="tel"
+                            value={mobileNumber}
+                            onChange={(e) => setMobileNumber(e.target.value)}
+                            placeholder="Enter WhatsApp number"
+                            className="w-full text-sm bg-transparent focus:outline-none text-primary"
+                          />
                         </div>
                       </div>
                       <div className="rounded-xl border border-third/40 bg-secondary/60 p-4 space-y-4">
                         <div className="flex items-center gap-2">
                           <Calendar size={16} className="text-primary" />
-                          <p className="text-sm font-semibold">Schedule Video Inspection</p>
+                          <p className="text-sm font-semibold">
+                            Schedule Video Inspection
+                          </p>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-1.5">
-                            <label className="text-xs font-medium text-third">Preferred Date</label>
+                            <label className="text-xs font-medium text-third">
+                              Preferred Date
+                            </label>
                             <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-third/40 bg-secondary focus-within:border-primary">
                               <Calendar size={14} className="text-third" />
-                              <DatePicker selected={inspectionDate} onChange={(date) => setInspectionDate(date)} dateFormat="MMMM d, yyyy" minDate={new Date()} placeholderText="Select Date" className="w-full text-sm bg-transparent focus:outline-none text-primary cursor-pointer" calendarClassName="dark-datepicker" />
+                              <DatePicker
+                                selected={inspectionDate}
+                                onChange={(date) => setInspectionDate(date)}
+                                dateFormat="MMMM d, yyyy"
+                                minDate={new Date()}
+                                placeholderText="Select Date"
+                                className="w-full text-sm bg-transparent focus:outline-none text-primary cursor-pointer"
+                                calendarClassName="dark-datepicker"
+                              />
                             </div>
                           </div>
                           <div className="space-y-1.5">
-                            <label className="text-xs font-medium text-third">Preferred Time</label>
+                            <label className="text-xs font-medium text-third">
+                              Preferred Time
+                            </label>
                             <div className="flex items-center gap-2 px-3 py-1 rounded-lg border border-third/40 bg-secondary focus-within:border-primary">
                               <Clock size={14} className="text-third" />
-                              <Select options={timeOptions} value={inspectionTime} onChange={(option) => setInspectionTime(option)} placeholder="Select Time" className="w-full text-sm" styles={{ control: (b) => ({ ...b, backgroundColor: "transparent", border: "none", boxShadow: "none", minHeight: "auto" }), singleValue: (b) => ({ ...b, color: "#ffffff" }), placeholder: (b) => ({ ...b, color: "#bebebe" }), menu: (b) => ({ ...b, backgroundColor: "#121212", borderRadius: "12px", border: "1px solid #2f2e2e", zIndex: 100 }), menuList: (b) => ({ ...b, padding: "0" }), option: (b, s) => ({ ...b, backgroundColor: s.isFocused ? "rgba(255,255,255,0.1)" : s.isSelected ? "rgba(255,255,255,0.2)" : "transparent", color: "#ffffff", cursor: "pointer" }), indicatorSeparator: () => ({ display: "none" }), dropdownIndicator: (b) => ({ ...b, color: "#bebebe", padding: "0 4px" }) }} />
+                              <Select
+                                options={timeOptions}
+                                value={inspectionTime}
+                                onChange={(option) => setInspectionTime(option)}
+                                placeholder="Select Time"
+                                className="w-full text-sm"
+                                styles={{
+                                  control: (b) => ({
+                                    ...b,
+                                    backgroundColor: "transparent",
+                                    border: "none",
+                                    boxShadow: "none",
+                                    minHeight: "auto",
+                                  }),
+                                  singleValue: (b) => ({
+                                    ...b,
+                                    color: "#ffffff",
+                                  }),
+                                  placeholder: (b) => ({
+                                    ...b,
+                                    color: "#bebebe",
+                                  }),
+                                  menu: (b) => ({
+                                    ...b,
+                                    backgroundColor: "#121212",
+                                    borderRadius: "12px",
+                                    border: "1px solid #2f2e2e",
+                                    zIndex: 100,
+                                  }),
+                                  menuList: (b) => ({ ...b, padding: "0" }),
+                                  option: (b, s) => ({
+                                    ...b,
+                                    backgroundColor: s.isFocused
+                                      ? "rgba(255,255,255,0.1)"
+                                      : s.isSelected
+                                        ? "rgba(255,255,255,0.2)"
+                                        : "transparent",
+                                    color: "#ffffff",
+                                    cursor: "pointer",
+                                  }),
+                                  indicatorSeparator: () => ({
+                                    display: "none",
+                                  }),
+                                  dropdownIndicator: (b) => ({
+                                    ...b,
+                                    color: "#bebebe",
+                                    padding: "0 4px",
+                                  }),
+                                }}
+                              />
                             </div>
                           </div>
                         </div>
-                        <p className="text-xs text-third leading-relaxed">Our inspector will confirm the exact slot based on availability.</p>
+                        <p className="text-xs text-third leading-relaxed">
+                          Our inspector will confirm the exact slot based on
+                          availability.
+                        </p>
                       </div>
                     </>
                   )}
 
                   <div className="flex justify-end gap-3 pt-2">
-                    <Button variant="outline" size="md" onClick={handleConfirm} showIcon={false} loading={isSubmitting}>
+                    <Button
+                      variant="outline"
+                      size="md"
+                      onClick={handleConfirm}
+                      showIcon={false}
+                      loading={isSubmitting}
+                    >
                       Confirm & Proceed
                     </Button>
                   </div>
@@ -562,11 +828,17 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
               {/* ---- STEP 2: Payment ---- */}
               {step === 2 && (
                 <>
-                  <h2 className="text-2xl font-bold text-center">Complete your payment</h2>
+                  <h2 className="text-2xl font-bold text-center">
+                    Complete your payment
+                  </h2>
                   <div className="border border-third/30 rounded-2xl p-5 space-y-4 bg-secondary/80">
                     <div className="flex justify-between items-center text-sm">
                       <span className="text-third">Inspection Type</span>
-                      <span className="font-semibold">{inspectionType === "video" ? "Video Call + Report" : "Inspection Report Only"}</span>
+                      <span className="font-semibold">
+                        {inspectionType === "video"
+                          ? "Video Call + Report"
+                          : "Inspection Report Only"}
+                      </span>
                     </div>
                     {inspectionType === "video" && (
                       <>
@@ -576,20 +848,44 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                         </div>
                         <div className="flex justify-between items-center text-sm">
                           <span className="text-third">Scheduled Slot</span>
-                          <span className="font-semibold">{inspectionDate?.toLocaleDateString()} at {inspectionTime?.label}</span>
+                          <span className="font-semibold">
+                            {inspectionDate?.toLocaleDateString()} at{" "}
+                            {inspectionTime?.label}
+                          </span>
                         </div>
                       </>
                     )}
                     <div className="border-t border-third/30 my-2" />
                     <div className="flex justify-between items-center text-lg font-bold">
                       <span>Total Amount</span>
-                      <span>{inspectionType === "video" ? "₹1,999" : "₹1,499"}</span>
+                      <span>
+                        {inspectionType === "video" ? "₹1,999" : "₹1,499"}
+                      </span>
                     </div>
                   </div>
-                  <p className="text-xs text-third text-center">By clicking Confirm Payment, you agree to complete the payment workflow.</p>
+                  <p className="text-xs text-third text-center">
+                    By clicking Confirm Payment, you agree to complete the
+                    payment workflow.
+                  </p>
                   <div className="flex justify-end gap-3 pt-2">
-                    <Button variant="ghost" size="md" onClick={() => setStep(1)} showIcon={false} locked={isSubmitting}>Back</Button>
-                    <Button variant="outline" size="md" onClick={handlePayment} showIcon={false} loading={isSubmitting}>Confirm Payment</Button>
+                    <Button
+                      variant="ghost"
+                      size="md"
+                      onClick={() => setStep(1)}
+                      showIcon={false}
+                      locked={isSubmitting}
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="md"
+                      onClick={() => handlePayment()}
+                      showIcon={false}
+                      loading={isSubmitting}
+                    >
+                      Confirm Payment
+                    </Button>
                   </div>
                 </>
               )}
@@ -599,19 +895,31 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                 <>
                   <div className="flex flex-col items-center justify-center text-center py-8 space-y-4">
                     <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center text-green-500 border border-green-500/20">
-                      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                      <svg
+                        className="w-8 h-8"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M5 13l4 4L19 7"
+                        />
                       </svg>
                     </div>
                     <h2 className="text-2xl font-bold">Payment Completed!</h2>
-                    <p className="text-sm text-third max-w-sm">Thank you! Your inspection request has been registered. Our team will contact you shortly.</p>
+                    <p className="text-sm text-third max-w-sm">
+                      Thank you! Your inspection request has been registered.
+                      Our team will contact you shortly.
+                    </p>
                   </div>
                   {/* <div className="flex justify-end gap-3 pt-2">
                     <Button variant="outline" size="md" onClick={closeModal} showIcon={false}>Close</Button>
                   </div> */}
                 </>
               )}
-
             </div>
 
             <div className="hidden md:block md:w-[50%]">
@@ -625,6 +933,14 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
             </div>
           </div>
         </div>
+      )}
+
+      {trackingInspection && (
+        <InspectionTrackingModal
+          inspection={trackingInspection}
+          onClose={handleCloseTracking}
+          animateModal={animateTrackingModal}
+        />
       )}
     </section>
   );

@@ -76,15 +76,10 @@ export default function AVXComparison() {
             Platform Comparison
           </p>
           <h2 className=" font-[Montserrat] text-4xl sm:text-5xl xl:text-5xl font-semibold leading-[1.05] mb-4">
-            Why{" "}
-            Reecomm{" "}
-            <span
-              className="text-fourth/80 pb-0.5"
-            >
-            is Different
-            </span>
+            Why Reecomm{" "}
+            <span className="text-fourth/80 pb-0.5">is Different</span>
           </h2>
-       
+
           <p className="text-third opacity-70 max-w-120 leading-relaxed text-sm">
             Every feature gap below is a trust problem solved. See exactly where
             generic platforms fall short.

@@ -3,8 +3,12 @@ import {
   getVehicleOverview,
   getVehicleSummary,
   checkIsUserEligbleToSendInquary,
+  getActiveInspectionByVehicleId,
 } from "@/services/vehicle.service";
-import { getSimularVehicles, getHomeFeedConsult } from "@/services/user.service";
+import {
+  getSimularVehicles,
+  getHomeFeedConsult,
+} from "@/services/user.service";
 import { getFilterConsualt } from "@/services/filter";
 import { getInspectionByVehicleId } from "@/services/inspection.service";
 
@@ -91,6 +95,18 @@ export const getInspectionByVehicleIdQuery = (vehicleId) => {
       return res?.data ?? null;
     },
     staleTime: 10 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+export const getActiveInspectionQuery = (vehicleId) => {
+  return queryOptions({
+    queryKey: ["active-inspection", vehicleId],
+    queryFn: async () => {
+      if (!vehicleId) return null;
+      const res = await getActiveInspectionByVehicleId(vehicleId);
+      return res?.data ?? null;
+    },
     retry: shouldRetry,
   });
 };
