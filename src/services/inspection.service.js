@@ -3,7 +3,8 @@ import axiosInstance, { handleResponse } from "@/lib/axiosInstance";
 const ENDPOINT = {
   getInspectionByVehicleId: "/vehicle/inspection/active",
   createInpection: "/vehicle/inspection/request",
-  complateInspectionPayment: "/vehicle/inspection/complete-payment",
+  complateInspectionPayment:
+    "/vehicle/inspection/inspection-payments/create-order",
   getInspectionSnapShot:
     "/consultation/dashboard/inspection/performance-snapshot",
   getVehiclesRequiringAttention:
@@ -43,7 +44,7 @@ export const createInpection = async (vehicleId, data) => {
 
 export const complateInspectionPayment = async (requestId) => {
   try {
-    const res = await axiosInstance.patch(
+    const res = await axiosInstance.post(
       `${ENDPOINT.complateInspectionPayment}/${requestId}`,
     );
     return handleResponse(res);

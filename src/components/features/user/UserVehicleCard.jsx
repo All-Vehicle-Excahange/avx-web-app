@@ -302,7 +302,7 @@ export default function UserVehicleCard({
                   ₹ {data?.price || "-"}
                 </h3>
                 <Button
-                  href={`/vehicle/details/${generateVehicleSlug(data)}/${data.id}`}
+                  href={`/vehicle/details/consualt/${generateVehicleSlug(data)}/${data.id}`}
                   variant="roundedOutline"
                   size="sm"
                   className="w-8 h-8 p-0 group"

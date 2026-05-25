@@ -359,7 +359,7 @@ export default function VehicleComparePopup({
                         <div className="flex justify-end w-full mb-2">
                             <Button
                                 variant="outlineSecondary"
-                                disabled={!leftVehicle || !rightVehicle || isFetchingComparison}
+                                locked={!leftVehicle || !rightVehicle || isFetchingComparison}
                                 className="py-2 w-[160px] sm:w-[180px] text-sm flex items-center justify-center gap-2 transition-all"
                                 onClick={handleCompareNow}
                             >

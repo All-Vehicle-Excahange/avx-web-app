@@ -6,6 +6,7 @@ import {
   Truck,
   Clock,
   FileText,
+  X,
 } from "lucide-react";
 
 export default function InspectionTrackingModal({
@@ -51,80 +52,233 @@ export default function InspectionTrackingModal({
     : "-";
 
   // Determine stage flags
-  const isRequested = true;
-
   const isScheduled = [
     "ASSIGNED",
     "SCHEDULED",
     "IN_PROGRESS",
     "COMPLETED",
-    "DONE",
     "SUBMITTED",
-    "INSPECTED",
   ].includes(status);
 
   const isInProgress = [
     "IN_PROGRESS",
     "COMPLETED",
-    "DONE",
     "SUBMITTED",
-    "INSPECTED",
   ].includes(status);
 
   const isReportReady = [
     "COMPLETED",
-    "DONE",
     "SUBMITTED",
-    "INSPECTED",
   ].includes(status);
 
   // Setup badge classes
   const badgeClasses =
     {
-      PENDING: "bg-blue-500/15 text-blue-400 border-blue-500/40",
+      PAYMENT_PENDING: "bg-yellow-500/15 text-yellow-500 border-yellow-500/40",
+      PENDING_OWNER_APPROVAL: "bg-blue-500/15 text-blue-400 border-blue-500/40",
+      REJECTED_BY_OWNER: "bg-red-500/15 text-red-500 border-red-500/40",
       REQUESTED: "bg-blue-500/15 text-blue-400 border-blue-500/40",
-      PAYMENT_PEND: "bg-yellow-500/15 text-yellow-500 border-yellow-500/40",
       ASSIGNED: "bg-yellow-400/15 text-yellow-400 border-yellow-400/40",
       SCHEDULED: "bg-yellow-400/15 text-yellow-400 border-yellow-400/40",
       IN_PROGRESS: "bg-yellow-400/15 text-yellow-400 border-yellow-400/40",
-      PROCESSING: "bg-yellow-400/15 text-yellow-400 border-yellow-400/40",
-      ACCEPTED: "bg-green-500/15 text-green-500 border-green-500/40",
-      COMPLETED: "bg-green-500/15 text-green-500 border-green-500/40",
       SUBMITTED: "bg-green-500/15 text-green-500 border-green-500/40",
-      DONE: "bg-green-500/15 text-green-500 border-green-500/40",
-      INSPECTED: "bg-green-500/15 text-green-500 border-green-500/40",
+      COMPLETED: "bg-green-500/15 text-green-500 border-green-500/40",
       REJECTED: "bg-red-500/15 text-red-500 border-red-500/40",
-      REJECTED_BY_OWNER: "bg-red-500/15 text-red-500 border-red-500/40",
       CANCELLED: "bg-red-500/15 text-red-500 border-red-500/40",
     }[status] || "bg-third/15 text-third border-third/40";
 
-  const formatDateOffset = (days) => {
-    const d = new Date(baseDate);
-    d.setDate(baseDate.getDate() + days);
-    return d.toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-    });
+  // Format backend dates
+  const scheduledDateStr = (inspection.scheduledAt || inspection.videoCallScheduledAt)
+    ? new Date(inspection.scheduledAt || inspection.videoCallScheduledAt).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : null;
+
+  const inProgressDateStr = (status === "IN_PROGRESS" || isInProgress) && inspection.updatedAt
+    ? new Date(inspection.updatedAt).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })
+    : null;
+
+  const completedDateStr = (status === "COMPLETED" || status === "SUBMITTED" || status === "REJECTED" || status === "CANCELLED") && inspection.updatedAt
+    ? new Date(inspection.updatedAt).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })
+    : null;
+
+  // Banner Text
+  const bannerText = {
+    PAYMENT_PENDING: "Waiting for payment",
+    PENDING_OWNER_APPROVAL: "Awaiting owner's response",
+    REJECTED_BY_OWNER: "Inspection request rejected by vehicle owner",
+    REQUESTED: "Payment completed, inspection request created",
+    ASSIGNED: "Inspector assigned to the vehicle",
+    SCHEDULED: "Inspection scheduled",
+    IN_PROGRESS: "Inspector is currently inspecting the vehicle",
+    SUBMITTED: "Inspector submitted the report, preparing final review",
+    COMPLETED: "Inspection successfully completed",
+    REJECTED: "Inspection request failed or was rejected",
+    CANCELLED: "Inspection request was cancelled",
+  }[status] || "Inspection request in progress";
+
+  const getStep1Details = () => {
+    if (status === "PAYMENT_PENDING") {
+      return {
+        title: "Request Created",
+        statusText: "Pending Payment",
+        icon: <Clock size={10} className="text-yellow-500" />,
+        bgClass: "bg-yellow-500/10 border border-yellow-500/30"
+      };
+    }
+    return {
+      title: "Request Created",
+      statusText: `Completed • ${requestedDateStr}`,
+      icon: <CheckCircle2 size={10} className="text-green-500" />,
+      bgClass: "bg-green-500/10 border border-green-500/30"
+    };
   };
+  const step1 = getStep1Details();
 
-  const scheduledDate = formatDateOffset(1);
-  const transitDate = formatDateOffset(2);
-  const reportDate = formatDateOffset(3);
+  const getStep2Details = () => {
+    if (status === "PAYMENT_PENDING") {
+      return {
+        title: "Owner Approval",
+        statusText: "Pending",
+        icon: <Clock size={10} className="text-third" />,
+        bgClass: "bg-white/5 border border-white/10"
+      };
+    }
+    if (status === "REQUESTED" || status === "PENDING_OWNER_APPROVAL") {
+      return {
+        title: "Owner Approval",
+        statusText: "Awaiting owner response",
+        icon: <Clock size={10} className="text-blue-500" />,
+        bgClass: "bg-blue-500/10 border border-blue-500/30"
+      };
+    }
+    if (status === "REJECTED_BY_OWNER") {
+      return {
+        title: "Owner Approval",
+        statusText: "Rejected by owner",
+        icon: <X size={10} className="text-red-500" />,
+        bgClass: "bg-red-500/10 border border-red-500/30"
+      };
+    }
+    return {
+      title: "Owner Approval",
+      statusText: "Approved",
+      icon: <CheckCircle2 size={10} className="text-green-500" />,
+      bgClass: "bg-green-500/10 border border-green-500/30"
+    };
+  };
+  const step2 = getStep2Details();
 
-  // Scheduled Banner Text
-  let bannerText = "Inspection scheduled soon";
-  if (status === "PENDING" || status === "REQUESTED") {
-    bannerText = "Awaiting owner approval";
-  } else if (status === "ACCEPTED") {
-    bannerText = "Payment or scheduling in progress";
-  } else if (status === "IN_PROGRESS" || status === "PROCESSING") {
-    bannerText = "Inspector is inspecting the vehicle";
-  } else if (isReportReady) {
-    bannerText = "Inspection completed, report is ready";
-  } else if (status.startsWith("REJECTED") || status === "CANCELLED") {
-    bannerText = "Inspection request was rejected or cancelled";
-  }
+  const getStep3Details = () => {
+    const isOwnerApproved = [
+      "ASSIGNED",
+      "SCHEDULED",
+      "IN_PROGRESS",
+      "COMPLETED",
+      "SUBMITTED"
+    ].includes(status);
+
+    if (!isOwnerApproved) {
+      return {
+        title: "Inspection Scheduled",
+        statusText: "Pending",
+        icon: <Truck size={10} className="text-third" />,
+        bgClass: "bg-white/5 border border-white/10"
+      };
+    }
+    if (status === "ASSIGNED") {
+      return {
+        title: "Inspection Scheduled",
+        statusText: "Inspector Assigned",
+        icon: <Truck size={10} className="text-yellow-500" />,
+        bgClass: "bg-yellow-500/10 border border-yellow-500/30"
+      };
+    }
+    return {
+      title: "Inspection Scheduled",
+      statusText: scheduledDateStr ? `Scheduled • ${scheduledDateStr}` : "Scheduled",
+      icon: <CheckCircle2 size={10} className="text-green-500" />,
+      bgClass: "bg-green-500/10 border border-green-500/30"
+    };
+  };
+  const step3 = getStep3Details();
+
+  const getStep4Details = () => {
+    if (status === "IN_PROGRESS") {
+      return {
+        title: "Inspection In Progress",
+        statusText: inProgressDateStr ? `Started • ${inProgressDateStr}` : "In Progress",
+        icon: <Clock size={10} className="text-yellow-500" />,
+        bgClass: "bg-yellow-500/10 border border-yellow-500/30"
+      };
+    }
+    const isPastInProgress = [
+      "COMPLETED",
+      "SUBMITTED"
+    ].includes(status);
+
+    if (isPastInProgress) {
+      return {
+        title: "Inspection In Progress",
+        statusText: "Completed",
+        icon: <CheckCircle2 size={10} className="text-green-500" />,
+        bgClass: "bg-green-500/10 border border-green-500/30"
+      };
+    }
+    return {
+      title: "Inspection In Progress",
+      statusText: "Pending",
+      icon: <Clock size={10} className="text-third" />,
+      bgClass: "bg-white/5 border border-white/10"
+    };
+  };
+  const step4 = getStep4Details();
+
+  const getStep5Details = () => {
+    if (status === "SUBMITTED") {
+      return {
+        title: "Report Ready",
+        statusText: completedDateStr ? `Submitted • ${completedDateStr}` : "Reviewing Report",
+        icon: <FileText size={10} className="text-yellow-500" />,
+        bgClass: "bg-yellow-500/10 border border-yellow-500/30"
+      };
+    }
+    if (status === "COMPLETED") {
+      return {
+        title: "Report Ready",
+        statusText: completedDateStr ? `Completed • ${completedDateStr}` : "Ready",
+        icon: <CheckCircle2 size={10} className="text-green-500" />,
+        bgClass: "bg-green-500/10 border border-green-500/30"
+      };
+    }
+    if (status === "REJECTED" || status === "CANCELLED") {
+      return {
+        title: status === "REJECTED" ? "Failed / Rejected" : "Cancelled",
+        statusText: completedDateStr ? `Closed • ${completedDateStr}` : "Closed",
+        icon: <X size={10} className="text-red-500" />,
+        bgClass: "bg-red-500/10 border border-red-500/30"
+      };
+    }
+    return {
+      title: "Report Ready",
+      statusText: "Pending",
+      icon: <FileText size={10} className="text-third" />,
+      bgClass: "bg-white/5 border border-white/10"
+    };
+  };
+  const step5 = getStep5Details();
 
   return (
     <div
@@ -159,7 +313,7 @@ export default function InspectionTrackingModal({
             {/* Image */}
             <div className="relative w-18 h-18 rounded-lg overflow-hidden bg-white/5 shrink-0">
               <Image
-                src={inspection.vehicleCoverImage || "/about2.png"}
+                src={inspection.thumbnailUrl || "/bg.jpg"}
                 alt="Vehicle Image"
                 width={72}
                 height={72}
@@ -180,30 +334,35 @@ export default function InspectionTrackingModal({
                     : status.replaceAll("_", " ")}
                 </span>
               </div>
-              <p className="text-[11px] text-third truncate mt-0.5">
-                Inspector:{" "}
-                <span className="text-primary font-medium">
-                  {inspection.assignedInspectorName || "Amit Verma"}
-                </span>
-              </p>
+              {(inspection.inspectorName || inspection.assignedInspectorName) && (
+                <p className="text-[11px] text-third truncate mt-0.5">
+                  Inspector:{" "}
+                  <span className="text-primary font-medium">
+                    {inspection.inspectorName || inspection.assignedInspectorName}
+                  </span>
+                </p>
+              )}
               <p className="text-[11px] text-third">
-                Date:{" "}
+                Requested Date:{" "}
                 <span className="text-primary font-medium">
                   {formattedInspectionDate}
                 </span>
               </p>
               <div className="flex items-center gap-1 mt-1">
-                <span className="text-[9px] text-third font-semibold bg-white/5 border border-white/10 px-1.5 py-0.5 rounded">
-                  {inspection.inspectionType === "VIDEO_CALL_WITH_REPORT"
-                    ? "Video"
-                    : "Report"}
-                </span>
-                <span className="text-[9px] text-third font-semibold bg-white/5 border border-white/10 px-1.5 py-0.5 rounded">
-                  Photo
-                </span>
-                <span className="text-xs font-black text-white ml-auto">
-                  ₹{inspection.amount || "1,999"}
-                </span>
+                {inspection.inspectionType && (
+                  <span className="text-[9px] text-third font-semibold bg-white/5 border border-white/10 px-1.5 py-0.5 rounded">
+                    {inspection.inspectionType === "VIDEO_CALL_WITH_REPORT"
+                      ? "Video + Report"
+                      : inspection.inspectionType === "REPORT_ONLY"
+                        ? "Report Only"
+                        : inspection.inspectionType.replaceAll("_", " ")}
+                  </span>
+                )}
+                {inspection.amount && (
+                  <span className="text-xs font-black text-white ml-auto">
+                    ₹{inspection.amount.toLocaleString("en-IN")}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -233,84 +392,75 @@ export default function InspectionTrackingModal({
 
               {/* Step 1: Requested */}
               <div className="relative">
-                <span className="absolute -left-7 top-0.5 w-5 h-5 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center">
-                  <CheckCircle2 size={10} className="text-green-500" />
+                <span className={`absolute -left-7 top-0.5 w-5 h-5 rounded-full flex items-center justify-center ${step1.bgClass}`}>
+                  {step1.icon}
                 </span>
                 <div>
                   <h5 className="text-[13px] font-semibold text-white">
-                    Requested
+                    {step1.title}
                   </h5>
                   <p className="text-[10px] text-third mt-0.5">
-                    Completed • {requestedDateStr}
+                    {step1.statusText}
                   </p>
                 </div>
               </div>
 
-              {/* Step 2: Scheduled */}
+              {/* Step 2: Owner Approval */}
               <div className="relative">
-                <span
-                  className={`absolute -left-7 top-0.5 w-5 h-5 rounded-full flex items-center justify-center ${
-                    isScheduled
-                      ? "bg-green-500/10 border border-green-500/30 text-green-500"
-                      : "bg-white/5 border border-white/10 text-third"
-                  }`}
-                >
-                  <Truck size={10} />
+                <span className={`absolute -left-7 top-0.5 w-5 h-5 rounded-full flex items-center justify-center ${step2.bgClass}`}>
+                  {step2.icon}
                 </span>
                 <div>
-                  <h5
-                    className={`text-[13px] font-semibold ${isScheduled ? "text-white" : "text-third"}`}
-                  >
-                    Scheduled
+                  <h5 className={`text-[13px] font-semibold ${status !== "PAYMENT_PENDING" ? "text-white" : "text-third"}`}>
+                    {step2.title}
                   </h5>
                   <p className="text-[10px] text-third mt-0.5">
-                    {isScheduled ? `Completed • ${scheduledDate}` : "Pending"}
+                    {step2.statusText}
                   </p>
                 </div>
               </div>
 
-              {/* Step 3: In Progress */}
+              {/* Step 3: Scheduled */}
               <div className="relative">
-                <span
-                  className={`absolute -left-7 top-0.5 w-5 h-5 rounded-full flex items-center justify-center ${
-                    isInProgress
-                      ? "bg-green-500/10 border border-green-500/30 text-green-500"
-                      : "bg-white/5 border border-white/10 text-third"
-                  }`}
-                >
-                  <Clock size={10} />
+                <span className={`absolute -left-7 top-0.5 w-5 h-5 rounded-full flex items-center justify-center ${step3.bgClass}`}>
+                  {step3.icon}
                 </span>
                 <div>
-                  <h5
-                    className={`text-[13px] font-semibold ${isInProgress ? "text-white" : "text-third"}`}
-                  >
-                    In Progress
+                  <h5 className={`text-[13px] font-semibold ${isScheduled ? "text-white" : "text-third"}`}>
+                    {step3.title}
                   </h5>
                   <p className="text-[10px] text-third mt-0.5">
-                    {isInProgress ? `Completed • ${transitDate}` : "Pending"}
+                    {step3.statusText}
                   </p>
                 </div>
               </div>
 
-              {/* Step 4: Report Ready */}
+              {/* Step 4: In Progress */}
               <div className="relative">
-                <span
-                  className={`absolute -left-7 top-0.5 w-5 h-5 rounded-full flex items-center justify-center ${
-                    isReportReady
-                      ? "bg-green-500/10 border border-green-500/30 text-green-500"
-                      : "bg-white/5 border border-white/10 text-third"
-                  }`}
-                >
-                  <FileText size={10} />
+                <span className={`absolute -left-7 top-0.5 w-5 h-5 rounded-full flex items-center justify-center ${step4.bgClass}`}>
+                  {step4.icon}
                 </span>
                 <div>
-                  <h5
-                    className={`text-[13px] font-semibold ${isReportReady ? "text-white" : "text-third"}`}
-                  >
-                    Report Ready
+                  <h5 className={`text-[13px] font-semibold ${isInProgress ? "text-white" : "text-third"}`}>
+                    {step4.title}
                   </h5>
                   <p className="text-[10px] text-third mt-0.5">
-                    {isReportReady ? `Completed • ${reportDate}` : "Pending"}
+                    {step4.statusText}
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 5: Report Ready */}
+              <div className="relative">
+                <span className={`absolute -left-7 top-0.5 w-5 h-5 rounded-full flex items-center justify-center ${step5.bgClass}`}>
+                  {step5.icon}
+                </span>
+                <div>
+                  <h5 className={`text-[13px] font-semibold ${isReportReady ? "text-white" : "text-third"}`}>
+                    {step5.title}
+                  </h5>
+                  <p className="text-[10px] text-third mt-0.5">
+                    {step5.statusText}
                   </p>
                 </div>
               </div>

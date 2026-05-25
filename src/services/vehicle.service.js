@@ -6,6 +6,7 @@ const ENDPOINT = {
   sendInquary: "/vehicles/inquiry/create",
   checkIsUserEligbleToSendInquary: "/vehicles/inquiry/latest-by-vehicle",
   markAsSoldVehicle: "/vehicle/sell/basic",
+  getActiveInspectionByVehicleId: "/vehicle/inspection/active",
 };
 
 export const getVehicleOverview = async (id) => {
@@ -59,6 +60,17 @@ export const markAsSoldVehicle = async (vehicleId, closingPrice) => {
           closingPrice: closingPrice,
         },
       },
+    );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getActiveInspectionByVehicleId = async (vehicleId) => {
+  try {
+    const res = await axiosInstance.get(
+      `${ENDPOINT.getActiveInspectionByVehicleId}/${vehicleId}`,
     );
     return handleResponse(res);
   } catch (error) {
