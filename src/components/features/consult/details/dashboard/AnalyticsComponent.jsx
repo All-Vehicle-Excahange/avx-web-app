@@ -12,6 +12,7 @@ import {
   StoreIcon,
   SquareMousePointer,
   BadgePercent,
+  Lock,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import CustomSelect from "@/components/ui/custom-select";
@@ -36,11 +37,18 @@ export default function AnalyticsComponent() {
 
   const daysParam = range === "30" ? "LAST_30_DAYS" : range === "90" ? "LAST_90_DAYS" : "LAST_7_DAYS";
 
+  const isProOrPremium = tier === "PRO" || tier === "PREMIUM";
+  const isBasic = tier === "BASIC";
+  const isPro = tier === "PRO";
+
   const { data: analyticsData, isFetching: kpisLoading } = useQuery(getAnalyticsKipsQuery(daysParam));
   const { data: trafficData, isFetching: trafficLoading } = useQuery(getTrafficConversionQuery(daysParam));
   const { data: weeklyData = [], isFetching: weeklyLoading } = useQuery(getWeeklyAnalyticsQuery(daysParam));
   const { data: demandBreakdown = [], isFetching: demandLoading } = useQuery(getSubTypeDemandBreakdownQuery(daysParam));
-  const { data: cityDemand = [], isFetching: cityLoading } = useQuery(getCityDemandBreakdownQuery(daysParam));
+  const { data: cityDemand = [], isFetching: cityLoading } = useQuery({
+    ...getCityDemandBreakdownQuery(daysParam),
+    enabled: isProOrPremium,
+  });
   const { data: insights = [], isFetching: insightsLoading } = useQuery(getKeyInsightsQuery(daysParam));
 
   const isLoading = kpisLoading || trafficLoading || weeklyLoading || demandLoading || cityLoading || insightsLoading;
@@ -61,9 +69,6 @@ export default function AnalyticsComponent() {
     queryClient.invalidateQueries({ queryKey: ["analytics-city-demand-breakdown", targetDaysParam] });
     queryClient.invalidateQueries({ queryKey: ["analytics-key-insights", targetDaysParam] });
   };
-  const isProOrPremium = tier === "PRO" || tier === "PREMIUM";
-  const isBasic = tier === "BASIC";
-  const isPro = tier === "PRO";
 
   useEffect(() => {
     setTier(getSellerTierTitle() || "BASIC");
@@ -305,25 +310,25 @@ export default function AnalyticsComponent() {
           icon={<Car size={20} />}
           label="Vehicle Views"
           value={analyticsData?.totalVehicleView || 0}
-          trend={isBasic ? null : analyticsData?.totalVehicleViewChange}
+          trend={analyticsData?.totalVehicleViewChange}
         />
         <StatCard
           icon={<StoreIcon size={20} />}
           label="Storefront Visits"
           value={analyticsData?.totalProfileVisit || 0}
-          trend={isBasic ? null : analyticsData?.totalProfileVisitChange}
+          trend={analyticsData?.totalProfileVisitChange}
         />
         <StatCard
           icon={<SquareMousePointer size={20} />}
           label="Total Inquiries"
           value={analyticsData?.totalInquiry || 0}
-          trend={isBasic ? null : analyticsData?.totalInquiryChange}
+          trend={analyticsData?.totalInquiryChange}
         />
         <StatCard
           icon={<BadgePercent size={20} />}
           label="Conversion Rate"
           value={analyticsData?.conversionRate || 0}
-          trend={isBasic ? null : analyticsData?.conversionRateChange}
+          trend={analyticsData?.conversionRateChange}
         />
       </div>
       {/* Traffic */}
@@ -433,7 +438,7 @@ export default function AnalyticsComponent() {
         )}
       </div>
       <div
-        className={`grid gap-6 ${isBasic ? "grid-cols-1" : "md:grid-cols-2"}`}
+        className="grid gap-6 md:grid-cols-2"
       >
         {/* ✅ Demand Breakdown (Show for everyone now as per request for basic) */}
         <div className=" border border-third/20 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
@@ -474,46 +479,60 @@ export default function AnalyticsComponent() {
           )}
         </div>
 
-        {/* ✅ City-wise Demand (Hide for BASIC as it was replaced) */}
-        {!isBasic && (
-          <div className=" border border-third/20 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
-            <h3 className="font-semibold text-white">City-wise Demand</h3>
+        {/* ✅ City-wise Demand (Locked for BASIC, Unlocked for PRO/PREMIUM) */}
+        <div className="relative border border-third/20 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40 overflow-hidden">
+          {isBasic && (
+            <div className="absolute inset-0 z-10 bg-black/75 backdrop-blur-[2px] flex flex-col items-center justify-center text-center p-4">
+              <div className="flex flex-col items-center gap-2.5 max-w-[280px]">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                  <Lock size={18} />
+                </div>
+                <h4 className="font-semibold text-white text-sm">City-wise Demand</h4>
+                <p className="text-xs text-third leading-relaxed">
+                  Upgrade to Pro or Premium to unlock detailed city-wise demand analytics for your listings.
+                </p>
+                <button className="mt-2 px-4 py-2 w-full rounded-lg border border-yellow-400/30 bg-yellow-400/10 text-yellow-300 text-xs font-semibold hover:bg-yellow-400/20 transition cursor-pointer">
+                  Upgrade to Pro
+                </button>
+              </div>
+            </div>
+          )}
+          <h3 className="font-semibold text-white">City-wise Demand</h3>
 
-            {currentCityDemand.length > 0 ? (
-              <div
-                className={`space-y-4 ${
-                  currentCityDemand.length > 4
-                    ? "max-h-[320px] overflow-y-auto custom-scrollbar pr-2"
-                    : ""
-                }`}
-              >
-                {currentCityDemand.map((item, i) => (
-                  <div key={item.city || i}>
-                    <div className="flex justify-between text-xs text-third">
-                      <span>{item.city}</span>
-                      <span>
-                        {parseFloat(item.demandPercentage || 0).toFixed(1)}%
-                      </span>
-                    </div>
-
-                    <div className="h-2 bg-white/10 rounded-full mt-1">
-                      <div
-                        className="h-full bg-white rounded-full transition-all duration-500"
-                        style={{
-                          width: `${Math.min(item.demandPercentage || 0, 100)}%`,
-                        }}
-                      ></div>
-                    </div>
+          {currentCityDemand.length > 0 ? (
+            <div
+              className={`space-y-4 ${
+                currentCityDemand.length > 4
+                  ? "max-h-[320px] overflow-y-auto custom-scrollbar pr-2"
+                  : ""
+              }`}
+            >
+              {currentCityDemand.map((item, i) => (
+                <div key={item.city || i}>
+                  <div className="flex justify-between text-xs text-third">
+                    <span>{item.city}</span>
+                    <span>
+                      {parseFloat(item.demandPercentage || 0).toFixed(1)}%
+                    </span>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-xs text-third italic py-4">
-                No city demand data available.
-              </div>
-            )}
-          </div>
-        )}
+
+                  <div className="h-2 bg-white/10 rounded-full mt-1">
+                    <div
+                      className="h-full bg-white rounded-full transition-all duration-500"
+                      style={{
+                        width: `${Math.min(item.demandPercentage || 0, 100)}%`,
+                      }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-xs text-third italic py-4">
+              No city demand data available.
+            </div>
+          )}
+        </div>
       </div>
       {/* Insights */}
       <div className=" border border-primary/20 rounded-xl p-7 space-y-5 shadow-sm transition-colors duration-200 hover:border-fourth/40">
@@ -594,44 +613,6 @@ export default function AnalyticsComponent() {
             <button className="px-4 py-2 rounded-lg border border-yellow-400/30 bg-yellow-400/10 text-yellow-300 text-xs font-semibold hover:bg-yellow-400/20 transition">
               Upgrade to Premium
             </button>
-          </div>
-        </div>
-      )}
-      {/* ✅ Recommended Actions (Only PRO + PREMIUM) */}
-      {isProOrPremium && (
-        <div className=" border border-third/20 rounded-xl p-7 space-y-5 shadow-sm transition-colors duration-200 hover:border-third/40">
-          {/* Title */}
-          <h3 className="font-semibold text-lg text-primary">
-            Recommended Actions
-          </h3>
-
-          <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="rounded-xl border border-third/20 bg-primary/5 p-5 hover:bg-primary/10 transition cursor-pointer">
-              <p className="text-sm font-semibold text-primary">
-                Boost 3 top-performing vehicles
-              </p>
-              <p className="text-xs text-third mt-1">
-                Increase weekend visibility instantly.
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-third/20 bg-primary/5 p-5 hover:bg-primary/10 transition cursor-pointer">
-              <p className="text-sm font-semibold text-primary">
-                Inspect 2 high-interest listings
-              </p>
-              <p className="text-xs text-third mt-1">
-                Inspected vehicles close faster.
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-yellow-400/30 bg-yellow-400/5 p-5 hover:bg-yellow-400/10 transition cursor-pointer">
-              <p className="text-sm font-semibold text-yellow-300">
-                Upgrade to Premium for higher visibility
-              </p>
-              <p className="text-xs text-third mt-1">
-                Get priority placement & more inquiries.
-              </p>
-            </div>
           </div>
         </div>
       )}

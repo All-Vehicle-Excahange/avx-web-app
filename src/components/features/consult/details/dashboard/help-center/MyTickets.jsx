@@ -1,17 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import { Plus, Eye, Ticket } from "lucide-react";
 import Button from "@/components/ui/button";
+import Pagination from "@/components/ui/Pagination";
 
-export default function MyTickets({ tickets, onNavigate, onSelectTicket }) {
-  const [activeFilter, setActiveFilter] = useState("All");
-
+export default function MyTickets({
+  tickets,
+  onNavigate,
+  onSelectTicket,
+  currentPage,
+  totalPages,
+  onPageChange,
+  activeFilter,
+  setActiveFilter,
+  totalCount,
+  isLoading
+}) {
   const filters = ["All", "Open", "In Progress", "Resolved"];
-
-  // Filter logic
-  const filteredTickets = tickets.filter((ticket) => {
-    if (activeFilter === "All") return true;
-    return ticket.status.toLowerCase() === activeFilter.toLowerCase();
-  });
 
   // Helper for priority dot color
   const getPriorityColor = (priority) => {
@@ -45,6 +49,46 @@ export default function MyTickets({ tickets, onNavigate, onSelectTicket }) {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="space-y-6 animate-pulse">
+        {/* Header Skeleton */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="space-y-2">
+            <div className="h-8 bg-white/10 rounded-lg w-48" />
+            <div className="h-4 bg-white/5 rounded-lg w-64" />
+          </div>
+          <div className="h-10 bg-white/10 rounded-lg w-32" />
+        </div>
+
+        {/* Filter Chips Skeleton */}
+        <div className="flex gap-2 pb-2 border-b border-third/10">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-8 bg-white/10 rounded-full w-20" />
+          ))}
+        </div>
+
+        {/* Table Skeleton */}
+        <div className="border border-third/15 rounded-2xl overflow-hidden bg-primary/5">
+          <div className="p-4 border-b border-third/15 h-12 flex justify-between">
+            <div className="h-4 bg-white/10 rounded w-16" />
+            <div className="h-4 bg-white/10 rounded w-48" />
+            <div className="h-4 bg-white/10 rounded w-20" />
+          </div>
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="flex justify-between items-center p-4 border-b border-third/10 last:border-0">
+              <div className="flex gap-4 items-center">
+                <div className="h-4 bg-white/10 rounded w-16" />
+                <div className="h-4 bg-white/10 rounded w-48" />
+              </div>
+              <div className="h-8 bg-white/10 rounded-lg w-20" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 animate-[fadeUp_0.3s_ease-out]">
       {/* Header */}
@@ -69,33 +113,28 @@ export default function MyTickets({ tickets, onNavigate, onSelectTicket }) {
       {/* Filter Chips */}
       <div className="flex flex-wrap gap-2 pb-2 overflow-x-auto no-scrollbar border-b border-third/10">
         {filters.map((filter) => {
-          // Count tickets matching filter
-          const count =
-            filter === "All"
-              ? tickets.length
-              : tickets.filter(
-                  (t) => t.status.toLowerCase() === filter.toLowerCase(),
-                ).length;
-
           const isActive = activeFilter === filter;
           return (
             <button
               key={filter}
-              onClick={() => setActiveFilter(filter)}
+              onClick={() => {
+                setActiveFilter(filter);
+                onPageChange(1);
+              }}
               className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all border cursor-pointer ${
                 isActive
                   ? "bg-primary border-primary text-secondary"
                   : "bg-primary/5 border-third/15 text-third hover:border-third/30"
               }`}
             >
-              {filter} ({count})
+              {filter} {isActive ? `(${totalCount})` : ""}
             </button>
           );
         })}
       </div>
 
       {/* Tickets List */}
-      {filteredTickets.length > 0 ? (
+      {tickets.length > 0 ? (
         <>
           {/* Desktop Table View */}
           <div className="hidden md:block overflow-x-auto border border-third/15 rounded-2xl">
@@ -118,7 +157,7 @@ export default function MyTickets({ tickets, onNavigate, onSelectTicket }) {
                     Status
                   </th>
                   <th className="p-4 text-xs tracking-wider uppercase">
-                    Last Updated
+                    Vehicle
                   </th>
                   <th className="p-4 text-xs tracking-wider uppercase text-right">
                     Action
@@ -126,10 +165,12 @@ export default function MyTickets({ tickets, onNavigate, onSelectTicket }) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-third/10">
-                {filteredTickets.map((ticket) => (
-                  <tr key={ticket.id} className="transition-colors">
-                    <td className="p-4 font-bold text-fourth">{ticket.id}</td>
-                    <td className="p-4 text-primary font-medium max-w-[220px] truncate">
+                {tickets.map((ticket) => (
+                  <tr key={ticket.id} className="transition-colors hover:bg-white/2">
+                    <td className="p-4 font-bold text-fourth max-w-[120px] truncate" title={ticket.ticketNumber || ticket.id}>
+                      {ticket.ticketNumber || ticket.id}
+                    </td>
+                    <td className="p-4 text-primary font-medium max-w-[220px] truncate" title={ticket.subject}>
                       {ticket.subject}
                     </td>
                     <td className="p-4 text-third">{ticket.category}</td>
@@ -148,7 +189,9 @@ export default function MyTickets({ tickets, onNavigate, onSelectTicket }) {
                         {ticket.status}
                       </span>
                     </td>
-                    <td className="p-4 text-third/80">{ticket.lastUpdated}</td>
+                    <td className="p-4 text-third max-w-[150px] truncate" title={ticket.relatedVehicle}>
+                      {ticket.relatedVehicle && ticket.relatedVehicle !== "None" ? ticket.relatedVehicle : "—"}
+                    </td>
                     <td className="p-4 text-right">
                       <button
                         onClick={() => {
@@ -168,7 +211,7 @@ export default function MyTickets({ tickets, onNavigate, onSelectTicket }) {
 
           {/* Mobile Card Grid View */}
           <div className="grid grid-cols-1 gap-4 md:hidden">
-            {filteredTickets.map((ticket) => (
+            {tickets.map((ticket) => (
               <div
                 key={ticket.id}
                 onClick={() => {
@@ -178,7 +221,9 @@ export default function MyTickets({ tickets, onNavigate, onSelectTicket }) {
                 className="bg-primary/5 border border-third/15 rounded-xl p-4 space-y-3 hover:border-fourth/40 active:bg-primary/10 transition-all cursor-pointer"
               >
                 <div className="flex justify-between items-center">
-                  <span className="font-bold text-fourth">{ticket.id}</span>
+                  <span className="font-bold text-fourth max-w-[150px] truncate">
+                    {ticket.ticketNumber || ticket.id}
+                  </span>
                   <span
                     className={`px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${getStatusBadge(ticket.status)}`}
                   >
@@ -198,8 +243,8 @@ export default function MyTickets({ tickets, onNavigate, onSelectTicket }) {
                   </div>
                 </div>
                 <div className="flex justify-between items-center pt-2 border-t border-third/10 text-xs">
-                  <span className="text-third/60">
-                    Updated {ticket.lastUpdated}
+                  <span className="text-third/60 truncate max-w-[70%]" title={ticket.relatedVehicle}>
+                    {ticket.relatedVehicle && ticket.relatedVehicle !== "None" ? ticket.relatedVehicle : "—"}
                   </span>
                   <span className="text-fourth font-semibold flex items-center gap-1">
                     Details <Eye size={12} />
@@ -208,6 +253,13 @@ export default function MyTickets({ tickets, onNavigate, onSelectTicket }) {
               </div>
             ))}
           </div>
+
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={onPageChange}
+          />
         </>
       ) : (
         <div className="border border-third/15 rounded-2xl p-12 text-center bg-primary/5">

@@ -19,6 +19,7 @@ import {
   CircleDollarSign,
   CheckCircle,
   Lock,
+  Crown,
 } from "lucide-react";
 import { getSellerTierTitle } from "@/lib/helper";
 import Button from "@/components/ui/button";
@@ -38,6 +39,7 @@ import {
 import { useRouter } from "next/navigation";
 import StatCard from "./components/StateCard";
 import ResultsModal from "./components/ResultsModal";
+import UpgradeTierPopup from "./components/UpgradeTierPopup";
 
 // --- Mock Data ---
 const audienceData = [
@@ -126,9 +128,14 @@ export default function PpcComponent() {
   const [range, setRange] = useState("60");
   const [openCustomize, setOpenCustomize] = useState(false);
   const [tier, setTier] = useState(null);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   useEffect(() => {
-    setTier(getSellerTierTitle() || "BASIC");
+    const currentTier = getSellerTierTitle() || "BASIC";
+    setTier(currentTier);
+    if (currentTier === "BASIC") {
+      setShowUpgradeModal(true);
+    }
   }, []);
 
   // State for the new "View Results" modal
@@ -206,8 +213,13 @@ export default function PpcComponent() {
           <p className="text-third text-sm">Dominance with guardrails</p>
         </div>
         {tier === "BASIC" ? (
-          <Button size="sm" variant="outlineSecondary" disabled className="opacity-60 cursor-not-allowed flex items-center gap-1.5 border-third/30 text-third">
-            <Lock size={14} /> Create New Boost (Premium)
+          <Button
+            size="sm"
+            variant="outlineSecondary"
+            disabled
+            className="opacity-60 cursor-not-allowed flex items-center gap-1.5 border-third/30 text-third "
+          >
+            <Lock size={14} className="mr-2" /> Create New Boost (Premium)
           </Button>
         ) : (
           <Button onClick={handleClick} size="sm" variant="ghost">
@@ -219,7 +231,6 @@ export default function PpcComponent() {
       {/* AD SUMMARY */}
       <div className="rounded-xl border border-third/30  p-6 space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-
           {/* Left Section */}
           <div>
             <h3 className="font-semibold">Advertising Summary</h3>
@@ -230,7 +241,6 @@ export default function PpcComponent() {
 
           {/* Right Section */}
           <div className="flex items-center gap-2 w-full sm:w-72">
-
             {/* Dropdown takes full width on mobile */}
             <div className="flex-1">
               <CustomSelect
@@ -251,7 +261,6 @@ export default function PpcComponent() {
             >
               <SlidersHorizontal size={16} />
             </Button> */}
-
           </div>
         </div>
 
@@ -281,9 +290,16 @@ export default function PpcComponent() {
         {/* Filter Controls Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-4">
           <h3 className="font-semibold text-lg text-white">Recent ads</h3>
-          
+
           <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide max-w-full md:max-w-2xl py-1">
-            {["All", "Homepage", "Search result", "Consultant page", "CPC", "CPI"].map((f) => (
+            {[
+              "All",
+              "Homepage",
+              "Search result",
+              "Consultant page",
+              "CPC",
+              "CPI",
+            ].map((f) => (
               <button
                 key={f}
                 onClick={() => setActiveFilter(f)}
@@ -303,7 +319,14 @@ export default function PpcComponent() {
         <div className="space-y-4">
           {filteredAds.length > 0 ? (
             filteredAds.map((ad) => (
-              <RecentAdCard key={ad.id} ad={ad} onOpenResults={() => { setSelectedAd(ad); setShowResults(true); }} />
+              <RecentAdCard
+                key={ad.id}
+                ad={ad}
+                onOpenResults={() => {
+                  setSelectedAd(ad);
+                  setShowResults(true);
+                }}
+              />
             ))
           ) : (
             <div className="py-8 text-center text-zinc-500 text-sm">
@@ -316,12 +339,13 @@ export default function PpcComponent() {
       {/* UNIFIED CAMPAIGN INSIGHTS & RECOMMENDATIONS */}
       <div className="rounded-xl border border-third/30 p-6 lg:p-8 space-y-8  backdrop-blur-sm shadow-sm transition-colors duration-200 hover:border-third/40">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
           {/* LEFT SIDE: Campaign Performance & Daily Impressions */}
           <div className="lg:col-span-7 space-y-8">
             {/* Header */}
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-lg sm:text-xl text-white">Campaign performance</h3>
+              <h3 className="font-semibold text-lg sm:text-xl text-white">
+                Campaign performance
+              </h3>
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 text-xs sm:text-sm hover:bg-white/5 cursor-pointer transition-colors text-zinc-300">
                 Last 7 days <ChevronDown size={14} />
               </div>
@@ -331,8 +355,12 @@ export default function PpcComponent() {
             <div className="grid grid-cols-3 gap-6 pt-2">
               {/* Total impressions */}
               <div className="space-y-1">
-                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">Total impressions</span>
-                <span className="text-xl sm:text-2xl font-bold text-white block">12,450</span>
+                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">
+                  Total impressions
+                </span>
+                <span className="text-xl sm:text-2xl font-bold text-white block">
+                  12,450
+                </span>
                 <span className="text-[10px] sm:text-xs text-emerald-400 flex items-center gap-1 font-medium">
                   ↑ 18% vs last week
                 </span>
@@ -340,8 +368,12 @@ export default function PpcComponent() {
 
               {/* Total clicks */}
               <div className="space-y-1">
-                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">Total clicks</span>
-                <span className="text-xl sm:text-2xl font-bold text-white block">486</span>
+                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">
+                  Total clicks
+                </span>
+                <span className="text-xl sm:text-2xl font-bold text-white block">
+                  486
+                </span>
                 <span className="text-[10px] sm:text-xs text-emerald-400 flex items-center gap-1 font-medium">
                   ↑ 12% vs last week
                 </span>
@@ -349,8 +381,12 @@ export default function PpcComponent() {
 
               {/* Click-through rate */}
               <div className="space-y-1">
-                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">Click-through rate</span>
-                <span className="text-xl sm:text-2xl font-bold text-white block">3.9%</span>
+                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">
+                  Click-through rate
+                </span>
+                <span className="text-xl sm:text-2xl font-bold text-white block">
+                  3.9%
+                </span>
                 <span className="text-[10px] sm:text-xs text-emerald-400 block font-medium">
                   Above industry avg
                 </span>
@@ -358,8 +394,12 @@ export default function PpcComponent() {
 
               {/* Total inquiries */}
               <div className="space-y-1">
-                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">Total inquiries</span>
-                <span className="text-xl sm:text-2xl font-bold text-white block">20</span>
+                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">
+                  Total inquiries
+                </span>
+                <span className="text-xl sm:text-2xl font-bold text-white block">
+                  20
+                </span>
                 <span className="text-[10px] sm:text-xs text-emerald-400 flex items-center gap-1 font-medium">
                   ↑ 5 vs last week
                 </span>
@@ -367,8 +407,12 @@ export default function PpcComponent() {
 
               {/* Inquiry rate */}
               <div className="space-y-1">
-                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">Inquiry rate</span>
-                <span className="text-xl sm:text-2xl font-bold text-white block">0.16%</span>
+                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">
+                  Inquiry rate
+                </span>
+                <span className="text-xl sm:text-2xl font-bold text-white block">
+                  0.16%
+                </span>
                 <span className="text-[10px] sm:text-xs text-zinc-500 block font-medium">
                   Benchmark: 0.2%
                 </span>
@@ -376,8 +420,12 @@ export default function PpcComponent() {
 
               {/* Total spend */}
               <div className="space-y-1">
-                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">Total spend</span>
-                <span className="text-xl sm:text-2xl font-bold text-white block">₹1,145</span>
+                <span className="text-[11px] sm:text-xs text-zinc-400 block font-medium">
+                  Total spend
+                </span>
+                <span className="text-xl sm:text-2xl font-bold text-white block">
+                  ₹1,145
+                </span>
                 <span className="text-[10px] sm:text-xs text-rose-400 flex items-center gap-1 font-medium">
                   ↑ ₹220 vs last week
                 </span>
@@ -386,7 +434,9 @@ export default function PpcComponent() {
 
             {/* Daily Impressions Chart */}
             <div className="pt-4 border-t border-white/5 space-y-4">
-              <h4 className="text-sm font-semibold text-zinc-300">Daily impressions</h4>
+              <h4 className="text-sm font-semibold text-zinc-300">
+                Daily impressions
+              </h4>
               <div className="w-full h-56 sm:h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
@@ -397,22 +447,27 @@ export default function PpcComponent() {
                     <XAxis
                       dataKey="day"
                       stroke="#555"
-                      tick={{ fill: '#888', fontSize: 13, fontWeight: 600 }}
+                      tick={{ fill: "#888", fontSize: 13, fontWeight: 600 }}
                       tickLine={false}
                       axisLine={false}
                     />
                     <YAxis hide />
                     <Tooltip
-                      cursor={{ fill: 'rgba(255,255,255,0.03)' }}
+                      cursor={{ fill: "rgba(255,255,255,0.03)" }}
                       contentStyle={{
-                        backgroundColor: '#1a1a1a',
-                        border: 'none',
-                        borderRadius: '10px',
-                        boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
-                        padding: '10px 14px',
+                        backgroundColor: "#1a1a1a",
+                        border: "none",
+                        borderRadius: "10px",
+                        boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+                        padding: "10px 14px",
                       }}
-                      itemStyle={{ color: '#ccc', fontSize: '12px' }}
-                      labelStyle={{ color: '#fff', fontWeight: 600, marginBottom: '4px', fontSize: '13px' }}
+                      itemStyle={{ color: "#ccc", fontSize: "12px" }}
+                      labelStyle={{
+                        color: "#fff",
+                        fontWeight: 600,
+                        marginBottom: "4px",
+                        fontSize: "13px",
+                      }}
                     />
                     <Bar
                       dataKey="value"
@@ -432,7 +487,9 @@ export default function PpcComponent() {
           {/* RIGHT SIDE: Boost Recommendations & Placement Performance Breakdown */}
           <div className="lg:col-span-5 space-y-6 lg:border-l lg:border-white/10 lg:pl-8">
             <div>
-              <h3 className="font-semibold text-lg sm:text-xl text-white">Boost recommendations</h3>
+              <h3 className="font-semibold text-lg sm:text-xl text-white">
+                Boost recommendations
+              </h3>
             </div>
 
             {/* Recommendations List */}
@@ -443,7 +500,9 @@ export default function PpcComponent() {
                   1
                 </span>
                 <div>
-                  <p className="text-xs sm:text-sm font-semibold text-white">Your BMW X1 campaign is performing well</p>
+                  <p className="text-xs sm:text-sm font-semibold text-white">
+                    Your BMW X1 campaign is performing well
+                  </p>
                   <p className="text-[10px] sm:text-xs text-emerald-400 font-medium mt-0.5">
                     Consider increasing daily budget to ₹750 for maximum reach
                   </p>
@@ -456,7 +515,9 @@ export default function PpcComponent() {
                   2
                 </span>
                 <div>
-                  <p className="text-xs sm:text-sm font-semibold text-white">Weekend traffic is 23% higher</p>
+                  <p className="text-xs sm:text-sm font-semibold text-white">
+                    Weekend traffic is 23% higher
+                  </p>
                   <p className="text-[10px] sm:text-xs text-emerald-400 font-medium mt-0.5">
                     Schedule boosts for Friday–Sunday for better ROI
                   </p>
@@ -469,7 +530,9 @@ export default function PpcComponent() {
                   3
                 </span>
                 <div>
-                  <p className="text-xs sm:text-sm font-semibold text-white">Feature your Mercedes C-Class on homepage</p>
+                  <p className="text-xs sm:text-sm font-semibold text-white">
+                    Feature your Mercedes C-Class on homepage
+                  </p>
                   <p className="text-[10px] sm:text-xs text-emerald-400 font-medium mt-0.5">
                     Luxury vehicles convert 1.8× better when boosted
                   </p>
@@ -482,7 +545,9 @@ export default function PpcComponent() {
                   4
                 </span>
                 <div>
-                  <p className="text-xs sm:text-sm font-semibold text-white">Switch Fortuner to CPI billing</p>
+                  <p className="text-xs sm:text-sm font-semibold text-white">
+                    Switch Fortuner to CPI billing
+                  </p>
                   <p className="text-[10px] sm:text-xs text-emerald-400 font-medium mt-0.5">
                     High impressions but low clicks — pay per inquiry instead
                   </p>
@@ -493,61 +558,74 @@ export default function PpcComponent() {
             {/* Placement Performance Breakdown */}
             <div className="space-y-4 pt-6 border-t border-white/10">
               <div>
-                <h4 className="font-semibold text-sm sm:text-base text-zinc-300">Placement performance breakdown</h4>
+                <h4 className="font-semibold text-sm sm:text-base text-zinc-300">
+                  Placement performance breakdown
+                </h4>
               </div>
 
               <div className="space-y-3.5">
                 {/* Homepage */}
                 <div className="flex items-center gap-4 group">
-                  <span className="text-xs font-medium text-zinc-400 w-24 group-hover:text-white transition-colors shrink-0">Homepage</span>
-                  <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden p-[1px]">
+                  <span className="text-xs font-medium text-zinc-400 w-24 group-hover:text-white transition-colors shrink-0">
+                    Homepage
+                  </span>
+                  <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden p-px">
                     <div
-                      className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-1000 ease-out"
-                      style={{ width: '72%' }}
+                      className="h-full bg-linear-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-1000 ease-out"
+                      style={{ width: "72%" }}
                     />
                   </div>
-                  <span className="text-xs font-bold text-zinc-300 group-hover:text-white transition-colors w-8 text-right shrink-0">72%</span>
+                  <span className="text-xs font-bold text-zinc-300 group-hover:text-white transition-colors w-8 text-right shrink-0">
+                    72%
+                  </span>
                 </div>
 
                 {/* Search result */}
                 <div className="flex items-center gap-4 group">
-                  <span className="text-xs font-medium text-zinc-400 w-24 group-hover:text-white transition-colors shrink-0">Search result</span>
-                  <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden p-[1px]">
+                  <span className="text-xs font-medium text-zinc-400 w-24 group-hover:text-white transition-colors shrink-0">
+                    Search result
+                  </span>
+                  <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden p-px">
                     <div
-                      className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full transition-all duration-1000 ease-out"
-                      style={{ width: '54%' }}
+                      className="h-full bg-linear-to-r from-blue-500 to-indigo-500 rounded-full transition-all duration-1000 ease-out"
+                      style={{ width: "54%" }}
                     />
                   </div>
-                  <span className="text-xs font-bold text-zinc-300 group-hover:text-white transition-colors w-8 text-right shrink-0">54%</span>
+                  <span className="text-xs font-bold text-zinc-300 group-hover:text-white transition-colors w-8 text-right shrink-0">
+                    54%
+                  </span>
                 </div>
 
                 {/* Consultant page */}
                 <div className="flex items-center gap-4 group">
-                  <span className="text-xs font-medium text-zinc-400 w-24 group-hover:text-white transition-colors shrink-0">Consultant page</span>
-                  <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden p-[1px]">
+                  <span className="text-xs font-medium text-zinc-400 w-24 group-hover:text-white transition-colors shrink-0">
+                    Consultant page
+                  </span>
+                  <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden p-px">
                     <div
-                      className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-1000 ease-out"
-                      style={{ width: '38%' }}
+                      className="h-full bg-linear-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-1000 ease-out"
+                      style={{ width: "38%" }}
                     />
                   </div>
-                  <span className="text-xs font-bold text-zinc-300 group-hover:text-white transition-colors w-8 text-right shrink-0">38%</span>
+                  <span className="text-xs font-bold text-zinc-300 group-hover:text-white transition-colors w-8 text-right shrink-0">
+                    38%
+                  </span>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
       {/* CUSTOMIZE MODAL */}
       {(openCustomize || isClosingCustomize) && (
         <div
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-9999  flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
           onClick={triggerCloseCustomize}
           style={{
             animation: isClosingCustomize
-              ? 'modalBackdropOut 0.25s ease-in forwards'
-              : 'modalBackdropIn 0.25s ease-out',
+              ? "modalBackdropOut 0.25s ease-in forwards"
+              : "modalBackdropIn 0.25s ease-out",
           }}
         >
           <div
@@ -555,13 +633,15 @@ export default function PpcComponent() {
             onClick={(e) => e.stopPropagation()}
             style={{
               animation: isClosingCustomize
-                ? 'modalCardOut 0.25s ease-in forwards'
-                : 'modalCardIn 0.3s ease-out',
+                ? "modalCardOut 0.25s ease-in forwards"
+                : "modalCardIn 0.3s ease-out",
             }}
           >
             {/* HEADER */}
             <div className="flex justify-between items-center">
-              <h3 className="font-semibold text-base sm:text-lg">Customize Advertising Summary</h3>
+              <h3 className="font-semibold text-base sm:text-lg">
+                Customize Advertising Summary
+              </h3>
               <button
                 onClick={triggerCloseCustomize}
                 className="bg-white cursor-pointer p-1 rounded-full hover:opacity-70 text-secondary transition-opacity"
@@ -617,8 +697,15 @@ export default function PpcComponent() {
 
       {/* RESULTS MODAL (THE NEW COMPONENT) */}
       {(showResults || isClosingResults) && (
-        <ResultsModal onClose={triggerCloseResults} isClosing={isClosingResults} ad={selectedAd} />
+        <ResultsModal
+          onClose={triggerCloseResults}
+          isClosing={isClosingResults}
+          ad={selectedAd}
+        />
       )}
+
+      {/* UPGRADE PLAN POPUP FOR BASIC TIER */}
+      <UpgradeTierPopup isOpen={showUpgradeModal} />
     </section>
   );
 }
@@ -646,10 +733,11 @@ function RecentAdCard({ ad, onOpenResults }) {
     statusClass = "bg-amber-500/10 text-amber-400";
   }
 
-  const displayTitle = ad.placement === "Consultant page" ? "Adarsh Auto Consultant" : ad.title;
+  const displayTitle =
+    ad.placement === "Consultant page" ? "Adarsh Auto Consultant" : ad.title;
 
   return (
-    <div 
+    <div
       onClick={onOpenResults}
       className="flex flex-col md:flex-row justify-between items-start md:items-center py-5 border-b border-white/5 hover:bg-white/5 px-2 rounded-xl transition-all duration-200 cursor-pointer gap-6"
     >
@@ -659,7 +747,9 @@ function RecentAdCard({ ad, onOpenResults }) {
           {displayTitle}
         </h4>
         <div className="flex items-center gap-2 flex-wrap">
-          <span className={`px-2 py-0.5 rounded text-[11px] font-medium ${tagClass}`}>
+          <span
+            className={`px-2 py-0.5 rounded text-[11px] font-medium ${tagClass}`}
+          >
             {ad.placement}
           </span>
           <span className="text-xs text-zinc-400 font-medium">
@@ -670,38 +760,54 @@ function RecentAdCard({ ad, onOpenResults }) {
 
       {/* Right side: Stats, Budget & Status Columns */}
       <div className="flex flex-wrap items-center gap-6 sm:gap-10 md:gap-12 w-full md:w-auto justify-between md:justify-end">
-        
         {/* Stats Column 1, 2, 3 */}
         <div className="flex items-center gap-6 sm:gap-8 text-center">
           <div className="space-y-0.5 min-w-[70px]">
-            <span className="text-sm sm:text-base font-bold text-white block">{ad.impressions}</span>
-            <span className="text-[10px] text-zinc-500 block font-medium">Impressions</span>
+            <span className="text-sm sm:text-base font-bold text-white block">
+              {ad.impressions}
+            </span>
+            <span className="text-[10px] text-zinc-500 block font-medium">
+              Impressions
+            </span>
           </div>
 
           <div className="space-y-0.5 min-w-[70px]">
-            <span className="text-sm sm:text-base font-bold text-white block">{ad.clicksValue}</span>
-            <span className="text-[10px] text-zinc-500 block font-medium">{ad.clicksLabel}</span>
+            <span className="text-sm sm:text-base font-bold text-white block">
+              {ad.clicksValue}
+            </span>
+            <span className="text-[10px] text-zinc-500 block font-medium">
+              {ad.clicksLabel}
+            </span>
           </div>
 
           <div className="space-y-0.5 min-w-[70px]">
-            <span className="text-sm sm:text-base font-bold text-white block">{ad.ctrValue}</span>
-            <span className="text-[10px] text-zinc-500 block font-medium">{ad.ctrLabel}</span>
+            <span className="text-sm sm:text-base font-bold text-white block">
+              {ad.ctrValue}
+            </span>
+            <span className="text-[10px] text-zinc-500 block font-medium">
+              {ad.ctrLabel}
+            </span>
           </div>
         </div>
 
         {/* Budget Column */}
         <div className="text-right min-w-[80px] space-y-0.5">
-          <span className="text-sm sm:text-base font-bold text-white block">{ad.spent}</span>
-          <span className="text-[11px] text-zinc-400 block font-medium">{ad.budget}</span>
+          <span className="text-sm sm:text-base font-bold text-white block">
+            {ad.spent}
+          </span>
+          <span className="text-[11px] text-zinc-400 block font-medium">
+            {ad.budget}
+          </span>
         </div>
 
         {/* Status Column */}
         <div className="min-w-[90px] text-right sm:text-center">
-          <span className={`px-3 py-1 rounded text-xs font-semibold inline-block ${statusClass}`}>
+          <span
+            className={`px-3 py-1 rounded text-xs font-semibold inline-block ${statusClass}`}
+          >
             {ad.status}
           </span>
         </div>
-
       </div>
     </div>
   );
@@ -717,4 +823,3 @@ function StatMini({ label, value }) {
 }
 
 // ResultsModal and its sub-components have been modularized to components/ResultsModal.jsx
-

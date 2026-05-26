@@ -5,7 +5,7 @@ const ENDPOINT = {
   getVehicleSummary: "/vehicle/detail-page/consultation/meta",
   sendInquary: "/vehicles/inquiry/create",
   checkIsUserEligbleToSendInquary: "/vehicles/inquiry/latest-by-vehicle",
-  markAsSoldVehicle: "/vehicle/sell/basic",
+  markAsSoldVehicle: "/vehicle/sell/basic/sold",
   getActiveInspectionByVehicleId: "/vehicle/inspection/active",
 };
 
@@ -53,7 +53,7 @@ export const checkIsUserEligbleToSendInquary = async (vehicleId) => {
 export const markAsSoldVehicle = async (vehicleId, closingPrice) => {
   try {
     const res = await axiosInstance.patch(
-      `${ENDPOINT.markAsSoldVehicle}/${vehicleId}/sold`,
+      `${ENDPOINT.markAsSoldVehicle}/${vehicleId}`,
       {},
       {
         params: {
