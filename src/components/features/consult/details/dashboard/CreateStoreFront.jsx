@@ -1,4 +1,6 @@
 "use client";
+import { useState, useEffect } from "react";
+import Image from "next/image";
 import Button from "@/components/ui/button";
 import { getSellerTierTitle } from "@/lib/helper";
 import {
@@ -9,42 +11,12 @@ import {
   Clock,
   ShieldCheck,
   XCircle,
+  Award,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { THEME_STORE } from "@/core/engine/themeStore";
-const TIERS = [
-  {
-    id: "BASIC",
-    name: "Tier 1",
-    label: "Basic",
-    features: ["1 Banner", "Basic About Section", "Single Image"],
-  },
-  {
-    id: "PRO",
-    name: "Tier 2",
-    label: "Pro",
-    features: [
-      "Custom Banner",
-      "All Sections",
-      "Multiple Images",
-      "Priority Listing",
-    ],
-  },
-  {
-    id: "PREMIUM",
-    name: "Tier 3",
-    label: "Advance",
-    features: [
-      "Everything in Pro",
-      "Featured Store",
-      "Homepage Slot",
-      "Analytics",
-    ],
-  },
-];
-
-// 🔐 Backend will send this later
-const USER_TIER = getSellerTierTitle();
+import PreviewPopup from "./storeFrontTheme/components/PreviewPopup";
+import { setConsualtTheme, getThemeListing } from "@/services/theme.service";
 
 /**
  * Returns a display label + color class for the verification status
@@ -85,12 +57,35 @@ function getStatusBadge(status) {
   }
 }
 
+const getThemeMetadata = (theme) => {
+  const idStr = String(theme.themeId || theme.id || "").toLowerCase();
+
+  if (idStr.includes("premium")) {
+    return {
+      description: "Premium layout with high-converting custom widgets",
+      tier: "Premium",
+      usedCount: "512+",
+    };
+  } else if (idStr.includes("pro")) {
+    return {
+      description: "Professional multi-column grid with deep customizations",
+      tier: "Pro",
+      usedCount: "284+",
+    };
+  } else {
+    return {
+      description: "Simple clean layout for starters",
+      tier: "Basic",
+      usedCount: "346+",
+    };
+  }
+};
+
 export default function CreateStoreFront({ storeData, onView }) {
   const router = useRouter();
-
-  const handleClick = () => {
-    router.push(`storefront/theme`);
-  };
+  const [previewTheme, setPreviewTheme] = useState(null);
+  const [themes, setThemes] = useState([]);
+  const [loadingThemes, setLoadingThemes] = useState(true);
 
   const statusBadge = storeData
     ? getStatusBadge(storeData.verificationStatus)
@@ -100,87 +95,129 @@ export default function CreateStoreFront({ storeData, onView }) {
     storeData?.verificationStatus &&
     !["VERIFIED", "REQUEST_CHANGES"].includes(storeData.verificationStatus);
 
+  const USER_TIER = getSellerTierTitle() || "BASIC";
+
+  useEffect(() => {
+    const fetchThemes = async () => {
+      setLoadingThemes(true);
+      try {
+        const data = await getThemeListing();
+        setThemes(data.data || []);
+      } catch (error) {
+        console.error("Failed to fetch themes:", error);
+      } finally {
+        setLoadingThemes(false);
+      }
+    };
+    fetchThemes();
+  }, []);
+
+  const tierThemes = themes.filter((theme) => {
+    const idLower = String(theme.themeId || theme.id || "").toLowerCase();
+    if (USER_TIER === "PRO") return idLower.includes("pro");
+    if (USER_TIER === "PREMIUM" || USER_TIER === "ADVANCE")
+      return idLower.includes("premium");
+    return (
+      idLower.includes("basic") ||
+      (!idLower.includes("pro") && !idLower.includes("premium"))
+    );
+  });
+
+  const handleExploreAll = () => {
+    if (isStatusLocked) return;
+    router.push(`storefront/theme`);
+  };
+
   return (
     <section className="space-y-10">
       {/* HEADER */}
-      <div>
-        <h1 className="text-2xl font-bold">Your Storefront Plan</h1>
-        <p className="text-third text-sm">
-          Your subscription defines your storefront capabilities
-        </p>
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+        <div>
+          <h1 className="text-2xl font-bold">Choose a Storefront Theme</h1>
+          <p className="text-third text-sm">
+            Select a template designed specifically for your subscription tier
+            to start building your brand.
+          </p>
+        </div>
+        <Button
+          onClick={handleExploreAll}
+          variant="outlineSecondary"
+          size="sm"
+          disabled={isStatusLocked}
+        >
+          Explore All Themes
+        </Button>
       </div>
 
-      {/* TIERS */}
-      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-        {TIERS.map((tier) => {
-          const isAllowed = USER_TIER === tier.id;
+      {/* THEMES GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {loadingThemes
+          ? Array.from({ length: 3 }).map((_, index) => (
+              <div
+                key={index}
+                className="relative rounded-3xl border border-third/30 overflow-hidden h-[300px] bg-secondary animate-pulse"
+              >
+                <div className="h-full w-full bg-third/10" />
+              </div>
+            ))
+          : tierThemes.map((theme) => {
+              const meta = getThemeMetadata(theme);
 
-          return (
-            <div
-              key={tier.id}
-              className={`rounded-xl border p-6 flex flex-col min-h-[320px] md:h-auto lg:h-[340px] transition-all duration-300
-                ${
-                  isAllowed
-                    ? isStatusLocked
-                      ? "border-primary/50 opacity-80 cursor-not-allowed"
-                      : "hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] border-primary ring-2 ring-primary/50 shadow-[0_0_20px_rgba(255,255,255,0.1)] cursor-pointer"
-                    : "border-third/30 opacity-60 pointer-events-none"
-                }`}
-            >
-              {/* Top */}
-              <div className="space-y-6 flex-1">
-                <div className="flex justify-between items-start">
-                  <h3 className="text-xl font-bold leading-tight">
-                    {tier.name}
-                    <div className="text-sm text-third font-normal mt-1">
-                      {tier.label} Listing
-                    </div>
-                  </h3>
-                  {isAllowed ? (
-                    <CheckCircle2 className="text-primary mt-1" size={20} />
-                  ) : (
-                    <Lock size={18} className="text-third mt-1" />
-                  )}
+              return (
+                <div
+                  key={theme.id}
+                  onClick={() => !isStatusLocked && setPreviewTheme(theme)}
+                  className={`relative group h-[300px] rounded-3xl overflow-hidden border transition-all duration-300 hover:scale-[1.01] bg-secondary flex flex-col justify-end
+                    ${
+                      isStatusLocked
+                        ? "border-third/20 opacity-80 cursor-not-allowed"
+                        : "border-third/30 hover:border-primary hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] cursor-pointer shadow-lg"
+                    }`}
+                >
+                  {/* Background Image */}
+                  <div className="absolute inset-0">
+                    <Image
+                      src={theme.thumbnail}
+                      alt={theme.name}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-linear-to-t from-black/95 via-black/40 to-transparent transition-opacity duration-300 group-hover:from-black" />
+
+                  {/* Top-Right Pill (Theme Tier) */}
+                  <div className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md text-white/90 text-xs border border-white/10 select-none">
+                    <Award size={12} className="text-white/80" />
+                    <span className="font-semibold">{meta.tier} Theme</span>
+                  </div>
+
+                  {/* Info Overlay */}
+                  <div className="relative z-10 p-6 flex flex-col gap-1.5 select-none w-full">
+                    <h3 className="text-lg font-bold text-white leading-tight">
+                      {theme.name}
+                    </h3>
+                    <p className="text-xs text-white/70 font-normal line-clamp-2">
+                      {meta.description}
+                    </p>
+                  </div>
                 </div>
-
-                {/* FEATURES */}
-                <ul className="text-sm text-third space-y-3 leading-relaxed">
-                  {tier.features.map((f, i) => (
-                    <li key={i} className="flex gap-2">
-                      <span className="text-primary">•</span> {f}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Bottom fixed */}
-              <div className="mt-6 pt-4 border-t border-third/10">
-                {isAllowed ? (
-                  <Button
-                    onClick={handleClick}
-                    variant="ghost"
-                    full
-                    size="sm"
-                    showIcon={!isStatusLocked}
-                    locked={isStatusLocked}
-                  >
-                    {isStatusLocked
-                      ? storeData.verificationStatus === "REQUESTED" ||
-                        storeData.verificationStatus === "PENDING"
-                        ? `Use ${tier.label} Storefront`
-                        : "Locked"
-                      : `Use ${tier.label} Storefront`}
-                  </Button>
-                ) : (
-                  <Button full disabled size="sm" variant="ghost">
-                    Locked <Lock className="ml-3" size={16} />
-                  </Button>
-                )}
-              </div>
-            </div>
-          );
-        })}
+              );
+            })}
       </div>
+
+      {previewTheme && (
+        <PreviewPopup
+          theme={previewTheme}
+          onClose={() => setPreviewTheme(null)}
+          onSelect={(selected) => {
+            router.push(
+              `/consult/dashboard/storefront/theme/create?theme=${selected.themeId || selected.id}`,
+            );
+          }}
+        />
+      )}
 
       {/* ─── STOREFRONT DRAFT TABLE (only when data exists) ─── */}
       {storeData && (
@@ -284,10 +321,10 @@ export default function CreateStoreFront({ storeData, onView }) {
         <h2 className="text-xl font-semibold">Why your Storefront matters</h2>
 
         <p className="text-third text-sm leading-relaxed max-w-4xl">
-          Your Storefront is your public brand page on Reecomm. This is what buyers
-          see when they click your profile, listings, and ads. A well-designed
-          storefront builds instant trust, improves conversions, and positions
-          your dealership as a verified premium seller.
+          Your Storefront is your public brand page on Reecomm. This is what
+          buyers see when they click your profile, listings, and ads. A
+          well-designed storefront builds instant trust, improves conversions,
+          and positions your dealership as a verified premium seller.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">

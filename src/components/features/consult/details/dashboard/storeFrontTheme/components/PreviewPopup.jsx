@@ -39,7 +39,7 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
 
   const handleUseTheme = async () => {
     try {
-      const res = await setConsualtTheme(theme.themeId);
+      const res = await setConsualtTheme(theme.themeId || theme.id);
       onSelect?.(theme);
       onClose?.();
     } catch (error) {

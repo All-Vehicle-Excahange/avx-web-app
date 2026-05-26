@@ -12,13 +12,14 @@ export default function Button({
   locked = false,
   loading = false,
   className = "",
+  disabled = false,
   ...props
 }) {
   const isRounded = variant === "roundedOutline";
   const isOutline = variant === "outline";
   const isOutlineAnimated = variant === "outlineAnimated";
 
-  const isLocked = locked || loading;
+  const isLocked = locked || loading || disabled;
 
   const base = cn(
     "inline-flex items-center justify-center font-medium select-none transition-all relative z-10 group overflow-hidden",

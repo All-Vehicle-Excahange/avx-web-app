@@ -1,5 +1,16 @@
 import React, { useState } from "react";
-import { Search, ChevronDown, ChevronUp, ArrowRight, Plus, HelpCircle, BookOpen, Inbox, CheckCircle2, Clock } from "lucide-react";
+import {
+  Search,
+  ChevronDown,
+  ChevronUp,
+  ArrowRight,
+  Plus,
+  HelpCircle,
+  BookOpen,
+  Inbox,
+  CheckCircle2,
+  Clock,
+} from "lucide-react";
 import Button from "@/components/ui/button";
 import { CATEGORIES } from "./mockData";
 import * as LucideIcons from "lucide-react";
@@ -11,15 +22,24 @@ export default function HelpCenterHome({
   onNavigate,
   onSelectArticle,
   searchQuery,
-  setSearchQuery
+  setSearchQuery,
 }) {
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
   // Compute stat counters from tickets
-  const openCount = tickets.filter(t => t.status === "Open" || t.status === "In Progress" || t.status === "Awaiting Reply").length;
-  const resolvedCount = tickets.filter(t => t.status === "Resolved").length;
+  const openCount = tickets.filter(
+    (t) =>
+      t.status === "Open" ||
+      t.status === "In Progress" ||
+      t.status === "Awaiting Reply",
+  ).length;
+  const resolvedCount = tickets.filter((t) => t.status === "Resolved").length;
 
-  const faqs = articles.filter(a => a.categoryId === "inspection" || a.categoryId === "storefront").slice(0, 4);
+  const faqs = articles
+    .filter(
+      (a) => a.categoryId === "inspection" || a.categoryId === "storefront",
+    )
+    .slice(0, 4);
 
   const handleFaqToggle = (index) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
@@ -33,9 +53,10 @@ export default function HelpCenterHome({
 
   // Filtered articles based on search
   const filteredArticles = searchQuery.trim()
-    ? articles.filter(a =>
-        a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        a.content.toLowerCase().includes(searchQuery.toLowerCase())
+    ? articles.filter(
+        (a) =>
+          a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          a.content.toLowerCase().includes(searchQuery.toLowerCase()),
       )
     : [];
 
@@ -45,7 +66,9 @@ export default function HelpCenterHome({
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Help Center</h1>
-          <p className="text-third text-sm">Find answers or raise a support ticket</p>
+          <p className="text-third text-sm">
+            Find answers or raise a support ticket
+          </p>
         </div>
         <Button
           onClick={() => onNavigate("create")}
@@ -92,14 +115,16 @@ export default function HelpCenterHome({
                 </div>
               ))
             ) : (
-              <div className="p-4 text-sm text-third text-center">No articles found matching your query</div>
+              <div className="p-4 text-sm text-third text-center">
+                No articles found matching your query
+              </div>
             )}
           </div>
         )}
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         <StatCard
           icon={<BookOpen size={18} />}
           label="Help articles"
@@ -115,23 +140,20 @@ export default function HelpCenterHome({
           label="Resolved tickets"
           value={resolvedCount}
         />
-        <StatCard
-          icon={<Clock size={18} />}
-          label="Avg response time"
-          value="~2h"
-        />
       </div>
 
       {/* Browse by Category */}
       <div className="space-y-4">
-        <h2 className="text-lg font-semibold tracking-tight">Browse by Category</h2>
+        <h2 className="text-lg font-semibold tracking-tight">
+          Browse by Category
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {CATEGORIES.map((cat) => (
             <div
               key={cat.id}
               onClick={() => {
                 // Find first article in category to view
-                const catArt = articles.find(a => a.categoryId === cat.id);
+                const catArt = articles.find((a) => a.categoryId === cat.id);
                 if (catArt) {
                   onSelectArticle(catArt);
                   onNavigate("article");
@@ -199,7 +221,9 @@ export default function HelpCenterHome({
       <div className="bg-primary/5 border border-third/15 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
         <div>
           <h3 className="text-sm font-semibold">Have existing tickets?</h3>
-          <p className="text-xs text-third mt-1">Track issues and communication with our support team.</p>
+          <p className="text-xs text-third mt-1">
+            Track issues and communication with our support team.
+          </p>
         </div>
         <Button
           onClick={() => onNavigate("my-tickets")}

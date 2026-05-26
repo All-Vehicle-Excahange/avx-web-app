@@ -46,7 +46,7 @@ export default function AnalyticsSkeleton({ isBasic }) {
       </div>
 
       {/* Demand Grid Skeleton */}
-      <div className={`grid gap-6 ${isBasic ? "grid-cols-1" : "md:grid-cols-2"}`}>
+      <div className="grid gap-6 md:grid-cols-2">
         <div className="border border-third/20 rounded-xl p-6 space-y-6">
           <SkeletonBox className="h-5 w-36" />
           <div className="space-y-5">
@@ -62,22 +62,20 @@ export default function AnalyticsSkeleton({ isBasic }) {
           </div>
         </div>
 
-        {!isBasic && (
-          <div className="border border-third/20 rounded-xl p-6 space-y-6">
-            <SkeletonBox className="h-5 w-36" />
-            <div className="space-y-5">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="space-y-2">
-                  <div className="flex justify-between">
-                    <SkeletonBox className="h-3 w-20" />
-                    <SkeletonBox className="h-3 w-10" />
-                  </div>
-                  <SkeletonBox className="h-2 w-full" rounded="rounded-full" />
+        <div className="border border-third/20 rounded-xl p-6 space-y-6">
+          <SkeletonBox className="h-5 w-36" />
+          <div className="space-y-5">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="space-y-2">
+                <div className="flex justify-between">
+                  <SkeletonBox className="h-3 w-20" />
+                  <SkeletonBox className="h-3 w-10" />
                 </div>
-              ))}
-            </div>
+                <SkeletonBox className="h-2 w-full" rounded="rounded-full" />
+              </div>
+            ))}
           </div>
-        )}
+        </div>
       </div>
 
       {/* Key Insights Skeleton */}

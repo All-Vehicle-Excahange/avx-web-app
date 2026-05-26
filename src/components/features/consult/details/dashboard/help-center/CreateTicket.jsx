@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import { ChevronRight, Upload, AlertCircle, ArrowLeft, ArrowRight, Check, Paperclip } from "lucide-react";
+import { ChevronRight, Upload, AlertCircle, ArrowLeft, ArrowRight, Check, Paperclip, X } from "lucide-react";
 import Button from "@/components/ui/button";
 import CustomSelect from "@/components/ui/custom-select";
 import InputField from "@/components/ui/inputField";
 import DropzoneUpload from "@/components/ui/DropzoneUpload";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { createHelpTicket } from "@/services/helpCenter.service";
+import { getInventoryVehicleQuery } from "@/queries/Seller.queries";
+import { toast } from "react-toastify";
 
 export default function CreateTicket({ onNavigate, onCreateTicket }) {
   const [step, setStep] = useState(1);
@@ -16,6 +20,8 @@ export default function CreateTicket({ onNavigate, onCreateTicket }) {
     description: "",
     attachments: []
   });
+
+  const { data: apiVehicles } = useQuery(getInventoryVehicleQuery());
 
   const categories = [
     "Storefront & Profile",
@@ -37,14 +43,6 @@ export default function CreateTicket({ onNavigate, onCreateTicket }) {
     "PPC & Boost Campaigns": ["Campaign paused unexpectedly", "CPC billing issue", "Boost not showing", "Other"],
     "Billing & Wallet": ["Wallet top-up not reflected", "Refund request", "Invoice request", "Other"]
   };
-
-  const vehicles = [
-    "None",
-    "Ford Ecosport TITANIUM 1.5L (Live)",
-    "Audi A6 2.0 TDI (Live)",
-    "BMW X1 sDrive20d (Live)",
-    "Hyundai i20 Asta (Draft)"
-  ];
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -100,6 +98,58 @@ export default function CreateTicket({ onNavigate, onCreateTicket }) {
     if (step > 1) setStep(step - 1);
   };
 
+  const createMutation = useMutation({
+    mutationFn: async (bodyFormData) => {
+      return createHelpTicket(bodyFormData);
+    },
+    onSuccess: (data) => {
+      toast.success("Help ticket submitted successfully!");
+      const ticketResponse = data?.data || {};
+      const newTicket = {
+        id: ticketResponse.id || `RC-${Math.floor(1000 + Math.random() * 9000)}`,
+        subject: formData.subject,
+        category: formData.category,
+        priority: formData.priority,
+        status: "Open",
+        lastUpdated: "Just now",
+        createdDate: new Date().toLocaleString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true
+        }),
+        assignedTo: "Support Team",
+        relatedVehicle: formData.relatedVehicle === "None" 
+          ? "None"
+          : (apiVehicles || []).find((v) => v.id === formData.relatedVehicle)
+            ? (() => {
+                const found = apiVehicles.find((v) => v.id === formData.relatedVehicle);
+                return `${found.makerName || ""} ${found.modelName || ""} ${found.variantName || ""}`.trim();
+              })()
+            : "None",
+        description: formData.description,
+        messages: [
+          {
+            sender: "user",
+            senderName: "You",
+            text: formData.description,
+            time: "Just now",
+            attachments: formData.attachments.length > 0 
+              ? formData.attachments.map(f => typeof f === "string" ? f : f.name) 
+              : undefined
+          }
+        ]
+      };
+      onCreateTicket(newTicket);
+    },
+    onError: (error) => {
+      console.error("Failed to create ticket:", error);
+      toast.error(error?.response?.data?.message || "Failed to submit ticket. Please try again.");
+    }
+  });
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (step < 3) {
@@ -108,39 +158,24 @@ export default function CreateTicket({ onNavigate, onCreateTicket }) {
     }
     if (!isStep1Valid || !isStep2Valid) return;
 
-    // Create the ticket object
-    const newTicket = {
-      id: `RC-${Math.floor(1000 + Math.random() * 9000)}`,
-      subject: formData.subject,
-      category: formData.category.replace(" Campaigns", "").replace(" & Profile", "").replace(" & Listings", "").replace(" & Trust", "").replace(" & Chats", "").replace(" & Wallet", ""),
-      priority: formData.priority,
-      status: "Open",
-      lastUpdated: "Just now",
-      createdDate: new Date().toLocaleString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true
-      }),
-      assignedTo: "Support Team",
-      relatedVehicle: formData.relatedVehicle,
-      description: formData.description,
-      messages: [
-        {
-          sender: "user",
-          senderName: "You",
-          text: formData.description,
-          time: "Just now",
-          attachments: formData.attachments.length > 0 
-            ? formData.attachments.map(f => typeof f === "string" ? f : f.name) 
-            : undefined
+    const bodyFormData = new FormData();
+    bodyFormData.append("category", formData.category);
+    bodyFormData.append("subCategory", formData.subCategory);
+    bodyFormData.append("priority", formData.priority.toUpperCase());
+    bodyFormData.append("subject", formData.subject);
+    bodyFormData.append("description", formData.description);
+    if (formData.relatedVehicle && formData.relatedVehicle !== "None") {
+      bodyFormData.append("vehicleId", formData.relatedVehicle);
+    }
+    if (formData.attachments && formData.attachments.length > 0) {
+      formData.attachments.forEach((file) => {
+        if (typeof file !== "string") {
+          bodyFormData.append("attachments", file);
         }
-      ]
-    };
+      });
+    }
 
-    onCreateTicket(newTicket);
+    createMutation.mutate(bodyFormData);
   };
 
   return (
@@ -275,7 +310,13 @@ export default function CreateTicket({ onNavigate, onCreateTicket }) {
                 <CustomSelect
                   value={formData.relatedVehicle}
                   onChange={(val) => handleInputChange("relatedVehicle", val)}
-                  options={vehicles.map((v) => ({ label: v, value: v }))}
+                  options={[
+                    { label: "None", value: "None" },
+                    ...(apiVehicles || []).map((v) => ({
+                      label: `${v.makerName || ""} ${v.modelName || ""} ${v.variantName || ""}`.trim() || `Vehicle #${v.id}`,
+                      value: v.id
+                    }))
+                  ]}
                   placeholder="Select related vehicle"
                   variant="transparent"
                 />
@@ -315,18 +356,110 @@ export default function CreateTicket({ onNavigate, onCreateTicket }) {
               <p className="text-[10px] text-third/60 ml-1">Minimum 10 characters. Please provide diagnostic details.</p>
             </div>
 
-            {/* Attachment Upload (Using global DropzoneUpload component) */}
-            <div className="pt-2">
-              <DropzoneUpload
-                label="Attachments (Optional)"
-                onChange={(file) => {
-                  setFormData(prev => ({
-                    ...prev,
-                    attachments: file ? [file] : []
-                  }));
+            {/* Attachment Upload */}
+            <div className="pt-2 space-y-3">
+              <label className="text-sm font-semibold text-primary ml-1">
+                Attachments (Optional)
+              </label>
+              
+              {/* Drag & Drop Area */}
+              <div
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const files = e.dataTransfer.files ? Array.from(e.dataTransfer.files) : [];
+                  const filtered = files.filter(f => f.type.startsWith("image/") || f.type.startsWith("video/"));
+                  if (filtered.length > 0) {
+                    setFormData(prev => ({
+                      ...prev,
+                      attachments: [...prev.attachments, ...filtered]
+                    }));
+                  }
                 }}
-                preview={formData.attachments[0] || null}
-              />
+                onClick={() => {
+                  const input = document.createElement("input");
+                  input.type = "file";
+                  input.multiple = true;
+                  input.accept = "image/*,video/*";
+                  input.onchange = (e) => {
+                    const files = Array.from(e.target.files);
+                    setFormData(prev => ({
+                      ...prev,
+                      attachments: [...prev.attachments, ...files]
+                    }));
+                  };
+                  input.click();
+                }}
+                className="cursor-pointer rounded-xl border-2 border-dashed border-third/40 bg-primary/5 hover:border-primary transition p-6 text-center w-full"
+              >
+                <div className="flex flex-col items-center justify-center space-y-2 py-2">
+                  <Upload className="w-10 h-10 text-primary/40" />
+                  <p className="text-third text-sm font-medium">
+                    Drag and drop photos or videos here, or click to browse
+                  </p>
+                  <p className="text-[11px] text-third/60">
+                    Supports multiple image and video files (PNG, JPG, WEBP, MP4, MOV, etc.)
+                  </p>
+                </div>
+              </div>
+
+              {/* Preview Grid */}
+              {formData.attachments.length > 0 && (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
+                  {formData.attachments.map((file, idx) => {
+                    const isImg = file.type && file.type.startsWith("image/");
+                    const isVid = file.type && file.type.startsWith("video/");
+                    const displayUrl = URL.createObjectURL(file);
+                    const fileSize = (file.size / (1024 * 1024)).toFixed(2) + " MB";
+
+                    return (
+                      <div key={idx} className="relative group border border-third/15 rounded-xl overflow-hidden bg-black/40 h-28 flex flex-col justify-between">
+                        {/* Preview Media */}
+                        {isImg ? (
+                          <img
+                            src={displayUrl}
+                            alt={file.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : isVid ? (
+                          <div className="w-full h-full flex items-center justify-center bg-black/60 text-white relative">
+                            <video src={displayUrl} className="w-full h-full object-cover opacity-70" />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <span className="bg-primary/80 text-secondary text-[10px] font-bold uppercase px-2 py-0.5 rounded">Video</span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="w-full h-full flex flex-col items-center justify-center p-2 text-center text-third">
+                            <Paperclip size={24} />
+                            <span className="text-[10px] truncate max-w-full mt-1">{file.name}</span>
+                          </div>
+                        )}
+
+                        {/* File details overlay on hover */}
+                        <div className="absolute inset-0 bg-black/75 opacity-0 group-hover:opacity-100 transition duration-200 flex flex-col justify-between p-2">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setFormData(prev => ({
+                                ...prev,
+                                attachments: prev.attachments.filter((_, i) => i !== idx)
+                              }));
+                            }}
+                            className="self-end p-1 bg-red-500 hover:bg-red-600 text-white rounded-full transition cursor-pointer"
+                          >
+                            <X size={12} />
+                          </button>
+                          <div className="text-[10px] text-white space-y-0.5">
+                            <p className="font-semibold truncate">{file.name}</p>
+                            <p className="text-gray-400">{fileSize}</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -346,9 +479,16 @@ export default function CreateTicket({ onNavigate, onCreateTicket }) {
                     </span>
                     <h2 className="text-lg font-bold text-primary mt-1">{formData.subject || "—"}</h2>
                   </div>
-                  {formData.relatedVehicle && (
+                  {formData.relatedVehicle && formData.relatedVehicle !== "None" && (
                     <div className="text-xs bg-primary/5 border border-third/15 px-3 py-1.5 rounded-lg text-third">
-                      Vehicle: <span className="text-primary font-medium">{formData.relatedVehicle}</span>
+                      Vehicle: <span className="text-primary font-medium">
+                        {(apiVehicles || []).find((v) => v.id === formData.relatedVehicle)
+                          ? (() => {
+                              const found = apiVehicles.find((v) => v.id === formData.relatedVehicle);
+                              return `${found.makerName || ""} ${found.modelName || ""} ${found.variantName || ""}`.trim();
+                            })()
+                          : formData.relatedVehicle}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -427,8 +567,9 @@ export default function CreateTicket({ onNavigate, onCreateTicket }) {
               type="submit"
               variant="ghost"
               className="flex items-center gap-1 cursor-pointer"
+              disabled={createMutation.isPending}
             >
-              Submit Ticket
+              {createMutation.isPending ? "Submitting..." : "Submit Ticket"}
             </Button>
           )}
         </div>
