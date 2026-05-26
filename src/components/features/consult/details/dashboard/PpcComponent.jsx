@@ -19,6 +19,7 @@ import {
   CircleDollarSign,
   CheckCircle,
   Lock,
+  Crown,
 } from "lucide-react";
 import { getSellerTierTitle } from "@/lib/helper";
 import Button from "@/components/ui/button";
@@ -38,6 +39,7 @@ import {
 import { useRouter } from "next/navigation";
 import StatCard from "./components/StateCard";
 import ResultsModal from "./components/ResultsModal";
+import UpgradeTierPopup from "./components/UpgradeTierPopup";
 
 // --- Mock Data ---
 const audienceData = [
@@ -126,9 +128,14 @@ export default function PpcComponent() {
   const [range, setRange] = useState("60");
   const [openCustomize, setOpenCustomize] = useState(false);
   const [tier, setTier] = useState(null);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   useEffect(() => {
-    setTier(getSellerTierTitle() || "BASIC");
+    const currentTier = getSellerTierTitle() || "BASIC";
+    setTier(currentTier);
+    if (currentTier === "BASIC") {
+      setShowUpgradeModal(true);
+    }
   }, []);
 
   // State for the new "View Results" modal
@@ -696,6 +703,9 @@ export default function PpcComponent() {
           ad={selectedAd}
         />
       )}
+
+      {/* UPGRADE PLAN POPUP FOR BASIC TIER */}
+      <UpgradeTierPopup isOpen={showUpgradeModal} />
     </section>
   );
 }

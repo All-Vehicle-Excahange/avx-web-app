@@ -772,6 +772,8 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                   const messages = profileStrength?.messages || [];
 
                   if (isConsultant) {
+                    const isSubscribed = userRole === "CONSULTATION";
+
                     // 1. Storefront Priority
                     const storefrontMsg = messages.find((m) =>
                       ["CREATE_STOREFRONT", "FIX_STOREFRONT"].includes(m.type),
@@ -779,7 +781,9 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                     if (storefrontMsg) {
                       return {
                         label: "Create StoreFront",
-                        href: "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Fstorefront",
+                        href: isSubscribed
+                          ? "/consult/dashboard/storefront"
+                          : "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Fstorefront",
                       };
                     }
 
@@ -790,7 +794,9 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                     if (inventoryMsg) {
                       return {
                         label: "List Vehicles",
-                        href: "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Finventory",
+                        href: isSubscribed
+                          ? "/consult/dashboard/inventory"
+                          : "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Finventory",
                       };
                     }
 
@@ -810,13 +816,17 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                       }
                       return {
                         label: labelText,
-                        href: "/consult/subscription",
+                        href: isSubscribed
+                          ? "/consult/dashboard/overview"
+                          : "/consult/subscription",
                       };
                     }
 
                     return {
                       label: "Go to Dashboard",
-                      href: "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Foverview",
+                      href: isSubscribed
+                        ? "/consult/dashboard/overview"
+                        : "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Foverview",
                     };
                   }
 
