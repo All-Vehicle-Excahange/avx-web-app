@@ -1,11 +1,12 @@
 import React from "react";
+import Link from "next/link";
 
 export default function SummaryPanel({ placement, billing, vehicle, dailyBudget, maxBid, campaignType }) {
   const isCPI = billing === "CPI";
   const totalSpend = dailyBudget * 30;
 
   return (
-    <div className="w-full lg:w-[320px] flex-shrink-0 bg-transparent p-6 space-y-6 flex flex-col justify-between">
+    <div className="w-full lg:w-[320px] shrink-0 bg-transparent p-6 space-y-6 flex flex-col justify-between">
       <div className="space-y-5">
         <h3 className="text-xs font-bold text-third uppercase tracking-widest">
           Boost summary
@@ -83,9 +84,17 @@ export default function SummaryPanel({ placement, billing, vehicle, dailyBudget,
       </div>
 
       <div className="space-y-4 pt-6">
-        <div>
-          <span className="text-[11px] text-third font-medium block">Wallet balance</span>
-          <span className="text-sm font-bold text-[#1D9E75] block mt-0.5">₹8,240</span>
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <span className="text-[11px] text-third font-medium block">Wallet balance</span>
+            <span className="text-sm font-bold text-[#1D9E75] block mt-0.5">₹8,240</span>
+          </div>
+          <Link
+            href="/consult/dashboard/billing"
+            className="text-[10px] font-semibold bg-primary text-secondary px-3 py-1.5 rounded-full hover:opacity-90 active:scale-95 transition-all whitespace-nowrap"
+          >
+            Add Fund
+          </Link>
         </div>
         
         <div>
