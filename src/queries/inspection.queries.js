@@ -6,6 +6,8 @@ import {
   getRequestedFromBuyers,
   getScoreBreakdown,
   getVehiclesRequiringAttention,
+  getInspectionPriceAndCount,
+  getInspectionPricForBuyer,
 } from "@/services/inspection.service";
 import { queryOptions } from "@tanstack/react-query";
 
@@ -126,4 +128,24 @@ export const getAllInsprectionRequestInfiniteQuery = (payload) => {
     },
     staleTime: 1000 * 10 * 60, // 10 minits
   };
+};
+
+export const getInspectionPriceAndCountQuery = (vehicleId) => {
+  return queryOptions({
+    queryKey: ["inspection-price-count", vehicleId],
+    queryFn: async () => {
+      const res = await getInspectionPriceAndCount(vehicleId);
+      return res?.data;
+    },
+  });
+};
+
+export const getInspectionPricForBuyerQuery = (vehicleId) => {
+  return queryOptions({
+    queryKey: ["inspection-price-count-for-buyer", vehicleId],
+    queryFn: async () => {
+      const res = await getInspectionPricForBuyer(vehicleId);
+      return res?.data;
+    },
+  });
 };

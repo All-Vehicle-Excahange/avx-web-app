@@ -1,11 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Calendar, Clock, X } from "lucide-react";
+import { X } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import Select from "react-select";
 import {
   complateInspectionPayment,
   createInpection,
@@ -13,33 +10,36 @@ import {
 import toast from "react-hot-toast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getInspectionByVehicleIdQuery } from "@/queries/vehicle.queries";
+import { getInspectionPriceAndCountQuery } from "@/queries/inspection.queries";
 
 export default function InspectionRequestModal({
   isOpen,
   onClose,
   vehicle,
-  initialInspectionType = "report",
 }) {
   const queryClient = useQueryClient();
   const [animate, setAnimate] = useState(false);
-  const [inspectionType, setInspectionType] = useState(initialInspectionType);
-  const [inspectionDate, setInspectionDate] = useState(null);
-  const [inspectionTime, setInspectionTime] = useState(null);
-  const [mobileNumber, setMobileNumber] = useState("");
   const [step, setStep] = useState(1);
   const [createdInspectionId, setCreatedInspectionId] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    if (isOpen) {
-      setInspectionType(initialInspectionType);
-    }
-  }, [isOpen, initialInspectionType]);
 
   const { data: existingInspection } = useQuery({
     ...getInspectionByVehicleIdQuery(vehicle?.id),
     enabled: !!vehicle?.id && isOpen,
   });
+
+  const { data: priceAndCountData } = useQuery({
+    ...getInspectionPriceAndCountQuery(vehicle?.id),
+    enabled: !!vehicle?.id && isOpen,
+  });
+
+  const freeInspectionCount = priceAndCountData?.freeInspectionRemainCount ?? 0;
+  const totalFreeInspection = priceAndCountData?.totalFreeInspectionCount ?? 0;
+  const originalPrice = priceAndCountData?.originalPrice ?? 1499;
+  const discountPrice = priceAndCountData?.discountPrice ?? 1499;
+  const discount = priceAndCountData?.discount ?? 0;
+  const isFree = freeInspectionCount > 0;
+  const displayPrice = isFree ? 0 : discountPrice;
 
   useEffect(() => {
     if (isOpen) {
@@ -54,42 +54,7 @@ export default function InspectionRequestModal({
     }
   }, [isOpen]);
 
-  useEffect(() => {
-    const initUser = () => {
-      if (typeof window !== "undefined") {
-        const savedUser = localStorage.getItem("user");
-        if (savedUser) {
-          try {
-            const userObj = JSON.parse(savedUser);
-            if (userObj) {
-              setMobileNumber(
-                userObj.phoneNumber || userObj.phone || userObj.mobile || "",
-              );
-            }
-          } catch (e) {
-            console.error("Error parsing user from localStorage", e);
-          }
-        }
-      }
-    };
-    initUser();
-  }, [isOpen]);
-
   if (!isOpen) return null;
-
-  const generateTimeSlots = () => {
-    const slots = [];
-    for (let hour = 9; hour <= 21; hour++) {
-      for (let min of ["00", "30"]) {
-        const h = hour > 12 ? hour - 12 : hour;
-        const ampm = hour >= 12 ? "PM" : "AM";
-        const label = `${h}:${min} ${ampm}`;
-        slots.push({ value: label, label: label });
-      }
-    }
-    return slots;
-  };
-  const timeOptions = generateTimeSlots();
 
   const handleClose = () => {
     setAnimate(false);
@@ -101,68 +66,26 @@ export default function InspectionRequestModal({
     }, 300);
   };
 
-  const parseTime = (timeStr) => {
-    if (!timeStr) return { hours: 0, minutes: 0 };
-    const [time, modifier] = timeStr.split(" ");
-    let [hoursStr, minutesStr] = time.split(":");
-    let hours = parseInt(hoursStr, 10);
-    const minutes = parseInt(minutesStr, 10);
-    if (modifier === "PM" && hours < 12) hours += 12;
-    if (modifier === "AM" && hours === 12) hours = 0;
-    return { hours, minutes };
-  };
-
-  const formatLocalDateTime = (date, timeObj) => {
-    if (!date || !timeObj) return "";
-    const parsed = parseTime(timeObj.value);
-    const d = new Date(date);
-    d.setHours(parsed.hours, parsed.minutes, 0, 0);
-    const pad = (n) => String(n).padStart(2, "0");
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-  };
-
   const handleConfirm = async () => {
     if (!vehicle?.id) {
       toast.error("Vehicle information is not available.");
       return;
     }
-    if (inspectionType === "video") {
-      if (!mobileNumber.trim()) {
-        toast.error("Please enter your WhatsApp number.");
-        return;
-      }
-      if (!inspectionDate) {
-        toast.error("Please select a preferred date.");
-        return;
-      }
-      if (!inspectionTime) {
-        toast.error("Please select a preferred time.");
-        return;
-      }
-    }
     setIsSubmitting(true);
     try {
-      const payload =
-        inspectionType === "video"
-          ? {
-              inspectionType: "VIDEO_CALL_WITH_REPORT",
-              whatsappNumber: mobileNumber,
-              videoCallScheduledAt: formatLocalDateTime(
-                inspectionDate,
-                inspectionTime,
-              ),
-            }
-          : { inspectionType: "REPORT_ONLY" };
+      const payload = { inspectionType: "REPORT_ONLY" };
       const response = await createInpection(vehicle.id, payload);
       if (response?.success) {
         const id = response.data?.id || response.id;
         if (id) {
           setCreatedInspectionId(id);
-          setStep(2);
+          setStep(2); // Go to step 2 (summary page) for both free and paid
           queryClient.invalidateQueries({
             queryKey: ["inspection-by-vehicle", vehicle.id],
           });
-        } else toast.error("Failed to retrieve request ID.");
+        } else {
+          toast.error("Failed to retrieve request ID.");
+        }
       } else {
         toast.error(
           response?.message || "Failed to create inspection request.",
@@ -198,49 +121,66 @@ export default function InspectionRequestModal({
     }
     setIsSubmitting(true);
     try {
-      const isScriptLoaded = await loadRazorpayScript();
-      if (!isScriptLoaded) {
-        toast.error(
-          "Razorpay SDK failed to load. Please check your connection.",
-        );
-        return;
-      }
-
       const response = await complateInspectionPayment(targetId);
-      if (response?.success && response?.data) {
-        const orderData = response.data;
-        const options = {
-          key: orderData.keyId,
-          amount: Math.round(orderData.amount * 100),
-          currency: orderData.currency || "INR",
-          name: "Reecomm",
-          description: "Vehicle Inspection Payment",
-          order_id: orderData.razorpayOrderId,
-          handler: async function (paymentResponse) {
-            setStep(3);
-            queryClient.invalidateQueries({
-              queryKey: ["inspection-by-vehicle", vehicle.id],
-            });
-            toast.success("Payment completed successfully!");
-            setTimeout(() => {
-              handleClose();
-            }, 3000);
-          },
-          theme: {
-            color: "#007bff",
-          },
-          modal: {
-            ondismiss: function () {
-              toast.error("Payment cancelled.");
-            },
-          },
-        };
+      if (response?.success) {
+        if (isFree) {
+          setStep(3);
+          queryClient.invalidateQueries({
+            queryKey: ["inspection-by-vehicle", vehicle.id],
+          });
+          toast.success("Inspection request registered successfully!");
+          setTimeout(() => {
+            handleClose();
+          }, 3000);
+          return;
+        }
 
-        const rzp = new window.Razorpay(options);
-        rzp.on("payment.failed", function (failResponse) {
-          toast.error("Payment failed: " + failResponse.error.description);
-        });
-        rzp.open();
+        // For paid inspections, launch Razorpay payment workflow:
+        const isScriptLoaded = await loadRazorpayScript();
+        if (!isScriptLoaded) {
+          toast.error(
+            "Razorpay SDK failed to load. Please check your connection.",
+          );
+          return;
+        }
+
+        if (response.data) {
+          const orderData = response.data;
+          const options = {
+            key: orderData.keyId,
+            amount: Math.round(orderData.amount * 100),
+            currency: orderData.currency || "INR",
+            name: "Reecomm",
+            description: "Vehicle Inspection Payment",
+            order_id: orderData.razorpayOrderId,
+            handler: async function (paymentResponse) {
+              setStep(3);
+              queryClient.invalidateQueries({
+                queryKey: ["inspection-by-vehicle", vehicle.id],
+              });
+              toast.success("Payment completed successfully!");
+              setTimeout(() => {
+                handleClose();
+              }, 3000);
+            },
+            theme: {
+              color: "#007bff",
+            },
+            modal: {
+              ondismiss: function () {
+                toast.error("Payment cancelled.");
+              },
+            },
+          };
+
+          const rzp = new window.Razorpay(options);
+          rzp.on("payment.failed", function (failResponse) {
+            toast.error("Payment failed: " + failResponse.error.description);
+          });
+          rzp.open();
+        } else {
+          toast.error(response?.message || "Payment completion failed.");
+        }
       } else {
         toast.error(response?.message || "Payment completion failed.");
       }
@@ -391,17 +331,7 @@ export default function InspectionRequestModal({
               <div className="space-y-3">
                 <p className="text-sm font-medium">Choose inspection type</p>
                 <div className="space-y-3">
-                  <label
-                    className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all ${inspectionType === "report" ? "border-primary bg-primary/5" : "border-third/40 hover:bg-secondary/80"}`}
-                  >
-                    <input
-                      type="radio"
-                      name="inspection"
-                      value="report"
-                      checked={inspectionType === "report"}
-                      onChange={() => setInspectionType("report")}
-                      className="mt-1 accent-primary"
-                    />
+                  <div className="p-4 rounded-xl border border-primary bg-primary/5">
                     <div className="flex-1">
                       <p className="text-sm font-semibold">
                         Inspection Report Only
@@ -409,139 +339,32 @@ export default function InspectionRequestModal({
                       <p className="text-xs text-third mt-0.5">
                         Complete physical inspection with digital report
                       </p>
-                      <p className="text-sm font-medium mt-1">₹1,499</p>
+                      <div className="flex items-center justify-between mt-3 gap-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-semibold text-primary">
+                            {isFree ? "Free" : `₹${discountPrice.toLocaleString("en-IN")}`}
+                          </span>
+                          {!isFree && discount > 0 && (
+                            <>
+                              <span className="text-xs text-third line-through">
+                                ₹{originalPrice.toLocaleString("en-IN")}
+                              </span>
+                              <span className="text-xs text-green-500 font-medium">
+                                ({discount}% off)
+                              </span>
+                            </>
+                          )}
+                        </div>
+                        {priceAndCountData && (
+                          <span className="text-xs text-third">
+                            Free inspections remaining: {freeInspectionCount} / {totalFreeInspection}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </label>
-                  <label
-                    className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all ${inspectionType === "video" ? "border-primary bg-primary/5" : "border-third/40 hover:bg-secondary/80"}`}
-                  >
-                    <input
-                      type="radio"
-                      name="inspection"
-                      value="video"
-                      checked={inspectionType === "video"}
-                      onChange={() => setInspectionType("video")}
-                      className="mt-1 accent-primary"
-                    />
-                    <div className="flex-1">
-                      <p className="text-sm font-semibold">
-                        Personalize Video Call + Inspection Report
-                      </p>
-                      <p className="text-xs text-third mt-0.5">
-                        Live video walkthrough with inspector + detailed digital
-                        report
-                      </p>
-                      <p className="text-sm font-medium mt-1">₹1,999</p>
-                    </div>
-                  </label>
+                  </div>
                 </div>
               </div>
-
-              {inspectionType === "video" && (
-                <>
-                  <div className="rounded-xl border border-third/40 bg-secondary/60 p-4 space-y-4">
-                    <p className="text-sm font-semibold">WhatsApp Number</p>
-                    <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-third/40 bg-secondary focus-within:border-primary">
-                      <input
-                        type="tel"
-                        value={mobileNumber}
-                        onChange={(e) => setMobileNumber(e.target.value)}
-                        placeholder="Enter WhatsApp number"
-                        className="w-full text-sm bg-transparent focus:outline-none text-primary"
-                      />
-                    </div>
-                  </div>
-                  <div className="rounded-xl border border-third/40 bg-secondary/60 p-4 space-y-4">
-                    <div className="flex items-center gap-2">
-                      <Calendar size={16} className="text-primary" />
-                      <p className="text-sm font-semibold">
-                        Schedule Video Inspection
-                      </p>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-medium text-third">
-                          Preferred Date
-                        </label>
-                        <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-third/40 bg-secondary focus-within:border-primary">
-                          <Calendar size={14} className="text-third" />
-                          <DatePicker
-                            selected={inspectionDate}
-                            onChange={(date) => setInspectionDate(date)}
-                            dateFormat="MMMM d, yyyy"
-                            minDate={new Date()}
-                            placeholderText="Select Date"
-                            className="w-full text-sm bg-transparent focus:outline-none text-primary cursor-pointer"
-                            calendarClassName="dark-datepicker"
-                          />
-                        </div>
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-medium text-third">
-                          Preferred Time
-                        </label>
-                        <div className="flex items-center gap-2 px-3 py-1 rounded-lg border border-third/40 bg-secondary focus-within:border-primary">
-                          <Clock size={14} className="text-third" />
-                          <Select
-                            options={timeOptions}
-                            value={inspectionTime}
-                            onChange={(option) => setInspectionTime(option)}
-                            placeholder="Select Time"
-                            className="w-full text-sm"
-                            styles={{
-                              control: (b) => ({
-                                ...b,
-                                backgroundColor: "transparent",
-                                border: "none",
-                                boxShadow: "none",
-                                minHeight: "auto",
-                              }),
-                              singleValue: (b) => ({
-                                ...b,
-                                color: "#ffffff",
-                              }),
-                              placeholder: (b) => ({
-                                ...b,
-                                color: "#bebebe",
-                              }),
-                              menu: (b) => ({
-                                ...b,
-                                backgroundColor: "#121212",
-                                borderRadius: "12px",
-                                border: "1px solid #2f2e2e",
-                                zIndex: 100,
-                              }),
-                              menuList: (b) => ({ ...b, padding: "0" }),
-                              option: (b, s) => ({
-                                ...b,
-                                backgroundColor: s.isFocused
-                                  ? "rgba(255,255,255,0.1)"
-                                  : s.isSelected
-                                    ? "rgba(255,255,255,0.2)"
-                                    : "transparent",
-                                color: "#ffffff",
-                                cursor: "pointer",
-                              }),
-                              indicatorSeparator: () => ({
-                                display: "none",
-                              }),
-                              dropdownIndicator: (b) => ({
-                                ...b,
-                                color: "#bebebe",
-                                padding: "0 4px",
-                              }),
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-xs text-third leading-relaxed">
-                      Our inspector will confirm the exact slot based on
-                      availability.
-                    </p>
-                  </div>
-                </>
-              )}
 
               <div className="flex justify-end gap-3 pt-2">
                 <Button
@@ -561,43 +384,39 @@ export default function InspectionRequestModal({
           {step === 2 && (
             <>
               <h2 className="text-2xl font-bold text-center">
-                Complete your payment
+                {isFree ? "Confirm your request" : "Complete your payment"}
               </h2>
               <div className="border border-third/30 rounded-2xl p-5 space-y-4 bg-secondary/80">
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-third">Inspection Type</span>
                   <span className="font-semibold">
-                    {inspectionType === "video"
-                      ? "Video Call + Report"
-                      : "Inspection Report Only"}
+                    Inspection Report Only
                   </span>
                 </div>
-                {inspectionType === "video" && (
-                  <>
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-third">WhatsApp Number</span>
-                      <span className="font-semibold">{mobileNumber}</span>
-                    </div>
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-third">Scheduled Slot</span>
-                      <span className="font-semibold">
-                        {inspectionDate?.toLocaleDateString()} at{" "}
-                        {inspectionTime?.label}
-                      </span>
-                    </div>
-                  </>
-                )}
                 <div className="border-t border-third/30 my-2" />
                 <div className="flex justify-between items-center text-lg font-bold">
                   <span>Total Amount</span>
-                  <span>
-                    {inspectionType === "video" ? "₹1,999" : "₹1,499"}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-primary font-bold">
+                      {isFree ? "₹0 (Free)" : `₹${discountPrice.toLocaleString("en-IN")}`}
+                    </span>
+                    {!isFree && discount > 0 && (
+                      <>
+                        <span className="text-sm text-third line-through font-normal">
+                          ₹{originalPrice.toLocaleString("en-IN")}
+                        </span>
+                        <span className="text-xs text-green-500 font-semibold">
+                          ({discount}% off)
+                        </span>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
               <p className="text-xs text-third text-center">
-                By clicking Confirm Payment, you agree to complete the payment
-                workflow.
+                {isFree
+                  ? "By clicking Confirm Request, you agree to submit the inspection request."
+                  : "By clicking Confirm Payment, you agree to complete the payment workflow."}
               </p>
               <div className="flex justify-end gap-3 pt-2">
                 <Button
@@ -616,7 +435,7 @@ export default function InspectionRequestModal({
                   showIcon={false}
                   loading={isSubmitting}
                 >
-                  Confirm Payment
+                  {isFree ? "Confirm Request" : "Confirm Payment"}
                 </Button>
               </div>
             </>
@@ -641,7 +460,9 @@ export default function InspectionRequestModal({
                     />
                   </svg>
                 </div>
-                <h2 className="text-2xl font-bold">Payment Completed!</h2>
+                <h2 className="text-2xl font-bold">
+                  {isFree ? "Request Submitted!" : "Payment Completed!"}
+                </h2>
                 <p className="text-sm text-third max-w-sm">
                   Thank you! Your inspection request has been registered. Our
                   team will contact you shortly.

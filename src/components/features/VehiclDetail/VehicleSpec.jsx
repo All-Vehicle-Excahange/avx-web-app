@@ -18,6 +18,7 @@ import {
   getActiveInspectionQuery,
 } from "@/queries/vehicle.queries";
 import InspectionTrackingModal from "@/components/features/user/InspectionTrackingModal";
+import { getInspectionPricForBuyerQuery } from "@/queries/inspection.queries";
 
 export default function VehicleSpec({ open, setOpen, vehicle }) {
   const queryClient = useQueryClient();
@@ -36,6 +37,14 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
       ...getInspectionByVehicleIdQuery(vehicle?.id),
       enabled: !!vehicle?.id,
     });
+
+  const { data: priceData } = useQuery({
+    ...getInspectionPricForBuyerQuery(vehicle?.id),
+    enabled: !!vehicle?.id,
+  });
+
+  const reportOnlyPrice = priceData?.reportOnlyPrice ?? 1499;
+  const videoCallWithReportPrice = priceData?.videoCallWithReportPrice ?? 1999;
 
   useEffect(() => {
     const initUser = () => {
@@ -393,7 +402,7 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                             <p className="text-xs text-third mt-0.5">
                               Complete physical inspection with digital report
                             </p>
-                            <p className="text-sm font-medium mt-1">₹1,499</p>
+                            <p className="text-sm font-medium mt-1">₹{reportOnlyPrice.toLocaleString("en-IN")}</p>
                           </div>
                         </label>
                         {/* Video Call + Report */}
@@ -425,7 +434,7 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                               Live video walkthrough with inspector + detailed
                               digital report
                             </p>
-                            <p className="text-sm font-medium mt-1">₹1,999</p>
+                            <p className="text-sm font-medium mt-1">₹{videoCallWithReportPrice.toLocaleString("en-IN")}</p>
                           </div>
                         </label>
                       </div>
@@ -677,7 +686,7 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                           <p className="text-xs text-third mt-0.5">
                             Complete physical inspection with digital report
                           </p>
-                          <p className="text-sm font-medium mt-1">₹1,499</p>
+                          <p className="text-sm font-medium mt-1">₹{reportOnlyPrice.toLocaleString("en-IN")}</p>
                         </div>
                       </label>
                       <label
@@ -699,7 +708,7 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                             Live video walkthrough with inspector + detailed
                             digital report
                           </p>
-                          <p className="text-sm font-medium mt-1">₹1,999</p>
+                          <p className="text-sm font-medium mt-1">₹{videoCallWithReportPrice.toLocaleString("en-IN")}</p>
                         </div>
                       </label>
                     </div>
@@ -859,7 +868,7 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                     <div className="flex justify-between items-center text-lg font-bold">
                       <span>Total Amount</span>
                       <span>
-                        {inspectionType === "video" ? "₹1,999" : "₹1,499"}
+                        {inspectionType === "video" ? `₹${videoCallWithReportPrice.toLocaleString("en-IN")}` : `₹${reportOnlyPrice.toLocaleString("en-IN")}`}
                       </span>
                     </div>
                   </div>
