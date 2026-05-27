@@ -7,7 +7,7 @@ import { getOtp, login } from "@/services/auth.service";
 import { useForm } from "react-hook-form";
 
 function Login() {
-  const router = useRouter();
+  const { push } = useRouter();
 
   const {
     register,
@@ -79,7 +79,7 @@ function Login() {
       });
 
       if (res?.success || res?.status) {
-        router.push("/consult/subscription");
+        push("/consult/subscription");
       }
     } catch (err) {
       const api = err?.response?.data;

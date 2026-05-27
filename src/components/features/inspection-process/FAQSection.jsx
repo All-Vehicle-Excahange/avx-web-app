@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import { useState } from "react";
 import { Plus, Minus } from "lucide-react"; // Fixed the import here
@@ -42,15 +43,11 @@ export default function FAQSection() {
 
             {/* LEFT IMAGE */}
             <div className="lg:col-span-5 lg:sticky lg:top-10">
-              <img
-                src="/FAQ2.jpeg"
-                alt="Frequently asked questions illustration"
-                className="
+              <Image src="/FAQ2.jpeg" alt="Frequently asked questions illustration" width={800} height={500} className="
                   w-full h-auto object-contain
                   rounded-xl
                   shadow-lg
-                "
-              />
+                " />
             </div>
 
             {/* RIGHT FAQ */}

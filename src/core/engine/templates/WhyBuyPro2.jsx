@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 "use client";
+import Image from "next/image";
 
 import { useEffect, useRef, useState } from "react";
 import { CheckCircle2, Star } from "lucide-react";
@@ -1271,7 +1272,7 @@ export default function WhyBuyPro2({
                 {heroImages.length > 0 ? heroImages.map((src, i) => (
                   <div key={i} className={i === 2 ? "col-span-2" : "col-span-1"}>
                     <div className="bg-white rounded-xs" style={{ padding: "6px 6px 22px", boxShadow: "0 4px 18px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.07)", transform: `rotate(${rotations[i] * 0.4}deg)` }}>
-                      <img src={src} alt="car" loading="lazy" className="w-full object-cover rounded-[1px] block" style={{ height: i === 2 ? "140px" : "110px" }} />
+                      <Image src={src} alt="car" width={800} height={500} unoptimized className="w-full object-cover rounded-[1px] block" loading="lazy" style={{ height: i === 2 ? "140px" : "110px" }} />
                     </div>
                   </div>
                 )) : (
@@ -1286,7 +1287,7 @@ export default function WhyBuyPro2({
                 {heroImages.length > 0 ? heroImages.map((src, i) => (
                   <div key={i} className="absolute cursor-pointer" style={{ ...desktopPositions[i], zIndex: 5 + i }}>
                     <div className="bg-white rounded-xs w-[180px]" style={{ padding: "7px 7px 26px", boxShadow: "0 6px 28px rgba(0,0,0,0.14), 0 1px 4px rgba(0,0,0,0.07)" }}>
-                      <img src={src} alt="car" loading="lazy" className="w-full h-[120px] object-cover rounded-[1px] block" />
+                      <Image src={src} alt="car" width={800} height={500} unoptimized className="w-full h-[120px] object-cover rounded-[1px] block" loading="lazy" />
                     </div>
                   </div>
                 )) : (
@@ -1324,7 +1325,7 @@ export default function WhyBuyPro2({
             <div className="flex flex-col gap-4">
               {storyImages.length > 0 ? storyImages.slice(0, 2).map((img, i) => (
                 <div key={i} className="w-full h-40 rounded-xl overflow-hidden">
-                  <img src={img} loading="lazy" className="w-full h-full object-cover" />
+                  <Image src={img} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" loading="lazy" />
                 </div>
               )) : (
                 <div className="w-full h-40 bg-primary/10 border-2 border-dashed border-primary/20 rounded-xl flex items-center justify-center">
@@ -1364,7 +1365,7 @@ export default function WhyBuyPro2({
               <div className="grid grid-cols-3 gap-3 w-full h-full">
                 <div className="col-span-2 aspect-4/3 rounded-xl overflow-hidden">
                   {selectionImages[0] ? (
-                    <img src={selectionImages[0]} loading="lazy" className="w-full h-full object-cover" />
+                    <Image src={selectionImages[0]} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" loading="lazy" />
                   ) : (
                     <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                       <span className="text-third/40 text-xs">Image 1</span>
@@ -1375,7 +1376,7 @@ export default function WhyBuyPro2({
                   {[1, 2].map((idx) => (
                     <div key={idx} className="aspect-4/3 rounded-xl overflow-hidden">
                       {selectionImages[idx] ? (
-                        <img src={selectionImages[idx]} loading="lazy" className="w-full h-full object-cover" />
+                        <Image src={selectionImages[idx]} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" loading="lazy" />
                       ) : (
                         <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                           <span className="text-third/40 text-xs">Image {idx + 1}</span>
@@ -1511,7 +1512,7 @@ export default function WhyBuyPro2({
             {/* RIGHT — active image */}
             <div key={activeIndex} className="w-full h-[260px] rounded-xl overflow-hidden">
               {inspectionImages[activeIndex % Math.max(inspectionImages.length, 1)] ? (
-                <img src={inspectionImages[activeIndex % inspectionImages.length]} loading="lazy" className="w-full h-full object-cover" />
+                <Image src={inspectionImages[activeIndex % inspectionImages.length]} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" loading="lazy" />
               ) : (
                 <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-sm">Inspection image not set</span>
@@ -1549,7 +1550,7 @@ export default function WhyBuyPro2({
               {commitmentImages.length > 0 ? commitmentImages.map((img, i) => (
                 <div key={i} className={`relative rounded-xl overflow-hidden ${i === 1 ? "lg:scale-105 lg:-translate-y-2 z-10" : ""}`}>
                   <div className="w-full aspect-4/3">
-                    <img src={img} loading="lazy" className="w-full h-full object-cover transition duration-500 hover:scale-105" />
+                    <Image src={img} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover transition duration-500 hover:scale-105" loading="lazy" />
                   </div>
                 </div>
               )) : (
@@ -1580,7 +1581,7 @@ export default function WhyBuyPro2({
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 auto-rows-[120px]">
             <div className="col-span-2 row-span-2 rounded-xl overflow-hidden">
               {galleryImages[0] ? (
-                <img src={galleryImages[0]} loading="lazy" className="w-full h-full object-cover hover:scale-105 transition duration-500" />
+                <Image src={galleryImages[0]} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover hover:scale-105 transition duration-500" loading="lazy" />
               ) : (
                 <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-xs">Gallery 1</span>
@@ -1589,7 +1590,7 @@ export default function WhyBuyPro2({
             </div>
             <div className="col-span-1 row-span-1 rounded-xl overflow-hidden">
               {galleryImages[1] ? (
-                <img src={galleryImages[1]} loading="lazy" className="w-full h-full object-cover hover:scale-105 transition duration-500" />
+                <Image src={galleryImages[1]} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover hover:scale-105 transition duration-500" loading="lazy" />
               ) : (
                 <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-xs">Gallery 2</span>
@@ -1598,7 +1599,7 @@ export default function WhyBuyPro2({
             </div>
             <div className="col-span-1 row-span-2 rounded-xl overflow-hidden">
               {galleryImages[2] ? (
-                <img src={galleryImages[2]} loading="lazy" className="w-full h-full object-cover hover:scale-105 transition duration-500" />
+                <Image src={galleryImages[2]} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover hover:scale-105 transition duration-500" loading="lazy" />
               ) : (
                 <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-xs">Gallery 3</span>
@@ -1607,7 +1608,7 @@ export default function WhyBuyPro2({
             </div>
             <div className="col-span-1 row-span-1 rounded-xl overflow-hidden">
               {galleryImages[3] ? (
-                <img src={galleryImages[3]} loading="lazy" className="w-full h-full object-cover hover:scale-105 transition duration-500" />
+                <Image src={galleryImages[3]} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover hover:scale-105 transition duration-500" loading="lazy" />
               ) : (
                 <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-xs">Gallery 4</span>

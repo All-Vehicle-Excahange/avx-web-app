@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import {
   CheckCircle2,
@@ -86,11 +87,7 @@ export default function RankingDiagram() {
               {/* <div className="absolute w-40 h-40 rounded-full bg-fourth/5 blur-2xl animate-pulse"></div> */}
 
               <div className="group relative w-28 h-28 rounded-2xl overflow-hidden border border-fourth/20">
-                <img
-                  src="engine-core.jpg"
-                  alt="Ranking system core"
-                  className="w-full h-full object-cover transition-all duration-500 group-hover:filter-[blur(0px)_grayscale(0)] filter-[blur(1px)_grayscale(100%)]"
-                />
+                <Image src="engine-core.jpg" alt="Ranking system core" width={800} height={500} className="w-full h-full object-cover transition-all duration-500 group-hover:filter-[blur(0px)_grayscale(0)] filter-[blur(1px)_grayscale(100%)]" />
               </div>
 
               <h3 className="text-sm font-bold uppercase tracking-[0.3em] mt-6">

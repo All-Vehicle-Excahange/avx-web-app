@@ -36,7 +36,7 @@ export default function ThemeListing() {
   const [previewTheme, setPreviewTheme] = useState(null);
   const [themes, setThemes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
+  const { push } = useRouter();
 
   // call the API to get themes in frist load
 
@@ -58,12 +58,12 @@ export default function ThemeListing() {
 
   const handleSelect = (theme) => {
     // !This is for APi must be uncommented when API will be integrated
-    router.push(
+    push(
       `/consult/dashboard/storefront/theme/create?theme=${theme.themeId}`,
     );
 
     //  This is for local themes must be removed when API will be integrated
-    // router.push(`/consult/dashboard/storefront/theme/create?theme=${theme.id}`);
+    // push(`/consult/dashboard/storefront/theme/create?theme=${theme.id}`);
   };
   return (
     <>

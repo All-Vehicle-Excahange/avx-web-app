@@ -9,7 +9,7 @@ import Image from "next/image";
 import { X, CheckCircle2, Loader2 } from "lucide-react";
 
 function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
-  const router = useRouter();
+  const { push } = useRouter();
   const [form, setForm] = useState({
     panCardNumber: "",
     panCardFrontImage: null,
@@ -193,7 +193,7 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
       setIsSuccess(true);
       setTimeout(() => {
         handleClose();
-        router.push("/user/details/myprofile");
+        push("/user/details/myprofile");
       }, 2000); // auto close and navigate after 2 seconds
     } catch (err) {
       console.error("Seller verification failed:", err);

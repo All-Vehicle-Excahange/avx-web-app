@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import {
   AlertTriangle,
@@ -127,11 +128,7 @@ export default function DisputeHandling() {
           {/* RIGHT VISUAL */}
           <div className="lg:col-span-6">
             <div className="relative rounded-2xl overflow-hidden border border-primary/10">
-              <img
-                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1600&auto=format&fit=crop"
-                alt="Reecomm audit trail and inspection data review dashboard"
-                className="w-full h-55 md:h-65 object-cover opacity-95"
-              />
+              <Image src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1600&auto=format&fit=crop" alt="Reecomm audit trail and inspection data review dashboard" width={800} height={500} unoptimized className="w-full h-55 md:h-65 object-cover opacity-95" />
               <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
             </div>
           </div>

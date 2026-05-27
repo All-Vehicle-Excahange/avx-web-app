@@ -14,9 +14,9 @@ export default function ConsultantGridSection({
   showIsSponsored = false,
   loading = false,
 }) {
-  const router = useRouter();
+  const { push } = useRouter();
   const handleClick = () => {
-    router.push("/consult/premium");
+    push("/consult/premium");
   };
 
   return (

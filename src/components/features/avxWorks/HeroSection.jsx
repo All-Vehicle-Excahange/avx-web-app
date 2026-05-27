@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -129,10 +130,7 @@ export default function HeroSection() {
 
             {/* IMAGE */}
             <div className="absolute left-0 top-[55%] w-[88%] h-[30%] rounded-xl overflow-hidden border border-[#1f2937] shadow-[0_30px_80px_rgba(0,0,0,0.8)] z-30">
-              <img
-                src="/car-hero-21.jpg"
-                className="w-full h-full object-cover"
-              />
+              <Image src="/car-hero-21.jpg" alt="" width={800} height={500} className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-linear-to-t from-secondary/80 to-transparent" />
             </div>
 

@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
+import Image from "next/image";
 import {
   Camera,
   Check,
@@ -1291,16 +1292,11 @@ export default function WhyBuyPro3({
       {/* ===== Hero Section ===== */}
       <section className="relative w-full overflow-hidden min-h-screen">
         {heroImages[active] ? (
-          <img
-            src={heroImages[active]}
-            alt="vehicle"
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{
+          <Image src={heroImages[active]} alt="vehicle" fill unoptimized className="absolute inset-0 w-full h-full object-cover" style={{
               opacity: fading ? 0 : 1,
               transform: fading ? "scale(1.04)" : "scale(1)",
               transition: "opacity 0.5s ease, transform 0.5s ease",
-            }}
-          />
+            }} />
         ) : (
           <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
             <span className="text-third/40 text-sm">Hero images not set</span>
@@ -1344,7 +1340,7 @@ export default function WhyBuyPro3({
               </div>
               <div className="relative overflow-hidden rounded-2xl group lg:w-[26.5%] min-h-[500px] ">
                 {storyImages[0] ? (
-                  <img src={storyImages[0]} alt="" className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700" />
+                  <Image src={storyImages[0]} alt="" fill unoptimized className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700" />
                 ) : (
                   <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                     <span className="text-third/40 text-xs">Story image 1</span>
@@ -1356,7 +1352,7 @@ export default function WhyBuyPro3({
                 {[1, 2].map((idx) => (
                   <div key={idx} className="relative flex-1 overflow-hidden rounded-2xl group min-h-60">
                     {storyImages[idx] ? (
-                      <img src={storyImages[idx]} alt="" className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700" />
+                      <Image src={storyImages[idx]} alt="" fill unoptimized className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700" />
                     ) : (
                       <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                         <span className="text-third/40 text-xs">Story image {idx + 1}</span>
@@ -1390,18 +1386,18 @@ export default function WhyBuyPro3({
             </div>
             <div className="flex gap-4 h-[260px]">
               <div className="w-[48%] md:w-[35%] rounded-3xl overflow-hidden border border-third/10">
-                {vehicleSelectionImages[0] ? <img src={vehicleSelectionImages[0]} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 1</span></div>}
+                {vehicleSelectionImages[0] ? <Image src={vehicleSelectionImages[0]} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 1</span></div>}
               </div>
               <div className="w-[25%] flex flex-col gap-4 md:block">
                 <div className="h-1/2 rounded-2xl overflow-hidden border border-third/10">
-                  {vehicleSelectionImages[1] ? <img src={vehicleSelectionImages[1]} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 2</span></div>}
+                  {vehicleSelectionImages[1] ? <Image src={vehicleSelectionImages[1]} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 2</span></div>}
                 </div>
                 <div className="h-1/2 rounded-2xl overflow-hidden border border-third/10">
-                  {vehicleSelectionImages[2] ? <img src={vehicleSelectionImages[2]} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 3</span></div>}
+                  {vehicleSelectionImages[2] ? <Image src={vehicleSelectionImages[2]} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 3</span></div>}
                 </div>
               </div>
               <div className="w-[48%] md:w-[40%] rounded-3xl overflow-hidden border border-third/10">
-                {vehicleSelectionImages[3] ? <img src={vehicleSelectionImages[3]} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 4</span></div>}
+                {vehicleSelectionImages[3] ? <Image src={vehicleSelectionImages[3]} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 4</span></div>}
               </div>
             </div>
           </div>
@@ -1514,11 +1510,7 @@ export default function WhyBuyPro3({
                   onMouseEnter={() => setAvxInspectionHovered(i)}
                   className="relative bg-secondary/10 p-10 flex flex-col gap-12 transition-colors group cursor-default h-full min-h-60"
                 >
-                  <img
-                    src={inspectionImages[i] || ""}
-                    alt={point}
-                    className={`absolute inset-0 w-full h-full object-cover grayscale brightness-[0.15] group-hover:brightness-[0.45] transition-all duration-700 ${!inspectionImages[i] ? "hidden" : ""}`}
-                  />
+                  <Image src={inspectionImages[i] || ""} alt={point} fill unoptimized className={`absolute inset-0 w-full h-full object-cover grayscale brightness-[0.15] group-hover:brightness-[0.45] transition-all duration-700 ${!inspectionImages[i] ? "hidden" : ""}`} />
                   <div className="relative z-10 flex flex-col justify-between h-full">
                     <div className="flex justify-between items-start">
                       <span className="text-2xl font-black font-[Montserrat] text-third/10 group-hover:text-third/20 transition-colors">
@@ -1605,11 +1597,7 @@ export default function WhyBuyPro3({
                                         ${i % 3 === 0 ? "md:col-span-2 aspect-video" : "aspect-square"}
                                     `}
                 >
-                  <img
-                    src={img}
-                    className="w-full h-full object-cover brightness-50 group-hover:brightness-110 group-hover:scale-105 transition-all duration-1000"
-                    alt={`Gallery item ${i + 1}`}
-                  />
+                  <Image src={img} alt={`Gallery item ${i + 1}`} width={800} height={500} unoptimized className="w-full h-full object-cover brightness-50 group-hover:brightness-110 group-hover:scale-105 transition-all duration-1000" />
                 </div>
               )) : (
                 <div className="col-span-3 h-40 bg-third/10 border-2 border-dashed border-third/20 rounded-2xl flex items-center justify-center">

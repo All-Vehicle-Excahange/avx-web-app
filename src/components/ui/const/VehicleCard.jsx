@@ -26,7 +26,7 @@ export default function VehicleCard({
   onWishlistChange,
   source = "search",
 }) {
-  const router = useRouter();
+  const { push } = useRouter();
 
   //  Initial Favorite State From Backend
   const [isFavorite, setIsFavorite] = useState(
@@ -158,7 +158,7 @@ export default function VehicleCard({
     .replace(/-$/, "")
     .replace(/^-/, "");
   const handleCardClick = () => {
-    router.push(`/vehicle/details/${slug}/${data.id}?source=${source}`);
+    push(`/vehicle/details/${slug}/${data.id}?source=${source}`);
   };
 
   return (

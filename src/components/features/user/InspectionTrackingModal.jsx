@@ -130,33 +130,7 @@ export default function InspectionTrackingModal({
   }[status] || "Inspection request in progress";
 
   const getStep1Details = () => {
-    if (status === "PAYMENT_PENDING") {
-      return {
-        title: "Request Created",
-        statusText: "Pending Payment",
-        icon: <Clock size={10} className="text-yellow-500" />,
-        bgClass: "bg-yellow-500/10 border border-yellow-500/30"
-      };
-    }
-    return {
-      title: "Request Created",
-      statusText: `Completed • ${requestedDateStr}`,
-      icon: <CheckCircle2 size={10} className="text-green-500" />,
-      bgClass: "bg-green-500/10 border border-green-500/30"
-    };
-  };
-  const step1 = getStep1Details();
-
-  const getStep2Details = () => {
-    if (status === "PAYMENT_PENDING") {
-      return {
-        title: "Owner Approval",
-        statusText: "Pending",
-        icon: <Clock size={10} className="text-third" />,
-        bgClass: "bg-white/5 border border-white/10"
-      };
-    }
-    if (status === "REQUESTED" || status === "PENDING_OWNER_APPROVAL") {
+    if (status === "PENDING_OWNER_APPROVAL") {
       return {
         title: "Owner Approval",
         statusText: "Awaiting owner response",
@@ -172,9 +146,41 @@ export default function InspectionTrackingModal({
         bgClass: "bg-red-500/10 border border-red-500/30"
       };
     }
+    const approvalDate = inspection.updatedAt ? new Date(inspection.updatedAt).toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    }) : formattedInspectionDate;
+
     return {
       title: "Owner Approval",
-      statusText: "Approved",
+      statusText: `Approved • ${approvalDate}`,
+      icon: <CheckCircle2 size={10} className="text-green-500" />,
+      bgClass: "bg-green-500/10 border border-green-500/30"
+    };
+  };
+  const step1 = getStep1Details();
+
+  const getStep2Details = () => {
+    if (status === "PENDING_OWNER_APPROVAL" || status === "REJECTED_BY_OWNER") {
+      return {
+        title: "Request Created",
+        statusText: "Pending",
+        icon: <Clock size={10} className="text-third" />,
+        bgClass: "bg-white/5 border border-white/10"
+      };
+    }
+    if (status === "PAYMENT_PENDING") {
+      return {
+        title: "Request Created",
+        statusText: "Pending Payment",
+        icon: <Clock size={10} className="text-yellow-500" />,
+        bgClass: "bg-yellow-500/10 border border-yellow-500/30"
+      };
+    }
+    return {
+      title: "Request Created",
+      statusText: `Completed • ${requestedDateStr}`,
       icon: <CheckCircle2 size={10} className="text-green-500" />,
       bgClass: "bg-green-500/10 border border-green-500/30"
     };
@@ -405,13 +411,13 @@ export default function InspectionTrackingModal({
                 </div>
               </div>
 
-              {/* Step 2: Owner Approval */}
+              {/* Step 2: Request Created */}
               <div className="relative">
                 <span className={`absolute -left-7 top-0.5 w-5 h-5 rounded-full flex items-center justify-center ${step2.bgClass}`}>
                   {step2.icon}
                 </span>
                 <div>
-                  <h5 className={`text-[13px] font-semibold ${status !== "PAYMENT_PENDING" ? "text-white" : "text-third"}`}>
+                  <h5 className={`text-[13px] font-semibold ${!["PENDING_OWNER_APPROVAL", "REJECTED_BY_OWNER"].includes(status) ? "text-white" : "text-third"}`}>
                     {step2.title}
                   </h5>
                   <p className="text-[10px] text-third mt-0.5">

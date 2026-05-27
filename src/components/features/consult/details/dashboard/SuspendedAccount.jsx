@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 
 const SuspendedAccount = ({ data }) => {
   const { reason, consultSuspenseType, suspendUntil } = data || {};
-  const router = useRouter();
+  const { push } = useRouter();
   const isTemporary = consultSuspenseType === "TEMPORARY";
 
   const formatDate = (dateString) => {
@@ -25,7 +25,7 @@ const SuspendedAccount = ({ data }) => {
   };
 
   const handlePartnerPolicies = () => {
-    router.push("/help");
+    push("/help");
   };
 
   return (

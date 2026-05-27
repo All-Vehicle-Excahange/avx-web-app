@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import React, { useEffect, useState, useCallback } from "react";
 import Step1Business from "../../components/Step1Business";
@@ -30,7 +31,7 @@ import { SkeletonBox } from "@/components/ui/skeleton";
 import { Clock, AlertCircle, XCircle } from "lucide-react";
 
 export default function UpdateProfile() {
-  const router = useRouter();
+  const { push } = useRouter();
   const [initialLoading, setInitialLoading] = useState(true);
 
   const [data, setData] = useState({
@@ -479,7 +480,7 @@ export default function UpdateProfile() {
       if (res?.success || res?.data) {
         setErrors((p) => ({ ...p, submit: "" }));
         sessionStorage.removeItem("consult_update_id");
-        router.push("/consult/dashboard/profile");
+        push("/consult/dashboard/profile");
         return;
       } else {
         setErrors((p) => ({ ...p, submit: res.message || "Submission failed" }));
@@ -507,11 +508,7 @@ export default function UpdateProfile() {
           {/* LEFT PANEL */}
           <div className="hidden lg:flex w-[30%] sticky top-[66px] h-[calc(100vh-66px)]  flex-col justify-between text-white overflow-hidden">
             <div className="absolute inset-0 z-0">
-              <img
-                src="/homeBanner.jpg"
-                alt="Partner Program"
-                className="w-full h-full object-cover object-center"
-              />
+              <Image src="/homeBanner.jpg" alt="Partner Program" width={800} height={500} className="w-full h-full object-cover object-center" />
               <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" />
             </div>
 

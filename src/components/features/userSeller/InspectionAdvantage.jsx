@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import Button from "@/components/ui/button";
 import { motion } from "framer-motion";
@@ -30,12 +31,7 @@ export default function InspectionAdvantage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <img
-              src="/car-inspection.avif"
-              alt="Car inspection"
-              className="w-full h-full object-cover "
-              style={{ objectPosition: "center 55%" }}
-            />
+            <Image src="/car-inspection.avif" alt="Car inspection" width={800} height={500} className="w-full h-full object-cover " style={{ objectPosition: "center 55%" }} />
             {/* right fade so it bleeds into content */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black" />
             {/* bottom fade for mobile */}

@@ -4,18 +4,36 @@ import FeatureGroup from "@/components/ui/FeatureGroup";
 import { ChevronDown } from "lucide-react";
 import Button from "@/components/ui/button";
 import toast from "react-hot-toast";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getActiveInspectionQuery } from "@/queries/vehicle.queries";
+import { getInspectionPriceAndCountQuery } from "@/queries/inspection.queries";
 import InspectionTrackingModal from "@/components/features/user/InspectionTrackingModal";
 import InspectionRequestModal from "@/components/features/user/InspectionRequestModal";
 
-const VehicleSpecsConsualt = forwardRef(function VehicleSpecsConsualt({ open, setOpen, vehicle }, ref) {
+const VehicleSpecsConsualt = forwardRef(function VehicleSpecsConsualt(
+  { open, setOpen, vehicle },
+  ref,
+) {
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
   const [inspectionType, setInspectionType] = useState("report");
   const [trackingInspection, setTrackingInspection] = useState(null);
   const [animateTrackingModal, setAnimateTrackingModal] = useState(false);
-  const [isCheckingActiveInspection, setIsCheckingActiveInspection] = useState(false);
+  const [isCheckingActiveInspection, setIsCheckingActiveInspection] =
+    useState(false);
+
+  const { data: priceAndCountData } = useQuery({
+    ...getInspectionPriceAndCountQuery(vehicle?.id),
+    enabled: !!vehicle?.id,
+  });
+
+  const freeInspectionCount = priceAndCountData?.freeInspectionRemainCount ?? 0;
+  const totalFreeInspection = priceAndCountData?.totalFreeInspectionCount ?? 0;
+  const originalPrice = priceAndCountData?.originalPrice ?? 1499;
+  const discountPrice = priceAndCountData?.discountPrice ?? 1499;
+  const discount = priceAndCountData?.discount ?? 0;
+  const isFree = freeInspectionCount > 0;
+  const displayPrice = isFree ? 0 : discountPrice;
 
   const inspectionAvailable = true;
 
@@ -132,80 +150,46 @@ const VehicleSpecsConsualt = forwardRef(function VehicleSpecsConsualt({ open, se
                         Want extra assurance before booking?
                       </h3>
                       <p className="text-sm text-primary font-normal mt-1">
-                        You can request a fresh inspection or a live video
-                        walkthrough for added confidence.
+                        You can request a fresh inspection report for added
+                        confidence.
                       </p>
                     </div>
                     {/* Inspection Type */}
                     <div className="space-y-3">
-                      <p className="text-sm font-medium">
-                        Choose inspection type
-                      </p>
-
-                      <div className="space-y-3">
-                        {/* Only Report */}
-                        <label
-                          className={`
-                            flex items-start gap-3 p-4 rounded-xl border cursor-pointer
-                            transition-all
-                            ${
-                              inspectionType === "report"
-                                ? "border-primary bg-primary/5"
-                                : "border-third/40 hover:bg-secondary/80"
-                            }
-                          `}
-                        >
-                          <input
-                            type="radio"
-                            name="inspection"
-                            value="report"
-                            checked={inspectionType === "report"}
-                            onChange={() => setInspectionType("report")}
-                            className="mt-1 accent-primary"
-                          />
-
-                          <div className="flex-1">
-                            <p className="text-sm font-semibold">
-                              Inspection Report Only
-                            </p>
-                            <p className="text-xs text-third mt-0.5">
-                              Complete physical inspection with digital report
-                            </p>
-                            <p className="text-sm font-medium mt-1">₹1,499</p>
+                      <div className="p-4 rounded-xl border border-primary bg-primary/5">
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold">
+                            Inspection Report Only 
+                          </p>
+                          <p className="text-xs text-third mt-0.5">
+                            Complete physical inspection with digital report
+                          </p>
+                          <div className="flex items-center justify-between mt-3 gap-2">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-semibold text-primary">
+                                {isFree
+                                  ? "Free"
+                                  : `₹${discountPrice.toLocaleString("en-IN")}`}
+                              </span>
+                              {!isFree && discount > 0 && (
+                                <>
+                                  <span className="text-xs text-third line-through">
+                                    ₹{originalPrice.toLocaleString("en-IN")}
+                                  </span>
+                                  <span className="text-xs text-green-500 font-medium">
+                                    ({discount}% off)
+                                  </span>
+                                </>
+                              )}
+                            </div>
+                            {priceAndCountData && (
+                              <span className="text-xs text-third">
+                                Free inspections remaining:{" "}
+                                {freeInspectionCount} / {totalFreeInspection} 
+                              </span>
+                            )}
                           </div>
-                        </label>
-                        {/* Video Call + Report */}
-                        <label
-                          className={`
-                            flex items-start gap-3 p-4 rounded-xl border cursor-pointer
-                            transition-all
-                            ${
-                              inspectionType === "video"
-                                ? "border-primary bg-primary/5"
-                                : "border-third/40 hover:bg-secondary/80"
-                            }
-                          `}
-                        >
-                          <input
-                            type="radio"
-                            name="inspection"
-                            value="video"
-                            checked={inspectionType === "video"}
-                            onChange={() => setInspectionType("video")}
-                            className="mt-1 accent-primary"
-                          />
-
-                          <div className="flex-1">
-                            <p className="text-sm font-semibold">
-                              Personalize Video Call + Inspection Report
-                            </p>
-                            <p className="text-xs text-third mt-0.5">
-                              Live video walkthrough with inspector + detailed
-                              digital report
-                            </p>
-                            <p className="text-sm font-medium mt-1">₹1,999</p>
-                          </div>
-                        </label>
+                        </div>
                       </div>
                     </div>
                     <div className="flex flex-col gap-3 md:flex-row justify-between items-center">

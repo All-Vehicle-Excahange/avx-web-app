@@ -28,14 +28,14 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function ConsultantProgramPage() {
-  const router = useRouter();
+  const { push } = useRouter();
 
   const handleGetStarted = () => {
-    router.push("/account");
+    push("/account");
   };
 
   const handleViewPricing = () => {
-    router.push("/pricing");
+    push("/pricing");
   };
   const steps = [
     {

@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import { useEffect, useRef, useState } from "react";
 import { User, CreditCard, Car, ShieldCheck } from "lucide-react";
@@ -75,11 +76,7 @@ export default function DocumentsRequired() {
                 className="group relative h-[220px] p-6 rounded-2xl overflow-hidden border border-white/10 hover:border-white/30 transition duration-300"
               >
                 {/* 🖼 FULL IMAGE */}
-                <img
-                  src={doc.bg}
-                  alt={doc.name}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
+                <Image src={doc.bg} alt={doc.name} fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
 
                 {/* 🌑 DARK OVERLAY */}
                 <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition duration-300" />

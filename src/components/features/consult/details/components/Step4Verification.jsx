@@ -19,7 +19,7 @@ import {
 import Button from "@/components/ui/button";
 
 export default function Step4Verification({ existing, onEdit }) {
-  const router = useRouter();
+  const { push, query } = useRouter();
 
   const business = existing?.business || {};
   const status = business.verificationStatus; // REQUESTED, REQUEST_CHANGES, REJECTED, VERIFIED
@@ -30,13 +30,13 @@ export default function Step4Verification({ existing, onEdit }) {
 
   useEffect(() => {
     if (isVerified) {
-      if (router.query?.redirect) {
-        router.push(router.query.redirect);
+      if (query?.redirect) {
+        push(query.redirect);
       } else {
-        router.push("/consult/dashboard/overview");
+        push("/consult/dashboard/overview");
       }
     }
-  }, [isVerified, router]);
+  }, [isVerified, push, query]);
 
   // Status mapping for the board
   const applicationSteps = [

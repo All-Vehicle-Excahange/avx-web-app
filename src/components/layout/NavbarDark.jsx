@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 export default function NavbarDark() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
-  const router = useRouter();
+  const { push } = useRouter();
 
   return (
     <>
@@ -20,7 +20,7 @@ export default function NavbarDark() {
         <div className="mx-auto flex items-center justify-between px-6 py-4 md:px-8 max-w-screen-2xl">
           {/* LEFT — Logo */}
           <div
-            onClick={() => router.push("/")}
+            onClick={() => push("/")}
             className="flex items-center gap-4 cursor-pointer"
           >
             <div className="bg-primary px-3 py-1.5 rounded shadow-md flex items-center gap-3 border border-third/40">

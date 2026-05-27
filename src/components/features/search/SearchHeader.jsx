@@ -21,7 +21,7 @@ export default function SearchHeader({
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(sortOptions[0]);
   const dropdownRef = useRef(null);
-  const router = useRouter();
+  const { push } = useRouter();
   const searchParams = useSearchParams();
 
   const vehicleType = searchParams.get("vehicleType");
@@ -164,7 +164,7 @@ export default function SearchHeader({
                         }
                         params.delete("sort");
 
-                        router.push(`?${params.toString()}`);
+                        push(`?${params.toString()}`);
                       }}
                       className={`
             w-full text-left px-3 py-2

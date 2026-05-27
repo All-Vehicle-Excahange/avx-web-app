@@ -9,7 +9,7 @@ import { getRelatedConsultantsQuery } from "@/queries/vehicle.queries";
 export default function ReletedConsualt(props) {
     // ✅ HARD SAFE DEFAULT
     const safeLimit = typeof props.limit === "number" ? props.limit : 4;
-    const router = useRouter();
+    const { push } = useRouter();
 
     // Build payload dynamically
     const payload = useMemo(() => {
@@ -104,7 +104,7 @@ export default function ReletedConsualt(props) {
             queryParams.set("priceRange", `${minPriceLakhs}L-${maxPriceLakhs}L`);
         }
 
-        router.push(`/consult/discovery?${queryParams.toString()}`);
+        push(`/consult/discovery?${queryParams.toString()}`);
     };
 
     return (

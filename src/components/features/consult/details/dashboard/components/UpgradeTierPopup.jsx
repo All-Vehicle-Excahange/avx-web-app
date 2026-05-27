@@ -8,7 +8,7 @@ import Button from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
 export default function UpgradeTierPopup({ isOpen }) {
-  const router = useRouter();
+  const { back, push } = useRouter();
 
   // Auto-lock body scroll when popup is open
   useEffect(() => {
@@ -76,7 +76,7 @@ export default function UpgradeTierPopup({ isOpen }) {
           <div className="w-full pt-2 flex flex-col sm:flex-row gap-3">
             <Button
               onClick={() => {
-                router.back();
+                back();
               }}
               variant="outlineSecondary"
               full
@@ -86,7 +86,7 @@ export default function UpgradeTierPopup({ isOpen }) {
             </Button>
             <Button
               onClick={() => {
-                router.push("/consult/dashboard/billing");
+                push("/consult/dashboard/billing");
               }}
               variant="ghost"
               full

@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 "use client";
+import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { Plus, Trash } from "lucide-react";
 import { ABOUT_PRO_3 } from "@/core/engine/schemas/about/pro/about_pro_3";
@@ -502,11 +503,7 @@ export default function AboutPro3({
       <section className="relative min-h-screen py-12 flex flex-col overflow-hidden">
         {data.aboutHeroTemplate1?.imageUrl && (
           <>
-            <img
-              src={data.aboutHeroTemplate1.imageUrl}
-              className="absolute inset-0 w-full h-full object-cover"
-              alt="Hero"
-            />
+            <Image src={data.aboutHeroTemplate1.imageUrl} alt="Hero" fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
             <div className="absolute inset-0 bg-secondary/65" />
             <div className="absolute inset-0 bg-linear-to-b from-secondary/20 via-secondary/40 to-secondary" />
           </>
@@ -542,11 +539,7 @@ export default function AboutPro3({
             <div className="mv-card relative rounded-2xl overflow-hidden shadow-2xl border border-third/10 py-14">
               {data.aboutMissionTemplate1?.imageUrl && (
                 <>
-                  <img
-                    src={data.aboutMissionTemplate1.imageUrl}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    alt="Mission"
-                  />
+                  <Image src={data.aboutMissionTemplate1.imageUrl} alt="Mission" fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-linear-to-r from-secondary/95 via-secondary/85 to-secondary/70" />
                 </>
               )}
@@ -568,11 +561,7 @@ export default function AboutPro3({
             <div className="mv-card relative rounded-2xl overflow-hidden shadow-2xl border border-third/10 py-14">
               {data.aboutVisionTemplate1?.imageUrl && (
                 <>
-                  <img
-                    src={data.aboutVisionTemplate1.imageUrl}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    alt="Vision"
-                  />
+                  <Image src={data.aboutVisionTemplate1.imageUrl} alt="Vision" fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-linear-to-l from-secondary/95 via-secondary/85 to-secondary/70" />
                 </>
               )}

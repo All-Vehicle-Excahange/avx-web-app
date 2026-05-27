@@ -2,8 +2,10 @@
 
 import Button from "@/components/ui/button";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
+import { getInspectionPriceAndCountQuery } from "@/queries/inspection.queries";
 import { Star, MapPin, CheckCircle, Loader2, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
+
 
 export default function SummaryRight({
   vehicle,

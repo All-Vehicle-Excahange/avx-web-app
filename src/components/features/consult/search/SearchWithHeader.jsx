@@ -17,7 +17,7 @@ export default function SearchWithHeader({ activeFilters = [], pageResponse = {}
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(sortOptions[0]);
   const dropdownRef = useRef(null);
-  const router = useRouter();
+  const { push } = useRouter();
   const searchParams = useSearchParams();
 
   /* Close on outside click */
@@ -143,7 +143,7 @@ export default function SearchWithHeader({ activeFilters = [], pageResponse = {}
                         );
                         params.set("sort", option.value);
 
-                        router.push(`?${params.toString()}`);
+                        push(`?${params.toString()}`);
                       }}
                       className={`
           w-full text-left px-3 py-2

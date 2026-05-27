@@ -13,7 +13,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 
 function UserDetails() {
   const params = useParams();
-  const router = useRouter();
+  const { push } = useRouter();
   const user = useAuthStore((state) => state.user);
   const isConsultant = user?.userRole === "CONSULTATION";
   const activeTab = params?.id || (isConsultant ? "myprofile" : "myvehicle");
@@ -46,7 +46,7 @@ function UserDetails() {
           .map((tab) => (
           <button
             key={tab.id}
-            onClick={() => router.push(`/user/details/${tab.id}`, undefined, { shallow: true })}
+            onClick={() => push(`/user/details/${tab.id}`, undefined, { shallow: true })}
             className={`relative py-4 text-sm font-medium transition hover:cursor-pointer ${activeTab === tab.id
               ? "text-primary"
               : "text-third hover:text-primary"

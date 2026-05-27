@@ -303,7 +303,7 @@ const getSectionProgress = (section, defaultSection) => {
 
 export default function CreateTheme() {
   const params = useSearchParams();
-  const router = useRouter();
+  const { push } = useRouter();
   const themeId = params.get("theme");
 
   const theme = THEME_STORE.find((t) => t.id === themeId) || THEME_STORE[0];
@@ -348,7 +348,7 @@ export default function CreateTheme() {
         res?.status === "SUCCESS" ||
         res?.status === "OK"
       ) {
-        router.push("/consult/dashboard/storefront/");
+        push("/consult/dashboard/storefront/");
       } else {
         console.error("Failed to submit:", res);
       }

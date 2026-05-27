@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
+import Image from "next/image";
 import React, { useState } from "react";
 import { ABOUT_PREMIUM_1 } from "../schemas";
 import EditorInput from "../atoms/EditorInput";
@@ -594,11 +595,7 @@ export default function AboutPremium1({
           <div className="relative">
             <div className="relative rounded-2xl overflow-hidden border border-primary/20">
               {(d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl) ? (
-                <img
-                  src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl}
-                  alt="Hero"
-                  className="w-full h-[300px] sm:h-[400px] lg:h-[400px] object-cover"
-                />
+                <Image src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl} alt="Hero" width={800} height={500} unoptimized className="w-full h-[300px] sm:h-[400px] lg:h-[400px] object-cover" />
               ) : (
                 <div className="w-full h-[300px] sm:h-[400px] lg:h-[400px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-sm">Hero image not set</span>
@@ -627,15 +624,11 @@ export default function AboutPremium1({
               {/* LEFT: MISSION */}
               <div className="lg:w-1/2 relative group">
                 <div className="relative h-[800px] lg:h-[600px] w-full lg:w-[95%] overflow-hidden rounded-tr-[100px] lg:rounded-tr-[200px] border-r border-t border-primary/10">
-                  <img
-                    src={
+                  <Image src={
                       d.customMissionImage1 ||
                       d.customMissionUrl1 ||
                       d.missionTemplate1?.imageUrl
-                    }
-                    className="w-full h-full object-cover grayscale transition-all duration-800 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:grayscale-0 group-hover:-translate-y-5 group-hover:brightness-110 group-hover:saturate-125"
-                    alt="Mission"
-                  />
+                    } alt="Mission" width={800} height={500} unoptimized className="w-full h-full object-cover grayscale transition-all duration-800 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:grayscale-0 group-hover:-translate-y-5 group-hover:brightness-110 group-hover:saturate-125" />
                   <div className="absolute inset-0 bg-linear-to-t from-secondary via-transparent to-transparent" />
                 </div>
                 {/* CONTENT */}
@@ -652,15 +645,11 @@ export default function AboutPremium1({
               {/* RIGHT: VISION */}
               <div className="lg:w-1/2 lg:mt-64 relative group">
                 <div className="relative h-[400px] lg:h-[550px] w-full overflow-hidden rounded-bl-[100px] lg:rounded-bl-[200px] border-b border-l border-primary/10">
-                  <img
-                    src={
+                  <Image src={
                       d.customVisionImage1 ||
                       d.customVisionUrl1 ||
                       d.visionTemplate1?.imageUrl
-                    }
-                    className="w-full h-full object-cover transition-all duration-800 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-105"
-                    alt="Vision"
-                  />
+                    } alt="Vision" width={800} height={500} unoptimized className="w-full h-full object-cover transition-all duration-800 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-105" />
                   <div className="absolute inset-0 bg-linear-to-b from-secondary via-transparent to-transparent" />
                 </div>
                 {/* CONTENT */}

@@ -9,7 +9,7 @@ import Button from "@/components/ui/button";
 
 function ConsualtPopup({ onClose }) {
   const [isClosing, setIsClosing] = useState(false);
-  const router = useRouter();
+  const { push } = useRouter();
 
   const handleClose = useCallback(() => {
     setIsClosing(true);
@@ -27,7 +27,7 @@ function ConsualtPopup({ onClose }) {
   }, []);
 
   const handleGoToDashboard = () => {
-    router.push("/consult/subscription");
+    push("/consult/subscription");
     handleClose();
   };
 

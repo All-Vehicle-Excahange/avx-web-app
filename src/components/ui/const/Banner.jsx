@@ -10,10 +10,10 @@ export default function Banner({
   navigationPath,
   onClick,
 }) {
-  const router = useRouter();
+  const { push } = useRouter();
 
   const handleClick = () => {
-    router.push("/consult");
+    push("/consult");
   };
 
   return (

@@ -15,10 +15,10 @@ import { generateVehicleSlug } from "@/lib/helper";
 
 export default function FeaturedVehicleCard({ data }) {
   const [isFavorite, setIsFavorite] = useState(false);
-  const router = useRouter();
+  const { push } = useRouter();
 
   const handleClick = () => {
-    router.push(`/vehicle/details/${generateVehicleSlug(data)}/${data?.id}?source=home`);
+    push(`/vehicle/details/${generateVehicleSlug(data)}/${data?.id}?source=home`);
   };
 
   return (

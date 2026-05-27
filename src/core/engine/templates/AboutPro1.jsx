@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 "use client";
+import Image from "next/image";
 
 import React, { useEffect, useRef, useState } from "react";
 import EditorInput from "../atoms/EditorInput";
@@ -561,11 +562,7 @@ function AboutPro1({
             {/* MISSION */}
             <div className="relative min-h-80 rounded-2xl overflow-hidden border border-third/10 shadow-2xl">
               {data.missionTemplate1?.imageUrl ? (
-                <img
-                  src={data.missionTemplate1.imageUrl}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  alt="Mission"
-                />
+                <Image src={data.missionTemplate1.imageUrl} alt="Mission" fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
               ) : (
                 <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-sm">Mission image not set</span>
@@ -589,11 +586,7 @@ function AboutPro1({
             {/* VISION */}
             <div className="relative min-h-80 rounded-2xl overflow-hidden border border-third/10 shadow-2xl">
               {data.visionTemplate1?.imageUrl ? (
-                <img
-                  src={data.visionTemplate1.imageUrl}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  alt="Vision"
-                />
+                <Image src={data.visionTemplate1.imageUrl} alt="Vision" fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
               ) : (
                 <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-sm">Vision image not set</span>

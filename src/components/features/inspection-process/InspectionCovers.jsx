@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import React from "react";
 import {
@@ -124,11 +125,7 @@ export default function InspectionCovers() {
             >
 
               {/* IMAGE */}
-              <img
-                src={cat.image}
-                alt={cat.title}
-                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700 group-hover:grayscale-50"
-              />
+              <Image src={cat.image} alt={cat.title} fill unoptimized className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700 group-hover:grayscale-50" />
 
               {/* DARK OVERLAY */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-[#050505]/60 to-transparent" />

@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import React, { useEffect, useState, useCallback } from "react";
 import Step1Business from "./components/Step1Business";
@@ -30,7 +31,7 @@ import { SkeletonBox } from "@/components/ui/skeleton";
 const steps = [1, 2, 3, 4];
 
 export default function KycForm() {
-  const router = useRouter();
+  const { query, replace } = useRouter();
   const [step, setStep] = useState(1);
   const [initialLoading, setInitialLoading] = useState(true);
 
@@ -135,10 +136,10 @@ export default function KycForm() {
         }
 
         if (bData?.verificationStatus === "VERIFIED") {
-          if (router.query?.redirect) {
-            router.replace(router.query.redirect);
+          if (query?.redirect) {
+            replace(query.redirect);
           } else {
-            router.replace("/consult/dashboard/overview");
+            replace("/consult/dashboard/overview");
           }
           return;
         }
@@ -186,7 +187,7 @@ export default function KycForm() {
     };
 
     check();
-  }, [router]);
+  }, [query, replace]);
 
   // Extract a human-readable message from a backend error the same way showBackendError does
   const extractBackendMessage = (error) => {
@@ -455,11 +456,7 @@ export default function KycForm() {
           <div className="hidden lg:flex w-[30%] sticky top-[66px] h-[calc(100vh-66px)]  flex-col justify-between text-white overflow-hidden">
             {/* Background Image Setup */}
             <div className="absolute inset-0 z-0">
-              <img
-                src="/homeBanner.jpg"
-                alt="Partner Program"
-                className="w-full h-full object-cover object-center"
-              />
+              <Image src="/homeBanner.jpg" alt="Partner Program" width={800} height={500} className="w-full h-full object-cover object-center" />
               {/* Dark Overlay for text readability */}
               <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" />
             </div>

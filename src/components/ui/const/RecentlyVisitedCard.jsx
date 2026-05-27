@@ -3,11 +3,11 @@ import { useRouter } from "next/router";
 import { generateVehicleSlug } from "@/lib/helper";
 
 export default function RecentlyVisitedCard({ data }) {
-  const router = useRouter();
+  const { push } = useRouter();
 
   return (
     <div
-      onClick={() => router.push(`/vehicle/details/${generateVehicleSlug(data)}/${data.id}?source=home`)}
+      onClick={() => push(`/vehicle/details/${generateVehicleSlug(data)}/${data.id}?source=home`)}
       className="
         cursor-pointer
         min-w-[150px] max-w-[150px]

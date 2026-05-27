@@ -127,10 +127,10 @@ export default function AccountPopup({ open, onClosePopup }) {
 
   const cta = getCTA();
 
-  const router = useRouter();
+  const { push } = useRouter();
 
   const navigate = (path) => {
-    router.push(path);
+    push(path);
     onClosePopup();
   };
 
@@ -151,9 +151,9 @@ export default function AccountPopup({ open, onClosePopup }) {
 
       // Both conditions preserved: Dashboard goes to /consult, others to /
       if (pathname?.includes("/consult/dashboard")) {
-        router.push("/consult");
+        push("/consult");
       } else {
-        router.push("/");
+        push("/");
       }
 
       logout();

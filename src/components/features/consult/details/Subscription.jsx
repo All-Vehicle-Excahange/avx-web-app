@@ -14,7 +14,7 @@ import {
 } from "@/services/subscription.service";
 
 export default function Subscription() {
-  const router = useRouter();
+  const { push, query } = useRouter();
   const [loading, setLoading] = useState(true);
   const [tiers, setTiers] = useState([]);
   const [selectedTierId, setSelectedTierId] = useState(null);
@@ -36,12 +36,12 @@ export default function Subscription() {
           subRes.value?.data &&
           subRes.value.data.userTierStatus === "ACTIVE"
         ) {
-          if (router.query?.redirect) {
-            router.push(
-              `/consult/kyc?redirect=${encodeURIComponent(router.query.redirect)}`,
+          if (query?.redirect) {
+            push(
+              `/consult/kyc?redirect=${encodeURIComponent(query.redirect)}`,
             );
           } else {
-            router.push("/consult/kyc");
+            push("/consult/kyc");
           }
           return;
         }
@@ -58,7 +58,7 @@ export default function Subscription() {
     };
 
     initializeData();
-  }, [router]);
+  }, [push, query]);
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -138,12 +138,12 @@ export default function Subscription() {
         name: "AVX",
         description: `Subscription for ${selectedTier.title} plan`,
         handler: async function (paymentResponse) {
-          if (router.query?.redirect) {
-            router.push(
-              `/consult/kyc?redirect=${encodeURIComponent(router.query.redirect)}`,
+          if (query?.redirect) {
+            push(
+              `/consult/kyc?redirect=${encodeURIComponent(query.redirect)}`,
             );
           } else {
-            router.push("/consult/kyc");
+            push("/consult/kyc");
           }
         },
         name: "AVX",
