@@ -9,7 +9,7 @@ import { getSimularVehiclesQuery } from "@/queries/vehicle.queries";
 function SimulerVehicle({ vehicleOverview }) {
 
     const params = useParams();
-    const router = useRouter();
+    const { push } = useRouter();
     const id = params.id;
 
     const { data: vehicle = [], isLoading: loading } = useQuery({
@@ -43,7 +43,7 @@ function SimulerVehicle({ vehicleOverview }) {
                 queryParams.set("budget", `${minPriceLakhs}-${maxPriceLakhs}`);
             }
 
-            router.push(`/search/${slug}?${queryParams.toString()}`);
+            push(`/search/${slug}?${queryParams.toString()}`);
         } else {
             const queryParams = new URLSearchParams();
             if (vehicleOverview?.makerId || vehicleOverview?.makeId) {
@@ -60,7 +60,7 @@ function SimulerVehicle({ vehicleOverview }) {
                 queryParams.set("budget", `${minPriceLakhs}-${maxPriceLakhs}`);
             }
 
-            router.push(`/search?${queryParams.toString()}`);
+            push(`/search?${queryParams.toString()}`);
         }
     };
 

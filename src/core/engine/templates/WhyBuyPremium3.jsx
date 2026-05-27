@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -1116,13 +1117,9 @@ export default function WhyBuyPremium3({
                 className="absolute inset-0 w-full h-full object-cover"
               />
             ) : (
-              <img
-                src={
+              <Image src={
                   data.customWhyBuyHero1 || data.whyBuyHeroTemplate1?.imageUrl
-                }
-                className="absolute inset-0 w-full h-full object-cover"
-                alt="Hero"
-              />
+                } alt="Hero" fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
             )}
             <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/50 to-black/30" />
             <div className="relative z-10 h-full flex items-center justify-center">
@@ -1159,11 +1156,7 @@ export default function WhyBuyPremium3({
                         className="overflow-hidden rounded-2xl bg-white/10 backdrop-blur-md border border-white/10"
                       >
                         <div className="aspect-4/3">
-                          <img
-                            src={img}
-                            alt="premium"
-                            className="w-full h-full object-cover"
-                          />
+                          <Image src={img} alt="premium" width={800} height={500} unoptimized className="w-full h-full object-cover" />
                         </div>
                       </div>
                     ))}
@@ -1205,26 +1198,18 @@ export default function WhyBuyPremium3({
               </div>
               <div className="relative h-[460px] sm:h-[520px]">
                 <div className="absolute top-0 left-0 w-[75%] h-[72%] rounded-2xl border border-third/10 shadow-2xl overflow-hidden">
-                  <img
-                    src={
+                  <Image src={
                       data.customWhyBuyStory1 || data.storyTemplate1?.imageUrl
-                    }
-                    alt="Our story"
-                    className="w-full h-full object-cover"
-                  />
+                    } alt="Our story" width={800} height={500} unoptimized className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-linear-to-t from-secondary/55 to-transparent pointer-events-none" />
                 </div>
                 <div className="absolute bottom-0 right-0 w-[58%] h-[55%] rounded-2xl shadow-2xl overflow-hidden">
-                  <img
-                    src={
+                  <Image src={
                       data.customWhyBuyStory2 ||
                       data.storyTemplate2?.imageUrl ||
                       data.storyTemplate3?.imageUrl ||
                       data.customWhyBuyStory3
-                    }
-                    alt="Our story"
-                    className="w-full h-full object-cover rounded-2xl"
-                  />
+                    } alt="Our story" width={800} height={500} unoptimized className="w-full h-full object-cover rounded-2xl" />
                   <div className="absolute inset-0 bg-linear-to-t from-secondary/55 to-transparent pointer-events-none" />
                 </div>
               </div>
@@ -1248,12 +1233,7 @@ export default function WhyBuyPremium3({
               ]
                 .filter(Boolean)
                 .map((img, i) => (
-                  <img
-                    key={i}
-                    src={img}
-                    alt={`Vehicle ${i + 1}`}
-                    className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-700 ${displayIndex === i ? "opacity-100" : "opacity-0"}`}
-                  />
+                  <Image src={img} alt={`Vehicle ${i + 1}`} fill unoptimized className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-700 ${displayIndex === i ? "opacity-100" : "opacity-0"}`} key={i} />
                 ))}
               <div className="absolute inset-0 bg-linear-to-t from-black/95 via-black/40 to-black/10" />
               <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
@@ -1296,11 +1276,7 @@ export default function WhyBuyPremium3({
                           onMouseEnter={() => setHoverIndex(i)}
                           onMouseLeave={() => setHoverIndex(null)}
                         >
-                          <img
-                            src={img}
-                            alt={`Thumb ${i + 1}`}
-                            className="w-full h-full object-cover"
-                          />
+                          <Image src={img} alt={`Thumb ${i + 1}`} width={800} height={500} unoptimized className="w-full h-full object-cover" />
                           <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent pointer-events-none" />
                           {activeIndex === i && (
                             <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-5 h-0.5 rounded-full bg-third/80" />
@@ -1543,15 +1519,10 @@ export default function WhyBuyPremium3({
                 onMouseLeave={() => setPaused(false)}
               >
                 {inspectionPoints.map((_, i) => (
-                  <img
-                    key={i}
-                    src={
+                  <Image src={
                       data[`customWhyBuyInspection${i + 1}`] ||
                       data[`inspectionTemplate${i + 1}`]?.imageUrl
-                    }
-                    alt={inspectionPoints[i]}
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${i === avxInspectionActive ? "opacity-100" : "opacity-0"}`}
-                  />
+                    } alt={inspectionPoints[i]} fill unoptimized className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${i === avxInspectionActive ? "opacity-100" : "opacity-0"}`} key={i} />
                 ))}
                 <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/10 to-transparent" />
                 <div className="absolute inset-0 bg-linear-to-r from-black/30 to-transparent" />
@@ -1621,14 +1592,10 @@ export default function WhyBuyPremium3({
                       className={`absolute left-0 top-3 bottom-3 w-0.5 rounded-full transition-all duration-300 ${i === avxInspectionActive ? "bg-third" : "bg-transparent"}`}
                     />
                     <div className="shrink-0 w-14 h-14 rounded-lg overflow-hidden">
-                      <img
-                        src={
+                      <Image src={
                           data[`customWhyBuyInspection${i + 1}`] ||
                           data[`inspectionTemplate${i + 1}`]?.imageUrl
-                        }
-                        alt={point}
-                        className={`w-full h-full object-cover transition-all duration-500 ${i === avxInspectionActive ? "scale-110" : "scale-100 grayscale opacity-50"}`}
-                      />
+                        } alt={point} width={800} height={500} unoptimized className={`w-full h-full object-cover transition-all duration-500 ${i === avxInspectionActive ? "scale-110" : "scale-100 grayscale opacity-50"}`} />
                     </div>
                     <div className="flex flex-col gap-1 flex-1 min-w-0">
                       <span
@@ -1664,13 +1631,7 @@ export default function WhyBuyPremium3({
               ]
                 .filter(Boolean)
                 .map((src, i) => (
-                  <img
-                    key={i}
-                    src={src}
-                    alt=""
-                    aria-hidden
-                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-1000 ${i === commitmentActive ? "opacity-100 scale-100" : "opacity-0 scale-[1.04]"}`}
-                  />
+                  <Image src={src} alt="" fill unoptimized className={`absolute inset-0 w-full h-full object-cover transition-all duration-1000 ${i === commitmentActive ? "opacity-100 scale-100" : "opacity-0 scale-[1.04]"}`} key={i} aria-hidden />
                 ))}
               <div className="absolute inset-0 bg-black/55" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-black/30" />
@@ -1741,11 +1702,7 @@ export default function WhyBuyPremium3({
                     onMouseLeave={() => setHovered(null)}
                   >
                     <div className="relative w-full h-full rounded-2xl overflow-hidden cursor-pointer">
-                      <img
-                        src={src}
-                        alt=""
-                        className="w-full h-full object-cover"
-                      />
+                      <Image src={src} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
                       <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
                       <div className="absolute bottom-4 left-4 right-4">
                         <p className="text-primary font-[Montserrat] font-semibold text-base">
@@ -1763,11 +1720,7 @@ export default function WhyBuyPremium3({
                   key={i}
                   className="min-w-[260px] h-80 rounded-2xl overflow-hidden shrink-0"
                 >
-                  <img
-                    src={img}
-                    alt=""
-                    className="w-full h-full object-cover"
-                  />
+                  <Image src={img} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>

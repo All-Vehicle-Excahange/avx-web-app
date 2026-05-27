@@ -55,7 +55,7 @@ function mapApiToTemplateData(api) {
 }
 
 export default function StoreFrontComponent() {
-  const router = useRouter();
+  const { push } = useRouter();
   const [hasStoreFront, setHasStoreFront] = useState(null);
   const [storeData, setStoreData] = useState(null);
   const [activeTab, setActiveTab] = useState("about");
@@ -241,7 +241,7 @@ export default function StoreFrontComponent() {
               storeData.verificationStatus === "REQUEST_CHANGES") && (
               <Button
                 onClick={() =>
-                  router.push(
+                  push(
                     `storefront/theme/create?theme=${storeData.themeId}`,
                   )
                 }

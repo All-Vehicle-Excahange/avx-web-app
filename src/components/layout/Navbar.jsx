@@ -95,7 +95,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
   const [atTop, setAtTop] = useState(true);
 
   const { user, isLoggedIn } = useAuthStore();
-  const router = useRouter();
+  const { push } = useRouter();
   const pathname = usePathname();
   /* ================= SEARCH STATES ================= */
   const [searchQuery, setSearchQuery] = useState("");
@@ -533,10 +533,10 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                         ) {
                           const selected = combinedItems[selectedIndex];
                           if (selected.link) {
-                            router.push(selected.link);
+                            push(selected.link);
                             setSearchQuery(selected.label);
                           } else if (selected.username) {
-                            router.push(`/store-front/${selected.username}`);
+                            push(`/store-front/${selected.username}`);
                           }
                           setShowDropdown(false);
                           setSelectedIndex(-1);
@@ -545,12 +545,12 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                             selectedBrand !== "All"
                               ? `&brand=${encodeURIComponent(selectedBrand)}`
                               : "";
-                          router.push(
+                          push(
                             `/search?q=${encodeURIComponent(searchQuery)}${brandParam}`,
                           );
                           setShowDropdown(false);
                         } else if (selectedBrand !== "All") {
-                          router.push(
+                          push(
                             `/search?brand=${encodeURIComponent(selectedBrand)}`,
                           );
                           setShowDropdown(false);
@@ -570,12 +570,12 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                           selectedBrand !== "All"
                             ? `&brand=${encodeURIComponent(selectedBrand)}`
                             : "";
-                        router.push(
+                        push(
                           `/search?q=${encodeURIComponent(searchQuery)}${brandParam}`,
                         );
                         setShowDropdown(false);
                       } else if (selectedBrand !== "All") {
-                        router.push(
+                        push(
                           `/search?brand=${encodeURIComponent(selectedBrand)}`,
                         );
                         setShowDropdown(false);
@@ -603,7 +603,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                               <div
                                 key={s.id}
                                 onClick={() => {
-                                  router.push(s.link);
+                                  push(s.link);
                                   setShowDropdown(false);
                                   setSearchQuery(s.label);
                                 }}
@@ -684,7 +684,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                                   key={item.id || index}
                                   onClick={() => {
                                     if (item.username) {
-                                      router.push(
+                                      push(
                                         `/store-front/${item.username}`,
                                       );
                                     }
@@ -863,7 +863,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
                 return (
                   <Button
-                    onClick={() => router.push(cta.href)}
+                    onClick={() => push(cta.href)}
                     size="sm"
                     className="hidden md:block text-xs md:text-sm text-primary border border-primary hover:bg-primary hover:text-secondary whitespace-nowrap"
                   >

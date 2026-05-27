@@ -10,7 +10,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 
 function Main() {
   const [activeTab, setActiveTab] = useState("login");
-  const router = useRouter();
+  const { replace } = useRouter();
   const { user, isLoggedIn } = useAuthStore();
   const isConsultant = ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(
     user?.userRole,
@@ -18,9 +18,9 @@ function Main() {
 
   useEffect(() => {
     if (isLoggedIn && isConsultant) {
-      router.replace("/consult/subscription");
+      replace("/consult/subscription");
     }
-  }, [isLoggedIn, isConsultant, router]);
+  }, [isLoggedIn, isConsultant, replace]);
 
   if (isLoggedIn && isConsultant) return null;
 

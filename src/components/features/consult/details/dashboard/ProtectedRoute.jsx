@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function ProtectedRoute({ children }) {
-  const router = useRouter();
+  const { replace } = useRouter();
 
   const { user, token, isLoggedIn, authInitialized, initializeAuth } =
     useAuthStore();
@@ -23,7 +23,7 @@ export default function ProtectedRoute({ children }) {
 
     // ❌ NOT LOGGED IN
     if (!hasAccess) {
-      router.replace("/consult/account");
+      replace("/consult/account");
       return;
     }
 

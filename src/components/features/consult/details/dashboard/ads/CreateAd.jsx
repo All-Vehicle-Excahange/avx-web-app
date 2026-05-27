@@ -13,7 +13,7 @@ import ReviewStep from "./components/ReviewStep";
 import SummaryPanel from "./components/SummaryPanel";
 
 export default function CreateAd() {
-  const router = useRouter();
+  const { push } = useRouter();
   const [curStep, setCurStep] = useState(1);
   const [isLaunching, setIsLaunching] = useState(false);
   const [isLaunched, setIsLaunched] = useState(false);
@@ -99,14 +99,14 @@ export default function CreateAd() {
         setIsLaunched(true);
         // After 1.5 seconds, redirect back to PPC dashboard
         setTimeout(() => {
-          router.push("/consult/dashboard/ppc");
+          push("/consult/dashboard/ppc");
         }, 1550);
       }, 1500);
     }
   };
 
   const handleClose = () => {
-    router.push("/consult/dashboard/ppc");
+    push("/consult/dashboard/ppc");
   };
 
   // Validation per step

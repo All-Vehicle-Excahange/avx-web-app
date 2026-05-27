@@ -7,7 +7,7 @@ import { getOtp, signup } from "@/services/auth.service";
 import { useForm } from "react-hook-form";
 
 function Register() {
-  const router = useRouter();
+  const { push } = useRouter();
 
   const {
     register,
@@ -102,7 +102,7 @@ function Register() {
       });
 
       if (!res?.error && (res?.success || res?.status)) {
-        router.push("/consult/subscription");
+        push("/consult/subscription");
       } else if (res?.error) {
         const msg = res?.message?.toLowerCase();
         if (msg?.includes("email")) {

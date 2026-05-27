@@ -68,7 +68,7 @@ export default function SearchWithCard({
 
   const isMobile = useIsMobile();
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const { replace } = useRouter();
   const pathname = usePathname();
 
   const vehicleType = searchParams.get("vehicleType");
@@ -1097,7 +1097,7 @@ export default function SearchWithCard({
 
   const handleClearFilters = async () => {
     // Remove query parameters from URL to clear top search bar
-    router.replace(pathname, { scroll: false });
+    replace(pathname, { scroll: false });
 
     // Remove saved location from localStorage
     localStorage.removeItem("avx_saved_location");

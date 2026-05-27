@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 "use client";
+import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import EditorInput from "../atoms/EditorInput";
 import { ImageUploader } from "../atoms/ImageUploader ";
@@ -625,11 +626,7 @@ export default function AboutPremium2({
         {/* HERO BACKGROUND (VIDEO/IMAGE) */}
         <div className="absolute inset-0 h-screen overflow-hidden">
           {(d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl) ? (
-            <img
-              src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl}
-              className="w-full h-full object-cover"
-              alt="Background"
-            />
+            <Image src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl} alt="Background" width={800} height={500} unoptimized className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
               <span className="text-third/40 text-sm">Hero background not set</span>
@@ -659,11 +656,7 @@ export default function AboutPremium2({
               <div className="relative group">
                 <div className="relative rounded-2xl overflow-hidden hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] bg-primary/5">
                   {(d.customHeroImage2 || d.customHeroImageUrl2 || d.heroTemplate2?.imageUrl) ? (
-                    <img
-                      src={d.customHeroImage2 || d.customHeroImageUrl2 || d.heroTemplate2?.imageUrl}
-                      alt="Hero side"
-                      className="w-full h-[450px] object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
+                    <Image src={d.customHeroImage2 || d.customHeroImageUrl2 || d.heroTemplate2?.imageUrl} alt="Hero side" width={800} height={500} unoptimized className="w-full h-[450px] object-cover transition-transform duration-700 group-hover:scale-110" />
                   ) : (
                     <div className="w-full h-[450px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                       <span className="text-third/40 text-sm">Side image not set</span>
@@ -705,11 +698,7 @@ export default function AboutPremium2({
               <div className="relative group">
                 <div className="relative rounded-2xl overflow-hidden hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] bg-primary/5">
                   {(d.customMissionImage1 || d.customMissionUrl1 || d.missionTemplate1?.imageUrl) ? (
-                    <img
-                      src={d.customMissionImage1 || d.customMissionUrl1 || d.missionTemplate1?.imageUrl}
-                      alt={d.missionTitle}
-                      className="w-full h-80 lg:h-[380px] object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
-                    />
+                    <Image src={d.customMissionImage1 || d.customMissionUrl1 || d.missionTemplate1?.imageUrl} alt={d.missionTitle} width={800} height={500} unoptimized className="w-full h-80 lg:h-[380px] object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110" />
                   ) : (
                     <div className="w-full h-80 lg:h-[380px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                       <span className="text-third/40 text-sm">Mission image not set</span>
@@ -739,11 +728,7 @@ export default function AboutPremium2({
               <div className="relative group">
                 <div className="relative rounded-2xl overflow-hidden hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] bg-primary/5">
                   {(d.customVisionImage1 || d.customVisionUrl1 || d.visionTemplate1?.imageUrl) ? (
-                    <img
-                      src={d.customVisionImage1 || d.customVisionUrl1 || d.visionTemplate1?.imageUrl}
-                      alt={d.visionTitle}
-                      className="w-full h-80 lg:h-[380px] object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
-                    />
+                    <Image src={d.customVisionImage1 || d.customVisionUrl1 || d.visionTemplate1?.imageUrl} alt={d.visionTitle} width={800} height={500} unoptimized className="w-full h-80 lg:h-[380px] object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110" />
                   ) : (
                     <div className="w-full h-80 lg:h-[380px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                       <span className="text-third/40 text-sm">Vision image not set</span>

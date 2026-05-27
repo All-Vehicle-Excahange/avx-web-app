@@ -147,11 +147,7 @@ export default function SplashScreen({ onComplete }) {
                   className={`letter-in ${letter.wide ? "w-[42px] h-[24px] md:w-[80px] md:h-[44px]" : "w-[22px] h-[24px] md:w-[42px] md:h-[44px]"}`}
                   style={{ animationDelay: `${i * 0.05}s` }}
                 >
-                  <img
-                    src={letter.src}
-                    alt={letter.alt}
-                    className="w-full h-full  object-contain"
-                  />
+                  <Image src={letter.src} alt={letter.alt} width={800} height={500} unoptimized className="w-full h-full  object-contain" />
                 </div>
               ))}
             </div>

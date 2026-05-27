@@ -18,7 +18,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
     reset,
     formState: { errors },
   } = useForm();
-  const router = useRouter();
+  const { push } = useRouter();
 
   const [accountType, setAccountType] = useState("personal");
 
@@ -150,7 +150,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         onSuccess();
         setTimeout(() => {
           if (accountType === "consultant") {
-            router.push("/consult");
+            push("/consult");
           } else {
             const hasShownPref = localStorage.getItem("hasShownPreferencesPopup");
             if (!hasShownPref) {

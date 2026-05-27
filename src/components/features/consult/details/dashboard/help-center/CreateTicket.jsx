@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React, { useState } from "react";
 import { ChevronRight, Upload, AlertCircle, ArrowLeft, ArrowRight, Check, Paperclip, X } from "lucide-react";
 import Button from "@/components/ui/button";
@@ -416,11 +417,7 @@ export default function CreateTicket({ onNavigate, onCreateTicket }) {
                       <div key={idx} className="relative group border border-third/15 rounded-xl overflow-hidden bg-black/40 h-28 flex flex-col justify-between">
                         {/* Preview Media */}
                         {isImg ? (
-                          <img
-                            src={displayUrl}
-                            alt={file.name}
-                            className="w-full h-full object-cover"
-                          />
+                          <Image src={displayUrl} alt={file.name} width={800} height={500} unoptimized className="w-full h-full object-cover" />
                         ) : isVid ? (
                           <div className="w-full h-full flex items-center justify-center bg-black/60 text-white relative">
                             <video src={displayUrl} className="w-full h-full object-cover opacity-70" />

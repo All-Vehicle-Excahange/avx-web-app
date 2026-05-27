@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 
 export default function TopPerformingCard({ vehicle, rank }) {
-  const router = useRouter();
+  const { push } = useRouter();
   const [open, setOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const menuRef = useRef(null);
@@ -104,7 +104,7 @@ export default function TopPerformingCard({ vehicle, rank }) {
             alt={vehicleTitle}
             fill
             onClick={() =>
-              router.push(
+              push(
                 `/vehicle/details/${generateVehicleSlug(vehicle)}/${vehicle.id}`,
               )
             }

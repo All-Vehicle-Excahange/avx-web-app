@@ -1,4 +1,5 @@
 "use client"
+import Image from "next/image";
 
 export default function InteractionSection() {
     return (
@@ -31,7 +32,7 @@ export default function InteractionSection() {
                     <div className="flex flex-col gap-10">
                         <div className="w-65 h-auto rounded-3xl overflow-hidden -translate-y-27.5 ">
                             {/* left image */}
-                            <img src="chat-image-1.webp" alt="Chat UI" className="w-full h-full object-cover " />
+                            <Image src="chat-image-1.webp" alt="Chat UI" width={800} height={500} className="w-full h-full object-cover " />
                         </div>
 
                         {/* POINT LIST (belongs to left image) */}
@@ -64,13 +65,13 @@ export default function InteractionSection() {
                     <div className="w-[320px] h-150 rounded-3xl overflow-hidden  shadow-2xl ">
                         {/* chat UI image */}
 
-                        <img src="/chat-image2.jpeg" alt="Chat UI" className="w-full h-full object-fit-cover" />
+                        <Image src="/chat-image2.jpeg" alt="Chat UI" width={800} height={500} className="w-full h-full object-fit-cover" />
                     </div>
 
                     {/* RIGHT IMAGE */}
                     <div className="w-65 h-auto rounded-3xl overflow-hidden translate-y-10">
                         {/* right image */}
-                        <img src="chat-image-3.webp" alt="Chat UI" className="w-full h-full object-cover" />
+                        <Image src="chat-image-3.webp" alt="Chat UI" width={800} height={500} className="w-full h-full object-cover" />
                     </div>
                 </div>
 

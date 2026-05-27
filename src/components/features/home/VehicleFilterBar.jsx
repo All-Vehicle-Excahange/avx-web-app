@@ -58,7 +58,7 @@ const AVAILABILITY_OPTIONS = [
 ];
 
 export default function VehicleFilterBar({ activeType = "vehicle" }) {
-  const router = useRouter();
+  const { push } = useRouter();
 
   /* ================= SHARED STATE ================= */
   const [activeTab, setActiveTab] = useState(null);
@@ -414,7 +414,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       }).toString();
       setActiveTab(null);
       setMobileOpen(false);
-      router.push(`/consult/discovery${query ? `?${query}` : ""}`);
+      push(`/consult/discovery${query ? `?${query}` : ""}`);
     } else {
       const vtLower = vehicleType.toLowerCase().replace(/_/g, " ");
       const isCar = vtLower.includes("car") || vtLower.includes("4 wheeler") || vtLower.includes("four wheeler") || vtLower.includes("4-wheeler") || vtLower.includes("four-wheeler");
@@ -444,7 +444,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
         setActiveTab(null);
         setMobileOpen(false);
-        router.push(`/search/${slug}${queryParams ? `?${queryParams}` : ""}`);
+        push(`/search/${slug}${queryParams ? `?${queryParams}` : ""}`);
       } else {
         const query = new URLSearchParams({
           ...(location && { location }),
@@ -459,7 +459,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         }).toString();
         setActiveTab(null);
         setMobileOpen(false);
-        router.push(`/search?${query}`);
+        push(`/search?${query}`);
       }
     }
   };

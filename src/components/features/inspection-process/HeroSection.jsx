@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import Button from "@/components/ui/button";
 
@@ -8,11 +9,7 @@ export default function HeroSection() {
       
       {/* BACKGROUND IMAGE */}
       <div className="absolute inset-0 z-0 pt-16 md:pt-20">
-        <img
-          src="/car-hero-21.jpg"
-          alt="Reecomm Inspection"
-          className="w-full h-full object-cover object-center opacity-60 md:opacity-70"
-        />
+        <Image src="/car-hero-21.jpg" alt="Reecomm Inspection" width={800} height={500} className="w-full h-full object-cover object-center opacity-60 md:opacity-70" />
 
         {/* overlays */}
         <div className="absolute inset-0 bg-linear-to-r from-secondary via-secondary/70 md:via-secondary/60 to-transparent" />

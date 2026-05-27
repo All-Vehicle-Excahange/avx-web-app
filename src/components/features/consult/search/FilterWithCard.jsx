@@ -47,7 +47,7 @@ export default function FilterWithCard({
   const [activeFilterTab, setActiveFilterTab] = useState("Location");
   const [avxAssumed, setAvxAssumed] = useState(false);
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const { replace } = useRouter();
   const pathname = usePathname();
   const sort = searchParams.get("sort");
 
@@ -684,7 +684,7 @@ export default function FilterWithCard({
 
   const handleClearFilters = async () => {
     // Remove query parameters from URL to clear top search bar
-    router.replace(pathname, { scroll: false });
+    replace(pathname, { scroll: false });
 
     // Remove saved location from localStorage
     localStorage.removeItem("avx_saved_location");

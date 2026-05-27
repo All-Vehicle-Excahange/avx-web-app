@@ -39,7 +39,7 @@ import {
 } from "@/services/inspection.service";
 
 function InspectionTab() {
-  const router = useRouter();
+  const { push } = useRouter();
   const [range, setRange] = React.useState("");
   const [statusFilter, setStatusFilter] = React.useState("");
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -406,7 +406,7 @@ function InspectionTab() {
                       <div
                         className="flex flex-col cursor-pointer hover:text-primary transition-colors"
                         onClick={() =>
-                          router.push(
+                          push(
                             `/vehicle/details/${generateVehicleSlug(vehicle)}/${vehicle.vehicleId}`,
                           )
                         }
@@ -528,7 +528,7 @@ function InspectionTab() {
                       <div
                         className="flex flex-col cursor-pointer hover:text-primary transition-colors"
                         onClick={() =>
-                          router.push(
+                          push(
                             `/vehicle/details/${generateVehicleSlug(request)}/${request.vehicleId}`,
                           )
                         }
@@ -806,7 +806,7 @@ function InspectionTab() {
                         <div
                           className="flex flex-col cursor-pointer hover:text-primary transition-colors"
                           onClick={() =>
-                            router.push(
+                            push(
                               `/vehicle/details/${generateVehicleSlug(report)}/${report.vehicleId}`,
                             )
                           }
@@ -994,7 +994,7 @@ function InspectionTab() {
                   key={vehicle.vehicleId || idx}
                   className="cursor-pointer hover:opacity-80 transition-opacity"
                   onClick={() =>
-                    router.push(
+                    push(
                       `/vehicle/details/${generateVehicleSlug(vehicle)}/${vehicle.vehicleId}`,
                     )
                   }

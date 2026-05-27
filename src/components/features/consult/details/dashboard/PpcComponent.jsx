@@ -188,10 +188,10 @@ export default function PpcComponent() {
     videos: false,
   });
 
-  const router = useRouter();
+  const { push } = useRouter();
 
   const handleClick = () => {
-    router.push("/consult/dashboard/ads/create");
+    push("/consult/dashboard/ads/create");
   };
 
   const rangeOptions = [

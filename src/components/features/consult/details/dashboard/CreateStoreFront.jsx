@@ -82,7 +82,7 @@ const getThemeMetadata = (theme) => {
 };
 
 export default function CreateStoreFront({ storeData, onView }) {
-  const router = useRouter();
+  const { push } = useRouter();
   const [previewTheme, setPreviewTheme] = useState(null);
   const [themes, setThemes] = useState([]);
   const [loadingThemes, setLoadingThemes] = useState(true);
@@ -125,7 +125,7 @@ export default function CreateStoreFront({ storeData, onView }) {
 
   const handleExploreAll = () => {
     if (isStatusLocked) return;
-    router.push(`storefront/theme`);
+    push(`storefront/theme`);
   };
 
   return (
@@ -212,7 +212,7 @@ export default function CreateStoreFront({ storeData, onView }) {
           theme={previewTheme}
           onClose={() => setPreviewTheme(null)}
           onSelect={(selected) => {
-            router.push(
+            push(
               `/consult/dashboard/storefront/theme/create?theme=${selected.themeId || selected.id}`,
             );
           }}

@@ -97,11 +97,7 @@ export default function StorySection() {
   return (
     <section className="relative w-full mx-auto bg-primary overflow-hidden">
       {/* Background SVG Watermarks */}
-      <img
-        src="/quote.svg"
-        alt="Quote Background Top"
-        className="absolute -top-5 -left-5 w-[300px] h-[300px] md:-top-10 md:left-3 md:w-[500px] md:h-[550px] opacity-30 z-0 pointer-events-none filter brightness-95"
-      />
+      <Image src="/quote.svg" alt="Quote Background Top" fill className="absolute -top-5 -left-5 w-[300px] h-[300px] md:-top-10 md:left-3 md:w-[500px] md:h-[550px] opacity-30 z-0 pointer-events-none filter brightness-95" />
       {/* <img
         src="/quote-1.svg"
         alt="Quote Background Bottom"

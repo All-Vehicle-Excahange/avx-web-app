@@ -71,7 +71,7 @@ export default function InventoryComponent() {
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
   const queryClient = useQueryClient();
-  const router = useRouter();
+  const { push } = useRouter();
 
   // 1. Inventory Vehicles Query (Paginated / Load More via Infinite Query)
   let vehicleStatus;
@@ -268,7 +268,7 @@ export default function InventoryComponent() {
                     size="sm"
                     showIcon={false}
                     onClick={() => {
-                      router.push("/consult/dashboard/ppc");
+                      push("/consult/dashboard/ppc");
                     }}
                     className="cursor-pointer"
                   >

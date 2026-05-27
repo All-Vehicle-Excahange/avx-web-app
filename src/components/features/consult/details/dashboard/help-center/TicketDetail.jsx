@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
 import {
   ChevronRight,
@@ -249,11 +250,7 @@ export default function TicketDetail({
                       key={idx}
                       className="relative group border border-third/15 rounded-xl overflow-hidden bg-black/40"
                     >
-                      <img
-                        src={url}
-                        alt={fileName}
-                        className="w-full h-40 object-cover hover:scale-105 transition duration-300"
-                      />
+                      <Image src={url} alt={fileName} width={800} height={500} unoptimized className="w-full h-40 object-cover hover:scale-105 transition duration-300" />
                       <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-3">
                         <a
                           href={url}

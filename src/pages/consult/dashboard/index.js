@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 
 export default function Index() {
-  const router = useRouter();
+  const { replace } = useRouter();
 
   useEffect(() => {
-    router.replace("/consult/dashboard/overview");
+    replace("/consult/dashboard/overview");
   }, []);
 
   return null;

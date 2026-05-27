@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import { useState } from "react";
 import {
@@ -99,11 +100,7 @@ export default function AvxInspectionLayer() {
                             {/* CORE */}
                             <div className="absolute inset-24 rounded-full overflow-hidden border border-neutral-700">
                                 {/* IMAGE */}
-                                <img
-                                    src="/car-inspection.avif"
-                                    alt="Inspection Core"
-                                    className="w-full h-full object-cover scale-105"
-                                />
+                                <Image src="/car-inspection.avif" alt="Inspection Core" width={800} height={500} className="w-full h-full object-cover scale-105" />
 
                                 {/* DARK OVERLAY */}
                                 <div className="absolute inset-0 bg-black/20" />

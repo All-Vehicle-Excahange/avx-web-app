@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -21,7 +22,7 @@ import Step3KYC from "../../components/Step3KYC";
 import { Clock, ShieldCheck, CheckCircle2, AlertCircle } from "lucide-react";
 
 export default function UpdateStatus() {
-  const router = useRouter();
+  const { push } = useRouter();
   const [updateId, setUpdateId] = useState(null);
   const [data, setData] = useState({
     business: null,
@@ -309,7 +310,7 @@ export default function UpdateStatus() {
       const res = await finalSubmit(updateId);
       if (res.success || res.data) {
         toast.success("Profile re-submitted successfully");
-        router.push("/consult/dashboard/overview");
+        push("/consult/dashboard/overview");
       } else {
         toast.error(res.message || "Submission failed");
       }
@@ -330,11 +331,7 @@ export default function UpdateStatus() {
           {/* LEFT PANEL */}
           <div className="hidden lg:flex w-[30%] sticky top-[66px] h-[calc(100vh-66px)] relative flex-col justify-between text-white overflow-hidden">
             <div className="absolute inset-0 z-0">
-              <img
-                src="/homeBanner.jpg"
-                alt="Update Tracker"
-                className="w-full h-full object-cover object-center"
-              />
+              <Image src="/homeBanner.jpg" alt="Update Tracker" width={800} height={500} className="w-full h-full object-cover object-center" />
               <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" />
             </div>
 

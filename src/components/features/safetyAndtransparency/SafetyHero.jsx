@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import { motion } from "framer-motion";
 
@@ -14,12 +15,7 @@ export default function SafetyHero() {
     <section className="relative h-fit flex flex-col justify-end overflow-hidden lg:min-h-screen">
       {/* BG IMAGE */}
       <div className="absolute inset-0">
-        <img
-          src="/safety-hero.avif"
-          alt=""
-          className="w-full h-full object-cover scale-100"
-          style={{ objectPosition: "center 100%" }}
-        />
+        <Image src="/safety-hero.avif" alt="" width={800} height={500} className="w-full h-full object-cover scale-100" style={{ objectPosition: "center 100%" }} />
       </div>
 
       <div className="absolute inset-0 bg-linear-to-t from-black via-black/35 to-black/10" />

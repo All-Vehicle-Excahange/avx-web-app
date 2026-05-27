@@ -83,7 +83,7 @@ const rangeData = {
 };
 
 export default function ResultsModal({ onClose, isClosing, ad }) {
-  const router = useRouter();
+  const { push } = useRouter();
   const [range, setRange] = useState("7d");
   const [isCampaignPaused, setIsCampaignPaused] = useState(
     ad?.status === "Paused",
@@ -443,7 +443,7 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
             <Button
               variant="outlineSecondary"
               size="sm"
-              onClick={() => router.push("/consult/dashboard/ads/create")}
+              onClick={() => push("/consult/dashboard/ads/create")}
               className="h-9 px-4 text-xs font-semibold flex items-center gap-1.5"
             >
               <Edit className="mr-2" size={14} /> Edit
@@ -467,7 +467,7 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => router.push("/consult/dashboard/ads/create")}
+              onClick={() => push("/consult/dashboard/ads/create")}
               className="h-9 px-4 text-xs font-bold flex items-center gap-1.5"
             >
               <RefreshCw className="mr-2" size={14} strokeWidth={3} /> Boost
