@@ -177,7 +177,7 @@ export default function ConsultantHeroSection() {
                 </Button>
               </Link>
 
-              <Link href="/consult/subscription">
+              <Link href="/consult/pricing">
                 <Button
                   variant="outlineSecondary"
                   size="md"

@@ -13,9 +13,9 @@ export default function MyTickets({
   activeFilter,
   setActiveFilter,
   totalCount,
-  isLoading
+  isLoading,
 }) {
-  const filters = ["All", "Open", "In Progress", "Resolved"];
+  const filters = ["All", "Open", "Resolved"];
 
   // Helper for priority dot color
   const getPriorityColor = (priority) => {
@@ -76,7 +76,10 @@ export default function MyTickets({
             <div className="h-4 bg-white/10 rounded w-20" />
           </div>
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="flex justify-between items-center p-4 border-b border-third/10 last:border-0">
+            <div
+              key={i}
+              className="flex justify-between items-center p-4 border-b border-third/10 last:border-0"
+            >
               <div className="flex gap-4 items-center">
                 <div className="h-4 bg-white/10 rounded w-16" />
                 <div className="h-4 bg-white/10 rounded w-48" />
@@ -166,11 +169,20 @@ export default function MyTickets({
               </thead>
               <tbody className="divide-y divide-third/10">
                 {tickets.map((ticket) => (
-                  <tr key={ticket.id} className="transition-colors hover:bg-white/2">
-                    <td className="p-4 font-bold text-fourth max-w-[120px] truncate" title={ticket.ticketNumber || ticket.id}>
+                  <tr
+                    key={ticket.id}
+                    className="transition-colors hover:bg-white/2"
+                  >
+                    <td
+                      className="p-4 font-bold text-fourth max-w-[120px] truncate"
+                      title={ticket.ticketNumber || ticket.id}
+                    >
                       {ticket.ticketNumber || ticket.id}
                     </td>
-                    <td className="p-4 text-primary font-medium max-w-[220px] truncate" title={ticket.subject}>
+                    <td
+                      className="p-4 text-primary font-medium max-w-[220px] truncate"
+                      title={ticket.subject}
+                    >
                       {ticket.subject}
                     </td>
                     <td className="p-4 text-third">{ticket.category}</td>
@@ -189,8 +201,13 @@ export default function MyTickets({
                         {ticket.status}
                       </span>
                     </td>
-                    <td className="p-4 text-third max-w-[150px] truncate" title={ticket.relatedVehicle}>
-                      {ticket.relatedVehicle && ticket.relatedVehicle !== "None" ? ticket.relatedVehicle : "—"}
+                    <td
+                      className="p-4 text-third max-w-[150px] truncate"
+                      title={ticket.relatedVehicle}
+                    >
+                      {ticket.relatedVehicle && ticket.relatedVehicle !== "None"
+                        ? ticket.relatedVehicle
+                        : "—"}
                     </td>
                     <td className="p-4 text-right">
                       <button
@@ -243,8 +260,13 @@ export default function MyTickets({
                   </div>
                 </div>
                 <div className="flex justify-between items-center pt-2 border-t border-third/10 text-xs">
-                  <span className="text-third/60 truncate max-w-[70%]" title={ticket.relatedVehicle}>
-                    {ticket.relatedVehicle && ticket.relatedVehicle !== "None" ? ticket.relatedVehicle : "—"}
+                  <span
+                    className="text-third/60 truncate max-w-[70%]"
+                    title={ticket.relatedVehicle}
+                  >
+                    {ticket.relatedVehicle && ticket.relatedVehicle !== "None"
+                      ? ticket.relatedVehicle
+                      : "—"}
                   </span>
                   <span className="text-fourth font-semibold flex items-center gap-1">
                     Details <Eye size={12} />

@@ -216,24 +216,7 @@ export default function BillingComponent() {
         </div>
       </div>
 
-      {/* PAYMENT METHOD */}
-      <div className="rounded-2xl border border-third/20  p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
-        <div className="flex justify-between items-center">
-          <h2 className="font-semibold">Payment Method</h2>
-          <Button variant="outlineSecondary" size="sm">Update</Button>
-        </div>
-
-        <div className="flex items-center gap-4 border border-third/30 rounded-xl p-4">
-          <CreditCard />
-          <div className="flex-1">
-            <p className="text-sm">**** **** **** 4242</p>
-            <p className="text-xs text-third">Expires 12/25</p>
-          </div>
-          <span className="text-xs px-3 py-1 bg-primary/10 rounded-full">
-            Primary
-          </span>
-        </div>
-      </div>
+     
 
       {/* TRANSACTION HISTORY */}
       <div className="rounded-2xl border border-third/20  p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">

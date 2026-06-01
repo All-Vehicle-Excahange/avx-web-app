@@ -78,6 +78,17 @@ export default function Step2Address({
     fetchCities();
   }, [form.stateId]);
 
+  const handleFormChange = (updated) => {
+    setForm(updated);
+    if (onChange) {
+      const isChanged =
+        (updated.address || "") !== (initialData?.address || "") ||
+        (updated.stateId || null) !== (initialData?.state?.id || initialData?.stateId || null) ||
+        (updated.cityId || null) !== (initialData?.city?.id || initialData?.cityId || null);
+      onChange(updated, isChanged);
+    }
+  };
+
   return (
     <div className="space-y-6 relative">
       {/* CLEAR BUTTON */}
@@ -103,8 +114,7 @@ export default function Step2Address({
           onChange={(e) => {
             const val = e.target.value;
             const updated = { ...form, address: val };
-            setForm(updated);
-            if (onChange) onChange(updated);
+            handleFormChange(updated);
           }}
         />
       )}
@@ -131,8 +141,7 @@ export default function Step2Address({
                   cityId: null,
                   cityName: "",
                 };
-                setForm(updated);
-                if (onChange) onChange(updated);
+                handleFormChange(updated);
               }}
             />
           </div>
@@ -164,8 +173,7 @@ export default function Step2Address({
                   cityId: val,
                   cityName: c ? c.label : "",
                 };
-                setForm(updated);
-                if (onChange) onChange(updated);
+                handleFormChange(updated);
               }}
             />
           </div>

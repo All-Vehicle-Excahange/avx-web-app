@@ -15,6 +15,8 @@ import Layout from "@/components/layout/Layout";
 import Navbar from "@/components/layout/Navbar";
 import Head from "next/head";
 import React from "react";
+import BecameBanner from "@/components/features/home/BecameBanner";
+import ConsultBanner from "@/components/features/home/ConsultBanner";
 
 function index() {
   return (
@@ -40,8 +42,15 @@ function index() {
         <TierStructure />
         <OnboardingProcess />
         <AccountabilityTrust />
-        <ConsultCta />
       </Layout>
+
+      <div className="hidden md:block">
+        <BecameBanner />
+      </div>
+      <div className="block md:hidden">
+        <ConsultBanner />
+      </div>
+
       <FooterLink />
       <Footer />
     </>
@@ -49,4 +58,3 @@ function index() {
 }
 index.fullWidth = true;
 export default index;
-

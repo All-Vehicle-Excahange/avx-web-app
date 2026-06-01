@@ -8,6 +8,7 @@ import {
   getVehiclesRequiringAttention,
   getInspectionPriceAndCount,
   getInspectionPricForBuyer,
+  getInspectionRefundStatus,
 } from "@/services/inspection.service";
 import { queryOptions } from "@tanstack/react-query";
 
@@ -146,6 +147,16 @@ export const getInspectionPricForBuyerQuery = (vehicleId) => {
     queryFn: async () => {
       const res = await getInspectionPricForBuyer(vehicleId);
       return res?.data;
+    },
+  });
+};
+
+export const getInspectionRefundStatusQuery = (requestId) => {
+  return queryOptions({
+    queryKey: ["inspection-refund-status", requestId],
+    queryFn: async () => {
+      const res = await getInspectionRefundStatus(requestId);
+      return res;
     },
   });
 };

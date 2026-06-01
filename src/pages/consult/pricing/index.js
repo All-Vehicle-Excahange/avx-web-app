@@ -8,6 +8,7 @@ import FullPricing from "@/components/features/consult/pricing/FullPricing";
 import NoCommissionModel from "@/components/features/consult/pricing/NoCommissionModel";
 import FAQ from "@/components/features/consult/pricing/Faq";
 import TierCta from "@/components/features/consult/pricing/TierCta";
+import PlanComplareTable from "@/components/features/consult/pricing/PlanComplareTable";
 
 function index() {
   return (
@@ -23,6 +24,7 @@ function index() {
 
       <FullPricing />
       <Layout>
+        <PlanComplareTable />
         <NoCommissionModel />
         <FAQ />
         <TierCta />
