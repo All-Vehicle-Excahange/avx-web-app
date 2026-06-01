@@ -9,6 +9,7 @@ import "@/styles/globals.css";
 import { useAuthStore } from "@/stores/useAuthStore";
 import useGuestSetup from "@/hooks/useGuestSetup";
 import LoginPopup from "@/components/auth/LoginPopup";
+import SignupPopup from "@/components/auth/SignupPopup";
 import GlobalLoader from "@/components/ui/GlobalLoader";
 import SplashScreen from "@/components/ui/SplashScreen";
 import GlobalCompareButton from "@/components/ui/GlobalCompareButton";
@@ -37,8 +38,11 @@ export default function App({ Component, pageProps }) {
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
 
   const isLoginPopupOpen = useAuthStore((state) => state.isLoginPopupOpen);
-
   const closeLoginPopup = useAuthStore((state) => state.closeLoginPopup);
+  const openLoginPopup = useAuthStore((state) => state.openLoginPopup);
+  const isSignupPopupOpen = useAuthStore((state) => state.isSignupPopupOpen);
+  const openSignupPopup = useAuthStore((state) => state.openSignupPopup);
+  const closeSignupPopup = useAuthStore((state) => state.closeSignupPopup);
 
   const [loading, setLoading] = useState(false);
 
@@ -190,6 +194,16 @@ export default function App({ Component, pageProps }) {
       <LoginPopup
         isOpen={isLoginPopupOpen && !showSplash}
         onClose={closeLoginPopup}
+        onSignup={openSignupPopup}
+        onSuccess={closeLoginPopup}
+      />
+
+      {/* SIGNUP POPUP */}
+      <SignupPopup
+        isOpen={isSignupPopupOpen && !showSplash}
+        onClose={closeSignupPopup}
+        onLogin={openLoginPopup}
+        onSuccess={closeSignupPopup}
       />
 
       {/* SPLASH SCREEN */}

@@ -3,18 +3,20 @@
 import { create } from "zustand";
 
 export const useAuthStore = create((set) => ({
-  // ✅ AUTH DATA
+  //  AUTH DATA
   user: null,
   token: null,
   isLoggedIn: false,
   authInitialized: false,
 
-  // ✅ LOGIN POPUP CONTROL
+  //  LOGIN & SIGNUP POPUP CONTROL
   isLoginPopupOpen: false,
+  isSignupPopupOpen: false,
 
   openLoginPopup: () =>
     set({
       isLoginPopupOpen: true,
+      isSignupPopupOpen: false,
     }),
 
   closeLoginPopup: () =>
@@ -22,7 +24,18 @@ export const useAuthStore = create((set) => ({
       isLoginPopupOpen: false,
     }),
 
-  // ✅ LOGIN FUNCTION
+  openSignupPopup: () =>
+    set({
+      isSignupPopupOpen: true,
+      isLoginPopupOpen: false,
+    }),
+
+  closeSignupPopup: () =>
+    set({
+      isSignupPopupOpen: false,
+    }),
+
+  //  LOGIN FUNCTION
   login: (userData, token) => {
     const userWithRefresh = {
       ...userData.userMaster,
@@ -35,18 +48,19 @@ export const useAuthStore = create((set) => ({
       isLoggedIn: true,
       authInitialized: true,
 
-      // ✅ Close popup automatically after login
+      //  Close popup automatically after login
       isLoginPopupOpen: false,
+      isSignupPopupOpen: false,
     });
 
-    // ✅ Persist in LocalStorage
+    //  Persist in LocalStorage
     if (typeof window !== "undefined") {
       localStorage.setItem("user", JSON.stringify(userWithRefresh));
       localStorage.setItem("token", token);
     }
   },
 
-  // ✅ LOGOUT FUNCTION
+  //  LOGOUT FUNCTION
   logout: () => {
     set({
       user: null,
@@ -54,17 +68,20 @@ export const useAuthStore = create((set) => ({
       isLoggedIn: false,
       authInitialized: true,
 
-      // ✅ Open popup after logout (optional)
+      //  Open popup after logout (optional)
       isLoginPopupOpen: true,
+      isSignupPopupOpen: false,
     });
 
     if (typeof window !== "undefined") {
       localStorage.removeItem("user");
       localStorage.removeItem("token");
+      localStorage.removeItem("sellerTierData");
+      localStorage.removeItem("sellerTier");
     }
   },
 
-  // ✅ INITIALIZE AUTH ON APP LOAD
+  //  INITIALIZE AUTH ON APP LOAD
   initializeAuth: () => {
     if (typeof window !== "undefined") {
       const savedUser = localStorage.getItem("user");

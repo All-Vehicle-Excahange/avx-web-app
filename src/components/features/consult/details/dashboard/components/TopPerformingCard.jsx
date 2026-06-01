@@ -105,7 +105,7 @@ export default function TopPerformingCard({ vehicle, rank }) {
             fill
             onClick={() =>
               push(
-                `/vehicle/details/${generateVehicleSlug(vehicle)}/${vehicle.id}`,
+                `/vehicle/details/consualt/${generateVehicleSlug(vehicle)}/${vehicle.id}`,
               )
             }
             className="object-cover cursor-pointer"
