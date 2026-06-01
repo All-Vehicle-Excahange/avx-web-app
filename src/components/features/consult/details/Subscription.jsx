@@ -263,11 +263,11 @@ export default function Subscription() {
             onSubscribe={handleClick}
             paymentLoading={paymentLoading}
             features={
-              tier.features?.map((f) =>
-                f.featureDescription
-                  ? `${f.featureName} (${f.featureDescription})`
-                  : f.featureName,
-              ) || []
+              ((billingCycle === "MONTHLY" ? tier.monthlyFeatures : tier.yearlyFeatures) || tier.features)?.map((f) => {
+                const titleVal = typeof f === "string" ? f : (f?.title || f?.featureName || f?.name || "");
+                const descVal = typeof f === "string" ? "" : (f?.description || f?.featureDescription || "");
+                return descVal ? `${titleVal} (${descVal})` : titleVal;
+              }) || []
             }
           />
         ))}

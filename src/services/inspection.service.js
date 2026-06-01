@@ -19,6 +19,7 @@ const ENDPOINT = {
   rejectInspectionRequest: "/vehicle/inspection/owner/request",
   getInspectionPriceAndCount: "/tier/owner/inspction-price",
   getInspectionPricForBuyer: "/tier/buyer/inspction-price",
+  getInspectionRefundStatus: "/vehicle/inspection",
 };
 
 export const getInspectionByVehicleId = async (vehicleId) => {
@@ -211,6 +212,17 @@ export const getInspectionPricForBuyer = async (vehicleId) => {
   try {
     const res = await axiosInstance.get(
       `${ENDPOINT.getInspectionPricForBuyer}/${vehicleId}`,
+    );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getInspectionRefundStatus = async (requestId) => {
+  try {
+    const res = await axiosInstance.get(
+      `${ENDPOINT.getInspectionRefundStatus}/${requestId}/refund-status`,
     );
     return handleResponse(res);
   } catch (error) {

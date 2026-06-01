@@ -40,8 +40,7 @@ export default function InspectionCard({
 
   const lowerStatus = status?.toLowerCase();
   const isPending =
-    lowerStatus === "pending" ||
-    lowerStatus === "pending_owner_approval";
+    lowerStatus === "pending" || lowerStatus === "pending_owner_approval";
   const isAccepted =
     lowerStatus === "accepted" ||
     lowerStatus === "processing" ||
@@ -58,7 +57,7 @@ export default function InspectionCard({
   const isNotInspected =
     lowerStatus === "not_inspected" ||
     lowerStatus === "rejected" ||
-    lowerStatus === "rejected_by_owner" ||
+    // lowerStatus === "rejected_by_owner" ||
     lowerStatus === "cancelled";
 
   return (
@@ -79,8 +78,7 @@ export default function InspectionCard({
           </p>
         ) : (
           <p className="text-sm text-third">
-            From:{" "}
-            <span className="text-primary font-semibold">{fromName}</span>
+            From: <span className="text-primary font-semibold">{fromName}</span>
           </p>
         )}
         <p className="text-sm text-third">Date: {date}</p>
