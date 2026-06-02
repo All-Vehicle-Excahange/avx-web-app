@@ -108,18 +108,20 @@ export default function OnboardingProcess() {
                   <div
                     className="w-12 h-12 rounded-full flex items-center justify-center text-lg border transition-all"
                     style={{
-                      borderColor: isActive
-                        ? step.color
-                        : isDone
-                          ? "#10b981"
-                          : "var(--color-primary/30)",
-                      background: isActive
-                          ? "#10b981" // solid green when done
-                          : "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)",
-                      color: isActive
-                        ? step.color
-                        : isDone
-                          ? "#10b981"
+                      borderColor: isDone
+                        ? "#10b981"
+                        : isActive
+                          ? step.color
+                          : "var(--color-primary/20)",
+                      background: isDone
+                        ? "#10b981"
+                        : isActive
+                          ? `${step.color}15`
+                          : "transparent",
+                      color: isDone
+                        ? "#ffffff"
+                        : isActive
+                          ? step.color
                           : "#4b5563",
                     }}
                   >
@@ -137,11 +139,11 @@ export default function OnboardingProcess() {
         {/* ===== DESKTOP LAYOUT ===== */}
         <div className="lg:grid lg:grid-cols-[180px_1fr] lg:gap-10">
           {/* LEFT VERTICAL TIMELINE */}
-          <div className="hidden lg:flex flex-col items-center relative">
+          <div className="hidden lg:flex flex-col items-start relative pl-6">
             {/* vertical line */}
-            <div className="absolute top-6 bottom-6 left-11.5 w-px bg-fourth/50" />
+            <div className="absolute top-6 bottom-6 left-12 w-px bg-fourth/50" />
 
-            <div className="flex flex-col gap-6 z-10">
+            <div className="flex flex-col gap-6 z-10 w-full">
               {steps.map((step, i) => {
                 const isActive = activeStep === i;
                 const isDone = i < activeStep;
@@ -150,30 +152,25 @@ export default function OnboardingProcess() {
                   <button
                     key={i}
                     onClick={() => setActiveStep(i)}
-                    className="flex items-center gap-4 group transition-all hover:cursor-pointer"
+                    className="flex items-center gap-4 group transition-all hover:cursor-pointer w-full"
                   >
-                    {(isActive || isDone) && (
-                      <div
-                        className="absolute left-2.5 w-8 h-8 rounded-full blur-lg opacity-30"
-                        style={{ background: isDone ? "#10b981" : step.color }}
-                      />
-                    )}
-
                     <div
                       className="w-12 h-12 rounded-full flex items-center justify-center border transition-all duration-300"
                       style={{
                         background: isDone
-                          ? "#10b981" // solid green when done
-                          : "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)", // always dark otherwise
+                          ? "#10b981"
+                          : isActive
+                            ? `${step.color}15`
+                            : "transparent",
                         borderColor: isDone
                           ? "#10b981"
                           : isActive
                             ? step.color
-                            : "var(--color-primary/30)",
+                            : "var(--color-primary/20)",
                         color: isDone
-                          ? "#ffffff" // white icon when done
+                          ? "#ffffff"
                           : isActive
-                            ? step.color // colored icon when active
+                            ? step.color
                             : "#4b5563",
                       }}
                     >
@@ -203,7 +200,7 @@ export default function OnboardingProcess() {
           </div>
 
           {/* RIGHT MAIN CARD */}
-          <div className="rounded-2xl border border-primary/30 bg-transparent shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] overflow-hidden">
+          <div className="rounded-2xl border border-primary/30 bg-transparent overflow-hidden">
             <div className="grid lg:grid-cols-[1fr_260px]">
               {/* LEFT */}
               <div className="p-6 md:p-8 space-y-5">
@@ -236,7 +233,7 @@ export default function OnboardingProcess() {
                   {active.detail.split(" · ").map((d) => (
                     <span
                       key={d}
-                      className="text-[11px] px-3 py-1 rounded-md border border-[#1f2937] bg-[#0b0e13] text-third"
+                      className="text-[11px] px-3 py-1 rounded-md border border-[#1f2937] bg-transparent text-third"
                     >
                       {d}
                     </span>

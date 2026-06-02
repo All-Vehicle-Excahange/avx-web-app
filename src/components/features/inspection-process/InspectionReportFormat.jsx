@@ -73,11 +73,7 @@ export default function InspectionReportFormat() {
 
               {/* fake report preview image */}
               <div className="relative">
-                <Image src="https://images.unsplash.com/photo-1625047509168-a7026f36de04?q=80&w=1600&auto=format&fit=crop
-
-
-
-" alt="Reecomm inspection digital report preview" width={800} height={500} unoptimized className="w-full h-60 md:h-112.5 object-cover opacity-90" />
+                <Image src="https://images.unsplash.com/photo-1625047509168-a7026f36de04?q=80&w=1600&auto=format&fit=crop" alt="Reecomm inspection digital report preview" width={800} height={500} unoptimized className="w-full h-60 md:h-112.5 object-cover opacity-90" />
 
                 {/* overlay gradient */}
                 <div className="absolute inset-0 bg-linear-to-t from-secondary/70 via-transparent to-transparent" />

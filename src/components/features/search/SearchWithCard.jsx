@@ -129,7 +129,9 @@ export default function SearchWithCard({
   // States
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [activeFilterTab, setActiveFilterTab] = useState("Location");
-  const [avxAssumed, setAvxAssumed] = useState(false);
+  const [avxAssumed, setAvxAssumed] = useState(() => {
+    return searchParams.get("reccomInspected") === "true";
+  });
 
   const [minPrice, setMinPrice] = useState(() => mPrice > 0 ? mPrice : 50000);
   const [maxPrice, setMaxPrice] = useState(() => mxPrice > 0 ? mxPrice : 2000000);
@@ -394,6 +396,10 @@ export default function SearchWithCard({
 
   // Synchronize options lists from URL params on mount/change
   useEffect(() => {
+    const reccomInspectedVal = searchParams.get("reccomInspected");
+    if (reccomInspectedVal === "true") {
+      setAvxAssumed(true);
+    }
     if (makerId && brandParam) {
       setBrands((prev) => {
         if (!prev.find((b) => b.value === makerId)) {

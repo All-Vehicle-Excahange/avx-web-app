@@ -36,6 +36,7 @@ import {
   getInspectionStatusQuery,
   getInventoryOverviewQuery,
   getOverviewSummaryDataQuery,
+  getRecentActivityQuery,
 } from "@/queries/overview.queries";
 import { getAnalyticsKipsQuery } from "@/queries/analytics.queries";
 import TopPerformingCardSkeleton from "@/components/ui/skeleton/TopPerformingCardSkeleton";
@@ -49,6 +50,31 @@ const rangeOptions = [
   { label: "Last 30 days", value: "30" },
   { label: "Last 90 days", value: "90" },
 ];
+
+function formatRelativeTime(dateString) {
+  if (!dateString) return "";
+  try {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHrs = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHrs / 24);
+
+    if (diffMins < 1) return "Just now";
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHrs < 24) return `${diffHrs}h ago`;
+    if (diffDays === 1) return "Yesterday";
+    if (diffDays < 7) return `${diffDays}d ago`;
+
+    return date.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+    });
+  } catch (e) {
+    return "";
+  }
+}
 
 export default function OverviewComponent() {
   const user = useAuthStore((state) => state.user);
@@ -87,6 +113,10 @@ export default function OverviewComponent() {
   const { data: inspectionStatusData, isLoading: inspectionStatusLoading } =
     useQuery(getInspectionStatusQuery());
 
+  const { data: recentActivityData, isLoading: recentActivityLoading } = useQuery(
+    getRecentActivityQuery(),
+  );
+
   let daysParam = "LAST_7_DAYS";
   if (range === "30") {
     daysParam = "LAST_30_DAYS";
@@ -111,7 +141,8 @@ export default function OverviewComponent() {
     inquiryLoading ||
     summaryLoading ||
     analyticsLoading ||
-    inspectionStatusLoading;
+    inspectionStatusLoading ||
+    recentActivityLoading;
 
   const avgTime = inquiryKpis?.averageResponseTime;
   const formattedTime = formatResponseTime(avgTime);
@@ -614,14 +645,17 @@ export default function OverviewComponent() {
         {/* RECENT ACTIVITY */}
         <div className="rounded-xl border border-third/30    p-6 space-y-3">
           <h3 className="font-semibold">Recent Activity</h3>
-
-          <Activity text="New inquiry on BMW X1" time="5m ago" />
-          <Activity text="Vehicle marked sold: Honda City" time="2h ago" />
-          <Activity text="Inspection completed: Baleno" time="4h ago" />
-          <Activity
-            text="Featured slot impression spike (+18%)"
-            time="6h ago"
-          />
+          {recentActivityData && recentActivityData.length > 0 ? (
+            recentActivityData.slice(0, 4).map((item, idx) => (
+              <Activity
+                key={idx}
+                text={item.activity}
+                time={formatRelativeTime(item.createdAt)}
+              />
+            ))
+          ) : (
+            <p className="text-sm text-third">No recent activity.</p>
+          )}
         </div>
 
         {/* RECOMMENDED ACTIONS */}

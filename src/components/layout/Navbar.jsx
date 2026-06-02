@@ -20,9 +20,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { useAuthStore } from "@/stores/useAuthStore";
 import PreferencesPopup from "../features/user/PreferencesPopup";
-import {
-  getGlobalSearch,
-} from "@/services/user.service";
 import { useRouter, usePathname } from "next/navigation";
 import { useUIStore } from "@/stores/useUIStore";
 import MobileAppDownloadBanner from "../ui/MobileAppDownloadBanner";
@@ -100,15 +97,13 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
   /* ================= SEARCH STATES ================= */
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("All");
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const combinedItems = useMemo(() => {
-    return [...filteredSuggestions, ...results];
-  }, [filteredSuggestions, results]);
+    return filteredSuggestions;
+  }, [filteredSuggestions]);
 
   useEffect(() => {
     setSelectedIndex(-1);
@@ -388,30 +383,6 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
     setFilteredSuggestions(unique);
   }, [searchQuery, selectedBrand, suggestionsData]);
 
-  /* ================= DEBOUNCED SEARCH ================= */
-  useEffect(() => {
-    if (!searchQuery.trim()) {
-      setResults([]);
-      // setShowDropdown(false); // Don't hide if suggestions are visible
-      return;
-    }
-
-    const timeout = setTimeout(async () => {
-      try {
-        setLoading(true);
-        const res = await getGlobalSearch(searchQuery);
-        setResults(res?.data || []);
-        setShowDropdown(true);
-      } catch (err) {
-        console.error("Search error:", err);
-      } finally {
-        setLoading(false);
-      }
-    }, 300);
-
-    return () => clearTimeout(timeout);
-  }, [searchQuery]);
-
   /* ================= CLICK OUTSIDE CLOSE ================= */
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -433,7 +404,7 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
       {/* Background Overlay for Search */}
       {showDropdown && (
         <div
-          className="fixed inset-0 bg-black/60 z-[1090] transition-opacity"
+          className="fixed inset-0 bg-black/60 z-1090 transition-opacity"
           onClick={() => setShowDropdown(false)}
         />
       )}
@@ -667,84 +638,14 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
                         </div>
                       )}
 
-                      {/* Results Section */}
-                      {results.length > 0 && (
-                        <div>
-                          <div className="px-3 py-2 border-t border-gray-50 mt-2 pt-4">
-                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                              Consultants & Stores
-                            </span>
-                          </div>
-                          <div className="grid grid-cols-1 gap-1">
-                            {results.map((item, index) => {
-                              const globalIndex =
-                                filteredSuggestions.length + index;
-                              return (
-                                <div
-                                  key={item.id || index}
-                                  onClick={() => {
-                                    if (item.username) {
-                                      push(
-                                        `/store-front/${item.username}`,
-                                      );
-                                    }
-                                    setShowDropdown(false);
-                                  }}
-                                  className={`flex items-center gap-4 p-3 cursor-pointer transition-all duration-200 rounded-sm group
-                                    ${selectedIndex === globalIndex ? "bg-fourth/10 border-l-4 border-fourth pl-4" : "hover:bg-fourth/5"}`}
-                                >
-                                  <div className="relative">
-                                    <Image
-                                      src={
-                                        item.profilePicture ||
-                                        "/images/default-avatar.png"
-                                      }
-                                      width={40}
-                                      height={40}
-                                      className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
-                                      alt={item.fullName || "User"}
-                                    />
-                                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
-                                  </div>
-                                  <div className="flex-1 min-w-0">
-                                    <div className="font-semibold text-gray-900 truncate group-hover:text-primary transition-colors">
-                                      {item.fullName || item.name}
-                                    </div>
-                                    <div className="text-xs text-gray-500 flex items-center gap-1">
-                                      <MapPin className="w-3 h-3" />
-                                      {item.city}, {item.state}
-                                    </div>
-                                  </div>
-                                  <div className="opacity-0 group-hover:opacity-100 transition-opacity pr-2">
-                                    <ChevronRight className="w-4 h-4 text-fourth" />
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
+                      {filteredSuggestions.length === 0 && searchQuery && (
+                        <div className="p-8 text-center text-gray-400">
+                          <Search className="w-10 h-10 mx-auto mb-3 opacity-20" />
+                          <p className="text-sm">
+                            No results found for &quot;{searchQuery}&quot;
+                          </p>
                         </div>
                       )}
-
-                      {loading && results.length === 0 && searchQuery && (
-                        <div className="p-8 text-center">
-                          <div className="inline-block animate-spin rounded-full h-5 w-5 border-2 border-fourth border-t-transparent mb-2"></div>
-                          <div className="text-gray-400 text-sm font-medium">
-                            Searching for &quot;{searchQuery}&quot;...
-                          </div>
-                        </div>
-                      )}
-
-                      {!loading &&
-                        results.length === 0 &&
-                        filteredSuggestions.length === 0 &&
-                        searchQuery && (
-                          <div className="p-8 text-center text-gray-400">
-                            <Search className="w-10 h-10 mx-auto mb-3 opacity-20" />
-                            <p className="text-sm">
-                              No results found for &quot;{searchQuery}&quot;
-                            </p>
-                          </div>
-                        )}
                     </div>
                   )}
                 </div>

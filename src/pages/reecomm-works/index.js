@@ -59,9 +59,8 @@ function index() {
         <WhyThisMattersSection />
       </Layout>
 
-      <Layout>
-        <Cta />
-      </Layout>
+      <Cta />
+
       <FooterLink />
       <Footer />
     </>

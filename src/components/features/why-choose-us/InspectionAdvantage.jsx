@@ -102,7 +102,7 @@ export default function InspectionAdvantage() {
         ═══════════════════════════════════════ */}
 
         {/* Step selector row */}
-        <div className="relative flex flex-col lg:flex-row items-start gap-10 lg:gap-0 mb-10">
+        <div className="relative flex p-4 flex-col lg:flex-row items-start gap-10 lg:gap-0 mb-10">
 
           {steps.map((s, i) => {
             const Icon = s.icon;

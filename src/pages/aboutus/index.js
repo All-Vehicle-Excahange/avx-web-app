@@ -43,10 +43,9 @@ function index() {
       <Layout>
         <ComplianceAndTransparency />
       </Layout>
-      <Layout>
+     
         <Cta />
-      </Layout>
-
+     
       <FooterLink />
       <Footer />
     </>
