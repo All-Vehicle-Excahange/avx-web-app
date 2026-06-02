@@ -151,6 +151,17 @@ export default function StoreFrontHeroSection() {
     return count.toString();
   };
 
+  const mapUrl = storeDetails?.mapUrl;
+  const addressParts = [
+    storeDetails?.address?.address,
+    storeDetails?.address?.city,
+    storeDetails?.address?.state,
+  ].filter(Boolean);
+  const locationString = addressParts.length > 0 
+    ? addressParts.join(", ") 
+    : "Kanodar, Ahmedabad, Gujarat";
+  const directionUrl = mapUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationString)}`;
+
   return (
     <>
       <section className="w-full max-w-[1480px] mt-10 mx-auto border border-third/40 rounded-2xl  md:rounded-[2.5rem] overflow-hidden shadow-sm">
@@ -317,7 +328,13 @@ export default function StoreFrontHeroSection() {
                   <MessageCircle className="ml-2 w-4 h-4" />
                 </Button>
 
-                <Button size="sm" variant="ghost">
+                <Button 
+                  size="sm" 
+                  variant="ghost"
+                  href={directionUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Get Directions
                   <CornerUpRight className="ml-2 w-4 h-4" />
                 </Button>

@@ -12,6 +12,8 @@ import VisionAndApproach from "@/components/features/about/OurVisionAndApproach"
 import ComplianceAndTransparency from "@/components/features/about/ComplianceAndTransparency";
 import FooterLink from "@/components/layout/FooterLink";
 import Footer from "@/components/layout/Footer";
+import BecameBanner from "@/components/features/home/BecameBanner";
+import ConsultBanner from "@/components/features/home/ConsultBanner";
 
 function index() {
   return (
@@ -43,9 +45,14 @@ function index() {
       <Layout>
         <ComplianceAndTransparency />
       </Layout>
-     
-        <Cta />
-     
+
+      <div className="hidden md:block">
+        <BecameBanner />
+      </div>
+      <div className="block md:hidden">
+        <ConsultBanner />
+      </div>
+
       <FooterLink />
       <Footer />
     </>
@@ -55,5 +62,3 @@ function index() {
 index.fullWidth = true;
 
 export default index;
-
-

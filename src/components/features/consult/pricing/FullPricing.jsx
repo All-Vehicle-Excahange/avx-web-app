@@ -9,73 +9,43 @@ import {
   FiTarget,
   FiVideo,
 } from "react-icons/fi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import { getAllTier } from "@/services/user.service";
 import PricingHero from "./PricingHero";
 
-const tiers = [
-  {
+const staticTierDetails = {
+  BASIC: {
     name: "Basic",
     tagline: "Start building your presence on AVX.",
     color: "#6b7280",
-    priceMonth: "₹999 ",
-    priceYear: "₹9,999",
     bestFor: "Small consultants & entry-level sellers",
-    features: [
-      "Up to 8 active listings",
-      "Default storefront theme",
-      "Public search visibility",
-      "Receive inquiries",
-      "Basic analytics",
-      "Inspection request support",
-      "Access to PPC (paid separately)",
-    ],
     note: "No customization. No featured priority.",
     cta: "Get Started",
     ctaStyle: "border border-[#d1d5db] text-[#111827] hover:bg-[#f9fafb]",
+    highlight: false,
   },
-  {
+  PRO: {
     name: "Pro",
     tagline: "Everything you need to grow and compete.",
-    highlight: true,
     color: "#2563eb",
-    priceMonth: "₹2,999",
-    priceYear: "₹19,999 ",
     bestFor: "Growing dealerships",
-    features: [
-      "25–40 active listings",
-      "Enhanced search visibility",
-      "Advanced analytics",
-      "Performance metrics",
-      "Higher inquiry limits",
-      "Featured vehicle eligibility",
-      "WhatsApp integration",
-    ],
     note: "Designed for growth-focused consultants.",
     cta: "Get Started",
     ctaStyle: "bg-[#2563eb] text-white hover:bg-[#1d4ed8]",
+    highlight: true,
   },
-  {
+  PREMIUM: {
     name: "Premium",
     tagline: "Maximum authority across the marketplace.",
     color: "#6b7280",
-    priceMonth: "₹7,999",
-    priceYear: "₹69,999",
     bestFor: "Large inventory dealers & brands",
-    features: [
-      "75+ active listings",
-      "Premium customization",
-      "Custom banners & media",
-      "Top placement eligibility",
-      "Dedicated support",
-      "Free re-inspection",
-      "Priority PPC slots",
-      "Advanced analytics dashboard",
-    ],
     note: "Premium visibility & authority positioning.",
     cta: "Get Started",
     ctaStyle: "border border-[#d1d5db] text-[#111827] hover:bg-[#f9fafb]",
+    highlight: false,
   },
-];
+};
 
 const addons = [
   {
@@ -106,7 +76,46 @@ const addons = [
 ];
 
 export default function FullPricing() {
+  const router = useRouter();
   const [yearly, setYearly] = useState(false);
+  const [tiers, setTiers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTiers = async () => {
+      try {
+        const res = await getAllTier();
+        if (res?.data) {
+          const order = ["BASIC", "PRO", "PREMIUM"];
+          const filtered = res.data.filter(
+            (tier) => tier.title?.toUpperCase() !== "TEST",
+          );
+          const sorted = [...filtered].sort((a, b) => {
+            const aTitle = a.title?.toUpperCase();
+            const bTitle = b.title?.toUpperCase();
+            return order.indexOf(aTitle) - order.indexOf(bTitle);
+          });
+          setTiers(sorted);
+        }
+      } catch (err) {
+        console.error("Error fetching tiers:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTiers();
+  }, []);
+
+  const formatPrice = (price) => {
+    if (price === undefined || price === null) return "";
+    if (typeof price === "number") {
+      return `₹${price.toLocaleString("en-IN")}`;
+    }
+    if (typeof price === "string" && !price.startsWith("₹")) {
+      return `₹${price}`;
+    }
+    return price;
+  };
 
   return (
     <div>
@@ -121,129 +130,228 @@ export default function FullPricing() {
       >
         <div className=" relative -top-40 max-w-7xl mx-auto px-5 sm:px-6 pt-0">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
-            {tiers.map((tier, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 32 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                viewport={{ once: true }}
-                className={`relative flex flex-col rounded-2xl overflow-hidden ${
-                  tier.highlight ? "lg:-translate-y-4" : ""
-                }`}
-                style={{
-                  background: tier.highlight
-                    ? "linear-gradient(180deg, #0069e0 0%, #0055b8 100%)"
-                    : "linear-gradient(180deg, #ffffff 0%, #f9fafb 100%)",
-                  border: tier.highlight
-                    ? "1px solid rgba(255,255,255,0.30)"
-                    : "1px solid rgba(0,0,0,0.08)",
-                  boxShadow: tier.highlight
-                    ? "0 20px 60px rgba(0,60,180,0.35)"
-                    : "0 8px 30px rgba(0,0,0,0.08)",
-                }}
-              >
-                {/* soft glow ring for highlight */}
-                {tier.highlight && (
-                  <div className="absolute -inset-0.5 rounded-2xl bg-white/10 blur-xl opacity-40 pointer-events-none" />
-                )}
-
-                {tier.highlight && (
-                  <div className="text-white text-[10px] font-bold tracking-[0.2em] uppercase text-center py-2.5 bg-white/15 backdrop-blur-sm">
-                    Recommended
-                  </div>
-                )}
-
-                <div className="relative p-7 flex flex-col flex-1">
-                  <h3
-                    className={`text-[20px] font-bold mb-1 ${tier.highlight ? "text-white" : "text-[#111827]"}`}
-                  >
-                    {tier.name}
-                  </h3>
-
-                  <p
-                    className={`text-[13px] mb-5 ${tier.highlight ? "text-white/60" : "text-[#6b7280]"}`}
-                  >
-                    {tier.tagline}
-                  </p>
-
-                  <div className="mb-1">
-                    <span
-                      className={`text-[26px] font-black ${tier.highlight ? "text-white" : "text-[#111827]"}`}
-                    >
-                      {yearly && tier.priceYear
-                        ? tier.priceYear
-                        : tier.priceMonth}
-                    </span>
-                    <span
-                      className={`text-[12px] ml-1 ${tier.highlight ? "text-white/50" : "text-[#9ca3af]"}`}
-                    >
-                      / {yearly ? "year" : "month"}
-                    </span>
-                  </div>
-
-                  <p
-                    className={`text-[11px] mb-5 ${tier.highlight ? "text-white/50" : "text-[#9ca3af]"}`}
-                  >
-                    Best for: {tier.bestFor}
-                  </p>
-
+            {loading
+              ? // SKELETON CARDS
+                Array.from({ length: 3 }).map((_, i) => (
                   <div
-                    className={`h-px mb-5 ${tier.highlight ? "bg-white/10" : "bg-[#eef2f7]"}`}
-                  />
-
-                  {/* FEATURES */}
-                  <ul className="space-y-3 flex-1">
-                    {tier.features.map((f, idx) => (
-                      <li key={idx} className="flex items-start gap-3">
-                        <div
-                          className="w-5 h-5 rounded-full flex items-center justify-center mt-0.5"
-                          style={{
-                            background: tier.highlight
-                              ? "rgba(255,255,255,0.20)"
-                              : "rgba(0,0,0,0.05)",
-                          }}
-                        >
-                          <FiCheck
-                            className="text-[10px]"
-                            style={{
-                              color: tier.highlight ? "#fff" : "#6b7280",
-                            }}
-                          />
-                        </div>
-                        <span
-                          className={`text-[13px] ${tier.highlight ? "text-white/80" : "text-[#374151]"}`}
-                        >
-                          {f}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <p
-                    className={`text-[11px] mt-5 italic ${tier.highlight ? "text-white/40" : "text-[#9ca3af]"}`}
-                  >
-                    {tier.note}
-                  </p>
-
-                  {/* BUTTON */}
-                  <button
-                    className="w-full py-3 rounded-full text-[14px] font-semibold transition-all duration-300 mt-8 hover:cursor-pointer"
+                    key={i}
+                    className="animate-pulse flex flex-col rounded-2xl overflow-hidden border border-primary/10 bg-secondary/5 h-[550px]"
                     style={{
-                      background: tier.highlight
-                        ? "#fff"
-                        : "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)",
-                      color: tier.highlight ? "#1f1f1f" : "#fff",
-                      boxShadow: tier.highlight
-                        ? "0 6px 20px rgba(255,255,255,0.2)"
-                        : "0 6px 20px rgba(0,0,0,0.25)",
+                      background:
+                        "linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)",
+                      boxShadow: "0 8px 30px rgba(0,0,0,0.08)",
                     }}
                   >
-                    {tier.cta}
-                  </button>
-                </div>
-              </motion.div>
-            ))}
+                    <div className="p-7 flex flex-col flex-1 space-y-6">
+                      <div className="space-y-2">
+                        <div className="h-6 bg-primary/10 rounded w-1/3" />
+                        <div className="h-4 bg-primary/10 rounded w-2/3" />
+                      </div>
+                      <div className="h-10 bg-primary/10 rounded w-1/2" />
+                      <div className="h-1px bg-primary/10" />
+                      <div className="space-y-3 flex-1">
+                        {Array.from({ length: 5 }).map((_, j) => (
+                          <div key={j} className="flex items-center gap-3">
+                            <div className="w-5 h-5 rounded-full bg-primary/10 shrink-0" />
+                            <div className="h-4 bg-primary/10 rounded w-full" />
+                          </div>
+                        ))}
+                      </div>
+                      <div className="h-11 bg-primary/10 rounded-full w-full" />
+                    </div>
+                  </div>
+                ))
+              : tiers.map((tier, i) => {
+                  const key = (tier.title || "").toUpperCase();
+                  const staticDetails = staticTierDetails[key] || {
+                    name: tier.title,
+                    tagline:
+                      tier.description || "Start competing in our marketplace.",
+                    color: "#6b7280",
+                    bestFor: "Consultants & Sellers",
+                    note: "",
+                    cta: "Get Started",
+                    ctaStyle:
+                      "border border-[#d1d5db] text-[#111827] hover:bg-[#f9fafb]",
+                    highlight: false,
+                  };
+
+                  const price = yearly ? tier.yearlyPrice : tier.monthlyPrice;
+                  const formattedPrice = formatPrice(price);
+
+                  const features = (
+                    (yearly ? tier.yearlyFeatures : tier.monthlyFeatures) ||
+                    tier.features ||
+                    []
+                  ).map((f) => {
+                    const titleVal =
+                      typeof f === "string"
+                        ? f
+                        : f?.title || f?.featureName || f?.name || "";
+                    const descVal =
+                      typeof f === "string"
+                        ? ""
+                        : f?.description || f?.featureDescription || "";
+                    return descVal ? `${titleVal} (${descVal})` : titleVal;
+                  });
+
+                  return (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 32 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: i * 0.1 }}
+                      viewport={{ once: true }}
+                      className={`relative flex flex-col rounded-2xl overflow-hidden ${
+                        staticDetails.highlight ? "lg:-translate-y-4" : ""
+                      }`}
+                      style={{
+                        background: staticDetails.highlight
+                          ? "linear-gradient(180deg, #0069e0 0%, #0055b8 100%)"
+                          : "linear-gradient(180deg, #ffffff 0%, #f9fafb 100%)",
+                        border: staticDetails.highlight
+                          ? "1px solid rgba(255,255,255,0.30)"
+                          : "1px solid rgba(0,0,0,0.08)",
+                        boxShadow: staticDetails.highlight
+                          ? "0 20px 60px rgba(0,60,180,0.35)"
+                          : "0 8px 30px rgba(0,0,0,0.08)",
+                      }}
+                    >
+                      {/* soft glow ring for highlight */}
+                      {staticDetails.highlight && (
+                        <div className="absolute -inset-0.5 rounded-2xl bg-white/10 blur-xl opacity-40 pointer-events-none" />
+                      )}
+
+                      {staticDetails.highlight && (
+                        <div className="text-white text-[10px] font-bold tracking-[0.2em] uppercase text-center py-2.5 bg-white/15 backdrop-blur-sm">
+                          Recommended
+                        </div>
+                      )}
+
+                      <div className="relative p-7 flex flex-col flex-1">
+                        <h3
+                          className={`text-[20px] font-bold mb-1 ${
+                            staticDetails.highlight
+                              ? "text-white"
+                              : "text-[#111827]"
+                          }`}
+                        >
+                          {staticDetails.name}
+                        </h3>
+
+                        <p
+                          className={`text-[13px] mb-5 ${
+                            staticDetails.highlight
+                              ? "text-white/60"
+                              : "text-[#6b7280]"
+                          }`}
+                        >
+                          {tier.description || staticDetails.tagline}
+                        </p>
+
+                        <div className="mb-1">
+                          <span
+                            className={`text-[26px] font-black ${
+                              staticDetails.highlight
+                                ? "text-white"
+                                : "text-[#111827]"
+                            }`}
+                          >
+                            {formattedPrice}
+                          </span>
+                          <span
+                            className={`text-[12px] ml-1 ${
+                              staticDetails.highlight
+                                ? "text-white/50"
+                                : "text-[#9ca3af]"
+                            }`}
+                          >
+                            / {yearly ? "year" : "month"}
+                          </span>
+                        </div>
+
+                        <p
+                          className={`text-[11px] mb-5 ${
+                            staticDetails.highlight
+                              ? "text-white/50"
+                              : "text-[#9ca3af]"
+                          }`}
+                        >
+                          Best for: {staticDetails.bestFor}
+                        </p>
+
+                        <div
+                          className={`h-px mb-5 ${
+                            staticDetails.highlight
+                              ? "bg-white/10"
+                              : "bg-[#eef2f7]"
+                          }`}
+                        />
+
+                        {/* FEATURES */}
+                        <ul className="space-y-3 flex-1">
+                          {features.map((f, idx) => (
+                            <li key={idx} className="flex items-start gap-3">
+                              <div
+                                className="w-5 h-5 rounded-full flex items-center justify-center mt-0.5"
+                                style={{
+                                  background: staticDetails.highlight
+                                    ? "rgba(255,255,255,0.20)"
+                                    : "rgba(0,0,0,0.05)",
+                                }}
+                              >
+                                <FiCheck
+                                  className="text-[10px]"
+                                  style={{
+                                    color: staticDetails.highlight
+                                      ? "#fff"
+                                      : "#6b7280",
+                                  }}
+                                />
+                              </div>
+                              <span
+                                className={`text-[13px] ${
+                                  staticDetails.highlight
+                                    ? "text-white/80"
+                                    : "text-[#374151]"
+                                }`}
+                              >
+                                {f}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        <p
+                          className={`text-[11px] mt-5 italic ${
+                            staticDetails.highlight
+                              ? "text-white/40"
+                              : "text-[#9ca3af]"
+                          }`}
+                        >
+                          {staticDetails.note}
+                        </p>
+
+                        {/* BUTTON */}
+                        <button
+                          onClick={() => router.push("/consult/subscription")}
+                          className="w-full py-3 rounded-full text-[14px] font-semibold transition-all duration-300 mt-8 hover:cursor-pointer"
+                          style={{
+                            background: staticDetails.highlight
+                              ? "#fff"
+                              : "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)",
+                            color: staticDetails.highlight ? "#1f1f1f" : "#fff",
+                            boxShadow: staticDetails.highlight
+                              ? "0 6px 20px rgba(255,255,255,0.2)"
+                              : "0 6px 20px rgba(0,0,0,0.25)",
+                          }}
+                        >
+                          {staticDetails.cta}
+                        </button>
+                      </div>
+                    </motion.div>
+                  );
+                })}
           </div>
         </div>
       </div>

@@ -18,6 +18,7 @@ import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
 import BecameBanner from "@/components/features/home/BecameBanner";
 import Head from "next/head";
+import ReecommSponcerSection from "@/components/features/home/ReecommSponcerSection";
 
 function Home() {
   return (
@@ -45,6 +46,11 @@ function Home() {
       <CategoriesSections />
       <Layout>
         <TopPicsSection />
+      </Layout>
+
+      <Layout>
+        {/* right now added dummy data We need to update data with real apis */}
+        <ReecommSponcerSection />
       </Layout>
 
       <div className="block md:hidden">

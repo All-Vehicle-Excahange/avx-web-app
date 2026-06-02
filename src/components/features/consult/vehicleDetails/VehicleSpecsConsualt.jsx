@@ -159,7 +159,7 @@ const VehicleSpecsConsualt = forwardRef(function VehicleSpecsConsualt(
                       <div className="p-4 rounded-xl border border-primary bg-primary/5">
                         <div className="flex-1">
                           <p className="text-sm font-semibold">
-                            Inspection Report Only 
+                            Inspection Report Only
                           </p>
                           <p className="text-xs text-third mt-0.5">
                             Complete physical inspection with digital report
@@ -182,10 +182,10 @@ const VehicleSpecsConsualt = forwardRef(function VehicleSpecsConsualt(
                                 </>
                               )}
                             </div>
-                            {priceAndCountData && (
+                            {priceAndCountData && freeInspectionCount > 0 && (
                               <span className="text-xs text-third">
                                 Free inspections remaining:{" "}
-                                {freeInspectionCount} / {totalFreeInspection} 
+                                {freeInspectionCount}
                               </span>
                             )}
                           </div>

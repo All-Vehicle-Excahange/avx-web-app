@@ -11,7 +11,7 @@ export default function HeroSection() {
 
       <div className="relative  mx-auto w-full pt-14 lg:pt-10 pb-5">
         <div className="flex flex-col  lg:flex-row items-center gap-6 lg:gap-4 ">
-          {/* LEFT TEXT */} 
+          {/* LEFT TEXT */}
           <div className="w-full  lg:w-[40%]">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-6">
               About Reecomm
@@ -32,18 +32,14 @@ export default function HeroSection() {
             </h2>
 
             <p className="mt-8 text-lg text-third max-w-lg leading-relaxed">
-              Reecomm brings structure, performance visibility, and trust into the
-              used vehicle ecosystem — connecting serious buyers with verified
-              consultants and inspected inventory.
+              Reecomm brings structure, performance visibility, and trust into
+              the used vehicle ecosystem — connecting serious buyers with
+              verified consultants and inspected inventory.
             </p>
 
             {/* CTA */}
             <div className="flex flex-wrap gap-5 mt-10">
-              <Button variant="ghost" size="md">
-                {" "}
-                Browse Vehicles
-              </Button>
-              <Button variant="outlineSecondary" size="md">
+              <Button variant="ghost" href={"/search"} size="md">
                 {" "}
                 Browse Vehicles
               </Button>

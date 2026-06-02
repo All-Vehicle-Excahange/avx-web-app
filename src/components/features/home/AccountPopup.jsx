@@ -525,7 +525,10 @@ export default function AccountPopup({ open, onClosePopup }) {
                     </Section>
 
                     <Section title="Buyer">
-                      <Item href="/user/details/myinquary" onClick={onClosePopup}>
+                      <Item
+                        href="/user/details/myinquary"
+                        onClick={onClosePopup}
+                      >
                         My Activity
                       </Item>
                     </Section>
@@ -559,13 +562,15 @@ export default function AccountPopup({ open, onClosePopup }) {
 
                   <Section title="Support">
                     <Item
-                      href="/consult/dashboard/help-center"
+                      href={wrapConsultAuth("/consult/dashboard/help-center")}
                       onClick={onClosePopup}
                     >
                       Consultant Help
                     </Item>
                     <Item
-                      href="/consult/dashboard/help-center"
+                      href={wrapConsultAuth(
+                        "/consult/dashboard/help-center?view=create",
+                      )}
                       onClick={onClosePopup}
                     >
                       Raise Ticket

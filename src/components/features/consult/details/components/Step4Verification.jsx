@@ -345,8 +345,8 @@ export default function Step4Verification({ existing, onEdit }) {
             },
             {
               icon: LayoutDashboard,
-              label: "Inspection Reports",
-              desc: "Prepare quality health checks",
+              label: "Vehicle Details",
+              desc: "Prepare vehicle details",
             },
             {
               icon: ShieldCheck,
@@ -377,7 +377,7 @@ export default function Step4Verification({ existing, onEdit }) {
             { label: "Partner Policies", icon: HelpCircle },
             { label: "Listing Best Practices", icon: ExternalLink },
             { label: "Vendor Support Guide", icon: HelpCircle },
-            { label: "Payment & Escrow System", icon: ExternalLink },
+            { label: "Help Center", icon: ExternalLink },
           ].map((item, idx) => (
             <button
               key={idx}

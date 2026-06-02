@@ -49,7 +49,10 @@ export default function Subscription() {
 
         // Handle tier data
         if (tierRes.status === "fulfilled" && tierRes.value?.data) {
-          setTiers(tierRes.value.data);
+          const filteredTiers = tierRes.value.data.filter(
+            (tier) => tier.title?.toUpperCase() !== "TEST"
+          );
+          setTiers(filteredTiers);
         }
       } catch (error) {
         console.error("Error initializing subscription data:", error);
