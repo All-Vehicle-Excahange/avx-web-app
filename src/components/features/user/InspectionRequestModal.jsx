@@ -13,11 +13,7 @@ import { getInspectionByVehicleIdQuery } from "@/queries/vehicle.queries";
 import { getInspectionPriceAndCountQuery } from "@/queries/inspection.queries";
 import { useAuthStore } from "@/stores/useAuthStore";
 
-export default function InspectionRequestModal({
-  isOpen,
-  onClose,
-  vehicle,
-}) {
+export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
   const queryClient = useQueryClient();
   const [animate, setAnimate] = useState(false);
   const [step, setStep] = useState(1);
@@ -152,9 +148,14 @@ export default function InspectionRequestModal({
           let prefillName = "";
           if (storeUser) {
             if (storeUser.firstname || storeUser.lastname) {
-              prefillName = `${storeUser.firstname || ""} ${storeUser.lastname || ""}`.trim();
+              prefillName =
+                `${storeUser.firstname || ""} ${storeUser.lastname || ""}`.trim();
             } else {
-              prefillName = storeUser.name || storeUser.fullName || storeUser.firstName || "";
+              prefillName =
+                storeUser.name ||
+                storeUser.fullName ||
+                storeUser.firstName ||
+                "";
             }
           }
           let prefillEmail = storeUser?.email || "";
@@ -175,9 +176,14 @@ export default function InspectionRequestModal({
                 if (userObj) {
                   if (!prefillName) {
                     if (userObj.firstname || userObj.lastname) {
-                      prefillName = `${userObj.firstname || ""} ${userObj.lastname || ""}`.trim();
+                      prefillName =
+                        `${userObj.firstname || ""} ${userObj.lastname || ""}`.trim();
                     } else {
-                      prefillName = userObj.name || userObj.fullName || userObj.firstName || "";
+                      prefillName =
+                        userObj.name ||
+                        userObj.fullName ||
+                        userObj.firstName ||
+                        "";
                     }
                   }
                   if (!prefillEmail) prefillEmail = userObj.email || "";
@@ -398,7 +404,9 @@ export default function InspectionRequestModal({
                       <div className="flex items-center justify-between mt-3 gap-2">
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-semibold text-primary">
-                            {isFree ? "Free" : `₹${discountPrice.toLocaleString("en-IN")}`}
+                            {isFree
+                              ? "Free"
+                              : `₹${discountPrice.toLocaleString("en-IN")}`}
                           </span>
                           {!isFree && discount > 0 && (
                             <>
@@ -411,9 +419,9 @@ export default function InspectionRequestModal({
                             </>
                           )}
                         </div>
-                        {priceAndCountData && (
+                        {priceAndCountData && freeInspectionCount > 0 && (
                           <span className="text-xs text-third">
-                            Free inspections remaining: {freeInspectionCount} / {totalFreeInspection}
+                            Free inspections remaining: {freeInspectionCount}
                           </span>
                         )}
                       </div>
@@ -445,16 +453,16 @@ export default function InspectionRequestModal({
               <div className="border border-third/30 rounded-2xl p-5 space-y-4 bg-secondary/80">
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-third">Inspection Type</span>
-                  <span className="font-semibold">
-                    Inspection Report Only
-                  </span>
+                  <span className="font-semibold">Inspection Report Only</span>
                 </div>
                 <div className="border-t border-third/30 my-2" />
                 <div className="flex justify-between items-center text-lg font-bold">
                   <span>Total Amount</span>
                   <div className="flex items-center gap-2">
                     <span className="text-primary font-bold">
-                      {isFree ? "₹0 (Free)" : `₹${discountPrice.toLocaleString("en-IN")}`}
+                      {isFree
+                        ? "₹0 (Free)"
+                        : `₹${discountPrice.toLocaleString("en-IN")}`}
                     </span>
                     {!isFree && discount > 0 && (
                       <>

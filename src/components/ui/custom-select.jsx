@@ -24,9 +24,15 @@ export default function CustomSelect({
   disabled = false,
   readOnly = false,
 }) {
+  const isMatch = (optValue, val) => {
+    if (optValue === val) return true;
+    if (optValue == null || val == null) return false;
+    return String(optValue) === String(val);
+  };
+
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState(() => {
-    const selected = options.find((o) => o.value === value);
+    const selected = options.find((o) => isMatch(o.value, value));
     return selected ? selected.label : "";
   });
   const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -36,7 +42,7 @@ export default function CustomSelect({
 
   // 🔹 Find selected option (derived state)
   const selectedOption = useMemo(
-    () => options.find((o) => o.value === value),
+    () => options.find((o) => isMatch(o.value, value)),
     [value, options]
   );
 

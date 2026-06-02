@@ -1,4 +1,3 @@
-
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Plus, X, Check, Camera, Loader2, Trash2 } from "lucide-react";
@@ -38,7 +37,9 @@ export default function Step1Business({
     username: initialData?.username || "",
     ownerName: initialData?.ownerName || "",
     companyEmail: initialData?.companyEmail || "",
-    establishmentYear: initialData?.establishmentYear || "",
+    establishmentYear: initialData?.establishmentYear
+      ? String(initialData.establishmentYear)
+      : "",
     vehicleTypes: initialData?.vehicleTypes || [],
     services: initialData?.services || [],
   });

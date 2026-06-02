@@ -28,12 +28,16 @@ export default function HelpCenter() {
     return null;
   };
 
-  const { data: ticketsResponse, isLoading: isLoadingTickets, refetch: refetchTickets } = useQuery(
+  const {
+    data: ticketsResponse,
+    isLoading: isLoadingTickets,
+    refetch: refetchTickets,
+  } = useQuery(
     getAllHelpTicketsQuery({
       pageNo: page,
       size: 10,
       ticketStatus: getApiStatus(activeFilter),
-    })
+    }),
   );
 
   const resolveMutation = useMutation({
@@ -45,24 +49,27 @@ export default function HelpCenter() {
       refetchTickets();
     },
     onError: (err) => {
-      toast.error(err?.response?.data?.message || "Failed to mark ticket as resolved.");
+      toast.error(
+        err?.response?.data?.message || "Failed to mark ticket as resolved.",
+      );
       console.error(err);
-    }
+    },
   });
 
   const rawTickets = ticketsResponse?.data || [];
-  
+
   // Map raw API tickets to UI-compatible ticket objects
   const tickets = rawTickets.map((t) => {
     const priorityFormatted = t.priority
       ? t.priority.charAt(0).toUpperCase() + t.priority.slice(1).toLowerCase()
       : "Low";
-      
+
     const statusFormatted = t.ticketStatus === "OPEN" ? "Open" : "Resolved";
 
     let relatedVehicle = "None";
     if (t.makerName || t.modelName) {
-      relatedVehicle = `${t.makerName || ""} ${t.modelName || ""} ${t.variantName || ""}`.trim();
+      relatedVehicle =
+        `${t.makerName || ""} ${t.modelName || ""} ${t.variantName || ""}`.trim();
     } else if (t.vehicleId) {
       relatedVehicle = `Listing #${t.vehicleId}`;
     }
@@ -76,14 +83,14 @@ export default function HelpCenter() {
       priority: priorityFormatted,
       status: statusFormatted,
       lastUpdated: "Recently",
-      createdDate: t.createdAt 
+      createdDate: t.createdAt
         ? new Date(t.createdAt).toLocaleString("en-US", {
             month: "short",
             day: "numeric",
             year: "numeric",
             hour: "numeric",
             minute: "2-digit",
-            hour12: true
+            hour12: true,
           })
         : "Just now",
       assignedTo: "Support Team",
@@ -95,19 +102,19 @@ export default function HelpCenter() {
           sender: "user",
           senderName: "You",
           text: t.description,
-          time: t.createdAt 
+          time: t.createdAt
             ? new Date(t.createdAt).toLocaleString("en-US", {
                 month: "short",
                 day: "numeric",
                 year: "numeric",
                 hour: "numeric",
                 minute: "2-digit",
-                hour12: true
+                hour12: true,
               })
             : "Just now",
-          attachments: t.attachments || []
-        }
-      ]
+          attachments: t.attachments || [],
+        },
+      ],
     };
   });
 

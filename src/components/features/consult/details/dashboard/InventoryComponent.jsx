@@ -17,7 +17,11 @@ import {
   ChevronDown,
 } from "lucide-react";
 import Button from "@/components/ui/button";
-import { useQuery, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
+import {
+  useQuery,
+  useQueryClient,
+  useInfiniteQuery,
+} from "@tanstack/react-query";
 import {
   getInventoryVehicleInfiniteQuery,
   getTopPerformingVehiclesQuery,
@@ -97,13 +101,13 @@ export default function InventoryComponent() {
     enabled: activeType !== "SUSPENDED",
   });
 
-  const vehicles = vehiclesInfiniteData?.pages.flatMap((page) => page.data || []) || [];
+  const vehicles =
+    vehiclesInfiniteData?.pages.flatMap((page) => page.data || []) || [];
 
   // 2. Top Performing Vehicles Query
-  const {
-    data: topPerformingData,
-    isLoading: topPerformingLoading,
-  } = useQuery(getTopPerformingVehiclesQuery());
+  const { data: topPerformingData, isLoading: topPerformingLoading } = useQuery(
+    getTopPerformingVehiclesQuery(),
+  );
 
   const topPerforming = topPerformingData || [];
 
@@ -124,7 +128,8 @@ export default function InventoryComponent() {
     hasNextPage: hasNextNeedAttentionPage,
   } = useInfiniteQuery(getNeedAttenctionVehiclesInfiniteQuery({ pageSize: 6 }));
 
-  const needAttentionVehicles = needAttentionInfiniteData?.pages.flatMap((page) => page.data || []) || [];
+  const needAttentionVehicles =
+    needAttentionInfiniteData?.pages.flatMap((page) => page.data || []) || [];
 
   const handleViewMoreNeedAttention = () => {
     if (hasNextNeedAttentionPage) {
@@ -140,13 +145,19 @@ export default function InventoryComponent() {
     hasNextPage: hasNextSuspendedPage,
   } = useInfiniteQuery(getSusPendedVehiclesInfiniteQuery({ pageSize: 9 }));
 
-  const suspendedVehicles = suspendedInfiniteData?.pages.flatMap((page) => page.data || []) || [];
-  const suspendedCount = suspendedInfiniteData?.pages[0]?.pagination?.totalElements ?? suspendedInfiniteData?.pages[0]?.pageResponse?.totalElements ?? 0;
+  const suspendedVehicles =
+    suspendedInfiniteData?.pages.flatMap((page) => page.data || []) || [];
+  const suspendedCount =
+    suspendedInfiniteData?.pages[0]?.pagination?.totalElements ??
+    suspendedInfiniteData?.pages[0]?.pageResponse?.totalElements ??
+    0;
 
   // Reset page and list when activeType changes
   useEffect(() => {
     if (activeType === "SUSPENDED") {
-      queryClient.invalidateQueries({ queryKey: ["seller-suspended-vehicles-infinite"] });
+      queryClient.invalidateQueries({
+        queryKey: ["seller-suspended-vehicles-infinite"],
+      });
     }
   }, [activeType]);
 
@@ -307,19 +318,24 @@ export default function InventoryComponent() {
 
             {/* CONTENT */}
             <p className="text-sm md:text-base leading-relaxed text-white/90">
-              <span className="text-primary font-semibold">Reecomm</span> inspected
-              vehicles are converting significantly better than regular
-              listings.
+              <span className="text-primary font-semibold">Reecomm</span>{" "}
+              inspected vehicles are converting significantly better than
+              regular listings.
             </p>
             <p className="text-sm md:text-base leading-relaxed text-white/90">
-              <span className="text-primary font-semibold">Reecomm</span> inspected
-              vehicles are converting significantly better than regular
-              listings.
+              <span className="text-primary font-semibold">Reecomm</span>{" "}
+              inspected vehicles are converting significantly better than
+              regular listings.
             </p>
 
             {/* FOOTER */}
             <div className="flex justify-start">
-              <Button variant="ghost" showIcon={false} className="text-sm">
+              <Button
+                variant="ghost"
+                href={"/consult/dashboard/inspection"}
+                showIcon={false}
+                className="text-sm"
+              >
                 Inspect More Vehicles
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -443,7 +459,9 @@ export default function InventoryComponent() {
                       inquiries={car.totalInquiries}
                       chats={car.approvedInquiries}
                       onRefresh={() => {
-                        queryClient.invalidateQueries({ queryKey: ["seller-suspended-vehicles-infinite"] });
+                        queryClient.invalidateQueries({
+                          queryKey: ["seller-suspended-vehicles-infinite"],
+                        });
                       }}
                     />
                   ))}{" "}
