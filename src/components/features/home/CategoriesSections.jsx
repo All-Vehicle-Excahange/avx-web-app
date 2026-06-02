@@ -77,24 +77,39 @@ const CategoriesSections = () => {
 
   // Auto-play / switch to next category if currently loaded category is empty
   useEffect(() => {
+    // Only run the auto-play logic when the query results match the active category and fetching has completed
+    if (active !== debouncedActive || activeType !== debouncedType) {
+      return;
+    }
+
     if (!isFetching && vehicles.length === 0 && selectedTag) {
       checkedCategories.current.add(selectedTag);
 
-      // Find next category based on the debounced category that just completed
-      const categories = categoriesByType[debouncedType];
-      const currentIndex = categories.findIndex((c) => c.id === debouncedActive);
+      // Find next category based on the category that just completed
+      const categories = categoriesByType[activeType];
+      const currentIndex = categories.findIndex((c) => c.id === active);
+
+      if (currentIndex === -1) return;
+
       const nextCategoryIndex = (currentIndex + 1) % categories.length;
       const nextCategory = categories[nextCategoryIndex];
-
-      const nextTag = vehicleTagMap[debouncedType]?.[nextCategory.id];
+      const nextTag = vehicleTagMap[activeType]?.[nextCategory.id];
 
       // If we haven't checked the next tag yet, switch to it
-      if (!checkedCategories.current.has(nextTag)) {
+      if (nextTag && !checkedCategories.current.has(nextTag)) {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setActive(nextCategory.id);
       }
     }
-  }, [vehicles, isFetching, debouncedType, debouncedActive, selectedTag]);
+  }, [
+    vehicles,
+    isFetching,
+    active,
+    debouncedActive,
+    activeType,
+    debouncedType,
+    selectedTag,
+  ]);
 
   return (
     <section className="w-full h-full flex flex-col text-primary">
@@ -103,7 +118,7 @@ const CategoriesSections = () => {
           <div className="flex flex-col items-start gap-2">
             <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
               All Vehicles
-              <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-gradient-to-r from-neutral-100 to-transparent" />
+              <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
             </p>
 
             <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">

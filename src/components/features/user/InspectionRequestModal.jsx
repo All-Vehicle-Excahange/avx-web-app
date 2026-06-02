@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getInspectionByVehicleIdQuery } from "@/queries/vehicle.queries";
 import { getInspectionPriceAndCountQuery } from "@/queries/inspection.queries";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function InspectionRequestModal({
   isOpen,
@@ -146,6 +147,56 @@ export default function InspectionRequestModal({
 
         if (response.data) {
           const orderData = response.data;
+
+          const storeUser = useAuthStore.getState().user;
+          let prefillName = "";
+          if (storeUser) {
+            if (storeUser.firstname || storeUser.lastname) {
+              prefillName = `${storeUser.firstname || ""} ${storeUser.lastname || ""}`.trim();
+            } else {
+              prefillName = storeUser.name || storeUser.fullName || storeUser.firstName || "";
+            }
+          }
+          let prefillEmail = storeUser?.email || "";
+          let prefillContact =
+            storeUser?.phoneNumber ||
+            storeUser?.phone ||
+            storeUser?.mobile ||
+            "";
+
+          if (
+            typeof window !== "undefined" &&
+            (!prefillName || !prefillEmail || !prefillContact)
+          ) {
+            try {
+              const savedUser = localStorage.getItem("user");
+              if (savedUser) {
+                const userObj = JSON.parse(savedUser);
+                if (userObj) {
+                  if (!prefillName) {
+                    if (userObj.firstname || userObj.lastname) {
+                      prefillName = `${userObj.firstname || ""} ${userObj.lastname || ""}`.trim();
+                    } else {
+                      prefillName = userObj.name || userObj.fullName || userObj.firstName || "";
+                    }
+                  }
+                  if (!prefillEmail) prefillEmail = userObj.email || "";
+                  if (!prefillContact)
+                    prefillContact =
+                      userObj.phoneNumber ||
+                      userObj.phone ||
+                      userObj.mobile ||
+                      "";
+                }
+              }
+            } catch (e) {
+              console.error(
+                "Error parsing user from localStorage for prefill",
+                e,
+              );
+            }
+          }
+
           const options = {
             key: orderData.keyId,
             amount: Math.round(orderData.amount * 100),
@@ -153,6 +204,11 @@ export default function InspectionRequestModal({
             name: "Reecomm",
             description: "Vehicle Inspection Payment",
             order_id: orderData.razorpayOrderId,
+            prefill: {
+              name: prefillName,
+              email: prefillEmail,
+              contact: prefillContact,
+            },
             handler: async function (paymentResponse) {
               setStep(3);
               queryClient.invalidateQueries({

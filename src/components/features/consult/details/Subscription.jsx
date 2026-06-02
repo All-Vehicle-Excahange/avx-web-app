@@ -12,6 +12,7 @@ import {
   createSubscription,
   getActiveSubscription,
 } from "@/services/subscription.service";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function Subscription() {
   const { push, query } = useRouter();
@@ -74,8 +75,9 @@ export default function Subscription() {
     });
   };
 
-  const handleClick = async () => {
-    if (!selectedTierId) return;
+  const handleClick = async (tierId) => {
+    const activeTierId = tierId || selectedTierId;
+    if (!activeTierId) return;
 
     try {
       setPaymentLoading(true);
@@ -87,13 +89,13 @@ export default function Subscription() {
         return;
       }
 
-      const selectedTier = tiers.find((t) => t.id === selectedTierId);
+      const selectedTier = tiers.find((t) => t.id === activeTierId);
 
       // Create subscription in the backend
       let response;
       try {
         response = await createSubscription({
-          planId: selectedTierId,
+          planId: activeTierId,
           billingCycle: billingCycle,
         });
       } catch (err) {
@@ -131,12 +133,66 @@ export default function Subscription() {
         return;
       }
 
+      const storeUser = useAuthStore.getState().user;
+      let prefillName = "";
+      if (storeUser) {
+        if (storeUser.firstname || storeUser.lastname) {
+          prefillName = `${storeUser.firstname || ""} ${storeUser.lastname || ""}`.trim();
+        } else {
+          prefillName = storeUser.name || storeUser.fullName || storeUser.firstName || "";
+        }
+      }
+      let prefillEmail = storeUser?.email || "";
+      let prefillContact =
+        storeUser?.phoneNumber ||
+        storeUser?.phone ||
+        storeUser?.mobile ||
+        "";
+
+      if (
+        typeof window !== "undefined" &&
+        (!prefillName || !prefillEmail || !prefillContact)
+      ) {
+        try {
+          const savedUser = localStorage.getItem("user");
+          if (savedUser) {
+            const userObj = JSON.parse(savedUser);
+            if (userObj) {
+              if (!prefillName) {
+                if (userObj.firstname || userObj.lastname) {
+                  prefillName = `${userObj.firstname || ""} ${userObj.lastname || ""}`.trim();
+                } else {
+                  prefillName = userObj.name || userObj.fullName || userObj.firstName || "";
+                }
+              }
+              if (!prefillEmail) prefillEmail = userObj.email || "";
+              if (!prefillContact)
+                prefillContact =
+                  userObj.phoneNumber ||
+                  userObj.phone ||
+                  userObj.mobile ||
+                  "";
+            }
+          }
+        } catch (e) {
+          console.error(
+            "Error parsing user from localStorage for prefill",
+            e,
+          );
+        }
+      }
+
       // Open Razorpay subscription checkout modal
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         subscription_id: razorpaySubscriptionId,
-        name: "AVX",
+        name: "Reecomm",
         description: `Subscription for ${selectedTier.title} plan`,
+        prefill: {
+          name: prefillName,
+          email: prefillEmail,
+          contact: prefillContact,
+        },
         handler: async function (paymentResponse) {
           if (query?.redirect) {
             push(
@@ -146,7 +202,6 @@ export default function Subscription() {
             push("/consult/kyc");
           }
         },
-        name: "AVX",
         theme: {
           color: "#007bff",
         },
@@ -257,10 +312,11 @@ export default function Subscription() {
             selected={selectedTierId === tier.id}
             onSelect={() => setSelectedTierId(tier.id)}
             title={tier.title}
+            description={tier.description}
             monthlyPrice={tier.monthlyPrice}
             yearlyPrice={tier.yearlyPrice}
             billingCycle={billingCycle}
-            onSubscribe={handleClick}
+            onSubscribe={() => handleClick(tier.id)}
             paymentLoading={paymentLoading}
             features={
               ((billingCycle === "MONTHLY" ? tier.monthlyFeatures : tier.yearlyFeatures) || tier.features)?.map((f) => {

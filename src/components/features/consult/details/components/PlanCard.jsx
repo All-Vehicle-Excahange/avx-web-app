@@ -1,8 +1,10 @@
+import { useRef } from "react";
 import { Info, Check, Loader2 } from "lucide-react";
 import Button from "@/components/ui/button";
 
 export default function PlanCard({
   title,
+  description,
   monthlyPrice,
   yearlyPrice,
   features,
@@ -30,13 +32,20 @@ export default function PlanCard({
     }
   };
 
+  const lastClickTimeRef = useRef(0);
+
   const handleAction = (e) => {
     e.stopPropagation();
-    if (!selected) {
-      onSelect();
-    } else {
-      onSubscribe();
+    if (paymentLoading) return;
+
+    const now = Date.now();
+    if (now - lastClickTimeRef.current < 1000) {
+      return; // Ignore double clicks within 1000ms
     }
+    lastClickTimeRef.current = now;
+
+    onSelect();
+    onSubscribe();
   };
 
   return (
@@ -56,8 +65,6 @@ export default function PlanCard({
         </span>
       )}
 
-    
-
       <div className="space-y-6">
         {/* HEADER SECTION */}
         <div className="flex justify-between items-baseline">
@@ -66,7 +73,7 @@ export default function PlanCard({
               {title}
             </h3>
             <p className="text-fourth/90 text-xs font-medium mt-1">
-              {getDescription()}
+              {description || getDescription()}
             </p>
           </div>
           <div className="text-right">

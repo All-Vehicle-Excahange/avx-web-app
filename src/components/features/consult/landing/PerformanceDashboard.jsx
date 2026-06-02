@@ -190,7 +190,7 @@ export default function PerformanceDashboard() {
             </p>
             <div className="flex gap-10">
               <div className="relative pl-5">
-                <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-primary/30" />
+                <div className="absolute left-0 top-0 bottom-0 w-px bg-primary/30" />
                 <p className="text-[32px] font-bold text-primary leading-none">
                   {viewCount}×
                 </p>
@@ -200,7 +200,7 @@ export default function PerformanceDashboard() {
               </div>
               <div className="relative pl-5">
                 <div
-                  className="absolute left-0 top-0 bottom-0 w-[1px]"
+                  className="absolute left-0 top-0 bottom-0 w-px"
                   style={{ background: "#10b98145" }}
                 />
                 <p
@@ -228,7 +228,7 @@ export default function PerformanceDashboard() {
             background: "transparent",
           }}
         >
-          <div className="grid lg:grid-cols-[260px_1fr] divide-y lg:divide-y-0 lg:divide-x divide-white/[0.06]">
+          <div className="grid lg:grid-cols-[260px_1fr] divide-y lg:divide-y-0 lg:divide-x divide-white/6">
             {/* ── LEFT NAV ── */}
             <div className="flex flex-row lg:flex-col overflow-x-auto p-3 gap-1">
               {METRICS.map((m, i) => {
@@ -241,7 +241,7 @@ export default function PerformanceDashboard() {
           ${
             isActive
               ? "bg-primary/5 border-primary/10"
-              : "bg-transparent border-transparent hover:border-primary/[0.06] hover:bg-primary/[0.03]"
+              : "bg-transparent border-transparent hover:border-primary/6 hover:bg-primary/3"
           }`}
                   >
                     {isActive && (
@@ -295,9 +295,7 @@ export default function PerformanceDashboard() {
                   className="flex items-end justify-between"
                 >
                   <div>
-                    <p
-                      className="text-[10px] uppercase tracking-[0.3em] mb-2.5 font-medium text-primary"
-                    >
+                    <p className="text-[10px] uppercase tracking-[0.3em] mb-2.5 font-medium text-primary">
                       {active.label}
                     </p>
                     <p
@@ -319,9 +317,7 @@ export default function PerformanceDashboard() {
                     >
                       {active.delta}
                     </span>
-                    <span
-                      className="text-[9px] tracking-[0.2em] uppercase text-primary"
-                    >
+                    <span className="text-[9px] tracking-[0.2em] uppercase text-primary">
                       8-week trend
                     </span>
                   </div>
@@ -352,7 +348,7 @@ export default function PerformanceDashboard() {
               </AnimatePresence>
 
               {/* bottom stats */}
-              <div className="grid grid-cols-3 gap-3 pt-1 border-t border-white/[0.05]">
+              <div className="grid grid-cols-3 gap-3 pt-1 border-t border-white/5">
                 {[
                   { l: "Peak Week", v: `W${peakIndex + 1}` },
                   { l: "Avg / Week", v: avg },
@@ -366,9 +362,7 @@ export default function PerformanceDashboard() {
                       border: "1px solid rgba(255,255,255,0.07)",
                     }}
                   >
-                    <p
-                      className="text-[9px] uppercase tracking-[0.2em] mb-2 text-primary"
-                    >
+                    <p className="text-[9px] uppercase tracking-[0.2em] mb-2 text-primary">
                       {l}
                     </p>
                     <p

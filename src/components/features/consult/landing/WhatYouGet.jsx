@@ -90,15 +90,10 @@ export default function WhatYouGetSpotlight() {
                     className={`relative group text-left rounded-xl px-5 py-4 transition-all duration-300 border overflow-hidden hover:cursor-pointer
               ${
                 isActive
-                  ? "border-primary/20 bg-primary/5 shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_10px_30px_rgba(0,0,0,0.4)]"
-                  : "border-transparent bg-transparent hover:border-primary/10 hover:bg-primary/[0.03]"
+                  ? "border-primary/20 bg-primary/5 "
+                  : "border-transparent bg-transparent hover:border-primary/10 hover:bg-primary/3"
               }`}
                   >
-                    {/* Active glow accent */}
-                    {isActive && (
-                      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-primary/60 rounded-r-full" />
-                    )}
-
                     <div className="flex items-center gap-4">
                       {/* Title */}
                       <div className="flex-1">

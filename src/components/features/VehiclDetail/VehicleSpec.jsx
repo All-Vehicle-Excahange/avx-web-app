@@ -19,6 +19,7 @@ import {
 } from "@/queries/vehicle.queries";
 import InspectionTrackingModal from "@/components/features/user/InspectionTrackingModal";
 import { getInspectionPricForBuyerQuery } from "@/queries/inspection.queries";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function VehicleSpec({ open, setOpen, vehicle }) {
   const queryClient = useQueryClient();
@@ -256,6 +257,58 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
       const response = await complateInspectionPayment(targetId);
       if (response?.success && response?.data) {
         const orderData = response.data;
+
+        const storeUser = useAuthStore.getState().user;
+        let prefillName = "";
+        if (storeUser) {
+          if (storeUser.firstname || storeUser.lastname) {
+            prefillName = `${storeUser.firstname || ""} ${storeUser.lastname || ""}`.trim();
+          } else {
+            prefillName = storeUser.name || storeUser.fullName || storeUser.firstName || "";
+          }
+        }
+        let prefillEmail = storeUser?.email || "";
+        let prefillContact =
+          storeUser?.phoneNumber ||
+          storeUser?.phone ||
+          storeUser?.mobile ||
+          mobileNumber ||
+          "";
+
+        if (
+          typeof window !== "undefined" &&
+          (!prefillName || !prefillEmail || !prefillContact)
+        ) {
+          try {
+            const savedUser = localStorage.getItem("user");
+            if (savedUser) {
+              const userObj = JSON.parse(savedUser);
+              if (userObj) {
+                if (!prefillName) {
+                  if (userObj.firstname || userObj.lastname) {
+                    prefillName = `${userObj.firstname || ""} ${userObj.lastname || ""}`.trim();
+                  } else {
+                    prefillName = userObj.name || userObj.fullName || userObj.firstName || "";
+                  }
+                }
+                if (!prefillEmail) prefillEmail = userObj.email || "";
+                if (!prefillContact)
+                  prefillContact =
+                    userObj.phoneNumber ||
+                    userObj.phone ||
+                    userObj.mobile ||
+                    mobileNumber ||
+                    "";
+              }
+            }
+          } catch (e) {
+            console.error(
+              "Error parsing user from localStorage for prefill",
+              e,
+            );
+          }
+        }
+
         const options = {
           key: orderData.keyId,
           amount: Math.round(orderData.amount * 100), // Razorpay expects amount in paise
@@ -263,6 +316,11 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
           name: "Reecomm",
           description: "Vehicle Inspection Payment",
           order_id: orderData.razorpayOrderId,
+          prefill: {
+            name: prefillName,
+            email: prefillEmail,
+            contact: prefillContact,
+          },
           handler: async function (paymentResponse) {
             setStep(3);
             queryClient.invalidateQueries({
@@ -402,7 +460,9 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                             <p className="text-xs text-third mt-0.5">
                               Complete physical inspection with digital report
                             </p>
-                            <p className="text-sm font-medium mt-1">₹{reportOnlyPrice.toLocaleString("en-IN")}</p>
+                            <p className="text-sm font-medium mt-1">
+                              ₹{reportOnlyPrice.toLocaleString("en-IN")}
+                            </p>
                           </div>
                         </label>
                         {/* Video Call + Report */}
@@ -434,7 +494,10 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                               Live video walkthrough with inspector + detailed
                               digital report
                             </p>
-                            <p className="text-sm font-medium mt-1">₹{videoCallWithReportPrice.toLocaleString("en-IN")}</p>
+                            <p className="text-sm font-medium mt-1">
+                              ₹
+                              {videoCallWithReportPrice.toLocaleString("en-IN")}
+                            </p>
                           </div>
                         </label>
                       </div>
@@ -686,7 +749,9 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                           <p className="text-xs text-third mt-0.5">
                             Complete physical inspection with digital report
                           </p>
-                          <p className="text-sm font-medium mt-1">₹{reportOnlyPrice.toLocaleString("en-IN")}</p>
+                          <p className="text-sm font-medium mt-1">
+                            ₹{reportOnlyPrice.toLocaleString("en-IN")}
+                          </p>
                         </div>
                       </label>
                       <label
@@ -708,7 +773,9 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                             Live video walkthrough with inspector + detailed
                             digital report
                           </p>
-                          <p className="text-sm font-medium mt-1">₹{videoCallWithReportPrice.toLocaleString("en-IN")}</p>
+                          <p className="text-sm font-medium mt-1">
+                            ₹{videoCallWithReportPrice.toLocaleString("en-IN")}
+                          </p>
                         </div>
                       </label>
                     </div>
@@ -868,7 +935,9 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                     <div className="flex justify-between items-center text-lg font-bold">
                       <span>Total Amount</span>
                       <span>
-                        {inspectionType === "video" ? `₹${videoCallWithReportPrice.toLocaleString("en-IN")}` : `₹${reportOnlyPrice.toLocaleString("en-IN")}`}
+                        {inspectionType === "video"
+                          ? `₹${videoCallWithReportPrice.toLocaleString("en-IN")}`
+                          : `₹${reportOnlyPrice.toLocaleString("en-IN")}`}
                       </span>
                     </div>
                   </div>

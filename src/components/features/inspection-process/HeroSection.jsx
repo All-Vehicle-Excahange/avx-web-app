@@ -56,7 +56,7 @@ export default function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 mt-8 md:mt-12 justify-center lg:justify-start">
               <Button variant="ghost">Request Inspection</Button>
 
-              <Button variant="outlineSecondary">
+              <Button href="/search?reccomInspected=true" variant="outlineSecondary">
                 Browse Inspected Vehicles
               </Button>
             </div>

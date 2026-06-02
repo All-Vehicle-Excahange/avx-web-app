@@ -46,9 +46,7 @@ const tiers = [
 export default function TierStructure() {
   return (
     <section className="py-20 relative overflow-hidden max-w-6xl">
-
       <div className="relative z-10  mx-auto text-center">
-
         {/* HEADER */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
@@ -83,8 +81,8 @@ export default function TierStructure() {
               viewport={{ once: true }}
               className={`relative rounded-2xl p-8 text-left transition-all duration-300 ${
                 tier.highlight
-                  ? "border border-primary/20 bg-primary/[0.04] scale-[1.04] shadow-[0_32px_80px_rgba(0,0,0,0.6)]"
-                  : "border border-white/[0.06] bg-transparent"
+                  ? "border border-primary/20 bg-primary/4 scale-[1.04]"
+                  : "border border-white/6 bg-transparent"
               }`}
             >
               {/* top edge line for highlight */}
@@ -100,7 +98,6 @@ export default function TierStructure() {
               )}
 
               <div className="relative">
-
                 {/* tier index */}
                 <p className="text-[10px] tracking-[0.3em] uppercase text-third mb-4 font-medium">
                   0{i + 1}
@@ -111,7 +108,9 @@ export default function TierStructure() {
                   {tier.name}
                 </h3>
 
-                <p className={`text-sm mt-1 font-medium ${tier.highlight ? "text-fourth" : "text-third"}`}>
+                <p
+                  className={`text-sm mt-1 font-medium ${tier.highlight ? "text-fourth" : "text-third"}`}
+                >
                   {tier.subtitle}
                 </p>
 
@@ -120,7 +119,7 @@ export default function TierStructure() {
                 </p>
 
                 {/* divider */}
-                <div className="my-7 h-px bg-white/[0.06]" />
+                <div className="my-7 h-px bg-white/6" />
 
                 {/* FEATURES */}
                 <div className="space-y-3.5">
@@ -141,14 +140,10 @@ export default function TierStructure() {
                     </div>
                   ))}
                 </div>
-
               </div>
             </motion.div>
           ))}
         </div>
-
-
-
 
         {/* CTA */}
         <motion.div
@@ -158,11 +153,14 @@ export default function TierStructure() {
           viewport={{ once: true }}
           className="mt-16"
         >
-        <Button variant="ghost" className="bg-primary/95 text-secondary" >
-           View Full Pricing
-        </Button>
+          <Button
+            variant="ghost"
+            href={"/consult/pricing"}
+            className="bg-primary/95 text-secondary"
+          >
+            View Full Pricing
+          </Button>
         </motion.div>
-
       </div>
     </section>
   );

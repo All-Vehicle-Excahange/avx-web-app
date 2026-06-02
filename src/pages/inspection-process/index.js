@@ -30,8 +30,9 @@ function index() {
         <InspectionNotCovered />
         <DisputeHandling />
         <FAQSection />
-        <Cta />
       </Layout>
+      <Cta />
+
       <FooterLink />
       <Footer />
     </>

@@ -3,6 +3,7 @@ import {
   getInspectionStatus,
   getInventoryOverview,
   getOverviewSummaryData,
+  getRecentActivity,
 } from "@/services/overview.service";
 
 export const getInventoryOverviewQuery = () => {
@@ -32,6 +33,17 @@ export const getInspectionStatusQuery = () => {
     queryKey: ["overview-inspection-status"],
     queryFn: async () => {
       const res = await getInspectionStatus();
+      return res?.data;
+    },
+    staleTime: Infinity,
+  });
+};
+
+export const getRecentActivityQuery = () => {
+  return queryOptions({
+    queryKey: ["overview-recent-activity"],
+    queryFn: async () => {
+      const res = await getRecentActivity();
       return res?.data;
     },
     staleTime: Infinity,

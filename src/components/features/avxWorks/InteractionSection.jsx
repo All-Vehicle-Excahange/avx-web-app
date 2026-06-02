@@ -32,7 +32,7 @@ export default function InteractionSection() {
                     <div className="flex flex-col gap-10">
                         <div className="w-65 h-auto rounded-3xl overflow-hidden -translate-y-27.5 ">
                             {/* left image */}
-                            <Image src="chat-image-1.webp" alt="Chat UI" width={800} height={500} className="w-full h-full object-cover " />
+                            <Image src="/chat-image-1.webp" alt="Chat UI" width={800} height={500} className="w-full h-full object-cover " />
                         </div>
 
                         {/* POINT LIST (belongs to left image) */}
@@ -71,7 +71,7 @@ export default function InteractionSection() {
                     {/* RIGHT IMAGE */}
                     <div className="w-65 h-auto rounded-3xl overflow-hidden translate-y-10">
                         {/* right image */}
-                        <Image src="chat-image-3.webp" alt="Chat UI" width={800} height={500} className="w-full h-full object-cover" />
+                        <Image src="/chat-image-3.webp" alt="Chat UI" width={800} height={500} className="w-full h-full object-cover" />
                     </div>
                 </div>
 
