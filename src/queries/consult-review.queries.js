@@ -11,7 +11,7 @@ export const getConsultationReviewSummaryQuery = (daysRange) => {
       const res = await getConsultationReviewSummary(daysRange);
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -32,6 +32,6 @@ export const getConsultationReviewsInfiniteQuery = (payload) => {
       const nextPage = allPages.length + 1;
       return nextPage <= totalPages ? nextPage : undefined;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   };
 };

@@ -8,7 +8,7 @@ export const getInquiriesQuery = (inquiryStatus) => {
       const res = await getInquiries({ inquiryStatus });
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -19,7 +19,7 @@ export const getMyInquiriesQuery = (inquiryStatus) => {
       const res = await getMyInquiries({ inquiryStatus });
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -39,7 +39,7 @@ export const getInquiriesInfiniteQuery = (payload) => {
       const nextPage = allPages.length + 1;
       return nextPage <= totalPages ? nextPage : undefined;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   };
 };
 
@@ -59,6 +59,6 @@ export const getMyInquiriesInfiniteQuery = (payload) => {
       const nextPage = allPages.length + 1;
       return nextPage <= totalPages ? nextPage : undefined;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   };
 };

@@ -15,7 +15,7 @@ export const getAnalyticsKipsQuery = (days) => {
       const res = await getAnalyticsKips(days);
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -26,7 +26,7 @@ export const getTrafficConversionQuery = (days) => {
       const res = await getTrafficConversion(days);
       return res?.data;
     },
-     staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -37,7 +37,7 @@ export const getWeeklyAnalyticsQuery = (days) => {
       const res = await getWeeklyAnalytics(days);
       return res?.data;
     },
-     staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -48,7 +48,7 @@ export const getSubTypeDemandBreakdownQuery = (days) => {
       const res = await getSubTypeDemandBreakdown(days);
       return res?.data;
     },
-     staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -59,7 +59,7 @@ export const getCityDemandBreakdownQuery = (days) => {
       const res = await getCityDemandBreakdown(days);
       return res?.data;
     },
-     staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -70,6 +70,6 @@ export const getKeyInsightsQuery = (days) => {
       const res = await getKeyInsights(days);
       return res?.data;
     },
-     staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
