@@ -666,12 +666,12 @@ export default function ProfileComponent() {
             </a>
 
             {/* Service Area */}
-            <p className="text-xs text-third">
+            {/* <p className="text-xs text-third">
               Service Area:{" "}
               <span className="font-medium text-primary">
                 {businessLocation.city || "Ahmedabad"} + 30km
               </span>
-            </p>
+            </p> */}
 
             {/* Trust Note */}
             <div className="rounded-xl bg-green-500/10 border border-green-500/20 px-4 py-3">

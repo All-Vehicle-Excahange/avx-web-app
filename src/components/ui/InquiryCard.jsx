@@ -20,10 +20,12 @@ import { useState } from "react";
 import { generateVehicleSlug } from "@/lib/helper";
 import { markAsSoldVehicle } from "@/services/vehicle.service";
 import MarkSoldPopup from "./MarkSoldPopup";
+import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 
 export default function InquiryCard({ inquiry, onStatusChange }) {
   const [showClosePopup, setShowClosePopup] = useState(false);
   const [showMarkSoldPopup, setShowMarkSoldPopup] = useState(false);
+  const [showDownloadPopup, setShowDownloadPopup] = useState(false);
   const [loadingAction, setLoadingAction] = useState(null); // 'APPROVE', 'REJECT', 'CLOSE', 'MARK_SOLD'
 
   if (!inquiry) {
@@ -285,6 +287,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
                 showIcon={false}
                 variant="ghost"
                 size="sm"
+                onClick={() => setShowDownloadPopup(true)}
               >
                 <MessageCircle size={16} className="mr-2" />
                 Open Chat
@@ -348,6 +351,14 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
           loading={loadingAction === "MARK_SOLD"}
           onClose={() => setShowMarkSoldPopup(false)}
           onConfirm={handleMarkSold}
+        />
+      )}
+
+      {/*   Download App Popup */}
+      {showDownloadPopup && (
+        <DownloadAppPopup
+          isOpen={showDownloadPopup}
+          onClose={() => setShowDownloadPopup(false)}
         />
       )}
     </div>

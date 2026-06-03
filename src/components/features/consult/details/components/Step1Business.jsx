@@ -449,16 +449,40 @@ export default function Step1Business({
       </div>
 
       {(!readOnly || form.vehicleTypes.length > 0) && (
-        <ChipGroup
-          title="Vehicle Types"
-          readOnly={readOnly}
-          items={[
-            { label: "Two Wheelers", value: "TWO_WHEELER" },
-            { label: "Four Wheelers", value: "FOUR_WHEELER" },
-          ]}
-          selected={form.vehicleTypes}
-          onChange={(val) => handleInput("vehicleTypes", val)}
-        />
+        <div className="flex flex-col mb-2">
+          <h3 className="text-md font-semibold text-primary mb-2">
+            Vehicle Types
+          </h3>
+          <div className="flex flex-wrap gap-3">
+            {[
+              { label: "Two Wheelers", value: "TWO_WHEELER" },
+              { label: "Four Wheelers", value: "FOUR_WHEELER" },
+            ].map((item) => (
+              <button
+                key={item.value}
+                type="button"
+                disabled={readOnly}
+                onClick={() => {
+                  const isSelected = form.vehicleTypes.includes(item.value);
+                  const updated = isSelected
+                    ? form.vehicleTypes.filter((v) => v !== item.value)
+                    : [...form.vehicleTypes, item.value];
+                  handleInput("vehicleTypes", updated);
+                }}
+                className={`px-4 py-1.5 text-sm font-medium border transition-all duration-200 rounded-xl
+                ${
+                  form.vehicleTypes.includes(item.value)
+                    ? "bg-primary text-secondary border-primary"
+                    : readOnly
+                      ? "hidden"
+                      : "bg-transparent text-primary border-primary/50 hover:border-primary hover:cursor-pointer"
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
       )}
 
       {/* ===== SERVICES ===== */}

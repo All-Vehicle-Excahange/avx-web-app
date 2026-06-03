@@ -27,10 +27,42 @@ function LoginPopup({
   const [otpSent, setOtpSent] = useState(false);
 
   const [otpError, setOtpError] = useState("");
+  const [countdown, setCountdown] = useState(0);
 
   const otpRefs = useRef([]);
   const [isClosing, setIsClosing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Check for active block on mount or when popup opens
+  useEffect(() => {
+    if (isOpen) {
+      const blockUntil = localStorage.getItem("otpBlockUntil");
+      if (blockUntil) {
+        const remaining = Math.ceil((Number(blockUntil) - Date.now()) / 1000);
+        if (remaining > 0) {
+          setCountdown(remaining);
+        } else {
+          localStorage.removeItem("otpBlockUntil");
+        }
+      }
+    }
+  }, [isOpen]);
+
+  // Countdown timer effect
+  useEffect(() => {
+    if (countdown <= 0) return;
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          localStorage.removeItem("otpBlockUntil");
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [countdown]);
 
   const triggerClose = useCallback(() => {
     setIsClosing(true);
@@ -93,11 +125,24 @@ function LoginPopup({
 
       if (res?.success || res?.status) {
         setOtpSent(true);
+        const blockTime = Date.now() + 60 * 1000;
+        localStorage.setItem("otpBlockUntil", String(blockTime));
+        setCountdown(60);
         setTimeout(() => otpRefs.current[0]?.focus(), 200);
       }
     } catch (err) {
       const api = err?.response?.data;
       const msg = api?.message || "Failed to send OTP";
+
+      if (
+        msg.toLowerCase().includes("blocked") ||
+        msg.toLowerCase().includes("too many attempts") ||
+        msg.toLowerCase().includes("2 minutes")
+      ) {
+        const blockTime = Date.now() + 120 * 1000;
+        localStorage.setItem("otpBlockUntil", String(blockTime));
+        setCountdown(120);
+      }
 
       setError("phoneNumber", {
         type: "server",
@@ -133,6 +178,16 @@ function LoginPopup({
     } catch (err) {
       const api = err?.response?.data;
       const msg = api?.message || "Invalid or expired OTP";
+
+      if (
+        msg.toLowerCase().includes("blocked") ||
+        msg.toLowerCase().includes("too many attempts") ||
+        msg.toLowerCase().includes("2 minutes")
+      ) {
+        const blockTime = Date.now() + 120 * 1000;
+        localStorage.setItem("otpBlockUntil", String(blockTime));
+        setCountdown(120);
+      }
 
       setOtpError(msg);
     } finally {
@@ -252,6 +307,19 @@ function LoginPopup({
                 ))}
               </div>
 
+              {/* Resend OTP */}
+              <div className="text-center text-xs text-primary/70 mb-4 mt-2">
+                Didn&apos;t receive OTP?{" "}
+                <button
+                  type="button"
+                  disabled={countdown > 0 || isLoading}
+                  onClick={onSendOtp}
+                  className={`font-semibold text-primary hover:underline cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed`}
+                >
+                  {countdown > 0 ? `Resend in ${countdown}s` : "Resend OTP"}
+                </button>
+              </div>
+
               {/* ✅ OTP Error Below Boxes */}
               {otpError && (
                 <p className="text-red-500 text-xs text-center mb-4">
@@ -266,11 +334,14 @@ function LoginPopup({
             <Button
               type="submit"
               variant="ghost"
-              locked={isLoading}
+              locked={isLoading || countdown > 0}
+              disabled={countdown > 0}
               className="w-full h-11 text-sm font-bold flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <Loader2 size={20} className="animate-spin" />
+              ) : countdown > 0 ? (
+                `GET OTP (${countdown}s)`
               ) : (
                 "GET OTP"
               )}

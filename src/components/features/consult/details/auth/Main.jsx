@@ -12,17 +12,13 @@ function Main() {
   const [activeTab, setActiveTab] = useState("login");
   const { replace } = useRouter();
   const { user, isLoggedIn } = useAuthStore();
-  const isConsultant = ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(
-    user?.userRole,
-  );
-
   useEffect(() => {
-    if (isLoggedIn && isConsultant) {
+    if (isLoggedIn) {
       replace("/consult/subscription");
     }
-  }, [isLoggedIn, isConsultant, replace]);
+  }, [isLoggedIn, replace]);
 
-  if (isLoggedIn && isConsultant) return null;
+  if (isLoggedIn) return null;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-secondary px-4 py-8">

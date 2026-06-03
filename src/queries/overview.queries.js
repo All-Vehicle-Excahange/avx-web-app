@@ -13,7 +13,7 @@ export const getInventoryOverviewQuery = () => {
       const res = await getInventoryOverview();
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -24,7 +24,7 @@ export const getOverviewSummaryDataQuery = () => {
       const res = await getOverviewSummaryData();
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -35,7 +35,7 @@ export const getInspectionStatusQuery = () => {
       const res = await getInspectionStatus();
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -46,6 +46,6 @@ export const getRecentActivityQuery = () => {
       const res = await getRecentActivity();
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };

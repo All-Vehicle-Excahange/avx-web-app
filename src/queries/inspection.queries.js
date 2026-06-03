@@ -19,7 +19,7 @@ export const getInspectionSnapShotQuery = () => {
       const res = await getInspectionSnapShot();
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -30,7 +30,7 @@ export const getVehiclesRequiringAttentionQuery = () => {
       const res = await getVehiclesRequiringAttention();
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -41,7 +41,7 @@ export const getRequestedFromBuyersQuary = () => {
       const res = await getRequestedFromBuyers();
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -61,7 +61,7 @@ export const getScoreBreakdownInfiniteQuery = (payload) => {
       const nextPage = allPages.length + 1;
       return nextPage <= totalPages ? nextPage : undefined;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   };
 };
 
@@ -81,7 +81,7 @@ export const getReportHistoryInfiniteQuery = (payload) => {
       const nextPage = allPages.length + 1;
       return nextPage <= totalPages ? nextPage : undefined;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   };
 };
 

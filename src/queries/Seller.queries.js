@@ -16,7 +16,7 @@ export const getInventoryVehicleQuery = (listingStatus) => {
       const res = await getInventoryVehicle({ listingStatus });
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -41,7 +41,7 @@ export const getInventoryVehicleInfiniteQuery = (payload) => {
       const nextPage = allPages.length + 1;
       return nextPage <= totalPages ? nextPage : undefined;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   };
 };
 
@@ -52,7 +52,7 @@ export const getSusPendedVehiclesQuery = (payload) => {
       const res = await getSusPendedVehicles(payload);
       return res;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -63,7 +63,7 @@ export const getTopPerformingVehiclesQuery = () => {
       const res = await getTopPerformingVehicles();
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -74,7 +74,7 @@ export const getInventorySnapShotCountQuery = () => {
       const res = await getInventorySnapShotCount();
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -85,7 +85,7 @@ export const getNeedAttenctionVehiclesQuery = (payload) => {
       const res = await getNeedAttenctionVehicles(payload);
       return res;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -96,7 +96,7 @@ export const getSellerTierQuery = () => {
       const res = await getSellerTier();
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -107,7 +107,7 @@ export const getInquiryKpisQuery = () => {
       const res = await getInquiryKpis();
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -132,7 +132,7 @@ export const getNeedAttenctionVehiclesInfiniteQuery = (payload) => {
       const nextPage = allPages.length + 1;
       return nextPage <= totalPages ? nextPage : undefined;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   };
 };
 
@@ -157,6 +157,6 @@ export const getSusPendedVehiclesInfiniteQuery = (payload) => {
       const nextPage = allPages.length + 1;
       return nextPage <= totalPages ? nextPage : undefined;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   };
 };

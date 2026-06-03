@@ -15,7 +15,7 @@ export const getVerificationStatusQuery = () => {
       const res = await getVerificationStatus();
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -26,7 +26,7 @@ export const getDocumentStatusQuery = () => {
       const res = await getDocumentStatus();
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -37,7 +37,7 @@ export const getConsultantAddressQuery = () => {
       const res = await getConsualtAdress();
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -48,7 +48,7 @@ export const getConsultantProfileQuery = () => {
       const res = await getConsualtProfile();
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -59,7 +59,7 @@ export const getActiveBasicUpdateQuery = () => {
       const res = await getActiveBasicUpdate();
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -70,6 +70,6 @@ export const getUserProfileStrengthQuery = () => {
       const res = await getUserProfileStrength();
       return res?.data;
     },
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
   });
 };
