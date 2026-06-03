@@ -23,13 +23,13 @@ export default function DashboardLayout({ children }) {
 
   // SUSPENSION LOGIC
   const isSuspended =
-    data?.success && data?.data
-      ? typeof data.data === "object"
-        ? data.data.isSuspended
-        : data.data === true
+    data
+      ? typeof data === "object"
+        ? data.isSuspended
+        : data === true
       : false;
 
-  const suspensionData = isSuspended ? data?.data : null;
+  const suspensionData = isSuspended ? data : null;
 
   // PAGE TITLE
   const pathParts = router.pathname.split("/");

@@ -689,6 +689,7 @@ export default function KycForm() {
                                 },
                               }));
                               setShowPreview(false);
+                              window.scrollTo({ top: 0, behavior: "smooth" });
                             }}
                           />
                         )}

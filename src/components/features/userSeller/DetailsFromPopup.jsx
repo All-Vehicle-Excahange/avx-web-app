@@ -156,13 +156,13 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
         const formattedPan = form.panCardNumber?.toUpperCase();
         const formattedAadhar = form.aadharCardNumber?.replace(/\s/g, "");
 
-        if (formattedPan !== existing.panCardNumber) {
+        if (formattedPan && formattedPan !== existing.panCardNumber) {
           payload.panCardNumber = formattedPan;
         }
         if (form.panCardFrontImage) {
           payload.panCardFrontImage = form.panCardFrontImage;
         }
-        if (formattedAadhar !== existing.aadharCardNumber) {
+        if (formattedAadhar && formattedAadhar !== existing.aadharCardNumber) {
           payload.aadharCardNumber = formattedAadhar;
         }
         if (form.aadharCardFrontImage) {
@@ -180,12 +180,26 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
 
         await updateBecameSeller(payload);
       } else {
-        // Automatically convert PAN to uppercase before submission just in case
-        const submissionData = {
-          ...form,
-          panCardNumber: form.panCardNumber?.toUpperCase(),
-          aadharCardNumber: form.aadharCardNumber?.replace(/\s/g, ""),
-        };
+        // Only send non-empty/non-null fields for new registration
+        const submissionData = {};
+        const formattedPan = form.panCardNumber?.toUpperCase();
+        const formattedAadhar = form.aadharCardNumber?.replace(/\s/g, "");
+
+        if (formattedPan) {
+          submissionData.panCardNumber = formattedPan;
+        }
+        if (form.panCardFrontImage) {
+          submissionData.panCardFrontImage = form.panCardFrontImage;
+        }
+        if (formattedAadhar) {
+          submissionData.aadharCardNumber = formattedAadhar;
+        }
+        if (form.aadharCardFrontImage) {
+          submissionData.aadharCardFrontImage = form.aadharCardFrontImage;
+        }
+        if (form.aadharCardBackImage) {
+          submissionData.aadharCardBackImage = form.aadharCardBackImage;
+        }
 
         await postBecameSeller(submissionData);
       }

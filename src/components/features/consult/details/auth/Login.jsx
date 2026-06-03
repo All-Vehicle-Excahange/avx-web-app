@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Button from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { getOtp, login } from "@/services/auth.service";
@@ -20,7 +20,38 @@ function Login() {
   const [otp, setOtp] = useState(Array(6).fill(""));
   const [otpSent, setOtpSent] = useState(false);
   const [otpError, setOtpError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [countdown, setCountdown] = useState(0);
   const otpRefs = useRef([]);
+
+  // Check for active block on mount
+  useEffect(() => {
+    const blockUntil = localStorage.getItem("otpBlockUntil");
+    if (blockUntil) {
+      const remaining = Math.ceil((Number(blockUntil) - Date.now()) / 1000);
+      if (remaining > 0) {
+        setCountdown(remaining);
+      } else {
+        localStorage.removeItem("otpBlockUntil");
+      }
+    }
+  }, []);
+
+  // Countdown timer effect
+  useEffect(() => {
+    if (countdown <= 0) return;
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          localStorage.removeItem("otpBlockUntil");
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [countdown]);
 
   const handleOtpChange = (index, value) => {
     if (!/^\d?$/.test(value)) return;
@@ -42,6 +73,7 @@ function Login() {
 
   const onSendOtp = async () => {
     try {
+      setLoading(true);
       const phone = getValues("phoneNumber");
       const res = await getOtp({
         phoneNumber: phone,
@@ -51,15 +83,31 @@ function Login() {
 
       if (res?.success || res?.status) {
         setOtpSent(true);
+        const blockTime = Date.now() + 60 * 1000;
+        localStorage.setItem("otpBlockUntil", String(blockTime));
+        setCountdown(60);
         setTimeout(() => otpRefs.current[0]?.focus(), 200);
       }
     } catch (err) {
       const api = err?.response?.data;
       const msg = api?.message || "Failed to send OTP";
+
+      if (
+        msg.toLowerCase().includes("blocked") ||
+        msg.toLowerCase().includes("too many attempts") ||
+        msg.toLowerCase().includes("2 minutes")
+      ) {
+        const blockTime = Date.now() + 120 * 1000;
+        localStorage.setItem("otpBlockUntil", String(blockTime));
+        setCountdown(120);
+      }
+
       setError("phoneNumber", {
         type: "server",
         message: msg,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,6 +119,7 @@ function Login() {
     }
 
     try {
+      setLoading(true);
       const phone = getValues("phoneNumber");
       const res = await login({
         phoneNumber: phone,
@@ -84,7 +133,20 @@ function Login() {
     } catch (err) {
       const api = err?.response?.data;
       const msg = api?.message || "Invalid or expired OTP";
+
+      if (
+        msg.toLowerCase().includes("blocked") ||
+        msg.toLowerCase().includes("too many attempts") ||
+        msg.toLowerCase().includes("2 minutes")
+      ) {
+        const blockTime = Date.now() + 120 * 1000;
+        localStorage.setItem("otpBlockUntil", String(blockTime));
+        setCountdown(120);
+      }
+
       setOtpError(msg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -144,6 +206,18 @@ function Login() {
               />
             ))}
           </div>
+          {/* Resend OTP */}
+          <div className="text-center text-xs text-primary/70 mb-4 mt-2">
+            Didn&apos;t receive OTP?{" "}
+            <button
+              type="button"
+              disabled={countdown > 0 || loading}
+              onClick={onSendOtp}
+              className={`font-semibold text-primary hover:underline cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed`}
+            >
+              {countdown > 0 ? `Resend in ${countdown}s` : "Resend OTP"}
+            </button>
+          </div>
           {otpError && (
             <p className="text-red-500 text-xs text-center mb-4">
               {otpError}
@@ -158,14 +232,17 @@ function Login() {
           type="submit"
           variant="ghost"
           className="w-full h-11 text-sm font-bold"
+          loading={loading}
+          disabled={countdown > 0}
         >
-          GET OTP
+          {countdown > 0 ? `GET OTP (${countdown}s)` : "GET OTP"}
         </Button>
       ) : (
         <Button
           type="submit"
           variant="ghost"
           className="w-full h-11 text-sm font-bold"
+          loading={loading}
         >
           Validate OTP
         </Button>

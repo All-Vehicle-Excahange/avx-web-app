@@ -189,6 +189,7 @@ export default function PreviewAndEdite({
 
       if (res?.success || res?.data) {
         if (onSuccess) onSuccess();
+        window.scrollTo({ top: 0, behavior: "smooth" });
         return;
       }
     } catch (error) {

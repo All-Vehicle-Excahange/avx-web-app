@@ -221,58 +221,45 @@ export default function UpdateProfile() {
       }
       setErrors((p) => ({ ...p, business: "" }));
 
-      // Build DELTA payload — only send what changed
+      // Build payload — check for changes first, then append all fields to avoid data loss
       const payload = new FormData();
       const b = form.business;
       const orig = data.business || {};
       let hasChanges = false;
 
       if (b.logo instanceof File) {
-        payload.append("logo", b.logo);
         hasChanges = true;
       }
       if (b.banner instanceof File) {
-        payload.append("banner", b.banner);
         hasChanges = true;
       }
       if (b.consultationName !== (orig.consultationName || "")) {
-        payload.append("consultationName", b.consultationName || "");
         hasChanges = true;
       }
       if (b.username !== (orig.username || "")) {
-        payload.append("username", b.username || "");
         hasChanges = true;
       }
       if (b.ownerName !== (orig.ownerName || "")) {
-        payload.append("ownerName", b.ownerName || "");
         hasChanges = true;
       }
       if (b.companyEmail !== (orig.companyEmail || "")) {
-        payload.append("companyEmail", b.companyEmail || "");
         hasChanges = true;
       }
       if (
         String(b.establishmentYear || "") !==
         String(orig.establishmentYear || "")
       ) {
-        payload.append("establishmentYear", b.establishmentYear || "");
         hasChanges = true;
       }
       // Arrays: compare via JSON
       const origVehicleTypes = JSON.stringify(orig.vehicleTypes || []);
       const newVehicleTypes = JSON.stringify(b.vehicleTypes || []);
       if (origVehicleTypes !== newVehicleTypes) {
-        (b.vehicleTypes || []).forEach((v, i) =>
-          payload.append(`vehicleTypes[${i}]`, v),
-        );
         hasChanges = true;
       }
       const origServices = JSON.stringify(orig.services || []);
       const newServices = JSON.stringify(b.services || []);
       if (origServices !== newServices) {
-        (b.services || []).forEach((s, i) =>
-          payload.append(`services[${i}]`, s),
-        );
         hasChanges = true;
       }
 
@@ -280,6 +267,25 @@ export default function UpdateProfile() {
         setEditMode((p) => ({ ...p, business: false }));
         return;
       }
+
+      // Append all fields if there are changes
+      if (b.logo instanceof File) {
+        payload.append("logo", b.logo);
+      }
+      if (b.banner instanceof File) {
+        payload.append("banner", b.banner);
+      }
+      payload.append("consultationName", b.consultationName || "");
+      payload.append("username", b.username || "");
+      payload.append("ownerName", b.ownerName || "");
+      payload.append("companyEmail", b.companyEmail || "");
+      payload.append("establishmentYear", b.establishmentYear || "");
+      (b.vehicleTypes || []).forEach((v, i) =>
+        payload.append(`vehicleTypes[${i}]`, v),
+      );
+      (b.services || []).forEach((s, i) =>
+        payload.append(`services[${i}]`, s),
+      );
 
       const res = await updateBasicDetails(payload, currentId);
       if (res.success) {
@@ -322,26 +328,23 @@ export default function UpdateProfile() {
       }
       setErrors((p) => ({ ...p, address: "" }));
 
-      // Build DELTA payload — only send what changed
+      // Build payload — check for changes first, then append all fields to avoid data loss
       const payload = new FormData();
       const a = form.address;
       const orig = data.address || {};
       let hasChanges = false;
 
       if (a.address !== (orig.address || "")) {
-        payload.append("address", a.address || "");
         hasChanges = true;
       }
       if (
         String(a.stateId || "") !== String(orig.state?.id || orig.stateId || "")
       ) {
-        payload.append("stateId", a.stateId || "");
         hasChanges = true;
       }
       if (
         String(a.cityId || "") !== String(orig.city?.id || orig.cityId || "")
       ) {
-        payload.append("cityId", a.cityId || "");
         hasChanges = true;
       }
 
@@ -349,6 +352,11 @@ export default function UpdateProfile() {
         setEditMode((p) => ({ ...p, address: false }));
         return;
       }
+
+      // Append all fields if there are changes
+      payload.append("address", a.address || "");
+      payload.append("stateId", a.stateId || "");
+      payload.append("cityId", a.cityId || "");
 
       const res = await updateAddressDetails(payload, currentId);
       if (res.success) {
@@ -399,44 +407,54 @@ export default function UpdateProfile() {
       }
       setErrors((p) => ({ ...p, kyc: "" }));
 
-      // Build DELTA payload — only send what changed
+      // Build payload — check for changes first, then append all fields to avoid data loss
       const payload = new FormData();
       const k = form.kyc;
       const orig = data.kyc || {};
       let hasChanges = false;
 
       if (k.gstNumber !== (orig.gstNumber || "")) {
-        payload.append("gstNumber", k.gstNumber || "");
         hasChanges = true;
       }
       if (k.panNumber !== (orig.panCardNumber || "")) {
-        payload.append("panCardNumber", k.panNumber || "");
         hasChanges = true;
       }
       if (k.aadharNumber !== (orig.aadharCardNumber || "")) {
-        payload.append("aadharCardNumber", k.aadharNumber || "");
         hasChanges = true;
       }
       if (k.gstPhoto instanceof File) {
-        payload.append("gstCertificateImage", k.gstPhoto);
         hasChanges = true;
       }
       if (k.panPhoto instanceof File) {
-        payload.append("panCardFrontImage", k.panPhoto);
         hasChanges = true;
       }
       if (k.aadharFront instanceof File) {
-        payload.append("aadharCardFrontImage", k.aadharFront);
         hasChanges = true;
       }
       if (k.aadharBack instanceof File) {
-        payload.append("aadharCardBackImage", k.aadharBack);
         hasChanges = true;
       }
 
       if (!hasChanges) {
         setEditMode((p) => ({ ...p, kyc: false }));
         return;
+      }
+
+      // Append all fields if there are changes
+      payload.append("gstNumber", k.gstNumber || "");
+      payload.append("panCardNumber", k.panNumber || "");
+      payload.append("aadharCardNumber", k.aadharNumber || "");
+      if (k.gstPhoto instanceof File) {
+        payload.append("gstCertificateImage", k.gstPhoto);
+      }
+      if (k.panPhoto instanceof File) {
+        payload.append("panCardFrontImage", k.panPhoto);
+      }
+      if (k.aadharFront instanceof File) {
+        payload.append("aadharCardFrontImage", k.aadharFront);
+      }
+      if (k.aadharBack instanceof File) {
+        payload.append("aadharCardBackImage", k.aadharBack);
       }
 
       const res = await updateKycDocuments(payload, currentId);

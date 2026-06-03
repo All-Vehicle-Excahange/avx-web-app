@@ -87,9 +87,17 @@ axiosInstance.interceptors.response.use(
               refreshPromise = null;
 
               if (res.data?.data?.accessToken) {
+                const currentUser = useAuthStore.getState().user || {};
+                const newUserData = {
+                  userMaster: {
+                    ...currentUser,
+                    ...(res.data.data.userMaster || {}),
+                  },
+                  refreshToken: res.data.data.refreshToken || currentUser.refreshToken,
+                };
                 useAuthStore
                   .getState()
-                  .login(res.data.data, res.data.data.accessToken);
+                  .login(newUserData, res.data.data.accessToken);
               }
 
               return res;
