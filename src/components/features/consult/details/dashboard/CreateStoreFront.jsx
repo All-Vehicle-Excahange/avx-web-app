@@ -12,6 +12,8 @@ import {
   ShieldCheck,
   XCircle,
   Award,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { THEME_STORE } from "@/core/engine/themeStore";
@@ -86,6 +88,7 @@ export default function CreateStoreFront({ storeData, onView }) {
   const [previewTheme, setPreviewTheme] = useState(null);
   const [themes, setThemes] = useState([]);
   const [loadingThemes, setLoadingThemes] = useState(true);
+  const [isAdminRemarkOpen, setIsAdminRemarkOpen] = useState(false);
 
   const statusBadge = storeData
     ? getStatusBadge(storeData.verificationStatus)
@@ -303,14 +306,35 @@ export default function CreateStoreFront({ storeData, onView }) {
 
           {/* Admin Remark */}
           {storeData.adminRemark && (
-            <div className="border border-orange-400/30 bg-orange-400/5 rounded-lg p-4 space-y-1.5">
-              <p className="text-sm font-medium text-orange-400 flex items-center gap-2">
-                <AlertCircle size={16} />
-                Admin Remark
-              </p>
-              <p className="text-sm text-third leading-relaxed">
-                {storeData.adminRemark}
-              </p>
+            <div className="border border-orange-400/30 bg-orange-400/5 rounded-lg p-4 transition-all duration-300">
+              <div
+                className="flex items-center justify-between cursor-pointer select-none"
+                onClick={() => setIsAdminRemarkOpen(!isAdminRemarkOpen)}
+              >
+                <p className="text-sm font-medium text-orange-400 flex items-center gap-2">
+                  <AlertCircle size={16} />
+                  Admin Remark
+                </p>
+                <span className="text-orange-400">
+                  <ChevronDown
+                    size={16}
+                    className={`transition-transform duration-300 ${isAdminRemarkOpen ? "rotate-180" : "rotate-0"}`}
+                  />
+                </span>
+              </div>
+              <div
+                className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${
+                  isAdminRemarkOpen
+                    ? "grid-rows-[1fr] opacity-100 mt-3 pt-3 border-t border-orange-400/20"
+                    : "grid-rows-[0fr] opacity-0"
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <p className="text-sm text-third leading-relaxed">
+                    {storeData.adminRemark}
+                  </p>
+                </div>
+              </div>
             </div>
           )}
         </div>

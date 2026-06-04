@@ -115,9 +115,10 @@ export default function WhyBuyHereBasic2({
 }) {
   const [isSaving, setIsSaving] = useState(false);
 
-  const iconOptions = storeIcons?.length > 0
-    ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
-    : SVG_OPTIONS;
+  const iconOptions =
+    storeIcons?.length > 0
+      ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
+      : SVG_OPTIONS;
 
   const data = {
     ...DEFAULT_DATA,
@@ -443,7 +444,6 @@ export default function WhyBuyHereBasic2({
                     value={
                       iconOptions.find((opt) => opt.value === step.icon) || null
                     }
-
                     onChange={(selectedOption) => {
                       updateArrayItem(
                         "processSteps",
@@ -558,15 +558,17 @@ export default function WhyBuyHereBasic2({
                 <div
                   key={review.id}
                   onClick={() => toggleReviewSelection(review.id)}
-                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${isSelected
-                    ? "border-fourth bg-fourth/10 shadow-md"
-                    : "border-third/20 bg-primary/5 hover:border-third/40"
-                    }`}
+                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
+                    isSelected
+                      ? "border-fourth bg-fourth/10 shadow-md"
+                      : "border-third/20 bg-primary/5 hover:border-third/40"
+                  }`}
                 >
                   {/* Selection indicator */}
                   <div
-                    className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? "border-fourth bg-fourth" : "border-third/40"
-                      }`}
+                    className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                      isSelected ? "border-fourth bg-fourth" : "border-third/40"
+                    }`}
                   >
                     {isSelected && (
                       <CheckCircle2 size={14} className="text-secondary" />
@@ -620,6 +622,10 @@ export default function WhyBuyHereBasic2({
   }
 
   // ── FRONT MODE ──
+
+  const testimonials = data.featuredReviews?.length
+    ? data.featuredReviews
+    : (allReviews?.length ? allReviews : []);
 
   return (
     <>
@@ -733,79 +739,33 @@ export default function WhyBuyHereBasic2({
         </div>
       </section>
 
-      {/* SECTION 5 — INSPECTION */}
       <section className="py-12 px-2 lg:px-4">
         <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
-            <div>
-              <EyeBrow>Inspection</EyeBrow>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                {data.inspectionTitle}
-              </h2>
-            </div>
-            <div>
-              <Divider />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
+            {/* Left Column: Title & Description */}
+            <div className="space-y-6">
+              <div>
+                <EyeBrow>INSPECTION</EyeBrow>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat] mt-2">
+                  {data.inspectionTitle}
+                </h2>
+              </div>
               <div
                 className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]"
                 dangerouslySetInnerHTML={{ __html: data.inspectionText }}
               />
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-stretch">
-            <div className="grid grid-cols-2 gap-3" variants={stagger}>
+            {/* Right Column: Points Stack */}
+            <div className="flex flex-col gap-3">
               {data.inspectionPoints.map((pt) => (
                 <div
                   key={pt}
-                  variants={fadeUp}
-                  className="group flex flex-col gap-4 p-6 border border-third/10 rounded-2xl hover:border-primary/25 transition-all duration-300 hover:shadow-[0_6px_28px_rgba(0,0,0,0.35)]"
+                  className="px-6 py-4 border border-third/10 rounded-xl transition-all duration-300 hover:border-primary/25 hover:bg-primary/5"
                 >
-                  <div className="w-8 h-8 rounded-lg border-[1.5px] border-fourth flex items-center justify-center shrink-0">
-                    <svg width="12" height="10" viewBox="0 0 10 8" fill="none">
-                      <path
-                        d="M1 4L3.8 7L9 1"
-                        stroke="#007bff"
-                        strokeWidth="1.6"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
-                  <span className="font-[Poppins] text-sm text-third/70 leading-[1.7] group-hover:text-primary/80 transition-colors duration-300">
+                  <span className="font-[Poppins] text-sm text-third/70 font-medium">
                     {pt}
                   </span>
-                </div>
-              ))}
-            </div>
-
-            <div className="border border-third/10 rounded-2xl overflow-hidden hover:border-primary/25 transition-all duration-300 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)]">
-              <div className="px-6 py-5 border-b border-primary/[0.07] flex items-center justify-between">
-                <p className="font-[Montserrat] font-bold text-[9px] tracking-[0.26em] uppercase text-primary/50">
-                  {"What's Covered"}
-                </p>
-                <span className="font-[Montserrat] font-bold text-[9px] tracking-[0.16em] uppercase text-primary">
-                  Status
-                </span>
-              </div>
-              {data.inspectionPoints.map((pt, i, arr) => (
-                <div
-                  key={pt}
-                  className={`flex justify-between items-center px-6 py-[18px] transition-colors duration-150 hover:bg-primary/4 ${i < arr.length - 1 ? "border-b border-primary/6" : ""}`}
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="font-[Montserrat] font-bold text-[10px] tracking-[0.14em] text-fourth">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="font-[Poppins] text-sm text-third/70">
-                      {pt}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-fourth" />
-                    <span className="font-[Montserrat] font-bold text-[9px] tracking-[0.16em] uppercase text-primary">
-                      Included
-                    </span>
-                  </div>
                 </div>
               ))}
             </div>
@@ -837,7 +797,7 @@ export default function WhyBuyHereBasic2({
       </section>
 
       {/* SECTION 7 — FEATURED REVIEWS */}
-      {(data.featuredReviews?.length > 0 || data.testimonials?.length > 0) && (
+      {testimonials && testimonials.length > 0 && (
         <section className="py-12 px-2 lg:px-4">
           <div className="container">
             <div className="flex flex-col gap-3 mb-12">
@@ -849,7 +809,7 @@ export default function WhyBuyHereBasic2({
 
             {/* FEATURED REVIEWS - Horizontal Scrollable */}
             <div className="flex overflow-x-auto gap-6 pb-12 no-scrollbar snap-x snap-mandatory">
-              {(data.featuredReviews || data.testimonials || []).map((t, i) => (
+              {testimonials.map((t, i) => (
                 <div
                   key={t.id || i}
                   className="min-w-[300px] md:min-w-[450px] snap-center group border border-primary/40 rounded-2xl p-8 flex flex-col gap-5 hover:border-primary/25 transition-all duration-500 hover:shadow-[0_8px_36px_rgba(0,0,0,0.4)] h-full"
@@ -872,7 +832,11 @@ export default function WhyBuyHereBasic2({
                   )}
 
                   {!t.rating && (
-                    <Quote size={20} className="text-fourth" strokeWidth={1.4} />
+                    <Quote
+                      size={20}
+                      className="text-fourth"
+                      strokeWidth={1.4}
+                    />
                   )}
 
                   {/* Review Title */}
@@ -884,7 +848,9 @@ export default function WhyBuyHereBasic2({
 
                   {/* Review Text */}
                   <div className="relative">
-                    <span className="absolute -top-2 -left-2 text-4xl text-primary/10 font-serif leading-none">&quot;</span>
+                    <span className="absolute -top-2 -left-2 text-4xl text-primary/10 font-serif leading-none">
+                      &quot;
+                    </span>
                     <p className="font-[Poppins] text-sm md:text-base leading-[1.86] text-third/70 italic flex-1 pl-2">
                       {t.reviewText || t.review}
                     </p>
