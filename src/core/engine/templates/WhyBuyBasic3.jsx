@@ -163,7 +163,10 @@ export default function WhyBuyBasic3({
 
   const [active, setActive] = useState(0);
   const [visible, setVisible] = useState(true);
-  const total = data.featuredReviews?.length || data.testimonials?.length || 0;
+  const testimonials = data.featuredReviews?.length
+    ? data.featuredReviews
+    : (allReviews?.length ? allReviews : []);
+  const total = testimonials.length;
   const timeoutRef = useRef(null);
 
   useEffect(() => () => clearTimeout(timeoutRef.current), []);
@@ -316,10 +319,7 @@ export default function WhyBuyBasic3({
   const prev = () => transition((active - 1 + total) % total);
   const next = () => transition((active + 1) % total);
 
-  const testimonials = data.featuredReviews?.length
-    ? data.featuredReviews
-    : data.testimonials;
-  const item = testimonials[active];
+  const item = testimonials[active] || null;
   const getIcon = (icon) => {
     if (typeof icon === "string" && icon.startsWith("<svg")) {
       return (

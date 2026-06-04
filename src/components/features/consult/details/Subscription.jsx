@@ -130,7 +130,7 @@ export default function Subscription() {
         const top = window.screen.height / 2 - height / 2;
         window.open(
           shortUrl,
-          "AVX Subscription Payment",
+          "Reecomm Subscription Payment",
           `width=${width},height=${height},top=${top},left=${left},scrollbars=yes,resizable=yes`,
         );
         return;

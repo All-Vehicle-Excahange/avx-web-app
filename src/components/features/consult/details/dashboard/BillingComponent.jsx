@@ -12,9 +12,141 @@ import {
   Info,
 } from "lucide-react";
 import CustomSelect from "@/components/ui/custom-select";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getSellerTierQuery } from "@/queries/Seller.queries";
+import { getWalletBalanceQuery } from "@/queries/waller.queries";
+import ManagePlan from "@/components/features/consult/details/components/ManagePlan";
+import AddMoneyPopup from "@/components/features/consult/details/components/AddMoneyPopup";
+import toast from "react-hot-toast";
+import { addTopUpPaymemt } from "@/services/waller.service";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { getActiveSubscription } from "@/services/subscription.service";
+import { SkeletonBox } from "@/components/ui/skeleton";
 
 export default function BillingComponent() {
+  const queryClient = useQueryClient();
   const [range, setRange] = useState("30");
+  const [isManageOpen, setIsManageOpen] = useState(false);
+  const [isAddMoneyOpen, setIsAddMoneyOpen] = useState(false);
+  const [isPaying, setIsPaying] = useState(false);
+
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleConfirmAddMoney = async (amount) => {
+    setIsPaying(true);
+    try {
+      const isScriptLoaded = await loadRazorpayScript();
+      if (!isScriptLoaded) {
+        toast.error("Razorpay SDK failed to load. Please check your connection.");
+        return;
+      }
+
+      const payload = { amount: Number(amount) };
+      const response = await addTopUpPaymemt(payload);
+
+      if (response && response.success && response.data) {
+        const orderData = response.data;
+
+        const storeUser = useAuthStore.getState().user;
+        let prefillName = "";
+        if (storeUser) {
+          if (storeUser.firstname || storeUser.lastname) {
+            prefillName = `${storeUser.firstname || ""} ${storeUser.lastname || ""}`.trim();
+          } else {
+            prefillName = storeUser.name || storeUser.fullName || storeUser.firstName || "";
+          }
+        }
+        let prefillEmail = storeUser?.email || "";
+        let prefillContact =
+          storeUser?.phoneNumber ||
+          storeUser?.phone ||
+          storeUser?.mobile ||
+          "";
+
+        if (
+          typeof window !== "undefined" &&
+          (!prefillName || !prefillEmail || !prefillContact)
+        ) {
+          try {
+            const savedUser = localStorage.getItem("user");
+            if (savedUser) {
+              const userObj = JSON.parse(savedUser);
+              if (userObj) {
+                if (!prefillName) {
+                  if (userObj.firstname || userObj.lastname) {
+                    prefillName = `${userObj.firstname || ""} ${userObj.lastname || ""}`.trim();
+                  } else {
+                    prefillName = userObj.name || userObj.fullName || userObj.firstName || "";
+                  }
+                }
+                if (!prefillEmail) prefillEmail = userObj.email || "";
+                if (!prefillContact)
+                  prefillContact =
+                    userObj.phoneNumber ||
+                    userObj.phone ||
+                    userObj.mobile ||
+                    "";
+              }
+            }
+          } catch (e) {
+            console.error("Error parsing user from localStorage for prefill", e);
+          }
+        }
+
+        const options = {
+          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || orderData.keyId,
+          amount: Math.round(orderData.amount * 100),
+          currency: orderData.currency || "INR",
+          name: "Reecomm",
+          description: "Wallet Top-up Payment",
+          order_id: orderData.razorpayOrderId,
+          prefill: {
+            name: prefillName,
+            email: prefillEmail,
+            contact: prefillContact,
+          },
+          handler: async function (paymentResponse) {
+            toast.success(`Successfully added ₹${amount.toLocaleString("en-IN")} to wallet!`);
+            setIsAddMoneyOpen(false);
+            queryClient.invalidateQueries({ queryKey: ["wallet-balance"] });
+          },
+          theme: {
+            color: "#007bff",
+          },
+          modal: {
+            ondismiss: function () {
+              toast.error("Payment cancelled.");
+            },
+          },
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.on("payment.failed", function (failResponse) {
+          toast.error("Payment failed: " + failResponse.error.description);
+        });
+        rzp.open();
+      } else {
+        toast.error(response?.message || "Failed to initiate payment.");
+      }
+    } catch (error) {
+      console.error("Payment topup error:", error);
+      toast.error(error?.response?.data?.message || "Something went wrong.");
+    } finally {
+      setIsPaying(false);
+    }
+  };
 
   const rangeOptions = [
     { label: "Last 7 days", value: "7" },
@@ -23,9 +155,59 @@ export default function BillingComponent() {
     { label: "Last 90 days", value: "90" },
   ];
 
-  const tier = "PREMIUM"; // BASIC | PRO | PREMIUM
+  const { data: sellerTierData } = useQuery(getSellerTierQuery());
+  const tier =
+    sellerTierData?.tierTitle ||
+    (typeof window !== "undefined"
+      ? localStorage.getItem("sellerTier")
+      : null) ||
+    "BASIC";
   const isProOrPremium = tier === "PRO" || tier === "PREMIUM";
   const isBasic = tier === "BASIC";
+
+  const { data: walletData } = useQuery({
+    ...getWalletBalanceQuery(),
+    enabled: isProOrPremium,
+  });
+  const balance = walletData?.balance ?? 0;
+
+  const { data: activeSubData, isLoading: isActiveSubLoading } = useQuery({
+    queryKey: ["active-subscription"],
+    queryFn: async () => {
+      try {
+        const res = await getActiveSubscription();
+        return res?.success ? res.data : null;
+      } catch (error) {
+        console.error("Error fetching active subscription:", error);
+        return null;
+      }
+    },
+  });
+
+  const planTitle = activeSubData?.planTitle || tier;
+  const isSubActive = activeSubData 
+    ? activeSubData.status?.toUpperCase() === "ACTIVE" 
+    : !isBasic;
+  
+  const displayTitle = planTitle 
+    ? `${planTitle.charAt(0).toUpperCase() + planTitle.slice(1).toLowerCase()} Consultant` 
+    : "Premium Consultant";
+
+  const billingCycleText = activeSubData?.billingCycle
+    ? `${activeSubData.billingCycle.charAt(0) + activeSubData.billingCycle.slice(1).toLowerCase()} Subscription`
+    : isBasic ? "Free Tier" : "Annual Subscription";
+
+  const priceText = activeSubData?.price !== undefined
+    ? `₹${activeSubData.price.toLocaleString("en-IN")} / ${activeSubData.billingCycle === 'MONTHLY' ? 'month' : 'year'}`
+    : isBasic ? "Free" : "₹9,999 / year";
+
+  const nextBillingDateText = activeSubData?.nextBillingDate
+    ? new Date(activeSubData.nextBillingDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+    : isBasic ? "Never" : "12 Oct 2024";
+
+  const autoRenewalText = activeSubData
+    ? (activeSubData.cancelAtPeriodEnd ? "Auto-renewal disabled" : "Auto-renewal enabled")
+    : isBasic ? "No renewal" : "Auto-renewal enabled";
 
   return (
     <section className="w-full space-y-10">
@@ -38,50 +220,87 @@ export default function BillingComponent() {
       </div>
 
       {/* PREMIUM + WALLET ROW */}
-
-      {/* PREMIUM + WALLET ROW */}
       <div
-        className={`grid gap-6 ${isBasic ? "grid-cols-1" : "grid-cols-1 xl:grid-cols-2"
-          }`}
+        className={`grid gap-6 ${
+          isBasic ? "grid-cols-1" : "grid-cols-1 xl:grid-cols-2"
+        }`}
       >
         {/* PREMIUM PLAN (Always Visible) */}
-        <div className="relative overflow-hidden rounded-2xl border border-primary/20  backdrop-blur-xl p-8 shadow-sm flex flex-col transition-colors duration-200 hover:border-primary/40">
-          {/* Top */}
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <Crown className="text-yellow-300" />
-              <div>
-                <p className="text-xs uppercase tracking-wider">
-                  Premium Consultant
-                </p>
-                <p className="text-lg font-semibold">Annual Subscription</p>
+        {isActiveSubLoading ? (
+          <div className="relative overflow-hidden rounded-2xl border border-primary/20 backdrop-blur-xl p-8 shadow-sm flex flex-col space-y-6 animate-pulse w-full">
+            {/* Top Skeleton */}
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <SkeletonBox className="w-10 h-10 rounded-full" />
+                <div className="space-y-2">
+                  <SkeletonBox className="w-24 h-4 rounded" />
+                  <SkeletonBox className="w-32 h-5 rounded" />
+                </div>
+              </div>
+              <SkeletonBox className="w-16 h-6 rounded-full" />
+            </div>
+            
+            {/* Middle Skeleton */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <SkeletonBox className="w-full h-20 rounded-xl" />
+              <SkeletonBox className="w-full h-20 rounded-xl" />
+            </div>
+            
+            {/* Bottom Skeleton */}
+            <div className="flex justify-between items-center pt-4">
+              <SkeletonBox className="w-32 h-4 rounded" />
+              <SkeletonBox className="w-24 h-8 rounded-full" />
+            </div>
+          </div>
+        ) : (
+          <div className="relative overflow-hidden rounded-2xl border border-primary/20 backdrop-blur-xl p-8 shadow-sm flex flex-col transition-colors duration-200 hover:border-primary/40">
+            {/* Top */}
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <Crown className="text-yellow-300" />
+                <div>
+                  <p className="text-xs uppercase tracking-wider">
+                    {displayTitle}
+                  </p>
+                  <p className="text-lg font-semibold">{billingCycleText}</p>
+                </div>
+              </div>
+
+              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                isSubActive ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"
+              }`}>
+                {isSubActive ? "Active" : "Inactive"}
+              </span>
+            </div>
+
+            {/* Middle */}
+            <div className="grid md:grid-cols-2 gap-6 mt-6">
+              <div className="bg-white/10 rounded-xl p-4">
+                <p className="text-xs opacity-70">Plan Value</p>
+                <p className="font-semibold">{priceText}</p>
+              </div>
+
+              <div className="bg-white/10 rounded-xl p-4">
+                <p className="text-xs opacity-70">Next Renewal</p>
+                <p className="font-semibold">{nextBillingDateText}</p>
               </div>
             </div>
 
-            <span className="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs">
-              Active
-            </span>
-          </div>
-
-          {/* Middle */}
-          <div className="grid md:grid-cols-2 gap-6 mt-6">
-            <div className="bg-white/10 rounded-xl p-4">
-              <p className="text-xs opacity-70">Plan Value</p>
-              <p className="font-semibold">₹9,999 / year</p>
-            </div>
-
-            <div className="bg-white/10 rounded-xl p-4">
-              <p className="text-xs opacity-70">Next Renewal</p>
-              <p className="font-semibold">12 Oct 2024</p>
+            {/* Bottom */}
+            <div className="flex justify-between items-center mt-auto pt-6">
+              <span className="text-xs opacity-90">{autoRenewalText}</span>
+              {!isBasic && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsManageOpen(true)}
+                >
+                  Manage Subscription
+                </Button>
+              )}
             </div>
           </div>
-
-          {/* Bottom */}
-          <div className="flex justify-between items-center mt-auto pt-6">
-            <span className="text-xs opacity-90">Auto-renewal enabled</span>
-            <Button variant="ghost" size="sm">Manage Subscription</Button>
-          </div>
-        </div>
+        )}
 
         {/* ✅ WALLET (Only for PRO/PREMIUM) */}
         {isProOrPremium && (
@@ -100,36 +319,19 @@ export default function BillingComponent() {
               </div>
 
               <p className="text-xs text-third">Available Balance</p>
-              <p className="text-3xl font-bold">₹ 3,420.00</p>
-            </div>
-
-            {/* Auto Recharge */}
-            <div className="mt-4 rounded-xl border border-third/30 bg-primary/5 px-4 py-3 space-y-1">
-              <p className="flex items-center gap-2 text-sm font-medium text-primary">
-                <Info size={15} className="text-primary/70" />
-                Auto-Recharge:{" "}
-                <span className="text-green-400 font-semibold">ENABLED</span>
-              </p>
-
-              <p className="text-xs text-third">
-                When balance falls below{" "}
-                <span className="font-medium text-primary">₹500</span>
-              </p>
-
-              <p className="text-xs text-third">
-                Recharge{" "}
-                <span className="font-medium text-primary">₹2,000</span>{" "}
-                automatically
+              <p className="text-3xl font-bold">
+                ₹ {balance.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
             </div>
 
             {/* Buttons */}
             <div className="flex gap-3 mt-6">
-              <Button size="sm" variant="ghost">
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setIsAddMoneyOpen(true)}
+              >
                 + Add Money
-              </Button>
-              <Button size="sm" variant="outlineSecondary">
-                Auto-Recharge Settings
               </Button>
             </div>
           </div>
@@ -215,8 +417,6 @@ export default function BillingComponent() {
           <span>₹ 2,840</span>
         </div>
       </div>
-
-     
 
       {/* TRANSACTION HISTORY */}
       <div className="rounded-2xl border border-third/20  p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
@@ -362,6 +562,19 @@ export default function BillingComponent() {
           </table>
         </div>
       </div>
+
+      <ManagePlan
+        isOpen={isManageOpen}
+        onClose={() => setIsManageOpen(false)}
+        currentPlan={tier}
+      />
+
+      <AddMoneyPopup
+        isOpen={isAddMoneyOpen}
+        onClose={() => setIsAddMoneyOpen(false)}
+        onConfirm={handleConfirmAddMoney}
+        loading={isPaying}
+      />
     </section>
   );
 }

@@ -1,4 +1,5 @@
 import Cta from "@/components/features/about/Cta";
+import { CarFront } from "lucide-react";
 import DisputeHandling from "@/components/features/inspection-process/DisputeHandling";
 import FAQSection from "@/components/features/inspection-process/FAQSection";
 import HeroSection from "@/components/features/inspection-process/HeroSection";
@@ -31,7 +32,14 @@ function index() {
         <DisputeHandling />
         <FAQSection />
       </Layout>
-      <Cta />
+      <Cta
+        consultantLabel="Inspected Cars"
+        consultantTitle={<>View Inspected <br /> Cars</>}
+        consultantDescription="Explore our inventory of professionally checked and verified vehicles to buy with absolute confidence."
+        consultantLink="/vehicles"
+        consultantButtonText="View Inspected Cars"
+        consultantIcon={CarFront}
+      />
 
       <FooterLink />
       <Footer />

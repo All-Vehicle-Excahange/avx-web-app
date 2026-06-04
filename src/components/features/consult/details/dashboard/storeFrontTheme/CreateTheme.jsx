@@ -700,9 +700,7 @@ export default function CreateTheme() {
               <div className="absolute inset-x-0 bottom-0  backdrop-blur-sm p-4 border-t border-third/30 flex justify-end z-10">
                 <Button
                   onClick={handleFinalSubmit}
-                  disabled={
-                    isSubmitting || !sectionProgress.every((s) => s.isValid)
-                  }
+                  disabled={isSubmitting}
                   variant="ghost"
                 >
                   {isSubmitting ? "Submitting..." : "Final Submit"}

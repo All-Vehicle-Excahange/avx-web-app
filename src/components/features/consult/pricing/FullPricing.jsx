@@ -13,6 +13,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { getAllTier } from "@/services/user.service";
 import PricingHero from "./PricingHero";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { useQuery } from "@tanstack/react-query";
+import { getSellerTierQuery } from "@/queries/Seller.queries";
 
 const staticTierDetails = {
   BASIC: {
@@ -80,6 +83,16 @@ export default function FullPricing() {
   const [yearly, setYearly] = useState(false);
   const [tiers, setTiers] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const { user, isLoggedIn } = useAuthStore();
+  const { data: sellerTierData } = useQuery({
+    ...getSellerTierQuery(),
+    enabled: !!isLoggedIn,
+  });
+
+  const currentTier = isLoggedIn
+    ? (sellerTierData?.tierTitle || user?.sellerTier || (typeof window !== "undefined" ? localStorage.getItem("sellerTier") : null) || "").toUpperCase()
+    : "";
 
   useEffect(() => {
     const fetchTiers = async () => {
@@ -175,6 +188,16 @@ export default function FullPricing() {
                       "border border-[#d1d5db] text-[#111827] hover:bg-[#f9fafb]",
                     highlight: false,
                   };
+
+                  const isCurrentTier = currentTier === key;
+                  let isTierDisabled = false;
+                  if (currentTier === "PREMIUM") {
+                    isTierDisabled = true;
+                  } else if (currentTier === "PRO") {
+                    isTierDisabled = key === "BASIC" || key === "PRO";
+                  } else if (currentTier === "BASIC") {
+                    isTierDisabled = key === "BASIC";
+                  }
 
                   const price = yearly ? tier.yearlyPrice : tier.monthlyPrice;
                   const formattedPrice = formatPrice(price);
@@ -334,19 +357,32 @@ export default function FullPricing() {
 
                         {/* BUTTON */}
                         <button
+                          disabled={isTierDisabled || isCurrentTier}
                           onClick={() => router.push("/consult/subscription")}
-                          className="w-full py-3 rounded-full text-[14px] font-semibold transition-all duration-300 mt-8 hover:cursor-pointer"
+                          className={`w-full py-3 rounded-full text-[14px] font-semibold transition-all duration-300 mt-8 ${
+                            isTierDisabled || isCurrentTier
+                              ? "opacity-50 cursor-not-allowed pointer-events-none"
+                              : "hover:cursor-pointer"
+                          }`}
                           style={{
-                            background: staticDetails.highlight
+                            background: isTierDisabled || isCurrentTier
+                              ? "#4b5563"
+                              : staticDetails.highlight
                               ? "#fff"
                               : "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)",
-                            color: staticDetails.highlight ? "#1f1f1f" : "#fff",
-                            boxShadow: staticDetails.highlight
+                            color: isTierDisabled || isCurrentTier
+                              ? "#9ca3af"
+                              : staticDetails.highlight
+                              ? "#1f1f1f"
+                              : "#fff",
+                            boxShadow: isTierDisabled || isCurrentTier
+                              ? "none"
+                              : staticDetails.highlight
                               ? "0 6px 20px rgba(255,255,255,0.2)"
                               : "0 6px 20px rgba(0,0,0,0.25)",
                           }}
                         >
-                          {staticDetails.cta}
+                          {isCurrentTier ? "Current Plan" : isTierDisabled ? "Unavailable" : staticDetails.cta}
                         </button>
                       </div>
                     </motion.div>
