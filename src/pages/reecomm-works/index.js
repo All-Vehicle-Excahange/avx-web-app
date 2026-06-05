@@ -14,10 +14,18 @@ import WhyThisMattersSection from "@/components/features/avxWorks/WhyThisMatters
 import Cta from "@/components/features/about/Cta";
 import FooterLink from "@/components/layout/FooterLink";
 import Footer from "@/components/layout/Footer";
+import Head from "next/head";
 
 function index() {
   return (
     <>
+      <Head>
+        <title>How Reecomm Works | Reecomm</title>
+        <meta
+          name="description"
+          content="Learn more about Reecomm's mission, our vision for a transparent vehicle marketplace, and how we empower consultants and buyers."
+        />
+      </Head>
       <Navbar scrolled={true} />
 
       <Layout>

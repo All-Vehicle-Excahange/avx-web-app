@@ -5,6 +5,8 @@ const ENDPOINT = {
   createInpection: "/vehicle/inspection/request",
   complateInspectionPayment:
     "/vehicle/inspection/inspection-payments/create-order",
+  completeInspectionPaymentWithWallet:
+    "/vehicle/inspection/inspection-payments/wallet-payment",
   getInspectionSnapShot:
     "/consultation/dashboard/inspection/performance-snapshot",
   getVehiclesRequiringAttention:
@@ -20,6 +22,7 @@ const ENDPOINT = {
   getInspectionPriceAndCount: "/tier/owner/inspction-price",
   getInspectionPricForBuyer: "/tier/buyer/inspction-price",
   getInspectionRefundStatus: "/vehicle/inspection",
+  payByWallet: "/vehicle/inspection/inspection-payments/pay-with-wallet",
 };
 
 export const getInspectionByVehicleId = async (vehicleId) => {
@@ -49,6 +52,17 @@ export const complateInspectionPayment = async (requestId) => {
   try {
     const res = await axiosInstance.post(
       `${ENDPOINT.complateInspectionPayment}/${requestId}`,
+    );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const completeInspectionPaymentWithWallet = async (requestId) => {
+  try {
+    const res = await axiosInstance.post(
+      `${ENDPOINT.completeInspectionPaymentWithWallet}/${requestId}`,
     );
     return handleResponse(res);
   } catch (error) {
@@ -223,6 +237,17 @@ export const getInspectionRefundStatus = async (requestId) => {
   try {
     const res = await axiosInstance.get(
       `${ENDPOINT.getInspectionRefundStatus}/${requestId}/refund-status`,
+    );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const payByWallet = async (requestId) => {
+  try {
+    const res = await axiosInstance.post(
+      `${ENDPOINT.payByWallet}/${requestId}`,
     );
     return handleResponse(res);
   } catch (error) {

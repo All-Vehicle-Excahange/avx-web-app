@@ -1,127 +1,168 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
+import { Search, FileText, ShieldCheck, MessageSquare, PlusCircle, Handshake } from "lucide-react";
 
 const steps = [
-    {
-        title: "Discover verified vehicles",
-        desc: "Browse consultant listed vehicles verified through platform quality and listing standards."
-    },
-    {
-        title: "Evaluate structured information",
-        desc: "Review standardized vehicle data, history insights, and consultant performance indicators."
-    },
-    {
-        title: "Review inspection data",
-        desc: "Access inspection reports, condition insights, and transparency driven documentation."
-    },
-    {
-        title: "Connect with consultants",
-        desc: "Interact directly with consultants through structured platform communication channels."
-    },
-    {
-        title: "Request additional assurance (optional)",
-        desc: "Request additional inspections or supporting validation before final decision making."
-    },
-    {
-        title: "Complete the deal directly",
-        desc: "Finalize pricing, negotiation, and transaction directly with the consultant."
-    },
-]
+  {
+    title: "Discover verified vehicles",
+    desc: "Browse consultant listed vehicles verified through platform quality and listing standards.",
+    icon: Search,
+  },
+  {
+    title: "Evaluate structured information",
+    desc: "Review standardized vehicle data, history insights, and consultant performance indicators.",
+    icon: FileText,
+  },
+  {
+    title: "Review inspection data",
+    desc: "Access inspection reports, condition insights, and transparency driven documentation.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Connect with consultants",
+    desc: "Interact directly with consultants through structured platform communication channels.",
+    icon: MessageSquare,
+  },
+  {
+    title: "Request additional assurance (optional)",
+    desc: "Request additional inspections or supporting validation before final decision making.",
+    icon: PlusCircle,
+  },
+  {
+    title: "Complete the deal directly",
+    desc: "Finalize pricing, negotiation, and transaction directly with the consultant.",
+    icon: Handshake,
+  },
+];
 
 export default function AVXJourneySection() {
-    return (
-        <section className="relative overflow-hidden py-16">
+  return (
+    <section className="relative overflow-hidden py-20 bg-transparent">
+      
+      <div className="relative max-w-5xl mx-auto px-6">
+        {/* HEADER */}
+        <div className="text-center mb-20">
+          <p className="text-xs tracking-[0.4em] uppercase text-white/40 font-bold mb-3">
+            The Complete Journey
+          </p>
 
-            <div className="relative max-w-5xl mx-auto px-6">
+          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-4 font-primary">
+            The Reecomm Buying Flow
+          </h2>
 
-                {/* HEADER */}
-                <div className="text-center mb-16">
-                    <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-4">
-                        The Complete Journey
-                    </p>
+          <div className="w-12 h-1 bg-fourth mx-auto rounded-full mt-5 mb-4" />
 
-                    <h2 className="text-3xl md:text-[42px] font-bold text-primary mb-4">
-                        The Reecomm Buying Flow
-                    </h2>
+          <p className="text-third max-w-lg mx-auto text-sm leading-relaxed">
+            A structured, transparent, and accountable pathway designed to eliminate buying friction and build transaction trust.
+          </p>
+        </div>
 
-                    <p className="text-fourth max-w-xl mx-auto text-[14px]">
-                        Structured. Transparent. Accountable.
-                    </p>
-                </div>
+        {/* FLOW RAIL CONTAINER */}
+        <div className="relative">
+          {/* TIMELINE VERTICAL RAIL */}
+          {/* Desktop Rail (Center) */}
+          <div
+            className="
+              hidden md:block absolute left-1/2 top-4 bottom-4
+              w-[2px] -translate-x-1/2
+              bg-linear-to-b from-fourth/80 via-fourth/30 to-fourth/5
+            "
+          />
+          {/* Mobile Rail (Left) */}
+          <div
+            className="
+              md:hidden absolute left-6 top-4 bottom-4
+              w-[2px]
+              bg-linear-to-b from-fourth/80 via-fourth/30 to-fourth/5
+            "
+          />
 
-                {/* FLOW RAIL */}
-                <div className="relative">
+          {/* STEPS */}
+          <div className="space-y-12 md:space-y-20">
+            {steps.map((step, i) => {
+              const Icon = step.icon;
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 40, scale: 0.98 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, amount: 0.25 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className={`
+                    relative flex flex-col md:flex-row items-start md:items-center w-full
+                    ${i % 2 === 0 ? "md:justify-start" : "md:justify-end"}
+                  `}
+                >
+                  {/* CARD CONTAINER WITH ALTERNATING WIDTH */}
+                  <div className={`w-full md:w-[calc(50%-40px)] ${i % 2 === 0 ? "md:pr-8" : "md:pl-8"} pl-16 md:pl-0`}>
+                    {/* STEP CARD */}
+                    <div
+                      className="
+                        group relative rounded-2xl border border-white/5
+                        bg-white/[0.02] hover:bg-white/[0.04]
+                        p-6 backdrop-blur-md
+                        hover:border-fourth/30 transition-all duration-300
+                        hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)]
+                        hover:-translate-y-1
+                      "
+                    >
+                      {/* Top Accent Gradient Border */}
+                      <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-linear-to-r from-transparent via-fourth/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                    {/* CENTER RAIL */}
-                    <div className="
-            absolute left-1/2 top-0 bottom-0
-            w-0.5
-            bg-fourth
-            opacity-60
-          " />
+                      {/* Header with step number & Icon */}
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-fourth bg-fourth/10 px-2 py-0.5 rounded">
+                          Step 0{i + 1}
+                        </span>
+                        <div className="w-8 h-8 rounded-lg bg-white/5 text-zinc-300 flex items-center justify-center group-hover:bg-fourth/10 group-hover:text-fourth transition-colors duration-300">
+                          <Icon size={16} />
+                        </div>
+                      </div>
 
-                    {/* STEPS */}
-                    <div className="space-y-12">
+                      <h3 className="text-lg font-bold text-white tracking-tight mt-2 font-primary">
+                        {step.title}
+                      </h3>
 
-                        {steps.map((step, i) => (
-                            <motion.div
-                                key={i}
-                                initial={{ opacity: 0, y: 60, scale: 0.96 }}
-                                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                                viewport={{ once: true, amount: 0.35 }}
-                                transition={{ duration: 0.55, ease: "easeOut" }}
-                                className={`
-                  relative flex items-center
-                  ${i % 2 === 0 ? "justify-start pr-12" : "justify-end pl-12"}
-                `}
-                            >
-
-                                {/* STEP CARD */}
-                                <div className="
-                  w-100
-                 rounded-2xl
-                  border border-blue-400/20
-                  bg-blue-500/5
-                  backdrop-blur-xl
-                  p-6
-                  bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)]
-                  hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]
-                  hover:border-blue-400/40
-                  transition
-                ">
-
-                                    <p className="text-fourth text-sm font-medium">
-                                        Step {i + 1}
-                                    </p>
-
-                                    <p className="text-primary text-[22px] font-semibold mt-2">
-                                        {step.title}
-                                    </p>
-
-                                    <p className="text-[15px] text-third mt-2 leading-relaxed">
-                                        {step.desc}
-                                    </p>
-
-                                </div>
-
-                                {/* NODE DOT */}
-                                <div className="
-                  absolute left-1/2 -translate-x-1/2
-                  w-3.5 h-3.5 rounded-full
-                  bg-blue-400
-                  shadow-[0_0_18px_rgba(96,165,250,0.9)]
-                " />
-
-                            </motion.div>
-                        ))}
-
+                      <p className="text-xs md:text-sm text-third mt-2 leading-relaxed">
+                        {step.desc}
+                      </p>
                     </div>
+                  </div>
 
-                </div>
-
-            </div>
-
-        </section>
-    )
+                  {/* MILESTONE / NODE POINT */}
+                  {/* Desktop Milestone Center */}
+                  <div
+                    className="
+                      hidden md:flex absolute left-1/2 -translate-x-1/2
+                      w-9 h-9 rounded-full
+                      bg-[#141416] border-[2px] border-fourth
+                      items-center justify-center text-[10px] font-black text-fourth
+                      shadow-[0_0_12px_rgba(0,123,255,0.3)]
+                      z-10
+                    "
+                  >
+                    0{i + 1}
+                  </div>
+                  {/* Mobile Milestone Left */}
+                  <div
+                    className="
+                      md:hidden absolute left-2 top-6
+                      w-8 h-8 rounded-full
+                      bg-[#141416] border-[2px] border-fourth
+                      flex items-center justify-center text-[9px] font-black text-fourth
+                      shadow-[0_0_10px_rgba(0,123,255,0.3)]
+                      z-10
+                    "
+                  >
+                    0{i + 1}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }

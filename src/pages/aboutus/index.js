@@ -14,10 +14,18 @@ import FooterLink from "@/components/layout/FooterLink";
 import Footer from "@/components/layout/Footer";
 import BecameBanner from "@/components/features/home/BecameBanner";
 import ConsultBanner from "@/components/features/home/ConsultBanner";
+import Head from "next/head";
 
 function index() {
   return (
     <>
+      <Head>
+        <title>About Us | Reecomm</title>
+        <meta
+          name="description"
+          content="Learn more about Reecomm's mission, our vision for a transparent vehicle marketplace, and how we empower consultants and buyers."
+        />
+      </Head>
       <Navbar scrolled={true} />
 
       <Layout>

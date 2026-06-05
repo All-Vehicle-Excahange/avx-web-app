@@ -250,7 +250,6 @@ export default function BillingComponent() {
 
   const { data: walletData } = useQuery({
     ...getWalletBalanceQuery(),
-    enabled: isProOrPremium,
   });
   const balance = walletData?.balance ?? 0;
 
@@ -268,7 +267,12 @@ export default function BillingComponent() {
   });
 
   const planTitle = activeSubData?.planTitle || tier;
-  const subStatus = (activeSubData?.status || activeSubData?.userTierStatus || activeSubData?.subscriptionStatus || "").toUpperCase();
+  const subStatus = (
+    activeSubData?.status ||
+    activeSubData?.userTierStatus ||
+    activeSubData?.subscriptionStatus ||
+    ""
+  ).toUpperCase();
   const isSubActive =
     sellerTierData?.userTierStatus?.toUpperCase() === "ACTIVE" ||
     (activeSubData
@@ -320,12 +324,7 @@ export default function BillingComponent() {
         </p>
       </div>
 
-      {/* PREMIUM + WALLET ROW */}
-      <div
-        className={`grid gap-6 ${
-          isBasic ? "grid-cols-1" : "grid-cols-1 xl:grid-cols-2"
-        }`}
-      >
+      <div className="grid gap-6 grid-cols-1 xl:grid-cols-2">
         {/* PREMIUM PLAN (Always Visible) */}
         {isActiveSubLoading ? (
           <div className="relative overflow-hidden rounded-2xl border border-primary/20 backdrop-blur-xl p-8 shadow-sm flex flex-col space-y-6 animate-pulse w-full">
@@ -394,22 +393,19 @@ export default function BillingComponent() {
             {/* Bottom */}
             <div className="flex justify-between items-center mt-auto pt-6">
               <span className="text-xs opacity-90">{autoRenewalText}</span>
-              {!isBasic && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsManageOpen(true)}
-                >
-                  Manage Subscription
-                </Button>
-              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsManageOpen(true)}
+              >
+                Manage Subscription
+              </Button>
             </div>
           </div>
         )}
 
-        {/* ✅ WALLET (Only for PRO/PREMIUM) */}
-        {isProOrPremium && (
-          <div className="relative rounded-2xl border border-third/20  p-6 overflow-hidden shadow-sm transition-colors duration-200 hover:border-third/40">
+        {/* ✅ WALLET */}
+        <div className="relative rounded-2xl border border-third/20  p-6 overflow-hidden shadow-sm transition-colors duration-200 hover:border-third/40">
             {/* Status Pill */}
             <div className="absolute top-4 right-4">
               <span className="px-4 py-1 rounded-full bg-green-500/20 text-green-400 text-xs font-medium backdrop-blur-md">
@@ -444,7 +440,6 @@ export default function BillingComponent() {
               </Button>
             </div>
           </div>
-        )}
       </div>
 
       {/* BENEFITS */}
@@ -670,7 +665,14 @@ export default function BillingComponent() {
                 currentHistoryPageData.map((item) => (
                   <tr key={item.id}>
                     <td className="py-4">{formatDate(item.createdAt)}</td>
-                    <td className="py-4">{item.tierPlanName || "N/A"}</td>
+                    <td className="py-4">
+                      {item.tierPlanName ||
+                        (item.paymentType === "WALLET_TOPUP"
+                          ? "Wallet Top-up"
+                          : item.paymentType === "SUBSCRIPTION"
+                            ? "Subscription"
+                            : "N/A")}
+                    </td>
                     <td className="py-4 font-medium">
                       {item.currency === "INR" ? "₹" : item.currency || "₹"}{" "}
                       {Number(item.amount).toLocaleString("en-IN", {
