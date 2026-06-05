@@ -5,6 +5,7 @@ import axiosInstance, {
 
 const ENDPOINT = {
   subscription: "/subscription",
+  updagradePlan: "/subscription/upgrade",
 };
 
 export const createSubscription = async (payload) => {
@@ -67,6 +68,16 @@ export const resumeSubscription = async (subscriptionId) => {
     const res = await axiosInstance.post(
       `${ENDPOINT.subscription}/${subscriptionId}/resume`,
     );
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const upgradeSubscription = async (payload) => {
+  try {
+    const res = await axiosInstance.post(ENDPOINT.updagradePlan, payload);
     return handleResponse(res);
   } catch (error) {
     handleError(error);

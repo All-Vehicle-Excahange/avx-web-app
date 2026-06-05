@@ -12,9 +12,16 @@ import {
   Info,
 } from "lucide-react";
 import CustomSelect from "@/components/ui/custom-select";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useQueryClient,
+  useInfiniteQuery,
+} from "@tanstack/react-query";
 import { getSellerTierQuery } from "@/queries/Seller.queries";
-import { getWalletBalanceQuery } from "@/queries/waller.queries";
+import {
+  getWalletBalanceQuery,
+  getPaymentHistoryInfiniteQuery,
+} from "@/queries/waller.queries";
 import ManagePlan from "@/components/features/consult/details/components/ManagePlan";
 import AddMoneyPopup from "@/components/features/consult/details/components/AddMoneyPopup";
 import toast from "react-hot-toast";
@@ -22,6 +29,7 @@ import { addTopUpPaymemt } from "@/services/waller.service";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { getActiveSubscription } from "@/services/subscription.service";
 import { SkeletonBox } from "@/components/ui/skeleton";
+import Pagination from "@/components/ui/Pagination";
 
 export default function BillingComponent() {
   const queryClient = useQueryClient();
@@ -29,6 +37,70 @@ export default function BillingComponent() {
   const [isManageOpen, setIsManageOpen] = useState(false);
   const [isAddMoneyOpen, setIsAddMoneyOpen] = useState(false);
   const [isPaying, setIsPaying] = useState(false);
+
+  // Payment History Pagination & Querying
+  const [historyPage, setHistoryPage] = useState(1);
+
+  const {
+    data: paymentHistoryData,
+    isLoading: isHistoryLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery(
+    getPaymentHistoryInfiniteQuery({
+      pageSize: 10,
+    }),
+  );
+
+  const handlePageChange = async (newPage) => {
+    if (newPage > (paymentHistoryData?.pages?.length || 0) && hasNextPage) {
+      await fetchNextPage();
+    }
+    setHistoryPage(newPage);
+  };
+
+  const historyTotalPages =
+    paymentHistoryData?.pages?.[0]?.pageResponse?.totalPages || 1;
+  const currentHistoryPageData =
+    paymentHistoryData?.pages?.[historyPage - 1]?.data || [];
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+    } catch (e) {
+      return dateString;
+    }
+  };
+
+  const getStatusBadge = (status) => {
+    const s = (status || "").toUpperCase();
+    if (s === "CAPTURED" || s === "SUCCESS" || s === "PAID") {
+      return (
+        <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-500/20 text-green-400">
+          Paid
+        </span>
+      );
+    }
+    if (s === "PENDING") {
+      return (
+        <span className="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-500/20 text-yellow-400">
+          Pending
+        </span>
+      );
+    }
+    return (
+      <span className="px-2 py-1 text-xs font-semibold rounded-full bg-red-500/20 text-red-400">
+        {status || "Failed"}
+      </span>
+    );
+  };
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -49,7 +121,9 @@ export default function BillingComponent() {
     try {
       const isScriptLoaded = await loadRazorpayScript();
       if (!isScriptLoaded) {
-        toast.error("Razorpay SDK failed to load. Please check your connection.");
+        toast.error(
+          "Razorpay SDK failed to load. Please check your connection.",
+        );
         return;
       }
 
@@ -63,17 +137,16 @@ export default function BillingComponent() {
         let prefillName = "";
         if (storeUser) {
           if (storeUser.firstname || storeUser.lastname) {
-            prefillName = `${storeUser.firstname || ""} ${storeUser.lastname || ""}`.trim();
+            prefillName =
+              `${storeUser.firstname || ""} ${storeUser.lastname || ""}`.trim();
           } else {
-            prefillName = storeUser.name || storeUser.fullName || storeUser.firstName || "";
+            prefillName =
+              storeUser.name || storeUser.fullName || storeUser.firstName || "";
           }
         }
         let prefillEmail = storeUser?.email || "";
         let prefillContact =
-          storeUser?.phoneNumber ||
-          storeUser?.phone ||
-          storeUser?.mobile ||
-          "";
+          storeUser?.phoneNumber || storeUser?.phone || storeUser?.mobile || "";
 
         if (
           typeof window !== "undefined" &&
@@ -86,9 +159,14 @@ export default function BillingComponent() {
               if (userObj) {
                 if (!prefillName) {
                   if (userObj.firstname || userObj.lastname) {
-                    prefillName = `${userObj.firstname || ""} ${userObj.lastname || ""}`.trim();
+                    prefillName =
+                      `${userObj.firstname || ""} ${userObj.lastname || ""}`.trim();
                   } else {
-                    prefillName = userObj.name || userObj.fullName || userObj.firstName || "";
+                    prefillName =
+                      userObj.name ||
+                      userObj.fullName ||
+                      userObj.firstName ||
+                      "";
                   }
                 }
                 if (!prefillEmail) prefillEmail = userObj.email || "";
@@ -101,7 +179,10 @@ export default function BillingComponent() {
               }
             }
           } catch (e) {
-            console.error("Error parsing user from localStorage for prefill", e);
+            console.error(
+              "Error parsing user from localStorage for prefill",
+              e,
+            );
           }
         }
 
@@ -118,7 +199,9 @@ export default function BillingComponent() {
             contact: prefillContact,
           },
           handler: async function (paymentResponse) {
-            toast.success(`Successfully added ₹${amount.toLocaleString("en-IN")} to wallet!`);
+            toast.success(
+              `Successfully added ₹${amount.toLocaleString("en-IN")} to wallet!`,
+            );
             setIsAddMoneyOpen(false);
             queryClient.invalidateQueries({ queryKey: ["wallet-balance"] });
           },
@@ -185,29 +268,47 @@ export default function BillingComponent() {
   });
 
   const planTitle = activeSubData?.planTitle || tier;
-  const isSubActive = activeSubData 
-    ? activeSubData.status?.toUpperCase() === "ACTIVE" 
-    : !isBasic;
-  
-  const displayTitle = planTitle 
-    ? `${planTitle.charAt(0).toUpperCase() + planTitle.slice(1).toLowerCase()} Consultant` 
+  const subStatus = (activeSubData?.status || activeSubData?.userTierStatus || activeSubData?.subscriptionStatus || "").toUpperCase();
+  const isSubActive =
+    sellerTierData?.userTierStatus?.toUpperCase() === "ACTIVE" ||
+    (activeSubData
+      ? subStatus === "ACTIVE" || subStatus === "AUTHENTICATED"
+      : !isBasic);
+
+  const displayTitle = planTitle
+    ? `${planTitle.charAt(0).toUpperCase() + planTitle.slice(1).toLowerCase()} Consultant`
     : "Premium Consultant";
 
   const billingCycleText = activeSubData?.billingCycle
     ? `${activeSubData.billingCycle.charAt(0) + activeSubData.billingCycle.slice(1).toLowerCase()} Subscription`
-    : isBasic ? "Free Tier" : "Annual Subscription";
+    : isBasic
+      ? "Free Tier"
+      : "Annual Subscription";
 
-  const priceText = activeSubData?.price !== undefined
-    ? `₹${activeSubData.price.toLocaleString("en-IN")} / ${activeSubData.billingCycle === 'MONTHLY' ? 'month' : 'year'}`
-    : isBasic ? "Free" : "₹9,999 / year";
+  const priceText =
+    activeSubData?.price !== undefined
+      ? `₹${activeSubData.price.toLocaleString("en-IN")} / ${activeSubData.billingCycle === "MONTHLY" ? "month" : "year"}`
+      : isBasic
+        ? "Free"
+        : "₹9,999 / year";
 
   const nextBillingDateText = activeSubData?.nextBillingDate
-    ? new Date(activeSubData.nextBillingDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
-    : isBasic ? "Never" : "12 Oct 2024";
+    ? new Date(activeSubData.nextBillingDate).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    : isBasic
+      ? "Never"
+      : "12 Oct 2024";
 
   const autoRenewalText = activeSubData
-    ? (activeSubData.cancelAtPeriodEnd ? "Auto-renewal disabled" : "Auto-renewal enabled")
-    : isBasic ? "No renewal" : "Auto-renewal enabled";
+    ? activeSubData.cancelAtPeriodEnd
+      ? "Auto-renewal disabled"
+      : "Auto-renewal enabled"
+    : isBasic
+      ? "No renewal"
+      : "Auto-renewal enabled";
 
   return (
     <section className="w-full space-y-10">
@@ -239,13 +340,13 @@ export default function BillingComponent() {
               </div>
               <SkeletonBox className="w-16 h-6 rounded-full" />
             </div>
-            
+
             {/* Middle Skeleton */}
             <div className="grid md:grid-cols-2 gap-6">
               <SkeletonBox className="w-full h-20 rounded-xl" />
               <SkeletonBox className="w-full h-20 rounded-xl" />
             </div>
-            
+
             {/* Bottom Skeleton */}
             <div className="flex justify-between items-center pt-4">
               <SkeletonBox className="w-32 h-4 rounded" />
@@ -266,9 +367,13 @@ export default function BillingComponent() {
                 </div>
               </div>
 
-              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                isSubActive ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"
-              }`}>
+              <span
+                className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                  isSubActive
+                    ? "bg-green-500/20 text-green-400"
+                    : "bg-red-500/20 text-red-400"
+                }`}
+              >
                 {isSubActive ? "Active" : "Inactive"}
               </span>
             </div>
@@ -320,7 +425,11 @@ export default function BillingComponent() {
 
               <p className="text-xs text-third">Available Balance</p>
               <p className="text-3xl font-bold">
-                ₹ {balance.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                ₹{" "}
+                {balance.toLocaleString("en-IN", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
               </p>
             </div>
 
@@ -527,40 +636,86 @@ export default function BillingComponent() {
               </tr>
             </thead>
             <tbody className="divide-y divide-third/20">
-              <tr>
-                <td className="py-4">12 Oct 2023</td>
-                <td>Annual Premium</td>
-                <td>₹9,999</td>
-                <td>
-                  <span className="px-2 py-1 text-xs rounded-full bg-green-500/20 text-green-400">
-                    Paid
-                  </span>
-                </td>
-                <td>
-                  <button className="flex items-center gap-2 text-primary hover:underline">
-                    <Download size={14} /> INV-2023-001
-                  </button>
-                </td>
-              </tr>
-
-              <tr>
-                <td className="py-4">12 Oct 2022</td>
-                <td>Annual Premium</td>
-                <td>₹9,999</td>
-                <td>
-                  <span className="px-2 py-1 text-xs rounded-full bg-green-500/20 text-green-400">
-                    Paid
-                  </span>
-                </td>
-                <td>
-                  <button className="flex items-center gap-2 text-primary hover:underline">
-                    <Download size={14} /> INV-2022-001
-                  </button>
-                </td>
-              </tr>
+              {isHistoryLoading ||
+              (isFetchingNextPage && currentHistoryPageData.length === 0) ? (
+                Array.from({ length: 5 }).map((_, index) => (
+                  <tr key={index}>
+                    <td className="py-4">
+                      <SkeletonBox className="h-4 w-24 opacity-20" />
+                    </td>
+                    <td className="py-4">
+                      <SkeletonBox className="h-4 w-28 opacity-20" />
+                    </td>
+                    <td className="py-4">
+                      <SkeletonBox className="h-4 w-16 opacity-20" />
+                    </td>
+                    <td className="py-4">
+                      <SkeletonBox className="h-6 w-16 rounded-full opacity-20" />
+                    </td>
+                    <td className="py-4">
+                      <SkeletonBox className="h-4 w-28 opacity-20" />
+                    </td>
+                  </tr>
+                ))
+              ) : currentHistoryPageData.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={5}
+                    className="py-8 text-center text-third text-sm"
+                  >
+                    No payment history found.
+                  </td>
+                </tr>
+              ) : (
+                currentHistoryPageData.map((item) => (
+                  <tr key={item.id}>
+                    <td className="py-4">{formatDate(item.createdAt)}</td>
+                    <td className="py-4">{item.tierPlanName || "N/A"}</td>
+                    <td className="py-4 font-medium">
+                      {item.currency === "INR" ? "₹" : item.currency || "₹"}{" "}
+                      {Number(item.amount).toLocaleString("en-IN", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </td>
+                    <td className="py-4">
+                      {getStatusBadge(item.paymentStatus)}
+                    </td>
+                    <td className="py-4">
+                      {item.invoiceId && item.invoiceUrl ? (
+                        <a
+                          href={item.invoiceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-primary hover:underline w-fit"
+                        >
+                          <Download size={14} /> {item.invoiceId}
+                        </a>
+                      ) : item.invoiceId ? (
+                        <span className="text-third text-sm">
+                          {item.invoiceId}
+                        </span>
+                      ) : (
+                        <span className="text-third text-xs">—</span>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
+
+        {/* PAGINATION */}
+        {!isHistoryLoading && historyTotalPages > 1 && (
+          <div className="pt-4 border-t border-third/10">
+            <Pagination
+              currentPage={historyPage}
+              totalPages={historyTotalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        )}
       </div>
 
       <ManagePlan
