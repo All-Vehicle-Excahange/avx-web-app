@@ -31,7 +31,7 @@ const ReVerification = () => {
 
             <div className="pt-6 border-t border-white/5 max-w-sm">
               <p className="text-sm italic text-zinc-300 border-l-2 border-fourth/60 pl-4 py-0.5 leading-relaxed font-medium">
-                "Because confidence is not one-size-fits-all."
+                Because confidence is not one-size-fits-all.
               </p>
             </div>
           </div>
