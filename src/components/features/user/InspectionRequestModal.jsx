@@ -1,16 +1,21 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import { X, Check } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
 import {
   complateInspectionPayment,
   createInpection,
+  payByWallet,
 } from "@/services/inspection.service";
+import { addTopUpPaymemt } from "@/services/waller.service";
 import toast from "react-hot-toast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getInspectionByVehicleIdQuery } from "@/queries/vehicle.queries";
 import { getInspectionPriceAndCountQuery } from "@/queries/inspection.queries";
+import { getWalletBalanceQuery } from "@/queries/waller.queries";
+import { getSellerTierQuery } from "@/queries/Seller.queries";
+import AddMoneyPopup from "@/components/features/consult/details/components/AddMoneyPopup";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
@@ -19,6 +24,21 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
   const [step, setStep] = useState(1);
   const [createdInspectionId, setCreatedInspectionId] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("WALLET");
+  const [isAddMoneyOpen, setIsAddMoneyOpen] = useState(false);
+  const [isPaying, setIsPaying] = useState(false);
+
+  const { data: sellerTierData } = useQuery({
+    ...getSellerTierQuery(),
+    enabled: isOpen,
+  });
+  const isConsultant = !!sellerTierData?.tierTitle;
+
+  const { data: walletData } = useQuery({
+    ...getWalletBalanceQuery(),
+    enabled: isConsultant && isOpen,
+  });
+  const walletBalance = walletData?.balance ?? 0;
 
   const { data: existingInspection } = useQuery({
     ...getInspectionByVehicleIdQuery(vehicle?.id),
@@ -109,6 +129,121 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
     });
   };
 
+  const handleConfirmAddMoney = async (amount) => {
+    setIsPaying(true);
+    try {
+      const isScriptLoaded = await loadRazorpayScript();
+      if (!isScriptLoaded) {
+        toast.error(
+          "Razorpay SDK failed to load. Please check your connection.",
+        );
+        return;
+      }
+
+      const payload = { amount: Number(amount) };
+      const response = await addTopUpPaymemt(payload);
+
+      if (response && response.success && response.data) {
+        const orderData = response.data;
+
+        const storeUser = useAuthStore.getState().user;
+        let prefillName = "";
+        if (storeUser) {
+          if (storeUser.firstname || storeUser.lastname) {
+            prefillName =
+              `${storeUser.firstname || ""} ${storeUser.lastname || ""}`.trim();
+          } else {
+            prefillName =
+              storeUser.name || storeUser.fullName || storeUser.firstName || "";
+          }
+        }
+        let prefillEmail = storeUser?.email || "";
+        let prefillContact =
+          storeUser?.phoneNumber || storeUser?.phone || storeUser?.mobile || "";
+
+        if (
+          typeof window !== "undefined" &&
+          (!prefillName || !prefillEmail || !prefillContact)
+        ) {
+          try {
+            const savedUser = localStorage.getItem("user");
+            if (savedUser) {
+              const userObj = JSON.parse(savedUser);
+              if (userObj) {
+                if (!prefillName) {
+                  if (userObj.firstname || userObj.lastname) {
+                    prefillName =
+                      `${userObj.firstname || ""} ${userObj.lastname || ""}`.trim();
+                  } else {
+                    prefillName =
+                      userObj.name ||
+                      userObj.fullName ||
+                      userObj.firstName ||
+                      "";
+                  }
+                }
+                if (!prefillEmail) prefillEmail = userObj.email || "";
+                if (!prefillContact)
+                  prefillContact =
+                    userObj.phoneNumber ||
+                    userObj.phone ||
+                    userObj.mobile ||
+                    "";
+              }
+            }
+          } catch (e) {
+            console.error(
+              "Error parsing user from localStorage for prefill",
+              e,
+            );
+          }
+        }
+
+        const options = {
+          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || orderData.keyId,
+          amount: Math.round(orderData.amount * 100),
+          currency: orderData.currency || "INR",
+          name: "Reecomm",
+          description: "Wallet Top-up Payment",
+          order_id: orderData.razorpayOrderId,
+          prefill: {
+            name: prefillName,
+            email: prefillEmail,
+            contact: prefillContact,
+          },
+          handler: async function (paymentResponse) {
+            toast.success(
+              `Successfully added ₹${amount.toLocaleString("en-IN")} to wallet!`,
+            );
+            setIsAddMoneyOpen(false);
+            queryClient.invalidateQueries({ queryKey: ["wallet-balance"] });
+          },
+          theme: {
+            color: "#007bff",
+          },
+          modal: {
+            ondismiss: function () {
+              toast.error("Payment cancelled.");
+            },
+          },
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.on("payment.failed", function (failResponse) {
+          toast.error("Payment failed: " + failResponse.error.description);
+        });
+        rzp.open();
+      } else {
+        toast.error(response?.message || "Failed to initiate payment.");
+      }
+    } catch (error) {
+      console.error("Payment topup error:", error);
+      toast.error(error?.response?.data?.message || "Something went wrong.");
+    } finally {
+      setIsPaying(false);
+    }
+  };
+
   const handlePayment = async (idToPay) => {
     const targetId =
       typeof idToPay === "string" ? idToPay : createdInspectionId;
@@ -118,9 +253,9 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
     }
     setIsSubmitting(true);
     try {
-      const response = await complateInspectionPayment(targetId);
-      if (response?.success) {
-        if (isFree) {
+      if (isFree) {
+        const response = await complateInspectionPayment(targetId);
+        if (response?.success) {
           setStep(3);
           queryClient.invalidateQueries({
             queryKey: ["inspection-by-vehicle", vehicle.id],
@@ -130,121 +265,150 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
             handleClose();
           }, 3000);
           return;
-        }
-
-        // For paid inspections, launch Razorpay payment workflow:
-        const isScriptLoaded = await loadRazorpayScript();
-        if (!isScriptLoaded) {
-          toast.error(
-            "Razorpay SDK failed to load. Please check your connection.",
-          );
-          return;
-        }
-
-        if (response.data) {
-          const orderData = response.data;
-
-          const storeUser = useAuthStore.getState().user;
-          let prefillName = "";
-          if (storeUser) {
-            if (storeUser.firstname || storeUser.lastname) {
-              prefillName =
-                `${storeUser.firstname || ""} ${storeUser.lastname || ""}`.trim();
-            } else {
-              prefillName =
-                storeUser.name ||
-                storeUser.fullName ||
-                storeUser.firstName ||
-                "";
-            }
-          }
-          let prefillEmail = storeUser?.email || "";
-          let prefillContact =
-            storeUser?.phoneNumber ||
-            storeUser?.phone ||
-            storeUser?.mobile ||
-            "";
-
-          if (
-            typeof window !== "undefined" &&
-            (!prefillName || !prefillEmail || !prefillContact)
-          ) {
-            try {
-              const savedUser = localStorage.getItem("user");
-              if (savedUser) {
-                const userObj = JSON.parse(savedUser);
-                if (userObj) {
-                  if (!prefillName) {
-                    if (userObj.firstname || userObj.lastname) {
-                      prefillName =
-                        `${userObj.firstname || ""} ${userObj.lastname || ""}`.trim();
-                    } else {
-                      prefillName =
-                        userObj.name ||
-                        userObj.fullName ||
-                        userObj.firstName ||
-                        "";
-                    }
-                  }
-                  if (!prefillEmail) prefillEmail = userObj.email || "";
-                  if (!prefillContact)
-                    prefillContact =
-                      userObj.phoneNumber ||
-                      userObj.phone ||
-                      userObj.mobile ||
-                      "";
-                }
-              }
-            } catch (e) {
-              console.error(
-                "Error parsing user from localStorage for prefill",
-                e,
-              );
-            }
-          }
-
-          const options = {
-            key: orderData.keyId,
-            amount: Math.round(orderData.amount * 100),
-            currency: orderData.currency || "INR",
-            name: "Reecomm",
-            description: "Vehicle Inspection Payment",
-            order_id: orderData.razorpayOrderId,
-            prefill: {
-              name: prefillName,
-              email: prefillEmail,
-              contact: prefillContact,
-            },
-            handler: async function (paymentResponse) {
-              setStep(3);
-              queryClient.invalidateQueries({
-                queryKey: ["inspection-by-vehicle", vehicle.id],
-              });
-              toast.success("Payment completed successfully!");
-              setTimeout(() => {
-                handleClose();
-              }, 3000);
-            },
-            theme: {
-              color: "#007bff",
-            },
-            modal: {
-              ondismiss: function () {
-                toast.error("Payment cancelled.");
-              },
-            },
-          };
-
-          const rzp = new window.Razorpay(options);
-          rzp.on("payment.failed", function (failResponse) {
-            toast.error("Payment failed: " + failResponse.error.description);
-          });
-          rzp.open();
         } else {
           toast.error(response?.message || "Payment completion failed.");
         }
+        return;
+      }
+
+      if (isConsultant && paymentMethod === "WALLET") {
+        if (walletBalance < discountPrice) {
+          setIsAddMoneyOpen(true);
+          setIsSubmitting(false);
+          return;
+        }
+
+        const response = await payByWallet(targetId);
+        if (response?.success) {
+          setStep(3);
+          queryClient.invalidateQueries({
+            queryKey: ["inspection-by-vehicle", vehicle.id],
+          });
+          queryClient.invalidateQueries({ queryKey: ["wallet-balance"] });
+          toast.success("Payment completed successfully from wallet!");
+          setTimeout(() => {
+            handleClose();
+          }, 3000);
+        } else {
+          toast.error(response?.message || "Wallet payment failed.");
+        }
       } else {
-        toast.error(response?.message || "Payment completion failed.");
+        const response = await complateInspectionPayment(targetId);
+        if (response?.success) {
+          // For paid inspections, launch Razorpay payment workflow:
+          const isScriptLoaded = await loadRazorpayScript();
+          if (!isScriptLoaded) {
+            toast.error(
+              "Razorpay SDK failed to load. Please check your connection.",
+            );
+            return;
+          }
+
+          if (response.data) {
+            const orderData = response.data;
+
+            const storeUser = useAuthStore.getState().user;
+            let prefillName = "";
+            if (storeUser) {
+              if (storeUser.firstname || storeUser.lastname) {
+                prefillName =
+                  `${storeUser.firstname || ""} ${storeUser.lastname || ""}`.trim();
+              } else {
+                prefillName =
+                  storeUser.name ||
+                  storeUser.fullName ||
+                  storeUser.firstName ||
+                  "";
+              }
+            }
+            let prefillEmail = storeUser?.email || "";
+            let prefillContact =
+              storeUser?.phoneNumber ||
+              storeUser?.phone ||
+              storeUser?.mobile ||
+              "";
+
+            if (
+              typeof window !== "undefined" &&
+              (!prefillName || !prefillEmail || !prefillContact)
+            ) {
+              try {
+                const savedUser = localStorage.getItem("user");
+                if (savedUser) {
+                  const userObj = JSON.parse(savedUser);
+                  if (userObj) {
+                    if (!prefillName) {
+                      if (userObj.firstname || userObj.lastname) {
+                        prefillName =
+                          `${userObj.firstname || ""} ${userObj.lastname || ""}`.trim();
+                      } else {
+                        prefillName =
+                          userObj.name ||
+                          userObj.fullName ||
+                          userObj.firstName ||
+                          "";
+                      }
+                    }
+                    if (!prefillEmail) prefillEmail = userObj.email || "";
+                    if (!prefillContact)
+                      prefillContact =
+                        userObj.phoneNumber ||
+                        userObj.phone ||
+                        userObj.mobile ||
+                        "";
+                  }
+                }
+              } catch (e) {
+                console.error(
+                  "Error parsing user from localStorage for prefill",
+                  e,
+                );
+              }
+            }
+
+            const options = {
+              key: orderData.keyId,
+              amount: Math.round(orderData.amount * 100),
+              currency: orderData.currency || "INR",
+              name: "Reecomm",
+              description: "Vehicle Inspection Payment",
+              order_id: orderData.razorpayOrderId,
+              prefill: {
+                name: prefillName,
+                email: prefillEmail,
+                contact: prefillContact,
+              },
+              handler: async function (paymentResponse) {
+                setStep(3);
+                queryClient.invalidateQueries({
+                  queryKey: ["inspection-by-vehicle", vehicle.id],
+                });
+                toast.success("Payment completed successfully!");
+                setTimeout(() => {
+                  handleClose();
+                }, 3000);
+              },
+              theme: {
+                color: "#007bff",
+              },
+              modal: {
+                ondismiss: function () {
+                  toast.error("Payment cancelled.");
+                },
+              },
+            };
+
+            const rzp = new window.Razorpay(options);
+            rzp.on("payment.failed", function (failResponse) {
+              toast.error("Payment failed: " + failResponse.error.description);
+            });
+            rzp.open();
+          } else {
+            toast.error(response?.message || "Payment completion failed.");
+          }
+        } else {
+          toast.error(response?.message || "Payment completion failed.");
+        }
       }
     } catch (err) {
       toast.error(err?.response?.data?.message || "Payment completion failed.");
@@ -476,10 +640,74 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
                     )}
                   </div>
                 </div>
+
+                {/* Payment Methods Selection for Consultants */}
+                {!isFree && isConsultant && (
+                  <>
+                    <div className="border-t border-third/30 my-2" />
+                    <div className="space-y-3">
+                      <label className="text-[11px] font-bold text-third uppercase tracking-wider block">
+                        Select Payment Method
+                      </label>
+                      <div className="grid grid-cols-1 gap-2.5">
+                        {/* Pay with Wallet */}
+                        <button
+                          type="button"
+                          onClick={() => setPaymentMethod("WALLET")}
+                          className={`flex items-center justify-between p-3.5 rounded-xl border transition-all text-left cursor-pointer
+                            ${paymentMethod === "WALLET"
+                              ? "bg-primary/5 border-primary text-primary"
+                              : "bg-transparent border-third/20 text-third hover:border-third/40"
+                            }`}
+                        >
+                          <div className="space-y-1">
+                            <p className="text-sm font-semibold">Reecomm Wallet</p>
+                            <p className="text-xs text-zinc-400">
+                              Balance: ₹{walletBalance.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                            </p>
+                            {walletBalance < discountPrice && (
+                              <p className="text-[10px] text-red-400 font-medium animate-pulse">
+                                Insufficient balance. Click to top-up.
+                              </p>
+                            )}
+                          </div>
+                          {paymentMethod === "WALLET" && (
+                            <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-secondary">
+                              <Check size={12} strokeWidth={3} />
+                            </div>
+                          )}
+                        </button>
+
+                        {/* Pay with Razorpay */}
+                        <button
+                          type="button"
+                          onClick={() => setPaymentMethod("RAZORPAY")}
+                          className={`flex items-center justify-between p-3.5 rounded-xl border transition-all text-left cursor-pointer
+                            ${paymentMethod === "RAZORPAY"
+                              ? "bg-primary/5 border-primary text-primary"
+                              : "bg-transparent border-third/20 text-third hover:border-third/40"
+                            }`}
+                        >
+                          <div className="space-y-1">
+                            <p className="text-sm font-semibold">Razorpay</p>
+                            <p className="text-xs text-zinc-400">UPI, Card, Netbanking</p>
+                          </div>
+                          {paymentMethod === "RAZORPAY" && (
+                            <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-secondary">
+                              <Check size={12} strokeWidth={3} />
+                            </div>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
               <p className="text-xs text-third text-center">
                 {isFree
                   ? "By clicking Confirm Request, you agree to submit the inspection request."
+                  : paymentMethod === "WALLET" && isConsultant
+                  ? "Confirm payment from your Reecomm Wallet to register inspection."
                   : "By clicking Confirm Payment, you agree to complete the payment workflow."}
               </p>
               <div className="flex justify-end gap-3 pt-2">
@@ -499,7 +727,13 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
                   showIcon={false}
                   loading={isSubmitting}
                 >
-                  {isFree ? "Confirm Request" : "Confirm Payment"}
+                  {isFree
+                    ? "Confirm Request"
+                    : isConsultant && paymentMethod === "WALLET"
+                    ? walletBalance < discountPrice
+                      ? "Top-up Wallet"
+                      : "Pay with Wallet"
+                    : "Confirm Payment"}
                 </Button>
               </div>
             </>
@@ -546,6 +780,13 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
           />
         </div>
       </div>
+
+      <AddMoneyPopup
+        isOpen={isAddMoneyOpen}
+        onClose={() => setIsAddMoneyOpen(false)}
+        onConfirm={handleConfirmAddMoney}
+        loading={isPaying}
+      />
     </div>
   );
 }

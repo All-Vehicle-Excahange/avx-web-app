@@ -18,11 +18,11 @@ function InputField({
 
   const styleVariants = {
     default:
-      "border border-secondary/60 bg-white text-black focus:border-third focus:ring-1 focus:ring-third",
+      "border border-secondary/60  text-black focus:border-third focus:ring-1 focus:ring-third",
     colored:
-      "border border-primary bg-primary/10 text-primary placeholder:text-primary/50 focus:border-primary focus:ring-1 focus:ring-primary",
+      "border border-primary/20  text-primary placeholder:text-primary/40 focus:border-primary/40 focus:ring-1 focus:ring-primary/40",
     search:
-      "border border-secondary/60 bg-white text-text-black focus:border-primary/50 focus:ring-1 focus:ring-primary/50",
+      "border border-secondary/60  text-text-black focus:border-primary/50 focus:ring-1 focus:ring-primary/50",
   };
 
   return (

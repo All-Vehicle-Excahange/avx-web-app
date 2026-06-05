@@ -16,6 +16,7 @@ import PricingHero from "./PricingHero";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useQuery } from "@tanstack/react-query";
 import { getSellerTierQuery } from "@/queries/Seller.queries";
+import { upgradeSubscription } from "@/services/subscription.service";
 
 const staticTierDetails = {
   BASIC: {
@@ -83,6 +84,154 @@ export default function FullPricing() {
   const [yearly, setYearly] = useState(false);
   const [tiers, setTiers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [upgradingTierId, setUpgradingTierId] = useState(null);
+
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleUpgrade = async (tier) => {
+    if (!isLoggedIn) {
+      router.push("/consult/subscription");
+      return;
+    }
+    if (!tier?.id) return;
+
+    try {
+      setPaymentLoading(true);
+      setUpgradingTierId(tier.id);
+
+      const isScriptLoaded = await loadRazorpayScript();
+      if (!isScriptLoaded) {
+        alert("Razorpay SDK failed to load. Please check your connection.");
+        return;
+      }
+
+      // Call upgradeSubscription in the backend
+      const response = await upgradeSubscription({
+        planId: tier.id,
+        billingCycle: yearly ? "YEARLY" : "MONTHLY",
+      });
+
+      if (!response.success) {
+        throw new Error(
+          response.message || "Failed to upgrade subscription order.",
+        );
+      }
+
+      const { razorpaySubscriptionId, shortUrl } = response.data;
+
+      // If SDK subscription ID is not available but shortUrl is, open hosted checkout in a popup window
+      if (!razorpaySubscriptionId && shortUrl) {
+        const width = 500;
+        const height = 700;
+        const left = window.screen.width / 2 - width / 2;
+        const top = window.screen.height / 2 - height / 2;
+        window.open(
+          shortUrl,
+          "Reecomm Subscription Payment",
+          `width=${width},height=${height},top=${top},left=${left},scrollbars=yes,resizable=yes`,
+        );
+        return;
+      }
+
+      const storeUser = useAuthStore.getState().user;
+      let prefillName = "";
+      if (storeUser) {
+        if (storeUser.firstname || storeUser.lastname) {
+          prefillName = `${storeUser.firstname || ""} ${storeUser.lastname || ""}`.trim();
+        } else {
+          prefillName = storeUser.name || storeUser.fullName || storeUser.firstName || "";
+        }
+      }
+      let prefillEmail = storeUser?.email || "";
+      let prefillContact =
+        storeUser?.phoneNumber ||
+        storeUser?.phone ||
+        storeUser?.mobile ||
+        "";
+
+      if (
+        typeof window !== "undefined" &&
+        (!prefillName || !prefillEmail || !prefillContact)
+      ) {
+        try {
+          const savedUser = localStorage.getItem("user");
+          if (savedUser) {
+            const userObj = JSON.parse(savedUser);
+            if (userObj) {
+              if (!prefillName) {
+                if (userObj.firstname || userObj.lastname) {
+                  prefillName = `${userObj.firstname || ""} ${userObj.lastname || ""}`.trim();
+                } else {
+                  prefillName = userObj.name || userObj.fullName || userObj.firstName || "";
+                }
+              }
+              if (!prefillEmail) prefillEmail = userObj.email || "";
+              if (!prefillContact)
+                prefillContact =
+                  userObj.phoneNumber ||
+                  userObj.phone ||
+                  userObj.mobile ||
+                  "";
+            }
+          }
+        } catch (e) {
+          console.error(
+            "Error parsing user from localStorage for prefill",
+            e,
+          );
+        }
+      }
+
+      // Open Razorpay subscription checkout modal
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        subscription_id: razorpaySubscriptionId,
+        name: "Reecomm",
+        description: `Upgrade to ${tier.title} plan`,
+        prefill: {
+          name: prefillName,
+          email: prefillEmail,
+          contact: prefillContact,
+        },
+        handler: async function (paymentResponse) {
+          alert("Subscription upgraded successfully!");
+          if (router.query?.redirect) {
+            router.push(router.query.redirect);
+          } else {
+            router.push("/consult/dashboard/billing");
+          }
+        },
+        theme: {
+          color: "#007bff",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.on("payment.failed", function (failResponse) {
+        alert("Payment failed: " + failResponse.error.description);
+      });
+      rzp.open();
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Error initiating payment: " + (error?.response?.data?.message || error?.message || "Something went wrong"));
+    } finally {
+      setPaymentLoading(false);
+      setUpgradingTierId(null);
+    }
+  };
 
   const { user, isLoggedIn } = useAuthStore();
   const { data: sellerTierData } = useQuery({
@@ -357,32 +506,38 @@ export default function FullPricing() {
 
                         {/* BUTTON */}
                         <button
-                          disabled={isTierDisabled || isCurrentTier}
-                          onClick={() => router.push("/consult/subscription")}
+                          disabled={isTierDisabled || isCurrentTier || paymentLoading}
+                          onClick={() => handleUpgrade(tier)}
                           className={`w-full py-3 rounded-full text-[14px] font-semibold transition-all duration-300 mt-8 ${
-                            isTierDisabled || isCurrentTier
+                            isTierDisabled || isCurrentTier || paymentLoading
                               ? "opacity-50 cursor-not-allowed pointer-events-none"
                               : "hover:cursor-pointer"
                           }`}
                           style={{
-                            background: isTierDisabled || isCurrentTier
+                            background: isTierDisabled || isCurrentTier || (paymentLoading && upgradingTierId === tier.id)
                               ? "#4b5563"
                               : staticDetails.highlight
                               ? "#fff"
                               : "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)",
-                            color: isTierDisabled || isCurrentTier
+                            color: isTierDisabled || isCurrentTier || (paymentLoading && upgradingTierId === tier.id)
                               ? "#9ca3af"
                               : staticDetails.highlight
                               ? "#1f1f1f"
                               : "#fff",
-                            boxShadow: isTierDisabled || isCurrentTier
+                            boxShadow: isTierDisabled || isCurrentTier || (paymentLoading && upgradingTierId === tier.id)
                               ? "none"
                               : staticDetails.highlight
                               ? "0 6px 20px rgba(255,255,255,0.2)"
                               : "0 6px 20px rgba(0,0,0,0.25)",
                           }}
                         >
-                          {isCurrentTier ? "Current Plan" : isTierDisabled ? "Unavailable" : staticDetails.cta}
+                          {paymentLoading && upgradingTierId === tier.id
+                            ? "Processing..."
+                            : isCurrentTier
+                            ? "Current Plan"
+                            : isTierDisabled
+                            ? "Unavailable"
+                            : staticDetails.cta}
                         </button>
                       </div>
                     </motion.div>

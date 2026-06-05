@@ -15,10 +15,18 @@ import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
 import Navbar from "@/components/layout/Navbar";
 import React from "react";
+import Head from "next/head";
 
 function index() {
   return (
     <>
+      <Head>
+        <title>Reecomm Inspection Process | Reecomm</title>
+        <meta
+          name="description"
+          content="Learn more about Reecomm's mission, our vision for a transparent vehicle marketplace, and how we empower consultants and buyers."
+        />
+      </Head>
       <Navbar />
       <HeroSection />
       <Layout>
@@ -34,7 +42,11 @@ function index() {
       </Layout>
       <Cta
         consultantLabel="Inspected Cars"
-        consultantTitle={<>View Inspected <br /> Cars</>}
+        consultantTitle={
+          <>
+            View Inspected <br /> Cars
+          </>
+        }
         consultantDescription="Explore our inventory of professionally checked and verified vehicles to buy with absolute confidence."
         consultantLink="/vehicles"
         consultantButtonText="View Inspected Cars"

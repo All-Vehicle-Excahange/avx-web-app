@@ -23,17 +23,19 @@ export default function Button({
 
   const base = cn(
     "inline-flex items-center justify-center font-medium select-none transition-all relative z-10 group overflow-hidden",
-    isLocked ? "cursor-not-allowed opacity-70" : "hover:cursor-pointer"
+    isLocked ? "cursor-not-allowed opacity-70" : "hover:cursor-pointer",
   );
 
   const variants = {
     default: cn(
       "bg-secondary border border-secondary text-primary rounded-full",
-      !isLocked && "hover:bg-transparent hover:text-secondary hover:border-secondary hover:border"
+      !isLocked &&
+        "hover:bg-transparent hover:text-secondary hover:border-secondary hover:border",
     ),
     ghost: cn(
-      "bg-primary border border-primary text-secondary rounded-full",
-      !isLocked && "hover:bg-third hover:bg-transparent hover:text-primary"
+      "bg-primary border border-primary text-secondary rounded-full transition-all duration-200 ease-in-out",
+      !isLocked &&
+        "hover:bg-primary/80 hover:shadow-md hover:border-primary/80",
     ),
 
     outline: cn(
@@ -41,21 +43,22 @@ export default function Button({
       "transition-all duration-300",
       "hover:text-white",
       !isLocked && "hover:text-white",
-      isLocked && "opacity-50 cursor-not-allowed pointer-events-none"
+      isLocked && "opacity-50 cursor-not-allowed pointer-events-none",
     ),
 
     outlineAnimated: cn(
       "text-white rounded-full border border-third",
-      "relative overflow-hidden"
+      "relative overflow-hidden",
     ),
 
     outlineSecondary: cn(
       "border border-third text-primary rounded-full transition-all duration-300",
-      !isLocked && "hover:bg-primary hover:text-secondary"
+      !isLocked &&
+        "hover:bg-primary/15 hover:text-primary hover:border-primary/15",
     ),
     roundedOutline: cn(
       "border border-third text-primary rounded-full flex items-center justify-center h-10 w-10",
-      !isLocked && "hover:bg-primary hover:text-secondary"
+      !isLocked && "hover:bg-primary hover:text-secondary",
     ),
   };
 
@@ -71,7 +74,7 @@ export default function Button({
     variants[variant],
     !isRounded && sizes[size],
     full && !isRounded && "w-full",
-    className
+    className,
   );
 
   const Content = (
@@ -87,7 +90,7 @@ export default function Button({
               "bg-[conic-gradient(from_90deg_at_50%_50%,#ffffff_0%,#c0c0c0_25%,#007bff_50%,#c0c0c0_75%,#ffffff_100%)]",
               isOutline
                 ? "opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                : "opacity-100"
+                : "opacity-100",
             )}
           />
 
@@ -97,7 +100,7 @@ export default function Button({
               "absolute inset-0.5 rounded-full bg-[#141414]",
               isOutline
                 ? "opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                : "opacity-100"
+                : "opacity-100",
             )}
           />
         </>
@@ -109,7 +112,12 @@ export default function Button({
         </span>
       )}
 
-      <span className={cn("relative z-10 flex items-center", loading && "opacity-0")}>
+      <span
+        className={cn(
+          "relative z-10 flex items-center",
+          loading && "opacity-0",
+        )}
+      >
         {children}
         {showIcon && !isRounded && !isLocked && (
           <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />
@@ -134,4 +142,3 @@ export default function Button({
     </button>
   );
 }
-
