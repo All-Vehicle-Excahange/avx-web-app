@@ -8,10 +8,18 @@ import FooterLink from "@/components/layout/FooterLink";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import React from "react";
+import Head from "next/head";
 
 function index() {
   return (
     <>
+      <Head>
+        <title>Help Center | Reecomm</title>
+        <meta
+          name="description"
+          content="Get help with Reecomm – solutions for vehicle inspections, consultant earnings, and business growth tools."
+        />
+      </Head>
       <Navbar />
       <HelpHero />
       <PopularTopicsGrid />
@@ -24,5 +32,7 @@ function index() {
     </>
   );
 }
+
+index.fullWidth = true;
 
 export default index;

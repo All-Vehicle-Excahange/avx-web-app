@@ -5,7 +5,7 @@ const Card = ({ title, highlight, description }) => (
     <div
         className="
         group relative overflow-hidden
-        border-2 border-primary/20
+        border-2 border-primary/10
         rounded-xl p-8 transition-all duration-500 ease-in-out
         hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]
       "

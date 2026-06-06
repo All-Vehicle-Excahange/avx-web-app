@@ -42,7 +42,7 @@ export default function BillingStep({ selected, onChange, placement = [] }) {
             CPC — Cost per click
           </h4>
           <span className="text-[#1D9E75] font-bold text-xs mt-1">Starting at ₹3/click</span>
-          <p className="text-third text-xs mt-2 flex-grow leading-relaxed">
+          <p className="text-third text-xs mt-2 grow leading-relaxed">
             Pay only when a buyer clicks on your boosted listing. Ideal for driving maximum traffic to new inventory.
           </p>
           {isCpiOnly && (
@@ -75,7 +75,7 @@ export default function BillingStep({ selected, onChange, placement = [] }) {
             CPI — Cost per inquiry
           </h4>
           <span className="text-[#1D9E75] font-bold text-xs mt-1">Starting at ₹15/inquiry</span>
-          <p className="text-third text-xs mt-2 flex-grow leading-relaxed">
+          <p className="text-third text-xs mt-2 grow leading-relaxed">
             Pay only when a buyer sends a direct inquiry or calls. Maximizes return on investment by prioritizing quality leads.
           </p>
           {isCpcOnly && (

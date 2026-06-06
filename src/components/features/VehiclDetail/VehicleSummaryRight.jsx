@@ -1,9 +1,8 @@
 "use client";
 
 import Button from "@/components/ui/button";
-import { Heart, Star, MapPin, CheckCircle, Loader2 } from "lucide-react";
+import { Star, MapPin, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { addWishList, removeWishList } from "@/services/user.service";
 
 import { useAuthStore } from "@/stores/useAuthStore";
 import LoginPopup from "@/components/auth/LoginPopup";
@@ -13,12 +12,10 @@ import { getInquiryEligibilityQuery } from "@/queries/vehicle.queries";
 import SignupPopup from "@/components/auth/SignupPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import RequestAlredySentPopup from "./RequestAlredySentPopup";
-import { useDebouncedCallback } from "@/hooks/useDebounce";
 
 export default function VehicleSummaryRight({ vehicle, summary }) {
   const vehicleId = vehicle?.id;
   const vehicleOwnerRole = vehicle?.vehicleOwner?.userRole || "USER";
-  const [isFavorite, setIsFavorite] = useState(vehicle?.isWishlisted || false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
@@ -32,7 +29,6 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
   const [loading, setLoading] = useState(false);
   const pendingAction = useRef(null);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-  const lastSyncedValue = useRef(vehicle?.isWishlisted || false);
 
   const {
     data: eligibilityData,
@@ -43,31 +39,9 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
     enabled: !!vehicleId && isLoggedIn,
   });
 
-  const debouncedSyncWishlist = useDebouncedCallback(async (nextState) => {
-    try {
-      if (!nextState) {
-        const res = await removeWishList(vehicleId);
-        if (!(res?.success || res?.status)) {
-          throw new Error("Failed to remove");
-        }
-      } else {
-        const res = await addWishList(vehicleId);
-        if (!(res?.success || res?.status)) {
-          throw new Error("Failed to add");
-        }
-      }
-      lastSyncedValue.current = nextState;
-    } catch (err) {
-      console.log("Wishlist sync error:", err);
-      // Revert if API fails
-      setIsFavorite(!nextState);
-    }
-  }, 1000);
-
   useEffect(() => {
-    setIsFavorite(vehicle?.isWishlisted || false);
     setLocalInquiryCount(vehicle?.totalInquiryCount || 0);
-  }, [vehicle?.isWishlisted, vehicle?.totalInquiryCount]);
+  }, [vehicle?.totalInquiryCount]);
 
   const handleInquirySuccess = () => {
     setLocalInquiryCount((prev) => prev + 1);
@@ -102,34 +76,12 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
     }
   };
 
-  const handleWishlistToggle = () => {
-    if (!isLoggedIn) {
-      pendingAction.current = "wishlist";
-      setIsLoginOpen(true);
-      return;
-    }
-
-    if (!vehicleId) return;
-
-    const nextState = !isFavorite;
-    setIsFavorite(nextState);
-
-    if (nextState === lastSyncedValue.current) {
-      debouncedSyncWishlist.cancel();
-    } else {
-      debouncedSyncWishlist(nextState);
-    }
-  };
-
   const handleAuthSuccess = () => {
     setIsLoginOpen(false);
     setIsSignupOpen(false);
     if (pendingAction.current === "request") {
       pendingAction.current = null;
       handleRequestInquiry();
-    } else if (pendingAction.current === "wishlist") {
-      pendingAction.current = null;
-      handleWishlistToggle();
     }
   };
 
@@ -137,9 +89,6 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
     if (isLoggedIn && pendingAction.current === "request") {
       pendingAction.current = null;
       handleRequestInquiry();
-    } else if (isLoggedIn && pendingAction.current === "wishlist") {
-      pendingAction.current = null;
-      handleWishlistToggle();
     }
   }, [isLoggedIn]);
 
@@ -150,37 +99,7 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
           {/* HEADER */}
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-md text-third">
-                Register {vehicle?.yearOfMfg || "-"}
-              </p>
-
-              <h2 className="hidden text-2xl font-bold leading-tight">
-                {[vehicle?.makerName, vehicle?.modelName, vehicle?.variantName]
-                  .filter(Boolean)
-                  .join(" ") || "-"}
-              </h2>
-            </div>
-
-            <button
-              onClick={handleWishlistToggle}
-              disabled={loading}
-              className="text-primary p-2 rounded-full hover:scale-105 transition cursor-pointer border"
-            >
-              <Heart
-                className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${
-                  isFavorite ? "fill-red-500 text-red-500" : "text-primary"
-                }`}
-              />
-            </button>
-          </div>
-
-          <div className="border-t border-third/40" />
-
-          {/* SELLER / DEALER INFO */}
-          <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
-            <div className="space-y-2 w-full">
-              {/* Seller name: consultation name OR vehicle owner firstname+lastname */}
-              <h3 className="text-md font-semibold">
+              <p className="text-md font-semibold text-primary">
                 {vehicleOwnerRole === "CONSULTATION"
                   ? summary?.consultationName || "Auto Consultant"
                   : [
@@ -189,7 +108,19 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
                     ]
                       .filter(Boolean)
                       .join(" ") || "Private Seller"}
-              </h3>
+              </p>
+
+              <h2 className="hidden text-2xl font-bold leading-tight">
+                {[vehicle?.makerName, vehicle?.modelName, vehicle?.variantName]
+                  .filter(Boolean)
+                  .join(" ") || "-"}
+              </h2>
+            </div>
+          </div>
+
+          {/* SELLER / DEALER INFO */}
+          <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
+            <div className="space-y-2 w-full">
 
               {vehicleOwnerRole === "CONSULTATION" ? (
                 /* ── CONSULTATION-ONLY stats ── */
@@ -251,26 +182,28 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
 
               {/* Services — only shown for consultants */}
               {vehicleOwnerRole === "CONSULTATION" && (
-                <div className="space-y-2 mt-4">
+                <div className="space-y-3 mt-4">
                   <p className="text-sm font-medium text-primary">
                     Whats Included
                   </p>
 
-                  <ul className="text-sm text-third">
+                  <div className="flex flex-wrap gap-2 pt-1">
                     {summary?.services?.length > 0 ? (
                       summary.services.map((service, index) => (
-                        <li key={index} className="flex items-center gap-2">
-                          <CheckCircle size={14} className="text-green-500" />
-                          {service.replaceAll("_", " ")}
-                        </li>
+                        <span
+                          key={index}
+                          className="text-xs py-1 px-3 rounded-full border border-third/40 bg-primary/5 text-third font-medium whitespace-nowrap"
+                        >
+                          {service
+                            .replaceAll("_", " ")
+                            .toLowerCase()
+                            .replace(/\b\w/g, (c) => c.toUpperCase())}
+                        </span>
                       ))
                     ) : (
-                      <li className="flex items-center gap-2">
-                        <CheckCircle size={14} className="text-green-500" />
-                        No services listed
-                      </li>
+                      <span className="text-xs text-third">-</span>
                     )}
-                  </ul>
+                  </div>
                 </div>
               )}
             </div>

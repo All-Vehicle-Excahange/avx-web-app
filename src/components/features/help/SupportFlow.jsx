@@ -145,7 +145,7 @@ function SummaryRow({ label, value, padded, border }) {
   );
 }
 
-export default function SupportFlow({ onTicketCreated = () => { }, onBack }) {
+export default function SupportFlow({ onTicketCreated = () => {}, onBack }) {
   const [step, setStep] = useState(0);
   const [issueType, setIssueType] = useState("");
   const [dropOpen, setDropOpen] = useState(false);
@@ -280,7 +280,7 @@ export default function SupportFlow({ onTicketCreated = () => { }, onBack }) {
             </div>
             <div className="h-1 bg-primary/10 mx-5 mb-5 rounded-full overflow-hidden">
               <div
-                className={`h-full rounded-full transition-all duration-1000 ${pctUsed > 80 ? 'bg-warning' : 'bg-fourth'}`}
+                className={`h-full rounded-full transition-all duration-1000 ${pctUsed > 80 ? "bg-warning" : "bg-fourth"}`}
                 style={{ width: `${pctUsed}%` }}
               />
             </div>
@@ -359,12 +359,13 @@ export default function SupportFlow({ onTicketCreated = () => { }, onBack }) {
                       className={`flex items-center gap-3.5 px-3 py-3 rounded-xl transition-all duration-300 ${isCurrent ? "bg-primary/5" : ""}`}
                     >
                       <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-black font-primary shrink-0 transition-all duration-300 ${isDone
+                        className={`w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-black font-primary shrink-0 transition-all duration-300 ${
+                          isDone
                             ? "bg-fourth text-primary"
                             : isCurrent
                               ? "border border-fourth text-fourth"
                               : "border border-primary/10 text-third/20"
-                          }`}
+                        }`}
                       >
                         {isDone ? "✓" : i + 1}
                       </div>
@@ -438,9 +439,7 @@ export default function SupportFlow({ onTicketCreated = () => { }, onBack }) {
                         />
                       </button>
                       {dropOpen && (
-                        <div
-                          className="absolute left-0 right-0 z-50 mt-1.5 border border-primary/10 rounded-xl shadow-2xl overflow-y-auto bg-secondary max-h-[260px] top-full"
-                        >
+                        <div className="absolute left-0 right-0 z-50 mt-1.5 border border-primary/10 rounded-xl shadow-2xl overflow-y-auto bg-secondary max-h-[260px] top-full">
                           {ISSUE_TYPES.map(({ value, label, icon: Icon }) => (
                             <button
                               key={value}
@@ -485,10 +484,11 @@ export default function SupportFlow({ onTicketCreated = () => { }, onBack }) {
                               <button
                                 key={item.id}
                                 onClick={() => setRelatedItem(item)}
-                                className={`w-full flex items-center gap-4 px-4 py-4 rounded-xl border transition-all text-left group outline-none ${isSelected
+                                className={`w-full flex items-center gap-4 px-4 py-4 rounded-xl border transition-all text-left group outline-none ${
+                                  isSelected
                                     ? "border-fourth/40 bg-fourth/10"
                                     : "border-primary/10 bg-primary/3 hover:border-primary/20"
-                                  }`}
+                                }`}
                               >
                                 <div
                                   className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${isSelected ? "bg-fourth/15" : "bg-primary/5"}`}

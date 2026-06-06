@@ -345,7 +345,7 @@ export default function UserVehicleCard({
                 </div>
               )}
 
-              {(status === "request_changes" || status === "rejected") && (
+              {status === "request_changes" && (
                 <div className="flex gap-2">
                   <Button
                     variant="ghost"

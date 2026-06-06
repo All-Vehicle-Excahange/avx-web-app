@@ -9,7 +9,6 @@ import {
   Megaphone,
   KeyRound,
   ShieldAlert,
-  ArrowUpRight,
   ChevronRight,
 } from "lucide-react";
 
@@ -135,14 +134,14 @@ export default function PopularTopicsGrid() {
                   className={`absolute top-0 left-0 right-0 h-[1.5px] transition-opacity duration-300 ${isHovered ? "opacity-100" : "opacity-0"} bg-linear-to-r from-transparent via-primary/20 to-transparent`}
                 />
 
-                {/* Ghost index */}
+                {/* Giant index number on top right */}
                 <div
-                  className={`absolute bottom-3 right-4 font-primary font-black select-none leading-none pointer-events-none transition-all duration-300 text-[4.5rem] ${isHovered ? "text-primary/10" : "text-primary/20"}`}
+                  className={`absolute top-2 right-4 font-primary font-black select-none leading-none pointer-events-none transition-all duration-300 text-[4.5rem] ${isHovered ? "text-primary/10" : "text-primary/20"}`}
                 >
                   {topic.index}
                 </div>
 
-                {/* Icon + Arrow */}
+                {/* Icon */}
                 <div className="flex items-start justify-between mb-6 relative z-10">
                   <div
                     className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${isHovered ? "bg-primary/10" : "bg-primary/5"}`}
@@ -153,12 +152,6 @@ export default function PopularTopicsGrid() {
                         isHovered ? "text-primary" : "text-primary/35"
                       }`}
                     />
-                  </div>
-
-                  <div
-                    className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-300 ${isHovered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-2"} bg-primary/10`}
-                  >
-                    <ArrowUpRight size={12} className="text-primary/60" />
                   </div>
                 </div>
 

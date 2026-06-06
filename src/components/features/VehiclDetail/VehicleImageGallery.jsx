@@ -1,10 +1,15 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Play } from "lucide-react";
+import { ChevronLeft, ChevronRight, Play, Heart } from "lucide-react";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
+import { addWishList, removeWishList } from "@/services/user.service";
+import { useAuthStore } from "@/stores/useAuthStore";
+import LoginPopup from "@/components/auth/LoginPopup";
+import SignupPopup from "@/components/auth/SignupPopup";
+import { useDebouncedCallback } from "@/hooks/useDebounce";
 
 // Import Swiper styles
 import "swiper/css";
@@ -14,6 +19,73 @@ import "swiper/css/thumbs";
 
 export default function VehicleImageGallery({ vehicle }) {
 
+
+    const vehicleId = vehicle?.id;
+    const [isFavorite, setIsFavorite] = useState(vehicle?.isWishlisted || false);
+    const [isLoginOpen, setIsLoginOpen] = useState(false);
+    const [isSignupOpen, setIsSignupOpen] = useState(false);
+    const pendingAction = useRef(null);
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    const lastSyncedValue = useRef(vehicle?.isWishlisted || false);
+
+    const debouncedSyncWishlist = useDebouncedCallback(async (nextState) => {
+        try {
+            if (!nextState) {
+                const res = await removeWishList(vehicleId);
+                if (!(res?.success || res?.status)) {
+                    throw new Error("Failed to remove");
+                }
+            } else {
+                const res = await addWishList(vehicleId);
+                if (!(res?.success || res?.status)) {
+                    throw new Error("Failed to add");
+                }
+            }
+            lastSyncedValue.current = nextState;
+        } catch (err) {
+            console.log("Wishlist sync error:", err);
+            setIsFavorite(!nextState);
+        }
+    }, 1000);
+
+    useEffect(() => {
+        setIsFavorite(vehicle?.isWishlisted || false);
+    }, [vehicle?.isWishlisted]);
+
+    const handleWishlistToggle = () => {
+        if (!isLoggedIn) {
+            pendingAction.current = "wishlist";
+            setIsLoginOpen(true);
+            return;
+        }
+
+        if (!vehicleId) return;
+
+        const nextState = !isFavorite;
+        setIsFavorite(nextState);
+
+        if (nextState === lastSyncedValue.current) {
+            debouncedSyncWishlist.cancel();
+        } else {
+            debouncedSyncWishlist(nextState);
+        }
+    };
+
+    const handleAuthSuccess = () => {
+        setIsLoginOpen(false);
+        setIsSignupOpen(false);
+        if (pendingAction.current === "wishlist") {
+            pendingAction.current = null;
+            handleWishlistToggle();
+        }
+    };
+
+    useEffect(() => {
+        if (isLoggedIn && pendingAction.current === "wishlist") {
+            pendingAction.current = null;
+            handleWishlistToggle();
+        }
+    }, [isLoggedIn]);
 
     const media = useMemo(() => {
         const items = [];
@@ -65,6 +137,18 @@ export default function VehicleImageGallery({ vehicle }) {
         <section className="w-full rounded-xl p-4 shadow border border-third/60">
             {/* ===== MAIN PREVIEW ===== */}
             <div className="relative w-full aspect-video bg-black/5 rounded-lg overflow-hidden group">
+                {/* Wishlist Button */}
+                <button
+                    onClick={handleWishlistToggle}
+                    className="absolute right-4 top-4 z-20 bg-black/50 hover:bg-black/70 text-white p-2.5 rounded-full hover:scale-105 transition cursor-pointer border border-white/20 shadow-md"
+                >
+                    <Heart
+                        className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${
+                            isFavorite ? "fill-red-500 text-red-500" : "text-white"
+                        }`}
+                    />
+                </button>
+
                 <Swiper
                     loop={true}
                     spaceBetween={10}
@@ -152,6 +236,26 @@ export default function VehicleImageGallery({ vehicle }) {
                     ))}
                 </Swiper>
             </div>
+
+            {/* Popups */}
+            <LoginPopup
+                isOpen={isLoginOpen}
+                onClose={() => setIsLoginOpen(false)}
+                onSuccess={handleAuthSuccess}
+                onSignup={() => {
+                    setIsLoginOpen(false);
+                    setIsSignupOpen(true);
+                }}
+            />
+            <SignupPopup
+                isOpen={isSignupOpen}
+                onClose={() => setIsSignupOpen(false)}
+                onSuccess={handleAuthSuccess}
+                onLogin={() => {
+                    setIsSignupOpen(false);
+                    setIsLoginOpen(true);
+                }}
+            />
         </section>
     );
 }
