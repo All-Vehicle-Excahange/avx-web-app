@@ -20,6 +20,7 @@ import {
   AlertCircle,
   ArrowLeft,
 } from "lucide-react";
+import Button from "@/components/ui/button";
 
 const ISSUE_TYPES = [
   { value: "vehicle", label: "Vehicle Inquiry", icon: Car },
@@ -200,17 +201,6 @@ export default function SupportFlow({ onTicketCreated = () => {}, onBack }) {
     setSubmitted(true);
   };
 
-  const resetAll = () => {
-    clearInterval(timerRef.current);
-    setStep(0);
-    setIssueType("");
-    setRelatedItem(null);
-    setDescription("");
-    setUploads([]);
-    setSubmitted(false);
-    setSlaElapsed(0);
-  };
-
   /* ── SUCCESS STATE ── */
   if (submitted) {
     const remaining = Math.max(0, SLA_SECONDS - slaElapsed);
@@ -293,12 +283,15 @@ export default function SupportFlow({ onTicketCreated = () => {}, onBack }) {
             </div>
           </div>
 
-          <button
+          <Button
+            variant="outline"
+            size="sm"
+            full
             onClick={onBack}
-            className="w-full text-center text-xs uppercase tracking-[0.2em] font-black text-fourth hover:underline transition-all pt-2"
+            className="w-full mt-4"
           >
-            ← Back to My Requests
-          </button>
+            Back to My Requests
+          </Button>
         </div>
       </section>
     );
@@ -317,18 +310,6 @@ export default function SupportFlow({ onTicketCreated = () => {}, onBack }) {
               How can we <span className="text-fourth">help you?</span>
             </h1>
           </div>
-
-          {/* BACK BUTTON HIGHLIGHTED */}
-          <button
-            onClick={onBack}
-            className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-black text-third/40 hover:text-primary transition-all font-primary group"
-          >
-            <ArrowLeft
-              size={14}
-              className="group-hover:-translate-x-1 transition-transform"
-            />
-            Back to My Requests
-          </button>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
@@ -399,13 +380,6 @@ export default function SupportFlow({ onTicketCreated = () => {}, onBack }) {
           {/* Form card */}
           <div className="flex-1 w-full ">
             <div className="border border-primary/10 rounded-2xl  backdrop-blur-sm overflow-visible">
-              <div className="h-0.5 bg-primary/10 rounded-t-2xl overflow-hidden w-[98%] mx-auto">
-                <div
-                  className="h-full bg-fourth transition-all duration-500 ease-out"
-                  style={{ width: `${progressPct}%` }}
-                />
-              </div>
-
               <div className="p-7 sm:p-10 space-y-8">
                 {/* Step 0 */}
                 {step === 0 && (
@@ -418,7 +392,7 @@ export default function SupportFlow({ onTicketCreated = () => {}, onBack }) {
                     <div className="relative">
                       <button
                         onClick={() => setDropOpen((o) => !o)}
-                        className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl border border-primary/10 bg-primary/5 text-sm text-primary hover:border-primary/20 transition-all outline-none"
+                        className="w-full cursor-pointer flex items-center justify-between px-4 py-3.5 rounded-xl border border-primary/10 bg-primary/5 text-sm text-primary hover:border-primary/20 transition-all outline-none"
                       >
                         {selected ? (
                           <span className="flex items-center gap-2.5 text-primary font-semibold uppercase tracking-wide">
@@ -484,7 +458,7 @@ export default function SupportFlow({ onTicketCreated = () => {}, onBack }) {
                               <button
                                 key={item.id}
                                 onClick={() => setRelatedItem(item)}
-                                className={`w-full flex items-center gap-4 px-4 py-4 rounded-xl border transition-all text-left group outline-none ${
+                                className={`w-full cursor-pointer flex items-center gap-4 px-4 py-4 rounded-xl border transition-all text-left group outline-none ${
                                   isSelected
                                     ? "border-fourth/40 bg-fourth/10"
                                     : "border-primary/10 bg-primary/3 hover:border-primary/20"
@@ -559,16 +533,16 @@ export default function SupportFlow({ onTicketCreated = () => {}, onBack }) {
                       <p className="text-[10px] uppercase tracking-widest text-third/40 mb-3 font-bold">
                         Attachments (optional)
                       </p>
-                      <div className="flex items-center gap-2 flex-wrap mb-3">
+                      <div className="flex  items-center gap-2 flex-wrap mb-3">
                         {[
                           { label: "Images", icon: Image },
-                          { label: "Documents", icon: FileIcon },
+
                           { label: "Video", icon: Video },
                         ].map(({ label, icon: Icon }) => (
                           <button
                             key={label}
                             onClick={() => fileRef.current?.click()}
-                            className="flex items-center gap-1.5 px-3 py-2 text-xs text-third/50 border border-primary/10 rounded-lg hover:border-primary/20 hover:text-primary transition-all font-primary uppercase font-bold tracking-wider"
+                            className="flex cursor-pointer items-center gap-1.5 px-3 py-2 text-xs text-third/50 border border-primary/10 rounded-lg hover:border-primary/20 hover:text-primary transition-all font-primary uppercase font-bold tracking-wider"
                           >
                             <Icon size={12} /> {label}
                           </button>
@@ -672,18 +646,21 @@ export default function SupportFlow({ onTicketCreated = () => {}, onBack }) {
                 {/* Nav buttons */}
                 <div className="flex items-center justify-between pt-6 border-t border-primary/5">
                   {step > 0 ? (
-                    <button
+                    <Button
+                      variant="outlineSecondary"
+                      size="sm"
                       onClick={() => setStep((s) => s - 1)}
-                      className="text-xs uppercase tracking-widest text-third/40 font-bold hover:text-primary transition-all font-primary"
                     >
-                      ← Previous
-                    </button>
+                      Previous
+                    </Button>
                   ) : (
                     <div />
                   )}
 
                   {step < 3 ? (
-                    <button
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       onClick={() => setStep((s) => s + 1)}
                       disabled={
                         step === 0
@@ -692,17 +669,13 @@ export default function SupportFlow({ onTicketCreated = () => {}, onBack }) {
                             ? !canNext1
                             : !canNext2
                       }
-                      className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-fourth text-primary text-xs font-black uppercase tracking-widest disabled:opacity-20 disabled:cursor-not-allowed hover:opacity-90 transition-all font-primary shadow-[0_8px_30px_rgba(0,123,255,0.15)]"
                     >
-                      Continue <ArrowRight size={12} />
-                    </button>
+                      Continue <ArrowRight size={14} className="ml-2" />
+                    </Button>
                   ) : (
-                    <button
-                      onClick={handleSubmit}
-                      className="flex items-center gap-2 px-8 py-3 rounded-xl bg-fourth text-primary text-xs font-black uppercase tracking-[0.18em] hover:opacity-90 transition-all font-primary shadow-[0_12px_40px_rgba(0,123,255,0.25)]"
-                    >
-                      Submit Ticket <ArrowRight size={12} />
-                    </button>
+                    <Button variant="ghost" size="sm" onClick={handleSubmit}>
+                      Submit Ticket <ArrowRight size={14} className="ml-2" />
+                    </Button>
                   )}
                 </div>
               </div>
