@@ -5,21 +5,21 @@ import Image from "next/image";
 
 const footerLinks = {
   buy: [
-    { label: "Browse all vehicles", href: "#" },
-    { label: "Cars", href: "#" },
-    { label: "Two-wheelers", href: "#" },
-    { label: "Reecomm Inspected", href: "#" },
-    { label: "Budget under ₹3 lakh", href: "#" },
-    { label: "Budget ₹3L – ₹8L", href: "#" },
+    { label: "Browse all vehicles", href: "/search" },
+    { label: "Cars", href: "/search?vehicleType=4 Wheeler" },
+    { label: "Two-wheelers", href: "/search?vehicleType=2 Wheeler" },
+    { label: "Reecomm Inspected", href: "/search?reccomInspected=true" },
+    { label: "Budget under ₹3 lakh", href: "/search?budget=0-3" },
+    { label: "Budget ₹3L – ₹8L", href: "/search?budget=3-8" },
     { label: "Used car buying guide", href: "#" },
   ],
   sell: [
-    { label: "List your car", href: "#" },
-    { label: "List your two-wheeler", href: "#" },
-    { label: "Request an inspection", href: "#" },
-    { label: "Seller pricing guide", href: "#" },
+    { label: "List your car", href: "/consult" },
+    { label: "List your two-wheeler", href: "/consult" },
+    { label: "Request an inspection", href: "/inspection-process" },
+    { label: "Seller pricing guide", href: "/consult/pricing" },
     { label: "RC transfer service", href: "#" },
-    { label: "Doorstep inspection", href: "#" },
+    { label: "Doorstep inspection", href: "/inspection-process" },
   ],
   consultants: [
     { label: "Become a consultant", href: "/consult" },
@@ -34,12 +34,12 @@ const footerLinks = {
     { label: "Inspection process", href: "/inspection-process" },
     { label: "Careers", href: "#" },
     { label: "Blog", href: "#" },
-    { label: "Contact us", href: "#" },
+    { label: "Contact us", href: "/contactus" },
     { label: "Help & FAQ", href: "/help" },
   ],
   legal: [
-    { label: "Terms of Use", href: "#" },
-    { label: "Privacy Policy", href: "#" },
+    { label: "Terms of Use", href: "/terms-and-conditions" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
   ],
 };
 
@@ -167,7 +167,7 @@ const Footer = () => {
                 ))}
               </ul>
               {/* Vertical line separator for desktop */}
-              <div className="hidden lg:block absolute right-[-1rem] top-0 bottom-0 w-px bg-[#ffffff20]"></div>
+              <div className="hidden lg:block absolute -right-4 top-0 bottom-0 w-px bg-[#ffffff20]"></div>
             </div>
 
             {/* Column 3 */}

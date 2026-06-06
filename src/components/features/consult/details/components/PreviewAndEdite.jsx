@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-
 import Step1Business from "../components/Step1Business";
 import Step2Address from "../components/Step2Address";
 import Step3KYC from "../components/Step3KYC";
+import { Briefcase, MapPin, FileText } from "lucide-react";
+import { motion } from "framer-motion";
 
 import {
   getBaiscDetails,
@@ -199,162 +200,198 @@ export default function PreviewAndEdite({
     }
   };
 
+  // Framer Motion staggered animations configuration
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { duration: 0.2, ease: "easeOut" },
+    },
+  };
+
   return (
-    <>
-      <div className="space-y-10 max-w-5xl mx-auto">
-        {/* <h2 className="text-2xl font-semibold text-primary">
-          Preview Your Details
-        </h2> */}
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="space-y-10 max-w-5xl mx-auto"
+    >
+      {/* ================= BUSINESS ================= */}
+      <motion.div
+        variants={itemVariants}
+        className="bg-white/2 backdrop-blur-md border border-white/5 rounded-2xl p-6 shadow-2xl relative z-10 hover:border-white/6 transition-all duration-300"
+      >
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">
+            <Briefcase size={16} className="text-primary/70" />
+            Preview Your Details
+          </h3>
 
-        {/* ================= BUSINESS ================= */}
-        <div className="border border-primary/30 rounded-xl p-6 ">
-          <div className="flex justify-between mb-4">
-            <h3 className="font-semibold">Preview Your Details</h3>
+          {!editMode.business ? (
+            <Button
+              variant="ghost"
+              onClick={() => setEditMode((p) => ({ ...p, business: true }))}
+            >
+              Edit
+            </Button>
+          ) : (
+            <div className="flex gap-3">
+              <Button
+                variant="outlineSecondary"
+                onClick={() =>
+                  setEditMode((p) => ({ ...p, business: false }))
+                }
+              >
+                Cancel
+              </Button>
 
-            {!editMode.business ? (
               <Button
                 variant="ghost"
-                onClick={() => setEditMode((p) => ({ ...p, business: true }))}
+                onClick={updateBusiness}
+                loading={loadingStates.business}
+                disabled={!localChanged.business}
               >
-                Edit
+                Update
               </Button>
-            ) : (
-              <div className="flex gap-3">
-                <Button
-                  variant="outlineSecondary"
-                  onClick={() =>
-                    setEditMode((p) => ({ ...p, business: false }))
-                  }
-                >
-                  Cancel
-                </Button>
-
-                <Button
-                  variant="ghost"
-                  onClick={updateBusiness}
-                  loading={loadingStates.business}
-                  disabled={!localChanged.business}
-                >
-                  Update
-                </Button>
-              </div>
-            )}
-          </div>
-
-          <div
-            className={`transition-opacity duration-300 ${!editMode.business ? "pointer-events-none opacity-60" : ""}`}
-          >
-            <Step1Business
-              initialData={data.business}
-              onChange={handleBusinessChange}
-              readOnly={!editMode.business}
-            />
-          </div>
+            </div>
+          )}
         </div>
 
-        {/* ================= ADDRESS ================= */}
-        <div className="border border-primary/30 rounded-xl p-6 ">
-          <div className="flex justify-between mb-4">
-            <h3 className="font-semibold">Address Details</h3>
+        <div
+          className={`transition-opacity duration-300 ${!editMode.business ? "pointer-events-none opacity-60" : ""}`}
+        >
+          <Step1Business
+            initialData={data.business}
+            onChange={handleBusinessChange}
+            readOnly={!editMode.business}
+          />
+        </div>
+      </motion.div>
 
-            {!editMode.address ? (
+      {/* ================= ADDRESS ================= */}
+      <motion.div
+        variants={itemVariants}
+        className="bg-white/2 backdrop-blur-md border border-white/5 rounded-2xl p-6 shadow-2xl relative z-10 hover:border-white/6 transition-all duration-300"
+      >
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">
+            <MapPin size={16} className="text-primary/70" />
+            Address Details
+          </h3>
+
+          {!editMode.address ? (
+            <Button
+              variant="ghost"
+              onClick={() => setEditMode((p) => ({ ...p, address: true }))}
+            >
+              Edit
+            </Button>
+          ) : (
+            <div className="flex gap-3">
+              <Button
+                variant="outlineSecondary"
+                onClick={() => setEditMode((p) => ({ ...p, address: false }))}
+              >
+                Cancel
+              </Button>
+
               <Button
                 variant="ghost"
-                onClick={() => setEditMode((p) => ({ ...p, address: true }))}
+                onClick={updateAddress}
+                loading={loadingStates.address}
+                disabled={!localChanged.address}
               >
-                Edit
+                Update
               </Button>
-            ) : (
-              <div className="flex gap-3">
-                <Button
-                  variant="outlineSecondary"
-                  onClick={() => setEditMode((p) => ({ ...p, address: false }))}
-                >
-                  Cancel
-                </Button>
-
-                <Button
-                  variant="ghost"
-                  onClick={updateAddress}
-                  loading={loadingStates.address}
-                  disabled={!localChanged.address}
-                >
-                  Update
-                </Button>
-              </div>
-            )}
-          </div>
-
-          <div
-            className={`transition-opacity duration-300 ${!editMode.address ? "pointer-events-none opacity-60" : ""}`}
-          >
-            <Step2Address
-              initialData={data.address}
-              onChange={handleAddressChange}
-              readOnly={!editMode.address}
-            />
-          </div>
+            </div>
+          )}
         </div>
 
-        {/* ================= KYC ================= */}
-        <div className="border border-primary/30 rounded-xl p-6 ">
-          <div className="flex justify-between mb-4">
-            <h3 className="font-semibold">KYC Details</h3>
+        <div
+          className={`transition-opacity duration-300 ${!editMode.address ? "pointer-events-none opacity-60" : ""}`}
+        >
+          <Step2Address
+            initialData={data.address}
+            onChange={handleAddressChange}
+            readOnly={!editMode.address}
+          />
+        </div>
+      </motion.div>
 
-            {!editMode.kyc ? (
+      {/* ================= KYC ================= */}
+      <motion.div
+        variants={itemVariants}
+        className="bg-white/2 backdrop-blur-md border border-white/5 rounded-2xl p-6 shadow-2xl relative z-10 hover:border-white/6 transition-all duration-300"
+      >
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">
+            <FileText size={16} className="text-primary/70" />
+            KYC Details
+          </h3>
+
+          {!editMode.kyc ? (
+            <Button
+              variant="ghost"
+              onClick={() => setEditMode((p) => ({ ...p, kyc: true }))}
+            >
+              Edit
+            </Button>
+          ) : (
+            <div className="flex gap-3">
+              <Button
+                variant="outlineSecondary"
+                onClick={() => setEditMode((p) => ({ ...p, kyc: false }))}
+              >
+                Cancel
+              </Button>
+
               <Button
                 variant="ghost"
-                onClick={() => setEditMode((p) => ({ ...p, kyc: true }))}
+                onClick={updateKyc}
+                loading={loadingStates.kyc}
+                disabled={!localChanged.kyc}
               >
-                Edit
+                Update
               </Button>
-            ) : (
-              <div className="flex gap-3">
-                <Button
-                  variant="outlineSecondary"
-                  onClick={() => setEditMode((p) => ({ ...p, kyc: false }))}
-                >
-                  Cancel
-                </Button>
-
-                <Button
-                  variant="ghost"
-                  onClick={updateKyc}
-                  loading={loadingStates.kyc}
-                  disabled={!localChanged.kyc}
-                >
-                  Update
-                </Button>
-              </div>
-            )}
-          </div>
-
-          <div
-            className={`transition-opacity duration-300 ${!editMode.kyc ? "pointer-events-none opacity-60" : ""}`}
-          >
-            <Step3KYC
-              initialData={data.kyc}
-              onChange={handleKycChange}
-              readOnly={!editMode.kyc}
-            />
-          </div>
+            </div>
+          )}
         </div>
 
-        {/* ================= FINAL SUBMIT ================= */}
-        <div className="flex justify-end">
-          <Button
-            variant="ghost"
-            onClick={handleSubmit}
-            loading={loadingStates.submit}
-            disabled={
-              existing.business?.verificationStatus === "REQUEST_CHANGES" &&
-              !hasMadeAnyUpdate
-            }
-          >
-            Final Submit
-          </Button>
+        <div
+          className={`transition-opacity duration-300 ${!editMode.kyc ? "pointer-events-none opacity-60" : ""}`}
+        >
+          <Step3KYC
+            initialData={data.kyc}
+            onChange={handleKycChange}
+            readOnly={!editMode.kyc}
+          />
         </div>
-      </div>
-    </>
+      </motion.div>
+
+      {/* ================= FINAL SUBMIT ================= */}
+      <motion.div variants={itemVariants} className="flex justify-end">
+        <Button
+          variant="ghost"
+          onClick={handleSubmit}
+          loading={loadingStates.submit}
+          disabled={
+            existing.business?.verificationStatus === "REQUEST_CHANGES" &&
+            !hasMadeAnyUpdate
+          }
+        >
+          Final Submit
+        </Button>
+      </motion.div>
+    </motion.div>
   );
 }

@@ -1,13 +1,33 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Plus, X, Check, Camera, Loader2, Trash2 } from "lucide-react";
+import {
+  Plus,
+  X,
+  Check,
+  Camera,
+  Loader2,
+  Trash2,
+  Building2,
+  User,
+  Mail,
+  Calendar,
+  Bike,
+  Car,
+  ShoppingBag,
+  DollarSign,
+  ArrowLeftRight,
+  Coins,
+  Briefcase,
+  Globe,
+  Tag,
+} from "lucide-react";
 import Image from "next/image";
-import InputField from "@/components/ui/inputField";
 import CustomSelect from "@/components/ui/custom-select";
-import ChipGroup from "@/components/ui/chipGroup";
 import DropzoneUpload from "@/components/ui/DropzoneUpload";
+import SleekInput from "@/components/ui/sleekInput";
 import { useDebounceValue } from "@/hooks/useDebounce";
 import { checkIsUserNameAvailbale } from "@/services/consult.profile.service";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Step1Business({
   onChange,
@@ -208,153 +228,192 @@ export default function Step1Business({
     return year.length === 4 && num > 1850;
   };
 
-  return (
-    <div className="space-y-8 animate-in fade-in duration-500 relative">
-      {/* CLEAR BUTTON */}
-      {/* {!readOnly && !isUpdateMode && !initialData && (
-        <div className="absolute -top-4 right-0 z-10">
-          <button
-            type="button"
-            onClick={handleClear}
-            className="text-xs font-medium border border-primary/40 rounded-2xl text-red-500 hover:text-red-600 transition flex items-center gap-1 cursor-pointer px-2 py-1 "
-          >
-            <X size={14} />
-            Clear Form
-          </button>
-        </div>
-      )} */}
+  // Framer Motion staggered animations configuration
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+      },
+    },
+  };
 
-      {/* ===== LOGO ===== */}
-      {(!readOnly || logo) && (
-        <div className="flex flex-col items-center gap-3">
-          <h3 className="text-sm font-semibold text-primary uppercase tracking-wider">
-            Business Logo
-          </h3>
-          <div className="relative">
-            <div
-              onClick={() => !readOnly && logoRef.current.click()}
-              className={`relative w-32 h-32 rounded-full border-4 border-primary/60 bg-primary/10 overflow-hidden flex items-center justify-center transition-all ${
-                !readOnly
-                  ? "cursor-pointer hover:border-primary hover:shadow-lg group"
-                  : ""
-              }`}
-            >
-              {!logo ? (
-                <span className="text-third transition-transform group-hover:scale-110">
-                  <Camera size={32} strokeWidth={1.5} />
-                </span>
-              ) : (
-                <>
-                  <Image
-                    src={
-                      typeof logo === "string"
-                        ? logo
-                        : URL.createObjectURL(logo)
-                    }
-                    alt="logo"
-                    fill
-                    className="object-cover"
-                    unoptimized
-                  />
-                  {/* Overlay on hover when logo exists */}
-                  {!readOnly && (
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <Camera className="text-white w-8 h-8" />
-                    </div>
+  const itemVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { duration: 0.2, ease: "easeOut" },
+    },
+  };
+
+  return (
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="space-y-6 relative"
+    >
+      {/* BRAND IDENTITY PANEL */}
+      {(!readOnly || logo || !readOnly || bannerPreview) && (
+        <motion.div
+          variants={itemVariants}
+          className="bg-white/2 backdrop-blur-md border border-white/5 rounded-2xl p-6 space-y-6 shadow-2xl hover:border-white/8 transition-all duration-300 relative z-10"
+        >
+          <div>
+            <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">
+              <Briefcase size={16} className="text-primary/70" />
+              Brand & Identity
+            </h3>
+            <p className="text-xs text-third/60 mt-1">
+              Upload your company logo and banner image to customize your store
+              presence.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+            {/* Logo column */}
+            <div className="flex flex-col items-center gap-3 md:col-span-1">
+              <span className="text-xs font-semibold text-third/70 uppercase tracking-wider">
+                Logo
+              </span>
+              <div className="relative group">
+                <div
+                  onClick={() => !readOnly && logoRef.current.click()}
+                  className={`relative w-28 h-28 rounded-full border-2 border-white/10 bg-white/2 backdrop-blur-sm overflow-hidden flex items-center justify-center transition-colors duration-200 ${
+                    !readOnly ? "cursor-pointer hover:border-primary group" : ""
+                  }`}
+                >
+                  {!logo ? (
+                    <span className="text-third/65 transition-transform duration-300 group-hover:scale-110">
+                      <Camera size={28} strokeWidth={1.5} />
+                    </span>
+                  ) : (
+                    <>
+                      <Image
+                        src={
+                          typeof logo === "string"
+                            ? logo
+                            : URL.createObjectURL(logo)
+                        }
+                        alt="logo"
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                      {!readOnly && (
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                          <Camera className="text-white w-6 h-6" />
+                        </div>
+                      )}
+                    </>
                   )}
-                </>
-              )}
+                </div>
+
+                {logo && !readOnly && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setLogo(null);
+                      handleInput("logo", null);
+                      if (logoRef.current) logoRef.current.value = "";
+                    }}
+                    className="cursor-pointer absolute bottom-0 right-0 p-1.5 bg-rose-500/80 hover:bg-rose-600 text-white rounded-full transition-colors duration-200 z-10 shadow-lg"
+                    title="Clear Logo"
+                  >
+                    <Trash2 size={12} />
+                  </button>
+                )}
+
+                <input
+                  ref={logoRef}
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      setLogo(file);
+                      handleInput("logo", file);
+                    }
+                  }}
+                />
+              </div>
             </div>
 
-            {logo && !readOnly && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setLogo(null);
-                  handleInput("logo", null);
-                  if (logoRef.current) logoRef.current.value = "";
+            {/* Banner column */}
+            <div className="md:col-span-2">
+              <DropzoneUpload
+                label="Banner Image"
+                preview={bannerPreview}
+                readOnly={readOnly}
+                onChange={(file) => {
+                  if (!file) {
+                    setBannerPreview(null);
+                    handleInput("banner", null);
+                    return;
+                  }
+                  const f = Array.isArray(file) ? file[0] : file;
+                  if (f) {
+                    setBannerPreview(
+                      typeof f === "string" ? f : URL.createObjectURL(f),
+                    );
+                    handleInput("banner", f);
+                  }
                 }}
-                className="cursor-pointer absolute bottom-2 right-2 p-1.5 bg-red-500/40 hover:bg-red-600 text-white rounded-full transition-colors z-10 "
-                title="Clear Logo"
-              >
-                <Trash2 size={14} />
-              </button>
-            )}
-
-            <input
-              ref={logoRef}
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={(e) => {
-                const file = e.target.files[0];
-                if (file) {
-                  setLogo(file);
-                  handleInput("logo", file);
-                }
-              }}
-            />
+              />
+            </div>
           </div>
-        </div>
+        </motion.div>
       )}
 
-      {/* ===== BANNER ===== */}
-      {(!readOnly || bannerPreview) && (
-        <DropzoneUpload
-          label="Banner Image"
-          preview={bannerPreview}
-          readOnly={readOnly}
-          onChange={(file) => {
-            if (!file) {
-              setBannerPreview(null);
-              handleInput("banner", null);
-              return;
-            }
-            const f = Array.isArray(file) ? file[0] : file;
-            if (f) {
-              setBannerPreview(
-                typeof f === "string" ? f : URL.createObjectURL(f),
-              );
-              handleInput("banner", f);
-            }
-          }}
-        />
-      )}
-
-      {/* ===== FIELDS ===== */}
-      <div className="space-y-6">
-        {!readOnly && (
-          <h3 className="text-sm font-semibold text-primary uppercase tracking-wider">
+      {/* BUSINESS DETAILS PANEL */}
+      <motion.div
+        variants={itemVariants}
+        className="bg-white/2 backdrop-blur-md border border-white/5 rounded-2xl p-6 space-y-6 shadow-2xl hover:border-white/6 transition-all duration-300 relative z-20"
+      >
+        <div>
+          <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">
+            <Building2 size={16} className="text-primary/70" />
             Business Details
           </h3>
-        )}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <p className="text-xs text-third/60 mt-1">
+            Provide the name, email, and establishment year of your consulting
+            business.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {(!readOnly || form.consultationName) && (
-            <InputField
+            <SleekInput
               label="Consultation Name"
-              variant="colored"
+              placeholder="e.g. Acme Motors"
               readOnly={readOnly}
               value={form.consultationName}
+              icon={Building2}
               onChange={(e) => handleInput("consultationName", e.target.value)}
             />
           )}
 
           {isUpdateMode && (!readOnly || form.username) && (
-            <div className="flex flex-col">
-              <InputField
+            <div className="flex flex-col w-full">
+              <SleekInput
                 label="Username"
-                variant="colored"
+                placeholder="e.g. acmemotors"
                 readOnly={readOnly}
                 value={form.username}
+                icon={Globe}
                 onChange={(e) =>
                   handleInput("username", e.target.value.toLowerCase().trim())
                 }
               />
               {usernameStatus.message && (
                 <div
-                  className={`flex items-center gap-1 text-[10px] mt-1 ml-1 ${
-                    usernameStatus.available ? "text-green-500" : "text-red-500"
+                  className={`flex items-center gap-1 text-[10px] mt-1 ml-1 font-medium ${
+                    usernameStatus.available
+                      ? "text-emerald-400"
+                      : "text-rose-400"
                   }`}
                 >
                   {usernameStatus.available ? (
@@ -366,7 +425,7 @@ export default function Step1Business({
                 </div>
               )}
               {usernameStatus.loading && (
-                <div className="flex items-center gap-1 text-[10px] mt-1 ml-1 text-third">
+                <div className="flex items-center gap-1 text-[10px] mt-1 ml-1 text-third/60">
                   <Loader2 size={10} className="animate-spin" />
                   Checking availability...
                 </div>
@@ -375,55 +434,51 @@ export default function Step1Business({
           )}
 
           {(!readOnly || form.ownerName) && (
-            <InputField
+            <SleekInput
               label="Owner Name"
-              variant="colored"
+              placeholder="e.g. John Doe"
               readOnly={readOnly}
               value={form.ownerName}
+              icon={User}
               onChange={(e) => handleInput("ownerName", e.target.value)}
             />
           )}
 
           {(!readOnly || form.companyEmail) && (
-            <div className="flex flex-col">
-              <InputField
-                label="Company Email"
-                type="email"
-                variant="colored"
-                readOnly={readOnly}
-                value={form.companyEmail}
-                onChange={(e) => {
-                  const val = e.target.value.toLowerCase().trim();
-                  handleInput("companyEmail", val);
-                  if (val && !validateEmail(val)) {
-                    setErrors((p) => ({
-                      ...p,
-                      companyEmail: "Invalid email format",
-                    }));
-                  } else {
-                    setErrors((p) => ({ ...p, companyEmail: "" }));
-                  }
-                }}
-              />
-              {errors.companyEmail && (
-                <span className="text-red-500 text-[10px] mt-1 ml-1">
-                  {errors.companyEmail}
-                </span>
-              )}
-            </div>
+            <SleekInput
+              label="Company Email"
+              type="email"
+              placeholder="e.g. info@acmemotors.com"
+              readOnly={readOnly}
+              value={form.companyEmail}
+              icon={Mail}
+              error={errors.companyEmail}
+              onChange={(e) => {
+                const val = e.target.value.toLowerCase().trim();
+                handleInput("companyEmail", val);
+                if (val && !validateEmail(val)) {
+                  setErrors((p) => ({
+                    ...p,
+                    companyEmail: "Invalid email format",
+                  }));
+                } else {
+                  setErrors((p) => ({ ...p, companyEmail: "" }));
+                }
+              }}
+            />
           )}
 
           {(!readOnly || form.establishmentYear) && (
-            <div className="flex flex-col">
-              <label className="text-sm font-semibold text-primary mb-1.5 ml-1">
+            <div className="flex flex-col space-y-1.5 w-full">
+              <span className="text-xs font-semibold uppercase tracking-wider text-third/80 ml-1">
                 Establishment Year
-              </label>
+              </span>
               <div className="relative">
                 {readOnly ? (
-                  <InputField
-                    variant="colored"
+                  <SleekInput
                     readOnly={true}
                     value={form.establishmentYear}
+                    icon={Calendar}
                   />
                 ) : (
                   <CustomSelect
@@ -434,214 +489,297 @@ export default function Step1Business({
                     }}
                     options={yearOptions}
                     placeholder="Select Year"
-                    variant="colored"
+                    variant="transparent"
                   />
                 )}
               </div>
               {errors.establishmentYear && (
-                <span className="text-red-500 text-[10px] mt-1 ml-1">
+                <span className="text-rose-500 text-[10px] mt-1 ml-1">
                   {errors.establishmentYear}
                 </span>
               )}
             </div>
           )}
         </div>
-      </div>
+      </motion.div>
 
-      {(!readOnly || form.vehicleTypes.length > 0) && (
-        <div className="flex flex-col mb-2">
-          <h3 className="text-md font-semibold text-primary mb-2">
-            Vehicle Types
-          </h3>
-          <div className="flex flex-wrap gap-3">
-            {[
-              { label: "Two Wheelers", value: "TWO_WHEELER" },
-              { label: "Four Wheelers", value: "FOUR_WHEELER" },
-            ].map((item) => (
-              <button
-                key={item.value}
-                type="button"
-                disabled={readOnly}
-                onClick={() => {
-                  const isSelected = form.vehicleTypes.includes(item.value);
-                  const updated = isSelected
-                    ? form.vehicleTypes.filter((v) => v !== item.value)
-                    : [...form.vehicleTypes, item.value];
-                  handleInput("vehicleTypes", updated);
-                }}
-                className={`px-4 py-1.5 text-sm font-medium border transition-all duration-200 rounded-xl
-                ${
-                  form.vehicleTypes.includes(item.value)
-                    ? "bg-primary text-secondary border-primary"
-                    : readOnly
-                      ? "hidden"
-                      : "bg-transparent text-primary border-primary/50 hover:border-primary hover:cursor-pointer"
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
+      {/* OPERATIONS & SERVICES PANEL */}
+      {(!readOnly ||
+        form.vehicleTypes.length > 0 ||
+        !readOnly ||
+        form.services.length > 0) && (
+        <motion.div
+          variants={itemVariants}
+          className="bg-white/2 backdrop-blur-md border border-white/5 rounded-2xl p-6 space-y-8 shadow-2xl hover:border-white/6 transition-all duration-300 relative z-10"
+        >
+          <div>
+            <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">
+              <Tag size={16} className="text-primary/70" />
+              Operations & Offerings
+            </h3>
+            <p className="text-xs text-third/60 mt-1">
+              Select the vehicle segments and business services your
+              consultation supports.
+            </p>
           </div>
-        </div>
-      )}
 
-      {/* ===== SERVICES ===== */}
-      {(!readOnly || form.services.length > 0) && (
-        <div className="flex flex-col mb-2">
-          <h3 className="text-md font-semibold text-primary mb-2">Services</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Vehicle Types */}
+            {(!readOnly || form.vehicleTypes.length > 0) && (
+              <div className="flex flex-col space-y-4">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-third/80 ml-1">
+                  Vehicle Types
+                </h4>
+                <div className="flex flex-wrap gap-2.5">
+                  {[
+                    {
+                      label: "Two Wheelers",
+                      value: "TWO_WHEELER",
+                      icon: Bike,
+                    },
+                    {
+                      label: "Four Wheelers",
+                      value: "FOUR_WHEELER",
+                      icon: Car,
+                    },
+                  ].map((item) => {
+                    const isSelected = form.vehicleTypes.includes(item.value);
+                    const Icon = item.icon;
+                    if (readOnly && !isSelected) return null;
+                    return (
+                      <button
+                        key={item.value}
+                        type="button"
+                        disabled={readOnly}
+                        onClick={() => {
+                          const updated = isSelected
+                            ? form.vehicleTypes.filter((v) => v !== item.value)
+                            : [...form.vehicleTypes, item.value];
+                          handleInput("vehicleTypes", updated);
+                        }}
+                        className={`flex items-center gap-2 px-3.5 py-2 text-xs font-medium border transition-all duration-300 rounded-xl
+                          ${
+                            isSelected
+                              ? "bg-primary text-secondary border-primary shadow-[0_0_15px_rgba(255,254,247,0.03)]"
+                              : readOnly
+                                ? "hidden"
+                                : "bg-white/2 text-third border-white/6 hover:border-white/20 hover:bg-white/2 hover:cursor-pointer"
+                          }
+                        `}
+                      >
+                        <Icon size={14} strokeWidth={2} />
+                        {item.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
-          <div className="flex flex-wrap gap-3 items-center">
-            {/* Preset chips via ChipGroup — rendered inline */}
-            {[
-              { label: "Buy", value: "BUY" },
-              { label: "Sell", value: "SELL" },
-              { label: "Exchange", value: "EXCHANGE" },
-              { label: "Finance", value: "FINANCE" },
-            ].map((item) => (
-              <button
-                key={item.value}
-                type="button"
-                disabled={readOnly}
-                onClick={() => {
-                  const isSelected = form.services.includes(item.value);
-                  if (!isSelected && form.services.length >= 4) {
-                    setErrors((prev) => ({
-                      ...prev,
-                      services: "You can select a maximum of 4 services.",
-                    }));
-                    return;
-                  }
-                  setErrors((prev) => ({ ...prev, services: "" }));
-                  const updated = isSelected
-                    ? form.services.filter((s) => s !== item.value)
-                    : [...form.services, item.value];
-                  handleInput("services", updated);
-                }}
-                className={`px-4 py-1.5  text-sm font-medium border transition-all duration-200 rounded-xl
-                ${
-                  form.services.includes(item.value)
-                    ? "bg-primary text-secondary border-primary"
-                    : readOnly
-                      ? "hidden"
-                      : "bg-transparent text-primary border-primary/50 hover:border-primary hover:cursor-pointer"
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-
-            {/* Custom service chips */}
-            {customServices.map((item) => (
-              <div
-                key={item.value}
-                className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium border transition-all duration-200
-                ${
-                  form.services.includes(item.value)
-                    ? "bg-primary text-secondary border-primary"
-                    : readOnly
-                      ? "hidden"
-                      : "bg-transparent text-primary border-primary/50"
-                }`}
-              >
-                <button
-                  type="button"
-                  disabled={readOnly}
-                  onClick={() => {
+            {/* Services */}
+            {(!readOnly || form.services.length > 0) && (
+              <div className="flex flex-col space-y-4">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-third/80 ml-1">
+                  Services
+                </h4>
+                <div className="flex flex-wrap gap-2.5 items-center">
+                  {[
+                    { label: "Buy", value: "BUY", icon: ShoppingBag },
+                    { label: "Sell", value: "SELL", icon: DollarSign },
+                    {
+                      label: "Exchange",
+                      value: "EXCHANGE",
+                      icon: ArrowLeftRight,
+                    },
+                    { label: "Finance", value: "FINANCE", icon: Coins },
+                  ].map((item) => {
                     const isSelected = form.services.includes(item.value);
-                    if (!isSelected && form.services.length >= 4) {
-                      setErrors((prev) => ({
-                        ...prev,
-                        services: "You can select a maximum of 4 services.",
-                      }));
-                      return;
-                    }
-                    setErrors((prev) => ({ ...prev, services: "" }));
-                    const updated = isSelected
-                      ? form.services.filter((s) => s !== item.value)
-                      : [...form.services, item.value];
-                    handleInput("services", updated);
-                  }}
-                >
-                  {item.label}
-                </button>
-                {!readOnly && (
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveCustomService(item.value)}
-                    className="ml-0.5 opacity-70 hover:opacity-100 cursor-pointer"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
+                    const Icon = item.icon;
+                    if (readOnly && !isSelected) return null;
+                    return (
+                      <button
+                        key={item.value}
+                        type="button"
+                        disabled={readOnly}
+                        onClick={() => {
+                          const isAlreadySelected = form.services.includes(
+                            item.value,
+                          );
+                          if (!isAlreadySelected && form.services.length >= 4) {
+                            setErrors((prev) => ({
+                              ...prev,
+                              services:
+                                "You can select a maximum of 4 services.",
+                            }));
+                            return;
+                          }
+                          setErrors((prev) => ({ ...prev, services: "" }));
+                          const updated = isAlreadySelected
+                            ? form.services.filter((s) => s !== item.value)
+                            : [...form.services, item.value];
+                          handleInput("services", updated);
+                        }}
+                        className={`flex items-center gap-2 px-3.5 py-2 text-xs font-medium border transition-all duration-300 rounded-xl
+                          ${
+                            isSelected
+                              ? "bg-primary text-secondary border-primary shadow-[0_0_15px_rgba(255,254,247,0.03)]"
+                              : readOnly
+                                ? "hidden"
+                                : "bg-white/2 text-third border-white/6 hover:border-white/20 hover:bg-white/2 hover:cursor-pointer"
+                          }
+                        `}
+                      >
+                        <Icon size={14} strokeWidth={2} />
+                        {item.label}
+                      </button>
+                    );
+                  })}
+
+                  {/* Custom Services */}
+                  <AnimatePresence>
+                    {customServices.map((item) => {
+                      const isSelected = form.services.includes(item.value);
+                      if (readOnly && !isSelected) return null;
+                      return (
+                        <motion.div
+                          key={item.value}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.15 }}
+                          className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium border transition-all duration-300
+                            ${
+                              isSelected
+                                ? "bg-primary text-secondary border-primary shadow-[0_0_15px_rgba(255,254,247,0.03)]"
+                                : readOnly
+                                  ? "hidden"
+                                  : "bg-white/2 text-third border-white/6"
+                            }
+                          `}
+                        >
+                          <button
+                            type="button"
+                            disabled={readOnly}
+                            onClick={() => {
+                              const isAlreadySelected = form.services.includes(
+                                item.value,
+                              );
+                              if (
+                                !isAlreadySelected &&
+                                form.services.length >= 4
+                              ) {
+                                setErrors((prev) => ({
+                                  ...prev,
+                                  services:
+                                    "You can select a maximum of 4 services.",
+                                }));
+                                return;
+                              }
+                              setErrors((prev) => ({ ...prev, services: "" }));
+                              const updated = isAlreadySelected
+                                ? form.services.filter((s) => s !== item.value)
+                                : [...form.services, item.value];
+                              handleInput("services", updated);
+                            }}
+                          >
+                            {item.label}
+                          </button>
+                          {!readOnly && (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleRemoveCustomService(item.value)
+                              }
+                              className="ml-0.5 opacity-60 hover:opacity-100 cursor-pointer"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          )}
+                        </motion.div>
+                      );
+                    })}
+                  </AnimatePresence>
+
+                  {/* Add Service Trigger Button or Input */}
+                  {!readOnly && (
+                    <div className="relative">
+                      <AnimatePresence mode="wait">
+                        {addingService ? (
+                          <motion.div
+                            key="input"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.15 }}
+                            className="flex items-center gap-1.5"
+                          >
+                            <input
+                              ref={serviceInputRef}
+                              autoFocus
+                              type="text"
+                              value={serviceInput}
+                              onChange={(e) => setServiceInput(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") handleAddCustomService();
+                                if (e.key === "Escape") {
+                                  setAddingService(false);
+                                  setServiceInput("");
+                                }
+                              }}
+                              placeholder="Service name..."
+                              className="h-8.5 px-3 text-xs rounded-xl border border-white/6 bg-white/2 text-primary outline-none w-32 focus:border-primary transition-all duration-300"
+                            />
+                            <button
+                              type="button"
+                              onClick={handleAddCustomService}
+                              className="w-7.5 h-7.5 rounded-xl cursor-pointer bg-primary text-secondary flex items-center justify-center hover:opacity-85 transition"
+                            >
+                              <Check className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setAddingService(false);
+                                setServiceInput("");
+                              }}
+                              className="w-7.5 h-7.5 cursor-pointer rounded-xl border border-white/6 text-third/80 flex items-center justify-center hover:bg-white/2 transition"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                          </motion.div>
+                        ) : (
+                          <motion.button
+                            key="button"
+                            type="button"
+                            onClick={() => setAddingService(true)}
+                            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-dashed border-white/6 text-third/75 text-xs hover:border-primary hover:text-primary transition-all duration-300 hover:cursor-pointer bg-white/2"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            Add Custom
+                          </motion.button>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  )}
+                </div>
+
+                {errors.services && (
+                  <p className="text-rose-500 text-[10px] mt-2 ml-1 animate-in fade-in slide-in-from-top-1">
+                    {errors.services}
+                  </p>
                 )}
               </div>
-            ))}
-
-            {/* Inline add-service input */}
-            {!readOnly && (
-              <>
-                {addingService ? (
-                  <div className="flex items-center gap-1.5">
-                    <input
-                      ref={serviceInputRef}
-                      autoFocus
-                      type="text"
-                      value={serviceInput}
-                      onChange={(e) => setServiceInput(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") handleAddCustomService();
-                        if (e.key === "Escape") {
-                          setAddingService(false);
-                          setServiceInput("");
-                        }
-                      }}
-                      placeholder="Service name..."
-                      className="h-8 px-3 text-sm rounded-full border border-primary bg-primary/10 text-primary outline-none w-36"
-                    />
-                    <button
-                      type="button"
-                      onClick={handleAddCustomService}
-                      className="w-8 h-8 rounded-full cursor-pointer bg-primary text-secondary flex items-center justify-center hover:opacity-80 transition"
-                    >
-                      <Check className="w-4 h-4" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setAddingService(false);
-                        setServiceInput("");
-                      }}
-                      className="w-8 h-8 cursor-pointer rounded-full border border-primary/40 text-primary flex items-center justify-center hover:opacity-80 transition"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setAddingService(true)}
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-dashed border-primary/50 text-primary/70 text-sm hover:border-primary hover:text-primary transition-all duration-200 hover:cursor-pointer"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                    Add Service
-                  </button>
-                )}
-              </>
             )}
           </div>
-          {errors.services && (
-            <p className="text-red-500 text-[10px] mt-2 ml-1 animate-in fade-in slide-in-from-top-1">
-              {errors.services}
-            </p>
-          )}
-        </div>
+        </motion.div>
       )}
 
       {/* ===== BACKEND ERROR ===== */}
       {backendError && (
-        <p className="text-red-500 text-sm font-medium mt-2 ml-1 animate-in fade-in slide-in-from-top-1">
+        <p className="text-rose-500 text-sm font-medium mt-2 ml-1 animate-in fade-in slide-in-from-top-1">
           {backendError}
         </p>
       )}
-    </div>
+    </motion.div>
   );
 }

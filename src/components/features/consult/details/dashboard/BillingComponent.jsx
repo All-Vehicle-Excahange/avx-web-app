@@ -393,13 +393,24 @@ export default function BillingComponent() {
             {/* Bottom */}
             <div className="flex justify-between items-center mt-auto pt-6">
               <span className="text-xs opacity-90">{autoRenewalText}</span>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsManageOpen(true)}
-              >
-                Manage Subscription
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsManageOpen(true)}
+                >
+                  Upgrade Subscription
+                </Button>
+                {activeSubData?.shortUrl && (
+                  <Button
+                    variant="outlineSecondary"
+                    size="sm"
+                    onClick={() => window.open(activeSubData.shortUrl, "_blank")}
+                  >
+                    Manage Subscription
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         )}

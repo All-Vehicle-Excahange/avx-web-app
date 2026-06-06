@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import { useEffect, useState, useCallback } from "react";
-import InputField from "@/components/ui/inputField";
+import { useEffect, useState } from "react";
+import SleekInput from "@/components/ui/sleekInput";
 import DropzoneUpload from "@/components/ui/DropzoneUpload";
-import { X } from "lucide-react";
+import { CreditCard, Fingerprint, ReceiptText, ShieldAlert } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Step3KYC({
   onChange,
@@ -142,81 +143,121 @@ export default function Step3KYC({
     if (onChange) onChange(emptyForm, true);
   };
 
-  return (
-    <div className="space-y-6 relative">
-      {/* CLEAR BUTTON */}
-      {/* {!readOnly && !isUpdateMode && !initialData && (
-        <div className="absolute -top-6 right-0 z-10">
-          <button
-            type="button"
-            onClick={handleClear}
-            className="text-xs font-medium border cursor-pointer border-primary/40 rounded-2xl text-red-500 hover:text-red-600 transition flex items-center gap-1  px-2 py-1 "
-          >
-            <X size={14} />
-            Clear Form
-          </button>
-        </div>
-      )} */}
+  // Framer Motion staggered animations configuration
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+      },
+    },
+  };
 
-      {/* PAN SECTION */}
-      <div className="space-y-4">
-        <div className="space-y-1">
-          <InputField
+  const itemVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { duration: 0.2, ease: "easeOut" },
+    },
+  };
+
+  return (
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="space-y-6 relative"
+    >
+      {/* PAN Card Card */}
+      <motion.div
+        variants={itemVariants}
+        className="bg-white/2 backdrop-blur-md border border-white/5 rounded-2xl p-6 space-y-6 shadow-2xl hover:border-white/6 transition-all duration-300 relative z-10"
+      >
+        <div>
+          <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">
+            <CreditCard size={16} className="text-primary/70" />
+            PAN Card Verification
+          </h3>
+          <p className="text-xs text-third/60 mt-1">
+            Provide your 10-digit Permanent Account Number and upload the document.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-5">
+          <SleekInput
             label="PAN Card Number"
-            variant="colored"
+            placeholder="e.g. ABCDE1234F"
             readOnly={readOnly}
             value={form.panNumber}
+            icon={CreditCard}
             maxLength={10}
             onChange={(e) => {
               const val = e.target.value.toUpperCase().slice(0, 10);
               handleInput("panNumber", val);
             }}
           />
+
+          <DropzoneUpload
+            label="PAN Card Photo"
+            preview={panPreview}
+            readOnly={readOnly}
+            onChange={(file) => {
+              if (!file) {
+                setPanPreview(null);
+                handleInput("panPhoto", null);
+                return;
+              }
+              const f = Array.isArray(file) ? file[0] : file;
+              if (f) {
+                setPanPreview(typeof f === "string" ? f : URL.createObjectURL(f));
+                handleInput("panPhoto", f);
+              }
+            }}
+          />
         </div>
 
-        <DropzoneUpload
-          label="PAN Card Photo"
-          preview={panPreview}
-          readOnly={readOnly}
-          onChange={(file) => {
-            if (!file) {
-              setPanPreview(null);
-              handleInput("panPhoto", null);
-              return;
-            }
-            const f = Array.isArray(file) ? file[0] : file;
-            if (f) {
-              setPanPreview(typeof f === "string" ? f : URL.createObjectURL(f));
-              handleInput("panPhoto", f);
-            }
-          }}
-        />
         {errors.pan && (
-          <p className="text-red-500 text-sm font-medium mt-1 ml-1">
+          <p className="text-rose-500 text-sm font-medium mt-1 ml-1">
             {errors.pan}
           </p>
         )}
-      </div>
+      </motion.div>
+
+      {/* OR Divider */}
       <div className="relative my-8">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-primary/10" />
+          <div className="w-full border-t border-white/5" />
         </div>
         <div className="relative flex justify-center">
-          <span className=" px-4 text-sm font-semibold text-primary/40 uppercase tracking-widest">
+          <span className="bg-secondary px-4 text-xs font-semibold text-third/35 uppercase tracking-widest  py-1 rounded-full border border-white/5 backdrop-blur-sm">
             OR
           </span>
         </div>
       </div>
 
-      {/* AADHAAR SECTION */}
-      <div className="space-y-4">
-        <div className="space-y-1">
-          <InputField
-            label="Aadhar Card Number"
-            variant="colored"
-            readOnly={readOnly}
+      {/* Aadhaar Card Card */}
+      <motion.div
+        variants={itemVariants}
+        className="bg-white/2 backdrop-blur-md border border-white/5 rounded-2xl p-6 space-y-6 shadow-2xl hover:border-white/6 transition-all duration-300 relative z-10"
+      >
+        <div>
+          <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">
+            <Fingerprint size={16} className="text-primary/70" />
+            Aadhaar Card Verification
+          </h3>
+          <p className="text-xs text-third/60 mt-1">
+            Provide your 12-digit Aadhaar number and upload front and back photos.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-5">
+          <SleekInput
+            label="Aadhaar Card Number"
             placeholder="1234-5678-9012"
+            readOnly={readOnly}
             value={formatAadhaar(form.aadharNumber)}
+            icon={Fingerprint}
             maxLength={14}
             onChange={(e) => {
               const raw = e.target.value.replace(/\D/g, "");
@@ -225,105 +266,124 @@ export default function Step3KYC({
               }
             }}
           />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <DropzoneUpload
+              label="Aadhaar Front Photo"
+              preview={aadharFrontPreview}
+              readOnly={readOnly}
+              onChange={(file) => {
+                if (!file) {
+                  setAadharFrontPreview(null);
+                  handleInput("aadharFront", null);
+                  return;
+                }
+                const f = Array.isArray(file) ? file[0] : file;
+                if (f) {
+                  setAadharFrontPreview(
+                    typeof f === "string" ? f : URL.createObjectURL(f),
+                  );
+                  handleInput("aadharFront", f);
+                }
+              }}
+            />
+
+            <DropzoneUpload
+              label="Aadhaar Back Photo"
+              preview={aadharBackPreview}
+              readOnly={readOnly}
+              onChange={(file) => {
+                if (!file) {
+                  setAadharBackPreview(null);
+                  handleInput("aadharBack", null);
+                  return;
+                }
+                const f = Array.isArray(file) ? file[0] : file;
+                if (f) {
+                  setAadharBackPreview(
+                    typeof f === "string" ? f : URL.createObjectURL(f),
+                  );
+                  handleInput("aadharBack", f);
+                }
+              }}
+            />
+          </div>
         </div>
 
-        <DropzoneUpload
-          label="Aadhar Front Photo"
-          preview={aadharFrontPreview}
-          readOnly={readOnly}
-          onChange={(file) => {
-            if (!file) {
-              setAadharFrontPreview(null);
-              handleInput("aadharFront", null);
-              return;
-            }
-            const f = Array.isArray(file) ? file[0] : file;
-            if (f) {
-              setAadharFrontPreview(
-                typeof f === "string" ? f : URL.createObjectURL(f),
-              );
-              handleInput("aadharFront", f);
-            }
-          }}
-        />
-
-        <DropzoneUpload
-          label="Aadhar Back Photo"
-          preview={aadharBackPreview}
-          readOnly={readOnly}
-          onChange={(file) => {
-            if (!file) {
-              setAadharBackPreview(null);
-              handleInput("aadharBack", null);
-              return;
-            }
-            const f = Array.isArray(file) ? file[0] : file;
-            if (f) {
-              setAadharBackPreview(
-                typeof f === "string" ? f : URL.createObjectURL(f),
-              );
-              handleInput("aadharBack", f);
-            }
-          }}
-        />
         {errors.aadhar && (
-          <p className="text-red-500 text-sm font-medium mt-1 ml-1">
+          <p className="text-rose-500 text-sm font-medium mt-1 ml-1">
             {errors.aadhar}
           </p>
         )}
         {!errors.aadhar && submitAttempted && errors.atLeastOne && (
-          <p className="text-red-500 text-sm font-medium mt-1 ml-1">
+          <p className="text-rose-500 text-sm font-medium mt-1 ml-1 flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 p-3 rounded-xl">
+            <ShieldAlert size={16} className="text-rose-500" />
             {errors.atLeastOne}
           </p>
         )}
-      </div>
+      </motion.div>
 
-      {/* GST SECTION */}
-      <div className="space-y-4">
-        <div className="space-y-1">
-          <InputField
+      {/* GST Certificate Card */}
+      <motion.div
+        variants={itemVariants}
+        className="bg-white/2 backdrop-blur-md border border-white/5 rounded-2xl p-6 space-y-6 shadow-2xl hover:border-white/6 transition-all duration-300 relative z-10"
+      >
+        <div>
+          <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">
+            <ReceiptText size={16} className="text-primary/70" />
+            GST Registration <span className="text-third/40 text-[10px]  normal-case tracking-normal ml-1">(Optional)</span>
+          </h3>
+          <p className="text-xs text-third/60 mt-1">
+            If your business is GST registered, provide details and certificate upload.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-5">
+          <SleekInput
             label="GST Number"
-            variant="colored"
+            placeholder="e.g. 07ABCDE1234F1Z5"
             readOnly={readOnly}
             value={form.gstNumber}
+            icon={ReceiptText}
             maxLength={15}
             onChange={(e) => {
               const val = e.target.value.toUpperCase().slice(0, 15);
               handleInput("gstNumber", val);
             }}
           />
+
+          <DropzoneUpload
+            label="GST Certificate Photo"
+            preview={gstPreview}
+            readOnly={readOnly}
+            onChange={(file) => {
+              if (!file) {
+                setGstPreview(null);
+                handleInput("gstPhoto", null);
+                return;
+              }
+              const f = Array.isArray(file) ? file[0] : file;
+              if (f) {
+                setGstPreview(typeof f === "string" ? f : URL.createObjectURL(f));
+                handleInput("gstPhoto", f);
+              }
+            }}
+          />
         </div>
 
-        <DropzoneUpload
-          label="GST Certificate Photo"
-          preview={gstPreview}
-          readOnly={readOnly}
-          onChange={(file) => {
-            if (!file) {
-              setGstPreview(null);
-              handleInput("gstPhoto", null);
-              return;
-            }
-            const f = Array.isArray(file) ? file[0] : file;
-            if (f) {
-              setGstPreview(typeof f === "string" ? f : URL.createObjectURL(f));
-              handleInput("gstPhoto", f);
-            }
-          }}
-        />
         {errors.gst && (
-          <p className="text-red-500 text-sm font-medium mt-1 ml-1">
+          <p className="text-rose-500 text-sm font-medium mt-1 ml-1">
             {errors.gst}
           </p>
         )}
-      </div>
+      </motion.div>
 
       {/* ===== BACKEND ERROR ===== */}
       {backendError && (
-        <p className="text-red-500 text-sm font-medium mt-4 ml-1 animate-in fade-in slide-in-from-top-1">
+        <p className="text-rose-500 text-sm font-medium mt-4 ml-1 animate-in fade-in slide-in-from-top-1">
           {backendError}
         </p>
       )}
-    </div>
+    </motion.div>
   );
 }

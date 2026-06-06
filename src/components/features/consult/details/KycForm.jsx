@@ -453,55 +453,128 @@ export default function KycForm() {
 
       <section className="w-full pt-[66px]">
         <div className="w-full flex items-start">
-          <div className="hidden lg:flex w-[30%] sticky top-[66px] h-[calc(100vh-66px)]  flex-col justify-between text-white overflow-hidden">
+          <div className="hidden lg:flex w-[30%] sticky top-[66px] h-[calc(100vh-66px)] flex-col justify-between text-white overflow-hidden border-r border-white/5">
             {/* Background Image Setup */}
             <div className="absolute inset-0 z-0">
               <Image src="/homeBanner.jpg" alt="Partner Program" width={800} height={500} className="w-full h-full object-cover object-center" />
               {/* Dark Overlay for text readability */}
-              <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" />
+              <div className="absolute inset-0 bg-black/75 backdrop-blur-[2px]" />
             </div>
 
-            <div className="relative z-10 space-y-10 p-12">
-              <div>
-                <h2 className="text-3xl font-bold mb-4 tracking-tight">
-                  Start selling your vehicle and services
-                </h2>
-                <p className="text-white/80 text-lg">
-                  Join our network of elite partners and reach thousands of
-                  interested customers.
-                </p>
+            <div className="relative z-10 flex flex-col justify-between h-full p-10">
+              {/* Top: Intro and Benefits list */}
+              <div className="space-y-8">
+                <div className="space-y-2">
+                  <h2 className="text-2xl font-bold tracking-tight">
+                    Start selling your vehicle and services
+                  </h2>
+                  <p className="text-white/70 text-xs">
+                    Join our network of elite partners and reach thousands of
+                    interested customers.
+                  </p>
+                </div>
+
+                {/* Benefits list */}
+                <div className="space-y-3.5 border-t border-white/10 pt-6">
+                  {[
+                    "Your own storefront",
+                    "Secure payments",
+                    "Transparent commission",
+                    "No upfront cost",
+                  ].map((text, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      <div className="w-5 h-5 rounded-full border border-white/25 flex items-center justify-center shrink-0">
+                        <svg
+                          className="w-3.5 h-3.5 text-white/95"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2.5"
+                            d="M5 13l4 4L19 7"
+                          ></path>
+                        </svg>
+                      </div>
+                      <span className="text-xs font-medium text-white/85">{text}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="space-y-5">
+              {/* Bottom: Vertical Stepper Progress */}
+              <div className="flex flex-col gap-10 border-t border-white/10 pt-6">
                 {[
-                  "Your own storefront",
-                  "Secure payments",
-                  "Transparent commission",
-                  "No upfront cost",
-                ].map((text, i) => (
-                  <div key={i} className="flex items-center gap-4">
-                    <div className="w-6 h-6 rounded-full border border-white/30 flex items-center justify-center shrink-0">
-                      <svg
-                        className="w-3.5 h-3.5 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2.5"
-                          d="M5 13l4 4L19 7"
-                        ></path>
-                      </svg>
+                  { num: 1, label: "Business Details", desc: "Company name, logo & email" },
+                  { num: 2, label: "Address Info", desc: "Operating location" },
+                  { num: 3, label: "KYC Documents", desc: "Pan card, GST, Aadhaar" },
+                  { num: 4, label: "Verification Status", desc: "Account activation status" },
+                ].map((item, i, arr) => (
+                  <div key={item.num} className="flex items-start gap-3 relative">
+                    {/* Vertical line connecting steps */}
+                    {i < arr.length - 1 && (
+                      <div className="absolute left-[15px] top-8 bottom-[-40px] w-[2px] bg-white/10">
+                        <div
+                          className="w-full bg-white transition-all duration-550"
+                          style={{
+                            height: step > item.num ? "100%" : "0%",
+                          }}
+                        />
+                      </div>
+                    )}
+
+                    {/* Circle Indicator */}
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-350 shrink-0 border text-xs font-bold relative z-10
+                        ${
+                          step > item.num
+                            ? "bg-white text-secondary border-white"
+                            : step === item.num
+                              ? "bg-white text-secondary border-white ring-4 ring-white/15"
+                              : "bg-transparent border-white/20 text-white/40"
+                        }
+                      `}
+                    >
+                      {step > item.num ? (
+                        <svg
+                          className="w-4 h-4 text-secondary"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="3.5"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      ) : (
+                        <span>{item.num}</span>
+                      )}
                     </div>
-                    <span className="text-sm font-medium">{text}</span>
+
+                    {/* Label Details */}
+                    <div className="flex flex-col pt-0.5">
+                      <span
+                        className={`text-xs font-semibold tracking-wide transition-colors duration-300
+                          ${step >= item.num ? "text-white" : "text-white/35"}`}
+                      >
+                        {item.label}
+                      </span>
+                      <span
+                        className={`text-[10px] transition-colors duration-300 mt-0.5
+                          ${step >= item.num ? "text-white/60" : "text-white/20"}`}
+                      >
+                        {item.desc}
+                      </span>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
-
-            {/* Decorative background effects (removed since background is an image now) */}
           </div>
 
           {/* Right Panel: Scrollable Form Area */}
@@ -512,7 +585,7 @@ export default function KycForm() {
                 {initialLoading ? (
                   <div className="space-y-10 animate-pulse">
                     {/* Progress Bar Skeleton */}
-                    <div className="flex items-center justify-between mb-16">
+                    <div className="flex items-center justify-between mb-16 lg:hidden">
                       {[1, 2, 3, 4].map((item, i) => (
                         <React.Fragment key={i}>
                           <div className="flex flex-col items-center gap-3">
@@ -560,7 +633,7 @@ export default function KycForm() {
                     </p>
 
                     {/* ===== NEW PROGRESS BAR (MATCHING SCREENSHOT) ===== */}
-                    <div className="mb-16 flex items-center justify-between">
+                    <div className="mb-16 flex items-center justify-between lg:hidden">
                       {[
                         { num: 1, label: "Business" },
                         { num: 2, label: "Address" },
