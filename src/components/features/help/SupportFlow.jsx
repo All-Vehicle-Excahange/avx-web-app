@@ -21,6 +21,12 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import Button from "@/components/ui/button";
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
+import { getMyInquiriesInfiniteQuery } from "@/queries/inquiry.queries";
+import { getAllRequestedInspectionInfiniteQuery } from "@/queries/inspection.queries";
+import { getSellerInventoryInfiniteQuery } from "@/queries/user.queries";
+import { createHelpTicket } from "@/services/helpCenter.service";
+import { toast } from "react-toastify";
 
 const ISSUE_TYPES = [
   { value: "vehicle", label: "Vehicle Inquiry", icon: Car },
@@ -32,71 +38,12 @@ const ISSUE_TYPES = [
   { value: "account", label: "Account Access", icon: LockKeyhole },
 ];
 
-const RELATED_MAP = {
-  vehicle: {
-    heading: "Saved / Inquired Vehicles",
-    items: [
-      {
-        id: "v1",
-        label: "2023 Toyota Camry",
-        meta: "Inquiry #4821",
-        icon: Car,
-      },
-      { id: "v2", label: "2021 Honda Civic", meta: "Inquiry #3904", icon: Car },
-      {
-        id: "v3",
-        label: "2022 BMW 3-Series",
-        meta: "Inquiry #5112",
-        icon: Car,
-      },
-    ],
-  },
-  inspection: {
-    heading: "Inspection Requests",
-    items: [
-      {
-        id: "i1",
-        label: "Inspection #IR-2204",
-        meta: "Submitted 12 Jan",
-        icon: ClipboardList,
-      },
-      {
-        id: "i2",
-        label: "Inspection #IR-1987",
-        meta: "Submitted 04 Jan",
-        icon: ClipboardList,
-      },
-      {
-        id: "i3",
-        label: "Inspection #IR-2389",
-        meta: "Submitted 20 Jan",
-        icon: ClipboardList,
-      },
-    ],
-  },
-  listing: {
-    heading: "Listed Vehicles",
-    items: [
-      {
-        id: "l1",
-        label: "Hyundai Tucson",
-        meta: "Listing #LST-0041",
-        icon: FileText,
-      },
-      {
-        id: "l2",
-        label: "Ford Ranger",
-        meta: "Listing #LST-0038",
-        icon: FileText,
-      },
-      {
-        id: "l3",
-        label: "Kia Sorento",
-        meta: "Listing #LST-0055",
-        icon: FileText,
-      },
-    ],
-  },
+const DYNAMIC_TYPES = ["vehicle", "inspection", "listing"];
+
+const DYNAMIC_HEADINGS = {
+  vehicle: "Your Inquiries",
+  inspection: "Your Inspection Requests",
+  listing: "Your Listed Vehicles",
 };
 
 const STEPS = [
@@ -158,14 +105,158 @@ export default function SupportFlow({ onTicketCreated = () => {}, onBack }) {
   const [ticketId] = useState(
     () => "TKT-" + Math.floor(100000 + Math.random() * 900000),
   );
+  const [createdTicketNumber, setCreatedTicketNumber] = useState("");
   const [submitTime] = useState(() => new Date());
   const fileRef = useRef();
   const timerRef = useRef(null);
 
   const selected = ISSUE_TYPES.find((i) => i.value === issueType);
-  const relatedGroup = RELATED_MAP[issueType] || null;
+  const isDynamicType = DYNAMIC_TYPES.includes(issueType);
+
+  // 1. Vehicle inquiries query
+  const {
+    data: inquiriesData,
+    fetchNextPage: fetchNextPageInquiries,
+    hasNextPage: hasNextPageInquiries,
+    isLoading: isLoadingInquiries,
+    isFetchingNextPage: isFetchingNextPageInquiries,
+  } = useInfiniteQuery({
+    ...getMyInquiriesInfiniteQuery({
+      pageSize: 10,
+    }),
+    enabled: issueType === "vehicle",
+    staleTime: 5 * 60 * 1000,
+  });
+
+  // 2. Inspection requests query
+  const {
+    data: inspectionsData,
+    fetchNextPage: fetchNextPageInspections,
+    hasNextPage: hasNextPageInspections,
+    isLoading: isLoadingInspections,
+    isFetchingNextPage: isFetchingNextPageInspections,
+  } = useInfiniteQuery({
+    ...getAllRequestedInspectionInfiniteQuery({
+      pageSize: 10,
+    }),
+    enabled: issueType === "inspection",
+    staleTime: 5 * 60 * 1000,
+  });
+
+  // 3. Listings query
+  const {
+    data: listingsData,
+    fetchNextPage: fetchNextPageListings,
+    hasNextPage: hasNextPageListings,
+    isLoading: isLoadingListings,
+    isFetchingNextPage: isFetchingNextPageListings,
+  } = useInfiniteQuery({
+    ...getSellerInventoryInfiniteQuery({
+      size: 10,
+    }),
+    enabled: issueType === "listing",
+    staleTime: 5 * 60 * 1000,
+  });
+
+  // 4. Create Help Ticket mutation
+  const createMutation = useMutation({
+    mutationFn: async (bodyFormData) => {
+      return createHelpTicket(bodyFormData);
+    },
+    onSuccess: (data) => {
+      toast.success("Support ticket submitted successfully!");
+      const ticketResponse = data?.data || {};
+      setCreatedTicketNumber(ticketResponse.ticketNumber || ticketResponse.id || ticketId);
+      const newTicket = {
+        id: ticketResponse.id || ticketId,
+        ticketNumber: ticketResponse.ticketNumber || ticketResponse.id || ticketId,
+        category: selected?.label || issueType,
+        status: "Open",
+        updated: "Just now",
+        subject: description.slice(0, 72) + (description.length > 72 ? "…" : ""),
+        messages: [
+          { from: "You", time: "Just now", text: description, mine: true },
+        ],
+      };
+      onTicketCreated(newTicket);
+      setSubmitted(true);
+    },
+    onError: (error) => {
+      console.error("Failed to submit support ticket:", error);
+      toast.error(
+        error?.response?.data?.message ||
+          "Failed to submit ticket. Please try again.",
+      );
+    },
+  });
+
+  let items = [];
+  let isLoadingItems = false;
+  let hasNextPageItems = false;
+  let isFetchingNextPageItems = false;
+  let fetchNextPageItems = () => {};
+  let heading = "";
+  let emptyMessage = "";
+
+  if (issueType === "vehicle") {
+    const inquiries = inquiriesData?.pages?.flatMap((page) => page?.data || []) || [];
+    items = inquiries.map((inq) => {
+      const vehicle = inq.inquiryVehicleResponse || {};
+      const vehicleName = `${vehicle.makerName || ""} ${vehicle.modelName || ""} ${vehicle.variantName || ""}`.trim() || "Unknown Vehicle";
+      return {
+        id: inq.id,
+        label: inq.inquiryTitle || vehicleName,
+        meta: `Inquiry #${inq.id} — ${vehicleName} (${inq.inquiryStatus || "PENDING"})`,
+        icon: Car,
+        raw: inq,
+      };
+    });
+    isLoadingItems = isLoadingInquiries;
+    hasNextPageItems = hasNextPageInquiries;
+    isFetchingNextPageItems = isFetchingNextPageInquiries;
+    fetchNextPageItems = fetchNextPageInquiries;
+    heading = "Your Inquiries";
+    emptyMessage = "You haven't sent any vehicle inquiries yet.";
+  } else if (issueType === "inspection") {
+    const inspections = inspectionsData?.pages?.flatMap((page) => page?.data || []) || [];
+    items = inspections.map((ins) => {
+      const vehicleName = `${ins.makerName || ""} ${ins.modelName || ""} ${ins.variantName || ""}`.trim() || "Unknown Vehicle";
+      return {
+        id: ins.id,
+        label: `Inspection for ${vehicleName}`,
+        meta: `Request #${ins.id} — Status: ${ins.inspectionRequestStatus || "PENDING"}`,
+        icon: ClipboardList,
+        raw: ins,
+      };
+    });
+    isLoadingItems = isLoadingInspections;
+    hasNextPageItems = hasNextPageInspections;
+    isFetchingNextPageItems = isFetchingNextPageInspections;
+    fetchNextPageItems = fetchNextPageInspections;
+    heading = "Your Inspection Requests";
+    emptyMessage = "You haven't requested any vehicle inspections yet.";
+  } else if (issueType === "listing") {
+    const listings = listingsData?.pages?.flatMap((page) => page?.data || []) || [];
+    items = listings.map((lst) => {
+      const vehicleName = `${lst.makerName || ""} ${lst.modelName || ""} ${lst.variantName || ""}`.trim() || "Unknown Vehicle";
+      return {
+        id: lst.id,
+        label: vehicleName,
+        meta: `Listing #${lst.id} — Status: ${lst.listingStatus || "DRAFT"}`,
+        icon: FileText,
+        raw: lst,
+      };
+    });
+    isLoadingItems = isLoadingListings;
+    hasNextPageItems = hasNextPageListings;
+    isFetchingNextPageItems = isFetchingNextPageListings;
+    fetchNextPageItems = fetchNextPageListings;
+    heading = "Your Listed Vehicles";
+    emptyMessage = "You don't have any listed vehicles yet.";
+  }
+
   const canNext0 = !!issueType;
-  const canNext1 = !relatedGroup || !!relatedItem;
+  const canNext1 = !isDynamicType || !!relatedItem;
   const canNext2 = description.trim().length > 10;
   const progressPct = submitted ? 100 : (step / 3) * 100;
 
@@ -178,27 +269,35 @@ export default function SupportFlow({ onTicketCreated = () => {}, onBack }) {
 
   const handleFile = (e) => {
     const files = Array.from(e.target.files || []);
-    setUploads((prev) => [
-      ...prev,
-      ...files.map((f) => ({ name: f.name, type: f.type })),
-    ]);
+    setUploads((prev) => [...prev, ...files]);
   };
   const removeUpload = (i) =>
     setUploads((prev) => prev.filter((_, idx) => idx !== i));
 
   const handleSubmit = () => {
-    const newTicket = {
-      id: ticketId,
-      category: selected?.label || issueType,
-      status: "Open",
-      updated: "Just now",
-      subject: description.slice(0, 72) + (description.length > 72 ? "…" : ""),
-      messages: [
-        { from: "You", time: "Just now", text: description, mine: true },
-      ],
-    };
-    onTicketCreated(newTicket);
-    setSubmitted(true);
+    const bodyFormData = new FormData();
+    bodyFormData.append("category", selected?.label || issueType);
+    bodyFormData.append("priority", "MEDIUM");
+    bodyFormData.append("subject", description.slice(0, 72) + (description.length > 72 ? "…" : ""));
+    bodyFormData.append("description", description);
+
+    if (relatedItem?.id) {
+      if (issueType === "vehicle") {
+        bodyFormData.append("vehicleInquiryId", relatedItem.id);
+      } else if (issueType === "inspection") {
+        bodyFormData.append("vehicleInspectionRequestId", relatedItem.id);
+      } else if (issueType === "listing") {
+        bodyFormData.append("vehicleId", relatedItem.id);
+      }
+    }
+
+    if (uploads && uploads.length > 0) {
+      uploads.forEach((file) => {
+        bodyFormData.append("attachments", file);
+      });
+    }
+
+    createMutation.mutate(bodyFormData);
   };
 
   /* ── SUCCESS STATE ── */
@@ -218,7 +317,7 @@ export default function SupportFlow({ onTicketCreated = () => {}, onBack }) {
                 Ticket Created
               </p>
               <h2 className="font-primary text-4xl font-black text-primary tracking-tight">
-                {ticketId}
+                {createdTicketNumber || ticketId}
               </h2>
             </div>
           </div>
@@ -440,62 +539,99 @@ export default function SupportFlow({ onTicketCreated = () => {}, onBack }) {
                       number="02"
                       title="Select Related Item"
                       sub={
-                        relatedGroup
-                          ? `Showing your ${relatedGroup.heading.toLowerCase()}`
+                        isDynamicType
+                          ? `Showing ${heading.toLowerCase()}`
                           : "No record link required for this issue."
                       }
                     />
-                    {relatedGroup ? (
+                    {isDynamicType ? (
                       <div className="space-y-3">
                         <p className="text-[10px] uppercase tracking-widest text-third/35 font-bold px-1">
-                          {relatedGroup.heading}
+                          {heading}
                         </p>
-                        <div className="space-y-2">
-                          {relatedGroup.items.map((item) => {
-                            const Icon = item.icon;
-                            const isSelected = relatedItem?.id === item.id;
-                            return (
-                              <button
-                                key={item.id}
-                                onClick={() => setRelatedItem(item)}
-                                className={`w-full cursor-pointer flex items-center gap-4 px-4 py-4 rounded-xl border transition-all text-left group outline-none ${
-                                  isSelected
-                                    ? "border-fourth/40 bg-fourth/10"
-                                    : "border-primary/10 bg-primary/3 hover:border-primary/20"
-                                }`}
-                              >
-                                <div
-                                  className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${isSelected ? "bg-fourth/15" : "bg-primary/5"}`}
+                        {isLoadingItems ? (
+                          <div className="space-y-3">
+                            {[1, 2, 3].map((n) => (
+                              <div key={n} className="flex items-center gap-4 px-4 py-4 rounded-xl border border-primary/10 bg-primary/3 animate-pulse">
+                                <div className="w-9 h-9 rounded-lg bg-primary/5 shrink-0" />
+                                <div className="flex-1 space-y-2">
+                                  <div className="h-4 bg-primary/10 rounded w-1/3" />
+                                  <div className="h-3 bg-primary/10 rounded w-1/4" />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : items.length > 0 ? (
+                          <div className="space-y-2">
+                            {items.map((item) => {
+                              const Icon = item.icon;
+                              const isSelected = relatedItem?.id === item.id;
+                              return (
+                                <button
+                                  key={item.id}
+                                  onClick={() => setRelatedItem(item)}
+                                  className={`w-full cursor-pointer flex items-center gap-4 px-4 py-4 rounded-xl border transition-all text-left group outline-none ${
+                                    isSelected
+                                      ? "border-fourth/40 bg-fourth/10"
+                                      : "border-primary/10 bg-primary/3 hover:border-primary/20"
+                                  }`}
                                 >
-                                  <Icon
-                                    size={14}
-                                    className={
-                                      isSelected
-                                        ? "text-fourth"
-                                        : "text-third/40"
-                                    }
-                                  />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <p
-                                    className={`text-sm font-semibold truncate transition-colors ${isSelected ? "text-primary" : "text-third/70"}`}
+                                  <div
+                                    className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${isSelected ? "bg-fourth/15" : "bg-primary/5"}`}
                                   >
-                                    {item.label}
-                                  </p>
-                                  <p className="text-[11px] text-third/35 mt-0.5">
-                                    {item.meta}
-                                  </p>
-                                </div>
-                                {isSelected && (
-                                  <CheckCircle2
-                                    size={15}
-                                    className="text-fourth shrink-0"
-                                  />
-                                )}
-                              </button>
-                            );
-                          })}
-                        </div>
+                                    <Icon
+                                      size={14}
+                                      className={
+                                        isSelected
+                                          ? "text-fourth"
+                                          : "text-third/40"
+                                      }
+                                    />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <p
+                                      className={`text-sm font-semibold truncate transition-colors ${isSelected ? "text-primary" : "text-third/70"}`}
+                                    >
+                                      {item.label}
+                                    </p>
+                                    <p className="text-[11px] text-third/35 mt-0.5">
+                                      {item.meta}
+                                    </p>
+                                  </div>
+                                  {isSelected && (
+                                    <CheckCircle2
+                                      size={15}
+                                      className="text-fourth shrink-0"
+                                    />
+                                  )}
+                                </button>
+                              );
+                            })}
+
+                            {hasNextPageItems && (
+                              <div className="flex justify-end mt-4">
+                                <Button
+                                  variant="outline"
+                                  onClick={() => fetchNextPageItems()}
+                                  loading={isFetchingNextPageItems}
+                                  className="px-6 py-2 rounded-full text-xs font-semibold shadow-md"
+                                >
+                                  Load More
+                                </Button>
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="flex items-start gap-3 px-4 py-4 rounded-xl border border-primary/10 bg-primary/3">
+                            <AlertCircle
+                              size={14}
+                              className="text-third/35 mt-0.5 shrink-0"
+                            />
+                            <p className="text-sm text-third/50 leading-relaxed">
+                              {emptyMessage}
+                            </p>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div className="flex items-start gap-3 px-4 py-4 rounded-xl border border-primary/10 bg-primary/3">
@@ -556,23 +692,68 @@ export default function SupportFlow({ onTicketCreated = () => {}, onBack }) {
                         />
                       </div>
                       {uploads.length > 0 && (
-                        <div className="space-y-1.5">
-                          {uploads.map((f, i) => (
-                            <div
-                              key={i}
-                              className="flex items-center justify-between px-3 py-2 rounded-lg border border-primary/10 bg-primary/3 text-xs text-third/60"
-                            >
-                              <span className="truncate font-secondary">
-                                {f.name}
-                              </span>
-                              <button
-                                onClick={() => removeUpload(i)}
-                                className="ml-2 text-third/30 hover:text-warning shrink-0 transition-colors"
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
+                          {uploads.map((file, idx) => {
+                            const isImg = file.type && file.type.startsWith("image/");
+                            const isVid = file.type && file.type.startsWith("video/");
+                            const displayUrl = URL.createObjectURL(file);
+                            const fileSize = (file.size / (1024 * 1024)).toFixed(2) + " MB";
+
+                            return (
+                              <div
+                                key={idx}
+                                className="relative group border border-primary/10 rounded-xl overflow-hidden bg-black/40 h-28 flex flex-col justify-between"
                               >
-                                <X size={12} />
-                              </button>
-                            </div>
-                          ))}
+                                {/* Preview Media */}
+                                {isImg ? (
+                                  <img
+                                    src={displayUrl}
+                                    alt={file.name}
+                                    className="w-full h-full object-cover"
+                                  />
+                                ) : isVid ? (
+                                  <div className="w-full h-full flex items-center justify-center bg-black/60 text-white relative">
+                                    <video
+                                      src={displayUrl}
+                                      className="w-full h-full object-cover opacity-70"
+                                    />
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                      <span className="bg-fourth/80 text-primary text-[10px] font-bold uppercase px-2 py-0.5 rounded">
+                                        Video
+                                      </span>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <div className="w-full h-full flex flex-col items-center justify-center p-2 text-center text-third">
+                                    <FileIcon size={24} />
+                                    <span className="text-[10px] truncate max-w-full mt-1">
+                                      {file.name}
+                                    </span>
+                                  </div>
+                                )}
+
+                                {/* File details overlay on hover */}
+                                <div className="absolute inset-0 bg-black/75 opacity-0 group-hover:opacity-100 transition duration-200 flex flex-col justify-between p-2">
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      removeUpload(idx);
+                                    }}
+                                    className="self-end p-1 bg-red-500 hover:bg-red-600 text-white rounded-full transition cursor-pointer"
+                                  >
+                                    <X size={12} />
+                                  </button>
+                                  <div className="text-[10px] text-white space-y-0.5">
+                                    <p className="font-semibold truncate">
+                                      {file.name}
+                                    </p>
+                                    <p className="text-gray-400">{fileSize}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
                         </div>
                       )}
                     </div>
@@ -650,6 +831,7 @@ export default function SupportFlow({ onTicketCreated = () => {}, onBack }) {
                       variant="outlineSecondary"
                       size="sm"
                       onClick={() => setStep((s) => s - 1)}
+                      disabled={createMutation.isPending}
                     >
                       Previous
                     </Button>
@@ -673,7 +855,13 @@ export default function SupportFlow({ onTicketCreated = () => {}, onBack }) {
                       Continue <ArrowRight size={14} className="ml-2" />
                     </Button>
                   ) : (
-                    <Button variant="ghost" size="sm" onClick={handleSubmit}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleSubmit}
+                      loading={createMutation.isPending}
+                      disabled={createMutation.isPending}
+                    >
                       Submit Ticket <ArrowRight size={14} className="ml-2" />
                     </Button>
                   )}
