@@ -12,7 +12,7 @@ import {
   CreditCard,
   InspectIcon,
   Star,
-  Ticket,
+  HelpCircle,
   Car,
 } from "lucide-react";
 
@@ -46,11 +46,6 @@ const menu = [
     icon: CreditCard,
     href: "/consult/dashboard/billing",
   },
-  {
-    label: "Help Center",
-    icon: Ticket,
-    href: "/consult/dashboard/help-center",
-  },
 ];
 
 export default function Sidebar({ isOpen, onClose }) {
@@ -76,40 +71,55 @@ export default function Sidebar({ isOpen, onClose }) {
         w-64 md:w-16 md:hover:w-64 bg-secondary md:bg-transparent
         transition-all duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
-        border-r border-third/30 p-3 md:p-2 space-y-2.5 overflow-y-auto overflow-x-hidden custom-scrollbar
+        border-r border-third/30 p-3 md:p-2 flex flex-col justify-between overflow-hidden
         group
       `}
     >
       {/* <h1 className="text-xl font-bold mt-4 mb-4">Reecomm Dashboard</h1> */}
 
-      {menu.map((m, i) => {
-        const isActive =
-          router.pathname === m.href ||
-          router.pathname.startsWith(m.href + "/") ||
-          (m.href === "/consult/dashboard/ppc" && router.pathname.startsWith("/consult/dashboard/ads")) ||
-          (router.pathname === "/consult/dashboard" &&
-            m.href === "/consult/dashboard/overview");
+      <div className="flex-1 space-y-2.5 overflow-y-auto overflow-x-hidden custom-scrollbar pr-1">
+        {menu.map((m, i) => {
+          const isActive =
+            router.pathname === m.href ||
+            router.pathname.startsWith(m.href + "/") ||
+            (m.href === "/consult/dashboard/ppc" && router.pathname.startsWith("/consult/dashboard/ads")) ||
+            (router.pathname === "/consult/dashboard" &&
+              m.href === "/consult/dashboard/overview");
 
-        return (
-          <Link
-            key={i}
-            href={m.href}
-            onClick={onClose}
-            className={`flex items-center p-3 md:p-2 rounded-lg transition-all duration-300
-        ${isActive
-                ? "bg-primary text-secondary shadow-lg"
-                : "hover:bg-primary/10 text-primary"
-              }`}
-          >
-            <div className="flex-shrink-0 flex items-center justify-center w-6 h-6">
-              <m.icon size={18} />
-            </div>
-            <span className="ml-3 md:ml-0 md:group-hover:ml-3 md:opacity-0 md:group-hover:opacity-100 max-w-full md:max-w-0 md:group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden">
-              {m.label}
-            </span>
-          </Link>
-        );
-      })}
+          return (
+            <Link
+              key={i}
+              href={m.href}
+              onClick={onClose}
+              className={`flex items-center p-3 md:p-2 rounded-lg transition-all duration-300
+          ${isActive
+                  ? "bg-primary text-secondary shadow-lg"
+                  : "hover:bg-primary/10 text-primary"
+                }`}
+            >
+              <div className="flex-shrink-0 flex items-center justify-center w-6 h-6">
+                <m.icon size={18} />
+              </div>
+              <span className="ml-3 md:ml-0 md:group-hover:ml-3 md:opacity-0 md:group-hover:opacity-100 max-w-full md:max-w-0 md:group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden">
+                {m.label}
+              </span>
+            </Link>
+          );
+        })}
+      </div>
+
+      <div className="pt-2 border-t border-third/30">
+        <Link
+          href="/help"
+          onClick={onClose}
+          className="flex items-center p-3 md:p-2 rounded-lg transition-all duration-300 hover:bg-primary/10 text-primary"
+          title="Help Center"
+        >
+          <div className="flex-shrink-0 flex items-center justify-center w-6 h-6">
+            <HelpCircle size={18} />
+          </div>
+        </Link>
+      </div>
     </aside>
   );
 }
