@@ -202,6 +202,8 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
       });
 
       if (!res?.error && (res?.success || res?.status)) {
+          localStorage.removeItem("otpBlockUntil");
+        setCountdown(0);
         onSuccess();
         setTimeout(() => {
           if (accountType === "consultant") {

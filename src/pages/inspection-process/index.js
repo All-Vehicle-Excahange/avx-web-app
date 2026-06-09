@@ -48,7 +48,7 @@ function index() {
           </>
         }
         consultantDescription="Explore our inventory of professionally checked and verified vehicles to buy with absolute confidence."
-        consultantLink="/vehicles"
+        consultantLink="/search"
         consultantButtonText="View Inspected Cars"
         consultantIcon={CarFront}
       />

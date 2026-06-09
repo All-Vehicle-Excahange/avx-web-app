@@ -16,7 +16,7 @@ export default function Cta({
   buyerLabel = "For Buyers",
   buyerTitle,
   buyerDescription = "Discover verified vehicles through structured, transparent listings.",
-  buyerLink = "/vehicles",
+  buyerLink = "/search",
   buyerButtonText = "Enter Marketplace",
   buyerIcon = CarFront,
   consultantLabel = "For Consultants",

@@ -172,6 +172,8 @@ function LoginPopup({
       });
 
       if (res?.success || res?.status) {
+        localStorage.removeItem("otpBlockUntil");
+        setCountdown(0);
         onSuccess();
         handleClose();
       }

@@ -97,7 +97,7 @@ export default function Sidebar({ isOpen, onClose }) {
                   : "hover:bg-primary/10 text-primary"
                 }`}
             >
-              <div className="flex-shrink-0 flex items-center justify-center w-6 h-6">
+              <div className="shrink-0 flex items-center justify-center w-6 h-6">
                 <m.icon size={18} />
               </div>
               <span className="ml-3 md:ml-0 md:group-hover:ml-3 md:opacity-0 md:group-hover:opacity-100 max-w-full md:max-w-0 md:group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden">
@@ -115,7 +115,7 @@ export default function Sidebar({ isOpen, onClose }) {
           className="flex items-center p-3 md:p-2 rounded-lg transition-all duration-300 hover:bg-primary/10 text-primary"
           title="Help Center"
         >
-          <div className="flex-shrink-0 flex items-center justify-center w-6 h-6">
+          <div className="shrink-0 flex items-center justify-center w-6 h-6">
             <HelpCircle size={18} />
           </div>
         </Link>
