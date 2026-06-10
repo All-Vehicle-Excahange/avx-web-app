@@ -7,22 +7,22 @@ const items = [
   {
     title: "Independent Car Consultants",
     desc: "Solo automotive professionals looking to build a stronger digital presence and generate qualified leads.",
-    img: "/consultant.webp",
+    img: "/1_cp.webp",
   },
   {
     title: "Multi-Vehicle Dealerships",
     desc: "Dealerships managing multiple listings who need structured visibility and performance tracking.",
-    img: "/dealership.webp",
+    img: "/2_cp.webp",
   },
   {
     title: "Growing Automotive Businesses",
     desc: "Businesses expanding operations and looking to scale visibility across cities and categories.",
-    img: "/business.png",
+    img: "/3_cp.webp",
   },
   {
     title: "City-Level Operators",
     desc: "Local automotive operators targeting regional markets with verified listings and insights.",
-    img: "/car-operator.webp",
+    img: "/4_cp.webp",
   },
 ];
 
@@ -36,7 +36,6 @@ export default function WhoItsFor() {
   return (
     <section className="relative py-10 overflow-hidden">
       <div className="relative z-10 max-w-[1440px] mx-auto w-full">
-
         {/* HEADER */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl text-primary font-semibold leading-[1.05]">

@@ -1,7 +1,14 @@
 import React from "react";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { getWalletBalanceQuery } from "@/queries/waller.queries";
 
 export default function SummaryPanel({ placement, billing, vehicle, dailyBudget, maxBid, campaignType }) {
+  const { data: walletData } = useQuery({
+    ...getWalletBalanceQuery(),
+  });
+  const walletBalance = walletData?.balance ?? 0;
+
   const isCPI = billing === "CPI";
   const totalSpend = dailyBudget * 30;
 
@@ -87,7 +94,9 @@ export default function SummaryPanel({ placement, billing, vehicle, dailyBudget,
         <div className="flex items-center justify-between gap-3">
           <div>
             <span className="text-[11px] text-third font-medium block">Wallet balance</span>
-            <span className="text-sm font-bold text-[#1D9E75] block mt-0.5">₹8,240</span>
+            <span className="text-sm font-bold text-[#1D9E75] block mt-0.5">
+              ₹{new Intl.NumberFormat("en-IN").format(walletBalance)}
+            </span>
           </div>
           <Link
             href="/consult/dashboard/billing"

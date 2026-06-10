@@ -8,18 +8,10 @@ import {
   MousePointerClick,
   Eye,
   Plus,
-  SlidersHorizontal,
   X,
-  Info,
-  MoreHorizontal,
   ChevronDown,
-  CheckCircle2,
-  Heart,
-  Clock,
-  CircleDollarSign,
   CheckCircle,
   Lock,
-  Crown,
 } from "lucide-react";
 import { getSellerTierTitle } from "@/lib/helper";
 import Button from "@/components/ui/button";
@@ -32,14 +24,19 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  CartesianGrid,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 import { useRouter } from "next/navigation";
 import StatCard from "./components/StateCard";
 import ResultsModal from "./components/ResultsModal";
 import UpgradeTierPopup from "./components/UpgradeTierPopup";
+import {
+  getAllDraftCampions,
+  getAllCampaigns,
+  changeCampaignStatus,
+} from "@/services/ppc.service";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 // --- Mock Data ---
 const audienceData = [
@@ -50,78 +47,6 @@ const audienceData = [
   { day: "F", value: 850, color: "#0062cc" },
   { day: "S", value: 980, color: "#004b9b" },
   { day: "S", value: 800, color: "#0062cc" },
-];
-
-// --- Mock Recent Ads Data ---
-const initialRecentAds = [
-  {
-    id: 1,
-    title: "BMW X1 — 2023 xDrive20d",
-    type: "Homepage featured CPC",
-    rate: "₹4.50/click",
-    placement: "Homepage featured",
-    model: "CPC",
-    impressions: "2,840",
-    clicksLabel: "Clicks",
-    clicksValue: "124",
-    ctrLabel: "CTR",
-    ctrValue: "4.4%",
-    spent: "₹558",
-    budget: "₹750/day",
-    status: "Active",
-    image: "/big_card_car.jpg",
-  },
-  {
-    id: 2,
-    title: "Mercedes C-Class — 2022 C200",
-    type: "Search result CPI",
-    rate: "₹18/inquiry",
-    placement: "Search result",
-    model: "CPI",
-    impressions: "1,640",
-    clicksLabel: "Inquiries",
-    clicksValue: "12",
-    ctrLabel: "INQ rate",
-    ctrValue: "0.7%",
-    spent: "₹216",
-    budget: "₹400/day",
-    status: "Active",
-    image: "/big_card_car.jpg",
-  },
-  {
-    id: 3,
-    title: "Audi A4 — 2021 40 TFSI",
-    type: "Consultant page CPC",
-    rate: "₹3.20/click",
-    placement: "Consultant page",
-    model: "CPC",
-    impressions: "980",
-    clicksLabel: "Clicks",
-    clicksValue: "61",
-    ctrLabel: "CTR",
-    ctrValue: "6.2%",
-    spent: "₹195",
-    budget: "₹300/day",
-    status: "Paused",
-    image: "/big_card_car.jpg",
-  },
-  {
-    id: 4,
-    title: "Toyota Fortuner — 2022 Legender",
-    type: "Search result CPI",
-    rate: "₹22/inquiry",
-    placement: "Search result",
-    model: "CPI",
-    impressions: "3,120",
-    clicksLabel: "Inquiries",
-    clicksValue: "8",
-    ctrLabel: "INQ rate",
-    ctrValue: "0.3%",
-    spent: "₹176",
-    budget: "₹500/day",
-    status: "Completed",
-    image: "/big_card_car.jpg",
-  },
 ];
 
 export default function PpcComponent() {
@@ -142,16 +67,185 @@ export default function PpcComponent() {
   const [showResults, setShowResults] = useState(false);
   const [selectedAd, setSelectedAd] = useState(null);
 
+  // Status toggle handler
+  const [toggledStatuses, setToggledStatuses] = useState({});
+
+  const handleToggleAd = async (id, currentStatus) => {
+    const current = toggledStatuses[id] || currentStatus;
+    const next =
+      current === "Active" ||
+      current === "In Review" ||
+      current === "Completed"
+        ? "Paused"
+        : "Active";
+
+    const apiStatus = next === "Active" ? "ACTIVE" : "PAUSED";
+
+    // Optimistically update the UI status
+    setToggledStatuses((prev) => ({ ...prev, [id]: next }));
+
+    try {
+      await changeCampaignStatus(id, apiStatus);
+      toast.success(
+        next === "Active"
+          ? "Campaign activated successfully"
+          : "Campaign paused successfully",
+      );
+    } catch (error) {
+      console.error("Failed to change campaign status:", error);
+      // Revert the status on error
+      setToggledStatuses((prev) => ({ ...prev, [id]: current }));
+      toast.error("Failed to update campaign status");
+    }
+  };
+
   // States for Recent Ads filtering
   const [activeFilter, setActiveFilter] = useState("All");
+  const [drafts, setDrafts] = useState([]);
+  const [isLoadingDrafts, setIsLoadingDrafts] = useState(false);
 
-  const filteredAds = initialRecentAds.filter((ad) => {
+  useEffect(() => {
+    if (activeFilter === "Draft") {
+      setIsLoadingDrafts(true);
+      getAllDraftCampions()
+        .then((res) => {
+          const dataList = Array.isArray(res)
+            ? res
+            : Array.isArray(res?.data)
+              ? res.data
+              : Array.isArray(res?.data?.data)
+                ? res.data.data
+                : res?.data
+                  ? [res.data]
+                  : [];
+          setDrafts(dataList);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch drafts:", err);
+          setDrafts([]);
+        })
+        .finally(() => {
+          setIsLoadingDrafts(false);
+        });
+    }
+  }, [activeFilter]);
+
+  const mappedDrafts = drafts.map((d) => ({
+    id: d.campaignId || d.id,
+    title: d.name || "Untitled Draft",
+    placement:
+      d.placementTypes && d.placementTypes.length > 0
+        ? d.placementTypes
+            .map((p) => p.toLowerCase().replace(/_/g, " "))
+            .join(", ")
+        : "No placements selected",
+    model: d.billingType || "—",
+    rate: d.bidAmount ? `₹${d.bidAmount}` : "—",
+    spent: "₹0",
+    budget: d.dailyBudget ? `₹${d.dailyBudget}/day` : "—",
+    impressions: "—",
+    clicksValue: "—",
+    clicksLabel: d.billingType === "CPI" ? "Inquiries" : "Clicks",
+    ctrValue: "—",
+    ctrLabel: d.billingType === "CPI" ? "INQ rate" : "CTR",
+    status: "Draft",
+    isDraft: true,
+  }));
+
+  // 1. Fetch campaigns using useInfiniteQuery
+  const {
+    data: campaignsInfiniteData,
+    isFetching: campaignsLoading,
+    fetchNextPage: fetchNextCampaignsPage,
+    hasNextPage: hasNextCampaignsPage,
+  } = useInfiniteQuery({
+    queryKey: ["campaigns-infinite"],
+    queryFn: async ({ pageParam = 1 }) => {
+      const res = await getAllCampaigns({
+        pageNo: pageParam,
+        pageSize: 10,
+      });
+      return res;
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      const pagination = lastPage?.pagination;
+      const totalPages = pagination?.totalPages || 1;
+      const currentPage = pagination?.currentPage || 1;
+      return currentPage < totalPages ? currentPage + 1 : undefined;
+    },
+  });
+
+  const campaigns =
+    campaignsInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
+
+  const mappedCampaigns = campaigns.map((c) => {
+    // Map placementTypes list to friendly readable string
+    const placementStr =
+      c.placementTypes && c.placementTypes.length > 0
+        ? c.placementTypes
+            .map((p) => {
+              const lower = p.toLowerCase().replace(/_/g, " ");
+              return lower.replace(/\b\w/g, (char) => char.toUpperCase());
+            })
+            .join(", ")
+        : "No placements";
+
+    // Rate format
+    const rateVal = c.bidAmount
+      ? `₹${c.bidAmount}/${c.billingType === "CPI" ? "inquiry" : "click"}`
+      : "—";
+
+    // Status mapping
+    let statusText = c.status;
+    if (c.status === "ACTIVE" || c.adStatus === "ACTIVE") {
+      statusText = "Active";
+    } else if (c.status === "INREVIEW" || c.ppcStatus === "INREVIEW") {
+      statusText = "In Review";
+    } else if (c.status === "DRAFT" || c.ppcStatus === "DRAFT") {
+      statusText = "Draft";
+    } else if (c.status === "COMPLETED") {
+      statusText = "Completed";
+    } else if (c.status === "PAUSED") {
+      statusText = "Paused";
+    } else {
+      statusText = c.status
+        ? c.status.charAt(0).toUpperCase() + c.status.slice(1).toLowerCase()
+        : "Unknown";
+    }
+
+    const campId = c.campaignId || c.id;
+    if (toggledStatuses[campId]) {
+      statusText = toggledStatuses[campId];
+    }
+
+    return {
+      id: c.campaignId || c.id,
+      title: c.name || "Untitled Campaign",
+      placement: placementStr,
+      model: c.billingType || "—",
+      rate: rateVal,
+      spent: c.spentAmount !== undefined ? `₹${c.spentAmount}` : "₹0",
+      budget: c.dailyBudget ? `₹${c.dailyBudget}/day` : "—",
+      impressions: c.impressionsCount !== undefined ? c.impressionsCount : "0",
+      clicksValue: c.clicksCount !== undefined ? c.clicksCount : "0",
+      clicksLabel: c.billingType === "CPI" ? "Inquiries" : "Clicks",
+      ctrValue: c.ctr !== undefined ? `${c.ctr}%` : "0%",
+      ctrLabel: c.billingType === "CPI" ? "INQ rate" : "CTR",
+      status: statusText,
+      isDraft: c.status === "DRAFT" || c.ppcStatus === "DRAFT",
+    };
+  });
+
+  const filteredAds = mappedCampaigns.filter((ad) => {
     if (activeFilter === "All") return true;
     if (activeFilter === "CPC" || activeFilter === "CPI") {
       return ad.model === activeFilter;
     }
     return ad.placement.toLowerCase().includes(activeFilter.toLowerCase());
   });
+
+  const displayAds = activeFilter === "Draft" ? mappedDrafts : filteredAds;
 
   // Animated close for Customize modal (mirrors LoginPopup pattern)
   const [isClosingCustomize, setIsClosingCustomize] = useState(false);
@@ -299,6 +393,7 @@ export default function PpcComponent() {
               "Consultant page",
               "CPC",
               "CPI",
+              "Draft",
             ].map((f) => (
               <button
                 key={f}
@@ -315,25 +410,482 @@ export default function PpcComponent() {
           </div>
         </div>
 
-        {/* Recent Ads List */}
+        {/* Recent Ads List Table */}
         <div className="space-y-4">
-          {filteredAds.length > 0 ? (
-            filteredAds.map((ad) => (
-              <RecentAdCard
-                key={ad.id}
-                ad={ad}
-                onOpenResults={() => {
-                  setSelectedAd(ad);
-                  setShowResults(true);
-                }}
-              />
-            ))
+          {isLoadingDrafts ||
+          (activeFilter !== "Draft" &&
+            campaignsLoading &&
+            campaigns.length === 0) ? (
+            <div className="py-8 text-center text-zinc-500 text-sm animate-pulse">
+              {activeFilter === "Draft"
+                ? "Loading drafts..."
+                : "Loading campaigns..."}
+            </div>
+          ) : displayAds.length > 0 ? (
+            <>
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto border border-white/10 rounded-2xl bg-secondary/30 backdrop-blur-sm">
+                <table className="w-full text-left border-collapse text-sm">
+                  <thead>
+                    <tr className="border-b border-white/10 text-third font-medium">
+                      <th className="p-4 w-12 text-center"></th>
+                      <th className="p-4 text-xs tracking-wider uppercase">
+                        Campaign
+                      </th>
+                      <th className="p-4 text-xs tracking-wider uppercase">
+                        Placement
+                      </th>
+                      <th className="p-4 text-xs tracking-wider uppercase">
+                        Status
+                      </th>
+                      <th className="p-4 text-xs tracking-wider uppercase">
+                        Billing
+                      </th>
+                      <th className="p-4 text-xs tracking-wider uppercase">
+                        Budget
+                      </th>
+                      <th className="p-4 text-xs tracking-wider uppercase text-center">
+                        Impressions
+                      </th>
+                      <th className="p-4 text-xs tracking-wider uppercase text-center">
+                        Results
+                      </th>
+                      <th className="p-4 text-xs tracking-wider uppercase text-center">
+                        CTR
+                      </th>
+                      <th className="p-4 text-xs tracking-wider uppercase text-right">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {displayAds.map((ad) => {
+                      const isPaused = ad.status === "Paused";
+                      const isActive =
+                        ad.status === "Active" ||
+                        ad.status === "In Review" ||
+                        ad.status === "Completed";
+
+                      // Custom colors for status badge
+                      let statusClass =
+                        "bg-zinc-500/10 text-zinc-300 border border-zinc-500/20";
+                      if (ad.status === "Active") {
+                        statusClass =
+                          "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+                      } else if (ad.status === "Paused") {
+                        statusClass =
+                          "bg-amber-500/10 text-amber-400 border border-amber-500/20";
+                      } else if (ad.status === "Draft") {
+                        statusClass =
+                          "bg-yellow-500/10 text-yellow-500 border border-yellow-500/20";
+                      } else if (ad.status === "In Review") {
+                        statusClass =
+                          "bg-blue-500/10 text-blue-400 border border-blue-500/20";
+                      }
+
+                      // Check title
+                      const displayTitle =
+                        typeof ad.placement === "string" &&
+                        ad.placement.toLowerCase().includes("consultant page")
+                          ? "Adarsh Auto Consultant"
+                          : ad.title;
+
+                      const placements =
+                        typeof ad.placement === "string"
+                          ? ad.placement
+                              .split(",")
+                              .map((p) => p.trim())
+                              .filter(Boolean)
+                          : [];
+
+                      return (
+                        <tr
+                          key={ad.id}
+                          onClick={() => {
+                            if (ad.isDraft) return;
+                            setSelectedAd(ad);
+                            setShowResults(true);
+                          }}
+                          className="transition-colors hover:bg-white/5 cursor-pointer"
+                        >
+                          {/* Toggle Switch */}
+                          <td
+                            className="p-4 text-center w-12"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {!ad.isDraft && (
+                              <button
+                                onClick={() => handleToggleAd(ad.id, ad.status)}
+                                className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden ${
+                                  ad.status === "Active"
+                                    ? "bg-primary"
+                                    : "bg-zinc-700"
+                                }`}
+                              >
+                                <span
+                                  className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-secondary shadow-lg ring-0 transition duration-200 ease-in-out ${
+                                    ad.status === "Active"
+                                      ? "translate-x-4"
+                                      : "translate-x-0"
+                                  }`}
+                                />
+                              </button>
+                            )}
+                          </td>
+
+                          {/* Campaign */}
+                          <td className="p-4">
+                            <h4 className="font-semibold text-sm sm:text-base text-white leading-tight">
+                              {displayTitle}
+                            </h4>
+                          </td>
+
+                          {/* Placement column */}
+                          <td className="p-4">
+                            <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide py-0.5 whitespace-nowrap max-w-[160px] sm:max-w-[220px] md:max-w-[260px] lg:max-w-[320px]">
+                              {placements.map((p, idx) => {
+                                let tagClass = "text-blue-400";
+                                if (p.toLowerCase().includes("search")) {
+                                  tagClass = "text-emerald-400";
+                                } else if (
+                                  p.toLowerCase().includes("consult") ||
+                                  p.toLowerCase().includes("detail") ||
+                                  p.toLowerCase().includes("vehicle")
+                                ) {
+                                  tagClass = "text-amber-400";
+                                }
+                                return (
+                                  <div key={idx} className="flex items-center">
+                                    {idx > 0 && (
+                                      <span className="text-zinc-600 mx-1.5">
+                                        •
+                                      </span>
+                                    )}
+                                    <span
+                                      className={`text-[10px] font-semibold inline-block shrink-0 ${tagClass}`}
+                                    >
+                                      {p}
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </td>
+
+                          {/* Status column */}
+                          <td className="p-4 whitespace-nowrap">
+                            <span
+                              className={`px-2.5 py-1 rounded text-xs font-semibold inline-block whitespace-nowrap ${statusClass}`}
+                            >
+                              {ad.status}
+                            </span>
+                          </td>
+
+                          {/* Billing */}
+                          <td className="p-4 whitespace-nowrap">
+                            <div className="space-y-0.5">
+                              <span className="text-sm font-bold text-white block">
+                                {ad.model}
+                              </span>
+                              <span className="text-xs text-zinc-400 block font-medium">
+                                {ad.rate}
+                              </span>
+                            </div>
+                          </td>
+
+                          {/* Budget & Spent */}
+                          <td className="p-4 whitespace-nowrap">
+                            <div className="space-y-0.5">
+                              <span className="text-sm font-bold text-white block">
+                                {ad.budget}
+                              </span>
+                              <span className="text-xs text-zinc-400 block font-medium">
+                                {ad.spent} spent
+                              </span>
+                            </div>
+                          </td>
+
+                          {/* Impressions */}
+                          <td className="p-4 text-center">
+                            <span className="text-sm font-bold text-white">
+                              {ad.impressions}
+                            </span>
+                          </td>
+
+                          {/* Results */}
+                          <td className="p-4 text-center">
+                            <div className="space-y-0.5">
+                              <span className="text-sm font-bold text-white block">
+                                {ad.clicksValue}
+                              </span>
+                              <span className="text-[10px] text-zinc-500 block font-medium">
+                                {ad.clicksLabel}
+                              </span>
+                            </div>
+                          </td>
+
+                          {/* CTR */}
+                          <td className="p-4 text-center">
+                            <div className="space-y-0.5">
+                              <span className="text-sm font-bold text-white block">
+                                {ad.ctrValue}
+                              </span>
+                              <span className="text-[10px] text-zinc-500 block font-medium">
+                                {ad.ctrLabel}
+                              </span>
+                            </div>
+                          </td>
+
+                          {/* Action Column */}
+                          <td className="p-4 text-right whitespace-nowrap">
+                            <div className="flex items-center justify-end">
+                              {ad.isDraft ? (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    push(
+                                      `/consult/dashboard/ads/create?campaignId=${ad.id}`,
+                                    );
+                                  }}
+                                  className="px-3 py-1 bg-fourth hover:bg-fourth/80 text-white rounded text-xs font-semibold cursor-pointer transition-colors"
+                                >
+                                  Complete
+                                </button>
+                              ) : ad.status === "Paused" ? (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    push(
+                                      `/consult/dashboard/ads/create?campaignId=${ad.id}`,
+                                    );
+                                  }}
+                                  className="px-3 py-1 bg-fourth hover:bg-fourth/80 text-white rounded text-xs font-semibold cursor-pointer transition-colors"
+                                >
+                                  Edit
+                                </button>
+                              ) : (
+                                <span className="text-zinc-500 text-xs">—</span>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile Card Grid View */}
+              <div className="grid grid-cols-1 gap-4 md:hidden">
+                {displayAds.map((ad) => {
+                  const isPaused = ad.status === "Paused";
+                  const isActive =
+                    ad.status === "Active" ||
+                    ad.status === "In Review" ||
+                    ad.status === "Completed";
+
+                  let statusClass =
+                    "bg-zinc-500/10 text-zinc-300 border border-zinc-500/20";
+                  if (ad.status === "Active") {
+                    statusClass =
+                      "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+                  } else if (ad.status === "Paused") {
+                    statusClass =
+                      "bg-amber-500/10 text-amber-400 border border-amber-500/20";
+                  } else if (ad.status === "Draft") {
+                    statusClass =
+                      "bg-yellow-500/10 text-yellow-500 border border-yellow-500/20";
+                  } else if (ad.status === "In Review") {
+                    statusClass =
+                      "bg-blue-500/10 text-blue-400 border border-blue-500/20";
+                  }
+
+                  const displayTitle =
+                    typeof ad.placement === "string" &&
+                    ad.placement.toLowerCase().includes("consultant page")
+                      ? "Adarsh Auto Consultant"
+                      : ad.title;
+
+                  const placements =
+                    typeof ad.placement === "string"
+                      ? ad.placement
+                          .split(",")
+                          .map((p) => p.trim())
+                          .filter(Boolean)
+                      : [];
+
+                  return (
+                    <div
+                      key={ad.id}
+                      onClick={() => {
+                        if (ad.isDraft) return;
+                        setSelectedAd(ad);
+                        setShowResults(true);
+                      }}
+                      className="bg-primary/5 border border-third/15 rounded-xl p-4 space-y-4 hover:border-fourth/40 active:bg-primary/10 transition-all cursor-pointer"
+                    >
+                      <div className="flex justify-between items-start gap-2">
+                        <div className="space-y-1 flex-1">
+                          <h4 className="font-semibold text-sm text-white line-clamp-2 leading-tight">
+                            {displayTitle}
+                          </h4>
+                          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide py-0.5 whitespace-nowrap max-w-[200px]">
+                            {placements.map((p, idx) => {
+                              let tagClass = "text-blue-400";
+                              if (p.toLowerCase().includes("search")) {
+                                tagClass = "text-emerald-400";
+                              } else if (
+                                p.toLowerCase().includes("consult") ||
+                                p.toLowerCase().includes("detail") ||
+                                p.toLowerCase().includes("vehicle")
+                              ) {
+                                tagClass = "text-amber-400";
+                              }
+                              return (
+                                <div key={idx} className="flex items-center">
+                                  {idx > 0 && (
+                                    <span className="text-zinc-600 mx-1">
+                                      •
+                                    </span>
+                                  )}
+                                  <span
+                                    className={`text-[9px] font-semibold inline-block shrink-0 ${tagClass}`}
+                                  >
+                                    {p}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                        <div
+                          className="shrink-0 flex items-center gap-2"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {!ad.isDraft && (
+                            <button
+                              onClick={() => handleToggleAd(ad.id, ad.status)}
+                              className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden ${
+                                ad.status === "Active"
+                                  ? "bg-primary"
+                                  : "bg-zinc-700"
+                              }`}
+                            >
+                              <span
+                                className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-secondary shadow-lg ring-0 transition duration-200 ease-in-out ${
+                                  ad.status === "Active"
+                                    ? "translate-x-4"
+                                    : "translate-x-0"
+                                }`}
+                              />
+                            </button>
+                          )}
+                          {ad.isDraft ? (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                push(
+                                  `/consult/dashboard/ads/create?campaignId=${ad.id}`,
+                                );
+                              }}
+                              className="px-2.5 py-0.5 bg-fourth hover:bg-fourth/80 text-white rounded text-xs font-semibold cursor-pointer transition-colors"
+                            >
+                              Complete
+                            </button>
+                          ) : (
+                            <div className="flex items-center gap-2">
+                              <span
+                                className={`px-2 py-0.5 rounded text-[10px] font-semibold ${statusClass}`}
+                              >
+                                {ad.status}
+                              </span>
+                              {ad.status === "Paused" && (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    push(
+                                      `/consult/dashboard/ads/create?campaignId=${ad.id}`,
+                                    );
+                                  }}
+                                  className="px-2.5 py-0.5 bg-fourth hover:bg-fourth/80 text-white rounded text-[10px] font-semibold cursor-pointer transition-colors"
+                                >
+                                  Edit
+                                </button>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Stats Grid */}
+                      <div className="grid grid-cols-3 gap-2 bg-white/2 rounded-lg p-2.5 text-center text-xs">
+                        <div>
+                          <span className="text-zinc-500 block text-[10px] uppercase tracking-wider font-semibold">
+                            Impressions
+                          </span>
+                          <span className="text-white font-bold mt-0.5 block">
+                            {ad.impressions}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-zinc-500 block text-[10px] uppercase tracking-wider font-semibold">
+                            {ad.clicksLabel}
+                          </span>
+                          <span className="text-white font-bold mt-0.5 block">
+                            {ad.clicksValue}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-zinc-500 block text-[10px] uppercase tracking-wider font-semibold">
+                            {ad.ctrLabel}
+                          </span>
+                          <span className="text-white font-bold mt-0.5 block">
+                            {ad.ctrValue}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Footer Details */}
+                      <div className="flex justify-between items-center text-xs text-zinc-400 pt-2 border-t border-white/5">
+                        <div>
+                          <span className="font-semibold text-white">
+                            {ad.model}
+                          </span>
+                          <span className="mx-1.5">·</span>
+                          <span>{ad.rate}</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-white font-bold">
+                            {ad.budget}
+                          </span>
+                          <span className="mx-1.5">·</span>
+                          <span>{ad.spent} spent</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
           ) : (
             <div className="py-8 text-center text-zinc-500 text-sm">
               No recent ads match your filter criteria.
             </div>
           )}
         </div>
+
+        {activeFilter !== "Draft" && hasNextCampaignsPage && (
+          <div className="flex justify-end mt-4">
+            <Button
+              variant="outline"
+              onClick={() => fetchNextCampaignsPage()}
+              disabled={campaignsLoading}
+              className="px-6 py-2 rounded-full text-sm font-semibold shadow-md cursor-pointer"
+            >
+              {campaignsLoading ? "Loading..." : "Load More"}
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* UNIFIED CAMPAIGN INSIGHTS & RECOMMENDATIONS */}
@@ -707,109 +1259,6 @@ export default function PpcComponent() {
       {/* UPGRADE PLAN POPUP FOR BASIC TIER */}
       <UpgradeTierPopup isOpen={showUpgradeModal} />
     </section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* SUB COMPONENTS                              */
-/* -------------------------------------------------------------------------- */
-function RecentAdCard({ ad, onOpenResults }) {
-  const isPaused = ad.status === "Paused";
-  const isActive = ad.status === "Active";
-
-  // Custom colors for tags based on placement
-  let tagClass = "bg-blue-500/10 text-blue-400";
-  if (ad.placement === "Search result") {
-    tagClass = "bg-emerald-500/10 text-emerald-400";
-  } else if (ad.placement === "Consultant page") {
-    tagClass = "bg-amber-500/10 text-amber-400";
-  }
-
-  // Custom colors for status
-  let statusClass = "bg-zinc-500/10 text-zinc-300";
-  if (isActive) {
-    statusClass = "bg-emerald-500/10 text-emerald-400";
-  } else if (isPaused) {
-    statusClass = "bg-amber-500/10 text-amber-400";
-  }
-
-  const displayTitle =
-    ad.placement === "Consultant page" ? "Adarsh Auto Consultant" : ad.title;
-
-  return (
-    <div
-      onClick={onOpenResults}
-      className="flex flex-col md:flex-row justify-between items-start md:items-center py-5 border-b border-white/5 hover:bg-white/5 px-2 rounded-xl transition-all duration-200 cursor-pointer gap-6"
-    >
-      {/* Left side: Vehicle title, placement tag and billing info */}
-      <div className="space-y-2 select-none">
-        <h4 className="font-semibold text-sm sm:text-base text-white leading-tight">
-          {displayTitle}
-        </h4>
-        <div className="flex items-center gap-2 flex-wrap">
-          <span
-            className={`px-2 py-0.5 rounded text-[11px] font-medium ${tagClass}`}
-          >
-            {ad.placement}
-          </span>
-          <span className="text-xs text-zinc-400 font-medium">
-            {ad.model} · {ad.rate}
-          </span>
-        </div>
-      </div>
-
-      {/* Right side: Stats, Budget & Status Columns */}
-      <div className="flex flex-wrap items-center gap-6 sm:gap-10 md:gap-12 w-full md:w-auto justify-between md:justify-end">
-        {/* Stats Column 1, 2, 3 */}
-        <div className="flex items-center gap-6 sm:gap-8 text-center">
-          <div className="space-y-0.5 min-w-[70px]">
-            <span className="text-sm sm:text-base font-bold text-white block">
-              {ad.impressions}
-            </span>
-            <span className="text-[10px] text-zinc-500 block font-medium">
-              Impressions
-            </span>
-          </div>
-
-          <div className="space-y-0.5 min-w-[70px]">
-            <span className="text-sm sm:text-base font-bold text-white block">
-              {ad.clicksValue}
-            </span>
-            <span className="text-[10px] text-zinc-500 block font-medium">
-              {ad.clicksLabel}
-            </span>
-          </div>
-
-          <div className="space-y-0.5 min-w-[70px]">
-            <span className="text-sm sm:text-base font-bold text-white block">
-              {ad.ctrValue}
-            </span>
-            <span className="text-[10px] text-zinc-500 block font-medium">
-              {ad.ctrLabel}
-            </span>
-          </div>
-        </div>
-
-        {/* Budget Column */}
-        <div className="text-right min-w-[80px] space-y-0.5">
-          <span className="text-sm sm:text-base font-bold text-white block">
-            {ad.spent}
-          </span>
-          <span className="text-[11px] text-zinc-400 block font-medium">
-            {ad.budget}
-          </span>
-        </div>
-
-        {/* Status Column */}
-        <div className="min-w-[90px] text-right sm:text-center">
-          <span
-            className={`px-3 py-1 rounded text-xs font-semibold inline-block ${statusClass}`}
-          >
-            {ad.status}
-          </span>
-        </div>
-      </div>
-    </div>
   );
 }
 

@@ -1,7 +1,10 @@
 import React from "react";
 import { ShieldCheck, Calendar, SlidersHorizontal, User, DollarSign, Award } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { getWalletBalanceQuery } from "@/queries/waller.queries";
 
 export default function ReviewStep({
+  name,
   placement,
   billing,
   vehicle,
@@ -12,6 +15,11 @@ export default function ReviewStep({
   activeDays,
   campaignType,
 }) {
+  const { data: walletData } = useQuery({
+    ...getWalletBalanceQuery(),
+  });
+  const walletBalance = walletData?.balance ?? 0;
+
   const isCPI = billing === "CPI";
   const total = dailyBudget * 30;
   const clicks = Math.round(total / maxBid);
@@ -37,6 +45,18 @@ export default function ReviewStep({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Left Side Details */}
         <div className="space-y-5">
+          {/* Campaign Name */}
+          <div className="space-y-3">
+            <h4 className="text-[10px] font-bold text-third uppercase tracking-widest">
+              Campaign Name
+            </h4>
+            <div className="border-l border-white/5 pl-3">
+              <span className="text-primary font-semibold text-xs">
+                {name || "—"}
+              </span>
+            </div>
+          </div>
+
           {/* Placement & Billing */}
           <div className="space-y-3">
             <h4 className="text-[10px] font-bold text-third uppercase tracking-widest">
@@ -144,7 +164,7 @@ export default function ReviewStep({
             Wallet Balance
           </span>
           <span className="text-[#1D9E75] font-bold text-sm block">
-            ₹8,240 available
+            ₹{new Intl.NumberFormat("en-IN").format(walletBalance)} available
           </span>
         </div>
         <span className="text-[10px] text-third text-right leading-relaxed block">

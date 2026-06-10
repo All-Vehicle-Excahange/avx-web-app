@@ -1,7 +1,7 @@
 import React from "react";
 import { Car, User } from "lucide-react";
 
-export default function TypeStep({ selected, onChange }) {
+export default function TypeStep({ name, onNameChange, selected, onChange }) {
   const options = [
     {
       id: "vehicle",
@@ -23,6 +23,23 @@ export default function TypeStep({ selected, onChange }) {
         <h3 className="text-lg font-semibold text-primary">Choose campaign type</h3>
         <p className="text-third text-sm mt-1">
           Select whether you want to promote a specific car or your overall consultant profile.
+        </p>
+      </div>
+
+      {/* Campaign Name Input */}
+      <div className="space-y-2">
+        <label className="text-xs font-semibold text-primary block">
+          Campaign Name
+        </label>
+        <input
+          type="text"
+          placeholder="e.g. Mercedes boost"
+          value={name}
+          onChange={(e) => onNameChange(e.target.value)}
+          className="w-full bg-transparent border border-third/30 rounded-xl px-4 py-2.5 text-primary text-xs focus:outline-none focus:border-fourth focus:ring-1 focus:ring-fourth transition-all"
+        />
+        <p className="text-[10px] text-third">
+          Give your campaign a memorable name to identify it in your dashboard.
         </p>
       </div>
 
@@ -51,7 +68,7 @@ export default function TypeStep({ selected, onChange }) {
               <h4 className={`font-semibold text-sm transition-colors ${isSelected ? "text-fourth" : "text-primary"}`}>
                 {item.title}
               </h4>
-              <p className="text-third text-xs mt-2 flex-grow leading-relaxed">
+              <p className="text-third text-xs mt-2 grow leading-relaxed">
                 {item.desc}
               </p>
             </button>
