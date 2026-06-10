@@ -4,9 +4,10 @@
 import { useEffect, useState } from "react";
 import SleekInput from "@/components/ui/sleekInput";
 import CustomSelect from "@/components/ui/custom-select";
-import { MapPin, Globe, Compass } from "lucide-react";
+import { MapPin, Globe, Compass, Link } from "lucide-react";
 import { getState, getCities } from "@/services/user.service";
 import { motion } from "framer-motion";
+import MiniMap from "@/components/ui/MiniMap";
 
 export default function Step2Address({
   onChange,
@@ -23,10 +24,11 @@ export default function Step2Address({
     cityId: initialData?.city?.id || initialData?.cityId || null,
     stateId: initialData?.state?.id || initialData?.stateId || null,
     countryId: initialData?.country?.id || initialData?.countryId || 101,
-    latitude: initialData?.latitude || 12.12,
-    longitude: initialData?.longitude || 12.12,
+    latitude: initialData?.latitude || 22.2587,
+    longitude: initialData?.longitude || 71.1924,
     stateName: initialData?.state?.name || initialData?.stateName || "",
     cityName: initialData?.city?.name || initialData?.cityName || "",
+    mapUrl: initialData?.mapUrl || "",
   });
 
   const handleClear = () => {
@@ -39,9 +41,14 @@ export default function Step2Address({
       address: "",
       latitude: "",
       longitude: "",
+      mapUrl: "",
     };
     setForm(emptyForm);
-    if (onChange) onChange(emptyForm, true);
+    if (onChange) {
+      const payload = { ...emptyForm };
+      delete payload.mapUrl;
+      onChange(payload, true);
+    }
   };
 
   // ===== Fetch States =====
@@ -85,8 +92,16 @@ export default function Step2Address({
       const isChanged =
         (updated.address || "") !== (initialData?.address || "") ||
         (updated.stateId || null) !== (initialData?.state?.id || initialData?.stateId || null) ||
-        (updated.cityId || null) !== (initialData?.city?.id || initialData?.cityId || null);
-      onChange(updated, isChanged);
+        (updated.cityId || null) !== (initialData?.city?.id || initialData?.cityId || null) ||
+        (updated.mapUrl || "") !== (initialData?.mapUrl || "") ||
+        Number(updated.latitude || 0) !== Number(initialData?.latitude || 0) ||
+        Number(updated.longitude || 0) !== Number(initialData?.longitude || 0);
+      
+      const payload = { ...updated };
+      if (!payload.mapUrl) {
+        delete payload.mapUrl;
+      }
+      onChange(payload, isChanged);
     }
   };
 
@@ -144,6 +159,36 @@ export default function Step2Address({
             }}
           />
         )}
+
+        {(!readOnly || form.mapUrl) && (
+          <SleekInput
+            label="Map URL"
+            placeholder="e.g. https://maps.google.com/..."
+            readOnly={readOnly}
+            value={form.mapUrl}
+            icon={Link}
+            onChange={(e) => {
+              const val = e.target.value;
+              const updated = { ...form, mapUrl: val };
+              handleFormChange(updated);
+            }}
+          />
+        )}
+
+        <MiniMap
+          initialLat={form.latitude}
+          initialLng={form.longitude}
+          readOnly={readOnly}
+          onChangeLocation={(lat, lng) => {
+            const updated = {
+              ...form,
+              latitude: lat,
+              longitude: lng,
+              mapUrl: `https://www.google.com/maps?q=${lat.toFixed(6)},${lng.toFixed(6)}`,
+            };
+            handleFormChange(updated);
+          }}
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* ===== STATE ===== */}
