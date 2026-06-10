@@ -33,7 +33,7 @@ const footerLinks = {
     { label: "How Reecomm works", href: "/reecomm-works" },
     { label: "Inspection process", href: "/inspection-process" },
     { label: "Careers", href: "#" },
-    { label: "Blog", href: "#" },
+    { label: "Blog", href: "/blog" },
     { label: "Contact us", href: "/contactus" },
     { label: "Help & FAQ", href: "/help" },
   ],

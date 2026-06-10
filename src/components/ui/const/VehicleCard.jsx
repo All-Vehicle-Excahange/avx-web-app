@@ -170,7 +170,7 @@ export default function VehicleCard({
         rounded-2xl overflow-hidden
          text-primary
         md:max-w-sm w-full sm:w-[392px]
-        border-2 border-third/60
+        border-2 border-third/30
         hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]
         transition-shadow duration-300
         h-full md:h-[500px] cursor-pointer"

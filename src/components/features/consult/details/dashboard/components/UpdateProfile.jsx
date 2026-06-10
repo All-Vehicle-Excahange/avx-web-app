@@ -519,7 +519,8 @@ export default function UpdateProfile() {
   };
 
   const verificationStatus = data.business?.verificationStatus;
-  const isRequested = verificationStatus === "REQUESTED";
+  const isSubmitted = data.business?.isSubmitted;
+  const isRequested = isSubmitted === true && verificationStatus === "REQUESTED";
   const isChangesRequested = verificationStatus === "REQUEST_CHANGES";
   const isRejected = verificationStatus === "REJECTED";
   const adminRemark = data.business?.adminRemark;

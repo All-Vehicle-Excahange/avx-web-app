@@ -94,7 +94,7 @@ export default function UserVehicleCard({
 
   return (
     <>
-      <div className="group/card relative flex flex-row md:flex-col rounded-2xl overflow-hidden text-primary w-full border-2 border-third/60 hover:shadow-[0_20px_60px_rgba(255,255,255,0.25)] transition-shadow duration-300">
+      <div className="group/card relative flex flex-row md:flex-col rounded-2xl overflow-hidden text-primary w-full border-2 border-third/30 hover:shadow-[0_20px_60px_rgba(255,255,255,0.25)] transition-shadow duration-300">
         {/* STATUS PILL */}
         <div className="absolute top-2 left-2 z-30">
           <div

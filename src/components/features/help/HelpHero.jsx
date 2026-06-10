@@ -406,7 +406,7 @@ export default function HelpHero() {
       </section>
 
       {supportOpen && (
-        <SupportFlowModal onClose={() => setSupportOpen(true)} />
+        <SupportFlowModal onClose={() => setSupportOpen(false)} />
       )}
     </>
   );

@@ -15,7 +15,7 @@ function BlogCard({ post }) {
   return (
     <div
       onClick={handleCardClick}
-      className="relative w-full h-full rounded-2xl overflow-hidden bg-transparent border-2 border-third/60 transition-all duration-300 flex flex-col hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] cursor-pointer p-4 sm:p-5"
+      className="relative w-full h-full rounded-2xl overflow-hidden bg-transparent border-2 border-third/20 transition-all duration-300 flex flex-col hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] cursor-pointer p-4 sm:p-5"
     >
       {/* Content wrapper */}
       <div className="relative z-10 flex flex-col h-full justify-between">
