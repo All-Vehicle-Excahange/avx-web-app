@@ -273,9 +273,12 @@ export default function KycForm() {
           stateId: a.stateId,
           cityId: a.cityId,
           countryId: a.countryId || 101,
-          latitude: a.latitude || 12.12,
-          longitude: a.longitude || 12.12,
+          latitude: a.latitude || 22.2587,
+          longitude: a.longitude || 71.1924,
         };
+        if (a?.mapUrl) {
+          payload.mapUrl = a.mapUrl;
+        }
 
         if (existing.address) {
           if (!changed.address) {

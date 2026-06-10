@@ -252,8 +252,8 @@ function MyProfile() {
         cityId: metaForm.cityId,
         stateId: metaForm.stateId,
         countryId: metaForm.country?.id || 101,
-        latitude: metaForm.latitude || 12.12,
-        longitude: metaForm.longitude || 12.12,
+        latitude: metaForm.latitude || 22.2587,
+        longitude: metaForm.longitude || 71.1924,
       };
 
       // Call create or update based on isCreatingMeta

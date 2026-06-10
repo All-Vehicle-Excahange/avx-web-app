@@ -347,6 +347,9 @@ export default function UpdateProfile() {
       ) {
         hasChanges = true;
       }
+      if (a.mapUrl !== (orig.mapUrl || "")) {
+        hasChanges = true;
+      }
 
       if (!hasChanges) {
         setEditMode((p) => ({ ...p, address: false }));
@@ -357,6 +360,9 @@ export default function UpdateProfile() {
       payload.append("address", a.address || "");
       payload.append("stateId", a.stateId || "");
       payload.append("cityId", a.cityId || "");
+      if (a.mapUrl) {
+        payload.append("mapUrl", a.mapUrl);
+      }
 
       const res = await updateAddressDetails(payload, currentId);
       if (res.success) {
@@ -369,6 +375,7 @@ export default function UpdateProfile() {
             address: a.address,
             state: { ...p.address?.state, id: a.stateId, name: a.stateName },
             city: { ...p.address?.city, id: a.cityId, name: a.cityName },
+            mapUrl: a.mapUrl,
           },
         }));
       } else {

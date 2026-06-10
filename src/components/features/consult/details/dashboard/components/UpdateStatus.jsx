@@ -202,6 +202,12 @@ export default function UpdateStatus() {
         payload.append("cityId", a.cityId || "");
         hasChanges = true;
       }
+      if (a.mapUrl !== (orig.mapUrl || "")) {
+        if (a.mapUrl) {
+          payload.append("mapUrl", a.mapUrl);
+        }
+        hasChanges = true;
+      }
 
       if (!hasChanges) {
         toast("No changes detected.");
@@ -220,6 +226,7 @@ export default function UpdateStatus() {
             address: a.address,
             state: { ...p.address?.state, id: a.stateId, name: a.stateName },
             city: { ...p.address?.city, id: a.cityId, name: a.cityName },
+            mapUrl: a.mapUrl,
           },
         }));
       } else {
