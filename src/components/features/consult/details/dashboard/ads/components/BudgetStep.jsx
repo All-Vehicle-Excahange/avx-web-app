@@ -141,8 +141,8 @@ export default function BudgetStep({
           </div>
         </div>
 
-        {/* Active Days Multi-select */}
-        <div className="space-y-3 pt-3">
+        {/* Active Days Multi-select - commnet for now  */}
+        {/* <div className="space-y-3 pt-3">
           <label className="text-xs font-semibold text-primary block">Active days</label>
           <div className="flex flex-wrap gap-2.5">
             {daysItems.map((day) => {
@@ -172,7 +172,7 @@ export default function BudgetStep({
             })}
           </div>
           <p className="text-[11px] text-third mt-1 block">Your boost will only run on selected days.</p>
-        </div>
+        </div> */}
 
         {/* Estimated Performance Box */}
         <div className="p-4 rounded-xl border border-third/30 bg-transparent space-y-4">

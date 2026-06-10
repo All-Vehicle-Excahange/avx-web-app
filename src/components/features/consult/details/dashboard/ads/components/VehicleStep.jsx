@@ -1,53 +1,38 @@
 import React, { useState } from "react";
 import { Search, Car } from "lucide-react";
-
-const vehicles = [
-  {
-    id: "v1",
-    name: "BMW X1 — 2023 xDrive20d",
-    meta: "12,400 km · Petrol · Auto",
-    price: "₹42,00,000",
-    displayPrice: "₹42.0L",
-    status: "Active",
-  },
-  {
-    id: "v2",
-    name: "Mercedes C-Class — 2022 C200",
-    meta: "8,200 km · Petrol · Auto",
-    price: "₹52,00,000",
-    displayPrice: "₹52.0L",
-    status: "Active",
-  },
-  {
-    id: "v3",
-    name: "Audi A4 — 2021 40 TFSI",
-    meta: "18,700 km · Petrol · Auto",
-    price: "₹38,00,000",
-    displayPrice: "₹38.0L",
-    status: "Active",
-  },
-  {
-    id: "v4",
-    name: "Toyota Fortuner — 2022 Legender",
-    meta: "22,100 km · Diesel · Auto",
-    price: "₹35,00,000",
-    displayPrice: "₹35.0L",
-    status: "Active",
-  },
-  {
-    id: "v5",
-    name: "Honda City — 2023 ZX CVT",
-    meta: "5,600 km · Petrol · CVT",
-    price: "₹14,50,000",
-    displayPrice: "₹14.5L",
-    status: "Active",
-  },
-];
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { getSellerInventoryInfiniteQuery } from "@/queries/user.queries";
+import Button from "@/components/ui/button";
 
 export default function VehicleStep({ selected, onChange }) {
   const [search, setSearch] = useState("");
 
-  const filteredVehicles = vehicles.filter((v) =>
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    ...getSellerInventoryInfiniteQuery({
+      size: 10,
+      listingStatus: "LIVE",
+    }),
+  });
+
+  const vehicles = data?.pages?.flatMap((page) => page?.data || []) || [];
+
+  const mappedVehicles = vehicles.map((v) => ({
+    id: v.id,
+    name: `${v.makerName || "-"} ${v.modelName || "-"} ${v.variantName || ""}`,
+    meta: `${v.yearOfMfg || "-"} · ${v.fuelType || "-"} · ${v.transmissionType || "-"}`,
+    price: v.price ? new Intl.NumberFormat("en-IN").format(v.price) : "-",
+    displayPrice: v.price ? `₹${(v.price / 100000).toFixed(1)}L` : "-",
+    status: v.listingStatus?.toLowerCase() || "draft",
+    raw: v,
+  }));
+
+  const filteredVehicles = mappedVehicles.filter((v) =>
     v.name.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -74,48 +59,68 @@ export default function VehicleStep({ selected, onChange }) {
       </div>
 
       <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
-        {filteredVehicles.length > 0 ? (
-          filteredVehicles.map((vehicle) => {
-            const isSelected = selected?.id === vehicle.id;
+        {isLoading ? (
+          <div className="py-8 text-center text-third text-sm">
+            Loading your active inventory...
+          </div>
+        ) : filteredVehicles.length > 0 ? (
+          <>
+            {filteredVehicles.map((vehicle) => {
+              const isSelected = selected?.id === vehicle.id;
 
-            return (
-              <button
-                key={vehicle.id}
-                onClick={() => onChange(vehicle)}
-                className={`w-full flex items-center gap-4 p-4 rounded-xl border text-left transition-all duration-200 cursor-pointer ${
-                  isSelected
-                    ? "border-fourth bg-fourth/10 shadow-[0_0_15px_rgba(0,123,255,0.15)]"
-                    : "border-third/30 bg-transparent hover:border-third/50 hover:bg-white/5"
-                }`}
-              >
-                <div
-                  className={`w-12 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
-                    isSelected ? "bg-fourth text-white" : "bg-white/5 text-third"
+              return (
+                <button
+                  key={vehicle.id}
+                  onClick={() => onChange(vehicle)}
+                  className={`w-full flex items-center gap-4 p-4 rounded-xl border text-left transition-all duration-200 cursor-pointer ${
+                    isSelected
+                      ? "border-fourth bg-fourth/10 shadow-[0_0_15px_rgba(0,123,255,0.15)]"
+                      : "border-third/30 bg-transparent hover:border-third/50 hover:bg-white/5"
                   }`}
                 >
-                  <Car size={20} />
-                </div>
-                
-                <div className="flex-1 min-w-0">
-                  <h4 className={`font-semibold text-sm truncate transition-colors ${isSelected ? "text-fourth" : "text-primary"}`}>
-                    {vehicle.name}
-                  </h4>
-                  <p className="text-third text-xs mt-1 truncate">
-                    {vehicle.meta}
-                  </p>
-                </div>
+                  <div
+                    className={`w-12 h-10 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                      isSelected ? "bg-fourth text-white" : "bg-white/5 text-third"
+                    }`}
+                  >
+                    <Car size={20} />
+                  </div>
+                  
+                  <div className="flex-1 min-w-0">
+                    <h4 className={`font-semibold text-sm truncate transition-colors ${isSelected ? "text-fourth" : "text-primary"}`}>
+                      {vehicle.name}
+                    </h4>
+                    <p className="text-third text-xs mt-1 truncate">
+                      {vehicle.meta}
+                    </p>
+                  </div>
 
-                <div className="text-right flex-shrink-0">
-                  <span className="text-primary font-bold text-sm block">
-                    {vehicle.displayPrice}
-                  </span>
-                  <span className="mt-1 px-2 py-0.5 inline-block text-[10px] font-bold bg-[#1D9E75]/10 text-[#1D9E75] rounded">
-                    {vehicle.status}
-                  </span>
-                </div>
-              </button>
-            );
-          })
+                  <div className="text-right shrink-0">
+                    <span className="text-primary font-bold text-sm block">
+                      {vehicle.displayPrice}
+                    </span>
+                    <span className="mt-1 px-2 py-0.5 inline-block text-[10px] font-bold bg-[#1D9E75]/10 text-[#1D9E75] rounded">
+                      {vehicle.status}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+
+            {hasNextPage && (
+              <div className="flex justify-center pt-2">
+                <Button
+                  variant="outlineSecondary"
+                  size="sm"
+                  loading={isFetchingNextPage}
+                  onClick={() => fetchNextPage()}
+                  className="px-6 py-1.5 rounded-xl text-xs font-semibold"
+                >
+                  Load More
+                </Button>
+              </div>
+            )}
+          </>
         ) : (
           <div className="py-8 text-center text-third text-sm">
             No matching vehicles found in inventory.
