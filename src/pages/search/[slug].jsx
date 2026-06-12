@@ -31,6 +31,31 @@ function SlugSearchPage({ seo, initialFilters }) {
           name="description"
           content={seo?.description || "Browse verified used vehicles for sale."}
         />
+        {/* Canonical — each slug page gets its own unique canonical */}
+        {seo?.canonical && (
+          <link rel="canonical" href={seo.canonical} />
+        )}
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Reecomm" />
+        {seo?.canonical && <meta property="og:url" content={seo.canonical} />}
+        <meta property="og:title" content={seo?.title || "Used Cars | Reecomm"} />
+        <meta
+          property="og:description"
+          content={seo?.description || "Browse verified used vehicles for sale on Reecomm."}
+        />
+        <meta property="og:image" content="https://www.reecomm.com/logo/logo.webp" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@reecomm" />
+        <meta name="twitter:title" content={seo?.title || "Used Cars | Reecomm"} />
+        <meta
+          name="twitter:description"
+          content={seo?.description || "Browse verified used vehicles for sale on Reecomm."}
+        />
+        <meta name="twitter:image" content="https://www.reecomm.com/logo/logo.webp" />
       </Head>
       <Suspense fallback={null}>
         <SearchContent
@@ -216,6 +241,7 @@ export async function getServerSideProps(context) {
       seo: {
         title: dynamicTitle,
         description: dynamicDescription,
+        canonical: `https://www.reecomm.com/search/${slug}`,
       },
       initialFilters,
     },

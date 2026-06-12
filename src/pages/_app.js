@@ -141,6 +141,11 @@ export default function App({ Component, pageProps }) {
           className={`${exo.variable} ${inter.variable} ${lexendDeca.variable} ${montserrat.variable} ${poppins.variable} ${raleway.variable} ${roboto.variable} font-sans`}
         >
           <Head>
+            {/* Global canonical — strips query params so Google picks the right URL */}
+            <link
+              rel="canonical"
+              href={`https://www.reecomm.com${router.asPath.split("?")[0]}`}
+            />
             <script
               dangerouslySetInnerHTML={{
                 __html: `
