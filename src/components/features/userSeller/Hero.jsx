@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Button from "@/components/ui/button";
 import DetailsFromPopup from "@/components/features/userSeller/DetailsFromPopup";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -22,20 +23,91 @@ const MARQUEE_ITEMS = [
 ];
 
 function Hero() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const user = useAuthStore((state) => state.user);
   const [loginPopup, setLoginPopup] = useState(false);
   const [signupPopup, setSignupPopup] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 100);
     return () => clearTimeout(t);
   }, []);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const savedUser = localStorage.getItem("user");
+        if (savedUser) {
+          const parsed = JSON.parse(savedUser);
+          setRole(parsed?.userRole || null);
+        } else {
+          setRole(null);
+        }
+      } catch (err) {
+        console.error("Failed to read user role from localStorage:", err);
+        setRole(null);
+      }
+    }
+  }, [isLoggedIn, user]);
+
   const handleStartSelling = () => {
     if (!isLoggedIn) {
       setLoginPopup(true);
+      return;
+    }
+
+    // Go to localStorage to check what is the role
+    let currentRole = null;
+    if (typeof window !== "undefined") {
+      try {
+        const savedUser = localStorage.getItem("user");
+        if (savedUser) {
+          const parsed = JSON.parse(savedUser);
+          currentRole = parsed?.userRole;
+        }
+      } catch (err) {
+        console.error("Failed to parse user role on button click:", err);
+      }
+    }
+
+    const finalRole = currentRole || user?.userRole;
+
+    if (finalRole === "CONSULTATION") {
+      // Hide the button or do nothing (normally hidden)
+      return;
+    }
+
+    if (finalRole === "USER_SELLER") {
+      router.push("/user/details/inventory");
+    } else {
+      setOpen(true);
+    }
+  };
+
+  const handleLoginSuccess = () => {
+    let currentRole = null;
+    if (typeof window !== "undefined") {
+      try {
+        const savedUser = localStorage.getItem("user");
+        if (savedUser) {
+          const parsed = JSON.parse(savedUser);
+          currentRole = parsed?.userRole;
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    const finalRole = currentRole || user?.userRole;
+
+    if (finalRole === "USER_SELLER") {
+      router.push("/user/details/inventory");
+    } else if (finalRole === "CONSULTATION") {
+      // Consultant - button will disappear, no popup
     } else {
       setOpen(true);
     }
@@ -107,13 +179,15 @@ function Hero() {
             className={`flex flex-col sm:flex-row items-center gap-4 mb-12 transition-all duration-700 delay-300 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
           >
-            <Button
-              variant="ghost"
-              size="md"
-              onClick={handleStartSelling}
-            >
-              START SELLING
-            </Button>
+            {!(mounted && isLoggedIn && role === "CONSULTATION") && (
+              <Button
+                variant="ghost"
+                size="md"
+                onClick={handleStartSelling}
+              >
+                START SELLING
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="md"
@@ -160,7 +234,7 @@ function Hero() {
           setLoginPopup(false);
           setSignupPopup(true);
         }}
-        onSuccess={() => setOpen(true)}
+        onSuccess={handleLoginSuccess}
       />
       <SignupPopup
         isOpen={signupPopup}
@@ -169,7 +243,7 @@ function Hero() {
           setSignupPopup(false);
           setLoginPopup(true);
         }}
-        onSuccess={() => setOpen(true)}
+        onSuccess={handleLoginSuccess}
       />
     </>
   );

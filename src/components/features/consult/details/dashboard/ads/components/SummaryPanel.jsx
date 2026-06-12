@@ -3,7 +3,14 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { getWalletBalanceQuery } from "@/queries/waller.queries";
 
-export default function SummaryPanel({ placement, billing, vehicle, dailyBudget, maxBid, campaignType }) {
+export default function SummaryPanel({
+  placement,
+  billing,
+  vehicle,
+  dailyBudget,
+  maxBid,
+  campaignType,
+}) {
   const { data: walletData } = useQuery({
     ...getWalletBalanceQuery(),
   });
@@ -21,28 +28,37 @@ export default function SummaryPanel({ placement, billing, vehicle, dailyBudget,
 
         {/* Placement */}
         <div className="space-y-1">
-          <span className="text-[11px] text-third font-medium block">Placement</span>
-          <div className="text-sm font-semibold text-primary whitespace-normal break-words leading-relaxed">
-            {placement && (Array.isArray(placement) ? placement.length > 0 : placement) ? (
+          <span className="text-[11px] text-third font-medium block">
+            Placement
+          </span>
+          <div className="text-sm font-semibold text-primary whitespace-normal wrap-break-word leading-relaxed">
+            {placement &&
+            (Array.isArray(placement) ? placement.length > 0 : placement) ? (
               <span className="text-primary transition-all duration-300">
                 {Array.isArray(placement) ? placement.join(", ") : placement}
               </span>
             ) : (
-              <span className="text-third/50 italic font-normal">Not selected</span>
+              <span className="text-third/50 italic font-normal">
+                Not selected
+              </span>
             )}
           </div>
         </div>
 
         {/* Billing */}
         <div className="space-y-1">
-          <span className="text-[11px] text-third font-medium block">Billing</span>
+          <span className="text-[11px] text-third font-medium block">
+            Billing
+          </span>
           <div className="text-sm font-semibold truncate">
             {billing ? (
               <span className="text-primary transition-all duration-300">
                 {billing === "CPC" ? "Cost per click" : "Cost per inquiry"}
               </span>
             ) : (
-              <span className="text-third/50 italic font-normal">Not selected</span>
+              <span className="text-third/50 italic font-normal">
+                Not selected
+              </span>
             )}
           </div>
         </div>
@@ -54,21 +70,31 @@ export default function SummaryPanel({ placement, billing, vehicle, dailyBudget,
           </span>
           <div className="text-sm font-semibold truncate">
             {campaignType === "profile" ? (
-              <span className="text-primary transition-all duration-300">Consultant Profile</span>
+              <span className="text-primary transition-all duration-300">
+                Consultant Profile
+              </span>
             ) : vehicle?.name ? (
-              <span className="text-primary transition-all duration-300">{vehicle.name}</span>
+              <span className="text-primary transition-all duration-300">
+                {vehicle.name}
+              </span>
             ) : (
-              <span className="text-third/50 italic font-normal">Not selected</span>
+              <span className="text-third/50 italic font-normal">
+                Not selected
+              </span>
             )}
           </div>
         </div>
 
         {/* Daily budget */}
         <div className="space-y-1">
-          <span className="text-[11px] text-third font-medium block">Daily budget</span>
+          <span className="text-[11px] text-third font-medium block">
+            Daily budget
+          </span>
           <div className="text-sm font-semibold truncate">
             {dailyBudget ? (
-              <span className="text-primary transition-all duration-300">₹{dailyBudget}/day</span>
+              <span className="text-primary transition-all duration-300">
+                ₹{dailyBudget}/day
+              </span>
             ) : (
               <span className="text-third/50 italic font-normal">Not set</span>
             )}
@@ -82,7 +108,9 @@ export default function SummaryPanel({ placement, billing, vehicle, dailyBudget,
           </span>
           <div className="text-sm font-semibold truncate">
             {maxBid ? (
-              <span className="text-primary transition-all duration-300">₹{maxBid}</span>
+              <span className="text-primary transition-all duration-300">
+                ₹{maxBid}
+              </span>
             ) : (
               <span className="text-third/50 italic font-normal">Not set</span>
             )}
@@ -93,7 +121,9 @@ export default function SummaryPanel({ placement, billing, vehicle, dailyBudget,
       <div className="space-y-4 pt-6">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <span className="text-[11px] text-third font-medium block">Wallet balance</span>
+            <span className="text-[11px] text-third font-medium block">
+              Wallet balance
+            </span>
             <span className="text-sm font-bold text-[#1D9E75] block mt-0.5">
               ₹{new Intl.NumberFormat("en-IN").format(walletBalance)}
             </span>
@@ -105,11 +135,18 @@ export default function SummaryPanel({ placement, billing, vehicle, dailyBudget,
             Add Fund
           </Link>
         </div>
-        
+
         <div>
-          <span className="text-[11px] text-third font-medium block">Est. 30-day spend</span>
+          <span className="text-[11px] text-third font-medium block">
+            Est. 30-day spend
+          </span>
           <span className="text-lg font-bold text-primary block mt-0.5">
-            {placement && (Array.isArray(placement) ? placement.length > 0 : placement) && billing && vehicle ? `₹${totalSpend.toLocaleString()}` : "—"}
+            {placement &&
+            (Array.isArray(placement) ? placement.length > 0 : placement) &&
+            billing &&
+            vehicle
+              ? `₹${totalSpend.toLocaleString()}`
+              : "—"}
           </span>
         </div>
       </div>

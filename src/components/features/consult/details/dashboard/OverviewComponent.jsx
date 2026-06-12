@@ -113,9 +113,8 @@ export default function OverviewComponent() {
   const { data: inspectionStatusData, isLoading: inspectionStatusLoading } =
     useQuery(getInspectionStatusQuery());
 
-  const { data: recentActivityData, isLoading: recentActivityLoading } = useQuery(
-    getRecentActivityQuery(),
-  );
+  const { data: recentActivityData, isLoading: recentActivityLoading } =
+    useQuery(getRecentActivityQuery());
 
   let daysParam = "LAST_7_DAYS";
   if (range === "30") {
@@ -265,10 +264,26 @@ export default function OverviewComponent() {
                   N/A Chats Pending
                 </h4>
               </div>
-              <p className="mb-4 text-xs text-third leading-relaxed font-medium">
-                Active conversations waiting
-              </p>
+            
             </div>
+
+            <div className="flex-1 my-4 flex flex-col justify-center">
+              <div className="flex flex-col items-center justify-center text-center p-6  bg-white/2 space-y-3 my-auto">
+                <div className="p-3 bg-primary/10 rounded-full text-primary">
+                  <Smartphone size={24} />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="font-semibold text-sm text-white">
+                    Chats are Mobile Only
+                  </h4>
+                  <p className="text-xs text-third max-w-[280px] leading-relaxed mx-auto">
+                    Download the Reecomm mobile app to chat with buyers in
+                    real-time and get instant notifications.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <Button
               onClick={() => setIsDownloadOpen(true)}
               variant="ghost"
@@ -304,7 +319,7 @@ export default function OverviewComponent() {
         </div>
 
         {/* INQUIRIES & CHATS DETAILS */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-white">
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 text-white">
           {/* Inquiries Detail */}
           <div className="rounded-2xl border border-third/20  p-6 flex flex-col space-y-6 transition">
             <div className="flex items-center gap-3">
@@ -374,7 +389,7 @@ export default function OverviewComponent() {
           </div>
 
           {/* Chats Detail */}
-          <div className="rounded-2xl border border-third/20  p-6 flex flex-col space-y-6 transition ">
+          {/* <div className="rounded-2xl border border-third/20  p-6 flex flex-col space-y-6 transition ">
             <div className="flex items-center gap-3">
               <div className="p-2.5 bg-primary/10 rounded-lg text-primary">
                 <MessageSquare size={20} />
@@ -403,7 +418,7 @@ export default function OverviewComponent() {
             >
               Download App
             </Button>
-          </div>
+          </div> */}
         </div>
 
         {/* INVENTORY & INSPECTION */}
@@ -646,13 +661,15 @@ export default function OverviewComponent() {
         <div className="rounded-xl border border-third/30    p-6 space-y-3">
           <h3 className="font-semibold">Recent Activity</h3>
           {recentActivityData && recentActivityData.length > 0 ? (
-            recentActivityData.slice(0, 4).map((item, idx) => (
-              <Activity
-                key={idx}
-                text={item.activity}
-                time={formatRelativeTime(item.createdAt)}
-              />
-            ))
+            recentActivityData
+              .slice(0, 4)
+              .map((item, idx) => (
+                <Activity
+                  key={idx}
+                  text={item.activity}
+                  time={formatRelativeTime(item.createdAt)}
+                />
+              ))
           ) : (
             <p className="text-sm text-third">No recent activity.</p>
           )}

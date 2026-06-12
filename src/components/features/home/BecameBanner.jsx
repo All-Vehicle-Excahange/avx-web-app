@@ -66,11 +66,11 @@ function BecameBanner() {
                       strokeWidth={2.5}
                     />
                   </div>
-                  <span className="font-bold text-lg whitespace-nowrap transition-colors duration-300">
+                  <span className=" text-lg whitespace-nowrap transition-colors duration-300">
                     List your Vehicle
                   </span>
                   <div className="mx-5 h-6 w-[1.5px] bg-white/20 group-hover/btn:bg-gray-200 transition-colors duration-300"></div>
-                  <span className="text-white/80 group-hover/btn:text-secondary font-semibold whitespace-nowrap transition-colors duration-300">
+                  <span className="text-white/80 group-hover/btn:text-secondary  whitespace-nowrap transition-colors duration-300">
                     It&apos;s free
                   </span>
                 </div>
@@ -132,7 +132,7 @@ function BecameBanner() {
                       strokeWidth={2}
                     />
                   </div>
-                  <span className="font-bold text-lg mr-4 whitespace-nowrap">
+                  <span className=" text-lg mr-4 whitespace-nowrap">
                     Become a consultant
                   </span>
                   <div className="mx-3 h-6 w-[1.5px] bg-white/20 group-hover/btn2:bg-gray-200 mr-5 transition-colors duration-300"></div>

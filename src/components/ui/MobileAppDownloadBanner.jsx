@@ -20,9 +20,8 @@ export default function MobileAppDownloadBanner({ onClose }) {
         </span>
 
         {/* Main Heading */}
-        <h2 className="text-lg font-black uppercase leading-tight text-white">
+        <h2 className="text-sm font-black  leading-tight text-white">
           Search verified listings, chat with sellers, and book test drives — all in the Reecomm app.
-
         </h2>
       </div>
 

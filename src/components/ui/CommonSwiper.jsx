@@ -1,39 +1,48 @@
+"use no memo";
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, FreeMode } from "swiper/modules";
+import { FreeMode } from "swiper/modules";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/free-mode";
 
 const CommonSwiper = ({ data, CardComponent, prevRef, nextRef }) => {
-  const swiperRef = useRef(null);
+  const [swiperInstance, setSwiperInstance] = useState(null);
 
   useEffect(() => {
-    if (!swiperRef.current) return;
+    if (!swiperInstance) return;
 
-    const swiper = swiperRef.current;
+    const prevEl = prevRef?.current;
+    const nextEl = nextRef?.current;
 
-    if (prevRef?.current && nextRef?.current) {
-      swiper.params.navigation.prevEl = prevRef.current;
-      swiper.params.navigation.nextEl = nextRef.current;
+    if (prevEl && nextEl) {
+      const handlePrev = () => swiperInstance.slidePrev();
+      const handleNext = () => swiperInstance.slideNext();
 
-      swiper.navigation.init();
-      swiper.navigation.update();
+      prevEl.addEventListener("click", handlePrev);
+      nextEl.addEventListener("click", handleNext);
+
+      return () => {
+        prevEl.removeEventListener("click", handlePrev);
+        nextEl.removeEventListener("click", handleNext);
+      };
     }
-  }, [prevRef, nextRef]);
+  }, [swiperInstance, prevRef, nextRef]);
 
   return (
     <Swiper
-      modules={[Navigation, FreeMode]}
+      modules={[FreeMode]}
       spaceBetween={16}
       grabCursor
       freeMode
       slidesPerView={"auto"}
-      onSwiper={(swiper) => {
-        swiperRef.current = swiper;
-      }}
+      onSwiper={setSwiperInstance}
     >
       {data.map((item) => (
-        <SwiperSlide key={item.id} className="!w-[340px]">
+        <SwiperSlide key={item.id} className="w-[340px]!">
           <CardComponent data={item} />
         </SwiperSlide>
       ))}

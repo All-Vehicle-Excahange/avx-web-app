@@ -12,11 +12,11 @@ export default function HeroSection() {
     <section
       className="relative h-screen bg-cover bg-center"
       style={{
-        backgroundImage: "url(/hero-back.webp)",
+        backgroundImage: "url(/landing-page.webp)",
       }}
     >
       {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/40 z-0" />
+      <div className="absolute inset-0 bg-black/30 z-0" />
 
       {/* 🔥 TOP GRADIENT SCRIM (KEY FIX) */}
       <div

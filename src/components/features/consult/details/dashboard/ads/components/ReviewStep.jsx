@@ -1,5 +1,12 @@
 import React from "react";
-import { ShieldCheck, Calendar, SlidersHorizontal, User, DollarSign, Award } from "lucide-react";
+import {
+  ShieldCheck,
+  Calendar,
+  SlidersHorizontal,
+  User,
+  DollarSign,
+  Award,
+} from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getWalletBalanceQuery } from "@/queries/waller.queries";
 
@@ -33,10 +40,13 @@ export default function ReviewStep({
     } catch {
       return dateStr;
     }
-  };  return (
+  };
+  return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-primary">Review your boost</h3>
+        <h3 className="text-lg font-semibold text-primary">
+          Review your boost
+        </h3>
         <p className="text-third text-sm mt-1">
           Everything looks good? Launch your campaign.
         </p>
@@ -65,9 +75,12 @@ export default function ReviewStep({
             <div className="space-y-2 border-l border-white/5 pl-3">
               <div className="flex justify-between items-start text-xs gap-4">
                 <span className="text-third shrink-0">Placement</span>
-                <span className="text-primary font-semibold text-right whitespace-normal break-words leading-relaxed max-w-[200px]">
-                  {placement && (Array.isArray(placement) ? placement.length > 0 : placement)
-                    ? (Array.isArray(placement) ? placement.join(", ") : placement)
+                <span className="text-primary font-semibold text-right whitespace-normal wrap-break-word leading-relaxed max-w-[200px]">
+                  {placement &&
+                  (Array.isArray(placement) ? placement.length > 0 : placement)
+                    ? Array.isArray(placement)
+                      ? placement.join(", ")
+                      : placement
                     : "—"}
                 </span>
               </div>
@@ -77,8 +90,8 @@ export default function ReviewStep({
                   {billing === "CPC"
                     ? "Cost per click (CPC)"
                     : billing === "CPI"
-                    ? "Cost per inquiry (CPI)"
-                    : "—"}
+                      ? "Cost per inquiry (CPI)"
+                      : "—"}
                 </span>
               </div>
             </div>
@@ -92,10 +105,14 @@ export default function ReviewStep({
             <div className="border-l border-white/5 pl-3">
               <div className="flex justify-between items-start text-xs">
                 <span className="text-third">
-                  {campaignType === "profile" ? "Boost Target" : "Selected Vehicle"}
+                  {campaignType === "profile"
+                    ? "Boost Target"
+                    : "Selected Vehicle"}
                 </span>
                 <span className="text-primary font-semibold text-right max-w-[150px] truncate">
-                  {campaignType === "profile" ? "Consultant Profile" : vehicle?.name || "—"}
+                  {campaignType === "profile"
+                    ? "Consultant Profile"
+                    : vehicle?.name || "—"}
                 </span>
               </div>
             </div>
@@ -112,10 +129,14 @@ export default function ReviewStep({
             <div className="space-y-2 border-l border-white/5 pl-3">
               <div className="flex justify-between items-start text-xs">
                 <span className="text-third">Daily Budget</span>
-                <span className="text-primary font-semibold">₹{dailyBudget}/day</span>
+                <span className="text-primary font-semibold">
+                  ₹{dailyBudget}/day
+                </span>
               </div>
               <div className="flex justify-between items-start text-xs">
-                <span className="text-third">{isCPI ? "Max CPI Bid" : "Max CPC Bid"}</span>
+                <span className="text-third">
+                  {isCPI ? "Max CPI Bid" : "Max CPC Bid"}
+                </span>
                 <span className="text-primary font-semibold">₹{maxBid}</span>
               </div>
               <div className="flex justify-between items-start text-xs">
@@ -137,22 +158,34 @@ export default function ReviewStep({
 
       {/* Performance Summary Box */}
       <div className="p-4 rounded-xl border border-third/30 bg-transparent space-y-3.5">
-        <h4 className="text-xs font-semibold text-third">Estimated Monthly Performance</h4>
-        
+        <h4 className="text-xs font-semibold text-third">
+          Estimated Monthly Performance
+        </h4>
+
         <div className="space-y-2.5">
           <div className="flex justify-between items-center text-xs">
-            <span className="text-third">{isCPI ? "Estimated inquiries" : "Estimated clicks"}</span>
-            <span className="text-primary font-semibold">{clicks.toLocaleString()}</span>
+            <span className="text-third">
+              {isCPI ? "Estimated inquiries" : "Estimated clicks"}
+            </span>
+            <span className="text-primary font-semibold">
+              {clicks.toLocaleString()}
+            </span>
           </div>
-          
+
           <div className="flex justify-between items-center text-xs">
             <span className="text-third">Estimated impressions</span>
-            <span className="text-primary font-semibold">{impressions.toLocaleString()}</span>
+            <span className="text-primary font-semibold">
+              {impressions.toLocaleString()}
+            </span>
           </div>
 
           <div className="border-t border-white/5 pt-2.5 mt-1 flex justify-between items-center">
-            <span className="text-sm font-semibold text-primary">Total budget (30 days)</span>
-            <span className="text-base font-bold text-fourth">₹{total.toLocaleString()}</span>
+            <span className="text-sm font-semibold text-primary">
+              Total budget (30 days)
+            </span>
+            <span className="text-base font-bold text-fourth">
+              ₹{total.toLocaleString()}
+            </span>
           </div>
         </div>
       </div>
@@ -168,7 +201,9 @@ export default function ReviewStep({
           </span>
         </div>
         <span className="text-[10px] text-third text-right leading-relaxed block">
-          Budget will be reserved<br />from your wallet on launch
+          Budget will be reserved
+          <br />
+          from your wallet on launch
         </span>
       </div>
 
@@ -176,7 +211,8 @@ export default function ReviewStep({
       <div className="flex gap-3 p-4 rounded-xl bg-fourth/5 border border-fourth/20 items-start">
         <ShieldCheck className="text-fourth shrink-0 mt-0.5" size={18} />
         <p className="text-xs text-fourth leading-relaxed font-medium">
-          Your ad will go into review before going live. Typically approved within 2–4 hours. You will be notified once active.
+          Your ad will go into review before going live. Typically approved
+          within 2–4 hours. You will be notified once active.
         </p>
       </div>
     </div>

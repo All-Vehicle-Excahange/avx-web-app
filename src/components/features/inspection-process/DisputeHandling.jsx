@@ -40,20 +40,19 @@ export default function DisputeHandling() {
           </p>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat mb-8 md:mb-10">
-           Structured Review 
-              <span className="text-fourth/80">       Protocol
-              </span>
-            </h2>
+            Structured Review
+            <span className="text-fourth/80"> Protocol</span>
+          </h2>
 
           <p className="text-lg text-third leading-relaxed">
-            Reecomm maintains a defined review workflow to address inspection-related
-            discrepancies with full audit visibility and procedural clarity.
+            Reecomm maintains a defined review workflow to address
+            inspection-related discrepancies with full audit visibility and
+            procedural clarity.
           </p>
         </div>
 
         {/* MAIN CONSOLE */}
         <div className="relative rounded-3xl border border-primary/20  backdrop-blur-md overflow-hidden">
-          
           {/* top strip — calmer */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-primary/10 ">
             <p className="text-xs tracking-widest uppercase text-third/70">
@@ -111,7 +110,6 @@ export default function DisputeHandling() {
 
         {/* AUDIT STATEMENT */}
         <div className="mt-14 grid lg:grid-cols-12 gap-10 items-center">
-          
           {/* LEFT TEXT */}
           <div className="lg:col-span-6">
             <h3 className="text-xl md:text-2xl font-semibold text-primary mb-3">
@@ -119,16 +117,23 @@ export default function DisputeHandling() {
             </h3>
 
             <p className="text-sm text-third leading-relaxed">
-              Reecomm maintains detailed inspection logs including media, checklist
-              inputs, timestamps, and inspector attribution. This ensures every
-              review is backed by verifiable historical data.
+              Reecomm maintains detailed inspection logs including media,
+              checklist inputs, timestamps, and inspector attribution. This
+              ensures every review is backed by verifiable historical data.
             </p>
           </div>
 
           {/* RIGHT VISUAL */}
           <div className="lg:col-span-6">
             <div className="relative rounded-2xl overflow-hidden border border-primary/10">
-              <Image src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1600&auto=format&fit=crop" alt="Reecomm audit trail and inspection data review dashboard" width={800} height={500} unoptimized className="w-full h-55 md:h-65 object-cover opacity-95" />
+              <Image
+                src="/inspection-audit-trails-are-preserved.webp"
+                alt="Reecomm audit trail and inspection data review dashboard"
+                width={800}
+                height={500}
+                unoptimized
+                className="w-full h-55 md:h-65 object-cover opacity-95"
+              />
               <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
             </div>
           </div>

@@ -10,6 +10,7 @@ function Index() {
 
     const tabTitles = {
         myvehicle: "My Vehicles",
+        inventory: "My Vehicles",
         inquaries: "Receive Inquiries",
         myinquary: "Send Inquiry",
         inspections: "Reecomm Inspections",
