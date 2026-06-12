@@ -28,13 +28,36 @@ function Index({ seo }) {
   return (
     <>
       <Head>
-        <title>{seo?.title || "Used Cars  | Reecomm"}</title>
+        <title>{seo?.title || "Used Cars | Reecomm"}</title>
         <meta
           name="description"
           content={
             seo?.description || "Browse verified used vehicles for sale."
           }
         />
+        {/* Canonical */}
+        <link rel="canonical" href="https://www.reecomm.com/search" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Reecomm" />
+        <meta property="og:url" content="https://www.reecomm.com/search" />
+        <meta property="og:title" content={seo?.title || "Used Cars | Reecomm"} />
+        <meta
+          property="og:description"
+          content={seo?.description || "Browse verified used vehicles for sale on Reecomm."}
+        />
+        <meta property="og:image" content="https://www.reecomm.com/logo/logo.webp" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@reecomm" />
+        <meta name="twitter:title" content={seo?.title || "Used Cars | Reecomm"} />
+        <meta
+          name="twitter:description"
+          content={seo?.description || "Browse verified used vehicles for sale on Reecomm."}
+        />
+        <meta name="twitter:image" content="https://www.reecomm.com/logo/logo.webp" />
       </Head>
       <Suspense fallback={null}>
         <SearchContent

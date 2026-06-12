@@ -65,10 +65,9 @@ const AboutSection = () => {
           {/* LEFT SIDE: Image Features */}
           <div className="relative min-h-[840px] lg:min-h-full lg:col-span-6 group overflow-hidden">
             <Image
-              src="/Frame 1160449162.jpg"
+              src="/about-us-built-to-fix-whats-broken-01.webp"
               alt="Reecomm Platform"
-              width={800}
-              height={800}
+             fill
               className="absolute inset-0 object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/10 to-transparent pointer-events-none"></div>
@@ -149,7 +148,7 @@ const AboutSection = () => {
               </p>
 
               {/* Divider */}
-              <div className="w-full h-[2px] bg-linear-to-r from-primary/60 to-transparent mb-6 transition-all group-hover:from-primary" />
+              <div className="w-full h-0.5 bg-linear-to-r from-primary/60 to-transparent mb-6 transition-all group-hover:from-primary" />
 
               {/* Value */}
               <p className="text-4xl md:text-5xl font-bold tracking-tight transition-transform">

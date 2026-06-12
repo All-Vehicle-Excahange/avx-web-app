@@ -7,9 +7,7 @@ import { motion } from "framer-motion";
 export default function InspectionAdvantage() {
   return (
     <section className="relative overflow-hidden py-10 lg:py-10">
-
       <div className="relative z-10 mx-auto w-full">
-
         {/* LABEL */}
         <motion.p
           className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-8"
@@ -22,7 +20,6 @@ export default function InspectionAdvantage() {
 
         {/* MAIN GRID — image left, content right */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-0 items-stretch ">
-
           {/* LEFT — IMAGE BLOCK */}
           <motion.div
             className="relative h-[300px] lg:h-auto lg:max-h-[520px] overflow-hidden border-0 rounded-2xl"
@@ -31,11 +28,18 @@ export default function InspectionAdvantage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <Image src="/car-inspection.avif" alt="Car inspection" width={800} height={500} className="w-full h-full object-cover " style={{ objectPosition: "center 55%" }} />
+            <Image
+              src="/increase-buyer-confidence-vehicle.webp"
+              alt="Car inspection"
+              width={800}
+              height={500}
+              className="w-full h-full object-cover "
+              style={{ objectPosition: "center 55%" }}
+            />
             {/* right fade so it bleeds into content */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black" />
+            <div className="absolute inset-0 bg-linear-to-r from-transparent via-transparent to-black" />
             {/* bottom fade for mobile */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent lg:hidden" />
+            <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent lg:hidden" />
 
             {/* floating stat badge — sits over the image */}
             <motion.div
@@ -49,7 +53,9 @@ export default function InspectionAdvantage() {
                 3×
               </p>
               <p className="text-[11px] text-third/60 leading-snug">
-                more inquiries on<br />inspected listings
+                more inquiries on
+                <br />
+                inspected listings
               </p>
             </motion.div>
           </motion.div>
@@ -94,19 +100,24 @@ export default function InspectionAdvantage() {
             <div className="space-y-5">
               <p className="text-[15px] leading-[1.9] text-third">
                 Buyers make decisions under uncertainty. When your listing
-                carries a certified Reecomm inspection — documented, timestamped,
-                and publicly visible — that uncertainty collapses. What remains
-                is confidence, and confidence converts.
+                carries a certified Reecomm inspection — documented,
+                timestamped, and publicly visible — that uncertainty collapses.
+                What remains is confidence, and confidence converts.
               </p>
               <p className="text-[15px] leading-[1.9] text-third/60">
-                {"Every report is permanently tied to your vehicle's record,accessible from first inquiry to final handover."}
+                {
+                  "Every report is permanently tied to your vehicle's record,accessible from first inquiry to final handover."
+                }
               </p>
             </div>
 
             {/* feature rows */}
             <div className="space-y-0">
               {[
-                { num: "01", text: "Certified report linked to vehicle history" },
+                {
+                  num: "01",
+                  text: "Certified report linked to vehicle history",
+                },
                 { num: "02", text: "Visible to all buyers on your listing" },
                 { num: "03", text: "Request before or after going live" },
               ].map((item, i) => (

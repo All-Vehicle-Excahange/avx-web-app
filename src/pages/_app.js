@@ -47,7 +47,7 @@ export default function App({ Component, pageProps }) {
   const [loading, setLoading] = useState(false);
 
   // Splash Screen State
-  const [showSplash, setShowSplash] = useState(null);
+  const [showSplash, setShowSplash] = useState(false);
 
   // INITIAL SETUP
   useEffect(() => {
@@ -132,19 +132,23 @@ export default function App({ Component, pageProps }) {
 
   // Prevent hydration flashing
   if (showSplash === null) {
-    return null;
   }
 
   return (
     <>
-     <QueryClientProvider client={queryClient}>
-    <div
-      className={`${exo.variable} ${inter.variable} ${lexendDeca.variable} ${montserrat.variable} ${poppins.variable} ${raleway.variable} ${roboto.variable} font-sans`}
-    >
-      <Head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
+      <QueryClientProvider client={queryClient}>
+        <div
+          className={`${exo.variable} ${inter.variable} ${lexendDeca.variable} ${montserrat.variable} ${poppins.variable} ${raleway.variable} ${roboto.variable} font-sans`}
+        >
+          <Head>
+            {/* Global canonical — strips query params so Google picks the right URL */}
+            <link
+              rel="canonical"
+              href={`https://www.reecomm.com${router.asPath.split("?")[0]}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
               try {
                 const hasSeen = localStorage.getItem('splashSeen');
                 const sessionSeen = sessionStorage.getItem('splashSession');
@@ -154,18 +158,18 @@ export default function App({ Component, pageProps }) {
                 }
               } catch (e) {}
             `,
-          }}
-        />
-      </Head>
+              }}
+            />
+          </Head>
 
-      {/* GOOGLE ANALYTICS */}
-      <Script
-        strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
-      />
+          {/* GOOGLE ANALYTICS */}
+          <Script
+            strategy="afterInteractive"
+            src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
+          />
 
-      <Script id="google-analytics" strategy="afterInteractive">
-        {`
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
           window.dataLayer = window.dataLayer || [];
 
           function gtag(){dataLayer.push(arguments);}
@@ -176,50 +180,52 @@ export default function App({ Component, pageProps }) {
             page_path: window.location.pathname,
           });
         `}
-      </Script>
+          </Script>
 
-      {/* GLOBAL LOADER */}
-      {loading && <GlobalLoader />}
+          {/* GLOBAL LOADER */}
+          {loading && <GlobalLoader />}
 
-      {/* PAGE RENDER */}
-      {hasFullWidth ? (
-        <Component {...pageProps} />
-      ) : (
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      )}
+          {/* PAGE RENDER */}
+          {hasFullWidth ? (
+            <Component {...pageProps} />
+          ) : (
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          )}
 
-      {/* LOGIN POPUP */}
-      <LoginPopup
-        isOpen={isLoginPopupOpen && !showSplash}
-        onClose={closeLoginPopup}
-        onSignup={openSignupPopup}
-        onSuccess={closeLoginPopup}
-      />
+          {/* LOGIN POPUP */}
+          <LoginPopup
+            isOpen={isLoginPopupOpen && !showSplash}
+            onClose={closeLoginPopup}
+            onSignup={openSignupPopup}
+            onSuccess={closeLoginPopup}
+          />
 
-      {/* SIGNUP POPUP */}
-      <SignupPopup
-        isOpen={isSignupPopupOpen && !showSplash}
-        onClose={closeSignupPopup}
-        onLogin={openLoginPopup}
-        onSuccess={closeSignupPopup}
-      />
+          {/* SIGNUP POPUP */}
+          <SignupPopup
+            isOpen={isSignupPopupOpen && !showSplash}
+            onClose={closeSignupPopup}
+            onLogin={openLoginPopup}
+            onSuccess={closeSignupPopup}
+          />
 
-      {/* SPLASH SCREEN */}
-      {showSplash && (
-        <div style={{ display: "var(--splash-display, contents)" }}>
-          <SplashScreen onComplete={handleSplashComplete} />
+          {/* SPLASH SCREEN */}
+          {showSplash && (
+            <div style={{ display: "var(--splash-display, contents)" }}>
+              <SplashScreen onComplete={handleSplashComplete} />
+            </div>
+          )}
+
+          {/* GLOBAL COMPARE BUTTON */}
+          {!showSplash &&
+            !router.asPath.startsWith("/consult/dashboard/") &&
+            !router.asPath.startsWith("/consult/kyc") && (
+              <GlobalCompareButton />
+            )}
         </div>
-      )}
-
-      {/* GLOBAL COMPARE BUTTON */}
-      {!showSplash &&
-        !router.asPath.startsWith("/consult/dashboard/") &&
-        !router.asPath.startsWith("/consult/kyc") && <GlobalCompareButton />}
-    </div>
-     <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </>
   );
 }

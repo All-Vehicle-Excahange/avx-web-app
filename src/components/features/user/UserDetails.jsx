@@ -17,6 +17,7 @@ function UserDetails() {
   const user = useAuthStore((state) => state.user);
   const isConsultant = user?.userRole === "CONSULTATION";
   const activeTab = params?.id || (isConsultant ? "myprofile" : "myvehicle");
+  const resolvedTab = activeTab === "inventory" ? "myvehicle" : activeTab;
 
   return (
     <section className="pt-12">
@@ -47,14 +48,14 @@ function UserDetails() {
           <button
             key={tab.id}
             onClick={() => push(`/user/details/${tab.id}`, undefined, { shallow: true })}
-            className={`relative py-4 text-sm font-medium transition hover:cursor-pointer ${activeTab === tab.id
+            className={`relative py-4 text-sm font-medium transition hover:cursor-pointer ${resolvedTab === tab.id
               ? "text-primary"
               : "text-third hover:text-primary"
               }`}
           >
             {tab.label}
 
-            {activeTab === tab.id && (
+            {resolvedTab === tab.id && (
               <span className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full" />
             )}
           </button>
@@ -62,12 +63,12 @@ function UserDetails() {
       </div>
 
       {/* TAB CONTENT */}
-      {activeTab === "myvehicle" && <MyVehicle />}
-      {activeTab === "inquaries" && <Inquiries />}
-      {activeTab === "myinquary" && <MyInquary />}
-      {activeTab === "inspections" && <Inspection />}
-      {activeTab === "wishlist" && <Wishlist />}
-      {activeTab === "myprofile" && <MyProfile />}
+      {resolvedTab === "myvehicle" && <MyVehicle />}
+      {resolvedTab === "inquaries" && <Inquiries />}
+      {resolvedTab === "myinquary" && <MyInquary />}
+      {resolvedTab === "inspections" && <Inspection />}
+      {resolvedTab === "wishlist" && <Wishlist />}
+      {resolvedTab === "myprofile" && <MyProfile />}
     </section>
   );
 }

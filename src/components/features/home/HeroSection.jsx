@@ -9,14 +9,18 @@ export default function HeroSection() {
   const [activeTab, setActiveTab] = useState("vehicles");
 
   return (
-    <section
-      className="relative h-screen bg-cover bg-center"
-      style={{
-        backgroundImage: "url(/hero-back.webp)",
-      }}
-    >
+    <section className="relative h-screen w-full overflow-hidden">
+      {/* Video Background */}
+      <video
+        autoPlay
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      >
+        <source src="/intro_home.mp4" type="video/mp4" />
+      </video>
       {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/40 z-0" />
+      <div className="absolute inset-0 bg-black/30 z-0" />
 
       {/* 🔥 TOP GRADIENT SCRIM (KEY FIX) */}
       <div
@@ -33,37 +37,61 @@ export default function HeroSection() {
           collapsed ? "opacity-0" : "opacity-100"
         }`}
       >
-        <p className="text-primary tracking-widest uppercase font-primary">
+        {/* <p className="text-primary tracking-widest uppercase font-primary">
           Welcome to reecomm
         </p>
 
         <h1 className="text-4xl font-bold text-primary drop-shadow-2xl font-primary">
           Pick Your Vehicle
-        </h1>
+        </h1> */}
 
-        <div className="mt-[20vh] hidden lg:flex gap-6 relative bottom-10 lg:bottom-5 xl:bottom-8">
-          {/* Vehicles Tab */}
+        <div className="mt-[20vh] hidden lg:flex items-center gap-6 relative bottom-10 lg:bottom-5 xl:bottom-8 select-none">
+          {/* Vehicles Tab Label */}
           <button
             onClick={() => setActiveTab("vehicles")}
-            className="relative flex cursor-pointer flex-col items-center text-primary"
+            className={`flex items-center gap-2 cursor-pointer transition-all duration-300 ${
+              activeTab === "vehicles"
+                ? "text-primary scale-105 font-semibold"
+                : "text-primary/50 hover:text-primary/80"
+            }`}
           >
-            <Car size={18} />
-            <span className="mt-1 text-sm font-medium">Vehicle</span>
-            {activeTab === "vehicles" && (
-              <span className="absolute -bottom-2 h-0.5 w-full bg-primary rounded-full" />
-            )}
+            <Car size={20} />
+            <span className="text-base tracking-wide font-medium">Vehicle</span>
           </button>
 
-          {/* Users Tab */}
+          {/* Central Toggle Switch */}
+          <button
+            onClick={() =>
+              setActiveTab((prev) =>
+                prev === "vehicles" ? "consult" : "vehicles"
+              )
+            }
+            aria-label="Toggle between vehicles and consultants"
+            className="relative w-16 h-9 rounded-full bg-white/10 backdrop-blur-md border border-white/20 p-1 cursor-pointer transition-all duration-300 hover:border-white/40 focus:outline-none"
+          >
+            {/* Sliding circular knob */}
+            <div
+              className={`absolute top-1 w-7 h-7 rounded-full shadow-lg transition-all duration-300 ease-out flex items-center justify-center ${
+                activeTab === "vehicles"
+                  ? "left-1 bg-fourth"
+                  : "left-[calc(100%-2rem)] bg-primary"
+              }`}
+            >
+              <div className="w-2 h-2 rounded-full bg-secondary/30" />
+            </div>
+          </button>
+
+          {/* Users Tab Label */}
           <button
             onClick={() => setActiveTab("consult")}
-            className="relative flex cursor-pointer flex-col items-center text-primary"
+            className={`flex items-center gap-2 cursor-pointer transition-all duration-300 ${
+              activeTab === "consult"
+                ? "text-primary scale-105 font-semibold"
+                : "text-primary/50 hover:text-primary/80"
+            }`}
           >
-            <User2 size={18} />
-            <span className="mt-1 text-sm font-medium">Consultant</span>
-            {activeTab === "consult" && (
-              <span className="absolute -bottom-2 h-0.5 w-full bg-primary rounded-full" />
-            )}
+            <User2 size={20} />
+            <span className="text-base tracking-wide font-medium">Consultant</span>
           </button>
         </div>
       </div>

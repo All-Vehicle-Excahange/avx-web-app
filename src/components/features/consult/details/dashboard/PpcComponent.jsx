@@ -73,9 +73,7 @@ export default function PpcComponent() {
   const handleToggleAd = async (id, currentStatus) => {
     const current = toggledStatuses[id] || currentStatus;
     const next =
-      current === "Active" ||
-      current === "In Review" ||
-      current === "Completed"
+      current === "Active" || current === "In Review" || current === "Completed"
         ? "Paused"
         : "Active";
 
@@ -416,11 +414,157 @@ export default function PpcComponent() {
           (activeFilter !== "Draft" &&
             campaignsLoading &&
             campaigns.length === 0) ? (
-            <div className="py-8 text-center text-zinc-500 text-sm animate-pulse">
-              {activeFilter === "Draft"
-                ? "Loading drafts..."
-                : "Loading campaigns..."}
-            </div>
+            <>
+              {/* Desktop Table Skeleton */}
+              <div className="hidden md:block overflow-x-auto border border-white/10 rounded-2xl bg-secondary/30 backdrop-blur-sm">
+                <table className="w-full text-left border-collapse text-sm">
+                  <thead>
+                    <tr className="border-b border-white/10 text-third font-medium">
+                      <th className="p-4 w-12 text-center"></th>
+                      <th className="p-4 text-xs tracking-wider uppercase">
+                        Campaign
+                      </th>
+                      <th className="p-4 text-xs tracking-wider uppercase">
+                        Placement
+                      </th>
+                      <th className="p-4 text-xs tracking-wider uppercase">
+                        Status
+                      </th>
+                      <th className="p-4 text-xs tracking-wider uppercase">
+                        Billing
+                      </th>
+                      <th className="p-4 text-xs tracking-wider uppercase">
+                        Budget
+                      </th>
+                      <th className="p-4 text-xs tracking-wider uppercase text-center">
+                        Impressions
+                      </th>
+                      <th className="p-4 text-xs tracking-wider uppercase text-center">
+                        Results
+                      </th>
+                      <th className="p-4 text-xs tracking-wider uppercase text-center">
+                        CTR
+                      </th>
+                      <th className="p-4 text-xs tracking-wider uppercase text-right">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {Array.from({ length: 5 }).map((_, idx) => (
+                      <tr
+                        key={idx}
+                        className="border-b border-white/5 last:border-0 animate-pulse"
+                      >
+                        {/* Toggle switch skeleton */}
+                        <td className="p-4 w-12 text-center">
+                          <div className="inline-block h-5 w-9 rounded-full bg-zinc-800" />
+                        </td>
+                        {/* Title skeleton */}
+                        <td className="p-4">
+                          <div className="h-4 bg-zinc-800 rounded-md w-36 animate-pulse" />
+                        </td>
+                        {/* Placement skeleton */}
+                        <td className="p-4">
+                          <div className="flex gap-2">
+                            <div className="h-3.5 bg-zinc-800 rounded-full w-16" />
+                            <div className="h-3.5 bg-zinc-800 rounded-full w-12" />
+                          </div>
+                        </td>
+                        {/* Status badge skeleton */}
+                        <td className="p-4">
+                          <div className="h-6 bg-zinc-800 rounded-md w-16" />
+                        </td>
+                        {/* Billing model and rate skeleton */}
+                        <td className="p-4">
+                          <div className="space-y-1.5">
+                            <div className="h-3.5 bg-zinc-800 rounded-md w-10" />
+                            <div className="h-3 bg-zinc-800/60 rounded-md w-14" />
+                          </div>
+                        </td>
+                        {/* Budget skeleton */}
+                        <td className="p-4">
+                          <div className="space-y-1.5">
+                            <div className="h-3.5 bg-zinc-800 rounded-md w-16" />
+                            <div className="h-3 bg-zinc-800/60 rounded-md w-12" />
+                          </div>
+                        </td>
+                        {/* Impressions skeleton */}
+                        <td className="p-4 text-center">
+                          <div className="inline-block h-3.5 bg-zinc-800 rounded-md w-8" />
+                        </td>
+                        {/* Results skeleton */}
+                        <td className="p-4 text-center">
+                          <div className="space-y-1.5 inline-block">
+                            <div className="h-3.5 bg-zinc-800 rounded-md w-6 mx-auto" />
+                            <div className="h-2.5 bg-zinc-800/60 rounded-md w-8 mx-auto" />
+                          </div>
+                        </td>
+                        {/* CTR skeleton */}
+                        <td className="p-4 text-center">
+                          <div className="space-y-1.5 inline-block">
+                            <div className="h-3.5 bg-zinc-800 rounded-md w-8 mx-auto" />
+                            <div className="h-2.5 bg-zinc-800/60 rounded-md w-6 mx-auto" />
+                          </div>
+                        </td>
+                        {/* Action skeleton */}
+                        <td className="p-4 text-right">
+                          <div className="inline-block h-6 bg-zinc-800 rounded-md w-16" />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile Card Grid Skeleton */}
+              <div className="grid grid-cols-1 gap-4 md:hidden">
+                {Array.from({ length: 3 }).map((_, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-primary/5 border border-third/15 rounded-xl p-4 space-y-4 animate-pulse"
+                  >
+                    <div className="flex justify-between items-start gap-2">
+                      <div className="space-y-2 flex-1">
+                        {/* Title */}
+                        <div className="h-4 bg-zinc-800 rounded-md w-3/4 animate-pulse" />
+                        {/* Placements */}
+                        <div className="flex gap-2">
+                          <div className="h-3 bg-zinc-800 rounded-full w-14 animate-pulse" />
+                          <div className="h-3 bg-zinc-800 rounded-full w-16 animate-pulse" />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="h-5 w-9 rounded-full bg-zinc-800 animate-pulse" />
+                        <div className="h-5 w-14 rounded-md bg-zinc-800 animate-pulse" />
+                      </div>
+                    </div>
+
+                    {/* Stats Grid */}
+                    <div className="grid grid-cols-3 gap-2 bg-white/2 rounded-lg p-2.5 text-center">
+                      {[1, 2, 3].map((i) => (
+                        <div key={i} className="space-y-1.5">
+                          <div className="h-2.5 bg-zinc-800/60 rounded-md w-12 mx-auto animate-pulse" />
+                          <div className="h-3.5 bg-zinc-800 rounded-md w-8 mx-auto animate-pulse" />
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Footer Details */}
+                    <div className="flex justify-between items-center pt-2 border-t border-white/5">
+                      <div className="flex items-center gap-1.5">
+                        <div className="h-3 bg-zinc-800 rounded-md w-8 animate-pulse" />
+                        <div className="h-3 bg-zinc-800/60 rounded-md w-10 animate-pulse" />
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <div className="h-3 bg-zinc-800 rounded-md w-12 animate-pulse" />
+                        <div className="h-3 bg-zinc-800/60 rounded-md w-10 animate-pulse" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
           ) : displayAds.length > 0 ? (
             <>
               {/* Desktop Table View */}
