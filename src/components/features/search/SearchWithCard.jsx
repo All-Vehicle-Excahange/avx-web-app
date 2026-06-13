@@ -14,7 +14,7 @@ import FilterSection from "./FilterSection";
 import PriceBased from "./PriceBased";
 import CustomSelect from "@/components/ui/custom-select";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import {
   getFilteredVehiclesQuery,
   getFilterConsualtQuery,
@@ -32,6 +32,7 @@ import {
 import { MAKER_NAME_MAPPING } from "@/data/makers";
 import { getState, getCities } from "@/services/user.service";
 import { getUserCityAndStateByLatLong } from "@/services/consult.filter.service";
+import { addClickEvent, getAddRecomandedVehicle } from "@/services/ppc.service";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
@@ -133,15 +134,19 @@ export default function SearchWithCard({
     return searchParams.get("reccomInspected") === "true";
   });
 
-  const [minPrice, setMinPrice] = useState(() => mPrice > 0 ? mPrice : 50000);
-  const [maxPrice, setMaxPrice] = useState(() => mxPrice > 0 ? mxPrice : 2000000);
+  const [minPrice, setMinPrice] = useState(() => (mPrice > 0 ? mPrice : 50000));
+  const [maxPrice, setMaxPrice] = useState(() =>
+    mxPrice > 0 ? mxPrice : 2000000,
+  );
   const [kmDistance, setKmDistance] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
   // ── Brand states ──
   const [brands, setBrands] = useState([]);
-  const [selectedBrands, setSelectedBrands] = useState(() => makerId ? [makerId] : []);
+  const [selectedBrands, setSelectedBrands] = useState(() =>
+    makerId ? [makerId] : [],
+  );
   const [brandSearch, setBrandSearch] = useState("");
   const [brandPage, setBrandPage] = useState(1);
   const [brandHasMore, setBrandHasMore] = useState(true);
@@ -149,7 +154,9 @@ export default function SearchWithCard({
 
   // ── Model states ──
   const [models, setModels] = useState([]);
-  const [selectedModels, setSelectedModels] = useState(() => modelIdParam ? [modelIdParam] : []);
+  const [selectedModels, setSelectedModels] = useState(() =>
+    modelIdParam ? [modelIdParam] : [],
+  );
   const [modelSearch, setModelSearch] = useState("");
   const [modelPage, setModelPage] = useState(1);
   const [modelHasMore, setModelHasMore] = useState(true);
@@ -162,16 +169,26 @@ export default function SearchWithCard({
     const qStateId = searchParams.get("stateId") || initialFilters.stateId;
     return qStateId ? Number(qStateId) : null;
   });
-  const [selectedStateName, setSelectedStateName] = useState(() => initialFilters.stateName || "");
+  const [selectedStateName, setSelectedStateName] = useState(
+    () => initialFilters.stateName || "",
+  );
   const [selectedCityId, setSelectedCityId] = useState(() => {
     const qCityId = searchParams.get("cityId") || initialFilters.cityId;
     return qCityId ? Number(qCityId) : null;
   });
-  const [selectedCityName, setSelectedCityName] = useState(() => initialFilters.cityName || "");
+  const [selectedCityName, setSelectedCityName] = useState(
+    () => initialFilters.cityName || "",
+  );
   const [selectedYear, setSelectedYear] = useState([]);
   const [years, setYears] = useState([]);
   const [yearLoading, setYearLoading] = useState(false);
-  const [selectedBodyType, setSelectedBodyType] = useState(() => bodyType ? [bodyType.toLowerCase()] : (initialFilters.bodyType ? [initialFilters.bodyType.toLowerCase()] : []));
+  const [selectedBodyType, setSelectedBodyType] = useState(() =>
+    bodyType
+      ? [bodyType.toLowerCase()]
+      : initialFilters.bodyType
+        ? [initialFilters.bodyType.toLowerCase()]
+        : [],
+  );
   const [selectedRating, setSelectedRating] = useState([]);
   const [selectedSellerType, setSelectedSellerType] = useState([]);
 
@@ -180,9 +197,11 @@ export default function SearchWithCard({
 
   // ── Add these ──
   const [selectedTransmissionTypes, setSelectedTransmissionTypes] = useState(
-    () => transmission ? [transmission.toLowerCase()] : [],
+    () => (transmission ? [transmission.toLowerCase()] : []),
   );
-  const [selectedVariants, setSelectedVariants] = useState(() => variantIdParam ? [variantIdParam] : []);
+  const [selectedVariants, setSelectedVariants] = useState(() =>
+    variantIdParam ? [variantIdParam] : [],
+  );
 
   // ── Fuel Type states ──
   const [fuelTypes, setFuelTypes] = useState([
@@ -194,7 +213,9 @@ export default function SearchWithCard({
     { value: "CNG", label: "CNG" },
   ]);
   const [fuelLoading, setFuelLoading] = useState(false);
-  const [selectedFuelTypes, setSelectedFuelTypes] = useState(() => fuelType ? [fuelType] : []);
+  const [selectedFuelTypes, setSelectedFuelTypes] = useState(() =>
+    fuelType ? [fuelType] : [],
+  );
 
   // ── Transmission Type states ──
   const [transmissionTypes, setTransmissionTypes] = useState([
@@ -304,8 +325,12 @@ export default function SearchWithCard({
   };
 
   /* ================= DEBOUNCED PAYLOADS ================= */
-  const [debouncedPayload, setDebouncedPayload] = useState(() => buildPayload());
-  const [debouncedConsultPayload, setDebouncedConsultPayload] = useState(() => buildConsultPayload());
+  const [debouncedPayload, setDebouncedPayload] = useState(() =>
+    buildPayload(),
+  );
+  const [debouncedConsultPayload, setDebouncedConsultPayload] = useState(() =>
+    buildConsultPayload(),
+  );
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -334,24 +359,92 @@ export default function SearchWithCard({
     kmDistance,
   ]);
 
-  const queryParams = useMemo(() => ({
-    pageNo: currentPage,
-    size: 9,
-    ...(sortBy ? { sortBy, direction: direction || "desc" } : {}),
-  }), [currentPage, sortBy, direction]);
+  const queryParams = useMemo(
+    () => ({
+      pageNo: currentPage,
+      size: 9,
+      ...(sortBy ? { sortBy, direction: direction || "desc" } : {}),
+    }),
+    [currentPage, sortBy, direction],
+  );
 
   const { data: searchData, isFetching: vehiclesLoading } = useQuery(
-    getFilteredVehiclesQuery(debouncedPayload, queryParams)
+    getFilteredVehiclesQuery(debouncedPayload, queryParams),
   );
 
   const { data: consultantData } = useQuery(
-    getFilterConsualtQuery(debouncedConsultPayload)
+    getFilterConsualtQuery(debouncedConsultPayload),
   );
+
+  // Resolve brand and model names for the PPC API
+  const resolvedBrandName = useMemo(() => {
+    if (selectedBrands.length === 0) return "";
+    const makerId = selectedBrands[0];
+    if (MAKER_NAME_MAPPING[makerId]) {
+      return MAKER_NAME_MAPPING[makerId];
+    }
+    const found = brands.find((b) => String(b.value) === String(makerId));
+    return found ? found.label : "";
+  }, [selectedBrands, brands]);
+
+  const resolvedModelName = useMemo(() => {
+    if (selectedModels.length === 0) return "";
+    const modelId = selectedModels[0];
+    const found = models.find((m) => String(m.value) === String(modelId));
+    return found ? found.label : "";
+  }, [selectedModels, models]);
+
+  const mappedVehicleTypeForAds = useMemo(() => {
+    if (!vehicleType) return "FOUR_WHEELER";
+    const normalized = vehicleType.toLowerCase();
+    if (normalized.includes("2") || normalized.includes("two")) {
+      return "TWO_WHEELER";
+    }
+    return "FOUR_WHEELER";
+  }, [vehicleType]);
+
+  const adParams = useMemo(() => {
+    const params = {
+      placement: "SEARCH_RESULT_PAGE",
+      vehicleType: mappedVehicleTypeForAds,
+      maxPrice: maxPrice,
+      page: 0,
+      size: 10,
+    };
+    if (resolvedBrandName) {
+      params.make = resolvedBrandName.toUpperCase();
+    }
+    if (resolvedModelName) {
+      params.model = resolvedModelName;
+    }
+    return params;
+  }, [mappedVehicleTypeForAds, resolvedBrandName, resolvedModelName, maxPrice]);
+
+  const { data: recommendedAdsData, isFetching: isAdsLoading } = useQuery({
+    queryKey: ["recommended-vehicles-ads", adParams],
+    queryFn: async () => {
+      const res = await getAddRecomandedVehicle(adParams);
+      return res;
+    },
+    staleTime: 5 * 60 * 1000,
+    placeholderData: keepPreviousData,
+  });
+
+  const recommendedVehicles = useMemo(() => {
+    return (recommendedAdsData?.data || []).map((item) => ({
+      ...item.vehicle,
+      sponsored: item.sponsored,
+      adId: item.adId,
+      billingType: item.billingType,
+      placement: item.placement,
+    }));
+  }, [recommendedAdsData]);
 
   const vehicles = searchData?.topPicksVehicles?.vehicles || [];
   const relatedVehicles = searchData?.similarVehicles || [];
   const priceBasedVehicles = searchData?.priceMatchVehicles || [];
-  const topPicksPageResponse = searchData?.topPicksVehicles?.pageResponse || null;
+  const topPicksPageResponse =
+    searchData?.topPicksVehicles?.pageResponse || null;
 
   useEffect(() => {
     if (onLoadingChange) onLoadingChange(vehiclesLoading);
@@ -1547,8 +1640,10 @@ export default function SearchWithCard({
                   setCurrentPage(1);
                   setDebouncedPayload((prev) => {
                     const next = { ...prev };
-                    if (MIN > MIN) next.minPrice = MIN; else delete next.minPrice;
-                    if (nextMaxPrice < MAX) next.maxPrice = nextMaxPrice; else delete next.maxPrice;
+                    if (MIN > MIN) next.minPrice = MIN;
+                    else delete next.minPrice;
+                    if (nextMaxPrice < MAX) next.maxPrice = nextMaxPrice;
+                    else delete next.maxPrice;
                     return next;
                   });
                 }}
@@ -1593,7 +1688,7 @@ export default function SearchWithCard({
           </div>
 
           <div className="col-span-full mb-10">
-            <SponsoredCars loading={vehiclesLoading} />
+            <SponsoredCars loading={isAdsLoading} data={recommendedVehicles} />
           </div>
 
           <div className="col-span-full mb-10 ">

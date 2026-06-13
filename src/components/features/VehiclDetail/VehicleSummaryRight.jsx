@@ -13,7 +13,7 @@ import SignupPopup from "@/components/auth/SignupPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import RequestAlredySentPopup from "./RequestAlredySentPopup";
 
-export default function VehicleSummaryRight({ vehicle, summary }) {
+export default function VehicleSummaryRight({ vehicle, summary, adId, sponsored, billingType }) {
   const vehicleId = vehicle?.id;
   const vehicleOwnerRole = vehicle?.vehicleOwner?.userRole || "USER";
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -353,6 +353,9 @@ export default function VehicleSummaryRight({ vehicle, summary }) {
           consultName={summary?.consultationName}
           vehicleId={vehicleId}
           onSuccess={handleInquirySuccess}
+          adId={adId}
+          sponsored={sponsored}
+          billingType={billingType}
         />
       )}
       {isAlreadySentOpen && (

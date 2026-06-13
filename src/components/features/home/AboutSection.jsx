@@ -73,7 +73,7 @@ const AboutSection = () => {
             <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/10 to-transparent pointer-events-none"></div>
 
             {/* Logo Overlay on Image */}
-            <div className="absolute bottom-6 left-6 lg:bottom-10 lg:left-10 bg-secondary backdrop-blur-md px-6 py-3 rounded-2xl shadow-xl border border-white/20">
+            {/* <div className="absolute bottom-6 left-6 lg:bottom-10 lg:left-10 bg-secondary backdrop-blur-md px-6 py-3 rounded-2xl shadow-xl border border-white/20">
               <Image
                 src="/logo/logo.webp"
                 alt="Reecomm Logo"
@@ -81,7 +81,7 @@ const AboutSection = () => {
                 height={40}
                 className="h-6 md:h-10 w-auto object-contain"
               />
-            </div>
+            </div> */}
           </div>
 
           {/* RIGHT SIDE: Content */}

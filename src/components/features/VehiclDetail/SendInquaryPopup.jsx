@@ -7,9 +7,10 @@ import Select from "react-select";
 import Button from "@/components/ui/button";
 import { X, CheckCircle2, Loader2 } from "lucide-react";
 import { sendInquary } from "@/services/vehicle.service";
+import { trackInquary } from "@/services/ppc.service";
 import { useQueryClient } from "@tanstack/react-query";
 
-function SendInquaryPopup({ onClose, consultName = "Consultant", vehicleId, onSuccess }) {
+function SendInquaryPopup({ onClose, consultName = "Consultant", vehicleId, onSuccess, adId, sponsored, billingType }) {
     const queryClient = useQueryClient();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -54,6 +55,16 @@ function SendInquaryPopup({ onClose, consultName = "Consultant", vehicleId, onSu
             queryClient.invalidateQueries({ queryKey: ["vehicle-overview", vehicleId] });
 
             if (onSuccess) onSuccess();
+
+            // Track CPI Inquiry if sponsored & billingType is CPI
+            if ((sponsored === "true" || sponsored === true) && billingType === "CPI" && adId) {
+                try {
+                    await trackInquary(vehicleId, { adId });
+                } catch (trackError) {
+                    console.error("Failed to track CPI inquiry:", trackError);
+                }
+            }
+
             setTimeout(() => handleClose(), 60000);
         } catch (error) {
             console.error("Send inquiry error:", error);

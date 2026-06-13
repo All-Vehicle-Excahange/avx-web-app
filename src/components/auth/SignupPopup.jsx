@@ -89,6 +89,8 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
       setOtp(Array(6).fill(""));
       setOtpSent(false);
       setAccountType("personal");
+      setCountdown(0);
+      localStorage.removeItem("otpBlockUntil");
       onClose();
     }, 250);
   };

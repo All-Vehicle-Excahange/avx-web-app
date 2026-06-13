@@ -19,7 +19,7 @@ import Navbar from "@/components/layout/Navbar";
 import VehicleOverviewMain from "./VehicleOverviewMain";
 
 
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getVehicleOverviewQuery, getVehicleSummaryQuery } from "@/queries/vehicle.queries";
 import ReletedConsualt from "./ReletedConsualt";
@@ -86,6 +86,10 @@ export default function VehicleDetails({ initialOverview = null, initialSummary 
   };
   const params = useParams();
   const id = params.id;
+  const searchParams = useSearchParams();
+  const sponsored = searchParams.get("sponsored");
+  const billingType = searchParams.get("billingType");
+  const adId = searchParams.get("adId");
 
   const { data: vehicleOverview, isLoading: isOverviewLoading } = useQuery({
     ...getVehicleOverviewQuery(id),
@@ -193,7 +197,13 @@ export default function VehicleDetails({ initialOverview = null, initialSummary 
               </div>
 
               <aside className="flex flex-col gap-6 lg:sticky lg:top-[102px] h-fit">
-                <VehicleSummaryRight vehicle={vehicleOverview} summary={vehicleSummary} />
+                <VehicleSummaryRight
+                  vehicle={vehicleOverview}
+                  summary={vehicleSummary}
+                  adId={adId}
+                  sponsored={sponsored}
+                  billingType={billingType}
+                />
                 <Testimonials summary={vehicleSummary} />
                 <SpecialOffer />
               </aside>

@@ -99,5 +99,34 @@ describe("LoginPopup Component (Unit Tests)", () => {
       expect(localStorage.getItem("otpBlockUntil")).toBeNull();
     });
   });
+
+  test("clears countdown and otpBlockUntil from localStorage when the popup is closed", async () => {
+    getOtp.mockResolvedValue({ success: true });
+
+    const { container } = render(
+      <LoginPopup isOpen={true} onClose={jest.fn()} />
+    );
+
+    // Enter valid phone number and click GET OTP
+    fireEvent.change(screen.getByPlaceholderText("9999999999"), {
+      target: { value: "9876543210" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: /get otp/i }));
+
+    // Wait for the OTP block to be set in localStorage
+    await waitFor(() => {
+      expect(localStorage.getItem("otpBlockUntil")).not.toBeNull();
+    });
+
+    // Find the close button (the absolute button with the close icon)
+    const closeBtn = container.querySelector("button.absolute");
+    expect(closeBtn).toBeInTheDocument();
+    fireEvent.click(closeBtn);
+
+    // Verify that the OTP block is cleared from localStorage after close delay
+    await waitFor(() => {
+      expect(localStorage.getItem("otpBlockUntil")).toBeNull();
+    });
+  });
 });
 

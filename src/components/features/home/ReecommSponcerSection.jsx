@@ -1,162 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
 import { Bike, Car } from "lucide-react";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
-import { useDebounceValue } from "@/hooks/useDebounce";
+import { useQuery } from "@tanstack/react-query";
+import { getAddRecomandedVehicle } from "@/services/ppc.service";
 
 // --- Utility for Tailwind classes ---
 const cn = (...classes) => classes.filter(Boolean).join(" ");
 
-const DUMMY_VEHICLES = {
-  "4-Wheeler": [
-    {
-      id: "dummy-car-1",
-      makerName: "Mercedes-Benz",
-      modelName: "C-Class",
-      variantName: "C 200 Avantgarde",
-      yearOfMfg: 2021,
-      transmissionType: "Automatic",
-      fuelType: "Petrol",
-      ownership: "1st Owner",
-      seats: 5,
-      avxInspectionRating: "4.8",
-      consultantName: "Elite Motors",
-      address: { city: "Mumbai", country: "India" },
-      price: 4250000,
-      sponsored: true,
-      thumbnailUrl: "https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=600&auto=format&fit=crop&q=60"
-    },
-    {
-      id: "dummy-car-2",
-      makerName: "Hyundai",
-      modelName: "Creta",
-      variantName: "SX (O) Turbo",
-      yearOfMfg: 2022,
-      transmissionType: "Automatic",
-      fuelType: "Petrol",
-      ownership: "1st Owner",
-      seats: 5,
-      avxInspectionRating: "4.6",
-      consultantName: "Apex Auto",
-      address: { city: "Delhi", country: "India" },
-      price: 1680000,
-      sponsored: true,
-      thumbnailUrl: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&auto=format&fit=crop&q=60"
-    },
-    {
-      id: "dummy-car-3",
-      makerName: "Tata",
-      modelName: "Nexon EV",
-      variantName: "Max XZ+ Lux",
-      yearOfMfg: 2023,
-      transmissionType: "Automatic",
-      fuelType: "Electric",
-      ownership: "1st Owner",
-      seats: 5,
-      avxInspectionRating: "4.7",
-      consultantName: "Green Drive",
-      address: { city: "Bangalore", country: "India" },
-      price: 1545000,
-      sponsored: true,
-      thumbnailUrl: "https://images.unsplash.com/photo-1563720223185-11003d516935?w=600&auto=format&fit=crop&q=60"
-    },
-    {
-      id: "dummy-car-4",
-      makerName: "Mahindra",
-      modelName: "Thar",
-      variantName: "LX 4-Wheel Drive",
-      yearOfMfg: 2022,
-      transmissionType: "Manual",
-      fuelType: "Diesel",
-      ownership: "2nd Owner",
-      seats: 4,
-      avxInspectionRating: "4.5",
-      consultantName: "Adventure Rides",
-      address: { city: "Pune", country: "India" },
-      price: 1390000,
-      sponsored: true,
-      thumbnailUrl: "https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=600&auto=format&fit=crop&q=60"
-    }
-  ],
-  "2-Wheeler": [
-    {
-      id: "dummy-bike-1",
-      makerName: "Royal Enfield",
-      modelName: "Classic 350",
-      variantName: "Chrome Red",
-      yearOfMfg: 2022,
-      transmissionType: "Manual",
-      fuelType: "Petrol",
-      ownership: "1st Owner",
-      seats: 2,
-      avxInspectionRating: "4.9",
-      consultantName: "Bullet Junction",
-      address: { city: "Chennai", country: "India" },
-      price: 195000,
-      sponsored: true,
-      thumbnailUrl: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=600&auto=format&fit=crop&q=60"
-    },
-    {
-      id: "dummy-bike-2",
-      makerName: "KTM",
-      modelName: "RC 390",
-      variantName: "GP Edition",
-      yearOfMfg: 2023,
-      transmissionType: "Manual",
-      fuelType: "Petrol",
-      ownership: "1st Owner",
-      seats: 2,
-      avxInspectionRating: "4.7",
-      consultantName: "Speed Wheelz",
-      address: { city: "Kochi", country: "India" },
-      price: 310000,
-      sponsored: true,
-      thumbnailUrl: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600&auto=format&fit=crop&q=60"
-    },
-    {
-      id: "dummy-bike-3",
-      makerName: "Ather",
-      modelName: "450X",
-      variantName: "Gen 3",
-      yearOfMfg: 2023,
-      transmissionType: "Automatic",
-      fuelType: "Electric",
-      ownership: "1st Owner",
-      seats: 2,
-      avxInspectionRating: "4.8",
-      consultantName: "Eco Moto",
-      address: { city: "Bangalore", country: "India" },
-      price: 125000,
-      sponsored: true,
-      thumbnailUrl: "https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?w=600&auto=format&fit=crop&q=60"
-    },
-    {
-      id: "dummy-bike-4",
-      makerName: "Yamaha",
-      modelName: "YZF R15",
-      variantName: "V4 Metallic Red",
-      yearOfMfg: 2022,
-      transmissionType: "Manual",
-      fuelType: "Petrol",
-      ownership: "1st Owner",
-      seats: 2,
-      avxInspectionRating: "4.6",
-      consultantName: "Yamaha Hub",
-      address: { city: "Hyderabad", country: "India" },
-      price: 175000,
-      sponsored: true,
-      thumbnailUrl: "https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=600&auto=format&fit=crop&q=60"
-    }
-  ]
-};
-
 export default function ReecommSponcerSection() {
   const [activeType, setActiveType] = useState("4-Wheeler");
-  const debouncedType = useDebounceValue(activeType, 400);
 
-  const cardData = DUMMY_VEHICLES[debouncedType] || [];
-  const showSkeleton = activeType !== debouncedType;
+  const mappedVehicleType =
+    activeType === "4-Wheeler" ? "FOUR_WHEELER" : "TWO_WHEELER";
+
+  const adParams = useMemo(
+    () => ({
+      placement: "HOMEPAGE_FEATURED",
+      vehicleType: mappedVehicleType,
+      page: 0,
+      size: 10,
+    }),
+    [mappedVehicleType],
+  );
+
+  const { data: recommendedAdsData, isFetching: isAdsLoading } = useQuery({
+    queryKey: ["homepage-featured-ads", adParams],
+    queryFn: async () => {
+      const res = await getAddRecomandedVehicle(adParams);
+      return res;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const cardData = useMemo(() => {
+    return (recommendedAdsData?.data || []).map((item) => ({
+      ...item.vehicle,
+      sponsored: item.sponsored,
+      adId: item.adId,
+      billingType: item.billingType,
+      placement: item.placement,
+    }));
+  }, [recommendedAdsData]);
+
+  const showSkeleton = isAdsLoading;
 
   return (
     <div className="w-full h-full flex flex-col  text-primary">
@@ -218,7 +106,7 @@ export default function ReecommSponcerSection() {
         ) : cardData.length === 0 ? (
           <div className="col-span-full flex justify-center py-16">
             <h3 className="text-lg font-semibold text-primary/40">
-              No vehicles found
+              No data found
             </h3>
           </div>
         ) : (
