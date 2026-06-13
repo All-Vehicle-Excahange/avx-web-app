@@ -10,6 +10,9 @@ const ENDPOINT = {
   getAllCampaigns: "/ppc/boosts",
   changeCampaignStatus: "/ppc/boost",
   updateCampaign: "/ppc/boost",
+  getAddRecomandedVehicle: "/ppc/delivery/recommendations",
+  addClickEvent: "/ppc/delivery",
+  trackInquary: "/vehicle/inquiry",
 };
 
 export const getAllCampaigns = async (payload) => {
@@ -96,6 +99,46 @@ export const updateCampaign = async (id, payload) => {
     const res = await axiosInstance.put(
       `${ENDPOINT.updateCampaign}/${id}`,
       payload,
+    );
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const getAddRecomandedVehicle = async (params) => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getAddRecomandedVehicle, {
+      params: params,
+    });
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const addClickEvent = async (id, placement) => {
+  try {
+    const res = await axiosInstance.post(
+      `${ENDPOINT.addClickEvent}/${id}/click`,
+      {
+        placement,
+      },
+    );
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const trackInquary = async (vehicleId, body) => {
+  try {
+    const res = await axiosInstance.post(
+      `${ENDPOINT.trackInquary}/${vehicleId}/inquiry`,
+      body,
     );
     return handleResponse(res);
   } catch (error) {

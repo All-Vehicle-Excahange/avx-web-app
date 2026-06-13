@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import SponsoredRibbon from "./SponsoredRibbonMain";
 import {
   Fuel,
   Heart,
@@ -15,6 +14,7 @@ import Button from "../button";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { addWishList, removeWishList } from "@/services/user.service";
+import { addClickEvent } from "@/services/ppc.service";
 import { useAuthStore } from "@/stores/useAuthStore";
 import LoginPopup from "@/components/auth/LoginPopup";
 import { createSlug } from "@/lib/helper";
@@ -120,7 +120,8 @@ export default function VehicleCard({
       : data.title,
 
     year: data.yearOfMfg || data.year,
-    transmission: formatText(data.transmissionType) || formatText(data.transmission),
+    transmission:
+      formatText(data.transmissionType) || formatText(data.transmission),
     fuel: formatText(data.fuelType) || formatText(data.fuel),
     seats: data.ownership || data.seats,
 
@@ -157,8 +158,23 @@ export default function VehicleCard({
     .replace(/-+/g, "-")
     .replace(/-$/, "")
     .replace(/^-/, "");
+  const handleAdClick = async () => {
+    if (data?.sponsored && data?.billingType === "CPC" && data?.adId) {
+      try {
+        await addClickEvent(data.adId, data.placement || "SEARCH_RESULT_PAGE");
+      } catch (err) {
+        console.error("Failed to register CPC click:", err);
+      }
+    }
+  };
+
   const handleCardClick = () => {
-    push(`/vehicle/details/${slug}/${data.id}?source=${source}`);
+    handleAdClick();
+    let url = `/vehicle/details/${slug}/${data.id}?source=${source}`;
+    if (data?.sponsored) {
+      url += `&sponsored=true&adId=${data.adId || ""}&billingType=${data.billingType || ""}`;
+    }
+    push(url);
   };
 
   return (
@@ -179,8 +195,6 @@ export default function VehicleCard({
           {/* IMAGE */}
           <div className="relative w-42 sm:w-40 min-h-45 md:min-h-0 md:h-62 md:w-full shrink-0 p-2">
             <div className="relative w-full h-full overflow-hidden rounded-xl">
-              {mapped.sponsored && <SponsoredRibbon />}
-
               {/* Inspection Badge */}
               {data?.inspectionBadgeUrl && (
                 <div className="hidden md:block absolute top-0 left-0 z-20">
@@ -193,7 +207,6 @@ export default function VehicleCard({
                   />
                 </div>
               )}
-              {mapped.sponsored && <SponsoredRibbon />}
 
               <Image
                 src={mapped.image}
@@ -295,7 +308,15 @@ export default function VehicleCard({
 
               <div className="hidden md:block">
                 <Button
-                  href={`/vehicle/details/${slug}/${data.id}?source=${source}`}
+                  href={`/vehicle/details/${slug}/${data.id}?source=${source}${
+                    data?.sponsored
+                      ? `&sponsored=true&adId=${data.adId || ""}&billingType=${data.billingType || ""}`
+                      : ""
+                  }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAdClick();
+                  }}
                   scroll={true}
                   variant="outline"
                   size="sm"

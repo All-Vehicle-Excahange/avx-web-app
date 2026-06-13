@@ -72,6 +72,8 @@ function LoginPopup({
       setOtp(Array(6).fill(""));
       setOtpSent(false);
       setOtpError("");
+      setCountdown(0);
+      localStorage.removeItem("otpBlockUntil");
       onClose();
     }, 250);
   }, [onClose, reset]);
