@@ -15,16 +15,46 @@ import Footer from "@/components/layout/Footer";
 import BecameBanner from "@/components/features/home/BecameBanner";
 import ConsultBanner from "@/components/features/home/ConsultBanner";
 import Head from "next/head";
+import OurTeam from "@/components/features/about/OurTeam";
 
 function index() {
   return (
     <>
       <Head>
-        <title>About Us | Reecomm</title>
+        <title>About Reecomm — India&apos;s Trusted Used Vehicle Marketplace</title>
         <meta
           name="description"
-          content="Learn more about Reecomm's mission, our vision for a transparent vehicle marketplace, and how we empower consultants and buyers."
+          content="Reecomm is building India&apos;s most trusted used vehicle marketplace — connecting verified consultants with confident buyers through transparency, inspections, and professional digital storefronts."
         />
+        <meta
+          name="keywords"
+          content="used vehicle marketplace India, trusted used car platform India"
+        />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://reecomm.com/aboutus" />
+        <meta property="og:title" content="About Reecomm — We didn&apos;t build another listing site" />
+        <meta
+          property="og:description"
+          content="India&apos;s used vehicle market is massive and unstructured. Reecomm is the trust infrastructure that organizes it — verified consultants, inspection-backed listings, and professional growth tools."
+        />
+        <meta property="og:image" content="https://reecomm.com/logo/logo.webp" />
+        <meta
+          property="og:image:alt"
+          content="Reecomm — India&apos;s trusted used vehicle marketplace connecting verified consultants and confident buyers"
+        />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@reecomm" />
+        <meta name="twitter:title" content="About Reecomm — India&apos;s Trusted Used Vehicle Platform" />
+        <meta
+          name="twitter:description"
+          content="We&apos;re building the trust infrastructure India&apos;s used vehicle market has needed for years. Verified consultants. Confident buyers. One organized ecosystem."
+        />
+        <meta name="twitter:image" content="https://reecomm.com/logo/logo.webp" />
+        <meta name="twitter:image:alt" content="Reecomm — India&apos;s trusted used vehicle marketplace" />
       </Head>
       <Navbar scrolled={true} />
 
@@ -45,7 +75,8 @@ function index() {
         <ConsultantsAndBuyers />
       </Layout>
       <Layout>
-        <TrustSignals />
+        {/* <TrustSignals /> */}
+        <OurTeam />
       </Layout>
       <Layout>
         <VisionAndApproach />

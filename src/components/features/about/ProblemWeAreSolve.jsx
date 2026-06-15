@@ -2,94 +2,107 @@ import React from "react";
 
 const ProblemWeAreSolve = () => {
   return (
-      <section className="py-2">
-        <div className="max-w-7xl mx-auto">
-          {/* Section Header */}
-          <div className="mb-14">
-            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-3">
-              The Problem We Fix
-            </p>
+    <section className="py-2">
+      <div className="max-w-7xl mx-auto">
+        {/* Section Header */}
+        <div className="mb-14">
+          <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-3">
+            The Problem We Saw
+          </p>
 
-           <h2
-              className="
+          <h2
+            className="
              text-3xl sm:text-4xl lg:text-5xl
               font-semibold
               leading-[1.05]
               text-primary
               font-[Montserrat]
             "
-            >
-              The Used Vehicle Market
-              <br />  
-              <span className="text-fourth/80">Needed Structure</span>
-            </h2>
+          >
+            An industry that outgrew
+            <br />
+            <span className="text-fourth/80"> its infrastructure</span>
+          </h2>
 
-          </div>
-
-          {/* Content Blocks */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Card 1 */}
-            <div className="group p-10  rounded-xl border-2 border-third/10 transition-all duration-300  hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
-              <div className="text-third text-sm tracking-widest mb-6 opacity-70 group-hover:text-fourth transition-colors">
-                ISSUE 01
-              </div>
-
-              <h3 className="text-lg md:text-xl font-semibold mb-3 text-primary">
-                Fragmented Listings
-              </h3>
-
-              <p className="text-third text-sm md:text-base leading-relaxed">
-                Vehicles scattered across platforms without consistency, making
-                the search process exhausting and inefficient.
-              </p>
-            </div>
-
-            {/* Card 2 */}
-            <div className="group p-10  rounded-xl border-2 border-third/10 transition-all duration-300  hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
-              <div className="text-third text-sm tracking-widest mb-6 opacity-70 group-hover:text-fourth transition-colors">
-                ISSUE 02
-              </div>
-
-              <h3 className="text-lg md:text-xl font-semibold mb-3 text-primary">
-                Low Transparency
-              </h3>
-
-              <p className="text-third text-sm md:text-base leading-relaxed">
-                Limited inspection clarity and unclear seller credibility often
-                leave buyers feeling uncertain and unprotected.
-              </p>
-            </div>
-
-            {/* Card 3 */}
-            <div className="group p-10  rounded-xl border-2 border-third/10 transition-all duration-300  hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
-              <div className="text-third text-sm tracking-widest mb-6 opacity-70 group-hover:text-fourth transition-colors">
-                ISSUE 03
-              </div>
-
-              <h3 className="text-lg md:text-xl font-semibold mb-3 text-primary">
-                No Accountability Layer
-              </h3>
-
-              <p className="text-third text-sm md:text-base leading-relaxed">
-                No performance visibility for consultants, creating a marketplace
-                where quality and service arent measurable.
-              </p>
-            </div>
-          </div>
-
-          {/* Closing Line */}
-          <div className="mt-10 text-center">
-            <p className="text-lg md:text-xl font-medium text-primary">
-              Reecomm was built to solve this
-              <span className="text-fourth opacity-90">
-              {" "}
-                structurally
-            </span>{" "}
-              — not cosmetically.
+          <div className="mt-8 text-third text-base md:text-lg leading-relaxed max-w-4xl space-y-4">
+            <p>
+              India&apos;s used vehicle market processes millions of
+              transactions every year. Demand is real. Supply is real. But the
+              system connecting buyers to sellers has barely evolved in a
+              decade.
+            </p>
+            <p>
+              Consultants with years of expertise had no way to display it
+              credibly online. Buyers with serious intent had no way to verify
+              who they were dealing with. And both sides kept paying for that
+              gap — in wasted time, failed deals, and eroded confidence.
+            </p>
+            <p>
+              That structural gap — between the scale of the industry and the
+              maturity of its infrastructure — is exactly where Reecomm
+              operates.
             </p>
           </div>
         </div>
-      </section>
+
+        {/* Content Blocks */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Card 1 */}
+          <div className="group p-10  rounded-xl border-2 border-third/10 transition-all duration-300  hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
+            <div className="text-third text-sm tracking-widest mb-6 opacity-70 group-hover:text-fourth transition-colors">
+              01
+            </div>
+
+            <h3 className="text-3xl md:text-4xl font-bold mb-3 text-primary">
+              ₹1.5T+
+            </h3>
+
+            <p className="text-third text-sm md:text-base leading-relaxed">
+              Est. used vehicle market size in India
+            </p>
+          </div>
+
+          {/* Card 2 */}
+          <div className="group p-10  rounded-xl border-2 border-third/10 transition-all duration-300  hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
+            <div className="text-third text-sm tracking-widest mb-6 opacity-70  transition-colors">
+              02
+            </div>
+
+            <h3 className="text-3xl md:text-4xl font-bold mb-3 text-primary  transition-colors">
+              Fragmented
+            </h3>
+
+            <p className="text-third text-sm md:text-base leading-relaxed">
+              Majority of consultants still undigitized
+            </p>
+          </div>
+
+          {/* Card 3 */}
+          <div className="group p-10  rounded-xl border-2 border-third/10 transition-all duration-300  hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
+            <div className="text-third text-sm tracking-widest mb-6 opacity-70  transition-colors">
+              03
+            </div>
+
+            <h3 className="text-3xl md:text-4xl font-bold mb-3 text-primary  transition-colors">
+              Low trust
+            </h3>
+
+            <p className="text-third text-sm md:text-base leading-relaxed">
+              No. 1 buyer barrier in used vehicle purchases
+            </p>
+          </div>
+        </div>
+
+        {/* Closing Line */}
+        <div className="mt-10 text-center">
+          <p className="text-lg md:text-xl font-medium text-primary">
+            Reecomm was built to solve this
+            <span className="text-fourth opacity-90"> structurally</span> — not
+            cosmetically.
+          </p>
+        </div>
+      </div>
+    </section>
   );
 };
 

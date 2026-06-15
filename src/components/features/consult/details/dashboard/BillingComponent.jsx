@@ -306,14 +306,6 @@ export default function BillingComponent() {
       ? "Never"
       : "12 Oct 2024";
 
-  const autoRenewalText = activeSubData
-    ? activeSubData.cancelAtPeriodEnd
-      ? "Auto-renewal disabled"
-      : "Auto-renewal enabled"
-    : isBasic
-      ? "No renewal"
-      : "Auto-renewal enabled";
-
   return (
     <section className="w-full space-y-10">
       {/* HEADER */}
@@ -392,7 +384,7 @@ export default function BillingComponent() {
 
             {/* Bottom */}
             <div className="flex justify-between items-center mt-auto pt-6">
-              <span className="text-xs opacity-90">{autoRenewalText}</span>
+              <span className="text-xs opacity-90"></span>
               <div className="flex items-center gap-2">
                 <Button
                   variant="ghost"
@@ -405,7 +397,9 @@ export default function BillingComponent() {
                   <Button
                     variant="outlineSecondary"
                     size="sm"
-                    onClick={() => window.open(activeSubData.shortUrl, "_blank")}
+                    onClick={() =>
+                      window.open(activeSubData.shortUrl, "_blank")
+                    }
                   >
                     Manage Subscription
                   </Button>
@@ -417,40 +411,40 @@ export default function BillingComponent() {
 
         {/* ✅ WALLET */}
         <div className="relative rounded-2xl border border-third/20  p-6 overflow-hidden shadow-sm transition-colors duration-200 hover:border-third/40">
-            {/* Status Pill */}
-            <div className="absolute top-4 right-4">
-              <span className="px-4 py-1 rounded-full bg-green-500/20 text-green-400 text-xs font-medium backdrop-blur-md">
-                Active
-              </span>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 font-semibold">
-                <CreditCard size={16} />
-                Reecomm Wallet
-              </div>
-
-              <p className="text-xs text-third">Available Balance</p>
-              <p className="text-3xl font-bold">
-                ₹{" "}
-                {balance.toLocaleString("en-IN", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </p>
-            </div>
-
-            {/* Buttons */}
-            <div className="flex gap-3 mt-6">
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => setIsAddMoneyOpen(true)}
-              >
-                + Add Money
-              </Button>
-            </div>
+          {/* Status Pill */}
+          <div className="absolute top-4 right-4">
+            <span className="px-4 py-1 rounded-full bg-green-500/20 text-green-400 text-xs font-medium backdrop-blur-md">
+              Active
+            </span>
           </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 font-semibold">
+              <CreditCard size={16} />
+              Reecomm Wallet
+            </div>
+
+            <p className="text-xs text-third">Available Balance</p>
+            <p className="text-3xl font-bold">
+              ₹{" "}
+              {balance.toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </p>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex gap-3 mt-6">
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setIsAddMoneyOpen(true)}
+            >
+              + Add Money
+            </Button>
+          </div>
+        </div>
       </div>
 
       {/* BENEFITS */}

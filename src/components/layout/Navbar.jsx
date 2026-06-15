@@ -11,6 +11,7 @@ import {
   Fuel,
   Zap,
   Star,
+  X,
 } from "lucide-react";
 import { useState, useEffect, useRef, useMemo } from "react";
 import Button from "../ui/button";
@@ -85,7 +86,7 @@ const MAKER_NAME_MAPPING = {
   64: "PMV",
 };
 
-export default function Navbar({ heroMode = false, scrolled = false }) {
+export default function Navbar({ heroMode = false, scrolled = false, insideDrawer = false, onClose = () => {} }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -432,15 +433,19 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
             {/* LEFT */}
             <Link
               href="/"
+              onClick={insideDrawer ? onClose : undefined}
               className="flex items-center h-10 px-3 md:px-4 gap-2 md:gap-3 bg-secondary text-primary"
             >
-              <Menu
-                className="w-5 h-5"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setMenuOpen(true);
-                }}
-              />
+              {!insideDrawer && (
+                <Menu
+                  className="w-5 h-5 cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setMenuOpen(true);
+                  }}
+                />
+              )}
               <Image
                 src="/logo/logo.webp"
                 alt="Reecomm Logo"
@@ -654,182 +659,198 @@ export default function Navbar({ heroMode = false, scrolled = false }) {
 
             {/* RIGHT SIDE */}
             <div className="flex items-center gap-2 md:gap-4">
-              {(() => {
-                const userRole = user?.userRole;
-                const isConsultant = [
-                  "CONSULTATION",
-                  "CONSULTANT_APPLICANT",
-                ].includes(userRole);
-                const isUserSeller = userRole === "USER_SELLER";
-
-                const getCTA = () => {
-                  if (!isLoggedIn) {
-                    return {
-                      label: "Sell Your Vehicle",
-                      href: "/became-seller",
-                    };
-                  }
-
-                  const messages = profileStrength?.messages || [];
-
-                  if (isConsultant) {
-                    const isSubscribed = userRole === "CONSULTATION";
-
-                    // 1. Storefront Priority
-                    const storefrontMsg = messages.find((m) =>
-                      ["CREATE_STOREFRONT", "FIX_STOREFRONT"].includes(m.type),
-                    );
-                    if (storefrontMsg) {
-                      return {
-                        label: "Create StoreFront",
-                        href: isSubscribed
-                          ? "/consult/dashboard/storefront"
-                          : "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Fstorefront",
-                      };
-                    }
-
-                    // 2. Inventory Priority
-                    const inventoryMsg = messages.find(
-                      (m) => m.type === "LIST_VEHICLE",
-                    );
-                    if (inventoryMsg) {
-                      return {
-                        label: "List Vehicles",
-                        href: isSubscribed
-                          ? "/consult/dashboard/inventory"
-                          : "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Finventory",
-                      };
-                    }
-
-                    // 3. KYC Priority
-                    const kycMsg = messages.find((m) =>
-                      [
-                        "ADD_GST",
-                        "UPLOAD_AADHAAR",
-                        "UPLOAD_PAN_CARD",
-                        "COMPLETE_REGISTRATION",
-                      ].includes(m.type),
-                    );
-                    if (kycMsg) {
-                      let labelText = "Upload Documents";
-                      if (kycMsg.type === "COMPLETE_REGISTRATION") {
-                        labelText = "Complete KYC";
-                      }
-                      return {
-                        label: labelText,
-                        href: isSubscribed
-                          ? "/consult/dashboard/overview"
-                          : "/consult/subscription",
-                      };
-                    }
-
-                    return {
-                      label: "Go to Dashboard",
-                      href: isSubscribed
-                        ? "/consult/dashboard/overview"
-                        : "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Foverview",
-                    };
-                  }
-
-                  if (isUserSeller) {
-                    const inventoryMsg = messages.find(
-                      (m) => m.type === "LIST_VEHICLE",
-                    );
-                    if (inventoryMsg) {
-                      return {
-                        label: "List Vehicles",
-                        href: "/user/details/myvehicle",
-                      };
-                    }
-                    return {
-                      label: "My Activity",
-                      href: "/user/details/myprofile",
-                    };
-                  }
-
-                  return {
-                    label: "My Activity",
-                    href: "/user/details/myprofile",
-                  };
-                };
-
-                const cta = getCTA();
-
-                if (
-                  pathname?.includes("/dashboard") &&
-                  cta.label === "Go to Dashboard"
-                ) {
-                  return null;
-                }
-
-                return (
-                  <Button
-                    onClick={() => push(cta.href)}
-                    size="sm"
-                    className="hidden md:block text-xs md:text-sm text-primary border border-primary hover:bg-primary hover:text-secondary whitespace-nowrap"
-                  >
-                    {cta.label}
-                  </Button>
-                );
-              })()}
-
-              {/* ACCOUNT */}
-              <div
-                ref={accountRef}
-                className="relative z-110"
-                onMouseEnter={() => setAccountOpen(true)}
-                onMouseLeave={() => {
-                  if (!persisAccountOpen) setAccountOpen(false);
-                }}
-              >
+              {insideDrawer ? (
                 <button
                   onClick={(e) => {
-                    e.stopPropagation();
-                    const nextPersis = !persisAccountOpen;
-                    setPersisAccountOpen(nextPersis);
-                    setAccountOpen(nextPersis);
+                    e.preventDefault();
+                    onClose();
                   }}
-                  className={`flex cursor-pointer items-center gap-1 px-2 py-1 rounded transition text-xs md:text-sm
-                ${
-                  heroMode && !scrolled
-                    ? "text-white  hover:outline-2 hover:outline-white/40"
-                    : "text-black  hover:outline-2 hover:outline-black/20"
-                }`}
+                  className="text-2xl cursor-pointer p-2 rounded-full hover:bg-white/10 transition-colors"
+                  aria-label="Close menu"
                 >
-                  <User className="w-5 h-5 md:w-6 md:h-6" />
-
-                  <span className="hidden sm:block text-left">
-                    <span className="block text-[10px] opacity-60">
-                      {!isLoggedIn ? (
-                        <span className="font-bold">Sign in</span>
-                      ) : (
-                        <span className="font-bold">
-                          Hello, {user?.consultationName || user?.firstname}
-                        </span>
-                      )}
-                    </span>
-                    <span className="font-semibold">Account</span>
-                  </span>
+                  <X className="w-6 h-6 text-current" />
                 </button>
+              ) : (
+                <>
+                  {(() => {
+                    const userRole = user?.userRole;
+                    const isConsultant = [
+                      "CONSULTATION",
+                      "CONSULTANT_APPLICANT",
+                    ].includes(userRole);
+                    const isUserSeller = userRole === "USER_SELLER";
 
-                <AccountPopup
-                  open={accountOpen}
-                  onClosePopup={() => {
-                    setAccountOpen(false);
-                    setPersisAccountOpen(false);
-                  }}
-                />
-              </div>
+                    const getCTA = () => {
+                      if (!isLoggedIn) {
+                        return {
+                          label: "Sell Your Vehicle",
+                          href: "/became-seller",
+                        };
+                      }
+
+                      const messages = profileStrength?.messages || [];
+
+                      if (isConsultant) {
+                        const isSubscribed = userRole === "CONSULTATION";
+
+                        // 1. Storefront Priority
+                        const storefrontMsg = messages.find((m) =>
+                          ["CREATE_STOREFRONT", "FIX_STOREFRONT"].includes(m.type),
+                        );
+                        if (storefrontMsg) {
+                          return {
+                            label: "Create StoreFront",
+                            href: isSubscribed
+                              ? "/consult/dashboard/storefront"
+                              : "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Fstorefront",
+                          };
+                        }
+
+                        // 2. Inventory Priority
+                        const inventoryMsg = messages.find(
+                          (m) => m.type === "LIST_VEHICLE",
+                        );
+                        if (inventoryMsg) {
+                          return {
+                            label: "List Vehicles",
+                            href: isSubscribed
+                              ? "/consult/dashboard/inventory"
+                              : "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Finventory",
+                          };
+                        }
+
+                        // 3. KYC Priority
+                        const kycMsg = messages.find((m) =>
+                          [
+                            "ADD_GST",
+                            "UPLOAD_AADHAAR",
+                            "UPLOAD_PAN_CARD",
+                            "COMPLETE_REGISTRATION",
+                          ].includes(m.type),
+                        );
+                        if (kycMsg) {
+                          let labelText = "Upload Documents";
+                          if (kycMsg.type === "COMPLETE_REGISTRATION") {
+                            labelText = "Complete KYC";
+                          }
+                          return {
+                            label: labelText,
+                            href: isSubscribed
+                              ? "/consult/dashboard/overview"
+                              : "/consult/subscription",
+                          };
+                        }
+
+                        return {
+                          label: "Go to Dashboard",
+                          href: isSubscribed
+                            ? "/consult/dashboard/overview"
+                            : "/consult/subscription?redirect=%2Fconsult%2Fdashboard%2Foverview",
+                        };
+                      }
+
+                      if (isUserSeller) {
+                        const inventoryMsg = messages.find(
+                          (m) => m.type === "LIST_VEHICLE",
+                        );
+                        if (inventoryMsg) {
+                          return {
+                            label: "List Vehicles",
+                            href: "/user/details/myvehicle",
+                          };
+                        }
+                        return {
+                          label: "My Activity",
+                          href: "/user/details/myprofile",
+                        };
+                      }
+
+                      return {
+                        label: "My Activity",
+                        href: "/user/details/myprofile",
+                      };
+                    };
+
+                    const cta = getCTA();
+
+                    if (
+                      pathname?.includes("/dashboard") &&
+                      cta.label === "Go to Dashboard"
+                    ) {
+                      return null;
+                    }
+
+                    return (
+                      <Button
+                        onClick={() => push(cta.href)}
+                        size="sm"
+                        className="hidden md:block text-xs md:text-sm text-primary border border-primary hover:bg-primary hover:text-secondary whitespace-nowrap"
+                      >
+                        {cta.label}
+                      </Button>
+                    );
+                  })()}
+
+                  {/* ACCOUNT */}
+                  <div
+                    ref={accountRef}
+                    className="relative z-110"
+                    onMouseEnter={() => setAccountOpen(true)}
+                    onMouseLeave={() => {
+                      if (!persisAccountOpen) setAccountOpen(false);
+                    }}
+                  >
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const nextPersis = !persisAccountOpen;
+                        setPersisAccountOpen(nextPersis);
+                        setAccountOpen(nextPersis);
+                      }}
+                      className={`flex cursor-pointer items-center gap-1 px-2 py-1 rounded transition text-xs md:text-sm
+                    ${
+                      heroMode && !scrolled
+                        ? "text-white  hover:outline-2 hover:outline-white/40"
+                        : "text-black  hover:outline-2 hover:outline-black/20"
+                    }`}
+                    >
+                      <User className="w-5 h-5 md:w-6 md:h-6" />
+
+                      <span className="hidden sm:block text-left">
+                        <span className="block text-[10px] opacity-60">
+                          {!isLoggedIn ? (
+                            <span className="font-bold">Sign in</span>
+                          ) : (
+                            <span className="font-bold">
+                              Hello, {user?.consultationName || user?.firstname}
+                            </span>
+                          )}
+                        </span>
+                        <span className="font-semibold">Account</span>
+                      </span>
+                    </button>
+
+                    <AccountPopup
+                      open={accountOpen}
+                      onClosePopup={() => {
+                        setAccountOpen(false);
+                        setPersisAccountOpen(false);
+                      }}
+                    />
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </nav>
       </div>
 
-      <HamburgerDrawer
-        open={menuOpen}
-        onClose={() => setMenuOpen(false)}
-        role="guest"
-      />
+      {!insideDrawer && (
+        <HamburgerDrawer
+          open={menuOpen}
+          onClose={() => setMenuOpen(false)}
+        />
+      )}
 
       <PreferencesPopup isOpen={open} onClose={() => setOpen(false)} />
     </>
