@@ -3,23 +3,18 @@ import React from "react";
 const features = [
   {
     id: "01",
-    title: "Verified Consultant Identity",
-    desc: "Every consultant on Reecomm operates through a public storefront backed by structured business information and accountability signals.",
+    title: "For buyers",
+    desc: "Confidence shouldn't be optional. Every buyer deserves to know who they're dealing with, what they're buying, what an independent inspection reveals, and what their options are if something goes wrong. We build for that clarity.",
   },
   {
     id: "02",
-    title: "Inspection Credibility Layer",
-    desc: "Optional inspection visibility and re-verification options that prioritise buyer confidence without forcing friction.",
+    title: "For consultants",
+    desc: "Growth shouldn't depend on who you know. The best consultants in India's used vehicle market are often invisible online. Reecomm gives them a professional identity, a structured storefront, and tools to make their expertise visible and scalable.",
   },
   {
     id: "03",
-    title: "Performance Transparency",
-    desc: "Consultant activity, engagement, and outcomes are surfaced through real signals — not vanity metrics.",
-  },
-  {
-    id: "04",
-    title: "Structured Search & Discovery",
-    desc: "Vehicles are ranked by relevance, quality, and trust indicators — ensuring the best value surfaces first.",
+    title: "For the market",
+    desc: "Structure creates scale. An organized, accountable marketplace benefits everyone — buyers make better decisions, consultants build real businesses, and the industry earns the trust it needs to grow.",
   },
 ];
 
@@ -30,26 +25,26 @@ export default function WhyAvxDifferent() {
         {/* Header */}
         <div className=" mb-28">
           <p className="mb-6 text-sm tracking-[0.4em] uppercase text-third font-semibold ">
-            Why Reecomm
+            What We Believe
           </p>
 
-           <h2
-              className="
+          <h2
+            className="
               text-3xl sm:text-4xl lg:text-5xl
               font-semibold
               leading-[1.05]
               text-primary
               font-[Montserrat]
             "
-            >
-              Not another listing
-              <br />  
-              <span className="text-fourth/80"> platform</span>
-            </h2>
+          >
+            Trust is infrastructure,
+            <br />
+            <span className="text-fourth/80"> not a feature</span>
+          </h2>
 
           <p className="mt-8 text-xl text-third  leading-relaxed">
-            Reecomm is engineered to remove ambiguity from the used-vehicle market
-            by introducing structure, accountability, and measurable trust.
+            Every decision we make at Reecomm comes back to one question: does
+            this build trust — for buyers, for consultants, and for the market?
           </p>
         </div>
 
@@ -79,17 +74,10 @@ export default function WhyAvxDifferent() {
                   <h3 className="text-2xl md:text-3xl font-semibold text-primary">
                     {item.title}
                   </h3>
-                  <p className="mt-4 text-lg text-third leading-relaxed">
+                  <p className="mt-4 text-lg w-6xl text-third leading-relaxed">
                     {item.desc}
                   </p>
                 </div>
-
-                {/* Visual Bar */}
-                <div
-                  className={`hidden md:block h-px flex-1 transition-colors duration-300
-          ${isLeftContent ? "bg-neutral-700" : "bg-neutral-700"}
-          group-hover:bg-primary/20`}
-                />
               </div>
             );
           })}

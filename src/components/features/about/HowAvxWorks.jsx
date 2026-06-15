@@ -1,47 +1,39 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Search,
-  ShieldCheck,
-  MessageSquare,
-  ClipboardCheck,
-  CheckCircle2,
-} from "lucide-react";
+import { ShieldCheck, ClipboardCheck, Award, Store } from "lucide-react";
 
 const HowAvxWorks = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   const steps = [
     {
-      title: "Discovery",
-      icon: <Search size={35} />,
-      desc: "Smart filters to find your perfect match based on budget and style.",
-      tag: "Step 01",
-    },
-    {
-      title: "Condition",
-      icon: <ClipboardCheck size={35} />,
-      desc: "Deep dive into transparent specs and high-resolution visual reports.",
-      tag: "Step 02",
-    },
-    {
-      title: "Contact",
-      icon: <MessageSquare size={35} />,
-      desc: "Instant direct line to consultants for test drives and negotiations.",
-      tag: "Step 03",
-    },
-    {
-      title: "Verification",
+      title: "Verified consultant identity",
+      shortTitle: "Identity",
       icon: <ShieldCheck size={35} />,
-      desc: "Optional multi-point inspections for absolute peace of mind.",
-      tag: "Step 04",
+      desc: "Every consultant is onboarded with a structured profile — not just an account. Business identity, credibility signals, and accountability are baked in from day one.",
+      tag: "01",
     },
     {
-      title: "Ownership",
-      icon: <CheckCircle2 size={35} />,
-      desc: "Finalize documents and payment directly with the seller.",
-      tag: "Step 05",
+      title: "Inspection-backed listings",
+      shortTitle: "Inspections",
+      icon: <ClipboardCheck size={35} />,
+      desc: "Buyers can request independent inspections on any vehicle. We don't mandate it — we make it possible, because we believe that choice belongs to the buyer.",
+      tag: "02",
+    },
+    {
+      title: "Performance over promises",
+      shortTitle: "Performance",
+      icon: <Award size={35} />,
+      desc: "Visibility on Reecomm is earned through structured participation and verifiable performance — not paid placement or boosted rankings.",
+      tag: "03",
+    },
+    {
+      title: "Professional storefronts",
+      shortTitle: "Storefronts",
+      icon: <Store size={35} />,
+      desc: "Consultants get a public business presence — with inventory, reviews, analytics, and engagement tools — so they operate like a modern business, not an informal seller.",
+      tag: "04",
     },
   ];
 
@@ -53,22 +45,21 @@ const HowAvxWorks = () => {
           <div className="relative z-10">
             <div className="inline-flex items-center gap-3 mb-4">
               <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                The Journey
+                How We Work
               </span>
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold font-[Montserrat] mb-6 from-primary   ">
-              How Reecomm <span className="text-fourth/80">Works</span> 
+              Built differently,
+              <span className="text-fourth/80">on purpose</span>
             </h2>
 
             <div className="max-w-2xl mx-auto">
               <p className="text-third text-base md:text-lg leading-relaxed opacity-80">
-                A premium, direct-to-owner experience designed for the
-                <span className="text-primary font-medium">
-                  {" "}
-                  modern automotive market
-                </span>
-                . Simple, transparent, and built for performance.
+                Reecomm is not a dealer. We don&apos;t own inventory. We don&apos;t
+                process payments or take a cut from deals. We build the
+                infrastructure that makes trust between buyers and consultants
+                possible — and then we stay out of the way.
               </p>
             </div>
           </div>
@@ -81,26 +72,23 @@ const HowAvxWorks = () => {
               key={index}
               onMouseEnter={() => setActiveStep(index)}
               className={`relative overflow-hidden transition-all duration-500 ease-in-out cursor-pointer rounded-2xl border border-primary/10 
-                ${activeStep === index
-                  ? "flex-3 "
-                  : "flex-1  "
-                }`}
+                ${activeStep === index ? "flex-3 " : "flex-1  "}`}
             >
               {/* Collapsed Title */}
               <div
-                className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${activeStep === index ? "opacity-0" : "opacity-100"
-                  }`}
+                className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
+                  activeStep === index ? "opacity-0" : "opacity-100"
+                }`}
               >
                 <span className="rotate-90 md:-rotate-90 whitespace-nowrap text-xs uppercase tracking-[0.35em] font-semibold text-third">
-                  {step.title}
+                  {step.shortTitle}
                 </span>
               </div>
 
               {/* Active Content */}
               <div
                 className={`p-7 md:p-8 h-full flex flex-col justify-between transition-opacity duration-500 
-                ${activeStep === index ? "opacity-100" : "opacity-0"
-                  }`}
+                ${activeStep === index ? "opacity-100" : "opacity-0"}`}
               >
                 <div>
                   <div className="text-primary mb-5 opacity-80">
@@ -131,8 +119,7 @@ const HowAvxWorks = () => {
 
               <span
                 className={`absolute bottom-19 right-6 text-6xl font-bold text-fourth/30 pointer-events-none transition-opacity duration-300 
-                ${activeStep === index ? "opacity-100" : "opacity-0"
-                  }`}
+                ${activeStep === index ? "opacity-100" : "opacity-0"}`}
               >
                 0{index + 1}
               </span>
@@ -145,10 +132,9 @@ const HowAvxWorks = () => {
           {steps.map((_, i) => (
             <div
               key={i}
-              className={`h-0.5 rounded-full transition-all duration-300 ${activeStep === i
-                ? "w-14 bg-primary"
-                : "w-5 bg-primary/10"
-                }`}
+              className={`h-0.5 rounded-full transition-all duration-300 ${
+                activeStep === i ? "w-14 bg-primary" : "w-5 bg-primary/10"
+              }`}
             />
           ))}
         </div>

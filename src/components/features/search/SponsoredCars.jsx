@@ -4,62 +4,6 @@ import React, { useRef } from "react";
 import { ChevronLeft, ChevronRight, Info } from "lucide-react";
 import CommonSwiper from "@/components/ui/CommonSwiper";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
-import { SwiperSlide } from "swiper/react";
-
-const smallCars = [
-  {
-    id: "1",
-    title: "Maruti Fronx",
-    subtitle: "Elite Selection",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/olx1.png",
-    sponsored: false,
-  },
-  {
-    id: "2",
-    title: "Maruti Fronx",
-    subtitle: "Elite Selection",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/olx2.png",
-    sponsored: false,
-  },
-  {
-    id: "3",
-    title: "Maruti Fronx",
-    subtitle: "Elite Selection",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/olx3.png",
-    sponsored: false,
-  },
-  {
-    id: "4",
-    title: "Maruti Fronx",
-    subtitle: "35 D6 Powerful lorem isump",
-    year: "2022",
-    transmission: "Manual",
-    fuel: "Diesel",
-    seats: "5",
-    rating: "4.3",
-    price: "6,75,998",
-    image: "/olx1.png",
-    sponsored: false,
-  },
-];
 
 const SponsoredCars = ({ loading = false, data = [] }) => {
   const prevRef = useRef(null);
@@ -67,12 +11,8 @@ const SponsoredCars = ({ loading = false, data = [] }) => {
 
   return (
     <div className="space-y-6">
-
       {/* Header */}
       <div className="flex items-center justify-between">
-
-        
-
         <div className="flex flex-col items-start gap-2">
           <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
             Trending Vehicles
@@ -83,16 +23,16 @@ const SponsoredCars = ({ loading = false, data = [] }) => {
             Trending <span className="text-fourth">Vehicles</span>
           </h2>
 
-           <div className="flex items-center gap-1 text-xs text-third">
-              <span>Sponsored</span>
+          <div className="flex items-center gap-1 text-xs text-third">
+            <span>Sponsored</span>
 
-              <button
-                type="button"
-                className="w-4 h-4 flex items-center justify-center rounded-full border border-third/40 hover:bg-third/10 transition"
-              >
-                <Info className="w-3 h-3" />
-              </button>
-            </div>
+            <button
+              type="button"
+              className="w-4 h-4 flex items-center justify-center rounded-full border border-third/40 hover:bg-third/10 transition"
+            >
+              <Info className="w-3 h-3" />
+            </button>
+          </div>
         </div>
 
         {/* Navigation */}
@@ -115,13 +55,19 @@ const SponsoredCars = ({ loading = false, data = [] }) => {
           prevRef={prevRef}
           nextRef={nextRef}
         />
-      ) : (
+      ) : data && data.length > 0 ? (
         <CommonSwiper
-          data={data.length > 0 ? data : smallCars}
+          data={data}
           CardComponent={VehicleCard}
           prevRef={prevRef}
           nextRef={nextRef}
         />
+      ) : (
+        <div className="flex items-center justify-center py-16 rounded-2xl">
+          <h3 className="text-lg font-semibold text-primary/40">
+            No data found
+          </h3>
+        </div>
       )}
     </div>
   );
