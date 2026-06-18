@@ -3,6 +3,7 @@ import { useState } from "react";
 import StickyHeroNavbar from "./StickyHeroNavbar";
 import VehicleFilterBar from "./VehicleFilterBar";
 import { Car, User2 } from "lucide-react";
+import Image from "next/image";
 
 export default function HeroSection() {
   const [collapsed, setCollapsed] = useState(false);
@@ -11,14 +12,12 @@ export default function HeroSection() {
   return (
     <section className="relative h-screen w-full overflow-hidden">
       {/* Video Background */}
-      <video
-        autoPlay
-        muted
-        playsInline
+      <Image
+        src="/main_bg.webp"
+        fill
         className="absolute inset-0 w-full h-full object-cover z-0"
-      >
-        <source src="/intro_home.mp4" type="video/mp4" />
-      </video>
+      />
+
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/30 z-0" />
 
@@ -63,7 +62,7 @@ export default function HeroSection() {
           <button
             onClick={() =>
               setActiveTab((prev) =>
-                prev === "vehicles" ? "consult" : "vehicles"
+                prev === "vehicles" ? "consult" : "vehicles",
               )
             }
             aria-label="Toggle between vehicles and consultants"
@@ -91,7 +90,9 @@ export default function HeroSection() {
             }`}
           >
             <User2 size={20} />
-            <span className="text-base tracking-wide font-medium">Consultant</span>
+            <span className="text-base tracking-wide font-medium">
+              Consultant
+            </span>
           </button>
         </div>
       </div>

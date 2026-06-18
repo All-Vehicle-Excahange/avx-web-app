@@ -282,8 +282,7 @@ export default function BlogDetails({ id }) {
   return (
     <section className="relative w-full py-12 sm:py-20 overflow-visible bg-transparent">
       {/* Background ambient lighting */}
-      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-fourth/5 rounded-full blur-[140px] pointer-events-none z-0" />
-
+    
       <div className="relative z-10 max-w-7xl mx-auto px-4">
         {/* BACK TO BLOGS LINK */}
         <div className="mb-8 flex">
@@ -296,15 +295,19 @@ export default function BlogDetails({ id }) {
           </Link>
         </div>
 
+        {/* Category Tag */}
+        <div className="mb-4">
+          <span className="inline-block px-3 py-1 rounded-full bg-fourth/10 border border-fourth/20 text-fourth text-xs font-bold uppercase tracking-wider">
+            {post.category}
+          </span>
+        </div>
+
         {/* 1. SPLIT HEADER LAYOUT */}
         <div
           id="intro-section"
           className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 pb-10 border-b border-white/5 items-start"
         >
           <div className="lg:col-span-5 space-y-4">
-            <span className="inline-block px-3 py-1 rounded-full bg-fourth/10 border border-fourth/20 text-fourth text-xs font-bold uppercase tracking-wider">
-              {post.category}
-            </span>
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-primary tracking-tight font-primary leading-tight">
               {post.title}
             </h1>
@@ -313,7 +316,7 @@ export default function BlogDetails({ id }) {
               <span>{post.date}</span>
             </div>
           </div>
-          <div className="lg:col-span-7 text-third/85 text-sm sm:text-base leading-relaxed font-secondary space-y-4 pt-2">
+          <div className="lg:col-span-7 text-third/85 text-sm sm:text-base leading-relaxed font-secondary space-y-4 pt-1">
             {intro.map((para, idx) => (
               <p key={idx}>{para}</p>
             ))}

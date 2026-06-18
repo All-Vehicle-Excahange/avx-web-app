@@ -21,29 +21,29 @@ function index() {
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Reecomm" />
 
-        {/* JSON-LD Schema */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Blog",
-              "name": "Reecomm Resources & Insights",
-              "url": "https://www.reecomm.com/blog",
-              "description": "Expert guides on buying, selling, and inspecting used vehicles in India.",
-              "publisher": {
-                "@type": "Organization",
-                "name": "Reecomm",
-                "url": "https://www.reecomm.com",
-                "logo": {
-                  "@type": "ImageObject",
-                  "url": "https://www.reecomm.com/assets/logo.png"
-                }
-              }
-            })
-          }}
-        />
       </Head>
+      {/* JSON-LD Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Blog",
+            "name": "Reecomm Resources & Insights",
+            "url": "https://www.reecomm.com/blog",
+            "description": "Expert guides on buying, selling, and inspecting used vehicles in India.",
+            "publisher": {
+              "@type": "Organization",
+              "name": "Reecomm",
+              "url": "https://www.reecomm.com",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.reecomm.com/assets/logo.png"
+              }
+            }
+          })
+        }}
+      />
       <Navbar scrolled={true} />
       <Layout>
         <BlogList />

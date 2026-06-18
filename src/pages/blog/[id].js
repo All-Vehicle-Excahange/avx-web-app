@@ -34,15 +34,15 @@ function BlogDetailPage() {
         <meta property="og:type" content="article" />
         <meta property="og:site_name" content="Reecomm" />
 
-        {/* JSON-LD Schemas */}
-        {post?.schemas && post.schemas.map((schema, idx) => (
-          <script
-            key={idx}
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-          />
-        ))}
       </Head>
+      {/* JSON-LD Schemas */}
+      {post?.schemas && post.schemas.map((schema, idx) => (
+        <script
+          key={idx}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
       <Navbar scrolled={true} />
       <Layout>
         {id ? (
