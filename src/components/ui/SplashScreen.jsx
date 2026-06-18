@@ -203,6 +203,21 @@ export default function SplashScreen({ onComplete }) {
                 </span>
               </div>
             </div>
+
+            {/* Footer brand info */}
+            <div className="mt-2 flex items-center gap-1.5">
+              <span className="text-white/60 text-[8px] md:text-[9px] tracking-[0.2em] uppercase font-secondary">
+                Product by
+              </span>
+              <div className="relative w-[60px] h-[28px]">
+                <Image
+                  src="/qubaLogo.png"
+                  alt="Quba Infotech Logo"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
           </div>
         )}
       </div>
