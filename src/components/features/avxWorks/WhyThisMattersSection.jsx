@@ -41,7 +41,7 @@ export default function WhyThisMattersSection() {
           {/* LEFT //// */}
           <div className="space-y-8 max-w-xl">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-              Why This Matters
+              Why It Matters
             </p>
 
             <h2 className="text-3xl md:text-[46px] font-bold leading-[1.15] text-primary">
@@ -50,10 +50,10 @@ export default function WhyThisMattersSection() {
             </h2>
 
             <p className="text-[17px] text-primary/85 leading-relaxed">
-              Buying a pre-owned vehicle is a significant financial decision.
-              Reecomm exists to reduce ambiguity — by making seller identity
-              visible, vehicle information structured, and inspection optional
-              but accessible.
+              Most used vehicle purchases fail not because of bad intent — but
+              because of bad information. Reecomm changes that. Every feature on
+              this platform exists to close the gap between what buyers know and
+              what they need to know.
             </p>
 
             <div className="pt-6 border-t border-primary/10">

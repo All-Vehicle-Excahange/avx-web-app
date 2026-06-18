@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from "react";
 import {
   ClipboardSignature,
-  CreditCard,
   UserCheck,
-  Search,
-  UploadCloud,
+  MapPin,
+  Camera,
+  ShieldCheck,
   Eye,
 } from "lucide-react";
 
@@ -38,37 +38,37 @@ export default function InspectionWorkFlow() {
   const steps = [
     {
       title: "Request Submitted",
-      desc: "Buyer or consultant selects inspection type.",
+      desc: "Buyer or consultant submits inspection request via listing.",
       icon: <ClipboardSignature className="w-5 h-5" />,
       color: "bg-primary/10",
     },
     {
-      title: "Payment Confirmed",
-      desc: "Inspection fee processed.",
-      icon: <CreditCard className="w-5 h-5" />,
-      color: "bg-primary/10",
-    },
-    {
       title: "Inspector Assigned",
-      desc: "City-based inspector scheduled.",
+      desc: "Reecomm maps nearest verified inspector.",
       icon: <UserCheck className="w-5 h-5" />,
       color: "bg-primary/10",
     },
     {
-      title: "Physical Evaluation",
-      desc: "Vehicle inspected using Reecomm checklist.",
-      icon: <Search className="w-5 h-5" />,
+      title: "Inspection Arrives",
+      desc: "Inspector conducts on-site evaluation.",
+      icon: <MapPin className="w-5 h-5" />,
       color: "bg-primary/10",
     },
     {
-      title: "Report Uploaded",
-      desc: "Media, checklist, summary uploaded.",
-      icon: <UploadCloud className="w-5 h-5" />,
+      title: "Photos Uploaded",
+      desc: "All evidence photos and videos uploaded in real time.",
+      icon: <Camera className="w-5 h-5" />,
+      color: "bg-primary/10",
+    },
+    {
+      title: "Report Reviewed",
+      desc: "Platform quality check before report is released.",
+      icon: <ShieldCheck className="w-5 h-5" />,
       color: "bg-primary/10",
     },
     {
       title: "Report Published",
-      desc: "Visible on vehicle listing.",
+      desc: "Inspector uploads structured digital report to the platform.",
       icon: <Eye className="w-5 h-5" />,
       color: "bg-primary/10",
     },

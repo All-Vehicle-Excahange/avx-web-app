@@ -107,25 +107,13 @@ function Contactus() {
       <div className="relative z-10 max-w-7xl mx-auto px-4">
         {/* HEADER SECTION */}
         <div className="text-center lg:text-left mb-12 sm:mb-16">
-          <p className="text-xs sm:text-sm tracking-[0.45em] uppercase text-fourth font-extrabold mb-3">
+          {/* <p className="text-xs sm:text-sm tracking-[0.45em] uppercase text-fourth font-extrabold mb-3">
             Contact Channels
-          </p>
+          </p> */}
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight font-primary">
             Connect with{" "}
-            <span className="text-fourth/80 italic font-secondary relative inline-block">
+            <span className="text-fourth/80  font-secondary relative inline-block">
               Reecomm
-              <svg
-                className="absolute left-0 -bottom-1 w-full text-fourth"
-                viewBox="0 0 200 20"
-                fill="none"
-              >
-                <path
-                  d="M5 15 Q 100 5 195 15"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                />
-              </svg>
             </span>
           </h1>
           <p className="mt-6 text-base sm:text-lg text-third max-w-2xl font-secondary leading-relaxed">

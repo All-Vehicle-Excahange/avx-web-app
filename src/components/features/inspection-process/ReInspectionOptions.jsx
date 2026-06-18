@@ -1,151 +1,109 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  RefreshCw,
-  Video,
-  FileSearch,
-  ChevronRight,
-  MonitorPlay,
-  ClipboardCheck,
-  Zap,
-} from "lucide-react";
+import React from "react";
+import { Zap, ShieldAlert, BadgeCheck } from "lucide-react";
 
 export default function ReInspectionOptions() {
-  const [activeTab, setActiveTab] = useState(0);
-
-  const options = [
-    {
-      title: "Fresh Inspection",
-      desc: "A full system reset. We perform the entire 200+ point diagnostic from scratch to capture every new detail since the last report.",
-      icon: <RefreshCw className="w-5 h-5" />,
-      visual: "SYSTEM_RECALIBRATION",
-      feature: "Full Multi-Point Scan",
-    },
-    {
-      title: "Video Walkthrough",
-      desc: "Get a personalized 4K video tour. Our inspector focuses on the specific engine sounds, interior textures, or underbody areas you want to see.",
-      icon: <Video className="w-5 h-5" />,
-      visual: "VISUAL_STREAM_INIT",
-      feature: "Personalized Media",
-    },
-    {
-      title: "Report Re-verification",
-      desc: "Fast-track audit. An expert inspector visits the vehicle specifically to verify the data points in the existing report.",
-      icon: <FileSearch className="w-5 h-5" />,
-      visual: "DATA_INTEGRITY_CHECK",
-      feature: "Manual Audit",
-    },
-  ];
-
   return (
-    <section className="relative py-10   overflow-hidden">
+    <section className="relative py-10 overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-px bg-fourth/20 opacity-30" />
 
-      <div className="relative w-full mx-auto F">
-        <div className="flex flex-col lg:flex-row border border-primary/20 rounded-4xl  backdrop-blur-md overflow-hidden">
-          {/* LEFT PANEL */}
-          <div className="lg:w-1/2 p-6 md:p-10 xl:p-14 lg:border-r border-primary/20">
-            <div className="flex items-center gap-3 mb-8 md:mb-10">
-              <Zap className="w-4 h-4 text-primary" />
-              <span className="text-xs md:text-sm tracking-[0.35em] uppercase text-third font-semibold">
-                Buyer Protocols
-              </span>
-            </div>
-
-           
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat mb-8 md:mb-10">
-            Existing Report 
-              <br />
-              <span className="text-fourth/80">
-         Upgrades
-              </span>
-            </h2>
-
-            <div className="space-y-3">
-              {options.map((opt, i) => (
-                <button
-                  key={i}
-                  onMouseEnter={() => setActiveTab(i)} // desktop hover
-                  onClick={() => setActiveTab(i)} // 📱 mobile tap
-                  className={`w-full text-left p-4 md:p-5 rounded-xl transition-all duration-300 flex items-center justify-between group
-                    ${
-                      activeTab === i
-                        ? " border border-primary/20"
-                        : " border border-transparent"
-                    }
-                  `}
-                >
-                  <div className="flex items-center gap-4 md:gap-5">
-                    <div
-                      className={`transition-colors duration-300 ${
-                        activeTab === i ? "text-primary" : "text-third"
-                      }`}
-                    >
-                      {opt.icon}
-                    </div>
-
-                    <span
-                      className={`text-xs md:text-sm font-semibold tracking-[0.12em] uppercase transition-colors ${
-                        activeTab === i ? "text-primary" : "text-third"
-                      }`}
-                    >
-                      {opt.title}
-                    </span>
-                  </div>
-
-                  <ChevronRight
-                    className={`w-4 h-4 transition-all duration-300 ${
-                      activeTab === i
-                        ? "text-primary translate-x-0 opacity-100"
-                        : "opacity-0 -translate-x-3"
-                    }`}
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* RIGHT PANEL */}
-          <div className="lg:w-1/2 p-6 md:p-10 xl:p-14 bg-linear-to-br from-transparent to-primary/5 flex flex-col justify-center relative">
-            <div className="relative z-10 transition-all duration-500">
-              <div className="mb-5 md:mb-6 inline-flex items-center gap-3 px-3 md:px-4 py-1.5 rounded-full  border border-primary/20">
-     
-                <span className="text-[10px] md:text-sm tracking-[0.35em] uppercase text-third font-semibold">
-                  {options[activeTab].visual}
+      <div className="relative w-full mx-auto">
+        <div className="flex flex-col lg:flex-row border border-primary/20 rounded-4xl backdrop-blur-md overflow-hidden">
+          {/* LEFT PANEL — Existing Report */}
+          <div className="lg:w-1/2 p-6 md:p-10 xl:p-14 lg:border-r border-primary/20 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-8 md:mb-10">
+                <Zap className="w-4 h-4 text-primary" />
+                <span className="text-xs md:text-sm tracking-[0.35em] uppercase text-third font-semibold">
+                  In Your Potential
                 </span>
               </div>
 
-              <h3 className="text-xl sm:text-2xl md:text-3xl xl:text-4xl font-semibold text-primary mb-4 md:mb-5">
-                {options[activeTab].feature}
-              </h3>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat mb-8 md:mb-10">
+                Existing Report <br />
+                <span className="text-fourth/80">Upgrades</span>
+              </h2>
 
-              <p className="text-sm md:text-base text-third/80 leading-relaxed mb-6 md:mb-8 max-w-xl">
-                {options[activeTab].desc}
+              <p className="text-sm md:text-base text-third/80 leading-relaxed mb-8">
+                Consultants who have already had their vehicle inspected elsewhere can submit that report for Reecomm review. If it meets our verification standards, it will be tagged on the listing.
               </p>
 
-              {/* ✅ responsive stats */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="p-4 md:p-6 rounded-xl  border border-primary/10">
-                  <MonitorPlay className="w-4 h-4 text-primary mb-2" />
-                  <p className="text-[11px] md:text-[12px] text-third uppercase tracking-widest font-semibold">
-                    Priority Status
-                  </p>
-                  <p className="text-primary text-sm md:text-[15px] mt-1">
-                    24H Turnaround
-                  </p>
-                </div>
+              <div className="mt-8">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-primary mb-4">
+                  What Reecomm checks:
+                </h4>
+                <ul className="space-y-3">
+                  {[
+                    "Fresh inspection (not older than 60 days)",
+                    "Issued by a recognised inspection body",
+                    "Complete photo documentation",
+                    "No evidence of alteration",
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-3 text-sm text-third/80">
+                      <span className="text-fourth mt-1.5">•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
 
-                <div className="p-4 md:p-6 rounded-xl  border border-primary/10">
-                  <ClipboardCheck className="w-4 h-4 text-primary mb-2" />
-                  <p className="text-[11px] md:text-[12px] text-third uppercase tracking-widest font-semibold">
-                    Verification
-                  </p>
-                  <p className="text-primary text-sm md:text-[15px] mt-1">
-                    On-Site Expert
-                  </p>
+            <div className="mt-8 p-4 rounded-xl border border-primary/10 bg-primary/3 flex gap-3 items-start">
+              <ShieldAlert className="w-4 h-4 text-fourth shrink-0 mt-0.5" />
+              <p className="text-xs text-third/70 leading-relaxed">
+                <strong>Note:</strong> Reecomm reserves the right to require a new inspection if the submitted report is incomplete or does not meet platform standards.
+              </p>
+            </div>
+          </div>
+
+          {/* RIGHT PANEL — Full Multi-Point Scan */}
+          <div className="lg:w-1/2 p-6 md:p-10 xl:p-14 bg-linear-to-br from-transparent to-primary/5 flex flex-col justify-between relative">
+            <div>
+              <div className="mb-5 md:mb-6 inline-flex items-center gap-3 px-3 md:px-4 py-1.5 rounded-full border border-primary/20">
+                <span className="text-[10px] md:text-sm tracking-[0.35em] uppercase text-third font-semibold">
+                  Custom Examination
+                </span>
+              </div>
+
+              <h3 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat mb-8 md:mb-10">
+                Full Multi-Point <br />
+                <span className="text-fourth/80">Scan</span>
+              </h3>
+
+              <p className="text-sm md:text-base text-third/80 leading-relaxed mb-8">
+                A fresh, independent inspection carried out by a Reecomm-assigned inspector — covering all 11 categories from engine to modifications.
+              </p>
+
+              <div className="mt-8">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-primary mb-4">
+                  Covers:
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+                  {[
+                    "Engine & Powertrain",
+                    "Mechanical System",
+                    "Exterior Panels (per panel)",
+                    "Interior & Cabin",
+                    "Structural History",
+                    "Tyres (tread depth in mm)",
+                    "OBD Diagnostics",
+                    "Modifications Assessment",
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-2 text-sm text-third/80">
+                      <span className="text-fourth">•</span>
+                      <span>{item}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
+            </div>
+
+            <div className="mt-8 p-4 rounded-xl border border-primary/10 bg-primary/3 flex gap-3 items-start">
+              <BadgeCheck className="w-4 h-4 text-fourth shrink-0 mt-0.5" />
+              <p className="text-xs text-primary/80 font-medium leading-relaxed">
+                Recommended for all buyers requesting inspection on a listed vehicle.
+              </p>
             </div>
           </div>
         </div>
@@ -153,8 +111,7 @@ export default function ReInspectionOptions() {
         {/* bottom note */}
         <div className="mt-8 md:mt-10 text-center px-2">
           <p className="text-[10px] md:text-[11px] text-third/50 uppercase tracking-[0.22em]">
-            Re-inspection facilitates risk mitigation closer to transaction
-            finalized date
+            Re-inspection facilitates risk mitigation closer to transaction finalized date
           </p>
         </div>
       </div>

@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Vehicle Listings (dynamic, paginated) -->
+  <sitemap>
+    <loc>https://www.reecomm.com/api/sitemap/vehicles.xml</loc>
+    <lastmod>2026-06-18T00:00:00Z</lastmod>
+  </sitemap>
+  <!-- Storefront Listings (dynamic, paginated) -->
+  <sitemap>
+    <loc>https://www.reecomm.com/api/sitemap/storefronts.xml</loc>
+    <lastmod>2026-06-18T00:00:00Z</lastmod>
+  </sitemap>
   <sitemap>
     <loc>https://www.reecomm.com/pages-sitemap.xml</loc>
     <lastmod>2026-05-16T14:27:00Z</lastmod>

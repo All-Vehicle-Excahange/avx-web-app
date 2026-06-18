@@ -14,69 +14,40 @@ import {
 
 const categories = [
   {
-    title: "Mechanical Systems",
-    subtitle: "Core Performance",
+    title: "Engine & Powertrain",
     icon: Wrench,
     image: "/mechanical-systems.webp",
-    items: [
-      "Engine performance",
-      "Transmission condition",
-      "Clutch operation",
-      "Suspension",
-      "Steering system",
-      "Brake system",
-    ],
+    description: "Assesses engine health, fuel system, oil and coolant leakage, exhaust condition, wiring harness, battery voltage, gearbox, clutch life, and drivetrain integrity.",
   },
   {
-    title: "Structural & Safety",
-    subtitle: "Chassis integrity",
+    title: "Mechanical System",
     icon: ShieldCheck,
-    image: "/structural-and-safety.webp",
-    items: [
-      "Chassis integrity",
-      "Accident signs",
-      "Frame alignment",
-      "Airbag indicators",
-      "Underbody condition",
-    ],
+    image: "/mechanical-systems.webp",
+    description: "Covers steering performance, suspension health, brake pad life, shock absorbers, ABS warning status, and all safety-critical mechanical components.",
   },
   {
-    title: "Electrical & Electronics",
-    subtitle: "Digital Health",
-    icon: CircuitBoard,
-    image: "/electric-and-electronic.webp",
-    items: [
-      "Battery health",
-      "Instrument cluster",
-      "Lighting systems",
-      "Infotainment",
-      "AC performance",
-    ],
-  },
-  {
-    title: "Exterior & Interior",
-    subtitle: "Aesthetics",
+    title: "Exterior Panels & Body",
     icon: Car,
     image: "/exterior-and-interior.webp",
-    items: [
-      "Paint condition",
-      "Panel gaps",
-      "Scratch/dent visibility",
-      "Seat condition",
-      "Upholstery",
-    ],
+    description: "Evaluates every exterior panel for repainting, dents, scratches, and rust — with individual severity ratings and photographic documentation per panel.",
   },
   {
-    title: "Documentation",
-    subtitle: "Verification",
+    title: "Interior & Cabin",
+    icon: CircuitBoard,
+    image: "/electric-and-electronic.webp",
+    description: "Checks AC cooling and heating, infotainment, power windows, central locking, airbags, seat condition, dashboard condition, and odometer reading — with a full interior video.",
+  },
+  {
+    title: "Structural History",
     icon: FileCheck2,
+    image: "/structural-and-safety.webp",
+    description: "Identifies structural damage, flood damage confirmation, underbody condition, rust presence, and chassis alignment issues.",
+  },
+  {
+    title: "Tyres & OBD Diagnostics",
+    icon: CheckCircle2,
     image: "/document-verification.webp",
-    items: [
-      "RC details match",
-      "Chassis validation",
-      "Odometer consistency",
-      "Insurance check",
-    ],
+    description: "Measures tread depth in mm for all four tyres plus the spare, records tyre condition ratings, and captures full OBD diagnostic scan results including error codes and emission status.",
   },
 ];
 
@@ -88,7 +59,7 @@ export default function InspectionCovers() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div className="space-y-4">
             <span className="text-xs tracking-[0.4em] uppercase text-third font-semibold">
-              Diagnostic_Protocol
+              Inspection Coverage
             </span>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat">
@@ -98,9 +69,11 @@ export default function InspectionCovers() {
             </h2>
           </div>
 
-          <p className="text-gray-400 max-w-sm text-sm leading-relaxed border-l border-primary/10 pl-6">
-            A clean technical overview of the key systems analysed during our
-            structured inspection process.
+          <p className="text-gray-400 w-2xl text-sm leading-relaxed border-l border-primary/10 pl-6">
+            Our inspection is not a checklist of surface observations. It is a
+            structured 11-category evaluation — scored, photographed, and
+            documented by trained, independent inspectors. Here is what every
+            report examines.
           </p>
         </div>
 
@@ -109,7 +82,7 @@ export default function InspectionCovers() {
           {categories.map((cat, idx) => (
             <div
               key={idx}
-              className="relative group rounded-2xl overflow-hidden border border-primary/10 h-[260px] hover:border-primary/40 transition"
+              className="relative group rounded-2xl overflow-hidden border border-primary/10 min-h-[280px] hover:border-primary/40 transition"
             >
               {/* IMAGE */}
               <Image
@@ -134,43 +107,26 @@ export default function InspectionCovers() {
                 </div>
 
                 <div>
-                  <h3 className="text-primary text-lg font-semibold mb-1">
+                  <h3 className="text-primary text-lg font-semibold mb-2">
                     {cat.title}
                   </h3>
 
-                  <p className="text-primary text-xs font-mono uppercase tracking-widest mb-3">
-                    {cat.subtitle}
-                  </p>
-
-                  <div className="space-y-1 opacity-0 group-hover:opacity-100 transition">
-                    {cat.items.slice(0, 4).map((item, i) => (
-                      <div key={i} className="flex items-start gap-2">
-                        <CheckCircle2
-                          size={13}
-                          className="text-primary mt-[3px]"
-                        />
-
-                        <span className="text-primary/80 text-xs">{item}</span>
-                      </div>
-                    ))}
+                  <div className="h-0 opacity-0 group-hover:h-auto group-hover:opacity-100 transition-all duration-300">
+                    <p className="text-primary/80 text-xs leading-relaxed">
+                      {cat.description}
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
           ))}
+        </div>
 
-          {/* CTA */}
-          <div className="rounded-2xl border border-dashed border-primary/20 flex flex-col items-center justify-center p-8 text-center hover:bg-primary/5 hover:border-primary/40 transition cursor-pointer">
-            <div className="w-12 h-12 rounded-full bg-primary/5 flex items-center justify-center mb-4">
-              <ArrowUpRight className="text-primary" />
-            </div>
-
-            <p className="text-primary text-sm font-semibold uppercase tracking-widest">
-              Full 200+ Points
-            </p>
-
-            <p className="text-primary/40 text-xs mt-1">View Full Checklist</p>
-          </div>
+        {/* Small Supporting Note */}
+        <div className="mt-10 border-t border-primary/10 pt-6">
+          <p className="text-xs md:text-sm text-third/60 italic text-center md:text-left max-w-3xl mx-auto md:mx-0">
+            *EV Battery System inspection is included for electric vehicles — covering battery SoH %, SoC %, charging port condition, BMS warnings, and high-voltage wiring.
+          </p>
         </div>
       </div>
     </section>

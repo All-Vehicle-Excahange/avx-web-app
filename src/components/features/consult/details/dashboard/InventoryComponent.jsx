@@ -28,8 +28,11 @@ import {
   getInventorySnapShotCountQuery,
   getNeedAttenctionVehiclesInfiniteQuery,
   getSusPendedVehiclesInfiniteQuery,
+  getSellerTierQuery,
+  getListingLimitsQuery,
 } from "@/queries/Seller.queries";
 import TopPerformingCard from "./components/TopPerformingCard";
+import AddSlotPopup from "./components/AddSlotPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import StatCardSkeleton from "@/components/ui/skeleton/StatCardSkeleton";
 import TopPerformingCardSkeleton from "@/components/ui/skeleton/TopPerformingCardSkeleton";
@@ -73,6 +76,7 @@ export default function InventoryComponent() {
 
   const [activeType, setActiveType] = useState("all");
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+  const [isAddSlotOpen, setIsAddSlotOpen] = useState(false);
 
   const queryClient = useQueryClient();
   const { push } = useRouter();
@@ -119,6 +123,21 @@ export default function InventoryComponent() {
   } = useQuery(getInventorySnapShotCountQuery());
 
   const inventorySnapShotCount = snapshotData || {};
+
+  const { data: sellerTierData } = useQuery(getSellerTierQuery());
+
+  // 6. Listing Limits Query
+  const {
+    data: listingLimitsData,
+    isLoading: listingLimitsLoading,
+    refetch: refetchListingLimits,
+  } = useQuery(getListingLimitsQuery());
+
+  const maxLimit = listingLimitsData?.maxVehicleListingCount ?? 0;
+  const currentCount = listingLimitsData?.currentVehicleListingCount ?? 0;
+  const percentage =
+    maxLimit > 0 ? Math.min((currentCount / maxLimit) * 100, 100) : 0;
+  const isNearLimit = maxLimit > 0 && maxLimit - currentCount <= 2;
 
   // 4. Need Attention Vehicles Query (Paginated / Load More via Infinite Query)
   const {
@@ -247,6 +266,46 @@ export default function InventoryComponent() {
           </div>
         </div>
 
+        {/* LISTING LIMIT PROGRESS */}
+        <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-8 md:gap-16 lg:gap-24 rounded-2xl border border-third/30 bg-linear-to-r from-primary/10 to-primary/5 p-5 sm:p-6 shadow-sm">
+          <div className="flex-1 flex flex-col gap-3.5 w-full">
+            <div className="flex items-center justify-between">
+              <span className="text-third text-xs uppercase tracking-widest font-semibold">
+                Listing Limit
+              </span>
+              {listingLimitsLoading ? (
+                <span className="text-third text-xs">Loading limits...</span>
+              ) : (
+                <span
+                  className={`font-bold text-base ${isNearLimit ? "text-red-500 animate-pulse" : "text-primary"}`}
+                >
+                  {currentCount}{" "}
+                  <span className="text-third font-medium text-sm">
+                    / {maxLimit} Listed
+                  </span>
+                </span>
+              )}
+            </div>
+            <div className="w-full h-2 bg-third/20 rounded-full overflow-hidden shadow-inner">
+              <div
+                className={`h-full rounded-full transition-all duration-700 ease-out ${
+                  isNearLimit ? "bg-red-500" : "bg-primary"
+                }`}
+                style={{ width: `${percentage}%` }}
+              ></div>
+            </div>
+          </div>
+
+          {/* <Button
+            variant="ghost"
+            showIcon={false}
+            onClick={() => setIsAddSlotOpen(true)}
+            className="w-full sm:w-auto shrink-0 shadow-md hover:shadow-lg transition-all"
+          >
+            Add Top-up
+          </Button> */}
+        </div>
+
         {/* 3️⃣ TOP PERFORMING VEHICLES */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {/* LEFT SIDE */}
@@ -343,6 +402,8 @@ export default function InventoryComponent() {
           </div>
         </div>
 
+        {/* LISTING LIMIT PROGRESS */}
+
         {/* 4️⃣ FILTER BAR */}
         <div className="rounded-xl border border-third/30 p-5 flex flex-col lg:flex-row gap-4 justify-between">
           <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
@@ -390,6 +451,7 @@ export default function InventoryComponent() {
                       onRefresh={() => {
                         refetchVehicles();
                         refetchSnapshot();
+                        refetchListingLimits();
                       }}
                     />
                   ))}
@@ -462,6 +524,7 @@ export default function InventoryComponent() {
                         queryClient.invalidateQueries({
                           queryKey: ["seller-suspended-vehicles-infinite"],
                         });
+                        refetchListingLimits();
                       }}
                     />
                   ))}{" "}
@@ -533,6 +596,10 @@ export default function InventoryComponent() {
       <DownloadAppPopup
         isOpen={isDownloadOpen}
         onClose={() => setIsDownloadOpen(false)}
+      />
+      <AddSlotPopup
+        isOpen={isAddSlotOpen}
+        onClose={() => setIsAddSlotOpen(false)}
       />
     </>
   );

@@ -2,28 +2,28 @@
 import Image from "next/image";
 
 import {
-  AlertTriangle,
-  FileSearch,
-  RefreshCcw,
+  User,
+  FileSignature,
+  RefreshCw,
   ShieldCheck,
 } from "lucide-react";
 
 export default function DisputeHandling() {
   const steps = [
     {
-      title: "Buyer raises dispute",
-      desc: "If discrepancies arise, the buyer may formally raise a dispute for review.",
-      icon: AlertTriangle,
+      title: "Buyer Value Report",
+      desc: "Every report is written with the buyer's decision in mind. Inspectors document what a buyer needs to know — condition, scores, flags, and photographs — in a format that is clear without being technical.",
+      icon: User,
     },
     {
-      title: "Inspection logs reviewed",
-      desc: "Reecomm reviews inspection media, checklist data, and inspector notes.",
-      icon: FileSearch,
+      title: "Inspector Sign-off",
+      desc: "Every report carries the inspector's digital sign-off, date of inspection, and location. Inspection identity is recorded on the platform and cannot be modified after submission.",
+      icon: FileSignature,
     },
     {
-      title: "Re-evaluation triggered",
-      desc: "If required, a structured re-evaluation workflow may be initiated.",
-      icon: RefreshCcw,
+      title: "Re-evaluation Support",
+      desc: "If a buyer raises a concern about the inspection findings, they can flag it through the platform. Reecomm will review the report and, if warranted, arrange a re-evaluation at no additional cost.",
+      icon: RefreshCw,
     },
   ];
 
@@ -36,18 +36,16 @@ export default function DisputeHandling() {
         {/* HEADER — aligned with home */}
         <div className="max-w-3xl mb-14">
           <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-5">
-            Dispute Handling
+            Inspector Standards
           </p>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat mb-8 md:mb-10">
             Structured Review
-            <span className="text-fourth/80"> Protocol</span>
+            <span className="text-fourth/80"> Protocol.</span>
           </h2>
 
           <p className="text-lg text-third leading-relaxed">
-            Reecomm maintains a defined review workflow to address
-            inspection-related discrepancies with full audit visibility and
-            procedural clarity.
+            Reecomm inspectors are not random third parties. Every inspector assigned through the platform operates under a defined review protocol — ensuring consistency, accountability, and report quality across every inspection.
           </p>
         </div>
 
@@ -56,7 +54,7 @@ export default function DisputeHandling() {
           {/* top strip — calmer */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-primary/10 ">
             <p className="text-xs tracking-widest uppercase text-third/70">
-              Dispute Review Flow
+              Protocol Pillars
             </p>
 
             <div className="flex items-center gap-2 text-xs text-third/70">
@@ -78,16 +76,14 @@ export default function DisputeHandling() {
                     group
                     rounded-2xl
                     border border-primary/10
-                    
                     p-6
                     transition-all duration-300
                     hover:border-primary/40
-                   
                   "
                 >
                   {/* step number */}
                   <div className="text-[10px] tracking-widest text-third/50 mb-3">
-                    STEP {index + 1}
+                    PILLAR 0{index + 1}
                   </div>
 
                   {/* icon */}
@@ -112,14 +108,12 @@ export default function DisputeHandling() {
         <div className="mt-14 grid lg:grid-cols-12 gap-10 items-center">
           {/* LEFT TEXT */}
           <div className="lg:col-span-6">
-            <h3 className="text-xl md:text-2xl font-semibold text-primary mb-3">
-              Inspection audit trails are preserved
+            <h3 className="text-xl md:text-2xl font-semibold text-primary mb-3 font-montserrat">
+              Inspection audit trails are preserved.
             </h3>
 
             <p className="text-sm text-third leading-relaxed">
-              Reecomm maintains detailed inspection logs including media,
-              checklist inputs, timestamps, and inspector attribution. This
-              ensures every review is backed by verifiable historical data.
+              Every inspection request, assignment, report submission, and flag is logged on the platform. If a dispute arises, the full audit trail is available for review.
             </p>
           </div>
 

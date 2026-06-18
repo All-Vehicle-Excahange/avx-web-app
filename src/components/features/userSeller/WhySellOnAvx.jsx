@@ -7,7 +7,7 @@ const features = [
     tag: "Buyers",
     title: "Reach Verified Buyers",
     description:
-      "Every buyer on Reecomm is verified before they can contact a seller. Your listing reaches only serious, qualified prospects — no spam, no time wasters, just real deals.",
+      "Every buyer on Reecomm is verified before they can contact a seller. Your listing reaches only serious, qualified prospects — no spam, no time-wasters, just real leads.",
     image: "/reach-verified-buyers.webp",
     icon: (
       <svg
@@ -31,7 +31,7 @@ const features = [
     tag: "Analytics",
     title: "Track Real Inquiries",
     description:
-      "See exactly who's viewing your listing, how many inquiries you've received, and where your leads are coming from — all from a clean, real-time seller dashboard.",
+      "Every inquiry on your listing is logged and visible to you through the platform. See how many buyers have shown interest, when they reached out, and what they are asking — so you always know where things stand.",
     image: "/track-real-inquires.webp",
     icon: (
       <svg
@@ -55,7 +55,7 @@ const features = [
     tag: "Inspection",
     title: "Optional Inspection",
     description:
-      "Get your vehicle inspected by a Reecomm-certified partner at your convenience. Inspected listings build instant buyer trust and consistently close faster than unverified ones.",
+      "Get your vehicle inspected by a Reecomm-verified inspector before listing — or allow buyers to request one. Inspected listings build buyer trust immediately, close faster, and attract more serious inquiries.",
     image: "/optional-inspection.webp",
     icon: (
       <svg
@@ -76,10 +76,10 @@ const features = [
   {
     id: 4,
     num: "04",
-    tag: "Visibility",
-    title: "Performance-Based Visibility",
+    tag: "Trust",
+    title: "Inspection-Backed Credibility",
     description:
-      "Listings with complete details, verified documents, and inspection reports rank higher automatically. Serious sellers get a natural edge — no paid promotions ever needed.",
+      "Listings with a Reecomm inspection report carry a verified badge on the marketplace. Buyers can see the inspection score before they contact you — giving them the confidence to reach out, and giving you fewer low-quality conversations.",
     image: "/performance-based-visibility.webp",
     icon: (
       <svg
@@ -120,9 +120,9 @@ function WhySellOnAvx() {
             >
               Why Sell on Reecomm?
               <br />
-              <span className="text-fourth/80">Built for Serious Sellers</span>
+              <span className="text-fourth/80">Built for Serious Sellers.</span>
             </h2>
-            <p className="text-third text-lg font-[Poppins] max-w-xs leading-relaxed mt-4">
+            <p className="text-third text-lg font-[Poppins] max-w-xl leading-relaxed mt-4">
               A structured marketplace designed to give you full control,
               visibility, and trust.
             </p>

@@ -15,18 +15,18 @@ export default function InspectionInitiated() {
   const steps = [
     {
       icon: <CreditCard className="w-5 h-5" />,
-      title: "Secure Payment",
-      desc: "Encrypted gateway validates the request before scheduling.",
+      title: "Step 1 — Secure Payment",
+      desc: "The inspection fee is paid through the platform at the time of request. No payment goes directly to the inspector or consultant.",
     },
     {
       icon: <MapPin className="w-5 h-5" />,
-      title: "Inspector Mapping",
-      desc: "Smart geo-assignment connects the nearest certified inspector.",
+      title: "Step 2 — Inspector Mapping",
+      desc: "Reecomm assigns a trained, independent inspector closest to the vehicle's location. Assignment is confirmed within 24 hours of payment.",
     },
     {
       icon: <CalendarCheck className="w-5 h-5" />,
-      title: "Inspection Confirmed",
-      desc: "Vehicle availability verified for physical inspection.",
+      title: "Step 3 — Inspector Confirmed",
+      desc: "The inspector's details and appointment window are shared with both the buyer and the consultant. The inspection is scheduled and locked.",
     },
   ];
 
@@ -38,14 +38,13 @@ export default function InspectionInitiated() {
       <div className="relative w-full mx-auto ">
         {/* HEADER */}
         <div className="text-center max-w-3xl mx-auto mb-20">
-         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat">
-            Inspection       <span className="text-fourth/80">
-               Initiated
-              </span>
-            </h2>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat">
+            Inspection <span className="text-fourth/80">Initiated</span>
+          </h2>
 
           <p className="mt-5 text-third/70 text-lg">
-            A precision-driven pipeline that activates once trust is requested.
+            A customer raises a request from the listing — the rest is managed
+            through the platform.
           </p>
         </div>
 
@@ -125,8 +124,9 @@ export default function InspectionInitiated() {
           <div className="inline-flex items-start gap-3 px-6 py-4 rounded-2xl bg-primary/3 border border-primary/10">
             <Zap className="text-primary w-5 h-5 mt-1 shrink-0" />
             <p className="text-sm text-primary/80 italic leading-relaxed">
-              Reecomm inspected vehicles consistently convert faster and build
-              stronger buyer confidence across the marketplace.
+              Once initiated, the inspection process is managed entirely by
+              Reecomm. Consultants cannot reschedule or cancel a buyer-requested
+              inspection.
             </p>
           </div>
         </div>

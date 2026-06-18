@@ -30,33 +30,33 @@ export default function InspectionMatters() {
             {/* sticky only on large screens */}
             <div className="lg:sticky lg:top-24">
               <div className="inline-block px-3 py-1 text-xs md:text-sm tracking-[0.35em] uppercase text-third font-semibold mb-5 md:mb-6">
-                ANALYSIS MODULE 01
+                Analysis Module 2.0
               </div>
 
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat mb-8 md:mb-10">
-            Clarity Before       <span className="text-fourth/80">
-               Commitment
-              </span>
-            </h2>
+                Clarity Before{" "}
+                <span className="text-fourth/80">Commitment</span>
+              </h2>
 
               <div className="space-y-5 md:space-y-6 text-third/70 text-sm md:text-lg leading-relaxed max-w-md">
                 <p>
-                  Pre-owned vehicles vary in condition. Our system provides a{" "}
-                 structured evaluation
-                  before you proceed.
+                  Reecomm offers two types of inspection — designed for
+                  different stages of the buying process. Whether you are a
+                  consultant building credibility or a buyer protecting your
+                  investment, there is a structured path for you.
                 </p>
 
                 <p className="text-[13px] md:text-[15px] font-light leading-relaxed border-l border-fourth/40 pl-4 md:pl-6">
-                  Reecomm inspection focuses on identifying hidden risks through a
-                  data-driven protocol. Transparency is the core of our
+                  Reecomm inspection focuses on identifying hidden risks through
+                  a data-driven protocol. Transparency is the core of our
                   ecosystem.
                 </p>
               </div>
 
               {/* Terminal */}
               <div className="mt-8 md:mt-12 p-3 md:p-4  border border-primary/10 rounded-md font-mono text-[12px] md:text-[14px] text-primary/60">
-                <span className="text-primary">SYSTEM_NOTE:</span> Inspection adds
-                transparency — not guarantees.
+                <span className="text-primary">SYSTEM_NOTE:</span> Inspection
+                adds transparency — not guarantees.
               </div>
             </div>
           </div>
@@ -110,8 +110,6 @@ export default function InspectionMatters() {
                         </p>
                       </div>
                     </div>
-
-                
                   </div>
                 ))}
 
