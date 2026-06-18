@@ -6,10 +6,15 @@ import Button from "@/components/ui/button";
 export default function HeroSection() {
   return (
     <section className="relative min-h-[90vh] lg:min-h-screen flex items-center justify-center overflow-hidden">
-      
       {/* BACKGROUND IMAGE */}
       <div className="absolute inset-0 z-0 pt-16 md:pt-20">
-        <Image src="/car-hero-21.jpg" alt="Reecomm Inspection" width={800} height={500} className="w-full h-full object-cover object-center opacity-60 md:opacity-70" />
+        <Image
+          src="/car-hero-21.jpg"
+          alt="Reecomm Inspection"
+          width={800}
+          height={500}
+          className="w-full h-full object-cover object-center opacity-60 md:opacity-70"
+        />
 
         {/* overlays */}
         <div className="absolute inset-0 bg-linear-to-r from-secondary via-secondary/70 md:via-secondary/60 to-transparent" />
@@ -18,10 +23,8 @@ export default function HeroSection() {
 
       <div className="relative z-20 mx-auto w-full max-w-[1480px] px-3 sm:px-4 md:px-6 lg:px-10 xl:px-12 my-21 ">
         <div className="grid lg:grid-cols-12 gap-10 md:gap-16 items-center">
-          
           {/* LEFT */}
           <div className="lg:col-span-7 text-center lg:text-left">
-            
             <div className="flex items-center gap-3 mb-5 md:mb-6 justify-center lg:justify-start">
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
                 Reecomm Inspection Framework
@@ -29,21 +32,16 @@ export default function HeroSection() {
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat">
-             Structured Inspection
+              Structured Inspection
               <br />
-              <span className="text-fourth/80">
-               for Informed Decisions
-              </span>
+              <span className="text-fourth/80">For Informed Decisions</span>
             </h2>
 
             <div className="max-w-xl mx-auto lg:mx-0 space-y-4 md:space-y-6 mt-6">
               <p className="text-sm sm:text-base md:text-[18px] text-third leading-relaxed">
-                Reecomm offers a{" "}
-                <span className="text-primary font-medium">
-                  standardized multi-point vehicle inspection
-                </span>{" "}
-                framework designed to improve transparency in the pre-owned
-                vehicle ecosystem.
+                Every vehicle on Reecomm can be independently inspected before a
+                deal is discussed. A standardised, multi-point vehicle
+                inspection — documented, scored, and delivered digitally.
               </p>
 
               <p className="text-[13px] md:text-[15px] text-third/60 border-l-2 border-fourth/40 pl-3 md:pl-4 py-1 italic">
@@ -54,10 +52,13 @@ export default function HeroSection() {
 
             {/* BUTTONS */}
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 mt-8 md:mt-12 justify-center lg:justify-start">
-              <Button variant="ghost">Request Inspection</Button>
+              <Button variant="ghost">Book an Inspection</Button>
 
-              <Button href="/search?reccomInspected=true" variant="outlineSecondary">
-                Browse Inspected Vehicles
+              <Button
+                href="/search?reccomInspected=true"
+                variant="outlineSecondary"
+              >
+                Browse Inspection Reports
               </Button>
             </div>
           </div>
@@ -65,62 +66,62 @@ export default function HeroSection() {
           {/* RIGHT WIDGET */}
           <div className="lg:col-span-5 hidden md:block">
             <div className="backdrop-blur-md bg-primary/5 border border-primary/10 p-6 md:p-8 rounded-2xl relative max-w-md mx-auto lg:mx-0">
-         
-
               <div className="space-y-5 md:space-y-6">
-                
                 <div className="flex justify-between items-end border-b border-primary/10 pb-3 md:pb-4">
                   <span className="text-[10px] md:text-xs text-third uppercase tracking-widest">
                     Confidence Score
                   </span>
                   <span className="text-xl md:text-2xl font-mono text-primary">
-                    98.4%
+                    86/100
                   </span>
                 </div>
 
                 <div className="space-y-3 md:space-y-4">
                   <p className="text-[9px] md:text-[10px] text-third/50 uppercase">
-                    Active Verification Modules
+                    Category Scores
                   </p>
 
                   {[
-                    { label: "Structural Integrity", val: "PASS" },
-                    { label: "Engine Diagnostics", val: "ACTIVE" },
-                    { label: "Electrical Systems", val: "PASS" },
-                  ].map((item, i) => (
-                    <div
-                      key={i}
-                      className="flex justify-between items-center bg-black/40 p-2.5 md:p-3 rounded"
-                    >
-                      <span className="text-[11px] md:text-xs text-primary/80">
-                        {item.label}
-                      </span>
+                    { label: "Engine & Powertrain", val: "87/100" },
+                    { label: "Mechanical System", val: "91/100" },
+                    { label: "Exterior Panels & Body", val: "74/100" },
+                    { label: "Interior & Cabin", val: "88/100" },
+                    { label: "Structural History", val: "95/100" },
+                  ].map((item, i) => {
+                    const score = parseInt(item.val);
+                    const colorClass =
+                      score >= 80
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-fourth/20 text-primary";
 
-                      <span
-                        className={`text-[9px] md:text-[10px] font-bold px-2 py-0.5 rounded ${
-                          item.val === "PASS"
-                            ? "bg-green-500/20 text-green-400"
-                            : "bg-fourth/20 text-primary"
-                        }`}
+                    return (
+                      <div
+                        key={i}
+                        className="flex justify-between items-center bg-black/40 p-2.5 md:p-3 rounded"
                       >
-                        {item.val}
-                      </span>
-                    </div>
-                  ))}
+                        <span className="text-[11px] md:text-xs text-primary/80">
+                          {item.label}
+                        </span>
+
+                        <span
+                          className={`text-[9px] md:text-[10px] font-bold px-2 py-0.5 rounded ${colorClass}`}
+                        >
+                          {item.val}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
 
                 <p className="text-[11px] md:text-[13px] leading-tight text-third/40 italic">
                   *Inspection is optional but recommended for buyers seeking
                   additional confidence and performance visibility.
                 </p>
-
               </div>
             </div>
           </div>
-
         </div>
       </div>
-
     </section>
   );
 }

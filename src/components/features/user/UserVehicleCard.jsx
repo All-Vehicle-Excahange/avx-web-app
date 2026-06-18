@@ -70,7 +70,10 @@ export default function UserVehicleCard({
   const formatStatus = (s) => {
     if (!s) return "-";
     if (s.toLowerCase() === "requested") return "Pending";
-    return s.replaceAll("_", " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+    return s
+      .replaceAll("_", " ")
+      .toLowerCase()
+      .replace(/\b\w/g, (c) => c.toUpperCase());
   };
 
   const handleSoldClick = () => {
@@ -113,7 +116,7 @@ export default function UserVehicleCard({
 
         <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
           {/* IMAGE */}
-          <div className="relative w-40 sm:w-48 h-auto min-h-[160px] md:h-56 md:w-full shrink-0 p-2">
+          <div className="relative w-40 sm:w-48 h-auto min-h-40 md:h-56 md:w-full shrink-0 p-2">
             <div className="relative w-full h-full overflow-hidden rounded-xl">
               {data?.sponsored && <SponsoredRibbon />}
               <Image
@@ -248,7 +251,7 @@ export default function UserVehicleCard({
                 />
                 <div className="min-w-0">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500/70 mb-0.5">
-                     Remarks:
+                    Remarks:
                   </p>
                   <p className="text-xs font-semibold text-primary leading-snug">
                     {data?.adminRemark ||
@@ -267,7 +270,7 @@ export default function UserVehicleCard({
                 />
                 <div className="min-w-0">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-orange-500/70 mb-0.5">
-                     Status:
+                    Status:
                   </p>
                   <p className="text-xs font-semibold text-primary leading-snug">
                     Waiting for admin approval.
@@ -279,13 +282,10 @@ export default function UserVehicleCard({
             {/* REJECTED notice + reason */}
             {status === "rejected" && (
               <div className="flex items-start gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2">
-                <Ban
-                  size={13}
-                  className="text-red-500 mt-0.5 shrink-0"
-                />
+                <Ban size={13} className="text-red-500 mt-0.5 shrink-0" />
                 <div className="min-w-0">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-red-500/70 mb-0.5">
-                     Remark:
+                    Remark:
                   </p>
                   <p className="text-xs font-semibold text-primary leading-snug">
                     {data?.adminRemark ||
@@ -307,7 +307,10 @@ export default function UserVehicleCard({
                   size="sm"
                   className="w-8 h-8 p-0 group"
                 >
-                  <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:rotate-45" />
+                  <ArrowUpRight
+                    size={16}
+                    className="transition-transform duration-300 group-hover:rotate-45"
+                  />
                 </Button>
               </div>
 

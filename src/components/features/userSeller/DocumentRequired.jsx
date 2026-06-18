@@ -7,27 +7,31 @@ import { User, CreditCard, Car, ShieldCheck } from "lucide-react";
 const docs = [
   {
     name: "Aadhaar Card",
+    desc: "Government-issued identity proof. Required for seller verification and platform accountability.",
     icon: User,
     required: true,
-    bg: "https://uidai.gov.in/images/advertisement/Aadhaar_Verify_creative_English.jpg", // id/doc style
+    bg: "https://uidai.gov.in/images/advertisement/Aadhaar_Verify_creative_English.jpg",
   },
   {
     name: "PAN Card",
+    desc: "Tax identification proof. Required for all individual sellers listing on the Reecomm platform.",
     icon: CreditCard,
     required: true,
-    bg: "https://media.assettype.com/outlookmoney/2024-12-07/3cguwiua/111121552.jpg.webp?w=801&auto=format%2Ccompress&fit=max&format=webp&dpr=1.0", // card/payment doc vibe
+    bg: "https://media.assettype.com/outlookmoney/2024-12-07/3cguwiua/111121552.jpg.webp?w=801&auto=format%2Ccompress&fit=max&format=webp&dpr=1.0",
   },
   {
     name: "Vehicle RC",
+    desc: "Registration certificate confirming your ownership of the vehicle being listed. Must match the vehicle details submitted.",
     icon: Car,
     required: true,
-    bg: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5jmtGW1d0xI-jM5Rfy4yliHAXogWhhwc14A&sttps://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200", // car doc vibe
+    bg: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5jmtGW1d0xI-jM5Rfy4yliHAXogWhhwc14A&sttps://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200",
   },
   {
     name: "Insurance",
+    desc: "Valid vehicle insurance document. Confirms the vehicle is currently insured and legally operable.",
     icon: ShieldCheck,
     required: false,
-    bg: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=1200", // paperwork/protection
+    bg: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=1200",
   },
 ];
 
@@ -61,8 +65,12 @@ export default function DocumentsRequired() {
           </span>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat mt-4">
-            Documents <span className="text-fourth/80">Required</span>
+            Documents <span className="text-fourth/80">Required.</span>
           </h2>
+          
+          <p className="mt-4 text-third/75 text-sm md:text-base font-[Poppins] max-w-xl">
+            KYC helps Reecomm maintain listing authenticity and ensures a secure environment for all sellers.
+          </p>
         </div>
 
         {/* GRID */}
@@ -73,13 +81,13 @@ export default function DocumentsRequired() {
             return (
               <div
                 key={i}
-                className="group relative h-[220px] p-6 rounded-2xl overflow-hidden border border-white/10 hover:border-white/30 transition duration-300"
+                className="group relative min-h-[250px] p-6 rounded-2xl overflow-hidden border border-white/10 hover:border-white/30 transition duration-300 flex flex-col justify-end"
               >
                 {/* 🖼 FULL IMAGE */}
                 <Image src={doc.bg} alt={doc.name} fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
 
                 {/* 🌑 DARK OVERLAY */}
-                <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition duration-300" />
+                <div className="absolute inset-0 bg-black/70 group-hover:bg-black/50 transition duration-300" />
 
                 {/* ✨ CONTENT */}
                 <div className="relative z-10 h-full flex flex-col justify-end">
@@ -90,12 +98,17 @@ export default function DocumentsRequired() {
                   </div>
 
                   {/* title */}
-                  <h3 className="text-white text-lg font-semibold uppercase tracking-tight">
+                  <h3 className="text-white text-lg font-semibold uppercase tracking-tight font-montserrat">
                     {doc.name}
                   </h3>
 
+                  {/* description */}
+                  <p className="text-white/70 text-xs mt-1.5 leading-relaxed font-[Poppins]">
+                    {doc.desc}
+                  </p>
+
                   {/* tag */}
-                  <p className="text-[10px] tracking-widest uppercase text-white/70 font-bold">
+                  <p className="text-[10px] tracking-widest uppercase text-white/60 font-bold mt-3">
                     {doc.required ? "Mandatory" : "Optional"}
                   </p>
                 </div>
@@ -110,11 +123,11 @@ export default function DocumentsRequired() {
             inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >
-          <p className="text-third text-sm md:text-base italic max-w-2xl">
-            KYC helps improve listing authenticity and ensures a secure structural marketplace for all sellers.
+          <p className="text-third text-sm md:text-base italic max-w-2xl font-[Poppins]">
+            KYC helps Reecomm maintain listing authenticity and ensures a secure environment for all sellers.
           </p>
 
-          <span className="text-[10px] tracking-[0.3em] uppercase text-third font-bold px-3 py-1 rounded-full border border-primary/20">
+          <span className="text-[10px] tracking-[0.35em] uppercase text-third font-bold px-3 py-1 rounded-full border border-primary/20">
             Trust Layer Verified
           </span>
         </div>

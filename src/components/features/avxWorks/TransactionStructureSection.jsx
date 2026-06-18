@@ -9,7 +9,7 @@ export default function TransactionStructureSection() {
         {/* ===== HEADER ===== */}
         <div className="max-w-3xl mb-8">
           <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-4">
-            Transaction Structure
+            Platform Principles
           </p>
 
           <h2 className="text-3xl md:text-[42px] font-bold leading-tight text-primary mb-5">
@@ -23,9 +23,9 @@ export default function TransactionStructureSection() {
           {/* LEFT TEXT */}
           <div className="space-y-6 max-w-xl">
             <p className="text-[15px] text-third leading-relaxed">
-              Reecomm operates as a structured marketplace connecting buyers and
-              consultants through verified listings, performance metrics, and
-              transparent activity visibility.
+              Reecomm operates on a simple principle: nothing should be hidden.
+              Buyers see consultant ratings, inspection history, listing
+              durations, and price movement — all in one place.
             </p>
 
             <p className="text-[15px] text-primary leading-relaxed">
@@ -76,11 +76,10 @@ export default function TransactionStructureSection() {
           >
             <Users className="text-2xl text-fourth mb-4" />
             <h3 className="text-primary font-semibold mb-2">
-              Marketplace Connector
+              Marketplace Insurance
             </h3>
             <p className="text-sm text-third">
-              Reecomm connects verified buyers and professional consultants
-              through structured listings.
+              Reecomm-verified consultants operate under platform conduct standards. Any breach impacts their visibility and verified status.
             </p>
           </div>
 
@@ -97,8 +96,7 @@ export default function TransactionStructureSection() {
               Transparent Negotiation
             </h3>
             <p className="text-sm text-third">
-              Pricing and negotiation happen directly between parties with full
-              visibility.
+              Price histories and listing activity are visible to buyers. No artificial urgency. No hidden markups.
             </p>
           </div>
 
@@ -115,8 +113,7 @@ export default function TransactionStructureSection() {
               No Payment Handling
             </h3>
             <p className="text-sm text-third">
-              Reecomm does not process transactions between buyers and
-              consultants.
+              Reecomm facilitates trust and connections — not payments. All transactions remain between buyer and consultant, with full documentation.
             </p>
           </div>
         </div>

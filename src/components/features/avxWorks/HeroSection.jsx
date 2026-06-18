@@ -51,7 +51,7 @@ export default function HeroSection() {
 
           <div className="max-w-xl space-y-8">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#60a5fa]/30 text-sm tracking-[0.4em] uppercase text-third font-semibold bg-[#044596]/10 backdrop-blur-md">
-              Our Process
+              For Buyers & Consultants
             </span>
 
             <div className="space-y-3">
@@ -64,25 +64,19 @@ export default function HeroSection() {
             </div>
 
             <p className="text-[15px] text-third leading-relaxed max-w-lg">
-              We connect verified consultants and serious buyers through
-              transparent listings, inspection visibility, and performance
-              accountability.
+              We connect verified vehicle consultants with serious buyers
+              through a structured, inspection-backed process that removes
+              guesswork and builds confidence.
             </p>
 
             <div className="w-24 h-0.5 bg-fourth rounded-full" />
 
             <div className="flex flex-col sm:flex-row gap-4 pt-3">
-              <Button
-                href="/search"
-                variant="ghost"
-              >
-                Browse Vehicles
+              <Button href="/search" variant="ghost">
+                Find a Vehicle
               </Button>
 
-              <Button
-                href="/consult"
-                variant="outlineSecondary"
-              >
+              <Button href="/consult" variant="outlineSecondary">
                 Become a Consultant
               </Button>
             </div>
@@ -130,7 +124,13 @@ export default function HeroSection() {
 
             {/* IMAGE */}
             <div className="absolute left-0 top-[55%] w-[88%] h-[30%] rounded-xl overflow-hidden border border-[#1f2937] shadow-[0_30px_80px_rgba(0,0,0,0.8)] z-30">
-              <Image src="/car-hero-21.jpg" alt="" width={800} height={500} className="w-full h-full object-cover" />
+              <Image
+                src="/car-hero-21.jpg"
+                alt=""
+                width={800}
+                height={500}
+                className="w-full h-full object-cover"
+              />
               <div className="absolute inset-0 bg-linear-to-t from-secondary/80 to-transparent" />
             </div>
 
@@ -147,9 +147,9 @@ export default function HeroSection() {
 
               <div className="grid grid-cols-3 gap-3">
                 {[
-                  { v: "98%", l: "Satisfaction" },
-                  { v: "12m", l: "Response" },
-                  { v: "95%", l: "Transparency" },
+                  { v: "500+", l: "Verified Consultants" },
+                  { v: "98%", l: "Buyer Satisfaction" },
+                  { v: "10K+", l: "Vehicles Listed" },
                 ].map((item, i) => (
                   <div
                     key={i}

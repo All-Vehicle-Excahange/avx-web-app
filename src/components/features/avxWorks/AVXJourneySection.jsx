@@ -1,37 +1,44 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Search, FileText, ShieldCheck, MessageSquare, PlusCircle, Handshake } from "lucide-react";
+import {
+  Search,
+  FileText,
+  ShieldCheck,
+  MessageSquare,
+  PlusCircle,
+  Handshake,
+} from "lucide-react";
 
 const steps = [
   {
-    title: "Discover verified vehicles",
-    desc: "Browse consultant listed vehicles verified through platform quality and listing standards.",
+    title: "Discover verified listings",
+    desc: "Browse vehicles listed by Reecomm-verified consultants. Filter by type, location, price, and consultant rating.",
     icon: Search,
   },
   {
     title: "Evaluate structured information",
-    desc: "Review standardized vehicle data, history insights, and consultant performance indicators.",
+    desc: "Every listing includes consultant credentials, vehicle details, and inspection availability — before you reach out.",
     icon: FileText,
   },
   {
-    title: "Review inspection data",
-    desc: "Access inspection reports, condition insights, and transparency driven documentation.",
+    title: "Request inspection data",
+    desc: "Initiate an independent inspection request directly from the listing. No need to contact the consultant first.",
     icon: ShieldCheck,
   },
   {
     title: "Connect with consultants",
-    desc: "Interact directly with consultants through structured platform communication channels.",
+    desc: "Once you're satisfied with the information, initiate direct contact through the platform — linked to the consultant's verified profile.",
     icon: MessageSquare,
   },
   {
-    title: "Request additional assurance (optional)",
-    desc: "Request additional inspections or supporting validation before final decision making.",
+    title: "Report additional concerns (optional)",
+    desc: "If anything in the listing or communication raises a concern, flag it through the platform. Our team reviews and responds.",
     icon: PlusCircle,
   },
   {
     title: "Complete the deal directly",
-    desc: "Finalize pricing, negotiation, and transaction directly with the consultant.",
+    desc: "Finalise the purchase with the consultant. Reecomm's documentation support ensures both parties have a clear transaction record.",
     icon: Handshake,
   },
 ];
@@ -39,12 +46,11 @@ const steps = [
 export default function AVXJourneySection() {
   return (
     <section className="relative overflow-hidden py-20 bg-transparent">
-      
       <div className="relative max-w-5xl mx-auto px-6">
         {/* HEADER */}
         <div className="text-center mb-20">
           <p className="text-xs tracking-[0.4em] uppercase text-white/40 font-bold mb-3">
-            The Complete Journey
+            Step by Step
           </p>
 
           <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-4 font-primary">
@@ -54,7 +60,8 @@ export default function AVXJourneySection() {
           <div className="w-12 h-1 bg-fourth mx-auto rounded-full mt-5 mb-4" />
 
           <p className="text-third max-w-lg mx-auto text-sm leading-relaxed">
-            A structured, transparent, and accountable pathway designed to eliminate buying friction and build transaction trust.
+            A structured, transparent, and accountable pathway designed to
+            eliminate buying friction and build transaction trust.
           </p>
         </div>
 
@@ -65,7 +72,7 @@ export default function AVXJourneySection() {
           <div
             className="
               hidden md:block absolute left-1/2 top-4 bottom-4
-              w-[2px] -translate-x-1/2
+              w-0.5 -translate-x-1/2
               bg-linear-to-b from-fourth/80 via-fourth/30 to-fourth/5
             "
           />
@@ -73,7 +80,7 @@ export default function AVXJourneySection() {
           <div
             className="
               md:hidden absolute left-6 top-4 bottom-4
-              w-[2px]
+              w-0.5
               bg-linear-to-b from-fourth/80 via-fourth/30 to-fourth/5
             "
           />
@@ -95,12 +102,14 @@ export default function AVXJourneySection() {
                   `}
                 >
                   {/* CARD CONTAINER WITH ALTERNATING WIDTH */}
-                  <div className={`w-full md:w-[calc(50%-40px)] ${i % 2 === 0 ? "md:pr-8" : "md:pl-8"} pl-16 md:pl-0`}>
+                  <div
+                    className={`w-full md:w-[calc(50%-40px)] ${i % 2 === 0 ? "md:pr-8" : "md:pl-8"} pl-16 md:pl-0`}
+                  >
                     {/* STEP CARD */}
                     <div
                       className="
                         group relative rounded-2xl border border-white/5
-                        bg-white/[0.02] hover:bg-white/[0.04]
+                        bg-white/2 hover:bg-white/4
                         p-6 backdrop-blur-md
                         hover:border-fourth/30 transition-all duration-300
                         hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)]
@@ -136,7 +145,7 @@ export default function AVXJourneySection() {
                     className="
                       hidden md:flex absolute left-1/2 -translate-x-1/2
                       w-9 h-9 rounded-full
-                      bg-[#141416] border-[2px] border-fourth
+                      bg-[#141416] border-2 border-fourth
                       items-center justify-center text-[10px] font-black text-fourth
                       shadow-[0_0_12px_rgba(0,123,255,0.3)]
                       z-10
@@ -149,7 +158,7 @@ export default function AVXJourneySection() {
                     className="
                       md:hidden absolute left-2 top-6
                       w-8 h-8 rounded-full
-                      bg-[#141416] border-[2px] border-fourth
+                      bg-[#141416] border-2 border-fourth
                       flex items-center justify-center text-[9px] font-black text-fourth
                       shadow-[0_0_10px_rgba(0,123,255,0.3)]
                       z-10

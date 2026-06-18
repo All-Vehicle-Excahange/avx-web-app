@@ -14,6 +14,10 @@ const ENDPOINT = {
     "/consultation/dashboard/inventory/need-attention-vehicle",
   getInquiryKpis: "/consultation/dashboard/inquiry/kpis",
   getSusPendedVehicles: "/consultation/dashboard/inventory/suspended-vehicles",
+  getListingCreditPrice: "/listing-credit/price",
+  purchaseListingCreditWallet: "/listing-credit/purchase/wallet",
+  purchaseListingCreditRazorpay: "/listing-credit/purchase/razorpay",
+  getLisitingLimits: "/consultation/dashboard/inventory/listing-count",
 };
 
 export const getInventoryVehicle = async (payload) => {
@@ -107,6 +111,51 @@ export const getInquiryKpis = async () => {
     const res = await axiosInstance.get(ENDPOINT.getInquiryKpis);
     return handleResponse(res);
   } catch (error) {
+    throw error;
+  }
+};
+
+export const getListingCreditPrice = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getListingCreditPrice);
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const purchaseListingCreditWallet = async (quantity) => {
+  try {
+    const res = await axiosInstance.post(ENDPOINT.purchaseListingCreditWallet, {
+      quantity,
+    });
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const purchaseListingCreditRazorpay = async (quantity) => {
+  try {
+    const res = await axiosInstance.post(
+      ENDPOINT.purchaseListingCreditRazorpay,
+      { quantity },
+    );
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const getLisitingLimits = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getLisitingLimits);
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
     throw error;
   }
 };

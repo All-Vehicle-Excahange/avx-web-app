@@ -199,7 +199,7 @@ export default function ConsualtVehicleDetails({
               <div className="flex flex-col gap-6 min-w-0">
                 <VehicleImageGallery vehicle={vehicleOverview} />
 
-                <div className="sticky top-[64px] lg:relative lg:top-0 lg:z-auto z-40 bg-transparent backdrop-blur-lg border-b border-third/40">
+                <div className="sticky top-16 lg:relative lg:top-0 lg:z-auto z-40 bg-transparent backdrop-blur-lg border-b border-third/40">
                   <div className="overflow-x-auto scrollbar-hide">
                     <div className="flex gap-6 px-2 min-w-max">
                       {[
@@ -233,7 +233,7 @@ export default function ConsualtVehicleDetails({
                           {tab.label}
 
                           {activeTab === tab.id && (
-                            <span className="absolute left-0 bottom-0 h-[2px] w-full bg-primary rounded-full" />
+                            <span className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full" />
                           )}
                         </button>
                       ))}

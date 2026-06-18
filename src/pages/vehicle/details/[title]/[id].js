@@ -21,32 +21,39 @@ function Index({ seo }) {
 
   const vehicle = vehicleOverview || {};
 
-  // Construct Schema.org Vehicle data dynamically
+  // ─── JSON-LD: Car Schema (uses @type: Car — more specific than Vehicle) ──
   const vehicleSchema = vehicle.id
     ? {
         "@context": "https://schema.org",
-        "@type": "Vehicle",
+        "@type": "Car",
         name: `${vehicle.yearOfMfg || ""} ${vehicle.makerName || ""} ${vehicle.modelName || ""} ${vehicle.variantName || ""}`.trim(),
         brand: { "@type": "Brand", name: vehicle.makerName },
         model: vehicle.modelName,
-        vehicleModelDate: vehicle.yearOfMfg,
-        fuelType: vehicle.fuelType,
-        mileageFromOdometer: { value: vehicle.kmDriven, unitCode: "KMT" },
-        vehicleTransmission: vehicle.transmissionType,
+        vehicleModelDate: String(vehicle.yearOfMfg || ""),
+        fuelType: formatTextCap(vehicle.fuelType),
+        vehicleTransmission: formatTextCap(vehicle.transmissionType),
+        mileageFromOdometer: {
+          "@type": "QuantitativeValue",
+          value: vehicle.kmDriven,
+          unitCode: "KMT",
+        },
         numberOfPreviousOwners: vehicle.ownership,
         image: vehicle.thumbnailUrl || vehicle.imageUrls?.[0],
         description: seo?.description,
+        url: seo?.url,
+        vehicleConfiguration: vehicle.variantName,
         offers: {
           "@type": "Offer",
           price: vehicle.price,
           priceCurrency: "INR",
           availability: "https://schema.org/InStock",
+          itemCondition: "https://schema.org/UsedCondition",
           seller: { "@type": "Organization", name: "Reecomm" },
         },
       }
     : null;
 
-  // Construct Breadcrumb schema dynamically
+  // ─── JSON-LD: Breadcrumb Schema ─────────────────────────────────────
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -55,19 +62,19 @@ function Index({ seo }) {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://reecomm.com",
+        item: "https://www.reecomm.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Used Cars",
-        item: "https://reecomm.com/search",
+        item: "https://www.reecomm.com/search",
       },
       {
         "@type": "ListItem",
         position: 3,
         name: vehicle.makerName || "Brands",
-        item: `https://reecomm.com/search?brand=${encodeURIComponent(vehicle.makerName || "")}`,
+        item: `https://www.reecomm.com/search?brand=${encodeURIComponent(vehicle.makerName || "")}`,
       },
       {
         "@type": "ListItem",
@@ -77,54 +84,61 @@ function Index({ seo }) {
     ],
   };
 
+  // ─── Display SEO Values ─────────────────────────────────────────────
   // 1. Start with server-provided SEO defaults (or clean title from URL slug)
   let displayTitle = seo?.title || "Vehicle Details | Reecomm";
-  let displayDescription = seo?.description || "View detailed vehicle information, specs, price, and more.";
+  let displayDescription =
+    seo?.description ||
+    "View detailed vehicle information, specs, price, and more.";
   let ogTitle = seo?.ogTitle || seo?.title || "Vehicle Details | Reecomm";
-  let ogDescription = seo?.ogDescription || seo?.description || "View detailed vehicle information, specs, price, and more.";
+  let ogDescription =
+    seo?.ogDescription ||
+    seo?.description ||
+    "View detailed vehicle information, specs, price, and more.";
   let vehicleImageUrl = seo?.image || "";
 
   // 2. If client-side query loads vehicle data, update SEO values dynamically!
   if (vehicleOverview) {
-    const formatPrice = (num) => {
-      if (!num) return "N/A";
-      if (typeof num === "string" && num.toUpperCase().includes("L"))
-        return num;
-      const val = Number(num);
-      if (isNaN(val)) return num;
-      if (val >= 100000) {
-        return (val / 100000).toFixed(2).replace(/\.00$/, "") + "L";
-      }
-      return val.toLocaleString("en-IN");
-    };
-
     const year = vehicleOverview.yearOfMfg || vehicleOverview.year || "";
     const make = vehicleOverview.makerName || "";
     const model = vehicleOverview.modelName || "";
     const variant = vehicleOverview.variantName || "";
-    const city = vehicleOverview.address?.city || vehicleOverview.location || "India";
+    const city =
+      vehicleOverview.address?.city || vehicleOverview.location || "India";
 
     const formattedPrice = formatPrice(vehicleOverview.price);
     const kms = vehicleOverview.kmDriven
       ? Number(vehicleOverview.kmDriven).toLocaleString("en-IN")
       : "0";
 
-    const formatText = (text) =>
-      text ? text.charAt(0).toUpperCase() + text.slice(1).toLowerCase() : "";
-    const fuel = formatText(vehicleOverview.fuelType || vehicleOverview.fuel || "");
-    const transmission = formatText(
+    const fuel = formatTextCap(
+      vehicleOverview.fuelType || vehicleOverview.fuel || "",
+    );
+    const transmission = formatTextCap(
       vehicleOverview.transmissionType || vehicleOverview.transmission || "",
     );
     const inspectionText = vehicleOverview.avxInspectionRating
       ? "Reecomm Inspected"
       : "Seller listed";
 
-    vehicleImageUrl = vehicleOverview.thumbnailUrl || vehicleOverview.imageUrls?.[0] || "";
+    vehicleImageUrl =
+      vehicleOverview.thumbnailUrl || vehicleOverview.imageUrls?.[0] || "";
 
-    displayTitle = `${year} ${make} ${model} ${variant} for Sale in ${city} — ₹${formattedPrice} | Reecomm`.replace(/\s+/g, " ").trim();
-    displayDescription = `Buy this ${year} ${make} ${model} in ${city} for ₹${formattedPrice}. ${kms} km driven · ${fuel} · ${transmission}. ${inspectionText}. View full specs, photos, and contact the seller on Reecomm.`.replace(/\s+/g, " ").trim();
-    ogTitle = `${year} ${make} ${model} · ₹${formattedPrice} · ${city}`.replace(/\s+/g, " ").trim();
-    ogDescription = `${kms} km · ${fuel} · ${transmission} ${vehicleOverview.avxInspectionRating ? "· ✓ Reecomm Inspected" : ""}`.replace(/\s+/g, " ").trim();
+    displayTitle =
+      `${year} ${make} ${model} ${variant} for Sale in ${city} — ₹${formattedPrice} | Reecomm`
+        .replace(/\s+/g, " ")
+        .trim();
+    displayDescription =
+      `Buy this ${year} ${make} ${model} in ${city} for ₹${formattedPrice}. ${kms} km driven · ${fuel} · ${transmission}. ${inspectionText}. View full specs, photos, and contact the seller on Reecomm.`
+        .replace(/\s+/g, " ")
+        .trim();
+    ogTitle = `${year} ${make} ${model} · ₹${formattedPrice} · ${city}`
+      .replace(/\s+/g, " ")
+      .trim();
+    ogDescription =
+      `${kms} km · ${fuel} · ${transmission} ${vehicleOverview.avxInspectionRating ? "· ✓ Reecomm Inspected" : ""}`
+        .replace(/\s+/g, " ")
+        .trim();
   }
 
   return (
@@ -132,14 +146,20 @@ function Index({ seo }) {
       <Head>
         <title>{displayTitle}</title>
         <meta name="description" content={displayDescription} />
+        <meta name="robots" content="index, follow" />
 
-        {/* JSON-LD Structured Data */}
+        {/* Canonical URL */}
+        {seo?.canonical && <link rel="canonical" href={seo.canonical} />}
+
+        {/* JSON-LD Structured Data: Car */}
         {vehicleSchema && (
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(vehicleSchema) }}
           />
         )}
+
+        {/* JSON-LD Structured Data: Breadcrumb */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
@@ -149,20 +169,25 @@ function Index({ seo }) {
         <meta property="og:title" content={ogTitle} />
         <meta property="og:description" content={ogDescription} />
         <meta property="og:type" content="product" />
+        <meta property="og:site_name" content="Reecomm" />
         {seo?.url && <meta property="og:url" content={seo.url} />}
-        {vehicleImageUrl && <meta property="og:image" content={vehicleImageUrl} />}
+        {vehicleImageUrl && (
+          <meta property="og:image" content={vehicleImageUrl} />
+        )}
+        {vehicleImageUrl && (
+          <meta property="og:image:alt" content={displayTitle} />
+        )}
 
         {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={ogTitle} />
         <meta name="twitter:description" content={ogDescription} />
-        {vehicleImageUrl && <meta name="twitter:image" content={vehicleImageUrl} />}
+        {vehicleImageUrl && (
+          <meta name="twitter:image" content={vehicleImageUrl} />
+        )}
       </Head>
       <Layout>
-        <VehiclDetail
-          initialOverview={null}
-          initialSummary={null}
-        />
+        <VehiclDetail initialOverview={null} initialSummary={null} />
       </Layout>
       <Layout>
         <AvxProcess />
@@ -175,6 +200,26 @@ function Index({ seo }) {
   );
 }
 
+// ─── Helpers ────────────────────────────────────────────────────────────────
+
+function formatTextCap(text) {
+  if (!text) return "";
+  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+}
+
+function formatPrice(num) {
+  if (!num) return "N/A";
+  if (typeof num === "string" && num.toUpperCase().includes("L")) return num;
+  const val = Number(num);
+  if (isNaN(val)) return num;
+  if (val >= 100000) {
+    return (val / 100000).toFixed(2).replace(/\.00$/, "") + "L";
+  }
+  return val.toLocaleString("en-IN");
+}
+
+// ─── Server-Side Props (slug-based SEO — no API call needed) ────────────────
+
 export async function getServerSideProps(context) {
   const { req, params } = context;
   const { title } = params || {};
@@ -183,6 +228,10 @@ export async function getServerSideProps(context) {
   const protocol = req.headers["x-forwarded-proto"] || "https";
   const host = req.headers.host || "www.reecomm.com";
   const currentUrl = `${protocol}://${host}${req.url}`;
+
+  // Canonical URL strips query params
+  const canonicalPath = req.url?.split("?")[0] || "";
+  const canonicalUrl = `https://www.reecomm.com${canonicalPath}`;
 
   // Simple, fast conversion from slug title to clean words
   const cleanTitle = title
@@ -203,6 +252,7 @@ export async function getServerSideProps(context) {
         ogDescription: finalDescription,
         image: `${protocol}://${host}/logo/logo.webp`,
         url: currentUrl,
+        canonical: canonicalUrl,
       },
     },
   };

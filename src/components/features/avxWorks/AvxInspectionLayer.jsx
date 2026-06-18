@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-
+import Link from "next/link";
 import { useState } from "react";
 import {
   Settings,
@@ -68,27 +68,34 @@ export default function AvxInspectionLayer() {
           </h2>
 
           <p className="mt-6 text-xl leading-relaxed text-third">
-            Reecomm applies a structured 200-point inspection framework to
-            surface vehicle condition clearly — beyond seller claims.
+            Reecomm enables buyers to request an independent third-party inspection of any vehicle — before negotiations begin, before money moves. You see the real condition of the vehicle, not just the seller&apos;s version of it.
           </p>
+          <div className="mt-6">
+            <Link
+              href="/inspections"
+              className="inline-flex items-center text-fourth hover:underline font-semibold tracking-wide"
+            >
+              → Learn how inspections work
+            </Link>
+          </div>
         </div>
 
         {/* KEY PRINCIPLES — THIS WAS MISSING */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-10">
           <SignalPoint
             index="01"
-            title="Independent by design"
-            desc="Inspection data is platform-governed, not seller-declared."
+            title="Inspection by Design"
+            desc="Every vehicle listing on Reecomm supports an inspection request. Buyers initiate the process directly from the listing — no follow-up required."
           />
           <SignalPoint
             index="02"
-            title="Deep system coverage"
-            desc="Critical vehicle systems are evaluated through a structured 200-point framework."
+            title="Deep Condition Coverage"
+            desc="Inspections cover engine health, body condition, service history, odometer verification, and known defect disclosure — documented in a structured report."
           />
           <SignalPoint
             index="03"
-            title="Visible before contact"
-            desc="Inspection status is shown directly on listings to reduce uncertainty."
+            title="Visible Before Contact"
+            desc="The inspection report is shared before the buyer speaks to the consultant. You enter every conversation informed."
           />
         </div>
 

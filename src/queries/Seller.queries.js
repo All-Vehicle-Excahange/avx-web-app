@@ -7,6 +7,8 @@ import {
   getNeedAttenctionVehicles,
   getSellerTier,
   getInquiryKpis,
+  getListingCreditPrice,
+  getLisitingLimits,
 } from "@/services/Seller.service";
 
 export const getInventoryVehicleQuery = (listingStatus) => {
@@ -159,4 +161,26 @@ export const getSusPendedVehiclesInfiniteQuery = (payload) => {
     },
     staleTime: 10 * 60 * 1000,
   };
+};
+
+export const getListingCreditPriceQuery = () => {
+  return queryOptions({
+    queryKey: ["listing-credit-price"],
+    queryFn: async () => {
+      const res = await getListingCreditPrice();
+      return res?.data;
+    },
+    staleTime: 10 * 60 * 1000,
+  });
+};
+
+export const getListingLimitsQuery = () => {
+  return queryOptions({
+    queryKey: ["listing-limits"],
+    queryFn: async () => {
+      const res = await getLisitingLimits();
+      return res?.data;
+    },
+    staleTime: 10 * 60 * 1000,
+  });
 };

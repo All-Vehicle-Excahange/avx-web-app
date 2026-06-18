@@ -1,42 +1,43 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Info } from "lucide-react";
 
 const steps = [
   {
     number: "01",
     label: "Step 1",
-    title: "Submit Basic Details",
+    title: "Verify Your Identity",
     description:
-      "Start by entering your vehicle's basic info — make, model, year, and asking price. Takes less than 2 minutes.",
+      "Submit your Aadhaar, PAN card, vehicle RC, and insurance documents. Verification is a one-time process and confirms you are the genuine owner of the vehicle you are listing.",
   },
   {
     number: "02",
     label: "Step 2",
-    title: "Upload Vehicle Info",
+    title: "Create Your Listing",
     description:
-      "Add photos, mileage, condition notes, and service history. The more you share, the faster it sells.",
+      "Add your vehicle details: make, model, year, mileage, condition, asking price, and photos. Your listing goes live on the marketplace after a quick platform review.",
   },
   {
     number: "03",
     label: "Step 3",
-    title: "Optional Inspection",
+    title: "Receive Inquiries",
     description:
-      "Boost buyer confidence with a third-party inspection. Completely optional, but highly recommended for faster sales.",
+      "Qualified buyers contact you directly through the platform. Every inquiry is logged. You control when and how you respond — no pressure, no spam.",
   },
   {
     number: "04",
     label: "Step 4",
-    title: "Receive Inquiries",
+    title: "Arrange Inspection (Optional)",
     description:
-      "Verified buyers reach out directly. You control who you respond to — no spam, no pressure.",
+      "Opt into a Reecomm inspection to strengthen your listing's credibility. Inspected listings carry a verified badge and give buyers the confidence to move forward faster.",
   },
   {
     number: "05",
     label: "Step 5",
     title: "Mark as Sold",
     description:
-      "Once you've closed the deal, mark your listing as sold. Clean, simple, done.",
+      "Once your deal is done, mark your listing as sold directly on the platform. This closes your current listing and reopens your slot for your next vehicle.",
   },
 ];
 
@@ -48,7 +49,7 @@ export default function HowAvxWorks() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => entry.isIntersecting && setInView(true),
-      { threshold: 0.15 }
+      { threshold: 0.15 },
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
@@ -56,126 +57,132 @@ export default function HowAvxWorks() {
 
   return (
     <section ref={sectionRef} className="relative ">
+      {/* heading */}
+      <div
+        className={`mb-16 transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+      >
+        <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+          Individual Seller Guide
+        </span>
 
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat mt-4">
+          How Selling <span className="text-fourth/80">Works.</span>
+        </h2>
 
-        {/* heading */}
-        <div className={`mb-16 transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-          <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-            Individual Seller Guide
-          </span>
+        <p className="mt-4 text-third max-w-lg">
+          List your vehicle as an individual seller — no dealership, no middleman.
+        </p>
+      </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat mt-4">
-            How Selling     <span className="text-fourth/80">Works</span>
-          </h2>
+      {/* top step indicators */}
+      <div className="hidden lg:flex justify-between mb-10 relative">
+        <div className="absolute top-6 left-0 w-full h-px bg-primary/10" />
 
-          <p className="mt-4 text-third max-w-lg">
-            List your vehicle as an individual seller — no dealership, no middlemen.
-          </p>
-        </div>
-
-        {/* top step indicators */}
-        <div className="hidden lg:flex justify-between mb-10 relative">
-          <div className="absolute top-6 left-0 w-full h-px bg-primary/10" />
-
-          {steps.map((step, i) => (
-            <button
-              key={i}
-              onClick={() => setActiveStep(i)}
-              className="flex flex-col items-center gap-2 w-full"
+        {steps.map((step, i) => (
+          <button
+            key={i}
+            onClick={() => setActiveStep(i)}
+            className="flex flex-col items-center gap-2 w-full"
+          >
+            <div
+              className={`w-12 h-12 flex items-center justify-center rounded-full border text-sm font-semibold transition
+                ${
+                  i === activeStep
+                    ? "border-primary text-primary bg-transparent   backdrop-blur-md"
+                    : i < activeStep
+                      ? "border-primary/20 text-primary/20   backdrop-blur-md"
+                      : "border-primary/20 text-third   backdrop-blur-md"
+                }`}
             >
-              <div className={`w-12 h-12 flex items-center justify-center rounded-full border text-sm font-semibold transition
-                ${i === activeStep
-                  ? "border-primary text-primary bg-transparent   backdrop-blur-md"
-                  : i < activeStep
-                  ? "border-primary/20 text-primary/20   backdrop-blur-md"
-                  : "border-primary/20 text-third   backdrop-blur-md"
-                  
-
-                }`}>
-                {i + 1}
-              </div>
-
-              <span className={`text-[10px] tracking-widest uppercase
-                ${i <= activeStep ? "text-primary" : "text-third"}`}>
-                {step.label}
-              </span>
-            </button>
-          ))}
-        </div>
-
-        {/* active content */}
-        <div className="border border-primary/10 rounded-xl p-8 md:p-10 ">
-          <div className="flex items-start justify-between gap-6 flex-wrap md:flex-nowrap">
-
-            {/* left content */}
-            <div className="flex gap-6">
-              <span className="text-6xl font-bold text-primary/20">
-                {steps[activeStep].number}
-              </span>
-
-              <div>
-                <h3 className="text-2xl font-semibold text-primary mb-2">
-                  {steps[activeStep].title}
-                </h3>
-
-                <p className="text-third max-w-xl leading-relaxed">
-                  {steps[activeStep].description}
-                </p>
-              </div>
+              {i + 1}
             </div>
 
-            {/* arrows */}
-        <div className="flex gap-3 shrink-0">
+            <span
+              className={`text-[10px] tracking-widest uppercase
+                ${i <= activeStep ? "text-primary" : "text-third"}`}
+            >
+              {step.label}
+            </span>
+          </button>
+        ))}
+      </div>
 
-  {/* prev */}
-  <button
-    onClick={() => setActiveStep((p) => Math.max(0, p - 1))}
-    disabled={activeStep === 0}
-    className="w-10 h-10 flex items-center justify-center rounded-full
+      {/* active content */}
+      <div className="border border-primary/10 rounded-xl p-8 md:p-10 ">
+        <div className="flex items-start justify-between gap-6 flex-wrap md:flex-nowrap">
+          {/* left content */}
+          <div className="flex gap-6">
+            <span className="text-6xl font-bold text-primary/20">
+              {steps[activeStep].number}
+            </span>
+
+            <div>
+              <h3 className="text-2xl font-semibold text-primary mb-2 font-montserrat">
+                {steps[activeStep].title}
+              </h3>
+
+              <p className="text-third max-w-xl leading-relaxed text-sm md:text-base">
+                {steps[activeStep].description}
+              </p>
+            </div>
+          </div>
+
+          {/* arrows */}
+          <div className="flex gap-3 shrink-0">
+            {/* prev */}
+            <button
+              onClick={() => setActiveStep((p) => Math.max(0, p - 1))}
+              disabled={activeStep === 0}
+              className="w-10 h-10 flex items-center justify-center rounded-full
     border border-primary/40 text-primary/60
     hover:text-primary hover:border-primary/30 
     disabled:opacity-70 transition"
-  >
-    ‹
-  </button>
+            >
+              ‹
+            </button>
 
-  {/* next */}
-  <button
-    onClick={() =>
-      setActiveStep((p) => Math.min(steps.length - 1, p + 1))
-    }
-    disabled={activeStep === steps.length - 1}
-    className="w-10 h-10 flex items-center justify-center rounded-full
+            {/* next */}
+            <button
+              onClick={() =>
+                setActiveStep((p) => Math.min(steps.length - 1, p + 1))
+              }
+              disabled={activeStep === steps.length - 1}
+              className="w-10 h-10 flex items-center justify-center rounded-full
     border border-primary text-primary
      hover:border-third
     disabled:opacity-30 transition"
-  >
-    ›
-  </button>
-
-</div>
-
-          </div>
-
-          {/* progress */}
-          <div className="flex gap-2 mt-6">
-            {steps.map((_, i) => (
-              <div
-                key={i}
-                onClick={() => setActiveStep(i)}
-                className={`h-0.5 cursor-pointer transition-all
-                  ${i === activeStep
-                    ? "flex-3 bg-primary"
-                    : i < activeStep
-                    ? "flex-1 bg-primary/40"
-                    : "flex-1 bg-primary/10"
-                  }`}
-              />
-            ))}
+            >
+              ›
+            </button>
           </div>
         </div>
 
-      
+        {/* progress */}
+        <div className="flex gap-2 mt-6">
+          {steps.map((_, i) => (
+            <div
+              key={i}
+              onClick={() => setActiveStep(i)}
+              className={`h-0.5 cursor-pointer transition-all
+                  ${
+                    i === activeStep
+                      ? "flex-3 bg-primary"
+                      : i < activeStep
+                        ? "flex-1 bg-primary/40"
+                        : "flex-1 bg-primary/10"
+                  }`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Important seller rule info box */}
+      <div className="mt-8 p-5 rounded-2xl border border-primary/10 bg-primary/3 max-w-2xl mx-auto flex items-start gap-3">
+        <Info className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+        <p className="text-xs text-third/80 leading-relaxed">
+          <strong>Important Seller Rule:</strong> Individual sellers can list 1 active vehicle at a time. You can sell up to 3 vehicles on Reecomm. Once a listing is marked as sold, your next slot opens immediately.
+        </p>
+      </div>
     </section>
   );
 }
