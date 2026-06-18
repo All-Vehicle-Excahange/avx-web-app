@@ -12,15 +12,36 @@ function BlogDetailPage() {
   const { id } = router.query;
 
   // Find post details for head title/description
-  const post = MOCK_POSTS.find((p) => p.id === Number(id));
-  const pageTitle = post ? `${post.title} | Reecomm Blog` : "Blog Detail | Reecomm";
-  const pageDesc = post ? post.description : "Read detailed articles and insights from Reecomm.";
+  const post = MOCK_POSTS.find(
+    (p) => String(p.id) === String(id) || p.slug === `/blog/${id}` || p.slug === id
+  );
+  const pageTitle = post?.seoTitle || (post ? `${post.title} | Reecomm Blog` : "Blog Detail | Reecomm");
+  const pageDesc = post?.seoDescription || (post ? post.description : "Read detailed articles and insights from Reecomm.");
+  const canonicalUrl = post ? `https://www.reecomm.com${post.slug}` : "https://www.reecomm.com/blog";
 
   return (
     <>
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDesc} />
+        <link rel="canonical" href={canonicalUrl} />
+
+        {/* Dynamic Open Graph Tags */}
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDesc} />
+        <meta property="og:image" content={post ? `https://www.reecomm.com${post.image}` : "https://www.reecomm.com/assets/og-blog.jpg"} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Reecomm" />
+
+        {/* JSON-LD Schemas */}
+        {post?.schemas && post.schemas.map((schema, idx) => (
+          <script
+            key={idx}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        ))}
       </Head>
       <Navbar scrolled={true} />
       <Layout>

@@ -9,7 +9,7 @@ function BlogCard({ post }) {
   if (!post) return null;
 
   const handleCardClick = () => {
-    router.push(`/blog/${post.id}`);
+    router.push(post.slug || `/blog/${post.id}`);
   };
 
   return (

@@ -22,7 +22,9 @@ const FALLBACK_SECTION_IMAGES = [
 
 export default function BlogDetails({ id }) {
   const post = useMemo(() => {
-    return MOCK_POSTS.find((p) => p.id === Number(id));
+    return MOCK_POSTS.find(
+      (p) => String(p.id) === String(id) || p.slug === `/blog/${id}` || p.slug === id
+    );
   }, [id]);
 
   const relatedPosts = useMemo(() => {
@@ -167,6 +169,67 @@ export default function BlogDetails({ id }) {
     }
   };
 
+  const parseInlineMarkdown = (text) => {
+    if (!text) return "";
+    const regex = /(\*\*.*?\*\*|\[.*?\]\(.*?\))/g;
+    const matches = [...text.matchAll(regex)];
+    const parts = [];
+    let lastIndex = 0;
+
+    matches.forEach((match) => {
+      const matchIndex = match.index;
+      const matchText = match[0];
+
+      if (matchIndex > lastIndex) {
+        parts.push(text.substring(lastIndex, matchIndex));
+      }
+
+      if (matchText.startsWith("**") && matchText.endsWith("**")) {
+        const boldText = matchText.slice(2, -2);
+        parts.push(
+          <strong key={matchIndex} className="text-primary font-bold">
+            {boldText}
+          </strong>
+        );
+      } else if (matchText.startsWith("[") && matchText.includes("](")) {
+        const linkText = matchText.substring(1, matchText.indexOf("]("));
+        const linkUrl = matchText.substring(matchText.indexOf("](") + 2, matchText.length - 1);
+
+        if (linkUrl.startsWith("http") || linkUrl.startsWith("//")) {
+          parts.push(
+            <a
+              key={matchIndex}
+              href={linkUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-fourth hover:underline transition-all font-semibold"
+            >
+              {linkText}
+            </a>
+          );
+        } else {
+          parts.push(
+            <Link
+              key={matchIndex}
+              href={linkUrl}
+              className="text-fourth hover:underline transition-all font-semibold"
+            >
+              {linkText}
+            </Link>
+          );
+        }
+      }
+
+      lastIndex = matchIndex + matchText.length;
+    });
+
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+
+    return parts.length > 0 ? parts : text;
+  };
+
   const renderSectionLines = (lines) => {
     const elements = [];
     let currentList = [];
@@ -181,56 +244,22 @@ export default function BlogDetails({ id }) {
               key={`list-${idx}`}
               className="list-disc list-inside text-third/80 space-y-2.5 my-4 pl-4 text-sm sm:text-base leading-relaxed"
             >
-              {currentList.map((item, i) => {
-                // Bold formatting matching Markdown e.g. **Best For:** or **Why buy:**
-                const parts = item.split("**");
-                if (parts.length >= 3) {
-                  return (
-                    <li key={i}>
-                      <strong className="text-primary font-bold">
-                        {parts[1]}
-                      </strong>
-                      {parts.slice(2).join("")}
-                    </li>
-                  );
-                }
-                return <li key={i}>{item}</li>;
-              })}
-            </ul>,
+              {currentList.map((item, i) => (
+                <li key={i}>{parseInlineMarkdown(item)}</li>
+              ))}
+            </ul>
           );
           currentList = [];
         }
 
-        // Bold formatting matching Markdown e.g. **Best For:**
-        const parts = line.split("**");
-        if (parts.length >= 3) {
-          elements.push(
-            <p
-              key={idx}
-              className="text-third/85 text-sm sm:text-base leading-relaxed mb-4 font-secondary"
-            >
-              {parts.map((part, pIdx) => {
-                if (pIdx % 2 === 1) {
-                  return (
-                    <strong key={pIdx} className="text-primary font-bold">
-                      {part}
-                    </strong>
-                  );
-                }
-                return part;
-              })}
-            </p>,
-          );
-        } else {
-          elements.push(
-            <p
-              key={idx}
-              className="text-third/85 text-sm sm:text-base leading-relaxed mb-4 font-secondary"
-            >
-              {line}
-            </p>,
-          );
-        }
+        elements.push(
+          <p
+            key={idx}
+            className="text-third/85 text-sm sm:text-base leading-relaxed mb-4 font-secondary"
+          >
+            {parseInlineMarkdown(line)}
+          </p>
+        );
       }
     });
 
@@ -240,19 +269,10 @@ export default function BlogDetails({ id }) {
           key="list-final"
           className="list-disc list-inside text-third/80 space-y-2.5 my-4 pl-4 text-sm sm:text-base leading-relaxed"
         >
-          {currentList.map((item, i) => {
-            const parts = item.split("**");
-            if (parts.length >= 3) {
-              return (
-                <li key={i}>
-                  <strong className="text-primary font-bold">{parts[1]}</strong>
-                  {parts.slice(2).join("")}
-                </li>
-              );
-            }
-            return <li key={i}>{item}</li>;
-          })}
-        </ul>,
+          {currentList.map((item, i) => (
+            <li key={i}>{parseInlineMarkdown(item)}</li>
+          ))}
+        </ul>
       );
     }
 
