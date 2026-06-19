@@ -67,7 +67,7 @@ const AboutSection = () => {
             <Image
               src="/about-us-built-to-fix-whats-broken-01.webp"
               alt="Reecomm Platform"
-             fill
+              fill
               className="absolute inset-0 object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/10 to-transparent pointer-events-none"></div>
@@ -97,19 +97,14 @@ const AboutSection = () => {
               </h2>
             </div>
             <p className="text-primary/70 text-sm leading-relaxed text-justify">
-              India&apos;s used car market is massive — but buying or selling a
-              second-hand vehicle has always felt like a gamble. Buyers
-              can&apos;t trust what they see. Sellers don&apos;t get what their
-              car is worth. And the auto consultants who&apos;ve spent years
-              building expertise? They&apos;re still running their entire
-              business on phone calls.
-              <br />
-              We started Reecomm in 2025 to change all three. A platform where
-              every vehicle is verified, every price is transparent, and every
-              consultant has the digital tools to grow their business properly.
-              <br />
-              We&apos;re starting in Gujarat and Maharashtra — and we&apos;re
-              just getting started.
+              India&apos;s used vehicle market runs on WhatsApp groups, referrals,
+              and walk-ins — fragmented, and hard to trust. Buyers can&apos;t verify
+              what they&apos;re told. Consultants can&apos;t grow past their own network.
+              Reecomm exists to organize that. One platform built on a single
+              idea: the same trust that protects buyers is the trust that grows
+              consultant businesses. Every vehicle inspected. Every consultant
+              verified. Every transaction transparent. Starting in Gujarat. Buy
+              smart. Sell fair. Move forward.
             </p>
           </div>
         </div>
@@ -163,4 +158,3 @@ const AboutSection = () => {
 };
 
 export default AboutSection;
-

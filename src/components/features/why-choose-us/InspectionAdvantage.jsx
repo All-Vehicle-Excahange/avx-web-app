@@ -17,12 +17,12 @@ const steps = [
     step: "01",
     icon: ShieldCheck,
     title: "Report Included",
-    tag: "Always",
+    tag: "Standard — Always Included",
     tagBlue: false,
     color: "rgba(255,254,247,0.15)",
-    short: "200-point inspection report with every listing.",
+    short: "200-point inspection report as standard.",
     detail:
-      "Every Reecomm listing comes with a structured 200-point inspection report as standard — covering engine health, bodywork, electricals, and documentation. No extra steps needed.",
+      "Every Reecomm listing comes with a structured 200-point inspection report as standard. No extra step needed.",
     proof: [
       { icon: CheckCircle2, label: "200 checkpoints" },
       { icon: Star, label: "Condition rated" },
@@ -33,11 +33,11 @@ const steps = [
     step: "02",
     icon: Video,
     title: "Video Walkthrough",
-    tag: "On Request",
+    tag: "Add for a Buyer-First Touch",
     tagBlue: true,
-    short: "Ask for a narrated video tour from your consultant.",
+    short: "Add recorded video walkthrough from verified inspector.",
     detail:
-      "Not enough from photos? Request a personalized video walkthrough from the consultant — a narrated, detailed tour built around your exact questions and concerns.",
+      "Add a recorded video walkthrough from a Reecomm-verified inspector for buyers who want to see condition before visiting.",
     proof: [
       { icon: CheckCircle2, label: "Buyer-requested" },
       { icon: Star, label: "Consultant-narrated" },
@@ -48,11 +48,11 @@ const steps = [
     step: "03",
     icon: RefreshCw,
     title: "Fresh Inspection",
-    tag: "Before You Decide",
+    tag: "For High-Confidence Transactions",
     tagBlue: true,
     short: "Request a brand-new inspection at any point.",
     detail:
-      "Need more certainty before committing? Request a fresh re-inspection at any point in the process. Your confidence is fully customizable — always on your terms.",
+      "Request a brand-new inspection at any point — useful when a listing has aged or a serious buyer requests fresh verification.",
     proof: [
       { icon: CheckCircle2, label: "Re-verified" },
       { icon: Star, label: "Full 200-point redo" },

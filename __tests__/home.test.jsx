@@ -11,11 +11,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Home from "@/pages/index";
 import {
   getTopPicsFour,
-  getTopPicsTwo,
   getAvxIsnpectedFourWheel,
-  getAvxIsnpectedTwoWheel,
   getFourWheelWithTag,
-  getTwoWheelWithTag,
 } from "@/services/user.service";
 
 // Mock the user services
@@ -38,11 +35,8 @@ jest.mock("@/services/user.service", () => ({
   getAboutUsStoreFrontByUserName: jest.fn().mockResolvedValue({ data: {} }),
   getWhyBuyHereStoreFrontByUserName: jest.fn().mockResolvedValue({ data: {} }),
   getFourWheelWithTag: jest.fn().mockResolvedValue({ data: [] }),
-  getTwoWheelWithTag: jest.fn().mockResolvedValue({ data: [] }),
   getTopPicsFour: jest.fn().mockResolvedValue({ data: [] }),
-  getTopPicsTwo: jest.fn().mockResolvedValue({ data: [] }),
   getAvxIsnpectedFourWheel: jest.fn().mockResolvedValue({ data: [] }),
-  getAvxIsnpectedTwoWheel: jest.fn().mockResolvedValue({ data: [] }),
   getHomeFeedConsult: jest.fn().mockResolvedValue({ data: [] }),
   getRecentlySold: jest.fn().mockResolvedValue({ data: [] }),
 }));
@@ -145,16 +139,18 @@ describe("Home Page Tabs API Calls", () => {
     jest.useRealTimers();
   });
 
-  test("verifies TopPicsSection switches active tab and calls getTopPicsTwo", async () => {
+  test("verifies TopPicsSection switches active tab and calls getTopPicsFour with TWO_WHEELER", async () => {
     render(
       <QueryClientProvider client={queryClient}>
         <Home />
       </QueryClientProvider>,
     );
 
-    // Initial render triggers getTopPicsFour
+    // Initial render triggers getTopPicsFour with FOUR_WHEELER
     await waitFor(() => {
-      expect(getTopPicsFour).toHaveBeenCalled();
+      expect(getTopPicsFour).toHaveBeenCalledWith(
+        expect.objectContaining({ vehicleType: "FOUR_WHEELER" }),
+      );
     });
 
     const topPicsHeader = screen.getByRole("heading", {
@@ -175,22 +171,26 @@ describe("Home Page Tabs API Calls", () => {
       jest.advanceTimersByTime(400);
     });
 
-    // Verify getTopPicsTwo gets called
+    // Verify getTopPicsFour gets called with TWO_WHEELER
     await waitFor(() => {
-      expect(getTopPicsTwo).toHaveBeenCalled();
+      expect(getTopPicsFour).toHaveBeenCalledWith(
+        expect.objectContaining({ vehicleType: "TWO_WHEELER" }),
+      );
     });
   });
 
-  test("verifies AvxInspected switches active tab and calls getAvxIsnpectedTwoWheel", async () => {
+  test("verifies AvxInspected switches active tab and calls getAvxIsnpectedFourWheel with TWO_WHEELER", async () => {
     render(
       <QueryClientProvider client={queryClient}>
         <Home />
       </QueryClientProvider>,
     );
 
-    // Initial render triggers getAvxIsnpectedFourWheel
+    // Initial render triggers getAvxIsnpectedFourWheel with FOUR_WHEELER
     await waitFor(() => {
-      expect(getAvxIsnpectedFourWheel).toHaveBeenCalled();
+      expect(getAvxIsnpectedFourWheel).toHaveBeenCalledWith(
+        expect.objectContaining({ vehicleType: "FOUR_WHEELER" }),
+      );
     });
 
     const inspectedHeader = screen.getByRole("heading", {
@@ -211,13 +211,15 @@ describe("Home Page Tabs API Calls", () => {
       jest.advanceTimersByTime(400);
     });
 
-    // Verify getAvxIsnpectedTwoWheel gets called
+    // Verify getAvxIsnpectedFourWheel gets called with TWO_WHEELER
     await waitFor(() => {
-      expect(getAvxIsnpectedTwoWheel).toHaveBeenCalled();
+      expect(getAvxIsnpectedFourWheel).toHaveBeenCalledWith(
+        expect.objectContaining({ vehicleType: "TWO_WHEELER" }),
+      );
     });
   });
 
-  test("verifies CategoriesSections switches active tab and calls getTwoWheelWithTag", async () => {
+  test("verifies CategoriesSections switches active tab and calls getFourWheelWithTag for 2-Wheeler", async () => {
     render(
       <QueryClientProvider client={queryClient}>
         <Home />
@@ -227,7 +229,7 @@ describe("Home Page Tabs API Calls", () => {
     // Initial render triggers getFourWheelWithTag (default urban-rides maps to URBAN_RIDE)
     await waitFor(() => {
       expect(getFourWheelWithTag).toHaveBeenCalledWith(
-        expect.objectContaining({ vehicleTag: "URBAN_RIDE" }),
+        expect.objectContaining({ vehicleTag: "URBAN_RIDE", vehicleType: "FOUR_WHEELER" }),
       );
     });
 
@@ -249,10 +251,10 @@ describe("Home Page Tabs API Calls", () => {
       jest.advanceTimersByTime(400);
     });
 
-    // Verify getTwoWheelWithTag gets called (default tab on 2-Wheeler is scooters mapping to SCOOTER)
+    // Verify getFourWheelWithTag gets called (default tab on 2-Wheeler is scooters mapping to SCOOTER)
     await waitFor(() => {
-      expect(getTwoWheelWithTag).toHaveBeenCalledWith(
-        expect.objectContaining({ vehicleTag: "SCOOTER" }),
+      expect(getFourWheelWithTag).toHaveBeenCalledWith(
+        expect.objectContaining({ vehicleTag: "SCOOTER", vehicleType: "TWO_WHEELER" }),
       );
     });
   });

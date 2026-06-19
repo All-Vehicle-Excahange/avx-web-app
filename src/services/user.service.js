@@ -5,10 +5,8 @@ const ENDPOINT = {
   getWhereYouLeftOff: "/homefeed/vehicles/history",
   getRecentlySold: "/homefeed/vehicles/recently-sold",
   getHomeFeedConsult: "/homefeed/consultations",
-  getAvxIsnpectedTwoWheel: "/homefeed/vehicles/avx-inspected/two-wheeler",
-  getAvxIsnpectedFourWheel: "/homefeed/vehicles/avx-inspected/four-wheeler",
-  getTopPicsFour: "/homefeed/vehicles/four-wheeler",
-  getTopPicsTwo: "/homefeed/vehicles/two-wheeler",
+  getAvxIsnpectedFourWheel: "/homefeed/vehicles/avx-inspected",
+  getTopPicsFour: "/homefeed/vehicles/top-picks",
   getState: "/util/address/states/101",
   getCities: "util/address/cities",
   addWishList: "/vehicle/wishlist",
@@ -30,7 +28,7 @@ const ENDPOINT = {
   addNewReview: "/consultation/review",
   getSimularVehicles: "/vehicle/detail-page",
   getConsualtInventory: "/consultation/detail-page/inventory",
-  getFourWheelWithTag: "/homefeed/vehicles/four-wheeler/with-tag",
+  getFourWheelWithTag: "/homefeed/vehicles/with-tag",
   getTwoWheelWithTag: "/homefeed/vehicles/two-wheeler/with-tag",
   getSellerInventory: "/vehicle/seller/my-vehicles",
   postBecameSeller: "/users/seller",
@@ -86,26 +84,12 @@ export const getRecentlySold = async (data) => {
   }
 };
 
-export const getAvxIsnpectedTwoWheel = async (data) => {
-  try {
-    const { pageNo, size } = data;
-
-    const res = await axiosInstance.get(ENDPOINT.getAvxIsnpectedTwoWheel, {
-      params: { pageNo, size },
-    });
-
-    return handleResponse(res);
-  } catch (error) {
-    throw error;
-  }
-};
-
 export const getAvxIsnpectedFourWheel = async (data) => {
   try {
-    const { pageNo, size } = data;
+    const { pageNo, size, vehicleType } = data;
 
     const res = await axiosInstance.get(ENDPOINT.getAvxIsnpectedFourWheel, {
-      params: { pageNo, size },
+      params: { pageNo, size, vehicleType },
     });
 
     return handleResponse(res);
@@ -116,24 +100,10 @@ export const getAvxIsnpectedFourWheel = async (data) => {
 
 export const getTopPicsFour = async (data) => {
   try {
-    const { pageNo, size } = data;
+    const { pageNo, size, vehicleType } = data;
 
     const res = await axiosInstance.get(ENDPOINT.getTopPicsFour, {
-      params: { pageNo, size },
-    });
-
-    return handleResponse(res);
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getTopPicsTwo = async (data) => {
-  try {
-    const { pageNo, size } = data;
-
-    const res = await axiosInstance.get(ENDPOINT.getTopPicsTwo, {
-      params: { pageNo, size },
+      params: { pageNo, size, vehicleType },
     });
 
     return handleResponse(res);
@@ -420,24 +390,10 @@ export const getFollowedConsultant = async (data) => {
 
 export const getFourWheelWithTag = async (data) => {
   try {
-    const { pageNo, size, vehicleTag } = data;
+    const { pageNo, size, vehicleTag, vehicleType } = data;
 
     const res = await axiosInstance.get(ENDPOINT.getFourWheelWithTag, {
-      params: { pageNo, size, vehicleTag },
-    });
-
-    return handleResponse(res);
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getTwoWheelWithTag = async (data) => {
-  try {
-    const { pageNo, size, vehicleTag } = data;
-
-    const res = await axiosInstance.get(ENDPOINT.getTwoWheelWithTag, {
-      params: { pageNo, size, vehicleTag },
+      params: { pageNo, size, vehicleTag, vehicleType },
     });
 
     return handleResponse(res);

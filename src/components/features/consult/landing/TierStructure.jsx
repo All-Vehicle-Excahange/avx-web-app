@@ -61,12 +61,13 @@ export default function TierStructure() {
 
           <h2 className="text-[34px] sm:text-[42px] md:text-[48px] font-semibold leading-tight text-primary">
             Choose a Tier That Matches{" "}
-            <span className="text-fourth font-bold">Your Scale</span>
+            <span className="text-fourth font-bold">Your Scale.</span>
           </h2>
 
           <p className="mt-6 text-third text-[15px] leading-relaxed">
             Reecomm operates on flexible subscription tiers designed to support
-            consultants at every stage of growth.
+            consultants at every stage of growth — from your first listing to a
+            full dealership operation.
           </p>
         </motion.div>
 

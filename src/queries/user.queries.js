@@ -17,11 +17,8 @@ import {
   getAboutUsStoreFrontByUserName,
   getWhyBuyHereStoreFrontByUserName,
   getFourWheelWithTag,
-  getTwoWheelWithTag,
   getTopPicsFour,
-  getTopPicsTwo,
   getAvxIsnpectedFourWheel,
-  getAvxIsnpectedTwoWheel,
   getHomeFeedConsult,
   getRecentlySold,
 } from "@/services/user.service";
@@ -306,12 +303,11 @@ export const getVehiclesByTagQuery = (activeType, payload) => {
     queryKey: ["vehicles-by-tag", activeType, payload],
     queryFn: async () => {
       if (!payload?.vehicleTag) return [];
-      let res;
-      if (activeType === "4-Wheeler") {
-        res = await getFourWheelWithTag(payload);
-      } else {
-        res = await getTwoWheelWithTag(payload);
-      }
+      const vehicleType = activeType === "4-Wheeler" ? "FOUR_WHEELER" : "TWO_WHEELER";
+      const res = await getFourWheelWithTag({
+        ...payload,
+        vehicleType,
+      });
       return res?.data || [];
     },
     staleTime: 10 * 60 * 1000,
@@ -323,12 +319,11 @@ export const getTopPicsQuery = (activeType, payload) => {
   return queryOptions({
     queryKey: ["top-pics", activeType, payload],
     queryFn: async () => {
-      let res;
-      if (activeType === "4-Wheeler") {
-        res = await getTopPicsFour(payload);
-      } else {
-        res = await getTopPicsTwo(payload);
-      }
+      const vehicleType = activeType === "4-Wheeler" ? "FOUR_WHEELER" : "TWO_WHEELER";
+      const res = await getTopPicsFour({
+        ...payload,
+        vehicleType,
+      });
       return res?.data || [];
     },
     staleTime: 10 * 60 * 1000,
@@ -340,12 +335,11 @@ export const getAvxInspectedQuery = (activeType, payload) => {
   return queryOptions({
     queryKey: ["avx-inspected", activeType, payload],
     queryFn: async () => {
-      let res;
-      if (activeType === "2-Wheeler") {
-        res = await getAvxIsnpectedTwoWheel(payload);
-      } else {
-        res = await getAvxIsnpectedFourWheel(payload);
-      }
+      const vehicleType = activeType === "2-Wheeler" ? "TWO_WHEELER" : "FOUR_WHEELER";
+      const res = await getAvxIsnpectedFourWheel({
+        ...payload,
+        vehicleType,
+      });
       return res?.data || [];
     },
     staleTime: 10 * 60 * 1000,
