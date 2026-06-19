@@ -6,30 +6,16 @@ const tools = [
   {
     icon: <TrendingUp />,
     title: "Sponsored Vehicle Placements",
-    desc: "Increase exposure with priority listing positions that attract high-intent buyers.",
+    desc: "Increase exposure with priority listing positions that attract higher-intent buyers.",
     color: "#3b82f6",
     stat: "3× more views",
   },
   {
     icon: <Star />,
     title: "Featured Consultant Slots",
-    desc: "Highlight your profile across key discovery areas to build brand authority.",
+    desc: "Highlight your profile in key inventory areas to build deeper buyer trust.",
     color: "#f59e0b",
     stat: "Top 5% reach",
-  },
-  {
-    icon: <Target />,
-    title: "PPC Campaigns",
-    desc: "Drive targeted traffic with performance-focused advertising campaigns.",
-    color: "#10b981",
-    stat: "Avg 4.2% CTR",
-  },
-  {
-    icon: <Layers />,
-    title: "Category-Level Prominence",
-    desc: "Stand out within your vehicle category with elevated visibility signals.",
-    color: "#a78bfa",
-    stat: "+62% discovery",
   },
 ];
 
@@ -70,15 +56,15 @@ export default function GrowthTools() {
             <div className="border-l-2 border-fourth pl-5">
               <p className="text-primary text-[15px] font-medium leading-relaxed">
                 Visibility is measurable and performance-based — giving
-                consultants a clear path to scalable growth.
+                consultants a clear path to scale.
               </p>
             </div>
 
             {/* stats row */}
             <div className="mt-10 grid grid-cols-2 gap-4">
               {[
-                { val: "12K+", label: "Active listings boosted" },
-                { val: "89%", label: "Consultants saw growth" },
+                { val: "12K+", label: "More Visibility Reach" },
+                { val: "89%", label: "Consultant Satisfaction Rate" },
               ].map(({ val, label }) => (
                 <div
                   key={label}

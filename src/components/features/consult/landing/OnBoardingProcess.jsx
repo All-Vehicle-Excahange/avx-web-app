@@ -16,7 +16,7 @@ const steps = [
     number: "01",
     title: "Register",
     fullTitle: "Register as Consultant",
-    desc: "Create your Reecomm consultant account with basic business details and contact information.",
+    desc: "Create your consultant account with your business name and contact details.",
     icon: <FiUserPlus />,
     color: "#3b82f6",
     time: "~2 min",
@@ -26,9 +26,9 @@ const steps = [
     number: "02",
     title: "KYC",
     fullTitle: "Submit KYC & Business Details",
-    desc: "Verify your identity and business credentials to unlock full marketplace access.",
+    desc: "Submit your identity and business verification documents for review.",
     icon: <FiFileText />,
-    color: "#f43f5e"  ,
+    color: "#f43f5e",
     time: "~5 min",
     detail: "Government ID · License · Address proof",
   },
@@ -36,17 +36,18 @@ const steps = [
     number: "03",
     title: "Subscription",
     fullTitle: "Choose Subscription Tier",
-    desc: "Select the plan that fits your business scale — from starter to premium.",
+    desc: "Choose the subscription tier that matches your current scale and needs.",
+    caption: "Select the plan that fits your business scale — from starter to premium.",
     icon: <FiCreditCard />,
     color: "#f59e0b",
     time: "~1 min",
-    detail: "Starter · Professional · Enterprise",
+    detail: "Starter · Professional · Premium",
   },
   {
     number: "04",
     title: "Verification",
     fullTitle: "Admin Verification",
-    desc: "Our team reviews your submission and verifies your marketplace eligibility.",
+    desc: "Reecomm reviews your documents and confirms your consultant status.",
     icon: <FiShield />,
     color: "#a78bfa",
     time: "24–48 hrs",
@@ -56,9 +57,9 @@ const steps = [
     number: "05",
     title: "Go Live",
     fullTitle: "Activate Storefront",
-    desc: "Your verified consultant profile and storefront go live across the Reecomm marketplace.",
+    desc: "Your storefront and listings go live on the marketplace — start receiving inquiries.",
     icon: <FiZap />,
-    color:"#10b981",
+    color: "#10b981",
     time: "Instant",
     detail: "Storefront live · Dashboard access",
   },
@@ -85,8 +86,11 @@ export default function OnboardingProcess() {
           </h2>
 
           <p className="text-third text-[14px] sm:text-[15px] leading-relaxed">
-            Structured onboarding ensures marketplace quality — every consultant
-            is verified before going live.
+            This is the part that used to take weeks — building a website, setting up listings, briefing a designer. On Reecomm, setting up your storefront takes minutes. Structured onboarding ensures marketplace quality, with every consultant verified before going live.
+          </p>
+
+          <p className="text-third text-[13px] mt-4 font-medium">
+            Setup takes minutes. Verification typically completes within 24–48 hours.
           </p>
         </div>
 
@@ -226,7 +230,7 @@ export default function OnboardingProcess() {
                 </div>
 
                 <p className="text-third text-[14px] leading-relaxed max-w-xl">
-                  {active.desc}
+                  {active.caption || active.desc}
                 </p>
 
                 <div className="flex flex-wrap gap-2">
@@ -260,7 +264,7 @@ export default function OnboardingProcess() {
                       color: active.color,
                     }}
                   >
-                    Next Step →
+                    Next Step
                   </button>
                 </div>
               </div>
@@ -278,7 +282,7 @@ export default function OnboardingProcess() {
 
                 <div>
                   <p className="text-[10px] uppercase tracking-widest text-third mb-2">
-                    Completion
+                    Onboarding
                   </p>
                   <div className="h-1.5 bg-[#1f2937] rounded-full overflow-hidden">
                     <motion.div

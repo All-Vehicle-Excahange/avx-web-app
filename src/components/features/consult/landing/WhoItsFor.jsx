@@ -6,23 +6,23 @@ import { useState } from "react";
 const items = [
   {
     title: "Independent Car Consultants",
-    desc: "Solo automotive professionals looking to build a stronger digital presence and generate qualified leads.",
-    img: "/1_cp.webp",
+    desc: "Running your business solo? Reecomm gives you the same storefront, tools, and buyer trust as a full dealership — without the overhead.",
+    img: "/consultant.webp",
   },
   {
     title: "Multi-Vehicle Dealerships",
-    desc: "Dealerships managing multiple listings who need structured visibility and performance tracking.",
-    img: "/2_cp.webp",
+    desc: "Manage your full inventory from a single dashboard. List, update, and track every vehicle without juggling spreadsheets or WhatsApp threads.",
+    img: "/dealership.webp",
   },
   {
     title: "Growing Automotive Businesses",
-    desc: "Businesses expanding operations and looking to scale visibility across cities and categories.",
-    img: "/3_cp.webp",
+    desc: "Scaling beyond a handful of vehicles? Reecomm's structured visibility and performance data help you grow predictably, not by guesswork.",
+    img: "/performance-based-visibility.webp",
   },
   {
     title: "City-Level Operators",
-    desc: "Local automotive operators targeting regional markets with verified listings and insights.",
-    img: "/4_cp.webp",
+    desc: "Operating across multiple locations or a wide service area? Reecomm's storefront and inquiry tools work the same way at any scale.",
+    img: "/car-operator.webp",
   },
 ];
 
@@ -46,7 +46,10 @@ export default function WhoItsFor() {
           </h2>
 
           <p className="text-third mt-5 text-[15px] md:text-[16px] max-w-xl mx-auto leading-relaxed">
-            If you sell vehicles seriously, Reecomm is structured for scale.
+            Going digital used to mean hiring a developer for a website, a
+            designer for your branding, and a marketer to bring you leads.
+            Reecomm replaces all three — built for consultants who sell vehicles
+            seriously, at any scale.
           </p>
         </div>
 

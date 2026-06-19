@@ -4,8 +4,6 @@ import { motion } from "framer-motion";
 import {
   UserCheck,
   Star,
-  Activity,
-  MessageSquare,
 } from "lucide-react";
 
 const pillars = [
@@ -20,18 +18,6 @@ const pillars = [
     title: "Review Transparency",
     desc: "Buyer reviews are authenticated and publicly visible with no hidden ratings.",
     color: "#f59e0b",
-  },
-  {
-    icon: <Activity />,
-    title: "Performance Signals",
-    desc: "Response rate, listing accuracy, and inquiry handling are tracked and surfaced to buyers.",
-    color: "#10b981",
-  },
-  {
-    icon: <MessageSquare />,
-    title: "Recorded Interactions",
-    desc: "Every buyer interaction is logged through Reecomm ensuring accountability across the platform.",
-    color: "#a78bfa",
   },
 ];
 

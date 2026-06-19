@@ -157,17 +157,17 @@ export default function ConsultantHeroSection() {
               Consultant Program
             </span>
             <div className="space-y-3">
-              <h1 className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl text-primary font-semibold leading-[1.05] mt-5">
-                Grow Your Automotive
+              <h1 className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl  text-primary font-semibold leading-[1.05] mt-5">
+                Digitize Your Vehicle Business in Under
               </h1>
               <h1 className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl text-fourth/80 font-semibold leading-[1.05]">
-                Business on Reecomm
+                10 Minutes.
               </h1>
             </div>
             <p className="text-[15px] text-third leading-relaxed max-w-lg">
-              Reecomm helps automotive consultants build visibility, generate
-              serious inquiries, and operate with structured performance
-              transparency.
+              No developers. No designers. No marketing team to hire. Set up
+              your storefront, list your inventory, and start looking
+              professional online — in the time it takes to fill out a form.
             </p>
             <div className="w-24 h-0.5 bg-fourth rounded-full" />
             <div className="flex flex-col sm:flex-row gap-4 pt-3">

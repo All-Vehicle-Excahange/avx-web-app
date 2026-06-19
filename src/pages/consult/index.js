@@ -22,11 +22,40 @@ function index() {
   return (
     <>
       <Head>
-        <title>Become a Consultant | Reecomm</title>
+        <title>Become a Consultant — Scale Your Automotive Business on Reecomm</title>
         <meta
           name="description"
-          content="Join Reecomm as a consultant and earn through vehicle inspections while growing your business with our advanced tools."
+          content="Join Reecomm as a professional consultant. Scale your business, access advanced storefront tools, manage your inventory from a single dashboard, and reach verified buyers."
         />
+        <meta
+          name="keywords"
+          content="become car consultant Reecomm, automotive consultant tools, professional vehicle storefront, digital dealership tools"
+        />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://reecomm.com/consult" />
+        <meta property="og:title" content="Become a Reecomm Consultant — Scale Your Automotive Business" />
+        <meta
+          property="og:description"
+          content="Reecomm is the platform built for professional automotive consultants. Scale your business, list and track your vehicles, build client trust, and work at any scale."
+        />
+        <meta property="og:image" content="https://reecomm.com/logo/logo.webp" />
+        <meta
+          property="og:image:alt"
+          content="Reecomm — India's trusted used vehicle marketplace become a consultant guide"
+        />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@reecomm" />
+        <meta name="twitter:title" content="Become a Reecomm Consultant — Scale Your Automotive Business" />
+        <meta
+          name="twitter:description"
+          content="Access advanced storefront tools, manage your inventory from a single dashboard, and reach verified buyers."
+        />
+        <meta name="twitter:image" content="https://reecomm.com/logo/logo.webp" />
+        <meta name="twitter:image:alt" content="Reecomm — India's trusted used vehicle marketplace" />
       </Head>
       <Navbar />
 
