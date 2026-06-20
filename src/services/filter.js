@@ -6,7 +6,7 @@ import axiosInstance, {
 
 const ENDPOINT = {
   getMakersByFuelOrBodyType: "/search/fuelTypesandbodyTypesmakers",
-  getFilteredVehicles: "/vehicle/filter/sections/four-wheeler",
+  getFilteredVehicles: "/vehicle/filter/sections",
   getAndSearchMakers: "/search/makers",
   getAndSearchModel: "/search/models",
   getFuelTypeByModelId: "/search/fuel-types",
@@ -36,13 +36,27 @@ export const getMakersByFuelOrBodyType = async (data) => {
 
 export const getFilteredVehicles = async (data, params = {}) => {
   try {
-    const res = await axiosInstance.post(ENDPOINT.getFilteredVehicles, data, {
+    let vehicleTypeVal = "FOUR_WHEELER";
+    if (params.vehicleType) {
+      const vt = String(params.vehicleType).toLowerCase();
+      if (vt.includes("2") || vt.includes("two")) {
+        vehicleTypeVal = "TWO_WHEELER";
+      }
+    }
+    const { bodyType, ...cleanParams } = params;
+    let cleanData = data;
+    if (data && typeof data === "object") {
+      const { bodyType: _, ...restData } = data;
+      cleanData = restData;
+    }
+    const res = await axiosInstance.post(ENDPOINT.getFilteredVehicles, cleanData, {
       params: {
-        pageNo: params.pageNo ?? 1,
-        size: params.size ?? 6,
-        sortBy: params.sortBy,
-        direction: params.direction,
-        ...params,
+        pageNo: cleanParams.pageNo ?? 1,
+        size: cleanParams.size ?? 6,
+        sortBy: cleanParams.sortBy,
+        direction: cleanParams.direction,
+        ...cleanParams,
+        vehicleType: vehicleTypeVal,
       },
     });
     return handleResponse(res);
@@ -53,7 +67,7 @@ export const getFilteredVehicles = async (data, params = {}) => {
 
 export const getAndSearchMakers = async (data) => {
   try {
-    const { searchTerm, page, limit } = data;
+    const { searchTerm, page, limit, bodyType } = data;
 
     const res = await axiosNodeInstance.get(ENDPOINT.getAndSearchMakers, {
       params: {
@@ -62,6 +76,7 @@ export const getAndSearchMakers = async (data) => {
         limit,
         sortDir: "asc",
         sortBy: "make_id",
+        bodyType,
       },
     });
     return handleNodeResponse(res);
@@ -72,7 +87,7 @@ export const getAndSearchMakers = async (data) => {
 
 export const getAndSearchModel = async (data) => {
   try {
-    const { searchTerm, page, limit, maker_id } = data;
+    const { searchTerm, page, limit, maker_id, bodyType } = data;
 
     const res = await axiosNodeInstance.get(ENDPOINT.getAndSearchModel, {
       params: {
@@ -80,6 +95,7 @@ export const getAndSearchModel = async (data) => {
         page,
         limit,
         makerId: maker_id,
+        bodyType,
       },
     });
     return handleNodeResponse(res);
@@ -88,11 +104,18 @@ export const getAndSearchModel = async (data) => {
   }
 };
 
-export const getFuelTypeByModelId = async (model_id) => {
+export const getFuelTypeByModelId = async (model_id, bodyType) => {
   try {
+    let mId = model_id;
+    let bType = bodyType;
+    if (model_id && typeof model_id === "object") {
+      mId = model_id.modelId;
+      bType = model_id.bodyType;
+    }
     const res = await axiosNodeInstance.get(ENDPOINT.getFuelTypeByModelId, {
       params: {
-        modelId: model_id,
+        modelId: mId,
+        bodyType: bType,
       },
     });
     return handleNodeResponse(res);
@@ -100,13 +123,20 @@ export const getFuelTypeByModelId = async (model_id) => {
     throw error;
   }
 };
-export const getTransmissionTypeByModelId = async (model_id) => {
+export const getTransmissionTypeByModelId = async (model_id, bodyType) => {
   try {
+    let mId = model_id;
+    let bType = bodyType;
+    if (model_id && typeof model_id === "object") {
+      mId = model_id.modelId;
+      bType = model_id.bodyType;
+    }
     const res = await axiosNodeInstance.get(
       ENDPOINT.getTransmissionTypeByModelId,
       {
         params: {
-          modelId: model_id,
+          modelId: mId,
+          bodyType: bType,
         },
       },
     );
@@ -116,13 +146,20 @@ export const getTransmissionTypeByModelId = async (model_id) => {
   }
 };
 
-export const getYearByModelId = async (model_id) => {
+export const getYearByModelId = async (model_id, bodyType) => {
   try {
+    let mId = model_id;
+    let bType = bodyType;
+    if (model_id && typeof model_id === "object") {
+      mId = model_id.modelId;
+      bType = model_id.bodyType;
+    }
     const res = await axiosNodeInstance.get(
       ENDPOINT.getYearByModelId,
       {
         params: {
-          modelId: model_id,
+          modelId: mId,
+          bodyType: bType,
         },
       },
     );
@@ -137,7 +174,7 @@ export const getYearByModelId = async (model_id) => {
 
 export const getAndSearchVariant = async (data) => {
   try {
-    const { searchTerm, page, limit, modelId, fuelType, year } = data;
+    const { searchTerm, page, limit, modelId, fuelType, year, bodyType } = data;
 
     const res = await axiosNodeInstance.get(ENDPOINT.getAndSearchVariant, {
       params: {
@@ -146,7 +183,8 @@ export const getAndSearchVariant = async (data) => {
         limit,
         modelId: modelId,
         fuelType: fuelType,
-        year: year
+        year: year,
+        bodyType,
       },
     });
     return handleNodeResponse(res);
@@ -181,7 +219,12 @@ export const SearchCityAndState = async (data) => {
 
 export const getFilterConsualt = async (data) => {
   try {
-    const res = await axiosInstance.post(ENDPOINT.getFilterConsualt, data);
+    let cleanData = data;
+    if (data && typeof data === "object") {
+      const { bodyType, ...restData } = data;
+      cleanData = restData;
+    }
+    const res = await axiosInstance.post(ENDPOINT.getFilterConsualt, cleanData);
     return handleResponse(res);
   } catch (error) {
     throw error;

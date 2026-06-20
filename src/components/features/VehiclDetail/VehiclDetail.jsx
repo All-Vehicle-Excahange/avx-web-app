@@ -18,15 +18,21 @@ import SimulerVehicle from "./SimulerVehicle";
 import Navbar from "@/components/layout/Navbar";
 import VehicleOverviewMain from "./VehicleOverviewMain";
 
-
 import { useParams, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { getVehicleOverviewQuery, getVehicleSummaryQuery } from "@/queries/vehicle.queries";
+import {
+  getVehicleOverviewQuery,
+  getVehicleSummaryQuery,
+  getVehicleInspectionDetailsQuery,
+} from "@/queries/vehicle.queries";
 import ReletedConsualt from "./ReletedConsualt";
 import VehicleDetailsSkeleton from "@/components/ui/skeleton/VehicleDetailsSkeleton";
 import SpecialOffer from "./SpecialOffer";
 
-export default function VehicleDetails({ initialOverview = null, initialSummary = null }) {
+export default function VehicleDetails({
+  initialOverview = null,
+  initialSummary = null,
+}) {
   const specificationRef = useRef(null);
   const conditionRef = useRef(null);
   const inspectionRef = useRef(null);
@@ -43,7 +49,6 @@ export default function VehicleDetails({ initialOverview = null, initialSummary 
 
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, []);
-
 
   const scrollToSection = (ref, tab) => {
     setActiveTab(tab);
@@ -106,6 +111,11 @@ export default function VehicleDetails({ initialOverview = null, initialSummary 
     enabled: !!id && isConsultation,
   });
 
+  const { data: inspectionDetails } = useQuery({
+    ...getVehicleInspectionDetailsQuery(id),
+    enabled: !!id,
+  });
+
   const vehicleSummary = vehicleSummaryData || {};
   const loading = isOverviewLoading || (isConsultation && isSummaryLoading);
 
@@ -136,35 +146,51 @@ export default function VehicleDetails({ initialOverview = null, initialSummary 
           {/* HEADER */}
           <section className="relative">
             <div className="lg:sticky top-16 md:pb-4 z-40">
-              <VehicleHeader vehicle={vehicleOverview} vehicleSummary={vehicleSummary} />
+              <VehicleHeader
+                vehicle={vehicleOverview}
+                vehicleSummary={vehicleSummary}
+              />
             </div>
 
             <section className="grid grid-cols-1 xl:grid-cols-[2.2fr_1fr] gap-6 items-start">
               <div className="flex flex-col gap-6 min-w-0">
                 <VehicleImageGallery vehicle={vehicleOverview} />
 
-                <div className="sticky top-[64px] lg:relative lg:top-0 lg:z-auto z-40 bg-transparent backdrop-blur-lg border-b border-third/40">
+                <div className="sticky top-16 lg:relative lg:top-0 lg:z-auto z-40 bg-transparent backdrop-blur-lg border-b border-third/40">
                   <div className="overflow-x-auto scrollbar-hide">
                     <div className="flex gap-6 px-2 min-w-max">
                       {[
                         { id: "overview", label: "Overview", ref: overviewRef },
-                        { id: "specification", label: "Specifications", ref: specificationRef },
-                        { id: "condition", label: "Condition", ref: conditionRef },
-                        { id: "inspection", label: "Inspection", ref: inspectionRef },
+                        {
+                          id: "specification",
+                          label: "Specifications",
+                          ref: specificationRef,
+                        },
+                        {
+                          id: "condition",
+                          label: "Condition",
+                          ref: conditionRef,
+                        },
+                        {
+                          id: "inspection",
+                          label: "Inspection",
+                          ref: inspectionRef,
+                        },
                       ].map((tab) => (
                         <button
                           key={tab.id}
                           onClick={() => scrollToSection(tab.ref, tab.id)}
                           className={`relative cursor-pointer py-3 text-sm font-medium whitespace-nowrap transition-colors
-          ${activeTab === tab.id
-                              ? "text-primary"
-                              : "text-third hover:text-primary"
-                            }`}
+          ${
+            activeTab === tab.id
+              ? "text-primary"
+              : "text-third hover:text-primary"
+          }`}
                         >
                           {tab.label}
 
                           {activeTab === tab.id && (
-                            <span className="absolute left-0 bottom-0 h-[2px] w-full bg-primary rounded-full" />
+                            <span className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full" />
                           )}
                         </button>
                       ))}
@@ -176,7 +202,11 @@ export default function VehicleDetails({ initialOverview = null, initialSummary 
                 </div>
 
                 <div ref={specificationRef}>
-                  <VehicleOverview vehicle={vehicleOverview} open={isSpecOpen} setOpen={setIsSpecOpen} />
+                  <VehicleOverview
+                    vehicle={vehicleOverview}
+                    open={isSpecOpen}
+                    setOpen={setIsSpecOpen}
+                  />
                 </div>
 
                 <div ref={conditionRef}>
@@ -184,6 +214,7 @@ export default function VehicleDetails({ initialOverview = null, initialSummary 
                     vehicle={vehicleOverview}
                     open={isConditionOpen}
                     setOpen={setIsConditionOpen}
+                    inspectionDetails={inspectionDetails}
                   />
                 </div>
 
@@ -211,7 +242,11 @@ export default function VehicleDetails({ initialOverview = null, initialSummary 
           </section>
           <section className="pt-12 flex flex-col gap-12">
             <SimulerVehicle vehicleOverview={vehicleOverview} />
-            <ReletedConsualt limit={4} vehicleOverview={vehicleOverview} vehicleSummary={vehicleSummary} />
+            <ReletedConsualt
+              limit={4}
+              vehicleOverview={vehicleOverview}
+              vehicleSummary={vehicleSummary}
+            />
           </section>
         </div>
       </main>
