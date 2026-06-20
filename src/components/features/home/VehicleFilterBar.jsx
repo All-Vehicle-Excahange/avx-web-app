@@ -27,10 +27,12 @@ export const FOUR_WHEELER_TYPES = [
   { key: "Luxury Sedan", label: "Luxury Sedan" },
 ];
 export const TWO_WHEELER_TYPES = [
-  { key: "bike", label: "Bike" },
-  { key: "scooter", label: "Scooter" },
-  { key: "electric_scooter", label: "Electric Scooter" },
-  { key: "moped", label: "Moped" },
+  { key: "scooter", label: "Scooters" },
+  { key: "commuter_bikes", label: "Commuter Bikes" },
+  { key: "sports_bikes", label: "Sports Bikes" },
+  { key: "cruiser_retro", label: "Cruiser & Retro" },
+  { key: "adventure_touring", label: "Adventure & Touring" },
+  { key: "electric_2w", label: "Electric 2W" },
 ];
 
 const FUEL_TYPES = ["Petrol", "Diesel", "CNG", "Electric", "Hybrid", "LPG"];
@@ -86,6 +88,14 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const brandInputRef = useRef(null);
   const searchTimerRef = useRef(null);
   const mobileTriggerRef = useRef(null);
+
+  const availableFuelTypes = useMemo(() => {
+    const isTwoWheeler = vehicleType && (vehicleType.toLowerCase().includes("2") || vehicleType.toLowerCase().includes("two"));
+    if (isTwoWheeler) {
+      return ["Petrol", "Diesel", "CNG", "Electric"];
+    }
+    return ["Petrol", "Diesel", "CNG", "Electric", "Hybrid", "LPG"];
+  }, [vehicleType]);
 
   /* ================= CITY / STATE API ================= */
   const fetchPopularCities = async () => {
@@ -146,10 +156,14 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         });
         setBrandOptions(res.data || []);
       } else {
+        const mappedBodyType = vehicleType && (vehicleType.toLowerCase().includes("2") || vehicleType.toLowerCase().includes("two"))
+          ? "TWO_WHEELER"
+          : "FOUR_WHEELER";
         const res = await getAndSearchMakers({
           searchTerm: "",
           page: 1,
           limit: 100,
+          bodyType: mappedBodyType,
         });
         setBrandOptions(res.data || []);
       }
@@ -562,6 +576,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                           e.stopPropagation();
                           setVehicleType(type.label);
                           setVehicleTypeError(false);
+                          setFuelType("");
+                          setBodyType("");
                           openNextAvailableTab("vehicle");
                         }}
                         className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold cursor-pointer"
@@ -730,7 +746,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     </div>
                     {activeTab === "fuel" && (
                       <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
-                        {FUEL_TYPES.map((f) => (
+                        {availableFuelTypes.map((f) => (
                           <button
                             key={f}
                             onClick={(e) => {
@@ -1029,6 +1045,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       onClick={() => {
                         setVehicleType(type.label);
                         setVehicleTypeError(false);
+                        setFuelType("");
+                        setBodyType("");
                         openNextAvailableTab("vehicle");
                       }}
                       className={`flex-1 mt-3 py-3 text-sm font-bold rounded-lg transition-colors cursor-pointer ${vehicleType === type.label ? "bg-white text-black" : "bg-neutral-800 text-gray-400 hover:text-white"}`}
@@ -1242,7 +1260,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   </button>
                   {activeTab === "fuel" && (
                     <div className="p-2 border-t border-neutral-800 border-opacity-50 dropdown-active">
-                      {FUEL_TYPES.map((fuel) => (
+                      {availableFuelTypes.map((fuel) => (
                         <button
                           key={fuel}
                           onClick={() => {

@@ -74,6 +74,14 @@ export default function SearchWithCard({
 
   const vehicleType = searchParams.get("vehicleType");
   const bodyType = searchParams.get("bodyType");
+  const apiBodyType = useMemo(() => {
+    if (!vehicleType) return "FOUR_WHEELER";
+    const normalized = vehicleType.toLowerCase();
+    if (normalized.includes("2") || normalized.includes("two")) {
+      return "TWO_WHEELER";
+    }
+    return "FOUR_WHEELER";
+  }, [vehicleType]);
   const fuelType = searchParams.get("fuelType");
 
   const rawBrand = searchParams.get("brand") || initialFilters.brand;
@@ -363,9 +371,10 @@ export default function SearchWithCard({
     () => ({
       pageNo: currentPage,
       size: 9,
+      vehicleType,
       ...(sortBy ? { sortBy, direction: direction || "desc" } : {}),
     }),
-    [currentPage, sortBy, direction],
+    [currentPage, sortBy, direction, vehicleType],
   );
 
   const { data: searchData, isFetching: vehiclesLoading } = useQuery(
@@ -570,6 +579,7 @@ export default function SearchWithCard({
         searchTerm: searchTerm.trim() || undefined,
         page,
         limit: 10,
+        bodyType: apiBodyType,
       });
 
       if (!res.success) return;
@@ -603,11 +613,11 @@ export default function SearchWithCard({
     }, 400);
 
     return () => clearTimeout(brandSearchTimeoutRef.current);
-  }, [brandSearch]);
+  }, [brandSearch, apiBodyType]);
 
   useEffect(() => {
     loadBrands(1, "");
-  }, []);
+  }, [apiBodyType]);
 
   useEffect(() => {
     const fetchStates = async () => {
@@ -755,6 +765,7 @@ export default function SearchWithCard({
         searchTerm: searchTerm.trim() || undefined,
         page,
         limit: 10,
+        bodyType: apiBodyType,
       };
 
       if (selectedBrands.length > 0) {
@@ -794,14 +805,14 @@ export default function SearchWithCard({
     }, 400);
 
     return () => clearTimeout(modelSearchTimeoutRef.current);
-  }, [modelSearch, selectedBrands]);
+  }, [modelSearch, selectedBrands, apiBodyType]);
 
   useEffect(() => {
     setModels([]);
     setModelPage(1);
     setModelHasMore(true);
     loadModels(1, modelSearch);
-  }, [selectedBrands]);
+  }, [selectedBrands, apiBodyType]);
 
   const handleLoadMoreModels = () => {
     if (modelLoading || !modelHasMore) return;
@@ -827,7 +838,7 @@ export default function SearchWithCard({
     setYearLoading(true);
     try {
       const modelId = selectedModels[0];
-      const res = await getYearByModelId(modelId);
+      const res = await getYearByModelId({ modelId, bodyType: apiBodyType });
 
       if (res.success && Array.isArray(res.data)) {
         const yearItems = res.data.map((y) => ({
@@ -848,7 +859,7 @@ export default function SearchWithCard({
 
   useEffect(() => {
     loadYears();
-  }, [selectedModels]);
+  }, [selectedModels, apiBodyType]);
 
   const handleYearChange = (values) => {
     setSelectedYear(values);
@@ -863,7 +874,7 @@ export default function SearchWithCard({
       if (selectedModels.length > 0) {
         const modelId = selectedModels[0];
 
-        const res = await getFuelTypeByModelId(modelId);
+        const res = await getFuelTypeByModelId({ modelId, bodyType: apiBodyType });
 
         if (res.success && Array.isArray(res.data)) {
           const realFuelTypes = res.data.map((fuel) => {
@@ -912,7 +923,7 @@ export default function SearchWithCard({
 
   useEffect(() => {
     loadFuelTypes();
-  }, [selectedModels]);
+  }, [selectedModels, apiBodyType]);
 
   const handleFuelChange = (values) => {
     setSelectedFuelTypes(values);
@@ -927,7 +938,7 @@ export default function SearchWithCard({
       if (selectedModels.length > 0) {
         const modelId = selectedModels[0];
 
-        const res = await getTransmissionTypeByModelId(modelId);
+        const res = await getTransmissionTypeByModelId({ modelId, bodyType: apiBodyType });
 
         if (res.success && Array.isArray(res.data)) {
           const realTransmissions = res.data.map((type) => {
@@ -971,7 +982,7 @@ export default function SearchWithCard({
 
   useEffect(() => {
     loadTransmissionTypes();
-  }, [selectedModels]);
+  }, [selectedModels, apiBodyType]);
 
   // ── Load Variants with search ──
   const loadVariants = async (page = 1, searchTerm = variantSearch) => {
@@ -997,6 +1008,7 @@ export default function SearchWithCard({
         modelId: selectedModels[0],
         fuelType: fuelTypeToSend,
         year: selectedYear.length > 0 ? selectedYear[0] : undefined,
+        bodyType: apiBodyType,
       };
 
       const res = await getAndSearchVariant(payload);
@@ -1039,14 +1051,14 @@ export default function SearchWithCard({
     }, 400);
 
     return () => clearTimeout(variantSearchTimeoutRef.current);
-  }, [variantSearch, selectedModels, selectedFuelTypes, selectedYear]);
+  }, [variantSearch, selectedModels, selectedFuelTypes, selectedYear, apiBodyType]);
 
   useEffect(() => {
     setVariants([]);
     setVariantPage(1);
     setVariantHasMore(true);
     loadVariants(1, variantSearch);
-  }, [selectedModels, selectedFuelTypes, selectedYear]);
+  }, [selectedModels, selectedFuelTypes, selectedYear, apiBodyType]);
 
   const handleLoadMoreVariants = () => {
     if (variantLoading || !variantHasMore) return;
@@ -1271,7 +1283,7 @@ export default function SearchWithCard({
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-[20px] gap-4">
+    <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-5 gap-4">
       {/* ================= DESKTOP SIDEBAR ================= */}
       <aside
         className="
@@ -1813,7 +1825,7 @@ export default function SearchWithCard({
 
       {/* MOBILE FILTER DRAWER */}
       <div
-        className={`fixed top-[64px] inset-x-0 bottom-0 z-100 bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${
+        className={`fixed top-16 inset-x-0 bottom-0 z-100 bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${
           mobileFilterOpen ? "translate-y-0" : "translate-y-full"
         }`}
       >
