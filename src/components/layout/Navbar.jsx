@@ -91,6 +91,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
   const [accountOpen, setAccountOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [atTop, setAtTop] = useState(true);
+  const [isComeFromPhone, setIsComeFromPhone] = useState(false);
 
   const { user, isLoggedIn } = useAuthStore();
   const { push } = useRouter();
@@ -399,6 +400,15 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  /* ================= PHONE APP MODE ================= */
+  useEffect(() => {
+    setIsComeFromPhone(sessionStorage.getItem("isComeFromPhone") === "true");
+  }, []);
+
+  const isStorefrontPage = pathname?.startsWith("/consult/dashboard/storefront");
+
+  if (isComeFromPhone && isStorefrontPage) return null;
 
   return (
     <>

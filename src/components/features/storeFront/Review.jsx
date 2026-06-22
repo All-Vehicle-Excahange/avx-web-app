@@ -44,12 +44,11 @@ export default function Review() {
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery(
-    getStoreFrontReviewsInfiniteQuery(id, { size: 10 })
-  );
+  } = useInfiniteQuery(getStoreFrontReviewsInfiniteQuery(id, { size: 10 }));
 
   const reviews =
-    reviewsInfiniteData?.pages?.flatMap((page) => page?.data?.reviews || []) || [];
+    reviewsInfiniteData?.pages?.flatMap((page) => page?.data?.reviews || []) ||
+    [];
 
   const reviewSummary =
     reviewsInfiniteData?.pages?.[0]?.data?.reviewSummary || null;
@@ -177,8 +176,8 @@ export default function Review() {
                       key={i}
                       className={`w-4 h-4 ${
                         i <= Math.round(reviewSummary.averageRating)
-                          ? "fill-primary text-primary"
-                          : "text-third"
+                          ? "fill-yellow-400 text-yellow-400"
+                          : "text-gray-300"
                       }`}
                     />
                   ))}
@@ -258,6 +257,13 @@ export default function Review() {
                   ))}
                 </div>
 
+                {/* 🏷️ TITLE */}
+                <input
+                  placeholder="What's most important to know?"
+                  value={reviewTitle}
+                  onChange={(e) => setReviewTitle(e.target.value)}
+                  className="w-full mb-5  border border-third/40 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-primary"
+                />
                 {/* 📝 REVIEW TEXT */}
                 <textarea
                   placeholder="What should other customers know?"
@@ -265,15 +271,6 @@ export default function Review() {
                   onChange={(e) => setReviewText(e.target.value)}
                   className="w-full min-h-[120px] border border-third/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary resize-none"
                 />
-
-                {/* 🏷️ TITLE */}
-                <input
-                  placeholder="What's most important to know?"
-                  value={reviewTitle}
-                  onChange={(e) => setReviewTitle(e.target.value)}
-                  className="w-full mt-3  border border-third/40 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-primary"
-                />
-
                 {/* 📷 MULTI IMAGE INPUTS (OLD DESIGN STYLE) */}
                 <div className="mt-4 space-y-3">
                   <label className="block text-sm font-medium mb-2">
@@ -413,42 +410,53 @@ export default function Review() {
                       {user?.firstname?.[0] || "U"}
                     </div>
 
-                    {/* Name */}
-                    <span className="font-medium">
+                    {/* Name
+                    <span className="font-medium ">
                       {user?.firstname} {user?.lastname}
-                    </span>
-                  </div>
+                    </span> */}
+                    <div>
+                      <span className="font-medium">
+                        {user?.firstname} {user?.lastname}
+                      </span>
 
-                  <div className="flex items-center gap-2">
+                      <p className="text-xs text-third">
+                        Reviewed on{" "}
+                        {new Date(review.createdAt).toLocaleDateString(
+                          "en-IN",
+                          {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          },
+                        )}
+                        {review.isEdited && (
+                          <span className="ml-2 text-primary font-medium">
+                            (Edited)
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex  items-center">
                     {[1, 2, 3, 4, 5].map((i) => (
                       <Star
                         key={i}
                         className={`w-4 h-4 ${
                           i <= review.rating
-                            ? "fill-primary text-primary"
-                            : "text-third"
+                            ? "fill-yellow-400 text-yellow-400"
+                            : "text-gray-300"
                         }`}
                       />
                     ))}
-
-                    <span className="text-sm text-third font-medium">
-                      {review.reviewTitle}
-                    </span>
                   </div>
 
-                  <p className="text-xs text-third">
-                    Reviewed on{" "}
-                    {new Date(review.createdAt).toLocaleDateString("en-IN", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}
-                    {review.isEdited && (
-                      <span className="ml-2 text-primary font-medium">
-                        (Edited)
+                  {review.reviewTitle && (
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm text-primary font-semibold">
+                        {review.reviewTitle}
                       </span>
-                    )}
-                  </p>
+                    </div>
+                  )}
 
                   <p className="text-sm leading-relaxed">{review.reviewText}</p>
 
@@ -482,7 +490,9 @@ export default function Review() {
                           {consultantName || "Consultant"}
                         </span>
                         {review.isConsultReplyEdited && (
-                          <span className="text-[10px] text-third">(edited)</span>
+                          <span className="text-[10px] text-third">
+                            (edited)
+                          </span>
                         )}
                       </div>
                       <p className="text-sm text-primary/80 leading-relaxed pl-9">

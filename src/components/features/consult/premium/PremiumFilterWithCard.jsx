@@ -13,7 +13,7 @@ import {
   getUserCityAndStateByLatLong,
   getPremiumConsult,
 } from "@/services/consult.filter.service";
-import { getCities, getState } from "@/services/user.service";
+import { getCities, getState, getAllTown } from "@/services/user.service";
 import ConsultantGridSection from "../search/ConsultantGridSection";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Pagination from "@/components/ui/Pagination";
@@ -53,6 +53,9 @@ export default function FilterWithCard({ onFilterChange }) {
   const [selectedStateName, setSelectedStateName] = useState("");
   const [selectedCityId, setSelectedCityId] = useState(null);
   const [selectedCityName, setSelectedCityName] = useState("");
+  const [towns, setTowns] = useState([]);
+  const [selectedTownId, setSelectedTownId] = useState(null);
+  const [selectedTownName, setSelectedTownName] = useState("");
 
   const autoFetchTimerRef = useRef(null);
   const hasMountedForAutoFetch = useRef(false);
@@ -118,9 +121,13 @@ export default function FilterWithCard({ onFilterChange }) {
       name: item.consultationName || "Unknown Consultant",
 
       location: item.address
-        ? `${item.address.city || ""}${
-            item.address.city && item.address.state ? ", " : ""
-          }${item.address.state || ""}`
+        ? [
+            item.address.town || "",
+            item.address.city || "",
+            item.address.state || "",
+          ]
+            .filter(Boolean)
+            .join(", ") || "-"
         : "-",
 
       rating: item.averageRating || 0,
@@ -271,6 +278,28 @@ export default function FilterWithCard({ onFilterChange }) {
     fetchCities();
   }, [selectedStateId]);
 
+  // Load towns when city changes
+  useEffect(() => {
+    const fetchTowns = async () => {
+      if (!selectedCityId) {
+        setTowns([]);
+        setSelectedTownId(null);
+        setSelectedTownName("");
+        return;
+      }
+      try {
+        const res = await getAllTown(selectedCityId);
+        if (res?.data) {
+          setTowns(res.data.map((t) => ({ label: t.name, value: t.id })));
+        }
+      } catch (err) {
+        console.error("Failed to load towns:", err);
+        setTowns([]);
+      }
+    };
+    fetchTowns();
+  }, [selectedCityId]);
+
   // Load services
   useEffect(() => {
     const fetchServices = async () => {
@@ -339,6 +368,7 @@ export default function FilterWithCard({ onFilterChange }) {
 
     if (selectedCityId) payload.cityId = selectedCityId;
     if (selectedStateId) payload.stateId = selectedStateId;
+    if (selectedTownId) payload.townId = selectedTownId;
 
     if (latitude !== null && longitude !== null) {
       payload.latitude = latitude;
@@ -456,6 +486,9 @@ export default function FilterWithCard({ onFilterChange }) {
     setSelectedStateName("");
     setSelectedCityId(null);
     setSelectedCityName("");
+    setSelectedTownId(null);
+    setSelectedTownName("");
+    setTowns([]);
 
     // Reset pagination
     setCurrentPage(1);
@@ -495,6 +528,7 @@ export default function FilterWithCard({ onFilterChange }) {
     selectedDistance,
     selectedCityId,
     selectedStateId,
+    selectedTownId,
     minPrice,
     maxPrice,
   ]);
@@ -553,10 +587,11 @@ export default function FilterWithCard({ onFilterChange }) {
         distances.find((d) => d.value === selectedDistance[0])?.label ||
           selectedDistance[0],
       );
-    if (selectedCityName || selectedStateName) {
+    if (selectedCityName || selectedStateName || selectedTownName) {
       const locationParts = [];
       if (selectedCityName) locationParts.push(selectedCityName);
       if (selectedStateName) locationParts.push(selectedStateName);
+      if (selectedTownName) locationParts.push(selectedTownName);
       tags.push(locationParts.join(", "));
     }
     if (minPrice !== MIN || maxPrice !== MAX)
@@ -572,6 +607,7 @@ export default function FilterWithCard({ onFilterChange }) {
     selectedDistance,
     selectedCityName,
     selectedStateName,
+    selectedTownName,
     minPrice,
     maxPrice,
   ]);
@@ -659,6 +695,25 @@ export default function FilterWithCard({ onFilterChange }) {
                   const c = cities.find((ct) => ct.value === val);
                   setSelectedCityId(val);
                   setSelectedCityName(c ? c.label : "");
+                }}
+              />
+            </div>
+
+            {/* Town Dropdown */}
+            <div className="relative">
+              <label className="text-xs text-third block mb-1">Town</label>
+              <CustomSelect
+                value={selectedTownId}
+                options={towns}
+                placeholder={
+                  selectedCityId ? "Select Town" : "Select city first"
+                }
+                variant="transparent"
+                disabled={!selectedCityId}
+                onChange={(val) => {
+                  const t = towns.find((tn) => tn.value === val);
+                  setSelectedTownId(val);
+                  setSelectedTownName(t ? t.label : "");
                 }}
               />
             </div>

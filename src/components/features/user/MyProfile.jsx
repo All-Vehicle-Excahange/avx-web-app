@@ -6,6 +6,7 @@ import {
   createUserMeta,
   updateuserProfile,
   updateuserProfileMeta,
+  getAllTown,
 } from "@/services/user.service";
 import {
   ChevronDown,
@@ -40,6 +41,7 @@ function MyProfile() {
 
   const [profileForm, setProfileForm] = useState({});
   const [metaForm, setMetaForm] = useState({});
+  const [towns, setTowns] = useState([]);
 
   const [profileError, setProfileError] = useState("");
   const [metaError, setMetaError] = useState("");
@@ -150,6 +152,27 @@ function MyProfile() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Fetch Towns when City changes
+  useEffect(() => {
+    const fetchTowns = async () => {
+      if (!metaForm.cityId) {
+        setTowns([]);
+        return;
+      }
+      try {
+        const res = await getAllTown(metaForm.cityId);
+        const options = (res.data || []).map((t) => ({
+          label: t.name,
+          value: t.id,
+        }));
+        setTowns(options);
+      } catch (err) {
+        console.error("Error fetching towns:", err);
+      }
+    };
+    fetchTowns();
+  }, [metaForm.cityId]);
+
   const formatRole = (role) => {
     switch (role) {
       case "USER":
@@ -179,8 +202,10 @@ function MyProfile() {
       ...profileMetaData,
       stateId: profileMetaData.state?.id,
       cityId: profileMetaData.city?.id,
+      townId: profileMetaData.town?.id,
       stateName: profileMetaData.state?.name,
       cityName: profileMetaData.city?.name,
+      townName: profileMetaData.town?.name,
     });
 
     setMetaError("");
@@ -197,8 +222,10 @@ function MyProfile() {
       address: "",
       stateId: null,
       cityId: null,
+      townId: null,
       stateName: "",
       cityName: "",
+      townName: "",
     });
 
     setMetaError("");
@@ -255,6 +282,10 @@ function MyProfile() {
         latitude: metaForm.latitude || 22.2587,
         longitude: metaForm.longitude || 71.1924,
       };
+
+      if (metaForm.townId) {
+        payload.townId = metaForm.townId;
+      }
 
       // Call create or update based on isCreatingMeta
       if (isCreatingMeta) {
@@ -726,6 +757,7 @@ function MyProfile() {
             <ProfileItem label="Gender" value={profileMetaData.gender} />
             <ProfileItem label="City" value={profileMetaData.city?.name} />
             <ProfileItem label="State" value={profileMetaData.state?.name} />
+            <ProfileItem label="Town" value={profileMetaData.town?.name} />
             <ProfileItem label="Address" value={profileMetaData.address} />
           </div>
         )}
@@ -810,6 +842,8 @@ function MyProfile() {
                       stateName: s ? s.label : "",
                       cityId: null,
                       cityName: "",
+                      townId: null,
+                      townName: "",
                     }));
                   }}
                 />
@@ -832,6 +866,30 @@ function MyProfile() {
                       ...p,
                       cityId: val,
                       cityName: c ? c.label : "",
+                      townId: null,
+                      townName: "",
+                    }));
+                  }}
+                />
+              </div>
+
+              {/* ✅ TOWN DROPDOWN */}
+              <div>
+                <label className="text-xs text-third mb-1.5 block">Town</label>
+                <CustomSelect
+                  value={metaForm.townId}
+                  options={towns}
+                  placeholder={
+                    metaForm.cityId ? "Search town..." : "Select city first"
+                  }
+                  variant="colored"
+                  disabled={!metaForm.cityId}
+                  onChange={(val) => {
+                    const t = towns.find((tn) => tn.value === val);
+                    setMetaForm((p) => ({
+                      ...p,
+                      townId: val,
+                      townName: t ? t.label : "",
                     }));
                   }}
                 />

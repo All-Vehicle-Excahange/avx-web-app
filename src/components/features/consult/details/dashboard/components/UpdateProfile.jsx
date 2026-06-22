@@ -347,6 +347,11 @@ export default function UpdateProfile() {
       ) {
         hasChanges = true;
       }
+      if (
+        String(a.townId || "") !== String(orig.town?.id || orig.townId || "")
+      ) {
+        hasChanges = true;
+      }
       if (a.mapUrl !== (orig.mapUrl || "")) {
         hasChanges = true;
       }
@@ -360,6 +365,9 @@ export default function UpdateProfile() {
       payload.append("address", a.address || "");
       payload.append("stateId", a.stateId || "");
       payload.append("cityId", a.cityId || "");
+      if (a.townId) {
+        payload.append("townId", a.townId);
+      }
       if (a.mapUrl) {
         payload.append("mapUrl", a.mapUrl);
       }
@@ -375,6 +383,7 @@ export default function UpdateProfile() {
             address: a.address,
             state: { ...p.address?.state, id: a.stateId, name: a.stateName },
             city: { ...p.address?.city, id: a.cityId, name: a.cityName },
+            town: { ...p.address?.town, id: a.townId, name: a.townName },
             mapUrl: a.mapUrl,
           },
         }));

@@ -13,7 +13,13 @@ import SignupPopup from "@/components/auth/SignupPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import RequestAlredySentPopup from "./RequestAlredySentPopup";
 
-export default function VehicleSummaryRight({ vehicle, summary, adId, sponsored, billingType }) {
+export default function VehicleSummaryRight({
+  vehicle,
+  summary,
+  adId,
+  sponsored,
+  billingType,
+}) {
   const vehicleId = vehicle?.id;
   const vehicleOwnerRole = vehicle?.vehicleOwner?.userRole || "USER";
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -121,7 +127,6 @@ export default function VehicleSummaryRight({ vehicle, summary, adId, sponsored,
           {/* SELLER / DEALER INFO */}
           <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
             <div className="space-y-2 w-full">
-
               {vehicleOwnerRole === "CONSULTATION" ? (
                 /* ── CONSULTATION-ONLY stats ── */
                 <div className="flex justify-between items-start pt-1 gap-2">
@@ -169,6 +174,7 @@ export default function VehicleSummaryRight({ vehicle, summary, adId, sponsored,
                       <MapPin size={14} className="mt-0.5 shrink-0" />
                       <span className="line-clamp-2">
                         {[
+                          vehicle.vehicleAddress.town,
                           vehicle.vehicleAddress.city,
                           vehicle.vehicleAddress.state,
                         ]

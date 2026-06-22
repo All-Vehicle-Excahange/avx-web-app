@@ -13,9 +13,10 @@ export default function HeroSection() {
     <section className="relative h-screen w-full overflow-hidden">
       {/* Video Background */}
       <Image
-        src="/main_bg.webp"
+        src="/hero_main_image.png"
         fill
         className="absolute inset-0 w-full h-full object-cover z-0"
+        alt="Hero background"
       />
 
       {/* Dark overlay */}
@@ -36,63 +37,42 @@ export default function HeroSection() {
           collapsed ? "opacity-0" : "opacity-100"
         }`}
       >
-        {/* <p className="text-primary tracking-widest uppercase font-primary">
-          Welcome to reecomm
-        </p>
+        <div className="text-center max-w-3xl px-4 select-none flex flex-col items-center gap-3 mb-8 animate-fade-up">
+          <span className="text-xs text-fourth md:text-sm uppercase tracking-[0.3em]  font-semibold drop-shadow-md">
+            One Ecosystem. Every Side.
+          </span>
+          <h1 className="text-4xl md:text-6xl font-black text-white leading-none w-6xl tracking-tight drop-shadow-xl font-primary">
+            Buyers. Sellers. Consultants.
+          </h1>
+          <p className="text-lg md:text-2xl text-white/80 font-medium tracking-wide drop-shadow-md">
+            One trusted marketplace.
+          </p>
+        </div>
 
-        <h1 className="text-4xl font-bold text-primary drop-shadow-2xl font-primary">
-          Pick Your Vehicle
-        </h1> */}
-
-        <div className="mt-[20vh] hidden lg:flex items-center gap-6 relative bottom-10 lg:bottom-5 xl:bottom-8 select-none">
-          {/* Vehicles Tab Label */}
+        {/* Tab Links with Bottom Border */}
+        <div className="mt-4 hidden lg:flex items-center gap-8 relative bottom-10 lg:bottom-5 xl:bottom-8 select-none">
           <button
             onClick={() => setActiveTab("vehicles")}
-            className={`flex items-center gap-2 cursor-pointer transition-all duration-300 ${
+            className={`flex items-center gap-2 pb-2 border-b-2 transition-all duration-300 cursor-pointer ${
               activeTab === "vehicles"
-                ? "text-primary scale-105 font-semibold"
-                : "text-primary/50 hover:text-primary/80"
+                ? "border-primary text-primary font-semibold"
+                : "border-transparent text-primary/60 hover:text-primary hover:border-primary/50"
             }`}
           >
             <Car size={20} />
-            <span className="text-base tracking-wide font-medium">Vehicle</span>
+            <span className="text-base tracking-wide">Vehicle</span>
           </button>
 
-          {/* Central Toggle Switch */}
-          <button
-            onClick={() =>
-              setActiveTab((prev) =>
-                prev === "vehicles" ? "consult" : "vehicles",
-              )
-            }
-            aria-label="Toggle between vehicles and consultants"
-            className="relative w-16 h-9 rounded-full bg-white/10 backdrop-blur-md border border-white/20 p-1 cursor-pointer transition-all duration-300 hover:border-white/40 focus:outline-none"
-          >
-            {/* Sliding circular knob */}
-            <div
-              className={`absolute top-1 w-7 h-7 rounded-full shadow-lg transition-all duration-300 ease-out flex items-center justify-center ${
-                activeTab === "vehicles"
-                  ? "left-1 bg-fourth"
-                  : "left-[calc(100%-2rem)] bg-primary"
-              }`}
-            >
-              <div className="w-2 h-2 rounded-full bg-secondary/30" />
-            </div>
-          </button>
-
-          {/* Users Tab Label */}
           <button
             onClick={() => setActiveTab("consult")}
-            className={`flex items-center gap-2 cursor-pointer transition-all duration-300 ${
+            className={`flex items-center gap-2 pb-2 border-b-2 transition-all duration-300 cursor-pointer ${
               activeTab === "consult"
-                ? "text-primary scale-105 font-semibold"
-                : "text-primary/50 hover:text-primary/80"
+                ? "border-primary text-primary font-semibold"
+                : "border-transparent text-primary/60 hover:text-primary hover:border-primary/50"
             }`}
           >
             <User2 size={20} />
-            <span className="text-base tracking-wide font-medium">
-              Consultant
-            </span>
+            <span className="text-base tracking-wide">Consultant</span>
           </button>
         </div>
       </div>
