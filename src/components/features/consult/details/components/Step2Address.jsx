@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import SleekInput from "@/components/ui/sleekInput";
 import CustomSelect from "@/components/ui/custom-select";
 import { MapPin, Globe, Compass, Link } from "lucide-react";
-import { getState, getCities } from "@/services/user.service";
+import { getState, getCities, getAllTown, addNewTown } from "@/services/user.service";
 import { motion } from "framer-motion";
 import MiniMap from "@/components/ui/MiniMap";
 
@@ -18,38 +18,22 @@ export default function Step2Address({
 }) {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
+  const [towns, setTowns] = useState([]);
+  const [isCreatingTown, setIsCreatingTown] = useState(false);
 
   const [form, setForm] = useState({
     address: initialData?.address || "",
     cityId: initialData?.city?.id || initialData?.cityId || null,
     stateId: initialData?.state?.id || initialData?.stateId || null,
+    townId: initialData?.town?.id || initialData?.townId || null,
     countryId: initialData?.country?.id || initialData?.countryId || 101,
     latitude: initialData?.latitude || 22.2587,
     longitude: initialData?.longitude || 71.1924,
     stateName: initialData?.state?.name || initialData?.stateName || "",
     cityName: initialData?.city?.name || initialData?.cityName || "",
+    townName: initialData?.town?.name || initialData?.townName || "",
     mapUrl: initialData?.mapUrl || "",
   });
-
-  const handleClear = () => {
-    const emptyForm = {
-      countryId: 101,
-      stateId: "",
-      stateName: "",
-      cityId: "",
-      cityName: "",
-      address: "",
-      latitude: "",
-      longitude: "",
-      mapUrl: "",
-    };
-    setForm(emptyForm);
-    if (onChange) {
-      const payload = { ...emptyForm };
-      delete payload.mapUrl;
-      onChange(payload, true);
-    }
-  };
 
   // ===== Fetch States =====
   useEffect(() => {
@@ -86,17 +70,39 @@ export default function Step2Address({
     fetchCities();
   }, [form.stateId]);
 
+  // ===== Fetch Towns When State Changes =====
+  useEffect(() => {
+    const fetchTowns = async () => {
+      if (!form.cityId) return;
+      try {
+        const res = await getAllTown(form.cityId);
+        const options = res.data.map((t) => ({
+          label: t.name,
+          value: t.id,
+        }));
+        setTowns(options);
+      } catch (err) {
+        console.error("Error fetching towns:", err);
+      }
+    };
+    fetchTowns();
+  }, [form.cityId]);
+
   const handleFormChange = (updated) => {
     setForm(updated);
     if (onChange) {
       const isChanged =
         (updated.address || "") !== (initialData?.address || "") ||
-        (updated.stateId || null) !== (initialData?.state?.id || initialData?.stateId || null) ||
-        (updated.cityId || null) !== (initialData?.city?.id || initialData?.cityId || null) ||
+        (updated.stateId || null) !==
+          (initialData?.state?.id || initialData?.stateId || null) ||
+        (updated.cityId || null) !==
+          (initialData?.city?.id || initialData?.cityId || null) ||
+        (updated.townId || null) !==
+          (initialData?.town?.id || initialData?.townId || null) ||
         (updated.mapUrl || "") !== (initialData?.mapUrl || "") ||
         Number(updated.latitude || 0) !== Number(initialData?.latitude || 0) ||
         Number(updated.longitude || 0) !== Number(initialData?.longitude || 0);
-      
+
       const payload = { ...updated };
       if (!payload.mapUrl) {
         delete payload.mapUrl;
@@ -105,7 +111,33 @@ export default function Step2Address({
     }
   };
 
-  // Framer Motion staggered animations configuration
+  // ===== Create a new town if not found in list =====
+  const handleCreateTown = async (townName) => {
+    if (!form.cityId || !form.stateId || !form.countryId) return;
+    setIsCreatingTown(true);
+    try {
+      const res = await addNewTown({
+        countryId: form.countryId,
+        stateId: form.stateId,
+        cityId: form.cityId,
+        name: townName,
+      });
+      const newTown = res.data;
+      const newOption = { label: newTown.name, value: newTown.id };
+      setTowns((prev) => [...prev, newOption]);
+      const updated = {
+        ...form,
+        townId: newTown.id,
+        townName: newTown.name,
+      };
+      handleFormChange(updated);
+    } catch (err) {
+      console.error("Error creating town:", err);
+    } finally {
+      setIsCreatingTown(false);
+    }
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -257,6 +289,46 @@ export default function Step2Address({
                         ...form,
                         cityId: val,
                         cityName: c ? c.label : "",
+                      };
+                      handleFormChange(updated);
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* ===== TOWN ===== */}
+          {(!readOnly || form.townName) && (
+            <div className="flex flex-col space-y-1.5 w-full">
+              <span className="text-xs font-semibold uppercase tracking-wider text-third/80 ml-1">
+                Town
+              </span>
+              <div className="relative">
+                {readOnly ? (
+                  <SleekInput
+                    readOnly={true}
+                    value={form.townName}
+                    icon={Compass}
+                  />
+                ) : (
+                  <CustomSelect
+                    value={form.townId}
+                    options={towns}
+                    placeholder={
+                      form.cityId ? "Search town..." : "Select city first"
+                    }
+                    variant="transparent"
+                    readOnly={readOnly}
+                    disabled={!form.cityId}
+                    onCreateNew={handleCreateTown}
+                    isCreating={isCreatingTown}
+                    onChange={(val) => {
+                      const t = towns.find((tn) => tn.value === val);
+                      const updated = {
+                        ...form,
+                        townId: val,
+                        townName: t ? t.label : "",
                       };
                       handleFormChange(updated);
                     }}

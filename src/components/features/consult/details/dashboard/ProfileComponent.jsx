@@ -152,11 +152,12 @@ export default function ProfileComponent() {
         state: "Gujarat",
       };
     }
-    const { address, city, state } = addressDataRaw;
+    const { address, city, state, town } = addressDataRaw;
     return {
       address: address || "",
       city: city?.name || "",
       state: state?.name || "",
+      town: town?.name || "",
     };
   }, [addressDataRaw]);
 
@@ -293,7 +294,7 @@ export default function ProfileComponent() {
         </div>
 
         {/* Checklist */}
-        <div className="space-y-2 text-sm overflow-y-auto max-h-[160px] custom-scrollbar">
+        <div className="space-y-2 text-sm overflow-y-auto max-h-40 custom-scrollbar">
           {profileStrengthData.messages?.length > 0 ? (
             profileStrengthData.messages.map((msg, i) => (
               <p key={i} className="flex items-start gap-2 text-yellow-400">
@@ -639,6 +640,7 @@ export default function ProfileComponent() {
               <p className="font-medium">
                 {[
                   businessLocation.address,
+                  businessLocation.town,
                   businessLocation.city,
                   businessLocation.state,
                 ]

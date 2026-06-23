@@ -82,9 +82,11 @@ export default function ChipGroup({
     ...items.filter((i) => !knownSelectedItems.some((k) => k.value === i.value)),
   ];
 
-  const filteredItems = combinedItems.filter((item) =>
-    item.label.toLowerCase().includes(currentSearch.toLowerCase()),
-  );
+  const filteredItems = combinedItems.filter((item) => {
+    const label = item?.label || "";
+    const searchStr = currentSearch || "";
+    return label.toLowerCase().includes(searchStr.toLowerCase());
+  });
 
   const visibleItems =
     showMore && !expanded ? filteredItems.slice(0, limit) : filteredItems;
@@ -99,7 +101,7 @@ export default function ChipGroup({
         <div className="mb-4">
           <InputField
             variant="colored"
-            placeholder={`Search ${title.toLowerCase()}...`}
+            placeholder={`Search ${(title || "").toLowerCase()}...`}
             value={currentSearch}
             onChange={(e) => {
               const newVal = e.target.value;

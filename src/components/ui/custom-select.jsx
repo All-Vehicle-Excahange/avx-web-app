@@ -23,6 +23,8 @@ export default function CustomSelect({
   variant = "default",
   disabled = false,
   readOnly = false,
+  onCreateNew = null,
+  isCreating = false,
 }) {
   const isMatch = (optValue, val) => {
     if (optValue === val) return true;
@@ -197,15 +199,51 @@ export default function CustomSelect({
                 </button>
               ))
             ) : (
-              <div
-                className={cn(
-                  "px-3 py-2 text-sm",
-                  variant === "transparent" || variant === "colored"
-                    ? "text-primary"
-                    : "text-third"
+              <div>
+                <div
+                  className={cn(
+                    "px-3 py-2 text-sm",
+                    variant === "transparent" || variant === "colored"
+                      ? "text-primary/60"
+                      : "text-third"
+                  )}
+                >
+                  No results found
+                </div>
+                {onCreateNew && search.trim() && (
+                  <button
+                    type="button"
+                    disabled={isCreating}
+                    onClick={() => {
+                      if (!isCreating) {
+                        onCreateNew(search.trim());
+                        setOpen(false);
+                      }
+                    }}
+                    className={cn(
+                      "w-full text-left px-3 py-2 text-sm font-medium border-t flex items-center gap-1.5 transition-colors",
+                      variant === "transparent" || variant === "colored"
+                        ? "border-white/10 text-emerald-400 hover:bg-white/10"
+                        : "border-third/20 text-emerald-500 hover:bg-third/10",
+                      isCreating && "opacity-60 cursor-not-allowed"
+                    )}
+                  >
+                    {isCreating ? (
+                      <>
+                        <svg className="animate-spin w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                        </svg>
+                        Creating...
+                      </>
+                    ) : (
+                      <>
+                        <span className="text-base leading-none">+</span>
+                        Create &quot;{search.trim()}&quot;
+                      </>
+                    )}
+                  </button>
                 )}
-              >
-                No results found
               </div>
             )}
           </div>

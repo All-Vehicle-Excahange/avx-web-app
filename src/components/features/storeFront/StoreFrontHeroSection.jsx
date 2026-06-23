@@ -16,10 +16,7 @@ import {
 import Button from "@/components/ui/button";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import {
-  followConsultant,
-  unFollowConsultant,
-} from "@/services/user.service";
+import { followConsultant, unFollowConsultant } from "@/services/user.service";
 import LoginPopup from "@/components/auth/LoginPopup";
 import { useAuthStore } from "@/stores/useAuthStore";
 import SignupPopup from "@/components/auth/SignupPopup";
@@ -35,7 +32,7 @@ export default function StoreFrontHeroSection() {
   const queryClient = useQueryClient();
 
   const { data: storeDetails, isLoading } = useQuery(
-    getStoreFrontByUsernameQuery(id)
+    getStoreFrontByUsernameQuery(id),
   );
 
   const [optimisticFollowState, setOptimisticFollowState] = useState(null);
@@ -66,12 +63,12 @@ export default function StoreFrontHeroSection() {
       (optimisticFollowState === null
         ? 0
         : optimisticFollowState
-        ? storeDetails?.isFollower
-          ? 0
-          : 1
-        : storeDetails?.isFollower
-        ? -1
-        : 0)
+          ? storeDetails?.isFollower
+            ? 0
+            : 1
+          : storeDetails?.isFollower
+            ? -1
+            : 0),
   );
 
   const debouncedSyncFollow = useDebouncedCallback(async (nextState) => {
@@ -111,7 +108,13 @@ export default function StoreFrontHeroSection() {
     } else {
       debouncedSyncFollow(nextState);
     }
-  }, [storeDetails?.id, isLoggedIn, isFollower, lastSyncState, debouncedSyncFollow]);
+  }, [
+    storeDetails?.id,
+    isLoggedIn,
+    isFollower,
+    lastSyncState,
+    debouncedSyncFollow,
+  ]);
 
   useEffect(() => {
     if (isLoggedIn && pendingAction.current === "follow") {
@@ -134,9 +137,7 @@ export default function StoreFrontHeroSection() {
 
   const formattedPrice =
     storeDetails.minVehiclePrice && storeDetails.maxVehiclePrice
-      ? `₹${Number(
-          storeDetails.minVehiclePrice,
-        ).toLocaleString()} - ₹${Number(
+      ? `₹${Number(storeDetails.minVehiclePrice).toLocaleString()} - ₹${Number(
           storeDetails.maxVehiclePrice,
         ).toLocaleString()}`
       : "-";
@@ -157,10 +158,13 @@ export default function StoreFrontHeroSection() {
     storeDetails?.address?.city,
     storeDetails?.address?.state,
   ].filter(Boolean);
-  const locationString = addressParts.length > 0 
-    ? addressParts.join(", ") 
-    : "Kanodar, Ahmedabad, Gujarat";
-  const directionUrl = mapUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationString)}`;
+  const locationString =
+    addressParts.length > 0
+      ? addressParts.join(", ")
+      : "Kanodar, Ahmedabad, Gujarat";
+  const directionUrl =
+    mapUrl ||
+    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationString)}`;
 
   return (
     <>
@@ -238,6 +242,7 @@ export default function StoreFrontHeroSection() {
                   <span className="text-sm">
                     {[
                       storeDetails?.address?.address,
+                      storeDetails?.address?.town,
                       storeDetails?.address?.city,
                       storeDetails?.address?.state,
                     ]
@@ -328,8 +333,8 @@ export default function StoreFrontHeroSection() {
                   <MessageCircle className="ml-2 w-4 h-4" />
                 </Button>
 
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   variant="ghost"
                   href={directionUrl}
                   target="_blank"

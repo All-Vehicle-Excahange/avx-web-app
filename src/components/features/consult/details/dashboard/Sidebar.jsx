@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   LayoutGrid,
   Store,
@@ -50,6 +50,14 @@ const menu = [
 
 export default function Sidebar({ isOpen, onClose }) {
   const router = useRouter();
+  const [isComeFromPhone, setIsComeFromPhone] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsComeFromPhone(sessionStorage.getItem("isComeFromPhone") === "true");
+  }, []);
+
+  const isStorefrontPage = router.pathname?.startsWith("/consult/dashboard/storefront");
 
   useEffect(() => {
     const initializeTier = async () => {
@@ -64,6 +72,9 @@ export default function Sidebar({ isOpen, onClose }) {
     };
     initializeTier();
   }, []);
+
+  if (isComeFromPhone && isStorefrontPage) return null;
+
   return (
     <aside
       className={`

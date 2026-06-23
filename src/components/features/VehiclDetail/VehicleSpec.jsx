@@ -33,6 +33,10 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
   const [createdInspectionId, setCreatedInspectionId] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const openLoginPopup = useAuthStore((state) => state.openLoginPopup);
+  const pendingAction = useRef(null);
+
   const { data: existingInspection, isFetching: isCheckingInspection } =
     useQuery({
       ...getInspectionByVehicleIdQuery(vehicle?.id),
@@ -115,6 +119,11 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
       toast.error("Vehicle information is not available.");
       return;
     }
+    if (!isLoggedIn) {
+      pendingAction.current = "requestInspection";
+      openLoginPopup();
+      return;
+    }
     setIsCheckingActiveInspection(true);
     try {
       const data = await queryClient.fetchQuery(
@@ -148,6 +157,13 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
       setIsCheckingActiveInspection(false);
     }
   };
+
+  useEffect(() => {
+    if (isLoggedIn && pendingAction.current === "requestInspection") {
+      pendingAction.current = null;
+      handleOpenModal();
+    }
+  }, [isLoggedIn]);
 
   const parseTime = (timeStr) => {
     if (!timeStr) return { hours: 0, minutes: 0 };
@@ -262,9 +278,11 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
         let prefillName = "";
         if (storeUser) {
           if (storeUser.firstname || storeUser.lastname) {
-            prefillName = `${storeUser.firstname || ""} ${storeUser.lastname || ""}`.trim();
+            prefillName =
+              `${storeUser.firstname || ""} ${storeUser.lastname || ""}`.trim();
           } else {
-            prefillName = storeUser.name || storeUser.fullName || storeUser.firstName || "";
+            prefillName =
+              storeUser.name || storeUser.fullName || storeUser.firstName || "";
           }
         }
         let prefillEmail = storeUser?.email || "";
@@ -286,9 +304,14 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
               if (userObj) {
                 if (!prefillName) {
                   if (userObj.firstname || userObj.lastname) {
-                    prefillName = `${userObj.firstname || ""} ${userObj.lastname || ""}`.trim();
+                    prefillName =
+                      `${userObj.firstname || ""} ${userObj.lastname || ""}`.trim();
                   } else {
-                    prefillName = userObj.name || userObj.fullName || userObj.firstName || "";
+                    prefillName =
+                      userObj.name ||
+                      userObj.fullName ||
+                      userObj.firstName ||
+                      "";
                   }
                 }
                 if (!prefillEmail) prefillEmail = userObj.email || "";

@@ -30,7 +30,7 @@ import {
   getFilterConsualt,
 } from "@/services/filter";
 import { MAKER_NAME_MAPPING } from "@/data/makers";
-import { getState, getCities } from "@/services/user.service";
+import { getState, getCities, getAllTown } from "@/services/user.service";
 import { getUserCityAndStateByLatLong } from "@/services/consult.filter.service";
 import { addClickEvent, getAddRecomandedVehicle } from "@/services/ppc.service";
 
@@ -187,6 +187,9 @@ export default function SearchWithCard({
   const [selectedCityName, setSelectedCityName] = useState(
     () => initialFilters.cityName || "",
   );
+  const [towns, setTowns] = useState([]);
+  const [selectedTownId, setSelectedTownId] = useState(null);
+  const [selectedTownName, setSelectedTownName] = useState("");
   const [selectedYear, setSelectedYear] = useState([]);
   const [years, setYears] = useState([]);
   const [yearLoading, setYearLoading] = useState(false);
@@ -265,6 +268,7 @@ export default function SearchWithCard({
 
     if (selectedCityId) payload.cityId = selectedCityId;
     if (selectedStateId) payload.stateId = selectedStateId;
+    if (selectedTownId) payload.townId = selectedTownId;
 
     if (selectedBodyType.length > 0)
       payload.vehicleSubTypes = selectedBodyType.map((b) => b.toUpperCase());
@@ -312,6 +316,7 @@ export default function SearchWithCard({
     const payload = {};
     if (selectedCityId) payload.cityId = selectedCityId;
     if (selectedStateId) payload.stateId = selectedStateId;
+    if (selectedTownId) payload.townId = selectedTownId;
     if (selectedBodyType.length > 0)
       payload.vehicleSubTypes = selectedBodyType.map((b) => b.toUpperCase());
     if (selectedBrands.length > 0)
@@ -359,6 +364,7 @@ export default function SearchWithCard({
     selectedYear,
     selectedCityId,
     selectedStateId,
+    selectedTownId,
     selectedRating,
     selectedSellerType,
     avxAssumed,
@@ -664,6 +670,32 @@ export default function SearchWithCard({
 
     fetchCities();
   }, [selectedStateId]);
+
+  useEffect(() => {
+    const fetchTowns = async () => {
+      if (!selectedCityId) {
+        setTowns([]);
+        setSelectedTownId(null);
+        setSelectedTownName("");
+        return;
+      }
+      try {
+        const res = await getAllTown(selectedCityId);
+        if (res?.data) {
+          setTowns(
+            res.data.map((t) => ({
+              label: t.name,
+              value: t.id,
+            })),
+          );
+        }
+      } catch (err) {
+        console.error("Failed to load towns:", err);
+        setTowns([]);
+      }
+    };
+    fetchTowns();
+  }, [selectedCityId]);
 
   useEffect(() => {
     // Priority 1: Read location from URL query params or initialFilters
@@ -1151,6 +1183,7 @@ export default function SearchWithCard({
     const locationParts = [];
     if (selectedCityName) locationParts.push(selectedCityName);
     if (selectedStateName) locationParts.push(selectedStateName);
+    if (selectedTownName) locationParts.push(selectedTownName);
     if (locationParts.length > 0) tags.push(locationParts.join(", "));
     if (minPrice > MIN || maxPrice < MAX)
       tags.push(
@@ -1173,6 +1206,7 @@ export default function SearchWithCard({
     selectedYear,
     selectedCityName,
     selectedStateName,
+    selectedTownName,
     minPrice,
     maxPrice,
     kmDistance,
@@ -1224,11 +1258,14 @@ export default function SearchWithCard({
     setBrandHasMore(true);
     setModelHasMore(true);
 
-    // Reset state & city
+    // Reset state, city & town
     setSelectedStateId(null);
     setSelectedStateName("");
     setSelectedCityId(null);
     setSelectedCityName("");
+    setSelectedTownId(null);
+    setSelectedTownName("");
+    setTowns([]);
 
     setStateSearch("");
     setCitySearch("");
@@ -1366,6 +1403,25 @@ export default function SearchWithCard({
                     const c = cities.find((ct) => ct.value === val);
                     setSelectedCityId(val);
                     setSelectedCityName(c ? c.label : "");
+                  }}
+                />
+              </div>
+
+              {/* ---------- TOWN DROPDOWN ---------- */}
+              <div className="relative">
+                <label className="text-xs text-third block mb-1">Town</label>
+                <CustomSelect
+                  value={selectedTownId}
+                  options={towns}
+                  placeholder={
+                    selectedCityId ? "Select Town" : "Select city first"
+                  }
+                  variant="transparent"
+                  disabled={!selectedCityId}
+                  onChange={(val) => {
+                    const t = towns.find((tn) => tn.value === val);
+                    setSelectedTownId(val);
+                    setSelectedTownName(t ? t.label : "");
                   }}
                 />
               </div>

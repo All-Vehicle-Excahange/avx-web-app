@@ -134,7 +134,7 @@ export default function VehicleCard({
         : data.userName,
 
     location: data.address
-      ? `${data.address.city ?? ""}${data.address.city && data.address.country ? ", " : ""}${data.address.country ?? ""}`.trim()
+      ? `${data.address.town ?? ""} ${" "}  ${data.address.city ?? ""}${data.address.city && data.address.country ? ", " : ""}${data.address.country ?? ""}`.trim()
       : data.location || "-",
 
     price: data.price ? Number(data.price).toLocaleString("en-IN") : data.price,
@@ -252,7 +252,7 @@ export default function VehicleCard({
             {/* TITLE + HEART */}
             <div className="flex justify-between items-start gap-2">
               <div className="min-w-0 flex-1">
-                <div className="flex items-start justify-between gap-2 min-h-[40px] md:min-h-[56px]">
+                <div className="flex items-start justify-between gap-2 min-h-10 md:min-h-14">
                   <h3
                     className="
       text-sm font-secondary md:text-xl font-bold 

@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import Button from "@/components/ui/button";
@@ -10,7 +8,12 @@ function CloseInqPopup({ onClose, onConfirm, loading = false }) {
   const [comment, setComment] = useState("");
   const [isClosing, setIsClosing] = useState(false);
 
-  const closeReasons = ["Price mismatch", "Not reachable", "Timing issue", "Other"];
+  const closeReasons = [
+    "Price mismatch",
+    "Not reachable",
+    "Timing issue",
+    "Other",
+  ];
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -36,7 +39,7 @@ function CloseInqPopup({ onClose, onConfirm, loading = false }) {
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
       onClick={triggerClose}
       style={{
         animation: isClosing
@@ -106,14 +109,18 @@ function CloseInqPopup({ onClose, onConfirm, loading = false }) {
         {/* ✅ Buttons */}
         <div className="flex justify-end gap-3 pt-3">
           {/* Cancel */}
-          <Button showIcon={false} variant="outlineSecondary" onClick={triggerClose}>
+          <Button
+            showIcon={false}
+            variant="outlineSecondary"
+            onClick={triggerClose}
+          >
             Cancel
           </Button>
 
           {/* Close Inquiry */}
-          <Button 
-            showIcon={false} 
-            variant="ghost" 
+          <Button
+            showIcon={false}
+            variant="ghost"
             onClick={handleSubmit}
             loading={loading}
             locked={!reason || (reason === "Other" && !comment.trim())}

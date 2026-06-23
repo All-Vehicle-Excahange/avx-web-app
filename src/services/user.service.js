@@ -41,6 +41,8 @@ const ENDPOINT = {
   getUserProfileStrength: "/users/profile/strength",
   getUserPreference: "/users/preference",
   updatePreference: "/users/preference",
+  getAllTown: "/util/address/town",
+  addNewTown: "/util/address/town",
 };
 
 export const getUserHomeFeed = async (data) => {
@@ -524,6 +526,24 @@ export const getUserPreference = async () => {
 export const updatePreference = async (payload) => {
   try {
     const res = await axiosInstance.put(ENDPOINT.updatePreference, payload);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllTown = async (cityId) => {
+  try {
+    const res = await axiosInstance.get(`${ENDPOINT.getAllTown}/${cityId}`);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addNewTown = async (payload) => {
+  try {
+    const res = await axiosInstance.post(ENDPOINT.addNewTown, payload);
     return handleResponse(res);
   } catch (error) {
     throw error;

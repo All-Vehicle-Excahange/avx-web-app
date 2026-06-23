@@ -9,6 +9,7 @@ import { generateVehicleSlug } from "@/lib/helper";
 
 export default function MyInquiryCard({ inquiry, onStatusChange }) {
   const [showClosePopup, setShowClosePopup] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   if (!inquiry) {
     return (
@@ -23,12 +24,13 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
     inquiryStatus,
     createdAt,
     isInspected,
+    inquiryCloseReason,
   } = inquiry;
 
   const isPending = inquiryStatus === "PENDING";
   const isApproved = inquiryStatus === "APPROVED";
   const isRejected = inquiryStatus === "REJECTED";
-  const isClosed = inquiryStatus === "CLOSED_BY_INQUIRER";
+  const isClosed = inquiryStatus?.startsWith("CLOSED");
 
   const vehicleTitle = `${inquiryVehicleResponse.makerName} ${inquiryVehicleResponse.modelName
     } ${inquiryVehicleResponse.variantName} - ${inquiryVehicleResponse.yearOfMfg
@@ -39,9 +41,17 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
     "https://images.pexels.com/photos/831475/pexels-photo-831475.jpeg";
 
   // ✅ Handlers
-  const handleClose = async () => {
-    await closeInquiry(inquiry.id);
-    onStatusChange(inquiry.id, "CLOSED_BY_INQUIRER");
+  const handleClose = async (reason) => {
+    if (loading) return;
+    try {
+      setLoading(true);
+      await closeInquiry(inquiry.id, reason);
+      onStatusChange(inquiry.id, "CLOSED_BY_INQUIRER");
+    } catch (error) {
+      console.error("Close error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // ✅ Date Formatting
@@ -113,8 +123,7 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
           {/* ✅ Closed Reason */}
           {isClosed && (
             <p className="text-xs flex items-center gap-2 text-third pt-1">
-              <span className="text-primary font-semibold">Reason:</span>
-              Closed by you
+              <span className="text-primary font-semibold">Reason: {inquiryCloseReason || "Closed by you"}</span>
             </p>
           )}
 
@@ -174,9 +183,11 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
       {/* ✅ Close Popup */}
       {showClosePopup && (
         <CloseInqPopup
+          loading={loading}
           onClose={() => setShowClosePopup(false)}
-          onConfirm={() => {
-            handleClose();
+          onConfirm={async ({ reason, comment }) => {
+            const closeReason = reason === "Other" ? comment : reason;
+            await handleClose(closeReason);
             setShowClosePopup(false);
           }}
         />

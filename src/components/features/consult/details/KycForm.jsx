@@ -279,6 +279,9 @@ export default function KycForm() {
         if (a?.mapUrl) {
           payload.mapUrl = a.mapUrl;
         }
+        if (a?.townId) {
+          payload.townId = a.townId;
+        }
 
         if (existing.address) {
           if (!changed.address) {
@@ -345,7 +348,6 @@ export default function KycForm() {
         }
 
         if (existing.kyc) {
-
           if (!changed.kyc) {
             if (existing.business?.isSubmitted === false) setShowPreview(true);
             setStep(4);
@@ -354,9 +356,12 @@ export default function KycForm() {
 
           // Build clean FormData for KYC
           const payload = new FormData();
-          if (k.gstNumber?.trim()) payload.append("gstNumber", k.gstNumber.trim());
-          if (k.panNumber?.trim()) payload.append("panCardNumber", k.panNumber.trim());
-          if (k.aadharNumber?.trim()) payload.append("aadharCardNumber", k.aadharNumber.trim());
+          if (k.gstNumber?.trim())
+            payload.append("gstNumber", k.gstNumber.trim());
+          if (k.panNumber?.trim())
+            payload.append("panCardNumber", k.panNumber.trim());
+          if (k.aadharNumber?.trim())
+            payload.append("aadharCardNumber", k.aadharNumber.trim());
           if (k.gstPhoto instanceof File)
             payload.append("gstCertificateImage", k.gstPhoto);
           if (k.panPhoto instanceof File)
@@ -384,9 +389,12 @@ export default function KycForm() {
         }
 
         const payload = new FormData();
-        if (k.gstNumber?.trim()) payload.append("gstNumber", k.gstNumber.trim());
-        if (k.panNumber?.trim()) payload.append("panCardNumber", k.panNumber.trim());
-        if (k.aadharNumber?.trim()) payload.append("aadharCardNumber", k.aadharNumber.trim());
+        if (k.gstNumber?.trim())
+          payload.append("gstNumber", k.gstNumber.trim());
+        if (k.panNumber?.trim())
+          payload.append("panCardNumber", k.panNumber.trim());
+        if (k.aadharNumber?.trim())
+          payload.append("aadharCardNumber", k.aadharNumber.trim());
         if (k.gstPhoto instanceof File)
           payload.append("gstCertificateImage", k.gstPhoto);
         if (k.panPhoto instanceof File)
@@ -459,7 +467,13 @@ export default function KycForm() {
           <div className="hidden lg:flex w-[30%] sticky top-[66px] h-[calc(100vh-66px)] flex-col justify-between text-white overflow-hidden border-r border-white/5">
             {/* Background Image Setup */}
             <div className="absolute inset-0 z-0">
-              <Image src="/homeBanner.jpg" alt="Partner Program" width={800} height={500} className="w-full h-full object-cover object-center" />
+              <Image
+                src="/homeBanner.jpg"
+                alt="Partner Program"
+                width={800}
+                height={500}
+                className="w-full h-full object-cover object-center"
+              />
               {/* Dark Overlay for text readability */}
               <div className="absolute inset-0 bg-black/75 backdrop-blur-[2px]" />
             </div>
@@ -501,7 +515,9 @@ export default function KycForm() {
                           ></path>
                         </svg>
                       </div>
-                      <span className="text-xs font-medium text-white/85">{text}</span>
+                      <span className="text-xs font-medium text-white/85">
+                        {text}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -510,12 +526,27 @@ export default function KycForm() {
               {/* Bottom: Vertical Stepper Progress */}
               <div className="flex flex-col gap-10 border-t border-white/10 pt-6">
                 {[
-                  { num: 1, label: "Business Details", desc: "Company name, logo & email" },
+                  {
+                    num: 1,
+                    label: "Business Details",
+                    desc: "Company name, logo & email",
+                  },
                   { num: 2, label: "Address Info", desc: "Operating location" },
-                  { num: 3, label: "KYC Documents", desc: "Pan card, GST, Aadhaar" },
-                  { num: 4, label: "Verification Status", desc: "Account activation status" },
+                  {
+                    num: 3,
+                    label: "KYC Documents",
+                    desc: "Pan card, GST, Aadhaar",
+                  },
+                  {
+                    num: 4,
+                    label: "Verification Status",
+                    desc: "Account activation status",
+                  },
                 ].map((item, i, arr) => (
-                  <div key={item.num} className="flex items-start gap-3 relative">
+                  <div
+                    key={item.num}
+                    className="flex items-start gap-3 relative"
+                  >
                     {/* Vertical line connecting steps */}
                     {i < arr.length - 1 && (
                       <div className="absolute left-[15px] top-8 bottom-[-40px] w-[2px] bg-white/10">
