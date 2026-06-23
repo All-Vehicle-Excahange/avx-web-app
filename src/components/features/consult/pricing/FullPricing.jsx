@@ -12,11 +12,12 @@ import {
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { getAllTier } from "@/services/user.service";
+import { getSellerTier } from "@/services/Seller.service";
 import PricingHero from "./PricingHero";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useQuery } from "@tanstack/react-query";
 import { getSellerTierQuery } from "@/queries/Seller.queries";
-import { upgradeSubscription } from "@/services/subscription.service";
+import { upgradeSubscription, createSubscription } from "@/services/subscription.service";
 
 const staticTierDetails = {
   BASIC: {
@@ -87,6 +88,34 @@ export default function FullPricing() {
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [upgradingTierId, setUpgradingTierId] = useState(null);
 
+  const { user, isLoggedIn } = useAuthStore();
+  let userRole = user?.userRole || user?.role;
+  if (!userRole && typeof window !== "undefined") {
+    try {
+      const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
+      userRole = savedUser?.userRole || savedUser?.role;
+    } catch (e) {}
+  }
+
+  const { data: sellerTierData, error: tierError } = useQuery({
+    ...getSellerTierQuery(),
+    enabled: !!isLoggedIn,
+  });
+
+  const isTier404 = tierError?.response?.status === 404 || tierError?.status === 404;
+
+  const currentTier = isLoggedIn
+    ? (sellerTierData?.tierTitle || user?.sellerTier || (typeof window !== "undefined" ? localStorage.getItem("sellerTier") : null) || "").toUpperCase()
+    : "";
+
+  useEffect(() => {
+    console.log("FullPricing Debug Nav:", { userRole, currentTier, sellerTierData });
+    if (userRole?.includes("CONSULTANT_APPLICANT") && currentTier) {
+      console.log("FullPricing Debug: Executing redirect to /consult/kyc");
+      router.push("/consult/kyc");
+    }
+  }, [userRole, currentTier, router, sellerTierData]);
+
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
       if (window.Razorpay) {
@@ -106,6 +135,17 @@ export default function FullPricing() {
       router.push("/consult/subscription");
       return;
     }
+
+    const currentKey = (tier.title || "").toUpperCase();
+    if (currentTier === currentKey) {
+      if (userRole?.includes("CONSULTANT_APPLICANT")) {
+        router.push("/consult/kyc");
+      } else {
+        router.push("/consult/dashboard");
+      }
+      return;
+    }
+
     if (!tier?.id) return;
 
     try {
@@ -118,11 +158,23 @@ export default function FullPricing() {
         return;
       }
 
-      // Call upgradeSubscription in the backend
-      const response = await upgradeSubscription({
+      let is404 = isTier404;
+      try {
+        await getSellerTier();
+      } catch (err) {
+        if (err?.response?.status === 404 || err?.status === 404) {
+          is404 = true;
+        }
+      }
+
+      const payload = {
         planId: tier.id,
         billingCycle: yearly ? "YEARLY" : "MONTHLY",
-      });
+      };
+
+      const response = is404 
+        ? await createSubscription(payload) 
+        : await upgradeSubscription(payload);
 
       if (!response.success) {
         throw new Error(
@@ -207,11 +259,12 @@ export default function FullPricing() {
           contact: prefillContact,
         },
         handler: async function (paymentResponse) {
-          alert("Subscription upgraded successfully!");
           if (router.query?.redirect) {
             router.push(router.query.redirect);
+          } else if (userRole?.includes("CONSULTANT_APPLICANT")) {
+            router.push("/consult/kyc");
           } else {
-            router.push("/consult/dashboard/billing");
+            router.push("/consult/dashboard");
           }
         },
         theme: {
@@ -233,15 +286,8 @@ export default function FullPricing() {
     }
   };
 
-  const { user, isLoggedIn } = useAuthStore();
-  const { data: sellerTierData } = useQuery({
-    ...getSellerTierQuery(),
-    enabled: !!isLoggedIn,
-  });
 
-  const currentTier = isLoggedIn
-    ? (sellerTierData?.tierTitle || user?.sellerTier || (typeof window !== "undefined" ? localStorage.getItem("sellerTier") : null) || "").toUpperCase()
-    : "";
+
 
   useEffect(() => {
     const fetchTiers = async () => {
@@ -367,6 +413,21 @@ export default function FullPricing() {
                     return descVal ? `${titleVal} (${descVal})` : titleVal;
                   });
 
+                  const isButtonDisabled = (isTierDisabled && !isCurrentTier) || (paymentLoading && upgradingTierId === tier.id);
+
+                  let buttonText = staticDetails.cta;
+                  if (paymentLoading && upgradingTierId === tier.id) {
+                    buttonText = "Processing...";
+                  } else if (isCurrentTier) {
+                    if (userRole?.includes("CONSULTANT_APPLICANT")) {
+                      buttonText = "Complete KYC";
+                    } else {
+                      buttonText = "Go to Dashboard";
+                    }
+                  } else if (isTierDisabled) {
+                    buttonText = "Unavailable";
+                  }
+
                   return (
                     <motion.div
                       key={i}
@@ -397,6 +458,12 @@ export default function FullPricing() {
                       {staticDetails.highlight && (
                         <div className="text-white text-[10px] font-bold tracking-[0.2em] uppercase text-center py-2.5 bg-white/15 backdrop-blur-sm">
                           Recommended
+                        </div>
+                      )}
+
+                      {isCurrentTier && (
+                        <div className="absolute top-10 right-4 bg-green-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm z-10">
+                          Active
                         </div>
                       )}
 
@@ -506,38 +573,32 @@ export default function FullPricing() {
 
                         {/* BUTTON */}
                         <button
-                          disabled={isTierDisabled || isCurrentTier || paymentLoading}
+                          disabled={isButtonDisabled}
                           onClick={() => handleUpgrade(tier)}
                           className={`w-full py-3 rounded-full text-[14px] font-semibold transition-all duration-300 mt-8 ${
-                            isTierDisabled || isCurrentTier || paymentLoading
+                            isButtonDisabled
                               ? "opacity-50 cursor-not-allowed pointer-events-none"
-                              : "hover:cursor-pointer"
+                              : "hover:cursor-pointer hover:opacity-90"
                           }`}
                           style={{
-                            background: isTierDisabled || isCurrentTier || (paymentLoading && upgradingTierId === tier.id)
+                            background: isButtonDisabled
                               ? "#4b5563"
                               : staticDetails.highlight
                               ? "#fff"
                               : "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)",
-                            color: isTierDisabled || isCurrentTier || (paymentLoading && upgradingTierId === tier.id)
+                            color: isButtonDisabled
                               ? "#9ca3af"
                               : staticDetails.highlight
                               ? "#1f1f1f"
                               : "#fff",
-                            boxShadow: isTierDisabled || isCurrentTier || (paymentLoading && upgradingTierId === tier.id)
+                            boxShadow: isButtonDisabled
                               ? "none"
                               : staticDetails.highlight
                               ? "0 6px 20px rgba(255,255,255,0.2)"
                               : "0 6px 20px rgba(0,0,0,0.25)",
                           }}
                         >
-                          {paymentLoading && upgradingTierId === tier.id
-                            ? "Processing..."
-                            : isCurrentTier
-                            ? "Current Plan"
-                            : isTierDisabled
-                            ? "Unavailable"
-                            : staticDetails.cta}
+                          {buttonText}
                         </button>
                       </div>
                     </motion.div>
