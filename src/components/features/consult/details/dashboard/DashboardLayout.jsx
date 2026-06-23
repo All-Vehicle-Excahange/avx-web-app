@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "@/components/layout/Navbar";
 import { LayoutDashboard } from "lucide-react";
@@ -13,8 +13,17 @@ import getIsAccountSuspendedQuery from "@/queries/consualt.queries";
 
 export default function DashboardLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isComeFromPhone, setIsComeFromPhone] = useState(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsComeFromPhone(sessionStorage.getItem("isComeFromPhone") === "true");
+  }, []);
+
+  const isStorefrontPage = router.pathname?.startsWith("/consult/dashboard/storefront");
+  const hideHeaders = isComeFromPhone && isStorefrontPage;
 
   // REACT QUERY
   const { data, isPending, error } = useQuery(
@@ -55,22 +64,24 @@ export default function DashboardLayout({ children }) {
 
         <Navbar heroMode scrolled={true} />
 
-        <div className="h-screen pt-16 flex flex-col md:flex-row text-primary relative overflow-hidden">
+        <div className={`h-screen flex flex-col md:flex-row text-primary relative overflow-hidden ${hideHeaders ? '' : 'pt-16'}`}>
           {/* MOBILE HEADER */}
-          <div className="md:hidden z-20 flex items-center justify-between p-4 border-b border-third/30 bg-[#2B2A2A] relative">
-            <span className="font-bold">
-              Dashboard Menu
-            </span>
+          {!hideHeaders && (
+            <div className="md:hidden z-20 flex items-center justify-between p-4 border-b border-third/30 bg-[#2B2A2A] relative">
+              <span className="font-bold">
+                Dashboard Menu
+              </span>
 
-            <button
-              onClick={() =>
-                setIsSidebarOpen(!isSidebarOpen)
-              }
-              className="p-2 hover:bg-primary/10 rounded-lg transition-colors"
-            >
-              <LayoutDashboard className="w-6 h-6" />
-            </button>
-          </div>
+              <button
+                onClick={() =>
+                  setIsSidebarOpen(!isSidebarOpen)
+                }
+                className="p-2 hover:bg-primary/10 rounded-lg transition-colors"
+              >
+                <LayoutDashboard className="w-6 h-6" />
+              </button>
+            </div>
+          )}
 
           {/* SIDEBAR */}
           <Sidebar

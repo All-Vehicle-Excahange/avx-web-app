@@ -403,6 +403,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
 
   /* ================= PHONE APP MODE ================= */
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsComeFromPhone(sessionStorage.getItem("isComeFromPhone") === "true");
   }, []);
 

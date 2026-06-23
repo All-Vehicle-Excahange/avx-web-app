@@ -53,6 +53,7 @@ export default function Sidebar({ isOpen, onClose }) {
   const [isComeFromPhone, setIsComeFromPhone] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsComeFromPhone(sessionStorage.getItem("isComeFromPhone") === "true");
   }, []);
 
