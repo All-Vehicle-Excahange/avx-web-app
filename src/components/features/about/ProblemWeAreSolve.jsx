@@ -45,13 +45,12 @@ const ProblemWeAreSolve = () => {
           </div>
         </div>
 
-        {/* Content Blocks */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Card 1 */}
-          <div className="group p-10  rounded-xl border-2 border-third/10 transition-all duration-300  hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
-            <div className="text-third text-sm tracking-widest mb-6 opacity-70 group-hover:text-fourth transition-colors">
+          <div className="group relative overflow-hidden p-10 rounded-xl border border-white/10 bg-white/1 transition-all duration-300 ">
+            <span className="pointer-events-none absolute top-4 right-6 text-6xl md:text-7xl font-bold font-primary text-white/3 transition-all duration-300 select-none">
               01
-            </div>
+            </span>
 
             <h3 className="text-3xl md:text-4xl font-bold mb-3 text-primary">
               ₹1.5T+
@@ -63,12 +62,12 @@ const ProblemWeAreSolve = () => {
           </div>
 
           {/* Card 2 */}
-          <div className="group p-10  rounded-xl border-2 border-third/10 transition-all duration-300  hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
-            <div className="text-third text-sm tracking-widest mb-6 opacity-70  transition-colors">
+          <div className="group relative overflow-hidden p-10 rounded-xl border border-white/10 bg-white/1 transition-all duration-300 ">
+            <span className="pointer-events-none absolute top-4 right-6 text-6xl md:text-7xl font-bold font-primary text-white/3 transition-all duration-300 select-none">
               02
-            </div>
+            </span>
 
-            <h3 className="text-3xl md:text-4xl font-bold mb-3 text-primary  transition-colors">
+            <h3 className="text-3xl md:text-4xl font-bold mb-3 text-primary transition-colors">
               Fragmented
             </h3>
 
@@ -78,12 +77,12 @@ const ProblemWeAreSolve = () => {
           </div>
 
           {/* Card 3 */}
-          <div className="group p-10  rounded-xl border-2 border-third/10 transition-all duration-300  hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
-            <div className="text-third text-sm tracking-widest mb-6 opacity-70  transition-colors">
+          <div className="group relative overflow-hidden p-10 rounded-xl border border-white/10 bg-white/1 transition-all duration-300">
+            <span className="pointer-events-none absolute top-4 right-6 text-6xl md:text-7xl font-bold font-primary text-white/3 transition-all duration-300 select-none">
               03
-            </div>
+            </span>
 
-            <h3 className="text-3xl md:text-4xl font-bold mb-3 text-primary  transition-colors">
+            <h3 className="text-3xl md:text-4xl font-bold mb-3 text-primary transition-colors">
               Low trust
             </h3>
 

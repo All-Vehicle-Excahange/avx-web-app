@@ -95,10 +95,7 @@ const HowAvxWorks = () => {
                     {step.icon}
                   </div>
 
-                  <span className="text-sm text-fourth/80 tracking-[0.25em] uppercase font-semibold">
-                    {step.tag}
-                  </span>
-
+                 
                   <h3 className="text-2xl font-semibold mt-2 mb-3">
                     {step.title}
                   </h3>
@@ -118,7 +115,7 @@ const HowAvxWorks = () => {
               </div>
 
               <span
-                className={`absolute bottom-19 right-6 text-6xl font-bold text-fourth/30 pointer-events-none transition-opacity duration-300 
+                className={`absolute top-4 right-6 text-6xl font-bold text-primary/20 pointer-events-none transition-opacity duration-300 
                 ${activeStep === index ? "opacity-100" : "opacity-0"}`}
               >
                 0{index + 1}

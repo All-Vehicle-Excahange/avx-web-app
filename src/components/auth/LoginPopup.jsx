@@ -133,8 +133,13 @@ function LoginPopup({
         setTimeout(() => otpRefs.current[0]?.focus(), 200);
       }
     } catch (err) {
+      const status = err?.response?.status;
       const api = err?.response?.data;
-      const msg = api?.message || "Failed to send OTP";
+      let msg = api?.message || "Failed to send OTP";
+
+      if (status === 404) {
+        msg = "This number isn't registered. Create your account.";
+      }
 
       if (
         msg.toLowerCase().includes("blocked") ||
@@ -273,6 +278,9 @@ function LoginPopup({
               <input
                 maxLength={10}
                 placeholder="9999999999"
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/\D/g, "");
+                }}
                 {...register("phoneNumber", {
                   required: "Mobile number is required",
                   minLength: {

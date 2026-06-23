@@ -391,6 +391,9 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
               <input
                 maxLength={10}
                 placeholder="9999999999"
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/\D/g, "");
+                }}
                 {...register("phone", { required: "Phone is required" })}
                 className="w-full text-primary border py-3 px-2 outline-none bg-transparent"
               />

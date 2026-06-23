@@ -1,14 +1,18 @@
-import Subscription from "@/components/features/consult/details/Subscription";
-import Navbar from "@/components/layout/Navbar";
-import React from "react";
+// import Subscription from "@/components/features/consult/details/Subscription";
+// import Navbar from "@/components/layout/Navbar";
+// import React from "react";
 
-function index() {
-  return (
-    <>
-      <Navbar />
-      <Subscription />
-    </>
-  );
-}
+// function index() {
+//   return (
+//     <>
+//       <Navbar />
+//       <Subscription />
+//     </>
+//   );
+// }
 
-export default index;
+// export default index;
+
+import PricingPage from "../pricing/index";
+
+export default PricingPage;
