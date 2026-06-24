@@ -84,14 +84,14 @@ export default function VehicleOverview({ vehicle }) {
             <div className="relative">
               <Item
                 icon={<Gauge />}
-                label="KM driven"
+                label={
+                  <span className="flex items-center gap-2">
+                    KM driven
+                    <Info size={14} className="text-third hover:text-primary cursor-pointer" />
+                  </span>
+                }
                 value={vehicle?.kmDriven ? `${vehicle.kmDriven.toLocaleString("en-IN")} km` : "-"}
               />
-
-              {/* Info Icon */}
-              <div className="absolute top-1 right-2 text-muted-foreground hover:text-primary cursor-pointer">
-                <Info size={14} />
-              </div>
             </div>
 
             {/* Hover Image Preview (Only if image provided) */}

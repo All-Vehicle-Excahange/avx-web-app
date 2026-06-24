@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import UserVehicleCard from "./UserVehicleCard";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import DetailsFromPopup from "../userSeller/DetailsFromPopup";
@@ -30,6 +30,8 @@ function MyVehicle() {
   ];
 
   const isSuspendedTab = activeType === "suspended";
+
+  const [totalPosted, setTotalPosted] = useState(0);
 
   // Suspended tab infinite query
   const {
@@ -65,6 +67,18 @@ function MyVehicle() {
     }),
     enabled: !isSuspendedTab,
   });
+
+  useEffect(() => {
+    if (activeType === "all" && inventoryData?.pages?.[0]) {
+      const page = inventoryData.pages[0];
+      const total = page.pagination?.totalElements 
+                 || page.pageResponse?.totalElements 
+                 || page.totalElements 
+                 || (page.data && page.data.length)
+                 || 0;
+      setTotalPosted(total);
+    }
+  }, [activeType, inventoryData]);
 
   const vehicles = isSuspendedTab
     ? suspendedData?.pages?.flatMap((page) => page?.data || []) || []
@@ -126,6 +140,28 @@ function MyVehicle() {
             </p>
           </div>
         )} */}
+
+      {/* SELLER LIMIT PROGRESS BAR */}
+      {user?.userRole === "USER_SELLER" && (
+        <div className="bg-secondary/40 border border-third/20 rounded-2xl p-5 mb-4 shadow-sm">
+          <div className="flex justify-between items-end mb-3">
+            <div>
+              <h3 className="text-lg font-bold text-primary">Vehicle Listing Limit</h3>
+              <p className="text-third text-sm mt-0.5">You can post up to 3 vehicles as a normal seller.</p>
+            </div>
+            <div className="text-right">
+              <span className="text-2xl font-black text-fourth">{totalPosted}</span>
+              <span className="text-third font-medium"> / 3</span>
+            </div>
+          </div>
+          <div className="w-full bg-third/10 h-3 rounded-full overflow-hidden">
+            <div 
+              className="bg-fourth h-full rounded-full transition-all duration-500"
+              style={{ width: `${(Math.min(totalPosted, 3) / 3) * 100}%` }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* FILTER TABS */}
       {!isLoading && !(activeType === "all" && mappedVehicles.length === 0) && (

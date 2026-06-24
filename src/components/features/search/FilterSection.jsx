@@ -1,7 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
-export default function FilterSection({ title, defaultOpen = false, children }) {
+export default function FilterSection({ title, defaultOpen = false, selectedCount = 0, children }) {
   const [open, setOpen] = useState(defaultOpen);
 
   return (
@@ -14,10 +14,17 @@ export default function FilterSection({ title, defaultOpen = false, children }) 
       >
         <h3 className="text-sm font-semibold text-primary">{title}</h3>
 
-        <ChevronDown
-          className={`h-4 w-4 text-primary transition-transform ${open ? "rotate-180" : ""
-            }`}
-        />
+        <div className="flex items-center gap-2">
+          {selectedCount > 0 && (
+            <span className="flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-primary text-secondary text-[10px] font-bold leading-none">
+              {selectedCount}
+            </span>
+          )}
+          <ChevronDown
+            className={`h-4 w-4 text-primary transition-transform ${open ? "rotate-180" : ""
+              }`}
+          />
+        </div>
       </button>
 
       {/* CONTENT */}

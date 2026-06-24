@@ -833,7 +833,7 @@ export default function FilterWithCard({
   ]);
 
   return (
-    <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-[20px] gap-4">
+    <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-5 gap-4">
       {/* ================= DESKTOP SIDEBAR ================= */}
       <aside
         className="
@@ -940,7 +940,7 @@ export default function FilterWithCard({
           </div>
 
           <div className="space-y-4">
-            <FilterSection title={"Distance"}>
+            <FilterSection title={"Distance"} selectedCount={selectedDistance.length}>
               <ChipGroup
                 title=""
                 items={distances}
@@ -950,7 +950,7 @@ export default function FilterWithCard({
               />
             </FilterSection>
 
-            <FilterSection title="Inventory Size">
+            <FilterSection title="Inventory Size" selectedCount={selectedInventory.length}>
               <ChipGroup
                 title=""
                 items={inventorySizes}
@@ -960,7 +960,7 @@ export default function FilterWithCard({
               />
             </FilterSection>
 
-            <FilterSection title="Vehicle Type">
+            <FilterSection title="Vehicle Type" selectedCount={selectedVehicleTypes.length}>
               <ChipGroup
                 title=""
                 items={vehicleTypes}
@@ -969,7 +969,7 @@ export default function FilterWithCard({
               />
             </FilterSection>
 
-            <FilterSection title="Rating">
+            <FilterSection title="Rating" selectedCount={selectedRating.length}>
               <ChipGroup
                 title=""
                 items={ratings}
@@ -979,7 +979,7 @@ export default function FilterWithCard({
               />
             </FilterSection>
 
-            <FilterSection title={"Services Provided"}>
+            <FilterSection title={"Services Provided"} selectedCount={selectedServices.length}>
               <ChipGroup
                 title=""
                 items={services}
@@ -1152,7 +1152,7 @@ export default function FilterWithCard({
 
       {/* ================= MOBILE FILTER DRAWER ================= */}
       <div
-        className={`fixed top-[64px] inset-x-0 bottom-0 z-100 bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${
+        className={`fixed top-16 inset-x-0 bottom-0 z-100 bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${
           mobileFilterOpen ? "translate-y-0" : "translate-y-full"
         }`}
       >
@@ -1174,24 +1174,29 @@ export default function FilterWithCard({
           {/* ── Left Tabs ── */}
           <div className="w-[40%] border-r border-third/40 overflow-y-auto">
             {[
-              "Location",
-              "Vehicle Type",
-              "Distance",
-              "Inventory Size",
-              "Rating",
-              "Services",
-              "Price Range",
+              { name: "Location", count: selectedStateId ? (selectedCityId ? 2 : 1) : 0 },
+              { name: "Vehicle Type", count: selectedVehicleTypes.length },
+              { name: "Distance", count: selectedDistance.length },
+              { name: "Inventory Size", count: selectedInventory.length },
+              { name: "Rating", count: selectedRating.length },
+              { name: "Services", count: selectedServices.length },
+              { name: "Price Range", count: 0 },
             ].map((tab) => (
               <div
-                key={tab}
-                onClick={() => setActiveFilterTab(tab)}
-                className={`px-4 py-3 cursor-pointer text-sm ${
-                  activeFilterTab === tab
+                key={tab.name}
+                onClick={() => setActiveFilterTab(tab.name)}
+                className={`px-4 py-3 cursor-pointer text-sm flex items-center justify-between ${
+                  activeFilterTab === tab.name
                     ? "bg-secondary/10 font-semibold"
                     : "hover:bg-secondary/5"
                 }`}
               >
-                {tab}
+                <span>{tab.name}</span>
+                {tab.count > 0 && (
+                  <span className="flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-primary text-secondary text-[10px] font-bold leading-none">
+                    {tab.count}
+                  </span>
+                )}
               </div>
             ))}
           </div>

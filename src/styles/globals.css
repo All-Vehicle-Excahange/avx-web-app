@@ -504,6 +504,15 @@ html {
   border-radius: 8px !important;
 }
 
+.react-datepicker__day--disabled {
+  color: rgba(255, 255, 255, 0.25) !important;
+  cursor: not-allowed !important;
+}
+
+.react-datepicker__day--disabled:hover {
+  background-color: transparent !important;
+}
+
 .react-datepicker__time-container {
   border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
   background-color: var(--color-secondary) !important;
@@ -524,6 +533,17 @@ html {
 
 .react-datepicker__navigation-icon::before {
   border-color: var(--color-primary) !important;
+}
+
+/* ===== SWIPER CUSTOM STYLES ===== */
+.auth-swiper .swiper-pagination-bullet {
+  background-color: white !important;
+  opacity: 0.5;
+}
+
+.auth-swiper .swiper-pagination-bullet-active {
+  background-color: var(--color-fourth) !important;
+  opacity: 1;
 }
 
 /* ===== SKELETON SHIMMER ANIMATION ===== */
