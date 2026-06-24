@@ -5,7 +5,6 @@ import Button from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { getVehiclesByTagQuery } from "@/queries/user.queries";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
-import { useDebounceValue } from "@/hooks/useDebounce";
 
 const cn = (...classes) => classes.filter(Boolean).join(" ");
 
@@ -56,33 +55,20 @@ const CategoriesSections = () => {
   const [active, setActive] = useState("urban-rides");
   const checkedCategories = React.useRef(new Set());
 
-  const debouncedType = useDebounceValue(activeType, 400);
-  const debouncedActive = useDebounceValue(active, 400);
-
-  const selectedTag = vehicleTagMap[debouncedType]?.[debouncedActive];
+  const selectedTag = vehicleTagMap[activeType]?.[active];
   const queryPayload = {
     pageNo: 1,
     size: 4,
     vehicleTag: selectedTag,
   };
 
-  const { data: vehicles = [], isFetching } = useQuery(
-    getVehiclesByTagQuery(debouncedType, queryPayload)
+  const { data: vehicles = [], isLoading } = useQuery(
+    getVehiclesByTagQuery(activeType, queryPayload)
   );
-
-  const showSkeleton =
-    isFetching ||
-    active !== debouncedActive ||
-    activeType !== debouncedType;
 
   // Auto-play / switch to next category if currently loaded category is empty
   useEffect(() => {
-    // Only run the auto-play logic when the query results match the active category and fetching has completed
-    if (active !== debouncedActive || activeType !== debouncedType) {
-      return;
-    }
-
-    if (!isFetching && vehicles.length === 0 && selectedTag) {
+    if (!isLoading && vehicles.length === 0 && selectedTag) {
       checkedCategories.current.add(selectedTag);
 
       // Find next category based on the category that just completed
@@ -103,11 +89,9 @@ const CategoriesSections = () => {
     }
   }, [
     vehicles,
-    isFetching,
+    isLoading,
     active,
-    debouncedActive,
     activeType,
-    debouncedType,
     selectedTag,
   ]);
 
@@ -201,7 +185,7 @@ const CategoriesSections = () => {
 
         {/* Vehicle Grid */}
         <div className="flex-1 min-h-0 grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {showSkeleton ? (
+          {isLoading ? (
             [...Array(4)].map((_, i) => (
               <VehicleCardSkeleton key={`skel-${i}`} />
             ))

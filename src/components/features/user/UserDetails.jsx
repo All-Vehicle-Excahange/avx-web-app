@@ -19,6 +19,12 @@ function UserDetails() {
   const activeTab = params?.id || (isConsultant ? "myprofile" : "myvehicle");
   const resolvedTab = activeTab === "inventory" ? "myvehicle" : activeTab;
 
+  React.useEffect(() => {
+    if (isConsultant && activeTab === "myvehicle") {
+      push("/user/details/myinquary");
+    }
+  }, [isConsultant, activeTab, push]);
+
   return (
     <section className="pt-12">
       <h1 className="text-2xl font-bold">Manage Your Activities</h1>

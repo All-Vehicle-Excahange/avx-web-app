@@ -20,6 +20,7 @@ import {
   getVehicleOverviewQuery,
   getVehicleSummaryQuery,
   getActiveInspectionQuery,
+  getVehicleInspectionDetailsQuery,
 } from "@/queries/vehicle.queries";
 import toast from "react-hot-toast";
 
@@ -150,6 +151,11 @@ export default function ConsualtVehicleDetails({
     enabled: !!id,
   });
 
+  const { data: inspectionDetails } = useQuery({
+    ...getVehicleInspectionDetailsQuery(id),
+    enabled: !!id,
+  });
+
   const ownerRole = vehicleOverview?.vehicleOwner?.userRole;
   const isConsultation = ownerRole === "CONSULTATION";
 
@@ -257,6 +263,7 @@ export default function ConsualtVehicleDetails({
                     vehicle={vehicleOverview}
                     open={isConditionOpen}
                     setOpen={setIsConditionOpen}
+                    inspectionDetails={inspectionDetails}
                   />
                 </div>
 

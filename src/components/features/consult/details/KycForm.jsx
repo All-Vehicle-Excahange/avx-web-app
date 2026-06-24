@@ -468,14 +468,14 @@ export default function KycForm() {
             {/* Background Image Setup */}
             <div className="absolute inset-0 z-0">
               <Image
-                src="/homeBanner.jpg"
+                src="/lyc-form.webp"
                 alt="Partner Program"
                 width={800}
                 height={500}
                 className="w-full h-full object-cover object-center"
               />
               {/* Dark Overlay for text readability */}
-              <div className="absolute inset-0 bg-black/75 backdrop-blur-[2px]" />
+              <div className="absolute inset-0 bg-black/35 backdrop-blur-[1px]" />
             </div>
 
             <div className="relative z-10 flex flex-col justify-between h-full p-10">
@@ -549,7 +549,7 @@ export default function KycForm() {
                   >
                     {/* Vertical line connecting steps */}
                     {i < arr.length - 1 && (
-                      <div className="absolute left-[15px] top-8 bottom-[-40px] w-[2px] bg-white/10">
+                      <div className="absolute left-[15px] top-8 -bottom-10 w-0.5 bg-white/10">
                         <div
                           className="w-full bg-white transition-all duration-550"
                           style={{

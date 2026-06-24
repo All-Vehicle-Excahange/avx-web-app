@@ -17,7 +17,10 @@ import PricingHero from "./PricingHero";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useQuery } from "@tanstack/react-query";
 import { getSellerTierQuery } from "@/queries/Seller.queries";
-import { upgradeSubscription, createSubscription } from "@/services/subscription.service";
+import {
+  upgradeSubscription,
+  createSubscription,
+} from "@/services/subscription.service";
 
 const staticTierDetails = {
   BASIC: {
@@ -97,24 +100,72 @@ export default function FullPricing() {
     } catch (e) {}
   }
 
-  const { data: sellerTierData, error: tierError } = useQuery({
+  const {
+    data: sellerTierData,
+    error: tierError,
+    isLoading: isSellerTierLoading,
+  } = useQuery({
     ...getSellerTierQuery(),
     enabled: !!isLoggedIn,
   });
 
-  const isTier404 = tierError?.response?.status === 404 || tierError?.status === 404;
+  const isTier404 =
+    tierError?.response?.status === 404 || tierError?.status === 404;
 
   const currentTier = isLoggedIn
-    ? (sellerTierData?.tierTitle || user?.sellerTier || (typeof window !== "undefined" ? localStorage.getItem("sellerTier") : null) || "").toUpperCase()
+    ? (
+        sellerTierData?.tierTitle ||
+        user?.sellerTier ||
+        (typeof window !== "undefined"
+          ? localStorage.getItem("sellerTier")
+          : null) ||
+        ""
+      ).toUpperCase()
     : "";
 
   useEffect(() => {
-    console.log("FullPricing Debug Nav:", { userRole, currentTier, sellerTierData });
-    if (userRole?.includes("CONSULTANT_APPLICANT") && currentTier) {
-      console.log("FullPricing Debug: Executing redirect to /consult/kyc");
-      router.push("/consult/kyc");
+    // Wait until router query params are available AND the seller tier query settled
+    if (!router.isReady) return;
+    if (isSellerTierLoading) return;
+    if (!isLoggedIn) return;
+
+    const tierStatus = sellerTierData?.userTierStatus;
+    const hasTier = !!currentTier;
+    const redirect = router.query?.redirect;
+
+    // Case 1: Fully active CONSULTATION consultant landed here
+    // (e.g. via wrapConsultAuth from AccountPopup)
+    // → send them straight to the ?redirect destination or dashboard
+    if (userRole === "CONSULTATION" && hasTier && tierStatus === "ACTIVE") {
+      router.replace(
+        redirect ? decodeURIComponent(redirect) : "/consult/dashboard/overview",
+      );
+      return;
     }
-  }, [userRole, currentTier, router, sellerTierData]);
+
+    // Case 2: CONSULTANT_APPLICANT who already has an ACTIVE subscription
+    // → send them to KYC (with redirect preserved so they end up in the right place after)
+    if (
+      userRole?.includes("CONSULTANT_APPLICANT") &&
+      hasTier &&
+      tierStatus === "ACTIVE"
+    ) {
+      router.replace(
+        redirect ? `/consult/kyc?redirect=${redirect}` : "/consult/kyc",
+      );
+      return;
+    }
+
+    // All other cases (no tier, INACTIVE tier, non-consultant, upgrade flows)
+    // → stay on the page and let the user choose / upgrade a plan
+  }, [
+    userRole,
+    currentTier,
+    sellerTierData,
+    isSellerTierLoading,
+    isLoggedIn,
+    router,
+  ]);
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -172,8 +223,8 @@ export default function FullPricing() {
         billingCycle: yearly ? "YEARLY" : "MONTHLY",
       };
 
-      const response = is404 
-        ? await createSubscription(payload) 
+      const response = is404
+        ? await createSubscription(payload)
         : await upgradeSubscription(payload);
 
       if (!response.success) {
@@ -202,17 +253,16 @@ export default function FullPricing() {
       let prefillName = "";
       if (storeUser) {
         if (storeUser.firstname || storeUser.lastname) {
-          prefillName = `${storeUser.firstname || ""} ${storeUser.lastname || ""}`.trim();
+          prefillName =
+            `${storeUser.firstname || ""} ${storeUser.lastname || ""}`.trim();
         } else {
-          prefillName = storeUser.name || storeUser.fullName || storeUser.firstName || "";
+          prefillName =
+            storeUser.name || storeUser.fullName || storeUser.firstName || "";
         }
       }
       let prefillEmail = storeUser?.email || "";
       let prefillContact =
-        storeUser?.phoneNumber ||
-        storeUser?.phone ||
-        storeUser?.mobile ||
-        "";
+        storeUser?.phoneNumber || storeUser?.phone || storeUser?.mobile || "";
 
       if (
         typeof window !== "undefined" &&
@@ -225,25 +275,21 @@ export default function FullPricing() {
             if (userObj) {
               if (!prefillName) {
                 if (userObj.firstname || userObj.lastname) {
-                  prefillName = `${userObj.firstname || ""} ${userObj.lastname || ""}`.trim();
+                  prefillName =
+                    `${userObj.firstname || ""} ${userObj.lastname || ""}`.trim();
                 } else {
-                  prefillName = userObj.name || userObj.fullName || userObj.firstName || "";
+                  prefillName =
+                    userObj.name || userObj.fullName || userObj.firstName || "";
                 }
               }
               if (!prefillEmail) prefillEmail = userObj.email || "";
               if (!prefillContact)
                 prefillContact =
-                  userObj.phoneNumber ||
-                  userObj.phone ||
-                  userObj.mobile ||
-                  "";
+                  userObj.phoneNumber || userObj.phone || userObj.mobile || "";
             }
           }
         } catch (e) {
-          console.error(
-            "Error parsing user from localStorage for prefill",
-            e,
-          );
+          console.error("Error parsing user from localStorage for prefill", e);
         }
       }
 
@@ -279,15 +325,17 @@ export default function FullPricing() {
       rzp.open();
     } catch (error) {
       console.error("Payment error:", error);
-      alert("Error initiating payment: " + (error?.response?.data?.message || error?.message || "Something went wrong"));
+      alert(
+        "Error initiating payment: " +
+          (error?.response?.data?.message ||
+            error?.message ||
+            "Something went wrong"),
+      );
     } finally {
       setPaymentLoading(false);
       setUpgradingTierId(null);
     }
   };
-
-
-
 
   useEffect(() => {
     const fetchTiers = async () => {
@@ -413,7 +461,9 @@ export default function FullPricing() {
                     return descVal ? `${titleVal} (${descVal})` : titleVal;
                   });
 
-                  const isButtonDisabled = (isTierDisabled && !isCurrentTier) || (paymentLoading && upgradingTierId === tier.id);
+                  const isButtonDisabled =
+                    (isTierDisabled && !isCurrentTier) ||
+                    (paymentLoading && upgradingTierId === tier.id);
 
                   let buttonText = staticDetails.cta;
                   if (paymentLoading && upgradingTierId === tier.id) {
@@ -584,18 +634,18 @@ export default function FullPricing() {
                             background: isButtonDisabled
                               ? "#4b5563"
                               : staticDetails.highlight
-                              ? "#fff"
-                              : "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)",
+                                ? "#fff"
+                                : "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)",
                             color: isButtonDisabled
                               ? "#9ca3af"
                               : staticDetails.highlight
-                              ? "#1f1f1f"
-                              : "#fff",
+                                ? "#1f1f1f"
+                                : "#fff",
                             boxShadow: isButtonDisabled
                               ? "none"
                               : staticDetails.highlight
-                              ? "0 6px 20px rgba(255,255,255,0.2)"
-                              : "0 6px 20px rgba(0,0,0,0.25)",
+                                ? "0 6px 20px rgba(255,255,255,0.2)"
+                                : "0 6px 20px rgba(0,0,0,0.25)",
                           }}
                         >
                           {buttonText}

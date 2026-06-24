@@ -5,7 +5,6 @@ import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
 import { Bike, Car } from "lucide-react";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
-import { useDebounceValue } from "@/hooks/useDebounce";
 import { useQuery } from "@tanstack/react-query";
 import { getAvxInspectedQuery } from "@/queries/user.queries";
 
@@ -15,15 +14,12 @@ const cn = (...classes) => classes.filter(Boolean).join(" ");
 
 export default function AvxInspected() {
   const [activeType, setActiveType] = useState("4-Wheeler");
-  const debouncedType = useDebounceValue(activeType, 400);
 
   const queryPayload = { pageNo: 1, size: 4 };
 
-  const { data: vehicles = [], isFetching } = useQuery(
-    getAvxInspectedQuery(debouncedType, queryPayload)
+  const { data: vehicles = [], isLoading } = useQuery(
+    getAvxInspectedQuery(activeType, queryPayload)
   );
-
-  const showSkeleton = isFetching || activeType !== debouncedType;
 
   return (
     <div className="w-full h-full flex flex-col text-secondary">
@@ -73,7 +69,7 @@ export default function AvxInspected() {
 
         {/* Grid */}
         <div className="grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {showSkeleton ? (
+          {isLoading ? (
             [...Array(4)].map((_, i) => (
               <VehicleCardSkeleton key={`skel-${i}`} />
             ))

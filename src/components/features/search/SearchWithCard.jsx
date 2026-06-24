@@ -590,12 +590,23 @@ export default function SearchWithCard({
 
       if (!res.success) return;
 
-      const newBrands = res.data.map((item) => ({
-        value: item.makeId.toString(),
-        label: item.makeDisplay || item.makeName,
-      }));
+      const newBrands = res.data
+        .map((item) => ({
+          value: item.makeId.toString(),
+          label: item.makeDisplay || item.makeName,
+        }))
+        .filter((item) => item.label && item.label.trim() !== "");
 
-      setBrands((prev) => (page === 1 ? newBrands : [...prev, ...newBrands]));
+      setBrands((prev) => {
+        if (page === 1) {
+          const keep = prev.filter((p) => selectedBrands.includes(p.value));
+          const filteredNew = newBrands.filter(
+            (nb) => !keep.some((k) => k.value === nb.value),
+          );
+          return [...keep, ...filteredNew];
+        }
+        return [...prev, ...newBrands];
+      });
       const meta = res.pagination;
       setBrandHasMore(meta ? page < meta.totalPages : false);
       setBrandPage(page);
@@ -612,7 +623,7 @@ export default function SearchWithCard({
       clearTimeout(brandSearchTimeoutRef.current);
 
     brandSearchTimeoutRef.current = setTimeout(() => {
-      setBrands([]);
+      // Don't clear brands[] here — loadBrands(page=1) will preserve selected items
       setBrandPage(1);
       setBrandHasMore(true);
       loadBrands(1, brandSearch);
@@ -622,6 +633,8 @@ export default function SearchWithCard({
   }, [brandSearch, apiBodyType]);
 
   useEffect(() => {
+    setBrandPage(1);
+    setBrandHasMore(true);
     loadBrands(1, "");
   }, [apiBodyType]);
 
@@ -808,12 +821,23 @@ export default function SearchWithCard({
 
       if (!res.success) return;
 
-      const newModels = res.data.map((item) => ({
-        value: item.modelId.toString(),
-        label: item.modelDisplayName || item.modelName,
-      }));
+      const newModels = res.data
+        .map((item) => ({
+          value: item.modelId.toString(),
+          label: item.modelDisplayName || item.modelName,
+        }))
+        .filter((item) => item.label && item.label.trim() !== "");
 
-      setModels((prev) => (page === 1 ? newModels : [...prev, ...newModels]));
+      setModels((prev) => {
+        if (page === 1) {
+          const keep = prev.filter((p) => selectedModels.includes(p.value));
+          const filteredNew = newModels.filter(
+            (nm) => !keep.some((k) => k.value === nm.value),
+          );
+          return [...keep, ...filteredNew];
+        }
+        return [...prev, ...newModels];
+      });
       const meta = res.pagination;
       setModelHasMore(meta ? page < meta.totalPages : false);
       setModelPage(page);
@@ -830,7 +854,7 @@ export default function SearchWithCard({
       clearTimeout(modelSearchTimeoutRef.current);
 
     modelSearchTimeoutRef.current = setTimeout(() => {
-      setModels([]);
+      // Don't clear models[] here — loadModels(page=1) will preserve selected items
       setModelPage(1);
       setModelHasMore(true);
       loadModels(1, modelSearch);
@@ -840,7 +864,6 @@ export default function SearchWithCard({
   }, [modelSearch, selectedBrands, apiBodyType]);
 
   useEffect(() => {
-    setModels([]);
     setModelPage(1);
     setModelHasMore(true);
     loadModels(1, modelSearch);
@@ -906,7 +929,10 @@ export default function SearchWithCard({
       if (selectedModels.length > 0) {
         const modelId = selectedModels[0];
 
-        const res = await getFuelTypeByModelId({ modelId, bodyType: apiBodyType });
+        const res = await getFuelTypeByModelId({
+          modelId,
+          bodyType: apiBodyType,
+        });
 
         if (res.success && Array.isArray(res.data)) {
           const realFuelTypes = res.data.map((fuel) => {
@@ -970,7 +996,10 @@ export default function SearchWithCard({
       if (selectedModels.length > 0) {
         const modelId = selectedModels[0];
 
-        const res = await getTransmissionTypeByModelId({ modelId, bodyType: apiBodyType });
+        const res = await getTransmissionTypeByModelId({
+          modelId,
+          bodyType: apiBodyType,
+        });
 
         if (res.success && Array.isArray(res.data)) {
           const realTransmissions = res.data.map((type) => {
@@ -1051,14 +1080,23 @@ export default function SearchWithCard({
         return;
       }
 
-      const newVariants = res.data.map((item) => ({
-        value: item.variantId.toString(),
-        label: item.variantDisplayName || item.variantName,
-      }));
+      const newVariants = res.data
+        .map((item) => ({
+          value: item.variantId.toString(),
+          label: item.variantDisplayName || item.variantName,
+        }))
+        .filter((item) => item.label && item.label.trim() !== "");
 
-      setVariants((prev) =>
-        page === 1 ? newVariants : [...prev, ...newVariants],
-      );
+      setVariants((prev) => {
+        if (page === 1) {
+          const keep = prev.filter((p) => selectedVariants.includes(p.value));
+          const filteredNew = newVariants.filter(
+            (nv) => !keep.some((k) => k.value === nv.value),
+          );
+          return [...keep, ...filteredNew];
+        }
+        return [...prev, ...newVariants];
+      });
       const meta = res.meta || res.pagination;
       setVariantHasMore(meta ? page < meta.totalPages : false);
       setVariantPage(page);
@@ -1076,17 +1114,22 @@ export default function SearchWithCard({
       clearTimeout(variantSearchTimeoutRef.current);
 
     variantSearchTimeoutRef.current = setTimeout(() => {
-      setVariants([]);
+      // Don't clear variants[] here — loadVariants(page=1) will preserve selected items
       setVariantPage(1);
       setVariantHasMore(true);
       loadVariants(1, variantSearch);
     }, 400);
 
     return () => clearTimeout(variantSearchTimeoutRef.current);
-  }, [variantSearch, selectedModels, selectedFuelTypes, selectedYear, apiBodyType]);
+  }, [
+    variantSearch,
+    selectedModels,
+    selectedFuelTypes,
+    selectedYear,
+    apiBodyType,
+  ]);
 
   useEffect(() => {
-    setVariants([]);
     setVariantPage(1);
     setVariantHasMore(true);
     loadVariants(1, variantSearch);
@@ -1491,7 +1534,7 @@ export default function SearchWithCard({
               </FilterSection>
             </div>
 
-            <FilterSection title="Brand">
+            <FilterSection title="Brand" selectedCount={selectedBrands.length}>
               <ChipGroup
                 title=""
                 items={brands}
@@ -1511,7 +1554,7 @@ export default function SearchWithCard({
               />
             </FilterSection>
 
-            <FilterSection title="Model">
+            <FilterSection title="Model" selectedCount={selectedModels.length}>
               <ChipGroup
                 title=""
                 items={models}
@@ -1526,10 +1569,18 @@ export default function SearchWithCard({
                 onSearchChange={setModelSearch}
                 isLoading={modelLoading}
                 allowMultiple={true}
+                customEmptyMessage={
+                  selectedBrands.length === 0
+                    ? "Please select a brand first"
+                    : undefined
+                }
               />
             </FilterSection>
 
-            <FilterSection title="Fuel Type">
+            <FilterSection
+              title="Fuel Type"
+              selectedCount={selectedFuelTypes.length}
+            >
               <ChipGroup
                 title=""
                 selected={selectedFuelTypes}
@@ -1539,7 +1590,10 @@ export default function SearchWithCard({
               />
             </FilterSection>
 
-            <FilterSection title="Transmission">
+            <FilterSection
+              title="Transmission"
+              selectedCount={selectedTransmissionTypes.length}
+            >
               <ChipGroup
                 title=""
                 items={transmissionTypes}
@@ -1549,7 +1603,7 @@ export default function SearchWithCard({
               />
             </FilterSection>
 
-            <FilterSection title="Year">
+            <FilterSection title="Year" selectedCount={selectedYear.length}>
               <ChipGroup
                 title=""
                 items={years}
@@ -1565,7 +1619,10 @@ export default function SearchWithCard({
               />
             </FilterSection>
 
-            <FilterSection title="Variant">
+            <FilterSection
+              title="Variant"
+              selectedCount={selectedVariants.length}
+            >
               <ChipGroup
                 title=""
                 items={variants}
@@ -1618,7 +1675,10 @@ export default function SearchWithCard({
               </div>
             </FilterSection>
 
-            <FilterSection title="Body Type">
+            <FilterSection
+              title="Body Type"
+              selectedCount={selectedBodyType.length}
+            >
               <ChipGroup
                 title=""
                 items={vehicleTypes}
@@ -1627,7 +1687,10 @@ export default function SearchWithCard({
               />
             </FilterSection>
 
-            <FilterSection title="Inspection Rating">
+            <FilterSection
+              title="Inspection Rating"
+              selectedCount={selectedRating.length}
+            >
               <ChipGroup
                 title=""
                 items={ratings}
@@ -1637,7 +1700,10 @@ export default function SearchWithCard({
               />
             </FilterSection>
 
-            <FilterSection title="Seller Type">
+            <FilterSection
+              title="Seller Type"
+              selectedCount={selectedSellerType.length}
+            >
               <ChipGroup
                 title=""
                 items={sellerType}
@@ -1903,29 +1969,37 @@ export default function SearchWithCard({
           {/* ── Left Tabs ── */}
           <div className="w-[40%] border-r border-third/40 overflow-y-auto">
             {[
-              "Location",
-              "Budget",
-              "Brand",
-              "Model",
-              "Fuel Type",
-              "Transmission",
-              "Year",
-              "Variant",
-              "KM Driven",
-              "Body Type",
-              "Rating",
-              "Seller Type",
+              {
+                name: "Location",
+                count: selectedStateId ? (selectedCityId ? 2 : 1) : 0,
+              },
+              { name: "Budget", count: 0 },
+              { name: "Brand", count: selectedBrands.length },
+              { name: "Model", count: selectedModels.length },
+              { name: "Fuel Type", count: selectedFuelTypes.length },
+              { name: "Transmission", count: selectedTransmissionTypes.length },
+              { name: "Year", count: selectedYear.length },
+              { name: "Variant", count: selectedVariants.length },
+              { name: "KM Driven", count: 0 },
+              { name: "Body Type", count: selectedBodyType.length },
+              { name: "Rating", count: selectedRating.length },
+              { name: "Seller Type", count: selectedSellerType.length },
             ].map((tab) => (
               <div
-                key={tab}
-                onClick={() => setActiveFilterTab(tab)}
-                className={`px-4 py-3 cursor-pointer text-sm ${
-                  activeFilterTab === tab
+                key={tab.name}
+                onClick={() => setActiveFilterTab(tab.name)}
+                className={`px-4 py-3 cursor-pointer text-sm flex items-center justify-between ${
+                  activeFilterTab === tab.name
                     ? "bg-secondary/10 font-semibold"
                     : "hover:bg-secondary/5"
                 }`}
               >
-                {tab}
+                <span>{tab.name}</span>
+                {tab.count > 0 && (
+                  <span className="flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-primary text-secondary text-[10px] font-bold leading-none">
+                    {tab.count}
+                  </span>
+                )}
               </div>
             ))}
           </div>

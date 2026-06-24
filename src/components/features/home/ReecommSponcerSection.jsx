@@ -25,7 +25,7 @@ export default function ReecommSponcerSection() {
     [mappedVehicleType],
   );
 
-  const { data: recommendedAdsData, isFetching: isAdsLoading } = useQuery({
+  const { data: recommendedAdsData, isLoading: isAdsLoading } = useQuery({
     queryKey: ["homepage-featured-ads", adParams],
     queryFn: async () => {
       const res = await getAddRecomandedVehicle(adParams);

@@ -7,7 +7,12 @@ import Image from "next/image";
 import Button from "@/components/ui/button";
 import { getOtp, signup } from "@/services/auth.service";
 import { useForm } from "react-hook-form";
-import { X, Loader2 } from "lucide-react";
+import { X, Loader2, User, UserCheck } from "lucide-react";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Autoplay, EffectFade } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/effect-fade';
 
 export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSuccess = () => { } }) {
   const {
@@ -281,10 +286,70 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
           <X size={20} />
         </button>
 
-        {/* LEFT IMAGE */}
-        <div className="hidden md:block w-5/12 relative">
-          <Image src="/cs.webp" alt="Cars" fill className="object-cover" />
-          <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
+        {/* LEFT IMAGE SLIDER */}
+        <div className="hidden md:block w-5/12 relative bg-black">
+          <Swiper
+            modules={[Pagination, Autoplay, EffectFade]}
+            pagination={{ clickable: true }}
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            effect="fade"
+            loop={true}
+            className="w-full h-full auth-swiper"
+          >
+            {/* Slide 1 - Buyer */}
+            <SwiperSlide>
+              <div className="relative w-full h-full">
+                <Image
+                  src="/auth-image-1.webp"
+                  priority
+                  alt="Buyer"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-black/80" />
+                
+                <div className="absolute bottom-12 right-8 z-10 flex flex-col items-end text-right">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-10 h-10 bg-fourth rounded-full flex items-center justify-center">
+                      <User className="text-white" size={20} />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white">Buyer</h3>
+                  </div>
+                  <p className="text-white/90 text-[13px] max-w-[180px] mb-3 leading-snug">
+                    Find the right vehicle with confidence.
+                  </p>
+                  <div className="w-8 h-[3px] bg-fourth rounded-full"></div>
+                </div>
+              </div>
+            </SwiperSlide>
+
+            {/* Slide 2 - Consultant */}
+            <SwiperSlide>
+              <div className="relative w-full h-full">
+                <Image
+                  src="/auth-image-2.webp"
+                  priority
+                  alt="Consultant"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-black/80" />
+                
+                <div className="absolute bottom-12 right-8 z-10 flex flex-col items-end text-right">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-10 h-10 bg-fourth rounded-full flex items-center justify-center">
+                      <UserCheck className="text-white" size={20} />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white">Consultant</h3>
+                  </div>
+                  <p className="text-white/90 text-[13px] max-w-[220px] mb-3 leading-snug">
+                    Connect with qualified buyers and close more deals.
+                  </p>
+                  <div className="w-8 h-[3px] bg-fourth rounded-full"></div>
+                </div>
+              </div>
+            </SwiperSlide>
+          </Swiper>
         </div>
 
         {/* RIGHT FORM */}
