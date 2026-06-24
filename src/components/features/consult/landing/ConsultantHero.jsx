@@ -4,6 +4,7 @@
 import Button from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState, useEffect, useRef } from "react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import ConsualtPopup from "./ConsualtPopup";
@@ -104,8 +105,9 @@ export default function ConsultantHeroSection() {
   const poolIndex = useRef(3);
   const keyRef = useRef(100);
 
-  const { user } = useAuthStore();
+  const { user, openLoginPopup } = useAuthStore();
   const [showConsultPopup, setShowConsultPopup] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (user?.userRole && ["CONSULTATION"].includes(user.userRole)) {
@@ -171,11 +173,19 @@ export default function ConsultantHeroSection() {
             </p>
             <div className="w-24 h-0.5 bg-fourth rounded-full" />
             <div className="flex flex-col sm:flex-row gap-4 pt-3">
-              <Link href="/consult/account">
-                <Button variant="ghost" size="md">
-                  Become a Consultant
-                </Button>
-              </Link>
+              <Button 
+                variant="ghost" 
+                size="md"
+                onClick={() => {
+                  if (!user) {
+                    openLoginPopup();
+                  } else {
+                    router.push("/consult/account");
+                  }
+                }}
+              >
+                Become a Consultant
+              </Button>
 
               <Link href="/consult/pricing">
                 <Button

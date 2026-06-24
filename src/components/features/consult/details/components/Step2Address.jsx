@@ -40,6 +40,25 @@ export default function Step2Address({
     mapUrl: initialData?.mapUrl || "",
   });
 
+  const [errors, setErrors] = useState({
+    address: "",
+    stateId: "",
+    cityId: "",
+  });
+
+  useEffect(() => {
+    if (backendError) {
+      const lowerErr = backendError.toLowerCase();
+      if (lowerErr.includes("address")) {
+        setErrors((p) => ({ ...p, address: backendError }));
+      } else if (lowerErr.includes("state")) {
+        setErrors((p) => ({ ...p, stateId: backendError }));
+      } else if (lowerErr.includes("city")) {
+        setErrors((p) => ({ ...p, cityId: backendError }));
+      }
+    }
+  }, [backendError]);
+
   // ===== Fetch States =====
   useEffect(() => {
     const fetchStates = async () => {
@@ -189,10 +208,16 @@ export default function Step2Address({
             readOnly={readOnly}
             value={form.address}
             icon={MapPin}
+            error={errors.address}
             onChange={(e) => {
               const val = e.target.value;
               const updated = { ...form, address: val };
               handleFormChange(updated);
+              if (!val.trim()) {
+                setErrors((p) => ({ ...p, address: "Address is required" }));
+              } else {
+                setErrors((p) => ({ ...p, address: "" }));
+              }
             }}
           />
         )}
@@ -258,10 +283,16 @@ export default function Step2Address({
                         cityName: "",
                       };
                       handleFormChange(updated);
+                      setErrors((p) => ({ ...p, stateId: "", cityId: "" }));
                     }}
                   />
                 )}
               </div>
+              {errors.stateId && (
+                <span className="text-rose-500 text-[10px] mt-1 ml-1 animate-in fade-in slide-in-from-top-1">
+                  {errors.stateId}
+                </span>
+              )}
             </div>
           )}
 
@@ -296,10 +327,16 @@ export default function Step2Address({
                         cityName: c ? c.label : "",
                       };
                       handleFormChange(updated);
+                      setErrors((p) => ({ ...p, cityId: "" }));
                     }}
                   />
                 )}
               </div>
+              {errors.cityId && (
+                <span className="text-rose-500 text-[10px] mt-1 ml-1 animate-in fade-in slide-in-from-top-1">
+                  {errors.cityId}
+                </span>
+              )}
             </div>
           )}
 
@@ -346,11 +383,16 @@ export default function Step2Address({
       </motion.div>
 
       {/* ===== BACKEND ERROR ===== */}
-      {backendError && (
-        <p className="text-rose-500 text-sm font-medium mt-4 ml-1 animate-in fade-in slide-in-from-top-1">
-          {backendError}
-        </p>
-      )}
+      {backendError &&
+        !(
+          backendError.toLowerCase().includes("address") ||
+          backendError.toLowerCase().includes("state") ||
+          backendError.toLowerCase().includes("city")
+        ) && (
+          <p className="text-rose-500 text-sm font-medium mt-4 ml-1 animate-in fade-in slide-in-from-top-1">
+            {backendError}
+          </p>
+        )}
     </motion.div>
   );
 }

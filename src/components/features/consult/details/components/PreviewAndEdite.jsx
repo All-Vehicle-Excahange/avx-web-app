@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Step1Business from "../components/Step1Business";
 import Step2Address from "../components/Step2Address";
 import Step3KYC from "../components/Step3KYC";
-import { Briefcase, MapPin, FileText } from "lucide-react";
+import { Briefcase, MapPin, FileText, LayoutDashboard } from "lucide-react";
 import { motion } from "framer-motion";
 
 import {
@@ -28,6 +28,9 @@ export default function PreviewAndEdite({
   setHasMadeAnyUpdate,
 }) {
   const router = useRouter();
+
+  const isChangesRequested = existing?.business?.verificationStatus === "REQUEST_CHANGES";
+  const canEdit = !existing?.business?.isSubmitted || isChangesRequested;
 
   // ===== EDIT MODES =====
   const [editMode, setEditMode] = useState({
@@ -240,34 +243,45 @@ export default function PreviewAndEdite({
             Preview Your Details
           </h3>
 
-          {!editMode.business ? (
-            <Button
-              variant="ghost"
-              onClick={() => setEditMode((p) => ({ ...p, business: true }))}
-            >
-              Edit
-            </Button>
-          ) : (
-            <div className="flex gap-3">
+          <div className="flex items-center gap-3">
+            {!isChangesRequested && (
               <Button
                 variant="outlineSecondary"
-                onClick={() =>
-                  setEditMode((p) => ({ ...p, business: false }))
-                }
+                onClick={onBack}
+                className="flex items-center gap-2 text-xs"
               >
-                Cancel
+                <LayoutDashboard size={14} />
+                Application Status
               </Button>
+            )}
 
+            {canEdit && !editMode.business ? (
               <Button
                 variant="ghost"
-                onClick={updateBusiness}
-                loading={loadingStates.business}
-                disabled={!localChanged.business}
+                onClick={() => setEditMode((p) => ({ ...p, business: true }))}
               >
-                Update
+                Edit
               </Button>
-            </div>
-          )}
+            ) : canEdit ? (
+              <div className="flex gap-3">
+                <Button
+                  variant="outlineSecondary"
+                  onClick={() => setEditMode((p) => ({ ...p, business: false }))}
+                >
+                  Cancel
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  onClick={updateBusiness}
+                  loading={loadingStates.business}
+                  disabled={!localChanged.business}
+                >
+                  Update
+                </Button>
+              </div>
+            ) : null}
+          </div>
         </div>
 
         <div
@@ -292,14 +306,14 @@ export default function PreviewAndEdite({
             Address Details
           </h3>
 
-          {!editMode.address ? (
+          {canEdit && !editMode.address ? (
             <Button
               variant="ghost"
               onClick={() => setEditMode((p) => ({ ...p, address: true }))}
             >
               Edit
             </Button>
-          ) : (
+          ) : canEdit ? (
             <div className="flex gap-3">
               <Button
                 variant="outlineSecondary"
@@ -317,7 +331,7 @@ export default function PreviewAndEdite({
                 Update
               </Button>
             </div>
-          )}
+          ) : null}
         </div>
 
         <div
@@ -342,14 +356,14 @@ export default function PreviewAndEdite({
             KYC Details
           </h3>
 
-          {!editMode.kyc ? (
+          {canEdit && !editMode.kyc ? (
             <Button
               variant="ghost"
               onClick={() => setEditMode((p) => ({ ...p, kyc: true }))}
             >
               Edit
             </Button>
-          ) : (
+          ) : canEdit ? (
             <div className="flex gap-3">
               <Button
                 variant="outlineSecondary"
@@ -367,7 +381,7 @@ export default function PreviewAndEdite({
                 Update
               </Button>
             </div>
-          )}
+          ) : null}
         </div>
 
         <div
@@ -382,19 +396,21 @@ export default function PreviewAndEdite({
       </motion.div>
 
       {/* ================= FINAL SUBMIT ================= */}
-      <motion.div variants={itemVariants} className="flex justify-end">
-        <Button
-          variant="ghost"
-          onClick={handleSubmit}
-          loading={loadingStates.submit}
-          disabled={
-            existing.business?.verificationStatus === "REQUEST_CHANGES" &&
-            !hasMadeAnyUpdate
-          }
-        >
-          Final Submit
-        </Button>
-      </motion.div>
+      {canEdit && (
+        <motion.div variants={itemVariants} className="flex justify-end">
+          <Button
+            variant="ghost"
+            onClick={handleSubmit}
+            loading={loadingStates.submit}
+            disabled={
+              existing.business?.verificationStatus === "REQUEST_CHANGES" &&
+              !hasMadeAnyUpdate
+            }
+          >
+            Final Submit
+          </Button>
+        </motion.div>
+      )}
     </motion.div>
   );
 }

@@ -117,10 +117,27 @@ export default function Step1Business({
   }, [debouncedUsername, initialData?.username]);
 
   const [errors, setErrors] = useState({
+    consultationName: "",
+    ownerName: "",
     companyEmail: "",
     establishmentYear: "",
     services: "",
   });
+
+  useEffect(() => {
+    if (backendError) {
+      const lowerErr = backendError.toLowerCase();
+      if (lowerErr.includes("consultation name") || lowerErr.includes("consultation")) {
+        setErrors((p) => ({ ...p, consultationName: backendError }));
+      } else if (lowerErr.includes("owner name") || lowerErr.includes("owner")) {
+        setErrors((p) => ({ ...p, ownerName: backendError }));
+      } else if (lowerErr.includes("email")) {
+        setErrors((p) => ({ ...p, companyEmail: backendError }));
+      } else if (lowerErr.includes("year") || lowerErr.includes("establishment")) {
+        setErrors((p) => ({ ...p, establishmentYear: backendError }));
+      }
+    }
+  }, [backendError]);
 
   // ===== CUSTOM SERVICES =====
   const PRESET_SERVICES = ["BUY", "SELL", "EXCHANGE", "FINANCE", "OTHER"];
@@ -210,6 +227,8 @@ export default function Step1Business({
     setBannerPreview(null);
     setCustomServices([]);
     setErrors({
+      consultationName: "",
+      ownerName: "",
       companyEmail: "",
       establishmentYear: "",
       services: "",
@@ -401,7 +420,19 @@ export default function Step1Business({
               readOnly={readOnly}
               value={form.consultationName}
               icon={Building2}
-              onChange={(e) => handleInput("consultationName", e.target.value)}
+              error={errors.consultationName}
+              onChange={(e) => {
+                const rawVal = e.target.value;
+                const val = rawVal.replace(/[^a-zA-Z\s]/g, "");
+                handleInput("consultationName", val);
+                if (!val.trim()) {
+                  setErrors((p) => ({ ...p, consultationName: "Consultation Name is required" }));
+                } else if (rawVal !== val) {
+                  setErrors((p) => ({ ...p, consultationName: "Only letters and spaces are allowed" }));
+                } else {
+                  setErrors((p) => ({ ...p, consultationName: "" }));
+                }
+              }}
             />
           )}
 
@@ -449,7 +480,19 @@ export default function Step1Business({
               readOnly={readOnly}
               value={form.ownerName}
               icon={User}
-              onChange={(e) => handleInput("ownerName", e.target.value)}
+              error={errors.ownerName}
+              onChange={(e) => {
+                const rawVal = e.target.value;
+                const val = rawVal.replace(/[^a-zA-Z\s]/g, "");
+                handleInput("ownerName", val);
+                if (!val.trim()) {
+                  setErrors((p) => ({ ...p, ownerName: "Owner Name is required" }));
+                } else if (rawVal !== val) {
+                  setErrors((p) => ({ ...p, ownerName: "Only letters and spaces are allowed" }));
+                } else {
+                  setErrors((p) => ({ ...p, ownerName: "" }));
+                }
+              }}
             />
           )}
 
@@ -465,7 +508,9 @@ export default function Step1Business({
               onChange={(e) => {
                 const val = e.target.value.toLowerCase().trim();
                 handleInput("companyEmail", val);
-                if (val && !validateEmail(val)) {
+                if (!val) {
+                  setErrors((p) => ({ ...p, companyEmail: "Company Email is required" }));
+                } else if (!validateEmail(val)) {
                   setErrors((p) => ({
                     ...p,
                     companyEmail: "Invalid email format",
@@ -785,11 +830,18 @@ export default function Step1Business({
       )}
 
       {/* ===== BACKEND ERROR ===== */}
-      {backendError && (
-        <p className="text-rose-500 text-sm font-medium mt-2 ml-1 animate-in fade-in slide-in-from-top-1">
-          {backendError}
-        </p>
-      )}
+      {backendError &&
+        !(
+          backendError.toLowerCase().includes("consultation") ||
+          backendError.toLowerCase().includes("owner") ||
+          backendError.toLowerCase().includes("email") ||
+          backendError.toLowerCase().includes("year") ||
+          backendError.toLowerCase().includes("establishment")
+        ) && (
+          <p className="text-rose-500 text-sm font-medium mt-2 ml-1 animate-in fade-in slide-in-from-top-1">
+            {backendError}
+          </p>
+        )}
     </motion.div>
   );
 }
