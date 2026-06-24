@@ -47,10 +47,8 @@ export default function CustomSelect({
   // 🔹 Find selected option (derived state)
   const selectedOption = useMemo(
     () => options.find((o) => isMatch(o.value, value)),
-    [value, options]
+    [value, options],
   );
-
-
 
   // 🔹 Close dropdown on outside click
   useEffect(() => {
@@ -68,14 +66,18 @@ export default function CustomSelect({
     selectedOption && search === selectedOption.label
       ? options
       : options.filter((opt) =>
-          opt.label.toLowerCase().includes(search.toLowerCase())
+          opt.label.toLowerCase().includes(search.toLowerCase()),
         );
 
   const [prevSelectedOption, setPrevSelectedOption] = useState(selectedOption);
   const [prevSearch, setPrevSearch] = useState(search);
   const [prevOpen, setPrevOpen] = useState(open);
 
-  if (selectedOption !== prevSelectedOption || search !== prevSearch || open !== prevOpen) {
+  if (
+    selectedOption !== prevSelectedOption ||
+    search !== prevSearch ||
+    open !== prevOpen
+  ) {
     setPrevSelectedOption(selectedOption);
     setPrevSearch(search);
     setPrevOpen(open);
@@ -114,7 +116,7 @@ export default function CustomSelect({
       case "ArrowDown":
         e.preventDefault();
         setFocusedIndex((prev) =>
-          prev < filteredOptions.length - 1 ? prev + 1 : prev
+          prev < filteredOptions.length - 1 ? prev + 1 : prev,
         );
         break;
       case "ArrowUp":
@@ -125,6 +127,16 @@ export default function CustomSelect({
         e.preventDefault();
         if (focusedIndex >= 0 && focusedIndex < filteredOptions.length) {
           onChange(filteredOptions[focusedIndex].value);
+          setOpen(false);
+        } else if (onCreateNew && search.trim() && !isCreating) {
+          const exactMatch = options.find((o) =>
+            isMatch(o.label, search.trim()),
+          );
+          if (!exactMatch) {
+            onCreateNew(search.trim());
+          } else {
+            onChange(exactMatch.value);
+          }
           setOpen(false);
         }
         break;
@@ -143,7 +155,7 @@ export default function CustomSelect({
           variants[variant],
           disabled && "opacity-60 cursor-not-allowed",
           readOnly && "cursor-default",
-          className
+          className,
         )}
         onClick={() => {
           if (!disabled && !readOnly) setOpen(true);
@@ -164,7 +176,7 @@ export default function CustomSelect({
             disabled ? "cursor-not-allowed" : readOnly ? "cursor-default" : "",
             variant === "transparent" || variant === "colored"
               ? "text-primary placeholder:text-primary/60"
-              : "text-secondary placeholder:text-secondary/60"
+              : "text-secondary placeholder:text-secondary/60",
           )}
         />
         <ChevronDown className="w-4 h-4" />
@@ -180,7 +192,7 @@ export default function CustomSelect({
               variant === "transparent" || variant === "colored"
                 ? "bg-neutral-950 border-white/10 backdrop-blur-xl"
                 : "bg-primary border border-third/40",
-              dropdownClassName
+              dropdownClassName,
             )}
           >
             {filteredOptions.length > 0 ? (
@@ -201,7 +213,7 @@ export default function CustomSelect({
                     focusedIndex === index &&
                       (variant === "transparent" || variant === "colored"
                         ? "bg-white/20"
-                        : "bg-third/20")
+                        : "bg-third/20"),
                   )}
                 >
                   {opt.label}
@@ -209,50 +221,58 @@ export default function CustomSelect({
               ))
             ) : (
               <div>
-                <div
+                <button
+                  type="button"
+                  disabled={isCreating}
+                  onClick={() => {
+                    if (onCreateNew && search.trim() && !isCreating) {
+                      onCreateNew(search.trim());
+                      setOpen(false);
+                    }
+                  }}
                   className={cn(
-                    "px-3 py-2 text-sm",
+                    "w-full text-left px-3 py-2 text-sm",
+                    onCreateNew && search.trim()
+                      ? "cursor-pointer"
+                      : "cursor-default",
                     variant === "transparent" || variant === "colored"
-                      ? "text-primary/60"
-                      : "text-third"
+                      ? onCreateNew && search.trim() && !isCreating
+                        ? "text-primary hover:bg-white/10"
+                        : "text-primary/60"
+                      : onCreateNew && search.trim() && !isCreating
+                        ? "text-secondary hover:bg-third/10"
+                        : "text-third",
                   )}
                 >
-                  No results found
-                </div>
-                {onCreateNew && search.trim() && (
-                  <button
-                    type="button"
-                    disabled={isCreating}
-                    onClick={() => {
-                      if (!isCreating) {
-                        onCreateNew(search.trim());
-                        setOpen(false);
-                      }
-                    }}
-                    className={cn(
-                      "w-full text-left px-3 py-2 text-sm font-medium border-t flex items-center gap-1.5 transition-colors",
-                      variant === "transparent" || variant === "colored"
-                        ? "border-white/10 text-emerald-400 hover:bg-white/10"
-                        : "border-third/20 text-emerald-500 hover:bg-third/10",
-                      isCreating && "opacity-60 cursor-not-allowed"
-                    )}
-                  >
-                    {isCreating ? (
-                      <>
-                        <svg className="animate-spin w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-                        </svg>
-                        Creating...
-                      </>
-                    ) : (
-                      <>
-                        <span className="text-base leading-none">+</span>
-                        Create &quot;{search.trim()}&quot;
-                      </>
-                    )}
-                  </button>
-                )}
+                  {isCreating ? (
+                    <div className="flex items-center gap-2">
+                      <svg
+                        className="animate-spin w-3.5 h-3.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8v8z"
+                        />
+                      </svg>
+                      Creating...
+                    </div>
+                  ) : onCreateNew && search.trim() ? (
+                    `${search.trim()}`
+                  ) : (
+                    "No results found"
+                  )}
+                </button>
               </div>
             )}
           </div>
