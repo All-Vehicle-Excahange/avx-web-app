@@ -136,12 +136,12 @@ export default function FullPricing() {
     // Case 1: Fully active CONSULTATION consultant landed here
     // (e.g. via wrapConsultAuth from AccountPopup)
     // → send them straight to the ?redirect destination or dashboard
-    if (userRole === "CONSULTATION" && hasTier && tierStatus === "ACTIVE") {
-      router.replace(
-        redirect ? decodeURIComponent(redirect) : "/consult/dashboard/overview",
-      );
-      return;
-    }
+    // if (userRole === "CONSULTATION" && hasTier && tierStatus === "ACTIVE") {
+    //   router.replace(
+    //     redirect ? decodeURIComponent(redirect) : "/consult/dashboard/overview",
+    //   );
+    //   return;
+    // }
 
     // Case 2: CONSULTANT_APPLICANT who already has an ACTIVE subscription
     // → send them to KYC (with redirect preserved so they end up in the right place after)
@@ -189,10 +189,15 @@ export default function FullPricing() {
 
     const currentKey = (tier.title || "").toUpperCase();
     if (currentTier === currentKey) {
+      const redirect = router.query?.redirect;
       if (userRole?.includes("CONSULTANT_APPLICANT")) {
-        router.push("/consult/kyc");
+        router.push(
+          redirect ? `/consult/kyc?redirect=${redirect}` : "/consult/kyc",
+        );
       } else {
-        router.push("/consult/dashboard");
+        router.push(
+          redirect ? decodeURIComponent(redirect) : "/consult/dashboard/overview",
+        );
       }
       return;
     }
