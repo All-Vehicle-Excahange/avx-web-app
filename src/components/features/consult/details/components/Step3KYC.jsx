@@ -202,6 +202,8 @@ export default function Step3KYC({
             label="PAN Card Photo"
             preview={panPreview}
             readOnly={readOnly}
+            accept=".jpg,.jpeg,.png,.webp"
+            supportedText="Supports: JPG, JPEG, PNG, WEBP"
             onChange={(file) => {
               if (!file) {
                 setPanPreview(null);
@@ -272,6 +274,8 @@ export default function Step3KYC({
               label="Aadhaar Front Photo"
               preview={aadharFrontPreview}
               readOnly={readOnly}
+              accept=".jpg,.jpeg,.png,.webp"
+              supportedText="Supports: JPG, JPEG, PNG, WEBP"
               onChange={(file) => {
                 if (!file) {
                   setAadharFrontPreview(null);
@@ -292,6 +296,8 @@ export default function Step3KYC({
               label="Aadhaar Back Photo"
               preview={aadharBackPreview}
               readOnly={readOnly}
+              accept=".jpg,.jpeg,.png,.webp"
+              supportedText="Supports: JPG, JPEG, PNG, WEBP"
               onChange={(file) => {
                 if (!file) {
                   setAadharBackPreview(null);
@@ -356,6 +362,8 @@ export default function Step3KYC({
             label="GST Certificate Photo"
             preview={gstPreview}
             readOnly={readOnly}
+            accept=".jpg,.jpeg,.png,.webp"
+            supportedText="Supports: JPG, JPEG, PNG, WEBP"
             onChange={(file) => {
               if (!file) {
                 setGstPreview(null);

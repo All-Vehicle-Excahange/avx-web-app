@@ -5,7 +5,12 @@ import { useEffect, useState } from "react";
 import SleekInput from "@/components/ui/sleekInput";
 import CustomSelect from "@/components/ui/custom-select";
 import { MapPin, Globe, Compass, Link } from "lucide-react";
-import { getState, getCities, getAllTown, addNewTown } from "@/services/user.service";
+import {
+  getState,
+  getCities,
+  getAllTown,
+  addNewTown,
+} from "@/services/user.service";
 import { motion } from "framer-motion";
 import MiniMap from "@/components/ui/MiniMap";
 
@@ -192,21 +197,6 @@ export default function Step2Address({
           />
         )}
 
-        {(!readOnly || form.mapUrl) && (
-          <SleekInput
-            label="Map URL"
-            placeholder="e.g. https://maps.google.com/..."
-            readOnly={readOnly}
-            value={form.mapUrl}
-            icon={Link}
-            onChange={(e) => {
-              const val = e.target.value;
-              const updated = { ...form, mapUrl: val };
-              handleFormChange(updated);
-            }}
-          />
-        )}
-
         <MiniMap
           initialLat={form.latitude}
           initialLng={form.longitude}
@@ -221,6 +211,21 @@ export default function Step2Address({
             handleFormChange(updated);
           }}
         />
+
+        {(!readOnly || form.mapUrl) && (
+          <SleekInput
+            label="Map URL"
+            placeholder="e.g. https://maps.google.com/..."
+            readOnly={readOnly}
+            value={form.mapUrl}
+            icon={Link}
+            onChange={(e) => {
+              const val = e.target.value;
+              const updated = { ...form, mapUrl: val };
+              handleFormChange(updated);
+            }}
+          />
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* ===== STATE ===== */}

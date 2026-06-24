@@ -25,6 +25,8 @@ export default function CustomSelect({
   readOnly = false,
   onCreateNew = null,
   isCreating = false,
+  className,
+  dropdownClassName,
 }) {
   const isMatch = (optValue, val) => {
     if (optValue === val) return true;
@@ -136,7 +138,13 @@ export default function CustomSelect({
     <div className="relative w-full" ref={wrapperRef}>
       {/* Input */}
       <div
-        className={cn(baseStyles, variants[variant], disabled && "opacity-60 cursor-not-allowed", readOnly && "cursor-default")}
+        className={cn(
+          baseStyles,
+          variants[variant],
+          disabled && "opacity-60 cursor-not-allowed",
+          readOnly && "cursor-default",
+          className
+        )}
         onClick={() => {
           if (!disabled && !readOnly) setOpen(true);
         }}
@@ -168,10 +176,11 @@ export default function CustomSelect({
           <div
             ref={listRef}
             className={cn(
-              "rounded-md shadow-xl max-h-40 overflow-y-auto",
+              "rounded-xl shadow-xl max-h-40 overflow-y-auto border",
               variant === "transparent" || variant === "colored"
-                ? "bg-white/10 border border-white/20 backdrop-blur-lg"
-                : "bg-primary border border-third/40"
+                ? "bg-neutral-950 border-white/10 backdrop-blur-xl"
+                : "bg-primary border border-third/40",
+              dropdownClassName
             )}
           >
             {filteredOptions.length > 0 ? (
