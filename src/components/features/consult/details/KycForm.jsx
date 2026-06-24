@@ -540,19 +540,18 @@ export default function KycForm() {
                   </p>
                 </div>
 
-                {/* Partner Resources */}
+                {/* Benefits list */}
                 <div className="space-y-3.5 border-t border-white/10 pt-6">
-                  <h3 className="text-sm font-semibold text-white/90 mb-2 uppercase tracking-wider">Partner Resources</h3>
                   {[
-                    { title: "Selling Guide", subtitle: "Price Your Used Car Right in India — Maximize Value, Avoid Underselling", href: "/blog/how-to-price-used-car-india" },
-                    { title: "Document Checklist", subtitle: "Essential Documents Required to Sell Your Car in India (2026)", href: "/blog/documents-needed-to-sell-car-india-2026" },
-                    { title: "Listing Best Practices", subtitle: "37 Proven Tips to Help Your Used Car Sell Faster", href: "/blog/how-to-sell-used-car-faster-india-2026" },
-                    { title: "RC Transfer Guide", subtitle: "Complete RC Transfer Process After Buying a Used Car in India", href: "/blog/rc-transfer-process-used-car-india-2026" },
-                  ].map((resource, i) => (
-                    <a key={i} href={resource.href} target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 group">
-                      <div className="w-5 h-5 rounded-full border border-white/25 flex items-center justify-center shrink-0 group-hover:border-white transition-colors mt-0.5">
+                    "Your own storefront",
+                    "Secure payments",
+                    "Transparent commission",
+                    "No upfront cost",
+                  ].map((text, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      <div className="w-5 h-5 rounded-full border border-white/25 flex items-center justify-center shrink-0">
                         <svg
-                          className="w-3 h-3 text-white/95 transition-transform group-hover:translate-x-0.5"
+                          className="w-3.5 h-3.5 text-white/95"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -561,19 +560,14 @@ export default function KycForm() {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth="2.5"
-                            d="M9 5l7 7-7 7"
+                            d="M5 13l4 4L19 7"
                           ></path>
                         </svg>
                       </div>
-                      <div className="flex flex-col">
-                        <span className="text-xs font-medium text-white/85 group-hover:text-white transition-colors">
-                          {resource.title}
-                        </span>
-                        <span className="text-[10px] text-white/50 group-hover:text-white/70 transition-colors mt-1 leading-tight">
-                          {resource.subtitle}
-                        </span>
-                      </div>
-                    </a>
+                      <span className="text-xs font-medium text-white/85">
+                        {text}
+                      </span>
+                    </div>
                   ))}
                 </div>
               </div>

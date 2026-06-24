@@ -130,6 +130,7 @@ export default function PreviewAndEdite({
         address: a.address || "",
         stateId: a.stateId,
         cityId: a.cityId,
+        townId: a.townId,
         countryId: a.countryId || 101,
         latitude: a.latitude || 22.2587,
         longitude: a.longitude || 71.1924,
