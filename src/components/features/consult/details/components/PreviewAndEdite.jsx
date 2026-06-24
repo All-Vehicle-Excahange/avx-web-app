@@ -161,9 +161,9 @@ export default function PreviewAndEdite({
 
       const payload = new FormData();
       const k = form.kyc;
-      payload.append("gstNumber", k.gstNumber || "");
-      payload.append("panCardNumber", k.panNumber || "");
-      payload.append("aadharCardNumber", k.aadharNumber || "");
+      if (k.gstNumber) payload.append("gstNumber", k.gstNumber);
+      if (k.panNumber) payload.append("panCardNumber", k.panNumber);
+      if (k.aadharNumber) payload.append("aadharCardNumber", k.aadharNumber);
       if (k.gstPhoto instanceof File)
         payload.append("gstCertificateImage", k.gstPhoto);
       if (k.panPhoto instanceof File)
