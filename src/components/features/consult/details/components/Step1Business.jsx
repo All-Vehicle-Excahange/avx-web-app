@@ -329,11 +329,18 @@ export default function Step1Business({
                 <input
                   ref={logoRef}
                   type="file"
-                  accept="image/*"
+                  accept=".jpg,.jpeg,.png,.webp"
                   hidden
                   onChange={(e) => {
                     const file = e.target.files[0];
                     if (file) {
+                      const fileExt = "." + file.name.split(".").pop().toLowerCase();
+                      const allowedExts = [".jpg", ".jpeg", ".png", ".webp"];
+                      if (!allowedExts.includes(fileExt)) {
+                        alert("Only JPG, JPEG, PNG, and WEBP formats are supported for the logo.");
+                        e.target.value = "";
+                        return;
+                      }
                       setLogo(file);
                       handleInput("logo", file);
                     }
@@ -348,6 +355,8 @@ export default function Step1Business({
                 label="Banner Image"
                 preview={bannerPreview}
                 readOnly={readOnly}
+                accept=".jpg,.jpeg,.png,.webp"
+                supportedText="Supports: JPG, JPEG, PNG, WEBP"
                 onChange={(file) => {
                   if (!file) {
                     setBannerPreview(null);
@@ -490,6 +499,7 @@ export default function Step1Business({
                     options={yearOptions}
                     placeholder="Select Year"
                     variant="transparent"
+                    className="h-11 rounded-xl bg-white/2 border-white/8 hover:border-white/20 hover:bg-white/3 focus-within:bg-white/4"
                   />
                 )}
               </div>

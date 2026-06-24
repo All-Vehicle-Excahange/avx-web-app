@@ -153,7 +153,7 @@ export default function UserVehicleCard({
                   {data?.location || "Location not set"}
                 </p>
               </div>
-
+{/* 
               <button
                 onClick={() => setIsFavorite(!isFavorite)}
                 className="w-8 h-8 rounded-full bg-primary/10 hover:bg-primary/20 flex items-center justify-center cursor-pointer transition-all shrink-0"
@@ -161,7 +161,7 @@ export default function UserVehicleCard({
                 <Heart
                   className={`w-5 h-5 ${isFavorite ? "fill-red-500 text-red-500" : "text-primary"}`}
                 />
-              </button>
+              </button> */}
             </div>
 
             {/* SPECS */}

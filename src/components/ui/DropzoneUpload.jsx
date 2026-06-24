@@ -4,7 +4,13 @@ import Image from "next/image";
 import { useRef, useState, useMemo, useEffect } from "react";
 import { UploadCloud, CheckCircle2, Trash2 } from "lucide-react";
 
-export default function DropzoneUpload({ label, onChange, preview }) {
+export default function DropzoneUpload({
+  label,
+  onChange,
+  preview,
+  accept = "image/*,application/pdf",
+  supportedText = "Supports: JPG, PNG, PDF",
+}) {
   const inputRef = useRef();
   const [localFile, setLocalFile] = useState(null);
 
@@ -26,6 +32,30 @@ export default function DropzoneUpload({ label, onChange, preview }) {
 
   const handleFile = (f) => {
     if (!f) return;
+
+    if (f instanceof File && accept) {
+      const fileExt = "." + f.name.split(".").pop().toLowerCase();
+      const mimeType = f.type;
+
+      const acceptedList = accept.split(",").map((item) => item.trim());
+
+      const isAccepted = acceptedList.some((item) => {
+        if (item.startsWith(".")) {
+          return item.toLowerCase() === fileExt;
+        } else if (item.endsWith("/*")) {
+          const baseMime = item.split("/")[0];
+          return mimeType.startsWith(baseMime + "/");
+        } else {
+          return mimeType === item;
+        }
+      });
+
+      if (!isAccepted) {
+        alert(`Only formats matching ${accept} are supported.`);
+        return;
+      }
+    }
+
     setLocalFile(f);
     if (onChange) {
       onChange(f);
@@ -48,7 +78,7 @@ export default function DropzoneUpload({ label, onChange, preview }) {
             <p className="text-third text-sm tracking-wide">
               Drop your image here, or click to browse
             </p>
-            <p className="text-xs text-third/70">Supports: JPG, PNG, PDF</p>
+            <p className="text-xs text-third/70">{supportedText}</p>
           </div>
         ) : (
           <div className="flex flex-col items-center gap-4 w-full relative ">
@@ -96,7 +126,7 @@ export default function DropzoneUpload({ label, onChange, preview }) {
       <input
         ref={inputRef}
         type="file"
-        accept="image/*"
+        accept={accept}
         hidden
         onChange={(e) => handleFile(e.target.files[0])}
       />
