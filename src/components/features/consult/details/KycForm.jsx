@@ -205,6 +205,29 @@ export default function KycForm() {
       setBackendError("");
 
       if (step === 1) {
+        const b = form.business || existing.business || {};
+
+        if (!b.consultationName?.trim()) {
+          setBackendError("Consultation Name is required");
+          setLoading(false);
+          return;
+        }
+        if (!b.ownerName?.trim()) {
+          setBackendError("Owner Name is required");
+          setLoading(false);
+          return;
+        }
+        if (!b.companyEmail?.trim()) {
+          setBackendError("Company Email is required");
+          setLoading(false);
+          return;
+        }
+        if (!b.establishmentYear) {
+          setBackendError("Establishment Year is required");
+          setLoading(false);
+          return;
+        }
+
         if (existing.business) {
           if (!changed.business) {
             setStep(2);
@@ -213,7 +236,6 @@ export default function KycForm() {
 
           // Build clean FormData
           const payload = new FormData();
-          const b = form.business;
           if (b.logo instanceof File) payload.append("logo", b.logo);
           if (b.banner instanceof File) payload.append("banner", b.banner);
           payload.append("consultationName", b.consultationName || "");
@@ -241,7 +263,6 @@ export default function KycForm() {
 
         // Post Flow
         const payload = new FormData();
-        const b = form.business;
         if (b.logo instanceof File) payload.append("logo", b.logo);
         if (b.banner instanceof File) payload.append("banner", b.banner);
         payload.append("consultationName", b.consultationName || "");
@@ -266,8 +287,25 @@ export default function KycForm() {
       }
 
       if (step === 2) {
+        const a = form.address || existing.address || {};
+
+        if (!a.address?.trim()) {
+          setBackendError("Address is required");
+          setLoading(false);
+          return;
+        }
+        if (!a.stateId) {
+          setBackendError("State is required");
+          setLoading(false);
+          return;
+        }
+        if (!a.cityId) {
+          setBackendError("City is required");
+          setLoading(false);
+          return;
+        }
+
         // Build clean object - EXCLUDE cityName and stateName
-        const a = form.address;
         const payload = {
           address: a.address || "",
           stateId: a.stateId,
@@ -457,6 +495,17 @@ export default function KycForm() {
     }
   };
 
+  const handleSidebarStepClick = (targetStep) => {
+    if (targetStep === step) return;
+    if (targetStep === 2 && !existing?.business) return;
+    if (targetStep === 3 && !existing?.address) return;
+    if (targetStep === 4 && !existing?.kyc && !existing?.business?.isSubmitted) return;
+
+    // Bump the version so the child with that step remounts with fresh initialData
+    setDataVersion((p) => ({ ...p, [targetStep]: (p[targetStep] || 0) + 1 }));
+    setStep(targetStep);
+  };
+
   return (
     <>
       <Navbar />
@@ -491,18 +540,19 @@ export default function KycForm() {
                   </p>
                 </div>
 
-                {/* Benefits list */}
+                {/* Partner Resources */}
                 <div className="space-y-3.5 border-t border-white/10 pt-6">
+                  <h3 className="text-sm font-semibold text-white/90 mb-2 uppercase tracking-wider">Partner Resources</h3>
                   {[
-                    "Your own storefront",
-                    "Secure payments",
-                    "Transparent commission",
-                    "No upfront cost",
-                  ].map((text, i) => (
-                    <div key={i} className="flex items-center gap-3">
-                      <div className="w-5 h-5 rounded-full border border-white/25 flex items-center justify-center shrink-0">
+                    { title: "Selling Guide", subtitle: "Price Your Used Car Right in India — Maximize Value, Avoid Underselling", href: "/blog/how-to-price-used-car-india" },
+                    { title: "Document Checklist", subtitle: "Essential Documents Required to Sell Your Car in India (2026)", href: "/blog/documents-needed-to-sell-car-india-2026" },
+                    { title: "Listing Best Practices", subtitle: "37 Proven Tips to Help Your Used Car Sell Faster", href: "/blog/how-to-sell-used-car-faster-india-2026" },
+                    { title: "RC Transfer Guide", subtitle: "Complete RC Transfer Process After Buying a Used Car in India", href: "/blog/rc-transfer-process-used-car-india-2026" },
+                  ].map((resource, i) => (
+                    <a key={i} href={resource.href} target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 group">
+                      <div className="w-5 h-5 rounded-full border border-white/25 flex items-center justify-center shrink-0 group-hover:border-white transition-colors mt-0.5">
                         <svg
-                          className="w-3.5 h-3.5 text-white/95"
+                          className="w-3 h-3 text-white/95 transition-transform group-hover:translate-x-0.5"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -511,14 +561,19 @@ export default function KycForm() {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth="2.5"
-                            d="M5 13l4 4L19 7"
+                            d="M9 5l7 7-7 7"
                           ></path>
                         </svg>
                       </div>
-                      <span className="text-xs font-medium text-white/85">
-                        {text}
-                      </span>
-                    </div>
+                      <div className="flex flex-col">
+                        <span className="text-xs font-medium text-white/85 group-hover:text-white transition-colors">
+                          {resource.title}
+                        </span>
+                        <span className="text-[10px] text-white/50 group-hover:text-white/70 transition-colors mt-1 leading-tight">
+                          {resource.subtitle}
+                        </span>
+                      </div>
+                    </a>
                   ))}
                 </div>
               </div>
@@ -542,10 +597,20 @@ export default function KycForm() {
                     label: "Verification Status",
                     desc: "Account activation status",
                   },
-                ].map((item, i, arr) => (
+                ].map((item, i, arr) => {
+                  const isFullySubmitted = existing?.business?.isSubmitted && existing?.business?.verificationStatus !== "REQUEST_CHANGES";
+                  const isClickable = isFullySubmitted ? item.num === 4 : (
+                    item.num === 1 ||
+                    (item.num === 2 && !!existing?.business) ||
+                    (item.num === 3 && !!existing?.address) ||
+                    (item.num === 4 && (!!existing?.kyc || existing?.business?.isSubmitted))
+                  );
+
+                  return (
                   <div
                     key={item.num}
-                    className="flex items-start gap-3 relative"
+                    onClick={() => isClickable && handleSidebarStepClick(item.num)}
+                    className={`flex items-start gap-3 relative ${isClickable ? "cursor-pointer hover:brightness-110 transition-all" : "cursor-not-allowed"}`}
                   >
                     {/* Vertical line connecting steps */}
                     {i < arr.length - 1 && (
@@ -606,7 +671,8 @@ export default function KycForm() {
                       </span>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>

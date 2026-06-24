@@ -69,23 +69,27 @@ export default function Step3KYC({
     // 1. GST Dependency
     const hasGstNum = !!form.gstNumber.trim();
     const hasGstImg = !!gstPreview;
-    if (hasGstNum && !hasGstImg) {
-      newErrors.gst = "Both GST number and image are required.";
-    } else if (!hasGstNum && hasGstImg) {
-      newErrors.gst = "Both GST number and image are required.";
-    } else if (hasGstNum && !validateGST(form.gstNumber)) {
+    if (hasGstNum && !validateGST(form.gstNumber)) {
       newErrors.gst = "Invalid GST Number format (e.g. 07ABCDE1234F1Z5)";
+    } else if (submitAttempted) {
+      if (hasGstNum && !hasGstImg) {
+        newErrors.gst = "Both GST number and image are required.";
+      } else if (!hasGstNum && hasGstImg) {
+        newErrors.gst = "Both GST number and image are required.";
+      }
     }
 
     // 2. PAN Dependency
     const hasPanNum = !!form.panNumber.trim();
     const hasPanImg = !!panPreview;
-    if (hasPanNum && !hasPanImg) {
-      newErrors.pan = "Both PAN number and image are required.";
-    } else if (!hasPanNum && hasPanImg) {
-      newErrors.pan = "Both PAN number and image are required.";
-    } else if (hasPanNum && !validatePAN(form.panNumber)) {
+    if (hasPanNum && !validatePAN(form.panNumber)) {
       newErrors.pan = "Invalid PAN format (e.g. ABCDE1234F)";
+    } else if (submitAttempted) {
+      if (hasPanNum && !hasPanImg) {
+        newErrors.pan = "Both PAN number and image are required.";
+      } else if (!hasPanNum && hasPanImg) {
+        newErrors.pan = "Both PAN number and image are required.";
+      }
     }
 
     // 3. Aadhaar Dependency
@@ -94,14 +98,14 @@ export default function Step3KYC({
     const hasAadharBack = !!aadharBackPreview;
     const hasAllAadharImg = hasAadharFront && hasAadharBack;
 
-    if (hasAadharNum && !hasAllAadharImg) {
-      newErrors.aadhar =
-        "Both Aadhaar number and front/back images are required.";
-    } else if (!hasAadharNum && (hasAadharFront || hasAadharBack)) {
-      newErrors.aadhar =
-        "Both Aadhaar number and front/back images are required.";
-    } else if (hasAadharNum && !validateAadhaar(form.aadharNumber)) {
+    if (hasAadharNum && !validateAadhaar(form.aadharNumber)) {
       newErrors.aadhar = "Invalid Aadhaar (must be 12 digits)";
+    } else if (submitAttempted) {
+      if (hasAadharNum && !hasAllAadharImg) {
+        newErrors.aadhar = "Both Aadhaar number and front/back images are required.";
+      } else if (!hasAadharNum && (hasAadharFront || hasAadharBack)) {
+        newErrors.aadhar = "Both Aadhaar number and front/back images are required.";
+      }
     }
 
     // 4. At-least-one: PAN or Aadhaar must be fully provided
@@ -162,6 +166,10 @@ export default function Step3KYC({
     },
   };
 
+  const backendPanError = backendError?.toLowerCase().includes("pan") ? backendError : null;
+  const backendAadharError = backendError?.toLowerCase().includes("aadhar") || backendError?.toLowerCase().includes("aadhaar") ? backendError : null;
+  const backendGstError = backendError?.toLowerCase().includes("gst") ? backendError : null;
+
   return (
     <motion.div
       variants={containerVariants}
@@ -192,6 +200,7 @@ export default function Step3KYC({
             value={form.panNumber}
             icon={CreditCard}
             maxLength={10}
+            error={errors.pan || backendPanError}
             onChange={(e) => {
               const val = e.target.value.toUpperCase().slice(0, 10);
               handleInput("panNumber", val);
@@ -219,11 +228,6 @@ export default function Step3KYC({
           />
         </div>
 
-        {errors.pan && (
-          <p className="text-rose-500 text-sm font-medium mt-1 ml-1">
-            {errors.pan}
-          </p>
-        )}
       </motion.div>
 
       {/* OR Divider */}
@@ -261,6 +265,7 @@ export default function Step3KYC({
             value={formatAadhaar(form.aadharNumber)}
             icon={Fingerprint}
             maxLength={14}
+            error={errors.aadhar || backendAadharError}
             onChange={(e) => {
               const raw = e.target.value.replace(/\D/g, "");
               if (raw.length <= 12) {
@@ -316,11 +321,7 @@ export default function Step3KYC({
           </div>
         </div>
 
-        {errors.aadhar && (
-          <p className="text-rose-500 text-sm font-medium mt-1 ml-1">
-            {errors.aadhar}
-          </p>
-        )}
+
         {!errors.aadhar && submitAttempted && errors.atLeastOne && (
           <p className="text-rose-500 text-sm font-medium mt-1 ml-1 flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 p-3 rounded-xl">
             <ShieldAlert size={16} className="text-rose-500" />
@@ -352,6 +353,7 @@ export default function Step3KYC({
             value={form.gstNumber}
             icon={ReceiptText}
             maxLength={15}
+            error={errors.gst || backendGstError}
             onChange={(e) => {
               const val = e.target.value.toUpperCase().slice(0, 15);
               handleInput("gstNumber", val);
@@ -379,15 +381,10 @@ export default function Step3KYC({
           />
         </div>
 
-        {errors.gst && (
-          <p className="text-rose-500 text-sm font-medium mt-1 ml-1">
-            {errors.gst}
-          </p>
-        )}
       </motion.div>
 
       {/* ===== BACKEND ERROR ===== */}
-      {backendError && (
+      {backendError && !backendPanError && !backendAadharError && !backendGstError && (
         <p className="text-rose-500 text-sm font-medium mt-4 ml-1 animate-in fade-in slide-in-from-top-1">
           {backendError}
         </p>

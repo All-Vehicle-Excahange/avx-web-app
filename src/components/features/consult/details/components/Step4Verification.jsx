@@ -91,9 +91,9 @@ export default function Step4Verification({ existing, onEdit }) {
     : applicationSteps;
 
   return (
-    <div className="w-full mx-auto py-12  space-y-12">
+    <div className="w-full mx-auto py-12 space-y-12 relative">
       {/* ── TOP HEADER ─────────────────────────────────────────────────── */}
-      <div className="flex flex-col items-center text-center space-y-6">
+      <div className="flex flex-col items-center text-center space-y-6 pt-4">
         <div
           className={`w-20 h-20 rounded-full flex items-center justify-center transition-all duration-700
           ${isVerified ? "bg-green-500/10" : isChangesRequested ? "bg-orange-500/10" : isRejected ? "bg-red-500/10" : "bg-primary/10"}`}
@@ -183,9 +183,18 @@ export default function Step4Verification({ existing, onEdit }) {
       ) : (
         <div className="bg-primary/5 border border-third/10 rounded-2xl overflow-hidden">
           <div className="p-8 space-y-8">
-            <h2 className="text-xl font-bold text-primary tracking-tight">
-              Application Status
-            </h2>
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-bold text-primary tracking-tight">
+                Application Status
+              </h2>
+
+              {!isChangesRequested && (
+                <Button variant="outlineSecondary" onClick={onEdit} className="flex items-center gap-2 text-xs">
+                  <FileText size={14} />
+                  View Application
+                </Button>
+              )}
+            </div>
 
             <div className="space-y-4">
               {visibleSteps.map((step) => (
@@ -374,26 +383,42 @@ export default function Step4Verification({ existing, onEdit }) {
         <h2 className="text-xl font-bold text-primary">Partner Resources</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
-            { label: "Partner Policies", icon: HelpCircle },
-            { label: "Listing Best Practices", icon: ExternalLink },
-            { label: "Vendor Support Guide", icon: HelpCircle },
-            { label: "Help Center", icon: ExternalLink },
+            { label: "Selling Guide", subtitle: "Price Your Used Car Right in India — Maximize Value, Avoid Underselling", icon: ExternalLink, href: "/blog/how-to-price-used-car-india" },
+            { label: "Document Checklist", subtitle: "Essential Documents Required to Sell Your Car in India (2026)", icon: ExternalLink, href: "/blog/documents-needed-to-sell-car-india-2026" },
+            { label: "Listing Best Practices", subtitle: "37 Proven Tips to Help Your Used Car Sell Faster", icon: ExternalLink, href: "/blog/how-to-sell-used-car-faster-india-2026" },
+            { label: "RC Transfer Guide", subtitle: "Complete RC Transfer Process After Buying a Used Car in India", icon: ExternalLink, href: "/blog/rc-transfer-process-used-car-india-2026" },
           ].map((item, idx) => (
-            <button
+            <a
               key={idx}
-              className="flex items-center justify-between p-5 rounded-xl border border-third/10 hover:border-primary/40 hover:bg-primary/10 transition-all text-left group"
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between p-5 rounded-xl border border-third/10 hover:border-primary/40 hover:bg-primary/10 transition-all text-left group cursor-pointer"
             >
-              <div className="flex items-center gap-4">
-                <div className="p-2 bg-primary/5 rounded-lg group-hover:bg-primary/10 transition-colors">
+              <div className="flex items-start gap-4">
+                <div className="p-2 bg-primary/5 rounded-lg group-hover:bg-primary/10 transition-colors shrink-0">
                   <item.icon className="w-5 h-5 text-primary" />
                 </div>
-                <span className="text-sm font-bold text-primary leading-none">
-                  {item.label}
-                </span>
+                <div className="flex flex-col">
+                  <span className="text-sm font-bold text-primary leading-none mb-1.5">
+                    {item.label}
+                  </span>
+                  <span className="text-xs text-third/70 leading-snug">
+                    {item.subtitle}
+                  </span>
+                </div>
               </div>
-              <ChevronRight className="w-4 h-4 text-third/40 group-hover:text-primary transition-colors" />
-            </button>
+              <ChevronRight className="w-4 h-4 text-third/40 group-hover:text-primary transition-colors shrink-0 ml-4" />
+            </a>
           ))}
+        </div>
+
+        {/* Verification Help Link */}
+        <div className="mt-6 pt-4 flex flex-col items-center text-center">
+          <p className="text-sm text-third/70">Need help with verification?</p>
+          <a href="/help" className="text-primary font-bold text-base hover:underline mt-1 inline-block">
+            Contact Partner Support
+          </a>
         </div>
       </div>
     </div>
