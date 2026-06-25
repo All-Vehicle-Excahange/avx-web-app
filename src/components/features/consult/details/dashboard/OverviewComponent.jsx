@@ -167,12 +167,12 @@ export default function OverviewComponent() {
               <span className="w-fit inline-flex items-center px-4 py-1.5 rounded-full bg-primary text-secondary text-[10px] md:text-xs font-bold tracking-wider uppercase">
                 {sellerTier || user?.sellerTier || ""}
               </span>
-            </div>
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs md:text-sm text-third mt-1">
-              <span className="flex items-center gap-1 text-green-400 font-medium">
+              <span className="flex items-center gap-1 text-green-400 font-medium text-xs md:text-sm">
                 <BadgeCheck size={16} />
                 Verified
               </span>
+            </div>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs md:text-sm text-third mt-1">
               {/* <span className="flex items-center gap-2">
                 <MapPin size={16} />
                 City: Ahmedabad
