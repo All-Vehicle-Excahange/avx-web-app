@@ -10,6 +10,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import useGuestSetup from "@/hooks/useGuestSetup";
 import LoginPopup from "@/components/auth/LoginPopup";
 import SignupPopup from "@/components/auth/SignupPopup";
+import CompleteProfilePopup from "@/components/auth/CompleteProfilePopup";
 import GlobalLoader from "@/components/ui/GlobalLoader";
 import SplashScreen from "@/components/ui/SplashScreen";
 import GlobalCompareButton from "@/components/ui/GlobalCompareButton";
@@ -43,6 +44,10 @@ export default function App({ Component, pageProps }) {
   const isSignupPopupOpen = useAuthStore((state) => state.isSignupPopupOpen);
   const openSignupPopup = useAuthStore((state) => state.openSignupPopup);
   const closeSignupPopup = useAuthStore((state) => state.closeSignupPopup);
+
+  const isCompleteProfilePopupOpen = useAuthStore((state) => state.isCompleteProfilePopupOpen);
+  const openCompleteProfilePopup = useAuthStore((state) => state.openCompleteProfilePopup);
+  const closeCompleteProfilePopup = useAuthStore((state) => state.closeCompleteProfilePopup);
 
   const [loading, setLoading] = useState(false);
 
@@ -199,7 +204,10 @@ export default function App({ Component, pageProps }) {
             isOpen={isLoginPopupOpen && !showSplash}
             onClose={closeLoginPopup}
             onSignup={openSignupPopup}
-            onSuccess={closeLoginPopup}
+            onSuccess={() => {
+              closeLoginPopup();
+              openCompleteProfilePopup();
+            }}
           />
 
           {/* SIGNUP POPUP */}
@@ -207,7 +215,17 @@ export default function App({ Component, pageProps }) {
             isOpen={isSignupPopupOpen && !showSplash}
             onClose={closeSignupPopup}
             onLogin={openLoginPopup}
-            onSuccess={closeSignupPopup}
+            onSuccess={() => {
+              closeSignupPopup();
+              openCompleteProfilePopup();
+            }}
+          />
+
+          {/* COMPLETE PROFILE POPUP */}
+          <CompleteProfilePopup
+            isOpen={isCompleteProfilePopupOpen && !showSplash}
+            onClose={closeCompleteProfilePopup}
+            onSuccess={closeCompleteProfilePopup}
           />
 
           {/* SPLASH SCREEN */}

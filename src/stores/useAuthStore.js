@@ -9,14 +9,16 @@ export const useAuthStore = create((set) => ({
   isLoggedIn: false,
   authInitialized: false,
 
-  //  LOGIN & SIGNUP POPUP CONTROL
+  //  LOGIN & SIGNUP & PROFILE POPUP CONTROL
   isLoginPopupOpen: false,
   isSignupPopupOpen: false,
+  isCompleteProfilePopupOpen: false,
 
   openLoginPopup: () =>
     set({
       isLoginPopupOpen: true,
       isSignupPopupOpen: false,
+      isCompleteProfilePopupOpen: false,
     }),
 
   closeLoginPopup: () =>
@@ -28,11 +30,24 @@ export const useAuthStore = create((set) => ({
     set({
       isSignupPopupOpen: true,
       isLoginPopupOpen: false,
+      isCompleteProfilePopupOpen: false,
     }),
 
   closeSignupPopup: () =>
     set({
       isSignupPopupOpen: false,
+    }),
+
+  openCompleteProfilePopup: () =>
+    set({
+      isCompleteProfilePopupOpen: true,
+      isLoginPopupOpen: false,
+      isSignupPopupOpen: false,
+    }),
+
+  closeCompleteProfilePopup: () =>
+    set({
+      isCompleteProfilePopupOpen: false,
     }),
 
   //  LOGIN FUNCTION
