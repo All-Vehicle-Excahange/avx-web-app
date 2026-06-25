@@ -1278,7 +1278,7 @@ export default function WhyBuyPro3({
         <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
           <Button
             onClick={handleSaveAndNext}
-            disabled={isSaving || (errors && Object.keys(errors).length > 0)}
+            disabled={isSaving}
             variant="ghost"
           >
             {isSaving ? "Saving..." : "Save and Next"}
