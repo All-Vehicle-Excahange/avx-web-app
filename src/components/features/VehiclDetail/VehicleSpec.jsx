@@ -40,12 +40,12 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
   const { data: existingInspection, isFetching: isCheckingInspection } =
     useQuery({
       ...getInspectionByVehicleIdQuery(vehicle?.id),
-      enabled: !!vehicle?.id,
+      enabled: !!vehicle?.id && open,
     });
 
   const { data: priceData } = useQuery({
     ...getInspectionPricForBuyerQuery(vehicle?.id),
-    enabled: !!vehicle?.id,
+    enabled: !!vehicle?.id && open,
   });
 
   const reportOnlyPrice = priceData?.reportOnlyPrice ?? 1499;
@@ -646,8 +646,19 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
               <X size={20} />
             </div>
 
-            {/* CONTENT */}
-            <div className="p-4 md:p-6 space-y-5 w-full md:w-[50%] overflow-y-auto custom-scrollbar">
+            {/* IMAGE (LEFT SIDE) */}
+            <div className="hidden md:block md:w-[40%]">
+              <Image
+                width={500}
+                height={500}
+                src="/bg.jpg"
+                alt="reecomm-payment"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* CONTENT (RIGHT SIDE) */}
+            <div className="p-4 md:p-6 space-y-5 w-full md:w-[60%] overflow-y-auto custom-scrollbar">
               {/* ---- STEP 0: Already Submitted ---- */}
               {step === 0 && existingInspection && (
                 <>
@@ -1023,15 +1034,6 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
               )}
             </div>
 
-            <div className="hidden md:block md:w-[50%]">
-              <Image
-                width={500}
-                height={500}
-                src="/bg.jpg"
-                alt="reecomm-payment"
-                className="w-full h-full object-cover"
-              />
-            </div>
           </div>
         </div>
       )}

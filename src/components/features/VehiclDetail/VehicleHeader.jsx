@@ -1,10 +1,12 @@
 "use client";
 
-import { ChevronRight, Star } from "lucide-react";
+import { ChevronRight, Star, ExternalLink } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useCompareStore } from "@/stores/useCompareStore";
+import Button from "@/components/ui/button";
+import SharePopup from "@/components/ui/SharePopup";
 
 export default function VehicleHeader({ vehicle, vehicleSummary }) {
   const searchParams = useSearchParams();
@@ -20,7 +22,13 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
     }
   }, [vehicle, setSelectedVehicle]);
 
-  
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState("");
+
+  useEffect(() => {
+    setCurrentUrl(typeof window !== "undefined" ? window.location.href : "");
+  }, []);
+
   const vehicleNameBase =
     [vehicle?.makerName, vehicle?.modelName, vehicle?.variantName]
       .filter(Boolean)
@@ -116,7 +124,16 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
         </h1>
 
         {/* RIGHT SIDE */}
-        <div className="flex items-center gap-3 ml-auto">
+        <div className="flex items-center gap-2 ml-auto ">
+          {/* SHARE */}
+          <Button
+            onClick={() => setIsShareOpen(true)}
+            size="sm"
+            className="bg-primary/20 flex h-10 w-10 items-center justify-center rounded-full p-0 text-primary/80 hover:text-primary "
+          >
+            <ExternalLink className="h-6 w-6" />
+          </Button>
+
           {/* PRICE */}
           <div className="hidden lg:block bg-primary text-secondary px-4 py-2 rounded-lg text-right">
             <p className="text-lg font-semibold">
@@ -125,6 +142,13 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
           </div>
         </div>
       </div>
+
+      <SharePopup
+        isOpen={isShareOpen}
+        onClose={() => setIsShareOpen(false)}
+        url={currentUrl}
+        title={vehicleNameBase}
+      />
     </header>
   );
 }
