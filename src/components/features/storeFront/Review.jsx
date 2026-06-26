@@ -318,14 +318,16 @@ export default function Review() {
                   ))}
 
                   {/* ✅ Add More Button */}
-                  <Button
-                    type="button"
-                    variant="outlineSecondary"
-                    onClick={addMoreImageInput}
-                    className="text-sm text-primary font-medium"
-                  >
-                    <Plus className="w-4 mr-1 h-4" /> Add Media
-                  </Button>
+                  {media.length < 4 && (
+                    <Button
+                      type="button"
+                      variant="outlineSecondary"
+                      onClick={addMoreImageInput}
+                      className="text-sm text-primary font-medium"
+                    >
+                      <Plus className="w-4 mr-1 h-4" /> Add Media
+                    </Button>
+                  )}
                 </div>
 
                 <div className="relative mt-5">

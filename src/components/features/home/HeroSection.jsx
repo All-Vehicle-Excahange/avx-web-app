@@ -4,23 +4,53 @@ import StickyHeroNavbar from "./StickyHeroNavbar";
 import VehicleFilterBar from "./VehicleFilterBar";
 import { Car, User2 } from "lucide-react";
 import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, EffectFade } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/effect-fade";
+
+const slidesData = [
+  { id: 1, title: "Seller Hand over the keys, not the headache." },
+  { id: 2, title: "Buyer See the real condition, before you decide." },
+  { id: 3, title: "Inspection Every vehicle, independently checked." },
+  { id: 4, title: "Consultant Your business, your storefront, your growth." }
+];
 
 export default function HeroSection() {
   const [collapsed, setCollapsed] = useState(false);
   const [activeTab, setActiveTab] = useState("vehicles");
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
-      {/* Video Background */}
-      <Image
-        src="/hero_main_image.png"
-        fill
-        className="absolute inset-0 w-full h-full object-cover z-0"
-        alt="Hero background"
-      />
+      {/* Swiper Background */}
+      <div className="absolute inset-0 w-full h-full z-0">
+        <Swiper
+          modules={[Autoplay, EffectFade]}
+          effect="fade"
+          autoplay={{ delay: 3000, disableOnInteraction: false }}
+          loop={true}
+          allowTouchMove={false}
+          className="w-full h-full"
+          onSlideChange={(swiper) => setActiveSlideIndex(swiper.realIndex)}
+        >
+          {slidesData.map((slide, index) => (
+            <SwiperSlide key={slide.id}>
+              <Image
+                src={`/${slide.id}.webp`}
+                fill
+                className="w-full h-full object-cover"
+                alt={`Hero background ${slide.title}`}
+                priority={index === 0}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
 
       {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/30 z-0" />
+      <div className="absolute inset-0 bg-black/20 z-0" />
 
       {/* 🔥 TOP GRADIENT SCRIM (KEY FIX) */}
       <div
@@ -41,11 +71,11 @@ export default function HeroSection() {
           <span className="text-xs text-fourth md:text-sm uppercase tracking-[0.3em]  font-semibold drop-shadow-md">
             One Ecosystem. Every Side.
           </span>
-          <h1 className="text-4xl md:text-6xl font-black text-white leading-none w-6xl tracking-tight drop-shadow-xl font-primary">
-            Buyers. Sellers. Consultants.
+          <h1 className="text-4xl md:text-6xl font-black text-white leading-none w-6xl tracking-tight drop-shadow-xl font-primary transition-all duration-300">
+            {slidesData[activeSlideIndex].title}
           </h1>
-          <p className="text-lg md:text-2xl text-white/80 font-medium tracking-wide drop-shadow-md">
-            One trusted marketplace.
+          <p className="text-lg md:text-2xl text-white/80 font-medium tracking-wide drop-shadow-md transition-all duration-300">
+           One trusted marketplace.
           </p>
         </div>
 

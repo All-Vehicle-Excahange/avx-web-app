@@ -6,9 +6,11 @@ import Image from "next/image";
 import CloseInqPopup from "../features/consult/details/dashboard/components/CloseInqPopup";
 import { useState } from "react";
 import { generateVehicleSlug } from "@/lib/helper";
+import FeedbackPopup from "./FeedbackPopup";
 
 export default function MyInquiryCard({ inquiry, onStatusChange }) {
   const [showClosePopup, setShowClosePopup] = useState(false);
+  const [showFeedbackPopup, setShowFeedbackPopup] = useState(false);
   const [loading, setLoading] = useState(false);
 
   if (!inquiry) {
@@ -122,9 +124,21 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
 
           {/* ✅ Closed Reason */}
           {isClosed && (
-            <p className="text-xs flex items-center gap-2 text-third pt-1">
-              <span className="text-primary font-semibold">Reason: {inquiryCloseReason || "Closed by you"}</span>
-            </p>
+            <>
+              <p className="text-xs flex items-center gap-2 text-third pt-1">
+                <span className="text-primary font-semibold">Reason: {inquiryCloseReason || "Closed by you"}</span>
+              </p>
+              <div className="pt-4 flex flex-wrap gap-3">
+                <Button
+                  showIcon={false}
+                  variant="outlineSecondary"
+                  size="sm"
+                  onClick={() => setShowFeedbackPopup(true)}
+                >
+                  Feedback
+                </Button>
+              </div>
+            </>
           )}
 
           {/* ✅ Inspection Completed */}
@@ -190,6 +204,21 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
             await handleClose(closeReason);
             setShowClosePopup(false);
           }}
+        />
+      )}
+
+      {/* ✅ Feedback Popup */}
+      {showFeedbackPopup && (
+        <FeedbackPopup
+          isOpen={showFeedbackPopup}
+          onClose={() => setShowFeedbackPopup(false)}
+          targetId={
+            inquiry?.inquiryVehicleResponse?.vehicleOwner?.username ||
+            inquiry?.inquiryVehicleResponse?.user?.username ||
+            inquiry?.inquiryVehicleResponse?.storeFrontUsername ||
+            inquiry?.inquirer?.username ||
+            "unknown"
+          }
         />
       )}
     </div>
