@@ -250,7 +250,7 @@ export default function ProfileComponent() {
         </p>
       </div>
 
-      <div className="w-full lg:w-1/2 border border-third/30 rounded-xl p-6 space-y-6 flex flex-col justify-between h-full hover:border-third/50 transition-all duration-200 shadow-sm">
+      <div className="w-full lg:w-1/2 bg-primary/5 rounded-xl p-6 space-y-6 flex flex-col justify-between h-full transition-all duration-200 shadow-sm">
         <div className="flex items-center justify-between">
           <p className="text-third text-sm">
             Profile Completion:{" "}
@@ -394,7 +394,7 @@ export default function ProfileComponent() {
         ["REQUESTED", "VERIFIED", "REQUEST_CHANGES", "REJECTED"].includes(
           basicUpdateData.verificationStatus,
         ) && (
-          <div className="border border-third/30 rounded-xl p-6 space-y-6 transition-all duration-300">
+          <div className="bg-primary/5 rounded-xl p-6 space-y-6 transition-all duration-300">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h2 className="text-xl font-semibold">
@@ -501,7 +501,7 @@ export default function ProfileComponent() {
         )}
 
       {/* PROFILE CARD */}
-      <div className="rounded-xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl bg-primary/5  p-6 space-y-6 shadow-sm transition-colors duration-200">
         <div className="flex justify-between items-center">
           <h2 className="font-semibold">Business Profile</h2>
         </div>
@@ -550,7 +550,7 @@ export default function ProfileComponent() {
           </div>
         )}
 
-        <div className="mt-4 rounded-xl bg-primary/5 border border-third/20 px-4 py-3">
+        <div className="mt-4 rounded-xl bg-primary/5 px-4 py-3">
           <p className="text-xs text-third flex items-center gap-2">
             <Info size={14} className="text-primary/70" />
             This information is visible to buyers
@@ -559,7 +559,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* VERIFICATION STATUS */}
-      <div className="rounded-xl border border-third/40  p-6 space-y-4">
+      <div className="rounded-xl bg-primary/5  p-6 space-y-4">
         <h2 className="font-semibold">Verification Status</h2>
 
         <div className="grid md:grid-cols-2 gap-6">
@@ -578,7 +578,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* KYC DOCUMENTS */}
-      <div className="rounded-xl border border-third/40  p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl bg-primary/5  p-6 space-y-4 shadow-sm transition-colors duration-200">
         <h2 className="font-semibold">KYC Documents</h2>
 
         {Object.values(documentData).some((s) => s !== "VERIFIED") && (
@@ -625,7 +625,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* BUSINESS LOCATION & MAP (TRUST BOOST) */}
-      <div className="rounded-xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl bg-primary/5  p-6 space-y-6 shadow-sm transition-colors duration-200">
         {/* Header */}
         <div className="flex justify-between items-center">
           <h2 className="font-semibold">Business Location & Map</h2>
@@ -716,7 +716,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* ACCOUNT & ROLE DETAILS (ADMIN-FRIENDLY) */}
-      <div className="rounded-xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl bg-primary/5  p-6 space-y-6 shadow-sm transition-colors duration-200">
         {/* Header */}
         <div>
           <h2 className="font-semibold">Account & Role Details</h2>
@@ -785,7 +785,7 @@ export default function ProfileComponent() {
       </div>
 
       {/* RESTRICTIONS & PLATFORM RULES (TRANSPARENCY) */}
-      <div className="rounded-xl border border-third/40  p-6 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl bg-primary/5  p-6 space-y-6 shadow-sm transition-colors duration-200">
         {/* Header */}
         <div>
           <h2 className="font-semibold">Restrictions & Platform Rules</h2>
@@ -833,7 +833,7 @@ export default function ProfileComponent() {
         </div>
       </div>
       {/* FOOTER ACTIONS (CONTEXTUAL) */}
-      <div className="rounded-xl border border-third/30  p-5 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
+      <div className="rounded-xl bg-primary/5  p-6 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
         {/* ✅ Text Section: Centered on mobile, left-aligned on desktop */}
         <div className="space-y-1 text-left">
           <p className="font-medium text-sm md:text-base text-primary">
@@ -883,8 +883,8 @@ export function ProfileItem({ label, value }) {
 function StatusCard({ title, value, icon, green }) {
   return (
     <div
-      className={`flex items-center gap-4 rounded-xl p-5 border border-third/30 ${
-        green ? "bg-green-500/10" : "bg-secondary"
+      className={`flex items-center gap-4 rounded-xl p-5 ${
+        green ? "bg-green-500/10" : "bg-primary/5"
       }`}
     >
       <div
@@ -906,7 +906,7 @@ function StatusCard({ title, value, icon, green }) {
 
 function KycRow({ title, status, state, reason }) {
   return (
-    <div className="flex justify-between items-center rounded-xl border border-third/30  p-4">
+    <div className="flex justify-between items-center rounded-xl bg-primary/5  p-4">
       {/* Left Info */}
       <div className="flex items-center gap-3">
         <FileText className="text-primary" size={18} />

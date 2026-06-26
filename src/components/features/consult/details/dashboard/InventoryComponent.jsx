@@ -35,6 +35,7 @@ import {
 import TopPerformingCard from "./components/TopPerformingCard";
 import AddSlotPopup from "./components/AddSlotPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
+import ListingPopup from "@/components/ui/const/ListingPopup";
 import StatCardSkeleton from "@/components/ui/skeleton/StatCardSkeleton";
 import TopPerformingCardSkeleton from "@/components/ui/skeleton/TopPerformingCardSkeleton";
 import UserVehicleCardSkeleton from "@/components/ui/skeleton/UserVehicleCardSkeleton";
@@ -78,6 +79,7 @@ export default function InventoryComponent() {
   const [activeType, setActiveType] = useState("all");
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isAddSlotOpen, setIsAddSlotOpen] = useState(false);
+  const [isListingOpen, setIsListingOpen] = useState(false);
 
   const queryClient = useQueryClient();
   const { push } = useRouter();
@@ -220,7 +222,7 @@ export default function InventoryComponent() {
             <Button
               variant="ghost"
               size="md"
-              onClick={() => setIsDownloadOpen(true)}
+              onClick={() => setIsListingOpen(true)}
               showIcon={false}
               className="w-auto md:w-auto justify-center"
             >
@@ -231,7 +233,7 @@ export default function InventoryComponent() {
         </div>
 
         {/* 3️⃣ Inventory Health Snapshot  */}
-        <div className="rounded-xl border border-third/20 bg-primary/5 p-5 shadow-sm space-y-6">
+        <div className="rounded-xl bg-primary/5 p-6 shadow-sm space-y-6">
           <div className="flex items-center gap-3 pb-5 border-b border-third/10">
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/10">
               <TrendingUp className="text-primary" size={20} />
@@ -280,7 +282,7 @@ export default function InventoryComponent() {
         </div>
 
         {/* LISTING LIMIT PROGRESS */}
-        <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-8 md:gap-16 lg:gap-24 rounded-2xl border border-third/30 bg-linear-to-r from-primary/10 to-primary/5 p-5 sm:p-6 shadow-sm">
+        <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-8 md:gap-16 lg:gap-24 rounded-2xl bg-primary/5 p-6 shadow-sm">
           <div className="flex-1 flex flex-col gap-3.5 w-full">
             <div className="flex items-center justify-between">
               <span className="text-third text-xs uppercase tracking-widest font-semibold">
@@ -322,7 +324,7 @@ export default function InventoryComponent() {
         {/* 3️⃣ TOP PERFORMING VEHICLES */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {/* LEFT SIDE */}
-          <div className="rounded-xl border border-third/30 bg-primary/5 p-5 flex flex-col h-[400px] ">
+          <div className="rounded-xl bg-primary/5 p-6 flex flex-col h-[400px] ">
             {/* HEADER (fixed) */}
             <div className="flex items-center gap-2 mb-4">
               <TrendingUp className="text-primary" size={18} />
@@ -434,7 +436,7 @@ export default function InventoryComponent() {
         {/* LISTING LIMIT PROGRESS */}
 
         {/* 4️⃣ FILTER BAR */}
-        <div className="rounded-xl border border-third/30 p-5 flex flex-col lg:flex-row gap-4 justify-between">
+        <div className="rounded-xl bg-primary/5 p-6 flex flex-col lg:flex-row gap-4 justify-between">
           <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
             {vehicleTypes.map((type) => (
               <button
@@ -585,7 +587,7 @@ export default function InventoryComponent() {
             )}
           </div>
         )}
-        <div className="rounded-xl border border-third/30 bg-primary/5 p-5 space-y-4">
+        <div className="rounded-xl bg-primary/5 p-6 space-y-4">
           <div className="flex items-center gap-2">
             <AlertTriangle className="text-yellow-500" size={18} />
             <h3 className="font-semibold">Vehicles Needing Attention</h3>
@@ -625,6 +627,10 @@ export default function InventoryComponent() {
       <DownloadAppPopup
         isOpen={isDownloadOpen}
         onClose={() => setIsDownloadOpen(false)}
+      />
+      <ListingPopup
+        isOpen={isListingOpen}
+        onClose={() => setIsListingOpen(false)}
       />
       <AddSlotPopup
         isOpen={isAddSlotOpen}
