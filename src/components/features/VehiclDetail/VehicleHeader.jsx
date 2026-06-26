@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, Star, ExternalLink } from "lucide-react";
+import { ChevronRight, Star, ExternalLink, Share2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -131,7 +131,7 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
             size="sm"
             className="bg-primary/20 flex h-10 w-10 items-center justify-center rounded-full p-0 text-primary/80 hover:text-primary "
           >
-            <ExternalLink className="h-6 w-6" />
+            <Share2 className="h-6 w-6" />
           </Button>
 
           {/* PRICE */}

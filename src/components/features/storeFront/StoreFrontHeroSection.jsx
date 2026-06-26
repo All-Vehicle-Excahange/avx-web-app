@@ -12,6 +12,7 @@ import {
   IndianRupee,
   CornerUpRight,
   ExternalLink,
+  Share2,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
@@ -233,7 +234,7 @@ export default function StoreFrontHeroSection() {
                     size="sm"
                     className="flex h-9 w-9 items-center justify-center rounded-full p-0 text-primary/80 hover:text-primary bg-transparent!"
                   >
-                    <ExternalLink className="h-5 w-5" />
+                    <Share2 className="h-5 w-5" />
                   </Button>
                 </div>
 
