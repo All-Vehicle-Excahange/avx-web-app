@@ -4,6 +4,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import { getStoreFrontByUsernameQuery } from "@/queries/user.queries";
+import { getStoreFrontByUsername } from "@/services/user.service";
 
 function StoreFrontPage({ seo }) {
   const router = useRouter();
@@ -75,7 +76,7 @@ export async function getServerSideProps(context) {
   const currentUrl = `${protocol}://${host}${req.url}`;
 
   // Fallback slug formatting (fast and synchronous)
-  const finalTitle = id
+  let finalTitle = id
     ? id
         .toString()
         .split("-")
@@ -83,7 +84,25 @@ export async function getServerSideProps(context) {
         .join(" ")
     : "StoreFront Details";
 
-  const storefrontImageUrl = `${protocol}://${host}/logo/logo.webp`;
+  let storefrontImageUrl = `${protocol}://${host}/logo/logo.webp`;
+
+  // Fetch actual storefront data for SEO accuracy
+  try {
+    if (id) {
+      const res = await getStoreFrontByUsername(id);
+      const storeData = res?.data;
+      if (storeData) {
+        if (storeData.consultationName) {
+          finalTitle = storeData.consultationName;
+        }
+        if (storeData.logoUrl) {
+          storefrontImageUrl = storeData.logoUrl;
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching storefront for SEO:", error?.message);
+  }
 
   return {
     props: {
