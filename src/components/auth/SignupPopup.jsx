@@ -209,20 +209,13 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
       });
 
       if (!res?.error && (res?.success || res?.status)) {
-          localStorage.removeItem("otpBlockUntil");
+        localStorage.removeItem("otpBlockUntil");
         setCountdown(0);
-        onSuccess();
-        setTimeout(() => {
-          if (accountType === "consultant") {
-            push("/consult");
-          } else {
-            const hasShownPref = localStorage.getItem("hasShownPreferencesPopup");
-            if (!hasShownPref) {
-              document.dispatchEvent(new Event("preferencespopup:open"));
-            }
-          }
-          handleClosePopup();
-        }, 500);
+        
+        // Wait for onSuccess to complete (which might open CompleteProfilePopup)
+        await onSuccess();
+        
+        handleClosePopup();
       } else if (res?.error) {
         const msg = res?.message?.toLowerCase();
         if (
@@ -440,7 +433,13 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
             <input
               type="email"
               placeholder="Email address"
-              {...register("email")}
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
+                  message: "Email must be in lowercase only",
+                },
+              })}
               className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
             />
             {errors.email && (

@@ -57,7 +57,7 @@ export default function StatCard({ icon, label, value, trend }) {
 
         {/* Removed whitespace-nowrap and added min-w-0 */}
         <div className="flex flex-col min-w-0">
-          <p className="text-[10px] sm:text-xs font-medium text-third leading-tight break-words">
+          <p className="text-[10px] sm:text-sm font-bold  text-third leading-tight break-words">
             {label}
           </p>
           <p className="text-base sm:text-lg font-bold text-primary leading-tight">
