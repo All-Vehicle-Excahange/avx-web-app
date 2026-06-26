@@ -10,6 +10,7 @@ import { X, User, Loader2 } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getStatesQuery, getCitiesQuery } from "@/queries/user.queries";
 import { createUserMeta, getAllTown } from "@/services/user.service";
+import { showBackendError } from "@/lib/axiosInstance";
 
 export default function CompleteProfilePopup({ isOpen, onClose, onSuccess = () => {} }) {
   const {
@@ -23,6 +24,7 @@ export default function CompleteProfilePopup({ isOpen, onClose, onSuccess = () =
     defaultValues: {
       age: "",
       gender: "",
+      profession: "",
       stateId: "",
       cityId: "",
       townId: "",
@@ -101,6 +103,7 @@ export default function CompleteProfilePopup({ isOpen, onClose, onSuccess = () =
       const payload = {
         age: Number(data.age),
         gender: data.gender,
+        profession: data.profession?.trim() ? data.profession : null,
         cityId: data.cityId,
         stateId: data.stateId,
         countryId: 101, // Default to India
@@ -110,22 +113,27 @@ export default function CompleteProfilePopup({ isOpen, onClose, onSuccess = () =
       };
 
       if (data.townId && String(data.townId).trim() !== "") {
-        payload.townId = data.townId;
+        payload.townId = Number(data.townId);
       } else {
         payload.townId = null;
       }
 
-      await createUserMeta(payload);
-      
-      // Refresh user profile meta
-      queryClient.invalidateQueries({ queryKey: ["user-meta-exists"] });
-      queryClient.invalidateQueries({ queryKey: ["user-profile-meta"] });
-      queryClient.invalidateQueries({ queryKey: ["user-profile-strength"] });
+      try {
+        await createUserMeta(payload);
+        
+        // Refresh user profile meta
+        queryClient.invalidateQueries({ queryKey: ["user-meta-exists"] });
+        queryClient.invalidateQueries({ queryKey: ["user-profile-meta"] });
+        queryClient.invalidateQueries({ queryKey: ["user-profile-strength"] });
 
-      onSuccess();
-      handleClosePopup();
-    } catch (err) {
-      console.error(err);
+        onSuccess();
+        handleClosePopup();
+      } catch (err) {
+        console.error("Error creating user meta:", err);
+        showBackendError(err);
+      }
+    } catch (error) {
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -205,7 +213,7 @@ export default function CompleteProfilePopup({ isOpen, onClose, onSuccess = () =
                   onInput={(e) => {
                     e.target.value = e.target.value.replace(/[^0-9]/g, '');
                   }}
-                  className="w-full text-primary py-[13px] px-4 border rounded-md border-accent-gray bg-transparent outline-none focus:border-primary transition-colors"
+                  className="w-full text-primary py-[13px] px-4 border rounded-md border-white/20 bg-transparent outline-none focus:border-white/60 transition-colors"
                 />
                 {errors.age && (
                   <p className="text-red-500 text-xs mt-1">{errors.age.message}</p>
@@ -224,7 +232,7 @@ export default function CompleteProfilePopup({ isOpen, onClose, onSuccess = () =
                   ]}
                   placeholder="Select Gender"
                   variant="transparent"
-                  className="!bg-transparent !border-accent-gray !text-primary !h-[50px]"
+                  className="!bg-transparent !border-white/20 !text-primary !h-[50px]"
                 />
                 <input
                   type="hidden"
@@ -234,6 +242,17 @@ export default function CompleteProfilePopup({ isOpen, onClose, onSuccess = () =
                   <p className="text-red-500 text-xs mt-1">{errors.gender.message}</p>
                 )}
               </div>
+            </div>
+
+            {/* Profession */}
+            <div>
+              <label className="block text-sm mb-1 text-primary/80">Profession (Optional)</label>
+              <input
+                type="text"
+                placeholder="e.g. Developer"
+                {...register("profession")}
+                className="w-full text-primary py-[13px] px-4 border rounded-md border-white/20 bg-transparent outline-none focus:border-white/60 transition-colors"
+              />
             </div>
 
             {/* State & City Row */}
@@ -250,7 +269,7 @@ export default function CompleteProfilePopup({ isOpen, onClose, onSuccess = () =
                   options={states}
                   placeholder="Select State"
                   variant="transparent"
-                  className="!bg-transparent !border-accent-gray !text-primary !h-[50px]"
+                  className="!bg-transparent !border-white/20 !text-primary !h-[50px]"
                 />
                 <input
                   type="hidden"
@@ -272,7 +291,7 @@ export default function CompleteProfilePopup({ isOpen, onClose, onSuccess = () =
                   options={cities}
                   placeholder="Select City"
                   variant="transparent"
-                  className="!bg-transparent !border-accent-gray !text-primary !h-[50px]"
+                  className="!bg-transparent !border-white/20 !text-primary !h-[50px]"
                   disabled={!stateIdValue || cities.length === 0}
                 />
                 <input
@@ -294,7 +313,7 @@ export default function CompleteProfilePopup({ isOpen, onClose, onSuccess = () =
                 options={towns}
                 placeholder="Select Town"
                 variant="transparent"
-                className="!bg-transparent !border-accent-gray !text-primary !h-[50px]"
+                className="!bg-transparent !border-white/20 !text-primary !h-[50px]"
                 disabled={!cityIdValue || towns.length === 0}
               />
             </div>
@@ -306,7 +325,7 @@ export default function CompleteProfilePopup({ isOpen, onClose, onSuccess = () =
                 placeholder="Enter your address"
                 rows={2}
                 {...register("address")}
-                className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none resize-none"
+                className="w-full text-primary py-3 px-4 border rounded-md border-white/20 bg-transparent outline-none focus:border-white/60 transition-colors resize-none"
               />
             </div>
 

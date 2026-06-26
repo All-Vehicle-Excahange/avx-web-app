@@ -28,6 +28,7 @@ import {
 } from "@/lib/fonts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { checkIsMetaExist } from "@/services/user.service";
 
 const queryClient = new QueryClient();
 
@@ -204,9 +205,16 @@ export default function App({ Component, pageProps }) {
             isOpen={isLoginPopupOpen && !showSplash}
             onClose={closeLoginPopup}
             onSignup={openSignupPopup}
-            onSuccess={() => {
-              closeLoginPopup();
-              openCompleteProfilePopup();
+            onSuccess={async () => {
+              try {
+                const res = await checkIsMetaExist();
+                const exists = res?.data?.exists === true || res?.data === true;
+                if (!exists) {
+                  openCompleteProfilePopup();
+                }
+              } catch (err) {
+                console.error("Error checking meta (assuming profile incomplete):", err);
+              }
             }}
           />
 
@@ -216,7 +224,6 @@ export default function App({ Component, pageProps }) {
             onClose={closeSignupPopup}
             onLogin={openLoginPopup}
             onSuccess={() => {
-              closeSignupPopup();
               openCompleteProfilePopup();
             }}
           />

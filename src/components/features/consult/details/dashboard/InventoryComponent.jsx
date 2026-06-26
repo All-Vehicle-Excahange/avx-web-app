@@ -15,6 +15,7 @@ import {
   ArrowRight,
   Ban,
   ChevronDown,
+  Info,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import {
@@ -194,39 +195,51 @@ export default function InventoryComponent() {
         </div>
 
         {/* 2️ NOTE */}
-        <div className="rounded-xl bg-fourth text-white p-5 md:p-8 min-h-[150px] flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-md">
+        <div className="relative overflow-hidden rounded-xl bg-fourth text-white p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-6 shadow-lg shadow-fourth/20">
+          {/* Abstract elements for a premium feel */}
+          <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white opacity-5 rounded-full blur-2xl pointer-events-none"></div>
+          <div className="absolute bottom-0 left-10 -mb-10 w-32 h-32 bg-black opacity-10 rounded-full blur-xl pointer-events-none"></div>
+
           {/* Left Content */}
-          <div className="max-w-[500px]">
-            <p className="text-sm md:text-base leading-relaxed">
-              <span className="font-semibold">Note:</span> Adding and editing
-              vehicles is available on the Reecomm mobile app. You can still
-              view listings and mark vehicles as sold here.
-            </p>
+          <div className="flex items-center gap-4 relative z-10 max-w-2xl">
+            <div className="hidden sm:flex shrink-0 w-12 h-12 rounded-full bg-white/10 items-center justify-center backdrop-blur-sm border border-white/10">
+              <Info size={24} className="text-white" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold mb-1 flex items-center gap-2">
+                <span className="sm:hidden"><Info size={18} /></span> Note
+              </h3>
+              <p className="text-sm md:text-base text-white/80 leading-relaxed font-medium">
+                Adding and editing vehicles is available on the <span className="text-white font-semibold">Reecomm mobile app</span>. You can still view listings and mark vehicles as sold here.
+              </p>
+            </div>
           </div>
 
           {/* Right Button */}
-          <div className="w-full md:w-auto">
+          <div className="w-full lg:w-auto shrink-0 relative z-10">
             <Button
               variant="ghost"
-              size="sm"
+              size="md"
               onClick={() => setIsDownloadOpen(true)}
               showIcon={false}
               className="w-auto md:w-auto justify-center"
             >
-              <Smartphone className="mr-3" size={16} />
+              <Smartphone className="mr-2" size={18} />
               Add Vehicle
             </Button>
           </div>
         </div>
 
         {/* 3️⃣ Inventory Health Snapshot  */}
-        <div className="rounded-xl border border-third/30 bg-primary/5 p-5 space-y-5">
-          <div className="flex items-center gap-2">
-            <TrendingUp className="text-primary" size={18} />
-            <h3 className="font-semibold">Inventory Health Snapshot</h3>
-            {/* <span className="px-3 py-1 rounded-full bg-primary/10 text-xs">
-              Auto-generated
-            </span> */}
+        <div className="rounded-xl border border-third/20 bg-primary/5 p-5 shadow-sm space-y-6">
+          <div className="flex items-center gap-3 pb-5 border-b border-third/10">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/10">
+              <TrendingUp className="text-primary" size={20} />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-primary">Inventory Health Snapshot</h3>
+              <p className="text-xs text-third mt-0.5">Track inventory health & performance metrics</p>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -349,43 +362,58 @@ export default function InventoryComponent() {
             </div>
           </div>
 
-          <div className="rounded-xl border border-white/10 bg-fourth p-5 md:p-6 flex flex-col gap-5 hover:shadow-lg transition-all">
+          <div className="relative overflow-hidden rounded-xl border border-fourth/30 bg-gradient-to-br from-fourth to-fourth/90 p-6 md:p-8 flex flex-col gap-5 shadow-xl shadow-fourth/10 transition-transform duration-300 hover:-translate-y-1 group/card">
+
             {/* HEADER */}
-            <div className="flex items-center justify-between">
+            <div className="relative z-10 flex flex-wrap items-center justify-between gap-4 pb-4">
               <div className="flex items-center gap-3">
                 {/* Icon */}
-                <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 text-primary">
-                  <BarChart3 className="w-5 h-5" />
+                <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-sm">
+                  <BarChart3 className="w-6 h-6" />
                 </div>
 
                 {/* Title */}
-                <div className="flex flex-col leading-tight">
-                  <span className="text-sm font-semibold tracking-wide text-primary">
-                    Insight
+                <div className="flex flex-col">
+                  <span className="text-sm md:text-base font-bold tracking-wide text-white">
+                    Market Insight
                   </span>
-                  <span className="text-xs text-primary/60">
-                    Performance metric
+                  <span className="text-xs text-white/70 font-medium uppercase tracking-wider">
+                    Performance Metric
                   </span>
                 </div>
               </div>
 
               {/* Badge */}
-              <span className="text-xs px-3 py-1 rounded-full bg-pink-500/20 text-primary font-semibold">
-                +2.3×
-              </span>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 border border-white/20 backdrop-blur-md shadow-sm">
+                <span className="text-xs font-bold text-white tracking-wide">
+                  +2.3x Conversion
+                </span>
+              </div>
             </div>
 
             {/* CONTENT */}
-            <p className="text-sm md:text-base leading-relaxed text-white/90">
-              <span className="text-primary font-semibold">Reecomm</span>{" "}
-              inspected vehicles are converting significantly better than
-              regular listings.
-            </p>
-            <p className="text-sm md:text-base leading-relaxed text-white/90">
-              <span className="text-primary font-semibold">Reecomm</span>{" "}
-              inspected vehicles are converting significantly better than
-              regular listings.
-            </p>
+            <div className="relative z-10 flex flex-col gap-3">
+              <p className="text-sm md:text-base leading-relaxed text-white/90">
+                <span className="text-white font-bold bg-white/10 px-1.5 py-0.5 rounded-md">Reecomm</span>{" "}
+              <span className="">  inspected vehicles are converting significantly better than
+                regular listings.</span>
+              </p>
+               <p className="text-sm md:text-base leading-relaxed text-white/90">
+                <span className="text-white font-bold bg-white/10 px-1.5 py-0.5 rounded-md">Reecomm</span>{" "}
+                inspected vehicles are converting significantly better than
+                regular listings.
+              </p>
+               <p className="text-sm md:text-base leading-relaxed text-white/90">
+                <span className="text-white font-bold bg-white/10 px-1.5 py-0.5 rounded-md">Reecomm</span>{" "}
+                inspected vehicles are converting significantly better than
+                regular listings.
+              </p>
+               <p className="text-sm md:text-base leading-relaxed text-white/90">
+                <span className="text-white font-bold bg-white/10 px-1.5 py-0.5 rounded-md">Reecomm</span>{" "}
+                inspected vehicles are converting significantly better than
+                regular listings.  inspected vehicles are converting 
+              </p>
+            </div>
 
             {/* FOOTER */}
             <div className="flex justify-start">
@@ -394,6 +422,7 @@ export default function InventoryComponent() {
                 href={"/consult/dashboard/inspection"}
                 showIcon={false}
                 className="text-sm"
+                size="md"
               >
                 Inspect More Vehicles
                 <ArrowRight className="w-4 h-4 ml-2" />
