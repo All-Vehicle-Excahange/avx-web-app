@@ -811,7 +811,7 @@ export default function UpdateProfile() {
                     </div>
 
                     {/* FINAL SUBMIT */}
-                    {!isRequested && !isRejected && (
+                    {!isRequested && !isRejected && !!updateId && (
                       <div className="flex justify-end pt-6">
                         <Button
                           variant="ghost"

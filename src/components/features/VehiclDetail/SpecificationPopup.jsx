@@ -1,30 +1,14 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { X, Check } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { getVehicleSpecificationQuery } from "@/queries/vehicle.queries";
 
-const DATA = {
-  Safety: ["Airbags (6)", "ABS", "ESP", "Traction Control"],
-
-  Comfort: ["Climate Control", "Cruise Control", "Sunroof", "Ventilated Seats"],
-
-  Technology: [
-    "Android Auto",
-    "Apple CarPlay",
-    "Reverse Camera",
-    "Parking Sensors",
-  ],
-
-  Entertainment: ["Bluetooth", "USB", "Radio", "CD Player"],
-
-  Interior: ["Leather seats", "Ambient lighting", "Adjustable headrests"],
-
-  Exterior: ["Alloy wheels", "LED headlamps", "Fog lamps"],
-};
-
-export default function SpecificationPopup({ open, onClose }) {
-  const [activeTab, setActiveTab] = useState("Safety");
+export default function SpecificationPopup({ open, onClose, variantId }) {
+  const [activeTab, setActiveTab] = useState("");
   const [isClosing, setIsClosing] = useState(false);
+  const popupRef = useRef(null);
 
   const handleClose = useCallback(() => {
     setIsClosing(true);
@@ -63,34 +47,55 @@ export default function SpecificationPopup({ open, onClose }) {
     };
   }, [open, handleClose]);
 
+  const { data, isLoading } = useQuery({
+    ...getVehicleSpecificationQuery(variantId),
+    enabled: open && !!variantId,
+  });
+
+  const specData = data?.specifications || {};
+  const categories = Object.keys(specData);
+
+  useEffect(() => {
+    if (categories.length > 0 && (!activeTab || !categories.includes(activeTab))) {
+      setActiveTab(categories[0]);
+    }
+  }, [categories, activeTab]);
+
   if (!open && !isClosing) return null;
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-secondary/40 backdrop-blur-md"
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
       onClick={handleClose}
       style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}
     >
       {/* MODAL */}
       <div
-        className="w-4xl max-w-4xl h-[65vh] bg-secondary rounded-2xl shadow-2xl overflow-hidden flex border-2 border-primary/40"
+        ref={popupRef}
+        className="w-full max-w-5xl h-[75vh] bg-secondary rounded-2xl shadow-2xl overflow-hidden flex border border-third/30"
         onClick={(e) => e.stopPropagation()}
         style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}
       >
         {/* LEFT TABS */}
-        <div className="w-52 border-r border-primary/20 p-4 space-y-1">
-          {Object.keys(DATA).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`w-full text-left cursor-pointer px-3 py-2 rounded-md text-sm transition ${activeTab === tab
-                ? "bg-primary/10 text-primary border-l-4 border-primary"
-                : "text-primary/70 hover:bg-primary/5"
-                }`}
-            >
-              {tab}
-            </button>
-          ))}
+        <div className="w-52 border-r border-primary/20 p-4 space-y-1 overflow-y-auto custom-scrollbar">
+          {isLoading ? (
+            <div className="text-sm text-primary/60 p-2">Loading...</div>
+          ) : categories.length === 0 ? (
+            <div className="text-sm text-primary/60 p-2">No specifications found</div>
+          ) : (
+            categories.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`w-full text-left cursor-pointer px-3 py-2 rounded-md text-sm transition ${activeTab === tab
+                  ? "bg-primary/10 text-primary border-l-4 border-primary font-medium"
+                  : "text-primary/70 hover:bg-primary/5"
+                  }`}
+              >
+                {tab}
+              </button>
+            ))
+          )}
         </div>
 
         {/* RIGHT CONTENT */}
@@ -111,17 +116,21 @@ export default function SpecificationPopup({ open, onClose }) {
 
           {/* FEATURES */}
           <ul className="space-y-3">
-            {DATA[activeTab].map((feature, index) => (
-              <li
-                key={index}
-                className="flex items-center gap-3 border-b border-primary/20 pb-2"
-              >
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/20">
-                  <Check size={14} className="text-primary" />
-                </span>
-                <span className="text-sm text-primary">{feature}</span>
-              </li>
-            ))}
+            {specData[activeTab] &&
+              Object.entries(specData[activeTab]).map(([key, value], index) => (
+                <li
+                  key={index}
+                  className="flex items-start gap-3 border-b border-primary/10 pb-3"
+                >
+                  <span className="flex h-5 w-5 mt-0.5 items-center justify-center rounded-full bg-primary/10 shrink-0">
+                    <Check size={12} className="text-primary/80" />
+                  </span>
+                  <div className="flex flex-col text-sm text-primary flex-1">
+                    <span className="font-semibold text-primary/80">{key}</span>
+                    <span className="text-primary mt-0.5">{value}</span>
+                  </div>
+                </li>
+              ))}
           </ul>
         </div>
       </div>

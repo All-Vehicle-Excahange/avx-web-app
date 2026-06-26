@@ -113,7 +113,7 @@ export default function VehicleDetails({
 
   const { data: inspectionDetails } = useQuery({
     ...getVehicleInspectionDetailsQuery(id),
-    enabled: !!id,
+    enabled: !!id && isConditionOpen,
   });
 
   const vehicleSummary = vehicleSummaryData || {};

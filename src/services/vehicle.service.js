@@ -1,4 +1,7 @@
-import axiosInstance, { handleResponse } from "@/lib/axiosInstance";
+import axiosInstance, {
+  axiosNodeInstance,
+  handleResponse,
+} from "@/lib/axiosInstance";
 
 const ENDPOINT = {
   getVehicleOverview: "/vehicle/detail-page",
@@ -8,6 +11,7 @@ const ENDPOINT = {
   markAsSoldVehicle: "/vehicle/sell/basic/sold",
   getActiveInspectionByVehicleId: "/vehicle/inspection/active",
   getVehicleInspectionDetails: "/vehicle/detail-page",
+  getVehicleSpecification: "/specifications",
 };
 
 export const getVehicleOverview = async (id) => {
@@ -83,6 +87,17 @@ export const getVehicleInspectionDetails = async (vehicleId) => {
   try {
     const res = await axiosInstance.get(
       `${ENDPOINT.getVehicleInspectionDetails}/${vehicleId}/inspection-details`,
+    );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVehicleSpecification = async (variantId) => {
+  try {
+    const res = await axiosNodeInstance.get(
+      `${ENDPOINT.getVehicleSpecification}/${variantId}`,
     );
     return handleResponse(res);
   } catch (error) {

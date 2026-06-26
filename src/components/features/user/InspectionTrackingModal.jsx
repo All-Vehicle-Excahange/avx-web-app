@@ -39,15 +39,19 @@ export default function InspectionTrackingModal({
     });
   }, [inspection?.createdAt]);
 
-  const status = inspection?.inspectionRequestStatus?.toUpperCase() || "PENDING";
-  const shouldFetchRefund = status === "REJECTED_BY_OWNER" || status === "CANCELLED_DUE_TO_VEHICLE_SOLD";
+  const status =
+    inspection?.inspectionRequestStatus?.toUpperCase() || "PENDING";
+  const shouldFetchRefund =
+    status === "REJECTED_BY_OWNER" ||
+    status === "CANCELLED_DUE_TO_VEHICLE_SOLD";
 
   const { data: refundData } = useQuery({
     ...getInspectionRefundStatusQuery(inspection?.id),
     enabled: !!inspection?.id && shouldFetchRefund,
   });
 
-  const refundStatus = refundData?.data?.refundStatus || refundData?.refundStatus || null;
+  const refundStatus =
+    refundData?.data?.refundStatus || refundData?.refundStatus || null;
 
   if (!inspection) return null;
 
@@ -398,7 +402,7 @@ export default function InspectionTrackingModal({
           icon: <CheckCircle2 size={10} className="text-green-500" />,
           bgClass: "bg-green-500/10 border border-green-500/30",
           textClass: "text-white",
-        }
+        },
       ];
 
       // Add scheduled step if scheduled
@@ -464,88 +468,105 @@ export default function InspectionTrackingModal({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`relative w-2/3 max-w-xl max-h-[490px] bg-secondary border border-white/10 rounded-[24px] shadow-2xl overflow-hidden flex flex-col transition-all duration-300 ease-out ${
+        className={`relative w-[65%] max-w-4xl h-auto max-h-[85vh] md:max-h-[500px] bg-secondary border border-white/10 rounded-[24px] shadow-2xl overflow-hidden flex flex-col md:flex-row transition-all duration-300 ease-out ${
           animateModal
             ? "opacity-100 scale-100 translate-y-0"
             : "opacity-0 scale-95 translate-y-4"
         }`}
       >
-        {/* HEADER */}
-        <div className="flex items-center gap-3 px-5 py-4 border-b border-white/5 bg-[#0c0c0e]/95 shrink-0">
-          <button
-            onClick={onClose}
-            className="w-7 h-7 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/10 text-white transition cursor-pointer"
-          >
-            <ChevronLeft size={16} />
-          </button>
-          <h2 className="text-sm font-bold text-white">Inspection Tracking</h2>
+        {/* CLOSE */}
+        <button
+          onClick={onClose}
+          className="absolute bg-white cursor-pointer top-4 right-4 z-20 p-1 rounded-full hover:opacity-70 text-secondary"
+        >
+          <X size={20} />
+        </button>
+
+        {/* LEFT SIDE IMAGE */}
+        <div className="hidden md:block md:w-[35%] bg-third/10">
+          <Image
+            width={500}
+            height={500}
+            src="/bg.jpg"
+            alt="inspection-tracking"
+            className="w-full h-full object-cover"
+          />
         </div>
 
-        {/* CONTENT */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar">
-          {/* VEHICLE DETAILS CARD */}
-          <div className="bg-[#131316] border border-white/4 rounded-xl p-3 flex gap-3">
-            {/* Image */}
-            <div className="relative w-18 h-18 rounded-lg overflow-hidden bg-white/5 shrink-0">
-              <Image
-                src={inspection.thumbnailUrl || "/bg.jpg"}
-                alt="Vehicle Image"
-                width={72}
-                height={72}
-                className="object-cover w-full h-full"
-              />
-            </div>
-            {/* Details */}
-            <div className="flex-1 flex flex-col justify-between min-w-0">
-              <div className="flex justify-between items-start gap-1">
-                <h3 className="font-bold text-white text-[13px] truncate">
-                  {`${inspection.makerName} ${inspection.modelName}`}
-                </h3>
-                <span
-                  className={`text-[8px] px-1.5 py-0.5 rounded border font-extrabold shrink-0 ${badgeClasses}`}
-                >
-                  {status === "DONE" || status === "COMPLETED"
-                    ? "INSPECTED"
-                    : status.replaceAll("_", " ")}
-                </span>
-              </div>
-              {(inspection.inspectorName ||
-                inspection.assignedInspectorName) && (
-                <p className="text-[11px] text-third truncate mt-0.5">
-                  Inspector:{" "}
-                  <span className="text-primary font-medium">
-                    {inspection.inspectorName ||
-                      inspection.assignedInspectorName}
-                  </span>
-                </p>
-              )}
-              <p className="text-[11px] text-third">
-                Requested Date:{" "}
-                <span className="text-primary font-medium">
-                  {formattedInspectionDate}
-                </span>
-              </p>
-              <div className="flex items-center gap-1 mt-1">
-                {inspection.inspectionType && (
-                  <span className="text-[9px] text-third font-semibold bg-white/5 border border-white/10 px-1.5 py-0.5 rounded">
-                    {inspection.inspectionType === "VIDEO_CALL_WITH_REPORT"
-                      ? "Video + Report"
-                      : inspection.inspectionType === "REPORT_ONLY"
-                        ? "Report Only"
-                        : inspection.inspectionType.replaceAll("_", " ")}
-                  </span>
-                )}
-                {inspection.amount && (
-                  <span className="text-xs font-black text-white ml-auto">
-                    ₹{inspection.amount.toLocaleString("en-IN")}
-                  </span>
-                )}
-              </div>
-            </div>
+        {/* RIGHT SIDE CONTENT */}
+        <div className="flex-1 flex flex-col w-full md:w-[70%] overflow-hidden">
+          {/* HEADER */}
+          <div className="flex items-start justify-start px-5 py-4 border-b border-white/5 bg-[#0c0c0e]/95 shrink-0">
+            <h2 className="text-sm font-bold text-white">
+              Inspection Tracking
+            </h2>
           </div>
 
-          {/* BANNER MESSAGE */}
-          <div
+          {/* CONTENT */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar">
+            {/* VEHICLE DETAILS CARD */}
+            <div className="bg-[#131316] border border-white/4 rounded-xl p-3 flex gap-3">
+              {/* Image */}
+              <div className="relative w-18 h-18 rounded-lg overflow-hidden bg-white/5 shrink-0">
+                <Image
+                  src={inspection.thumbnailUrl || "/bg.jpg"}
+                  alt="Vehicle Image"
+                  width={72}
+                  height={72}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+              {/* Details */}
+              <div className="flex-1 flex flex-col justify-between min-w-0">
+                <div className="flex justify-between items-start gap-1">
+                  <h3 className="font-bold text-white text-[13px] truncate">
+                    {`${inspection.makerName} ${inspection.modelName}`}
+                  </h3>
+                  <span
+                    className={`text-[8px] px-1.5 py-0.5 rounded border font-extrabold shrink-0 ${badgeClasses}`}
+                  >
+                    {status === "DONE" || status === "COMPLETED"
+                      ? "INSPECTED"
+                      : status.replaceAll("_", " ")}
+                  </span>
+                </div>
+                {(inspection.inspectorName ||
+                  inspection.assignedInspectorName) && (
+                  <p className="text-[11px] text-third truncate mt-0.5">
+                    Inspector:{" "}
+                    <span className="text-primary font-medium">
+                      {inspection.inspectorName ||
+                        inspection.assignedInspectorName}
+                    </span>
+                  </p>
+                )}
+                <p className="text-[11px] text-third">
+                  Requested Date:{" "}
+                  <span className="text-primary font-medium">
+                    {formattedInspectionDate}
+                  </span>
+                </p>
+                <div className="flex items-center gap-1 mt-1">
+                  {inspection.inspectionType && (
+                    <span className="text-[9px] text-third font-semibold bg-white/5 border border-white/10 px-1.5 py-0.5 rounded">
+                      {inspection.inspectionType === "VIDEO_CALL_WITH_REPORT"
+                        ? "Video + Report"
+                        : inspection.inspectionType === "REPORT_ONLY"
+                          ? "Report Only"
+                          : inspection.inspectionType.replaceAll("_", " ")}
+                    </span>
+                  )}
+                  {inspection.amount && (
+                    <span className="text-xs font-black text-white ml-auto">
+                      ₹{inspection.amount.toLocaleString("en-IN")}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* BANNER MESSAGE */}
+            {/* <div
             className={`border rounded-lg p-2.5 text-center text-[11px] font-semibold ${
               status.startsWith("REJECTED") || status.includes("CANCELLED")
                 ? "bg-red-500/5 border-red-500/20 text-red-400"
@@ -555,37 +576,38 @@ export default function InspectionTrackingModal({
             }`}
           >
             {bannerText}
-          </div>
+          </div> */}
 
-          {/* TIMELINE */}
-          <div className="space-y-3">
-            <h4 className="text-[11px] font-bold text-white/55 uppercase tracking-wider">
-              Inspection Status
-            </h4>
+            {/* TIMELINE */}
+            <div className="space-y-3">
+              <h4 className="text-[11px] font-bold text-white/55 uppercase tracking-wider">
+                Inspection Status
+              </h4>
 
-            <div className="relative pl-7 space-y-4">
-              {/* Vertical line connecting steps */}
-              <div className="absolute left-2.5 top-2.5 bottom-2.5 w-px border-l border-dashed border-white/10" />
+              <div className="relative pl-7 space-y-4">
+                {/* Vertical line connecting steps */}
+                <div className="absolute left-2.5 top-2.5 bottom-2.5 w-px border-l border-dashed border-white/10" />
 
-              {getTimelineSteps().map((step, idx) => (
-                <div key={idx} className="relative">
-                  <span
-                    className={`absolute -left-7 top-0.5 w-5 h-5 rounded-full flex items-center justify-center ${step.bgClass}`}
-                  >
-                    {step.icon}
-                  </span>
-                  <div>
-                    <h5
-                      className={`text-[13px] font-semibold ${step.textClass}`}
+                {getTimelineSteps().map((step, idx) => (
+                  <div key={idx} className="relative">
+                    <span
+                      className={`absolute -left-7 top-0.5 w-5 h-5 rounded-full flex items-center justify-center ${step.bgClass}`}
                     >
-                      {step.title}
-                    </h5>
-                    <p className="text-[10px] text-third mt-0.5">
-                      {step.statusText}
-                    </p>
+                      {step.icon}
+                    </span>
+                    <div>
+                      <h5
+                        className={`text-[13px] font-semibold ${step.textClass}`}
+                      >
+                        {step.title}
+                      </h5>
+                      <p className="text-[10px] text-third mt-0.5">
+                        {step.statusText}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>

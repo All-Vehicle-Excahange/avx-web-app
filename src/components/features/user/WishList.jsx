@@ -11,7 +11,7 @@ import {
   LayoutGrid,
   Edit3,
 } from "lucide-react";
-import { updatePreference } from "@/services/user.service";
+import { updatePreference, addUserPefrence } from "@/services/user.service";
 import {
   VehicleCardSkeleton,
   ConsultantCardSkeleton,
@@ -63,7 +63,24 @@ function Wishlist() {
 
   // Mutations
   const updatePreferenceMutation = useMutation({
-    mutationFn: updatePreference,
+    mutationFn: async (payload) => {
+      try {
+        const res = await updatePreference(payload);
+        if (res?.error && res?.statusCode === 404) {
+          return await addUserPefrence(payload);
+        }
+        return res;
+      } catch (err) {
+        if (
+          err?.response?.status === 404 ||
+          err?.statusCode === 404 ||
+          err?.data?.statusCode === 404
+        ) {
+          return await addUserPefrence(payload);
+        }
+        throw err;
+      }
+    },
     onSuccess: (res) => {
       if (res?.success) {
         queryClient.invalidateQueries({ queryKey: ["user-preferences"] });

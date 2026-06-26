@@ -59,7 +59,7 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
             className={`transition-all ${
               !isEligible
                 ? "opacity-50 cursor-not-allowed text-gray-400 border border-dashed border-gray-500 pointer-events-none"
-                : " hover:text-primary"
+                : ""
             }`}
           >
             Use This Theme

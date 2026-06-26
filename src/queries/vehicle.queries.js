@@ -5,6 +5,7 @@ import {
   checkIsUserEligbleToSendInquary,
   getActiveInspectionByVehicleId,
   getVehicleInspectionDetails,
+  getVehicleSpecification,
 } from "@/services/vehicle.service";
 import {
   getSimularVehicles,
@@ -96,6 +97,19 @@ export const getInspectionByVehicleIdQuery = (vehicleId) => {
       return res?.data ?? null;
     },
     staleTime: 10 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+export const getVehicleSpecificationQuery = (variantId) => {
+  return queryOptions({
+    queryKey: ["vehicle-specification", variantId],
+    queryFn: async () => {
+      if (!variantId) return null;
+      const res = await getVehicleSpecification(variantId);
+      return res?.data || null;
+    },
+    staleTime: 15 * 60 * 1000, // 15 mins cache
     retry: shouldRetry,
   });
 };
