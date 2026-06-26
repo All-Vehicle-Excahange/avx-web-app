@@ -21,11 +21,13 @@ import { generateVehicleSlug } from "@/lib/helper";
 import { markAsSoldVehicle } from "@/services/vehicle.service";
 import MarkSoldPopup from "./MarkSoldPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
+import FeedbackPopup from "./FeedbackPopup";
 
 export default function InquiryCard({ inquiry, onStatusChange }) {
   const [showClosePopup, setShowClosePopup] = useState(false);
   const [showMarkSoldPopup, setShowMarkSoldPopup] = useState(false);
   const [showDownloadPopup, setShowDownloadPopup] = useState(false);
+  const [showFeedbackPopup, setShowFeedbackPopup] = useState(false);
   const [loadingAction, setLoadingAction] = useState(null); // 'APPROVE', 'REJECT', 'CLOSE', 'MARK_SOLD'
 
   if (!inquiry) {
@@ -302,17 +304,27 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
             </p>
           )}
 
-          {/*   Closed & Not Sold Section */}
-          {isClosed && !inquiryVehicleResponse.isVehicleSold && (
-            <div className="pt-4">
+          {/*   Closed Section */}
+          {isClosed && (
+            <div className="pt-4 flex flex-wrap gap-3">
+              {!inquiryVehicleResponse.isVehicleSold && (
+                <Button
+                  showIcon={false}
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowMarkSoldPopup(true)}
+                  loading={loadingAction === "MARK_SOLD"}
+                >
+                  Mark as Sold
+                </Button>
+              )}
               <Button
                 showIcon={false}
-                variant="ghost"
+                variant="outlineSecondary"
                 size="sm"
-                onClick={() => setShowMarkSoldPopup(true)}
-                loading={loadingAction === "MARK_SOLD"}
+                onClick={() => setShowFeedbackPopup(true)}
               >
-                Mark as Sold
+                Feedback
               </Button>
             </div>
           )}
@@ -359,6 +371,20 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
         <DownloadAppPopup
           isOpen={showDownloadPopup}
           onClose={() => setShowDownloadPopup(false)}
+        />
+      )}
+
+      {/*   Feedback Popup */}
+      {showFeedbackPopup && (
+        <FeedbackPopup
+          isOpen={showFeedbackPopup}
+          onClose={() => setShowFeedbackPopup(false)}
+          targetId={
+            inquiry?.inquirer?.username ||
+            inquiry?.inquiryVehicleResponse?.vehicleOwner?.username ||
+            inquiry?.inquiryVehicleResponse?.user?.username ||
+            "unknown"
+          }
         />
       )}
     </div>

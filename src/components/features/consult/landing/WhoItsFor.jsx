@@ -7,22 +7,22 @@ const items = [
   {
     title: "Independent Car Consultants",
     desc: "Running your business solo? Reecomm gives you the same storefront, tools, and buyer trust as a full dealership — without the overhead.",
-    img: "/consultant.webp",
+    img: "/Independent-car-consultant.webp",
   },
   {
     title: "Multi-Vehicle Dealerships",
     desc: "Manage your full inventory from a single dashboard. List, update, and track every vehicle without juggling spreadsheets or WhatsApp threads.",
-    img: "/dealership.webp",
+    img: "/multivehicle-delaership.webp",
   },
   {
     title: "Growing Automotive Businesses",
     desc: "Scaling beyond a handful of vehicles? Reecomm's structured visibility and performance data help you grow predictably, not by guesswork.",
-    img: "/performance-based-visibility.webp",
+    img: "/growing-business.webp",
   },
   {
     title: "City-Level Operators",
     desc: "Operating across multiple locations or a wide service area? Reecomm's storefront and inquiry tools work the same way at any scale.",
-    img: "/car-operator.webp",
+    img: "/City-Operator-broker.webp",
   },
 ];
 
@@ -74,8 +74,6 @@ export default function WhoItsFor() {
                   style={{ backgroundImage: `url(${item.img})` }}
                 />
 
-                {/* DEFAULT OVERLAY */}
-                <div className="absolute inset-0 bg-linear-to-t from-secondary via-secondary/60 to-transparent" />
 
                 {/* SLIDE OVERLAY */}
                 <div
