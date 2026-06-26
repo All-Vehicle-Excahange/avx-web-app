@@ -332,7 +332,7 @@ export default function AnalyticsComponent() {
         />
       </div>
       {/* Traffic */}
-      <div className=" border border-third/20 rounded-xl p-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-8 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="bg-primary/5 rounded-xl p-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-8 shadow-sm transition-colors duration-200">
         <div className="space-y-4">
           <h3 className="font-semibold text-white">Traffic & Conversion</h3>
 
@@ -400,7 +400,7 @@ export default function AnalyticsComponent() {
           </Button>
         </div>
       </div>
-      <div className=" border border-third/20 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="bg-primary/5 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200">
         <h3 className="font-semibold text-white">Performance Overview</h3>
 
         {currentPerformance.labels.length > 0 ? (
@@ -441,7 +441,7 @@ export default function AnalyticsComponent() {
         className="grid gap-6 md:grid-cols-2"
       >
         {/* ✅ Demand Breakdown (Show for everyone now as per request for basic) */}
-        <div className=" border border-third/20 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
+        <div className="bg-primary/5 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200">
           <h3 className="font-semibold text-white">Demand Breakdown</h3>
 
           {currentDemand.length > 0 ? (
@@ -480,7 +480,7 @@ export default function AnalyticsComponent() {
         </div>
 
         {/* ✅ City-wise Demand (Locked for BASIC, Unlocked for PRO/PREMIUM) */}
-        <div className="relative border border-third/20 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40 overflow-hidden">
+        <div className="relative bg-primary/5 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200 overflow-hidden">
           {isBasic && (
             <div className="absolute inset-0 z-10 bg-black/75 backdrop-blur-[2px] flex flex-col items-center justify-center text-center p-4">
               <div className="flex flex-col items-center gap-2.5 max-w-[280px]">
@@ -535,7 +535,7 @@ export default function AnalyticsComponent() {
         </div>
       </div>
       {/* Insights */}
-      <div className=" border border-primary/20 rounded-xl p-7 space-y-5 shadow-sm transition-colors duration-200 hover:border-fourth/40">
+      <div className="bg-primary/5 rounded-xl p-7 space-y-5 shadow-sm transition-colors duration-200">
         <h3 className="font-semibold text-lg text-fourth">Key Insights</h3>
 
         <ul className="grid md:grid-cols-2 gap-4 text-sm">
@@ -549,7 +549,7 @@ export default function AnalyticsComponent() {
       </div>{" "}
       {/* Recommended Actions (Only BASIC Users) */}
       {isBasic && (
-        <div className=" border border-blue-400/20 rounded-xl p-7 space-y-5 shadow-sm transition-colors duration-200 hover:border-blue-400/40">
+        <div className="bg-primary/5 rounded-xl p-7 space-y-5 shadow-sm transition-colors duration-200">
           <h3 className="font-semibold text-lg text-blue-300">
             Recommended Actions
           </h3>

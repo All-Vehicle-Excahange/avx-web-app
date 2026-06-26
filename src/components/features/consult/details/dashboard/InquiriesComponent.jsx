@@ -90,7 +90,7 @@ export default function InquiriesComponent() {
 
       </div>
 
-      <div className="rounded-xl border border-third/30 bg-primary/5 p-5 space-y-5">
+      <div className="rounded-xl bg-primary/5 p-6 space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
           {kpiLoading ? (
             <>
@@ -156,7 +156,7 @@ export default function InquiriesComponent() {
       </div>
 
       {/* FILTER BAR */}
-      <div className="rounded-xl border border-third/30 p-3 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl bg-primary/5 p-4 shadow-sm transition-colors duration-200">
 
         <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
           {inquiryTypes.map((type) => (

@@ -273,7 +273,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= SNAPSHOT ================= */}
-      <div className="rounded-xl border border-third/30 bg-primary/5 p-5 space-y-5">
+      <div className="rounded-xl bg-primary/5 p-6 space-y-5">
         <h2 className="text-lg font-semibold">
           Inspection Performance Snapshot
         </h2>
@@ -316,24 +316,24 @@ function InspectionTab() {
       {/* ================= TRUST SCORE BANNER ================= */}
 
       {/* ================= HOW INSPECTION AFFECTS RANKING ================= */}
-      <div className="rounded-xl border border-third/30  p-5 space-y-4 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl bg-primary/5 p-6 space-y-4 shadow-sm transition-colors duration-200">
         <h3 className="font-semibold flex items-center gap-2">
           <TrendingUp size={18} className="text-primary" />
           How inspection affects ranking:
         </h3>
 
         <div className="space-y-3 text-sm">
-          <p className="flex items-center gap-2 text-green-400">
+          <p className="flex items-center gap-2 text-third">
             <CheckCircle2 size={16} />
             Fresh inspection boosts visibility
           </p>
 
-          <p className="flex items-center gap-2 text-green-400">
+          <p className="flex items-center gap-2 text-third">
             <CheckCircle2 size={16} />
             Higher inspection score increases buyer trust
           </p>
 
-          <p className="flex items-center gap-2 text-green-400">
+          <p className="flex items-center gap-2 text-third">
             <CheckCircle2 size={16} />
             Re-inspection improves conversion
           </p>
@@ -341,7 +341,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= VEHICLES REQUIRING ATTENTION ================= */}
-      <div className="rounded-xl border border-third/30  p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl bg-primary/5 p-6 space-y-6 shadow-sm transition-colors duration-200">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div>
@@ -450,7 +450,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= INSPECTION REQUESTS FROM BUYERS ================= */}
-      <div className="rounded-xl border border-third/30  p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl bg-primary/5 p-6 space-y-6 shadow-sm transition-colors duration-200">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           {/* Title */}
@@ -685,7 +685,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= INSPECTION HISTORY ================= */}
-      <div className="rounded-xl border border-third/30  p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl bg-primary/5 p-6 space-y-6 shadow-sm transition-colors duration-200">
         {/* Header */}
         <div>
           <h2 className="text-xl font-semibold">Inspection History</h2>
@@ -908,7 +908,7 @@ function InspectionTab() {
       </div>
 
       {/* ================= RE-INSPECTION CONTROL PANEL ================= */}
-      <div className="rounded-xl border border-third/30  p-5 space-y-6 shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl bg-primary/5 p-6 space-y-6 shadow-sm transition-colors duration-200">
         {/* Header */}
         <div>
           <h2 className="text-xl font-semibold">Re-Inspection Control Panel</h2>
@@ -928,7 +928,7 @@ function InspectionTab() {
             </div>
 
             {/* Aging Box */}
-            <div className="rounded-xl border border-third/30 bg-yellow-500/5 p-5 space-y-4">
+            <div className="rounded-xl bg-yellow-500/5 p-6 space-y-4">
               {/* Current Status */}
               <div className="flex items-start gap-3">
                 <Clock className="w-6 h-6 text-yellow-400 mt-1" />
@@ -1081,7 +1081,7 @@ function VehicleScore({ name, score, orange }) {
 
 function PremiumFeatureCard({ icon, title, desc, tag }) {
   return (
-    <div className="group rounded-2xl border border-zinc-800 bg-primary/5 p-5 transition-all hover:border-zinc-700">
+    <div className="group rounded-2xl bg-primary/5 p-6 transition-all">
       {/* Top Row: Icon + Text + Badge */}
       <div className="flex items-start gap-4">
         {/* 1. Icon */}

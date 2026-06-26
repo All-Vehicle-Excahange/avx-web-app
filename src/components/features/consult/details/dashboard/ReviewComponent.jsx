@@ -148,7 +148,7 @@ function ReviewComponent() {
       </div>
 
       {/* RATING SUMMARY CARD */}
-      <div className="border border-white/10 rounded-3xl p-6 md:p-8">
+      <div className="bg-primary/5 rounded-3xl p-6 md:p-8">
         <h3 className="text-xl font-bold mb-6 text-white">Customer reviews</h3>
 
         {isLoadingSummary ? (
@@ -255,7 +255,7 @@ function ReviewComponent() {
               </div>
             ))
           ) : reviews.length === 0 ? (
-            <div className="text-center py-20 border border-white/10 rounded-3xl">
+            <div className="text-center py-20 bg-primary/5 rounded-3xl">
               <MessageSquare className="mx-auto text-white/20 mb-4" size={48} />
               <p className="text-third">
                 No reviews found for the last {range} days.
@@ -265,7 +265,7 @@ function ReviewComponent() {
             reviews.map((review) => (
               <div
                 key={review.id}
-                className="border border-third/30 rounded-3xl p-6 hover:border-third/50 transition-all duration-300 group"
+                className="bg-primary/5 rounded-3xl p-6 transition-all duration-300 group"
               >
                 {/* USER INFO */}
                 <div className="flex items-center gap-3 mb-4">

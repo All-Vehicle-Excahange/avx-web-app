@@ -321,7 +321,7 @@ export default function PpcComponent() {
       </div>
 
       {/* AD SUMMARY */}
-      <div className="rounded-xl border border-third/30  p-6 space-y-5">
+      <div className="rounded-xl bg-primary/5 p-6 space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           {/* Left Section */}
           <div>
@@ -378,7 +378,7 @@ export default function PpcComponent() {
       </div>
 
       {/* RECENT ADS */}
-      <div className="rounded-xl border border-third/30 p-6 space-y-6">
+      <div className="rounded-xl bg-primary/5 p-6 space-y-6">
         {/* Filter Controls Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-4">
           <h3 className="font-semibold text-lg text-white">Recent ads</h3>
@@ -1033,7 +1033,7 @@ export default function PpcComponent() {
       </div>
 
       {/* UNIFIED CAMPAIGN INSIGHTS & RECOMMENDATIONS */}
-      <div className="rounded-xl border border-third/30 p-6 lg:p-8 space-y-8  backdrop-blur-sm shadow-sm transition-colors duration-200 hover:border-third/40">
+      <div className="rounded-xl bg-primary/5 p-6 lg:p-8 space-y-8  backdrop-blur-sm shadow-sm transition-colors duration-200">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* LEFT SIDE: Campaign Performance & Daily Impressions */}
           <div className="lg:col-span-7 space-y-8">
