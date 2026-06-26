@@ -186,4 +186,31 @@ export const showBackendError = (error) => {
   toast.error(api?.message || "Request failed");
 };
 
+export const refreshUserToken = async () => {
+  const { user, isLoggedIn } = useAuthStore.getState();
+  if (!isLoggedIn || !user?.refreshToken) return;
+
+  try {
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
+      { refreshToken: user.refreshToken },
+      { withCredentials: true },
+    );
+    if (res.data?.data?.accessToken) {
+      const currentUser = useAuthStore.getState().user || {};
+      const newUserData = {
+        userMaster: {
+          ...currentUser,
+          ...(res.data.data.userMaster || {}),
+        },
+        refreshToken: res.data.data.refreshToken || currentUser.refreshToken,
+      };
+      useAuthStore.getState().login(newUserData, res.data.data.accessToken);
+    }
+    return res.data;
+  } catch (error) {
+    console.error("Manual refresh failed", error);
+  }
+};
+
 export default axiosInstance;

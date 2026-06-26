@@ -23,7 +23,7 @@ import {
 
 import { useRouter } from "next/router";
 import toast, { Toaster } from "react-hot-toast";
-import { showBackendError } from "@/lib/axiosInstance";
+import { showBackendError, refreshUserToken } from "@/lib/axiosInstance";
 import Step4Verification from "./components/Step4Verification";
 import Navbar from "@/components/layout/Navbar";
 import { SkeletonBox } from "@/components/ui/skeleton";
@@ -136,6 +136,7 @@ export default function KycForm() {
         }
 
         if (bData?.verificationStatus === "VERIFIED") {
+          await refreshUserToken();
           if (query?.redirect) {
             replace(query.redirect);
           } else {
