@@ -313,9 +313,14 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
                   <p className="text-sm font-medium mb-1 text-white">Number</p>
                   <EditorInput
                     value={s.number}
-                    onChange={(e) =>
-                      updateArrayItem("stats", i, "number", e.target.value)
-                    }
+                    onInput={(e) => {
+                      e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                    }}
+                    onChange={(e) => {
+                      const numericValue = e.target.value.replace(/[^0-9]/g, "");
+                      e.target.value = numericValue;
+                      updateArrayItem("stats", i, "number", numericValue);
+                    }}
                     maxLength={rules?.arrayRules?.stats?.number?.max}
                     error={!!errors?.stats?.[i]?.number}
                     errorMsg={errors?.stats?.[i]?.number}

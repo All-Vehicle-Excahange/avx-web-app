@@ -451,9 +451,14 @@ export default function AboutPremium3({
                 <EditorInput
                   bold
                   value={s.number}
-                  onChange={(e) =>
-                    updateArr("stats", i, "number", e.target.value)
-                  }
+                  onInput={(e) => {
+                    e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                  }}
+                  onChange={(e) => {
+                    const numericValue = e.target.value.replace(/[^0-9]/g, "");
+                    e.target.value = numericValue;
+                    updateArr("stats", i, "number", numericValue);
+                  }}
                   placeholder="Number"
                   maxLength={rules?.arrayRules?.stats?.number?.max}
                   error={!!errors?.stats?.[i]?.number}

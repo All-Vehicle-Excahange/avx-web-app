@@ -381,12 +381,17 @@ function AboutPro1({
                  <EditorInput
                   bold
                   value={s.number}
+                  onInput={(e) => {
+                    e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                  }}
                   error={errors?.stats?.[i]?.number}
                   errorMsg={errors?.stats?.[i]?.number}
                   maxLength={rules?.stats?.number?.max}
-                  onChange={(e) =>
-                    updateArr("stats", i, "number", e.target.value)
-                  }
+                  onChange={(e) => {
+                    const numericValue = e.target.value.replace(/[^0-9]/g, "");
+                    e.target.value = numericValue;
+                    updateArr("stats", i, "number", numericValue);
+                  }}
                   placeholder="Number"
                 />
                 <EditorInput

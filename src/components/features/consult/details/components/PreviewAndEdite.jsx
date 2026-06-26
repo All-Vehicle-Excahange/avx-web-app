@@ -29,7 +29,8 @@ export default function PreviewAndEdite({
 }) {
   const router = useRouter();
 
-  const isChangesRequested = existing?.business?.verificationStatus === "REQUEST_CHANGES";
+  const isChangesRequested =
+    existing?.business?.verificationStatus === "REQUEST_CHANGES";
   const canEdit = !existing?.business?.isSubmitted || isChangesRequested;
 
   // ===== EDIT MODES =====
@@ -245,13 +246,13 @@ export default function PreviewAndEdite({
           </h3>
 
           <div className="flex items-center gap-3">
-            {!isChangesRequested && (
+            {!(isChangesRequested && !existing?.business?.isSubmitted) && (
               <Button
                 variant="outlineSecondary"
                 onClick={onBack}
                 className="flex items-center gap-2 text-xs"
               >
-                <LayoutDashboard size={14} />
+                <LayoutDashboard className="mr-1" size={14} />
                 Application Status
               </Button>
             )}
@@ -267,7 +268,9 @@ export default function PreviewAndEdite({
               <div className="flex gap-3">
                 <Button
                   variant="outlineSecondary"
-                  onClick={() => setEditMode((p) => ({ ...p, business: false }))}
+                  onClick={() =>
+                    setEditMode((p) => ({ ...p, business: false }))
+                  }
                 >
                   Cancel
                 </Button>
