@@ -222,7 +222,7 @@ function formatPrice(num) {
 
 export async function getServerSideProps(context) {
   const { req, params } = context;
-  const { title } = params || {};
+  const { title, id } = params || {};
 
   // Construct the full current URL dynamically
   const protocol = req.headers["x-forwarded-proto"] || "https";
@@ -240,8 +240,37 @@ export async function getServerSideProps(context) {
         .replace(/\b\w/g, (c) => c.toUpperCase())
     : "Vehicle Details";
 
-  const finalTitle = `${cleanTitle} | Reecomm`;
-  const finalDescription = `Buy ${cleanTitle} at Reecomm. View detailed vehicle information, specs, price, and more.`;
+  let finalTitle = `${cleanTitle} | Reecomm`;
+  let finalDescription = `Buy ${cleanTitle} at Reecomm. View detailed vehicle information, specs, price, and more.`;
+  let finalImageUrl = `${protocol}://${host}/logo/logo.webp`;
+
+  try {
+    if (id) {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (apiUrl) {
+        const response = await fetch(`${apiUrl}/vehicle/detail-page/${id}`);
+        if (response.ok) {
+          const resJson = await response.json();
+          const vehicle = resJson?.data;
+          if (vehicle) {
+            finalImageUrl = vehicle.thumbnailUrl || vehicle.imageUrls?.[0] || finalImageUrl;
+            
+            const year = vehicle.yearOfMfg || vehicle.year || "";
+            const make = vehicle.makerName || "";
+            const model = vehicle.modelName || "";
+            const variant = vehicle.variantName || "";
+            const city = vehicle.address?.city || vehicle.location || "India";
+            
+            if (make || model) {
+              finalTitle = `${year} ${make} ${model} ${variant} for Sale in ${city} | Reecomm`.replace(/\s+/g, " ").trim();
+            }
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Failed to fetch vehicle SEO data:", error);
+  }
 
   return {
     props: {
@@ -250,7 +279,7 @@ export async function getServerSideProps(context) {
         description: finalDescription,
         ogTitle: finalTitle,
         ogDescription: finalDescription,
-        image: `${protocol}://${host}/logo/logo.webp`,
+        image: finalImageUrl,
         url: currentUrl,
         canonical: canonicalUrl,
       },

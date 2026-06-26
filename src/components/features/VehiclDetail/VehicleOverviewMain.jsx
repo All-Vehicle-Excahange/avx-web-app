@@ -117,7 +117,11 @@ export default function VehicleOverview({ vehicle }) {
           <Item
             icon={<Fuel />}
             label="Fuel"
-            value={vehicle?.fuelType || "CNG"}
+            value={
+              vehicle?.isCngFitted && vehicle?.fuelType
+                ? `${vehicle.fuelType} + CNG`
+                : vehicle?.fuelType || "CNG"
+            }
           />
           <Divider />
 

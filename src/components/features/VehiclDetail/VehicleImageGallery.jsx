@@ -220,13 +220,7 @@ export default function VehicleImageGallery({ vehicle }) {
                                     />
                                 ) : (
                                     <>
-                                        <Image
-                                            src={item.thumbnail}
-                                            width={100}
-                                            height={100}
-                                            alt={`thumb-video-${idx}`}
-                                            className="w-full h-full object-cover"
-                                        />
+                                        <VideoThumbnail videoUrl={item.src} providedThumbnail={item.thumbnail} />
                                         <div className="absolute inset-0 bg-black/30" />
                                         <Play size={18} className="absolute text-white" />
                                     </>
@@ -259,3 +253,76 @@ export default function VehicleImageGallery({ vehicle }) {
         </section>
     );
 }
+
+const VideoThumbnail = ({ videoUrl, providedThumbnail }) => {
+    const [thumbnail, setThumbnail] = useState(providedThumbnail || null);
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    useEffect(() => {
+        if (thumbnail || !videoUrl || isProcessing) return;
+
+        setIsProcessing(true);
+
+        const video = document.createElement("video");
+        let proxyUrl = videoUrl;
+        if (proxyUrl?.includes("sfcdev-assets.s3.us-west-1.amazonaws.com")) {
+            proxyUrl = proxyUrl.replace(
+                "https://sfcdev-assets.s3.us-west-1.amazonaws.com",
+                "/api/video-proxy"
+            );
+        }
+
+        video.src = proxyUrl;
+        video.crossOrigin = "anonymous";
+        video.muted = true;
+
+        const handleLoadedMetadata = () => {
+            // Get first frame
+            video.currentTime = 0.1;
+        };
+
+        const handleSeeked = () => {
+            try {
+                const canvas = document.createElement("canvas");
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(video, 0, 0);
+
+                const image = canvas.toDataURL("image/png");
+                setThumbnail(image);
+            } catch (err) {
+                console.error("Thumbnail error:", err);
+            } finally {
+                setIsProcessing(false);
+            }
+        };
+
+        video.addEventListener("loadedmetadata", handleLoadedMetadata);
+        video.addEventListener("seeked", handleSeeked);
+
+        return () => {
+            video.removeEventListener("loadedmetadata", handleLoadedMetadata);
+            video.removeEventListener("seeked", handleSeeked);
+        };
+    }, [videoUrl, thumbnail]);
+
+    if (!thumbnail) {
+        return (
+            <div className="w-full h-full flex items-center justify-center bg-black/10 text-third/40 text-[10px]">
+                Loading...
+            </div>
+        );
+    }
+
+    return (
+        <Image
+            src={thumbnail}
+            width={100}
+            height={100}
+            alt="video-thumbnail"
+            className="w-full h-full object-cover"
+        />
+    );
+};
