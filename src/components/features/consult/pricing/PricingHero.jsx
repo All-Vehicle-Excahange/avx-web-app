@@ -52,9 +52,6 @@ export default function PricingHero({ yearly, setYearly }) {
               }`}
             >
               Yearly
-              <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
-                Save 20%
-              </span>
             </button>
           </div>
         </div>

@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { getAllTier } from "@/services/user.service";
 import { getSellerTier } from "@/services/Seller.service";
 import PricingHero from "./PricingHero";
+import Button from "@/components/ui/button";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useQuery } from "@tanstack/react-query";
 import { getSellerTierQuery } from "@/queries/Seller.queries";
@@ -196,7 +197,9 @@ export default function FullPricing() {
         );
       } else {
         router.push(
-          redirect ? decodeURIComponent(redirect) : "/consult/dashboard/overview",
+          redirect
+            ? decodeURIComponent(redirect)
+            : "/consult/dashboard/overview",
         );
       }
       return;
@@ -450,6 +453,21 @@ export default function FullPricing() {
                   const price = yearly ? tier.yearlyPrice : tier.monthlyPrice;
                   const formattedPrice = formatPrice(price);
 
+                  const monthlyVal = Number(tier.monthlyPrice) || 0;
+                  const yearlyVal = Number(tier.yearlyPrice) || 0;
+                  const totalMonthlyCostForYear = monthlyVal * 12;
+                  let savingsPercent = 0;
+                  if (
+                    totalMonthlyCostForYear > 0 &&
+                    yearlyVal < totalMonthlyCostForYear
+                  ) {
+                    savingsPercent = Math.round(
+                      ((totalMonthlyCostForYear - yearlyVal) /
+                        totalMonthlyCostForYear) *
+                        100,
+                    );
+                  }
+
                   const features = (
                     (yearly ? tier.yearlyFeatures : tier.monthlyFeatures) ||
                     tier.features ||
@@ -490,171 +508,103 @@ export default function FullPricing() {
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: i * 0.1 }}
                       viewport={{ once: true }}
-                      className={`relative flex flex-col rounded-2xl overflow-hidden ${
-                        staticDetails.highlight ? "lg:-translate-y-4" : ""
-                      }`}
-                      style={{
-                        background: staticDetails.highlight
-                          ? "linear-gradient(180deg, #0069e0 0%, #0055b8 100%)"
-                          : "linear-gradient(180deg, #ffffff 0%, #f9fafb 100%)",
-                        border: staticDetails.highlight
-                          ? "1px solid rgba(255,255,255,0.30)"
-                          : "1px solid rgba(0,0,0,0.08)",
-                        boxShadow: staticDetails.highlight
-                          ? "0 20px 60px rgba(0,60,180,0.35)"
-                          : "0 8px 30px rgba(0,0,0,0.08)",
-                      }}
+                      className="group/card relative flex flex-col rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] border border-primary/10 hover:border-primary/25"
+                      style={{ background: "transparent" }}
                     >
-                      {/* soft glow ring for highlight */}
-                      {staticDetails.highlight && (
-                        <div className="absolute -inset-0.5 rounded-2xl bg-white/10 blur-xl opacity-40 pointer-events-none" />
-                      )}
 
-                      {staticDetails.highlight && (
-                        <div className="text-white text-[10px] font-bold tracking-[0.2em] uppercase text-center py-2.5 bg-white/15 backdrop-blur-sm">
-                          Recommended
+
+                      <div className="relative p-8 sm:p-10 flex flex-col flex-1 pt-12">
+                        {/* Plan name and pills */}
+                        <div className="flex items-center gap-3 mb-5">
+                          <h3 className="text-[24px] font-bold text-primary tracking-tight">
+                            {staticDetails.name}
+                          </h3>
+                          {staticDetails.highlight && (
+                            <span className="border border-fourth/30 bg-fourth/5 text-fourth text-[10px] font-bold tracking-widest uppercase px-3 py-0.5 rounded-full">
+                              Popular
+                            </span>
+                          )}
+                          {isCurrentTier && (
+                            <span className="border border-emerald-500/30 text-emerald-500 text-[10px] font-bold tracking-widest uppercase px-3 py-0.5 rounded-full">
+                              Active
+                            </span>
+                          )}
                         </div>
-                      )}
 
-                      {isCurrentTier && (
-                        <div className="absolute top-10 right-4 bg-green-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm z-10">
-                          Active
+                        {/* Price */}
+                        <div className="mb-2">
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-[40px] font-black text-primary tracking-tighter leading-none">
+                              {formattedPrice}
+                            </span>
+                            <span className="text-[13px] font-medium text-primary/40">
+                              / {yearly ? "year" : "month"}
+                            </span>
+                          </div>
+
+                          {!yearly && savingsPercent > 0 && (
+                            <div className="mt-2 flex items-center gap-2">
+                              <span className="text-[15px] font-medium text-primary/40 line-through">
+                                {formatPrice(tier.yearlyPrice)} / yr
+                              </span>
+                              <span className="text-[10px] px-2.5 py-0.5 rounded-full font-bold border border-emerald-500/25 text-emerald-500 bg-emerald-500/5">
+                                Save {savingsPercent}%
+                              </span>
+                            </div>
+                          )}
                         </div>
-                      )}
 
-                      <div className="relative p-7 flex flex-col flex-1">
-                        <h3
-                          className={`text-[20px] font-bold mb-1 ${
-                            staticDetails.highlight
-                              ? "text-white"
-                              : "text-[#111827]"
-                          }`}
-                        >
-                          {staticDetails.name}
-                        </h3>
-
-                        <p
-                          className={`text-[13px] mb-5 ${
-                            staticDetails.highlight
-                              ? "text-white/60"
-                              : "text-[#6b7280]"
-                          }`}
-                        >
+                        {/* Description */}
+                        <p className="text-[13px] mb-6 mt-3 text-primary/60 leading-relaxed min-h-[40px]">
                           {tier.description || staticDetails.tagline}
                         </p>
 
-                        <div className="mb-1">
-                          <span
-                            className={`text-[26px] font-black ${
-                              staticDetails.highlight
-                                ? "text-white"
-                                : "text-[#111827]"
-                            }`}
-                          >
-                            {formattedPrice}
-                          </span>
-                          <span
-                            className={`text-[12px] ml-1 ${
-                              staticDetails.highlight
-                                ? "text-white/50"
-                                : "text-[#9ca3af]"
-                            }`}
-                          >
-                            / {yearly ? "year" : "month"}
-                          </span>
-                        </div>
+                        <div className="h-px bg-primary/10 mb-6" />
 
-                        <p
-                          className={`text-[11px] mb-5 ${
-                            staticDetails.highlight
-                              ? "text-white/50"
-                              : "text-[#9ca3af]"
-                          }`}
-                        >
-                          Best for: {staticDetails.bestFor}
-                        </p>
-
-                        <div
-                          className={`h-px mb-5 ${
-                            staticDetails.highlight
-                              ? "bg-white/10"
-                              : "bg-[#eef2f7]"
-                          }`}
-                        />
-
-                        {/* FEATURES */}
-                        <ul className="space-y-3 flex-1">
+                        {/* Features */}
+                        <ul className="flex-1 flex flex-col">
                           {features.map((f, idx) => (
-                            <li key={idx} className="flex items-start gap-3">
-                              <div
-                                className="w-5 h-5 rounded-full flex items-center justify-center mt-0.5"
-                                style={{
-                                  background: staticDetails.highlight
-                                    ? "rgba(255,255,255,0.20)"
-                                    : "rgba(0,0,0,0.05)",
-                                }}
-                              >
+                            <div key={idx}>
+                              <li className="flex items-start gap-3 py-3">
                                 <FiCheck
-                                  className="text-[10px]"
-                                  style={{
-                                    color: staticDetails.highlight
-                                      ? "#fff"
-                                      : "#6b7280",
-                                  }}
+                                  className={`text-[14px] mt-0.5 shrink-0 ${
+                                    staticDetails.highlight
+                                      ? "text-fourth"
+                                      : "text-primary/40"
+                                  }`}
                                 />
-                              </div>
-                              <span
-                                className={`text-[13px] ${
-                                  staticDetails.highlight
-                                    ? "text-white/80"
-                                    : "text-[#374151]"
-                                }`}
-                              >
-                                {f}
-                              </span>
-                            </li>
+                                <span className="text-[13px] text-primary/70 leading-relaxed">
+                                  {f}
+                                </span>
+                              </li>
+                              {idx < features.length - 1 && (
+                                <div className="h-px bg-primary/5 ml-6" />
+                              )}
+                            </div>
                           ))}
                         </ul>
 
-                        <p
-                          className={`text-[11px] mt-5 italic ${
-                            staticDetails.highlight
-                              ? "text-white/40"
-                              : "text-[#9ca3af]"
-                          }`}
-                        >
-                          {staticDetails.note}
-                        </p>
+                        {/* Note */}
+                        {staticDetails.note && (
+                          <p className="text-[12px] mt-6 mb-2 text-primary/40 text-left">
+                            {staticDetails.note}
+                          </p>
+                        )}
 
-                        {/* BUTTON */}
-                        <button
-                          disabled={isButtonDisabled}
-                          onClick={() => handleUpgrade(tier)}
-                          className={`w-full py-3 rounded-full text-[14px] font-semibold transition-all duration-300 mt-8 ${
-                            isButtonDisabled
-                              ? "opacity-50 cursor-not-allowed pointer-events-none"
-                              : "hover:cursor-pointer hover:opacity-90"
-                          }`}
-                          style={{
-                            background: isButtonDisabled
-                              ? "#4b5563"
-                              : staticDetails.highlight
-                                ? "#fff"
-                                : "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)",
-                            color: isButtonDisabled
-                              ? "#9ca3af"
-                              : staticDetails.highlight
-                                ? "#1f1f1f"
-                                : "#fff",
-                            boxShadow: isButtonDisabled
-                              ? "none"
-                              : staticDetails.highlight
-                                ? "0 6px 20px rgba(255,255,255,0.2)"
-                                : "0 6px 20px rgba(0,0,0,0.25)",
-                          }}
-                        >
-                          {buttonText}
-                        </button>
+                        {/* Button */}
+                        <div className="mt-6 pt-2 flex justify-start">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            disabled={isButtonDisabled}
+                            loading={
+                              paymentLoading && upgradingTierId === tier.id
+                            }
+                            onClick={() => handleUpgrade(tier)}
+                          >
+                            {buttonText}
+                          </Button>
+                        </div>
                       </div>
                     </motion.div>
                   );
