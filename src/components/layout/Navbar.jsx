@@ -448,14 +448,25 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
               className="flex items-center h-10 px-3 md:px-4 gap-2 md:gap-3 bg-secondary text-primary"
             >
               {!insideDrawer && (
-                <Menu
-                  className="w-5 h-5 cursor-pointer"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setMenuOpen(true);
-                  }}
-                />
+                menuOpen ? (
+                  <X
+                    className="w-5 h-5 cursor-pointer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setMenuOpen(false);
+                    }}
+                  />
+                ) : (
+                  <Menu
+                    className="w-5 h-5 cursor-pointer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setMenuOpen(true);
+                    }}
+                  />
+                )
               )}
               <Image
                 src="/logo/logo.webp"

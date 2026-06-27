@@ -15,6 +15,11 @@ import {
   CheckCircle2,
   AlertCircle,
   Ban,
+  UserCircle,
+  MapPin,
+  Sparkles,
+  PencilLine,
+  Save
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { ProfileSkeleton } from "@/components/ui/skeleton";
@@ -632,307 +637,327 @@ function MyProfile() {
           </div>
         )}
 
-      {/*  PROFILE INFO SECTION */}
-      <div className="rounded-2xl border border-third/40 px-6 pb-6">
-        <div className="flex justify-between py-6">
-          <h2 className="text-lg font-semibold">Profile Info</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
+        {/*  PROFILE INFO SECTION */}
+        <div className="rounded-2xl border border-third/40 px-6 pb-6 h-fit flex flex-col">
+          
+          <div className="flex justify-between items-center py-6">
+            <h2 className="text-lg font-semibold">Profile Info</h2>
 
-          {!isEditingProfile && profile.role !== "USER_SELLER_APPLICANT" && (
-            <Button variant="ghost" onClick={handleEditProfile}>
-              Edit
-            </Button>
+            {!isEditingProfile && profile.role !== "USER_SELLER_APPLICANT" && (
+              <Button variant="ghost" onClick={handleEditProfile}>
+                Edit
+              </Button>
+            )}
+          </div>
+
+          {!isEditingProfile && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm flex-1">
+              <ProfileItem label="First Name" value={profile.firstName} />
+              <ProfileItem label="Last Name" value={profile.lastName} />
+              <ProfileItem label="Email" value={profile.email} />
+              <ProfileItem
+                label="Phone"
+                value={profile.countryCode + " " + profile.phoneNumber}
+              />
+              <ProfileItem label="Role" value={formatRole(profile.role)} />
+            </div>
+          )}
+
+          {isEditingProfile && (
+            <div className="flex-1 flex flex-col">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <InputField
+                  label="First Name"
+                  variant="colored"
+                  value={profileForm.firstName || ""}
+                  onChange={(e) =>
+                    setProfileForm({
+                      ...profileForm,
+                      firstName: e.target.value,
+                    })
+                  }
+                />
+
+                <InputField
+                  label="Last Name"
+                  variant="colored"
+                  value={profileForm.lastName || ""}
+                  onChange={(e) =>
+                    setProfileForm({
+                      ...profileForm,
+                      lastName: e.target.value,
+                    })
+                  }
+                />
+
+                <InputField
+                  label="Email"
+                  variant="colored"
+                  value={profileForm.email || ""}
+                  onChange={(e) =>
+                    setProfileForm({
+                      ...profileForm,
+                      email: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              {profileError && (
+                <div className="mt-4 p-3 rounded-lg bg-red-50 border border-red-100 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 text-red-500" />
+                  <p className="text-red-700 text-xs font-medium">{profileError}</p>
+                </div>
+              )}
+
+              <div className="flex justify-end gap-4 mt-8">
+                <Button
+                  variant="outlineSecondary"
+                  onClick={() => setIsEditingProfile(false)}
+                >
+                  Cancel
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  disabled={!isProfileFormValid}
+                  onClick={handleSaveProfile}
+                  className="flex items-center gap-2 px-6 py-2 font-medium"
+                >
+                  {!isProfileFormValid ? (
+                    <>
+                      <Lock size={16} />
+                      Locked
+                    </>
+                  ) : (
+                    "Save Changes"
+                  )}
+                </Button>
+              </div>
+            </div>
           )}
         </div>
 
-        {!isEditingProfile && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <ProfileItem label="First Name" value={profile.firstName} />
-            <ProfileItem label="Last Name" value={profile.lastName} />
-            <ProfileItem label="Email" value={profile.email} />
-            <ProfileItem
-              label="Phone"
-              value={profile.countryCode + " " + profile.phoneNumber}
-            />
-            <ProfileItem label="Role" value={formatRole(profile.role)} />
+        {/* ✅ PROFILE META SECTION */}
+        <div className="relative overflow-visible rounded-2xl border border-third/40 px-6 pb-6 h-fit flex flex-col">
+          
+          <div className="flex justify-between items-center py-6">
+            <h2 className="text-lg font-semibold">Profile Meta</h2>
+
+            {!isEditingMeta &&
+              !isCreatingMeta &&
+              profile.role !== "USER_SELLER_APPLICANT" && 
+              isMetaExist && (
+                <Button variant="ghost" onClick={handleEditMeta}>
+                  Edit
+                </Button>
+              )}
           </div>
-        )}
 
-        {isEditingProfile && (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <InputField
-                label="First Name"
-                variant="colored"
-                value={profileForm.firstName || ""}
-                onChange={(e) =>
-                  setProfileForm({
-                    ...profileForm,
-                    firstName: e.target.value,
-                  })
-                }
-              />
-
-              <InputField
-                label="Last Name"
-                variant="colored"
-                value={profileForm.lastName || ""}
-                onChange={(e) =>
-                  setProfileForm({
-                    ...profileForm,
-                    lastName: e.target.value,
-                  })
-                }
-              />
-
-              <InputField
-                label="Email"
-                variant="colored"
-                value={profileForm.email || ""}
-                onChange={(e) =>
-                  setProfileForm({
-                    ...profileForm,
-                    email: e.target.value,
-                  })
-                }
-              />
-            </div>
-
-            {profileError && (
-              <p className="text-red-500 text-sm mt-4">{profileError}</p>
-            )}
-
-            <div className="flex justify-end gap-4 mt-8">
-              <Button
-                variant="outlineSecondary"
-                onClick={() => setIsEditingProfile(false)}
-              >
-                Cancel
+          {/* Missing Meta Premium Empty State */}
+          {!isEditingMeta && !isCreatingMeta && !isMetaExist && (
+            <div className="flex-1 flex flex-col items-center justify-center text-center py-10 px-4">
+              <h3 className="text-base font-semibold mb-2">Complete Your Profile</h3>
+              <p className="text-sm text-third max-w-[280px] leading-relaxed mb-6">
+                Add your demographics and location to receive personalized vehicle recommendations.
+              </p>
+              <Button variant="outlineSecondary" onClick={handleCreateMeta}>
+                Complete Profile
               </Button>
-
-              <button
-                disabled={!isProfileFormValid}
-                onClick={handleSaveProfile}
-                className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium transition
-                  ${
-                    !isProfileFormValid
-                      ? "bg-gray-400 cursor-not-allowed text-white"
-                      : "bg-primary border text-secondary hover:bg-transparent hover:text-primary hover:border-primary hover:border "
-                  }`}
-              >
-                {!isProfileFormValid ? (
-                  <>
-                    <Lock size={16} />
-                    Locked
-                  </>
-                ) : (
-                  "Save Changes"
-                )}
-              </button>
             </div>
-          </>
-        )}
-      </div>
+          )}
 
-      {/* ✅ PROFILE META SECTION */}
-      <div className="relative overflow-visible rounded-2xl border border-third/40 px-6 pb-6">
-        <div className="flex justify-between py-6">
-          <h2 className="text-lg font-semibold">Profile Meta</h2>
+          {/* Meta View */}
+          {!isEditingMeta && !isCreatingMeta && isMetaExist && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm flex-1">
+              <ProfileItem label="Age" value={profileMetaData.age} />
+              <ProfileItem label="Gender" value={profileMetaData.gender} />
+              <ProfileItem label="City" value={profileMetaData.city?.name} />
+              <ProfileItem label="State" value={profileMetaData.state?.name} />
+              <ProfileItem label="Town" value={profileMetaData.town?.name} />
+              <ProfileItem label="Address" value={profileMetaData.address} />
+            </div>
+          )}
 
-          {!isEditingMeta &&
-            !isCreatingMeta &&
-            profile.role !== "USER_SELLER_APPLICANT" && (
-              <Button
-                variant="ghost"
-                onClick={isMetaExist ? handleEditMeta : handleCreateMeta}
-              >
-                {isMetaExist ? "Edit" : "Create"}
-              </Button>
-            )}
-        </div>
+          {/* Meta Edit/Create Form */}
+          {(isEditingMeta || isCreatingMeta) && (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <InputField
+                  label="Age"
+                  variant="colored"
+                  value={metaForm.age || ""}
+                  onChange={(e) =>
+                    setMetaForm({ ...metaForm, age: e.target.value })
+                  }
+                />
 
-        {/* Meta View */}
-        {!isEditingMeta && !isCreatingMeta && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <ProfileItem label="Age" value={profileMetaData.age} />
-            <ProfileItem label="Gender" value={profileMetaData.gender} />
-            <ProfileItem label="City" value={profileMetaData.city?.name} />
-            <ProfileItem label="State" value={profileMetaData.state?.name} />
-            <ProfileItem label="Town" value={profileMetaData.town?.name} />
-            <ProfileItem label="Address" value={profileMetaData.address} />
-          </div>
-        )}
+                {/* ✅ GENDER DROPDOWN */}
+                <div ref={genderRef} className="relative">
+                  <label className="text-xs text-third">Gender</label>
 
-        {/* Meta Edit/Create Form */}
-        {(isEditingMeta || isCreatingMeta) && (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <InputField
-                label="Age"
-                variant="colored"
-                value={metaForm.age || ""}
-                onChange={(e) =>
-                  setMetaForm({ ...metaForm, age: e.target.value })
-                }
-              />
+                  <div
+                    onClick={() => setGenderOpen(!genderOpen)}
+                    className="h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-secondary text-primary cursor-pointer"
+                  >
+                    <span>{metaForm.gender || "Select Gender"}</span>
+                    <ChevronDown size={16} />
+                  </div>
 
-              {/* ✅ GENDER DROPDOWN */}
-              <div ref={genderRef} className="relative">
-                <label className="text-xs text-third">Gender</label>
-
-                <div
-                  onClick={() => setGenderOpen(!genderOpen)}
-                  className="h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-secondary text-primary cursor-pointer"
-                >
-                  <span>{metaForm.gender || "Select Gender"}</span>
-                  <ChevronDown size={16} />
+                  {genderOpen && (
+                    <div className="absolute z-9999 mt-1 w-full border border-primary rounded-md bg-secondary text-primary shadow-lg overflow-hidden">
+                      {["MALE", "FEMALE"].map((genderOption) => (
+                        <div
+                          key={genderOption}
+                          onClick={() => {
+                            setMetaForm((prev) => ({
+                              ...prev,
+                              gender: genderOption,
+                            }));
+                            setGenderOpen(false);
+                          }}
+                          className="px-3 py-2 hover:bg-primary/20 cursor-pointer"
+                        >
+                          {genderOption}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
-                {genderOpen && (
-                  <div className="absolute z-9999 mt-1 w-full border border-primary rounded-md bg-secondary text-primary shadow-lg overflow-hidden">
-                    {["MALE", "FEMALE"].map((genderOption) => (
-                      <div
-                        key={genderOption}
-                        onClick={() => {
-                          setMetaForm((prev) => ({
-                            ...prev,
-                            gender: genderOption,
-                          }));
-                          setGenderOpen(false);
-                        }}
-                        className="px-3 py-2 hover:bg-primary/20 cursor-pointer"
-                      >
-                        {genderOption}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <InputField
-                label="Profession"
-                variant="colored"
-                value={metaForm.profession || ""}
-                onChange={(e) =>
-                  setMetaForm({ ...metaForm, profession: e.target.value })
-                }
-              />
-
-              <InputField
-                label="Address"
-                variant="colored"
-                value={metaForm.address || ""}
-                onChange={(e) =>
-                  setMetaForm({ ...metaForm, address: e.target.value })
-                }
-              />
-
-              {/* ✅ STATE DROPDOWN */}
-              <div>
-                <label className="text-xs text-third mb-1.5 block">State</label>
-                <CustomSelect
-                  value={metaForm.stateId}
-                  options={states}
-                  placeholder="Search state..."
+                <InputField
+                  label="Profession"
                   variant="colored"
-                  onChange={(val) => {
-                    const s = states.find((st) => st.value === val);
-                    setMetaForm((p) => ({
-                      ...p,
-                      stateId: val,
-                      stateName: s ? s.label : "",
-                      cityId: null,
-                      cityName: "",
-                      townId: null,
-                      townName: "",
-                    }));
-                  }}
-                />
-              </div>
-
-              {/* ✅ CITY DROPDOWN */}
-              <div>
-                <label className="text-xs text-third mb-1.5 block">City</label>
-                <CustomSelect
-                  value={metaForm.cityId}
-                  options={cities}
-                  placeholder={
-                    metaForm.stateId ? "Search city..." : "Select state first"
+                  value={metaForm.profession || ""}
+                  onChange={(e) =>
+                    setMetaForm({ ...metaForm, profession: e.target.value })
                   }
-                  variant="colored"
-                  disabled={!metaForm.stateId}
-                  onChange={(val) => {
-                    const c = cities.find((ct) => ct.value === val);
-                    setMetaForm((p) => ({
-                      ...p,
-                      cityId: val,
-                      cityName: c ? c.label : "",
-                      townId: null,
-                      townName: "",
-                    }));
-                  }}
                 />
-              </div>
 
-              {/* ✅ TOWN DROPDOWN */}
-              <div>
-                <label className="text-xs text-third mb-1.5 block">Town</label>
-                <CustomSelect
-                  value={metaForm.townId}
-                  options={towns}
-                  placeholder={
-                    metaForm.cityId ? "Search town..." : "Select city first"
+                <InputField
+                  label="Address"
+                  variant="colored"
+                  value={metaForm.address || ""}
+                  onChange={(e) =>
+                    setMetaForm({ ...metaForm, address: e.target.value })
                   }
-                  variant="colored"
-                  disabled={!metaForm.cityId}
-                  onChange={(val) => {
-                    const t = towns.find((tn) => tn.value === val);
-                    setMetaForm((p) => ({
-                      ...p,
-                      townId: val,
-                      townName: t ? t.label : "",
-                    }));
-                  }}
                 />
+
+                {/* ✅ STATE DROPDOWN */}
+                <div>
+                  <label className="text-xs text-third mb-1.5 block">
+                    State
+                  </label>
+                  <CustomSelect
+                    value={metaForm.stateId}
+                    options={states}
+                    placeholder="Search state..."
+                    variant="colored"
+                    onChange={(val) => {
+                      const s = states.find((st) => st.value === val);
+                      setMetaForm((p) => ({
+                        ...p,
+                        stateId: val,
+                        stateName: s ? s.label : "",
+                        cityId: null,
+                        cityName: "",
+                        townId: null,
+                        townName: "",
+                      }));
+                    }}
+                  />
+                </div>
+
+                {/* ✅ CITY DROPDOWN */}
+                <div>
+                  <label className="text-xs text-third mb-1.5 block">
+                    City
+                  </label>
+                  <CustomSelect
+                    value={metaForm.cityId}
+                    options={cities}
+                    placeholder={
+                      metaForm.stateId ? "Search city..." : "Select state first"
+                    }
+                    variant="colored"
+                    disabled={!metaForm.stateId}
+                    onChange={(val) => {
+                      const c = cities.find((ct) => ct.value === val);
+                      setMetaForm((p) => ({
+                        ...p,
+                        cityId: val,
+                        cityName: c ? c.label : "",
+                        townId: null,
+                        townName: "",
+                      }));
+                    }}
+                  />
+                </div>
+
+                {/* ✅ TOWN DROPDOWN */}
+                <div>
+                  <label className="text-xs text-third mb-1.5 block">
+                    Town
+                  </label>
+                  <CustomSelect
+                    value={metaForm.townId}
+                    options={towns}
+                    placeholder={
+                      metaForm.cityId ? "Search town..." : "Select city first"
+                    }
+                    variant="colored"
+                    disabled={!metaForm.cityId}
+                    onChange={(val) => {
+                      const t = towns.find((tn) => tn.value === val);
+                      setMetaForm((p) => ({
+                        ...p,
+                        townId: val,
+                        townName: t ? t.label : "",
+                      }));
+                    }}
+                  />
+                </div>
               </div>
-            </div>
 
-            {metaError && (
-              <p className="text-red-500 text-sm mt-4">{metaError}</p>
-            )}
+              {metaError && (
+                <div className="mt-4 p-3 rounded-lg bg-red-50 border border-red-100 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 text-red-500" />
+                  <p className="text-red-700 text-xs font-medium">{metaError}</p>
+                </div>
+              )}
 
-            <div className="flex justify-end gap-4 mt-8">
-              <Button
-                variant="outlineSecondary"
-                onClick={() => {
-                  setIsEditingMeta(false);
-                  setIsCreatingMeta(false);
-                }}
-              >
-                Cancel
-              </Button>
+              <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-third/10">
+                <Button
+                  variant="outlineSecondary"
+                  onClick={() => {
+                    setIsEditingMeta(false);
+                    setIsCreatingMeta(false);
+                  }}
+                >
+                  Cancel
+                </Button>
 
-              <button
-                disabled={!isMetaFormValid}
-                onClick={handleSaveMeta}
-                className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium transition-all
-    ${
-      !isMetaFormValid
-        ? "bg-gray-400 cursor-not-allowed text-secondary"
-        : "bg-primary border text-secondary hover:bg-transparent hover:text-primary hover:border-primary hover:border"
-    }`}
-              >
-                {!isMetaFormValid ? (
-                  <>
-                    <Lock size={16} />
-                    Locked
-                  </>
-                ) : (
-                  "Save Changes"
-                )}
-              </button>
-            </div>
-          </>
-        )}
+                <Button
+                  variant="ghost"
+                  disabled={!isMetaFormValid}
+                  onClick={handleSaveMeta}
+                  className="flex items-center gap-2 px-6 py-2.5 font-bold text-sm shadow-sm"
+                >
+                  {!isMetaFormValid ? (
+                    <>
+                      <Lock size={14} /> Locked
+                    </>
+                  ) : (
+                    <>
+                      <Save size={14} /> {isCreatingMeta ? "Complete Profile" : "Save Changes"}
+                    </>
+                  )}
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
       <DetailsFromPopup
         isOpen={isSellerPopupOpen}
