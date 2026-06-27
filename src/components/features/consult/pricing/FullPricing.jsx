@@ -144,7 +144,7 @@ export default function FullPricing() {
     // Case 2: CONSULTANT_APPLICANT who already has an ACTIVE subscription
     // → send them to KYC (with redirect preserved so they end up in the right place after)
     if (
-      userRole?.includes("CONSULTANT_APPLICANT") &&
+      userRole !== "CONSULTATION" &&
       hasTier &&
       tierStatus === "ACTIVE"
     ) {
@@ -188,7 +188,7 @@ export default function FullPricing() {
     const currentKey = (tier.title || "").toUpperCase();
     if (currentTier === currentKey) {
       const redirect = router.query?.redirect;
-      if (userRole?.includes("CONSULTANT_APPLICANT")) {
+      if (userRole !== "CONSULTATION") {
         router.push(
           redirect ? `/consult/kyc?redirect=${redirect}` : "/consult/kyc",
         );
@@ -310,10 +310,13 @@ export default function FullPricing() {
           contact: prefillContact,
         },
         handler: async function (paymentResponse) {
-          if (router.query?.redirect) {
+          if (userRole !== "CONSULTATION") {
+            const redirect = router.query?.redirect;
+            router.push(
+              redirect ? `/consult/kyc?redirect=${redirect}` : "/consult/kyc",
+            );
+          } else if (router.query?.redirect) {
             router.push(router.query.redirect);
-          } else if (userRole?.includes("CONSULTANT_APPLICANT")) {
-            router.push("/consult/kyc");
           } else {
             router.push("/consult/dashboard");
           }
@@ -489,7 +492,7 @@ export default function FullPricing() {
                   if (paymentLoading && upgradingTierId === tier.id) {
                     buttonText = "Processing...";
                   } else if (isCurrentTier) {
-                    if (userRole?.includes("CONSULTANT_APPLICANT")) {
+                    if (userRole !== "CONSULTATION") {
                       buttonText = "Complete KYC";
                     } else {
                       buttonText = "Go to Dashboard";

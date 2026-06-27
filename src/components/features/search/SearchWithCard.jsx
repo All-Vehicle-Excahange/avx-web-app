@@ -446,7 +446,9 @@ export default function SearchWithCard({
   });
 
   const recommendedVehicles = useMemo(() => {
-    return (recommendedAdsData?.data || []).map((item) => ({
+    const data = recommendedAdsData?.data;
+    const list = Array.isArray(data) ? data : [];
+    return list.map((item) => ({
       ...item.vehicle,
       sponsored: item.sponsored,
       adId: item.adId,

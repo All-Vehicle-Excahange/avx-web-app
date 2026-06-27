@@ -70,11 +70,11 @@ export default function VehicleOverview({ vehicle }) {
             value={
               vehicle?.vehicleDocument?.regDate
                 ? new Date(vehicle.vehicleDocument.regDate)
-                  .toLocaleDateString("en-US", {
-                    month: "short",
-                    year: "numeric",
-                  })
-                  .replace(" ", "-")
+                    .toLocaleDateString("en-US", {
+                      month: "short",
+                      year: "numeric",
+                    })
+                    .replace(" ", "-")
                 : "-"
             }
           />
@@ -87,10 +87,17 @@ export default function VehicleOverview({ vehicle }) {
                 label={
                   <span className="flex items-center gap-2">
                     KM driven
-                    <Info size={14} className="text-third hover:text-primary cursor-pointer" />
+                    <Info
+                      size={14}
+                      className="text-third hover:text-primary cursor-pointer"
+                    />
                   </span>
                 }
-                value={vehicle?.kmDriven ? `${vehicle.kmDriven.toLocaleString("en-IN")} km` : "-"}
+                value={
+                  vehicle?.kmDriven
+                    ? `${vehicle.kmDriven.toLocaleString("en-IN")} km`
+                    : "-"
+                }
               />
             </div>
 
@@ -190,6 +197,12 @@ export default function VehicleOverview({ vehicle }) {
             label="Commercial Vehicle"
             value={vehicle?.isCommercialVehicle ? "Yes" : "No"}
           />
+          {vehicle?.isCngFitted && (
+            <>
+              <Divider />
+              <Item icon={<Fuel />} label="CNG Type" value={vehicle?.cngType || "-"} />
+            </>
+          )}
         </div>
       </div>
     </section>

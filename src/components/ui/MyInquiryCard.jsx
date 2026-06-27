@@ -7,11 +7,14 @@ import CloseInqPopup from "../features/consult/details/dashboard/components/Clos
 import { useState } from "react";
 import { generateVehicleSlug } from "@/lib/helper";
 import FeedbackPopup from "./FeedbackPopup";
+import { getAndCheckEligbleForReview } from "@/services/user.service";
 
 export default function MyInquiryCard({ inquiry, onStatusChange }) {
   const [showClosePopup, setShowClosePopup] = useState(false);
   const [showFeedbackPopup, setShowFeedbackPopup] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingFeedback, setLoadingFeedback] = useState(false);
+  const [reviewData, setReviewData] = useState(null);
 
   if (!inquiry) {
     return (
@@ -53,6 +56,23 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
       console.error("Close error:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleFeedbackClick = async () => {
+    if (loadingFeedback) return;
+    try {
+      setLoadingFeedback(true);
+      if (inquiry?.id) {
+        const res = await getAndCheckEligbleForReview(inquiry.id);
+        setReviewData(res?.data || null);
+      }
+      setShowFeedbackPopup(true);
+    } catch (error) {
+      console.error("Feedback error:", error);
+      setShowFeedbackPopup(true);
+    } finally {
+      setLoadingFeedback(false);
     }
   };
 
@@ -133,9 +153,10 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
                   showIcon={false}
                   variant="outlineSecondary"
                   size="sm"
-                  onClick={() => setShowFeedbackPopup(true)}
+                  onClick={handleFeedbackClick}
+                  loading={loadingFeedback}
                 >
-                  Feedback
+                Write  Review
                 </Button>
               </div>
             </>
@@ -212,6 +233,9 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
         <FeedbackPopup
           isOpen={showFeedbackPopup}
           onClose={() => setShowFeedbackPopup(false)}
+          isReview={reviewData?.isEligibleToReview || !!reviewData?.consultationReview}
+          isWritten={!reviewData?.isEligibleToReview && !!reviewData?.consultationReview}
+          reviewData={reviewData?.consultationReview || null}
           targetId={
             inquiry?.inquiryVehicleResponse?.vehicleOwner?.username ||
             inquiry?.inquiryVehicleResponse?.user?.username ||
