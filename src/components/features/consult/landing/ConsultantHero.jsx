@@ -180,7 +180,7 @@ export default function ConsultantHeroSection() {
                   if (!user) {
                     openLoginPopup();
                   } else {
-                    router.push("/consult/account");
+                    router.push("/consult/subscription");
                   }
                 }}
               >

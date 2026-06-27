@@ -6,7 +6,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 export default function ProtectedRoute({ children }) {
   const { replace } = useRouter();
 
-  const { user, token, isLoggedIn, authInitialized, initializeAuth } =
+  const { user, token, isLoggedIn, authInitialized, initializeAuth, openLoginPopup } =
     useAuthStore();
 
   const [checking, setChecking] = useState(true);
@@ -23,7 +23,10 @@ export default function ProtectedRoute({ children }) {
 
     // ❌ NOT LOGGED IN
     if (!hasAccess) {
-      replace("/consult/account");
+      try {
+        sessionStorage.setItem("triggerLoginPopup", "true");
+      } catch (e) {}
+      replace("/consult");
       return;
     }
 

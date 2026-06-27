@@ -10,13 +10,23 @@ import { useAuthStore } from "@/stores/useAuthStore";
 
 function Main() {
   const [activeTab, setActiveTab] = useState("login");
-  const { replace } = useRouter();
-  const { user, isLoggedIn } = useAuthStore();
+  const router = useRouter();
+  const { user, isLoggedIn, openLoginPopup } = useAuthStore();
+  
   useEffect(() => {
     if (isLoggedIn) {
-      replace("/consult/subscription");
+      router.replace("/consult/subscription");
+    } else {
+      try {
+        sessionStorage.setItem("triggerLoginPopup", "true");
+      } catch (e) {}
+      if (typeof window !== "undefined" && window.history.length > 1) {
+        router.back();
+      } else {
+        router.replace("/consult");
+      }
     }
-  }, [isLoggedIn, replace]);
+  }, [isLoggedIn, router]);
 
   if (isLoggedIn) return null;
 

@@ -143,20 +143,25 @@ function MyVehicle() {
 
       {/* SELLER LIMIT PROGRESS BAR */}
       {user?.userRole === "USER_SELLER" && (
-        <div className="bg-secondary/40 border border-third/20 rounded-2xl p-5 mb-4 shadow-sm">
-          <div className="flex justify-between items-end mb-3">
+        <div className="bg-primary/5 border border-primary/10 rounded-2xl p-6 mb-6 shadow-sm relative overflow-hidden backdrop-blur-md">
+          {/* Subtle background glow */}
+          <div className="absolute -right-10 -top-10 w-24 h-24 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
+
+          <div className="flex justify-between items-center mb-4">
             <div>
-              <h3 className="text-lg font-bold text-primary">Vehicle Listing Limit</h3>
-              <p className="text-third text-sm mt-0.5">You can post up to 3 vehicles as a normal seller.</p>
+              <h3 className="text-base font-bold text-primary">Vehicle Listing Limit</h3>
+              <p className="text-third text-xs mt-1">You can post up to 3 vehicles as a normal seller.</p>
             </div>
             <div className="text-right">
-              <span className="text-2xl font-black text-fourth">{totalPosted}</span>
-              <span className="text-third font-medium"> / 3</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-xl font-bold text-primary">{totalPosted}</span>
+                <span className="text-third text-sm">/ 3</span>
+              </div>
             </div>
           </div>
-          <div className="w-full bg-third/10 h-3 rounded-full overflow-hidden">
+          <div className="w-full bg-primary/10 h-1.5 rounded-full overflow-hidden">
             <div 
-              className="bg-fourth h-full rounded-full transition-all duration-500"
+              className="bg-primary h-full rounded-full transition-all duration-700 ease-out"
               style={{ width: `${(Math.min(totalPosted, 3) / 3) * 100}%` }}
             />
           </div>

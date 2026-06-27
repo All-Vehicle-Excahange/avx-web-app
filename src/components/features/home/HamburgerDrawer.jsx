@@ -65,7 +65,7 @@ export default function HamburgerDrawer({ open, onClose }) {
       {/* DRAWER SCROLL CONTAINER */}
       <div className="h-[calc(100vh-64px)] mt-16 overflow-y-auto no-scrollbar custom-scrollbar">
         {/* 5-COLUMN MEGA MENU CONTENT */}
-        <div className="max-w-7xl mx-auto px-8 pt-16 pb-12">
+        <div className="w-full px-8 md:px-12 pt-16 pb-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-12 border-b border-white/10 min-h-[450px]">
             {/* 1. LEFT MENU (3 cols) */}
             <div className="lg:col-span-3 border-r border-white/10 pr-4 lg:pr-8 flex flex-col gap-8 text-left">
