@@ -29,7 +29,6 @@ const staticTierDetails = {
     tagline: "Start building your presence on AVX.",
     color: "#6b7280",
     bestFor: "Small consultants & entry-level sellers",
-    note: "No customization. No featured priority.",
     cta: "Get Started",
     ctaStyle: "border border-[#d1d5db] text-[#111827] hover:bg-[#f9fafb]",
     highlight: false,
@@ -39,7 +38,6 @@ const staticTierDetails = {
     tagline: "Everything you need to grow and compete.",
     color: "#2563eb",
     bestFor: "Growing dealerships",
-    note: "Designed for growth-focused consultants.",
     cta: "Get Started",
     ctaStyle: "bg-[#2563eb] text-white hover:bg-[#1d4ed8]",
     highlight: true,
@@ -49,7 +47,6 @@ const staticTierDetails = {
     tagline: "Maximum authority across the marketplace.",
     color: "#6b7280",
     bestFor: "Large inventory dealers & brands",
-    note: "Premium visibility & authority positioning.",
     cta: "Get Started",
     ctaStyle: "border border-[#d1d5db] text-[#111827] hover:bg-[#f9fafb]",
     highlight: false,
@@ -393,7 +390,7 @@ export default function FullPricing() {
         // style={{ background: "#ffffff" }}
       >
         <div className=" relative -top-40 max-w-7xl mx-auto px-5 sm:px-6 pt-0">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             {loading
               ? // SKELETON CARDS
                 Array.from({ length: 3 }).map((_, i) => (
@@ -508,22 +505,15 @@ export default function FullPricing() {
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: i * 0.1 }}
                       viewport={{ once: true }}
-                      className="group/card relative flex flex-col rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] border border-primary/10 hover:border-primary/25"
+                      className="group/card relative flex flex-col h-full rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 border border-primary/10"
                       style={{ background: "transparent" }}
                     >
-
-
                       <div className="relative p-8 sm:p-10 flex flex-col flex-1 pt-12">
                         {/* Plan name and pills */}
                         <div className="flex items-center gap-3 mb-5">
                           <h3 className="text-[24px] font-bold text-primary tracking-tight">
                             {staticDetails.name}
                           </h3>
-                          {staticDetails.highlight && (
-                            <span className="border border-fourth/30 bg-fourth/5 text-fourth text-[10px] font-bold tracking-widest uppercase px-3 py-0.5 rounded-full">
-                              Popular
-                            </span>
-                          )}
                           {isCurrentTier && (
                             <span className="border border-emerald-500/30 text-emerald-500 text-[10px] font-bold tracking-widest uppercase px-3 py-0.5 rounded-full">
                               Active
@@ -534,7 +524,7 @@ export default function FullPricing() {
                         {/* Price */}
                         <div className="mb-2">
                           <div className="flex items-baseline gap-1">
-                            <span className="text-[40px] font-black text-primary tracking-tighter leading-none">
+                            <span className="text-[32px] font-bold text-primary tracking-tight leading-none">
                               {formattedPrice}
                             </span>
                             <span className="text-[13px] font-medium text-primary/40">
@@ -569,7 +559,7 @@ export default function FullPricing() {
                                 <FiCheck
                                   className={`text-[14px] mt-0.5 shrink-0 ${
                                     staticDetails.highlight
-                                      ? "text-fourth"
+                                      ? "text-primary/40"
                                       : "text-primary/40"
                                   }`}
                                 />

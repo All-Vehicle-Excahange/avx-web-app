@@ -379,6 +379,8 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
         <FeedbackPopup
           isOpen={showFeedbackPopup}
           onClose={() => setShowFeedbackPopup(false)}
+          isReview={false}
+          isWritten={true}
           targetId={
             inquiry?.inquirer?.username ||
             inquiry?.inquiryVehicleResponse?.vehicleOwner?.username ||

@@ -1,14 +1,7 @@
 "use client";
 
-import {
-  X,
-  User,
-  LogOut,
-  Crown,
-  CheckCircle2,
-  ChevronRight,
-} from "lucide-react";
-import { useEffect } from "react";
+import { CheckCircle2, ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -17,6 +10,8 @@ import Navbar from "@/components/layout/Navbar";
 export default function HamburgerDrawer({ open, onClose }) {
   const { isLoggedIn, user, openLoginPopup, openSignupPopup, logout } =
     useAuthStore();
+
+  const [hoveredTab, setHoveredTab] = useState(null);
 
   // close on Esc key
   useEffect(() => {
@@ -62,452 +57,569 @@ export default function HamburgerDrawer({ open, onClose }) {
     <div
       aria-hidden={!open}
       className={`
-        fixed inset-0 z-99999 bg-secondary text-primary
+        fixed inset-0 z-[1090] bg-secondary text-primary
         transform transition-all duration-500 ease-out 3xl:max-w-full 3xl:mx-auto
         ${open ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"}
       `}
     >
-      {/* HEADER */}
-      <Navbar insideDrawer={true} onClose={onClose} scrolled={true} />
-
       {/* DRAWER SCROLL CONTAINER */}
       <div className="h-[calc(100vh-64px)] mt-16 overflow-y-auto no-scrollbar custom-scrollbar">
         {/* 5-COLUMN MEGA MENU CONTENT */}
         <div className="max-w-7xl mx-auto px-8 pt-16 pb-12">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 pb-12 border-b border-white/10">
-            {/* COLUMN 1 — BROWSE VEHICLES */}
-            <div className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-12 border-b border-white/10 min-h-[450px]">
+            {/* 1. LEFT MENU (3 cols) */}
+            <div className="lg:col-span-3 border-r border-white/10 pr-4 lg:pr-8 flex flex-col gap-8 text-left">
+              {/* DISCOVER */}
               <div>
-                <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
-                  Browse Vehicles
+                <span className="text-[11px] uppercase font-black tracking-widest text-primary/50 mb-3.5 block">
+                  DISCOVER
                 </span>
                 <div className="space-y-2 flex flex-col">
-                  <MenuLink href="/search/buy-used-cars" onClick={onClose}>
-                    Used Cars
-                  </MenuLink>
-                  <MenuLink
-                    href="/search?vehicleType=2 Wheeler"
-                    onClick={onClose}
-                  >
-                    Used Bikes
-                  </MenuLink>
-                  <MenuLink
-                    href="/search?vehicleType=4 Wheeler&bodyType=truck"
-                    onClick={onClose}
-                  >
-                    Used Trucks
-                  </MenuLink>
-                  <MenuLink
-                    href="/search/buy-used-cars?fuelType=Electric"
-                    onClick={onClose}
-                  >
-                    Used EVs
-                  </MenuLink>
-                </div>
-              </div>
-
-              <div>
-                <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
-                  Browse by Brand
-                </span>
-                <div className="space-y-2 flex flex-col">
-                  <MenuLink
-                    href="/search/buy-used-maruti-suzuki-cars"
-                    onClick={onClose}
-                  >
-                    Maruti Suzuki
-                  </MenuLink>
-                  <MenuLink
-                    href="/search/buy-used-hyundai-cars"
-                    onClick={onClose}
-                  >
-                    Hyundai
-                  </MenuLink>
-                  <MenuLink href="/search/buy-used-tata-cars" onClick={onClose}>
-                    Tata
-                  </MenuLink>
-                  <MenuLink
-                    href="/search/buy-used-mahindra-cars"
-                    onClick={onClose}
-                  >
-                    Mahindra
-                  </MenuLink>
-                  <MenuLink
-                    href="/search/buy-used-honda-cars"
-                    onClick={onClose}
-                  >
-                    Honda
-                  </MenuLink>
-                  <MenuLink
-                    href="/search/buy-used-toyota-cars"
-                    onClick={onClose}
-                  >
-                    Toyota
-                  </MenuLink>
-                  <MenuLink href="/search/buy-used-bmw-cars" onClick={onClose}>
-                    BMW
-                  </MenuLink>
-                  <MenuLink
-                    href="/search/buy-used-mercedes-benz-cars"
-                    onClick={onClose}
-                  >
-                    Mercedes
-                  </MenuLink>
-                  <MenuLink href="/search/buy-used-audi-cars" onClick={onClose}>
-                    Audi
-                  </MenuLink>
-                </div>
-              </div>
-
-              <div>
-                <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
-                  Browse by Budget
-                </span>
-                <div className="space-y-2 flex flex-col">
-                  <MenuLink
-                    href="/search/buy-used-cars?budget=0-3"
-                    onClick={onClose}
-                  >
-                    Under ₹3L
-                  </MenuLink>
-                  <MenuLink
-                    href="/search/buy-used-cars?budget=0-5"
-                    onClick={onClose}
-                  >
-                    Under ₹5L
-                  </MenuLink>
-                  <MenuLink
-                    href="/search/buy-used-cars?budget=0-10"
-                    onClick={onClose}
-                  >
-                    Under ₹10L
-                  </MenuLink>
-                  <MenuLink
-                    href="/search/buy-used-cars?budget=50-200"
-                    onClick={onClose}
-                  >
-                    Luxury Cars
-                  </MenuLink>
-                </div>
-              </div>
-
-              <div>
-                <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
-                  Browse by Fuel
-                </span>
-                <div className="space-y-2 flex flex-col">
-                  <MenuLink
-                    href="/search/buy-used-cars?fuelType=Petrol"
-                    onClick={onClose}
-                  >
-                    Petrol
-                  </MenuLink>
-                  <MenuLink
-                    href="/search/buy-used-cars?fuelType=Diesel"
-                    onClick={onClose}
-                  >
-                    Diesel
-                  </MenuLink>
-                  <MenuLink
-                    href="/search/buy-used-cars?fuelType=Electric"
-                    onClick={onClose}
-                  >
-                    Electric
-                  </MenuLink>
-                  <MenuLink
-                    href="/search/buy-used-cars?fuelType=Hybrid"
-                    onClick={onClose}
-                  >
-                    Hybrid
-                  </MenuLink>
-                  <MenuLink
-                    href="/search/buy-used-cars?fuelType=CNG"
-                    onClick={onClose}
-                  >
-                    CNG
-                  </MenuLink>
-                </div>
-              </div>
-            </div>
-
-            {/* COLUMN 2 — CONSULTANTS */}
-            <div className="space-y-6">
-              <div>
-                <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
-                  Find Consultants
-                </span>
-                <div className="space-y-2 flex flex-col">
-                  <MenuLink href="/consult/discovery" onClick={onClose}>
-                    All Consultants
-                  </MenuLink>
-                  <MenuLink
-                    href="/consult/discovery?sort=recommended"
-                    onClick={onClose}
-                  >
-                    Premium Consultants
-                  </MenuLink>
-                  <MenuLink
-                    href="/consult/discovery?sort=subscribers_high_low"
-                    onClick={onClose}
-                  >
-                    Verified Consultants
-                  </MenuLink>
-                  <MenuLink
-                    href="/consult/discovery?service=AVX_Inspected_Specialists"
-                    onClick={onClose}
-                  >
-                    Reecomm Inspected Specialists
-                  </MenuLink>
-                </div>
-              </div>
-
-              <div>
-                <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
-                  Browse by Category
-                </span>
-                <div className="space-y-2 flex flex-col">
-                  <MenuLink
-                    href="/consult/discovery?service=SUV_Specialists"
-                    onClick={onClose}
-                  >
-                    SUV Specialists
-                  </MenuLink>
-                  <MenuLink
-                    href="/consult/discovery?service=Luxury_Car_Specialists"
-                    onClick={onClose}
-                  >
-                    Luxury Car Specialists
-                  </MenuLink>
-                  <MenuLink
-                    href="/consult/discovery?service=Commercial_Vehicle_Specialists"
-                    onClick={onClose}
-                  >
-                    Commercial Vehicle Specialists
-                  </MenuLink>
-                  <MenuLink
-                    href="/consult/discovery?service=EV_Specialists"
-                    onClick={onClose}
-                  >
-                    EV Specialists
-                  </MenuLink>
-                </div>
-              </div>
-
-              <div>
-                <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
-                  Browse by City
-                </span>
-                <div className="space-y-2 flex flex-col">
-                  <MenuLink
-                    href="/consult/discovery?location=Ahmedabad"
-                    onClick={onClose}
-                  >
-                    Ahmedabad Consultants
-                  </MenuLink>
-                  <MenuLink
-                    href="/consult/discovery?location=Surat"
-                    onClick={onClose}
-                  >
-                    Surat Consultants
-                  </MenuLink>
-                  <MenuLink
-                    href="/consult/discovery?location=Vadodara"
-                    onClick={onClose}
-                  >
-                    Vadodara Consultants
-                  </MenuLink>
-                  <MenuLink
-                    href="/consult/discovery?location=Mumbai"
-                    onClick={onClose}
-                  >
-                    Mumbai Consultants
-                  </MenuLink>
-                  <MenuLink
-                    href="/consult/discovery?location=Delhi"
-                    onClick={onClose}
-                  >
-                    Delhi Consultants
-                  </MenuLink>
-                </div>
-              </div>
-            </div>
-
-            {/* COLUMN 3 — SELL */}
-            <div className="space-y-6">
-              <div>
-                <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
-                  Sell With Reecomm
-                </span>
-                <div className="space-y-2 flex flex-col">
-                  <MenuLink href={getSellVehicleLink()} onClick={onClose}>
-                    Sell Your Vehicle
-                  </MenuLink>
-                  <MenuLink href="/inspection-request" onClick={onClose}>
-                    Get Vehicle Inspection
-                  </MenuLink>
-                  <MenuLink href="/consult" onClick={onClose}>
-                    Become Consultant
-                  </MenuLink>
-                </div>
-              </div>
-
-              <div>
-                <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
-                  Consultant Program
-                </span>
-                <div className="space-y-2 flex flex-col">
-                  <MenuLink href="/consult/pricing" onClick={onClose}>
-                    Pricing Plans
-                  </MenuLink>
-                </div>
-              </div>
-
-              <div>
-                <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
-                  Why Sell With Reecomm
-                </span>
-                <div className="space-y-3.5 mt-2">
-                  <ValuePropItem
-                    text="Verified Marketplace"
-                    href="/why-chose-us"
-                    onClick={onClose}
+                  <TabItem
+                    id="browse"
+                    label="Browse Vehicles"
+                    hoveredTab={hoveredTab}
+                    setHoveredTab={setHoveredTab}
+                    href="/search/buy-used-cars"
+                    onClose={onClose}
                   />
-                  <ValuePropItem
-                    text="Inspection Support"
-                    href="/inspection-process"
-                    onClick={onClose}
+                  <TabItem
+                    id="trending"
+                    label="Trending Vehicles"
+                    hoveredTab={hoveredTab}
+                    setHoveredTab={setHoveredTab}
+                    href="/search/buy-used-cars?sort=trending"
+                    onClose={onClose}
                   />
-                  <ValuePropItem
-                    text="High Intent Buyers"
-                    href="/aboutus"
-                    onClick={onClose}
+                  <TabItem
+                    id="picks"
+                    label="Top Picks For You"
+                    hoveredTab={hoveredTab}
+                    setHoveredTab={setHoveredTab}
+                    href="/search/buy-used-cars?sort=recommended"
+                    onClose={onClose}
                   />
-                  <ValuePropItem
-                    text="Premium Visibility"
-                    href="/why-chose-us"
-                    onClick={onClose}
+                </div>
+              </div>
+
+              {/* BUYER TOOLS */}
+              <div>
+                <span className="text-[11px] uppercase font-black tracking-widest text-primary/50 mb-3.5 block">
+                  BUYER TOOLS
+                </span>
+                <div className="space-y-2 flex flex-col">
+                  <TabItem
+                    id="compare"
+                    label="Compare Vehicles"
+                    hoveredTab={hoveredTab}
+                    setHoveredTab={setHoveredTab}
+                    href="/compare"
+                    onClose={onClose}
+                  />
+                  <TabItem
+                    id="wishlist"
+                    label="Wishlist (Login Required)"
+                    hoveredTab={hoveredTab}
+                    setHoveredTab={setHoveredTab}
+                    href="/user/details/wishlist"
+                    onClose={onClose}
+                  />
+                </div>
+              </div>
+
+              {/* SELL */}
+              <div>
+                <span className="text-[11px] uppercase font-black tracking-widest text-primary/50 mb-3.5 block">
+                  SELL
+                </span>
+                <div className="space-y-2 flex flex-col">
+                  <TabItem
+                    id="sell"
+                    label="Sell Your Vehicle"
+                    hoveredTab={hoveredTab}
+                    setHoveredTab={setHoveredTab}
+                    href={getSellVehicleLink()}
+                    onClose={onClose}
+                  />
+                  <TabItem
+                    id="inspect"
+                    label="Get Vehicle Inspected"
+                    hoveredTab={hoveredTab}
+                    setHoveredTab={setHoveredTab}
+                    href="/inspection-request"
+                    onClose={onClose}
+                  />
+                  <TabItem
+                    id="consult"
+                    label="Become a Consultant"
+                    hoveredTab={hoveredTab}
+                    setHoveredTab={setHoveredTab}
+                    href="/consult"
+                    onClose={onClose}
                   />
                 </div>
               </div>
             </div>
 
-            {/* COLUMN 4 — RESOURCES */}
-            <div>
-              <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
-                Resources
-              </span>
-              <div className="space-y-2 flex flex-col">
-                <MenuLink href="/aboutus" onClick={onClose}>
-                  About Reecomm
-                </MenuLink>
-                <MenuLink href="/reecomm-works" onClick={onClose}>
-                  How Reecomm Works
-                </MenuLink>
-                <MenuLink href="/why-chose-us" onClick={onClose}>
-                  Why Choose Reecomm
-                </MenuLink>
-                <MenuLink href="/inspection-process" onClick={onClose}>
-                  Inspection Process
-                </MenuLink>
-                <MenuLink href="/safety-transparency" onClick={onClose}>
-                  Safety & Transparency
-                </MenuLink>
-                <MenuLink href="/help" onClick={onClose}>
-                  Help Center
-                </MenuLink>
-                <MenuLink href="/contactus" onClick={onClose}>
-                  Contact Us
-                </MenuLink>
-                <MenuLink href="/blog" onClick={onClose}>
-                  Blog
-                </MenuLink>
-              </div>
+            {/* 2. MIDDLE DYNAMIC CONTENT (5 cols) */}
+            <div className="lg:col-span-5 border-r border-white/10 px-0 lg:px-4 pr-4 lg:pr-8">
+              {hoveredTab === "browse" && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 fade-in-fast">
+                  <div className="space-y-8">
+                    <div>
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
+                        Browse Vehicles
+                      </span>
+                      <div className="space-y-2 flex flex-col">
+                        <MenuLink
+                          href="/search/buy-used-cars"
+                          onClick={onClose}
+                        >
+                          Used Cars
+                        </MenuLink>
+                        <MenuLink
+                          href="/search?vehicleType=2 Wheeler"
+                          onClick={onClose}
+                        >
+                          Used Bikes
+                        </MenuLink>
+                        <MenuLink
+                          href="/search?vehicleType=4 Wheeler&bodyType=truck"
+                          onClick={onClose}
+                        >
+                          Used Trucks
+                        </MenuLink>
+                        <MenuLink
+                          href="/search/buy-used-cars?fuelType=Electric"
+                          onClick={onClose}
+                        >
+                          Used EVs
+                        </MenuLink>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
+                        Browse by Brand
+                      </span>
+                      <div className="space-y-2 flex flex-col">
+                        <MenuLink
+                          href="/search/buy-used-maruti-suzuki-cars"
+                          onClick={onClose}
+                        >
+                          Maruti Suzuki
+                        </MenuLink>
+                        <MenuLink
+                          href="/search/buy-used-hyundai-cars"
+                          onClick={onClose}
+                        >
+                          Hyundai
+                        </MenuLink>
+                        <MenuLink
+                          href="/search/buy-used-tata-cars"
+                          onClick={onClose}
+                        >
+                          Tata
+                        </MenuLink>
+                        <MenuLink
+                          href="/search/buy-used-mahindra-cars"
+                          onClick={onClose}
+                        >
+                          Mahindra
+                        </MenuLink>
+                        <MenuLink
+                          href="/search/buy-used-honda-cars"
+                          onClick={onClose}
+                        >
+                          Honda
+                        </MenuLink>
+                        <MenuLink
+                          href="/search/buy-used-toyota-cars"
+                          onClick={onClose}
+                        >
+                          Toyota
+                        </MenuLink>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-8">
+                    <div>
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
+                        Browse by Budget
+                      </span>
+                      <div className="space-y-2 flex flex-col">
+                        <MenuLink
+                          href="/search/buy-used-cars?budget=0-3"
+                          onClick={onClose}
+                        >
+                          Under ₹3L
+                        </MenuLink>
+                        <MenuLink
+                          href="/search/buy-used-cars?budget=0-5"
+                          onClick={onClose}
+                        >
+                          Under ₹5L
+                        </MenuLink>
+                        <MenuLink
+                          href="/search/buy-used-cars?budget=0-10"
+                          onClick={onClose}
+                        >
+                          Under ₹10L
+                        </MenuLink>
+                        <MenuLink
+                          href="/search/buy-used-cars?budget=50-200"
+                          onClick={onClose}
+                        >
+                          Luxury Cars
+                        </MenuLink>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
+                        Browse by Fuel
+                      </span>
+                      <div className="space-y-2 flex flex-col">
+                        <MenuLink
+                          href="/search/buy-used-cars?fuelType=Petrol"
+                          onClick={onClose}
+                        >
+                          Petrol
+                        </MenuLink>
+                        <MenuLink
+                          href="/search/buy-used-cars?fuelType=Diesel"
+                          onClick={onClose}
+                        >
+                          Diesel
+                        </MenuLink>
+                        <MenuLink
+                          href="/search/buy-used-cars?fuelType=Electric"
+                          onClick={onClose}
+                        >
+                          Electric
+                        </MenuLink>
+                        <MenuLink
+                          href="/search/buy-used-cars?fuelType=Hybrid"
+                          onClick={onClose}
+                        >
+                          Hybrid
+                        </MenuLink>
+                        <MenuLink
+                          href="/search/buy-used-cars?fuelType=CNG"
+                          onClick={onClose}
+                        >
+                          CNG
+                        </MenuLink>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {hoveredTab === "consult" && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 fade-in-fast">
+                  <div className="space-y-8">
+                    <div>
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
+                        Find Consultants
+                      </span>
+                      <div className="space-y-2 flex flex-col">
+                        <MenuLink href="/consult/discovery" onClick={onClose}>
+                          All Consultants
+                        </MenuLink>
+                        <MenuLink
+                          href="/consult/discovery?sort=recommended"
+                          onClick={onClose}
+                        >
+                          Premium Consultants
+                        </MenuLink>
+                        <MenuLink
+                          href="/consult/discovery?sort=subscribers_high_low"
+                          onClick={onClose}
+                        >
+                          Verified Consultants
+                        </MenuLink>
+                        <MenuLink
+                          href="/consult/discovery?service=AVX_Inspected_Specialists"
+                          onClick={onClose}
+                        >
+                          Reecomm Inspected Specialists
+                        </MenuLink>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
+                        Browse by City
+                      </span>
+                      <div className="space-y-2 flex flex-col">
+                        <MenuLink
+                          href="/consult/discovery?location=Ahmedabad"
+                          onClick={onClose}
+                        >
+                          Ahmedabad Consultants
+                        </MenuLink>
+                        <MenuLink
+                          href="/consult/discovery?location=Surat"
+                          onClick={onClose}
+                        >
+                          Surat Consultants
+                        </MenuLink>
+                        <MenuLink
+                          href="/consult/discovery?location=Vadodara"
+                          onClick={onClose}
+                        >
+                          Vadodara Consultants
+                        </MenuLink>
+                        <MenuLink
+                          href="/consult/discovery?location=Mumbai"
+                          onClick={onClose}
+                        >
+                          Mumbai Consultants
+                        </MenuLink>
+                        <MenuLink
+                          href="/consult/discovery?location=Delhi"
+                          onClick={onClose}
+                        >
+                          Delhi Consultants
+                        </MenuLink>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-8">
+                    <div>
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
+                        Browse by Category
+                      </span>
+                      <div className="space-y-2 flex flex-col">
+                        <MenuLink
+                          href="/consult/discovery?service=SUV_Specialists"
+                          onClick={onClose}
+                        >
+                          SUV Specialists
+                        </MenuLink>
+                        <MenuLink
+                          href="/consult/discovery?service=Luxury_Car_Specialists"
+                          onClick={onClose}
+                        >
+                          Luxury Car Specialists
+                        </MenuLink>
+                        <MenuLink
+                          href="/consult/discovery?service=Commercial_Vehicle_Specialists"
+                          onClick={onClose}
+                        >
+                          Commercial Vehicle Specialists
+                        </MenuLink>
+                        <MenuLink
+                          href="/consult/discovery?service=EV_Specialists"
+                          onClick={onClose}
+                        >
+                          EV Specialists
+                        </MenuLink>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {hoveredTab === "sell" && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 fade-in-fast">
+                  <div className="space-y-8">
+                    <div>
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
+                        Sell With Reecomm
+                      </span>
+                      <div className="space-y-2 flex flex-col">
+                        <MenuLink href={getSellVehicleLink()} onClick={onClose}>
+                          Sell Your Vehicle
+                        </MenuLink>
+                        <MenuLink href="/inspection-request" onClick={onClose}>
+                          Get Vehicle Inspection
+                        </MenuLink>
+                        <MenuLink href="/consult" onClick={onClose}>
+                          Become Consultant
+                        </MenuLink>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
+                        Consultant Program
+                      </span>
+                      <div className="space-y-2 flex flex-col">
+                        <MenuLink href="/consult/pricing" onClick={onClose}>
+                          Pricing Plans
+                        </MenuLink>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-8">
+                    <div>
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
+                        Why Sell With Reecomm
+                      </span>
+                      <div className="space-y-3.5 mt-2">
+                        <ValuePropItem
+                          text="Verified Marketplace"
+                          href="/why-chose-us"
+                          onClick={onClose}
+                        />
+                        <ValuePropItem
+                          text="Inspection Support"
+                          href="/inspection-process"
+                          onClick={onClose}
+                        />
+                        <ValuePropItem
+                          text="High Intent Buyers"
+                          href="/aboutus"
+                          onClick={onClose}
+                        />
+                        <ValuePropItem
+                          text="Premium Visibility"
+                          href="/why-chose-us"
+                          onClick={onClose}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Default view when nothing specific is hovered */}
+              {(!hoveredTab ||
+                !["browse", "consult", "sell"].includes(hoveredTab)) && (
+                <div className="flex flex-col items-center justify-center h-full min-h-[400px] text-center space-y-4 fade-in-fast">
+                  <h3 className="text-xl md:text-2xl font-medium text-primary">
+                    Trusted by 10,000+ Dealers
+                  </h3>
+                  <p className="text-sm text-third max-w-md">
+                    Reecomm is India's fastest growing verified automotive
+                    marketplace.
+                  </p>
+                </div>
+              )}
             </div>
 
-            {/* COLUMN 5 — DYNAMIC ACCOUNT ACTIONS */}
-            <div>
-              <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
-                My Account
-              </span>
+            {/* 3. RIGHT FIXED COLUMNS (4 cols) */}
+            <div className="lg:col-span-4 pl-0 lg:pl-4 grid grid-cols-1 sm:grid-cols-2 gap-8">
+              {/* RESOURCES */}
+              <div>
+                <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
+                  Resources
+                </span>
+                <div className="space-y-2 flex flex-col">
+                  <MenuLink href="/aboutus" onClick={onClose}>
+                    About Reecomm
+                  </MenuLink>
+                  <MenuLink href="/reecomm-works" onClick={onClose}>
+                    How Reecomm Works
+                  </MenuLink>
+                  <MenuLink href="/why-chose-us" onClick={onClose}>
+                    Why Choose Reecomm
+                  </MenuLink>
+                  <MenuLink href="/inspection-process" onClick={onClose}>
+                    Inspection Process
+                  </MenuLink>
+                  <MenuLink href="/safety-transparency" onClick={onClose}>
+                    Safety & Transparency
+                  </MenuLink>
+                  <MenuLink href="/help" onClick={onClose}>
+                    Help Center
+                  </MenuLink>
+                  <MenuLink href="/contactus" onClick={onClose}>
+                    Contact Us
+                  </MenuLink>
+                  <MenuLink href="/blog" onClick={onClose}>
+                    Blog
+                  </MenuLink>
+                </div>
+              </div>
 
-              {/* Dynamic Links Based on User State */}
-              <div className="space-y-2 flex flex-col">
-                {!isLoggedIn ? (
-                  <>
-                    <button
-                      onClick={handleSignInClick}
-                      className="block text-left text-sm text-third hover:text-primary transition-all duration-200 transform hover:translate-x-1 py-1"
-                    >
-                      Sign In
-                    </button>
-                    <button
-                      onClick={handleRegisterClick}
-                      className="block text-left text-sm text-third hover:text-primary transition-all duration-200 transform hover:translate-x-1 py-1"
-                    >
-                      Register
-                    </button>
-                    <MenuLink href="/became-seller" onClick={onClose}>
-                      Sell Vehicle
-                    </MenuLink>
-                    <MenuLink href="/consult" onClick={onClose}>
-                      Become Consultant
-                    </MenuLink>
-                  </>
-                ) : isConsultant ? (
-                  <>
-                    <MenuLink
-                      href="/consult/dashboard/overview"
-                      onClick={onClose}
-                    >
-                      Dashboard
-                    </MenuLink>
-                    <MenuLink
-                      href="/consult/dashboard/inventory"
-                      onClick={onClose}
-                    >
-                      Inventory
-                    </MenuLink>
-                    <MenuLink
-                      href="/consult/dashboard/inquiries"
-                      onClick={onClose}
-                    >
-                      Inquiries
-                    </MenuLink>
-                    <MenuLink
-                      href="/consult/dashboard/storefront"
-                      onClick={onClose}
-                    >
-                      Storefront
-                    </MenuLink>
-                    <MenuLink
-                      href="/consult/dashboard/analytics"
-                      onClick={onClose}
-                    >
-                      Analytics
-                    </MenuLink>
-                    <MenuLink
-                      href="/consult/dashboard/billing"
-                      onClick={onClose}
-                    >
-                      Billing
-                    </MenuLink>
-                  </>
-                ) : (
-                  <>
-                    <MenuLink href="/user/details/myprofile" onClick={onClose}>
-                      My Activity
-                    </MenuLink>
-                    <MenuLink href="/user/details/wishlist" onClick={onClose}>
-                      Saved Vehicles
-                    </MenuLink>
-                    <MenuLink href="/compare" onClick={onClose}>
-                      Compare Vehicles
-                    </MenuLink>
-                    <MenuLink href="/user/details/inquaries" onClick={onClose}>
-                      Inquiries
-                    </MenuLink>
-                  </>
-                )}
+              {/* MY ACCOUNT */}
+              <div>
+                <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
+                  My Account
+                </span>
+                <div className="space-y-2 flex flex-col">
+                  {!isLoggedIn ? (
+                    <>
+                      <button
+                        onClick={handleSignInClick}
+                        className="block text-left text-sm text-third hover:text-primary transition-all duration-200 transform hover:translate-x-1 py-1"
+                      >
+                        Sign In
+                      </button>
+                      <button
+                        onClick={handleRegisterClick}
+                        className="block text-left text-sm text-third hover:text-primary transition-all duration-200 transform hover:translate-x-1 py-1"
+                      >
+                        Register
+                      </button>
+                      <MenuLink href="/became-seller" onClick={onClose}>
+                        Sell Vehicle
+                      </MenuLink>
+                      <MenuLink href="/consult" onClick={onClose}>
+                        Become Consultant
+                      </MenuLink>
+                    </>
+                  ) : isConsultant ? (
+                    <>
+                      <MenuLink
+                        href="/consult/dashboard/overview"
+                        onClick={onClose}
+                      >
+                        Dashboard
+                      </MenuLink>
+                      <MenuLink
+                        href="/consult/dashboard/inventory"
+                        onClick={onClose}
+                      >
+                        Inventory
+                      </MenuLink>
+                      <MenuLink
+                        href="/consult/dashboard/inquiries"
+                        onClick={onClose}
+                      >
+                        Inquiries
+                      </MenuLink>
+                      <MenuLink
+                        href="/consult/dashboard/storefront"
+                        onClick={onClose}
+                      >
+                        Storefront
+                      </MenuLink>
+                      <MenuLink
+                        href="/consult/dashboard/analytics"
+                        onClick={onClose}
+                      >
+                        Analytics
+                      </MenuLink>
+                      <MenuLink
+                        href="/consult/dashboard/billing"
+                        onClick={onClose}
+                      >
+                        Billing
+                      </MenuLink>
+                    </>
+                  ) : (
+                    <>
+                      <MenuLink
+                        href="/user/details/myprofile"
+                        onClick={onClose}
+                      >
+                        My Activity
+                      </MenuLink>
+                      <MenuLink href="/user/details/wishlist" onClick={onClose}>
+                        Saved Vehicles
+                      </MenuLink>
+                      <MenuLink href="/compare" onClick={onClose}>
+                        Compare Vehicles
+                      </MenuLink>
+                      <MenuLink
+                        href="/user/details/inquaries"
+                        onClick={onClose}
+                      >
+                        Inquiries
+                      </MenuLink>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -698,6 +810,23 @@ const MenuLink = ({ href, children, onClick, compact }) => {
       }`}
     >
       {children}
+    </Link>
+  );
+};
+
+const TabItem = ({ id, label, hoveredTab, setHoveredTab, href, onClose }) => {
+  return (
+    <Link
+      href={href}
+      onClick={onClose}
+      onMouseEnter={() => setHoveredTab(id)}
+      className={`block text-left transition-all duration-200 transform py-1 text-sm ${
+        hoveredTab === id
+          ? "text-primary translate-x-1 font-medium"
+          : "text-third hover:text-primary hover:translate-x-1"
+      }`}
+    >
+      {label}
     </Link>
   );
 };
