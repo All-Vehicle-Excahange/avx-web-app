@@ -21,7 +21,7 @@ import InspectionTrackingModal from "@/components/features/user/InspectionTracki
 import { getInspectionPricForBuyerQuery } from "@/queries/inspection.queries";
 import { useAuthStore } from "@/stores/useAuthStore";
 
-export default function VehicleSpec({ open, setOpen, vehicle }) {
+export default function VehicleSpec({ open, setOpen, vehicle, inspectionDetails }) {
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
   const [animateModal, setAnimateModal] = useState(false);
@@ -86,6 +86,7 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
   };
   const timeOptions = generateTimeSlots();
   const inspectionAvailable = true;
+  const reportUrl = inspectionDetails?.reportUrl || existingInspection?.reportUrl;
 
   const closeModal = () => {
     setAnimateModal(false);
@@ -429,9 +430,19 @@ export default function VehicleSpec({ open, setOpen, vehicle }) {
                       <FeatureGroup title="EXTERIOR" items={["Sunroof"]} />
                     </div>
                     <div className="flex justify-end">
-                      <Button variant="outline" showIcon={true} locked={true}>
-                        View Inspection Report
-                      </Button>
+                      {(() => {
+                        const reportUrl = inspectionDetails?.reportUrl || existingInspection?.reportUrl;
+                        return (
+                          <Button 
+                            variant="outline" 
+                            showIcon={true} 
+                            locked={!reportUrl}
+                            onClick={reportUrl ? () => window.open(reportUrl, "_blank") : undefined}
+                          >
+                            View Inspection Report
+                          </Button>
+                        );
+                      })()}
                     </div>
                     <div className="md:col-span-3 border-t border border-third/40" />
                     <div>
