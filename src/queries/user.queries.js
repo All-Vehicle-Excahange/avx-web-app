@@ -21,6 +21,7 @@ import {
   getAvxIsnpectedFourWheel,
   getHomeFeedConsult,
   getRecentlySold,
+  getAndCheckEligbleForReview,
 } from "@/services/user.service";
 import {
   getFilteredVehicles,
@@ -412,6 +413,20 @@ export const getFilterConsualtQuery = (payload) => {
       return res?.data || [];
     },
     staleTime: 5 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+export const getAndCheckEligbleForReviewQuery = (inquiryId, enabled = true) => {
+  return queryOptions({
+    queryKey: ["check-eligible-for-review", inquiryId],
+    queryFn: async () => {
+      if (!inquiryId) return null;
+      const res = await getAndCheckEligbleForReview(inquiryId);
+      return res?.data || null;
+    },
+    enabled: !!inquiryId && enabled,
+    staleTime: 0,
     retry: shouldRetry,
   });
 };

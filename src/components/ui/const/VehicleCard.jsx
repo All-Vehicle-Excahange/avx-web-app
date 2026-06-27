@@ -112,6 +112,7 @@ export default function VehicleCard({
   const formatText = (text) =>
     text ? text.charAt(0).toUpperCase() + text.slice(1).toLowerCase() : "";
 
+  const baseFuel = formatText(data.fuelType) || formatText(data.fuel);
   const mapped = {
     image: data.thumbnailUrl || data.image,
 
@@ -122,7 +123,7 @@ export default function VehicleCard({
     year: data.yearOfMfg || data.year,
     transmission:
       formatText(data.transmissionType) || formatText(data.transmission),
-    fuel: formatText(data.fuelType) || formatText(data.fuel),
+    fuel: (data.cngType && data.cngType !== "NONE" && data.cngType !== "null") ? `${baseFuel} + CNG` : baseFuel,
     seats: data.ownership || data.seats,
 
     rating: data.avxInspectionRating || "-",
@@ -244,6 +245,12 @@ export default function VehicleCard({
                   className={`w-5 h-5 transition-colors ${isFavorite ? "fill-red-500 text-red-500" : "text-white"}`}
                 />
               </button>
+
+              {/* ✅ Rating Badge (Bottom-Left of Image) */}
+              <div className="absolute bottom-2 left-2 shrink-0 flex items-center justify-center gap-1 rounded-full bg-black/60 backdrop-blur-sm px-2.5 py-1.5 z-20">
+                <Star className="w-3.5 h-3.5 fill-primary text-primary" />
+                <span className="text-white text-[11px] leading-none font-bold">{mapped.rating}</span>
+              </div>
             </div>
           </div>
 
@@ -293,15 +300,10 @@ export default function VehicleCard({
               <span className="flex items-center gap-1">
                 <Users className="w-4 h-4" /> {mapped.seats}
               </span>
-
-              <span className="flex items-center gap-1">
-                <Star className="w-4 h-4 fill-primary text-primary" />
-                {mapped.rating}
-              </span>
             </div>
 
             {/* PRICE + BUTTON */}
-            <div className="flex items-center justify-end md:justify-between gap-2 mt-auto">
+            <div className="flex items-center justify-between gap-2 mt-auto">
               <h3 className="text-sm md:text-xl font-bold text-primary">
                 ₹ {mapped.price}
               </h3>

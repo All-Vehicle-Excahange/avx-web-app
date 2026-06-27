@@ -15,11 +15,6 @@ import {
   CheckCircle2,
   AlertCircle,
   Ban,
-  UserCircle,
-  MapPin,
-  Sparkles,
-  PencilLine,
-  Save
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { ProfileSkeleton } from "@/components/ui/skeleton";
@@ -244,13 +239,15 @@ function MyProfile() {
     profileForm.lastName?.trim() &&
     profileForm.email?.trim();
 
-  const isMetaFormValid =
-    metaForm.age &&
-    metaForm.gender?.trim() &&
-    metaForm.profession?.trim() &&
-    metaForm.address?.trim() &&
-    metaForm.stateId &&
-    metaForm.cityId;
+  const isMetaFormValid = !!(
+    metaForm.age ||
+    metaForm.gender?.trim() ||
+    metaForm.profession?.trim() ||
+    metaForm.address?.trim() ||
+    metaForm.stateId ||
+    metaForm.cityId ||
+    metaForm.townId
+  );
 
   const handleSaveProfile = async () => {
     try {
@@ -276,20 +273,51 @@ function MyProfile() {
     try {
       setMetaError("");
 
-      const payload = {
-        age: Number(metaForm.age),
-        gender: metaForm.gender,
-        profession: metaForm.profession,
-        address: metaForm.address,
-        cityId: metaForm.cityId,
-        stateId: metaForm.stateId,
-        countryId: metaForm.country?.id || 101,
-        latitude: metaForm.latitude || 22.2587,
-        longitude: metaForm.longitude || 71.1924,
+      const payload = {};
+
+      const addIfChanged = (key, newValue, oldValue) => {
+        if (newValue !== oldValue && newValue !== undefined) {
+          payload[key] = newValue;
+        }
       };
 
-      if (metaForm.townId) {
-        payload.townId = metaForm.townId;
+      // Number comparison for age
+      const newAge = metaForm.age ? Number(metaForm.age) : null;
+      const oldAge = profileMetaData.age ? Number(profileMetaData.age) : null;
+      if (newAge !== oldAge) {
+        payload.age = newAge;
+      }
+
+      addIfChanged("gender", metaForm.gender, profileMetaData.gender);
+      addIfChanged("profession", metaForm.profession, profileMetaData.profession);
+      addIfChanged("address", metaForm.address, profileMetaData.address);
+      addIfChanged("cityId", metaForm.cityId, profileMetaData.city?.id);
+      addIfChanged("stateId", metaForm.stateId, profileMetaData.state?.id);
+      addIfChanged("townId", metaForm.townId, profileMetaData.town?.id);
+
+      const newCountryId = metaForm.country?.id || 101;
+      const oldCountryId = profileMetaData.country?.id || 101;
+      if (newCountryId !== oldCountryId) {
+        payload.countryId = newCountryId;
+      }
+
+      const newLat = metaForm.latitude || 22.2587;
+      const oldLat = profileMetaData.latitude || 22.2587;
+      if (newLat !== oldLat) {
+        payload.latitude = newLat;
+      }
+
+      const newLong = metaForm.longitude || 71.1924;
+      const oldLong = profileMetaData.longitude || 71.1924;
+      if (newLong !== oldLong) {
+        payload.longitude = newLong;
+      }
+
+      // If nothing has changed, just close editing without API call
+      if (Object.keys(payload).length === 0) {
+        setIsEditingMeta(false);
+        setIsCreatingMeta(false);
+        return;
       }
 
       // Call create or update based on isCreatingMeta
@@ -639,9 +667,8 @@ function MyProfile() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
         {/*  PROFILE INFO SECTION */}
-        <div className="rounded-2xl border border-third/40 px-6 pb-6 h-fit flex flex-col">
-          
-          <div className="flex justify-between items-center py-6">
+        <div className="rounded-2xl border border-third/40 px-6 pb-6">
+          <div className="flex justify-between py-6">
             <h2 className="text-lg font-semibold">Profile Info</h2>
 
             {!isEditingProfile && profile.role !== "USER_SELLER_APPLICANT" && (
@@ -652,7 +679,7 @@ function MyProfile() {
           </div>
 
           {!isEditingProfile && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm flex-1">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
               <ProfileItem label="First Name" value={profile.firstName} />
               <ProfileItem label="Last Name" value={profile.lastName} />
               <ProfileItem label="Email" value={profile.email} />
@@ -665,8 +692,8 @@ function MyProfile() {
           )}
 
           {isEditingProfile && (
-            <div className="flex-1 flex flex-col">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <InputField
                   label="First Name"
                   variant="colored"
@@ -705,10 +732,7 @@ function MyProfile() {
               </div>
 
               {profileError && (
-                <div className="mt-4 p-3 rounded-lg bg-red-50 border border-red-100 flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 text-red-500" />
-                  <p className="text-red-700 text-xs font-medium">{profileError}</p>
-                </div>
+                <p className="text-red-500 text-sm mt-4">{profileError}</p>
               )}
 
               <div className="flex justify-end gap-4 mt-8">
@@ -719,11 +743,15 @@ function MyProfile() {
                   Cancel
                 </Button>
 
-                <Button
-                  variant="ghost"
+                <button
                   disabled={!isProfileFormValid}
                   onClick={handleSaveProfile}
-                  className="flex items-center gap-2 px-6 py-2 font-medium"
+                  className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium transition
+                    ${
+                      !isProfileFormValid
+                        ? "bg-gray-400 cursor-not-allowed text-white"
+                        : "bg-primary border text-secondary hover:bg-transparent hover:text-primary hover:border-primary hover:border "
+                    }`}
                 >
                   {!isProfileFormValid ? (
                     <>
@@ -733,44 +761,32 @@ function MyProfile() {
                   ) : (
                     "Save Changes"
                   )}
-                </Button>
+                </button>
               </div>
-            </div>
+            </>
           )}
         </div>
 
         {/* ✅ PROFILE META SECTION */}
-        <div className="relative overflow-visible rounded-2xl border border-third/40 px-6 pb-6 h-fit flex flex-col">
-          
-          <div className="flex justify-between items-center py-6">
+        <div className="relative overflow-visible rounded-2xl border border-third/40 px-6 pb-6">
+          <div className="flex justify-between py-6">
             <h2 className="text-lg font-semibold">Profile Meta</h2>
 
             {!isEditingMeta &&
               !isCreatingMeta &&
-              profile.role !== "USER_SELLER_APPLICANT" && 
-              isMetaExist && (
-                <Button variant="ghost" onClick={handleEditMeta}>
-                  Edit
+              profile.role !== "USER_SELLER_APPLICANT" && (
+                <Button
+                  variant="ghost"
+                  onClick={isMetaExist ? handleEditMeta : handleCreateMeta}
+                >
+                  {isMetaExist ? "Edit" : "Create"}
                 </Button>
               )}
           </div>
 
-          {/* Missing Meta Premium Empty State */}
-          {!isEditingMeta && !isCreatingMeta && !isMetaExist && (
-            <div className="flex-1 flex flex-col items-center justify-center text-center py-10 px-4">
-              <h3 className="text-base font-semibold mb-2">Complete Your Profile</h3>
-              <p className="text-sm text-third max-w-[280px] leading-relaxed mb-6">
-                Add your demographics and location to receive personalized vehicle recommendations.
-              </p>
-              <Button variant="outlineSecondary" onClick={handleCreateMeta}>
-                Complete Profile
-              </Button>
-            </div>
-          )}
-
           {/* Meta View */}
-          {!isEditingMeta && !isCreatingMeta && isMetaExist && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm flex-1">
+          {!isEditingMeta && !isCreatingMeta && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
               <ProfileItem label="Age" value={profileMetaData.age} />
               <ProfileItem label="Gender" value={profileMetaData.gender} />
               <ProfileItem label="City" value={profileMetaData.city?.name} />
@@ -846,9 +862,7 @@ function MyProfile() {
 
                 {/* ✅ STATE DROPDOWN */}
                 <div>
-                  <label className="text-xs text-third mb-1.5 block">
-                    State
-                  </label>
+                  <label className="text-xs text-third mb-1.5 block">State</label>
                   <CustomSelect
                     value={metaForm.stateId}
                     options={states}
@@ -871,9 +885,7 @@ function MyProfile() {
 
                 {/* ✅ CITY DROPDOWN */}
                 <div>
-                  <label className="text-xs text-third mb-1.5 block">
-                    City
-                  </label>
+                  <label className="text-xs text-third mb-1.5 block">City</label>
                   <CustomSelect
                     value={metaForm.cityId}
                     options={cities}
@@ -897,9 +909,7 @@ function MyProfile() {
 
                 {/* ✅ TOWN DROPDOWN */}
                 <div>
-                  <label className="text-xs text-third mb-1.5 block">
-                    Town
-                  </label>
+                  <label className="text-xs text-third mb-1.5 block">Town</label>
                   <CustomSelect
                     value={metaForm.townId}
                     options={towns}
@@ -921,13 +931,10 @@ function MyProfile() {
               </div>
 
               {metaError && (
-                <div className="mt-4 p-3 rounded-lg bg-red-50 border border-red-100 flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 text-red-500" />
-                  <p className="text-red-700 text-xs font-medium">{metaError}</p>
-                </div>
+                <p className="text-red-500 text-sm mt-4">{metaError}</p>
               )}
 
-              <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-third/10">
+              <div className="flex justify-end gap-4 mt-8">
                 <Button
                   variant="outlineSecondary"
                   onClick={() => {
@@ -938,22 +945,18 @@ function MyProfile() {
                   Cancel
                 </Button>
 
-                <Button
-                  variant="ghost"
+                <button
                   disabled={!isMetaFormValid}
                   onClick={handleSaveMeta}
-                  className="flex items-center gap-2 px-6 py-2.5 font-bold text-sm shadow-sm"
+                  className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium transition-all
+      ${
+        !isMetaFormValid
+          ? "bg-gray-400 cursor-not-allowed text-secondary"
+          : "bg-primary border text-secondary hover:bg-transparent hover:text-primary hover:border-primary hover:border"
+      }`}
                 >
-                  {!isMetaFormValid ? (
-                    <>
-                      <Lock size={14} /> Locked
-                    </>
-                  ) : (
-                    <>
-                      <Save size={14} /> {isCreatingMeta ? "Complete Profile" : "Save Changes"}
-                    </>
-                  )}
-                </Button>
+                  {isCreatingMeta ? "Complete Profile" : "Save Changes"}
+                </button>
               </div>
             </>
           )}

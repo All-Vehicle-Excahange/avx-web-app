@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   ShieldAlert,
   Ban,
+  Star,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
@@ -125,6 +126,14 @@ export default function UserVehicleCard({
                 fill
                 className="object-cover transition-transform duration-500 group-hover/card:scale-110"
               />
+
+              {/* ✅ Rating Badge (Bottom-Left of Image) */}
+              <div className="absolute bottom-2 left-2 shrink-0 flex items-center justify-center gap-1 rounded-full bg-black/60 backdrop-blur-sm px-2.5 py-1.5 z-20">
+                <Star className="w-3.5 h-3.5 fill-primary text-primary" />
+                <span className="text-white text-[11px] leading-none font-bold">
+                  {data?.avxInspectionRating || data?.rating || "-"}
+                </span>
+              </div>
             </div>
 
             {/* Inspection badge overlay (bottom-left of image) */}
@@ -177,6 +186,7 @@ export default function UserVehicleCard({
               <span className="flex items-center gap-1.5">
                 <Fuel className="w-3.5 h-3.5" />
                 {data?.fuel || "-"}
+                {data?.cngType && data.cngType !== "NONE" && data.cngType !== "null" ? " + CNG" : ""}
               </span>
               <span className="flex items-center gap-1.5">
                 <Users className="w-3.5 h-3.5" />

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import Button from "@/components/ui/button";
-import { X, Star, Loader2, Plus, Camera } from "lucide-react";
+import { X, Star, Loader2, Plus, Camera, User } from "lucide-react";
 import { addNewReview } from "@/services/user.service";
 
 export default function FeedbackPopup({
@@ -16,7 +16,7 @@ export default function FeedbackPopup({
   reviewData = null,
 }) {
   const mockReview = {
-    user: { firstname: "Demo", lastname: "User" },
+    reviewedBy: { firstname: "Demo", lastname: "User" },
     createdAt: new Date("2026-06-26").toISOString(),
     rating: 5,
     reviewTitle: "Excellent service!",
@@ -154,11 +154,11 @@ export default function FeedbackPopup({
                 <div className="flex flex-col gap-1 mb-4">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white font-medium text-sm border border-white/10 shrink-0">
-                      {dataToShow?.user?.firstname?.[0] || <User size={16} />}
+                      {dataToShow?.reviewedBy?.firstname?.[0] || <User size={16} />}
                     </div>
                     <div>
                       <h4 className="font-semibold text-white text-base">
-                        {dataToShow?.user?.firstname || "User"} {dataToShow?.user?.lastname || ""}
+                        {dataToShow?.reviewedBy?.firstname || "User"} {dataToShow?.reviewedBy?.lastname || ""}
                       </h4>
                       <p className="text-white/40 text-[11px] mt-0.5">
                         Reviewed on{" "}

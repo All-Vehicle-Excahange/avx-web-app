@@ -22,6 +22,7 @@ import { markAsSoldVehicle } from "@/services/vehicle.service";
 import MarkSoldPopup from "./MarkSoldPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import FeedbackPopup from "./FeedbackPopup";
+import { getAndCheckEligbleForReview } from "@/services/user.service";
 
 export default function InquiryCard({ inquiry, onStatusChange }) {
   const [showClosePopup, setShowClosePopup] = useState(false);
@@ -29,6 +30,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
   const [showDownloadPopup, setShowDownloadPopup] = useState(false);
   const [showFeedbackPopup, setShowFeedbackPopup] = useState(false);
   const [loadingAction, setLoadingAction] = useState(null); // 'APPROVE', 'REJECT', 'CLOSE', 'MARK_SOLD'
+  const [reviewData, setReviewData] = useState(null);
 
   if (!inquiry) {
     return (
@@ -47,16 +49,16 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
     inquiryCloseReason,
   } = inquiry;
 
-
-
   const isPending = inquiryStatus === "PENDING";
   const isApproved = inquiryStatus === "APPROVED";
   const isRejected = inquiryStatus === "REJECTED";
   const isClosed = inquiryStatus?.startsWith("CLOSED");
 
-  const vehicleTitle = `${inquiryVehicleResponse.makerName} ${inquiryVehicleResponse.modelName
-    } ${inquiryVehicleResponse.variantName} - ${inquiryVehicleResponse.yearOfMfg
-    }`;
+  const vehicleTitle = `${inquiryVehicleResponse.makerName} ${
+    inquiryVehicleResponse.modelName
+  } ${inquiryVehicleResponse.variantName} - ${
+    inquiryVehicleResponse.yearOfMfg
+  }`;
 
   const vehicleImage =
     inquiryVehicleResponse.thumbnailUrl ||
@@ -110,7 +112,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
       // Update local state by telling parent the vehicle is sold
       // This is slightly tricky as onStatusChange usually takes a status string for the inquiry
       // But we can trigger a refresh or handle it if onStatusChange allows.
-      // For now, we assume the parent will handle the refresh or we can manually 
+      // For now, we assume the parent will handle the refresh or we can manually
       // update the inquiry object if we had local state for it.
       // Since it's passed as a prop, we usually rely on onStatusChange.
       // Let's call onStatusChange with the current status to trigger a refresh in parent.
@@ -123,6 +125,25 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
     }
   };
 
+  const handleFeedbackClick = async () => {
+    console.log("CALLED");
+    if (loadingAction) return;
+    try {
+      setLoadingAction("FEEDBACK");
+      if (inquiry?.id) {
+        const res = await getAndCheckEligbleForReview(inquiry.id);
+
+        setReviewData(res?.data || null);
+      }
+      setShowFeedbackPopup(true);
+    } catch (error) {
+      console.error("Feedback error:", error);
+      setShowFeedbackPopup(true);
+    } finally {
+      setLoadingAction(null);
+    }
+  };
+
   //   Date Formatting
   const localDate = new Date(createdAt).toLocaleDateString("en-IN", {
     day: "2-digit",
@@ -132,10 +153,8 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
 
   return (
     <div className="rounded-xl border border-third/40  p-4 lg:px-6 lg:py-5 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 lg:gap-6 shadow-sm hover:shadow-md transition">
-
       {/*   LEFT IMAGE + INFO (Stacks on mobile & tablet, row on desktop) */}
       <div className="flex flex-col lg:flex-row items-start gap-4 lg:gap-5 w-full">
-
         {/*   Vehicle Image (Full width on mobile/tablet, fixed on desktop) */}
         <Link
           href={`/vehicle/details/${generateVehicleSlug(inquiryVehicleResponse)}/${inquiryVehicleResponse.id}`}
@@ -151,22 +170,27 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
 
         {/*   Content */}
         <div className="space-y-2 w-full flex-1">
-
           <div className="flex justify-between items-start gap-2">
             <div className="space-y-1">
               <p className="text-sm text-third">
                 Inquiry Title:{" "}
-                <span className="text-primary font-semibold">{inquiry.inquiryTitle || "N/A"}</span>
+                <span className="text-primary font-semibold">
+                  {inquiry.inquiryTitle || "N/A"}
+                </span>
               </p>
 
               <p className="text-sm text-third">
                 Inquiry Description:{" "}
-                <span className="text-primary font-semibold">{inquiry.inquiryDescription || "N/A"}</span>
+                <span className="text-primary font-semibold">
+                  {inquiry.inquiryDescription || "N/A"}
+                </span>
               </p>
 
               <p className="text-sm text-third">
                 Vehicle:{" "}
-                <span className="text-primary font-semibold">{vehicleTitle}</span>
+                <span className="text-primary font-semibold">
+                  {vehicleTitle}
+                </span>
               </p>
 
               <p className="text-sm text-third">
@@ -180,12 +204,16 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
               {isClosed ? (
                 <p className="text-xs text-third/80">
                   Closed on:{" "}
-                  <span className="text-primary font-semibold">{localDate}</span>
+                  <span className="text-primary font-semibold">
+                    {localDate}
+                  </span>
                 </p>
               ) : (
                 <p className="text-xs text-third/80">
                   Date:{" "}
-                  <span className="text-primary font-semibold">{localDate}</span>
+                  <span className="text-primary font-semibold">
+                    {localDate}
+                  </span>
                 </p>
               )}
             </div>
@@ -199,7 +227,9 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
           {/*  Closed Reason */}
           {isClosed && (
             <p className="text-xs flex items-center gap-2 text-third pt-1">
-              <span className="text-primary font-semibold">Reason: {inquiryCloseReason || "N/A"}</span>
+              <span className="text-primary font-semibold">
+                Reason: {inquiryCloseReason || "N/A"}
+              </span>
             </p>
           )}
 
@@ -322,9 +352,10 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
                 showIcon={false}
                 variant="outlineSecondary"
                 size="sm"
-                onClick={() => setShowFeedbackPopup(true)}
+                onClick={handleFeedbackClick}
+                loading={loadingAction === "FEEDBACK"}
               >
-                Feedback
+                Review12
               </Button>
             </div>
           )}
@@ -379,8 +410,13 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
         <FeedbackPopup
           isOpen={showFeedbackPopup}
           onClose={() => setShowFeedbackPopup(false)}
-          isReview={false}
-          isWritten={true}
+          isReview={
+            reviewData?.isEligibleToReview || !!reviewData?.consultationReview
+          }
+          isWritten={
+            !reviewData?.isEligibleToReview && !!reviewData?.consultationReview
+          }
+          reviewData={reviewData?.consultationReview || null}
           targetId={
             inquiry?.inquirer?.username ||
             inquiry?.inquiryVehicleResponse?.vehicleOwner?.username ||
@@ -405,8 +441,9 @@ function StatusPill({ status }) {
 
   return (
     <span
-      className={`text-[10px] sm:text-xs px-3 py-1 sm:px-4 rounded-full border font-semibold whitespace-nowrap ${map[status]
-        }`}
+      className={`text-[10px] sm:text-xs px-3 py-1 sm:px-4 rounded-full border font-semibold whitespace-nowrap ${
+        map[status]
+      }`}
     >
       {status.replaceAll("_", " ")}
     </span>

@@ -43,6 +43,7 @@ const ENDPOINT = {
   updatePreference: "/users/preference",
   getAllTown: "/util/address/town",
   addNewTown: "/util/address/town",
+  getAndCheckEligbleForReview: "/vehicles/inquiry/review-details",
 };
 
 export const getUserHomeFeed = async (data) => {
@@ -544,6 +545,17 @@ export const getAllTown = async (cityId) => {
 export const addNewTown = async (payload) => {
   try {
     const res = await axiosInstance.post(ENDPOINT.addNewTown, payload);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAndCheckEligbleForReview = async (inquiryId) => {
+  try {
+    const res = await axiosInstance.get(
+      `${ENDPOINT.getAndCheckEligbleForReview}/${inquiryId}`,
+    );
     return handleResponse(res);
   } catch (error) {
     throw error;
