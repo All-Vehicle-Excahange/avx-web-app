@@ -296,6 +296,59 @@ export default function PpcComponent() {
   const toggleMetric = (key) =>
     setMetrics((prev) => ({ ...prev, [key]: !prev[key] }));
 
+  if (tier === "BASIC") {
+    return (
+      <section className="w-full space-y-8 relative">
+        {/* HEADER */}
+        <div className="flex flex-col lg:flex-row items-start gap-5 justify-between">
+          <div>
+            <h1 className="text-2xl font-bold">PPC & Visibility Boosts</h1>
+            <p className="text-third text-sm">Dominance with guardrails</p>
+          </div>
+          <Button
+            size="sm"
+            variant="outlineSecondary"
+            disabled
+            className="opacity-60 cursor-not-allowed flex items-center gap-1.5 border-third/30 text-third"
+          >
+            <Lock size={14} className="mr-2" /> Create New Boost (Premium)
+          </Button>
+        </div>
+
+        {/* Beautiful lock screen */}
+        <div className="flex flex-col items-center justify-center text-center p-12 py-20 space-y-6 max-w-2xl mx-auto relative">
+          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shadow-[0_0_15px_rgba(var(--color-primary),0.1)]">
+            <Lock size={24} className="animate-pulse" />
+          </div>
+
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold text-primary">
+              Unlock PPC & Visibility Boosts
+            </h2>
+            <p className="text-sm text-third max-w-md mx-auto leading-relaxed">
+              Visibility boost campaigns, PPC ads, and advanced metrics are
+              exclusive features for Pro and Premium tier consultants.
+            </p>
+          </div>
+
+          <div className="pt-4">
+            <Button
+              variant="ghost"
+              size="md"
+              href="/consult/subscription"
+              className="px-8 py-3 font-semibold tracking-wide cursor-pointer flex items-center gap-2"
+            >
+              Upgrade Your Plan
+            </Button>
+          </div>
+        </div>
+
+        {/* UPGRADE PLAN POPUP FOR BASIC TIER */}
+        <UpgradeTierPopup isOpen={showUpgradeModal} />
+      </section>
+    );
+  }
+
   return (
     <section className="w-full space-y-8 relative">
       {/* HEADER */}

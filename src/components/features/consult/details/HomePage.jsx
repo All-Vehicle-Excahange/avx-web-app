@@ -26,9 +26,11 @@ import {
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function ConsultantProgramPage() {
   const { push } = useRouter();
+  const { isLoggedIn, openLoginPopup } = useAuthStore();
 
   const handleGetStarted = () => {
     push("/account");
@@ -136,11 +138,19 @@ export default function ConsultantProgramPage() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                <Link href="/consult/account">  
-                  <Button variant="ghost" size="md">
-                    Become a Consultant
-                  </Button>
-                </Link>
+                <Button
+                  variant="ghost"
+                  size="md"
+                  onClick={() => {
+                    if (!isLoggedIn) {
+                      openLoginPopup();
+                    } else {
+                      push("/consult/subscription");
+                    }
+                  }}
+                >
+                  Become a Consultant
+                </Button>
 
                 <Link href="/consult/subscription">
                   <Button

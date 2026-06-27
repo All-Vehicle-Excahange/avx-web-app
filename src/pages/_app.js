@@ -136,6 +136,19 @@ export default function App({ Component, pageProps }) {
     };
   }, []);
 
+  // Handle cross-page login popup triggering
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const trigger = sessionStorage.getItem("triggerLoginPopup");
+      if (trigger === "true") {
+        sessionStorage.removeItem("triggerLoginPopup");
+        setTimeout(() => {
+          openLoginPopup();
+        }, 150);
+      }
+    }
+  }, [router.asPath, openLoginPopup]);
+
   // Prevent hydration flashing
   if (showSplash === null) {
   }
