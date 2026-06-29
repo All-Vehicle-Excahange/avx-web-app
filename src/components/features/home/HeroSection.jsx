@@ -11,10 +11,10 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 
 const slidesData = [
-  { id: 1, title: "Seller Hand over the keys, not the headache." },
-  { id: 2, title: "Buyer See the real condition, before you decide." },
-  { id: 3, title: "Inspection Every vehicle, independently checked." },
-  { id: 4, title: "Consultant Your business, your storefront, your growth." }
+  { id: 1, prefix: "Seller", text: "Hand over the keys, not the headache." },
+  { id: 2, prefix: "Buyer", text: "See the real condition, before you decide." },
+  { id: 3, prefix: "Inspection", text: "Every vehicle, independently checked." },
+  { id: 4, prefix: "Consultant", text: "Your business, your storefront, your growth." }
 ];
 
 export default function HeroSection() {
@@ -37,11 +37,20 @@ export default function HeroSection() {
         >
           {slidesData.map((slide, index) => (
             <SwiperSlide key={slide.id}>
+              {/* Desktop Image */}
               <Image
                 src={`/${slide.id}.webp`}
                 fill
-                className="w-full h-full object-cover"
+                className="hidden md:block w-full h-full object-cover"
                 alt={`Hero background ${slide.title}`}
+                priority={index === 0}
+              />
+              {/* Mobile Image */}
+              <Image
+                src={`/sm${slide.id}.webp`}
+                fill
+                className="block md:hidden w-full h-full object-cover"
+                alt={`Hero background mobile ${slide.title}`}
                 priority={index === 0}
               />
             </SwiperSlide>
@@ -71,8 +80,10 @@ export default function HeroSection() {
           <span className="text-xs text-fourth md:text-sm uppercase tracking-[0.3em]  font-semibold drop-shadow-md">
             One Ecosystem. Every Side.
           </span>
-          <h1 className="text-4xl md:text-6xl font-black text-white leading-none w-6xl tracking-tight drop-shadow-xl font-primary transition-all duration-300">
-            {slidesData[activeSlideIndex].title}
+          <h1 className="text-4xl md:text-6xl font-black text-white leading-tight md:leading-none w-full max-w-5xl tracking-tight drop-shadow-xl font-primary transition-all duration-300">
+            <span className="block md:inline text-primary mb-1 md:mb-0">{slidesData[activeSlideIndex].prefix}</span>
+            <span className="hidden md:inline"> </span>
+            <span className="block md:inline text-3xl md:text-6xl">{slidesData[activeSlideIndex].text}</span>
           </h1>
           <p className="text-lg md:text-2xl text-white/80 font-medium tracking-wide drop-shadow-md transition-all duration-300">
            One trusted marketplace.
