@@ -183,10 +183,19 @@ export const normalizeWhyBuyData = (raw = {}, defaults = {}) => {
   // vehicleSelectionTemplate objects already handled by the raw overlay above
 
   /* ================= PROCESS ================= */
+  const isProcessStepsEmpty =
+    !raw.processSteps ||
+    !raw.processSteps.length ||
+    (Array.isArray(raw.processSteps) &&
+      raw.processSteps.every(
+        (p) => !p.title && !p.description && !p.desc && !p.icon
+      ));
+
   if (
+    isProcessStepsEmpty &&
     raw.processes &&
     Array.isArray(raw.processes) &&
-    !raw.processSteps?.length
+    raw.processes.length > 0
   ) {
     data.processSteps = raw.processes.map((p) => ({
       title: p.title || "",

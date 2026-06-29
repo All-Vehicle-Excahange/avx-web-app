@@ -220,12 +220,12 @@ export default function AboutPro3({
 
   if (isEditing) {
     return (
-      <div className="w-full max-w-[1480px] mx-auto space-y-10">
+      <div className="w-full p-2 md:p-8 max-w-[1480px] mx-auto space-y-10">
         <GlobalLoader isLoading={isSaving} />
         {/* HERO EDITOR */}
         <h3 className="text-primary text-xl font-bold">Hero Section</h3>
-        <div className="grid grid-cols-2 gap-6">
-          <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4 order-2 md:order-1">
             <EditorInput
               bold
               value={data.aboutHeroTitle}
@@ -244,7 +244,7 @@ export default function AboutPro3({
               onChange={(v) => update("aboutHeroDescription", v)}
             />
           </div>
-          <div className="space-y-4">
+          <div className="space-y-4 order-1 md:order-2">
             <p className="text-sm font-semibold text-primary">Hero Image</p>
             <div className="h-40 relative">
               <ImageUploader
@@ -367,7 +367,7 @@ export default function AboutPro3({
         />
         <div className="p-4 bg-primary/5 rounded-lg border border-third/10 mt-4">
           <h4 className="text-primary font-semibold mb-4">Stats Numbers</h4>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {(data.stats || []).map((s, i) => (
               <div key={i} className="space-y-2">
                 <EditorInput

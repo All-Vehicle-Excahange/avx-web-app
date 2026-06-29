@@ -217,7 +217,7 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
   // ================= EDIT MODE =================
   if (isEditing) {
     return (
-      <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
+      <div className="w-full max-w-[1480px] mx-auto p-2 md:p-8 rounded-xl space-y-10">
         <GlobalLoader isLoading={isSaving} />
         {/* HERO */}
         <div className="space-y-6">

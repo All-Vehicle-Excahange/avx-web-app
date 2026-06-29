@@ -270,7 +270,7 @@ export default function AboutPremium3({
   /* ================== EDITOR ================== */
   if (isEditing) {
     return (
-      <div className="p-8 rounded-xl border border-third/30 w-full max-w-[1480px] mx-auto space-y-10">
+      <div className="p-2 md:p-8 rounded-xl border border-third/30 w-full max-w-[1480px] mx-auto space-y-10">
         <GlobalLoader isLoading={isSaving} />
         {/* HERO EDITOR */}
         <h3 className="text-primary text-xl font-bold">Hero Section</h3>
@@ -445,7 +445,7 @@ export default function AboutPremium3({
         />
         <div className="p-4 bg-primary/5 rounded-lg border border-third/10">
           <h4 className="text-primary font-semibold mb-4">Stats Numbers</h4>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {(d.stats || []).map((s, i) => (
               <div key={i} className="space-y-2">
                 <EditorInput

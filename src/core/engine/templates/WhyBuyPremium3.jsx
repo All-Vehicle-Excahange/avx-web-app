@@ -430,7 +430,7 @@ export default function WhyBuyPremium3({
   /* ================== EDITOR ================== */
   if (isEditing) {
     return (
-      <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
+      <div className="w-full max-w-[1480px] mx-auto p-2 md:p-8 rounded-xl space-y-10">
         <GlobalLoader isLoading={isSaving} />
         {/* HERO */}
         <div className="space-y-6">
@@ -1335,7 +1335,7 @@ export default function WhyBuyPremium3({
                   >
                     {/* Subtle gradient background */}
                     <div
-                      className={`absolute inset-0 bg-gradient-to-br from-fourth/[0.03] to-transparent transition-opacity duration-700 ${isActive ? "opacity-100" : "opacity-0"}`}
+                      className={`absolute inset-0 bg-linear-to-br from-fourth/5 to-transparent transition-opacity duration-700 ${isActive ? "opacity-100" : "opacity-0"}`}
                     />
 
                     {/* Collapsed state — rotated title strip */}
@@ -1383,14 +1383,14 @@ export default function WhyBuyPremium3({
                       }}
                     >
                       {/* Large watermark number */}
-                      <div className="absolute top-4 right-6 text-[140px] font-black font-[Montserrat] leading-none text-fourth/[0.04] select-none pointer-events-none">
+                      <div className="absolute top-4 right-6 text-[140px] font-black font-[Montserrat] leading-none text-fourth/4 select-none pointer-events-none">
                         {String(i + 1).padStart(2, "0")}
                       </div>
 
                       {/* Content */}
                       <div className="relative z-10 flex flex-col gap-5">
                         <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-xl border border-fourth/25 bg-fourth/[0.06] flex items-center justify-center">
+                          <div className="w-12 h-12 rounded-xl border border-fourth/25 bg-fourth/6 flex items-center justify-center">
                             {typeof step.icon === "string" &&
                               step.icon.startsWith("<svg") ? (
                               <div
@@ -1419,13 +1419,13 @@ export default function WhyBuyPremium3({
                         />
 
                         {/* Bottom accent */}
-                        <div className="w-16 h-px bg-gradient-to-r from-fourth/30 to-transparent mt-2" />
+                        <div className="w-16 h-px bg-linear-to-r from-fourth/30 to-transparent mt-2" />
                       </div>
                     </div>
 
                     {/* Bottom accent bar */}
                     <div
-                      className={`absolute bottom-0 left-0 right-0 h-0.5 transition-all duration-500 ${isActive ? "bg-gradient-to-r from-fourth/30 to-transparent" : "bg-transparent"}`}
+                      className={`absolute bottom-0 left-0 right-0 h-0.5 transition-all duration-500 ${isActive ? "bg-linear-to-r from-fourth/30 to-transparent" : "bg-transparent"}`}
                     />
                   </div>
                 );
@@ -1440,11 +1440,11 @@ export default function WhyBuyPremium3({
                   <div
                     key={i}
                     onClick={() => setHowBuyingWorksActive(i)}
-                    className={`relative rounded-xl border overflow-hidden cursor-pointer transition-all duration-400 ${isActive ? "border-fourth/20 bg-fourth/[0.03]" : "border-third/10 hover:border-third/20"}`}
+                    className={`relative rounded-xl border overflow-hidden cursor-pointer transition-all duration-400 ${isActive ? "border-fourth/20 bg-fourth/3" : "border-third/10 hover:border-third/20"}`}
                   >
                     <div className="flex items-center gap-4 p-5">
                       <div
-                        className={`w-10 h-10 rounded-lg border flex items-center justify-center shrink-0 transition-all duration-400 ${isActive ? "border-fourth/30 bg-fourth/[0.08]" : "border-third/12"}`}
+                        className={`w-10 h-10 rounded-lg border flex items-center justify-center shrink-0 transition-all duration-400 ${isActive ? "border-fourth/30 bg-fourth/8" : "border-third/12"}`}
                       >
                         {typeof step.icon === "string" &&
                           step.icon.startsWith("<svg") ? (
@@ -1483,7 +1483,7 @@ export default function WhyBuyPremium3({
                       }}
                     >
                       <div
-                        className="text-[13px] text-third/50 leading-[1.85] font-[Poppins] px-5 pb-5 pl-[4.25rem]"
+                        className="text-[13px] text-third/50 leading-[1.85] font-[Poppins] px-5 pb-5 pl-17"
                         dangerouslySetInnerHTML={{ __html: step.description }}
                       />
                     </div>
@@ -1767,7 +1767,7 @@ export default function WhyBuyPremium3({
                               />
                             ))}
                           </div>
-                          <Quote className="w-6 h-6 text-third/20 translate-y-[-2px]" />
+                          <Quote className="w-6 h-6 text-third/20 -translate-y-0.5" />
                         </div>
                         <div className="relative flex-1">
                           <span className="absolute -top-3 -left-3 text-5xl text-primary/10 font-serif leading-none pointer-events-none">&quot;</span>

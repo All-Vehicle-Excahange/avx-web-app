@@ -498,7 +498,7 @@ export default function CreateTheme() {
       <div className="flex flex-col relative">
         {/* Overall Progress Bar - Sticky inside the scroll container */}
         {sections.length > 0 && (
-          <div className="sticky -top-10 z-40  backdrop-blur-md border-b border-third/30 p-4">
+          <div className="sticky -top-10 z-40  backdrop-blur-md border-b border-third/30 p-3 sm:p-4">
             <div className="flex justify-between items-end mb-3">
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center gap-2">
@@ -622,7 +622,7 @@ export default function CreateTheme() {
           </div>
         )}
 
-        <div className="flex gap-2 p-3 border-b border-third/30 bg-secondary/30 backdrop-blur-sm">
+        <div className="flex gap-2 p-2 sm:p-3 border-b border-third/30 bg-secondary/30 backdrop-blur-sm overflow-x-auto custom-scrollbar">
           {sections.map((sec, i) => (
             <button
               key={sec.id}
@@ -642,7 +642,7 @@ export default function CreateTheme() {
         </div>
 
         {/* Header */}
-        <div className="p-4 border-b border-third/30 flex justify-between items-center bg-secondary/10">
+        <div className="p-3 sm:p-4 border-b border-third/30 flex flex-wrap gap-2 justify-between items-center bg-secondary/10">
           <div>
             <h3 className="font-bold">Editing: {theme.name}</h3>
             <span className="text-xs uppercase text-third">
@@ -674,7 +674,7 @@ export default function CreateTheme() {
         </div>
 
         {/* Renderer */}
-        <div className="flex-1 p-4 flex flex-col relative pb-24">
+        <div className="flex-1 px-1 py-4 sm:p-4 flex flex-col relative pb-24">
           {sections.length > 0 && sections[activeTab] && (
             <EngineRenderer
               sections={[sections[activeTab]]}
@@ -697,7 +697,7 @@ export default function CreateTheme() {
           {/* Final Submit Button (Only on Why Buy tab) */}
           {sections.length > 0 &&
             sections[activeTab]?.type?.includes("why_buy") && (
-              <div className="absolute inset-x-0 bottom-0  backdrop-blur-sm p-4 border-t border-third/30 flex justify-end z-10">
+              <div className="absolute inset-x-0 bottom-0  backdrop-blur-sm p-3 sm:p-4 border-t border-third/30 flex justify-end z-10">
                 <Button
                   onClick={handleFinalSubmit}
                   disabled={isSubmitting}

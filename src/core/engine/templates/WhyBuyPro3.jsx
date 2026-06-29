@@ -159,7 +159,13 @@ export default function WhyBuyPro3({
     }
 
     // Map backend 'processes' array → 'processSteps'
-    if (!rawData?.processSteps?.length && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
+    const isProcessStepsEmpty =
+      !rawData?.processSteps ||
+      !rawData.processSteps.length ||
+      (Array.isArray(rawData.processSteps) &&
+        rawData.processSteps.every((p) => !p.title && !p.description && !p.desc && !p.icon));
+
+    if (isProcessStepsEmpty && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
       merged.processSteps = rawData.processes.map(p => ({
         title: p.title || "",
         description: p.desc || p.description || "",
@@ -505,7 +511,7 @@ export default function WhyBuyPro3({
   };
   if (isEditing) {
     return (
-      <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
+      <div className="w-full max-w-[1480px] mx-auto p-2 md:p-8 rounded-xl space-y-10">
         <GlobalLoader isLoading={isSaving} />
         {/* HERO */}
         <div className="space-y-6">
@@ -1436,7 +1442,7 @@ export default function WhyBuyPro3({
                     >
                       {/* left column: step line + icon */}
                       <div className="flex flex-col items-center gap-3">
-                        <div className="w-12 h-12 rounded-xl border border-third/12 flex items-center justify-center group-hover:border-fourth/40 group-hover:bg-fourth/[0.04] transition-all duration-300">
+                        <div className="w-12 h-12 rounded-xl border border-third/12 flex items-center justify-center group-hover:border-fourth/40 group-hover:bg-fourth/4 transition-all duration-300">
                           {typeof step.icon === "string" &&
                             step.icon.startsWith("<svg") ? (
                             <div

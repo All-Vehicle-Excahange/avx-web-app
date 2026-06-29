@@ -117,8 +117,13 @@ export default function WhyBuyBasic3({
 
   // Map 'processes' and 'inspectionDescription' from draft/backend to UI fields
   // Only apply mapping if the target UI fields don't exist yet to avoid overwriting user edits
+  const isProcessStepsEmpty =
+    !rawData?.processSteps ||
+    (Array.isArray(rawData.processSteps) &&
+      rawData.processSteps.every((p) => !p.title && !p.description && !p.desc && !p.icon));
+
   if (
-    !rawData?.processSteps &&
+    isProcessStepsEmpty &&
     rawData?.processes &&
     Array.isArray(rawData.processes) &&
     rawData.processes.length > 0
@@ -141,7 +146,12 @@ export default function WhyBuyBasic3({
     const updatedData = { ...data };
 
     // Sync processes mapping
-    if (!rawData.processSteps && rawData.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
+    const isRawProcessStepsEmpty =
+      !rawData.processSteps ||
+      (Array.isArray(rawData.processSteps) &&
+        rawData.processSteps.every((p) => !p.title && !p.description && !p.desc && !p.icon));
+
+    if (isRawProcessStepsEmpty && rawData.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
       updatedData.processSteps = rawData.processes.map(p => ({
         title: p.title || "",
         description: p.desc || p.description || "",
@@ -336,7 +346,7 @@ export default function WhyBuyBasic3({
   };
   if (isEditing) {
     return (
-      <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10 ">
+      <div className="w-full max-w-[1480px] mx-auto p-2 md:p-8 rounded-xl space-y-10 ">
         <GlobalLoader isLoading={isSaving} />
         <div className="space-y-6">
           <h3 className="text-white font-bold mb-4">Hero Section</h3>

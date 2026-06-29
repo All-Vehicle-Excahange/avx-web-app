@@ -402,7 +402,7 @@ export default function WhyBuyPremium1({
   /* ================== EDITOR ================== */
   if (isEditing) {
     return (
-      <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
+      <div className="w-full max-w-[1480px] mx-auto p-2 md:p-8 rounded-xl space-y-10">
         <GlobalLoader isLoading={isSaving} />
         {/* HERO */}
         <div className="space-y-6">
@@ -1527,7 +1527,7 @@ export default function WhyBuyPremium1({
 
                     {/* CENTER — icon node */}
                     <div className="hidden lg:flex flex-col items-center relative">
-                      <div className="w-16 h-16 rounded-2xl border border-third/12 flex items-center justify-center group-hover:border-fourth/40 group-hover:bg-fourth/[0.04] group-hover:scale-110 transition-all duration-400 relative z-10">
+                      <div className="w-16 h-16 rounded-2xl border border-third/12 flex items-center justify-center group-hover:border-fourth/40 group-hover:bg-fourth/4 group-hover:scale-110 transition-all duration-400 relative z-10">
                         {typeof step.icon === "string" && step.icon.startsWith("<svg") ? (
                           <div
                             className="text-primary/60 [&>svg]:w-6 [&>svg]:h-6 group-hover:text-fourth transition-colors duration-300"
@@ -1543,7 +1543,7 @@ export default function WhyBuyPremium1({
 
                     {/* SPACER SIDE — large ghost number */}
                     <div className={`hidden lg:flex items-center ${isEven ? "lg:pl-16" : "lg:pr-16 lg:justify-end"}`}>
-                      <span className="text-[100px] font-black font-[Montserrat] text-primary/[0.03] leading-none select-none">
+                      <span className="text-[100px] font-black font-[Montserrat] text-primary/3 leading-none select-none">
                         {String(i + 1).padStart(2, "0")}
                       </span>
                     </div>
