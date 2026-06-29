@@ -246,13 +246,13 @@ export default function PreviewAndEdite({
           </h3>
 
           <div className="flex items-center gap-3">
-            {!(isChangesRequested && !existing?.business?.isSubmitted) && (
+            {existing?.business?.isSubmitted && (
               <Button
                 variant="outlineSecondary"
                 onClick={onBack}
                 className="flex items-center gap-2 text-xs"
               >
-                <LayoutDashboard className="mr-1" size={14} />
+                <LayoutDashboard className="mr-2" size={14} />
                 Application Status
               </Button>
             )}
