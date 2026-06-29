@@ -548,7 +548,7 @@ export default function FullPricing() {
                         </div>
 
                         {/* Description */}
-                        <p className="text-[13px] mb-6 mt-3 text-primary/60 leading-relaxed min-h-[40px]">
+                        <p className="text-[13px] mb-6 mt-3 text-primary/60 leading-relaxed min-h-10">
                           {tier.description || staticDetails.tagline}
                         </p>
 

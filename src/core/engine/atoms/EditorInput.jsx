@@ -46,7 +46,7 @@ export default function EditorInput({
           ${size === "sm" ? "h-9 px-3 text-sm" : "h-11 px-4 text-base"}
         `}
       />
-      <div className="flex items-center justify-between min-h-[16px]">
+      <div className="flex items-center justify-between min-h-4">
         {/* Left: messages in priority order — only after focus */}
         {showMessages && (error && errorMsg) ? (
           <span className="text-[11px] text-red-500 font-medium ml-1">{errorMsg}</span>
