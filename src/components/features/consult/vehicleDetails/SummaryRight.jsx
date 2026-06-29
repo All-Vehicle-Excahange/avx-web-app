@@ -3,16 +3,21 @@
 import Button from "@/components/ui/button";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import { getInspectionPriceAndCountQuery } from "@/queries/inspection.queries";
+import { getActiveInspectionQuery } from "@/queries/vehicle.queries";
 import { Star, MapPin, CheckCircle, Loader2, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
+import InspectionTrackingModal from "@/components/features/user/InspectionTrackingModal";
+import InspectionRequestModal from "@/components/features/user/InspectionRequestModal";
 
 export default function SummaryRight({
   vehicle,
   summary,
-  onRequestInspection,
-  isCheckingInspection,
 }) {
+  const queryClient = useQueryClient();
   const vehicleId = vehicle?.id;
   const vehicleOwnerRole = vehicle?.vehicleOwner?.userRole || "USER";
   const [prevTotalInquiryCount, setPrevTotalInquiryCount] = useState(
@@ -23,6 +28,62 @@ export default function SummaryRight({
   );
 
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+  const [showRequestModal, setShowRequestModal] = useState(false);
+  const [trackingInspection, setTrackingInspection] = useState(null);
+  const [animateTrackingModal, setAnimateTrackingModal] = useState(false);
+  const [isCheckingInspection, setIsCheckingInspection] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const handleOpenTracking = (data) => {
+    setTrackingInspection(data);
+    setTimeout(() => setAnimateTrackingModal(true), 10);
+  };
+
+  const handleCloseTracking = () => {
+    setAnimateTrackingModal(false);
+    setTimeout(() => {
+      setTrackingInspection(null);
+    }, 300);
+  };
+
+  const handleRequestInspection = async () => {
+    if (!vehicleId) {
+      toast.error("Vehicle information is not available.");
+      return;
+    }
+    setIsCheckingInspection(true);
+    try {
+      const data = await queryClient.fetchQuery(
+        getActiveInspectionQuery(vehicleId),
+      );
+      if (data) {
+        if (data.inspectionRequestStatus === "PAYMENT_PENDING") {
+          setShowRequestModal(true);
+        } else {
+          handleOpenTracking(data);
+        }
+      } else {
+        setShowRequestModal(true);
+      }
+    } catch (error) {
+      if (error?.response?.status === 404 || error?.status === 404) {
+        setShowRequestModal(true);
+      } else {
+        toast.error(
+          error?.response?.data?.message ||
+            "Failed to check inspection status.",
+        );
+      }
+    } finally {
+      setIsCheckingInspection(false);
+    }
+  };
+
+
 
   if (vehicle?.totalInquiryCount !== prevTotalInquiryCount) {
     setPrevTotalInquiryCount(vehicle?.totalInquiryCount);
@@ -197,7 +258,7 @@ export default function SummaryRight({
               size="sm"
               showIcon={false}
               className="rounded-full"
-              onClick={onRequestInspection}
+              onClick={handleRequestInspection}
               loading={isCheckingInspection}
             >
               Request Inspection
@@ -227,7 +288,7 @@ export default function SummaryRight({
             size="sm"
             showIcon={false}
             className=""
-            onClick={onRequestInspection}
+            onClick={handleRequestInspection}
             loading={isCheckingInspection}
           >
             Request Inspection
@@ -243,6 +304,28 @@ export default function SummaryRight({
         isOpen={isDownloadOpen}
         onClose={() => setIsDownloadOpen(false)}
       />
+
+      {mounted && typeof document !== "undefined"
+        ? createPortal(
+            <>
+              <InspectionRequestModal
+                isOpen={showRequestModal}
+                onClose={() => setShowRequestModal(false)}
+                vehicle={vehicle}
+                initialInspectionType="report"
+              />
+
+              {trackingInspection && (
+                <InspectionTrackingModal
+                  inspection={trackingInspection}
+                  onClose={handleCloseTracking}
+                  animateModal={animateTrackingModal}
+                />
+              )}
+            </>,
+            document.body
+          )
+        : null}
     </>
   );
 }

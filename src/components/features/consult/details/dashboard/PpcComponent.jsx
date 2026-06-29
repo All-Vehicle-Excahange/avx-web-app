@@ -739,7 +739,7 @@ export default function PpcComponent() {
 
                           {/* Placement column */}
                           <td className="p-4">
-                            <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide py-0.5 whitespace-nowrap max-w-[160px] sm:max-w-[220px] md:max-w-[260px] lg:max-w-[320px]">
+                            <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide py-0.5 whitespace-nowrap max-w-40 sm:max-w-[220px] md:max-w-[260px] lg:max-w-[320px]">
                               {placements.map((p, idx) => {
                                 let tagClass = "text-blue-400";
                                 if (p.toLowerCase().includes("search")) {

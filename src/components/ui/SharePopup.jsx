@@ -5,7 +5,6 @@ import {
   MessageCircle,
   Instagram,
   Facebook,
-  Link2,
   X,
   Check,
 } from "lucide-react";
@@ -18,7 +17,6 @@ export default function SharePopup({
 }) {
   const popupRef = useRef(null);
   const [copied, setCopied] = useState(false);
-  const [instagramCopied, setInstagramCopied] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
   const finalShareUrl = useMemo(() => {
@@ -65,7 +63,6 @@ export default function SharePopup({
     setPrevIsOpen(isOpen);
     if (!isOpen) {
       setCopied(false);
-      setInstagramCopied(false);
     }
   }
 
@@ -85,40 +82,11 @@ export default function SharePopup({
     }
   };
 
-  const handleInstagramShare = async () => {
-    try {
-      await navigator.clipboard.writeText(finalShareUrl);
-      setInstagramCopied(true);
-      setTimeout(() => setInstagramCopied(false), 2000);
-      window.open("https://www.instagram.com/", "_blank");
-    } catch (error) {
-      console.error("Instagram copy failed:", error);
-    }
-  };
-
   const shareItems = [
-    {
-      label: "Email",
-      icon: Mail,
-      onClick: () => {
-        window.location.href = `mailto:?subject=${encodedTitle}&body=${encodeURIComponent(
-          `${title}\n\n${finalShareUrl}`
-        )}`;
-      },
-    },
-    {
-      label: "WhatsApp",
-      icon: MessageCircle,
-      onClick: () => window.open(`https://wa.me/?text=${shareText}`, "_blank"),
-    },
-    {
-      label: instagramCopied ? "Link copied for Instagram" : "Instagram",
-      icon: Instagram,
-      onClick: handleInstagramShare,
-    },
     {
       label: "Facebook",
       icon: Facebook,
+      bgClass: "bg-[#1877F2]",
       onClick: () =>
         window.open(
           `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
@@ -126,15 +94,35 @@ export default function SharePopup({
         ),
     },
     {
-      label: copied ? "Copied" : "Copy Link",
-      icon: copied ? Check : Link2,
-      onClick: handleCopyLink,
+      label: "WhatsApp",
+      icon: MessageCircle,
+      bgClass: "bg-[#25D366]",
+      onClick: () => window.open(`https://wa.me/?text=${shareText}`, "_blank"),
     },
+    {
+      label: "Instagram",
+      icon: Instagram,
+      bgClass: "bg-linear-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888]",
+      onClick: () => {
+        navigator.clipboard.writeText(finalShareUrl);
+        window.open("https://www.instagram.com/", "_blank");
+      }
+    },
+    {
+      label: "Email",
+      icon: Mail,
+      bgClass: "bg-gray-500",
+      onClick: () => {
+        window.location.href = `mailto:?subject=${encodedTitle}&body=${encodeURIComponent(
+          `${title}\n\n${finalShareUrl}`
+        )}`;
+      },
+    }
   ];
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
+      className="fixed inset-0 z-9999 flex items-end sm:items-center justify-center bg-black/50 px-0 sm:px-4 pb-0 sm:pb-0"
       onClick={triggerClose}
       style={{
         animation: isClosing
@@ -145,43 +133,58 @@ export default function SharePopup({
       <div
         ref={popupRef}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-[280px] overflow-hidden rounded-2xl border border-third/30 bg-secondary shadow-2xl"
+        className="w-full max-w-[500px] overflow-hidden rounded-t-3xl sm:rounded-2xl border border-third/10 bg-[#212121] shadow-2xl p-6"
         style={{
           animation: isClosing
             ? "modalCardOut 0.25s ease-in forwards"
             : "modalCardIn 0.3s ease-out",
         }}
       >
-        <div className="flex items-center justify-between border-b border-third/20 px-4 py-3">
-          <h3 className="text-base font-semibold text-primary">Share</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xl font-medium text-white">Share</h3>
           <button
             onClick={triggerClose}
-            className="cursor-pointer rounded-full p-1 text-primary/80 transition hover:bg-primary/10 hover:text-primary"
+            className="cursor-pointer rounded-full p-2 text-white/70 transition hover:bg-white/10 hover:text-white"
           >
-            <X className="h-5 w-5" />
+            <X className="h-6 w-6" />
           </button>
         </div>
 
-        <div className="">
+        {/* Share Icons */}
+        <div className="flex overflow-x-auto gap-6 pb-6 pt-2 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+          <style>{`.scrollbar-hide::-webkit-scrollbar { display: none; }`}</style>
           {shareItems.map((item, index) => {
             const Icon = item.icon;
-
             return (
               <button
                 key={index}
                 onClick={item.onClick}
-                className="flex w-full cursor-pointer items-center gap-3 px-4 py-2 text-left transition hover:bg-fourth/20"
+                className="flex flex-col items-center gap-3 shrink-0 group cursor-pointer border-none bg-transparent"
               >
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <Icon className="h-5 w-5" />
+                <div className={`flex h-16 w-16 items-center justify-center rounded-full text-white ${item.bgClass} transition-transform duration-300 group-hover:scale-105 shadow-lg`}>
+                  <Icon className="h-7 w-7" />
                 </div>
-
-                <span className="text-sm font-medium text-primary">
+                <span className="text-[13px] font-medium text-white/90">
                   {item.label}
                 </span>
               </button>
             );
           })}
+        </div>
+
+        {/* Copy Link Box */}
+        <div className="mt-2 flex items-center justify-between rounded-xl border border-white/10 bg-black/40 p-1 pl-4">
+          <div className="flex-1 overflow-x-auto whitespace-nowrap scrollbar-hide mr-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+            <span className="text-sm text-white/90 font-medium">
+              {finalShareUrl}
+            </span>
+          </div>
+          <button
+            onClick={handleCopyLink}
+            className="shrink-0 cursor-pointer rounded-full bg-white/10 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/20 transition-colors border-none"
+          >
+            {copied ? "Copied" : "Copy"}
+          </button>
         </div>
       </div>
     </div>
