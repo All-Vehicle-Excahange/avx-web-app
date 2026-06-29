@@ -2,7 +2,7 @@ import { EngineRenderer } from "@/core/engine/Renderer";
 import { THEME_STORE } from "@/core/engine/themeStore";
 import { useEffect, useState } from "react";
 import StoreFrontAboutSkeleton from "@/components/ui/skeleton/StoreFrontAboutSkeleton";
-import { useParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import { getWhyBuyHereStoreFrontByUserNameQuery } from "@/queries/user.queries";
 
@@ -41,7 +41,8 @@ function mapApiToTemplateData(api) {
 }
 
 export default function WhyBuyHere({ storeData = null }) {
-  const id = useParams()?.id;
+  const router = useRouter();
+  const id = router.query?.id;
 
   const [sections, setSections] = useState([]);
   const [prevApiData, setPrevApiData] = useState(null);

@@ -66,14 +66,21 @@ StoreFrontPage.fullWidth = true;
 
 export default StoreFrontPage;
 
-export async function getServerSideProps(context) {
-  const { req, params } = context;
+export async function getStaticPaths() {
+  return {
+    paths: [],
+    fallback: 'blocking',
+  };
+}
+
+export async function getStaticProps(context) {
+  const { params } = context;
   const { id } = params || {};
 
-  // Construct the full current URL dynamically
-  const protocol = req.headers["x-forwarded-proto"] || "https";
-  const host = req.headers.host || "www.reecomm.com";
-  const currentUrl = `${protocol}://${host}${req.url}`;
+  // Construct the full current URL dynamically using params
+  const protocol = process.env.NEXT_PUBLIC_API_URL?.includes("localhost") ? "http" : "https";
+  const host = process.env.NEXT_PUBLIC_DOMAIN || "www.reecomm.com";
+  const currentUrl = `${protocol}://${host}/store-front/${id}`;
 
   // Fallback slug formatting (fast and synchronous)
   let finalTitle = id
@@ -114,5 +121,6 @@ export async function getServerSideProps(context) {
         canonical: `https://www.reecomm.com/store-front/${id}`,
       },
     },
+    revalidate: 60,
   };
 }

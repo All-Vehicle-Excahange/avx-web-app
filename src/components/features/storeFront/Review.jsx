@@ -16,14 +16,15 @@ import {
   Loader2,
 } from "lucide-react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect, useState, useCallback } from "react";
 import StoreFrontReviewSkeleton from "@/components/ui/skeleton/StoreFrontReviewSkeleton";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { getStoreFrontReviewsInfiniteQuery } from "@/queries/user.queries";
 
 export default function Review() {
-  const id = useParams()?.id;
+  const router = useRouter();
+  const id = router.query?.id;
   const queryClient = useQueryClient();
 
   const [rating, setRating] = useState(0);

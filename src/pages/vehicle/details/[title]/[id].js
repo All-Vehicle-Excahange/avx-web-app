@@ -220,18 +220,26 @@ function formatPrice(num) {
 
 // ─── Server-Side Props (slug-based SEO — no API call needed) ────────────────
 
-export async function getServerSideProps(context) {
-  const { req, params } = context;
+export async function getStaticPaths() {
+  return {
+    // Generate pages on-demand rather than at build time
+    paths: [], 
+    // 'blocking' will wait for the HTML to be generated on the first request 
+    // before sending it to the browser, ensuring perfect SEO for the first hit
+    fallback: 'blocking',
+  };
+}
+
+export async function getStaticProps(context) {
+  const { params } = context;
   const { title, id } = params || {};
 
-  // Construct the full current URL dynamically
-  const protocol = req.headers["x-forwarded-proto"] || "https";
-  const host = req.headers.host || "www.reecomm.com";
-  const currentUrl = `${protocol}://${host}${req.url}`;
-
-  // Canonical URL strips query params
-  const canonicalPath = req.url?.split("?")[0] || "";
-  const canonicalUrl = `https://www.reecomm.com${canonicalPath}`;
+  // Construct the full current URL dynamically using params
+  // Since 'req' is not available in getStaticProps, we build it directly
+  const protocol = process.env.NEXT_PUBLIC_API_URL?.includes("localhost") ? "http" : "https";
+  const host = process.env.NEXT_PUBLIC_DOMAIN || "www.reecomm.com";
+  const canonicalUrl = `${protocol}://${host}/vehicle/details/${title}/${id}`;
+  const currentUrl = canonicalUrl;
 
   // Simple, fast conversion from slug title to clean words
   const cleanTitle = title
@@ -284,6 +292,10 @@ export async function getServerSideProps(context) {
         canonical: canonicalUrl,
       },
     },
+    // Next.js will attempt to re-generate the page in the background:
+    // - When a request comes in
+    // - At most once every 60 seconds
+    revalidate: 60,
   };
 }
 

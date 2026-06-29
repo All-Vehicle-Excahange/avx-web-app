@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { followConsultant, unFollowConsultant } from "@/services/user.service";
 import LoginPopup from "@/components/auth/LoginPopup";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -29,7 +29,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getStoreFrontByUsernameQuery } from "@/queries/user.queries";
 
 export default function StoreFrontHeroSection() {
-  const id = useParams()?.id;
+  const router = useRouter();
+  const id = router.query?.id;
   const queryClient = useQueryClient();
 
   const { data: storeDetails, isLoading } = useQuery(
