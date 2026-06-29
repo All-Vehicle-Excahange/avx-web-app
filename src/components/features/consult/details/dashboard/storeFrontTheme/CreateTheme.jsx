@@ -674,7 +674,7 @@ export default function CreateTheme() {
         </div>
 
         {/* Renderer */}
-        <div className="flex-1 px-1 py-4 sm:p-4 flex flex-col relative pb-24">
+        <div className="flex-1 px-1 py-4 sm:p-4 flex flex-col relative pb-4">
           {sections.length > 0 && sections[activeTab] && (
             <EngineRenderer
               sections={[sections[activeTab]]}
@@ -690,18 +690,19 @@ export default function CreateTheme() {
                 );
                 setSections(updated);
               }}
-
             />
           )}
 
           {/* Final Submit Button (Only on Why Buy tab) */}
           {sections.length > 0 &&
             sections[activeTab]?.type?.includes("why_buy") && (
-              <div className="absolute inset-x-0 bottom-0  backdrop-blur-sm p-3 sm:p-4 border-t border-third/30 flex justify-end z-10">
+              <div className="mt-8 p-3 sm:p-4 border-t border-third/30 flex justify-between items-center bg-secondary/10 rounded-xl z-10">
+                <span className="text-third text-sm">Once saved, submit your theme to complete the process.</span>
                 <Button
                   onClick={handleFinalSubmit}
                   disabled={isSubmitting}
                   variant="ghost"
+                  className="bg-primary text-secondary font-bold hover:bg-primary/90"
                 >
                   {isSubmitting ? "Submitting..." : "Final Submit"}
                 </Button>
