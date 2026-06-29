@@ -18,7 +18,7 @@ import SimulerVehicle from "./SimulerVehicle";
 import Navbar from "@/components/layout/Navbar";
 import VehicleOverviewMain from "./VehicleOverviewMain";
 
-import { useParams, useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import {
   getVehicleOverviewQuery,
@@ -89,12 +89,11 @@ export default function VehicleDetails({
       behavior: "smooth",
     });
   };
-  const params = useParams();
-  const id = params.id;
-  const searchParams = useSearchParams();
-  const sponsored = searchParams.get("sponsored");
-  const billingType = searchParams.get("billingType");
-  const adId = searchParams.get("adId");
+  const router = useRouter();
+  const id = router.query?.id;
+  const sponsored = router.query?.sponsored;
+  const billingType = router.query?.billingType;
+  const adId = router.query?.adId;
 
   const { data: vehicleOverview, isLoading: isOverviewLoading } = useQuery({
     ...getVehicleOverviewQuery(id),

@@ -3,14 +3,15 @@
 import { useState } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Select from "react-select";
-import { useParams } from "next/navigation";
+import { useRouter } from "next/router";
 import Button from "@/components/ui/button";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getStoreFrontInventoryInfiniteQuery } from "@/queries/user.queries";
 
 export default function Inventory() {
-    const id = useParams()?.id;
+    const router = useRouter();
+    const id = router.query?.id;
 
     const [activeType, setActiveType] = useState("all");
 
