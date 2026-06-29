@@ -119,7 +119,13 @@ export default function WhyBuyPro1({
 
     // Map backend 'processes' array (with 'desc') → 'processSteps' (with 'description')
     // Guard checks length, not just existence, because CreateTheme initializes processSteps as []
-    if (!rawData?.processSteps?.length && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
+    const isProcessStepsEmpty =
+      !rawData?.processSteps ||
+      !rawData.processSteps.length ||
+      (Array.isArray(rawData.processSteps) &&
+        rawData.processSteps.every((p) => !p.title && !p.description && !p.desc && !p.icon));
+
+    if (isProcessStepsEmpty && rawData?.processes && Array.isArray(rawData.processes) && rawData.processes.length > 0) {
       merged.processSteps = rawData.processes.map((p) => ({
         title: p.title || "",
         description: p.desc || p.description || "",
@@ -350,7 +356,7 @@ export default function WhyBuyPro1({
 
   if (isEditing) {
     return (
-      <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
+      <div className="w-full max-w-[1480px] mx-auto p-2 md:p-8 rounded-xl space-y-10">
         <GlobalLoader isLoading={isSaving} />
         {/* HERO */}
         <div className="space-y-6">

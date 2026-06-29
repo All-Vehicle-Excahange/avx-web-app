@@ -50,27 +50,28 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
   return (
     <div className="fixed inset-0 z-9999 bg-black/90 backdrop-blur-sm flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-third/30 bg-black/95 shrink-0">
-        <h2 className="text-xl font-semibold text-primary">{theme.name}</h2>
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-third/30 bg-black/95 shrink-0 gap-2">
+        <h2 className="text-lg sm:text-xl font-semibold text-primary truncate">{theme.name}</h2>
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <Button
             variant="ghost"
             onClick={isEligible ? handleUseTheme : undefined}
-            className={`transition-all ${
+            className={`transition-all whitespace-nowrap text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 h-auto ${
               !isEligible
                 ? "opacity-50 cursor-not-allowed text-gray-400 border border-dashed border-gray-500 pointer-events-none"
                 : ""
             }`}
           >
-            Use This Theme
-            {!isEligible && <LockIcon className="ml-2" />}
+            <span className="hidden sm:inline">Use This Theme</span>
+            <span className="sm:hidden">Use Theme</span>
+            {!isEligible && <LockIcon className="ml-1 sm:ml-2 w-3 h-3 sm:w-4 sm:h-4" />}
           </Button>
 
           <button
             onClick={onClose}
-            className="opacity-60 hover:opacity-100 text-primary"
+            className="opacity-60 hover:opacity-100 text-primary p-1 shrink-0"
           >
-            <X />
+            <X className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
       </div>

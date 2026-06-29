@@ -261,12 +261,12 @@ export default function AboutPro2({
 
   if (isEditing) {
     return (
-      <div className=" p-8 rounded-xl border border-third/30 w-full max-w-[1480px] mx-auto space-y-10">
+      <div className="p-2 md:p-8 rounded-xl border border-third/30 w-full max-w-[1480px] mx-auto space-y-10">
         <GlobalLoader isLoading={isSaving} />
         {/* HERO EDITOR */}
         <h3 className="text-primary text-xl font-bold">Hero Section</h3>
-        <div className="grid grid-cols-2 gap-6">
-          <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4 order-2 md:order-1">
             <EditorInput
               bold
               value={data.aboutHeroTitle}
@@ -285,7 +285,7 @@ export default function AboutPro2({
               errorMsg={errors?.aboutHeroDescription}
             />
           </div>
-          <div className="space-y-4">
+          <div className="space-y-4 order-1 md:order-2">
             <p className="text-sm font-semibold text-primary">Hero Images</p>
             <div className="grid grid-cols-2 gap-4">
               <div className="h-40 relative col-span-2">
@@ -434,7 +434,7 @@ export default function AboutPro2({
         />
         <div className="p-4 bg-primary/5 rounded-lg border border-third/10 mt-4">
           <h4 className="text-primary font-semibold mb-4">Stats Numbers</h4>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {(data.stats || []).map((s, i) => (
               <div key={i} className="space-y-2">
                 <EditorInput
@@ -645,7 +645,7 @@ export default function AboutPro2({
                   >
                     {/* image side */}
                     {item.image && (
-                      <div className="relative overflow-hidden h-[320px] lg:h-auto">
+                      <div className="relative overflow-hidden h-80 lg:h-auto">
                         <Image src={item.image} alt={item.keyword} fill unoptimized className="w-full h-full object-cover lg:absolute lg:inset-0 transition-transform duration-700 hover:scale-105" />
                         <div className="absolute inset-0 bg-linear-to-t from-secondary/60 to-transparent" />
                         <div className="absolute bottom-5 left-5 flex items-center gap-3">

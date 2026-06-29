@@ -11,7 +11,7 @@ import {
   setAboutMission,
   setAboutVision,
   setState,
-  setAboutServices
+  setAboutServices,
 } from "@/services/theme.service";
 import { ABOUT_BASIC_2 } from "@/core/engine/schemas/about/basic/about_basic_2";
 
@@ -92,27 +92,37 @@ const stagger = {
 const Divider = () => <div className="w-8 h-px bg-primary/15 my-2" />;
 
 const EyeBrow = ({ children }) => (
-  <p
-    className="text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat] mb-4"
-  >
+  <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat] mb-4">
     {children}
   </p>
 );
 
 const DEFAULT_DATA = ABOUT_BASIC_2[0].data;
 
-function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, rules, storeIcons }) {
+function AboutBasic2({
+  data: rawData,
+  isEditing,
+  onUpdate,
+  onNextTab,
+  errors,
+  rules,
+  storeIcons,
+}) {
   const [isSaving, setIsSaving] = useState(false);
 
-  const iconOptions = storeIcons?.length > 0
-    ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
-    : SVG_OPTIONS;
+  const iconOptions =
+    storeIcons?.length > 0
+      ? storeIcons.map((icon) => ({ value: icon.svgIcon, label: icon.title }))
+      : SVG_OPTIONS;
 
   // Merge schema defaults with incoming data so missing fields use dummy values
   const data = {
-    ...DEFAULT_DATA, ...Object.fromEntries(
-      Object.entries(rawData || {}).filter(([, v]) => v !== undefined && v !== null)
-    )
+    ...DEFAULT_DATA,
+    ...Object.fromEntries(
+      Object.entries(rawData || {}).filter(
+        ([, v]) => v !== undefined && v !== null,
+      ),
+    ),
   };
 
   // Map backend fields to UI fields if UI fields are missing
@@ -132,7 +142,7 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
   // Synchronize transformed draft data with the parent state once on load
   React.useEffect(() => {
     if (!rawData) return;
-    
+
     let hasChanges = false;
     const updatedData = { ...data };
 
@@ -166,7 +176,7 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
 
   const updateArrayItem = (arrayName, index, field, value) => {
     const newArray = [...data[arrayName]];
-    if (typeof newArray[index] === 'object' && newArray[index] !== null) {
+    if (typeof newArray[index] === "object" && newArray[index] !== null) {
       newArray[index] = { ...newArray[index], [field]: value };
     } else {
       newArray[index] = value;
@@ -227,7 +237,7 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
 
   if (isEditing) {
     return (
-      <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10 ">
+      <div className="w-full max-w-[1480px] mx-auto p-2  md:p-8 rounded-xl space-y-10 ">
         <GlobalLoader isLoading={isSaving} />
         <div className="space-y-6">
           <h3 className="text-white font-bold mb-4">Hero Section</h3>
@@ -317,7 +327,10 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
                       e.target.value = e.target.value.replace(/[^0-9]/g, "");
                     }}
                     onChange={(e) => {
-                      const numericValue = e.target.value.replace(/[^0-9]/g, "");
+                      const numericValue = e.target.value.replace(
+                        /[^0-9]/g,
+                        "",
+                      );
                       e.target.value = numericValue;
                       updateArrayItem("stats", i, "number", numericValue);
                     }}
@@ -382,7 +395,6 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
                     value={
                       iconOptions.find((opt) => opt.value === s.icon) || null
                     }
-
                     onChange={(selectedOption) => {
                       updateArrayItem(
                         "services",
@@ -427,8 +439,8 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
         </div>
 
         <div className="flex justify-end mt-8 border-t border-white/10 pt-6">
-          <Button 
-            onClick={handleSaveAndNext} 
+          <Button
+            onClick={handleSaveAndNext}
             disabled={isSaving}
             variant="ghost"
           >
@@ -443,17 +455,14 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
     <>
       <section className="relative flex items-center justify-center min-h-screen py-14 lg:py-24">
         <div className="px-5 flex flex-col items-center text-center gap-6 max-w-3xl mx-auto">
-          <div
-          >
+          <div>
             <EyeBrow>About Us</EyeBrow>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1] text-primary font-[Montserrat]">
               {data.heroTitle}
             </h1>
           </div>
 
-          <div
-            className="w-10 h-px bg-primary/15"
-          />
+          <div className="w-10 h-px bg-primary/15" />
 
           <div
             className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]"
@@ -465,8 +474,7 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
       <section className="py-14 lg:py-20">
         <div className="px-2 lg:px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
-            <div
-            >
+            <div>
               <EyeBrow>What Drives Us</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 Mission & <span className="text-primary">Vision</span>
@@ -493,10 +501,7 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
             >
               <div className="flex items-start justify-between gap-4">
                 <h3 className="text-xl font-semibold font-[Montserrat]">
-                  <span className="text-primary">
-                    {data.missionTitle}
-                  </span>
-
+                  <span className="text-primary">{data.missionTitle}</span>
                 </h3>
                 <span className="text-[11px] tracking-[0.25em] text-fourth/60 font-[Montserrat] font-bold mt-1 shrink-0">
                   01
@@ -515,10 +520,7 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
             >
               <div className="flex items-start justify-between gap-4">
                 <h3 className="text-xl font-semibold font-[Montserrat]">
-                  <span className="text-primary">
-                    {data.visionTitle}
-                  </span>
-
+                  <span className="text-primary">{data.visionTitle}</span>
                 </h3>
                 <span className="text-[11px] tracking-[0.25em] text-fourth/60 font-[Montserrat] font-bold mt-1 shrink-0">
                   02
@@ -536,8 +538,7 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
 
       <section className="py-12 lg:py-16 bg-fourth">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center px-10">
-          <div
-          >
+          <div>
             <EyeBrow>By The Numbers</EyeBrow>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat] mb-4">
               Our Growth <span className="text-primary">in Numbers</span>
@@ -570,16 +571,14 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
       <section className="py-14 lg:py-20">
         <div className="px-2 lg:px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
-            <div
-            >
+            <div>
               <EyeBrow>Services</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 {data.servicesTitle}
               </h2>
             </div>
 
-            <div
-            >
+            <div>
               <Divider />
               <div
                 className="text-third/70 text-[15px] leading-[1.9] font-[Poppins]"
@@ -601,7 +600,8 @@ function AboutBasic2({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
                 >
                   <div className="flex items-center justify-between">
                     <div className="w-10 h-10 rounded-xl border border-third/10 flex items-center justify-center group-hover:border-fourth/40 transition-colors duration-300">
-                      {typeof svc.icon === 'string' && svc.icon.startsWith('<svg') ? (
+                      {typeof svc.icon === "string" &&
+                      svc.icon.startsWith("<svg") ? (
                         <div
                           className="text-fourth [&>svg]:w-5 [&>svg]:h-5"
                           dangerouslySetInnerHTML={{ __html: svc.icon }}

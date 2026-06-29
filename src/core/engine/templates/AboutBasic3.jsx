@@ -209,7 +209,7 @@ function AboutBasic3({
   };
   if (isEditing) {
     return (
-      <div className="w-full max-w-[1480px] mx-auto p-8 rounded-xl space-y-10">
+      <div className="w-full max-w-[1480px] mx-auto px-2 py-6 sm:p-8 rounded-xl space-y-8 sm:space-y-10">
         <GlobalLoader isLoading={isSaving} />
         <div className="space-y-6">
           <h3 className="text-white font-bold mb-4">Hero Section</h3>
