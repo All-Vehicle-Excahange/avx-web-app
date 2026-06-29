@@ -1,7 +1,19 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import FeatureGroup from "@/components/ui/FeatureGroup";
-import { Calendar, ChevronDown, Clock, X } from "lucide-react";
+import {
+  Calendar,
+  ChevronDown,
+  Clock,
+  X,
+  Settings,
+  Car,
+  Armchair,
+  Share2,
+  CircleDashed,
+  Cpu,
+  Wrench,
+} from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
 import DatePicker from "react-datepicker";
@@ -21,7 +33,12 @@ import InspectionTrackingModal from "@/components/features/user/InspectionTracki
 import { getInspectionPricForBuyerQuery } from "@/queries/inspection.queries";
 import { useAuthStore } from "@/stores/useAuthStore";
 
-export default function VehicleSpec({ open, setOpen, vehicle, inspectionDetails }) {
+export default function VehicleSpec({
+  open,
+  setOpen,
+  vehicle,
+  inspectionDetails,
+}) {
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
   const [animateModal, setAnimateModal] = useState(false);
@@ -86,7 +103,8 @@ export default function VehicleSpec({ open, setOpen, vehicle, inspectionDetails 
   };
   const timeOptions = generateTimeSlots();
   const inspectionAvailable = true;
-  const reportUrl = inspectionDetails?.reportUrl || existingInspection?.reportUrl;
+  const reportUrl =
+    inspectionDetails?.reportUrl || existingInspection?.reportUrl;
 
   const closeModal = () => {
     setAnimateModal(false);
@@ -407,37 +425,52 @@ export default function VehicleSpec({ open, setOpen, vehicle, inspectionDetails 
               <div className="space-y-6 px-6 pb-6">
                 {inspectionAvailable ? (
                   <>
-                    <p className="text-xs text-third font-normal mt-1">
-                      Reecomm Inspection Available Last verified on: 12 Jan 2025
+                    <p className="text-sm text-third font-normal mt-1">
+                      The report above reflects this vehicle&apos;s last
+                      check-in. A fresh inspection re-checks everything that
+                      matters, scheduled around your purchase — current,
+                      complete, and yours.
                     </p>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
-                      <FeatureGroup
-                        title="SAFETY"
-                        items={["Side airbags", "Airbags"]}
-                      />
-
-                      <FeatureGroup
-                        title="COMFORT & CONVENIENCE"
-                        items={[
-                          "Puddle lamp",
-                          "Cruise control",
-                          "Ventilated seats",
-                          "Keyless start",
-                          "Wireless phone charging",
-                        ]}
-                      />
-
-                      <FeatureGroup title="EXTERIOR" items={["Sunroof"]} />
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                      {[
+                        { title: "Engine & powertrain", icon: Settings },
+                        { title: "Mechanical & brakes", icon: Settings },
+                        { title: "Exterior & body", icon: Car },
+                        { title: "Interior & cabin", icon: Armchair },
+                        { title: "Structural history", icon: Share2 },
+                        { title: "Tyres & tread depth", icon: CircleDashed },
+                        { title: "OBD diagnostics", icon: Cpu },
+                        { title: "Modifications check", icon: Wrench },
+                      ].map((feature, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center gap-3 p-3 border border-third/20 rounded-xl transition-colors"
+                        >
+                          <feature.icon
+                            className="w-5 h-5 shrink-0 text-primary"
+                            strokeWidth={1.5}
+                          />
+                          <span className="font-semibold text-primary leading-tight">
+                            {feature.title}
+                          </span>
+                        </div>
+                      ))}
                     </div>
                     <div className="flex justify-end">
                       {(() => {
-                        const reportUrl = inspectionDetails?.reportUrl || existingInspection?.reportUrl;
+                        const reportUrl =
+                          inspectionDetails?.reportUrl ||
+                          existingInspection?.reportUrl;
                         return (
-                          <Button 
-                            variant="outline" 
-                            showIcon={true} 
+                          <Button
+                            variant="outline"
+                            showIcon={true}
                             locked={!reportUrl}
-                            onClick={reportUrl ? () => window.open(reportUrl, "_blank") : undefined}
+                            onClick={
+                              reportUrl
+                                ? () => window.open(reportUrl, "_blank")
+                                : undefined
+                            }
                           >
                             View Inspection Report
                           </Button>
@@ -1044,7 +1077,6 @@ export default function VehicleSpec({ open, setOpen, vehicle, inspectionDetails 
                 </>
               )}
             </div>
-
           </div>
         </div>
       )}

@@ -629,12 +629,11 @@ export default function AccountPopup({ open, onClosePopup }) {
 
               <div className="flex gap-3">
                 <Button
-                  variant="default"
+                  variant="outlineSecondary"
                   full
                   size="sm"
                   onClick={handleCancelLogout}
                   disabled={isLoggingOut}
-                  className="border border-primary  text-primary hover:bg-primary hover:text-secondary disabled:opacity-50"
                 >
                   Cancel
                 </Button>
