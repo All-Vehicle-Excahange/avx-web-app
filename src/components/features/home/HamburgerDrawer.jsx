@@ -57,9 +57,9 @@ export default function HamburgerDrawer({ open, onClose }) {
     <div
       aria-hidden={!open}
       className={`
-        fixed inset-0 z-[1090] bg-secondary text-primary
+        fixed inset-0 z-1090 bg-secondary text-primary
         transform transition-all duration-500 ease-out 3xl:max-w-full 3xl:mx-auto
-        ${open ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"}
+        ${open ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0 pointer-events-none"}
       `}
     >
       {/* DRAWER SCROLL CONTAINER */}
