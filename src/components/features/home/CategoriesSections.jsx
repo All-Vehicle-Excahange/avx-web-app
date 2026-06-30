@@ -211,11 +211,13 @@ const CategoriesSections = () => {
         </div>
 
         {/* Bottom Button */}
-        <div className="mt-7 flex justify-end">
-          <Button href="/search" variant="outlineAnimated" size="md">
-            Explore All Vehicles
-          </Button>
-        </div>
+        {vehicles.length >= 4 && (
+          <div className="mt-7 flex justify-end">
+            <Button href="/search" variant="outlineAnimated" size="md">
+              Explore All Vehicles
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -13,10 +13,7 @@ import toast from "react-hot-toast";
 import InspectionTrackingModal from "@/components/features/user/InspectionTrackingModal";
 import InspectionRequestModal from "@/components/features/user/InspectionRequestModal";
 
-export default function SummaryRight({
-  vehicle,
-  summary,
-}) {
+export default function SummaryRight({ vehicle, summary }) {
   const queryClient = useQueryClient();
   const vehicleId = vehicle?.id;
   const vehicleOwnerRole = vehicle?.vehicleOwner?.userRole || "USER";
@@ -82,8 +79,6 @@ export default function SummaryRight({
       setIsCheckingInspection(false);
     }
   };
-
-
 
   if (vehicle?.totalInquiryCount !== prevTotalInquiryCount) {
     setPrevTotalInquiryCount(vehicle?.totalInquiryCount);
@@ -235,7 +230,17 @@ export default function SummaryRight({
                     />
                   </div>
 
-                  <p className="text-sm text-third">
+                  <p 
+                    className={`text-sm font-medium ${
+                      inquiries >= MAX_INQUIRIES
+                        ? "text-red-500"
+                        : inquiries > 10
+                          ? "text-orange-500"
+                          : inquiries > 0
+                            ? "text-green-500"
+                            : "text-primary"
+                    }`}
+                  >
                     {inquiries >= MAX_INQUIRIES
                       ? "Very high demand – Almost booked!"
                       : inquiries > 10
@@ -323,7 +328,7 @@ export default function SummaryRight({
                 />
               )}
             </>,
-            document.body
+            document.body,
           )
         : null}
     </>

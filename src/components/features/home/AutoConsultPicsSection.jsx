@@ -66,11 +66,13 @@ export default function AutoConsultPicsSection(props) {
         </div>
       )}
 
-      <div className="mt-8 flex justify-end">
-        <Button href="/consult/discovery" variant="outlineAnimated">
-          Explore All
-        </Button>
-      </div>
+      {finalConsultants.length >= 4 && (
+        <div className="mt-8 flex justify-end">
+          <Button href="/consult/discovery" variant="outlineAnimated">
+            Explore All
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

@@ -87,11 +87,13 @@ export default function AvxInspected() {
         </div>
 
         {/* Bottom Button */}
-        <div className="mt-4 flex justify-end">
-          <Button href="/search" variant="outlineAnimated" size="md">
-            Explore All Vehicles
-          </Button>
-        </div>
+        {vehicles.length >= 4 && (
+          <div className="mt-4 flex justify-end">
+            <Button href="/search" variant="outlineAnimated" size="md">
+              Explore All Vehicles
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

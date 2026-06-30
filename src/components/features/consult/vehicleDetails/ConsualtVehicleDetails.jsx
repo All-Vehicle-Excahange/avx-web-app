@@ -273,6 +273,7 @@ export default function ConsualtVehicleDetails({
                     vehicle={vehicleOverview}
                     open={isInspectionOpen}
                     setOpen={setIsInspectionOpen}
+                    inspectionDetails={inspectionDetails}
                   />
                 </div>
               </div>

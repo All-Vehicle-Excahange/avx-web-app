@@ -3,9 +3,9 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { X, Check } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { getVehicleSpecificationQuery } from "@/queries/vehicle.queries";
+import { getVehicleSpecificationQuery, getVehicleExtraDetailsQuery } from "@/queries/vehicle.queries";
 
-export default function SpecificationPopup({ open, onClose, variantId }) {
+export default function SpecificationPopup({ open, onClose, variantId, vehicleId }) {
   const [activeTab, setActiveTab] = useState("");
   const [isClosing, setIsClosing] = useState(false);
   const popupRef = useRef(null);
@@ -46,12 +46,35 @@ export default function SpecificationPopup({ open, onClose, variantId }) {
     };
   }, [open, handleClose]);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading: isSpecLoading } = useQuery({
     ...getVehicleSpecificationQuery(variantId),
     enabled: open && !!variantId,
   });
 
-  const specData = data?.specifications || {};
+  const { data: extraData } = useQuery({
+    ...getVehicleExtraDetailsQuery(vehicleId),
+    enabled: open && !!vehicleId,
+  });
+
+  const isLoading = isSpecLoading;
+
+  const transformedExtra = {};
+  if (Array.isArray(extraData)) {
+    extraData.forEach((item) => {
+      if (item.detailKey && Array.isArray(item.detailValues)) {
+        const catObj = {};
+        item.detailValues.forEach((val) => {
+          catObj[val] = "";
+        });
+        transformedExtra[item.detailKey] = catObj;
+      }
+    });
+  }
+
+  const specData = {
+    ...(data?.specifications || {}),
+    ...transformedExtra,
+  };
   const categories = Object.keys(specData);
 
   useEffect(() => {

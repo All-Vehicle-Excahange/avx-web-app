@@ -137,17 +137,29 @@ export default function VehicleImageGallery({ vehicle }) {
         <section className="w-full rounded-xl p-4 shadow border border-third/60">
             {/* ===== MAIN PREVIEW ===== */}
             <div className="relative w-full aspect-video bg-black/5 rounded-lg overflow-hidden group">
-                {/* Wishlist Button */}
-                <button
-                    onClick={handleWishlistToggle}
-                    className="absolute right-4 top-4 z-20 bg-black/50 hover:bg-black/70 text-white p-2.5 rounded-full hover:scale-105 transition cursor-pointer border border-white/20 shadow-md"
-                >
-                    <Heart
-                        className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${
-                            isFavorite ? "fill-red-500 text-red-500" : "text-white"
-                        }`}
-                    />
-                </button>
+                {/* Top Left Actions */}
+                {vehicle?.testDriveAvl && (
+                    <div className="absolute top-4 left-4 z-20">
+                        <div className="bg-green-500/90 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md border border-green-400/20 backdrop-blur-sm">
+                            Test Drive Available
+                        </div>
+                    </div>
+                )}
+
+                {/* Top Right Actions */}
+                <div className="absolute top-4 right-4 z-20 flex items-center gap-3">
+                    {/* Wishlist Button */}
+                    <button
+                        onClick={handleWishlistToggle}
+                        className="bg-black/50 hover:bg-black/70 text-white p-2.5 rounded-full hover:scale-105 transition cursor-pointer border border-white/20 shadow-md"
+                    >
+                        <Heart
+                            className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${
+                                isFavorite ? "fill-red-500 text-red-500" : "text-white"
+                            }`}
+                        />
+                    </button>
+                </div>
 
                 <Swiper
                     loop={true}

@@ -245,7 +245,17 @@ export default function VehicleSummaryRight({
                     />
                   </div>
 
-                  <p className="text-sm text-third">
+                  <p 
+                    className={`text-sm font-medium ${
+                      inquiries >= MAX_INQUIRIES
+                        ? "text-red-500"
+                        : inquiries > 10
+                          ? "text-orange-500"
+                          : inquiries > 0
+                            ? "text-green-500"
+                            : "text-primary"
+                    }`}
+                  >
                     {inquiries >= MAX_INQUIRIES
                       ? "Very high demand – Almost booked!"
                       : inquiries > 10
