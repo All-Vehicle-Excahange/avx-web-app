@@ -323,7 +323,7 @@ export default function BlogDetails({ id }) {
           </div>
         </div>
 
-        {/* MULTIPLE SMALL COVER IMAGES GRID */}
+        {/* MULTIPLE SMALL COVER IMAGES GRID
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-8">
           {topImages.map((imgSrc, imgIdx) => (
             <div
@@ -339,7 +339,7 @@ export default function BlogDetails({ id }) {
               />
             </div>
           ))}
-        </div>
+        </div> */}
 
         {/* 2. TWO-COLUMN MAIN BODY GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-12 items-start">

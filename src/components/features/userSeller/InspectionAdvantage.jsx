@@ -27,7 +27,7 @@ export default function InspectionAdvantage() {
             viewport={{ once: true }}
           >
             <Image
-              src="/increase-buyer-confidence-vehicle.webp"
+              src="./increase-buyer-confide.webp"
               alt="Increase Buyer Confidence"
               width={800}
               height={500}
@@ -42,7 +42,9 @@ export default function InspectionAdvantage() {
             {/* Score Badge */}
             <div className="absolute top-6 left-6 border border-primary/20 rounded-xl px-4 py-2 bg-black/70 backdrop-blur-md flex items-center gap-2">
               <span className="text-fourth font-bold text-sm">5 ★</span>
-              <span className="text-[10px] text-white uppercase tracking-widest font-semibold">Reecomm Inspected</span>
+              <span className="text-[10px] text-white uppercase tracking-widest font-semibold">
+                Reecomm Inspected
+              </span>
             </div>
 
             {/* floating stat badge — sits over the image */}
@@ -103,10 +105,14 @@ export default function InspectionAdvantage() {
             {/* copy */}
             <div className="space-y-4">
               <p className="text-[15px] leading-[1.8] text-third font-[Poppins]">
-                Buyers make decisions faster when they trust what they see. Getting your vehicle inspected by Reecomm before listing removes the biggest barrier in every used vehicle sale — doubt.
+                Buyers make decisions faster when they trust what they see.
+                Getting your vehicle inspected by Reecomm before listing removes
+                the biggest barrier in every used vehicle sale — doubt.
               </p>
               <p className="text-[15px] leading-[1.8] text-third/85 font-[Poppins]">
-                Inspection puts the facts on the table. No negotiation games. No uncomfortable questions about condition. Buyers arrive informed and ready.
+                Inspection puts the facts on the table. No negotiation games. No
+                uncomfortable questions about condition. Buyers arrive informed
+                and ready.
               </p>
             </div>
 
@@ -126,7 +132,9 @@ export default function InspectionAdvantage() {
                   transition={{ delay: 0.4 + i * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <span className="text-fourth font-bold text-sm shrink-0">✓</span>
+                  <span className="text-fourth font-bold text-sm shrink-0">
+                    ✓
+                  </span>
                   <span className="text-sm text-primary/70 group-hover:text-primary transition-colors duration-300">
                     {text}
                   </span>
@@ -136,7 +144,8 @@ export default function InspectionAdvantage() {
 
             {/* Supporting note */}
             <p className="text-xs text-third/50 italic leading-relaxed">
-              * Sellers who list with an inspection report receive, on average, 2.3x more qualified inquiries than unverified listings.
+              * Sellers who list with an inspection report receive, on average,
+              2.3x more qualified inquiries than unverified listings.
             </p>
           </motion.div>
         </div>

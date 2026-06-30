@@ -47,7 +47,7 @@ function condLabel(c) {
 }
 
 // Car top-view tyre diagram
-function TyreDiagram({ fl, fr, rl, rr }) {
+function TyreDiagram({ fl, fr, rl, rr, spareWheel }) {
   const hasAny = [fl, fr, rl, rr].some((v) => v && v.toUpperCase() !== "NA");
   if (!hasAny) return null;
 
@@ -77,11 +77,11 @@ function TyreDiagram({ fl, fr, rl, rr }) {
       </div>
 
       <svg
-        viewBox="-70 130 440 160"
+        viewBox="-70 130 440 180"
         width="100%"
         height="100%"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-auto max-h-40 ml-0 mr-auto"
+        className="w-full h-auto max-h-48 ml-0 mr-auto"
       >
         <defs>
           <filter id="car-shadow" x="-20%" y="-20%" width="140%" height="140%">
@@ -509,12 +509,24 @@ function TyreDiagram({ fl, fr, rl, rr }) {
             />
           </g>
         </g>
+        {spareWheel && (
+          <text
+            x={rx}
+            y={rlY + 36}
+            textAnchor="end"
+            fontSize="12"
+            fontWeight="600"
+            fill="#43A047"
+          >
+            Spare Wheel Available
+          </text>
+        )}
       </svg>
     </div>
   );
 }
 
-export default function VehicleCondition({ open, setOpen, inspectionDetails }) {
+export default function VehicleCondition({ vehicle, open, setOpen, inspectionDetails }) {
   // handleResponse already unwraps api.data, so inspectionDetails IS the inspection object directly
   const d = inspectionDetails ?? null;
 
@@ -648,6 +660,7 @@ export default function VehicleCondition({ open, setOpen, inspectionDetails }) {
                     fr={d.frontRightTyreCondition ?? d.frontTyreCondition}
                     rl={d.rearLeftTyreCondition ?? d.rearTyreCondition}
                     rr={d.rearRightTyreCondition ?? d.rearTyreCondition}
+                    spareWheel={vehicle?.spareWheel || d?.spareWheel}
                   />
                 </>
               )}

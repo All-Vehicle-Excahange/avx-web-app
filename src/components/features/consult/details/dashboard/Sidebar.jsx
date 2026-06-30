@@ -14,10 +14,12 @@ import {
   Star,
   HelpCircle,
   Car,
+  Bell,
 } from "lucide-react";
 
 import { getSellerTierTitle } from "@/lib/helper";
 import { getSellerTier } from "@/services/Seller.service";
+import NotificationsComponent from "./NotificationsComponent";
 
 const menu = [
   { label: "Overview", icon: LayoutGrid, href: "/consult/dashboard/overview" },
@@ -46,11 +48,17 @@ const menu = [
     icon: CreditCard,
     href: "/consult/dashboard/billing",
   },
+  {
+    label: "Notifications",
+    icon: Bell,
+    href: "/consult/dashboard/notifications",
+  },
 ];
 
 export default function Sidebar({ isOpen, onClose }) {
   const router = useRouter();
   const [isComeFromPhone, setIsComeFromPhone] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -76,14 +84,15 @@ export default function Sidebar({ isOpen, onClose }) {
   if (isComeFromPhone && isStorefrontPage) return null;
 
   return (
-    <aside
-      className={`
-        fixed md:sticky top-16 h-[calc(100vh-64px)] z-40
-        w-64 md:w-16 md:hover:w-64 bg-secondary md:bg-transparent
+    <>
+      <aside
+        className={`
+        fixed md:sticky top-16 h-[calc(100vh-64px)] z-50
+        w-64 md:w-16 bg-secondary md:bg-transparent
+        ${!isNotificationsOpen ? "md:hover:w-64 group" : ""}
         transition-all duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         border-r border-third/30 p-3 md:p-2 flex flex-col justify-between overflow-hidden
-        group
       `}
     >
       {/* <h1 className="text-xl font-bold mt-4 mb-4">Reecomm Dashboard</h1> */}
@@ -91,17 +100,42 @@ export default function Sidebar({ isOpen, onClose }) {
       <div className="flex-1 space-y-2.5 overflow-y-auto overflow-x-hidden custom-scrollbar pr-1">
         {menu.map((m, i) => {
           const isActive =
-            router.pathname === m.href ||
+            !isNotificationsOpen &&
+            (router.pathname === m.href ||
             router.pathname.startsWith(m.href + "/") ||
             (m.href === "/consult/dashboard/ppc" && router.pathname.startsWith("/consult/dashboard/ads")) ||
             (router.pathname === "/consult/dashboard" &&
-              m.href === "/consult/dashboard/overview");
+              m.href === "/consult/dashboard/overview"));
+
+          if (m.label === "Notifications") {
+            return (
+              <button
+                key={i}
+                onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+                className={`flex items-center w-full text-left p-3 md:p-2 rounded-lg transition-all duration-300
+          ${isNotificationsOpen
+                    ? "bg-primary text-secondary shadow-lg"
+                    : "hover:bg-primary/10 text-primary"
+                  }`}
+              >
+                <div className="shrink-0 flex items-center justify-center w-6 h-6">
+                  <m.icon size={18} />
+                </div>
+                <span className="ml-3 md:ml-0 md:group-hover:ml-3 md:opacity-0 md:group-hover:opacity-100 max-w-full md:max-w-0 md:group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden">
+                  {m.label}
+                </span>
+              </button>
+            );
+          }
 
           return (
             <Link
               key={i}
               href={m.href}
-              onClick={onClose}
+              onClick={() => {
+                setIsNotificationsOpen(false);
+                onClose && onClose();
+              }}
               className={`flex items-center p-3 md:p-2 rounded-lg transition-all duration-300
           ${isActive
                   ? "bg-primary text-secondary shadow-lg"
@@ -132,5 +166,10 @@ export default function Sidebar({ isOpen, onClose }) {
         </Link>
       </div>
     </aside>
+      <NotificationsComponent 
+        isOpen={isNotificationsOpen} 
+        onClose={() => setIsNotificationsOpen(false)} 
+      />
+    </>
   );
 }

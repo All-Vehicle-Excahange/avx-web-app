@@ -113,12 +113,22 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
         <span className="text-sm text-primary font-medium">
           Inspection Rating: {vehicle?.avxInspectionRating || "-"}
         </span>
+        {vehicle?.inspectionStatus && (
+          <span className="text-xs font-semibold px-2 py-0.5 rounded-full border border-third/40 text-primary bg-third/10">
+            {vehicle.inspectionStatus.replace(/_/g, " ")}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         {/* LEFT SIDE */}
         <h1 className="text-2xl text-primary sm:text-3xl 3xl:text-4xl font-bold">
-          {[vehicle?.makerName, vehicle?.modelName, vehicle?.variantName]
+          {[
+            vehicle?.makerName,
+            vehicle?.modelName,
+            vehicle?.variantName,
+            vehicle?.yearOfMfg,
+          ]
             .filter(Boolean)
             .join(" ") || "-"}
         </h1>

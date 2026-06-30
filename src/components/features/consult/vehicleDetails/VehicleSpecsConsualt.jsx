@@ -11,7 +11,7 @@ import InspectionTrackingModal from "@/components/features/user/InspectionTracki
 import InspectionRequestModal from "@/components/features/user/InspectionRequestModal";
 
 const VehicleSpecsConsualt = forwardRef(function VehicleSpecsConsualt(
-  { open, setOpen, vehicle },
+  { open, setOpen, vehicle, inspectionDetails },
   ref,
 ) {
   const queryClient = useQueryClient();
@@ -26,6 +26,8 @@ const VehicleSpecsConsualt = forwardRef(function VehicleSpecsConsualt(
     ...getInspectionPriceAndCountQuery(vehicle?.id),
     enabled: !!vehicle?.id,
   });
+
+  const reportUrl = vehicle?.reportUrl || inspectionDetails?.reportUrl || inspectionDetails?.data?.reportUrl;
 
   const freeInspectionCount = priceAndCountData?.freeInspectionRemainCount ?? 0;
   const totalFreeInspection = priceAndCountData?.totalFreeInspectionCount ?? 0;
@@ -60,7 +62,7 @@ const VehicleSpecsConsualt = forwardRef(function VehicleSpecsConsualt(
     }
     setIsCheckingActiveInspection(true);
     try {
-      const data = await queryClient.fetchQuery(
+      const data = inspectionDetails || await queryClient.fetchQuery(
         getActiveInspectionQuery(vehicle.id),
       );
       if (data) {
@@ -135,7 +137,17 @@ const VehicleSpecsConsualt = forwardRef(function VehicleSpecsConsualt(
                       <FeatureGroup title="EXTERIOR" items={["Sunroof"]} />
                     </div>
                     <div className="flex justify-end">
-                      <Button variant="outline" showIcon={true} locked={true}>
+                      <Button 
+                        variant="outline" 
+                        showIcon={true} 
+                        locked={!reportUrl}
+                        disabled={!reportUrl}
+                        onClick={() => {
+                          if (reportUrl) {
+                            window.open(reportUrl, "_blank", "noopener,noreferrer");
+                          }
+                        }}
+                      >
                         View Inspection Report
                       </Button>
                     </div>

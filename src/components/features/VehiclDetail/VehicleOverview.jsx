@@ -153,6 +153,7 @@ export default function VehicleOverview({ vehicle, open, setOpen }) {
         open={openSpec} 
         onClose={() => setOpenSpec(false)} 
         variantId={vehicle?.variantId}
+        vehicleId={vehicle?.id}
       />
     </section>
   );

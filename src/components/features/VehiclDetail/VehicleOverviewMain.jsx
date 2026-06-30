@@ -1,8 +1,11 @@
 "use client";
 
+import { Fragment } from "react";
+
 import Item from "@/components/ui/Item";
 import {
   Calendar,
+  CalendarDays,
   Fuel,
   Gauge,
   Settings,
@@ -61,148 +64,200 @@ export default function VehicleOverview({ vehicle }) {
       <div className="relative z-10 p-4 md:p-6 space-y-4 md:space-y-6">
         <h3 className="text-lg md:text-xl font-semibold">Vehicle Overview</h3>
 
-        {/* GRID: Changed to grid-cols-2 for mobile, reduced gaps and text size */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-4 md:gap-x-8 md:gap-y-6 text-xs md:text-sm">
-          {/* ROW 1 */}
-          <Item
-            icon={<Calendar />}
-            label="Reg. year"
-            value={
-              vehicle?.vehicleDocument?.regDate
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-4 md:gap-x-8 md:gap-y-6 text-xs md:text-sm">
+          {[
+            {
+              icon: <Calendar />,
+              label: "Reg. Date",
+              value: vehicle?.vehicleDocument?.regDate
                 ? new Date(vehicle.vehicleDocument.regDate)
                     .toLocaleDateString("en-US", {
+                      day: "2-digit",
                       month: "short",
                       year: "numeric",
                     })
                     .replace(" ", "-")
-                : "-"
-            }
-          />
-
-          <div className="relative group">
-            {/* KM Driven Item */}
-            <div className="relative">
-              <Item
-                icon={<Gauge />}
-                label={
-                  <span className="flex items-center gap-2">
-                    KM driven
-                    <Info
-                      size={14}
-                      className="text-third hover:text-primary cursor-pointer"
-                    />
-                  </span>
-                }
-                value={
-                  vehicle?.kmDriven
-                    ? `${vehicle.kmDriven.toLocaleString("en-IN")} km`
-                    : "-"
-                }
-              />
-            </div>
-
-            {/* Hover Image Preview (Only if image provided) */}
-            {speedometerImage?.trim() && (
-              <div className="absolute right-0 top-8 z-50 hidden group-hover:block">
-                <div className="rounded-lg border bg-background shadow-lg p-2 w-40">
-                  <div className="relative w-full h-24">
-                    <Image
-                      src={speedometerImage}
-                      alt="Odometer preview"
-                      fill
-                      className="rounded-md object-cover"
+                : "-",
+            },
+            {
+              custom: (
+                <div className="relative group" key="km-driven">
+                  <div className="relative">
+                    <Item
+                      icon={<Gauge />}
+                      label={
+                        <span className="flex items-center gap-2">
+                          KM driven
+                          <Info
+                            size={14}
+                            className="text-third hover:text-primary cursor-pointer"
+                          />
+                        </span>
+                      }
+                      value={
+                        vehicle?.kmDriven
+                          ? `${vehicle.kmDriven.toLocaleString("en-IN")} km`
+                          : "-"
+                      }
                     />
                   </div>
-                  <p className="mt-1 text-xs text-muted-foreground text-center">
-                    Odometer reading
-                  </p>
+                  {speedometerImage?.trim() && (
+                    <div className="absolute right-0 top-8 z-50 hidden group-hover:block">
+                      <div className="rounded-lg border bg-background shadow-lg p-2 w-40">
+                        <div className="relative w-full h-24">
+                          <Image
+                            src={speedometerImage}
+                            alt="Odometer preview"
+                            fill
+                            className="rounded-md object-cover"
+                          />
+                        </div>
+                        <p className="mt-1 text-xs text-muted-foreground text-center">
+                          Odometer reading
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
-            )}
-          </div>
-
-          <Item
-            icon={<Fuel />}
-            label="Fuel"
-            value={
-              vehicle?.isCngFitted && vehicle?.fuelType
-                ? `${vehicle.fuelType} + CNG`
-                : vehicle?.fuelType || "CNG"
-            }
-          />
-          <Divider />
-
-          {/* ROW 2 */}
-          <Item
-            icon={<Users />}
-            label="Ownership"
-            value={vehicle?.ownership || "1st"}
-          />
-          <Item
-            icon={<Settings />}
-            label="Transmission"
-            value={vehicle?.transmissionType || "NA"}
-          />
-          <Item
-            icon={<BadgeCheck />}
-            label="Reg number"
-            value={vehicle?.vehicleDocument?.regNumber || "NA"}
-          />
-
-          <Divider />
-
-          {/* ROW 3 */}
-          <Item
-            icon={isInsuranceActive ? <ShieldCheck /> : <ShieldX />}
-            label="Insurance Status"
-            value={isInsuranceActive ? "Active" : "Expired"}
-          />
-          <Item
-            icon={<FileText />}
-            label="Insurance Type"
-            value={formatInsuranceType(
-              vehicle?.vehicleDocument?.typeOfInsurance,
-            )}
-          />
-          <Item
-            icon={<MapPin />}
-            label="Registered State"
-            value={vehicle?.vehicleDocument?.regState || "-"}
-          />
-
-          <Divider />
-
-          {/* ROW 4 */}
-
-          <Item
-            icon={<Key />}
-            label="Spare key"
-            value={hasSpareKey ? "Available" : "Not Available"}
-          />
-
-          <Item
-            icon={
-              vehicle?.challanStatus === "Clear" ? (
-                <CheckCircle />
-              ) : (
-                <AlertCircle />
-              )
-            }
-            label="Challan Status"
-            value={vehicle?.challanStatus || "Clear"}
-          />
-
-          <Item
-            icon={<Truck />}
-            label="Commercial Vehicle"
-            value={vehicle?.isCommercialVehicle ? "Yes" : "No"}
-          />
-          {vehicle?.isCngFitted && (
-            <>
-              <Divider />
-              <Item icon={<Fuel />} label="CNG Type" value={vehicle?.cngType || "-"} />
-            </>
-          )}
+              ),
+            },
+            {
+              icon: <Fuel />,
+              label: "Fuel",
+              value:
+                vehicle?.isCngFitted && vehicle?.fuelType
+                  ? `${vehicle.fuelType} + CNG`
+                  : vehicle?.fuelType || "CNG",
+            },
+            {
+              icon: <Users />,
+              label: "Ownership",
+              value: vehicle?.ownership || "1st",
+            },
+            {
+              icon: <Settings />,
+              label: "Transmission",
+              value: vehicle?.transmissionType || "NA",
+            },
+            {
+              icon: <BadgeCheck />,
+              label: "Reg number",
+              value:
+                vehicle?.fuelType === "ELECTRIC" ||
+                vehicle?.fuelType === "EV" ? (
+                  <span className="text-green-600 dark:text-green-400 font-semibold  ">
+                    {vehicle?.vehicleDocument?.regNumber || "NA"}
+                  </span>
+                ) : vehicle?.isCommercialVehicle ? (
+                  <span className="text-yellow-600 dark:text-yellow-400 font-semibold  ">
+                    {vehicle?.vehicleDocument?.regNumber || "NA"}
+                  </span>
+                ) : (
+                  vehicle?.vehicleDocument?.regNumber || "NA"
+                ),
+            },
+            {
+              icon: isInsuranceActive ? <ShieldCheck /> : <ShieldX />,
+              label: "Insurance Status",
+              value: isInsuranceActive ? "Active" : "Expired",
+            },
+            {
+              icon: <FileText />,
+              label: "Insurance Type",
+              value: formatInsuranceType(
+                vehicle?.vehicleDocument?.typeOfInsurance,
+              ),
+            },
+            isInsuranceActive && {
+              icon: <CalendarDays />,
+              label: "Insurance Expiry",
+              value: vehicle?.vehicleDocument?.insuranceExpiryDate
+                ? new Date(vehicle.vehicleDocument.insuranceExpiryDate)
+                    .toLocaleDateString("en-US", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })
+                    .replace(" ", "-")
+                : "-",
+            },
+            {
+              icon: <MapPin />,
+              label: "Registered State",
+              value: vehicle?.vehicleDocument?.regState || "-",
+            },
+            {
+              icon: <Key />,
+              label: "Spare key",
+              value: hasSpareKey ? "Available" : "Not Available",
+            },
+            {
+              icon:
+                vehicle?.challanStatus === "Clear" ? (
+                  <CheckCircle />
+                ) : (
+                  <AlertCircle />
+                ),
+              label: "Challan Status",
+              value: vehicle?.challanStatus || "Clear",
+            },
+            {
+              icon: <Truck />,
+              label: "Commercial Vehicle",
+              value: vehicle?.isCommercialVehicle ? "Yes" : "No",
+            },
+            vehicle?.isCommercialVehicle && {
+              icon: <CalendarDays />,
+              label: "Permit Expiry",
+              value: vehicle?.vehicleDocument?.permitExpiryDate
+                ? new Date(vehicle.vehicleDocument.permitExpiryDate)
+                    .toLocaleDateString("en-US", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })
+                    .replace(" ", "-")
+                : "-",
+            },
+            vehicle?.vehicleDocument?.puc && {
+              icon: <CalendarDays />,
+              label: "PUC Expiry",
+              value: vehicle?.vehicleDocument?.pucExpiryDate
+                ? new Date(vehicle.vehicleDocument.pucExpiryDate)
+                    .toLocaleDateString("en-US", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })
+                    .replace(" ", "-")
+                : "-",
+            },
+            vehicle?.isCngFitted && {
+              icon: <Fuel />,
+              label: "CNG Type",
+              value: vehicle?.cngType || "-",
+            },
+          ]
+            .filter(Boolean)
+            .map((item, index, arr) => {
+              // Add a divider after every 4 items, except after the last item
+              const isLastInRow =
+                (index + 1) % 4 === 0 && index !== arr.length - 1;
+              return (
+                <Fragment key={index}>
+                  {item.custom ? (
+                    item.custom
+                  ) : (
+                    <Item
+                      icon={item.icon}
+                      label={item.label}
+                      value={item.value}
+                    />
+                  )}
+                  {isLastInRow && <Divider />}
+                </Fragment>
+              );
+            })}
         </div>
       </div>
     </section>
@@ -211,5 +266,5 @@ export default function VehicleOverview({ vehicle }) {
 
 // Added col-span-2 for mobile so the line stretches across both columns
 function Divider() {
-  return <div className="col-span-2 md:col-span-3 border border-third/40" />;
+  return <div className="col-span-2 md:col-span-4 border border-third/40" />;
 }

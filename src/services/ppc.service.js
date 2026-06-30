@@ -7,7 +7,9 @@ const ENDPOINT = {
   createCampion: "/ppc/boost/draft",
   finalSubmit: "/ppc/boost",
   getCampaignsDetails: "ppc/ad/campaign",
-  getAllCampaigns: "/ppc/boosts",
+  getAllCampaigns: "/ppc/dashboard",
+  getDashboardSummary: "/ppc/dashboard/summary",
+  getDashboardPerformance: "/ppc/dashboard/performance",
   changeCampaignStatus: "/ppc/boost",
   updateCampaign: "/ppc/boost",
   getAddRecomandedVehicle: "/ppc/delivery/recommendations",
@@ -24,9 +26,39 @@ export const getAllCampaigns = async (payload) => {
   if (payload?.size !== undefined || payload?.pageSize !== undefined) {
     params.size = payload.size || payload.pageSize;
   }
+  if (payload?.daysRange) {
+    params.daysRange = payload.daysRange;
+  }
+  if (payload?.status) params.status = payload.status;
+  if (payload?.billingType) params.billingType = payload.billingType;
+  if (payload?.placementType) params.placementType = payload.placementType;
 
   try {
     const res = await axiosInstance.get(ENDPOINT.getAllCampaigns, { params });
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const getDashboardSummary = async (daysRange = "LAST_60_DAYS") => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getDashboardSummary, {
+      params: { daysRange },
+    });
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const getDashboardPerformance = async (daysRange = "LAST_60_DAYS") => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getDashboardPerformance, {
+      params: { daysRange },
+    });
     return handleResponse(res);
   } catch (error) {
     handleError(error);

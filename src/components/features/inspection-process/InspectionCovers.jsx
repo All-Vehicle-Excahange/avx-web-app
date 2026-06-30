@@ -16,38 +16,44 @@ const categories = [
   {
     title: "Engine & Powertrain",
     icon: Wrench,
-    image: "/mechanical-systems.webp",
-    description: "Assesses engine health, fuel system, oil and coolant leakage, exhaust condition, wiring harness, battery voltage, gearbox, clutch life, and drivetrain integrity.",
+    image: "/engine-and-powertrain.webp",
+    description:
+      "Assesses engine health, fuel system, oil and coolant leakage, exhaust condition, wiring harness, battery voltage, gearbox, clutch life, and drivetrain integrity.",
   },
   {
     title: "Mechanical System",
     icon: ShieldCheck,
-    image: "/mechanical-systems.webp",
-    description: "Covers steering performance, suspension health, brake pad life, shock absorbers, ABS warning status, and all safety-critical mechanical components.",
+    image: "/mechanical-system.webp",
+    description:
+      "Covers steering performance, suspension health, brake pad life, shock absorbers, ABS warning status, and all safety-critical mechanical components.",
   },
   {
     title: "Exterior Panels & Body",
     icon: Car,
-    image: "/exterior-and-interior.webp",
-    description: "Evaluates every exterior panel for repainting, dents, scratches, and rust — with individual severity ratings and photographic documentation per panel.",
+    image: "/exterior-panels-and-body.webp",
+    description:
+      "Evaluates every exterior panel for repainting, dents, scratches, and rust — with individual severity ratings and photographic documentation per panel.",
   },
   {
     title: "Interior & Cabin",
     icon: CircuitBoard,
-    image: "/electric-and-electronic.webp",
-    description: "Checks AC cooling and heating, infotainment, power windows, central locking, airbags, seat condition, dashboard condition, and odometer reading — with a full interior video.",
+    image: "/intinor-and-cabin-2.webp",
+    description:
+      "Checks AC cooling and heating, infotainment, power windows, central locking, airbags, seat condition, dashboard condition, and odometer reading — with a full interior video.",
   },
   {
     title: "Structural History",
     icon: FileCheck2,
-    image: "/structural-and-safety.webp",
-    description: "Identifies structural damage, flood damage confirmation, underbody condition, rust presence, and chassis alignment issues.",
+    image: "/structural-history.webp",
+    description:
+      "Identifies structural damage, flood damage confirmation, underbody condition, rust presence, and chassis alignment issues.",
   },
   {
     title: "Tyres & OBD Diagnostics",
     icon: CheckCircle2,
-    image: "/document-verification.webp",
-    description: "Measures tread depth in mm for all four tyres plus the spare, records tyre condition ratings, and captures full OBD diagnostic scan results including error codes and emission status.",
+    image: "/tyres-and-obd-diagnostics.webp",
+    description:
+      "Measures tread depth in mm for all four tyres plus the spare, records tyre condition ratings, and captures full OBD diagnostic scan results including error codes and emission status.",
   },
 ];
 
@@ -125,7 +131,9 @@ export default function InspectionCovers() {
         {/* Small Supporting Note */}
         <div className="mt-10 border-t border-primary/10 pt-6">
           <p className="text-xs md:text-sm text-third/60 italic text-center md:text-left max-w-3xl mx-auto md:mx-0">
-            *EV Battery System inspection is included for electric vehicles — covering battery SoH %, SoC %, charging port condition, BMS warnings, and high-voltage wiring.
+            *EV Battery System inspection is included for electric vehicles —
+            covering battery SoH %, SoC %, charging port condition, BMS
+            warnings, and high-voltage wiring.
           </p>
         </div>
       </div>

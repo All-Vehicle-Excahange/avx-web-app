@@ -8,7 +8,7 @@ const features = [
     title: "Reach Verified Buyers",
     description:
       "Every buyer on Reecomm is verified before they can contact a seller. Your listing reaches only serious, qualified prospects — no spam, no time-wasters, just real leads.",
-    image: "/reach-verified-buyers.webp",
+    image: "/reach-verified-buyers-2.webp",
     icon: (
       <svg
         className="w-4 h-4"
@@ -32,7 +32,7 @@ const features = [
     title: "Track Real Inquiries",
     description:
       "Every inquiry on your listing is logged and visible to you through the platform. See how many buyers have shown interest, when they reached out, and what they are asking — so you always know where things stand.",
-    image: "/track-real-inquires.webp",
+    image: "/track-analysit.webp",
     icon: (
       <svg
         className="w-4 h-4"
@@ -56,7 +56,7 @@ const features = [
     title: "Optional Inspection",
     description:
       "Get your vehicle inspected by a Reecomm-verified inspector before listing — or allow buyers to request one. Inspected listings build buyer trust immediately, close faster, and attract more serious inquiries.",
-    image: "/optional-inspection.webp",
+    image: "/inspect.webp",
     icon: (
       <svg
         className="w-4 h-4"
@@ -80,7 +80,7 @@ const features = [
     title: "Inspection-Backed Credibility",
     description:
       "Listings with a Reecomm inspection report carry a verified badge on the marketplace. Buyers can see the inspection score before they contact you — giving them the confidence to reach out, and giving you fewer low-quality conversations.",
-    image: "/performance-based-visibility.webp",
+    image: "/inspection-backed-credibility.webp",
     icon: (
       <svg
         className="w-4 h-4"

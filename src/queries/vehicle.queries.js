@@ -6,6 +6,7 @@ import {
   getActiveInspectionByVehicleId,
   getVehicleInspectionDetails,
   getVehicleSpecification,
+  getVehicleExtraDetails,
 } from "@/services/vehicle.service";
 import {
   getSimularVehicles,
@@ -66,7 +67,7 @@ export const getRelatedConsultantsQuery = (payload, limit) => {
     queryFn: async () => {
       const hasPayload = Object.keys(payload || {}).length > 0;
       const res = hasPayload
-         ? await getFilterConsualt(payload)
+        ? await getFilterConsualt(payload)
         : await getHomeFeedConsult({ pageNo: 1, size: limit });
       return res?.data || [];
     },
@@ -132,6 +133,19 @@ export const getVehicleInspectionDetailsQuery = (vehicleId) => {
     queryFn: async () => {
       if (!vehicleId) return null;
       const res = await getVehicleInspectionDetails(vehicleId);
+      return res?.data ?? null;
+    },
+    staleTime: 10 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+export const getVehicleExtraDetailsQuery = (vehicleId) => {
+  return queryOptions({
+    queryKey: ["vehicle-extra-details", vehicleId],
+    queryFn: async () => {
+      if (!vehicleId) return null;
+      const res = await getVehicleExtraDetails(vehicleId);
       return res?.data ?? null;
     },
     staleTime: 10 * 60 * 1000,

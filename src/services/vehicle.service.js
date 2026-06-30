@@ -12,6 +12,7 @@ const ENDPOINT = {
   getActiveInspectionByVehicleId: "/vehicle/inspection/active",
   getVehicleInspectionDetails: "/vehicle/detail-page",
   getVehicleSpecification: "/specifications",
+  getVehicleExtraDetails: "/vehicle/sell/extra-details",
 };
 
 export const getVehicleOverview = async (id) => {
@@ -98,6 +99,17 @@ export const getVehicleSpecification = async (variantId) => {
   try {
     const res = await axiosNodeInstance.get(
       `${ENDPOINT.getVehicleSpecification}/${variantId}`,
+    );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVehicleExtraDetails = async (vehicleId) => {
+  try {
+    const res = await axiosInstance.get(
+      `${ENDPOINT.getVehicleExtraDetails}/${vehicleId}`,
     );
     return handleResponse(res);
   } catch (error) {

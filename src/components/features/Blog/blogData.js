@@ -4,48 +4,101 @@ export const MOCK_POSTS = [
     slug: "/blog/how-to-buy-used-car-safely-india",
     title: "How to Buy a Used Car Safely in India in 2026",
     category: "Buying Guide",
-    description: "First time buying a used car? Here are the exact steps serious buyers follow — before they even contact a seller.",
-    seoTitle: "How to Buy a Used Car Safely in India in 2026 — Step-by-Step Guide | Reecomm",
-    seoDescription: "First time buying a used car in India? Follow this 6-step process — from setting your budget to negotiating after inspection — to buy with confidence and avoid costly mistakes.",
+    description:
+      "First time buying a used car? Here are the exact steps serious buyers follow — before they even contact a seller.",
+    seoTitle:
+      "How to Buy a Used Car Safely in India in 2026 — Step-by-Step Guide | Reecomm",
+    seoDescription:
+      "First time buying a used car in India? Follow this 6-step process — from setting your budget to negotiating after inspection — to buy with confidence and avoid costly mistakes.",
     schemas: [
       {
         "@context": "https://schema.org",
         "@type": "Article",
-        "headline": "How to Buy a Used Car Safely in India in 2026",
-        "description": "A 6-step guide for buying a used car safely in India — covering budget, seller verification, inspection, RC check, test drive, and negotiation.",
-        "url": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
-        "datePublished": "2026-06-18",
-        "dateModified": "2026-06-18",
-        "author": { "@type": "Organization", "name": "Reecomm" },
-        "publisher": {
+        headline: "How to Buy a Used Car Safely in India in 2026",
+        description:
+          "A 6-step guide for buying a used car safely in India — covering budget, seller verification, inspection, RC check, test drive, and negotiation.",
+        url: "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        datePublished: "2026-06-18",
+        dateModified: "2026-06-18",
+        author: { "@type": "Organization", name: "Reecomm" },
+        publisher: {
           "@type": "Organization",
-          "name": "Reecomm",
-          "logo": { "@type": "ImageObject", "url": "https://www.reecomm.com/assets/logo.png" }
+          name: "Reecomm",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://www.reecomm.com/assets/logo.png",
+          },
         },
-        "mainEntityOfPage": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india"
+        mainEntityOfPage:
+          "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
       },
       {
         "@context": "https://schema.org",
         "@type": "HowTo",
-        "name": "How to Buy a Used Car Safely in India",
-        "step": [
-          { "@type": "HowToStep", "position": 1, "name": "Start With Budget, Not Brand", "text": "Fix your total budget including registration transfer, insurance renewal, and post-purchase costs before shortlisting vehicles." },
-          { "@type": "HowToStep", "position": 2, "name": "Verify the Seller Before the Vehicle", "text": "Confirm the seller's identity is verified and their name matches the RC before spending time on any listing." },
-          { "@type": "HowToStep", "position": 3, "name": "Request an Independent Inspection", "text": "Get a third-party inspection covering engine health, structural history, OBD diagnostics, and tyre condition." },
-          { "@type": "HowToStep", "position": 4, "name": "Check the RC and Ownership History", "text": "Verify the RC name matches the seller, check for outstanding loans, and check challan history on the Vahan portal." },
-          { "@type": "HowToStep", "position": 5, "name": "Test Drive With Purpose", "text": "Drive at least 20–30 minutes in real city conditions, listening for engine noise, steering pull, and AC performance." },
-          { "@type": "HowToStep", "position": 6, "name": "Negotiate After Inspection", "text": "Use documented inspection findings as a specific, factual basis for price negotiation." }
-        ]
+        name: "How to Buy a Used Car Safely in India",
+        step: [
+          {
+            "@type": "HowToStep",
+            position: 1,
+            name: "Start With Budget, Not Brand",
+            text: "Fix your total budget including registration transfer, insurance renewal, and post-purchase costs before shortlisting vehicles.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 2,
+            name: "Verify the Seller Before the Vehicle",
+            text: "Confirm the seller's identity is verified and their name matches the RC before spending time on any listing.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 3,
+            name: "Request an Independent Inspection",
+            text: "Get a third-party inspection covering engine health, structural history, OBD diagnostics, and tyre condition.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 4,
+            name: "Check the RC and Ownership History",
+            text: "Verify the RC name matches the seller, check for outstanding loans, and check challan history on the Vahan portal.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 5,
+            name: "Test Drive With Purpose",
+            text: "Drive at least 20–30 minutes in real city conditions, listening for engine noise, steering pull, and AC performance.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 6,
+            name: "Negotiate After Inspection",
+            text: "Use documented inspection findings as a specific, factual basis for price negotiation.",
+          },
+        ],
       },
       {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.reecomm.com" },
-          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.reecomm.com/blog" },
-          { "@type": "ListItem", "position": 3, "name": "How to Buy a Used Car Safely in India", "item": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india" }
-        ]
-      }
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: "https://www.reecomm.com",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Blog",
+            item: "https://www.reecomm.com/blog",
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: "How to Buy a Used Car Safely in India",
+            item: "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+          },
+        ],
+      },
     ],
     content: `
       Buying a used car in India has never been more accessible — or more confusing. With nearly 6 million used vehicles sold in FY2024–25 and the market growing at over 10% year-on-year, there are more options than ever. But more options also means more risk if you do not have a structured approach.
@@ -96,55 +149,72 @@ export const MOCK_POSTS = [
 
       Key Takeaway: Buying a used car safely in India in 2026 is not about luck or instinct. It is about following a process — verified seller, independent inspection, RC check, purpose-driven test drive, and post-inspection negotiation.
     `,
-    image: "/car-inspection.avif",
+    image: "/blog/blog-1.webp",
     sectionImages: [
       "/engine-core.jpg",
       "/car-hero-2.jpg",
       "/car-hero-21.jpg",
       "/verification.jpg",
-      "/small_car.jpg"
+      "/small_car.jpg",
     ],
     author: {
       name: "Aarav Sharma",
-      avatar: "/dp.jpg"
+      avatar: "/dp.jpg",
     },
-    date: "12 June 2026"
+    date: "12 June 2026",
   },
   {
     id: 2,
     slug: "/blog/what-does-used-car-inspection-cover-india",
-    title: "What Does a Used Car Inspection Actually Cover? A Complete Breakdown",
+    title:
+      "What Does a Used Car Inspection Actually Cover? A Complete Breakdown",
     category: "Inspections",
-    description: "Not all inspections are equal. Here's exactly what a proper multi-point vehicle inspection checks — and what it cannot tell you.",
-    seoTitle: "What Does a Used Car Inspection Cover in India? Complete Breakdown | Reecomm",
-    seoDescription: "Engine, structure, exterior panels, OBD diagnostics, tyres — here is exactly what a multi-point vehicle inspection covers and why each section matters before you buy.",
+    description:
+      "Not all inspections are equal. Here's exactly what a proper multi-point vehicle inspection checks — and what it cannot tell you.",
+    seoTitle:
+      "What Does a Used Car Inspection Cover in India? Complete Breakdown | Reecomm",
+    seoDescription:
+      "Engine, structure, exterior panels, OBD diagnostics, tyres — here is exactly what a multi-point vehicle inspection covers and why each section matters before you buy.",
     schemas: [
       {
         "@context": "https://schema.org",
         "@type": "Article",
-        "headline": "What Does a Used Car Inspection Actually Cover?",
-        "url": "https://www.reecomm.com/blog/what-does-used-car-inspection-cover-india",
-        "datePublished": "2026-06-18",
-        "dateModified": "2026-06-18",
-        "author": { "@type": "Organization", "name": "Reecomm" },
-        "publisher": { "@type": "Organization", "name": "Reecomm", "logo": { "@type": "ImageObject", "url": "https://www.reecomm.com/assets/logo.png" } }
+        headline: "What Does a Used Car Inspection Actually Cover?",
+        url: "https://www.reecomm.com/blog/what-does-used-car-inspection-cover-india",
+        datePublished: "2026-06-18",
+        dateModified: "2026-06-18",
+        author: { "@type": "Organization", name: "Reecomm" },
+        publisher: {
+          "@type": "Organization",
+          name: "Reecomm",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://www.reecomm.com/assets/logo.png",
+          },
+        },
       },
       {
         "@context": "https://schema.org",
         "@type": "FAQPage",
-        "mainEntity": [
+        mainEntity: [
           {
             "@type": "Question",
-            "name": "What does a multi-point used car inspection cover?",
-            "acceptedAnswer": { "@type": "Answer", "text": "A proper multi-point inspection covers engine and powertrain, structural history, exterior panels, mechanical system, interior and cabin, OBD diagnostics, tyres, and for EVs, the battery system. Each section is scored and photographed." }
+            name: "What does a multi-point used car inspection cover?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "A proper multi-point inspection covers engine and powertrain, structural history, exterior panels, mechanical system, interior and cabin, OBD diagnostics, tyres, and for EVs, the battery system. Each section is scored and photographed.",
+            },
           },
           {
             "@type": "Question",
-            "name": "Can a seller clear OBD fault codes before inspection?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes, sellers can clear active fault codes, but a professional scanner can still read stored historical codes from approximately the past 40 drive cycles, revealing issues the seller may have attempted to hide." }
-          }
-        ]
-      }
+            name: "Can a seller clear OBD fault codes before inspection?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Yes, sellers can clear active fault codes, but a professional scanner can still read stored historical codes from approximately the past 40 drive cycles, revealing issues the seller may have attempted to hide.",
+            },
+          },
+        ],
+      },
     ],
     content: `
       The phrase "inspection done" appears on many used vehicle listings. But what does that actually mean? A 10-minute visual check is not an inspection. A service history document is not an inspection. A seller saying "I've maintained it well" is definitely not an inspection.
@@ -182,44 +252,52 @@ export const MOCK_POSTS = [
 
       Use it as one critical input in your buying decision, not as the only one.
     `,
-    image: "/car-showroom.avif",
+    image: "/blog/blog2.webp",
     sectionImages: [
       "/car-showroom.avif",
       "/car-hero-2.jpg",
       "/car-hero-21.jpg",
       "/big_card_car.jpg",
-      "/small_car.jpg"
+      "/small_car.jpg",
     ],
     author: {
       name: "Neha Patil",
-      avatar: "/dp.jpg"
+      avatar: "/dp.jpg",
     },
-    date: "11 June 2026"
+    date: "11 June 2026",
   },
   {
     id: 3,
     slug: "/blog/used-car-market-india-2026-trends",
-    title: "India's Used Car Market in 2026: What the Numbers Are Actually Telling Buyers",
+    title:
+      "India's Used Car Market in 2026: What the Numbers Are Actually Telling Buyers",
     category: "Market Trends",
-    description: "A ₹37.6 billion market growing at 14.7% CAGR. Tier-2 cities driving 62% of sales. Here's what the data means for anyone buying or selling a used vehicle today.",
-    seoTitle: "India's Used Car Market in 2026 — Key Trends Buyers & Sellers Need to Know | Reecomm",
-    seoDescription: "India's used car market is projected at ₹37.6 billion in 2026 with Tier-2 cities driving 62% of sales. Here is what the latest data means for buyers, sellers, and consultants.",
+    description:
+      "A ₹37.6 billion market growing at 14.7% CAGR. Tier-2 cities driving 62% of sales. Here's what the data means for anyone buying or selling a used vehicle today.",
+    seoTitle:
+      "India's Used Car Market in 2026 — Key Trends Buyers & Sellers Need to Know | Reecomm",
+    seoDescription:
+      "India's used car market is projected at ₹37.6 billion in 2026 with Tier-2 cities driving 62% of sales. Here is what the latest data means for buyers, sellers, and consultants.",
     schemas: [
       {
         "@context": "https://schema.org",
         "@type": "Article",
-        "headline": "India's Used Car Market in 2026: What the Numbers Are Actually Telling Buyers",
-        "url": "https://www.reecomm.com/blog/used-car-market-india-2026-trends",
-        "datePublished": "2026-06-18",
-        "dateModified": "2026-06-18",
-        "author": { "@type": "Organization", "name": "Reecomm" },
-        "publisher": {
+        headline:
+          "India's Used Car Market in 2026: What the Numbers Are Actually Telling Buyers",
+        url: "https://www.reecomm.com/blog/used-car-market-india-2026-trends",
+        datePublished: "2026-06-18",
+        dateModified: "2026-06-18",
+        author: { "@type": "Organization", name: "Reecomm" },
+        publisher: {
           "@type": "Organization",
-          "name": "Reecomm",
-          "logo": { "@type": "ImageObject", "url": "https://www.reecomm.com/assets/logo.png" }
+          name: "Reecomm",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://www.reecomm.com/assets/logo.png",
+          },
         },
-        "about": { "@type": "Thing", "name": "India Used Car Market 2026" }
-      }
+        about: { "@type": "Thing", name: "India Used Car Market 2026" },
+      },
     ],
     content: `
       India's used car market is no longer a secondary market. It is a primary one. With a projected value of ₹37.6 billion in 2026 and volumes approaching 6 million units annually, the used vehicle segment is growing faster than new car sales — and the patterns within that growth reveal something important for buyers, sellers, and consultants.
@@ -255,55 +333,93 @@ export const MOCK_POSTS = [
 
       This matters because unorganised transactions carry structurally higher risk: no standardised inspection, no verified seller identity, no platform accountability. As buyers become more informed, the shift toward organised platforms is accelerating — but the unorganised market remains large enough to trap unprepared buyers.
     `,
-    image: "/car-hero-2.jpg",
+    image: "/blog/blog-3.webp",
     sectionImages: [
       "/car-hero-2.jpg",
       "/car-hero-21.jpg",
       "/big_card_car.jpg",
-      "/small_car.jpg"
+      "/small_car.jpg",
     ],
     author: {
       name: "Karan Mehta",
-      avatar: "/dp.jpg"
+      avatar: "/dp.jpg",
     },
-    date: "10 June 2026"
+    date: "10 June 2026",
   },
   {
     id: 4,
     slug: "/blog/how-to-price-used-car-india",
-    title: "How to Price Your Used Car Correctly in India — Without Leaving Money on the Table",
+    title:
+      "How to Price Your Used Car Correctly in India — Without Leaving Money on the Table",
     category: "Selling Guide",
-    description: "Overpriced listings sit unsold. Underpriced ones leave lakhs behind. Here is exactly how to find the right number before you list.",
-    seoTitle: "How to Price Your Used Car in India — The Right Way to Value Before You List | Reecomm",
-    seoDescription: "Overpriced listings sit unsold. Underpriced ones cost you lakhs. Here is how to calculate the right asking price for your used car in India using depreciation, mileage, and inspection data.",
+    description:
+      "Overpriced listings sit unsold. Underpriced ones leave lakhs behind. Here is exactly how to find the right number before you list.",
+    seoTitle:
+      "How to Price Your Used Car in India — The Right Way to Value Before You List | Reecomm",
+    seoDescription:
+      "Overpriced listings sit unsold. Underpriced ones cost you lakhs. Here is how to calculate the right asking price for your used car in India using depreciation, mileage, and inspection data.",
     schemas: [
       {
         "@context": "https://schema.org",
         "@type": "Article",
-        "headline": "How to Price Your Used Car Correctly in India — Without Leaving Money on the Table",
-        "url": "https://www.reecomm.com/blog/how-to-price-used-car-india",
-        "datePublished": "2026-06-18",
-        "dateModified": "2026-06-18",
-        "author": { "@type": "Organization", "name": "Reecomm" },
-        "publisher": {
+        headline:
+          "How to Price Your Used Car Correctly in India — Without Leaving Money on the Table",
+        url: "https://www.reecomm.com/blog/how-to-price-used-car-india",
+        datePublished: "2026-06-18",
+        dateModified: "2026-06-18",
+        author: { "@type": "Organization", name: "Reecomm" },
+        publisher: {
           "@type": "Organization",
-          "name": "Reecomm",
-          "logo": { "@type": "ImageObject", "url": "https://www.reecomm.com/assets/logo.png" }
-        }
+          name: "Reecomm",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://www.reecomm.com/assets/logo.png",
+          },
+        },
       },
       {
         "@context": "https://schema.org",
         "@type": "HowTo",
-        "name": "How to Price Your Used Car in India",
-        "step": [
-          { "@type": "HowToStep", "position": 1, "name": "Start With the Depreciation Baseline", "text": "Calculate expected value using standard depreciation rates: 15–20% in year 1, 10–12% per year in years 2–3, reducing to 6–8% from year 6 onwards." },
-          { "@type": "HowToStep", "position": 2, "name": "Adjust for Mileage", "text": "Below-average mileage supports a 5–8% premium. Above-average mileage warrants a similar discount from the baseline." },
-          { "@type": "HowToStep", "position": 3, "name": "Adjust for Condition Honestly", "text": "Price in any cosmetic or mechanical issues before listing rather than discovering them during negotiation." },
-          { "@type": "HowToStep", "position": 4, "name": "Research What Is Selling in Your City", "text": "Search for the same make, model, year, and mileage on organised platforms and note actual transaction prices." },
-          { "@type": "HowToStep", "position": 5, "name": "Get an Inspection Before You Price", "text": "An inspection report gives you documented evidence to support pricing at the higher end of your range." },
-          { "@type": "HowToStep", "position": 6, "name": "Apply the 5% Rule", "text": "List at 5% above your target price to give room for negotiation without compromising your actual number." }
-        ]
-      }
+        name: "How to Price Your Used Car in India",
+        step: [
+          {
+            "@type": "HowToStep",
+            position: 1,
+            name: "Start With the Depreciation Baseline",
+            text: "Calculate expected value using standard depreciation rates: 15–20% in year 1, 10–12% per year in years 2–3, reducing to 6–8% from year 6 onwards.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 2,
+            name: "Adjust for Mileage",
+            text: "Below-average mileage supports a 5–8% premium. Above-average mileage warrants a similar discount from the baseline.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 3,
+            name: "Adjust for Condition Honestly",
+            text: "Price in any cosmetic or mechanical issues before listing rather than discovering them during negotiation.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 4,
+            name: "Research What Is Selling in Your City",
+            text: "Search for the same make, model, year, and mileage on organised platforms and note actual transaction prices.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 5,
+            name: "Get an Inspection Before You Price",
+            text: "An inspection report gives you documented evidence to support pricing at the higher end of your range.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 6,
+            name: "Apply the 5% Rule",
+            text: "List at 5% above your target price to give room for negotiation without compromising your actual number.",
+          },
+        ],
+      },
     ],
     content: `
       Pricing is where most individual sellers make their biggest mistake — in either direction. List too high and serious buyers scroll past. List too low and you fund someone else's bargain. Neither outcome is what you want.
@@ -340,42 +456,75 @@ export const MOCK_POSTS = [
       ### 6. The 5% Rule
       Whatever final number you arrive at, list at 5% above it. Give yourself room to negotiate without compromising your actual target. Buyers expect to negotiate. Price in the space for it.
     `,
-    image: "/engine-core.jpg",
+    image: "/blog/blog-4.webp",
     sectionImages: [
       "/procImg.jpg",
       "/safety-car-inspect.jpg",
       "/verification.jpg",
       "/business-address.jpg",
-      "/small_car.jpg"
+      "/small_car.jpg",
     ],
     author: {
       name: "Vikram Malhotra",
-      avatar: "/dp.jpg"
+      avatar: "/dp.jpg",
     },
-    date: "09 June 2026"
+    date: "09 June 2026",
   },
   {
     id: 5,
     slug: "/blog/best-used-cars-under-5-lakh-india-2026",
     title: "Best Used Cars Under ₹5 Lakh in India (2026 Edition)",
     category: "Buying Guide",
-    description: "The sub-₹5 lakh segment is where India's used car market is most competitive. Here are the models that offer the best reliability, parts availability, and resale value.",
-    seoTitle: "Best Used Cars Under ₹5 Lakh in India (2026 Edition) — Top Picks | Reecomm",
-    seoDescription: "Looking for the best used car under ₹5 lakh in India? Here are 5 models with proven reliability, wide service networks, and strong resale value — with what to inspect on each.",
+    description:
+      "The sub-₹5 lakh segment is where India's used car market is most competitive. Here are the models that offer the best reliability, parts availability, and resale value.",
+    seoTitle:
+      "Best Used Cars Under ₹5 Lakh in India (2026 Edition) — Top Picks | Reecomm",
+    seoDescription:
+      "Looking for the best used car under ₹5 lakh in India? Here are 5 models with proven reliability, wide service networks, and strong resale value — with what to inspect on each.",
     schemas: [
       {
         "@context": "https://schema.org",
         "@type": "ItemList",
-        "name": "Best Used Cars Under ₹5 Lakh in India (2026)",
-        "url": "https://www.reecomm.com/blog/best-used-cars-under-5-lakh-india-2026",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Maruti Suzuki Swift (2018–2020)", "description": "Best for fuel efficiency, service network, and resale value in the sub-₹5 lakh segment." },
-          { "@type": "ListItem", "position": 2, "name": "Hyundai i20 (2019–2021)", "description": "Premium cabin features at a used car price point with reliable 1.2 petrol engine." },
-          { "@type": "ListItem", "position": 3, "name": "Tata Tiago (2018–2021)", "description": "Best for pure reliability, low running cost, and 5-star NCAP safety for first-time buyers." },
-          { "@type": "ListItem", "position": 4, "name": "Honda City 4th Gen (2017–2019)", "description": "Best refinement and cabin quality in the segment for buyers stretching to ₹5.5 lakh." },
-          { "@type": "ListItem", "position": 5, "name": "Maruti Suzuki Ertiga (2016–2018)", "description": "Best 7-seat family carrier in this price bracket with strong fuel efficiency." }
-        ]
-      }
+        name: "Best Used Cars Under ₹5 Lakh in India (2026)",
+        url: "https://www.reecomm.com/blog/best-used-cars-under-5-lakh-india-2026",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Maruti Suzuki Swift (2018–2020)",
+            description:
+              "Best for fuel efficiency, service network, and resale value in the sub-₹5 lakh segment.",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Hyundai i20 (2019–2021)",
+            description:
+              "Premium cabin features at a used car price point with reliable 1.2 petrol engine.",
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: "Tata Tiago (2018–2021)",
+            description:
+              "Best for pure reliability, low running cost, and 5-star NCAP safety for first-time buyers.",
+          },
+          {
+            "@type": "ListItem",
+            position: 4,
+            name: "Honda City 4th Gen (2017–2019)",
+            description:
+              "Best refinement and cabin quality in the segment for buyers stretching to ₹5.5 lakh.",
+          },
+          {
+            "@type": "ListItem",
+            position: 5,
+            name: "Maruti Suzuki Ertiga (2016–2018)",
+            description:
+              "Best 7-seat family carrier in this price bracket with strong fuel efficiency.",
+          },
+        ],
+      },
     ],
     content: `
       The sub-₹5 lakh segment accounts for the largest share of India's used car market. It is also where information asymmetry is highest — plenty of vehicles, widely varying condition, and significant price variation for identical models.
@@ -414,60 +563,81 @@ export const MOCK_POSTS = [
 
       Key Note: Every model listed above represents a sound choice — if the specific vehicle you are buying has been maintained, has a clean structural history, and carries documentation. Always [verify the individual vehicle](/blog/how-to-buy-used-car-safely-india), not just the model's reputation. An inspection report on the specific unit you are purchasing is worth more than any general advice about a model's reliability.
     `,
-    image: "/car-inspection.avif",
+    image: "/blog/blog5.webp",
     sectionImages: [
       "/engine-core.jpg",
       "/car-hero-2.jpg",
       "/car-hero-21.jpg",
       "/verification.jpg",
-      "/small_car.jpg"
+      "/small_car.jpg",
     ],
     author: {
       name: "Aarav Sharma",
-      avatar: "/dp.jpg"
+      avatar: "/dp.jpg",
     },
-    date: "08 June 2026"
+    date: "08 June 2026",
   },
   {
     id: 6,
     slug: "/blog/inspection-report-vs-no-inspection-used-car-india",
-    title: "Inspection Report vs No Inspection: What the Difference Actually Costs You",
+    title:
+      "Inspection Report vs No Inspection: What the Difference Actually Costs You",
     category: "Inspections",
-    description: "Skipping the inspection feels like saving money. Here's what it actually costs buyers who find out the hard way.",
-    seoTitle: "Inspection Report vs No Inspection — What It Actually Costs Used Car Buyers | Reecomm",
-    seoDescription: "Skipping the inspection to save money is one of the most expensive decisions used car buyers make. Here is what hidden defects, OBD codes, and repainted panels actually cost without a report.",
+    description:
+      "Skipping the inspection feels like saving money. Here's what it actually costs buyers who find out the hard way.",
+    seoTitle:
+      "Inspection Report vs No Inspection — What It Actually Costs Used Car Buyers | Reecomm",
+    seoDescription:
+      "Skipping the inspection to save money is one of the most expensive decisions used car buyers make. Here is what hidden defects, OBD codes, and repainted panels actually cost without a report.",
     schemas: [
       {
         "@context": "https://schema.org",
         "@type": "Article",
-        "headline": "Inspection Report vs No Inspection: What the Difference Actually Costs You",
-        "url": "https://www.reecomm.com/blog/inspection-report-vs-no-inspection-used-car-india",
-        "datePublished": "2026-06-18",
-        "dateModified": "2026-06-18",
-        "author": { "@type": "Organization", "name": "Reecomm" },
-        "publisher": { "@type": "Organization", "name": "Reecomm", "logo": { "@type": "ImageObject", "url": "https://www.reecomm.com/assets/logo.png" } }
+        headline:
+          "Inspection Report vs No Inspection: What the Difference Actually Costs You",
+        url: "https://www.reecomm.com/blog/inspection-report-vs-no-inspection-used-car-india",
+        datePublished: "2026-06-18",
+        dateModified: "2026-06-18",
+        author: { "@type": "Organization", name: "Reecomm" },
+        publisher: {
+          "@type": "Organization",
+          name: "Reecomm",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://www.reecomm.com/assets/logo.png",
+          },
+        },
       },
       {
         "@context": "https://schema.org",
         "@type": "FAQPage",
-        "mainEntity": [
+        mainEntity: [
           {
             "@type": "Question",
-            "name": "Is it worth getting a used car inspected before buying in India?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes. A vehicle inspection can surface engine faults, structural damage, OBD error codes, and tyre wear that are invisible in a test drive. The inspection fee is a fraction of the cost of discovering these issues after purchase." }
+            name: "Is it worth getting a used car inspected before buying in India?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Yes. A vehicle inspection can surface engine faults, structural damage, OBD error codes, and tyre wear that are invisible in a test drive. The inspection fee is a fraction of the cost of discovering these issues after purchase.",
+            },
           },
           {
             "@type": "Question",
-            "name": "How much does a pre-purchase car inspection cost in India?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Pre-purchase vehicle inspection fees in India vary by provider and coverage scope. On Reecomm, buyers can request an independent inspection directly from any listing. The fee is paid through the platform before the inspector is assigned." }
+            name: "How much does a pre-purchase car inspection cost in India?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Pre-purchase vehicle inspection fees in India vary by provider and coverage scope. On Reecomm, buyers can request an independent inspection directly from any listing. The fee is paid through the platform before the inspector is assigned.",
+            },
           },
           {
             "@type": "Question",
-            "name": "Can a seller hide car defects before an inspection?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Sellers can clear active dashboard warning lights, but a professional OBD scanner reads stored historical fault codes from approximately the past 40 drive cycles. Structural repairs and repainted panels are also identifiable by a trained inspector." }
-          }
-        ]
-      }
+            name: "Can a seller hide car defects before an inspection?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Sellers can clear active dashboard warning lights, but a professional OBD scanner reads stored historical fault codes from approximately the past 40 drive cycles. Structural repairs and repainted panels are also identifiable by a trained inspector.",
+            },
+          },
+        ],
+      },
     ],
     content: `
       The most common reason buyers skip a vehicle inspection is the fee. It feels like an unnecessary cost on a transaction where you are already spending several lakhs. That logic is understandable — and consistently expensive.
@@ -499,40 +669,69 @@ export const MOCK_POSTS = [
 
       Buyers can [request an inspection on Reecomm](/inspection) to resolve these questions. Buyers with inspection reports consistently close closer to the actual market value of the vehicle. Buyers without them pay what the seller asks.
     `,
-    image: "/verification.jpg",
+    image: "/blog/blog6.webp",
     sectionImages: [
       "/verification.jpg",
       "/document-confirm.jpg",
       "/safety-inventry.jpg",
-      "/business-address.jpg"
+      "/business-address.jpg",
     ],
     author: {
       name: "Neha Patil",
-      avatar: "/dp.jpg"
+      avatar: "/dp.jpg",
     },
-    date: "07 June 2026"
+    date: "07 June 2026",
   },
   {
     id: 7,
     slug: "/blog/documents-needed-to-sell-car-india-2026",
-    title: "Documents You Need to Sell Your Car in India in 2026 — Complete Checklist",
+    title:
+      "Documents You Need to Sell Your Car in India in 2026 — Complete Checklist",
     category: "Selling Guide",
-    description: "Missing even one document can stall a sale or create legal problems later. Here is every paper you need to have ready before you list.",
-    seoTitle: "Documents Required to Sell a Car in India (2026 Checklist) | Reecomm",
-    seoDescription: "Selling your car in India? Here is every document you need — RC, insurance, Form 29, Form 30, PUC, NOC — what each does and what happens if one is missing.",
+    description:
+      "Missing even one document can stall a sale or create legal problems later. Here is every paper you need to have ready before you list.",
+    seoTitle:
+      "Documents Required to Sell a Car in India (2026 Checklist) | Reecomm",
+    seoDescription:
+      "Selling your car in India? Here is every document you need — RC, insurance, Form 29, Form 30, PUC, NOC — what each does and what happens if one is missing.",
     schemas: [
       {
         "@context": "https://schema.org",
         "@type": "HowTo",
-        "name": "Documents Required to Sell a Car in India",
-        "step": [
-          { "@type": "HowToStep", "position": 1, "name": "Registration Certificate (RC)", "text": "The RC must be in the seller's name. Without it, ownership transfer is legally impossible." },
-          { "@type": "HowToStep", "position": 2, "name": "Insurance Policy", "text": "A valid insurance certificate confirms the vehicle is currently insured. Transfer insurance to the buyer's name as part of the sale." },
-          { "@type": "HowToStep", "position": 3, "name": "PUC Certificate", "text": "A valid Pollution Under Control certificate is required by law. Costs ₹60–₹100 at any authorised centre." },
-          { "@type": "HowToStep", "position": 4, "name": "Form 29 and Form 30", "text": "Form 29 is the notice of transfer; Form 30 is the application for transfer. Both are signed by buyer and seller and submitted to the RTO." },
-          { "@type": "HowToStep", "position": 5, "name": "NOC (If Inter-State)", "text": "If the vehicle is registered in another state, the seller must obtain a No Objection Certificate from their RTO before transfer can be completed." }
-        ]
-      }
+        name: "Documents Required to Sell a Car in India",
+        step: [
+          {
+            "@type": "HowToStep",
+            position: 1,
+            name: "Registration Certificate (RC)",
+            text: "The RC must be in the seller's name. Without it, ownership transfer is legally impossible.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 2,
+            name: "Insurance Policy",
+            text: "A valid insurance certificate confirms the vehicle is currently insured. Transfer insurance to the buyer's name as part of the sale.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 3,
+            name: "PUC Certificate",
+            text: "A valid Pollution Under Control certificate is required by law. Costs ₹60–₹100 at any authorised centre.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 4,
+            name: "Form 29 and Form 30",
+            text: "Form 29 is the notice of transfer; Form 30 is the application for transfer. Both are signed by buyer and seller and submitted to the RTO.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 5,
+            name: "NOC (If Inter-State)",
+            text: "If the vehicle is registered in another state, the seller must obtain a No Objection Certificate from their RTO before transfer can be completed.",
+          },
+        ],
+      },
     ],
     content: `
       Selling a used vehicle in India is a fairly straightforward process — provided your documentation is in order. The most common reason a ready buyer walks away from a deal is incomplete paperwork. Here is every document you need, what it does, and what happens if it is missing.
@@ -566,44 +765,53 @@ export const MOCK_POSTS = [
 
       Keep a copy of both after submission — this is your evidence that the transfer has been initiated, protecting you from future challans or legal claims on the vehicle.
     `,
-    image: "/business-address.jpg",
+    image: "/blog/blog7.webp",
     sectionImages: [
       "/document-confirm.jpg",
       "/verification.jpg",
       "/business-address.jpg",
-      "/business-verification.webp"
+      "/business-verification.webp",
     ],
     author: {
       name: "Vikram Malhotra",
-      avatar: "/dp.jpg"
+      avatar: "/dp.jpg",
     },
-    date: "06 June 2026"
+    date: "06 June 2026",
   },
   {
     id: 8,
     slug: "/blog/used-suv-market-india-2026",
     title: "Why Used SUVs Are the Smartest Buy in India Right Now",
     category: "Market Trends",
-    description: "SUVs are the fastest-growing segment in India's used car market. Here's why the timing for buyers is better than it has ever been.",
-    seoTitle: "Why Used SUVs Are the Smartest Buy in India Right Now (2026) | Reecomm",
-    seoDescription: "The first wave of compact SUVs from 2019–2022 is entering India's used market at competitive prices. Here's why the timing is right — and what to inspect before buying one.",
+    description:
+      "SUVs are the fastest-growing segment in India's used car market. Here's why the timing for buyers is better than it has ever been.",
+    seoTitle:
+      "Why Used SUVs Are the Smartest Buy in India Right Now (2026) | Reecomm",
+    seoDescription:
+      "The first wave of compact SUVs from 2019–2022 is entering India's used market at competitive prices. Here's why the timing is right — and what to inspect before buying one.",
     schemas: [
       {
         "@context": "https://schema.org",
         "@type": "FAQPage",
-        "mainEntity": [
+        mainEntity: [
           {
             "@type": "Question",
-            "name": "Are used SUVs a good buy in India in 2026?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes. The first generation of compact SUVs sold between 2019–2022 is now entering the used market in volume at significantly lower prices than new, while retaining most of their useful life. SUVs also depreciate more slowly than hatchbacks, giving buyers better resale value." }
+            name: "Are used SUVs a good buy in India in 2026?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Yes. The first generation of compact SUVs sold between 2019–2022 is now entering the used market in volume at significantly lower prices than new, while retaining most of their useful life. SUVs also depreciate more slowly than hatchbacks, giving buyers better resale value.",
+            },
           },
           {
             "@type": "Question",
-            "name": "What should I inspect on a used SUV in India?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Prioritise structural history check, suspension component condition, and diesel engine health for diesel variants. Turbo diesel engines in compact SUVs are reliable if maintained — get a full inspection including OBD diagnostics before purchasing." }
-          }
-        ]
-      }
+            name: "What should I inspect on a used SUV in India?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Prioritise structural history check, suspension component condition, and diesel engine health for diesel variants. Turbo diesel engines in compact SUVs are reliable if maintained — get a full inspection including OBD diagnostics before purchasing.",
+            },
+          },
+        ],
+      },
     ],
     content: `
       Something significant has happened in India's used vehicle market over the past two years. The first wave of compact SUVs sold during the 2018–2021 boom — the Tata Nexon, Hyundai Creta, Kia Seltos, Mahindra XUV300, MG Hector — is now entering the pre-owned market in volume. And they are arriving at a point where their prices have dropped significantly from new, but their useful life is far from over.
@@ -630,55 +838,85 @@ export const MOCK_POSTS = [
 
       Always get a [full inspection including OBD](/blog/what-does-used-car-inspection-cover-india) diagnostics on a used SUV before purchasing. The inspection fee is proportionally smaller relative to the vehicle value and the potential repair costs.
     `,
-    image: "/big_card_car.jpg",
+    image: "/blog/blog8.webp",
     sectionImages: [
       "/big_card_car.jpg",
       "/small_car.jpg",
       "/car-hero-2.jpg",
-      "/car-hero-21.jpg"
+      "/car-hero-21.jpg",
     ],
     author: {
       name: "Karan Mehta",
-      avatar: "/dp.jpg"
+      avatar: "/dp.jpg",
     },
-    date: "05 June 2026"
+    date: "05 June 2026",
   },
   {
     id: 9,
     slug: "/blog/rc-transfer-process-used-car-india-2026",
-    title: "RC Transfer After Buying a Used Car in India — The Complete 2026 Guide",
+    title:
+      "RC Transfer After Buying a Used Car in India — The Complete 2026 Guide",
     category: "Buying Guide",
-    description: "The RC transfer is the most important step after a used car purchase. Here is exactly how to do it, how long it takes, and what happens if you delay.",
-    seoTitle: "RC Transfer After Buying a Used Car in India — Complete 2026 Guide | Reecomm",
-    seoDescription: "Bought a used car in India? Here is exactly how to complete the RC transfer — documents needed, RTO process, inter-state transfer steps, and what happens if you delay.",
+    description:
+      "The RC transfer is the most important step after a used car purchase. Here is exactly how to do it, how long it takes, and what happens if you delay.",
+    seoTitle:
+      "RC Transfer After Buying a Used Car in India — Complete 2026 Guide | Reecomm",
+    seoDescription:
+      "Bought a used car in India? Here is exactly how to complete the RC transfer — documents needed, RTO process, inter-state transfer steps, and what happens if you delay.",
     schemas: [
       {
         "@context": "https://schema.org",
         "@type": "HowTo",
-        "name": "How to Transfer RC After Buying a Used Car in India",
-        "step": [
-          { "@type": "HowToStep", "position": 1, "name": "Collect Documents from Seller", "text": "Collect original RC, Form 29 signed by seller, Form 30 signed by both parties, and insurance certificate." },
-          { "@type": "HowToStep", "position": 2, "name": "Transfer Insurance First", "text": "Transfer the vehicle insurance to your name before visiting the RTO. Most insurers process this in 2–5 working days." },
-          { "@type": "HowToStep", "position": 3, "name": "Submit at Your Local RTO", "text": "Submit documents at the RTO nearest your registered address with applicable fees (typically ₹500–₹1,500 depending on state)." },
-          { "@type": "HowToStep", "position": 4, "name": "Wait for Processing", "text": "Processing typically takes 15–30 working days. In states with Vahan integration, the updated RC is issued to your DigiLocker account." }
-        ]
+        name: "How to Transfer RC After Buying a Used Car in India",
+        step: [
+          {
+            "@type": "HowToStep",
+            position: 1,
+            name: "Collect Documents from Seller",
+            text: "Collect original RC, Form 29 signed by seller, Form 30 signed by both parties, and insurance certificate.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 2,
+            name: "Transfer Insurance First",
+            text: "Transfer the vehicle insurance to your name before visiting the RTO. Most insurers process this in 2–5 working days.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 3,
+            name: "Submit at Your Local RTO",
+            text: "Submit documents at the RTO nearest your registered address with applicable fees (typically ₹500–₹1,500 depending on state).",
+          },
+          {
+            "@type": "HowToStep",
+            position: 4,
+            name: "Wait for Processing",
+            text: "Processing typically takes 15–30 working days. In states with Vahan integration, the updated RC is issued to your DigiLocker account.",
+          },
+        ],
       },
       {
         "@context": "https://schema.org",
         "@type": "FAQPage",
-        "mainEntity": [
+        mainEntity: [
           {
             "@type": "Question",
-            "name": "What is the time limit for RC transfer after buying a used car in India?",
-            "acceptedAnswer": { "@type": "Answer", "text": "For same-state transfers, you have 30 days from the date of purchase to complete the RC transfer. Missing this window attracts a late fee but does not invalidate the transfer." }
+            name: "What is the time limit for RC transfer after buying a used car in India?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "For same-state transfers, you have 30 days from the date of purchase to complete the RC transfer. Missing this window attracts a late fee but does not invalidate the transfer.",
+            },
           },
           {
             "@type": "Question",
-            "name": "How long does inter-state RC transfer take in India?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Inter-state transfers require an NOC from the seller's state RTO, which adds approximately 2–4 weeks to the standard process." }
-          }
-        ]
-      }
+            name: "How long does inter-state RC transfer take in India?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Inter-state transfers require an NOC from the seller's state RTO, which adds approximately 2–4 weeks to the standard process.",
+            },
+          },
+        ],
+      },
     ],
     content: `
       You have agreed on a price, handed over the money, and collected the keys. The deal is done — or so it feels. In legal terms, the deal is complete only when the RC has been transferred to your name. Until then, the vehicle is still registered to the previous owner. Any challans, accidents, or legal claims involving the vehicle remain their problem to prove — and yours to deal with.
@@ -716,49 +954,61 @@ export const MOCK_POSTS = [
 
       Account for this timeline before the transaction. If the seller does not yet have the NOC, the deal is not ready to close.
     `,
-    image: "/car-hero-21.jpg",
+    image: "/blog/blog-9.webp",
     sectionImages: [
       "/car-hero-21.jpg",
       "/car-hero-2.jpg",
       "/verification.jpg",
-      "/small_car.jpg"
+      "/small_car.jpg",
     ],
     author: {
       name: "Aarav Sharma",
-      avatar: "/dp.jpg"
+      avatar: "/dp.jpg",
     },
-    date: "04 June 2026"
+    date: "04 June 2026",
   },
   {
     id: 10,
     slug: "/blog/obd-diagnostics-used-car-explained-india",
     title: "OBD Diagnostics Explained — What Used Car Buyers Need to Know",
     category: "Inspections",
-    description: "An OBD scan takes 10 minutes and can surface problems invisible to the eye and ear. Here is what the results mean and why every buyer should request one.",
-    seoTitle: "OBD Diagnostics for Used Cars Explained — What Every Buyer in India Should Know | Reecomm",
-    seoDescription: "An OBD scan reads engine fault codes invisible to the eye and ear. Here is what diagnostic results mean, which codes cost the most to fix, and how to request one before buying.",
+    description:
+      "An OBD scan takes 10 minutes and can surface problems invisible to the eye and ear. Here is what the results mean and why every buyer should request one.",
+    seoTitle:
+      "OBD Diagnostics for Used Cars Explained — What Every Buyer in India Should Know | Reecomm",
+    seoDescription:
+      "An OBD scan reads engine fault codes invisible to the eye and ear. Here is what diagnostic results mean, which codes cost the most to fix, and how to request one before buying.",
     schemas: [
       {
         "@context": "https://schema.org",
         "@type": "FAQPage",
-        "mainEntity": [
+        mainEntity: [
           {
             "@type": "Question",
-            "name": "What is an OBD diagnostic scan for a used car?",
-            "acceptedAnswer": { "@type": "Answer", "text": "An OBD scan reads data from a vehicle's electronic control units through a standardised diagnostic port. It reveals active and stored fault codes from the engine, transmission, emission systems, and safety electronics — including codes that have been cleared by the seller." }
+            name: "What is an OBD diagnostic scan for a used car?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "An OBD scan reads data from a vehicle's electronic control units through a standardised diagnostic port. It reveals active and stored fault codes from the engine, transmission, emission systems, and safety electronics — including codes that have been cleared by the seller.",
+            },
           },
           {
             "@type": "Question",
-            "name": "Should I get an OBD scan before buying a used car in India?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes. An OBD scan takes approximately 10 minutes and can surface faults that are invisible in a visual inspection or test drive. On Reecomm, OBD diagnostics are included as a standard section in every vehicle inspection report." }
+            name: "Should I get an OBD scan before buying a used car in India?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Yes. An OBD scan takes approximately 10 minutes and can surface faults that are invisible in a visual inspection or test drive. On Reecomm, OBD diagnostics are included as a standard section in every vehicle inspection report.",
+            },
           },
           {
             "@type": "Question",
-            "name": "Can a seller hide OBD fault codes?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Sellers can clear active fault codes before showing the vehicle. However, a professional scanner reads stored historical codes from approximately the past 40 drive cycles. These codes persist even after a reset." }
-          }
-        ]
-      }
+            name: "Can a seller hide OBD fault codes?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Sellers can clear active fault codes before showing the vehicle. However, a professional scanner reads stored historical codes from approximately the past 40 drive cycles. These codes persist even after a reset.",
+            },
+          },
+        ],
+      },
     ],
     content: `
       Every passenger car sold in India since 2010 has an OBD (On-Board Diagnostics) port — a standardised connector that allows a diagnostic scanner to read data directly from the vehicle's electronic control units. In 10 minutes, an OBD scan can surface fault codes that a test drive lasting an hour would never reveal.
@@ -790,43 +1040,74 @@ export const MOCK_POSTS = [
       ### 5. How to Request an OBD Scan
       On Reecomm, OBD diagnostics are [included in every Reecomm inspection] (/inspection) report. You do not need to separately request it — it is part of the process. The results appear in the published inspection report as a scored section with error code details and emission status.
     `,
-    image: "/small_car.jpg",
+    image: "/blog/blog10.webp",
     sectionImages: [
       "/small_car.jpg",
       "/car-hero-2.jpg",
       "/car-hero-21.jpg",
-      "/verification.jpg"
+      "/verification.jpg",
     ],
     author: {
       name: "Neha Patil",
-      avatar: "/dp.jpg"
+      avatar: "/dp.jpg",
     },
-    date: "03 June 2026"
+    date: "03 June 2026",
   },
   {
     id: 11,
     slug: "/blog/how-to-sell-used-car-faster-india-2026",
     title: "7 Things That Make Your Used Car Listing Sell Faster in India",
     category: "Selling Guide",
-    description: "Most listings sit unsold not because of the vehicle — but because of how they are presented. Here is what serious buyers actually look for.",
-    seoTitle: "7 Things That Make Your Used Car Sell Faster in India (2026) | Reecomm",
-    seoDescription: "Most listings sit unsold not because of the car — but how they are presented. Here are 7 things serious buyers look for that help listings close in days, not months.",
+    description:
+      "Most listings sit unsold not because of the vehicle — but because of how they are presented. Here is what serious buyers actually look for.",
+    seoTitle:
+      "7 Things That Make Your Used Car Sell Faster in India (2026) | Reecomm",
+    seoDescription:
+      "Most listings sit unsold not because of the car — but how they are presented. Here are 7 things serious buyers look for that help listings close in days, not months.",
     schemas: [
       {
         "@context": "https://schema.org",
         "@type": "ItemList",
-        "name": "7 Things That Make Your Used Car Listing Sell Faster",
-        "url": "https://www.reecomm.com/blog/how-to-sell-used-car-faster-india-2026",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Complete and Accurate Vehicle Information" },
-          { "@type": "ListItem", "position": 2, "name": "15–20 Quality Photographs" },
-          { "@type": "ListItem", "position": 3, "name": "Honest, Specific Condition Description" },
-          { "@type": "ListItem", "position": 4, "name": "A Clear Asking Price With a Reason" },
-          { "@type": "ListItem", "position": 5, "name": "Documentation Ready to Confirm" },
-          { "@type": "ListItem", "position": 6, "name": "An Inspection Report on the Listing" },
-          { "@type": "ListItem", "position": 7, "name": "Fast Response to Inquiries" }
-        ]
-      }
+        name: "7 Things That Make Your Used Car Listing Sell Faster",
+        url: "https://www.reecomm.com/blog/how-to-sell-used-car-faster-india-2026",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Complete and Accurate Vehicle Information",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "15–20 Quality Photographs",
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: "Honest, Specific Condition Description",
+          },
+          {
+            "@type": "ListItem",
+            position: 4,
+            name: "A Clear Asking Price With a Reason",
+          },
+          {
+            "@type": "ListItem",
+            position: 5,
+            name: "Documentation Ready to Confirm",
+          },
+          {
+            "@type": "ListItem",
+            position: 6,
+            name: "An Inspection Report on the Listing",
+          },
+          {
+            "@type": "ListItem",
+            position: 7,
+            name: "Fast Response to Inquiries",
+          },
+        ],
+      },
     ],
     content: `
       A used vehicle listing is a first impression. Buyers in India's 2026 market are more informed than ever — they compare multiple listings, they read reviews of models, and they look for signals of seller credibility before making contact. The listings that sell fastest are not necessarily the cheapest. They are the ones that make buyers feel safe reaching out.
@@ -858,50 +1139,63 @@ export const MOCK_POSTS = [
       ### 7. Responsiveness
       Buyers in 2026 move quickly. A listing that receives an inquiry and gets a response within the hour converts at dramatically higher rates than one where the seller responds two days later. Serious buyers are comparing multiple listings simultaneously. If you are slow, they move on. Feel free to [list your vehicle on Reecomm](/sell) today.
     `,
-    image: "/car-showroom.avif",
+    image: "/blog/blog11.webp",
     sectionImages: [
       "/car-showroom.avif",
       "/car-hero-2.jpg",
       "/car-hero-21.jpg",
       "/big_card_car.jpg",
-      "/small_car.jpg"
+      "/small_car.jpg",
     ],
     author: {
       name: "Vikram Malhotra",
-      avatar: "/dp.jpg"
+      avatar: "/dp.jpg",
     },
-    date: "02 June 2026"
+    date: "02 June 2026",
   },
   {
     id: 12,
     slug: "/blog/used-electric-vehicles-india-2026",
-    title: "Buying a Used Electric Vehicle in India in 2026 — What You Need to Know First",
+    title:
+      "Buying a Used Electric Vehicle in India in 2026 — What You Need to Know First",
     category: "Market Trends",
-    description: "Used EVs are entering India's market in growing volumes. They offer real savings — but require a completely different inspection approach than petrol or diesel vehicles.",
-    seoTitle: "Buying a Used Electric Vehicle in India in 2026 — What You Must Check First | Reecomm",
-    seoDescription: "Used EVs are entering India's market in growing volumes. Here is how to evaluate battery health, charging systems, and EV-specific inspection points before buying a second-hand electric car.",
+    description:
+      "Used EVs are entering India's market in growing volumes. They offer real savings — but require a completely different inspection approach than petrol or diesel vehicles.",
+    seoTitle:
+      "Buying a Used Electric Vehicle in India in 2026 — What You Must Check First | Reecomm",
+    seoDescription:
+      "Used EVs are entering India's market in growing volumes. Here is how to evaluate battery health, charging systems, and EV-specific inspection points before buying a second-hand electric car.",
     schemas: [
       {
         "@context": "https://schema.org",
         "@type": "FAQPage",
-        "mainEntity": [
+        mainEntity: [
           {
             "@type": "Question",
-            "name": "Is it safe to buy a used electric car in India?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes, if you verify the battery State of Health (SoH) before purchasing. A used EV with SoH above 85% retains most of its original range and is a sound purchase. Always get an EV-specific inspection that includes battery diagnostics." }
+            name: "Is it safe to buy a used electric car in India?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Yes, if you verify the battery State of Health (SoH) before purchasing. A used EV with SoH above 85% retains most of its original range and is a sound purchase. Always get an EV-specific inspection that includes battery diagnostics.",
+            },
           },
           {
             "@type": "Question",
-            "name": "What is battery State of Health (SoH) in a used EV?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Battery SoH is a percentage indicating how much of the battery's original capacity remains. A new battery starts at 100%. A 3-year-old EV with average use is typically at 88–93%. Below 80%, range is meaningfully reduced and battery replacement may be approaching." }
+            name: "What is battery State of Health (SoH) in a used EV?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Battery SoH is a percentage indicating how much of the battery's original capacity remains. A new battery starts at 100%. A 3-year-old EV with average use is typically at 88–93%. Below 80%, range is meaningfully reduced and battery replacement may be approaching.",
+            },
           },
           {
             "@type": "Question",
-            "name": "How much does a used Tata Nexon EV cost in 2026?",
-            "acceptedAnswer": { "@type": "Answer", "text": "A 2021 Tata Nexon EV is currently available in the ₹9–12 lakh range in India depending on variant, mileage, and battery health. Battery SoH significantly affects the value — verify this before anchoring on any price." }
-          }
-        ]
-      }
+            name: "How much does a used Tata Nexon EV cost in 2026?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "A 2021 Tata Nexon EV is currently available in the ₹9–12 lakh range in India depending on variant, mileage, and battery health. Battery SoH significantly affects the value — verify this before anchoring on any price.",
+            },
+          },
+        ],
+      },
     ],
     content: `
       India's used electric vehicle market is young but growing quickly. The first generation of Tata Nexon EVs, MG ZS EVs, and Hyundai Kona Electrics sold between 2020 and 2022 are now entering the pre-owned market. For buyers who want to reduce fuel costs and want a modern driving experience, used EVs offer genuinely compelling value — if you know what to look for.
@@ -938,19 +1232,25 @@ export const MOCK_POSTS = [
 
       Key Note: The used EV market in India is at an early but important stage. Buyers who understand how to evaluate battery health have a genuine information advantage over the majority of the market. Get the inspection, get the SoH reading, and make your decision on documented facts.
     `,
-    image: "/big_card_car.jpg",
+    image: "/blog/blog12.webp",
     sectionImages: [
       "/big_card_car.jpg",
       "/small_car.jpg",
       "/car-hero-2.jpg",
-      "/car-hero-21.jpg"
+      "/car-hero-21.jpg",
     ],
     author: {
       name: "Karan Mehta",
-      avatar: "/dp.jpg"
+      avatar: "/dp.jpg",
     },
-    date: "01 June 2026"
-  }
+    date: "01 June 2026",
+  },
 ];
 
-export const CATEGORIES = ["All", "Inspections", "Buying Guide", "Selling Guide", "Market Trends"];
+export const CATEGORIES = [
+  "All",
+  "Inspections",
+  "Buying Guide",
+  "Selling Guide",
+  "Market Trends",
+];
