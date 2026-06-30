@@ -1,5 +1,14 @@
 import React from "react";
-import { Settings, CheckSquare, MessageCircle, MessageSquare, AlertCircle, MailCheck, SlidersHorizontal, MailOpen } from "lucide-react";
+import {
+  Settings,
+  CheckSquare,
+  MessageCircle,
+  MessageSquare,
+  AlertCircle,
+  MailCheck,
+  SlidersHorizontal,
+  MailOpen,
+} from "lucide-react";
 
 const notificationsMock = [
   {
@@ -37,7 +46,9 @@ const NotificationItem = ({ data }) => {
     <div className="flex items-start gap-3 px-3 py-3 hover:bg-white/5 rounded-lg cursor-pointer transition-colors relative border-b border-third/10 last:border-0">
       {/* Content */}
       <div className="flex-1 pr-5">
-        <h3 className="text-[13px] font-semibold text-primary mb-0.5 leading-snug">{data.title}</h3>
+        <h3 className="text-[13px] font-semibold text-primary mb-0.5 leading-snug">
+          {data.title}
+        </h3>
         <p className="text-[12px] text-primary/60 leading-snug mb-1">
           {data.content}
         </p>
@@ -59,15 +70,12 @@ export default function NotificationsComponent({ isOpen, onClose }) {
     <>
       {/* Backdrop */}
       {isOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/20"
-          onClick={onClose}
-        />
+        <div className="fixed inset-0 z-40 bg-black/20" onClick={onClose} />
       )}
 
       {/* Slide-out panel */}
       <div
-        className={`fixed top-16 left-0 md:left-16 h-[calc(100vh-64px)] w-full max-w-sm bg-secondary border-r border-third/30 z-[60] shadow-[4px_0_24px_rgba(0,0,0,0.5)] md:rounded-r-2xl transition-transform duration-300 ease-in-out ${
+        className={`fixed top-16 left-0 md:left-16 h-[calc(100vh-64px)] w-full max-w-sm bg-secondary border-r border-third/30 z-60 shadow-[4px_0_24px_rgba(0,0,0,0.5)] md:rounded-r-2xl transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full md:-translate-x-[150%]"
         }`}
       >

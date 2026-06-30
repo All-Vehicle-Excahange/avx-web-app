@@ -34,12 +34,14 @@ import {
   getAllDraftCampions,
   getAllCampaigns,
   changeCampaignStatus,
+  getDashboardSummary,
+  getDashboardPerformance,
 } from "@/services/ppc.service";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 // --- Mock Data ---
-const audienceData = [
+const mockAudienceData = [
   { day: "M", value: 450, color: "#7cb5ff" },
   { day: "T", value: 650, color: "#4da6ff" },
   { day: "W", value: 520, color: "#7cb5ff" },
@@ -50,7 +52,7 @@ const audienceData = [
 ];
 
 export default function PpcComponent() {
-  const [range, setRange] = useState("60");
+  const [range, setRange] = useState("30");
   const [openCustomize, setOpenCustomize] = useState(false);
   const [tier, setTier] = useState(null);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
@@ -157,22 +159,52 @@ export default function PpcComponent() {
     fetchNextPage: fetchNextCampaignsPage,
     hasNextPage: hasNextCampaignsPage,
   } = useInfiniteQuery({
-    queryKey: ["campaigns-infinite"],
+    queryKey: ["campaigns-infinite", range],
     queryFn: async ({ pageParam = 1 }) => {
       const res = await getAllCampaigns({
         pageNo: pageParam,
         pageSize: 10,
+        daysRange: `LAST_${range}_DAYS`,
       });
       return res;
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
-      const pagination = lastPage?.pagination;
+      const pagination = lastPage?.pageResponse || lastPage?.data?.pageResponse || lastPage?.pagination;
       const totalPages = pagination?.totalPages || 1;
       const currentPage = pagination?.currentPage || 1;
       return currentPage < totalPages ? currentPage + 1 : undefined;
     },
   });
+
+  // Fetch Summary
+  const { data: summaryData } = useQuery({
+    queryKey: ["dashboard-summary", range],
+    queryFn: async () => {
+      const res = await getDashboardSummary(`LAST_${range}_DAYS`);
+      return res?.data || {};
+    },
+  });
+
+  // Fetch Performance
+  const { data: performanceData } = useQuery({
+    queryKey: ["dashboard-performance", range],
+    queryFn: async () => {
+      const res = await getDashboardPerformance(`LAST_${range}_DAYS`);
+      return res?.data || {};
+    },
+  });
+
+  const finalAudienceData =
+    performanceData?.dailyMetrics?.length > 0
+      ? performanceData.dailyMetrics.map((d) => ({
+          day: new Date(d.date)
+            .toLocaleDateString("en-US", { weekday: "short" })
+            .charAt(0),
+          value: d.impressions || 0,
+          color: "#7cb5ff",
+        }))
+      : mockAudienceData;
 
   const campaigns =
     campaignsInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
@@ -289,7 +321,6 @@ export default function PpcComponent() {
   const rangeOptions = [
     { label: "Last 7 days", value: "7" },
     { label: "Last 30 days", value: "30" },
-    { label: "Last 60 days", value: "60" },
     { label: "Last 90 days", value: "90" },
   ];
 
@@ -380,7 +411,7 @@ export default function PpcComponent() {
           <div>
             <h3 className="font-semibold">Advertising Summary</h3>
             <p className="text-xs text-third">
-              ₹5.23K spent on 6 ads in the last 60 days
+              ₹{summaryData?.totalSpent ?? 0} spent on {summaryData?.totalAdsInRange ?? 0} ads in the last {range} days
             </p>
           </div>
 
@@ -414,18 +445,18 @@ export default function PpcComponent() {
           <StatCard
             icon={<TrendingUp size={20} />}
             label="Active Campaigns"
-            value="12"
+            value={summaryData?.activeCampaigns ?? 0}
           />
-          <StatCard icon={<Eye size={20} />} label="Speed Today" value="9" />
+          <StatCard icon={<Eye size={20} />} label="Spent Today" value={`₹${summaryData?.speedToday ?? 0}`} />
           <StatCard
             icon={<MousePointerClick size={20} />}
             label="Total Clicks"
-            value="8"
+            value={summaryData?.totalClicks ?? 0}
           />
           <StatCard
             icon={<CheckCircle size={20} />}
             label="Avg.CPC"
-            value="6"
+            value={`₹${summaryData?.avgCpc ?? 0}`}
           />
         </div>
       </div>
@@ -1108,11 +1139,13 @@ export default function PpcComponent() {
                   Total impressions
                 </span>
                 <span className="text-xl sm:text-2xl font-bold text-white block">
-                  12,450
+                  {performanceData?.totalImpressions?.toLocaleString() ?? 0}
                 </span>
-                <span className="text-[10px] sm:text-xs text-emerald-400 flex items-center gap-1 font-medium">
-                  ↑ 18% vs last week
-                </span>
+                {performanceData?.impressionsChangePercent !== undefined && (
+                  <span className={`text-[10px] sm:text-xs block font-medium ${performanceData.impressionsChangePercent >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    {performanceData.impressionsChangePercent >= 0 ? '↑' : '↓'} {Math.abs(performanceData.impressionsChangePercent)}% vs last week
+                  </span>
+                )}
               </div>
 
               {/* Total clicks */}
@@ -1121,11 +1154,13 @@ export default function PpcComponent() {
                   Total clicks
                 </span>
                 <span className="text-xl sm:text-2xl font-bold text-white block">
-                  486
+                  {performanceData?.totalClicks?.toLocaleString() ?? 0}
                 </span>
-                <span className="text-[10px] sm:text-xs text-emerald-400 flex items-center gap-1 font-medium">
-                  ↑ 12% vs last week
-                </span>
+                {performanceData?.clicksChangePercent !== undefined && (
+                  <span className={`text-[10px] sm:text-xs block font-medium ${performanceData.clicksChangePercent >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    {performanceData.clicksChangePercent >= 0 ? '↑' : '↓'} {Math.abs(performanceData.clicksChangePercent)}% vs last week
+                  </span>
+                )}
               </div>
 
               {/* Click-through rate */}
@@ -1134,10 +1169,7 @@ export default function PpcComponent() {
                   Click-through rate
                 </span>
                 <span className="text-xl sm:text-2xl font-bold text-white block">
-                  3.9%
-                </span>
-                <span className="text-[10px] sm:text-xs text-emerald-400 block font-medium">
-                  Above industry avg
+                  {performanceData?.ctr ?? 0}%
                 </span>
               </div>
 
@@ -1147,11 +1179,13 @@ export default function PpcComponent() {
                   Total inquiries
                 </span>
                 <span className="text-xl sm:text-2xl font-bold text-white block">
-                  20
+                  {performanceData?.totalInquiries?.toLocaleString() ?? 0}
                 </span>
-                <span className="text-[10px] sm:text-xs text-emerald-400 flex items-center gap-1 font-medium">
-                  ↑ 5 vs last week
-                </span>
+                {performanceData?.inquiriesChangePercent !== undefined && (
+                  <span className={`text-[10px] sm:text-xs block font-medium ${performanceData.inquiriesChangePercent >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    {performanceData.inquiriesChangePercent >= 0 ? '↑' : '↓'} {Math.abs(performanceData.inquiriesChangePercent)}% vs last week
+                  </span>
+                )}
               </div>
 
               {/* Inquiry rate */}
@@ -1160,10 +1194,7 @@ export default function PpcComponent() {
                   Inquiry rate
                 </span>
                 <span className="text-xl sm:text-2xl font-bold text-white block">
-                  0.16%
-                </span>
-                <span className="text-[10px] sm:text-xs text-zinc-500 block font-medium">
-                  Benchmark: 0.2%
+                  {performanceData?.inquiryRate ?? 0}%
                 </span>
               </div>
 
@@ -1173,11 +1204,13 @@ export default function PpcComponent() {
                   Total spend
                 </span>
                 <span className="text-xl sm:text-2xl font-bold text-white block">
-                  ₹1,145
+                  ₹{performanceData?.totalSpend?.toLocaleString() ?? 0}
                 </span>
-                <span className="text-[10px] sm:text-xs text-rose-400 flex items-center gap-1 font-medium">
-                  ↑ ₹220 vs last week
-                </span>
+                {performanceData?.spendChangePercent !== undefined && (
+                  <span className={`text-[10px] sm:text-xs block font-medium ${performanceData.spendChangePercent >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    {performanceData.spendChangePercent >= 0 ? '↑' : '↓'} {Math.abs(performanceData.spendChangePercent)}% vs last week
+                  </span>
+                )}
               </div>
             </div>
 
@@ -1189,7 +1222,7 @@ export default function PpcComponent() {
               <div className="w-full h-56 sm:h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
-                    data={audienceData}
+                    data={finalAudienceData}
                     margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
                     barCategoryGap="28%"
                   >
@@ -1223,7 +1256,7 @@ export default function PpcComponent() {
                       radius={[6, 6, 0, 0]}
                       name="Impressions"
                     >
-                      {audienceData.map((entry, index) => (
+                      {finalAudienceData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Bar>
@@ -1313,53 +1346,33 @@ export default function PpcComponent() {
               </div>
 
               <div className="space-y-3.5">
-                {/* Homepage */}
-                <div className="flex items-center gap-4 group">
-                  <span className="text-xs font-medium text-zinc-400 w-24 group-hover:text-white transition-colors shrink-0">
-                    Homepage
-                  </span>
-                  <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden p-px">
-                    <div
-                      className="h-full bg-linear-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-1000 ease-out"
-                      style={{ width: "72%" }}
-                    />
-                  </div>
-                  <span className="text-xs font-bold text-zinc-300 group-hover:text-white transition-colors w-8 text-right shrink-0">
-                    72%
-                  </span>
-                </div>
+                {performanceData?.placementBreakdown?.length > 0 ? (
+                  performanceData.placementBreakdown.map((item, idx) => {
+                    // Decide color based on index or placement name
+                    let colors = "from-emerald-500 to-teal-500";
+                    if (idx % 3 === 1) colors = "from-blue-500 to-indigo-500";
+                    if (idx % 3 === 2) colors = "from-amber-500 to-orange-500";
 
-                {/* Search result */}
-                <div className="flex items-center gap-4 group">
-                  <span className="text-xs font-medium text-zinc-400 w-24 group-hover:text-white transition-colors shrink-0">
-                    Search result
-                  </span>
-                  <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden p-px">
-                    <div
-                      className="h-full bg-linear-to-r from-blue-500 to-indigo-500 rounded-full transition-all duration-1000 ease-out"
-                      style={{ width: "54%" }}
-                    />
-                  </div>
-                  <span className="text-xs font-bold text-zinc-300 group-hover:text-white transition-colors w-8 text-right shrink-0">
-                    54%
-                  </span>
-                </div>
-
-                {/* Consultant page */}
-                <div className="flex items-center gap-4 group">
-                  <span className="text-xs font-medium text-zinc-400 w-24 group-hover:text-white transition-colors shrink-0">
-                    Consultant page
-                  </span>
-                  <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden p-px">
-                    <div
-                      className="h-full bg-linear-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-1000 ease-out"
-                      style={{ width: "38%" }}
-                    />
-                  </div>
-                  <span className="text-xs font-bold text-zinc-300 group-hover:text-white transition-colors w-8 text-right shrink-0">
-                    38%
-                  </span>
-                </div>
+                    return (
+                      <div key={idx} className="flex items-center gap-4 group">
+                        <span className="text-xs font-medium text-zinc-400 w-24 group-hover:text-white transition-colors shrink-0 truncate">
+                          {item.placement?.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, c => c.toUpperCase())}
+                        </span>
+                        <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden p-px">
+                          <div
+                            className={`h-full bg-linear-to-r ${colors} rounded-full transition-all duration-1000 ease-out`}
+                            style={{ width: `${item.percentage || 0}%` }}
+                          />
+                        </div>
+                        <span className="text-xs font-bold text-zinc-300 group-hover:text-white transition-colors w-8 text-right shrink-0">
+                          {item.percentage || 0}%
+                        </span>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="text-xs text-zinc-500">No placement data available.</div>
+                )}
               </div>
             </div>
           </div>

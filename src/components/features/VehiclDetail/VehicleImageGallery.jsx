@@ -138,13 +138,13 @@ export default function VehicleImageGallery({ vehicle }) {
             {/* ===== MAIN PREVIEW ===== */}
             <div className="relative w-full aspect-video bg-black/5 rounded-lg overflow-hidden group">
                 {/* Top Left Actions */}
-                {vehicle?.testDriveAvl && (
+                {/* {vehicle?.testDriveAvl && (
                     <div className="absolute top-4 left-4 z-20">
                         <div className="bg-green-500/90 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md border border-green-400/20 backdrop-blur-sm">
                             Test Drive Available
                         </div>
                     </div>
-                )}
+                )} */}
 
                 {/* Top Right Actions */}
                 <div className="absolute top-4 right-4 z-20 flex items-center gap-3">

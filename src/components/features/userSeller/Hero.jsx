@@ -120,15 +120,15 @@ function Hero() {
         {/* ── FULL BLEED BACKGROUND IMAGE ── */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90"
+            src="./hero-section-image.webp"
             alt="Reecomm Premium Vehicle"
             fill
             className="object-cover object-center scale-105"
             priority
           />
           {/* Multi-layer cinematic darkening */}
-          <div className="absolute inset-0 bg-secondary/70" />
-          <div className="absolute inset-0 bg-linear-to-t from-secondary via-secondary/40 to-secondary/80" />
+          {/* <div className="absolute inset-0 bg-secondary/70" /> */}
+          <div className="absolute inset-0 bg-linear-to-t from-secondary via-secondary/10 to-secondary/80" />
           <div className="absolute inset-0 bg-linear-to-r from-secondary/80 via-transparent to-secondary/50" />
         </div>
 
@@ -185,7 +185,7 @@ function Hero() {
               </Button>
             )}
             <Button variant="ghost" size="md">
-              EXPLORE MARKET →
+              EXPLORE MARKET
             </Button>
           </div>
 
@@ -207,7 +207,7 @@ function Hero() {
                 <span className="font-[Montserrat] font-black text-2xl text-primary leading-none">
                   {badge.value}
                 </span>
-                <span className="font-[Poppins] text-[9px] tracking-[0.2em] uppercase text-third/40">
+                <span className="font-[Poppins] text-[9px] tracking-[0.2em] uppercase text-third">
                   {badge.label}
                 </span>
               </div>

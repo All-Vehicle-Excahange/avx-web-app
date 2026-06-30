@@ -9,7 +9,7 @@ export default function HeroSection() {
       {/* BACKGROUND IMAGE */}
       <div className="absolute inset-0 z-0 pt-16 md:pt-20">
         <Image
-          src="/car-hero-21.jpg"
+          src="/engine-and-powertrain.webp"
           alt="Reecomm Inspection"
           width={800}
           height={500}
@@ -17,8 +17,8 @@ export default function HeroSection() {
         />
 
         {/* overlays */}
-        <div className="absolute inset-0 bg-linear-to-r from-secondary via-secondary/70 md:via-secondary/60 to-transparent" />
-        <div className="absolute inset-0 bg-linear-to-t from-secondary via-transparent to-secondary/40 md:to-secondary/30" />
+          <div className="absolute inset-0 bg-linear-to-r from-secondary via-secondary/60 md:via-secondary/50 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-secondary via-transparent to-secondary/20 md:to-secondary/20" />
       </div>
 
       <div className="relative z-20 mx-auto w-full max-w-[1480px] px-3 sm:px-4 md:px-6 lg:px-10 xl:px-12 my-21 ">
