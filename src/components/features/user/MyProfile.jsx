@@ -200,12 +200,12 @@ function MyProfile() {
   const handleEditMeta = () => {
     setMetaForm({
       ...profileMetaData,
-      stateId: profileMetaData.state?.id,
-      cityId: profileMetaData.city?.id,
-      townId: profileMetaData.town?.id,
-      stateName: profileMetaData.state?.name,
-      cityName: profileMetaData.city?.name,
-      townName: profileMetaData.town?.name,
+      stateId: profileMetaData.state?.id || profileMetaData.stateId,
+      cityId: profileMetaData.city?.id || profileMetaData.cityId,
+      townId: profileMetaData.town?.id || profileMetaData.townId,
+      stateName: profileMetaData.state?.name || profileMetaData.stateName,
+      cityName: profileMetaData.city?.name || profileMetaData.cityName,
+      townName: profileMetaData.town?.name || profileMetaData.townName,
     });
 
     setMetaError("");
@@ -291,9 +291,9 @@ function MyProfile() {
       addIfChanged("gender", metaForm.gender, profileMetaData.gender);
       addIfChanged("profession", metaForm.profession, profileMetaData.profession);
       addIfChanged("address", metaForm.address, profileMetaData.address);
-      addIfChanged("cityId", metaForm.cityId, profileMetaData.city?.id);
-      addIfChanged("stateId", metaForm.stateId, profileMetaData.state?.id);
-      addIfChanged("townId", metaForm.townId, profileMetaData.town?.id);
+      addIfChanged("cityId", metaForm.cityId, profileMetaData.city?.id || profileMetaData.cityId);
+      addIfChanged("stateId", metaForm.stateId, profileMetaData.state?.id || profileMetaData.stateId);
+      addIfChanged("townId", metaForm.townId, profileMetaData.town?.id || profileMetaData.townId);
 
       const newCountryId = metaForm.country?.id || 101;
       const oldCountryId = profileMetaData.country?.id || 101;

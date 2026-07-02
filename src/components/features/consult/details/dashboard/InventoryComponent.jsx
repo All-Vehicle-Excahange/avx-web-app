@@ -209,10 +209,17 @@ export default function InventoryComponent() {
             </div>
             <div>
               <h3 className="text-lg font-bold mb-1 flex items-center gap-2">
-                <span className="sm:hidden"><Info size={18} /></span> Note
+                <span className="sm:hidden">
+                  <Info size={18} />
+                </span>{" "}
+                Note
               </h3>
               <p className="text-sm md:text-base text-white/80 leading-relaxed font-medium">
-                Adding and editing vehicles is available on the <span className="text-white font-semibold">Reecomm mobile app</span>. You can still view listings and mark vehicles as sold here.
+                Adding and editing vehicles is available on the{" "}
+                <span className="text-white font-semibold">
+                  Reecomm mobile app
+                </span>
+                . You can still view listings and mark vehicles as sold here.
               </p>
             </div>
           </div>
@@ -239,8 +246,12 @@ export default function InventoryComponent() {
               <TrendingUp className="text-primary" size={20} />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-primary">Inventory Health Snapshot</h3>
-              <p className="text-xs text-third mt-0.5">Track inventory health & performance metrics</p>
+              <h3 className="text-lg font-bold text-primary">
+                Inventory Health Snapshot
+              </h3>
+              <p className="text-xs text-third mt-0.5">
+                Track inventory health & performance metrics
+              </p>
             </div>
           </div>
 
@@ -363,62 +374,26 @@ export default function InventoryComponent() {
               )}
             </div>
           </div>
-
-          <div className="relative overflow-hidden rounded-xl border border-fourth/30 bg-gradient-to-br from-fourth to-fourth/90 p-6 md:p-8 flex flex-col gap-5 shadow-xl shadow-fourth/10 transition-transform duration-300 hover:-translate-y-1 group/card">
-
-            {/* HEADER */}
-            <div className="relative z-10 flex flex-wrap items-center justify-between gap-4 pb-4">
-              <div className="flex items-center gap-3">
-                {/* Icon */}
-                <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-sm">
-                  <BarChart3 className="w-6 h-6" />
-                </div>
-
-                {/* Title */}
-                <div className="flex flex-col">
-                  <span className="text-sm md:text-base font-bold tracking-wide text-white">
-                    Market Insight
-                  </span>
-                  <span className="text-xs text-white/70 font-medium uppercase tracking-wider">
-                    Performance Metric
-                  </span>
-                </div>
+          <div className="rounded-xl  border-third/30 bg-primary/5 p-6 flex flex-col h-[400px]">
+            {/* HEADER (fixed) */}
+            <div className="flex items-center justify-between mb-4 w-full">
+              <div className="flex items-center gap-2">
+                <BarChart3 className="text-primary" size={18} />
+                <h3 className="font-semibold">Market Insight</h3>
               </div>
-
-              {/* Badge */}
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 border border-white/20 backdrop-blur-md shadow-sm">
-                <span className="text-xs font-bold text-white tracking-wide">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-green-500/10 border border-green-500/20 shadow-sm">
+                <span className="text-xs font-bold text-green-600 tracking-wide">
                   +2.3x Conversion
                 </span>
               </div>
             </div>
 
-            {/* CONTENT */}
-            <div className="relative z-10 flex flex-col gap-3">
-              <p className="text-sm md:text-base leading-relaxed text-white/90">
-                <span className="text-white font-bold bg-white/10 px-1.5 py-0.5 rounded-md">Reecomm</span>{" "}
-              <span className="">  inspected vehicles are converting significantly better than
-                regular listings.</span>
+            {/* CONTENT & FOOTER CENTERED */}
+            <div className="flex-1 flex flex-col items-center justify-center text-center gap-4 py-8">
+              <p className="text-xs md:text-base leading-relaxed text-third ">
+                Reecomm inspected vehicles are converting significantly better
+                than regular listings.
               </p>
-               <p className="text-sm md:text-base leading-relaxed text-white/90">
-                <span className="text-white font-bold bg-white/10 px-1.5 py-0.5 rounded-md">Reecomm</span>{" "}
-                inspected vehicles are converting significantly better than
-                regular listings.
-              </p>
-               <p className="text-sm md:text-base leading-relaxed text-white/90">
-                <span className="text-white font-bold bg-white/10 px-1.5 py-0.5 rounded-md">Reecomm</span>{" "}
-                inspected vehicles are converting significantly better than
-                regular listings.
-              </p>
-               <p className="text-sm md:text-base leading-relaxed text-white/90">
-                <span className="text-white font-bold bg-white/10 px-1.5 py-0.5 rounded-md">Reecomm</span>{" "}
-                inspected vehicles are converting significantly better than
-                regular listings.  inspected vehicles are converting 
-              </p>
-            </div>
-
-            {/* FOOTER */}
-            <div className="flex justify-start">
               <Button
                 variant="ghost"
                 href={"/consult/dashboard/inspection"}
@@ -430,7 +405,7 @@ export default function InventoryComponent() {
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
-          </div>
+          </div>{" "}
         </div>
 
         {/* LISTING LIMIT PROGRESS */}

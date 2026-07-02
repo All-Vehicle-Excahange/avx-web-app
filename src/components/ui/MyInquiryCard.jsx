@@ -37,9 +37,11 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
   const isRejected = inquiryStatus === "REJECTED";
   const isClosed = inquiryStatus?.startsWith("CLOSED");
 
-  const vehicleTitle = `${inquiryVehicleResponse.makerName} ${inquiryVehicleResponse.modelName
-    } ${inquiryVehicleResponse.variantName} - ${inquiryVehicleResponse.yearOfMfg
-    }`;
+  const vehicleTitle = `${inquiryVehicleResponse.makerName} ${
+    inquiryVehicleResponse.modelName
+  } ${inquiryVehicleResponse.variantName} - ${
+    inquiryVehicleResponse.yearOfMfg
+  }`;
 
   const vehicleImage =
     inquiryVehicleResponse.thumbnailUrl ||
@@ -85,12 +87,10 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
 
   return (
     <div className="rounded-2xl border border-third/40  p-4 lg:px-6 lg:py-5 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 lg:gap-6 shadow-sm hover:shadow-md transition">
-
       {/* ✅ LEFT IMAGE + INFO */}
       <div className="flex flex-col lg:flex-row items-start gap-4 lg:gap-5 w-full">
-
         {/* ✅ Vehicle Image */}
-        <Link 
+        <Link
           href={`/vehicle/details/${generateVehicleSlug(inquiryVehicleResponse)}/${inquiryVehicleResponse.id}`}
           className="w-full lg:w-48 h-48 lg:h-42 rounded-xl overflow-hidden border border-third/30 bg-primary/5 shrink-0 relative block cursor-pointer transition hover:opacity-90"
         >
@@ -104,34 +104,43 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
 
         {/* ✅ Content */}
         <div className="space-y-2 w-full flex-1">
-
           <div className="flex justify-between items-start gap-2">
             <div className="space-y-1">
               <p className="text-sm text-third">
                 Inquiry Title:{" "}
-                <span className="text-primary font-semibold">{inquiry.inquiryTitle || "N/A"}</span>
+                <span className="text-primary font-semibold">
+                  {inquiry.inquiryTitle || "N/A"}
+                </span>
               </p>
 
               <p className="text-sm text-third">
                 Inquiry Description:{" "}
-                <span className="text-primary font-semibold">{inquiry.inquiryDescription || "N/A"}</span>
+                <span className="text-primary font-semibold">
+                  {inquiry.inquiryDescription || "N/A"}
+                </span>
               </p>
 
               <p className="text-sm text-third">
                 Vehicle:{" "}
-                <span className="text-primary font-semibold">{vehicleTitle}</span>
+                <span className="text-primary font-semibold">
+                  {vehicleTitle}
+                </span>
               </p>
 
               {/* ✅ Date or Closed Date */}
               {isClosed ? (
                 <p className="text-xs text-third/80">
                   Closed on:{" "}
-                  <span className="text-primary font-semibold">{localDate}</span>
+                  <span className="text-primary font-semibold">
+                    {localDate}
+                  </span>
                 </p>
               ) : (
                 <p className="text-xs text-third/80">
                   Date:{" "}
-                  <span className="text-primary font-semibold">{localDate}</span>
+                  <span className="text-primary font-semibold">
+                    {localDate}
+                  </span>
                 </p>
               )}
             </div>
@@ -146,7 +155,9 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
           {isClosed && (
             <>
               <p className="text-xs flex items-center gap-2 text-third pt-1">
-                <span className="text-primary font-semibold">Reason: {inquiryCloseReason || "Closed by you"}</span>
+                <span className="text-primary font-semibold">
+                  Reason: {inquiryCloseReason || "Closed by you"}
+                </span>
               </p>
               <div className="pt-4 flex flex-wrap gap-3">
                 <Button
@@ -156,7 +167,7 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
                   onClick={handleFeedbackClick}
                   loading={loadingFeedback}
                 >
-                Write  Review
+                  Write Review
                 </Button>
               </div>
             </>
@@ -175,9 +186,7 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
             <div className="pt-2 space-y-2">
               <p className="text-xs text-third flex items-center gap-2">
                 <Clock size={14} className="text-yellow-400 shrink-0" />
-                <span>
-                  Waiting for the vehicle owner to respond
-                </span>
+                <span>Waiting for the vehicle owner to respond</span>
               </p>
             </div>
           )}
@@ -233,8 +242,12 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
         <FeedbackPopup
           isOpen={showFeedbackPopup}
           onClose={() => setShowFeedbackPopup(false)}
-          isReview={reviewData?.isEligibleToReview || !!reviewData?.consultationReview}
-          isWritten={!reviewData?.isEligibleToReview && !!reviewData?.consultationReview}
+          isReview={
+            reviewData?.isEligibleToReview || !!reviewData?.consultationReview
+          }
+          isWritten={
+            !reviewData?.isEligibleToReview && !!reviewData?.consultationReview
+          }
           reviewData={reviewData?.consultationReview || null}
           targetId={
             inquiry?.inquiryVehicleResponse?.vehicleOwner?.username ||
@@ -260,8 +273,9 @@ function StatusPill({ status }) {
 
   return (
     <span
-      className={`text-[10px] sm:text-xs px-3 py-1 sm:px-4 rounded-full border font-semibold whitespace-nowrap ${map[status]
-        }`}
+      className={`text-[10px] sm:text-xs px-3 py-1 sm:px-4 rounded-full border font-semibold whitespace-nowrap ${
+        map[status]
+      }`}
     >
       {status.replaceAll("_", " ")}
     </span>

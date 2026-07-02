@@ -21,6 +21,10 @@ export default function Step2Address({
   isUpdateMode = false,
   backendError = "",
 }) {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [towns, setTowns] = useState([]);

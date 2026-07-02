@@ -355,7 +355,7 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
                 onClick={handleFeedbackClick}
                 loading={loadingAction === "FEEDBACK"}
               >
-                Review12
+                Review
               </Button>
             </div>
           )}

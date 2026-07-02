@@ -720,12 +720,16 @@ export default function KycForm() {
                 ) : (
                   <>
                     {/* Headers */}
-                    <h2 className="text-2xl font-bold text-primary mb-2">
-                      Create your account
-                    </h2>
-                    <p className="text-third text-sm mb-10">
-                      Enter your details to get started
-                    </p>
+                    {!(step === 4 && existing?.business?.isSubmitted) && (
+                      <>
+                        <h2 className="text-2xl font-bold text-primary mb-2">
+                          Create your account
+                        </h2>
+                        <p className="text-third text-sm mb-10">
+                          Enter your details to get started
+                        </p>
+                      </>
+                    )}
 
                     {/* ===== NEW PROGRESS BAR (MATCHING SCREENSHOT) ===== */}
                     <div className="mb-16 flex items-center justify-between lg:hidden">
