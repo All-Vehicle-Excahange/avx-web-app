@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Step1Business from "../components/Step1Business";
 import Step2Address from "../components/Step2Address";
@@ -29,21 +29,21 @@ export default function PreviewAndEdite({
 }) {
   const router = useRouter();
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   const isChangesRequested =
     existing?.business?.verificationStatus === "REQUEST_CHANGES";
   const canEdit = !existing?.business?.isSubmitted || isChangesRequested;
 
-  // ===== EDIT MODES =====
   const [editMode, setEditMode] = useState({
-    business: false,
-    address: false,
-    kyc: false,
+    business: canEdit,
+    address: canEdit,
+    kyc: canEdit,
   });
 
   const [loadingStates, setLoadingStates] = useState({
-    business: false,
-    address: false,
-    kyc: false,
     submit: false,
   });
 
@@ -80,120 +80,76 @@ export default function PreviewAndEdite({
     setLocalChanged((p) => ({ ...p, kyc: isChanged }));
   }, []);
 
-  const updateBusiness = async () => {
-    try {
-      if (!form.business || !localChanged.business) {
-        setEditMode((p) => ({ ...p, business: false }));
-        return;
-      }
-      setLoadingStates((p) => ({ ...p, business: true }));
-
-      const payload = new FormData();
-      const b = form.business;
-      if (b.logo instanceof File) payload.append("logo", b.logo);
-      if (b.banner instanceof File) payload.append("banner", b.banner);
-      payload.append("consultationName", b.consultationName || "");
-      payload.append("ownerName", b.ownerName || "");
-      payload.append("companyEmail", b.companyEmail || "");
-      payload.append("establishmentYear", b.establishmentYear || "");
-      if (Array.isArray(b.vehicleTypes)) {
-        b.vehicleTypes.forEach((v, i) =>
-          payload.append(`vehicleTypes[${i}]`, v),
-        );
-      }
-      if (Array.isArray(b.services)) {
-        b.services.forEach((s, i) => payload.append(`services[${i}]`, s));
-      }
-
-      await updatebasicDetials(payload);
-      setHasMadeAnyUpdate(true);
-      setEditMode((p) => ({ ...p, business: false }));
-
-      const bRes = await getBaiscDetails();
-      setData((p) => ({ ...p, business: bRes?.data }));
-    } catch (e) {
-      console.error("Update failed", e);
-    } finally {
-      setLoadingStates((p) => ({ ...p, business: false }));
-    }
-  };
-
-  const updateAddress = async () => {
-    try {
-      if (!form.address || !localChanged.address) {
-        setEditMode((p) => ({ ...p, address: false }));
-        return;
-      }
-      setLoadingStates((p) => ({ ...p, address: true }));
-
-      const a = form.address;
-      const payload = {
-        address: a.address || "",
-        stateId: a.stateId,
-        cityId: a.cityId,
-        townId: a.townId,
-        countryId: a.countryId || 101,
-        latitude: a.latitude || 22.2587,
-        longitude: a.longitude || 71.1924,
-      };
-      if (a?.mapUrl) {
-        payload.mapUrl = a.mapUrl;
-      }
-
-      await updateAddressDetials(payload);
-      setHasMadeAnyUpdate(true);
-      setEditMode((p) => ({ ...p, address: false }));
-
-      const aRes = await getAddressDetails();
-      setData((p) => ({ ...p, address: aRes?.data }));
-    } catch (e) {
-      console.error("Update failed", e);
-    } finally {
-      setLoadingStates((p) => ({ ...p, address: false }));
-    }
-  };
-
-  const updateKyc = async () => {
-    try {
-      if (!form.kyc || !localChanged.kyc) {
-        setEditMode((p) => ({ ...p, kyc: false }));
-        return;
-      }
-      setLoadingStates((p) => ({ ...p, kyc: true }));
-
-      const payload = new FormData();
-      const k = form.kyc;
-      if (k.gstNumber) payload.append("gstNumber", k.gstNumber);
-      if (k.panNumber) payload.append("panCardNumber", k.panNumber);
-      if (k.aadharNumber) payload.append("aadharCardNumber", k.aadharNumber);
-      if (k.gstPhoto instanceof File)
-        payload.append("gstCertificateImage", k.gstPhoto);
-      if (k.panPhoto instanceof File)
-        payload.append("panCardFrontImage", k.panPhoto);
-      if (k.aadharFront instanceof File)
-        payload.append("aadharCardFrontImage", k.aadharFront);
-      if (k.aadharBack instanceof File)
-        payload.append("aadharCardBackImage", k.aadharBack);
-
-      await updateKycDetials(payload);
-      setHasMadeAnyUpdate(true);
-      setEditMode((p) => ({ ...p, kyc: false }));
-
-      const kRes = await getKycDocs();
-      setData((p) => ({ ...p, kyc: kRes?.data }));
-    } catch (e) {
-      console.error("Update failed", e);
-    } finally {
-      setLoadingStates((p) => ({ ...p, kyc: false }));
-    }
-  };
-
   // ==========================================
   // FINAL SUBMIT
   // ==========================================
   const handleSubmit = async () => {
     try {
       setLoadingStates((p) => ({ ...p, submit: true }));
+      let updateMade = false;
+
+      // Update Business
+      if (form.business && localChanged.business) {
+        const payload = new FormData();
+        const b = form.business;
+        if (b.logo instanceof File) payload.append("logo", b.logo);
+        if (b.banner instanceof File) payload.append("banner", b.banner);
+        payload.append("consultationName", b.consultationName || "");
+        payload.append("ownerName", b.ownerName || "");
+        payload.append("companyEmail", b.companyEmail || "");
+        payload.append("establishmentYear", b.establishmentYear || "");
+        if (Array.isArray(b.vehicleTypes)) {
+          b.vehicleTypes.forEach((v, i) =>
+            payload.append(`vehicleTypes[${i}]`, v),
+          );
+        }
+        if (Array.isArray(b.services)) {
+          b.services.forEach((s, i) => payload.append(`services[${i}]`, s));
+        }
+        await updatebasicDetials(payload);
+        updateMade = true;
+      }
+
+      // Update Address
+      if (form.address && localChanged.address) {
+        const a = form.address;
+        const payload = {
+          address: a.address || "",
+          stateId: a.stateId,
+          cityId: a.cityId,
+          townId: a.townId,
+          countryId: a.countryId || 101,
+          latitude: a.latitude || 22.2587,
+          longitude: a.longitude || 71.1924,
+        };
+        if (a?.mapUrl) payload.mapUrl = a.mapUrl;
+        await updateAddressDetials(payload);
+        updateMade = true;
+      }
+
+      // Update KYC
+      if (form.kyc && localChanged.kyc) {
+        const payload = new FormData();
+        const k = form.kyc;
+        if (k.gstNumber) payload.append("gstNumber", k.gstNumber);
+        if (k.panNumber) payload.append("panCardNumber", k.panNumber);
+        if (k.aadharNumber) payload.append("aadharCardNumber", k.aadharNumber);
+        if (k.gstPhoto instanceof File)
+          payload.append("gstCertificateImage", k.gstPhoto);
+        if (k.panPhoto instanceof File)
+          payload.append("panCardFrontImage", k.panPhoto);
+        if (k.aadharFront instanceof File)
+          payload.append("aadharCardFrontImage", k.aadharFront);
+        if (k.aadharBack instanceof File)
+          payload.append("aadharCardBackImage", k.aadharBack);
+        await updateKycDetials(payload);
+        updateMade = true;
+      }
+
+      if (updateMade) {
+        setHasMadeAnyUpdate(true);
+      }
+
       const res = await finalSubmit();
 
       if (res?.success || res?.data) {
@@ -256,35 +212,6 @@ export default function PreviewAndEdite({
                 Application Status
               </Button>
             )}
-
-            {canEdit && !editMode.business ? (
-              <Button
-                variant="ghost"
-                onClick={() => setEditMode((p) => ({ ...p, business: true }))}
-              >
-                Edit
-              </Button>
-            ) : canEdit ? (
-              <div className="flex gap-3">
-                <Button
-                  variant="outlineSecondary"
-                  onClick={() =>
-                    setEditMode((p) => ({ ...p, business: false }))
-                  }
-                >
-                  Cancel
-                </Button>
-
-                <Button
-                  variant="ghost"
-                  onClick={updateBusiness}
-                  loading={loadingStates.business}
-                  disabled={!localChanged.business}
-                >
-                  Update
-                </Button>
-              </div>
-            ) : null}
           </div>
         </div>
 
@@ -310,32 +237,7 @@ export default function PreviewAndEdite({
             Address Details
           </h3>
 
-          {canEdit && !editMode.address ? (
-            <Button
-              variant="ghost"
-              onClick={() => setEditMode((p) => ({ ...p, address: true }))}
-            >
-              Edit
-            </Button>
-          ) : canEdit ? (
-            <div className="flex gap-3">
-              <Button
-                variant="outlineSecondary"
-                onClick={() => setEditMode((p) => ({ ...p, address: false }))}
-              >
-                Cancel
-              </Button>
 
-              <Button
-                variant="ghost"
-                onClick={updateAddress}
-                loading={loadingStates.address}
-                disabled={!localChanged.address}
-              >
-                Update
-              </Button>
-            </div>
-          ) : null}
         </div>
 
         <div
@@ -360,32 +262,7 @@ export default function PreviewAndEdite({
             KYC Details
           </h3>
 
-          {canEdit && !editMode.kyc ? (
-            <Button
-              variant="ghost"
-              onClick={() => setEditMode((p) => ({ ...p, kyc: true }))}
-            >
-              Edit
-            </Button>
-          ) : canEdit ? (
-            <div className="flex gap-3">
-              <Button
-                variant="outlineSecondary"
-                onClick={() => setEditMode((p) => ({ ...p, kyc: false }))}
-              >
-                Cancel
-              </Button>
 
-              <Button
-                variant="ghost"
-                onClick={updateKyc}
-                loading={loadingStates.kyc}
-                disabled={!localChanged.kyc}
-              >
-                Update
-              </Button>
-            </div>
-          ) : null}
         </div>
 
         <div
@@ -408,7 +285,7 @@ export default function PreviewAndEdite({
             loading={loadingStates.submit}
             disabled={
               existing.business?.verificationStatus === "REQUEST_CHANGES" &&
-              !hasMadeAnyUpdate
+              !hasMadeAnyUpdate && !localChanged.business && !localChanged.address && !localChanged.kyc
             }
           >
             Final Submit

@@ -19,6 +19,10 @@ import {
 import Button from "@/components/ui/button";
 
 export default function Step4Verification({ existing, onEdit }) {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   const { push, query } = useRouter();
 
   const business = existing?.business || {};

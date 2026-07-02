@@ -36,6 +36,10 @@ export default function Step1Business({
   isUpdateMode = false,
   backendError = "",
 }) {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   const logoRef = useRef();
 
   // Initialize state directly from initialData to avoid useEffect cascading renders

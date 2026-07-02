@@ -54,12 +54,6 @@ export default function UpdateProfile() {
     sessionStorage.setItem("consult_update_id", id);
   };
 
-  const [editMode, setEditMode] = useState({
-    business: false,
-    address: false,
-    kyc: false,
-  });
-
   const [loadingStates, setLoadingStates] = useState({
     kyc: false,
     submit: false,
@@ -195,321 +189,102 @@ export default function UpdateProfile() {
   }, []);
 
   // ===== UPDATE HANDLERS =====
-  const updateBusiness = async () => {
-    try {
-      if (!form.business) {
-        setEditMode((p) => ({ ...p, business: false }));
-        return;
-      }
-
-      setLoadingStates((p) => ({ ...p, business: true }));
-      let currentId = updateId;
-
-      // Create update request if no ID exists
-      if (!currentId) {
-        const createRes = await createUpdateRequest(new FormData());
-        if (createRes.success && (createRes.data?._id || createRes.data?.id)) {
-          currentId = createRes.data?._id || createRes.data?.id;
-          saveUpdateId(currentId);
-        } else {
-          setErrors((p) => ({
-            ...p,
-            business: createRes.message || "Failed to initiate update request",
-          }));
-          return;
-        }
-      }
-      setErrors((p) => ({ ...p, business: "" }));
-
-      // Build payload — check for changes first, then append all fields to avoid data loss
-      const payload = new FormData();
-      const b = form.business;
-      const orig = data.business || {};
-      let hasChanges = false;
-
-      if (b.logo instanceof File) {
-        hasChanges = true;
-      }
-      if (b.banner instanceof File) {
-        hasChanges = true;
-      }
-      if (b.consultationName !== (orig.consultationName || "")) {
-        hasChanges = true;
-      }
-      if (b.username !== (orig.username || "")) {
-        hasChanges = true;
-      }
-      if (b.ownerName !== (orig.ownerName || "")) {
-        hasChanges = true;
-      }
-      if (b.companyEmail !== (orig.companyEmail || "")) {
-        hasChanges = true;
-      }
-      if (
-        String(b.establishmentYear || "") !==
-        String(orig.establishmentYear || "")
-      ) {
-        hasChanges = true;
-      }
-      // Arrays: compare via JSON
-      const origVehicleTypes = JSON.stringify(orig.vehicleTypes || []);
-      const newVehicleTypes = JSON.stringify(b.vehicleTypes || []);
-      if (origVehicleTypes !== newVehicleTypes) {
-        hasChanges = true;
-      }
-      const origServices = JSON.stringify(orig.services || []);
-      const newServices = JSON.stringify(b.services || []);
-      if (origServices !== newServices) {
-        hasChanges = true;
-      }
-
-      if (!hasChanges) {
-        setEditMode((p) => ({ ...p, business: false }));
-        return;
-      }
-
-      // Append all fields if there are changes
-      if (b.logo instanceof File) {
-        payload.append("logo", b.logo);
-      }
-      if (b.banner instanceof File) {
-        payload.append("banner", b.banner);
-      }
-      payload.append("consultationName", b.consultationName || "");
-      payload.append("username", b.username || "");
-      payload.append("ownerName", b.ownerName || "");
-      payload.append("companyEmail", b.companyEmail || "");
-      payload.append("establishmentYear", b.establishmentYear || "");
-      (b.vehicleTypes || []).forEach((v, i) =>
-        payload.append(`vehicleTypes[${i}]`, v),
-      );
-      (b.services || []).forEach((s, i) =>
-        payload.append(`services[${i}]`, s),
-      );
-
-      const res = await updateBasicDetails(payload, currentId);
-      if (res.success) {
-        setErrors((p) => ({ ...p, business: "" }));
-        setEditMode((p) => ({ ...p, business: false }));
-        setData((p) => ({ ...p, business: { ...p.business, ...b } }));
-      } else {
-        setErrors((p) => ({ ...p, business: res.message || "Update failed" }));
-      }
-    } catch (e) {
-      console.error("Update failed", e);
-      setErrors((p) => ({ ...p, business: "An unexpected error occurred" }));
-    } finally {
-      setLoadingStates((p) => ({ ...p, business: false }));
-    }
-  };
-
-  const updateAddress = async () => {
-    try {
-      if (!form.address) {
-        setEditMode((p) => ({ ...p, address: false }));
-        return;
-      }
-
-      setLoadingStates((p) => ({ ...p, address: true }));
-      let currentId = updateId;
-
-      if (!currentId) {
-        const createRes = await createUpdateRequest(new FormData());
-        if (createRes.success && (createRes.data?._id || createRes.data?.id)) {
-          currentId = createRes.data?._id || createRes.data?.id;
-          saveUpdateId(currentId);
-        } else {
-          setErrors((p) => ({
-            ...p,
-            address: createRes.message || "Failed to initiate update request",
-          }));
-          return;
-        }
-      }
-      setErrors((p) => ({ ...p, address: "" }));
-
-      // Build payload — check for changes first, then append all fields to avoid data loss
-      const payload = new FormData();
-      const a = form.address;
-      const orig = data.address || {};
-      let hasChanges = false;
-
-      if (a.address !== (orig.address || "")) {
-        hasChanges = true;
-      }
-      if (
-        String(a.stateId || "") !== String(orig.state?.id || orig.stateId || "")
-      ) {
-        hasChanges = true;
-      }
-      if (
-        String(a.cityId || "") !== String(orig.city?.id || orig.cityId || "")
-      ) {
-        hasChanges = true;
-      }
-      if (
-        String(a.townId || "") !== String(orig.town?.id || orig.townId || "")
-      ) {
-        hasChanges = true;
-      }
-      if (a.mapUrl !== (orig.mapUrl || "")) {
-        hasChanges = true;
-      }
-
-      if (!hasChanges) {
-        setEditMode((p) => ({ ...p, address: false }));
-        return;
-      }
-
-      // Append all fields if there are changes
-      payload.append("address", a.address || "");
-      payload.append("stateId", a.stateId || "");
-      payload.append("cityId", a.cityId || "");
-      if (a.townId) {
-        payload.append("townId", a.townId);
-      }
-      if (a.mapUrl) {
-        payload.append("mapUrl", a.mapUrl);
-      }
-
-      const res = await updateAddressDetails(payload, currentId);
-      if (res.success) {
-        setErrors((p) => ({ ...p, address: "" }));
-        setEditMode((p) => ({ ...p, address: false }));
-        setData((p) => ({
-          ...p,
-          address: {
-            ...p.address,
-            address: a.address,
-            state: { ...p.address?.state, id: a.stateId, name: a.stateName },
-            city: { ...p.address?.city, id: a.cityId, name: a.cityName },
-            town: { ...p.address?.town, id: a.townId, name: a.townName },
-            mapUrl: a.mapUrl,
-          },
-        }));
-      } else {
-        setErrors((p) => ({ ...p, address: res.message || "Update failed" }));
-      }
-    } catch (e) {
-      console.error("Update failed", e);
-      setErrors((p) => ({ ...p, address: "An unexpected error occurred" }));
-    } finally {
-      setLoadingStates((p) => ({ ...p, address: false }));
-    }
-  };
-
-  const updateKyc = async () => {
-    try {
-      if (!form.kyc) {
-        setEditMode((p) => ({ ...p, kyc: false }));
-        return;
-      }
-
-      setLoadingStates((p) => ({ ...p, kyc: true }));
-      let currentId = updateId;
-
-      if (!currentId) {
-        const createRes = await createUpdateRequest(new FormData());
-        if (createRes.success && (createRes.data?._id || createRes.data?.id)) {
-          currentId = createRes.data?._id || createRes.data?.id;
-          saveUpdateId(currentId);
-        } else {
-          setErrors((p) => ({
-            ...p,
-            kyc: createRes.message || "Failed to initiate update request",
-          }));
-          return;
-        }
-      }
-      setErrors((p) => ({ ...p, kyc: "" }));
-
-      // Build payload — check for changes first, then append all fields to avoid data loss
-      const payload = new FormData();
-      const k = form.kyc;
-      const orig = data.kyc || {};
-      let hasChanges = false;
-
-      if (k.gstNumber !== (orig.gstNumber || "")) {
-        hasChanges = true;
-      }
-      if (k.panNumber !== (orig.panCardNumber || "")) {
-        hasChanges = true;
-      }
-      if (k.aadharNumber !== (orig.aadharCardNumber || "")) {
-        hasChanges = true;
-      }
-      if (k.gstPhoto instanceof File) {
-        hasChanges = true;
-      }
-      if (k.panPhoto instanceof File) {
-        hasChanges = true;
-      }
-      if (k.aadharFront instanceof File) {
-        hasChanges = true;
-      }
-      if (k.aadharBack instanceof File) {
-        hasChanges = true;
-      }
-
-      if (!hasChanges) {
-        setEditMode((p) => ({ ...p, kyc: false }));
-        return;
-      }
-
-      // Append all fields if there are changes
-      payload.append("gstNumber", k.gstNumber || "");
-      payload.append("panCardNumber", k.panNumber || "");
-      payload.append("aadharCardNumber", k.aadharNumber || "");
-      if (k.gstPhoto instanceof File) {
-        payload.append("gstCertificateImage", k.gstPhoto);
-      }
-      if (k.panPhoto instanceof File) {
-        payload.append("panCardFrontImage", k.panPhoto);
-      }
-      if (k.aadharFront instanceof File) {
-        payload.append("aadharCardFrontImage", k.aadharFront);
-      }
-      if (k.aadharBack instanceof File) {
-        payload.append("aadharCardBackImage", k.aadharBack);
-      }
-
-      const res = await updateKycDocuments(payload, currentId);
-      if (res.success) {
-        setErrors((p) => ({ ...p, kyc: "" }));
-        setEditMode((p) => ({ ...p, kyc: false }));
-        setData((p) => ({
-          ...p,
-          kyc: {
-            ...p.kyc,
-            gstNumber: k.gstNumber,
-            panCardNumber: k.panNumber,
-            aadharCardNumber: k.aadharNumber,
-          },
-        }));
-      } else {
-        setErrors((p) => ({ ...p, kyc: res.message || "Update failed" }));
-      }
-    } catch (e) {
-      console.error("Update failed", e);
-      setErrors((p) => ({ ...p, kyc: "An unexpected error occurred" }));
-    } finally {
-      setLoadingStates((p) => ({ ...p, kyc: false }));
-    }
-  };
-
   const handleSubmit = async () => {
     try {
-      if (!updateId) {
-        setErrors((p) => ({
-          ...p,
-          submit: "Please update some details first",
-        }));
+      setErrors((p) => ({ ...p, submit: "" }));
+      setLoadingStates((p) => ({ ...p, submit: true }));
+      
+      let currentId = updateId;
+      
+      const b = form.business || {};
+      const origB = data.business || {};
+      let bChanged = false;
+      if (b.logo instanceof File || b.banner instanceof File || b.consultationName !== (origB.consultationName || "") || b.username !== (origB.username || "") || b.ownerName !== (origB.ownerName || "") || b.companyEmail !== (origB.companyEmail || "") || String(b.establishmentYear || "") !== String(origB.establishmentYear || "") || JSON.stringify(origB.vehicleTypes || []) !== JSON.stringify(origB.vehicleTypes || []) || JSON.stringify(origB.services || []) !== JSON.stringify(origB.services || [])) bChanged = true;
+      if (JSON.stringify(origB.vehicleTypes || []) !== JSON.stringify(b.vehicleTypes || []) || JSON.stringify(origB.services || []) !== JSON.stringify(b.services || [])) bChanged = true;
+
+      const a = form.address || {};
+      const origA = data.address || {};
+      let aChanged = false;
+      if (a.address !== (origA.address || "") || String(a.stateId || "") !== String(origA.state?.id || origA.stateId || "") || String(a.cityId || "") !== String(origA.city?.id || origA.cityId || "") || String(a.townId || "") !== String(origA.town?.id || origA.townId || "") || a.mapUrl !== (origA.mapUrl || "")) aChanged = true;
+
+      const k = form.kyc || {};
+      const origK = data.kyc || {};
+      let kChanged = false;
+      if (k.gstNumber !== (origK.gstNumber || "") || k.panNumber !== (origK.panCardNumber || "") || k.aadharNumber !== (origK.aadharCardNumber || "") || k.gstPhoto instanceof File || k.panPhoto instanceof File || k.aadharFront instanceof File || k.aadharBack instanceof File) kChanged = true;
+
+      if (!bChanged && !aChanged && !kChanged && !currentId) {
+        setErrors((p) => ({ ...p, submit: "No changes detected to update." }));
+        setLoadingStates((p) => ({ ...p, submit: false }));
         return;
       }
-      setErrors((p) => ({ ...p, submit: "" }));
 
-      setLoadingStates((p) => ({ ...p, submit: true }));
-      const res = await finalSubmit(updateId);
+      if ((bChanged || aChanged || kChanged) && !currentId) {
+        const createRes = await createUpdateRequest(new FormData());
+        if (createRes.success && (createRes.data?._id || createRes.data?.id)) {
+          currentId = createRes.data?._id || createRes.data?.id;
+          saveUpdateId(currentId);
+        } else {
+          setErrors((p) => ({ ...p, submit: createRes.message || "Failed to initiate update request" }));
+          setLoadingStates((p) => ({ ...p, submit: false }));
+          return;
+        }
+      }
+
+      if (bChanged) {
+        const payload = new FormData();
+        if (b.logo instanceof File) payload.append("logo", b.logo);
+        if (b.banner instanceof File) payload.append("banner", b.banner);
+        payload.append("consultationName", b.consultationName || "");
+        payload.append("username", b.username || "");
+        payload.append("ownerName", b.ownerName || "");
+        payload.append("companyEmail", b.companyEmail || "");
+        payload.append("establishmentYear", b.establishmentYear || "");
+        (b.vehicleTypes || []).forEach((v, i) => payload.append(`vehicleTypes[${i}]`, v));
+        (b.services || []).forEach((s, i) => payload.append(`services[${i}]`, s));
+
+        const res = await updateBasicDetails(payload, currentId);
+        if (!res.success) {
+           setErrors((p) => ({ ...p, submit: res.message || "Failed to update business details" }));
+           setLoadingStates((p) => ({ ...p, submit: false }));
+           return;
+        }
+      }
+
+      if (aChanged) {
+        const payload = new FormData();
+        payload.append("address", a.address || "");
+        payload.append("stateId", a.stateId || "");
+        payload.append("cityId", a.cityId || "");
+        if (a.townId) payload.append("townId", a.townId);
+        if (a.mapUrl) payload.append("mapUrl", a.mapUrl);
+
+        const res = await updateAddressDetails(payload, currentId);
+        if (!res.success) {
+           setErrors((p) => ({ ...p, submit: res.message || "Failed to update address details" }));
+           setLoadingStates((p) => ({ ...p, submit: false }));
+           return;
+        }
+      }
+
+      if (kChanged) {
+        const payload = new FormData();
+        payload.append("gstNumber", k.gstNumber || "");
+        payload.append("panCardNumber", k.panNumber || "");
+        payload.append("aadharCardNumber", k.aadharNumber || "");
+        if (k.gstPhoto instanceof File) payload.append("gstCertificateImage", k.gstPhoto);
+        if (k.panPhoto instanceof File) payload.append("panCardFrontImage", k.panPhoto);
+        if (k.aadharFront instanceof File) payload.append("aadharCardFrontImage", k.aadharFront);
+        if (k.aadharBack instanceof File) payload.append("aadharCardBackImage", k.aadharBack);
+
+        const res = await updateKycDocuments(payload, currentId);
+        if (!res.success) {
+           setErrors((p) => ({ ...p, submit: res.message || "Failed to update KYC documents" }));
+           setLoadingStates((p) => ({ ...p, submit: false }));
+           return;
+        }
+      }
+
+      const res = await finalSubmit(currentId);
 
       if (res?.success || res?.data) {
         setErrors((p) => ({ ...p, submit: "" }));
@@ -663,43 +438,14 @@ export default function UpdateProfile() {
                     <div className="border border-primary/30 rounded-xl p-6">
                       <div className="flex justify-between mb-4">
                         <h3 className="font-semibold">Preview Your Details</h3>
-                        {!editMode.business && !isRequested && !isRejected && (
-                          <Button
-                            variant="ghost"
-                            onClick={() =>
-                              setEditMode((p) => ({ ...p, business: true }))
-                            }
-                          >
-                            Edit
-                          </Button>
-                        )}
-                        {editMode.business && (
-                          <div className="flex gap-3">
-                            <Button
-                              variant="outlineSecondary"
-                              onClick={() =>
-                                setEditMode((p) => ({ ...p, business: false }))
-                              }
-                            >
-                              Cancel
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              onClick={updateBusiness}
-                              loading={loadingStates.business}
-                            >
-                              Update
-                            </Button>
-                          </div>
-                        )}
                       </div>
                       <div
-                        className={`${!editMode.business ? "pointer-events-none opacity-60" : ""}`}
+                        className={`${isRequested || isRejected ? "pointer-events-none opacity-60" : ""}`}
                       >
                         <Step1Business
                           initialData={data.business}
                           onChange={handleBusinessChange}
-                          readOnly={!editMode.business}
+                          readOnly={isRequested || isRejected}
                           isUpdateMode={true}
                         />
                       </div>
@@ -714,43 +460,14 @@ export default function UpdateProfile() {
                     <div className="border border-primary/30 rounded-xl p-6">
                       <div className="flex justify-between mb-4">
                         <h3 className="font-semibold">Address Details</h3>
-                        {!editMode.address && !isRequested && (
-                          <Button
-                            variant="ghost"
-                            onClick={() =>
-                              setEditMode((p) => ({ ...p, address: true }))
-                            }
-                          >
-                            Edit
-                          </Button>
-                        )}
-                        {editMode.address && (
-                          <div className="flex gap-3">
-                            <Button
-                              variant="outlineSecondary"
-                              onClick={() =>
-                                setEditMode((p) => ({ ...p, address: false }))
-                              }
-                            >
-                              Cancel
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              onClick={updateAddress}
-                              loading={loadingStates.address}
-                            >
-                              Update
-                            </Button>
-                          </div>
-                        )}
                       </div>
                       <div
-                        className={`${!editMode.address ? "pointer-events-none opacity-60" : ""}`}
+                        className={`${isRequested || isRejected ? "pointer-events-none opacity-60" : ""}`}
                       >
                         <Step2Address
                           initialData={data.address}
                           onChange={handleAddressChange}
-                          readOnly={!editMode.address}
+                          readOnly={isRequested || isRejected}
                         />
                       </div>
                       {errors.address && (
@@ -764,43 +481,14 @@ export default function UpdateProfile() {
                     <div className="border border-primary/30 rounded-xl p-6">
                       <div className="flex justify-between mb-4">
                         <h3 className="font-semibold">KYC Details</h3>
-                        {!editMode.kyc && !isRequested && (
-                          <Button
-                            variant="ghost"
-                            onClick={() =>
-                              setEditMode((p) => ({ ...p, kyc: true }))
-                            }
-                          >
-                            Edit
-                          </Button>
-                        )}
-                        {editMode.kyc && (
-                          <div className="flex gap-3">
-                            <Button
-                              variant="outlineSecondary"
-                              onClick={() =>
-                                setEditMode((p) => ({ ...p, kyc: false }))
-                              }
-                            >
-                              Cancel
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              onClick={updateKyc}
-                              loading={loadingStates.kyc}
-                            >
-                              Update
-                            </Button>
-                          </div>
-                        )}
                       </div>
                       <div
-                        className={`${!editMode.kyc ? "pointer-events-none opacity-60" : ""}`}
+                        className={`${isRequested || isRejected ? "pointer-events-none opacity-60" : ""}`}
                       >
                         <Step3KYC
                           initialData={data.kyc}
                           onChange={handleKycChange}
-                          readOnly={!editMode.kyc}
+                          readOnly={isRequested || isRejected}
                         />
                       </div>
                       {errors.kyc && (
@@ -811,7 +499,7 @@ export default function UpdateProfile() {
                     </div>
 
                     {/* FINAL SUBMIT */}
-                    {!isRequested && !isRejected && !!updateId && (
+                    {!isRequested && !isRejected && (
                       <div className="flex justify-end pt-6">
                         <Button
                           variant="ghost"
