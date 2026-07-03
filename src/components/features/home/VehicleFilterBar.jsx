@@ -117,7 +117,36 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     try {
       const res = await SearchCityAndState({ searchTerm: term.trim() });
       if (res?.data && Array.isArray(res.data)) {
-        setLocationSuggestions(res.data);
+        const suggestions = [...res.data];
+        const seenStates = new Set();
+
+        res.data.forEach((item) => {
+          if (
+            item.stateName &&
+            item.stateId &&
+            !seenStates.has(item.stateId)
+          ) {
+            seenStates.add(item.stateId);
+
+            // Check if search term matches the state name (e.g. "harya" matches "Haryana")
+            if (
+              item.stateName
+                .toLowerCase()
+                .includes(term.toLowerCase().trim())
+            ) {
+              // Add the State as a top suggestion
+              suggestions.unshift({
+                isStateOnly: true,
+                cityId: null,
+                cityName: "",
+                stateId: item.stateId,
+                stateName: item.stateName,
+              });
+            }
+          }
+        });
+
+        setLocationSuggestions(suggestions);
       }
     } catch (err) {
       console.error("Error searching cities:", err);
@@ -520,23 +549,29 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       {locationSuggestions.length > 0 ? (
                         locationSuggestions.map((item) => (
                           <button
-                            key={item.cityId}
+                            key={item.isStateOnly ? `state-${item.stateId}` : item.cityId}
                             onClick={(e) => {
                               e.stopPropagation();
-                              setLocation(
-                                `${item.cityName}, ${item.stateName}`,
-                              );
-                              setCityId(item.cityId);
-                              setStateId(item.stateId);
+                              if (item.isStateOnly) {
+                                setLocation(item.stateName);
+                                setCityId(null);
+                                setStateId(item.stateId);
+                              } else {
+                                setLocation(
+                                  `${item.cityName}, ${item.stateName}`,
+                                );
+                                setCityId(item.cityId);
+                                setStateId(item.stateId);
+                              }
                               openNextAvailableTab("location");
                             }}
                             className="flex items-center justify-between gap-4 py-2 px-3 hover:bg-neutral-800 rounded-lg text-left cursor-pointer"
                           >
                             <span className="text-sm font-semibold text-white">
-                              {item.cityName}
+                              {item.isStateOnly ? item.stateName : item.cityName}
                             </span>
                             <span className="text-xs text-gray-400">
-                              {item.stateName}
+                              {item.isStateOnly ? "State" : item.stateName}
                             </span>
                           </button>
                         ))
@@ -988,23 +1023,29 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   />
                   {locationSuggestions.length > 0 && location && (
                     <div className="mt-2 bg-neutral-800 rounded-xl overflow-hidden border border-neutral-700">
-                      {locationSuggestions.map((item) => (
+                       {locationSuggestions.map((item) => (
                         <button
-                          key={item.cityId}
+                          key={item.isStateOnly ? `state-${item.stateId}` : item.cityId}
                           onClick={() => {
-                            setLocation(`${item.cityName}, ${item.stateName}`);
-                            setCityId(item.cityId);
-                            setStateId(item.stateId);
+                            if (item.isStateOnly) {
+                              setLocation(item.stateName);
+                              setCityId(null);
+                              setStateId(item.stateId);
+                            } else {
+                              setLocation(`${item.cityName}, ${item.stateName}`);
+                              setCityId(item.cityId);
+                              setStateId(item.stateId);
+                            }
                             setLocationSuggestions([]);
                             openNextAvailableTab("location");
                           }}
                           className="w-full flex items-center justify-between gap-4 py-3 px-4 border-b border-neutral-700 last:border-0 hover:bg-neutral-700 text-left cursor-pointer"
                         >
                           <span className="text-sm font-semibold text-white">
-                            {item.cityName}
+                            {item.isStateOnly ? item.stateName : item.cityName}
                           </span>
                           <span className="text-xs text-gray-400">
-                            {item.stateName}
+                            {item.isStateOnly ? "State" : item.stateName}
                           </span>
                         </button>
                       ))}

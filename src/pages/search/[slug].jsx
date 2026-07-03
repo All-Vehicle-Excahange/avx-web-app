@@ -166,6 +166,13 @@ export async function getServerSideProps(context) {
           initialFilters.stateId = foundCity.stateId;
           initialFilters.cityName = foundCity.cityName;
           initialFilters.location = foundCity.cityName;
+        } else {
+          const foundState = cityJson?.data?.find(c => c.stateName.toLowerCase() === city.toLowerCase());
+          if (foundState) {
+            initialFilters.stateId = foundState.stateId;
+            initialFilters.stateName = foundState.stateName;
+            initialFilters.location = foundState.stateName;
+          }
         }
       }
     } catch (e) {
