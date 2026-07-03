@@ -371,7 +371,7 @@ export default function VehicleSpec({
             toast.success("Payment completed successfully!");
             setTimeout(() => {
               closeModal();
-            }, 3000);
+            }, 6000);
           },
           theme: {
             color: "#007bff",
@@ -478,11 +478,6 @@ export default function VehicleSpec({
                       })()}
                     </div>
                     <div className="md:col-span-3 border-t border border-third/40" />
-                    <div>
-                      <h3 className="text-xl font-semibold">
-                        Reecomm Inspection Available
-                      </h3>
-                    </div>
                     <div>
                       <h3 className="text-lg font-normal">
                         Want extra assurance before booking?

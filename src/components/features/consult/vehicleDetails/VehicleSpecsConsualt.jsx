@@ -152,11 +152,7 @@ const VehicleSpecsConsualt = forwardRef(function VehicleSpecsConsualt(
                       </Button>
                     </div>
                     <div className="md:col-span-3 border-t border border-third/40" />
-                    <div>
-                      <h3 className="text-xl font-semibold">
-                        Reecomm Inspection Available
-                      </h3>
-                    </div>
+                   
                     <div>
                       <h3 className="text-lg font-normal">
                         Want extra assurance before booking?
