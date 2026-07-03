@@ -172,6 +172,7 @@ export async function getServerSideProps(context) {
             initialFilters.stateId = foundState.stateId;
             initialFilters.stateName = foundState.stateName;
             initialFilters.location = foundState.stateName;
+            delete initialFilters.cityName;
           }
         }
       }
