@@ -1944,7 +1944,13 @@ export default function SearchWithCard({
           ) : (
             <div className="col-span-full py-12 text-center bg-secondary/5 rounded-xl border border-third/10 my-4 px-4">
               <h3 className="text-lg md:text-xl font-bold text-primary">
-                No vehicles listed directly in {selectedCityName || "this location"} yet
+                {selectedCityName ? (
+                  `No vehicles listed directly in ${selectedCityName} yet`
+                ) : brandParam ? (
+                  `No ${brandParam} vehicles listed directly yet`
+                ) : (
+                  "No vehicles listed directly yet"
+                )}
               </h3>
               <p className="text-sm text-third mt-2 max-w-md mx-auto">
                 We are actively verifying new consultants and pre-owned listings here. In the meantime, browse the top verified matches and recommendations near you below.
