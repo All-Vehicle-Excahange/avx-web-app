@@ -33,6 +33,7 @@ import { MAKER_NAME_MAPPING } from "@/data/makers";
 import { getState, getCities, getAllTown } from "@/services/user.service";
 import { getUserCityAndStateByLatLong } from "@/services/consult.filter.service";
 import { addClickEvent, getAddRecomandedVehicle } from "@/services/ppc.service";
+import { generateSeoSlug } from "@/lib/seo";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
@@ -462,6 +463,31 @@ export default function SearchWithCard({
   const priceBasedVehicles = searchData?.priceMatchVehicles || [];
   const topPicksPageResponse =
     searchData?.topPicksVehicles?.pageResponse || null;
+
+  // Sync selected filters to the browser URL (Faceted SEO routing)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const brandName = resolvedBrandName;
+    const modelName = resolvedModelName;
+    const cityName = selectedCityName;
+
+    // Build the target SEO slug
+    const targetSlug = generateSeoSlug({ brandName, modelName, cityName });
+    const currentSlug = pathname.split("/").pop();
+
+    if (!brandName && !cityName) {
+      // If we are currently on an SEO slug page but filters are empty, go back to base search
+      if (currentSlug && currentSlug.startsWith("buy-used-")) {
+        replace("/search", { scroll: false });
+      }
+      return;
+    }
+
+    if (targetSlug !== currentSlug) {
+      replace(`/search/${targetSlug}`, { scroll: false });
+    }
+  }, [resolvedBrandName, resolvedModelName, selectedCityName, pathname]);
 
   useEffect(() => {
     if (onLoadingChange) onLoadingChange(vehiclesLoading);

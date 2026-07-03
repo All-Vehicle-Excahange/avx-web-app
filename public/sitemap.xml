@@ -10,6 +10,11 @@
     <loc>https://www.reecomm.com/api/sitemap/storefronts.xml</loc>
     <lastmod>2026-06-18T00:00:00Z</lastmod>
   </sitemap>
+  <!-- Geo-Brands & City Combinations (dynamic) -->
+  <sitemap>
+    <loc>https://www.reecomm.com/api/sitemap/geo-brands.xml</loc>
+    <lastmod>2026-07-03T12:00:00Z</lastmod>
+  </sitemap>
   <sitemap>
     <loc>https://www.reecomm.com/pages-sitemap.xml</loc>
     <lastmod>2026-05-16T14:27:00Z</lastmod>
