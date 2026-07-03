@@ -610,6 +610,18 @@ export default function InspectionTrackingModal({
               </div>
             </div>
           </div>
+
+          {/* ACTION BUTTON */}
+          {isReportReady && inspection.reportUrl && (
+            <div className="p-4 border-t border-white/5 bg-[#0c0c0e]/95 shrink-0">
+              <button
+                onClick={() => window.open(inspection.reportUrl, "_blank")}
+                className="w-full bg-white text-black font-bold py-3 rounded-xl hover:bg-white/90 transition-colors"
+              >
+                View Inspection Report
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
