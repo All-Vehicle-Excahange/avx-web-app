@@ -25,7 +25,7 @@ function index() {
           name="description"
           content="Reecomm connects buyers with verified used vehicle consultants through independent inspections, transparent storefronts, and platform-backed accountability. Buy with confidence. Grow your business."
         />
-        <link rel="canonical" href="https://www.reecomm.com/how-it-works" />
+        <link key="canonical" rel="canonical" href="https://www.reecomm.com/how-it-works" />
 
         {/* Open Graph / Social Meta Tags */}
         <meta property="og:title" content="How Reecomm Works | Verified Used Vehicle Platform India" />

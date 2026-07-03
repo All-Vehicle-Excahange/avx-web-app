@@ -149,7 +149,7 @@ function Index({ seo }) {
         <meta name="robots" content="index, follow" />
 
         {/* Canonical URL */}
-        {seo?.canonical && <link rel="canonical" href={seo.canonical} />}
+        {seo?.canonical && <link key="canonical" rel="canonical" href={seo.canonical} />}
 
         {/* JSON-LD Structured Data: Car */}
         {vehicleSchema && (

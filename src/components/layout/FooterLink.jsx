@@ -89,37 +89,37 @@ const FooterLink = () => {
             </h2>
             <div className="flex flex-col gap-2">
               <Link
-                href="/search?vehicleType=FOUR_WHEELER&brand=Maruti%20Suzuki"
+                href="/search/buy-used-maruti-suzuki-cars"
                 className="text-[12px] text-white/50 hover:text-white transition-all"
               >
                 Maruti Suzuki
               </Link>
               <Link
-                href="/search?vehicleType=FOUR_WHEELER&brand=Hyundai"
+                href="/search/buy-used-hyundai-cars"
                 className="text-[12px] text-white/50 hover:text-white transition-all"
               >
                 Hyundai
               </Link>
               <Link
-                href="/search?vehicleType=FOUR_WHEELER&brand=Honda"
+                href="/search/buy-used-honda-cars"
                 className="text-[12px] text-white/50 hover:text-white transition-all"
               >
                 Honda
               </Link>
               <Link
-                href="/search?vehicleType=FOUR_WHEELER&brand=Tata"
+                href="/search/buy-used-tata-cars"
                 className="text-[12px] text-white/50 hover:text-white transition-all"
               >
                 Tata
               </Link>
               <Link
-                href="/search?vehicleType=FOUR_WHEELER&brand=Toyota"
+                href="/search/buy-used-toyota-cars"
                 className="text-[12px] text-white/50 hover:text-white transition-all"
               >
                 Toyota
               </Link>
               <Link
-                href="/search?vehicleType=FOUR_WHEELER&brand=Mahindra"
+                href="/search/buy-used-mahindra-cars"
                 className="text-[12px] text-white/50 hover:text-white transition-all"
               >
                 Mahindra

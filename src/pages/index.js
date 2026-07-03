@@ -36,6 +36,44 @@ function Home() {
           name="keywords"
           content="buy used cars, sell used cars, second hand cars, certified pre-owned cars, car inspection, Reecomm"
         />
+        
+        {/* Organization Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Reecomm",
+              "url": "https://www.reecomm.com",
+              "logo": "https://www.reecomm.com/logo/logo.webp",
+              "description": "Certified and verified second-hand cars for sale. Buy and sell used cars online at best prices with Reecomm. Expert inspection and transparent process.",
+              "sameAs": [
+                "https://www.facebook.com/reecomm",
+                "https://twitter.com/reecomm",
+                "https://www.instagram.com/reecomm"
+              ]
+            })
+          }}
+        />
+
+        {/* WebSite Schema for Sitelinks Searchbox */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Reecomm",
+              "url": "https://www.reecomm.com",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://www.reecomm.com/search?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            })
+          }}
+        />
       </Head>
       <HeroSection fullWidth />
       {/* <RecentlyVisitedSection /> */}

@@ -39,7 +39,7 @@ function StoreFrontPage({ seo }) {
         <meta name="description" content={displayDescription} />
 
         {/* Canonical */}
-        {seo?.canonical && <link rel="canonical" href={seo.canonical} />}
+        {seo?.canonical && <link key="canonical" rel="canonical" href={seo.canonical} />}
 
         {/* OpenGraph Tags for Social Sharing */}
         <meta property="og:site_name" content="Reecomm" />

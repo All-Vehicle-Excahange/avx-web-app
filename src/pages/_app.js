@@ -58,6 +58,17 @@ export default function App({ Component, pageProps }) {
   // INITIAL SETUP
   useEffect(() => {
     const checkSplash = () => {
+      // Bypass splash screen for search engine crawlers and performance tools to ensure correct indexing
+      if (typeof window !== "undefined" && typeof navigator !== "undefined") {
+        const isCrawler = /bot|google|baidu|bing|msn|duckduckbot|teoma|slurp|yandex|lighthouse/i.test(
+          navigator.userAgent
+        );
+        if (isCrawler) {
+          setShowSplash(false);
+          return;
+        }
+      }
+
       try {
         const hasSeenSplash = localStorage.getItem("splashSeen");
         const sessionSeen = sessionStorage.getItem("splashSession");
@@ -162,6 +173,7 @@ export default function App({ Component, pageProps }) {
           <Head>
             {/* Global canonical — strips query params so Google picks the right URL */}
             <link
+              key="canonical"
               rel="canonical"
               href={`https://www.reecomm.com${router.asPath.split("?")[0]}`}
             />

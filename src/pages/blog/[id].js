@@ -24,7 +24,7 @@ function BlogDetailPage() {
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDesc} />
-        <link rel="canonical" href={canonicalUrl} />
+        <link key="canonical" rel="canonical" href={canonicalUrl} />
 
         {/* Dynamic Open Graph Tags */}
         <meta property="og:title" content={pageTitle} />

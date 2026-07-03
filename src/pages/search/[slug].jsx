@@ -33,7 +33,7 @@ function SlugSearchPage({ seo, initialFilters }) {
         />
         {/* Canonical — each slug page gets its own unique canonical */}
         {seo?.canonical && (
-          <link rel="canonical" href={seo.canonical} />
+          <link key="canonical" rel="canonical" href={seo.canonical} />
         )}
 
         {/* Open Graph */}

@@ -11,7 +11,7 @@ function index() {
       <Head>
         <title>Resources & Insights — Used Vehicle Buying, Selling & Inspection Guides | Reecomm</title>
         <meta name="description" content="Expert guides on buying, selling, and inspecting used vehicles in India. Buying guides, market trends, inspection tips, and selling advice — all from Reecomm's verified marketplace." />
-        <link rel="canonical" href="https://www.reecomm.com/blog" />
+        <link key="canonical" rel="canonical" href="https://www.reecomm.com/blog" />
         
         {/* Open Graph Tags */}
         <meta property="og:title" content="Resources & Insights — Used Vehicle Guides | Reecomm" />

@@ -36,7 +36,7 @@ function Index({ seo }) {
           }
         />
         {/* Canonical */}
-        <link rel="canonical" href="https://www.reecomm.com/search" />
+        <link key="canonical" rel="canonical" href="https://www.reecomm.com/search" />
 
         {/* Open Graph */}
         <meta property="og:type" content="website" />

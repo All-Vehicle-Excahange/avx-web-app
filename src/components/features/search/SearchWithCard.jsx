@@ -1909,40 +1909,47 @@ export default function SearchWithCard({
                 <VehicleCardSkeleton key={`skel-${i}`} />
               ))}
             </>
-          ) : (
-            vehicles?.length > 0 && (
-              <>
-                <div className="col-span-full">
-                  <div className="flex flex-col items-start gap-2">
-                    <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
-                      Top Vehicle
-                      <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
-                    </p>
+          ) : vehicles?.length > 0 ? (
+            <>
+              <div className="col-span-full">
+                <div className="flex flex-col items-start gap-2">
+                  <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
+                    Top Vehicle
+                    <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
+                  </p>
 
-                    <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-                      <span className="text-fourth"> Top Vehicle</span> For You
-                    </h2>
+                  <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
+                    <span className="text-fourth"> Top Vehicle</span> For You
+                  </h2>
 
-                    <p className="text-third">
-                      Lorem ipsum dolor sit amet consectetur dolor sit amet
-                      consectetur..
-                    </p>
-                  </div>
+                  <p className="text-third">
+                    Lorem ipsum dolor sit amet consectetur dolor sit amet
+                    consectetur..
+                  </p>
                 </div>
+              </div>
 
-                {vehicles.map((vehicle) => (
-                  <VehicleCard key={vehicle.id} data={vehicle} />
-                ))}
+              {vehicles.map((vehicle) => (
+                <VehicleCard key={vehicle.id} data={vehicle} />
+              ))}
 
-                {topPicksPageResponse?.totalElements > 9 && (
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                  />
-                )}
-              </>
-            )
+              {topPicksPageResponse?.totalElements > 9 && (
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              )}
+            </>
+          ) : (
+            <div className="col-span-full py-12 text-center bg-secondary/5 rounded-xl border border-third/10 my-4 px-4">
+              <h3 className="text-lg md:text-xl font-bold text-primary">
+                No vehicles listed directly in {selectedCityName || "this location"} yet
+              </h3>
+              <p className="text-sm text-third mt-2 max-w-md mx-auto">
+                We are actively verifying new consultants and pre-owned listings here. In the meantime, browse the top verified matches and recommendations near you below.
+              </p>
+            </div>
           )}
         </div>
       </main>
