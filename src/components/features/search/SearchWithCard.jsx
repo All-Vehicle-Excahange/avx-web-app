@@ -1941,7 +1941,7 @@ export default function SearchWithCard({
                 />
               )}
             </>
-          ) : (
+          ) : (vehicles?.length === 0 && priceBasedVehicles?.length === 0) ? (
             <div className="col-span-full py-12 text-center bg-secondary/5 rounded-xl border border-third/10 my-4 px-4">
               <h3 className="text-lg md:text-xl font-bold text-primary">
                 {selectedCityName ? (
@@ -1956,7 +1956,7 @@ export default function SearchWithCard({
                 We are actively verifying new consultants and pre-owned listings here. In the meantime, browse the top verified matches and recommendations near you below.
               </p>
             </div>
-          )}
+          ) : null}
         </div>
       </main>
 
