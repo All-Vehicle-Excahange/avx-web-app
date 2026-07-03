@@ -35,7 +35,8 @@ export default function ReecommSponcerSection() {
   });
 
   const cardData = useMemo(() => {
-    return (recommendedAdsData?.data || []).map((item) => ({
+    const list = recommendedAdsData?.data?.content || recommendedAdsData?.data || [];
+    return (Array.isArray(list) ? list : []).map((item) => ({
       ...item.vehicle,
       sponsored: item.sponsored,
       adId: item.adId,
