@@ -151,32 +151,34 @@ export async function getServerSideProps(context) {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.reecomm.com/api/v1";
   const nodeApiUrl = process.env.NEXT_PUBLIC_NODE_API_URL || "https://api.reecomm.com/api/v1";
 
-  // 1. Resolve City ID
+  // 1. Resolve City ID / State ID
   if (city) {
-    initialFilters.cityName = city.charAt(0).toUpperCase() + city.slice(1);
+    const searchLocation = city.replace(/-/g, " ");
+    initialFilters.cityName = searchLocation.charAt(0).toUpperCase() + searchLocation.slice(1);
     initialFilters.location = initialFilters.cityName;
     
     try {
-      const cityRes = await fetch(`${apiUrl}/util/address/search-cities-states?searchText=${city}`);
+      const cityRes = await fetch(`${apiUrl}/util/address/search-cities-states?searchText=${encodeURIComponent(searchLocation)}`);
       if (cityRes.ok) {
         const cityJson = await cityRes.json();
-        const foundCity = cityJson?.data?.find(c => c.cityName.toLowerCase() === city.toLowerCase());
+        const foundCity = cityJson?.data?.find(c => c.cityName.toLowerCase() === searchLocation.toLowerCase());
         if (foundCity) {
           initialFilters.cityId = foundCity.cityId;
           initialFilters.stateId = foundCity.stateId;
           initialFilters.cityName = foundCity.cityName;
           initialFilters.location = foundCity.cityName;
         } else {
-          const foundState = cityJson?.data?.find(c => c.stateName.toLowerCase() === city.toLowerCase());
+          const foundState = cityJson?.data?.find(c => c.stateName.toLowerCase() === searchLocation.toLowerCase());
           if (foundState) {
             initialFilters.stateId = foundState.stateId;
             initialFilters.stateName = foundState.stateName;
             initialFilters.location = foundState.stateName;
+            initialFilters.cityName = "";
           }
         }
       }
     } catch (e) {
-      console.error("City resolution failed:", e);
+      console.error("City/State resolution failed:", e);
     }
   }
 

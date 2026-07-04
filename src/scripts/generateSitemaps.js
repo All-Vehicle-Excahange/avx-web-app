@@ -48,7 +48,7 @@ const statesData = {
 };
 
 const BASE_URL = "https://www.reecomm.com";
-const CITY_API_ENDPOINT = "https://reecomm-spring-fcde06afd95d.herokuapp.com/api/v1/website/util/address/cities";
+const CITY_API_ENDPOINT = "https://api.reecomm.online/api/v1/website/util/address/cities";
 const OUTPUT_DIR = path.join(process.cwd(), 'public', 'sitemaps');
 
 async function generateSitemaps() {
@@ -79,6 +79,13 @@ async function generateSitemaps() {
 
       let xmlContent = `<?xml version="1.0" encoding="UTF-8"?>\n`;
       xmlContent += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+      
+      // Add state-level search landing page URL
+      xmlContent += `  <url>\n`;
+      xmlContent += `    <loc>${BASE_URL}/search/buy-used-cars-${stateSlug}</loc>\n`;
+      xmlContent += `    <changefreq>daily</changefreq>\n`;
+      xmlContent += `    <priority>0.9</priority>\n`;
+      xmlContent += `  </url>\n`;
       
       cities.forEach(city => {
         const citySlug = city.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');

@@ -39,6 +39,25 @@ export default async function handler(req, res) {
       });
     });
 
+    // Popular Indian states to map combinations for search landing pages
+    const states = [
+      "maharashtra", "karnataka", "telangana", "gujarat", "tamil-nadu",
+      "west-bengal", "punjab", "rajasthan", "uttar-pradesh", "haryana",
+      "madhya-pradesh", "andhra-pradesh", "kerala", "bihar"
+    ];
+
+    // 3. Add Brand + State combination URLs (e.g. buy-used-hyundai-cars-haryana)
+    brands.forEach((brand) => {
+      states.forEach((state) => {
+        xml += `  <url>\n`;
+        xml += `    <loc>${BASE_URL}/search/buy-used-${brand}-cars-${state}</loc>\n`;
+        xml += `    <lastmod>${now}</lastmod>\n`;
+        xml += `    <changefreq>weekly</changefreq>\n`;
+        xml += `    <priority>0.6</priority>\n`;
+        xml += `  </url>\n`;
+      });
+    });
+
     xml += `</urlset>`;
 
     res.setHeader("Content-Type", "application/xml; charset=utf-8");

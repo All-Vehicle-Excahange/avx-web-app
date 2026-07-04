@@ -813,7 +813,10 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       className="w-full bg-transparent border-none outline-none text-sm text-gray-200 placeholder-gray-400 font-medium truncate"
                       value={brandSearch}
                       onChange={(e) => setBrandSearch(e.target.value)}
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleActiveTabChange("brand");
+                      }}
                     />
                     {activeTab === "brand" && (
                       <div className="absolute top-[110%] left-0 z-50 dropdown-active w-[300px] bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">

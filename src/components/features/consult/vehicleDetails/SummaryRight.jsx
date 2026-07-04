@@ -117,17 +117,30 @@ export default function SummaryRight({ vehicle, summary }) {
           {/* SELLER / DEALER INFO */}
           <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
             <div className="space-y-2 w-full">
-              {/* Seller name: consultation name OR vehicle owner firstname+lastname */}
-              <h3 className="text-md font-semibold">
-                {vehicleOwnerRole === "CONSULTATION"
-                  ? summary?.consultationName || "Auto Consultant"
-                  : [
+              {vehicleOwnerRole === "CONSULTATION" ? (
+                <>
+                  <span className="text-xs uppercase tracking-[0.1em] text-fourth font-bold block mb-1">
+                    Listed By Auto Consultant
+                  </span>
+                  <h3 className="text-xl font-bold text-primary">
+                    {summary?.consultationName || "Auto Consultant"}
+                  </h3>
+                </>
+              ) : (
+                <>
+                  <span className="text-xs uppercase tracking-[0.1em] text-third font-medium block mb-1">
+                    Private Seller
+                  </span>
+                  <h3 className="text-xl font-bold text-primary">
+                    {[
                       vehicle?.vehicleOwner?.firstname,
                       vehicle?.vehicleOwner?.lastname,
                     ]
                       .filter(Boolean)
-                      .join(" ") || "Private Seller"}
-              </h3>
+                      .join(" ") || "Individual Seller"}
+                  </h3>
+                </>
+              )}
 
               {vehicleOwnerRole === "CONSULTATION" ? (
                 /* ── CONSULTATION-ONLY stats ── */
@@ -177,7 +190,7 @@ export default function SummaryRight({ vehicle, summary }) {
               {vehicleOwnerRole === "CONSULTATION" && (
                 <div className="space-y-2 mt-4">
                   <p className="text-sm font-medium text-primary">
-                    Whats Included
+                    Services Offered
                   </p>
 
                   <ul className="text-sm text-third">

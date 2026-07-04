@@ -32,6 +32,7 @@ body {
   background: linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%);
   color: var(--color-primary);
   font-family: var(--secondary-font);
+  overflow-x: hidden;
 }
 
 h1,

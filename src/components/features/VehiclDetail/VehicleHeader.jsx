@@ -114,7 +114,7 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
           Inspection Rating: {vehicle?.avxInspectionRating || "-"}
         </span>
         {vehicle?.inspectionStatus && (
-          <span className="text-xs font-semibold px-2 py-0.5 rounded-full border border-third/40 text-primary bg-third/10">
+          <span className="text-xs font-bold px-2.5 py-0.5 rounded-full border border-fourth text-white bg-fourth shadow-sm">
             {vehicle.inspectionStatus.replace(/_/g, " ")}
           </span>
         )}

@@ -105,16 +105,30 @@ export default function VehicleSummaryRight({
           {/* HEADER */}
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-md font-semibold text-primary">
-                {vehicleOwnerRole === "CONSULTATION"
-                  ? summary?.consultationName || "Auto Consultant"
-                  : [
+              {vehicleOwnerRole === "CONSULTATION" ? (
+                <>
+                  <span className="text-xs uppercase tracking-[0.1em] text-fourth font-bold block mb-1">
+                    Listed By Auto Consultant
+                  </span>
+                  <p className="text-xl font-bold text-primary">
+                    {summary?.consultationName || "Auto Consultant"}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <span className="text-xs uppercase tracking-[0.1em] text-third font-medium block mb-1">
+                    Private Seller
+                  </span>
+                  <p className="text-xl font-bold text-primary">
+                    {[
                       vehicle?.vehicleOwner?.firstname,
                       vehicle?.vehicleOwner?.lastname,
                     ]
                       .filter(Boolean)
-                      .join(" ") || "Private Seller"}
-              </p>
+                      .join(" ") || "Individual Seller"}
+                  </p>
+                </>
+              )}
 
               <h2 className="hidden text-2xl font-bold leading-tight">
                 {[vehicle?.makerName, vehicle?.modelName, vehicle?.variantName]
@@ -190,7 +204,7 @@ export default function VehicleSummaryRight({
               {vehicleOwnerRole === "CONSULTATION" && (
                 <div className="space-y-3 mt-4">
                   <p className="text-sm font-medium text-primary">
-                    Whats Included
+                    Services Offered
                   </p>
 
                   <div className="flex flex-wrap gap-2 pt-1">

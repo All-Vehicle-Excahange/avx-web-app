@@ -7,6 +7,7 @@ import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 
 const ShowcaseSection = () => {
   const [vehicle, setVehicle] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,9 +22,11 @@ const ShowcaseSection = () => {
 
         // Ensure state always receives an array
         setVehicle(res?.data || []);
+        setTotalCount(res?.pagination?.totalElements || res?.pagination?.total || (res?.data || []).length);
       } catch (error) {
         console.error("Error fetching vehicles:", error);
         setVehicle([]);
+        setTotalCount(0);
       } finally {
         setLoading(false);
       }
@@ -66,11 +69,13 @@ const ShowcaseSection = () => {
       </div>
 
       {/* Button */}
-      <div className="mt-4 flex justify-end">
-        <Button href="/search" variant="outlineAnimated" size="md">
-          Explore All Vehicles
-        </Button>
-      </div>
+      {totalCount > 4 && (
+        <div className="mt-4 flex justify-end">
+          <Button href="/search" variant="outlineAnimated" size="md">
+            Explore All Vehicles
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

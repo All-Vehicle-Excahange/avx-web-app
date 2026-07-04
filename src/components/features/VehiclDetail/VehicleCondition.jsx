@@ -692,9 +692,9 @@ export default function VehicleCondition({ vehicle, open, setOpen, inspectionDet
           <div className="flex items-center gap-2">
             <CheckCircle size={20} />
             <h3 className="text-xl font-semibold">Vehicle Condition  </h3>
-            {d?.inspectionScore != null && (
-              <span className="text-xs font-semibold px-2 py-0.5 rounded-full ml-1 border border-third/40 text-primary bg-third/10">
-                {d.inspectionStatus?.replace(/_/g, " ")}
+            {(d?.inspectionStatus || vehicle?.inspectionStatus) && (
+              <span className="text-xs font-bold px-2.5 py-0.5 rounded-full ml-1.5 border border-fourth text-white bg-fourth shadow-sm">
+                {(d?.inspectionStatus || vehicle?.inspectionStatus).replace(/_/g, " ")}
               </span>
             )}
           </div>

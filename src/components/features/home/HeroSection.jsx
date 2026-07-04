@@ -23,7 +23,7 @@ export default function HeroSection() {
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
   return (
-    <section className="relative h-screen w-full overflow-hidden">
+    <section className="relative h-screen w-full">
       {/* Swiper Background */}
       <div className="absolute inset-0 w-full h-full z-0">
         <Swiper

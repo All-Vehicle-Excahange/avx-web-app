@@ -117,7 +117,7 @@ const CategoriesSections = () => {
           </div>
 
           {/* Toggle Switch */}
-          <div className="flex gap-1 sm:gap-2 mt-auto justify-end w-full sm:w-fit">
+          <div className="flex p-0.5 bg-neutral-950/80 border border-white/10 rounded-full w-fit mt-auto ml-auto sm:ml-0 shrink-0">
             <button
               type="button"
               onClick={() => {
@@ -128,15 +128,15 @@ const CategoriesSections = () => {
                 }
               }}
               className={cn(
-                "px-3 py-1 text-xs sm:text-sm font-medium rounded-full border cursor-pointer flex items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0",
+                "px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full cursor-pointer flex items-center justify-center gap-1.5 transition-all duration-300 whitespace-nowrap shrink-0",
                 activeType === "4-Wheeler"
-                  ? "bg-fourth text-primary border-fourth shadow-sm"
-                  : "text-primary border-white/20 hover:border-primary/40",
+                  ? "bg-fourth text-white shadow-md"
+                  : "text-third hover:text-primary",
               )}
             >
               <Car size={16} /> 4-Wheeler
             </button>
-
+  
             <button
               type="button"
               onClick={() => {
@@ -147,10 +147,10 @@ const CategoriesSections = () => {
                 }
               }}
               className={cn(
-                "px-3 py-1 text-xs sm:text-sm font-medium rounded-full border cursor-pointer flex items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0",
+                "px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full cursor-pointer flex items-center justify-center gap-1.5 transition-all duration-300 whitespace-nowrap shrink-0",
                 activeType === "2-Wheeler"
-                  ? "bg-fourth text-primary border-fourth shadow-sm"
-                  : "text-primary border-white/20 hover:border-primary/40",
+                  ? "bg-fourth text-white shadow-md"
+                  : "text-third hover:text-primary",
               )}
             >
               <Bike size={16} /> 2-Wheeler

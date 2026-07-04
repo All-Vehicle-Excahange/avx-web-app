@@ -470,13 +470,13 @@ export default function SearchWithCard({
 
     const brandName = resolvedBrandName;
     const modelName = resolvedModelName;
-    const cityName = selectedCityName;
+    const locationName = selectedCityName || selectedStateName;
 
     // Build the target SEO slug
-    const targetSlug = generateSeoSlug({ brandName, modelName, cityName });
+    const targetSlug = generateSeoSlug({ brandName, modelName, cityName: locationName });
     const currentSlug = pathname.split("/").pop();
 
-    if (!brandName && !cityName) {
+    if (!brandName && !locationName) {
       // If we are currently on an SEO slug page but filters are empty, go back to base search
       if (currentSlug && currentSlug.startsWith("buy-used-")) {
         replace("/search", { scroll: false });
@@ -487,7 +487,7 @@ export default function SearchWithCard({
     if (targetSlug !== currentSlug) {
       replace(`/search/${targetSlug}`, { scroll: false });
     }
-  }, [resolvedBrandName, resolvedModelName, selectedCityName, pathname]);
+  }, [resolvedBrandName, resolvedModelName, selectedCityName, selectedStateName, pathname]);
 
   useEffect(() => {
     if (onLoadingChange) onLoadingChange(vehiclesLoading);
