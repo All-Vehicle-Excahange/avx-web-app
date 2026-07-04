@@ -108,7 +108,7 @@ export default function ReletedConsualt(props) {
     };
 
     return (
-        <div className="w-full py-8 md:py-12">
+        <div className="w-full pb-3 md:pb-4">
             {/* Header */}
             <div className="flex flex-col items-start gap-2">
                 <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
@@ -145,7 +145,7 @@ export default function ReletedConsualt(props) {
                 )}
             </div>
 
-            <div className="mt-8 flex justify-end">
+            <div className="mt-4 flex justify-end">
                 <Button onClick={handleViewMore} variant="outlineAnimated">
                     Explore All
                 </Button>
