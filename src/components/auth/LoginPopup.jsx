@@ -5,8 +5,11 @@ import { createPortal } from "react-dom";
 import { X, Loader2, User, UserCheck } from "lucide-react";
 import Image from "next/image";
 import Button from "@/components/ui/button";
-import { getOtp, login } from "@/services/auth.service";
+import { getOtp, login, googleVerify, googleSignupVerify } from "@/services/auth.service";
 import { useForm } from "react-hook-form";
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "@/config/firebase";
+import { FcGoogle } from "react-icons/fc";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay, EffectFade } from 'swiper/modules';
 import 'swiper/css';
@@ -37,6 +40,9 @@ function LoginPopup({
   const otpRefs = useRef([]);
   const [isClosing, setIsClosing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [googleToken, setGoogleToken] = useState(null);
+  const [isGoogleSignupFlow, setIsGoogleSignupFlow] = useState(false);
 
   // Check for active block on mount or when popup opens
   useEffect(() => {
@@ -78,6 +84,9 @@ function LoginPopup({
       setOtpSent(false);
       setOtpError("");
       setCountdown(0);
+      setGoogleToken(null);
+      setIsGoogleSignupFlow(false);
+      setIsGoogleLoading(false);
       localStorage.removeItem("otpBlockUntil");
       onClose();
     }, 250);
@@ -119,6 +128,38 @@ function LoginPopup({
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsGoogleLoading(true);
+      const result = await signInWithPopup(auth, googleProvider);
+      const idToken = await result.user.getIdToken();
+
+      const res = await googleVerify({ googleIdToken: idToken });
+
+      if (res?.success || res?.status) {
+        if (res.data?.requiresPhoneVerification) {
+          setGoogleToken(idToken);
+          setIsGoogleSignupFlow(true);
+        } else {
+          localStorage.removeItem("otpBlockUntil");
+          setCountdown(0);
+          onSuccess();
+          handleClose();
+        }
+      } else if (res?.error) {
+        setError("root", { type: "server", message: res.message || "Google sign-in failed" });
+      }
+    } catch (err) {
+      console.error(err);
+      const apiMsg = err?.response?.data?.message;
+      if (err?.code !== 'auth/popup-closed-by-user') {
+        setError("root", { type: "server", message: apiMsg || "Google sign-in failed" });
+      }
+    } finally {
+      setIsGoogleLoading(false);
+    }
+  };
+
   const onSendOtp = async () => {
     try {
       setIsLoading(true);
@@ -127,7 +168,7 @@ function LoginPopup({
       const res = await getOtp({
         phoneNumber: phone,
         countryCode: "+91",
-        requestType: "LOGIN",
+        requestType: isGoogleSignupFlow ? "SIGNUP" : "LOGIN",
       });
 
       if (res?.success || res?.status) {
@@ -177,11 +218,22 @@ function LoginPopup({
       setIsLoading(true);
       const phone = getValues("phoneNumber");
 
-      const res = await login({
-        phoneNumber: phone,
-        countryCode: "+91",
-        otp: finalOtp,
-      });
+      let res;
+      if (isGoogleSignupFlow) {
+        res = await googleSignupVerify({
+          googleIdToken: googleToken,
+          phoneNumber: phone,
+          countryCode: "+91",
+          otp: finalOtp,
+          isApplyForConsultation: false,
+        });
+      } else {
+        res = await login({
+          phoneNumber: phone,
+          countryCode: "+91",
+          otp: finalOtp,
+        });
+      }
 
       if (res?.success || res?.status) {
         localStorage.removeItem("otpBlockUntil");
@@ -304,19 +356,51 @@ function LoginPopup({
 
         {/* RIGHT FORM */}
         <form
-          className="w-full md:w-7/12 p-8 md:p-12 bg-secondary"
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (!otpSent) {
-              handleSubmit(onSendOtp)();
-            } else {
-              onValidateOtp();
-            }
-          }}
+          className="w-full md:w-7/12 p-8 md:p-12 bg-secondary flex flex-col justify-center"
+          onSubmit={handleSubmit(otpSent ? onValidateOtp : onSendOtp)}
         >
           <h3 className="text-2xl font-bold mb-6 text-primary">
-            Log in to <br /> continue
+            {isGoogleSignupFlow ? (
+              <>
+                Verify mobile number
+              </>
+            ) : (
+              <>
+                Log in to <br /> continue
+              </>
+            )}
           </h3>
+
+          {errors.root?.message && (
+            <p className="text-red-500 text-sm mb-4 text-center">
+              {errors.root.message}
+            </p>
+          )}
+
+          {!otpSent && !isGoogleSignupFlow && (
+            <div className="mb-4">
+              <Button
+                type="button"
+                className="w-full h-11 text-sm font-bold flex items-center justify-center gap-2 border border-accent-gray bg-transparent text-primary hover:border-accent-gray hover:text-primary hover:shadow-md transition-all"
+                onClick={handleGoogleSignIn}
+                disabled={isLoading || isGoogleLoading}
+                loading={isGoogleLoading}
+              >
+                <FcGoogle className="text-xl" /> Continue with Google
+              </Button>
+              <div className="flex items-center my-4">
+                <div className="flex-1 border-t border-accent-gray/30"></div>
+                <span className="px-3 text-xs text-primary/50">or login with mobile</span>
+                <div className="flex-1 border-t border-accent-gray/30"></div>
+              </div>
+            </div>
+          )}
+
+          {isGoogleSignupFlow && !otpSent && (
+            <div className="mb-4 text-center">
+              <p className="text-sm text-primary/70 mb-2">Almost there! Please verify mobile number to complete sign-in.</p>
+            </div>
+          )}
 
           {/* ✅ MOBILE INPUT */}
           <div className="mb-4">
@@ -425,25 +509,29 @@ function LoginPopup({
             </Button>
           )}
 
-          {/*  SIGNUP SWITCH */}
-          <div className="mt-4 text-center text-sm text-primary/70">
-            Don’t have an account?{" "}
-            <button
-              type="button"
-              onClick={() => {
-                handleClose();
-                setTimeout(() => onSignup(), 100);
-              }}
-              className="font-semibold text-primary hover:underline cursor-pointer"
-            >
-              Create
-            </button>
-          </div>
+          {!isGoogleSignupFlow && (
+            <>
+              {/* REGISTER LINK */}
+              <div className="mt-4 text-primary/60 text-center text-sm">
+                Don’t have an account?{" "}
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleClose();
+                    setTimeout(() => onSignup(), 100);
+                  }}
+                  className="font-semibold text-primary hover:underline cursor-pointer"
+                >
+                  Create
+                </button>
+              </div>
 
-          {/* TERMS */}
-          <div className="text-[10px] text-primary/50 mt-6 text-center">
-            By logging in, you agree to Reecomms Privacy Policy & Terms
-          </div>
+              {/* TERMS */}
+              <div className="text-[10px] text-primary/50 mt-6 text-center">
+                By logging in, you agree to Reecomms Privacy Policy & Terms
+              </div>
+            </>
+          )}
         </form>
       </div>
     </div>

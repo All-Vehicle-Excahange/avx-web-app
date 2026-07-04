@@ -3,8 +3,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import Button from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { getOtp, signup } from "@/services/auth.service";
+import { getOtp, signup, googleVerify, googleSignupVerify } from "@/services/auth.service";
 import { useForm } from "react-hook-form";
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "@/config/firebase";
+import { FcGoogle } from "react-icons/fc";
 
 function Register() {
   const { push } = useRouter();
@@ -20,7 +23,10 @@ function Register() {
   const [otp, setOtp] = useState(Array(6).fill(""));
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [countdown, setCountdown] = useState(0);
+  const [googleToken, setGoogleToken] = useState(null);
+  const [isGoogleSignupFlow, setIsGoogleSignupFlow] = useState(false);
   const otpRefs = useRef([]);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
@@ -64,6 +70,35 @@ function Register() {
   const handleOtpKeyDown = (index, e) => {
     if (e.key === "Backspace" && !otp[index] && index > 0)
       otpRefs.current[index - 1]?.focus();
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsGoogleLoading(true);
+      const result = await signInWithPopup(auth, googleProvider);
+      const idToken = await result.user.getIdToken();
+
+      const res = await googleVerify({ googleIdToken: idToken });
+
+      if (res?.success || res?.status) {
+        if (res.data?.requiresPhoneVerification) {
+          setGoogleToken(idToken);
+          setIsGoogleSignupFlow(true);
+        } else {
+          push("/consult/subscription");
+        }
+      } else if (res?.error) {
+        setError("root", { type: "server", message: res.message || "Google sign-in failed" });
+      }
+    } catch (err) {
+      console.error(err);
+      const apiMsg = err?.response?.data?.message;
+      if (err?.code !== 'auth/popup-closed-by-user') {
+        setError("root", { type: "server", message: apiMsg || "Google sign-in failed" });
+      }
+    } finally {
+      setIsGoogleLoading(false);
+    }
   };
 
   const onSendOtp = async () => {
@@ -149,15 +184,26 @@ function Register() {
       setLoading(true);
       const values = getValues();
 
-      const res = await signup({
-        firstname: values.firstName,
-        lastname: values.lastName,
-        email: values.email,
-        phoneNumber: values.phone,
-        countryCode: "+91",
-        isApplyForConsultation: true,
-        otp: finalOtp,
-      });
+      let res;
+      if (isGoogleSignupFlow) {
+        res = await googleSignupVerify({
+          googleIdToken: googleToken,
+          phoneNumber: values.phone,
+          countryCode: "+91",
+          otp: finalOtp,
+          isApplyForConsultation: true,
+        });
+      } else {
+        res = await signup({
+          firstname: values.firstName,
+          lastname: values.lastName,
+          email: values.email,
+          phoneNumber: values.phone,
+          countryCode: "+91",
+          isApplyForConsultation: true,
+          otp: finalOtp,
+        });
+      }
 
       if (!res?.error && (res?.success || res?.status)) {
         push("/consult/subscription");
@@ -231,11 +277,45 @@ function Register() {
         </p>
       )}
 
+      {!otpSent && !isGoogleSignupFlow && (
+        <div className="mb-4">
+          <Button
+            type="button"
+            className="w-full h-11 text-sm font-bold flex items-center justify-center gap-2 border border-accent-gray bg-transparent text-primary hover:border-accent-gray hover:text-primary hover:shadow-md transition-all"
+            onClick={handleGoogleSignIn}
+            disabled={loading || isGoogleLoading}
+            loading={isGoogleLoading}
+          >
+            <FcGoogle className="text-xl" /> Continue with Google
+          </Button>
+          <div className="flex items-center my-4">
+            <div className="flex-1 border-t border-accent-gray/30"></div>
+            <span className="px-3 text-xs text-primary/50">or register with mobile</span>
+            <div className="flex-1 border-t border-accent-gray/30"></div>
+          </div>
+        </div>
+      )}
+
+      {isGoogleSignupFlow && !otpSent && (
+        <div className="mb-4 text-center">
+          <p className="text-sm text-primary/70 mb-2">Almost there! Please verify mobile number to complete sign-in.</p>
+        </div>
+      )}
+
       {/* FORM FIELDS */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <div>
-          <input
-            placeholder="First Name"
+      {!isGoogleSignupFlow && (
+        <>
+          <h1 className="text-4xl font-bold mb-2">
+            {isGoogleSignupFlow ? (
+              <>Verify mobile number</>
+            ) : (
+              <>Create your <br /> account</>
+            )}
+          </h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <input
+                placeholder="First Name"
             {...register("firstName", {
               required: "First Name is required",
             })}
@@ -267,11 +347,13 @@ function Register() {
           placeholder="Email address"
           {...register("email")}
           className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
-        />
-        {errors.email && (
-          <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
-        )}
-      </div>
+            />
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+            )}
+          </div>
+        </>
+      )}
 
       <div className="mb-4">
         <div className="flex items-center text-primary border rounded-md border-accent-gray">

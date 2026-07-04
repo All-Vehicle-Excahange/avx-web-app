@@ -7,6 +7,8 @@ const ENDPOINT = {
   login: "/auth/login",
   refresh: "/auth/refresh",
   logout: "/auth/logout",
+  googleVerify: "/auth/google/verify",
+  googleSignupVerify: "/auth/google/signup/verify",
 };
 
 export const getOtp = async ({
@@ -80,4 +82,55 @@ export const refreshToken = async () => {
 export const logoutUser = async () => {
   const res = await axiosInstance.post(ENDPOINT.logout);
   return res.data;
+};
+
+export const googleVerify = async ({ googleIdToken }) => {
+  const res = await axiosInstance.post(ENDPOINT.googleVerify, {
+    googleIdToken,
+  });
+
+  const normalizedResponse = handleResponse(res);
+  if (normalizedResponse.success && normalizedResponse.data?.authResponse?.accessToken) {
+    const authData = normalizedResponse.data.authResponse;
+    const user = authData.userMaster || authData;
+    useAuthStore.getState().login(
+      {
+        userMaster: user,
+        refreshToken: authData.refreshToken,
+      },
+      authData.accessToken,
+    );
+  }
+
+  return normalizedResponse;
+};
+
+export const googleSignupVerify = async ({
+  googleIdToken,
+  phoneNumber,
+  countryCode,
+  otp,
+  isApplyForConsultation,
+}) => {
+  const res = await axiosInstance.post(ENDPOINT.googleSignupVerify, {
+    googleIdToken,
+    phoneNumber,
+    countryCode,
+    otp,
+    isApplyForConsultation,
+  });
+
+  const normalizedResponse = handleResponse(res);
+  if (normalizedResponse.success && normalizedResponse.data?.accessToken) {
+    const user = normalizedResponse.data.userMaster || normalizedResponse.data;
+    useAuthStore.getState().login(
+      {
+        userMaster: user,
+        refreshToken: normalizedResponse.data.refreshToken,
+      },
+      normalizedResponse.data.accessToken,
+    );
+  }
+
+  return normalizedResponse;
 };

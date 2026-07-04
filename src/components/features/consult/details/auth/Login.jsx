@@ -3,8 +3,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import Button from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { getOtp, login } from "@/services/auth.service";
+import { getOtp, login, googleVerify, googleSignupVerify } from "@/services/auth.service";
 import { useForm } from "react-hook-form";
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "@/config/firebase";
+import { FcGoogle } from "react-icons/fc";
 
 function Login() {
   const { push } = useRouter();
@@ -21,7 +24,10 @@ function Login() {
   const [otpSent, setOtpSent] = useState(false);
   const [otpError, setOtpError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [countdown, setCountdown] = useState(0);
+  const [googleToken, setGoogleToken] = useState(null);
+  const [isGoogleSignupFlow, setIsGoogleSignupFlow] = useState(false);
   const otpRefs = useRef([]);
 
   // Check for active block on mount
@@ -71,6 +77,36 @@ function Login() {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsGoogleLoading(true);
+      const result = await signInWithPopup(auth, googleProvider);
+      const idToken = await result.user.getIdToken();
+
+      const res = await googleVerify({ googleIdToken: idToken });
+
+      if (res?.success || res?.status) {
+        if (res.data?.requiresPhoneVerification) {
+          setGoogleToken(idToken);
+          setIsGoogleSignupFlow(true);
+        } else {
+          push("/consult/subscription");
+        }
+      } else if (res?.error) {
+        setError("root", { type: "server", message: res.message || "Google sign-in failed" });
+      }
+    } catch (err) {
+      console.error(err);
+      const apiMsg = err?.response?.data?.message;
+      if (err?.code !== 'auth/popup-closed-by-user') {
+        setError("root", { type: "server", message: apiMsg || "Google sign-in failed" });
+      }
+    } finally {
+      setIsGoogleLoading(false);
+    }
+  };
+
+
   const onSendOtp = async () => {
     try {
       setLoading(true);
@@ -78,7 +114,7 @@ function Login() {
       const res = await getOtp({
         phoneNumber: phone,
         countryCode: "+91",
-        requestType: "LOGIN",
+        requestType: isGoogleSignupFlow ? "SIGNUP" : "LOGIN",
       });
 
       if (res?.success || res?.status) {
@@ -121,11 +157,23 @@ function Login() {
     try {
       setLoading(true);
       const phone = getValues("phoneNumber");
-      const res = await login({
-        phoneNumber: phone,
-        countryCode: "+91",
-        otp: finalOtp,
-      });
+      
+      let res;
+      if (isGoogleSignupFlow) {
+        res = await googleSignupVerify({
+          googleIdToken: googleToken,
+          phoneNumber: phone,
+          countryCode: "+91",
+          otp: finalOtp,
+          isApplyForConsultation: false,
+        });
+      } else {
+        res = await login({
+          phoneNumber: phone,
+          countryCode: "+91",
+          otp: finalOtp,
+        });
+      }
 
       if (res?.success || res?.status) {
         push("/consult/subscription");
@@ -162,6 +210,45 @@ function Login() {
         }
       }}
     >
+      {errors.root?.message && (
+        <p className="text-red-500 text-sm mb-4 text-center">
+          {errors.root.message}
+        </p>
+      )}
+
+      {!otpSent && !isGoogleSignupFlow && (
+        <div className="mb-4">
+          <Button
+            type="button"
+            className="w-full h-11 text-sm font-bold flex items-center justify-center gap-2 border border-accent-gray bg-transparent text-primary hover:border-accent-gray hover:text-primary hover:shadow-md transition-all"
+            onClick={handleGoogleSignIn}
+            disabled={loading || isGoogleLoading}
+            loading={isGoogleLoading}
+          >
+            <FcGoogle className="text-xl" /> Continue with Google
+          </Button>
+          <div className="flex items-center my-4">
+            <div className="flex-1 border-t border-accent-gray/30"></div>
+            <span className="px-3 text-xs text-primary/50">or login with mobile</span>
+            <div className="flex-1 border-t border-accent-gray/30"></div>
+          </div>
+        </div>
+      )}
+
+      {isGoogleSignupFlow && !otpSent && (
+        <div className="mb-4 text-center">
+          <p className="text-sm text-primary/70 mb-2">Almost there! Please verify mobile number to complete sign-in.</p>
+        </div>
+      )}
+
+      <h1 className="text-4xl font-bold mb-6">
+        {isGoogleSignupFlow ? (
+          <>Verify mobile number</>
+        ) : (
+          <>Log in to <br /> continue</>
+        )}
+      </h1>
+
       <div className="mb-4">
         <label className="block text-sm mb-2 text-primary/70">
           Mobile number
