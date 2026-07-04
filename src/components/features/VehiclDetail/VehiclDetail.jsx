@@ -258,7 +258,7 @@ export default function VehicleDetails({
               </aside>
             </section>
           </section>
-          <section className="pt-8 md:pt-12 flex flex-col gap-8 md:gap-10">
+          <section className="pt-12 flex flex-col gap-12">
             <SimulerVehicle vehicleOverview={vehicleOverview} />
             <ReletedConsualt
               limit={4}

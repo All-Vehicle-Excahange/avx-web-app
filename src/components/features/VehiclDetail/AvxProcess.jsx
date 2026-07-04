@@ -144,7 +144,7 @@ export default function AvxProcess() {
   return (
     <section
       ref={containerRef}
-      className="w-full relative overflow-hidden pt-4 md:pt-6 pb-6 md:pb-8"
+      className="w-full relative overflow-hidden py-10"
     >
       <div className="w-full">
         {/* Header with Vertical Accent */}

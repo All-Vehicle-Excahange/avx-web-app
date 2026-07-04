@@ -97,7 +97,8 @@ function SimulerVehicle({ vehicleOverview }) {
                 )}
             </div>
 
-            <div className="mt-4 flex justify-end">
+            {/* Bottom Right Button */}
+            <div className="mt-6 flex justify-end">
                 <Button size="sm" variant="outlineAnimated" onClick={handleViewMore}>View More</Button>
             </div>
         </div>
