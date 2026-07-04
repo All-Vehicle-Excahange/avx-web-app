@@ -101,9 +101,9 @@ export default function VehicleSummaryRight({
   return (
     <>
       <aside className="relative text-primary rounded-2xl shadow-xl overflow-hidden border border-third/60">
-        <div className="relative z-10 p-6 space-y-5">
+        <div className="relative z-10 p-6 space-y-4">
           {/* HEADER */}
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-1">
             {vehicleOwnerRole === "CONSULTATION" ? (
               <>
                 {/* Label row + Visit Storefront on same line */}
