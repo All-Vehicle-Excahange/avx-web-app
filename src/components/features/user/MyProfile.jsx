@@ -15,6 +15,13 @@ import {
   CheckCircle2,
   AlertCircle,
   Ban,
+  User,
+  Mail,
+  Phone,
+  ShieldCheck,
+  Calendar,
+  MapPin,
+  Map,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { ProfileSkeleton } from "@/components/ui/skeleton";
@@ -667,9 +674,16 @@ function MyProfile() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
         {/*  PROFILE INFO SECTION */}
-        <div className="rounded-2xl border border-third/40 px-6 pb-6">
-          <div className="flex justify-between py-6">
-            <h2 className="text-lg font-semibold">Profile Info</h2>
+        <div className="bg-secondary/40 backdrop-blur-md rounded-3xl border border-white/10 p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.37)] hover:border-fourth/30 transition-all duration-300 relative group overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-fourth/5 rounded-full blur-2xl pointer-events-none group-hover:bg-fourth/10 transition-all duration-500" />
+          
+          <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-fourth/10 flex items-center justify-center text-fourth border border-fourth/20">
+                <User size={20} />
+              </div>
+              <h2 className="text-xl font-bold text-primary tracking-tight">Profile Info</h2>
+            </div>
 
             {!isEditingProfile && profile.role !== "USER_SELLER_APPLICANT" && (
               <Button variant="ghost" onClick={handleEditProfile}>
@@ -679,44 +693,51 @@ function MyProfile() {
           </div>
 
           {!isEditingProfile && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-              <ProfileItem label="First Name" value={profile.firstName} />
-              <ProfileItem label="Last Name" value={profile.lastName} />
-              <ProfileItem label="Email" value={profile.email} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+              <ProfileItem label="First Name" value={profile.firstName} icon={User} />
+              <ProfileItem label="Last Name" value={profile.lastName} icon={User} />
+              <ProfileItem label="Email" value={profile.email} icon={Mail} />
               <ProfileItem
                 label="Phone"
-                value={profile.countryCode + " " + profile.phoneNumber}
+                value={
+                  profile.phoneNumber
+                    ? `${profile.countryCode || "+91"} ${profile.phoneNumber}`
+                    : null
+                }
+                icon={Phone}
               />
-              <ProfileItem label="Role" value={formatRole(profile.role)} />
+              <ProfileItem label="Role" value={formatRole(profile.role)} icon={ShieldCheck} className="sm:col-span-2" />
             </div>
           )}
 
           {isEditingProfile && (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <InputField
-                  label="First Name"
-                  variant="colored"
-                  value={profileForm.firstName || ""}
-                  onChange={(e) =>
-                    setProfileForm({
-                      ...profileForm,
-                      firstName: e.target.value,
-                    })
-                  }
-                />
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <InputField
+                    label="First Name"
+                    variant="colored"
+                    value={profileForm.firstName || ""}
+                    onChange={(e) =>
+                      setProfileForm({
+                        ...profileForm,
+                        firstName: e.target.value,
+                      })
+                    }
+                  />
 
-                <InputField
-                  label="Last Name"
-                  variant="colored"
-                  value={profileForm.lastName || ""}
-                  onChange={(e) =>
-                    setProfileForm({
-                      ...profileForm,
-                      lastName: e.target.value,
-                    })
-                  }
-                />
+                  <InputField
+                    label="Last Name"
+                    variant="colored"
+                    value={profileForm.lastName || ""}
+                    onChange={(e) =>
+                      setProfileForm({
+                        ...profileForm,
+                        lastName: e.target.value,
+                      })
+                    }
+                  />
+                </div>
 
                 <InputField
                   label="Email"
@@ -746,11 +767,11 @@ function MyProfile() {
                 <button
                   disabled={!isProfileFormValid}
                   onClick={handleSaveProfile}
-                  className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium transition
+                  className={`flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-bold transition-all duration-300 text-sm hover:cursor-pointer
                     ${
                       !isProfileFormValid
-                        ? "bg-gray-400 cursor-not-allowed text-white"
-                        : "bg-primary border text-secondary hover:bg-transparent hover:text-primary hover:border-primary hover:border "
+                        ? "bg-white/10 text-white/40 border border-white/5 cursor-not-allowed"
+                        : "bg-fourth text-white border border-fourth hover:bg-transparent hover:text-fourth shadow-[0_4px_12px_rgba(0,123,255,0.2)]"
                     }`}
                 >
                   {!isProfileFormValid ? (
@@ -768,9 +789,16 @@ function MyProfile() {
         </div>
 
         {/* ✅ PROFILE META SECTION */}
-        <div className="relative overflow-visible rounded-2xl border border-third/40 px-6 pb-6">
-          <div className="flex justify-between py-6">
-            <h2 className="text-lg font-semibold">Profile Meta</h2>
+        <div className="relative overflow-visible bg-secondary/40 backdrop-blur-md rounded-3xl border border-white/10 p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.37)] hover:border-fourth/30 transition-all duration-300 group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-fourth/5 rounded-full blur-2xl pointer-events-none group-hover:bg-fourth/10 transition-all duration-500" />
+          
+          <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-fourth/10 flex items-center justify-center text-fourth border border-fourth/20">
+                <MapPin size={20} />
+              </div>
+              <h2 className="text-xl font-bold text-primary tracking-tight">Profile Meta</h2>
+            </div>
 
             {!isEditingMeta &&
               !isCreatingMeta &&
@@ -786,13 +814,13 @@ function MyProfile() {
 
           {/* Meta View */}
           {!isEditingMeta && !isCreatingMeta && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-              <ProfileItem label="Age" value={profileMetaData.age} />
-              <ProfileItem label="Gender" value={profileMetaData.gender} />
-              <ProfileItem label="City" value={profileMetaData.city?.name} />
-              <ProfileItem label="State" value={profileMetaData.state?.name} />
-              <ProfileItem label="Town" value={profileMetaData.town?.name} />
-              <ProfileItem label="Address" value={profileMetaData.address} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+              <ProfileItem label="Age" value={profileMetaData.age} icon={Calendar} />
+              <ProfileItem label="Gender" value={profileMetaData.gender} icon={User} />
+              <ProfileItem label="City" value={profileMetaData.city?.name} icon={MapPin} />
+              <ProfileItem label="State" value={profileMetaData.state?.name} icon={Map} />
+              <ProfileItem label="Town" value={profileMetaData.town?.name} icon={MapPin} />
+              <ProfileItem label="Address" value={profileMetaData.address} icon={MapPin} className="sm:col-span-2" />
             </div>
           )}
 
@@ -811,18 +839,18 @@ function MyProfile() {
 
                 {/* ✅ GENDER DROPDOWN */}
                 <div ref={genderRef} className="relative">
-                  <label className="text-xs text-third">Gender</label>
+                  <label className="text-xs text-third mb-1.5 block">Gender</label>
 
                   <div
                     onClick={() => setGenderOpen(!genderOpen)}
-                    className="h-10 px-3 flex items-center justify-between rounded-md border border-primary bg-secondary text-primary cursor-pointer"
+                    className="h-10 px-3 flex items-center justify-between rounded-lg border border-primary/20 bg-transparent text-primary hover:border-primary/40 cursor-pointer transition-all duration-200"
                   >
                     <span>{metaForm.gender || "Select Gender"}</span>
-                    <ChevronDown size={16} />
+                    <ChevronDown size={16} className={`text-third transition-transform duration-200 ${genderOpen ? "rotate-180" : ""}`} />
                   </div>
 
                   {genderOpen && (
-                    <div className="absolute z-9999 mt-1 w-full border border-primary rounded-md bg-secondary text-primary shadow-lg overflow-hidden">
+                    <div className="absolute z-50 mt-1 w-full border border-primary/20 rounded-lg bg-[#1a1a1a] text-primary shadow-2xl overflow-hidden backdrop-blur-md">
                       {["MALE", "FEMALE"].map((genderOption) => (
                         <div
                           key={genderOption}
@@ -833,7 +861,7 @@ function MyProfile() {
                             }));
                             setGenderOpen(false);
                           }}
-                          className="px-3 py-2 hover:bg-primary/20 cursor-pointer"
+                          className="px-3 py-2.5 hover:bg-white/10 cursor-pointer text-sm font-medium transition-colors"
                         >
                           {genderOption}
                         </div>
@@ -948,12 +976,12 @@ function MyProfile() {
                 <button
                   disabled={!isMetaFormValid}
                   onClick={handleSaveMeta}
-                  className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium transition-all
-      ${
-        !isMetaFormValid
-          ? "bg-gray-400 cursor-not-allowed text-secondary"
-          : "bg-primary border text-secondary hover:bg-transparent hover:text-primary hover:border-primary hover:border"
-      }`}
+                  className={`flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-bold transition-all duration-300 text-sm hover:cursor-pointer
+                    ${
+                      !isMetaFormValid
+                        ? "bg-white/10 text-white/40 border border-white/5 cursor-not-allowed"
+                        : "bg-fourth text-white border border-fourth hover:bg-transparent hover:text-fourth shadow-[0_4px_12px_rgba(0,123,255,0.2)]"
+                    }`}
                 >
                   {isCreatingMeta ? "Complete Profile" : "Save Changes"}
                 </button>
@@ -976,11 +1004,18 @@ function MyProfile() {
 
 export default MyProfile;
 
-function ProfileItem({ label, value }) {
+function ProfileItem({ label, value, icon: Icon, className = "" }) {
   return (
-    <div className="flex flex-col gap-1">
-      <span className="text-xs text-third">{label}</span>
-      <span className="font-medium">{value || "-"}</span>
+    <div className={`flex items-center gap-4 bg-white/5 border border-white/5 rounded-2xl p-5 hover:bg-white/10 hover:border-white/10 transition-all duration-300 ${className}`}>
+      {Icon && (
+        <div className="w-10 h-10 rounded-xl bg-fourth/10 border border-fourth/20 text-fourth flex items-center justify-center shrink-0">
+          <Icon size={18} />
+        </div>
+      )}
+      <div className="flex flex-col gap-0.5">
+        <span className="text-xs text-third font-semibold uppercase tracking-wider">{label}</span>
+        <span className="font-semibold text-primary text-base">{value || "—"}</span>
+      </div>
     </div>
   );
 }
