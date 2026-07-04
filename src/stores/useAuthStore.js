@@ -13,6 +13,7 @@ export const useAuthStore = create((set) => ({
   isLoginPopupOpen: false,
   isSignupPopupOpen: false,
   isCompleteProfilePopupOpen: false,
+  prefilledPhoneNumber: "",
 
   openLoginPopup: () =>
     set({
@@ -26,16 +27,18 @@ export const useAuthStore = create((set) => ({
       isLoginPopupOpen: false,
     }),
 
-  openSignupPopup: () =>
+  openSignupPopup: (phoneNumber = "") =>
     set({
       isSignupPopupOpen: true,
       isLoginPopupOpen: false,
       isCompleteProfilePopupOpen: false,
+      prefilledPhoneNumber: phoneNumber,
     }),
 
   closeSignupPopup: () =>
     set({
       isSignupPopupOpen: false,
+      prefilledPhoneNumber: "",
     }),
 
   openCompleteProfilePopup: () =>

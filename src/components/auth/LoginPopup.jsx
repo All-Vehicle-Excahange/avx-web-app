@@ -7,6 +7,7 @@ import Image from "next/image";
 import Button from "@/components/ui/button";
 import { getOtp, login, googleVerify, googleSignupVerify } from "@/services/auth.service";
 import { useForm } from "react-hook-form";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "@/config/firebase";
 import { FcGoogle } from "react-icons/fc";
@@ -517,8 +518,12 @@ function LoginPopup({
                 <button
                   type="button"
                   onClick={() => {
+                    const typedPhone = getValues("phoneNumber");
+                    if (typedPhone) {
+                      useAuthStore.setState({ prefilledPhoneNumber: typedPhone });
+                    }
                     handleClose();
-                    setTimeout(() => onSignup(), 100);
+                    setTimeout(() => onSignup(typedPhone), 100);
                   }}
                   className="font-semibold text-primary hover:underline cursor-pointer"
                 >

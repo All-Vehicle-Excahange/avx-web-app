@@ -16,13 +16,17 @@ import { Pagination, Autoplay, EffectFade } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSuccess = () => { } }) {
+  const prefilledPhoneNumber = useAuthStore((state) => state.prefilledPhoneNumber);
+
   const {
     register,
     handleSubmit,
     setError,
     getValues,
+    setValue,
     reset,
     formState: { errors },
   } = useForm();
@@ -78,6 +82,12 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    if (isOpen && prefilledPhoneNumber) {
+      setValue("phone", prefilledPhoneNumber);
+    }
+  }, [isOpen, prefilledPhoneNumber, setValue]);
+
   // Auto-lock body scroll when popup is open
   useEffect(() => {
     if (isOpen) {
@@ -105,6 +115,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
       setIsGoogleSignupFlow(false);
       setIsGoogleLoading(false);
       localStorage.removeItem("otpBlockUntil");
+      useAuthStore.setState({ prefilledPhoneNumber: "" });
       onClose();
     }, 250);
   };
