@@ -227,7 +227,7 @@ export default function VehicleDetails({
                 </div>
               </div>
 
-              <aside className="flex flex-col gap-6 lg:sticky lg:top-[102px] h-fit">
+              <aside className="flex flex-col gap-6 lg:sticky lg:top-[180px] h-fit">
                 <VehicleSummaryRight
                   vehicle={vehicleOverview}
                   summary={vehicleSummary}
