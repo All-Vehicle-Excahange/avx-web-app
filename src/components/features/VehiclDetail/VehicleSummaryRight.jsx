@@ -110,7 +110,7 @@ export default function VehicleSummaryRight({
                 {/* Label row + Visit Storefront on same line */}
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-xs uppercase tracking-[0.1em] text-fourth font-bold">
-                    Listed By Auto Consultant
+                    Listed By Auto Consult
                   </span>
                   {summary?.consultationName && (
                     <a
