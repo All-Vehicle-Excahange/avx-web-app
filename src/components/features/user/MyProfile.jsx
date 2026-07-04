@@ -1008,9 +1008,7 @@ function ProfileItem({ label, value, icon: Icon, className = "" }) {
   return (
     <div className={`flex items-center gap-4 bg-white/5 border border-white/5 rounded-2xl p-5 hover:bg-white/10 hover:border-white/10 transition-all duration-300 ${className}`}>
       {Icon && (
-        <div className="w-10 h-10 rounded-xl bg-fourth/10 border border-fourth/20 text-fourth flex items-center justify-center shrink-0">
-          <Icon size={18} />
-        </div>
+        <Icon size={20} className="text-fourth shrink-0" />
       )}
       <div className="flex flex-col gap-0.5">
         <span className="text-xs text-third font-semibold uppercase tracking-wider">{label}</span>
