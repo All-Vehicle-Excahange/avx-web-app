@@ -526,6 +526,107 @@ function TyreDiagram({ fl, fr, rl, rr, spareWheel }) {
   );
 }
 
+// Bike horizontal tyre diagram
+function BikeTyreDiagram({ front, rear }) {
+  const hasAny = [front, rear].some((v) => v && v.toUpperCase() !== "NA");
+  if (!hasAny) return null;
+
+  const flY = 300; // y-level for the horizontal tyres
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center gap-2">
+        <Disc size={16} />
+        <h4 className="text-sm font-semibold text-primary/80 uppercase tracking-wide">
+          Tyre Condition
+        </h4>
+      </div>
+
+      <svg
+        viewBox="-40 230 480 140"
+        width="100%"
+        height="100%"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full h-auto max-h-48 ml-0 mr-auto"
+      >
+        <defs>
+          <filter id="bike-shadow" x="-30%" y="-20%" width="160%" height="140%">
+            <feDropShadow dx="0" dy="6" stdDeviation="6" floodColor="#000000" floodOpacity="0.3" />
+          </filter>
+        </defs>
+
+        {/* ── CONNECTOR LINES ── */}
+        <line x1="-10" y1={flY} x2="50" y2={flY} stroke="currentColor" strokeOpacity="0.25" strokeWidth="1.5" />
+        <line x1="350" y1={flY} x2="410" y2={flY} stroke="currentColor" strokeOpacity="0.25" strokeWidth="1.5" />
+        
+        {/* ── ARROWS ── */}
+        <polygon points="50,297 57,300 50,303" fill="currentColor" fillOpacity="0.6" />
+        <polygon points="350,297 343,300 350,303" fill="currentColor" fillOpacity="0.6" />
+
+        {/* ── OUTER ANCHOR DOTS ── */}
+        <circle cx="-10" cy={flY} r="3" fill="currentColor" fillOpacity="0.5" />
+        <circle cx="410" cy={flY} r="3" fill="currentColor" fillOpacity="0.5" />
+
+        {/* ── LABELS ── */}
+        <text x="-20" y={flY - 8} textAnchor="end" fontSize="12" fill="currentColor" fillOpacity="0.5" fontWeight="600">Front</text>
+        {condLabel(front) && (
+          <text x="-20" y={flY + 16} textAnchor="end" fontSize="14" fontWeight="700" fill={condColor(front)}>{condLabel(front)}</text>
+        )}
+
+        <text x="420" y={flY - 8} textAnchor="start" fontSize="12" fill="currentColor" fillOpacity="0.5" fontWeight="600">Rear</text>
+        {condLabel(rear) && (
+          <text x="420" y={flY + 16} textAnchor="start" fontSize="14" fontWeight="700" fill={condColor(rear)}>{condLabel(rear)}</text>
+        )}
+
+        {/* ── ROTATED BIKE DIAGRAM ── */}
+        <g transform="rotate(-90 200 300)" filter="url(#bike-shadow)">
+          <g id="tyres">
+            <rect id="tyre-front" x="180" y="110" width="40" height="110" rx="10" fill={condColor(front)} />
+            <rect id="tyre-rear" x="176" y="380" width="48" height="120" rx="10" fill={condColor(rear)} />
+          </g>
+
+          <g id="bike-chassis-under">
+            <rect x="165" y="265" width="70" height="35" rx="6" fill="#94A3B8" stroke="#64748B" strokeWidth="1.5" />
+            <line x1="175" y1="390" x2="182" y2="450" stroke="#94A3B8" strokeWidth="4" strokeLinecap="round" />
+            <line x1="225" y1="390" x2="218" y2="450" stroke="#94A3B8" strokeWidth="4" strokeLinecap="round" />
+            <path d="M 220 340 L 225 350 L 230 460 L 222 460 Z" fill="#F1F5F9" stroke="#CBD5E1" strokeWidth="1.5" strokeLinejoin="round" />
+            <rect x="222" y="460" width="8" height="6" rx="1" fill="#64748B" />
+            <rect x="160" y="345" width="15" height="8" rx="3" fill="#64748B" />
+            <rect x="225" y="345" width="15" height="8" rx="3" fill="#64748B" />
+          </g>
+
+          <g id="bike-body-group">
+            <path d="M 188 150 L 212 150 L 216 215 L 184 215 Z" fill="#F5F5F5" stroke="#D9D9D9" strokeWidth="1.5" strokeLinejoin="round" />
+            <path d="M 175 210 C 175 185, 225 185, 225 210 Z" fill="#E2E8F0" stroke="#CBD5E1" strokeWidth="1.5" opacity="0.9" />
+            <rect x="185" y="200" width="30" height="10" rx="3" fill="#334155" /> 
+            
+            {/* Shrunk handlebars to save Y-axis space after rotation */}
+            <line x1="150" y1="230" x2="165" y2="222" stroke="#334155" strokeWidth="8" strokeLinecap="round" />
+            <line x1="250" y1="230" x2="235" y2="222" stroke="#334155" strokeWidth="8" strokeLinecap="round" />
+            <path d="M 165 222 Q 200 205 235 222" fill="none" stroke="#D9D9D9" strokeWidth="5" strokeLinecap="round" />
+            
+            <line x1="160" y1="223" x2="150" y2="190" stroke="#94A3B8" strokeWidth="2" />
+            <ellipse cx="145" cy="185" rx="12" ry="7" fill="#F8FAFC" stroke="#D9D9D9" strokeWidth="1.5" transform="rotate(-25 145 185)" />
+            <line x1="240" y1="223" x2="250" y2="190" stroke="#94A3B8" strokeWidth="2" />
+            <ellipse cx="255" cy="185" rx="12" ry="7" fill="#F8FAFC" stroke="#D9D9D9" strokeWidth="1.5" transform="rotate(25 255 185)" />
+
+            <path d="M 175 235 C 145 250, 160 320, 185 330 L 215 330 C 240 320, 255 250, 225 235 Z" fill="#F5F5F5" stroke="#D9D9D9" strokeWidth="2" strokeLinejoin="round" />
+            <line x1="200" y1="240" x2="200" y2="320" stroke="#E2E8F0" strokeWidth="2" />
+
+            <path d="M 185 330 C 175 370, 178 410, 188 430 L 212 430 C 222 410, 225 370, 215 330 Z" fill="#334155" stroke="#1E293B" strokeWidth="1.5" strokeLinejoin="round" />
+            <line x1="184" y1="360" x2="216" y2="360" stroke="#475569" strokeWidth="1" />
+            <line x1="184" y1="380" x2="216" y2="380" stroke="#475569" strokeWidth="1" />
+            <line x1="185" y1="400" x2="215" y2="400" stroke="#475569" strokeWidth="1" />
+
+            <path d="M 188 430 L 212 430 L 206 475 L 194 475 Z" fill="#F5F5F5" stroke="#D9D9D9" strokeWidth="2" strokeLinejoin="round" />
+            <rect x="194" y="475" width="12" height="4" rx="2" fill="#EF4444" stroke="#B91C1C" strokeWidth="0.5" />
+          </g>
+        </g>
+      </svg>
+    </div>
+  );
+}
+
 export default function VehicleCondition({ vehicle, open, setOpen, inspectionDetails }) {
   // handleResponse already unwraps api.data, so inspectionDetails IS the inspection object directly
   const d = inspectionDetails ?? null;
@@ -590,7 +691,7 @@ export default function VehicleCondition({ vehicle, open, setOpen, inspectionDet
         >
           <div className="flex items-center gap-2">
             <CheckCircle size={20} />
-            <h3 className="text-xl font-semibold">Vehicle Condition </h3>
+            <h3 className="text-xl font-semibold">Vehicle Condition  </h3>
             {d?.inspectionScore != null && (
               <span className="text-xs font-semibold px-2 py-0.5 rounded-full ml-1 border border-third/40 text-primary bg-third/10">
                 {d.inspectionStatus?.replace(/_/g, " ")}
@@ -655,13 +756,20 @@ export default function VehicleCondition({ vehicle, open, setOpen, inspectionDet
                   })}
 
                   {/* ===== TYRE CONDITIONS ===== */}
-                  <TyreDiagram
-                    fl={d.frontLeftTyreCondition ?? d.frontTyreCondition}
-                    fr={d.frontRightTyreCondition ?? d.frontTyreCondition}
-                    rl={d.rearLeftTyreCondition ?? d.rearTyreCondition}
-                    rr={d.rearRightTyreCondition ?? d.rearTyreCondition}
-                    spareWheel={vehicle?.spareWheel || d?.spareWheel}
-                  />
+                  {vehicle?.vehicleType === "TWO_WHEELER" ? (
+                    <BikeTyreDiagram
+                      front={d.frontTyreCondition}
+                      rear={d.rearTyreCondition}
+                    />
+                  ) : (
+                    <TyreDiagram
+                      fl={d.frontLeftTyreCondition ?? d.frontTyreCondition}
+                      fr={d.frontRightTyreCondition ?? d.frontTyreCondition}
+                      rl={d.rearLeftTyreCondition ?? d.rearTyreCondition}
+                      rr={d.rearRightTyreCondition ?? d.rearTyreCondition}
+                      spareWheel={vehicle?.spareWheel || d?.spareWheel}
+                    />
+                  )}
                 </>
               )}
             </div>
