@@ -114,7 +114,7 @@ export default function Button({
 
       <span
         className={cn(
-          "relative z-10 flex items-center",
+          "relative z-10 flex items-center gap-2",
           loading && "opacity-0",
         )}
       >
