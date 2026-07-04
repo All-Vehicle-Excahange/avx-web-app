@@ -37,6 +37,8 @@ export default function VehicleDetails({
   const conditionRef = useRef(null);
   const inspectionRef = useRef(null);
   const overviewRef = useRef(null);
+  const headerRef = useRef(null);
+  const [headerHeight, setHeaderHeight] = useState(120);
   const [isConditionOpen, setIsConditionOpen] = useState(false);
   const [isSpecOpen, setIsSpecOpen] = useState(false);
   const [isInspectionOpen, setIsInspectionOpen] = useState(false);
@@ -118,6 +120,19 @@ export default function VehicleDetails({
   const vehicleSummary = vehicleSummaryData || {};
   const loading = isOverviewLoading || (isConsultation && isSummaryLoading);
 
+  useEffect(() => {
+    if (!headerRef.current) return;
+    const updateHeight = () => {
+      if (headerRef.current) {
+        setHeaderHeight(headerRef.current.offsetHeight);
+      }
+    };
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(headerRef.current);
+    return () => observer.disconnect();
+  }, [loading]);
+
   //  Stricter loading check to prevent "Labels without values" UI flash
   if (loading || !vehicleOverview?.id) {
     return (
@@ -144,7 +159,7 @@ export default function VehicleDetails({
         <div className="w-full py-6 pb-24 lg:pb-6">
           {/* HEADER */}
           <section className="relative">
-            <div className="lg:sticky top-16 md:pb-4 z-40">
+            <div ref={headerRef} className="lg:sticky top-16 md:pb-4 z-40">
               <VehicleHeader
                 vehicle={vehicleOverview}
                 vehicleSummary={vehicleSummary}
@@ -227,7 +242,10 @@ export default function VehicleDetails({
                 </div>
               </div>
 
-              <aside className="flex flex-col gap-6 lg:sticky lg:top-[180px] h-fit">
+              <aside 
+                className="flex flex-col gap-6 lg:sticky h-fit"
+                style={{ top: `${64 + headerHeight}px` }}
+              >
                 <VehicleSummaryRight
                   vehicle={vehicleOverview}
                   summary={vehicleSummary}
