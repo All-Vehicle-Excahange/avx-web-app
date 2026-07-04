@@ -103,14 +103,14 @@ export default function VehicleSummaryRight({
       <aside className="relative text-primary rounded-2xl shadow-xl overflow-hidden border border-third/60">
         <div className="relative z-10 p-6 space-y-5">
           {/* HEADER */}
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
               {vehicleOwnerRole === "CONSULTATION" ? (
                 <>
                   <span className="text-xs uppercase tracking-[0.1em] text-fourth font-bold block mb-1">
                     Listed By Auto Consultant
                   </span>
-                  <p className="text-xl font-bold text-primary">
+                  <p className="text-xl font-bold text-primary truncate">
                     {summary?.consultationName || "Auto Consultant"}
                   </p>
                 </>
@@ -119,7 +119,7 @@ export default function VehicleSummaryRight({
                   <span className="text-xs uppercase tracking-[0.1em] text-third font-medium block mb-1">
                     Private Seller
                   </span>
-                  <p className="text-xl font-bold text-primary">
+                  <p className="text-xl font-bold text-primary truncate">
                     {[
                       vehicle?.vehicleOwner?.firstname,
                       vehicle?.vehicleOwner?.lastname,
@@ -136,6 +136,21 @@ export default function VehicleSummaryRight({
                   .join(" ") || "-"}
               </h2>
             </div>
+
+            {/* View Storefront — shown for consultants only, sits top-right of header */}
+            {vehicleOwnerRole === "CONSULTATION" && summary?.consultationName && (
+              <div className="shrink-0 mt-1">
+                <Button
+                  href={`/store-front/${summary?.username || 1}`}
+                  variant="outline"
+                  size="sm"
+                  showIcon
+                  className="h-8 py-0 px-3 text-xs whitespace-nowrap"
+                >
+                  Visit Storefront
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* SELLER / DEALER INFO */}
@@ -165,19 +180,7 @@ export default function VehicleSummaryRight({
                     </p>
                   </div>
 
-                  {summary?.consultationName && (
-                    <div className="shrink-0">
-                      <Button
-                        href={`/store-front/${summary?.username || 1}`}
-                        variant="outline"
-                        size="sm"
-                        showIcon
-                        className="h-8 py-0 px-3 text-xs"
-                      >
-                        View Storefront
-                      </Button>
-                    </div>
-                  )}
+
                 </div>
               ) : (
                 /* ── NORMAL USER_SELLER info ── */
