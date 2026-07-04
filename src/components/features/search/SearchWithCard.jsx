@@ -748,17 +748,10 @@ export default function SearchWithCard({
     const qCityName = searchParams.get("cityName") || initialFilters.cityName;
 
     // Handle location names even without IDs
-    if (initialFilters.stateId && !initialFilters.cityId) {
-      setSelectedCityName("");
-      setSelectedStateName(initialFilters.stateName || qLocation || "");
-    } else if (qLocation) {
+    if (qLocation) {
       const parts = qLocation.split(",").map((s) => s.trim());
-      if (parts.length > 1) {
-        setSelectedCityName(parts[0]);
-        setSelectedStateName(parts[1]);
-      } else {
-        setSelectedCityName(parts[0]);
-      }
+      if (parts[0]) setSelectedCityName(parts[0]);
+      if (parts[1]) setSelectedStateName(parts[1]);
     } else {
       if (qStateName) setSelectedStateName(qStateName);
       if (qCityName) setSelectedCityName(qCityName);

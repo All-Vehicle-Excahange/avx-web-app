@@ -1,4 +1,4 @@
-import { Facebook, Instagram, X, Youtube, ArrowUp } from "lucide-react";
+import { Facebook, Instagram, X, Youtube, ArrowUp, Linkedin } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
@@ -229,10 +229,28 @@ const Footer = () => {
           <div className="flex items-center gap-6">
             <div className="flex gap-4">
               <Link
-                href="#"
+                href="https://www.linkedin.com/company/reecomm/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary/60 hover:text-white transition-colors flex items-center justify-center"
+              >
+                <Linkedin size={18} />
+              </Link>
+              <Link
+                href="https://www.instagram.com/reecommindia"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-primary/60 hover:text-white transition-colors"
               >
-                <Youtube size={18} />
+                <Instagram size={18} />
+              </Link>
+              <Link
+                href="https://www.facebook.com/reecommindia/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary/60 hover:text-white transition-colors"
+              >
+                <Facebook size={18} />
               </Link>
               <Link
                 href="#"
@@ -244,31 +262,7 @@ const Footer = () => {
                 href="#"
                 className="text-primary/60 hover:text-white transition-colors"
               >
-                <Instagram size={18} />
-              </Link>
-              <Link
-                href="#"
-                className="text-primary/60 hover:text-white transition-colors"
-              >
-                <Facebook size={18} />
-              </Link>
-              <Link
-                href="#"
-                className="text-primary/60 hover:text-white transition-colors flex items-center justify-center"
-              >
-                {/* Tiktok SVG */}
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
-                </svg>
+                <Youtube size={18} />
               </Link>
             </div>
             {/* <button
