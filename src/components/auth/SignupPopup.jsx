@@ -405,6 +405,33 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
                 </div>
               </div>
             </SwiperSlide>
+
+            {/* Slide 3 - Private Seller */}
+            <SwiperSlide>
+              <div className="relative w-full h-full">
+                <Image
+                  src="/auth-image-2.webp"
+                  priority
+                  alt="Private Seller"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-black/80" />
+                
+                <div className="absolute bottom-12 right-8 z-10 flex flex-col items-end text-right">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-10 h-10 bg-fourth rounded-full flex items-center justify-center">
+                      <User className="text-white" size={20} />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white">Private Seller</h3>
+                  </div>
+                  <p className="text-white/90 text-[13px] max-w-[220px] mb-3 leading-snug">
+                    Sell your personal vehicle directly to buyers with ease.
+                  </p>
+                  <div className="w-8 h-[3px] bg-fourth rounded-full"></div>
+                </div>
+              </div>
+            </SwiperSlide>
           </Swiper>
         </div>
 
