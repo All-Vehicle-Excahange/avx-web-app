@@ -103,50 +103,49 @@ export default function VehicleSummaryRight({
       <aside className="relative text-primary rounded-2xl shadow-xl overflow-hidden border border-third/60">
         <div className="relative z-10 p-6 space-y-5">
           {/* HEADER */}
-          <div className="flex items-start justify-between gap-2">
-            <div className="min-w-0">
-              {vehicleOwnerRole === "CONSULTATION" ? (
-                <>
-                  <span className="text-xs uppercase tracking-[0.1em] text-fourth font-bold block mb-1">
+          <div className="flex flex-col gap-0.5">
+            {vehicleOwnerRole === "CONSULTATION" ? (
+              <>
+                {/* Label row + Visit Storefront on same line */}
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs uppercase tracking-[0.1em] text-fourth font-bold">
                     Listed By Auto Consultant
                   </span>
-                  <p className="text-xl font-bold text-primary">
-                    {summary?.consultationName || "Auto Consultant"}
-                  </p>
-                </>
-              ) : (
-                <>
-                  <span className="text-xs uppercase tracking-[0.1em] text-third font-medium block mb-1">
-                    Private Seller
-                  </span>
-                  <p className="text-xl font-bold text-primary">
-                    {[
-                      vehicle?.vehicleOwner?.firstname,
-                      vehicle?.vehicleOwner?.lastname,
-                    ]
-                      .filter(Boolean)
-                      .join(" ") || "Individual Seller"}
-                  </p>
-                </>
-              )}
-
-              <h2 className="hidden text-2xl font-bold leading-tight">
-                {[vehicle?.makerName, vehicle?.modelName, vehicle?.variantName]
-                  .filter(Boolean)
-                  .join(" ") || "-"}
-              </h2>
-            </div>
-
-            {/* Visit Storefront — right corner */}
-            {vehicleOwnerRole === "CONSULTATION" && summary?.consultationName && (
-              <a
-                href={`/store-front/${summary?.username || 1}`}
-                className="text-xs text-white font-semibold underline underline-offset-2 decoration-blue-400/70 hover:decoration-blue-400 transition-all flex items-center gap-0.5 shrink-0 mt-0.5"
-              >
-                Visit Storefront
-                <ExternalLink size={11} className="inline" />
-              </a>
+                  {summary?.consultationName && (
+                    <a
+                      href={`/store-front/${summary?.username || 1}`}
+                      className="text-xs text-white font-semibold underline underline-offset-2 decoration-blue-400/70 hover:decoration-blue-400 transition-all flex items-center gap-0.5 shrink-0"
+                    >
+                      Visit Storefront
+                      <ExternalLink size={11} className="inline" />
+                    </a>
+                  )}
+                </div>
+                {/* Consultant name tight below */}
+                <p className="text-xl font-bold text-primary leading-tight">
+                  {summary?.consultationName || "Auto Consultant"}
+                </p>
+              </>
+            ) : (
+              <>
+                <span className="text-xs uppercase tracking-[0.1em] text-third font-medium">
+                  Private Seller
+                </span>
+                <p className="text-xl font-bold text-primary leading-tight">
+                  {[
+                    vehicle?.vehicleOwner?.firstname,
+                    vehicle?.vehicleOwner?.lastname,
+                  ]
+                    .filter(Boolean)
+                    .join(" ") || "Individual Seller"}
+                </p>
+              </>
             )}
+            <h2 className="hidden text-2xl font-bold leading-tight">
+              {[vehicle?.makerName, vehicle?.modelName, vehicle?.variantName]
+                .filter(Boolean)
+                .join(" ") || "-"}
+            </h2>
           </div>
 
           {/* SELLER / DEALER INFO */}
