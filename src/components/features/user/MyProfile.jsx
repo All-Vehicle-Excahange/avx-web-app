@@ -724,8 +724,7 @@ function MyProfile() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
         {/*  PROFILE INFO SECTION */}
-        <div className="bg-secondary/40 backdrop-blur-md rounded-3xl border border-white/10 p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.37)] hover:border-fourth/30 transition-all duration-300 relative group overflow-hidden">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-fourth/5 rounded-full blur-2xl pointer-events-none group-hover:bg-fourth/10 transition-all duration-500" />
+        <div className="bg-gradient-to-br from-[#18191b] to-[#0f1012] rounded-3xl border border-white/10 p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.37)] hover:border-fourth/30 transition-all duration-300 relative group overflow-hidden">
           
           <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
             <div className="flex items-center gap-3">
@@ -866,8 +865,7 @@ function MyProfile() {
         </div>
 
         {/* ✅ PROFILE META SECTION */}
-        <div className="relative overflow-visible bg-secondary/40 backdrop-blur-md rounded-3xl border border-white/10 p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.37)] hover:border-fourth/30 transition-all duration-300 group">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-fourth/5 rounded-full blur-2xl pointer-events-none group-hover:bg-fourth/10 transition-all duration-500" />
+        <div className="relative overflow-visible bg-gradient-to-br from-[#18191b] to-[#0f1012] rounded-3xl border border-white/10 p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.37)] hover:border-fourth/30 transition-all duration-300 group">
           
           <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
             <div className="flex items-center gap-3">
