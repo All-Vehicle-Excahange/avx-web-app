@@ -470,24 +470,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
             </p>
           )}
 
-          {!otpSent && !isGoogleSignupFlow && (
-            <div className="mb-4">
-              <Button
-                type="button"
-                className="w-full h-11 text-sm font-bold flex items-center justify-center gap-2 border border-accent-gray bg-transparent text-primary hover:border-accent-gray hover:text-primary hover:shadow-md transition-all"
-                onClick={handleGoogleSignIn}
-                disabled={isLoading || isGoogleLoading}
-                loading={isGoogleLoading}
-              >
-                <FcGoogle className="text-xl" /> Continue with Google
-              </Button>
-              <div className="flex items-center my-4">
-                <div className="flex-1 border-t border-accent-gray/30"></div>
-                <span className="px-3 text-xs text-primary/50">or register with mobile</span>
-                <div className="flex-1 border-t border-accent-gray/30"></div>
-              </div>
-            </div>
-          )}
+          {/* Google Sign In moved below */}
 
           {isGoogleSignupFlow && !otpSent && (
             <div className="mb-4 text-center">
@@ -657,6 +640,26 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
                 )}
               </Button>
             </>
+          )}
+
+          {/* ✅ GOOGLE SIGNUP BELOW */}
+          {!otpSent && !isGoogleSignupFlow && (
+            <div className="mt-4">
+              <div className="flex items-center mb-4">
+                <div className="flex-1 border-t border-accent-gray/30"></div>
+                <span className="px-3 text-xs text-primary/50">or register with Google</span>
+                <div className="flex-1 border-t border-accent-gray/30"></div>
+              </div>
+              <Button
+                type="button"
+                className="w-full h-11 text-sm font-bold flex items-center justify-center gap-2 border border-accent-gray bg-transparent text-primary hover:border-accent-gray hover:text-primary hover:shadow-md transition-all"
+                onClick={handleGoogleSignIn}
+                disabled={isLoading || isGoogleLoading}
+                loading={isGoogleLoading}
+              >
+                <FcGoogle className="text-xl" /> Continue with Google
+              </Button>
+            </div>
           )}
 
           {/* LOGIN LINK */}
