@@ -724,7 +724,7 @@ function MyProfile() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
         {/*  PROFILE INFO SECTION */}
-        <div className="bg-[#18191b] rounded-3xl border border-white/10 p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.37)] hover:border-fourth/30 transition-all duration-300 relative group overflow-hidden">
+        <div className="bg-third/5 rounded-3xl border border-white/10 p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.37)] hover:border-fourth/30 transition-all duration-300 relative group overflow-hidden">
           
           <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
             <div className="flex items-center gap-3">
@@ -865,7 +865,7 @@ function MyProfile() {
         </div>
 
         {/* ✅ PROFILE META SECTION */}
-        <div className="relative overflow-visible bg-[#18191b] rounded-3xl border border-white/10 p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.37)] hover:border-fourth/30 transition-all duration-300 group">
+        <div className="relative overflow-visible bg-third/5 rounded-3xl border border-white/10 p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.37)] hover:border-fourth/30 transition-all duration-300 group">
           
           <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
             <div className="flex items-center gap-3">
