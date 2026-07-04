@@ -420,17 +420,16 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
             }
           }}
         >
-          <h3 className="text-2xl font-bold mb-6 text-primary">
-            {isGoogleSignupFlow ? (
-              <>
-                Verify mobile number
-              </>
-            ) : (
-              <>
-                Create your <br /> account
-              </>
-            )}
-          </h3>
+          <div className="mb-6">
+            <h3 className="text-3xl font-extrabold text-primary tracking-tight font-primary">
+              {isGoogleSignupFlow ? "Verify Mobile" : "Create Account"}
+            </h3>
+            <p className="text-sm text-third mt-1.5 leading-snug">
+              {isGoogleSignupFlow
+                ? "Enter your mobile number to complete verification."
+                : "Register today and explore verified vehicles."}
+            </p>
+          </div>
 
           <div className="flex justify-center gap-10 mb-8 border-b border-accent-gray/20">
             <button
