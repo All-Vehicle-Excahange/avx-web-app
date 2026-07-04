@@ -50,8 +50,8 @@ function MyProfile() {
   const [metaForm, setMetaForm] = useState({});
   const [towns, setTowns] = useState([]);
 
-  const [profileError, setProfileError] = useState("");
-  const [metaError, setMetaError] = useState("");
+  const [profileErrors, setProfileErrors] = useState({});
+  const [metaErrors, setMetaErrors] = useState({});
 
   const [genderOpen, setGenderOpen] = useState(false);
 
@@ -199,7 +199,7 @@ function MyProfile() {
 
   const handleEditProfile = () => {
     setProfileForm(profile);
-    setProfileError("");
+    setProfileErrors({});
     setIsEditingProfile(true);
     setIsEditingMeta(false);
   };
@@ -215,7 +215,7 @@ function MyProfile() {
       townName: profileMetaData.town?.name || profileMetaData.townName,
     });
 
-    setMetaError("");
+    setMetaErrors({});
     setIsEditingMeta(true);
     setIsCreatingMeta(false);
     setIsEditingProfile(false);
@@ -235,7 +235,7 @@ function MyProfile() {
       townName: "",
     });
 
-    setMetaError("");
+    setMetaErrors({});
     setIsCreatingMeta(true);
     setIsEditingMeta(false);
     setIsEditingProfile(false);
@@ -258,7 +258,7 @@ function MyProfile() {
 
   const handleSaveProfile = async () => {
     try {
-      setProfileError("");
+      setProfileErrors({});
 
       const payload = {
         firstname: profileForm.firstName,
@@ -272,13 +272,37 @@ function MyProfile() {
 
       setIsEditingProfile(false);
     } catch (error) {
-      setProfileError(error?.response?.data?.message || "Something went wrong");
+      let errorsMap = {};
+      if (error?.response?.data) {
+        const api = error.response.data;
+        if (api.data?.validationErrors) {
+          errorsMap = api.data.validationErrors;
+        } else if (api.validationErrors) {
+          errorsMap = api.validationErrors;
+        } else if (api.errors) {
+          errorsMap = api.errors;
+        } else if (Array.isArray(api.message)) {
+          api.message.forEach((msg) => {
+            const lowMsg = msg.toLowerCase();
+            if (lowMsg.includes("first")) errorsMap.firstName = msg;
+            else if (lowMsg.includes("last")) errorsMap.lastName = msg;
+            else if (lowMsg.includes("email")) errorsMap.email = msg;
+            else errorsMap.general = msg;
+          });
+        } else {
+          errorsMap.general = api.message || "Something went wrong";
+        }
+      } else {
+        errorsMap.general = error?.message || "Something went wrong";
+      }
+
+      setProfileErrors(errorsMap);
     }
   };
 
   const handleSaveMeta = async () => {
     try {
-      setMetaError("");
+      setMetaErrors({});
 
       const payload = {};
 
@@ -340,9 +364,35 @@ function MyProfile() {
       setIsEditingMeta(false);
       setIsCreatingMeta(false);
     } catch (error) {
-      const message = error?.response?.data?.message || "Meta save failed";
+      let errorsMap = {};
+      if (error?.response?.data) {
+        const api = error.response.data;
+        if (api.data?.validationErrors) {
+          errorsMap = api.data.validationErrors;
+        } else if (api.validationErrors) {
+          errorsMap = api.validationErrors;
+        } else if (api.errors) {
+          errorsMap = api.errors;
+        } else if (Array.isArray(api.message)) {
+          api.message.forEach((msg) => {
+            const lowMsg = msg.toLowerCase();
+            if (lowMsg.includes("profession")) errorsMap.profession = msg;
+            else if (lowMsg.includes("address")) errorsMap.address = msg;
+            else if (lowMsg.includes("age")) errorsMap.age = msg;
+            else if (lowMsg.includes("gender")) errorsMap.gender = msg;
+            else if (lowMsg.includes("state")) errorsMap.stateId = msg;
+            else if (lowMsg.includes("city")) errorsMap.cityId = msg;
+            else if (lowMsg.includes("town")) errorsMap.townId = msg;
+            else errorsMap.general = msg;
+          });
+        } else {
+          errorsMap.general = api.message || "Meta save failed";
+        }
+      } else {
+        errorsMap.general = error?.message || "Meta save failed";
+      }
 
-      setMetaError(message);
+      setMetaErrors(errorsMap);
     }
   };
 
@@ -714,52 +764,79 @@ function MyProfile() {
             <>
               <div className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <InputField
-                    label="First Name"
-                    variant="colored"
-                    value={profileForm.firstName || ""}
-                    onChange={(e) =>
-                      setProfileForm({
-                        ...profileForm,
-                        firstName: e.target.value,
-                      })
-                    }
-                  />
+                  <div>
+                    <InputField
+                      label="First Name"
+                      variant="colored"
+                      value={profileForm.firstName || ""}
+                      onChange={(e) => {
+                        setProfileForm({
+                          ...profileForm,
+                          firstName: e.target.value,
+                        });
+                        if (profileErrors.firstName) {
+                          setProfileErrors((prev) => ({ ...prev, firstName: "" }));
+                        }
+                      }}
+                    />
+                    {profileErrors.firstName && (
+                      <p className="text-red-500 text-xs mt-1 ml-1">{profileErrors.firstName}</p>
+                    )}
+                  </div>
 
-                  <InputField
-                    label="Last Name"
-                    variant="colored"
-                    value={profileForm.lastName || ""}
-                    onChange={(e) =>
-                      setProfileForm({
-                        ...profileForm,
-                        lastName: e.target.value,
-                      })
-                    }
-                  />
+                  <div>
+                    <InputField
+                      label="Last Name"
+                      variant="colored"
+                      value={profileForm.lastName || ""}
+                      onChange={(e) => {
+                        setProfileForm({
+                          ...profileForm,
+                          lastName: e.target.value,
+                        });
+                        if (profileErrors.lastName) {
+                          setProfileErrors((prev) => ({ ...prev, lastName: "" }));
+                        }
+                      }}
+                    />
+                    {profileErrors.lastName && (
+                      <p className="text-red-500 text-xs mt-1 ml-1">{profileErrors.lastName}</p>
+                    )}
+                  </div>
                 </div>
 
-                <InputField
-                  label="Email"
-                  variant="colored"
-                  value={profileForm.email || ""}
-                  onChange={(e) =>
-                    setProfileForm({
-                      ...profileForm,
-                      email: e.target.value,
-                    })
-                  }
-                />
+                <div>
+                  <InputField
+                    label="Email"
+                    variant="colored"
+                    value={profileForm.email || ""}
+                    onChange={(e) => {
+                      setProfileForm({
+                        ...profileForm,
+                        email: e.target.value,
+                      });
+                      if (profileErrors.email) {
+                        setProfileErrors((prev) => ({ ...prev, email: "" }));
+                      }
+                    }}
+                  />
+                  {profileErrors.email && (
+                    <p className="text-red-500 text-xs mt-1 ml-1">{profileErrors.email}</p>
+                  )}
+                </div>
               </div>
 
-              {profileError && (
-                <p className="text-red-500 text-sm mt-4">{profileError}</p>
+              {profileErrors.general && (
+                <p className="text-red-500 text-sm mt-4">{profileErrors.general}</p>
               )}
 
               <div className="flex justify-end gap-4 mt-8">
                 <Button
                   variant="outlineSecondary"
-                  onClick={() => setIsEditingProfile(false)}
+                  onClick={() => {
+                    setIsEditingProfile(false);
+                    setProfileErrors({});
+                  }}
                 >
                   Cancel
                 </Button>
@@ -828,14 +905,22 @@ function MyProfile() {
           {(isEditingMeta || isCreatingMeta) && (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <InputField
-                  label="Age"
-                  variant="colored"
-                  value={metaForm.age || ""}
-                  onChange={(e) =>
-                    setMetaForm({ ...metaForm, age: e.target.value })
-                  }
-                />
+                <div>
+                  <InputField
+                    label="Age"
+                    variant="colored"
+                    value={metaForm.age || ""}
+                    onChange={(e) => {
+                      setMetaForm({ ...metaForm, age: e.target.value });
+                      if (metaErrors.age) {
+                        setMetaErrors((prev) => ({ ...prev, age: "" }));
+                      }
+                    }}
+                  />
+                  {metaErrors.age && (
+                    <p className="text-red-500 text-xs mt-1 ml-1">{metaErrors.age}</p>
+                  )}
+                </div>
 
                 {/* ✅ GENDER DROPDOWN */}
                 <div ref={genderRef} className="relative">
@@ -860,6 +945,9 @@ function MyProfile() {
                               gender: genderOption,
                             }));
                             setGenderOpen(false);
+                            if (metaErrors.gender) {
+                              setMetaErrors((prev) => ({ ...prev, gender: "" }));
+                            }
                           }}
                           className="px-3 py-2.5 hover:bg-white/10 cursor-pointer text-sm font-medium transition-colors"
                         >
@@ -868,25 +956,44 @@ function MyProfile() {
                       ))}
                     </div>
                   )}
+                  {metaErrors.gender && (
+                    <p className="text-red-500 text-xs mt-1 ml-1">{metaErrors.gender}</p>
+                  )}
                 </div>
 
-                <InputField
-                  label="Profession"
-                  variant="colored"
-                  value={metaForm.profession || ""}
-                  onChange={(e) =>
-                    setMetaForm({ ...metaForm, profession: e.target.value })
-                  }
-                />
+                <div>
+                  <InputField
+                    label="Profession"
+                    variant="colored"
+                    value={metaForm.profession || ""}
+                    onChange={(e) => {
+                      setMetaForm({ ...metaForm, profession: e.target.value });
+                      if (metaErrors.profession) {
+                        setMetaErrors((prev) => ({ ...prev, profession: "" }));
+                      }
+                    }}
+                  />
+                  {metaErrors.profession && (
+                    <p className="text-red-500 text-xs mt-1 ml-1">{metaErrors.profession}</p>
+                  )}
+                </div>
 
-                <InputField
-                  label="Address"
-                  variant="colored"
-                  value={metaForm.address || ""}
-                  onChange={(e) =>
-                    setMetaForm({ ...metaForm, address: e.target.value })
-                  }
-                />
+                <div>
+                  <InputField
+                    label="Address"
+                    variant="colored"
+                    value={metaForm.address || ""}
+                    onChange={(e) => {
+                      setMetaForm({ ...metaForm, address: e.target.value });
+                      if (metaErrors.address) {
+                        setMetaErrors((prev) => ({ ...prev, address: "" }));
+                      }
+                    }}
+                  />
+                  {metaErrors.address && (
+                    <p className="text-red-500 text-xs mt-1 ml-1">{metaErrors.address}</p>
+                  )}
+                </div>
 
                 {/* ✅ STATE DROPDOWN */}
                 <div>
@@ -907,8 +1014,14 @@ function MyProfile() {
                         townId: null,
                         townName: "",
                       }));
+                      if (metaErrors.stateId) {
+                        setMetaErrors((prev) => ({ ...prev, stateId: "", cityId: "", townId: "" }));
+                      }
                     }}
                   />
+                  {metaErrors.stateId && (
+                    <p className="text-red-500 text-xs mt-1 ml-1">{metaErrors.stateId}</p>
+                  )}
                 </div>
 
                 {/* ✅ CITY DROPDOWN */}
@@ -931,8 +1044,14 @@ function MyProfile() {
                         townId: null,
                         townName: "",
                       }));
+                      if (metaErrors.cityId) {
+                        setMetaErrors((prev) => ({ ...prev, cityId: "", townId: "" }));
+                      }
                     }}
                   />
+                  {metaErrors.cityId && (
+                    <p className="text-red-500 text-xs mt-1 ml-1">{metaErrors.cityId}</p>
+                  )}
                 </div>
 
                 {/* ✅ TOWN DROPDOWN */}
@@ -953,13 +1072,19 @@ function MyProfile() {
                         townId: val,
                         townName: t ? t.label : "",
                       }));
+                      if (metaErrors.townId) {
+                        setMetaErrors((prev) => ({ ...prev, townId: "" }));
+                      }
                     }}
                   />
+                  {metaErrors.townId && (
+                    <p className="text-red-500 text-xs mt-1 ml-1">{metaErrors.townId}</p>
+                  )}
                 </div>
               </div>
 
-              {metaError && (
-                <p className="text-red-500 text-sm mt-4">{metaError}</p>
+              {metaErrors.general && (
+                <p className="text-red-500 text-sm mt-4">{metaErrors.general}</p>
               )}
 
               <div className="flex justify-end gap-4 mt-8">
@@ -968,6 +1093,7 @@ function MyProfile() {
                   onClick={() => {
                     setIsEditingMeta(false);
                     setIsCreatingMeta(false);
+                    setMetaErrors({});
                   }}
                 >
                   Cancel
