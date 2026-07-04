@@ -102,8 +102,9 @@ export default function VehicleSummaryRight({
     <>
       <aside className="relative text-primary rounded-2xl shadow-xl overflow-hidden border border-third/60">
         <div className="relative z-10 p-6 space-y-4">
-          {/* HEADER */}
-          <div className="flex flex-col gap-1">
+          {/* HEADER + SELLER INFO — unified block with even spacing */}
+          <div className="flex flex-col gap-3">
+
             {vehicleOwnerRole === "CONSULTATION" ? (
               <>
                 {/* Label row + Visit Storefront on same line */}
@@ -121,17 +122,39 @@ export default function VehicleSummaryRight({
                     </a>
                   )}
                 </div>
-                {/* Consultant name tight below */}
-                <p className="text-xl font-bold text-primary leading-tight">
+
+                {/* Consultant name */}
+                <p className="text-xl font-bold text-primary leading-tight -mt-1">
                   {summary?.consultationName || "Auto Consultant"}
                 </p>
+
+                {/* Stats row */}
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 text-sm">
+                    <Star className="text-yellow-400" size={16} />
+                    <span className="font-medium text-primary">
+                      {summary?.averageRating || 0}
+                    </span>
+                    <span className="text-third">
+                      | {summary?.soldVehiclesCount || 0} Sold Vehicles
+                    </span>
+                  </div>
+                  <p className="flex items-start gap-2 text-sm text-third">
+                    <MapPin size={14} className="mt-0.5 shrink-0" />
+                    <span className="line-clamp-2">
+                      {summary?.address
+                        ? `${summary.address.city}, ${summary.address.state}`
+                        : "Location not available"}
+                    </span>
+                  </p>
+                </div>
               </>
             ) : (
               <>
                 <span className="text-xs uppercase tracking-[0.1em] text-third font-medium">
                   Private Seller
                 </span>
-                <p className="text-xl font-bold text-primary leading-tight">
+                <p className="text-xl font-bold text-primary leading-tight -mt-1">
                   {[
                     vehicle?.vehicleOwner?.firstname,
                     vehicle?.vehicleOwner?.lastname,
@@ -139,8 +162,23 @@ export default function VehicleSummaryRight({
                     .filter(Boolean)
                     .join(" ") || "Individual Seller"}
                 </p>
+                {(vehicle?.vehicleAddress?.city || vehicle?.vehicleAddress?.state) && (
+                  <p className="flex items-start gap-2 text-sm text-third">
+                    <MapPin size={14} className="mt-0.5 shrink-0" />
+                    <span className="line-clamp-2">
+                      {[
+                        vehicle.vehicleAddress.town,
+                        vehicle.vehicleAddress.city,
+                        vehicle.vehicleAddress.state,
+                      ]
+                        .filter(Boolean)
+                        .join(", ")}
+                    </span>
+                  </p>
+                )}
               </>
             )}
+
             <h2 className="hidden text-2xl font-bold leading-tight">
               {[vehicle?.makerName, vehicle?.modelName, vehicle?.variantName]
                 .filter(Boolean)
@@ -148,84 +186,32 @@ export default function VehicleSummaryRight({
             </h2>
           </div>
 
-          {/* SELLER / DEALER INFO */}
-          <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
-            <div className="space-y-2 w-full">
-              {vehicleOwnerRole === "CONSULTATION" ? (
-                /* ── CONSULTATION-ONLY stats ── */
-                <div className="flex justify-between items-start pt-1 gap-2">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-sm">
-                      <Star className="text-yellow-400" size={16} />
-                      <span className="font-medium text-primary">
-                        {summary?.averageRating || 0}
-                      </span>
-                      <span className="text-third">
-                        | {summary?.soldVehiclesCount || 0} Sold Vehicles
-                      </span>
-                    </div>
-
-                    <p className="flex items-start gap-2 text-sm text-third">
-                      <MapPin size={14} className="mt-0.5 shrink-0" />
-                      <span className="line-clamp-2">
-                        {summary?.address
-                          ? `${summary.address.city}, ${summary.address.state}`
-                          : "Location not available"}
-                      </span>
-                    </p>
-                  </div>
-
-
-                </div>
-              ) : (
-                /* ── NORMAL USER_SELLER info ── */
-                <div className="space-y-2 pt-1">
-                  {(vehicle?.vehicleAddress?.city ||
-                    vehicle?.vehicleAddress?.state) && (
-                    <p className="flex items-start gap-2 text-sm text-third">
-                      <MapPin size={14} className="mt-0.5 shrink-0" />
-                      <span className="line-clamp-2">
-                        {[
-                          vehicle.vehicleAddress.town,
-                          vehicle.vehicleAddress.city,
-                          vehicle.vehicleAddress.state,
-                        ]
-                          .filter(Boolean)
-                          .join(", ")}
-                      </span>
-                    </p>
-                  )}
-                </div>
-              )}
-
-              {/* Services — only shown for consultants */}
-              {vehicleOwnerRole === "CONSULTATION" && (
-                <div className="space-y-3 mt-4">
-                  <p className="text-sm font-medium text-primary">
-                    Services Offered
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 pt-1">
-                    {summary?.services?.length > 0 ? (
-                      summary.services.map((service, index) => (
-                        <span
-                          key={index}
-                          className="text-xs py-1 px-3 rounded-full border border-third/40 bg-primary/5 text-third font-medium whitespace-nowrap"
-                        >
-                          {service
-                            .replaceAll("_", " ")
-                            .toLowerCase()
-                            .replace(/\b\w/g, (c) => c.toUpperCase())}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="text-xs text-third">-</span>
-                    )}
-                  </div>
-                </div>
-              )}
+          {/* Services — only shown for consultants */}
+          {vehicleOwnerRole === "CONSULTATION" && (
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-primary">
+                Services Offered
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {summary?.services?.length > 0 ? (
+                  summary.services.map((service, index) => (
+                    <span
+                      key={index}
+                      className="text-xs py-1 px-3 rounded-full border border-third/40 bg-primary/5 text-third font-medium whitespace-nowrap"
+                    >
+                      {service
+                        .replaceAll("_", " ")
+                        .toLowerCase()
+                        .replace(/\b\w/g, (c) => c.toUpperCase())}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-xs text-third">-</span>
+                )}
+              </div>
             </div>
-          </div>
+          )}
+
 
           <div className="border-t border-third/40" />
 
