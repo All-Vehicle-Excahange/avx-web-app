@@ -123,10 +123,13 @@ export default function VehicleSummaryRight({
                   )}
                 </div>
 
-                {/* Consultant name */}
-                <p className="text-xl font-bold text-primary leading-tight -mt-1">
+                {/* Consultant name — clickable → storefront */}
+                <a
+                  href={`/store-front/${summary?.username || 1}`}
+                  className="text-xl font-bold text-primary leading-tight -mt-1 hover:underline underline-offset-2 decoration-primary/50 transition-all"
+                >
                   {summary?.consultationName || "Auto Consultant"}
-                </p>
+                </a>
 
                 {/* Stats row */}
                 <div className="space-y-1">
