@@ -1049,7 +1049,8 @@ export default function FilterWithCard({
 
       {/* ================= MAIN CONTENT ================= */}
       <main className="flex-1 min-w-0">
-        <div className="flex lg:hidden items-center gap-3 mb-4 overflow-x-auto scrollbar-hide pb-2">
+        <div className="lg:hidden sticky top-16 z-40 py-2 mb-4" style={{ background: "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)" }}>
+          <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide pb-2">
           <div className="shrink-0">
             <Button
               variant="ghost"
@@ -1118,6 +1119,7 @@ export default function FilterWithCard({
               }}
             />
           </div>
+        </div>
         </div>
 
         <ConsultantGridSection

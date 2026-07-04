@@ -1770,7 +1770,7 @@ export default function SearchWithCard({
           </div>
 
           {/* MOBILE FILTER BAR */}
-          <div className="col-span-full lg:hidden">
+          <div className="col-span-full lg:hidden sticky top-16 z-40 py-2" style={{ background: "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)" }}>
             <div className="flex lg:hidden items-center gap-3 overflow-x-auto scrollbar-hide">
               <div className="shrink-0">
                 <Button
@@ -1974,19 +1974,19 @@ export default function SearchWithCard({
                 />
               )}
             </>
-          ) : (vehicles?.length === 0 && priceBasedVehicles?.length === 0) ? (
+          ) : vehicles?.length === 0 && priceBasedVehicles?.length === 0 ? (
             <div className="col-span-full py-12 text-center bg-secondary/5 rounded-xl border border-third/10 my-4 px-4">
               <h3 className="text-lg md:text-xl font-bold text-primary">
-                {selectedCityName ? (
-                  `No vehicles listed directly in ${selectedCityName} yet`
-                ) : brandParam ? (
-                  `No ${brandParam} vehicles listed directly yet`
-                ) : (
-                  "No vehicles listed directly yet"
-                )}
+                {selectedCityName
+                  ? `No vehicles listed directly in ${selectedCityName} yet`
+                  : brandParam
+                    ? `No ${brandParam} vehicles listed directly yet`
+                    : "No vehicles listed directly yet"}
               </h3>
               <p className="text-sm text-third mt-2 max-w-md mx-auto">
-                We are actively verifying new consultants and pre-owned listings here. In the meantime, browse the top verified matches and recommendations near you below.
+                We are actively verifying new consultants and pre-owned listings
+                here. In the meantime, browse the top verified matches and
+                recommendations near you below.
               </p>
             </div>
           ) : null}
