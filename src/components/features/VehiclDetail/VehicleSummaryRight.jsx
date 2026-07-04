@@ -295,7 +295,7 @@ export default function VehicleSummaryRight({
               showIcon={false}
               onClick={() => setIsDownloadOpen(true)}
             >
-              Chat with Seller
+              {vehicleOwnerRole === "CONSULTATION" ? "Chat with Consult" : "Chat with Seller"}
             </Button>
           </div>
         </div>
