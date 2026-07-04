@@ -107,20 +107,9 @@ export default function VehicleSummaryRight({
             <div className="min-w-0">
               {vehicleOwnerRole === "CONSULTATION" ? (
                 <>
-                  <div className="flex items-center gap-3 flex-wrap mb-1">
-                    <span className="text-xs uppercase tracking-[0.1em] text-fourth font-bold">
-                      Listed By Auto Consultant
-                    </span>
-                    {summary?.consultationName && (
-                      <a
-                        href={`/store-front/${summary?.username || 1}`}
-                        className="text-xs text-fourth font-semibold underline underline-offset-2 decoration-fourth/60 hover:decoration-fourth transition-all flex items-center gap-0.5 shrink-0"
-                      >
-                        Visit Storefront
-                        <ExternalLink size={11} className="inline" />
-                      </a>
-                    )}
-                  </div>
+                  <span className="text-xs uppercase tracking-[0.1em] text-fourth font-bold block mb-1">
+                    Listed By Auto Consultant
+                  </span>
                   <p className="text-xl font-bold text-primary">
                     {summary?.consultationName || "Auto Consultant"}
                   </p>
@@ -147,6 +136,17 @@ export default function VehicleSummaryRight({
                   .join(" ") || "-"}
               </h2>
             </div>
+
+            {/* Visit Storefront — right corner */}
+            {vehicleOwnerRole === "CONSULTATION" && summary?.consultationName && (
+              <a
+                href={`/store-front/${summary?.username || 1}`}
+                className="text-xs text-white font-semibold underline underline-offset-2 decoration-white/50 hover:decoration-white transition-all flex items-center gap-0.5 shrink-0 mt-0.5"
+              >
+                Visit Storefront
+                <ExternalLink size={11} className="inline" />
+              </a>
+            )}
           </div>
 
           {/* SELLER / DEALER INFO */}
