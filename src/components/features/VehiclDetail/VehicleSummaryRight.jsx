@@ -141,7 +141,7 @@ export default function VehicleSummaryRight({
             {vehicleOwnerRole === "CONSULTATION" && summary?.consultationName && (
               <a
                 href={`/store-front/${summary?.username || 1}`}
-                className="text-xs text-white font-semibold underline underline-offset-2 decoration-white/50 hover:decoration-white transition-all flex items-center gap-0.5 shrink-0 mt-0.5"
+                className="text-xs text-white font-semibold underline underline-offset-2 decoration-blue-400/70 hover:decoration-blue-400 transition-all flex items-center gap-0.5 shrink-0 mt-0.5"
               >
                 Visit Storefront
                 <ExternalLink size={11} className="inline" />
