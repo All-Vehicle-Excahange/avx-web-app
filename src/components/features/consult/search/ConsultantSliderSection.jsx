@@ -5,8 +5,9 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import ConsultantCard from "@/components/ui/const/ConsultCard";
 import Button from "@/components/ui/button";
 import ConsultantCardSkeleton from "@/components/ui/skeleton/ConsultantCardSkeleton";
+import EmptyState from "@/components/ui/EmptyState";
 
-export default function ConsultantSliderSection({ title, data, loading = false }) {
+export default function ConsultantSliderSection({ title, data, loading = false, emptyTitle, emptyDescription }) {
   const sliderRef = useRef(null);
 
   const scroll = (dir) => {
@@ -83,9 +84,9 @@ export default function ConsultantSliderSection({ title, data, loading = false }
               </div>
             ))
           ) : (
-            <p className="text-center text-sm text-third w-full py-4">
-              No consultants found.
-            </p>
+            <div className="w-full py-8">
+              <EmptyState title={emptyTitle || "No consultants found"} description={emptyDescription || "Please check back later."} />
+            </div>
           )}
         </div>
       </div>

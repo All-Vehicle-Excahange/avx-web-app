@@ -128,12 +128,26 @@ export default function UserVehicleCard({
               />
 
               {/* ✅ Rating Badge (Bottom-Left of Image) */}
-              <div className="absolute bottom-2 left-2 shrink-0 flex items-center justify-center gap-1 rounded-full bg-black/60 backdrop-blur-sm px-2.5 py-1.5 z-20">
-                <Star className="w-3.5 h-3.5 fill-primary text-primary" />
-                <span className="text-white text-[11px] leading-none font-bold">
-                  {data?.avxInspectionRating || data?.rating || "-"}
-                </span>
-              </div>
+              {data?.inspectionStatus === "AVX_INSPECTED" ? (
+                <div className="absolute bottom-1.5 left-1.5 shrink-0 z-20 flex items-center justify-center w-14 h-14">
+                  <Image
+                    src="/inspection_vector.svg"
+                    alt="AVX Inspected"
+                    fill
+                    className="object-contain drop-shadow-lg z-20"
+                  />
+                  <span className="absolute left-6 z-30 text-white font-bold text-xs pb-0.5">
+                    {data?.avxInspectionRating || data?.rating || "-"}
+                  </span>
+                </div>
+              ) : (
+                <div className="absolute bottom-2 left-2 shrink-0 flex items-center justify-center gap-1 rounded-full bg-black/60 backdrop-blur-sm px-2.5 py-1.5 z-20">
+                  <Star className="w-3.5 h-3.5 fill-primary text-primary" />
+                  <span className="text-white text-[11px] leading-none font-bold">
+                    {data?.avxInspectionRating || data?.rating || "-"}
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Inspection badge overlay (bottom-left of image) */}
@@ -332,7 +346,7 @@ export default function UserVehicleCard({
                     showIcon={false}
                     onClick={() => setIsDownloadOpen(true)}
                   >
-                    <Pencil size={14} className="mr-2" /> Improve Listing
+                    <Pencil size={14}  /> Improve Listing
                   </Button>
                   <Button
                     onClick={handleSoldClick}
@@ -340,7 +354,7 @@ export default function UserVehicleCard({
                     size="sm"
                     showIcon={false}
                   >
-                    <CheckCircle size={14} className="mr-2" /> Mark Sold
+                    <CheckCircle size={14}  /> Mark Sold
                   </Button>
                 </div>
               )}
@@ -353,7 +367,7 @@ export default function UserVehicleCard({
                     size="sm"
                     showIcon={false}
                   >
-                    <Pencil size={14} className="mr-2" /> Edit Draft
+                    <Pencil size={14}  /> Edit Draft
                   </Button>
                 </div>
               )}
@@ -366,7 +380,7 @@ export default function UserVehicleCard({
                     size="sm"
                     showIcon={false}
                   >
-                    <Pencil size={14} className="mr-2" /> Improve Listing
+                    <Pencil size={14}  /> Improve Listing
                   </Button>
                 </div>
               )}

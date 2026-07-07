@@ -1,12 +1,26 @@
+"use client";
 import React from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
+import EmptyState from "@/components/ui/EmptyState";
+import { useSearchParams } from "next/navigation";
+import { MAKER_NAME_MAPPING } from "@/data/makers";
 
 // // --- Utility for Tailwind classes ---
 // const cn = (...classes) => classes.filter(Boolean).join(" ");
 
 export default function ReletedToSearch({ data, loading = false }) {
   const cardData = data || [];
+  const searchParams = useSearchParams();
+  const brandParam = searchParams?.get("brand");
+  const modelParam = searchParams?.get("model");
+
+  const resolvedBrandName = MAKER_NAME_MAPPING?.[brandParam] || brandParam;
+  const searchContext = [resolvedBrandName, modelParam].filter(Boolean).join(" ");
+  
+  const title = searchContext 
+    ? `No related vehicles found for ${searchContext}` 
+    : "No related vehicles found";
 
   return (
     <div className="">
@@ -37,11 +51,10 @@ export default function ReletedToSearch({ data, loading = false }) {
             </div>
           ))
         ) : cardData.length === 0 ? (
-          <div className="col-span-full flex justify-center py-16">
-            <h3 className="text-lg font-semibold text-primary/40">
-              No vehicles found
-            </h3>
-          </div>
+          <EmptyState
+            title={title}
+            description="We are actively sourcing more vehicles that match your preferences. Please check back later."
+          />
         ) : (
           cardData.map((vehicle) => (
             <div

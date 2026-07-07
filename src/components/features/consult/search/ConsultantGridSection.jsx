@@ -5,6 +5,7 @@ import Button from "@/components/ui/button";
 import { useRouter } from "next/router";
 import { Info } from "lucide-react";
 import ConsultantCardSkeleton from "@/components/ui/skeleton/ConsultantCardSkeleton";
+import EmptyState from "@/components/ui/EmptyState";
 
 export default function ConsultantGridSection({
   title,
@@ -13,6 +14,8 @@ export default function ConsultantGridSection({
   showViewAll = false,
   showIsSponsored = false,
   loading = false,
+  emptyTitle,
+  emptyDescription,
 }) {
   const { push } = useRouter();
   const handleClick = () => {
@@ -72,9 +75,9 @@ export default function ConsultantGridSection({
         ) : data && data.length > 0 ? (
           data.slice(0, i).map((c) => <ConsultantCard key={c.id} {...c} />)
         ) : (
-          <p className="text-center text-sm text-third col-span-full">
-            No consultants found.
-          </p>
+          <div className="col-span-full py-8">
+            <EmptyState title={emptyTitle || "No consultants found"} description={emptyDescription || "Please check back later."} />
+          </div>
         )}
       </div>
     </section>

@@ -2,36 +2,13 @@
 
 import Item from "@/components/ui/Item";
 import {
-  Calendar,
-  Fuel,
-  Gauge,
-  GitFork,
   Cpu,
-  User,
-  Key,
-  Hash,
-  ArrowUpDown,
-  Briefcase,
   CheckCircle,
   ChevronDown,
   Zap,
   RotateCw,
   Settings,
   ArrowLeftRight,
-  Scale,
-  Users,
-  Droplet,
-  MoveHorizontal,
-  ShieldCheck,
-  Shield,
-  TrendingUp,
-  Wind,
-  Sun,
-  Armchair,
-  Smartphone,
-  Camera,
-  Radar,
-  ActivityIcon,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import { useState } from "react";
@@ -48,7 +25,8 @@ export default function VehicleOverview({ vehicle, open, setOpen }) {
     enabled: !!vehicle?.variantId && open,
   });
 
-  const specData = specDataResponse?.specifications?.["Engine & Transmission"] || {};
+  const specData =
+    specDataResponse?.specifications?.["Engine & Transmission"] || {};
 
   if (!vehicle?.id) {
     return (
@@ -112,13 +90,19 @@ export default function VehicleOverview({ vehicle, open, setOpen }) {
                 <Item
                   icon={<Zap />}
                   label="Power"
-                  value={specData["Max Power"] || (vehicle?.power ? `${vehicle.power} bhp` : "-")}
+                  value={
+                    specData["Max Power"] ||
+                    (vehicle?.power ? `${vehicle.power} bhp` : "-")
+                  }
                 />
 
                 <Item
                   icon={<RotateCw />}
                   label="Torque"
-                  value={specData["Max Torque"] || (vehicle?.torque ? `${vehicle.torque} Nm` : "-")}
+                  value={
+                    specData["Max Torque"] ||
+                    (vehicle?.torque ? `${vehicle.torque} Nm` : "-")
+                  }
                 />
 
                 <Item
@@ -149,9 +133,9 @@ export default function VehicleOverview({ vehicle, open, setOpen }) {
           </div>
         </div>
       </div>
-      <SpecificationPopup 
-        open={openSpec} 
-        onClose={() => setOpenSpec(false)} 
+      <SpecificationPopup
+        open={openSpec}
+        onClose={() => setOpenSpec(false)}
         variantId={vehicle?.variantId}
         vehicleId={vehicle?.id}
       />

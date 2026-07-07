@@ -456,27 +456,7 @@ export default function VehicleSpec({
                         </div>
                       ))}
                     </div>
-                    <div className="flex justify-end">
-                      {(() => {
-                        const reportUrl =
-                          inspectionDetails?.reportUrl ||
-                          existingInspection?.reportUrl;
-                        return (
-                          <Button
-                            variant="outline"
-                            showIcon={true}
-                            locked={!reportUrl}
-                            onClick={
-                              reportUrl
-                                ? () => window.open(reportUrl, "_blank")
-                                : undefined
-                            }
-                          >
-                            View Inspection Report
-                          </Button>
-                        );
-                      })()}
-                    </div>
+
                     <div className="md:col-span-3 border-t border border-third/40" />
                     <div>
                       <h3 className="text-lg font-normal">

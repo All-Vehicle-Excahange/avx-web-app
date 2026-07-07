@@ -10,11 +10,14 @@ import Link from "next/link";
 import { getSellerTierTitle, generateVehicleSlug } from "@/lib/helper";
 import { useRouter } from "next/router";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
+import ListingPopup from "@/components/ui/const/ListingPopup";
 
 export default function TopPerformingCard({ vehicle, rank }) {
   const { push } = useRouter();
   const [open, setOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+  const [isListingOpen, setIsListingOpen] = useState(false);
+
   const menuRef = useRef(null);
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -70,14 +73,14 @@ export default function TopPerformingCard({ vehicle, rank }) {
                 <>
                   <Link
                     className="w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
-                    href={"/consult/dashboard/ppc"}
+                    href={`/consult/dashboard/ads/create?vehicleId=${vehicle.id}`}
                   >
                     Boost Listing
                   </Link>
 
                   <button
                     className="w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
-                    onClick={() => setIsDownloadOpen(true)}
+                    onClick={() => setIsListingOpen(true)}
                   >
                     Improve Listing
                   </button>
@@ -93,6 +96,13 @@ export default function TopPerformingCard({ vehicle, rank }) {
                   Request Inspection
                 </button>
               )}
+              <Link
+                className="block w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
+                href={`/vehicle/details/consualt/${generateVehicleSlug(vehicle)}/${vehicle.id}?tab=inspection`}
+                onClick={() => setOpen(false)}
+              >
+                Inspection Details
+              </Link>
             </div>
           )}
         </div>
@@ -147,6 +157,10 @@ export default function TopPerformingCard({ vehicle, rank }) {
       <DownloadAppPopup
         isOpen={isDownloadOpen}
         onClose={() => setIsDownloadOpen(false)}
+      />
+      <ListingPopup
+        isOpen={isListingOpen}
+        onClose={() => setIsListingOpen(false)}
       />
     </>
   );

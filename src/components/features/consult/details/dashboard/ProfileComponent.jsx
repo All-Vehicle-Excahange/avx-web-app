@@ -849,6 +849,7 @@ export default function ProfileComponent() {
           <Button
             variant="outlineSecondary"
             size="sm"
+            href={"/help"}
             className="flex items-center justify-center gap-2 whitespace-nowrap shrink-0 px-4"
           >
             <Headphones size={16} className="mr-1" />
@@ -858,13 +859,14 @@ export default function ProfileComponent() {
           <Button
             variant="ghost"
             size="sm"
+            href={"/help"}
             className="flex items-center justify-center gap-2 whitespace-nowrap shrink-0 px-4"
           >
             <FileText size={16} className="mr-1" />
             <span>View Guidelines</span>
           </Button>
         </div>
-      </div>
+      </div>  
     </section>
   );
 }

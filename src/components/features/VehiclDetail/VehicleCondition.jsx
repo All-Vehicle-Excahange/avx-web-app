@@ -1,6 +1,8 @@
 "use client";
 
 import { CheckCircle, ChevronDown, Disc } from "lucide-react";
+import Button from "@/components/ui/button";
+import Image from "next/image";
 
 // Score → status label
 function scoreStatus(score) {
@@ -526,12 +528,10 @@ function TyreDiagram({ fl, fr, rl, rr, spareWheel }) {
   );
 }
 
-// Bike horizontal tyre diagram
+// Bike side profile tyre diagram
 function BikeTyreDiagram({ front, rear }) {
   const hasAny = [front, rear].some((v) => v && v.toUpperCase() !== "NA");
   if (!hasAny) return null;
-
-  const flY = 300; // y-level for the horizontal tyres
 
   return (
     <div className="space-y-3">
@@ -543,84 +543,76 @@ function BikeTyreDiagram({ front, rear }) {
       </div>
 
       <svg
-        viewBox="-40 230 480 140"
+        viewBox="0 0 400 180"
         width="100%"
         height="100%"
         xmlns="http://www.w3.org/2000/svg"
         className="w-full h-auto max-h-48 ml-0 mr-auto"
       >
         <defs>
-          <filter id="bike-shadow" x="-30%" y="-20%" width="160%" height="140%">
+          <filter id="bike-shadow" x="-20%" y="-20%" width="140%" height="140%">
             <feDropShadow dx="0" dy="6" stdDeviation="6" floodColor="#000000" floodOpacity="0.3" />
           </filter>
         </defs>
 
-        {/* ── CONNECTOR LINES ── */}
-        <line x1="-10" y1={flY} x2="50" y2={flY} stroke="currentColor" strokeOpacity="0.25" strokeWidth="1.5" />
-        <line x1="350" y1={flY} x2="410" y2={flY} stroke="currentColor" strokeOpacity="0.25" strokeWidth="1.5" />
-        
-        {/* ── ARROWS ── */}
-        <polygon points="50,297 57,300 50,303" fill="currentColor" fillOpacity="0.6" />
-        <polygon points="350,297 343,300 350,303" fill="currentColor" fillOpacity="0.6" />
-
-        {/* ── OUTER ANCHOR DOTS ── */}
-        <circle cx="-10" cy={flY} r="3" fill="currentColor" fillOpacity="0.5" />
-        <circle cx="410" cy={flY} r="3" fill="currentColor" fillOpacity="0.5" />
-
-        {/* ── LABELS ── */}
-        <text x="-20" y={flY - 8} textAnchor="end" fontSize="12" fill="currentColor" fillOpacity="0.5" fontWeight="600">Front</text>
+        {/* ── ARROWS & CONNECTORS ── */}
+        {/* Front */}
+        <text x="100" y="20" textAnchor="middle" fontSize="11" fill="currentColor" fillOpacity="0.5" fontWeight="600">Front</text>
         {condLabel(front) && (
-          <text x="-20" y={flY + 16} textAnchor="end" fontSize="14" fontWeight="700" fill={condColor(front)}>{condLabel(front)}</text>
+          <text x="100" y="38" textAnchor="middle" fontSize="13" fontWeight="700" fill={condColor(front)}>{condLabel(front)}</text>
         )}
+        <line x1="100" y1="48" x2="100" y2="75" stroke="currentColor" strokeOpacity="0.25" strokeWidth="1.5" />
+        <polygon points="100,80 96,73 104,73" fill="currentColor" fillOpacity="0.6" />
 
-        <text x="420" y={flY - 8} textAnchor="start" fontSize="12" fill="currentColor" fillOpacity="0.5" fontWeight="600">Rear</text>
+        {/* Rear */}
+        <text x="300" y="20" textAnchor="middle" fontSize="11" fill="currentColor" fillOpacity="0.5" fontWeight="600">Rear</text>
         {condLabel(rear) && (
-          <text x="420" y={flY + 16} textAnchor="start" fontSize="14" fontWeight="700" fill={condColor(rear)}>{condLabel(rear)}</text>
+          <text x="300" y="38" textAnchor="middle" fontSize="13" fontWeight="700" fill={condColor(rear)}>{condLabel(rear)}</text>
         )}
+        <line x1="300" y1="48" x2="300" y2="75" stroke="currentColor" strokeOpacity="0.25" strokeWidth="1.5" />
+        <polygon points="300,80 296,73 304,73" fill="currentColor" fillOpacity="0.6" />
 
-        {/* ── ROTATED BIKE DIAGRAM ── */}
-        <g transform="rotate(-90 200 300)" filter="url(#bike-shadow)">
-          <g id="tyres">
-            <rect id="tyre-front" x="180" y="110" width="40" height="110" rx="10" fill={condColor(front)} />
-            <rect id="tyre-rear" x="176" y="380" width="48" height="120" rx="10" fill={condColor(rear)} />
-          </g>
-
-          <g id="bike-chassis-under">
-            <rect x="165" y="265" width="70" height="35" rx="6" fill="#94A3B8" stroke="#64748B" strokeWidth="1.5" />
-            <line x1="175" y1="390" x2="182" y2="450" stroke="#94A3B8" strokeWidth="4" strokeLinecap="round" />
-            <line x1="225" y1="390" x2="218" y2="450" stroke="#94A3B8" strokeWidth="4" strokeLinecap="round" />
-            <path d="M 220 340 L 225 350 L 230 460 L 222 460 Z" fill="#F1F5F9" stroke="#CBD5E1" strokeWidth="1.5" strokeLinejoin="round" />
-            <rect x="222" y="460" width="8" height="6" rx="1" fill="#64748B" />
-            <rect x="160" y="345" width="15" height="8" rx="3" fill="#64748B" />
-            <rect x="225" y="345" width="15" height="8" rx="3" fill="#64748B" />
-          </g>
-
-          <g id="bike-body-group">
-            <path d="M 188 150 L 212 150 L 216 215 L 184 215 Z" fill="#F5F5F5" stroke="#D9D9D9" strokeWidth="1.5" strokeLinejoin="round" />
-            <path d="M 175 210 C 175 185, 225 185, 225 210 Z" fill="#E2E8F0" stroke="#CBD5E1" strokeWidth="1.5" opacity="0.9" />
-            <rect x="185" y="200" width="30" height="10" rx="3" fill="#334155" /> 
-            
-            {/* Shrunk handlebars to save Y-axis space after rotation */}
-            <line x1="150" y1="230" x2="165" y2="222" stroke="#334155" strokeWidth="8" strokeLinecap="round" />
-            <line x1="250" y1="230" x2="235" y2="222" stroke="#334155" strokeWidth="8" strokeLinecap="round" />
-            <path d="M 165 222 Q 200 205 235 222" fill="none" stroke="#D9D9D9" strokeWidth="5" strokeLinecap="round" />
-            
-            <line x1="160" y1="223" x2="150" y2="190" stroke="#94A3B8" strokeWidth="2" />
-            <ellipse cx="145" cy="185" rx="12" ry="7" fill="#F8FAFC" stroke="#D9D9D9" strokeWidth="1.5" transform="rotate(-25 145 185)" />
-            <line x1="240" y1="223" x2="250" y2="190" stroke="#94A3B8" strokeWidth="2" />
-            <ellipse cx="255" cy="185" rx="12" ry="7" fill="#F8FAFC" stroke="#D9D9D9" strokeWidth="1.5" transform="rotate(25 255 185)" />
-
-            <path d="M 175 235 C 145 250, 160 320, 185 330 L 215 330 C 240 320, 255 250, 225 235 Z" fill="#F5F5F5" stroke="#D9D9D9" strokeWidth="2" strokeLinejoin="round" />
-            <line x1="200" y1="240" x2="200" y2="320" stroke="#E2E8F0" strokeWidth="2" />
-
-            <path d="M 185 330 C 175 370, 178 410, 188 430 L 212 430 C 222 410, 225 370, 215 330 Z" fill="#334155" stroke="#1E293B" strokeWidth="1.5" strokeLinejoin="round" />
-            <line x1="184" y1="360" x2="216" y2="360" stroke="#475569" strokeWidth="1" />
-            <line x1="184" y1="380" x2="216" y2="380" stroke="#475569" strokeWidth="1" />
-            <line x1="185" y1="400" x2="215" y2="400" stroke="#475569" strokeWidth="1" />
-
-            <path d="M 188 430 L 212 430 L 206 475 L 194 475 Z" fill="#F5F5F5" stroke="#D9D9D9" strokeWidth="2" strokeLinejoin="round" />
-            <rect x="194" y="475" width="12" height="4" rx="2" fill="#EF4444" stroke="#B91C1C" strokeWidth="0.5" />
-          </g>
+        {/* ── BIKE DIAGRAM ── */}
+        <g filter="url(#bike-shadow)">
+          {/* Engine / Lower Body */}
+          <path d="M 160 130 L 220 130 L 230 90 L 170 90 Z" fill="currentColor" fillOpacity="0.1" stroke="currentColor" strokeOpacity="0.3" strokeWidth="2" strokeLinejoin="round" />
+          
+          {/* Exhaust */}
+          <line x1="200" y1="130" x2="280" y2="120" stroke="currentColor" strokeOpacity="0.4" strokeWidth="8" strokeLinecap="round" />
+          
+          {/* Swingarm */}
+          <line x1="200" y1="110" x2="300" y2="120" stroke="currentColor" strokeOpacity="0.5" strokeWidth="6" strokeLinecap="round" />
+          
+          {/* Front Forks */}
+          <line x1="100" y1="120" x2="140" y2="50" stroke="currentColor" strokeOpacity="0.5" strokeWidth="6" strokeLinecap="round" />
+          
+          {/* Headlight & Fairing */}
+          <path d="M 135 50 L 150 40 L 160 80 L 120 90 Z" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeOpacity="0.3" strokeWidth="2" strokeLinejoin="round" />
+          
+          {/* Tank */}
+          <path d="M 150 50 Q 190 30 210 70" fill="none" stroke="currentColor" strokeOpacity="0.2" strokeWidth="24" strokeLinecap="round" />
+          
+          {/* Seat & Tail */}
+          <path d="M 200 70 L 260 60 L 280 50 L 290 60 L 240 80 Z" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeOpacity="0.5" strokeWidth="2" strokeLinejoin="round" />
+          
+          {/* Handlebars */}
+          <line x1="140" y1="50" x2="130" y2="35" stroke="currentColor" strokeOpacity="0.8" strokeWidth="4" strokeLinecap="round" />
+          
+          {/* Front Tyre */}
+          <circle cx="100" cy="120" r="28" fill="none" stroke={condColor(front)} strokeWidth="10" />
+          <circle cx="100" cy="120" r="23" fill="none" stroke="currentColor" strokeOpacity="0.2" strokeWidth="1" />
+          <circle cx="100" cy="120" r="16" fill="currentColor" fillOpacity="0.1" />
+          <path d="M100 97 L100 143 M77 120 L123 120 M84 104 L116 136 M84 136 L116 104" stroke="currentColor" strokeOpacity="0.2" strokeWidth="2" />
+          <circle cx="100" cy="120" r="6" fill="none" stroke="currentColor" strokeOpacity="0.3" strokeWidth="2" />
+          <circle cx="100" cy="120" r="2" fill="currentColor" fillOpacity="0.5" />
+          
+          {/* Rear Tyre */}
+          <circle cx="300" cy="120" r="28" fill="none" stroke={condColor(rear)} strokeWidth="10" />
+          <circle cx="300" cy="120" r="23" fill="none" stroke="currentColor" strokeOpacity="0.2" strokeWidth="1" />
+          <circle cx="300" cy="120" r="16" fill="currentColor" fillOpacity="0.1" />
+          <path d="M300 97 L300 143 M277 120 L323 120 M284 104 L316 136 M284 136 L316 104" stroke="currentColor" strokeOpacity="0.2" strokeWidth="2" />
+          <circle cx="300" cy="120" r="6" fill="none" stroke="currentColor" strokeOpacity="0.3" strokeWidth="2" />
+          <circle cx="300" cy="120" r="2" fill="currentColor" fillOpacity="0.5" />
         </g>
       </svg>
     </div>
@@ -691,12 +683,21 @@ export default function VehicleCondition({ vehicle, open, setOpen, inspectionDet
         >
           <div className="flex items-center gap-2">
             <CheckCircle size={20} />
-            <h3 className="text-xl font-semibold">Vehicle Condition  </h3>
-            {(d?.inspectionStatus || vehicle?.inspectionStatus) && (
+            <h3 className="text-xl font-semibold">Vehicle Condition</h3>
+            {(d?.inspectionStatus || vehicle?.inspectionStatus) === "AVX_INSPECTED" ? (
+              <div className="relative w-28 h-6 ml-1">
+                <Image
+                  src="/inspection_small.svg"
+                  alt="Reecomm Inspected"
+                  fill
+                  className="object-contain object-left"
+                />
+              </div>
+            ) : (d?.inspectionStatus || vehicle?.inspectionStatus) ? (
               <span className="text-xs font-bold px-2.5 py-0.5 rounded-full ml-1.5 border border-fourth text-white bg-fourth shadow-sm">
                 {(d?.inspectionStatus || vehicle?.inspectionStatus).replace(/_/g, " ")}
               </span>
-            )}
+            ) : null}
           </div>
 
           <ChevronDown
@@ -770,6 +771,22 @@ export default function VehicleCondition({ vehicle, open, setOpen, inspectionDet
                       spareWheel={vehicle?.spareWheel || d?.spareWheel}
                     />
                   )}
+
+                  {/* ===== VIEW INSPECTION REPORT BUTTON ===== */}
+                  <div className="flex justify-end mt-6">
+                    <Button
+                      variant="outline"
+                      showIcon={true}
+                      locked={!d?.reportUrl}
+                      onClick={
+                        d?.reportUrl
+                          ? () => window.open(d.reportUrl, "_blank")
+                          : undefined
+                      }
+                    >
+                      View Inspection Report
+                    </Button>
+                  </div>
                 </>
               )}
             </div>

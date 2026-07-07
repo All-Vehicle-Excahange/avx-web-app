@@ -20,6 +20,8 @@ export default function BudgetStep({
   const totalBudget = dailyBudget * 30;
   const estClicks = Math.round(totalBudget / maxBid);
   const estImp = Math.round(estClicks * 25);
+  
+  const today = new Date().toISOString().split('T')[0];
 
   const daysItems = [
     { value: "Mon", label: "Mon" },
@@ -117,7 +119,14 @@ export default function BudgetStep({
               <input
                 type="date"
                 value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+                min={today}
+                onChange={(e) => {
+                  setStartDate(e.target.value);
+                  // Reset end date if it's earlier than the new start date
+                  if (endDate && e.target.value > endDate) {
+                    setEndDate(e.target.value);
+                  }
+                }}
                 className="w-full bg-transparent border border-third/30 rounded-xl pl-4 pr-10 py-2.5 text-primary text-xs focus:outline-none focus:border-fourth focus:ring-1 focus:ring-fourth transition-all relative z-10 [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-10 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
               />
               <span className="absolute inset-y-0 right-3.5 flex items-center pointer-events-none text-third z-0">
@@ -131,6 +140,7 @@ export default function BudgetStep({
               <input
                 type="date"
                 value={endDate}
+                min={startDate || today}
                 onChange={(e) => setEndDate(e.target.value)}
                 className="w-full bg-transparent border border-third/30 rounded-xl pl-4 pr-10 py-2.5 text-primary text-xs focus:outline-none focus:border-fourth focus:ring-1 focus:ring-fourth transition-all relative z-10 [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-10 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
               />
