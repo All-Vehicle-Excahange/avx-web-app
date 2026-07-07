@@ -1,9 +1,10 @@
 import Button from "@/components/ui/button";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import React, { useRef } from "react";
-import { ChevronLeft, ChevronRight, Info } from "lucide-react";
+import { ChevronLeft, ChevronRight, Info, SearchX } from "lucide-react";
 import CommonSwiper from "@/components/ui/CommonSwiper";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
+import EmptyState from "@/components/ui/EmptyState";
 
 const SponsoredCars = ({ loading = false, data = [] }) => {
   const prevRef = useRef(null);
@@ -63,11 +64,10 @@ const SponsoredCars = ({ loading = false, data = [] }) => {
           nextRef={nextRef}
         />
       ) : (
-        <div className="flex items-center justify-center py-16 rounded-2xl">
-          <h3 className="text-lg font-semibold text-primary/40">
-            No data found
-          </h3>
-        </div>
+        <EmptyState
+          title="No sponsored vehicles found"
+          description="Currently, there are no trending sponsored vehicles to display here. Please check back later or modify your search."
+        />
       )}
     </div>
   );

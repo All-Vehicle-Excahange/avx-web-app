@@ -47,12 +47,8 @@ export default function CreateAd() {
     vehicle: null,
     dailyBudget: 500,
     maxBid: 8,
-    startDate: new Date().toISOString().split("T")[0],
-    endDate: (() => {
-      const d = new Date();
-      d.setDate(d.getDate() + 30);
-      return d.toISOString().split("T")[0];
-    })(),
+    startDate: "",
+    endDate: "",
     activeDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
   });
 

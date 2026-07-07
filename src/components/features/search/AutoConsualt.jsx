@@ -5,6 +5,7 @@ import ConsultantCard from "@/components/ui/const/ConsultCard";
 import Button from "@/components/ui/button";
 import { getHomeFeedConsult } from "@/services/user.service";
 import ConsultantCardSkeleton from "@/components/ui/skeleton/ConsultantCardSkeleton";
+import EmptyState from "@/components/ui/EmptyState";
 
 const mapConsultant = (item) => ({
     id: item.id,
@@ -107,11 +108,28 @@ export default function AutoConsualt({ limit, data, filterPayload, loading: exte
                         <ConsultantCardSkeleton key={`skel-${i}`} />
                     ))
                 ) : consultants.length === 0 ? (
-                    <div className="col-span-full flex justify-center py-16">
-                        <h3 className="text-lg font-semibold text-primary/40">
-                            No consultants found
-                        </h3>
-                    </div>
+                    (() => {
+                        const cityLabel = filterPayload?.cityName || filterPayload?.location || filterPayload?._labels?.cityLabel;
+                        const brandLabel = filterPayload?._labels?.brandLabel;
+                        
+                        const title = cityLabel 
+                            ? `No consultants found in ${cityLabel}`
+                            : brandLabel 
+                                ? `No consultants found for ${brandLabel} near you`
+                                : "No consultants found near you";
+                                
+                        const desc = cityLabel
+                            ? `We are actively listing consultants from ${cityLabel}. Please check back later.`
+                            : brandLabel
+                                ? `We are actively listing consultants for ${brandLabel}. Please check back later.`
+                                : "We are actively listing more consultants. Please check back later.";
+
+                        return (
+                            <div className="col-span-full">
+                                <EmptyState title={title} description={desc} />
+                            </div>
+                        );
+                    })()
                 ) : (
                     consultants
                         .slice(0, safeLimit)

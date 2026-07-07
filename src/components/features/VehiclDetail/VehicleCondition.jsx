@@ -1,6 +1,8 @@
 "use client";
 
 import { CheckCircle, ChevronDown, Disc } from "lucide-react";
+import Button from "@/components/ui/button";
+import Image from "next/image";
 
 // Score → status label
 function scoreStatus(score) {
@@ -691,12 +693,21 @@ export default function VehicleCondition({ vehicle, open, setOpen, inspectionDet
         >
           <div className="flex items-center gap-2">
             <CheckCircle size={20} />
-            <h3 className="text-xl font-semibold">Vehicle Condition  </h3>
-            {(d?.inspectionStatus || vehicle?.inspectionStatus) && (
+            <h3 className="text-xl font-semibold">Vehicle Condition</h3>
+            {(d?.inspectionStatus || vehicle?.inspectionStatus) === "AVX_INSPECTED" ? (
+              <div className="relative w-28 h-6 ml-1">
+                <Image
+                  src="/inspection_small.svg"
+                  alt="Reecomm Inspected"
+                  fill
+                  className="object-contain object-left"
+                />
+              </div>
+            ) : (d?.inspectionStatus || vehicle?.inspectionStatus) ? (
               <span className="text-xs font-bold px-2.5 py-0.5 rounded-full ml-1.5 border border-fourth text-white bg-fourth shadow-sm">
                 {(d?.inspectionStatus || vehicle?.inspectionStatus).replace(/_/g, " ")}
               </span>
-            )}
+            ) : null}
           </div>
 
           <ChevronDown
@@ -770,6 +781,22 @@ export default function VehicleCondition({ vehicle, open, setOpen, inspectionDet
                       spareWheel={vehicle?.spareWheel || d?.spareWheel}
                     />
                   )}
+
+                  {/* ===== VIEW INSPECTION REPORT BUTTON ===== */}
+                  <div className="flex justify-end mt-6">
+                    <Button
+                      variant="outline"
+                      showIcon={true}
+                      locked={!d?.reportUrl}
+                      onClick={
+                        d?.reportUrl
+                          ? () => window.open(d.reportUrl, "_blank")
+                          : undefined
+                      }
+                    >
+                      View Inspection Report
+                    </Button>
+                  </div>
                 </>
               )}
             </div>

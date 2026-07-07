@@ -21,50 +21,6 @@ const AppStoreLogo = () => (
   </svg>
 );
 
-/* Vector Mock QR Code (High-Density & Clean 29x29 Scanner Representation) */
-const QR_MATRIX = [
-  "11111110100100110101001111111",
-  "10000010110111010010001000001",
-  "10111010001101000110101011101",
-  "10111010111010001100001011101",
-  "10111010101001011011101011101",
-  "10000010010111100010011000001",
-  "11111110101010101010101111111",
-  "00000000111010001101100000000",
-  "11011110001011101001111001010",
-  "10010001110101100100100010101",
-  "01110100101100111010001101110",
-  "10010110100101010111010010001",
-  "01001101101000010001001011101",
-  "11100101110011100111001001011",
-  "00101010011100111011011100010",
-  "10110010100101001101000110100",
-  "01101110110110101101100111011",
-  "10010010010010110101001010001",
-  "00000000101001100101110101100",
-  "11111110010100110011101111011",
-  "10000010111011011101010101110",
-  "10111010011000100011010100101",
-  "10111010101111011101100011010",
-  "10111010001001000110111011001",
-  "10000010111000011110010010110",
-  "11111110010101010111010110010",
-  "00000000110110110010101001101",
-  "10110111001100111010011011010",
-  "01101001110010101110110010101"
-];
-
-const MockQRCode = () => (
-  <svg viewBox="0 0 29 29" className="w-20 h-20 sm:w-24 sm:h-24 text-zinc-950" fill="currentColor">
-    {QR_MATRIX.map((row, rIdx) =>
-      row.split("").map((cell, cIdx) =>
-        cell === "1" ? (
-          <rect key={`${rIdx}-${cIdx}`} x={cIdx} y={rIdx} width={1} height={1} />
-        ) : null
-      )
-    )}
-  </svg>
-);
 
 export default function ListingPopup({ isOpen, onClose }) {
   const [isClosing, setIsClosing] = useState(false);
@@ -166,7 +122,13 @@ export default function ListingPopup({ isOpen, onClose }) {
             {/* QR Code Container centered */}
             <div className="flex items-center gap-5 p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 shadow-inner w-auto">
               <div className="p-3 bg-white rounded-xl shadow-lg flex items-center justify-center shrink-0">
-                <MockQRCode />
+                <Image
+                  src="/app_qr.png"
+                  alt="App QR Code"
+                  width={96}
+                  height={96}
+                  className="w-20 h-20 sm:w-24 sm:h-24 object-contain"
+                />
               </div>
               <span className="text-xs sm:text-sm font-bold text-third uppercase tracking-wider text-left leading-normal max-w-[140px]">
                 Scan to start your listing

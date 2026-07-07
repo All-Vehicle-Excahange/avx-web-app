@@ -1049,7 +1049,31 @@ export default function FilterWithCard({
 
       {/* ================= MAIN CONTENT ================= */}
       <main className="flex-1 min-w-0">
-        <div className="lg:hidden sticky top-16 z-40 py-2 mb-4" style={{ background: "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)" }}>
+        {(() => {
+          const getEmptyStateProps = (baseTitle) => {
+            let contextStr = "";
+            if (selectedCityName) {
+              contextStr = `in ${selectedCityName}`;
+            } else if (selectedServices && selectedServices.length > 0) {
+              const serviceName = services.find(s => s.value === selectedServices[0])?.label || selectedServices[0];
+              contextStr = `for ${serviceName}`;
+            } else if (minPrice > 0 || maxPrice < 5000000) {
+              contextStr = `in this price range`;
+            }
+
+            return {
+              emptyTitle: contextStr 
+                ? `No ${baseTitle.toLowerCase()} found ${contextStr}`
+                : `No ${baseTitle.toLowerCase()} found`,
+              emptyDescription: contextStr
+                ? `We are actively adding more ${baseTitle.toLowerCase()} ${contextStr}. Please check back later or adjust your filters.`
+                : `We are actively adding more ${baseTitle.toLowerCase()}. Please check back later.`,
+            };
+          };
+
+          return (
+            <>
+              <div className="lg:hidden sticky top-16 z-40 py-2 mb-4" style={{ background: "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)" }}>
           <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide pb-2">
           <div className="shrink-0">
             <Button
@@ -1129,12 +1153,14 @@ export default function FilterWithCard({
           showViewAll
           i={3}
           loading={consultantsLoading}
+          {...getEmptyStateProps("featured premium consultants")}
         />
 
         <ConsultantSliderSection
           title="Sponsored Consultant"
           data={[]}
           loading={consultantsLoading}
+          {...getEmptyStateProps("sponsored consultants")}
         />
 
         <ConsultantGridSection
@@ -1142,6 +1168,7 @@ export default function FilterWithCard({
           data={consultants}
           i={6}
           loading={consultantsLoading}
+          {...getEmptyStateProps("consultants")}
         />
 
         {/* Pagination Controls */}
@@ -1150,6 +1177,9 @@ export default function FilterWithCard({
           totalPages={totalPages}
           onPageChange={handlePageChange}
         />
+            </>
+          );
+        })()}
       </main>
 
       {/* ================= MOBILE FILTER DRAWER ================= */}

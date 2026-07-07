@@ -8,11 +8,12 @@ import PromoCardRow from "./PromoCardRow";
 import Chip from "@/components/ui/chip";
 import Pagination from "@/components/ui/Pagination";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
-import { FilterIcon, MapPin, X } from "lucide-react";
+import { FilterIcon, MapPin, X, SearchX } from "lucide-react";
 import SponsoredCars from "./SponsoredCars";
 import FilterSection from "./FilterSection";
 import PriceBased from "./PriceBased";
 import CustomSelect from "@/components/ui/custom-select";
+import EmptyState from "@/components/ui/EmptyState";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import {
@@ -473,7 +474,11 @@ export default function SearchWithCard({
     const locationName = selectedCityName || selectedStateName;
 
     // Build the target SEO slug
-    const targetSlug = generateSeoSlug({ brandName, modelName, cityName: locationName });
+    const targetSlug = generateSeoSlug({
+      brandName,
+      modelName,
+      cityName: locationName,
+    });
     const currentSlug = pathname.split("/").pop();
 
     if (!brandName && !locationName) {
@@ -487,7 +492,13 @@ export default function SearchWithCard({
     if (targetSlug !== currentSlug) {
       replace(`/search/${targetSlug}`, { scroll: false });
     }
-  }, [resolvedBrandName, resolvedModelName, selectedCityName, selectedStateName, pathname]);
+  }, [
+    resolvedBrandName,
+    resolvedModelName,
+    selectedCityName,
+    selectedStateName,
+    pathname,
+  ]);
 
   useEffect(() => {
     if (onLoadingChange) onLoadingChange(vehiclesLoading);
@@ -1763,7 +1774,13 @@ export default function SearchWithCard({
           </div>
 
           {/* MOBILE FILTER BAR */}
-          <div className="col-span-full lg:hidden sticky top-16 z-40 py-2" style={{ background: "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)" }}>
+          <div
+            className="col-span-full lg:hidden sticky top-16 z-40 py-2"
+            style={{
+              background:
+                "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)",
+            }}
+          >
             <div className="flex lg:hidden items-center gap-3 overflow-x-auto scrollbar-hide">
               <div className="shrink-0">
                 <Button
@@ -1968,20 +1985,16 @@ export default function SearchWithCard({
               )}
             </>
           ) : vehicles?.length === 0 && priceBasedVehicles?.length === 0 ? (
-            <div className="col-span-full py-12 text-center bg-secondary/5 rounded-xl border border-third/10 my-4 px-4">
-              <h3 className="text-lg md:text-xl font-bold text-primary">
-                {selectedCityName
+            <EmptyState
+              title={
+                selectedCityName
                   ? `No vehicles listed directly in ${selectedCityName} yet`
                   : brandParam
                     ? `No ${brandParam} vehicles listed directly yet`
-                    : "No vehicles listed directly yet"}
-              </h3>
-              <p className="text-sm text-third mt-2 max-w-md mx-auto">
-                We are actively verifying new consultants and pre-owned listings
-                here. In the meantime, browse the top verified matches and
-                recommendations near you below.
-              </p>
-            </div>
+                    : "No vehicles listed directly yet"
+              }
+              description="We are actively verifying new consultants and pre-owned listings here. In the meantime, browse the top verified matches and recommendations near you below."
+            />
           ) : null}
         </div>
       </main>

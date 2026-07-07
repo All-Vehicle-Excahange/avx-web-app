@@ -3,6 +3,7 @@
 import { ChevronRight, Star, ExternalLink, Share2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useCompareStore } from "@/stores/useCompareStore";
 import Button from "@/components/ui/button";
@@ -109,14 +110,33 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
 
       {/* Rating */}
       <div className="flex items-center gap-2">
-        <Star className="text-yellow-400" size={16} />
-        <span className="text-sm text-primary font-medium">
-          Inspection Rating: {vehicle?.avxInspectionRating || "-"}
-        </span>
-        {vehicle?.inspectionStatus && (
-          <span className="text-xs font-bold px-2.5 py-0.5 rounded-full border border-fourth text-white bg-fourth shadow-sm">
-            {vehicle.inspectionStatus.replace(/_/g, " ")}
-          </span>
+        {vehicle?.inspectionStatus === "AVX_INSPECTED" ? (
+          <>
+            <span className="text-sm text-primary font-medium">
+              Reecomm Inspection Rating:
+            </span>
+            <div className="relative w-12 h-12 flex items-center justify-center">
+              <Image
+                src="/inspection_vector.svg"
+                alt="Reecomm Inspected"
+                fill
+                className="object-contain"
+              />
+              <span className="absolute left-5 z-10 text-white font-bold text-xs pb-0.5">
+                {vehicle?.avxInspectionRating || "-"}
+              </span>
+            </div>
+          </>
+        ) : (
+          <>
+            <Star className="text-yellow-400" size={16} />
+            <span className="text-sm text-primary font-medium">
+              {vehicle?.inspectionStatus === "SELF_INSPECTED"
+                ? "Self Inspection Rating:"
+                : "Inspection Rating:"}{" "}
+              {vehicle?.avxInspectionRating || "-"}
+            </span>
+          </>
         )}
       </div>
 

@@ -33,20 +33,20 @@ const vehicleTagMap = {
 
 const categoriesByType = {
   "4-Wheeler": [
-    { id: "urban-rides", label: "Urban Rides", icon: Car },
-    { id: "city-compact", label: "City Compact", icon: Car },
-    { id: "comfort-sedans", label: "Comfort Sedans", icon: Car },
-    { id: "compact-suvs", label: "Compact SUVs", icon: Car },
-    { id: "fullsize-suvs-muvs", label: "Full-Size SUVs & MUVs", icon: Car },
+    { id: "urban-rides", label: "Urban Rides", icon: Car, iconUrl: "/icons/car_URBAN RIDER.svg" },
+    { id: "city-compact", label: "City Compact", icon: Car, iconUrl: "/icons/car_CITY COMPACT.svg" },
+    { id: "comfort-sedans", label: "Comfort Sedans", icon: Car, iconUrl: "/icons/car_COMFERT SEDAN.svg" },
+    { id: "compact-suvs", label: "Compact SUVs", icon: Car, iconUrl: "/icons/car_COMPACT SUVS.svg" },
+    { id: "fullsize-suvs-muvs", label: "Full-Size SUVs & MUVs", icon: Car, iconUrl: "/icons/car_FULL SIZE SUV.svg" },
     { id: "premium-luxury", label: "Premium & Luxury", icon: Car },
   ],
   "2-Wheeler": [
-    { id: "scooters", label: "Scooters", icon: Bike },
-    { id: "commuter-bikes", label: "Commuter Bikes", icon: Bike },
-    { id: "sports-bikes", label: "Sports Bikes", icon: Bike },
-    { id: "cruiser-retro", label: "Cruiser & Retro", icon: Bike },
+    { id: "scooters", label: "Scooters", icon: Bike, iconUrl: "/icons/bike_Scooter.svg" },
+    { id: "commuter-bikes", label: "Commuter Bikes", icon: Bike, iconUrl: "/icons/bike_Commuter Bike.svg" },
+    { id: "sports-bikes", label: "Sports Bikes", icon: Bike, iconUrl: "/icons/bike_Sport Bike.svg" },
+    { id: "cruiser-retro", label: "Cruiser & Retro", icon: Bike, iconUrl: "/icons/bike_Cruiser & Retro.svg" },
     { id: "adventure-touring", label: "Adventure & Touring", icon: Bike },
-    { id: "electric-2w", label: "Electric 2W", icon: Bike },
+    { id: "electric-2w", label: "Electric 2W", icon: Bike, iconUrl: "/icons/bike_Electric 2W.svg" },
   ],
 };
 
@@ -175,7 +175,11 @@ const CategoriesSections = () => {
                       : "text-primary border-white/20 hover:border-primary/40",
                   )}
                 >
-                  {cat.icon && <cat.icon size={18} />}
+                  {cat.iconUrl ? (
+                    <img src={cat.iconUrl} alt={cat.label} className={`w-5 h-5 object-contain ${isActive ? "" : "opacity-80"}`} />
+                  ) : cat.icon ? (
+                    <cat.icon size={18} />
+                  ) : null}
                   {cat.label}
                 </button>
               );
