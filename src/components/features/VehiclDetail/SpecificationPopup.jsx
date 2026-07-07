@@ -59,22 +59,21 @@ export default function SpecificationPopup({ open, onClose, variantId, vehicleId
   const isLoading = isSpecLoading;
 
   const transformedExtra = {};
-  if (Array.isArray(extraData)) {
+  if (Array.isArray(extraData) && extraData.length > 0) {
     extraData.forEach((item) => {
       if (item.detailKey && Array.isArray(item.detailValues)) {
-        const catObj = {};
-        item.detailValues.forEach((val) => {
-          catObj[val] = "";
-        });
-        transformedExtra[item.detailKey] = catObj;
+        transformedExtra[item.detailKey] = item.detailValues.join(", ");
       }
     });
   }
 
   const specData = {
     ...(data?.specifications || {}),
-    ...transformedExtra,
   };
+
+  if (Object.keys(transformedExtra).length > 0) {
+    specData["Modifications"] = transformedExtra;
+  }
   const categories = Object.keys(specData);
 
   useEffect(() => {
@@ -110,6 +109,8 @@ export default function SpecificationPopup({ open, onClose, variantId, vehicleId
         <div className="w-[220px] shrink-0 border-r border-white/5 overflow-y-auto custom-scrollbar flex flex-col py-2">
           {isLoading ? (
             <div className="p-4 text-sm text-primary/60">Loading...</div>
+          ) : categories.length === 0 ? (
+            <div className="p-4 text-sm text-primary/60">No data found</div>
           ) : (
             categories.map((category) => (
               <button
@@ -144,7 +145,11 @@ export default function SpecificationPopup({ open, onClose, variantId, vehicleId
 
           {/* LIST */}
           <div className="flex-1 overflow-y-auto custom-scrollbar px-8 py-4">
-            {activeTab && specData[activeTab] ? (
+            {categories.length === 0 && !isLoading ? (
+              <div className="flex items-center justify-center h-full text-sm text-primary/60">
+                No data found
+              </div>
+            ) : activeTab && specData[activeTab] ? (
               <ul className="flex flex-col">
                 {Object.entries(specData[activeTab]).map(
                   ([key, value], index) => (

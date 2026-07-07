@@ -24,7 +24,7 @@ import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import FeedbackPopup from "./FeedbackPopup";
 import { getAndCheckEligbleForReview } from "@/services/user.service";
 
-export default function InquiryCard({ inquiry, onStatusChange }) {
+export default function InquiryCard({ inquiry, onStatusChange, hideReviewButton = false }) {
   const [showClosePopup, setShowClosePopup] = useState(false);
   const [showMarkSoldPopup, setShowMarkSoldPopup] = useState(false);
   const [showDownloadPopup, setShowDownloadPopup] = useState(false);
@@ -348,15 +348,17 @@ export default function InquiryCard({ inquiry, onStatusChange }) {
                   Mark as Sold
                 </Button>
               )}
-              <Button
-                showIcon={false}
-                variant="outlineSecondary"
-                size="sm"
-                onClick={handleFeedbackClick}
-                loading={loadingAction === "FEEDBACK"}
-              >
-                Review
-              </Button>
+              {!hideReviewButton && (
+                <Button
+                  showIcon={false}
+                  variant="outlineSecondary"
+                  size="sm"
+                  onClick={handleFeedbackClick}
+                  loading={loadingAction === "FEEDBACK"}
+                >
+                  Review
+                </Button>
+              )}
             </div>
           )}
 

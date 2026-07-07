@@ -31,6 +31,7 @@ import SummaryPanel from "./components/SummaryPanel";
 export default function CreateAd() {
   const { query, push } = useRouter();
   const campaignIdParam = query?.campaignId;
+  const vehicleIdParam = query?.vehicleId;
   const [curStep, setCurStep] = useState(1);
   const [isLaunching, setIsLaunching] = useState(false);
   const [isLaunched, setIsLaunched] = useState(false);
@@ -126,8 +127,28 @@ export default function CreateAd() {
         .finally(() => {
           setIsLoadingDraft(false);
         });
+    } else if (vehicleIdParam) {
+      getVehicleOverview(vehicleIdParam)
+        .then((vehRes) => {
+          const vehData = vehRes?.data || vehRes;
+          if (vehData) {
+            setState((prev) => ({
+              ...prev,
+              campaignType: "vehicle",
+              vehicle: {
+                id: vehicleIdParam,
+                name: `${vehData.makerName || "-"} ${vehData.modelName || "-"} ${vehData.variantName || ""}`,
+                meta: `${vehData.yearOfMfg || "-"} · ${vehData.fuelType || "-"} · ${vehData.transmissionType || "-"}`,
+                raw: vehData
+              }
+            }));
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to load vehicle details:", err);
+        });
     }
-  }, [campaignIdParam]);
+  }, [campaignIdParam, vehicleIdParam]);
 
   // Handle Placement Selection with Auto-Billing Pre-selection
   const handlePlacementChange = (placementVal) => {

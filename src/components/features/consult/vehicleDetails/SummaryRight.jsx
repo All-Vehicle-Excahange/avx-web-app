@@ -8,6 +8,7 @@ import { Star, MapPin, CheckCircle, Loader2, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 
 import InspectionTrackingModal from "@/components/features/user/InspectionTrackingModal";
@@ -15,6 +16,7 @@ import InspectionRequestModal from "@/components/features/user/InspectionRequest
 
 export default function SummaryRight({ vehicle, summary }) {
   const queryClient = useQueryClient();
+  const { push } = useRouter();
   const vehicleId = vehicle?.id;
   const vehicleOwnerRole = vehicle?.vehicleOwner?.userRole || "USER";
   const [prevTotalInquiryCount, setPrevTotalInquiryCount] = useState(
@@ -282,7 +284,7 @@ export default function SummaryRight({ vehicle, summary }) {
               Request Inspection
             </Button>
 
-            <Button variant="outline" size="sm" showIcon={false}>
+            <Button variant="outline" size="sm" showIcon={false} onClick={() => push(`/consult/dashboard/ads/create?vehicleId=${vehicleId}`)}>
               Boost Listing
             </Button>
           </div>
@@ -312,7 +314,7 @@ export default function SummaryRight({ vehicle, summary }) {
             Request Inspection
           </Button>
 
-          <Button variant="outline" size="sm" showIcon={false} className="">
+          <Button variant="outline" size="sm" showIcon={false} className="" onClick={() => push(`/consult/dashboard/ads/create?vehicleId=${vehicleId}`)}>
             Boost Listing
           </Button>
         </div>

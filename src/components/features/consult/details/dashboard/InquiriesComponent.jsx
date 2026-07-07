@@ -191,6 +191,7 @@ export default function InquiriesComponent() {
                 key={inq.id}
                 inquiry={inq}
                 onStatusChange={handleStatusChange}
+                hideReviewButton={true}
               />
             ))}
 
