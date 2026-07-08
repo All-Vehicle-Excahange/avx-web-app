@@ -418,8 +418,10 @@ export default function InquiryCard({ inquiry, onStatusChange, hideReviewButton 
           isWritten={
             !reviewData?.isEligibleToReview && !!reviewData?.consultationReview
           }
+          isEligible={reviewData?.isEligibleToReview ?? true}
           reviewData={reviewData?.consultationReview || null}
           targetId={
+            reviewData?.username ||
             inquiry?.inquirer?.username ||
             inquiry?.inquiryVehicleResponse?.vehicleOwner?.username ||
             inquiry?.inquiryVehicleResponse?.user?.username ||

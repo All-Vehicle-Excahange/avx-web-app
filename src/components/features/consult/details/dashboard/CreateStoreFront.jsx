@@ -147,6 +147,7 @@ export default function CreateStoreFront({ storeData, onView }) {
           variant="outlineSecondary"
           size="sm"
           disabled={isStatusLocked}
+          className="hidden sm:inline-flex"
         >
           Explore All Themes
         </Button>
@@ -209,6 +210,17 @@ export default function CreateStoreFront({ storeData, onView }) {
               );
             })}
       </div>
+
+      {/* MOBILE ONLY: Explore All Themes button after grid */}
+      <Button
+        onClick={handleExploreAll}
+        variant="outlineSecondary"
+        size="sm"
+        disabled={isStatusLocked}
+        className="w-full sm:hidden flex justify-center"
+      >
+        Explore All Themes
+      </Button>
 
       {previewTheme && (
         <PreviewPopup

@@ -3,6 +3,7 @@ import { THEME_STORE } from "@/core/engine/themeStore";
 import { useEffect, useState } from "react";
 import StoreFrontAboutSkeleton from "@/components/ui/skeleton/StoreFrontAboutSkeleton";
 import { useRouter } from "next/router";
+import EmptyState from "@/components/ui/EmptyState";
 import { useQuery } from "@tanstack/react-query";
 import { getAboutUsStoreFrontByUserNameQuery } from "@/queries/user.queries";
 
@@ -151,6 +152,20 @@ export default function AboutUs({ storeData = null }) {
   );
 
   if (loading && sections.length === 0) return <StoreFrontAboutSkeleton />;
+
+  const isApiDataEmpty = !apiData || Object.keys(apiData).length === 0;
+
+  if (!loading && isApiDataEmpty) {
+    return (
+      <section className="w-full container rounded-2xl p-6">
+        <EmptyState
+          imageSrc="/store-Front-empty.svg"
+          title="About Us Details Unavailable"
+          description="This storefront hasn't added their About Us information yet."
+        />
+      </section>
+    );
+  }
 
   return (
     <section className="w-full container rounded-2xl p-6 space-y-8">
