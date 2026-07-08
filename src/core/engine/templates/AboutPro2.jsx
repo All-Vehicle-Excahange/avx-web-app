@@ -711,12 +711,16 @@ export default function AboutPro2({
                   />
                 </div>
               </div>
-              {/* ── BOTTOM: 4-col stat strip (unchanged) ── */}
-              <div className="lg:px-4 grid grid-cols-2 lg:grid-cols-4 divide-x divide-y lg:divide-y-0 divide-primary/10">
+              {/* ── BOTTOM: 4-col stat strip ── */}
+              <div className="lg:px-4 grid grid-cols-2 lg:grid-cols-4">
                 {data.stats.map((stat, i) => (
                   <div
                     key={i}
-                    className="group relative flex flex-col gap-2 px-10 py-9 transition-colors duration-300 overflow-hidden"
+                    className={`group relative flex flex-col gap-2 px-10 py-9 transition-colors duration-300 overflow-hidden border-primary/10
+                      ${i % 2 !== 0 ? 'border-l' : ''} 
+                      ${i > 1 ? 'border-t lg:border-t-0' : ''}
+                      ${i > 0 ? 'lg:border-l' : ''}
+                    `}
                   >
                     {/* top accent line on hover */}
                     <div className="absolute top-0 left-0 right-0 h-0.5 bg-primary/0  transition-all duration-300" />

@@ -292,7 +292,7 @@ export default function CompleteProfilePopup({ isOpen, onClose, onSuccess = () =
                   placeholder="Select City"
                   variant="transparent"
                   className="!bg-transparent !border-white/20 !text-primary !h-[50px]"
-                  disabled={!stateIdValue || cities.length === 0}
+                  disabled={!stateIdValue}
                 />
                 <input
                   type="hidden"
@@ -314,7 +314,7 @@ export default function CompleteProfilePopup({ isOpen, onClose, onSuccess = () =
                 placeholder="Select Town"
                 variant="transparent"
                 className="!bg-transparent !border-white/20 !text-primary !h-[50px]"
-                disabled={!cityIdValue || towns.length === 0}
+                disabled={!cityIdValue}
               />
             </div>
 

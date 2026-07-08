@@ -14,6 +14,7 @@ export default function FeedbackPopup({
   isReview = true,
   isWritten = true,
   reviewData = null,
+  isEligible = true,
 }) {
   const mockReview = {
     reviewedBy: { firstname: "Demo", lastname: "User" },
@@ -147,7 +148,17 @@ export default function FeedbackPopup({
 
         {/* RIGHT FORM */}
         <div className="w-full md:w-7/12 bg-secondary flex flex-col max-h-[90vh]">
-          {isWritten ? (
+          {!isEligible && !isWritten ? (
+            <div className="p-8 md:p-12 overflow-y-auto custom-scrollbar flex-1 flex flex-col justify-center items-center text-center">
+              <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-6">
+                <X size={32} className="text-white/40" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">Not Eligible</h3>
+              <p className="text-white/60 text-sm max-w-sm">
+                You are not eligible to write a review at this time.
+              </p>
+            </div>
+          ) : isWritten ? (
             <div className="p-8 md:p-12 overflow-y-auto custom-scrollbar flex-1 flex flex-col justify-center">
               <div className="bg-primary-black/20 border border-white/5 rounded-3xl p-8">
                 {/* User Info */}
@@ -240,8 +251,8 @@ export default function FeedbackPopup({
           >
             {/* Scrollable Fields Container */}
             <div className="flex-1 overflow-y-auto custom-scrollbar px-8 md:px-12 pb-4 flex flex-col gap-6">
-              {isReview ? (
-                <>
+              {/* Review Fields */}
+              <>
                   <div>
                     <label className="block text-sm mb-1 text-primary/80">
                       What's most important to know?
@@ -327,20 +338,6 @@ export default function FeedbackPopup({
                     </div>
                   </div>
                 </>
-              ) : (
-                <div>
-                  <label className="block text-sm mb-1 text-primary/80">
-                    How can we improve?
-                  </label>
-                  <textarea
-                    placeholder="Enter your feedback..."
-                    rows={6}
-                    value={reviewText}
-                    onChange={(e) => setReviewText(e.target.value)}
-                    className="w-full text-primary py-3 px-4 border rounded-md border-white/20 bg-transparent outline-none focus:border-white/60 transition-colors resize-none"
-                  />
-                </div>
-              )}
             </div>
 
             {/* ACTION BUTTONS - Sticky Footer */}

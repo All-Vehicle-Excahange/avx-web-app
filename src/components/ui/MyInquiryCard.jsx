@@ -248,8 +248,10 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
           isWritten={
             !reviewData?.isEligibleToReview && !!reviewData?.consultationReview
           }
+          isEligible={reviewData?.isEligibleToReview ?? true}
           reviewData={reviewData?.consultationReview || null}
           targetId={
+            reviewData?.username ||
             inquiry?.inquiryVehicleResponse?.vehicleOwner?.username ||
             inquiry?.inquiryVehicleResponse?.user?.username ||
             inquiry?.inquiryVehicleResponse?.storeFrontUsername ||

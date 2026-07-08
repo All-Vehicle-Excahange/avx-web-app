@@ -128,9 +128,7 @@ export default function VehicleCard({
         ? `${baseFuel} + CNG`
         : baseFuel,
     seats: data.ownership || data.seats,
-
-    rating: data.avxInspectionRating || "-",
-
+    rating: data.avxInspectionRating,
     userName: data.consultantName
       ? data.consultantName
       : data.vehicleOwner
@@ -250,26 +248,28 @@ export default function VehicleCard({
               </button>
 
               {/* ✅ Rating Badge (Bottom-Left of Image) */}
-              {data?.inspectionStatus === "AVX_INSPECTED" ? (
-                <div className="absolute bottom-1.5 left-1.5 shrink-0 z-20 flex items-center justify-center w-14 h-14">
-                  <Image
-                    src="/inspection_vector.svg"
-                    alt="AVX Inspected"
-                    fill
-                    className="object-contain drop-shadow-lg z-20"
-                  />
-                  <span className="absolute left-6 z-30 text-white font-bold text-xs pb-0.5">
-                    {mapped.rating}
-                  </span>
-                </div>
-              ) : (
-                <div className="absolute bottom-2 left-2 shrink-0 flex items-center justify-center gap-1 rounded-full bg-black/60 backdrop-blur-sm px-2.5 py-1.5 z-20">
-                  <Star className="w-3.5 h-3.5 fill-primary text-primary" />
-                  <span className="text-white text-[11px] leading-none font-bold">
-                    {mapped.rating}
-                  </span>
-                </div>
-              )}
+              {mapped?.rating ? (
+                data?.inspectionStatus === "AVX_INSPECTED" ? (
+                  <div className="absolute -bottom-1.5 left-2.5 shrink-0 z-20 flex items-center justify-center w-14 h-14">
+                    <Image
+                      src="/inspection_vector.svg"
+                      alt="AVX Inspected"
+                      fill
+                      className="object-contain drop-shadow-lg z-20"
+                    />
+                    <span className="absolute left-6 z-30 text-white font-bold text-xs pb-0.5">
+                      {mapped.rating}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="absolute bottom-2 left-2 shrink-0 flex items-center justify-center gap-1 rounded-full bg-black/60 backdrop-blur-sm px-2.5 py-1.5 z-20">
+                    <Star className="w-3.5 h-3.5 fill-primary text-primary" />
+                    <span className="text-white text-[11px] leading-none font-bold">
+                      {mapped.rating}
+                    </span>
+                  </div>
+                )
+              ) : null}
             </div>
           </div>
 

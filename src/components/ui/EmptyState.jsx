@@ -6,6 +6,7 @@ export default function EmptyState({
   title,
   description,
   className = "",
+  imageSrc = "/empty2.svg",
 }) {
   return (
     <div
@@ -19,7 +20,7 @@ export default function EmptyState({
       ) : (
         <div className="relative w-32 h-32 mb-2 opacity-60">
           <Image
-            src="/empty2.svg"
+            src={imageSrc}
             alt="Empty State"
             fill
             className="object-contain"
