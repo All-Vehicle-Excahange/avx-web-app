@@ -10,7 +10,7 @@ import { Loader2, Crown } from "lucide-react";
 
 import { useAuthStore } from "@/stores/useAuthStore";
 import { logoutUser } from "@/services/auth.service";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUserProfileStrengthQuery } from "@/queries/user.queries";
 import { getSellerTierQuery } from "@/queries/Seller.queries";
 import Link from "next/link";
@@ -141,6 +141,8 @@ export default function AccountPopup({ open, onClosePopup }) {
     return `/consult/subscription?redirect=${encodeURIComponent(path)}`;
   };
 
+  const queryClient = useQueryClient();
+
   const handleLogout = async () => {
     try {
       setIsLoggingOut(true);
@@ -148,6 +150,8 @@ export default function AccountPopup({ open, onClosePopup }) {
     } catch (err) {
     } finally {
       setIsLoggingOut(false);
+      queryClient.clear();
+      queryClient.invalidateQueries();
 
       // Both conditions preserved: Dashboard goes to /consult, others to /
       if (pathname?.includes("/consult/dashboard")) {

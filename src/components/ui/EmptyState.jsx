@@ -10,7 +10,7 @@ export default function EmptyState({
 }) {
   return (
     <div
-      className={`col-span-full py-12 text-center bg-secondary/5 rounded-xl my-4 px-4 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05),_0_2px_10px_rgba(0,0,0,0.02)] flex flex-col items-center justify-center ${className}`}
+      className={`col-span-full py-12 text-center  rounded-xl my-4 px-4 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05),_0_2px_10px_rgba(0,0,0,0.02)] flex flex-col items-center justify-center ${className}`}
     >
       {Icon ? (
         <Icon

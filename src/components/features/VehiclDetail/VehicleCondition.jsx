@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle, ChevronDown, Disc } from "lucide-react";
+import { CheckCircle, ChevronDown, Disc, FileSearch } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
 
@@ -717,9 +717,15 @@ export default function VehicleCondition({ vehicle, open, setOpen, inspectionDet
           <div className="overflow-hidden">
             <div className="mt-3 pb-6 space-y-6 px-6">
               {!d ? (
-                <p className="text-sm text-third py-4 text-center">
-                  No inspection data available.
-                </p>
+                <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
+                  <FileSearch className="w-10 h-10 text-third/50 mb-3" strokeWidth={1.5} />
+                  <p className="text-sm font-semibold text-primary">
+                    No condition data available for this vehicle.
+                  </p>
+                  <p className="text-xs text-third mt-1">
+                    Want to know the real condition? Get it inspected.
+                  </p>
+                </div>
               ) : (
                 <>
                   {/* Inspection Status Badge */}

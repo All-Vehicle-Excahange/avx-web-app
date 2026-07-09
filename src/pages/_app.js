@@ -46,9 +46,15 @@ export default function App({ Component, pageProps }) {
   const openSignupPopup = useAuthStore((state) => state.openSignupPopup);
   const closeSignupPopup = useAuthStore((state) => state.closeSignupPopup);
 
-  const isCompleteProfilePopupOpen = useAuthStore((state) => state.isCompleteProfilePopupOpen);
-  const openCompleteProfilePopup = useAuthStore((state) => state.openCompleteProfilePopup);
-  const closeCompleteProfilePopup = useAuthStore((state) => state.closeCompleteProfilePopup);
+  const isCompleteProfilePopupOpen = useAuthStore(
+    (state) => state.isCompleteProfilePopupOpen,
+  );
+  const openCompleteProfilePopup = useAuthStore(
+    (state) => state.openCompleteProfilePopup,
+  );
+  const closeCompleteProfilePopup = useAuthStore(
+    (state) => state.closeCompleteProfilePopup,
+  );
 
   const [loading, setLoading] = useState(false);
 
@@ -60,9 +66,10 @@ export default function App({ Component, pageProps }) {
     const checkSplash = () => {
       // Bypass splash screen for search engine crawlers and performance tools to ensure correct indexing
       if (typeof window !== "undefined" && typeof navigator !== "undefined") {
-        const isCrawler = /bot|google|baidu|bing|msn|duckduckbot|teoma|slurp|yandex|lighthouse/i.test(
-          navigator.userAgent
-        );
+        const isCrawler =
+          /bot|google|baidu|bing|msn|duckduckbot|teoma|slurp|yandex|lighthouse/i.test(
+            navigator.userAgent,
+          );
         if (isCrawler) {
           setShowSplash(false);
           return;
@@ -238,7 +245,10 @@ export default function App({ Component, pageProps }) {
                   openCompleteProfilePopup();
                 }
               } catch (err) {
-                console.error("Error checking meta (assuming profile incomplete):", err);
+                console.error(
+                  "Error checking meta (assuming profile incomplete):",
+                  err,
+                );
               }
             }}
           />

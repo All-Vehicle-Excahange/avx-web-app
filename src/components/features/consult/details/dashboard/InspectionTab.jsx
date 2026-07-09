@@ -346,17 +346,17 @@ function InspectionTab() {
         <div className="flex items-start justify-between">
           <div>
             <h2 className="text-lg font-semibold">
-              Vehicles Requiring Attention
+              Inspection Status Overview
             </h2>
             <p className="text-sm text-third">
-              Action required on these vehicles
+              Review vehicles where inspection is underway or renewal is due.
             </p>
           </div>
 
           {/* Urgent Badge */}
-          <span className="px-4 py-1 rounded-full bg-red-500/10 text-red-400 text-sm font-semibold">
+          {/* <span className="px-4 py-1 rounded-full bg-red-500/10 text-red-400 text-sm font-semibold">
             {vehiclesRequiringAttentionData?.urgentCount || 0} Urgent
-          </span>
+          </span> */}
         </div>
 
         {/* Table */}
@@ -558,8 +558,14 @@ function InspectionTab() {
                     {/* Status */}
                     <td className="pr-4">
                       {(() => {
-                        const currentStatus = localRequestStatuses[request.id] || request.inspectionRequestStatus || "PENDING_OWNER_APPROVAL";
-                        if (currentStatus === "ACCEPTED" || currentStatus === "APPROVED") {
+                        const currentStatus =
+                          localRequestStatuses[request.id] ||
+                          request.inspectionRequestStatus ||
+                          "PENDING_OWNER_APPROVAL";
+                        if (
+                          currentStatus === "ACCEPTED" ||
+                          currentStatus === "APPROVED"
+                        ) {
                           return (
                             <span className="px-3 py-1 rounded-full bg-green-500/10 text-green-500 text-[11px] font-medium">
                               ACCEPTED
@@ -584,8 +590,14 @@ function InspectionTab() {
                     {/* Action Buttons */}
                     <td className="flex justify-end gap-3 py-4">
                       {(() => {
-                        const currentStatus = localRequestStatuses[request.id] || request.inspectionRequestStatus || "PENDING_OWNER_APPROVAL";
-                        if (currentStatus === "ACCEPTED" || currentStatus === "APPROVED") {
+                        const currentStatus =
+                          localRequestStatuses[request.id] ||
+                          request.inspectionRequestStatus ||
+                          "PENDING_OWNER_APPROVAL";
+                        if (
+                          currentStatus === "ACCEPTED" ||
+                          currentStatus === "APPROVED"
+                        ) {
                           return (
                             <span className="text-green-500 text-xs font-semibold px-4 py-1.5">
                               Accepted
@@ -603,7 +615,9 @@ function InspectionTab() {
                               <Button
                                 variant="ghost"
                                 className="px-6 text-xs h-8"
-                                loading={loadingRequests[request.id] === "accept"}
+                                loading={
+                                  loadingRequests[request.id] === "accept"
+                                }
                                 locked={!!loadingRequests[request.id]}
                                 onClick={async () => {
                                   try {
@@ -632,7 +646,9 @@ function InspectionTab() {
                               <Button
                                 variant="outlineSecondary"
                                 className="px-6 text-xs h-8"
-                                loading={loadingRequests[request.id] === "reject"}
+                                loading={
+                                  loadingRequests[request.id] === "reject"
+                                }
                                 locked={!!loadingRequests[request.id]}
                                 onClick={async () => {
                                   try {

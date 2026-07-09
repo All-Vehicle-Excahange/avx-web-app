@@ -14,10 +14,11 @@ import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { getAllNotifications } from "@/services/notification.service";
 
 const NotificationItem = ({ data, onMarkAsRead }) => {
-  const isUnread = data.read === false || data.unread === true || data.isRead === false;
-  
+  const isUnread =
+    data.read === false || data.unread === true || data.isRead === false;
+
   return (
-    <div 
+    <div
       onClick={() => isUnread && onMarkAsRead(data.id || data._id)}
       className="flex items-start gap-3 px-3 py-3 hover:bg-white/5 rounded-lg cursor-pointer transition-colors relative border-b border-third/10 last:border-0"
     >
@@ -32,7 +33,11 @@ const NotificationItem = ({ data, onMarkAsRead }) => {
           {data.body || data.content || data.message}
         </p>
         <span className="text-[11px] font-medium text-third/60">
-          {data.sentAt ? new Date(data.sentAt).toLocaleDateString() : data.time || new Date(data.createdAt).toLocaleDateString() || "Just now"}
+          {data.sentAt
+            ? new Date(data.sentAt).toLocaleDateString()
+            : data.time ||
+              new Date(data.createdAt).toLocaleDateString() ||
+              "Just now"}
         </span>
       </div>
 
@@ -44,46 +49,66 @@ const NotificationItem = ({ data, onMarkAsRead }) => {
   );
 };
 
-export default function NotificationsComponent({ 
-  isOpen, 
+export default function NotificationsComponent({
+  isOpen,
   onClose,
   unreadCount,
   markAsRead,
   markAllAsRead,
-  isConnected
+  isConnected,
 }) {
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState("ALL");
   const observerRef = useRef(null);
 
-  const { 
-    data: apiResponse, 
+  const {
+    data: apiResponse,
     isLoading,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage
+    isFetchingNextPage,
   } = useInfiniteQuery({
     queryKey: ["notificationsList", filter],
-    queryFn: ({ pageParam = 1 }) => getAllNotifications({ pageNo: pageParam, size: 20, ...(filter === "UNREAD" ? { isRead: false } : {}) }),
+    queryFn: ({ pageParam = 1 }) =>
+      getAllNotifications({
+        pageNo: pageParam,
+        size: 20,
+        ...(filter === "UNREAD" ? { isRead: false } : {}),
+      }),
     getNextPageParam: (lastPage, allPages) => {
       const totalPages = lastPage?.pageResponse?.totalPages || 1;
       const nextPage = allPages.length + 1;
       console.log("[Pagination] lastPage:", lastPage);
-      console.log("[Pagination] allPages length:", allPages.length, "totalPages:", totalPages, "nextPage:", nextPage);
+      console.log(
+        "[Pagination] allPages length:",
+        allPages.length,
+        "totalPages:",
+        totalPages,
+        "nextPage:",
+        nextPage,
+      );
       return nextPage <= totalPages ? nextPage : undefined;
     },
     enabled: isOpen,
     initialPageParam: 1,
   });
 
-  const displayNotifications = apiResponse?.pages?.flatMap(page => page?.data?.data || page?.data || []) || [];
+  const displayNotifications =
+    apiResponse?.pages?.flatMap(
+      (page) => page?.data?.data || page?.data || [],
+    ) || [];
 
   const containerRef = useRef(null);
-  
+
   useEffect(() => {
     if (!observerRef.current || !containerRef.current) return;
-    
-    console.log("[Observer] Initializing observer. hasNextPage:", hasNextPage, "isFetchingNextPage:", isFetchingNextPage);
+
+    console.log(
+      "[Observer] Initializing observer. hasNextPage:",
+      hasNextPage,
+      "isFetchingNextPage:",
+      isFetchingNextPage,
+    );
     const observer = new IntersectionObserver(
       (entries) => {
         console.log("[Observer] Intersecting:", entries[0].isIntersecting);
@@ -92,20 +117,25 @@ export default function NotificationsComponent({
           fetchNextPage();
         }
       },
-      { 
+      {
         root: containerRef.current,
         threshold: 0.1,
         rootMargin: "50px",
-      }
+      },
     );
-    
+
     observer.observe(observerRef.current);
-    
+
     return () => {
       console.log("[Observer] Disconnecting observer.");
       observer.disconnect();
     };
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage, displayNotifications.length]);
+  }, [
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+    displayNotifications.length,
+  ]);
 
   const handleMarkAsRead = async (id) => {
     await markAsRead(id);
@@ -130,7 +160,10 @@ export default function NotificationsComponent({
           isOpen ? "translate-x-0" : "-translate-x-full md:-translate-x-[150%]"
         }`}
       >
-        <div ref={containerRef} className="w-full h-full overflow-y-auto custom-scrollbar px-4 pt-5 pb-6">
+        <div
+          ref={containerRef}
+          className="w-full h-full overflow-y-auto custom-scrollbar px-4 pt-5 pb-6"
+        >
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-lg font-bold text-primary tracking-tight flex items-center gap-2">
@@ -142,9 +175,9 @@ export default function NotificationsComponent({
               )}
             </h1>
             <div className="flex gap-1.5">
-              <button 
+              <button
                 onClick={handleMarkAllAsRead}
-                className="w-7 h-7 rounded-md border border-third/30 flex items-center justify-center text-primary hover:bg-white/5 transition-colors" 
+                className="w-7 h-7 rounded-md border border-third/30 flex items-center justify-center text-primary hover:bg-white/5 transition-colors"
                 title="Mark all as read"
               >
                 <MailOpen size={13} />
@@ -154,13 +187,13 @@ export default function NotificationsComponent({
 
           {/* Filter Tabs */}
           <div className="flex gap-2 mb-5">
-            <button 
+            <button
               onClick={() => setFilter("ALL")}
               className={`px-4 py-1.5 text-xs font-semibold rounded-full border transition-colors ${filter === "ALL" ? "bg-primary text-secondary border-primary" : "border-third/30 text-primary hover:bg-white/5"}`}
             >
               All
             </button>
-            <button 
+            <button
               onClick={() => setFilter("UNREAD")}
               className={`px-4 py-1.5 text-xs font-semibold rounded-full border transition-colors ${filter === "UNREAD" ? "bg-primary text-secondary border-primary" : "border-third/30 text-primary hover:bg-white/5"}`}
             >
@@ -170,9 +203,9 @@ export default function NotificationsComponent({
 
           {/* Connection Status */}
           {!isConnected && (
-             <div className="text-xs text-third/60 mb-3 px-1 text-center">
-                Connecting to live updates...
-             </div>
+            <div className="text-xs text-third/60 mb-3 px-1 text-center">
+              Connecting to live updates...
+            </div>
           )}
 
           {/* Notifications List */}
@@ -185,16 +218,16 @@ export default function NotificationsComponent({
               ) : displayNotifications && displayNotifications.length > 0 ? (
                 <>
                   {displayNotifications.map((item, index) => (
-                    <NotificationItem 
-                      key={item.id || item._id || index} 
-                      data={item} 
+                    <NotificationItem
+                      key={item.id || item._id || index}
+                      data={item}
                       onMarkAsRead={handleMarkAsRead}
                     />
                   ))}
-                  
+
                   {/* Intersection Observer Target */}
                   <div ref={observerRef} className="h-4 w-full" />
-                  
+
                   {isFetchingNextPage ? (
                     <div className="text-center text-third/60 text-xs py-4">
                       Loading more...

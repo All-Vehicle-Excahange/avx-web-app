@@ -76,7 +76,7 @@ export default function HeroSection() {
           collapsed ? "opacity-0" : "opacity-100"
         }`}
       >
-        <div className="text-center max-w-3xl px-4 select-none flex flex-col items-center gap-3 mb-8 animate-fade-up">
+        <div className="text-center max-w-3xl px-4 select-none flex flex-col items-center gap-3 mb-8 animate-fade-up h-auto lg:h-[220px] xl:h-[240px] justify-center">
           <span className="text-xs text-fourth md:text-sm uppercase tracking-[0.3em]  font-semibold drop-shadow-md">
             One Ecosystem. Every Side.
           </span>
@@ -91,7 +91,7 @@ export default function HeroSection() {
         </div>
 
         {/* Tab Links with Bottom Border */}
-        <div className="mt-4 hidden lg:flex items-center gap-8 relative bottom-10 lg:bottom-5 xl:bottom-8 select-none">
+        <div className="mt-4 hidden lg:flex items-center gap-8 select-none">
           <button
             onClick={() => setActiveTab("vehicles")}
             className={`flex items-center gap-2 pb-2 border-b-2 transition-all duration-300 cursor-pointer ${
