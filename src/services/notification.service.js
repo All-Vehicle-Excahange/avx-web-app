@@ -27,9 +27,9 @@ export const markAllNotificationsAsRead = async () => {
   }
 };
 
-export const getAllNotifications = async () => {
+export const getAllNotifications = async (payload = { pageNo: 0, size: 20 }) => {
   try {
-    const response = await axiosInstance.get(ENDPOINT.getAllNotifications);
+    const response = await axiosInstance.get(ENDPOINT.getAllNotifications, { params: payload });
     return handleResponse(response);
   } catch (error) {
     return handleError(error);

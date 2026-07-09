@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Settings,
   CheckSquare,
@@ -23,9 +23,16 @@ const NotificationItem = ({ data, onMarkAsRead }) => {
     >
       {/* Content */}
       <div className="flex-1 pr-5">
-        <h3 className="text-[13px] font-semibold text-primary mb-0.5 leading-snug">
-          {data.title || "Notification"}
-        </h3>
+        <div className="flex items-center gap-2 mb-0.5">
+          <h3 className="text-[13px] font-semibold text-primary leading-snug">
+            {data.title || "Notification"}
+          </h3>
+          {data.isBroadcast && (
+            <span className="bg-primary/20 text-primary text-[9px] px-1.5 py-0.5 rounded-sm font-semibold uppercase">
+              Broadcast
+            </span>
+          )}
+        </div>
         <p className="text-[12px] text-primary/60 leading-snug mb-1">
           {data.body || data.content || data.message}
         </p>
@@ -42,13 +49,20 @@ const NotificationItem = ({ data, onMarkAsRead }) => {
   );
 };
 
-export default function NotificationsComponent({ isOpen, onClose }) {
-  const { unreadCount, markAsRead, markAllAsRead, isConnected } = useNotifications();
+export default function NotificationsComponent({ 
+  isOpen, 
+  onClose,
+  unreadCount,
+  markAsRead,
+  markAllAsRead,
+  isConnected
+}) {
   const queryClient = useQueryClient();
+  const [filter, setFilter] = useState("ALL");
 
   const { data: apiResponse, isLoading } = useQuery({
-    queryKey: ["notificationsList"],
-    queryFn: getAllNotifications,
+    queryKey: ["notificationsList", filter],
+    queryFn: () => getAllNotifications({ pageNo: 0, size: 20, ...(filter === "UNREAD" ? { isRead: false } : {}) }),
     enabled: isOpen,
   });
 
@@ -79,7 +93,7 @@ export default function NotificationsComponent({ isOpen, onClose }) {
       >
         <div className="w-full h-full overflow-y-auto custom-scrollbar px-4 pt-5 pb-6">
           {/* Header */}
-          <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center justify-between mb-4">
             <h1 className="text-lg font-bold text-primary tracking-tight flex items-center gap-2">
               Notifications
               {unreadCount > 0 && (
@@ -89,9 +103,6 @@ export default function NotificationsComponent({ isOpen, onClose }) {
               )}
             </h1>
             <div className="flex gap-1.5">
-              <button className="w-7 h-7 rounded-md border border-third/30 flex items-center justify-center text-primary hover:bg-white/5 transition-colors" title="Settings">
-                <SlidersHorizontal size={13} />
-              </button>
               <button 
                 onClick={handleMarkAllAsRead}
                 className="w-7 h-7 rounded-md border border-third/30 flex items-center justify-center text-primary hover:bg-white/5 transition-colors" 
@@ -99,10 +110,23 @@ export default function NotificationsComponent({ isOpen, onClose }) {
               >
                 <MailOpen size={13} />
               </button>
-              <button className="w-7 h-7 rounded-md border border-third/30 flex items-center justify-center text-primary hover:bg-white/5 transition-colors" title="More Options">
-                <Settings size={13} />
-              </button>
             </div>
+          </div>
+
+          {/* Filter Tabs */}
+          <div className="flex gap-2 mb-5">
+            <button 
+              onClick={() => setFilter("ALL")}
+              className={`px-4 py-1.5 text-xs font-semibold rounded-full border transition-colors ${filter === "ALL" ? "bg-primary text-secondary border-primary" : "border-third/30 text-primary hover:bg-white/5"}`}
+            >
+              All
+            </button>
+            <button 
+              onClick={() => setFilter("UNREAD")}
+              className={`px-4 py-1.5 text-xs font-semibold rounded-full border transition-colors ${filter === "UNREAD" ? "bg-primary text-secondary border-primary" : "border-third/30 text-primary hover:bg-white/5"}`}
+            >
+              Unread
+            </button>
           </div>
 
           {/* Connection Status */}

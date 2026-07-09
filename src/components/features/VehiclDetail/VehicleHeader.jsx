@@ -127,17 +127,17 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
               </span>
             </div>
           </>
-        ) : (
+        ) : vehicle?.avxInspectionRating ? (
           <>
             <Star className="text-yellow-400" size={16} />
             <span className="text-sm text-primary font-medium">
               {vehicle?.inspectionStatus === "SELF_INSPECTED"
                 ? "Self Inspection Rating:"
                 : "Inspection Rating:"}{" "}
-              {vehicle?.avxInspectionRating || "-"}
+              {vehicle?.avxInspectionRating}
             </span>
           </>
-        )}
+        ) : null}
       </div>
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
