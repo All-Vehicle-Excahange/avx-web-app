@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Settings,
   CheckSquare,
@@ -10,7 +10,7 @@ import {
   MailOpen,
 } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { getAllNotifications } from "@/services/notification.service";
 
 const NotificationItem = ({ data, onMarkAsRead }) => {
@@ -27,11 +27,6 @@ const NotificationItem = ({ data, onMarkAsRead }) => {
           <h3 className="text-[13px] font-semibold text-primary leading-snug">
             {data.title || "Notification"}
           </h3>
-          {data.isBroadcast && (
-            <span className="bg-primary/20 text-primary text-[9px] px-1.5 py-0.5 rounded-sm font-semibold uppercase">
-              Broadcast
-            </span>
-          )}
         </div>
         <p className="text-[12px] text-primary/60 leading-snug mb-1">
           {data.body || data.content || data.message}
@@ -59,14 +54,58 @@ export default function NotificationsComponent({
 }) {
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState("ALL");
+  const observerRef = useRef(null);
 
-  const { data: apiResponse, isLoading } = useQuery({
+  const { 
+    data: apiResponse, 
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useInfiniteQuery({
     queryKey: ["notificationsList", filter],
-    queryFn: () => getAllNotifications({ pageNo: 0, size: 20, ...(filter === "UNREAD" ? { isRead: false } : {}) }),
+    queryFn: ({ pageParam = 1 }) => getAllNotifications({ pageNo: pageParam, size: 20, ...(filter === "UNREAD" ? { isRead: false } : {}) }),
+    getNextPageParam: (lastPage, allPages) => {
+      const totalPages = lastPage?.pageResponse?.totalPages || 1;
+      const nextPage = allPages.length + 1;
+      console.log("[Pagination] lastPage:", lastPage);
+      console.log("[Pagination] allPages length:", allPages.length, "totalPages:", totalPages, "nextPage:", nextPage);
+      return nextPage <= totalPages ? nextPage : undefined;
+    },
     enabled: isOpen,
+    initialPageParam: 1,
   });
 
-  const displayNotifications = apiResponse?.data || apiResponse || [];
+  const displayNotifications = apiResponse?.pages?.flatMap(page => page?.data?.data || page?.data || []) || [];
+
+  const containerRef = useRef(null);
+  
+  useEffect(() => {
+    if (!observerRef.current || !containerRef.current) return;
+    
+    console.log("[Observer] Initializing observer. hasNextPage:", hasNextPage, "isFetchingNextPage:", isFetchingNextPage);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        console.log("[Observer] Intersecting:", entries[0].isIntersecting);
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          console.log("[Observer] Triggering fetchNextPage()");
+          fetchNextPage();
+        }
+      },
+      { 
+        root: containerRef.current,
+        threshold: 0.1,
+        rootMargin: "50px",
+      }
+    );
+    
+    observer.observe(observerRef.current);
+    
+    return () => {
+      console.log("[Observer] Disconnecting observer.");
+      observer.disconnect();
+    };
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage, displayNotifications.length]);
 
   const handleMarkAsRead = async (id) => {
     await markAsRead(id);
@@ -91,7 +130,7 @@ export default function NotificationsComponent({
           isOpen ? "translate-x-0" : "-translate-x-full md:-translate-x-[150%]"
         }`}
       >
-        <div className="w-full h-full overflow-y-auto custom-scrollbar px-4 pt-5 pb-6">
+        <div ref={containerRef} className="w-full h-full overflow-y-auto custom-scrollbar px-4 pt-5 pb-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-lg font-bold text-primary tracking-tight flex items-center gap-2">
@@ -139,18 +178,37 @@ export default function NotificationsComponent({
           {/* Notifications List */}
           <div>
             <div className="flex flex-col">
-              {isLoading ? (
+              {isLoading && displayNotifications.length === 0 ? (
                 <div className="text-center text-third/60 text-sm py-10">
                   Loading notifications...
                 </div>
               ) : displayNotifications && displayNotifications.length > 0 ? (
-                displayNotifications.map((item, index) => (
-                  <NotificationItem 
-                    key={item.id || item._id || index} 
-                    data={item} 
-                    onMarkAsRead={handleMarkAsRead}
-                  />
-                ))
+                <>
+                  {displayNotifications.map((item, index) => (
+                    <NotificationItem 
+                      key={item.id || item._id || index} 
+                      data={item} 
+                      onMarkAsRead={handleMarkAsRead}
+                    />
+                  ))}
+                  
+                  {/* Intersection Observer Target */}
+                  <div ref={observerRef} className="h-4 w-full" />
+                  
+                  {isFetchingNextPage ? (
+                    <div className="text-center text-third/60 text-xs py-4">
+                      Loading more...
+                    </div>
+                  ) : hasNextPage ? (
+                    <div className="text-center text-third/60 text-xs py-4">
+                      Scroll for more (Debug: hasNextPage={String(hasNextPage)})
+                    </div>
+                  ) : (
+                    <div className="text-center text-third/60 text-xs py-4">
+                      No more notifications
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className="text-center text-third/60 text-sm py-10">
                   No notifications yet.

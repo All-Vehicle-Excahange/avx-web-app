@@ -70,8 +70,10 @@ export const useNotifications = () => {
             }
           },
           onclose() {
-            console.log("[SSE] Connection closed.");
+            console.log("[SSE] Connection closed, will retry.");
             setIsConnected(false);
+            // Throwing an error forces @microsoft/fetch-event-source to retry automatically
+            throw new Error("Connection closed");
           },
           onerror(err) {
             console.error("[SSE] Connection Error:", err);

@@ -63,8 +63,7 @@ export default function BillingComponent() {
 
   const txnTotalPages =
     txnHistoryData?.pages?.[0]?.pageResponse?.totalPages || 1;
-  const currentTxnPageData =
-    txnHistoryData?.pages?.[txnPage - 1]?.data || [];
+  const currentTxnPageData = txnHistoryData?.pages?.[txnPage - 1]?.data || [];
 
   useEffect(() => {
     setTxnPage(1);
@@ -564,7 +563,7 @@ export default function BillingComponent() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 font-semibold">
             <IndianRupee size={16} />
-            Transaction History
+            Wallet Transaction Hiistory
           </div>
 
           <div className="flex items-center gap-3">
