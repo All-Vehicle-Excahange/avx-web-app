@@ -51,7 +51,7 @@ const Footer = () => {
           {/* Brand & Description Column */}
           <div className="lg:w-[25%] flex flex-col gap-6">
             <Link href="/" className="flex items-center  gap-2">
-              <div className="p-2 bg-secondary">
+              <div className="p-2 ">
                 <Image
                   src="/logo/logo.webp"
                   alt="Reecomm Logo"

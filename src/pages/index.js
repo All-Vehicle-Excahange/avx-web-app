@@ -36,7 +36,7 @@ function Home() {
           name="keywords"
           content="buy used cars, sell used cars, second hand cars, certified pre-owned cars, car inspection, Reecomm"
         />
-        
+
         {/* Organization Schema */}
         <script
           type="application/ld+json"
@@ -44,16 +44,17 @@ function Home() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "name": "Reecomm",
-              "url": "https://www.reecomm.com",
-              "logo": "https://www.reecomm.com/logo/logo.webp",
-              "description": "Certified and verified second-hand cars for sale. Buy and sell used cars online at best prices with Reecomm. Expert inspection and transparent process.",
-              "sameAs": [
+              name: "Reecomm",
+              url: "https://www.reecomm.com",
+              logo: "https://www.reecomm.com/logo/logo.webp",
+              description:
+                "Certified and verified second-hand cars for sale. Buy and sell used cars online at best prices with Reecomm. Expert inspection and transparent process.",
+              sameAs: [
                 "https://www.facebook.com/reecomm",
                 "https://twitter.com/reecomm",
-                "https://www.instagram.com/reecomm"
-              ]
-            })
+                "https://www.instagram.com/reecomm",
+              ],
+            }),
           }}
         />
 
@@ -64,14 +65,14 @@ function Home() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
-              "name": "Reecomm",
-              "url": "https://www.reecomm.com",
-              "potentialAction": {
+              name: "Reecomm",
+              url: "https://www.reecomm.com",
+              potentialAction: {
                 "@type": "SearchAction",
-                "target": "https://www.reecomm.com/search?q={search_term_string}",
-                "query-input": "required name=search_term_string"
-              }
-            })
+                target: "https://www.reecomm.com/search?q={search_term_string}",
+                "query-input": "required name=search_term_string",
+              },
+            }),
           }}
         />
       </Head>
@@ -123,7 +124,7 @@ function Home() {
       <SayHello />
       <Layout>
         {/* <StatsSection /> */}
-        <AboutSection />
+        {/* <AboutSection /> */}
       </Layout>
       <DownloadAppSection />
       <FooterLink />

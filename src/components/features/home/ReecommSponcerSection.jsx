@@ -53,16 +53,16 @@ export default function ReecommSponcerSection() {
       <div className="shrink-0 flex flex-col md:flex-row md:items-end justify-between mb-4 gap-4">
         <div className="flex flex-col items-start gap-2">
           <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
-            Sponsored
+            Trending
             <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
           </p>
 
           <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-            <span className="text-fourth"> Sponsored</span> Vehicle For You
+            <span className="text-fourth"> Trending</span> Vehicles For You
           </h2>
 
           <p className="text-third w-full max-w-2xl">
-            Sponsored vehicles across all India — updated every day.
+            Trending vehicles across all India — updated every day.
           </p>
         </div>
 

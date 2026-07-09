@@ -693,7 +693,7 @@ export default function VehicleCondition({ vehicle, open, setOpen, inspectionDet
                   className="object-contain object-left"
                 />
               </div>
-            ) : (d?.inspectionStatus || vehicle?.inspectionStatus) ? (
+            ) : (d?.inspectionStatus || vehicle?.inspectionStatus) && (d?.inspectionStatus || vehicle?.inspectionStatus) !== "NOT_INSPECTED" ? (
               <span className="text-xs font-bold px-2.5 py-0.5 rounded-full ml-1.5 border border-fourth text-white bg-fourth shadow-sm">
                 {(d?.inspectionStatus || vehicle?.inspectionStatus).replace(/_/g, " ")}
               </span>

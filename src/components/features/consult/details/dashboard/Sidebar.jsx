@@ -20,6 +20,7 @@ import {
 import { getSellerTierTitle } from "@/lib/helper";
 import { getSellerTier } from "@/services/Seller.service";
 import NotificationsComponent from "./NotificationsComponent";
+import { useNotifications } from "@/hooks/useNotifications";
 
 const menu = [
   { label: "Overview", icon: LayoutGrid, href: "/consult/dashboard/overview" },
@@ -59,6 +60,7 @@ export default function Sidebar({ isOpen, onClose }) {
   const router = useRouter();
   const [isComeFromPhone, setIsComeFromPhone] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const { unreadCount, markAsRead, markAllAsRead, isConnected } = useNotifications();
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -118,8 +120,13 @@ export default function Sidebar({ isOpen, onClose }) {
                     : "hover:bg-primary/10 text-primary"
                   }`}
               >
-                <div className="shrink-0 flex items-center justify-center w-6 h-6">
+                <div className="relative shrink-0 flex items-center justify-center w-6 h-6">
                   <m.icon size={18} />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-fourth text-[10px] font-bold text-white">
+                      {unreadCount > 99 ? '99+' : unreadCount}
+                    </span>
+                  )}
                 </div>
                 <span className="ml-3 md:ml-0 md:group-hover:ml-3 md:opacity-0 md:group-hover:opacity-100 max-w-full md:max-w-0 md:group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden">
                   {m.label}
@@ -169,6 +176,10 @@ export default function Sidebar({ isOpen, onClose }) {
       <NotificationsComponent 
         isOpen={isNotificationsOpen} 
         onClose={() => setIsNotificationsOpen(false)} 
+        unreadCount={unreadCount}
+        markAsRead={markAsRead}
+        markAllAsRead={markAllAsRead}
+        isConnected={isConnected}
       />
     </>
   );

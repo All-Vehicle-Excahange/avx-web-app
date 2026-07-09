@@ -60,7 +60,7 @@ export const useNotifications = () => {
             console.log(`[SSE] Received event: ${msg.event}`, msg.data);
             if (msg.event === "unread_count") {
               const data = JSON.parse(msg.data);
-              setUnreadCount(data.count || 0);
+              setUnreadCount(typeof data === "number" ? data : (data?.count || 0));
             } else if (msg.event === "notification") {
               const newNotification = JSON.parse(msg.data);
               setNotifications((prev) => [newNotification, ...prev]);

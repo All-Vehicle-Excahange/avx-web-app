@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@/components/ui/button";
 import {
   Crown,
@@ -21,6 +21,7 @@ import { getSellerTierQuery } from "@/queries/Seller.queries";
 import {
   getWalletBalanceQuery,
   getPaymentHistoryInfiniteQuery,
+  getTransactionHistoryInfiniteQuery,
 } from "@/queries/waller.queries";
 import ManagePlan from "@/components/features/consult/details/components/ManagePlan";
 import AddMoneyPopup from "@/components/features/consult/details/components/AddMoneyPopup";
@@ -37,6 +38,37 @@ export default function BillingComponent() {
   const [isManageOpen, setIsManageOpen] = useState(false);
   const [isAddMoneyOpen, setIsAddMoneyOpen] = useState(false);
   const [isPaying, setIsPaying] = useState(false);
+
+  // Transaction History Pagination & Querying
+  const [txnPage, setTxnPage] = useState(1);
+  const {
+    data: txnHistoryData,
+    isLoading: isTxnLoading,
+    fetchNextPage: fetchNextTxnPage,
+    hasNextPage: hasNextTxnPage,
+    isFetchingNextPage: isFetchingNextTxnPage,
+  } = useInfiniteQuery(
+    getTransactionHistoryInfiniteQuery({
+      daysRange: `LAST_${range}_DAYS`,
+      pageSize: 10,
+    }),
+  );
+
+  const handleTxnPageChange = async (newPage) => {
+    if (newPage > (txnHistoryData?.pages?.length || 0) && hasNextTxnPage) {
+      await fetchNextTxnPage();
+    }
+    setTxnPage(newPage);
+  };
+
+  const txnTotalPages =
+    txnHistoryData?.pages?.[0]?.pageResponse?.totalPages || 1;
+  const currentTxnPageData =
+    txnHistoryData?.pages?.[txnPage - 1]?.data || [];
+
+  useEffect(() => {
+    setTxnPage(1);
+  }, [range]);
 
   // Payment History Pagination & Querying
   const [historyPage, setHistoryPage] = useState(1);
@@ -234,7 +266,6 @@ export default function BillingComponent() {
   const rangeOptions = [
     { label: "Last 7 days", value: "7" },
     { label: "Last 30 days", value: "30" },
-    { label: "Last 60 days", value: "60" },
     { label: "Last 90 days", value: "90" },
   ];
 
@@ -560,64 +591,71 @@ export default function BillingComponent() {
             </thead>
 
             <tbody className="divide-y divide-third/20">
-              <tr>
-                <td className="py-3">12 Oct</td>
-                <td>PPC Spend</td>
-                <td className="text-primary">BMW X1 Boost</td>
-                <td className="text-right">₹120</td>
-              </tr>
-
-              <tr>
-                <td className="py-3">11 Oct</td>
-                <td>Inspection</td>
-                <td className="text-primary">REC-INS-2381</td>
-                <td className="text-right">₹360</td>
-              </tr>
-
-              <tr>
-                <td className="py-3">10 Oct</td>
-                <td>Wallet Top-up</td>
-                <td className="text-primary">Razorpay</td>
-                <td className="text-right text-green-400">+₹2,000</td>
-              </tr>
-
-              <tr>
-                <td className="py-3">08 Oct</td>
-                <td>Refund</td>
-                <td className="text-primary">Failed Campaign</td>
-                <td className="text-right text-green-400">+₹80</td>
-              </tr>
-
-              <tr>
-                <td className="py-3">07 Oct</td>
-                <td>Boost</td>
-                <td className="text-primary">Audi A4 Premium</td>
-                <td className="text-right">₹200</td>
-              </tr>
-
-              <tr>
-                <td className="py-3">05 Oct</td>
-                <td>PPC Spend</td>
-                <td className="text-primary">Mercedes Campaign</td>
-                <td className="text-right">₹450</td>
-              </tr>
-
-              <tr>
-                <td className="py-3">04 Oct</td>
-                <td>Boost</td>
-                <td className="text-primary">Tesla Model 3</td>
-                <td className="text-right">₹540</td>
-              </tr>
-
-              <tr>
-                <td className="py-3">03 Oct</td>
-                <td>PPC Spend</td>
-                <td className="text-primary">Luxury Cars Ad</td>
-                <td className="text-right">₹250</td>
-              </tr>
+              {isTxnLoading ||
+              (isFetchingNextTxnPage && currentTxnPageData.length === 0) ? (
+                Array.from({ length: 5 }).map((_, index) => (
+                  <tr key={index}>
+                    <td className="py-4">
+                      <SkeletonBox className="h-4 w-16 opacity-20" />
+                    </td>
+                    <td className="py-4">
+                      <SkeletonBox className="h-4 w-24 opacity-20" />
+                    </td>
+                    <td className="py-4">
+                      <SkeletonBox className="h-4 w-32 opacity-20" />
+                    </td>
+                    <td className="py-4">
+                      <SkeletonBox className="h-4 w-16 opacity-20" />
+                    </td>
+                  </tr>
+                ))
+              ) : currentTxnPageData.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={4}
+                    className="py-8 text-center text-third text-sm"
+                  >
+                    No transactions found for this period.
+                  </td>
+                </tr>
+              ) : (
+                currentTxnPageData.map((item) => (
+                  <tr key={item.id}>
+                    <td className="py-3">{formatDate(item.createdAt)}</td>
+                    <td className="capitalize">
+                      {item.sourceType
+                        ? item.sourceType.replace(/_/g, " ").toLowerCase()
+                        : item.type}
+                    </td>
+                    <td className="text-primary">{item.transactionNumber}</td>
+                    <td
+                      className={`text-right ${
+                        item.type === "CREDIT" ? "text-green-400" : ""
+                      }`}
+                    >
+                      {item.type === "CREDIT" ? "+" : "-"}₹
+                      {Number(item.amount).toLocaleString("en-IN", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
+
+        {/* PAGINATION */}
+        {!isTxnLoading && txnTotalPages > 1 && (
+          <div className="pt-4 border-t border-third/10">
+            <Pagination
+              currentPage={txnPage}
+              totalPages={txnTotalPages}
+              onPageChange={handleTxnPageChange}
+            />
+          </div>
+        )}
       </div>
 
       {/* PAYMENT HISTORY */}
