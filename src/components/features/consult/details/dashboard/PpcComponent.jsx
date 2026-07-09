@@ -1355,10 +1355,10 @@ export default function PpcComponent() {
 
                     return (
                       <div key={idx} className="flex items-center gap-4 group">
-                        <span className="text-xs font-medium text-zinc-400 w-24 group-hover:text-white transition-colors shrink-0 truncate">
+                        <span className="text-xs font-medium text-zinc-400 w-32 sm:w-40 lg:w-48 group-hover:text-white transition-colors shrink-0 truncate">
                           {item.placement?.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, c => c.toUpperCase())}
                         </span>
-                        <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden p-px">
+                        <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
                           <div
                             className={`h-full bg-linear-to-r ${colors} rounded-full transition-all duration-1000 ease-out`}
                             style={{ width: `${item.percentage || 0}%` }}

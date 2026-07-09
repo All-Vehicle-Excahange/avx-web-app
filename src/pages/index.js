@@ -124,7 +124,7 @@ function Home() {
       <SayHello />
       <Layout>
         {/* <StatsSection /> */}
-        {/* <AboutSection /> */}
+        <AboutSection />
       </Layout>
       <DownloadAppSection />
       <FooterLink />

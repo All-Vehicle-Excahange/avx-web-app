@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import FeatureGroup from "@/components/ui/FeatureGroup";
 import {
   Calendar,
@@ -40,6 +41,7 @@ export default function VehicleSpec({
   inspectionDetails,
 }) {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [animateModal, setAnimateModal] = useState(false);
   const [inspectionType, setInspectionType] = useState("report");
@@ -406,7 +408,7 @@ export default function VehicleSpec({
           className="flex justify-between items-center px-6 py-3 text-primary cursor-pointer"
           onClick={() => setOpen((prev) => !prev)}
         >
-          <h3 className="text-xl font-semibold">Reecomm Inspection Report</h3>
+          <h3 className="text-xl font-semibold">Know Before You Buy</h3>
           <div className="text-xl">
             <ChevronDown
               size={20}
@@ -1040,15 +1042,26 @@ export default function VehicleSpec({
                         />
                       </svg>
                     </div>
-                    <h2 className="text-2xl font-bold">Payment Completed!</h2>
+                    <h2 className="text-2xl font-bold">Inspection Booked.</h2>
                     <p className="text-sm text-third max-w-sm">
-                      Thank you! Your inspection request has been registered.
-                      Our team will contact you shortly.
+                      Your payment is confirmed and your inspection request is
+                      now live. A Reecomm inspector will be assigned shortly —
+                      you can track every step right here.
                     </p>
+                    <div className="pt-2">
+                      <Button
+                        variant="ghost"
+                        size="md"
+                        onClick={() => {
+                          closeModal();
+                          router.push("/user/details/inspections");
+                        }}
+                        showIcon={false}
+                      >
+                        Track Your Inspection &rarr;
+                      </Button>
+                    </div>
                   </div>
-                  {/* <div className="flex justify-end gap-3 pt-2">
-                    <Button variant="outline" size="md" onClick={closeModal} showIcon={false}>Close</Button>
-                  </div> */}
                 </>
               )}
             </div>

@@ -43,9 +43,12 @@ export default function DownloadAppPopup({ isOpen, onClose }) {
     >
       {/* CONTAINER */}
       <div
-        className="relative flex w-full max-w-[1050px] min-h-[450px] overflow-hidden rounded-2xl shadow-2xl bg-secondary border border-third/20"
+        className="relative flex w-full max-w-[1050px] min-h-[450px] overflow-hidden rounded-2xl shadow-2xl border border-third/20 bg-secondary bg-cover bg-center bg-no-repeat"
         onClick={(e) => e.stopPropagation()}
-        style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}
+        style={{ 
+          animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out',
+          backgroundImage: "url('/downlaodPopupbg.png')" 
+        }}
       >
         {/* CLOSE */}
         <button
@@ -56,9 +59,9 @@ export default function DownloadAppPopup({ isOpen, onClose }) {
         </button>
 
         {/* LEFT IMAGE */}
-        <div className="hidden lg:block w-5/12 relative">
+        <div className="hidden lg:block w-5/12 relative z-10">
           <Image
-            src="/mobile_CTA_sm.png"
+            src="/leftDownlaodImage.webp"
             alt="Reecomm App"
             fill
             className="object-cover"
@@ -101,9 +104,9 @@ export default function DownloadAppPopup({ isOpen, onClose }) {
             <button 
               type="button" 
               onClick={() => window.open("https://play.google.com/store/apps/details?id=com.reecomm.vehicle.marketplace", "_blank")}
-              className="flex-1 sm:flex-none sm:w-auto min-w-[130px] sm:min-w-[200px] flex items-center justify-center px-2 sm:px-3 py-2 sm:py-2 bg-primary text-secondary rounded-lg border border-gray-600 hover:border-gray-600 hover:bg-secondary hover:text-primary transition-all duration-300 cursor-pointer group/btn"
+              className="flex-1 sm:flex-none sm:w-auto min-w-[130px] sm:min-w-[200px] flex items-center justify-center px-2 sm:px-3 py-2 sm:py-2 bg-[#000000] text-white rounded-lg border border-neutral-800 hover:bg-neutral-900 transition-all duration-300 cursor-pointer group/btn shadow-md"
             >
-              <div className="mr-2 sm:mr-3 transition-transform duration-300 ">
+              <div className="mr-2 sm:mr-3 transition-transform duration-300">
                 <svg viewBox="30 336.7 120.9 129.2" className="w-[18px] sm:w-6">
                   <path fill="#FFD400" d="M119.2,421.2c15.3-8.4,27-14.8,28-15.3c3.2-1.7,6.5-6.2,0-9.7  c-2.1-1.1-13.4-7.3-28-15.3l-20.1,20.2L119.2,421.2z"></path>
                   <path fill="#FF3333" d="M99.1,401.1l-64.2,64.7c1.5,0.2,3.2-0.2,5.2-1.3  c4.2-2.3,48.8-26.7,79.1-43.3L99.1,401.1L99.1,401.1z"></path>
@@ -112,10 +115,10 @@ export default function DownloadAppPopup({ isOpen, onClose }) {
                 </svg>
               </div>
               <div className="text-left">
-                <div className="text-[8px] sm:text-[10px] font-semibold uppercase tracking-wider text-secondary group-hover/btn:text-primary/80 transition-colors whitespace-nowrap">
+                <div className="text-[8px] sm:text-[10px] font-semibold uppercase tracking-wider text-white/60 transition-colors whitespace-nowrap">
                   Get it on
                 </div>
-                <div className="text-[14px] sm:text-lg font-semibold leading-none tracking-tight whitespace-nowrap">
+                <div className="text-[14px] sm:text-lg font-semibold leading-none tracking-tight whitespace-nowrap text-white">
                   Google Play
                 </div>
               </div>
@@ -125,18 +128,18 @@ export default function DownloadAppPopup({ isOpen, onClose }) {
             <button 
               type="button" 
               onClick={() => window.open("https://www.apple.com/app-store", "_blank")}
-              className="flex-1 sm:flex-none sm:w-auto min-w-[130px] sm:min-w-[200px] flex items-center justify-center px-2 sm:px-3 py-2 sm:py-2 bg-primary text-secondary rounded-lg border border-gray-600 hover:border-gray-600 hover:bg-secondary hover:text-primary transition-all duration-300 cursor-pointer group/btn"
+              className="flex-1 sm:flex-none sm:w-auto min-w-[130px] sm:min-w-[200px] flex items-center justify-center px-2 sm:px-3 py-2 sm:py-2 bg-[#000000] text-white rounded-lg border border-neutral-800 hover:bg-neutral-900 transition-all duration-300 cursor-pointer group/btn shadow-md"
             >
-              <div className="mr-2 sm:mr-3 transition-transform">
+              <div className="mr-2 sm:mr-3 transition-transform text-white">
                 <svg viewBox="0 0 384 512" className="w-4 sm:w-[22px]">
                   <path fill="currentColor" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path>
                 </svg>
               </div>
               <div className="text-left">
-                <div className="text-[8px] sm:text-[10px] font-semibold uppercase tracking-wider text-secondary group-hover/btn:text-primary/80 transition-colors whitespace-nowrap">
-                  Download on
+                <div className="text-[8px] sm:text-[10px] font-semibold uppercase tracking-wider text-white/60 transition-colors whitespace-nowrap">
+                  Download on the
                 </div>
-                <div className="text-[14px] sm:text-lg font-semibold leading-none tracking-tight whitespace-nowrap">
+                <div className="text-[14px] sm:text-lg font-semibold leading-none tracking-tight whitespace-nowrap text-white">
                   App Store
                 </div>
               </div>

@@ -7,6 +7,7 @@ import {
   Clock,
   FileText,
   X,
+  ExternalLink,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getInspectionRefundStatusQuery } from "@/queries/inspection.queries";
@@ -289,7 +290,7 @@ export default function InspectionTrackingModal({
         bgClass: "bg-yellow-500/10 border border-yellow-500/30",
       };
     }
-    if (status === "COMPLETED") {
+    if (status === "COMPLETED" || status === "DONE") {
       return {
         title: "Report Ready",
         statusText: completedDateStr
@@ -297,6 +298,8 @@ export default function InspectionTrackingModal({
           : "Ready",
         icon: <CheckCircle2 size={10} className="text-green-500" />,
         bgClass: "bg-green-500/10 border border-green-500/30",
+        onClick: isReportReady && inspection.reportUrl ? () => window.open(inspection.reportUrl, "_blank", "noopener,noreferrer") : undefined,
+        isClickable: !!(isReportReady && inspection.reportUrl),
       };
     }
     if (status === "REJECTED" || status === "CANCELLED") {
@@ -589,7 +592,11 @@ export default function InspectionTrackingModal({
                 <div className="absolute left-2.5 top-2.5 bottom-2.5 w-px border-l border-dashed border-white/10" />
 
                 {getTimelineSteps().map((step, idx) => (
-                  <div key={idx} className="relative">
+                  <div 
+                    key={idx} 
+                    className={`relative ${step.isClickable ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
+                    onClick={step.onClick}
+                  >
                     <span
                       className={`absolute -left-7 top-0.5 w-5 h-5 rounded-full flex items-center justify-center ${step.bgClass}`}
                     >
@@ -597,9 +604,10 @@ export default function InspectionTrackingModal({
                     </span>
                     <div>
                       <h5
-                        className={`text-[13px] font-semibold ${step.textClass}`}
+                        className={`text-[13px] font-semibold ${step.textClass} ${step.isClickable ? 'text-primary flex items-center gap-1.5' : ''}`}
                       >
                         {step.title}
+                        {step.isClickable && <ExternalLink size={12} className="text-primary/70" />}
                       </h5>
                       <p className="text-[10px] text-third mt-0.5">
                         {step.statusText}

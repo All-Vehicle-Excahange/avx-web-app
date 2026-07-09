@@ -1,7 +1,7 @@
 "use client";
 import { useState, forwardRef, useImperativeHandle } from "react";
 import FeatureGroup from "@/components/ui/FeatureGroup";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Settings, Car, Armchair, Share2, CircleDashed, Cpu, Wrench } from "lucide-react";
 import Button from "@/components/ui/button";
 import toast from "react-hot-toast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -95,7 +95,7 @@ const VehicleSpecsConsualt = forwardRef(function VehicleSpecsConsualt(
           className="flex justify-between items-center px-6 py-3 text-primary cursor-pointer"
           onClick={() => setOpen((prev) => !prev)}
         >
-          <h3 className="text-xl font-semibold">Reecomm Inspection Report</h3>
+          <h3 className="text-xl font-semibold">Know Before You Buy</h3>
           <div className="text-xl">
             <ChevronDown
               size={20}
@@ -114,43 +114,47 @@ const VehicleSpecsConsualt = forwardRef(function VehicleSpecsConsualt(
               <div className="space-y-6 px-6 pb-6">
                 {inspectionAvailable ? (
                   <>
-                    <p className="text-xs text-third font-normal mt-1">
-                      Reecomm Inspection Available Last verified on: 12 Jan 2025
+                    <p className="text-sm text-third font-normal mt-1">
+                      The report above reflects this vehicle&apos;s last
+                      check-in. A fresh inspection re-checks everything that
+                      matters, scheduled around your purchase — current,
+                      complete, and yours.
                     </p>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
-                      <FeatureGroup
-                        title="SAFETY"
-                        items={["Side airbags", "Airbags"]}
-                      />
-
-                      <FeatureGroup
-                        title="COMFORT & CONVENIENCE"
-                        items={[
-                          "Puddle lamp",
-                          "Cruise control",
-                          "Ventilated seats",
-                          "Keyless start",
-                          "Wireless phone charging",
-                        ]}
-                      />
-
-                      <FeatureGroup title="EXTERIOR" items={["Sunroof"]} />
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                      {[
+                        { title: "Engine & powertrain", icon: Settings },
+                        { title: "Mechanical & brakes", icon: Settings },
+                        { title: "Exterior & body", icon: Car },
+                        { title: "Interior & cabin", icon: Armchair },
+                        { title: "Structural history", icon: Share2 },
+                        { title: "Tyres & tread depth", icon: CircleDashed },
+                        { title: "OBD diagnostics", icon: Cpu },
+                        { title: "Modifications check", icon: Wrench },
+                      ].map((feature, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center gap-3 p-3 border border-third/20 rounded-xl transition-colors"
+                        >
+                          <feature.icon
+                            className="w-5 h-5 shrink-0 text-primary"
+                            strokeWidth={1.5}
+                          />
+                          <span className="font-semibold text-primary leading-tight">
+                            {feature.title}
+                          </span>
+                        </div>
+                      ))}
                     </div>
-                    <div className="flex justify-end">
-                      <Button 
-                        variant="outline" 
-                        showIcon={true} 
-                        locked={!reportUrl}
-                        disabled={!reportUrl}
-                        onClick={() => {
-                          if (reportUrl) {
-                            window.open(reportUrl, "_blank", "noopener,noreferrer");
-                          }
-                        }}
-                      >
-                        View Inspection Report
-                      </Button>
-                    </div>
+                    {reportUrl && (
+                      <div className="flex justify-start">
+                        <Button
+                          variant="outline"
+                          onClick={() => window.open(reportUrl, "_blank", "noopener,noreferrer")}
+                        >
+                          View Inspection Report
+                        </Button>
+                      </div>
+                    )}
                     <div className="md:col-span-3 border-t border border-third/40" />
                    
                     <div>
