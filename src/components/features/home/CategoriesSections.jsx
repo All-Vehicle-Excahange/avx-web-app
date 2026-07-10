@@ -39,37 +39,7 @@ const categoriesByType = {
     { id: "compact-suvs", label: "Compact SUVs", icon: Car, iconUrl: "/icons/car_COMPACT SUVS.svg" },
     { id: "fullsize-suvs-muvs", label: "Full-Size SUVs & MUVs", icon: Car, iconUrl: "/icons/car_FULL SIZE SUV.svg" },
     { id: "premium-luxury", label: "Premium & Luxury", icon: Car, iconUrl: "/icons/car_PREMIUM LUXURY.svg" },
-    {
-      id: "urban-rides",
-      label: "Urban Rides",
-      icon: Car,
-      iconUrl: "/icons/icon_URBAN RIDER.svg",
-    },
-    {
-      id: "city-compact",
-      label: "City Compact",
-      icon: Car,
-      iconUrl: "/icons/icon_CITY COMPACT copy.svg",
-    },
-    {
-      id: "comfort-sedans",
-      label: "Comfort Sedans",
-      icon: Car,
-      iconUrl: "/icons/car_COMFERT SEDAN.svg",
-    },
-    {
-      id: "compact-suvs",
-      label: "Compact SUVs",
-      icon: Car,
-      iconUrl: "/icons/car_COMPACT SUVS.svg",
-    },
-    {
-      id: "fullsize-suvs-muvs",
-      label: "Full-Size SUVs & MUVs",
-      icon: Car,
-      iconUrl: "/icons/car_FULL SIZE SUV.svg",
-    },
-    { id: "premium-luxury", label: "Premium & Luxury", icon: Car },
+
   ],
   "2-Wheeler": [
     {
@@ -235,11 +205,6 @@ const CategoriesSections = () => {
                 >
                   {cat.iconUrl ? (
                     <img src={cat.iconUrl} alt={cat.label} className={`w-8 h-7 object-contain ${isActive ? "" : ""}`} />
-                    <img
-                      src={cat.iconUrl}
-                      alt={cat.label}
-                      className={`w-5 h-5 object-contain ${isActive ? "" : "opacity-80"}`}
-                    />
                   ) : cat.icon ? (
                     <cat.icon size={18} />
                   ) : null}
