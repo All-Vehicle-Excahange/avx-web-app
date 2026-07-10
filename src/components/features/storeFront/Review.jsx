@@ -165,7 +165,7 @@ export default function Review() {
         {/* ================= LEFT ================= */}
         <div className="space-y-6 lg:sticky lg:top-24 h-fit">
           {/*  RATING SUMMARY */}
-          <div className="border border-third/40 rounded-2xl p-4 sm:p-6">
+          <div className="border-0 sm:border border-third/40 rounded-none sm:rounded-2xl px-0 py-4 sm:p-6">
             <h2 className="text-xl font-semibold mb-3">Customer reviews</h2>
 
             {reviewSummary ? (
@@ -240,7 +240,7 @@ export default function Review() {
           </div>
 
           {/*  WRITE REVIEW */}
-          <div className="border border-third/40 rounded-2xl p-4 sm:p-6">
+          <div className="border-0 sm:border border-third/40 rounded-none sm:rounded-2xl px-0 py-4 sm:p-6">
             <h3 className="text-lg font-semibold mb-4">Write a review</h3>
 
             {isEligibleToCreateReview ? (
@@ -347,7 +347,7 @@ export default function Review() {
               </>
             ) : (
               <>
-                <div className="flex gap-3 rounded-xl border border-third/40 px-4 py-4 bg-third/5">
+                <div className="flex gap-3 rounded-xl border-0 sm:border border-third/40 px-0 sm:px-4 py-4 bg-transparent sm:bg-third/5">
                   <Info size={18} className="text-primary shrink-0 mt-0.5" />
 
                   <p className="text-sm leading-relaxed text-third">
@@ -385,7 +385,7 @@ export default function Review() {
         {/* ================= RIGHT ================= */}
         <div className="space-y-6">
           {reviews.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 sm:py-16 px-4 sm:px-6 border-2 border-dashed border-third/40 rounded-2xl text-center">
+            <div className="flex flex-col items-center justify-center py-10 sm:py-16 px-0 sm:px-6 border-0 sm:border-2 border-dashed border-third/40 rounded-none sm:rounded-2xl text-center">
               <div className="w-16 h-16 bg-third/10 rounded-full flex items-center justify-center mb-4">
                 <MessageSquare className="w-8 h-8 text-third" />
               </div>
@@ -404,7 +404,7 @@ export default function Review() {
               return (
                 <div
                   key={review.id}
-                  className="border border-third/40 rounded-2xl p-4 sm:p-6 space-y-4"
+                  className="border-0 sm:border border-third/40 rounded-none sm:rounded-2xl px-0 py-4 sm:p-6 space-y-4"
                 >
                   {/*  USER HEADER */}
                   <div className="flex items-center gap-3">

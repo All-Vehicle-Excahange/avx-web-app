@@ -193,7 +193,7 @@ export default function PreviewAndEdite({
       {/* ================= BUSINESS ================= */}
       <motion.div
         variants={itemVariants}
-        className="bg-white/2 backdrop-blur-md border border-white/5 rounded-2xl p-6 shadow-2xl relative z-10 hover:border-white/6 transition-all duration-300"
+        className="bg-transparent sm:bg-white/2 sm:backdrop-blur-md border-0 sm:border border-white/5 rounded-2xl px-0 py-4 sm:p-6 shadow-none sm:shadow-2xl relative z-10 sm:hover:border-white/6 transition-all duration-300"
       >
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">
@@ -229,7 +229,7 @@ export default function PreviewAndEdite({
       {/* ================= ADDRESS ================= */}
       <motion.div
         variants={itemVariants}
-        className="bg-white/2 backdrop-blur-md border border-white/5 rounded-2xl p-6 shadow-2xl relative z-10 hover:border-white/6 transition-all duration-300"
+        className="bg-transparent sm:bg-white/2 sm:backdrop-blur-md border-0 sm:border border-white/5 rounded-2xl px-0 py-4 sm:p-6 shadow-none sm:shadow-2xl relative z-10 sm:hover:border-white/6 transition-all duration-300"
       >
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">
@@ -254,7 +254,7 @@ export default function PreviewAndEdite({
       {/* ================= KYC ================= */}
       <motion.div
         variants={itemVariants}
-        className="bg-white/2 backdrop-blur-md border border-white/5 rounded-2xl p-6 shadow-2xl relative z-10 hover:border-white/6 transition-all duration-300"
+        className="bg-transparent sm:bg-white/2 sm:backdrop-blur-md border-0 sm:border border-white/5 rounded-2xl px-0 py-4 sm:p-6 shadow-none sm:shadow-2xl relative z-10 sm:hover:border-white/6 transition-all duration-300"
       >
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">

@@ -16,6 +16,7 @@ export default function InspectionTrackingModal({
   inspection,
   onClose,
   animateModal,
+  vehicle,
 }) {
   // Prevent body scroll when open
   React.useEffect(() => {
@@ -55,6 +56,11 @@ export default function InspectionTrackingModal({
     refundData?.data?.refundStatus || refundData?.refundStatus || null;
 
   if (!inspection) return null;
+
+  const maker = inspection.makerName || vehicle?.makerName || inspection.vehicle?.makerName || "";
+  const model = inspection.modelName || vehicle?.modelName || inspection.vehicle?.modelName || "";
+  const title = (maker || model) ? `${maker} ${model}`.trim() : "Vehicle Inspection";
+  const thumbnail = inspection.thumbnailUrl || vehicle?.thumbnailUrl || inspection.vehicle?.thumbnailUrl || "/bg.jpg";
 
   // Format createdAt date
   const requestedDateStr = inspection.createdAt
@@ -298,7 +304,15 @@ export default function InspectionTrackingModal({
           : "Ready",
         icon: <CheckCircle2 size={10} className="text-green-500" />,
         bgClass: "bg-green-500/10 border border-green-500/30",
-        onClick: isReportReady && inspection.reportUrl ? () => window.open(inspection.reportUrl, "_blank", "noopener,noreferrer") : undefined,
+        onClick:
+          isReportReady && inspection.reportUrl
+            ? () =>
+                window.open(
+                  inspection.reportUrl,
+                  "_blank",
+                  "noopener,noreferrer",
+                )
+            : undefined,
         isClickable: !!(isReportReady && inspection.reportUrl),
       };
     }
@@ -471,7 +485,7 @@ export default function InspectionTrackingModal({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`relative w-[65%] max-w-4xl h-auto max-h-[85vh] md:max-h-[500px] bg-secondary border border-white/10 rounded-[24px] shadow-2xl overflow-hidden flex flex-col md:flex-row transition-all duration-300 ease-out ${
+        className={`relative w-[96%] md:w-[65%] max-w-4xl h-auto max-h-[85vh] md:max-h-[500px] bg-secondary border border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row transition-all duration-300 ease-out ${
           animateModal
             ? "opacity-100 scale-100 translate-y-0"
             : "opacity-0 scale-95 translate-y-4"
@@ -512,7 +526,7 @@ export default function InspectionTrackingModal({
               {/* Image */}
               <div className="relative w-18 h-18 rounded-lg overflow-hidden bg-white/5 shrink-0">
                 <Image
-                  src={inspection.thumbnailUrl || "/bg.jpg"}
+                  src={thumbnail}
                   alt="Vehicle Image"
                   width={72}
                   height={72}
@@ -523,10 +537,10 @@ export default function InspectionTrackingModal({
               <div className="flex-1 flex flex-col justify-between min-w-0">
                 <div className="flex justify-between items-start gap-1">
                   <h3 className="font-bold text-white text-[13px] truncate">
-                    {`${inspection.makerName} ${inspection.modelName}`}
+                    {title}
                   </h3>
                   <span
-                    className={`text-[8px] px-1.5 py-0.5 rounded border font-extrabold shrink-0 ${badgeClasses}`}
+                    className={`hidden sm:inline-block text-[8px] px-1.5 py-0.5 rounded border font-extrabold shrink-0 ${badgeClasses}`}
                   >
                     {status === "DONE" || status === "COMPLETED"
                       ? "INSPECTED"
@@ -592,9 +606,9 @@ export default function InspectionTrackingModal({
                 <div className="absolute left-2.5 top-2.5 bottom-2.5 w-px border-l border-dashed border-white/10" />
 
                 {getTimelineSteps().map((step, idx) => (
-                  <div 
-                    key={idx} 
-                    className={`relative ${step.isClickable ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
+                  <div
+                    key={idx}
+                    className={`relative ${step.isClickable ? "cursor-pointer hover:opacity-80 transition-opacity" : ""}`}
                     onClick={step.onClick}
                   >
                     <span
@@ -604,10 +618,12 @@ export default function InspectionTrackingModal({
                     </span>
                     <div>
                       <h5
-                        className={`text-[13px] font-semibold ${step.textClass} ${step.isClickable ? 'text-primary flex items-center gap-1.5' : ''}`}
+                        className={`text-[13px] font-semibold ${step.textClass} ${step.isClickable ? "text-primary flex items-center gap-1.5" : ""}`}
                       >
                         {step.title}
-                        {step.isClickable && <ExternalLink size={12} className="text-primary/70" />}
+                        {step.isClickable && (
+                          <ExternalLink size={12} className="text-primary/70" />
+                        )}
                       </h5>
                       <p className="text-[10px] text-third mt-0.5">
                         {step.statusText}

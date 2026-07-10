@@ -340,6 +340,7 @@ export default function SummaryRight({ vehicle, summary }) {
                   inspection={trackingInspection}
                   onClose={handleCloseTracking}
                   animateModal={animateTrackingModal}
+                  vehicle={vehicle}
                 />
               )}
             </>,

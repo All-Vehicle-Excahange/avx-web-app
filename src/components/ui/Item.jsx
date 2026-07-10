@@ -6,7 +6,7 @@ export default function Item({ icon, label, value, href, className = "" }) {
       <div className="mt-1 text-primary">{icon}</div>
       <div>
         <p className="text-third text-xs">{label}</p>
-        <p className="text-base font-semibold">{value}</p>
+        <p className="text-sm sm:text-base font-semibold">{value}</p>
       </div>
     </>
   );

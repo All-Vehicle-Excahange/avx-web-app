@@ -97,7 +97,7 @@ export default function SpecificationPopup({ open, onClose, variantId, vehicleId
       {/* MODAL */}
       <div
         ref={popupRef}
-        className="w-full max-w-4xl h-[80vh] md:h-[70vh] bg-secondary rounded-2xl shadow-2xl overflow-hidden flex flex-row border border-third/30"
+        className="w-full max-w-4xl h-[80vh] md:h-[70vh] bg-secondary rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row border border-third/30"
         onClick={(e) => e.stopPropagation()}
         style={{
           animation: isClosing
@@ -106,17 +106,17 @@ export default function SpecificationPopup({ open, onClose, variantId, vehicleId
         }}
       >
         {/* LEFT SIDEBAR - CATEGORIES */}
-        <div className="w-[220px] shrink-0 border-r border-white/5 overflow-y-auto custom-scrollbar flex flex-col py-2">
+        <div className="w-full md:w-[220px] shrink-0 border-b md:border-b-0 md:border-r border-white/5 overflow-x-auto md:overflow-y-auto flex flex-row md:flex-col py-2 px-3 md:px-0 gap-1.5 md:gap-0 no-scrollbar whitespace-nowrap">
           {isLoading ? (
-            <div className="p-4 text-sm text-primary/60">Loading...</div>
+            <div className="p-4 text-xs md:text-sm text-primary/60">Loading...</div>
           ) : categories.length === 0 ? (
-            <div className="p-4 text-sm text-primary/60">No data found</div>
+            <div className="p-4 text-xs md:text-sm text-primary/60">No data found</div>
           ) : (
             categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setActiveTab(category)}
-                className={`text-left px-5 py-3 text-sm font-medium transition-all ${
+                className={`px-4 md:px-5 py-2 md:py-3 text-xs md:text-sm font-semibold md:font-medium rounded-full md:rounded-none shrink-0 md:text-left transition-all ${
                   activeTab === category
                     ? "bg-white/10 text-primary"
                     : "text-primary/60 hover:bg-white/5 hover:text-primary"
@@ -131,22 +131,22 @@ export default function SpecificationPopup({ open, onClose, variantId, vehicleId
         {/* RIGHT CONTENT */}
         <div className="flex-1 flex flex-col overflow-hidden relative">
           {/* HEADER */}
-          <div className="flex items-center justify-between px-8 py-5 border-b border-white/5 shrink-0">
-            <h2 className="text-lg font-bold text-primary">
+          <div className="flex items-center justify-between px-4 md:px-8 py-3 md:py-5 border-b border-white/5 shrink-0">
+            <h2 className="text-base md:text-lg font-bold text-primary truncate pr-4">
               {activeTab || "Vehicle Specifications"}
             </h2>
             <button
               onClick={handleClose}
               className="rounded-full p-2 bg-primary text-secondary hover:bg-primary/90 cursor-pointer transition-all"
             >
-              <X size={16} />
+              <X size={14} />
             </button>
           </div>
 
           {/* LIST */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar px-8 py-4">
+          <div className="flex-1 overflow-y-auto custom-scrollbar px-4 md:px-8 py-4">
             {categories.length === 0 && !isLoading ? (
-              <div className="flex items-center justify-center h-full text-sm text-primary/60">
+              <div className="flex items-center justify-center h-full text-xs md:text-sm text-primary/60">
                 No data found
               </div>
             ) : activeTab && specData[activeTab] ? (
@@ -155,13 +155,13 @@ export default function SpecificationPopup({ open, onClose, variantId, vehicleId
                   ([key, value], index) => (
                     <li
                       key={index}
-                      className="flex items-start gap-4 py-4 border-b border-white/5 last:border-0"
+                      className="flex items-start gap-3 md:gap-4 py-3 md:py-4 border-b border-white/5 last:border-0"
                     >
-                      <span className="flex h-[18px] w-[18px] mt-0.5 items-center justify-center rounded-full bg-white/10 shrink-0">
-                        <Check size={10} className="text-white/80" />
+                      <span className="flex h-4 w-4 mt-0.5 items-center justify-center rounded-full bg-white/10 shrink-0">
+                        <Check size={8} className="text-white/80" />
                       </span>
-                      <div className="flex flex-col text-sm text-primary">
-                        <span className="font-semibold text-primary/90 mb-1">
+                      <div className="flex flex-col text-xs md:text-sm text-primary">
+                        <span className="font-semibold text-primary/90 mb-0.5 md:mb-1">
                           {key}
                         </span>
                         <span className="text-primary/80">{value}</span>
@@ -172,7 +172,7 @@ export default function SpecificationPopup({ open, onClose, variantId, vehicleId
               </ul>
             ) : (
               !isLoading && (
-                <div className="text-sm text-primary/60">
+                <div className="text-xs md:text-sm text-primary/60">
                   No details available.
                 </div>
               )

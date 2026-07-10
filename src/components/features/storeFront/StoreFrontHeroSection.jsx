@@ -173,7 +173,7 @@ export default function StoreFrontHeroSection() {
 
   return (
     <>
-      <section className="w-full max-w-[1480px] mt-10 mx-auto border border-third/40 rounded-2xl  md:rounded-[2.5rem] overflow-hidden shadow-sm">
+      <section className="w-full max-w-[1480px] mt-0 sm:mt-10 mx-auto border-0 sm:border border-third/40 rounded-none sm:rounded-2xl md:rounded-[2.5rem] overflow-hidden shadow-none sm:shadow-sm">
         {/* ================= BANNER ================= */}
         <div
           className="w-full h-54 md:h-80 bg-cover bg-center"
@@ -183,7 +183,7 @@ export default function StoreFrontHeroSection() {
         />
 
         {/* ================= CONTENT AREA ================= */}
-        <div className="px-6 md:px-10 py-4 relative">
+        <div className="px-4 sm:px-6 md:px-10 py-4 relative">
           <div className="flex flex-col lg:flex-row gap-8">
             {/* LEFT COLUMN */}
             <div className="flex flex-col items-center -mt-20 z-30 w-full lg:w-48 shrink-0">
@@ -197,30 +197,42 @@ export default function StoreFrontHeroSection() {
                 />
               </div>
 
-              {/* subscribe btn */}
-              <div className="mt-6 w-full">
-                <button
-                  onClick={handleFollowToggle}
-                  type="button"
-                  className={`group w-full rounded-full px-4 py-2 border flex items-center justify-center gap-2 font-medium cursor-pointer transition-all duration-300 ease-in-out ${
-                    isFollower
-                      ? "bg-fourth text-primary border-fourth hover:bg-transparent hover:text-fourth"
-                      : "bg-primary text-secondary border-primary hover:bg-transparent hover:text-primary"
-                  }`}
-                >
-                  <span className="transition-colors duration-300">
-                    {isFollower ? "Unsubscribe" : "Subscribe"}
-                  </span>
-
-                  <span
-                    className={`px-2.5 py-0.5 rounded-full text-xs font-semibold transition-all duration-300 ${
+              {/* subscribe & share buttons wrapper */}
+              <div className="mt-6 w-full flex flex-row items-center gap-3 lg:block lg:space-y-0">
+                {/* subscribe btn */}
+                <div className="flex-1 lg:w-full">
+                  <button
+                    onClick={handleFollowToggle}
+                    type="button"
+                    className={`group w-full rounded-full px-4 py-1.5 lg:py-2 border flex items-center justify-center gap-2 text-sm lg:text-base font-medium cursor-pointer transition-all duration-300 ease-in-out ${
                       isFollower
-                        ? "bg-primary/10 text-primary group-hover:bg-fourth/10 group-hover:text-primary"
-                        : "bg-secondary/10 text-secondary group-hover:bg-primary/10 group-hover:text-primary"
+                        ? "bg-fourth text-primary border-fourth hover:bg-transparent hover:text-fourth"
+                        : "bg-primary text-secondary border-primary hover:bg-transparent hover:text-primary"
                     }`}
                   >
-                    {formatFollowerCount(localFollowersCount)}
-                  </span>
+                    <span className="transition-colors duration-300">
+                      {isFollower ? "Unsubscribe" : "Subscribe"}
+                    </span>
+
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[10px] lg:text-xs font-semibold transition-all duration-300 ${
+                        isFollower
+                          ? "bg-primary/10 text-primary group-hover:bg-fourth/10 group-hover:text-primary"
+                          : "bg-secondary/10 text-secondary group-hover:bg-primary/10 group-hover:text-primary"
+                      }`}
+                    >
+                      {formatFollowerCount(localFollowersCount)}
+                    </span>
+                  </button>
+                </div>
+
+                {/* Mobile share btn: visible only on mobile/tablet */}
+                <button
+                  onClick={() => setIsShareOpen(true)}
+                  type="button"
+                  className="lg:hidden flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary border border-white/15 cursor-pointer hover:bg-primary/20 transition-all"
+                >
+                  <Share2 className="h-4.5 w-4.5" />
                 </button>
               </div>
             </div>
@@ -233,13 +245,13 @@ export default function StoreFrontHeroSection() {
                     {storeDetails.consultationName}
                   </h1>
 
-                  <Button
+                  <button
                     onClick={() => setIsShareOpen(true)}
-                    size="sm"
-                    className="flex h-9 w-9 items-center justify-center rounded-full p-0 text-primary/80 hover:text-primary bg-transparent!"
+                    type="button"
+                    className="hidden lg:flex h-9 w-9 items-center justify-center rounded-full p-0 text-primary/80 hover:text-primary bg-transparent! cursor-pointer"
                   >
                     <Share2 className="h-5 w-5" />
-                  </Button>
+                  </button>
                 </div>
 
                 <p className="flex items-center gap-1.5 text-third mt-1">
@@ -305,28 +317,24 @@ export default function StoreFrontHeroSection() {
 
             {/* RIGHT COLUMN */}
             <div className="w-full lg:w-80 space-y-6 pt-2">
-              <div className="space-y-3">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-third">
-                  Services Provided
-                </p>
+              {storeDetails?.services?.length > 0 && (
+                <div className="space-y-3">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-third">
+                    Services Provided
+                  </p>
 
-                <div className="flex flex-wrap gap-2">
-                  {storeDetails?.services?.length > 0 ? (
-                    storeDetails.services.map((service) => (
+                  <div className="flex flex-wrap gap-2">
+                    {storeDetails.services.map((service) => (
                       <span
                         key={service}
                         className="px-3 py-1.5 text-[11px] font-medium border border-third rounded-full text-primary hover:bg-primary/5 transition-colors cursor-default"
                       >
                         {formatServiceName(service)}
                       </span>
-                    ))
-                  ) : (
-                    <span className="text-xs text-third italic">
-                      No services listed
-                    </span>
-                  )}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="flex gap-3 pt-15">
                 <Button
