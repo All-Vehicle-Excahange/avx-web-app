@@ -522,10 +522,10 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
             ref={containerRef}
             className="inner-container w-full h-16 relative"
           >
-            <div className="relative z-10 flex items-center w-full h-full p-2 text-primary">
+            <div className="relative z-10 flex items-center w-full h-full pr-2 text-primary">
               {/* SECTION: LOCATION */}
               <div
-                className={`flex-1 relative px-4 py-3 rounded-full transition-colors cursor-pointer ${activeTab === "location" ? "bg-white/20" : "hover:bg-white/10"}`}
+                className={`flex-1 relative pl-5 pr-4 h-full flex flex-col justify-center rounded-full transition-colors cursor-pointer ${activeTab === "location" ? "bg-white/20" : "hover:bg-white/10"}`}
                 onClick={() => handleActiveTabChange("location")}
               >
                 <div className="text-md font-semibold text-primary tracking-wide">
@@ -586,7 +586,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
               {/* SECTION: VEHICLE TYPE */}
               <div
-                className={`flex-1 relative px-6 py-3 rounded-full transition-colors cursor-pointer ${activeTab === "vehicle" ? "bg-white/20" : "hover:bg-white/10"}`}
+                className={`flex-1 relative px-6 h-full flex flex-col justify-center rounded-full transition-colors cursor-pointer ${activeTab === "vehicle" ? "bg-white/20" : "hover:bg-white/10"}`}
                 onClick={() => handleActiveTabChange("vehicle")}
               >
                 <div className="text-md font-semibold text-primary tracking-wide">
@@ -626,7 +626,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 <>
                   {/* PRICE RANGE */}
                   <div
-                    className={`flex-1 relative px-6 py-3 rounded-full transition-colors cursor-pointer ${activeTab === "priceRange" ? "bg-white/20" : "hover:bg-white/10"}`}
+                    className={`flex-1 relative px-6 h-full flex flex-col justify-center rounded-full transition-colors cursor-pointer ${activeTab === "priceRange" ? "bg-white/20" : "hover:bg-white/10"}`}
                     onClick={() => handleActiveTabChange("priceRange")}
                   >
                     <div className="text-md font-semibold text-primary tracking-wide">
@@ -726,7 +726,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 <>
                   {/* BODY TYPE */}
                   <div
-                    className={`flex-1 relative px-6 py-3 rounded-full transition-colors cursor-pointer ${activeTab === "bodyType" ? "bg-white/20" : "hover:bg-white/10"}`}
+                    className={`flex-1 relative px-6 h-full flex flex-col justify-center rounded-full transition-colors cursor-pointer ${activeTab === "bodyType" ? "bg-white/20" : "hover:bg-white/10"}`}
                     onClick={() => {
                       if (!vehicleType) {
                         handleActiveTabChange("vehicle");
@@ -765,7 +765,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   <div className="w-px h-8 bg-white/30 my-auto mx-1" />
                   {/* FUEL TYPE */}
                   <div
-                    className={`flex-1 relative px-6 py-3 rounded-full transition-colors cursor-pointer ${activeTab === "fuel" ? "bg-white/20" : "hover:bg-white/10"}`}
+                    className={`flex-1 relative px-6 h-full flex flex-col justify-center rounded-full transition-colors cursor-pointer ${activeTab === "fuel" ? "bg-white/20" : "hover:bg-white/10"}`}
                     onClick={() => handleActiveTabChange("fuel")}
                   >
                     <div className="text-md font-semibold text-primary tracking-wide">
@@ -795,7 +795,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   <div className="w-px h-8 bg-white/30 my-auto mx-1" />
                   {/* BRAND (INLINE SEARCH) */}
                   <div
-                    className={`flex-1 relative px-6 py-3 rounded-full transition-colors cursor-pointer ${activeTab === "brand" ? "bg-white/20" : "hover:bg-white/10"}`}
+                    className={`flex-1 relative px-6 h-full flex flex-col justify-center rounded-full transition-colors cursor-pointer ${activeTab === "brand" ? "bg-white/20" : "hover:bg-white/10"}`}
                     onClick={() => handleActiveTabChange("brand")}
                   >
                     <div className="text-md font-semibold text-primary tracking-wide">
@@ -838,7 +838,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   <div className="w-px h-8 bg-white/30 my-auto mx-1" />
                   {/* BUDGET */}
                   <div
-                    className={`flex-1 relative px-6 py-3 rounded-full transition-colors cursor-pointer ${activeTab === "budget" ? "bg-white/20" : "hover:bg-white/10"}`}
+                    className={`flex-1 relative px-6 h-full flex flex-col justify-center rounded-full transition-colors cursor-pointer ${activeTab === "budget" ? "bg-white/20" : "hover:bg-white/10"}`}
                     onClick={() => handleActiveTabChange("budget")}
                   >
                     <div className="text-md font-semibold text-primary tracking-wide">
@@ -891,11 +891,10 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         <div className="relative">
           {showTypeDropdown && (
             <div
-              className={`absolute bottom-[110%] mb-4 backdrop-blur-2xl rounded-2xl p-2 animate-in slide-in-from-bottom-4 duration-300 dropdown-active ${
-                isScrolled 
-                  ? "right-0 w-[280px] bg-black/70 border border-white/10 shadow-2xl" 
-                  : "left-0 right-0 bg-gradient-to-br from-white/20 to-white/5 border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)]"
-              }`}
+              className={`absolute bottom-[110%] mb-4 backdrop-blur-2xl rounded-2xl p-2 animate-in slide-in-from-bottom-4 duration-300 dropdown-active ${isScrolled
+                ? "right-0 w-[280px] bg-black/70 border border-white/10 shadow-2xl"
+                : "left-0 right-0 bg-gradient-to-br from-white/20 to-white/5 border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)]"
+                }`}
             >
               <button
                 onClick={() => {
