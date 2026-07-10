@@ -76,22 +76,22 @@ export default function HeroSection() {
           collapsed ? "opacity-0" : "opacity-100"
         }`}
       >
-        <div className="text-center max-w-3xl px-4 select-none flex flex-col items-center gap-3 mb-8 animate-fade-up h-auto lg:h-[220px] xl:h-[240px] justify-center">
+        <div className="text-center max-w-3xl px-4 select-none flex flex-col items-center gap-2 mb-4 animate-fade-up h-auto justify-center">
           <span className="text-xs text-fourth md:text-sm uppercase tracking-[0.3em]  font-semibold drop-shadow-md">
             One Ecosystem. Every Side.
           </span>
-          <h1 className="text-4xl md:text-6xl font-black text-white leading-tight md:leading-none w-full max-w-5xl tracking-tight drop-shadow-xl font-primary transition-all duration-300">
+          <h1 className="text-3xl md:text-4xl lg:text-4xl xl:text-6xl font-black text-white leading-tight md:leading-snug w-full max-w-5xl tracking-tight drop-shadow-xl font-primary transition-all duration-300">
             <span className="block md:inline text-primary mb-1 md:mb-0">{slidesData[activeSlideIndex].prefix}</span>
             <span className="hidden md:inline"> </span>
-            <span className="block md:inline text-3xl md:text-6xl">{slidesData[activeSlideIndex].text}</span>
+            <span className="block md:inline text-3xl md:text-3xl lg:text-3xl xl:text-5xl">{slidesData[activeSlideIndex].text}</span>
           </h1>
-          <p className="text-lg md:text-2xl text-white/80 font-medium tracking-wide drop-shadow-md transition-all duration-300">
+          <p className="text-base md:text-base lg:text-base xl:text-xl text-white/80 font-medium tracking-wide drop-shadow-md transition-all duration-300">
            One trusted marketplace.
           </p>
         </div>
 
         {/* Tab Links with Bottom Border */}
-        <div className="mt-4 hidden lg:flex items-center gap-8 select-none">
+        <div className="mt-2 hidden lg:flex items-center gap-8 select-none">
           <button
             onClick={() => setActiveTab("vehicles")}
             className={`flex items-center gap-2 pb-2 border-b-2 transition-all duration-300 cursor-pointer ${
@@ -119,7 +119,7 @@ export default function HeroSection() {
       </div>
 
       {/* Filter Bar – sticks to bottom INSIDE hero */}
-      <div className="absolute bottom-2 left-0 right-0 z-20">
+      <div className="absolute -bottom-6 left-0 right-0 z-20">
         <VehicleFilterBar activeType={activeTab} />
       </div>
 

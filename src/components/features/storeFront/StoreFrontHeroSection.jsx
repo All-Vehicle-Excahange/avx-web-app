@@ -85,6 +85,9 @@ export default function StoreFrontHeroSection() {
       await queryClient.invalidateQueries({
         queryKey: ["storefront-by-username", id],
       });
+      await queryClient.invalidateQueries({
+        queryKey: ["user-followed-consultants-infinite"],
+      });
       setOptimisticFollowState(null);
     } catch (error) {
       console.log("Follow/Unfollow error:", error);
