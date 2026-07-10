@@ -942,18 +942,22 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           )}
           <button
             onClick={() => setShowTypeDropdown(!showTypeDropdown)}
-            className={`flex items-center justify-center gap-2 shadow-lg transition-all duration-500 ease-in-out cursor-pointer ${
+            className={`flex items-center justify-center gap-2 shadow-lg transition-all duration-500 ease-in-out cursor-pointer whitespace-nowrap overflow-hidden ${
               isScrolled
                 ? "w-14 h-14 bg-fourth rounded-full"
                 : "w-full py-4 bg-neutral-900 border border-neutral-800 rounded-full"
             }`}
           >
-            <Search size={22} className="text-white" />
-            {!isScrolled && (
-              <span className="font-medium text-white transition-opacity duration-300">
-                Start your search
-              </span>
-            )}
+            <Search size={22} className="text-white shrink-0" />
+            <span
+              className={`font-medium text-white transition-all duration-500 ease-in-out overflow-hidden ${
+                isScrolled
+                  ? "max-w-0 opacity-0 pointer-events-none"
+                  : "max-w-[150px] opacity-100"
+              }`}
+            >
+              Start your search
+            </span>
           </button>
         </div>
       </div>

@@ -21,12 +21,15 @@ import { createSlug } from "@/lib/helper";
 import SignupPopup from "@/components/auth/SignupPopup";
 import { useDebouncedCallback } from "@/hooks/useDebounce";
 
+import { useQueryClient } from "@tanstack/react-query";
+
 export default function VehicleCard({
   data,
   onWishlistChange,
   source = "search",
 }) {
   const { push } = useRouter();
+  const queryClient = useQueryClient();
 
   //  Initial Favorite State From Backend
   const [isFavorite, setIsFavorite] = useState(
@@ -55,6 +58,7 @@ export default function VehicleCard({
         }
       }
       lastSyncedValue.current = nextState;
+      queryClient.invalidateQueries({ queryKey: ["user-wishlist-infinite"] });
       onWishlistChange?.();
     } catch (err) {
       console.log("Wishlist sync error:", err);

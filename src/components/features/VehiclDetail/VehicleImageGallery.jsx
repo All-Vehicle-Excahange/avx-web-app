@@ -10,6 +10,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import LoginPopup from "@/components/auth/LoginPopup";
 import SignupPopup from "@/components/auth/SignupPopup";
 import { useDebouncedCallback } from "@/hooks/useDebounce";
+import { useQueryClient } from "@tanstack/react-query";
 
 // Import Swiper styles
 import "swiper/css";
@@ -18,7 +19,7 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 
 export default function VehicleImageGallery({ vehicle }) {
-
+    const queryClient = useQueryClient();
 
     const vehicleId = vehicle?.id;
     const [isFavorite, setIsFavorite] = useState(vehicle?.isWishlisted || false);
@@ -42,6 +43,7 @@ export default function VehicleImageGallery({ vehicle }) {
                 }
             }
             lastSyncedValue.current = nextState;
+            queryClient.invalidateQueries({ queryKey: ["user-wishlist-infinite"] });
         } catch (err) {
             console.log("Wishlist sync error:", err);
             setIsFavorite(!nextState);
