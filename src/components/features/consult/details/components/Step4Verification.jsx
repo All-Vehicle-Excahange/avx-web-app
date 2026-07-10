@@ -145,7 +145,7 @@ export default function Step4Verification({ existing, onEdit }) {
 
       {/* ── ADMIN REMARK (IF CHANGES REQUESTED) ────────────────────────── */}
       {isChangesRequested && (
-        <div className="bg-yellow-500/10  rounded-2xl p-6 space-y-4 shadow-sm shadow-orange-500/5">
+        <div className="bg-yellow-500/10 rounded-2xl p-4 sm:p-6 space-y-4 shadow-none sm:shadow-sm">
           <div className="flex items-start gap-4 text-yellow-600">
             <div className="w-12 h-12 bg-yellow-500/10 rounded-xl flex items-center justify-center shrink-0">
               <AlertCircle className="w-6 h-6" />
@@ -161,7 +161,7 @@ export default function Step4Verification({ existing, onEdit }) {
             </div>
           </div>
 
-          <div className="bg-primary/5 rounded-xl border border-orange-500/20 p-5 ml-0 md:ml-16">
+          <div className="bg-primary/5 rounded-xl border border-orange-500/20 p-4 sm:p-5 ml-0 md:ml-16">
             <p className="text-primary font-medium leading-relaxed">
               <span className="text-primary font-bold">Admin Remark:</span>{" "}
               {remark || "-"}
@@ -185,8 +185,8 @@ export default function Step4Verification({ existing, onEdit }) {
       {false ? (
         <div />
       ) : (
-        <div className="bg-primary/5 border border-third/10 rounded-2xl overflow-hidden">
-          <div className="p-8 space-y-8">
+        <div className="bg-transparent sm:bg-primary/5 border-0 sm:border border-third/10 rounded-2xl overflow-hidden">
+          <div className="px-0 py-6 sm:p-8 space-y-8">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-bold text-primary tracking-tight">
                 Application Status
@@ -338,7 +338,7 @@ export default function Step4Verification({ existing, onEdit }) {
       </div>
 
       {/* ── WHILE YOU WAIT / TIPS ──────────────────────────────────────── */}
-      <div className="bg-primary/5 border border-primary/20 rounded-2xl p-8 space-y-6">
+      <div className="bg-transparent sm:bg-primary/5 border-0 sm:border border-primary/20 rounded-2xl px-0 py-6 sm:p-8 space-y-6">
         <div className="flex items-center gap-3 text-lg font-bold text-primary">
           <PartyPopperIcon className="text-orange-400" />
           While you wait, prepare your first listing

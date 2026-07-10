@@ -17,7 +17,7 @@ const AboutSection = () => {
       <div className="my-10 lg:my-13  overflow-hidden">
         <div className="grid lg:grid-cols-12 grid-cols-1 items-stretch">
           {/* LEFT SIDE: Image Features */}
-          <div className="relative min-h-[840px] lg:min-h-full lg:col-span-6 group overflow-hidden">
+          <div className="relative min-h-[300px] md:min-h-[450px] lg:min-h-full lg:col-span-6 group overflow-hidden">
             <Image
               src="/about-us-built-to-fix-whats-broken-01.webp"
               alt="Reecomm Platform"

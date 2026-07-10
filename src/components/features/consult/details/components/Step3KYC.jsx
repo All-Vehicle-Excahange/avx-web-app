@@ -184,7 +184,7 @@ export default function Step3KYC({
       {/* PAN Card Card */}
       <motion.div
         variants={itemVariants}
-        className="bg-white/2 backdrop-blur-md border border-white/5 rounded-2xl p-6 space-y-6 shadow-2xl hover:border-white/6 transition-all duration-300 relative z-10"
+        className="bg-transparent sm:bg-white/2 sm:backdrop-blur-md border-0 sm:border border-white/5 rounded-2xl px-0 py-4 sm:p-6 shadow-none sm:shadow-2xl sm:hover:border-white/6 transition-all duration-300 relative z-10"
       >
         <div>
           <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">
@@ -249,7 +249,7 @@ export default function Step3KYC({
       {/* Aadhaar Card Card */}
       <motion.div
         variants={itemVariants}
-        className="bg-white/2 backdrop-blur-md border border-white/5 rounded-2xl p-6 space-y-6 shadow-2xl hover:border-white/6 transition-all duration-300 relative z-10"
+        className="bg-transparent sm:bg-white/2 sm:backdrop-blur-md border-0 sm:border border-white/5 rounded-2xl px-0 py-4 sm:p-6 shadow-none sm:shadow-2xl sm:hover:border-white/6 transition-all duration-300 relative z-10"
       >
         <div>
           <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">
@@ -337,7 +337,7 @@ export default function Step3KYC({
       {/* GST Certificate Card */}
       <motion.div
         variants={itemVariants}
-        className="bg-white/2 backdrop-blur-md border border-white/5 rounded-2xl p-6 space-y-6 shadow-2xl hover:border-white/6 transition-all duration-300 relative z-10"
+        className="bg-transparent sm:bg-white/2 sm:backdrop-blur-md border-0 sm:border border-white/5 rounded-2xl px-0 py-4 sm:p-6 shadow-none sm:shadow-2xl sm:hover:border-white/6 transition-all duration-300 relative z-10"
       >
         <div>
           <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">

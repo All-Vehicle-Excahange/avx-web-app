@@ -33,20 +33,70 @@ const vehicleTagMap = {
 
 const categoriesByType = {
   "4-Wheeler": [
-    { id: "urban-rides", label: "Urban Rides", icon: Car, iconUrl: "/icons/car_URBAN RIDER.svg" },
-    { id: "city-compact", label: "City Compact", icon: Car, iconUrl: "/icons/car_CITY COMPACT.svg" },
-    { id: "comfort-sedans", label: "Comfort Sedans", icon: Car, iconUrl: "/icons/car_COMFERT SEDAN.svg" },
-    { id: "compact-suvs", label: "Compact SUVs", icon: Car, iconUrl: "/icons/car_COMPACT SUVS.svg" },
-    { id: "fullsize-suvs-muvs", label: "Full-Size SUVs & MUVs", icon: Car, iconUrl: "/icons/car_FULL SIZE SUV.svg" },
+    {
+      id: "urban-rides",
+      label: "Urban Rides",
+      icon: Car,
+      iconUrl: "/icons/icon_URBAN RIDER.svg",
+    },
+    {
+      id: "city-compact",
+      label: "City Compact",
+      icon: Car,
+      iconUrl: "/icons/icon_CITY COMPACT copy.svg",
+    },
+    {
+      id: "comfort-sedans",
+      label: "Comfort Sedans",
+      icon: Car,
+      iconUrl: "/icons/car_COMFERT SEDAN.svg",
+    },
+    {
+      id: "compact-suvs",
+      label: "Compact SUVs",
+      icon: Car,
+      iconUrl: "/icons/car_COMPACT SUVS.svg",
+    },
+    {
+      id: "fullsize-suvs-muvs",
+      label: "Full-Size SUVs & MUVs",
+      icon: Car,
+      iconUrl: "/icons/car_FULL SIZE SUV.svg",
+    },
     { id: "premium-luxury", label: "Premium & Luxury", icon: Car },
   ],
   "2-Wheeler": [
-    { id: "scooters", label: "Scooters", icon: Bike, iconUrl: "/icons/bike_Scooter.svg" },
-    { id: "commuter-bikes", label: "Commuter Bikes", icon: Bike, iconUrl: "/icons/bike_Commuter Bike.svg" },
-    { id: "sports-bikes", label: "Sports Bikes", icon: Bike, iconUrl: "/icons/bike_Sport Bike.svg" },
-    { id: "cruiser-retro", label: "Cruiser & Retro", icon: Bike, iconUrl: "/icons/bike_Cruiser & Retro.svg" },
+    {
+      id: "scooters",
+      label: "Scooters",
+      icon: Bike,
+      iconUrl: "/icons/bike_Scooter.svg",
+    },
+    {
+      id: "commuter-bikes",
+      label: "Commuter Bikes",
+      icon: Bike,
+      iconUrl: "/icons/bike_Commuter Bike.svg",
+    },
+    {
+      id: "sports-bikes",
+      label: "Sports Bikes",
+      icon: Bike,
+      iconUrl: "/icons/bike_Sport Bike.svg",
+    },
+    {
+      id: "cruiser-retro",
+      label: "Cruiser & Retro",
+      icon: Bike,
+      iconUrl: "/icons/bike_Cruiser & Retro.svg",
+    },
     { id: "adventure-touring", label: "Adventure & Touring", icon: Bike },
-    { id: "electric-2w", label: "Electric 2W", icon: Bike, iconUrl: "/icons/bike_Electric 2W.svg" },
+    {
+      id: "electric-2w",
+      label: "Electric 2W",
+      icon: Bike,
+      iconUrl: "/icons/bike_Electric 2W.svg",
+    },
   ],
 };
 
@@ -54,6 +104,7 @@ const CategoriesSections = () => {
   const [activeType, setActiveType] = useState("4-Wheeler");
   const [active, setActive] = useState("urban-rides");
   const checkedCategories = React.useRef(new Set());
+  const hasManuallySelected = React.useRef(false);
 
   const selectedTag = vehicleTagMap[activeType]?.[active];
   const queryPayload = {
@@ -63,11 +114,13 @@ const CategoriesSections = () => {
   };
 
   const { data: vehicles = [], isLoading } = useQuery(
-    getVehiclesByTagQuery(activeType, queryPayload)
+    getVehiclesByTagQuery(activeType, queryPayload),
   );
 
   // Auto-play / switch to next category if currently loaded category is empty
   useEffect(() => {
+    if (hasManuallySelected.current) return;
+
     if (!isLoading && vehicles.length === 0 && selectedTag) {
       checkedCategories.current.add(selectedTag);
 
@@ -87,13 +140,7 @@ const CategoriesSections = () => {
         setActive(nextCategory.id);
       }
     }
-  }, [
-    vehicles,
-    isLoading,
-    active,
-    activeType,
-    selectedTag,
-  ]);
+  }, [vehicles, isLoading, active, activeType, selectedTag]);
 
   return (
     <section className="w-full h-full flex flex-col text-primary">
@@ -122,6 +169,7 @@ const CategoriesSections = () => {
               type="button"
               onClick={() => {
                 if (activeType !== "4-Wheeler") {
+                  hasManuallySelected.current = true;
                   checkedCategories.current.clear();
                   setActiveType("4-Wheeler");
                   setActive("urban-rides");
@@ -136,11 +184,12 @@ const CategoriesSections = () => {
             >
               <Car size={16} /> 4-Wheeler
             </button>
-  
+
             <button
               type="button"
               onClick={() => {
                 if (activeType !== "2-Wheeler") {
+                  hasManuallySelected.current = true;
                   checkedCategories.current.clear();
                   setActiveType("2-Wheeler");
                   setActive("scooters");
@@ -167,7 +216,10 @@ const CategoriesSections = () => {
               return (
                 <button
                   key={cat.id}
-                  onClick={() => setActive(cat.id)}
+                  onClick={() => {
+                    hasManuallySelected.current = true;
+                    setActive(cat.id);
+                  }}
                   className={cn(
                     "flex items-center gap-2 shrink-0 px-5 py-2 text-sm font-semibold rounded-full border transition-all cursor-pointer",
                     isActive
@@ -176,7 +228,11 @@ const CategoriesSections = () => {
                   )}
                 >
                   {cat.iconUrl ? (
-                    <img src={cat.iconUrl} alt={cat.label} className={`w-5 h-5 object-contain ${isActive ? "" : "opacity-80"}`} />
+                    <img
+                      src={cat.iconUrl}
+                      alt={cat.label}
+                      className={`w-5 h-5 object-contain ${isActive ? "" : "opacity-80"}`}
+                    />
                   ) : cat.icon ? (
                     <cat.icon size={18} />
                   ) : null}

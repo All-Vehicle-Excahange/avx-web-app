@@ -1,13 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
-  Settings,
-  CheckSquare,
-  MessageCircle,
-  MessageSquare,
-  AlertCircle,
-  MailCheck,
-  SlidersHorizontal,
   MailOpen,
+  X,
 } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
@@ -181,6 +175,13 @@ export default function NotificationsComponent({
                 title="Mark all as read"
               >
                 <MailOpen size={13} />
+              </button>
+              <button
+                onClick={onClose}
+                className="w-7 h-7 rounded-md border border-third/30 flex items-center justify-center text-primary hover:bg-white/5 transition-colors md:hidden"
+                title="Close"
+              >
+                <X size={13} />
               </button>
             </div>
           </div>

@@ -675,7 +675,7 @@ export default function KycForm() {
           {/* Right Panel: Scrollable Form Area */}
           <div className="w-full lg:w-[70%] flex flex-col relative">
             {/* Form body naturally pushes height */}
-            <div className="flex-1 px-6 py-8 lg:px-16 lg:py-10 relative">
+            <div className="flex-1 px-3 py-6 sm:px-8 lg:px-16 lg:py-10 relative">
               <div className="max-w-3xl mx-auto w-full">
                 {initialLoading ? (
                   <div className="space-y-10 animate-pulse">

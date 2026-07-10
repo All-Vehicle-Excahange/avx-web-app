@@ -365,7 +365,7 @@ export default function UpdateProfile() {
 
           {/* RIGHT PANEL */}
           <div className="w-full lg:w-[70%] flex flex-col relative">
-            <div className="flex-1 px-6 py-8 lg:px-16 lg:py-10 relative">
+            <div className="flex-1 px-3 py-6 sm:px-8 lg:px-16 lg:py-10 relative">
               <div className="max-w-3xl mx-auto w-full">
                 {initialLoading ? (
                   <div className="space-y-10 animate-pulse">
@@ -435,7 +435,7 @@ export default function UpdateProfile() {
                     )}
 
                     {/* BUSINESS SECTION */}
-                    <div className="border border-primary/30 rounded-xl p-6">
+                    <div className="border-0 sm:border border-primary/30 rounded-xl px-0 py-6 sm:p-6">
                       <div className="flex justify-between mb-4">
                         <h3 className="font-semibold">Preview Your Details</h3>
                       </div>
@@ -457,7 +457,7 @@ export default function UpdateProfile() {
                     </div>
 
                     {/* ADDRESS SECTION */}
-                    <div className="border border-primary/30 rounded-xl p-6">
+                    <div className="border-0 sm:border border-primary/30 rounded-xl px-0 py-6 sm:p-6">
                       <div className="flex justify-between mb-4">
                         <h3 className="font-semibold">Address Details</h3>
                       </div>
@@ -478,7 +478,7 @@ export default function UpdateProfile() {
                     </div>
 
                     {/* KYC SECTION */}
-                    <div className="border border-primary/30 rounded-xl p-6">
+                    <div className="border-0 sm:border border-primary/30 rounded-xl px-0 py-6 sm:p-6">
                       <div className="flex justify-between mb-4">
                         <h3 className="font-semibold">KYC Details</h3>
                       </div>

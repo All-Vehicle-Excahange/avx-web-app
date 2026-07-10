@@ -57,7 +57,7 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
   const searchUrl = `/search?${searchQueryParams.toString()}`;
 
   return (
-    <header className="w-full space-y-3 pt-9 md:pt-6 bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)]">
+    <header className="w-full space-y-3 pt-9 md:pt-6 mb-4 sm:mb-0 bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)]">
       {/* Breadcrumb */}
       <nav className="text-xs sm:text-sm text-third flex items-center gap-1 flex-wrap">
         <Link
@@ -142,27 +142,36 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         {/* LEFT SIDE */}
-        <h1 className="text-2xl text-primary sm:text-3xl 3xl:text-4xl font-bold">
-          {[
-            vehicle?.makerName,
-            vehicle?.modelName,
-            vehicle?.variantName,
-            vehicle?.yearOfMfg,
-          ]
-            .filter(Boolean)
-            .join(" ") || "-"}
-        </h1>
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-row items-end justify-between gap-3">
+            <h1 className="text-2xl text-primary sm:text-3xl 3xl:text-4xl font-bold leading-tight">
+              {[
+                vehicle?.makerName,
+                vehicle?.modelName,
+                vehicle?.variantName,
+                vehicle?.yearOfMfg,
+              ]
+                .filter(Boolean)
+                .join(" ") || "-"}
+            </h1>
+            <button
+              onClick={() => setIsShareOpen(true)}
+              className="sm:hidden bg-primary/20 flex h-8 w-8 items-center justify-center rounded-full p-0 text-primary/80 hover:text-primary shrink-0 cursor-pointer mb-1"
+            >
+              <Share2 className="h-4.5 w-4.5" />
+            </button>
+          </div>
+        </div>
 
         {/* RIGHT SIDE */}
-        <div className="flex items-center gap-2 ml-auto ">
+        <div className="hidden sm:flex items-center gap-2 ml-auto sm:ml-0">
           {/* SHARE */}
-          <Button
+          <button
             onClick={() => setIsShareOpen(true)}
-            size="sm"
-            className="bg-primary/20 flex h-10 w-10 items-center justify-center rounded-full p-0 text-primary/80 hover:text-primary "
+            className="bg-primary/20 h-10 w-10 items-center justify-center rounded-full p-0 text-primary/80 hover:text-primary cursor-pointer shrink-0"
           >
             <Share2 className="h-6 w-6" />
-          </Button>
+          </button>
 
           {/* PRICE */}
           <div className="hidden lg:block bg-primary text-secondary px-4 py-2 rounded-lg text-right">
