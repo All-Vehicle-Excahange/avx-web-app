@@ -33,6 +33,12 @@ const vehicleTagMap = {
 
 const categoriesByType = {
   "4-Wheeler": [
+    { id: "urban-rides", label: "Urban Rides", icon: Car, iconUrl: "/icons/car_URBAN RIDER.svg" },
+    { id: "city-compact", label: "City Compact", icon: Car, iconUrl: "/icons/car_CITY COMPACT.svg" },
+    { id: "comfort-sedans", label: "Comfort Sedans", icon: Car, iconUrl: "/icons/car_COMFERT SEDAN.svg" },
+    { id: "compact-suvs", label: "Compact SUVs", icon: Car, iconUrl: "/icons/car_COMPACT SUVS.svg" },
+    { id: "fullsize-suvs-muvs", label: "Full-Size SUVs & MUVs", icon: Car, iconUrl: "/icons/car_FULL SIZE SUV.svg" },
+    { id: "premium-luxury", label: "Premium & Luxury", icon: Car, iconUrl: "/icons/car_PREMIUM LUXURY.svg" },
     {
       id: "urban-rides",
       label: "Urban Rides",
@@ -221,13 +227,14 @@ const CategoriesSections = () => {
                     setActive(cat.id);
                   }}
                   className={cn(
-                    "flex items-center gap-2 shrink-0 px-5 py-2 text-sm font-semibold rounded-full border transition-all cursor-pointer",
+                    "flex items-center gap-2 shrink-0 px-5 py-1 text-sm font-semibold rounded-full border transition-all cursor-pointer",
                     isActive
                       ? "bg-fourth text-primary border-fourth shadow-sm"
                       : "text-primary border-white/20 hover:border-primary/40",
                   )}
                 >
                   {cat.iconUrl ? (
+                    <img src={cat.iconUrl} alt={cat.label} className={`w-8 h-7 object-contain ${isActive ? "" : ""}`} />
                     <img
                       src={cat.iconUrl}
                       alt={cat.label}

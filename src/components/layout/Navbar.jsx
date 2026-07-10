@@ -13,6 +13,7 @@ import {
   Star,
   X,
 } from "lucide-react";
+import { FaUserCircle } from "react-icons/fa";
 import { useState, useEffect, useRef, useMemo } from "react";
 import Button from "../ui/button";
 import HamburgerDrawer from "../features/home/HamburgerDrawer";
@@ -86,7 +87,7 @@ const MAKER_NAME_MAPPING = {
   64: "PMV",
 };
 
-export default function Navbar({ heroMode = false, scrolled = false, insideDrawer = false, onClose = () => {} }) {
+export default function Navbar({ heroMode = false, scrolled = false, insideDrawer = false, onClose = () => { } }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -113,6 +114,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
 
   const searchRef = useRef(null);
   const accountRef = useRef(null);
+  const accountTimeoutRef = useRef(null);
   const [persisAccountOpen, setPersisAccountOpen] = useState(false);
   const { data: strengthRes } = useQuery({
     ...getUserProfileStrengthQuery(),
@@ -229,7 +231,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
           s.makerId &&
           MAKER_NAME_MAPPING[s.makerId] &&
           MAKER_NAME_MAPPING[s.makerId].toLowerCase() ===
-            selectedBrand.toLowerCase();
+          selectedBrand.toLowerCase();
         // If it's a model of the selected brand, or the brand itself
         return (
           brandMatch ||
@@ -422,7 +424,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
       )}
       <div
         className="fixed top-0 inset-x-0 z-1100 transition-transform duration-300 pointer-events-none"
-        // style={{ transform: `translateY(${transformY}px)` }}
+      // style={{ transform: `translateY(${transformY}px)` }}
       >
         {isMobileBannerVisible && !isMobileBannerTempHidden && atTop && (
           <div className="pointer-events-auto">
@@ -432,41 +434,46 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
 
         <nav
           className={`pointer-events-auto transition-all duration-300 relative w-full
-          ${
-            heroMode
+          ${heroMode
               ? scrolled
                 ? "bg-white text-black shadow-xl backdrop-blur-lg h-16"
                 : "bg-transparent text-secondary h-20 md:h-24"
               : "bg-primary text-secondary h-16"
-          }`}
+            }`}
         >
           <div className="relative w-full px-4 md:px-8 mx-auto h-full flex items-center justify-between">
             {/* LEFT */}
             <Link
               href="/"
               onClick={insideDrawer ? onClose : undefined}
-              className="flex items-center h-10 px-3 md:px-4 gap-2 md:gap-3 bg-secondary text-primary"
+              className={`flex items-center px-4 md:px-5 gap-3 transition-all duration-500 ease-in-out ${heroMode && !scrolled
+                ? "h-11 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl rounded-full border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-primary"
+                : "h-10 md:h-11 bg-secondary rounded-full text-primary"
+                }`}
             >
               {!insideDrawer && (
-                menuOpen ? (
-                  <X
-                    className="w-5 h-5 cursor-pointer"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setMenuOpen(false);
-                    }}
-                  />
-                ) : (
-                  <Menu
-                    className="w-5 h-5 cursor-pointer"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setMenuOpen(true);
-                    }}
-                  />
-                )
+                <>
+                  {menuOpen ? (
+                    <X
+                      className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setMenuOpen(false);
+                      }}
+                    />
+                  ) : (
+                    <Menu
+                      className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setMenuOpen(true);
+                      }}
+                    />
+                  )}
+                  <div className="w-px h-5 bg-current opacity-30" />
+                </>
               )}
               <Image
                 src="/logo/logo.webp"
@@ -806,7 +813,10 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                       <Button
                         onClick={() => push(cta.href)}
                         size="sm"
-                        className="hidden md:block text-xs md:text-sm text-primary border border-primary hover:bg-primary hover:text-secondary whitespace-nowrap"
+                        className={`hidden md:block text-xs md:text-sm whitespace-nowrap transition-all duration-500 ease-in-out ${heroMode && !scrolled
+                          ? "bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl rounded-full border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-primary hover:bg-transparent hover:text-primary hover:border-white/30"
+                          : "text-primary border border-primary hover:bg-primary hover:text-secondary"
+                          }`}
                       >
                         {cta.label}
                       </Button>
@@ -817,9 +827,14 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                   <div
                     ref={accountRef}
                     className="relative z-110"
-                    onMouseEnter={() => setAccountOpen(true)}
+                    onMouseEnter={() => {
+                      if (accountTimeoutRef.current) clearTimeout(accountTimeoutRef.current);
+                      setAccountOpen(true);
+                    }}
                     onMouseLeave={() => {
-                      if (!persisAccountOpen) setAccountOpen(false);
+                      accountTimeoutRef.current = setTimeout(() => {
+                        if (!persisAccountOpen) setAccountOpen(false);
+                      }, 250);
                     }}
                   >
                     <button
@@ -830,15 +845,27 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                         setAccountOpen(nextPersis);
                       }}
                       className={`flex cursor-pointer items-center gap-1 px-2 py-1 rounded transition text-xs md:text-sm
-                    ${
-                      heroMode && !scrolled
-                        ? "text-white  hover:outline-2 hover:outline-white/40"
-                        : "text-black  hover:outline-2 hover:outline-black/20"
-                    }`}
+                    ${heroMode && !scrolled
+                          ? `text-white hover:outline-2 hover:outline-white/40 ${accountOpen ? "outline outline-2 outline-white/40" : ""}`
+                          : `text-black hover:outline-2 hover:outline-black/20 ${accountOpen ? "outline outline-2 outline-black/20" : ""}`
+                        }`}
                     >
-                      <User className="w-5 h-5 md:w-6 md:h-6" />
+                      {!isLoggedIn ? (
+                        <FaUserCircle className="w-5 h-5 md:w-7 md:h-7 shrink-0" />
+                      ) : user?.userRole === "CONSULTATION" && user?.logoUrl ? (
+                        <img
+                          src={user.logoUrl}
+                          alt="Profile"
+                          className="w-6 h-6 md:w-7 md:h-7 rounded-full object-cover shrink-0 bg-white"
+                        />
+                      ) : (
+                        <div className="w-6 h-6 md:w-7 md:h-7 rounded-full bg-fourth text-white flex items-center justify-center text-[10px] md:text-xs font-semibold shrink-0">
+                          {user?.firstname?.charAt(0)?.toUpperCase() || ""}
+                          {user?.lastname?.charAt(0)?.toUpperCase() || ""}
+                        </div>
+                      )}
 
-                      <span className="hidden sm:block text-left">
+                      <span className="block text-left">
                         <span className="block text-[10px] opacity-60">
                           {!isLoggedIn ? (
                             <span className="font-bold">Sign in</span>

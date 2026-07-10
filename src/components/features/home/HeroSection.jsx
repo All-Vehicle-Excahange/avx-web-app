@@ -59,9 +59,9 @@ export default function HeroSection() {
       </div>
 
       {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/20 z-0" />
+      <div className="absolute inset-0 bg-black/45 z-0" />
 
-      {/* 🔥 TOP GRADIENT SCRIM (KEY FIX) */}
+      {/*  TOP GRADIENT SCRIM (KEY FIX) */}
       <div
         className="absolute top-0 left-0 right-0 h-32 z-1
     bg-linear-to-b from-black/70 via-black/40 to-transparent"
@@ -72,50 +72,48 @@ export default function HeroSection() {
 
       {/* Hero Content */}
       <div
-        className={`relative z-10 flex flex-col items-center justify-center h-full transition-opacity duration-300 ${
-          collapsed ? "opacity-0" : "opacity-100"
-        }`}
+        className={`relative z-10 flex flex-col items-center justify-center h-full transition-opacity duration-300 ${collapsed ? "opacity-0" : "opacity-100"
+          }`}
       >
-        <div className="text-center max-w-3xl px-4 select-none flex flex-col items-center gap-2 mb-4 animate-fade-up h-auto justify-center">
+        <div className="text-center max-w-3xl px-4 select-none flex flex-col items-center gap-2 mb-4 animate-fade-up h-auto justify-center lg:-mt-32">
           <span className="text-xs text-fourth md:text-sm uppercase tracking-[0.3em]  font-semibold drop-shadow-md">
             One Ecosystem. Every Side.
           </span>
-          <h1 className="text-3xl md:text-4xl lg:text-4xl xl:text-6xl font-black text-white leading-tight md:leading-snug w-full max-w-5xl tracking-tight drop-shadow-xl font-primary transition-all duration-300">
+          <h1 className="text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-black text-white  w-full max-w-5xl tracking-tight drop-shadow-xl font-primary transition-all duration-300">
             <span className="block md:inline text-primary mb-1 md:mb-0">{slidesData[activeSlideIndex].prefix}</span>
             <span className="hidden md:inline"> </span>
-            <span className="block md:inline text-3xl md:text-3xl lg:text-3xl xl:text-5xl">{slidesData[activeSlideIndex].text}</span>
+            <span className="block md:inline text-3xl md:text-3xl lg:text-3xl xl:text-4xl 2xl:text-5xl">{slidesData[activeSlideIndex].text}</span>
           </h1>
-          <p className="text-base md:text-base lg:text-base xl:text-xl text-white/80 font-medium tracking-wide drop-shadow-md transition-all duration-300">
-           One trusted marketplace.
+          <p className="text-base md:text-base lg:text-base xl:text-lg 2xl:text-xl text-white/80 font-medium tracking-wide drop-shadow-md transition-all duration-300">
+            One trusted marketplace.
           </p>
         </div>
 
-        {/* Tab Links with Bottom Border */}
-        <div className="mt-2 hidden lg:flex items-center gap-8 select-none">
-          <button
-            onClick={() => setActiveTab("vehicles")}
-            className={`flex items-center gap-2 pb-2 border-b-2 transition-all duration-300 cursor-pointer ${
-              activeTab === "vehicles"
-                ? "border-primary text-primary font-semibold"
-                : "border-transparent text-primary/60 hover:text-primary hover:border-primary/50"
-            }`}
-          >
-            <Car size={20} />
-            <span className="text-base tracking-wide">Vehicle</span>
-          </button>
+      </div>
 
-          <button
-            onClick={() => setActiveTab("consult")}
-            className={`flex items-center gap-2 pb-2 border-b-2 transition-all duration-300 cursor-pointer ${
-              activeTab === "consult"
-                ? "border-primary text-primary font-semibold"
-                : "border-transparent text-primary/60 hover:text-primary hover:border-primary/50"
+      {/* Tab Links with Bottom Border */}
+      <div className={`absolute bottom-[calc(20vh+5.5rem)] left-1/2 -translate-x-1/2 z-40 hidden lg:flex items-center gap-8 select-none transition-opacity duration-300 ${collapsed ? "opacity-0" : "opacity-100"}`}>
+        <button
+          onClick={() => setActiveTab("vehicles")}
+          className={`flex items-center gap-2 pb-2 border-b-2 transition-all duration-300 cursor-pointer ${activeTab === "vehicles"
+            ? "border-primary text-primary font-semibold"
+            : "border-transparent text-primary/60 hover:text-primary hover:border-primary/50"
             }`}
-          >
-            <User2 size={20} />
-            <span className="text-base tracking-wide">Consultant</span>
-          </button>
-        </div>
+        >
+          <Car size={20} />
+          <span className="text-base tracking-wide">Vehicle</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab("consult")}
+          className={`flex items-center gap-2 pb-2 border-b-2 transition-all duration-300 cursor-pointer ${activeTab === "consult"
+            ? "border-primary text-primary font-semibold"
+            : "border-transparent text-primary/60 hover:text-primary hover:border-primary/50"
+            }`}
+        >
+          <User2 size={20} />
+          <span className="text-base tracking-wide">Consultant</span>
+        </button>
       </div>
 
       {/* Filter Bar – sticks to bottom INSIDE hero */}

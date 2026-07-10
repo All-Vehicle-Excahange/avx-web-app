@@ -517,16 +517,11 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         }
       `}</style>
       <div className="hidden lg:flex absolute bottom-[20vh] left-0 right-0 z-30 justify-center items-center px-4">
-        <div className="w-full max-w-[1400px] animated-gradient-border shadow-2xl relative overflow-visible">
+        <div className="w-full max-w-[1400px] rounded-full bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] relative overflow-visible transition-all duration-500">
           <div
             ref={containerRef}
             className="inner-container w-full h-16 relative"
           >
-            <div className="clip-layer absolute inset-0 rounded-full overflow-hidden z-0">
-              <div className="absolute inset-0 bg-[url('/bg_blur_2.webp')] bg-cover bg-center bg-no-repeat" />
-              <div className="absolute inset-0 backdrop-blur-xl bg-secondary" />
-            </div>
-
             <div className="relative z-10 flex items-center w-full h-full p-2 text-primary">
               {/* SECTION: LOCATION */}
               <div
@@ -888,16 +883,19 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       {/* MOBILE FILTER SEARCH BAR */}
       <div
         ref={mobileTriggerRef}
-        className={`lg:hidden fixed z-40 transition-all duration-500 ease-in-out ${
-          isScrolled
-            ? "bottom-4 right-4 w-14"
-            : "bottom-4 left-0 right-0 px-4 w-full md:max-w-md md:left-1/2 md:-translate-x-1/2"
-        }`}
+        className={`lg:hidden fixed z-40 transition-all duration-500 ease-in-out ${isScrolled
+          ? "bottom-4 right-4 w-14"
+          : "bottom-4 right-4 w-[calc(100%-2rem)] md:right-[calc(50%-14rem)] md:w-[28rem]"
+          }`}
       >
         <div className="relative">
           {showTypeDropdown && (
             <div
-              className={`absolute bottom-[110%] mb-4 bg-neutral-900 border border-neutral-800 rounded-2xl p-2 shadow-2xl animate-in slide-in-from-bottom-4 duration-300 ${isScrolled ? "right-0 w-[280px]" : "left-0 right-0"} dropdown-active`}
+              className={`absolute bottom-[110%] mb-4 backdrop-blur-2xl rounded-2xl p-2 animate-in slide-in-from-bottom-4 duration-300 dropdown-active ${
+                isScrolled 
+                  ? "right-0 w-[280px] bg-black/70 border border-white/10 shadow-2xl" 
+                  : "left-0 right-0 bg-gradient-to-br from-white/20 to-white/5 border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)]"
+              }`}
             >
               <button
                 onClick={() => {
@@ -905,7 +903,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   setMobileOpen(true);
                   setShowTypeDropdown(false);
                 }}
-                className="w-full flex items-center gap-3 p-4 hover:bg-neutral-800 rounded-xl text-left cursor-pointer"
+                className="w-full flex items-center gap-3 p-4 hover:bg-white/10 transition-colors rounded-xl text-left cursor-pointer"
               >
                 <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-primary">
                   <Search size={18} />
@@ -917,14 +915,14 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   </div>
                 </div>
               </button>
-              <div className="h-px bg-neutral-800 mx-2 my-1" />
+              <div className="h-px bg-white/20 mx-2 my-1" />
               <button
                 onClick={() => {
                   setInternalActiveType("consult");
                   setMobileOpen(true);
                   setShowTypeDropdown(false);
                 }}
-                className="w-full flex items-center gap-3 p-4 hover:bg-neutral-800 rounded-xl text-left cursor-pointer"
+                className="w-full flex items-center gap-3 p-4 hover:bg-white/10 transition-colors rounded-xl text-left cursor-pointer"
               >
                 <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-primary">
                   <Search size={18} />
@@ -942,19 +940,17 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           )}
           <button
             onClick={() => setShowTypeDropdown(!showTypeDropdown)}
-            className={`flex items-center justify-center gap-2 shadow-lg transition-all duration-500 ease-in-out cursor-pointer whitespace-nowrap overflow-hidden ${
-              isScrolled
-                ? "w-14 h-14 bg-fourth rounded-full"
-                : "w-full py-4 bg-neutral-900 border border-neutral-800 rounded-full"
-            }`}
+            className={`w-full flex items-center justify-center gap-2 transition-all duration-500 ease-in-out cursor-pointer whitespace-nowrap overflow-hidden rounded-full ${isScrolled
+              ? "h-14 bg-fourth shadow-lg"
+              : "h-14 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)]"
+              }`}
           >
             <Search size={22} className="text-white shrink-0" />
             <span
-              className={`font-medium text-white transition-all duration-500 ease-in-out overflow-hidden ${
-                isScrolled
-                  ? "max-w-0 opacity-0 pointer-events-none"
-                  : "max-w-[150px] opacity-100"
-              }`}
+              className={`font-medium text-white transition-all duration-500 ease-in-out overflow-hidden ${isScrolled
+                ? "max-w-0 opacity-0 ml-0 pointer-events-none"
+                : "max-w-[150px] opacity-100 ml-2"
+                }`}
             >
               Start your search
             </span>
@@ -1030,7 +1026,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   />
                   {locationSuggestions.length > 0 && location && (
                     <div className="mt-2 bg-neutral-800 rounded-xl overflow-hidden border border-neutral-700">
-                       {locationSuggestions.map((item) => (
+                      {locationSuggestions.map((item) => (
                         <button
                           key={item.isStateOnly ? `state-${item.stateId}` : item.cityId}
                           onClick={() => {
