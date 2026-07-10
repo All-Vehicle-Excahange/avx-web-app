@@ -6,6 +6,7 @@ import DetailsFromPopup from "./DetailsFromPopup";
 import LoginPopup from "@/components/auth/LoginPopup";
 import SignupPopup from "@/components/auth/SignupPopup";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const faqData = [
   {
@@ -31,19 +32,47 @@ const faqData = [
 ];
 
 export default function FAQSection() {
+  const router = useRouter();
   const [openIndex, setOpenIndex] = useState(0);
 
   const [open, setOpen] = useState(false);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const user = useAuthStore((state) => state.user);
   const [loginPopup, setLoginPopup] = useState(false);
   const [signupPopup, setSignupPopup] = useState(false);
 
   const handleStartSelling = () => {
     if (!isLoggedIn) {
       setLoginPopup(true);
+      return;
+    }
+
+    let currentRole = null;
+    if (typeof window !== "undefined") {
+      try {
+        const savedUser = localStorage.getItem("user");
+        if (savedUser) {
+          const parsed = JSON.parse(savedUser);
+          currentRole = parsed?.userRole;
+        }
+      } catch (err) {
+        console.error("Failed to parse user role on button click:", err);
+      }
+    }
+
+    const finalRole = currentRole || user?.userRole;
+
+    if (finalRole === "CONSULTATION") {
+      return;
+    }
+
+    if (finalRole === "USER_SELLER") {
+      router.push("/user/details/inventory");
+    } else if (finalRole === "USER_SELLER_APPLICANT") {
+      router.push("/user/details/myprofile");
     } else {
       setOpen(true);
-    }0
+    }
   };
 
   return (
@@ -69,14 +98,14 @@ export default function FAQSection() {
                     "  Can't find the answer you're looking for? Our consultants are here to help."
                   }
                 </p>
-                <Link href="/help">
+                {/* <Link href="/help">
                   <Button
                     variant="ghost"
                     className="flex items-center justify-center gap-20 px-7 py-3 bg-primary  text-secondary rounded-full hover:bg-third hover:text-secondary transition-all text-sm font-black tracking-widest uppercase"
                   >
                     Get in touch
                   </Button>
-                </Link>
+                </Link> */}
               </div>
             </div>
 

@@ -294,6 +294,7 @@ const VehicleSpecsConsualt = forwardRef(function VehicleSpecsConsualt(
           inspection={trackingInspection}
           onClose={handleCloseTracking}
           animateModal={animateTrackingModal}
+          vehicle={vehicle}
         />
       )}
     </section>

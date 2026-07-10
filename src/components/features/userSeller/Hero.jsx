@@ -84,6 +84,8 @@ function Hero() {
 
     if (finalRole === "USER_SELLER") {
       router.push("/user/details/inventory");
+    } else if (finalRole === "USER_SELLER_APPLICANT") {
+      router.push("/user/details/myprofile");
     } else {
       setOpen(true);
     }
@@ -107,6 +109,8 @@ function Hero() {
 
     if (finalRole === "USER_SELLER") {
       router.push("/user/details/inventory");
+    } else if (finalRole === "USER_SELLER_APPLICANT") {
+      router.push("/user/details/myprofile");
     } else if (finalRole === "CONSULTATION") {
       // Consultant - button will disappear, no popup
     } else {

@@ -54,7 +54,7 @@ export default function Inventory() {
 
 
     return (
-        <section className="w-full container mt-2! rounded-2xl p-6 space-y-6 ">
+        <section className="w-full container mt-2! border-0 sm:border border-third/40 rounded-none sm:rounded-2xl px-0 py-4 sm:p-6 space-y-6">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <div className="flex flex-wrap gap-2">
                     {vehicleTypes.map((type) => (
@@ -145,7 +145,7 @@ export default function Inventory() {
                             <VehicleCard key={`${car.id}-${index}`} data={car} />
                         ))
                     ) : (
-                        <div className="flex flex-col items-center justify-center py-20 text-center rounded-2xl border-2 border-dashed border-third/20 bg-primary/5 w-full">
+                        <div className="flex flex-col items-center justify-center py-10 sm:py-20 text-center rounded-none sm:rounded-2xl border-0 sm:border-2 border-dashed border-third/20 bg-transparent sm:bg-primary/5 w-full">
                             <h3 className="text-xl font-bold mb-2 text-primary">
                                 No {activeType === "all" ? "" : vehicleTypes.find(t => t.id === activeType)?.label} vehicles found
                             </h3>

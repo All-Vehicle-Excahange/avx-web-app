@@ -27,11 +27,11 @@ export default function StoreFront() {
         <Navbar heroMode scrolled={true} />
       </div>
 
-      <main className=" px-4 text-primary pt-12">
+      <main className="px-0 sm:px-4 text-primary pt-12">
         {/* HERO */}
         <StoreFrontHeroSection />
 
-        <div className=" py-6">
+        <div className="px-0 py-6">
           <section className="w-full">
             <div className="flex flex-col gap-6 3xl:max-w-[1480px] 3xl:mx-auto">
               {/* TABS */}

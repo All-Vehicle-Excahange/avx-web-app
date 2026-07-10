@@ -678,34 +678,60 @@ export default function VehicleCondition({ vehicle, open, setOpen, inspectionDet
       <div className="relative z-10">
         {/* ================= HEADER ================= */}
         <div
-          className="flex justify-between items-center px-6 py-3 cursor-pointer"
+          className="flex justify-between items-center px-4 md:px-6 py-3 cursor-pointer select-none"
           onClick={() => setOpen((prev) => !prev)}
         >
-          <div className="flex items-center gap-2">
-            <CheckCircle size={20} />
-            <h3 className="text-xl font-semibold">Vehicle Condition</h3>
-            {(d?.inspectionStatus || vehicle?.inspectionStatus) === "AVX_INSPECTED" ? (
-              <div className="relative w-28 h-6 ml-1">
-                <Image
-                  src="/inspection_small.svg"
-                  alt="Reecomm Inspected"
-                  fill
-                  className="object-contain object-left"
-                />
-              </div>
-            ) : (d?.inspectionStatus || vehicle?.inspectionStatus) && (d?.inspectionStatus || vehicle?.inspectionStatus) !== "NOT_INSPECTED" ? (
-              <span className="text-xs font-bold px-2.5 py-0.5 rounded-full ml-1.5 border border-fourth text-white bg-fourth shadow-sm">
-                {(d?.inspectionStatus || vehicle?.inspectionStatus).replace(/_/g, " ")}
-              </span>
-            ) : null}
+          {/* LEFT SIDE */}
+          <div className="flex items-center gap-2 min-w-0">
+            <CheckCircle size={20} className="shrink-0" />
+            <h3 className="text-lg md:text-xl font-semibold truncate">Vehicle Condition</h3>
+            
+            {/* Desktop Badge: shown next to title on large screens */}
+            <div className="hidden md:flex items-center gap-2">
+              {(d?.inspectionStatus || vehicle?.inspectionStatus) === "AVX_INSPECTED" ? (
+                <div className="relative w-28 h-6 ml-1">
+                  <Image
+                    src="/inspection_small.svg"
+                    alt="Reecomm Inspected"
+                    fill
+                    className="object-contain object-left"
+                  />
+                </div>
+              ) : (d?.inspectionStatus || vehicle?.inspectionStatus) && (d?.inspectionStatus || vehicle?.inspectionStatus) !== "NOT_INSPECTED" ? (
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full ml-1.5 border border-fourth text-white bg-fourth shadow-sm whitespace-nowrap">
+                  {(d?.inspectionStatus || vehicle?.inspectionStatus).replace(/_/g, " ")}
+                </span>
+              ) : null}
+            </div>
           </div>
 
-          <ChevronDown
-            size={20}
-            className={`transition-transform duration-300 ${
-              open ? "rotate-180" : "rotate-0"
-            }`}
-          />
+          {/* RIGHT SIDE */}
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Mobile Badge: shown next to arrow on small screens */}
+            <div className="md:hidden flex items-center gap-1.5">
+              {(d?.inspectionStatus || vehicle?.inspectionStatus) === "AVX_INSPECTED" ? (
+                <div className="relative w-24 h-6">
+                  <Image
+                    src="/inspection_small.svg"
+                    alt="Reecomm Inspected"
+                    fill
+                    className="object-contain object-right"
+                  />
+                </div>
+              ) : (d?.inspectionStatus || vehicle?.inspectionStatus) && (d?.inspectionStatus || vehicle?.inspectionStatus) !== "NOT_INSPECTED" ? (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full border border-fourth text-white bg-fourth shadow-sm whitespace-nowrap">
+                  {(d?.inspectionStatus || vehicle?.inspectionStatus).replace(/_/g, " ")}
+                </span>
+              ) : null}
+            </div>
+
+            <ChevronDown
+              size={20}
+              className={`transition-transform duration-300 shrink-0 ${
+                open ? "rotate-180" : "rotate-0"
+              }`}
+            />
+          </div>
         </div>
 
         {/* ================= CONTENT ================= */}

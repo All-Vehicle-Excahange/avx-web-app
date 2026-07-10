@@ -1074,6 +1074,7 @@ export default function VehicleSpec({
           inspection={trackingInspection}
           onClose={handleCloseTracking}
           animateModal={animateTrackingModal}
+          vehicle={vehicle}
         />
       )}
     </section>

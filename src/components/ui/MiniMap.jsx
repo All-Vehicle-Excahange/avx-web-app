@@ -300,7 +300,7 @@ export default function MiniMap({
   return (
     <div className="w-full flex flex-col space-y-3">
       {/* Top Header */}
-      <div className="flex justify-between items-center px-1">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0 px-1">
         <span className="text-xs font-semibold uppercase tracking-wider text-third/80">
           Showroom Location on Google Maps
         </span>
@@ -309,7 +309,7 @@ export default function MiniMap({
             type="button"
             onClick={handleLocateUser}
             disabled={isLocating}
-            className="flex items-center gap-1.5 text-[11px] font-medium text-primary hover:text-primary-hover transition-colors disabled:opacity-60 cursor-pointer bg-white/5 px-2.5 py-1 rounded-lg border border-white/5 hover:border-white/10"
+            className="flex items-center justify-center gap-1.5 text-[11px] font-medium text-primary hover:text-primary-hover transition-colors disabled:opacity-60 cursor-pointer bg-white/5 px-2.5 py-1.5 sm:py-1 rounded-lg border border-white/5 hover:border-white/10 w-full sm:w-auto"
           >
             <Navigation
               size={12}

@@ -296,6 +296,7 @@ export default function ConsualtVehicleDetails({
           inspection={trackingInspection}
           onClose={handleCloseTracking}
           animateModal={animateTrackingModal}
+          vehicle={vehicleOverview}
         />
       )}
     </>
