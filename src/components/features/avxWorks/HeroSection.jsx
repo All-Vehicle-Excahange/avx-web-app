@@ -86,7 +86,7 @@ export default function HeroSection() {
 
           <div className="relative h-115">
             {/* glow layer */}
-            <div className="absolute inset-0 bg-linear-to-r from-fourth/10 to-transparent blur-3xl rounded-3xl" />
+            <div className="absolute inset-0  rounded-3xl" />
 
             {/* MAIN CARD */}
             <motion.div

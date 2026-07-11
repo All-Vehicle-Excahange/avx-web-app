@@ -9,7 +9,6 @@ import InspectionMatters from "@/components/features/inspection-process/Inspecti
 import InspectionNotCovered from "@/components/features/inspection-process/InspectionNotCovered";
 import InspectionReportFormat from "@/components/features/inspection-process/InspectionReportFormat";
 import InspectionWorkFlow from "@/components/features/inspection-process/InspectionWorkFlow";
-import ReInspectionOptions from "@/components/features/inspection-process/ReInspectionOptions";
 import FooterLink from "@/components/layout/FooterLink";
 import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
@@ -64,7 +63,6 @@ function index() {
         <InspectionInitiated />
         <InspectionWorkFlow />
         <InspectionReportFormat />
-        <ReInspectionOptions />
         <InspectionNotCovered />
         <DisputeHandling />
         <FAQSection />

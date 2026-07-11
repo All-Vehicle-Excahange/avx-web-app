@@ -86,9 +86,7 @@ export default function WhyThisMattersSection() {
                 {/* LIGHT SWEEP */}
                 <div
                   className="
-        absolute inset-0 opacity-0 group-hover:opacity-100 transition
-        bg-linear-to-r from-transparent via-blue-400/20 to-transparent
-        -translate-x-full group-hover:translate-x-full
+        group-hover:translate-x-full
         duration-900
       "
                 />

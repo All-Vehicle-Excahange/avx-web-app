@@ -24,54 +24,63 @@ const ITEMS = [
     title: "Engine & Powertrain",
     desc: "Complete evaluation of engine health, transmission shifts, and powertrain performance.",
     icon: Settings,
+    image: "/How-recomm-work/engine & powertrain final.png",
   },
   {
     id: "mechanical",
     title: "Mechanical Components",
     desc: "Thorough inspection of suspension, brakes, steering, and underbody mechanics.",
     icon: Wrench,
+    image: "/How-recomm-work/Mechanical Components final.png",
   },
   {
     id: "exterior",
     title: "Exterior Panel Inspection",
     desc: "Analysis of paint quality, body gaps, and identification of any replaced panels.",
     icon: ScanLine,
+    image: "/How-recomm-work/Exterior Panel Inspection.png",
   },
   {
     id: "glass",
     title: "Glass & Exterior Electronics",
     desc: "Checking all windows, mirrors, lighting systems, and exterior sensors.",
     icon: Zap,
+    image: "/How-recomm-work/Glass & Exterior Electronics.png",
   },
   {
     id: "interior",
     title: "Interior & Cabin",
     desc: "Assessment of upholstery, cabin electronics, air conditioning, and overall wear.",
     icon: Car,
+    image: "/How-recomm-work/Interior & Cabin.png",
   },
   {
     id: "structural",
     title: "Structural History",
     desc: "Frame alignment, load paths, and impact indicators to verify chassis integrity.",
     icon: ShieldCheck,
+    image: "/How-recomm-work/Structural History  Final.png",
   },
   {
     id: "tyres",
     title: "Tyres",
     desc: "Tread depth measurement, wear patterns, and wheel alloy inspection.",
     icon: CircleDashed,
+    image: "/How-recomm-work/typers final.png",
   },
   {
     id: "obd",
     title: "OBD Diagnostics",
     desc: "Computerized scan for hidden fault codes, sensor data, and emission readiness.",
     icon: Activity,
+    image: "/How-recomm-work/OBD Diagnostics.png",
   },
   {
     id: "modification",
     title: "Modification Check",
     desc: "Identifying aftermarket modifications and ensuring they meet safety standards.",
     icon: Search,
+    image: "/How-recomm-work/Modification Check.png",
   },
 ];
 
@@ -177,15 +186,14 @@ export default function AvxInspectionLayer() {
             <div className="relative rounded-3xl overflow-hidden border border-primary/20 aspect-video lg:aspect-auto lg:h-[600px]">
               {/* IMAGE */}
               <Image
-                src="/car-inspection.avif"
-                alt="Inspection Core"
+                src={active.image}
+                alt={active.title}
                 width={800}
                 height={500}
                 className="w-full h-full object-cover scale-105"
               />
 
               {/* DARK OVERLAY */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
               {/* OVERLAY CONTENT */}
               <div className="absolute bottom-0 left-0 w-full p-8 lg:p-12">
