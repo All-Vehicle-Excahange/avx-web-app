@@ -113,7 +113,7 @@ export default function App({ Component, pageProps }) {
     try {
       localStorage.setItem("splashSeen", "true");
       sessionStorage.setItem("splashSession", "true");
-    } catch (e) {}
+    } catch (e) { }
 
     const channel = new BroadcastChannel("splash_channel");
 
@@ -175,7 +175,7 @@ export default function App({ Component, pageProps }) {
     <>
       <QueryClientProvider client={queryClient}>
         <div
-          className={`${exo.variable} ${inter.variable} ${lexendDeca.variable} ${montserrat.variable} ${poppins.variable} ${raleway.variable} ${roboto.variable} font-sans`}
+          className={`${exo.variable} ${inter.variable} ${lexendDeca.variable} ${montserrat.variable} ${poppins.variable} ${raleway.variable} ${roboto.variable} font-secondary`}
         >
           <Head>
             {/* Global canonical — strips query params so Google picks the right URL */}

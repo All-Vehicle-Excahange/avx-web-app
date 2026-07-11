@@ -16,8 +16,8 @@
   --color-third: #bebebe;
   --breakpoint-3xl: 120rem;
   --color-fourth: #007bff;
-  --primary: var(--font-exo), sans-serif;
-  --secondary: var(--font-poppins), sans-serif;
+  --font-primary: var(--font-exo), sans-serif;
+  --font-secondary: var(--font-poppins), sans-serif;
 
   --animate-spin-slow: spin 3s linear infinite;
 }
@@ -31,7 +31,6 @@
 body {
   background: linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%);
   color: var(--color-primary);
-  font-family: var(--secondary-font);
   overflow-x: hidden;
 }
 

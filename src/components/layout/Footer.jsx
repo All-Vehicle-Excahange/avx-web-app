@@ -11,13 +11,13 @@ const footerLinks = {
     { label: "Reecomm Inspected", href: "/search?reccomInspected=true" },
     { label: "Budget under ₹3 lakh", href: "/search?budget=0-3" },
     { label: "Budget ₹3L – ₹8L", href: "/search?budget=3-8" },
-    { label: "Used car buying guide", href: "#" },
+    { label: "Used car buying guide", href: "/blog/how-to-buy-used-car-safely-india" },
   ],
   sell: [
     { label: "List your car", href: "/consult" },
     { label: "List your two-wheeler", href: "/consult" },
     { label: "Request an inspection", href: "/inspection-process" },
-    { label: "RC transfer service", href: "#" },
+    { label: "RC transfer service", href: "/blog/rc-transfer-process-used-car-india-2026" },
     { label: "Doorstep inspection", href: "/inspection-process" },
   ],
   consultants: [
@@ -43,28 +43,29 @@ const footerLinks = {
 
 const Footer = () => {
   return (
-    <footer className=" text-white font-sans">
+    <footer className=" text-white font-secondary">
       <div className="container mx-auto ">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-8 justify-between mb-16">
           {/* Brand & Description Column */}
           <div className="lg:w-[25%] flex flex-col gap-6">
-            <Link href="/" className="flex items-center  gap-2">
-              <div className="p-2 ">
-                <Image
-                  src="/logo/logo.webp"
-                  alt="Reecomm Logo"
-                  width={130}
-                  height={32}
-                  className="h-6 md:h-8 w-auto object-contain block"
-                />
-              </div>
-            </Link>
+            <div>
+              <Link href="/" className="flex items-center  gap-2">
+                <div className="pb-2">
+                  <Image
+                    src="/logo/logo.webp"
+                    alt="Reecomm Logo"
+                    width={130}
+                    height={32}
+                    className="h-6 md:h-8 w-auto object-contain block"
+                  />
+                </div>
+              </Link>
 
-            <p className="text-white/90 font-medium text-[15px]">
-              Buy smart. Sell fair. Move forward.
-            </p>
-
-            <p className="text-primary/60 text-[13px] leading-relaxed lg:pr-4">
+              <p className="text-white/90 font-medium text-[15px]">
+                Buy smart. Sell fair. Move forward.
+              </p>
+            </div>
+            <p className="text-primary/60 text-[12px] leading-relaxed lg:pr-4">
               India&apos;s trusted marketplace for used cars and two-wheelers.
               Verified listings, transparent prices, and real auto consultants —
               all in one place.
@@ -132,18 +133,17 @@ const Footer = () => {
                 {" "}
                 Buy
               </h2>
-              <ul className="flex flex-col gap-3">
+              <div className="flex flex-col gap-2">
                 {footerLinks.buy.map((item) => (
-                  <li key={item.label}>
-                    <Link
-                      href={item.href}
-                      className="text-primary/60 hover:text-white text-[13px] transition-colors"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className="text-[12px] text-white/60 hover:text-white transition-all"
+                  >
+                    {item.label}
+                  </Link>
                 ))}
-              </ul>
+              </div>
             </div>
 
             {/* Column 2 */}
@@ -152,18 +152,17 @@ const Footer = () => {
                 {" "}
                 Sell
               </h2>
-              <ul className="flex flex-col gap-3">
+              <div className="flex flex-col gap-2">
                 {footerLinks.sell.map((item) => (
-                  <li key={item.label}>
-                    <Link
-                      href={item.href}
-                      className="text-primary/60 hover:text-white text-[13px] transition-colors"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className="text-[12px] text-white/60 hover:text-white transition-all"
+                  >
+                    {item.label}
+                  </Link>
                 ))}
-              </ul>
+              </div>
               {/* Vertical line separator for desktop */}
               <div className="hidden lg:block absolute -right-4 top-0 bottom-0 w-px bg-[#ffffff20]"></div>
             </div>
@@ -174,18 +173,17 @@ const Footer = () => {
                 {" "}
                 Consultants
               </h2>
-              <ul className="flex flex-col gap-3">
+              <div className="flex flex-col gap-2">
                 {footerLinks.consultants.map((item) => (
-                  <li key={item.label}>
-                    <Link
-                      href={item.href}
-                      className="text-primary/60 hover:text-white text-[13px] transition-colors"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className="text-[12px] text-white/60 hover:text-white transition-all"
+                  >
+                    {item.label}
+                  </Link>
                 ))}
-              </ul>
+              </div>
             </div>
 
             {/* Column 4 */}
@@ -194,18 +192,17 @@ const Footer = () => {
                 {" "}
                 Company
               </h2>
-              <ul className="flex flex-col gap-3">
+              <div className="flex flex-col gap-2">
                 {footerLinks.company.map((item) => (
-                  <li key={item.label}>
-                    <Link
-                      href={item.href}
-                      className="text-primary/60 hover:text-white text-[13px] transition-colors"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className="text-[12px] text-white/60 hover:text-white transition-all"
+                  >
+                    {item.label}
+                  </Link>
                 ))}
-              </ul>
+              </div>
             </div>
           </div>
         </div>
