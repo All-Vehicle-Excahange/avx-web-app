@@ -190,6 +190,16 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
       } else if (res?.error) {
         // Handle API errors returned in response
         const msg = res?.message?.toLowerCase();
+
+        if (msg?.includes("otp already sent")) {
+          setOtpSent(true);
+          const blockTime = Date.now() + 60 * 1000;
+          localStorage.setItem("otpBlockUntil", String(blockTime));
+          setCountdown(60);
+          setTimeout(() => otpRefs.current[0]?.focus(), 200);
+          return;
+        }
+
         if (
           msg?.includes("blocked") ||
           msg?.includes("too many attempts") ||
@@ -214,6 +224,15 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
     } catch (err) {
       const api = err?.response?.data;
       const msg = api?.message?.toLowerCase();
+
+      if (msg?.includes("otp already sent")) {
+        setOtpSent(true);
+        const blockTime = Date.now() + 60 * 1000;
+        localStorage.setItem("otpBlockUntil", String(blockTime));
+        setCountdown(60);
+        setTimeout(() => otpRefs.current[0]?.focus(), 200);
+        return;
+      }
 
       if (
         msg?.includes("blocked") ||
@@ -508,98 +527,128 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
           )}
 
           {/* FORM FIELDS */}
-          {!isGoogleSignupFlow && (
+          {!otpSent ? (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <input
-                    placeholder="First Name"
-                    {...register("firstName", {
-                      required: "First Name is required",
-                    })}
-                    className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
-                  />
-                  {errors.firstName && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.firstName.message}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <input
-                    placeholder="Last Name"
-                    {...register("lastName", { required: "Last Name is required" })}
-                    className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
-                  />
-                  {errors.lastName && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.lastName.message}
-                    </p>
-                  )}
-                </div>
-              </div>
+              {!isGoogleSignupFlow && (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <input
+                        placeholder="First Name"
+                        {...register("firstName", {
+                          required: "First Name is required",
+                        })}
+                        className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
+                      />
+                      {errors.firstName && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {errors.firstName.message}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <input
+                        placeholder="Last Name"
+                        {...register("lastName", { required: "Last Name is required" })}
+                        className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
+                      />
+                      {errors.lastName && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {errors.lastName.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mb-4">
+                    <input
+                      type="email"
+                      placeholder="Email address"
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                          value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
+                          message: "Email must be in lowercase only",
+                        },
+                      })}
+                      className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
+                    />
+                    {errors.email && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.email.message}
+                      </p>
+                    )}
+                  </div>
+                </>
+              )}
 
               <div className="mb-4">
-                <input
-                  type="email"
-                  placeholder="Email address"
-                  {...register("email", {
-                    required: "Email is required",
-                    pattern: {
-                      value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
-                      message: "Email must be in lowercase only",
-                    },
-                  })}
-                  className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
-                />
-                {errors.email && (
+                <div className="flex items-center text-primary border rounded-md border-accent-gray">
+                  <span className="pl-4 pr-2 text-text-black/60">+91-</span>
+                  <input
+                    maxLength={10}
+                    placeholder="9999999999"
+                    onInput={(e) => {
+                      e.target.value = e.target.value.replace(/\D/g, "");
+                    }}
+                    {...register("phone", { required: "Phone is required" })}
+                    className="w-full text-primary border py-3 px-2 outline-none bg-transparent"
+                  />
+                </div>
+                {errors.phone && (
                   <p className="text-red-500 text-xs mt-1">
-                    {errors.email.message}
+                    {errors.phone.message}
                   </p>
                 )}
               </div>
+
+              <div className="flex items-start gap-2 mb-4">
+                <input
+                  type="checkbox"
+                  id="termsCheckbox"
+                  className="mt-1 cursor-pointer"
+                  checked={acceptedTerms}
+                  onChange={(e) => setAcceptedTerms(e.target.checked)}
+                />
+                <label htmlFor="termsCheckbox" className="text-sm text-primary/60 cursor-pointer">
+                  I agree to the{" "}
+                  <a href="/terms-and-conditions" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                    Terms and Conditions
+                  </a>{" "}
+                  and{" "}
+                  <a href="/privacy-policy" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                    Privacy Policy
+                  </a>
+                </label>
+              </div>
             </>
-          )}
-
-          <div className="mb-4">
-            <div className="flex items-center text-primary border rounded-md border-accent-gray">
-              <span className="pl-4 pr-2 text-text-black/60">+91-</span>
-              <input
-                maxLength={10}
-                placeholder="9999999999"
-                onInput={(e) => {
-                  e.target.value = e.target.value.replace(/\D/g, "");
-                }}
-                {...register("phone", { required: "Phone is required" })}
-                className="w-full text-primary border py-3 px-2 outline-none bg-transparent"
-              />
+          ) : (
+            <div className="mb-4 flex items-center justify-between bg-primary/5 border border-primary/10 rounded-lg p-3.5">
+              <div>
+                {!isGoogleSignupFlow && (
+                  <p className="text-sm font-semibold text-primary mb-1">
+                    {getValues("firstName")} {getValues("lastName")}
+                  </p>
+                )}
+                <p className="text-xs text-third">OTP sent to</p>
+                <p className="text-sm font-semibold text-primary">
+                  +91 {getValues("phone")}
+                </p>
+                {!isGoogleSignupFlow && getValues("email") && (
+                  <p className="text-xs text-third mt-0.5">
+                    {getValues("email")}
+                  </p>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => setOtpSent(false)}
+                className="text-xs font-semibold text-primary hover:underline cursor-pointer bg-transparent border-none outline-none self-center"
+              >
+                Change
+              </button>
             </div>
-            {errors.phone && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.phone.message}
-              </p>
-            )}
-          </div>
-
-          <div className="flex items-start gap-2 mb-4">
-            <input
-              type="checkbox"
-              id="termsCheckbox"
-              className="mt-1 cursor-pointer"
-              checked={acceptedTerms}
-              onChange={(e) => setAcceptedTerms(e.target.checked)}
-            />
-            <label htmlFor="termsCheckbox" className="text-sm text-primary/60 cursor-pointer">
-              I agree to the{" "}
-              <a href="/terms" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-                Terms and Conditions
-              </a>{" "}
-              and{" "}
-              <a href="/privacy" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-                Privacy Policy
-              </a>
-            </label>
-          </div>
+          )}
 
           {/* OTP SEND BUTTON */}
           {!otpSent && (

@@ -188,7 +188,7 @@ function Hero() {
                 START SELLING
               </Button>
             )}
-            <Button variant="ghost" size="md">
+            <Button variant="ghost" size="md" href={"/search"}>
               EXPLORE MARKET
             </Button>
           </div>

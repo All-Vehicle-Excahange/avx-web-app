@@ -178,7 +178,7 @@ function WhoCanSell() {
           </div>
           <button
             onClick={handleStartSelling}
-            className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 border rounded-md border-primary/20 bg-primary/5 hover:bg-primary/10 hover:border-primary/40 transition text-sm font-semibold text-primary font-[Poppins] whitespace-nowrap"
+            className="shrink-0 inline-flex cursor-pointer items-center gap-2 px-5 py-2.5 border rounded-md border-primary/20 bg-primary/5 hover:bg-primary/10 hover:border-primary/40 transition text-sm font-semibold text-primary font-[Poppins] whitespace-nowrap"
           >
             Become a Seller →
           </button>

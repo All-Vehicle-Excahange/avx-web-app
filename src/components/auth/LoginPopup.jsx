@@ -188,6 +188,15 @@ function LoginPopup({
         msg = "This number isn't registered. Create your account.";
       }
 
+      if (msg.toLowerCase().includes("otp already sent")) {
+        setOtpSent(true);
+        const blockTime = Date.now() + 60 * 1000;
+        localStorage.setItem("otpBlockUntil", String(blockTime));
+        setCountdown(60);
+        setTimeout(() => otpRefs.current[0]?.focus(), 200);
+        return;
+      }
+
       if (
         msg.toLowerCase().includes("blocked") ||
         msg.toLowerCase().includes("too many attempts") ||
@@ -414,37 +423,55 @@ function LoginPopup({
           )}
 
           {/* ✅ MOBILE INPUT */}
-          <div className="mb-4">
-            <label className="block text-sm mb-2 text-primary/70">
-              Mobile number
-            </label>
+          {!otpSent ? (
+            <div className="mb-4">
+              <label className="block text-sm mb-2 text-primary/70">
+                Mobile number
+              </label>
 
-            <div className="flex items-center border rounded-md border-accent-primary">
-              <span className="pl-4 pr-2 text-primary/60">+91-</span>
+              <div className="flex items-center border rounded-md border-accent-primary">
+                <span className="pl-4 pr-2 text-primary/60">+91-</span>
 
-              <input
-                maxLength={10}
-                placeholder="9999999999"
-                onInput={(e) => {
-                  e.target.value = e.target.value.replace(/\D/g, "");
-                }}
-                {...register("phoneNumber", {
-                  required: "Mobile number is required",
-                  minLength: {
-                    value: 10,
-                    message: "Mobile must be 10 digits",
-                  },
-                })}
-                className="w-full text-primary py-3 px-2 outline-none bg-transparent"
-              />
+                <input
+                  maxLength={10}
+                  placeholder="9999999999"
+                  onInput={(e) => {
+                    e.target.value = e.target.value.replace(/\D/g, "");
+                  }}
+                  {...register("phoneNumber", {
+                    required: "Mobile number is required",
+                    minLength: {
+                      value: 10,
+                      message: "Mobile must be 10 digits",
+                    },
+                  })}
+                  className="w-full text-primary py-3 px-2 outline-none bg-transparent"
+                />
+              </div>
+
+              {errors.phoneNumber && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.phoneNumber.message}
+                </p>
+              )}
             </div>
-
-            {errors.phoneNumber && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.phoneNumber.message}
-              </p>
-            )}
-          </div>
+          ) : (
+            <div className="mb-4 flex items-center justify-between bg-primary/5 border border-primary/10 rounded-lg p-3">
+              <div>
+                <p className="text-xs text-third">OTP sent to</p>
+                <p className="text-sm font-semibold text-primary">
+                  +91 {getValues("phoneNumber")}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setOtpSent(false)}
+                className="text-xs font-semibold text-primary hover:underline cursor-pointer bg-transparent border-none outline-none"
+              >
+                Change
+              </button>
+            </div>
+          )}
 
           {otpSent && (
             <>
@@ -563,7 +590,26 @@ function LoginPopup({
 
               {/* TERMS */}
               <div className="text-[10px] text-primary/50 mt-6 text-center">
-                By logging in, you agree to Reecomms Privacy Policy & Terms
+                By logging in, you agree to Reecomm&apos;s{" "}
+                <a
+                  href="/privacy-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-primary transition-colors font-medium"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Privacy Policy
+                </a>{" "}
+                &amp;{" "}
+                <a
+                  href="/terms-and-conditions"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-primary transition-colors font-medium"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Terms
+                </a>
               </div>
             </>
           )}

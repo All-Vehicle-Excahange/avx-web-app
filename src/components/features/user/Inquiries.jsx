@@ -105,7 +105,7 @@ function Inquiries() {
             ) : (
               <>
                 <h3 className="text-xl font-bold mb-2">
-                  No {activeType.toLowerCase()} inquiries found.
+                  No {activeType.replace(/_/g, " ").toLowerCase()} inquiries found.
                 </h3>
                 <p className="text-third max-w-sm">
                   There are currently no inquiries with this status.

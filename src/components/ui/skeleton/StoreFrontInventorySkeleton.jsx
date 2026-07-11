@@ -7,7 +7,7 @@ import VehicleCardSkeleton from "./VehicleCardSkeleton";
  */
 export default function StoreFrontInventorySkeleton() {
   return (
-    <section className="w-full container mt-2! rounded-2xl p-6 space-y-6">
+    <section className="w-full container mt-2! rounded-none sm:rounded-2xl pl-0! pr-0 py-4 sm:pt-6 sm:pb-6 sm:pr-6 sm:pl-0! space-y-6">
       {/* Filter bar + Sort */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="flex flex-wrap gap-2">

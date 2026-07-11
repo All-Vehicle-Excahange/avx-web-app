@@ -1,13 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
-import {
-  Mail,
-  MessageCircle,
-  Instagram,
-  Facebook,
-  X,
-  Check,
-} from "lucide-react";
+import { X } from "lucide-react";
 
 export default function SharePopup({
   isOpen,
@@ -85,8 +78,7 @@ export default function SharePopup({
   const shareItems = [
     {
       label: "Facebook",
-      icon: Facebook,
-      bgClass: "bg-[#1877F2]",
+      imageSrc: "/social-icons/facebook.png",
       onClick: () =>
         window.open(
           `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
@@ -95,23 +87,20 @@ export default function SharePopup({
     },
     {
       label: "WhatsApp",
-      icon: MessageCircle,
-      bgClass: "bg-[#25D366]",
+      imageSrc: "/social-icons/whatsaap.png",
       onClick: () => window.open(`https://wa.me/?text=${shareText}`, "_blank"),
     },
     {
       label: "Instagram",
-      icon: Instagram,
-      bgClass: "bg-linear-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888]",
+      imageSrc: "/social-icons/instagram.png",
       onClick: () => {
         navigator.clipboard.writeText(finalShareUrl);
         window.open("https://www.instagram.com/", "_blank");
       }
     },
     {
-      label: "Email",
-      icon: Mail,
-      bgClass: "bg-gray-500",
+      label: "Gmail",
+      imageSrc: "/social-icons/gmail.png",
       onClick: () => {
         window.location.href = `mailto:?subject=${encodedTitle}&body=${encodeURIComponent(
           `${title}\n\n${finalShareUrl}`
@@ -154,15 +143,18 @@ export default function SharePopup({
         <div className="flex overflow-x-auto gap-6 pb-6 pt-2 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           <style>{`.scrollbar-hide::-webkit-scrollbar { display: none; }`}</style>
           {shareItems.map((item, index) => {
-            const Icon = item.icon;
             return (
               <button
                 key={index}
                 onClick={item.onClick}
                 className="flex flex-col items-center gap-3 shrink-0 group cursor-pointer border-none bg-transparent"
               >
-                <div className={`flex h-16 w-16 items-center justify-center rounded-full text-white ${item.bgClass} transition-transform duration-300 group-hover:scale-105 shadow-lg`}>
-                  <Icon className="h-7 w-7" />
+                <div className="flex h-16 w-16 items-center justify-center transition-transform duration-300 group-hover:scale-105 drop-shadow-md">
+                  <img
+                    src={item.imageSrc}
+                    alt={item.label}
+                    className="h-full w-full object-contain"
+                  />
                 </div>
                 <span className="text-[13px] font-medium text-white/90">
                   {item.label}

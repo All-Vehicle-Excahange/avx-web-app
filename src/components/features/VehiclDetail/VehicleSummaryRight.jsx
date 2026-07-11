@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import LoginPopup from "@/components/auth/LoginPopup";
 import SendInquaryPopup from "./SendInquaryPopup";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getInquiryEligibilityQuery } from "@/queries/vehicle.queries";
 import SignupPopup from "@/components/auth/SignupPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
@@ -20,6 +20,7 @@ export default function VehicleSummaryRight({
   sponsored,
   billingType,
 }) {
+  const queryClient = useQueryClient();
   const vehicleId = vehicle?.id;
   const vehicleOwnerRole = vehicle?.vehicleOwner?.userRole || "USER";
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -51,6 +52,15 @@ export default function VehicleSummaryRight({
 
   const handleInquirySuccess = () => {
     setLocalInquiryCount((prev) => prev + 1);
+    
+    // Invalidate inquiry caches to reflect the new inquiry elsewhere immediately
+    queryClient.invalidateQueries({ queryKey: ["inquiries"] });
+    queryClient.invalidateQueries({ queryKey: ["my-inquiries"] });
+    queryClient.invalidateQueries({ queryKey: ["inquiries-infinite"] });
+    queryClient.invalidateQueries({ queryKey: ["my-inquiries-infinite"] });
+    
+    // Refresh eligibility state so it knows we have an active inquiry
+    refetchEligibility();
   };
 
   const handleRequestInquiry = async () => {
@@ -289,7 +299,7 @@ export default function VehicleSummaryRight({
                 }
               }}
             >
-              Request Vehicle
+              Send Inquiry 
             </Button>
 
             <Button

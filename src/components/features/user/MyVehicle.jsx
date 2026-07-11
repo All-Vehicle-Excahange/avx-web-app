@@ -71,11 +71,12 @@ function MyVehicle() {
   useEffect(() => {
     if (activeType === "all" && inventoryData?.pages?.[0]) {
       const page = inventoryData.pages[0];
-      const total = page.pagination?.totalElements 
-                 || page.pageResponse?.totalElements 
-                 || page.totalElements 
-                 || (page.data && page.data.length)
-                 || 0;
+      const total =
+        page.pagination?.totalElements ||
+        page.pageResponse?.totalElements ||
+        page.totalElements ||
+        (page.data && page.data.length) ||
+        0;
       setTotalPosted(total);
     }
   }, [activeType, inventoryData]);
@@ -149,18 +150,24 @@ function MyVehicle() {
 
           <div className="flex justify-between items-center mb-4">
             <div>
-              <h3 className="text-base font-bold text-primary">Vehicle Listing Limit</h3>
-              <p className="text-third text-xs mt-1">You can post up to 3 vehicles as a normal seller.</p>
+              <h3 className="text-base font-bold text-primary">
+                Vehicle Listing Limit
+              </h3>
+              <p className="text-third text-xs mt-1">
+                You can post up to 3 vehicles as a normal seller.
+              </p>
             </div>
             <div className="text-right">
               <div className="flex items-baseline gap-1">
-                <span className="text-xl font-bold text-primary">{totalPosted}</span>
+                <span className="text-xl font-bold text-primary">
+                  {totalPosted}
+                </span>
                 <span className="text-third text-sm">/ 3</span>
               </div>
             </div>
           </div>
           <div className="w-full bg-primary/10 h-1.5 rounded-full overflow-hidden">
-            <div 
+            <div
               className="bg-primary h-full rounded-full transition-all duration-700 ease-out"
               style={{ width: `${(Math.min(totalPosted, 3) / 3) * 100}%` }}
             />
@@ -234,9 +241,13 @@ function MyVehicle() {
         <div className="flex flex-col items-center justify-center py-16 text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5">
           {activeType === "all" ? (
             <>
-              <h3 className="text-xl font-bold mb-2">No vehicles listed yet</h3>
+              <h3 className="text-xl font-bold mb-2">
+                Ready to sell your vehicle?
+              </h3>
               <p className="text-third mb-6">
-                Sell your first vehicle on Reecomm.
+                Reach verified buyers, list for free, and sell directly — no
+                middlemen, no broker fees. You can have 1 active listing at a
+                time, up to 3 vehicles total.
               </p>
               <Button
                 onClick={() => {

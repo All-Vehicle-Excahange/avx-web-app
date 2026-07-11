@@ -160,7 +160,7 @@ export default function Review() {
   if (reviewsLoading) return <StoreFrontReviewSkeleton />;
 
   return (
-    <section className="container mt-4 text-primary py-6 sm:py-10">
+    <section className="container mt-4 text-primary py-6 sm:py-10 pl-0! sm:pl-0!">
       <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-6 lg:gap-12">
         {/* ================= LEFT ================= */}
         <div className="space-y-6 lg:sticky lg:top-24 h-fit">
