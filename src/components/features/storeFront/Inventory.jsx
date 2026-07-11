@@ -54,7 +54,7 @@ export default function Inventory() {
 
 
     return (
-        <section className="w-full container mt-2! border-0 sm:border border-third/40 rounded-none sm:rounded-2xl px-0 py-4 sm:p-6 space-y-6">
+        <section className="w-full container mt-2! border-0  rounded-none sm:rounded-2xl pl-0! pr-0 py-4 sm:pt-6 sm:pb-6 sm:pr-6 sm:pl-0! space-y-6">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <div className="flex flex-wrap gap-2">
                     {vehicleTypes.map((type) => (

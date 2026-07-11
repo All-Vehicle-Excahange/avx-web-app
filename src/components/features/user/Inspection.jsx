@@ -1,11 +1,12 @@
 import { useState } from "react";
 import InspectionCard from "@/components/ui/InspectionCard";
-import Image from "next/image";
 import React from "react";
 import Button from "@/components/ui/button";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/stores/useAuthStore";
 import InspectionTrackingModal from "./InspectionTrackingModal";
+import { useRouter } from "next/router";
+import { FileText, UserCheck, Video } from "lucide-react";
 import {
   getAllRequestedInspectionInfiniteQuery,
   getAllInsprectionRequestInfiniteQuery,
@@ -16,6 +17,7 @@ import {
 } from "@/services/inspection.service";
 
 function Inspection() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("sent");
   const [localStatuses, setLocalStatuses] = useState({});
   const [selectedInspection, setSelectedInspection] = useState(null);
@@ -69,16 +71,62 @@ function Inspection() {
 
   return (
     <>
-      <section className="w-full container rounded-2xl  p-6 space-y-6">
-        <div className="relative w-full overflow-hidden rounded-xl">
-          <Image
-            src={"/about2.png"}
-            alt={`Banner`}
-            width={1200}
-            height={600}
-            className="w-full h-auto object-cover"
-            priority
-          />
+      <section className="w-full container rounded-2xl p-6 space-y-6">
+        {/* NEW INSPECTION HEADER CARD */}
+        <div className="w-full bg-fourth text-white rounded-2xl overflow-hidden shadow-lg border border-fourth">
+          {/* Top section: 3 Columns */}
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/20">
+            {/* Column 1 */}
+            <div className="p-6 md:p-8 flex flex-col items-start space-y-3">
+              <div className="p-3 bg-white/10 rounded-xl">
+                <FileText className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold tracking-wide">Full condition report</h3>
+              <p className="text-white/80 text-sm leading-relaxed">
+                Scored across 200+ checkpoints with photo evidence.
+              </p>
+            </div>
+
+            {/* Column 2 */}
+            <div className="p-6 md:p-8 flex flex-col items-start space-y-3">
+              <div className="p-3 bg-white/10 rounded-xl">
+                <UserCheck className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold tracking-wide">Independent inspector</h3>
+              <p className="text-white/80 text-sm leading-relaxed">
+                Not the seller. Not the consultant. Assigned by Reecomm.
+              </p>
+            </div>
+
+            {/* Column 3 */}
+            <div className="p-6 md:p-8 flex flex-col items-start space-y-3">
+              <div className="p-3 bg-white/10 rounded-xl">
+                <Video className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold tracking-wide">Live video option</h3>
+              <p className="text-white/80 text-sm leading-relaxed">
+                Walk through the vehicle live with the inspector before committing.
+              </p>
+            </div>
+          </div>
+
+          {/* Bottom section: Banner */}
+          <div className="border-t border-white/20 p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-white/5">
+            <div>
+              <h4 className="text-xl md:text-2xl font-bold tracking-wide">
+                Inspection report from ₹699. Video call from ₹899.
+              </h4>
+              <p className="text-white/85 text-sm mt-1">
+                The cost of not knowing is usually higher.
+              </p>
+            </div>
+            <button
+              onClick={() => router.push("/search")}
+              className="px-6 py-3 border border-white rounded-xl text-white font-medium hover:bg-white/10 transition-all duration-300 shadow-sm cursor-pointer whitespace-nowrap"
+            >
+              Get this vehicle inspected
+            </button>
+          </div>
         </div>
 
         {/* TABS */}

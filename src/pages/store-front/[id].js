@@ -5,9 +5,15 @@ import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import { getStoreFrontByUsernameQuery } from "@/queries/user.queries";
 import { getStoreFrontByUsername } from "@/services/user.service";
+import StoreFrontHeroSkeleton from "@/components/ui/skeleton/StoreFrontHeroSkeleton";
 
 function StoreFrontPage({ seo }) {
   const router = useRouter();
+  
+  if (router.isFallback) {
+    return <StoreFrontHeroSkeleton />;
+  }
+
   const { id } = router.query || {};
 
   const { data: storeDetails } = useQuery({
@@ -69,7 +75,7 @@ export default StoreFrontPage;
 export async function getStaticPaths() {
   return {
     paths: [],
-    fallback: 'blocking',
+    fallback: true,
   };
 }
 

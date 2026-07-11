@@ -390,7 +390,7 @@ function Register() {
         >
           I agree to the{" "}
           <a
-            href="/terms"
+            href="/terms-and-conditions"
             className="text-primary hover:underline"
             target="_blank"
             rel="noopener noreferrer"
@@ -399,7 +399,7 @@ function Register() {
           </a>{" "}
           and{" "}
           <a
-            href="/privacy"
+            href="/privacy-policy"
             className="text-primary hover:underline"
             target="_blank"
             rel="noopener noreferrer"

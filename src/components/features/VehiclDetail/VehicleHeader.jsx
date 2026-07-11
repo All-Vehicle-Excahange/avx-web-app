@@ -168,7 +168,7 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
           {/* SHARE */}
           <button
             onClick={() => setIsShareOpen(true)}
-            className="bg-primary/20 h-10 w-10 items-center justify-center rounded-full p-0 text-primary/80 hover:text-primary cursor-pointer shrink-0"
+            className="bg-primary/20 flex h-10 w-10 items-center justify-center rounded-full p-0 text-primary/80 hover:text-primary cursor-pointer shrink-0"
           >
             <Share2 className="h-6 w-6" />
           </button>

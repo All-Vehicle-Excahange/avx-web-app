@@ -129,7 +129,13 @@ export default function Button({
   // If href exists → Link
   if (href && !isLocked) {
     return (
-      <Link prefetch={false} href={href} scroll={true} className={classes}>
+      <Link
+        prefetch={false}
+        href={href}
+        scroll={true}
+        className={classes}
+        {...props}
+      >
         {Content}
       </Link>
     );

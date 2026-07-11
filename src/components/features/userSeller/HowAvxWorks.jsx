@@ -70,7 +70,8 @@ export default function HowAvxWorks() {
         </h2>
 
         <p className="mt-4 text-third max-w-lg">
-          List your vehicle as an individual seller — no dealership, no middleman.
+          List your vehicle as an individual seller — no dealership, no
+          middleman.
         </p>
       </div>
 
@@ -82,7 +83,7 @@ export default function HowAvxWorks() {
           <button
             key={i}
             onClick={() => setActiveStep(i)}
-            className="flex flex-col items-center gap-2 w-full"
+            className="flex flex-col items-center gap-2 w-full cursor-pointer"
           >
             <div
               className={`w-12 h-12 flex items-center justify-center rounded-full border text-sm font-semibold transition
@@ -133,7 +134,7 @@ export default function HowAvxWorks() {
             <button
               onClick={() => setActiveStep((p) => Math.max(0, p - 1))}
               disabled={activeStep === 0}
-              className="w-10 h-10 flex items-center justify-center rounded-full
+              className="w-10 h-10 flex cursor-pointer items-center justify-center rounded-full
     border border-primary/40 text-primary/60
     hover:text-primary hover:border-primary/30 
     disabled:opacity-70 transition"
@@ -147,7 +148,7 @@ export default function HowAvxWorks() {
                 setActiveStep((p) => Math.min(steps.length - 1, p + 1))
               }
               disabled={activeStep === steps.length - 1}
-              className="w-10 h-10 flex items-center justify-center rounded-full
+              className="w-10 h-10 flex cursor-pointer items-center justify-center rounded-full
     border border-primary text-primary
      hover:border-third
     disabled:opacity-30 transition"
@@ -180,7 +181,9 @@ export default function HowAvxWorks() {
       <div className="mt-8 p-5 rounded-2xl border border-primary/10 bg-primary/3 max-w-2xl mx-auto flex items-start gap-3">
         <Info className="w-5 h-5 text-primary shrink-0 mt-0.5" />
         <p className="text-xs text-third/80 leading-relaxed">
-          <strong>Important Seller Rule:</strong> Individual sellers can list 1 active vehicle at a time. You can sell up to 3 vehicles on Reecomm. Once a listing is marked as sold, your next slot opens immediately.
+          <strong>Important Seller Rule:</strong> Individual sellers can list 1
+          active vehicle at a time. You can sell up to 3 vehicles on Reecomm.
+          Once a listing is marked as sold, your next slot opens immediately.
         </p>
       </div>
     </section>

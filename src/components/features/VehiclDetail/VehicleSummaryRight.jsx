@@ -289,7 +289,7 @@ export default function VehicleSummaryRight({
                 }
               }}
             >
-              Request Vehicle
+              Send Inquiry 
             </Button>
 
             <Button

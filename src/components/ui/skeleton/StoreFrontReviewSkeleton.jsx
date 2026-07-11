@@ -7,7 +7,7 @@ import SkeletonBox from "./SkeletonBox";
  */
 export default function StoreFrontReviewSkeleton() {
   return (
-    <section className="container mt-4 text-primary py-6 sm:py-10">
+    <section className="container mt-4 text-primary py-6 sm:py-10 pl-0! sm:pl-0!">
       <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-6 lg:gap-12">
 
         {/* LEFT — Rating Summary + Write Review */}
