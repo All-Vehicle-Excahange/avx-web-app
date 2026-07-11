@@ -14,12 +14,14 @@ export const useAuthStore = create((set) => ({
   isSignupPopupOpen: false,
   isCompleteProfilePopupOpen: false,
   prefilledPhoneNumber: "",
+  authPopupDefaultTab: "personal",
 
-  openLoginPopup: () =>
+  openLoginPopup: (defaultTab = "personal") =>
     set({
       isLoginPopupOpen: true,
       isSignupPopupOpen: false,
       isCompleteProfilePopupOpen: false,
+      authPopupDefaultTab: defaultTab,
     }),
 
   closeLoginPopup: () =>

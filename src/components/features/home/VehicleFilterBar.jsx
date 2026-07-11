@@ -515,26 +515,209 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           outline: 1px solid #525252 !important;
           outline-offset: -1px;
         }
+
+        /* ====== LIQUID GLASS SEARCH BAR – DESKTOP ====== */
+        .lg-glass-bar {
+          position: relative;
+          width: 100%;
+          max-width: 1400px;
+          border-radius: 56px;
+          background: linear-gradient(
+            135deg,
+            rgba(255,255,255,0.22) 0%,
+            rgba(255,255,255,0.10) 40%,
+            rgba(255,255,255,0.06) 70%,
+            rgba(255,255,255,0.14) 100%
+          );
+          backdrop-filter: blur(32px) saturate(180%);
+          -webkit-backdrop-filter: blur(32px) saturate(180%);
+          border: 1.5px solid rgba(255,255,255,0.28);
+          box-shadow:
+            0 2px 0 0 rgba(255,255,255,0.35) inset,
+            0 -1px 0 0 rgba(0,0,0,0.10) inset,
+            0 24px 64px rgba(0,0,0,0.28),
+            0 8px 24px rgba(0,0,0,0.20),
+            0 0 0 0.5px rgba(255,255,255,0.12);
+          overflow: visible;
+          transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Glossy top-shine reflection */
+        .lg-glass-bar::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 56px;
+          background: linear-gradient(
+            180deg,
+            rgba(255,255,255,0.30) 0%,
+            rgba(255,255,255,0.08) 40%,
+            transparent 60%
+          );
+          pointer-events: none;
+          z-index: 1;
+        }
+
+        /* Animated light-sweep reflection – uses opacity pulse, no horizontal overflow */
+        .lg-glass-bar::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 56px;
+          background: linear-gradient(
+            105deg,
+            transparent 0%,
+            rgba(255,255,255,0.10) 50%,
+            transparent 100%
+          );
+          animation: glassPulse 5s ease-in-out infinite;
+          pointer-events: none;
+          z-index: 2;
+        }
+
+        @keyframes glassPulse {
+          0%, 100% { opacity: 0; }
+          50%       { opacity: 1; }
+        }
+
+        .lg-glass-inner {
+          position: relative;
+          z-index: 10;
+          width: 100%;
+          height: 70px;
+        }
+
+        /* Filter section hover glass highlight */
+        .lg-filter-section {
+          flex: 1;
+          position: relative;
+          padding-left: 1rem;
+          padding-right: 1rem;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          border-radius: 52px;
+          cursor: pointer;
+          transition: background 0.25s ease;
+          min-width: 0;
+        }
+
+        .lg-filter-section:first-child {
+          padding-left: 1.25rem;
+        }
+
+        .lg-filter-section:hover {
+          background: rgba(255,255,255,0.14);
+        }
+
+        .lg-filter-section.active {
+          background: rgba(255,255,255,0.20);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.30), inset 0 -1px 0 rgba(0,0,0,0.05);
+        }
+
+        /* Labels – original style: medium-weight, normal case, primary color */
+        .lg-label {
+          font-size: 14px;
+          font-weight: 600;
+          color: #fff;
+          white-space: nowrap;
+          line-height: 1.2;
+        }
+
+        /* Values – original style: text-sm font-medium */
+        .lg-value {
+          font-size: 13px;
+          font-weight: 500;
+          color: rgba(255,255,255,0.85);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .lg-value.placeholder {
+          font-weight: 400;
+          color: rgba(255,255,255,0.45);
+        }
+
+        .lg-value.error {
+          color: #f87171;
+          font-weight: 500;
+        }
+
+        /* Thin translucent divider */
+        .lg-divider {
+          width: 1px;
+          height: 36px;
+          background: rgba(255,255,255,0.20);
+          flex-shrink: 0;
+          margin: 0 2px;
+          border-radius: 1px;
+        }
+
+        /* Search button */
+        .lg-search-btn {
+          width: 52px;
+          height: 52px;
+          border-radius: 50%;
+          background: rgba(255,255,255,0.96);
+          border: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          flex-shrink: 0;
+          box-shadow:
+            0 4px 16px rgba(0,0,0,0.22),
+            0 1px 0 rgba(255,255,255,0.9) inset;
+          transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
+          color: #111;
+        }
+
+        .lg-search-btn:hover {
+          transform: scale(1.05);
+          box-shadow:
+            0 8px 28px rgba(0,0,0,0.30),
+            0 1px 0 rgba(255,255,255,0.9) inset;
+        }
+
+        .lg-search-btn:active {
+          transform: scale(0.95);
+        }
+
+        /* Input inside glass bar – matches .lg-value style */
+        .lg-input {
+          width: 100%;
+          background: transparent;
+          border: none;
+          outline: none;
+          font-size: 13px;
+          font-weight: 500;
+          color: rgba(255,255,255,0.85);
+        }
+
+        .lg-input::placeholder {
+          color: rgba(255,255,255,0.40);
+          font-weight: 500;
+        }
       `}</style>
       <div className="hidden lg:flex absolute bottom-[20vh] left-0 right-0 z-30 justify-center items-center px-4">
-        <div className="w-full max-w-[1400px] rounded-full bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] relative overflow-visible transition-all duration-500">
+        <div className="lg-glass-bar">
           <div
             ref={containerRef}
-            className="inner-container w-full h-16 relative"
+            className="lg-glass-inner"
           >
-            <div className="relative z-10 flex items-center w-full h-full pr-2 text-primary">
+            <div className="relative z-10 flex items-center w-full h-full pr-2 pl-0 text-primary gap-0">
               {/* SECTION: LOCATION */}
               <div
-                className={`flex-1 relative pl-5 pr-4 h-full flex flex-col justify-center rounded-full transition-colors cursor-pointer ${activeTab === "location" ? "bg-white/20" : "hover:bg-white/10"}`}
+                className={`lg-filter-section${activeTab === "location" ? " active" : ""}`}
                 onClick={() => handleActiveTabChange("location")}
               >
-                <div className="text-md font-semibold text-primary tracking-wide">
-                  Location
-                </div>
+                <div className="lg-label">Location</div>
                 <input
                   type="text"
                   placeholder="Search city"
-                  className="w-full bg-transparent border-none outline-none text-sm text-gray-200 placeholder-gray-400 font-medium text-left truncate"
+                  className="lg-input"
                   value={location}
                   onChange={handleLocationChange}
                 />
@@ -582,19 +765,15 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 )}
               </div>
 
-              <div className="w-px h-8 bg-white/30 my-auto mx-1" />
+              <div className="lg-divider" />
 
               {/* SECTION: VEHICLE TYPE */}
               <div
-                className={`flex-1 relative px-6 h-full flex flex-col justify-center rounded-full transition-colors cursor-pointer ${activeTab === "vehicle" ? "bg-white/20" : "hover:bg-white/10"}`}
+                className={`lg-filter-section${activeTab === "vehicle" ? " active" : ""}`}
                 onClick={() => handleActiveTabChange("vehicle")}
               >
-                <div className="text-md font-semibold text-primary tracking-wide">
-                  Vehicle Type
-                </div>
-                <div
-                  className={`text-sm font-medium ${vehicleTypeError ? "text-red-500" : "text-gray-200"}`}
-                >
+                <div className="lg-label">Vehicle Type</div>
+                <div className={vehicleTypeError ? "lg-value error" : (vehicleType ? "lg-value" : "lg-value placeholder")}>
                   {vehicleTypeError ? "* Required" : vehicleType || "Add type"}
                 </div>
                 {activeTab === "vehicle" && (
@@ -619,20 +798,18 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 )}
               </div>
 
-              <div className="w-px h-8 bg-white/30 my-auto mx-1" />
+              <div className="lg-divider" />
 
               {/* CONDITIONAL SECTIONS */}
               {internalActiveType === "consult" ? (
                 <>
                   {/* PRICE RANGE */}
                   <div
-                    className={`flex-1 relative px-6 h-full flex flex-col justify-center rounded-full transition-colors cursor-pointer ${activeTab === "priceRange" ? "bg-white/20" : "hover:bg-white/10"}`}
+                    className={`lg-filter-section${activeTab === "priceRange" ? " active" : ""}`}
                     onClick={() => handleActiveTabChange("priceRange")}
                   >
-                    <div className="text-md font-semibold text-primary tracking-wide">
-                      Price Range
-                    </div>
-                    <div className="text-sm font-medium text-gray-400 truncate">
+                    <div className="lg-label">Price Range</div>
+                    <div className={priceRange ? "lg-value" : "lg-value placeholder"}>
                       {priceRange || "Select price"}
                     </div>
                     {activeTab === "priceRange" && (
@@ -653,16 +830,14 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       </div>
                     )}
                   </div>
-                  <div className="w-px h-8 bg-white/30 my-auto mx-1" />
+                  <div className="lg-divider" />
                   {/* SERVICE */}
                   <div
-                    className={`flex-1 relative px-6 py-3 rounded-full transition-colors cursor-pointer ${activeTab === "service" ? "bg-white/20" : "hover:bg-white/10"}`}
+                    className={`lg-filter-section${activeTab === "service" ? " active" : ""}`}
                     onClick={() => handleActiveTabChange("service")}
                   >
-                    <div className="text-md font-semibold text-primary tracking-wide">
-                      Service
-                    </div>
-                    <div className="text-sm font-medium text-gray-400 truncate">
+                    <div className="lg-label">Service</div>
+                    <div className={service ? "lg-value" : "lg-value placeholder"}>
                       {service || "Select service"}
                     </div>
                     {activeTab === "service" && (
@@ -691,16 +866,14 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       </div>
                     )}
                   </div>
-                  <div className="w-px h-8 bg-white/30 my-auto mx-1" />
+                  <div className="lg-divider" />
                   {/* AVAILABILITY */}
                   <div
-                    className={`flex-1 relative px-6 py-3 rounded-full transition-colors cursor-pointer ${activeTab === "availability" ? "bg-white/20" : "hover:bg-white/10"}`}
+                    className={`lg-filter-section${activeTab === "availability" ? " active" : ""}`}
                     onClick={() => handleActiveTabChange("availability")}
                   >
-                    <div className="text-md font-semibold text-primary tracking-wide">
-                      Availability
-                    </div>
-                    <div className="text-sm font-medium text-gray-400 truncate">
+                    <div className="lg-label">Availability</div>
+                    <div className={availability ? "lg-value" : "lg-value placeholder"}>
                       {availability || "Select availability"}
                     </div>
                     {activeTab === "availability" && (
@@ -726,7 +899,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 <>
                   {/* BODY TYPE */}
                   <div
-                    className={`flex-1 relative px-6 h-full flex flex-col justify-center rounded-full transition-colors cursor-pointer ${activeTab === "bodyType" ? "bg-white/20" : "hover:bg-white/10"}`}
+                    className={`lg-filter-section${activeTab === "bodyType" ? " active" : ""}`}
                     onClick={() => {
                       if (!vehicleType) {
                         handleActiveTabChange("vehicle");
@@ -735,10 +908,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       handleActiveTabChange("bodyType");
                     }}
                   >
-                    <div className="text-md font-semibold text-primary tracking-wide">
-                      Body Type
-                    </div>
-                    <div className="text-sm font-medium text-gray-200">
+                    <div className="lg-label">Body Type</div>
+                    <div className={bodyType ? "lg-value" : "lg-value placeholder"}>
                       {bodyType || "Add type"}
                     </div>
                     {activeTab === "bodyType" && (
@@ -762,16 +933,14 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       </div>
                     )}
                   </div>
-                  <div className="w-px h-8 bg-white/30 my-auto mx-1" />
+                  <div className="lg-divider" />
                   {/* FUEL TYPE */}
                   <div
-                    className={`flex-1 relative px-6 h-full flex flex-col justify-center rounded-full transition-colors cursor-pointer ${activeTab === "fuel" ? "bg-white/20" : "hover:bg-white/10"}`}
+                    className={`lg-filter-section${activeTab === "fuel" ? " active" : ""}`}
                     onClick={() => handleActiveTabChange("fuel")}
                   >
-                    <div className="text-md font-semibold text-primary tracking-wide">
-                      Fuel Type
-                    </div>
-                    <div className="text-sm font-medium text-gray-200">
+                    <div className="lg-label">Fuel Type</div>
+                    <div className={fuelType ? "lg-value" : "lg-value placeholder"}>
                       {fuelType || "Select fuel"}
                     </div>
                     {activeTab === "fuel" && (
@@ -792,20 +961,18 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       </div>
                     )}
                   </div>
-                  <div className="w-px h-8 bg-white/30 my-auto mx-1" />
+                  <div className="lg-divider" />
                   {/* BRAND (INLINE SEARCH) */}
                   <div
-                    className={`flex-1 relative px-6 h-full flex flex-col justify-center rounded-full transition-colors cursor-pointer ${activeTab === "brand" ? "bg-white/20" : "hover:bg-white/10"}`}
+                    className={`lg-filter-section${activeTab === "brand" ? " active" : ""}`}
                     onClick={() => handleActiveTabChange("brand")}
                   >
-                    <div className="text-md font-semibold text-primary tracking-wide">
-                      Brand
-                    </div>
+                    <div className="lg-label">Brand</div>
                     <input
                       ref={brandInputRef}
                       type="text"
                       placeholder={brand || "Search brand"}
-                      className="w-full bg-transparent border-none outline-none text-sm text-gray-200 placeholder-gray-400 font-medium truncate"
+                      className="lg-input"
                       value={brandSearch}
                       onChange={(e) => setBrandSearch(e.target.value)}
                       onClick={(e) => {
@@ -835,16 +1002,14 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       </div>
                     )}
                   </div>
-                  <div className="w-px h-8 bg-white/30 my-auto mx-1" />
+                  <div className="lg-divider" />
                   {/* BUDGET */}
                   <div
-                    className={`flex-1 relative px-6 h-full flex flex-col justify-center rounded-full transition-colors cursor-pointer ${activeTab === "budget" ? "bg-white/20" : "hover:bg-white/10"}`}
+                    className={`lg-filter-section${activeTab === "budget" ? " active" : ""}`}
                     onClick={() => handleActiveTabChange("budget")}
                   >
-                    <div className="text-md font-semibold text-primary tracking-wide">
-                      Budget
-                    </div>
-                    <div className="text-sm font-medium text-gray-400 truncate">
+                    <div className="lg-label">Budget</div>
+                    <div className={budget ? "lg-value" : "lg-value placeholder"}>
                       {budget || "Select budget"}
                     </div>
                     {activeTab === "budget" && (
@@ -868,12 +1033,12 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 </>
               )}
 
-              <div className="pl-2 pr-2">
+              <div className="pl-2 pr-2 flex items-center">
                 <button
                   onClick={handleSearch}
-                  className="bg-white cursor-pointer hover:bg-gray-200 text-black p-3 rounded-full shadow-lg transition-all hover:scale-105 active:scale-95"
+                  className="lg-search-btn"
                 >
-                  <Search size={20} strokeWidth={3} />
+                  <Search size={20} strokeWidth={2.5} />
                 </button>
               </div>
             </div>

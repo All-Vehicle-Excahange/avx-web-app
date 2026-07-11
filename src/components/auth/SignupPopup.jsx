@@ -20,6 +20,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSuccess = () => { } }) {
   const prefilledPhoneNumber = useAuthStore((state) => state.prefilledPhoneNumber);
+  const defaultTab = useAuthStore((state) => state.authPopupDefaultTab);
 
   const {
     register,
@@ -32,7 +33,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
   } = useForm();
   const { push } = useRouter();
 
-  const [accountType, setAccountType] = useState("personal");
+  const [accountType, setAccountType] = useState(defaultTab || "personal");
 
   const [otp, setOtp] = useState(Array(6).fill(""));
   const [otpSent, setOtpSent] = useState(false);
@@ -48,6 +49,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
   // Check for active block on mount or when popup opens
   useEffect(() => {
     if (isOpen) {
+      setAccountType(defaultTab || "personal");
       const blockUntil = localStorage.getItem("otpBlockUntil");
       if (blockUntil) {
         const remaining = Math.ceil((Number(blockUntil) - Date.now()) / 1000);
@@ -274,10 +276,10 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
       if (!res?.error && (res?.success || res?.status)) {
         localStorage.removeItem("otpBlockUntil");
         setCountdown(0);
-        
+
         // Wait for onSuccess to complete (which might open CompleteProfilePopup)
         await onSuccess();
-        
+
         handleClosePopup();
       } else if (res?.error) {
         const msg = res?.message?.toLowerCase();
@@ -333,7 +335,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
 
   const modalContent = (
     <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={handleClosePopup} style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}>
-      <div className="relative flex w-full max-w-[900px] overflow-hidden rounded-2xl shadow-2xl bg-primary-white" onClick={(e) => e.stopPropagation()} style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}>
+      <div className="relative flex w-full max-w-[900px] max-h-[95vh] overflow-hidden rounded-2xl shadow-2xl bg-primary-white" onClick={(e) => e.stopPropagation()} style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}>
 
         <button
           onClick={handleClosePopup}
@@ -350,6 +352,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
             autoplay={{ delay: 5000, disableOnInteraction: false }}
             effect="fade"
             loop={true}
+            initialSlide={defaultTab === "consultant" ? 1 : 0}
             className="w-full h-full auth-swiper"
           >
             {/* Slide 1 - Buyer */}
@@ -363,7 +366,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-black/80" />
-                
+
                 <div className="absolute bottom-12 right-8 z-10 flex flex-col items-end text-right">
                   <div className="flex items-center gap-2 mb-1">
                     <div className="w-10 h-10 bg-fourth rounded-full flex items-center justify-center">
@@ -390,7 +393,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-black/80" />
-                
+
                 <div className="absolute bottom-12 right-8 z-10 flex flex-col items-end text-right">
                   <div className="flex items-center gap-2 mb-1">
                     <div className="w-10 h-10 bg-fourth rounded-full flex items-center justify-center">
@@ -417,7 +420,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-black/80" />
-                
+
                 <div className="absolute bottom-12 right-8 z-10 flex flex-col items-end text-right">
                   <div className="flex items-center gap-2 mb-1">
                     <div className="w-10 h-10 bg-fourth rounded-full flex items-center justify-center">
@@ -437,7 +440,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
 
         {/* RIGHT FORM */}
         <form
-          className="w-full md:w-7/12 p-8 md:p-12 bg-secondary flex flex-col justify-center"
+          className="w-full md:w-7/12 p-8 md:p-12 bg-secondary flex flex-col md:justify-center overflow-y-auto custom-scrollbar"
           onSubmit={(e) => {
             e.preventDefault();
             if (!otpSent) {
@@ -509,53 +512,53 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-              <input
-                placeholder="First Name"
-                {...register("firstName", {
-                  required: "First Name is required",
-                })}
-                className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
-              />
-              {errors.firstName && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.firstName.message}
-                </p>
-              )}
-            </div>
-            <div>
-              <input
-                placeholder="Last Name"
-                {...register("lastName", { required: "Last Name is required" })}
-                className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
-              />
-              {errors.lastName && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.lastName.message}
-                </p>
-              )}
-            </div>
-          </div>
+                  <input
+                    placeholder="First Name"
+                    {...register("firstName", {
+                      required: "First Name is required",
+                    })}
+                    className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
+                  />
+                  {errors.firstName && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.firstName.message}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <input
+                    placeholder="Last Name"
+                    {...register("lastName", { required: "Last Name is required" })}
+                    className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
+                  />
+                  {errors.lastName && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.lastName.message}
+                    </p>
+                  )}
+                </div>
+              </div>
 
-          <div className="mb-4">
-            <input
-              type="email"
-              placeholder="Email address"
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
-                  message: "Email must be in lowercase only",
-                },
-              })}
-              className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-          </>
+              <div className="mb-4">
+                <input
+                  type="email"
+                  placeholder="Email address"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
+                      message: "Email must be in lowercase only",
+                    },
+                  })}
+                  className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
+            </>
           )}
 
           <div className="mb-4">
@@ -605,9 +608,8 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
               variant="ghost"
               locked={!acceptedTerms || isLoading || countdown > 0}
               disabled={!acceptedTerms || countdown > 0}
-              className={`text-secondary w-full h-11 text-sm font-bold flex items-center justify-center gap-2 ${
-                !acceptedTerms ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+              className={`text-secondary w-full h-11 shrink-0 text-sm font-bold flex items-center justify-center gap-2 ${!acceptedTerms ? "opacity-50 cursor-not-allowed" : ""
+                }`}
             >
               {isLoading ? (
                 <Loader2 size={20} className="animate-spin" />
@@ -626,7 +628,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
                 Enter OTP sent to +91 {getValues("phone")}
               </p>
 
-              <div className="flex justify-center gap-2 sm:gap-4 mb-6">
+              <div className="flex justify-center gap-2 sm:gap-4 mb-6 shrink-0">
                 {otp.map((digit, index) => (
                   <input
                     key={index}
@@ -635,13 +637,13 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
                     value={digit}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                    className="w-10 h-10 sm:w-12 sm:h-12 text-center text-primary text-xl font-bold border rounded-lg border-accent-primary/20 outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary/50 transition-all p-0"
+                    className="w-10 h-10 sm:w-12 sm:h-12 text-center text-primary text-xl font-bold border rounded-lg border-accent-primary/20 outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary/50 transition-all p-0 shrink-0"
                   />
                 ))}
               </div>
 
               {/* Resend OTP */}
-              <div className="text-center text-xs text-primary/70 mb-4 mt-2">
+              <div className="text-center text-xs text-primary/70 mb-4 mt-2 shrink-0">
                 Didn&apos;t receive OTP?{" "}
                 <button
                   type="button"
@@ -657,7 +659,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
                 type="submit"
                 variant="ghost"
                 locked={isLoading}
-                className="text-secondary w-full h-11 text-sm font-bold flex items-center justify-center gap-2"
+                className="text-secondary w-full h-11 shrink-0 text-sm font-bold flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <Loader2 size={20} className="animate-spin" />
@@ -670,7 +672,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
 
           {/* ✅ GOOGLE SIGNUP BELOW */}
           {!otpSent && !isGoogleSignupFlow && (
-            <div className="mt-4">
+            <div className="mt-4 shrink-0">
               <div className="flex items-center mb-4">
                 <div className="flex-1 border-t border-accent-gray/30"></div>
                 <span className="px-3 text-xs text-primary/50">or register with Google</span>
@@ -678,7 +680,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
               </div>
               <Button
                 type="button"
-                className="w-full h-11 text-sm font-bold flex items-center justify-center gap-2 border border-accent-gray bg-transparent text-primary hover:border-accent-gray hover:text-primary hover:shadow-md transition-all"
+                className="w-full h-11 shrink-0 text-sm font-bold flex items-center justify-center gap-2 border border-accent-gray bg-transparent text-primary hover:border-accent-gray hover:text-primary hover:shadow-md transition-all"
                 onClick={handleGoogleSignIn}
                 disabled={isLoading || isGoogleLoading}
                 loading={isGoogleLoading}

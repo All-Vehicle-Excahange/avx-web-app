@@ -178,7 +178,7 @@ export default function ConsultantHeroSection() {
                 size="md"
                 onClick={() => {
                   if (!user) {
-                    openLoginPopup();
+                    openLoginPopup("consultant");
                   } else {
                     router.push("/consult/subscription");
                   }
