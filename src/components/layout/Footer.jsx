@@ -17,7 +17,6 @@ const footerLinks = {
     { label: "List your car", href: "/consult" },
     { label: "List your two-wheeler", href: "/consult" },
     { label: "Request an inspection", href: "/inspection-process" },
-    { label: "Seller pricing guide", href: "/consult/pricing" },
     { label: "RC transfer service", href: "#" },
     { label: "Doorstep inspection", href: "/inspection-process" },
   ],
@@ -26,7 +25,6 @@ const footerLinks = {
     { label: "Consultant pricing", href: "/consult/pricing" },
     { label: "Manage my inventory", href: "/consult/subscription" },
     { label: "Consultant success guide", href: "#" },
-    { label: "Partner with Reecomm", href: "#" },
   ],
   company: [
     { label: "About us", href: "/aboutus" },

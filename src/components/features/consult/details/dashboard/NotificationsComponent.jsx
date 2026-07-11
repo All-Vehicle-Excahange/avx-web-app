@@ -171,14 +171,14 @@ export default function NotificationsComponent({
             <div className="flex gap-1.5">
               <button
                 onClick={handleMarkAllAsRead}
-                className="w-7 h-7 rounded-md border border-third/30 flex items-center justify-center text-primary hover:bg-white/5 transition-colors"
+                className="cursor-pointer w-7 h-7 rounded-md border border-third/30 flex items-center justify-center text-primary hover:bg-white/5 transition-colors"
                 title="Mark all as read"
               >
                 <MailOpen size={13} />
               </button>
               <button
                 onClick={onClose}
-                className="w-7 h-7 rounded-md border border-third/30 flex items-center justify-center text-primary hover:bg-white/5 transition-colors md:hidden"
+                className="cursor-pointer w-7 h-7 rounded-md border border-third/30 flex items-center justify-center text-primary hover:bg-white/5 transition-colors md:hidden"
                 title="Close"
               >
                 <X size={13} />
@@ -190,13 +190,13 @@ export default function NotificationsComponent({
           <div className="flex gap-2 mb-5">
             <button
               onClick={() => setFilter("ALL")}
-              className={`px-4 py-1.5 text-xs font-semibold rounded-full border transition-colors ${filter === "ALL" ? "bg-primary text-secondary border-primary" : "border-third/30 text-primary hover:bg-white/5"}`}
+              className={`cursor-pointer px-4 py-1.5 text-xs font-semibold rounded-full border transition-colors ${filter === "ALL" ? "bg-primary text-secondary border-primary" : "border-third/30 text-primary hover:bg-white/5"}`}
             >
               All
             </button>
             <button
               onClick={() => setFilter("UNREAD")}
-              className={`px-4 py-1.5 text-xs font-semibold rounded-full border transition-colors ${filter === "UNREAD" ? "bg-primary text-secondary border-primary" : "border-third/30 text-primary hover:bg-white/5"}`}
+              className={`cursor-pointer px-4 py-1.5 text-xs font-semibold rounded-full border transition-colors ${filter === "UNREAD" ? "bg-primary text-secondary border-primary" : "border-third/30 text-primary hover:bg-white/5"}`}
             >
               Unread
             </button>

@@ -844,10 +844,10 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                         setPersisAccountOpen(nextPersis);
                         setAccountOpen(nextPersis);
                       }}
-                      className={`flex cursor-pointer items-center gap-1 px-2 py-1 rounded transition text-xs md:text-sm
+                      className={`flex cursor-pointer items-center gap-1 px-3 py-1 rounded-full transition-all outline outline-2 outline-transparent text-xs md:text-sm
                     ${heroMode && !scrolled
-                          ? `text-white hover:outline-2 hover:outline-white/40 ${accountOpen ? "outline outline-2 outline-white/40" : ""}`
-                          : `text-black hover:outline-2 hover:outline-black/20 ${accountOpen ? "outline outline-2 outline-black/20" : ""}`
+                          ? `text-white hover:outline-white/40 ${accountOpen ? "!outline-white/40" : ""}`
+                          : `text-black hover:outline-black/20 ${accountOpen ? "!outline-black/20" : ""}`
                         }`}
                     >
                       {!isLoggedIn ? (
@@ -875,7 +875,13 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                             </span>
                           )}
                         </span>
-                        <span className="font-semibold">Account</span>
+                        <span className="font-semibold">
+                          {isLoggedIn && ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(user?.userRole)
+                            ? "Consultant"
+                            : isLoggedIn && user?.userRole === "USER_SELLER"
+                              ? "Seller"
+                              : "Account"}
+                        </span>
                       </span>
                     </button>
 

@@ -92,7 +92,7 @@ export default function Sidebar({ isOpen, onClose }) {
     <>
       <aside
         className={`
-        fixed md:sticky top-16 h-[calc(100vh-64px)] z-50
+        fixed md:sticky h-[calc(100vh-64px)] z-50
         w-64 md:w-16 bg-secondary md:bg-transparent
         ${!isNotificationsOpen ? "md:hover:w-64 group" : ""}
         transition-all duration-300 ease-in-out
@@ -102,7 +102,7 @@ export default function Sidebar({ isOpen, onClose }) {
       >
         {/* <h1 className="text-xl font-bold mt-4 mb-4">Reecomm Dashboard</h1> */}
 
-        <div className="flex-1 space-y-2.5 overflow-y-auto overflow-x-hidden custom-scrollbar pr-1">
+        <div className="flex-1 space-y-2.5 overflow-y-auto overflow-x-hidden custom-scrollbar pr-1 py-1.5">
           {menu.map((m, i) => {
             const isActive =
               !isNotificationsOpen &&
@@ -118,12 +118,11 @@ export default function Sidebar({ isOpen, onClose }) {
                 <button
                   key={i}
                   onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-                  className={`flex items-center w-full text-left p-3 md:p-2 rounded-lg transition-all duration-300
-          ${
-            isNotificationsOpen
-              ? "bg-primary text-secondary shadow-lg"
-              : "hover:bg-primary/10 text-primary"
-          }`}
+                  className={`flex cursor-pointer items-center w-full text-left p-3 md:p-2 rounded-lg transition-all duration-300
+          ${isNotificationsOpen
+                      ? "bg-primary text-secondary shadow-lg"
+                      : "hover:bg-primary/10 text-primary"
+                    }`}
                 >
                   <div className="relative shrink-0 flex items-center justify-center w-6 h-6">
                     <m.icon size={18} />
@@ -149,11 +148,10 @@ export default function Sidebar({ isOpen, onClose }) {
                   onClose && onClose();
                 }}
                 className={`flex items-center p-3 md:p-2 rounded-lg transition-all duration-300
-          ${
-            isActive
-              ? "bg-primary text-secondary shadow-lg"
-              : "hover:bg-primary/10 text-primary"
-          }`}
+          ${isActive
+                    ? "bg-primary text-secondary shadow-lg"
+                    : "hover:bg-primary/10 text-primary"
+                  }`}
               >
                 <div className="shrink-0 flex items-center justify-center w-6 h-6">
                   <m.icon size={18} />

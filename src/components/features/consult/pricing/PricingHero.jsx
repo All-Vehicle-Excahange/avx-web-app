@@ -27,29 +27,26 @@ export default function PricingHero({ yearly, setYearly }) {
           <div className="relative flex bg-transparent border border-primary/30 backdrop-blur-md p-1.5 rounded-full w-[300px]">
             {/* Active Pill Background */}
             <div
-              className={`absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-primary rounded-full shadow-lg transition-all duration-300 ease-out ${
-                yearly ? "left-[50%]" : "left-1.5"
-              }`}
+              className={`absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-primary rounded-full shadow-lg transition-all duration-300 ease-out ${yearly ? "left-[50%]" : "left-1.5"
+                }`}
             />
 
             <button
               onClick={() => setYearly(false)}
-              className={`relative z-10 flex-1 py-2.5 text-sm font-semibold tracking-wide transition-colors duration-300 ${
-                !yearly
-                  ? "text-secondary"
-                  : "text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-gray-200"
-              }`}
+              className={`relative z-10 flex-1 py-2.5 text-sm font-semibold tracking-wide cursor-pointer transition-colors duration-300 ${!yearly
+                ? "text-secondary"
+                : "text-white/60 hover:text-white"
+                }`}
             >
               Monthly
             </button>
 
             <button
               onClick={() => setYearly(true)}
-              className={`relative z-10 flex-1 py-2.5 text-sm font-semibold tracking-wide transition-colors duration-300 flex items-center justify-center gap-2 ${
-                yearly
-                  ? "text-secondary"
-                  : "text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-gray-200"
-              }`}
+              className={`relative z-10 flex-1 py-2.5 text-sm font-semibold tracking-wide transition-colors cursor-pointer duration-300 flex items-center justify-center gap-2 ${yearly
+                ? "text-secondary"
+                : "text-white/60 hover:text-white"
+                }`}
             >
               Yearly
             </button>
