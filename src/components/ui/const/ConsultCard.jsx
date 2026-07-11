@@ -46,16 +46,24 @@ export default function ConsultantCard(props) {
   return (
     <div className="w-[360px] rounded-2xl overflow-hidden border border-third/40 shadow-lg mx-auto flex flex-col">
       {/* COVER IMAGE */}
-      <div className="relative h-[168px] w-full">
-        <Image
-          src={
-            data?.image ||
-            "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1"
-          }
-          alt="cover"
-          fill
-          className="object-cover p-2 rounded-2xl"
-        />
+      <div className="relative h-[168px] w-full p-2">
+        <div className="relative w-full h-full rounded-xl overflow-hidden">
+          <Image
+            src={
+              data?.image ||
+              data?.bannerUrl ||
+              "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1"
+            }
+            alt="cover"
+            fill
+            className="object-cover"
+          />
+          {String(data?.tierTitle).toUpperCase() === "PREMIUM" && (
+            <div className="absolute top-[14px] -left-[35px] w-[140px] -rotate-45 bg-fourth text-white text-[10px] font-bold py-1 text-center shadow-lg tracking-widest z-[100] pointer-events-none border-y border-white/20">
+              VERIFIED 
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="px-5 pb-5 pt-0 relative flex flex-col flex-1">

@@ -12,10 +12,9 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "@/config/firebase";
 import { FcGoogle } from "react-icons/fc";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Autoplay, EffectFade } from 'swiper/modules';
+import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import 'swiper/css/effect-fade';
 
 function LoginPopup({
   isOpen,
@@ -301,11 +300,12 @@ function LoginPopup({
         {/* LEFT IMAGE SLIDER */}
         <div className="hidden md:block w-5/12 relative bg-black">
           <Swiper
-            modules={[Pagination, Autoplay, EffectFade]}
+            modules={[Pagination, Autoplay]}
             pagination={{ clickable: true }}
             autoplay={{ delay: 5000, disableOnInteraction: false }}
-            effect="fade"
-            loop={true}
+            speed={800}
+            grabCursor={true}
+            rewind={true}
             className="w-full h-full auth-swiper"
           >
             {/* Slide 1 - Buyer */}

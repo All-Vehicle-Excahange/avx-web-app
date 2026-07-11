@@ -1104,7 +1104,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           )}
           <button
             onClick={() => setShowTypeDropdown(!showTypeDropdown)}
-            className={`w-full flex items-center justify-center gap-2 transition-all duration-500 ease-in-out cursor-pointer whitespace-nowrap overflow-hidden rounded-full ${isScrolled
+            className={`w-full flex items-center justify-center transition-all duration-500 ease-in-out cursor-pointer whitespace-nowrap overflow-hidden rounded-full ${isScrolled
               ? "h-14 bg-fourth shadow-lg"
               : "h-14 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)]"
               }`}

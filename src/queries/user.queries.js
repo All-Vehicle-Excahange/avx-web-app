@@ -373,6 +373,7 @@ export const getHomeFeedConsultQuery = (payload) => {
           item.minVehiclePrice && item.maxVehiclePrice
             ? `${(item.minVehiclePrice / 100000).toFixed(1)}L - ${(item.maxVehiclePrice / 100000).toFixed(1)}L`
             : "-",
+        tierTitle: item.tierTitle,
         isSponsored: item.isActiveTier || false,
       }));
     },

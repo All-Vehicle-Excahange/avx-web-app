@@ -12,10 +12,9 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "@/config/firebase";
 import { FcGoogle } from "react-icons/fc";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Autoplay, EffectFade } from 'swiper/modules';
+import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import 'swiper/css/effect-fade';
 import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSuccess = () => { } }) {
@@ -296,8 +295,15 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         localStorage.removeItem("otpBlockUntil");
         setCountdown(0);
 
-        // Wait for onSuccess to complete (which might open CompleteProfilePopup)
-        await onSuccess();
+        if (accountType !== "consultant") {
+          // Wait for onSuccess to complete (which might open CompleteProfilePopup)
+          await onSuccess();
+        } else {
+          // For consultants, do not open complete profile. Redirect to pricing so they can checkout/open Razorpay.
+          if (window.location.pathname !== "/consult") {
+            push("/consult");
+          }
+        }
 
         handleClosePopup();
       } else if (res?.error) {
@@ -366,11 +372,12 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         {/* LEFT IMAGE SLIDER */}
         <div className="hidden md:block w-5/12 relative bg-black">
           <Swiper
-            modules={[Pagination, Autoplay, EffectFade]}
+            modules={[Pagination, Autoplay]}
             pagination={{ clickable: true }}
             autoplay={{ delay: 5000, disableOnInteraction: false }}
-            effect="fade"
-            loop={true}
+            speed={800}
+            grabCursor={true}
+            rewind={true}
             initialSlide={defaultTab === "consultant" ? 1 : 0}
             className="w-full h-full auth-swiper"
           >
@@ -459,7 +466,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
 
         {/* RIGHT FORM */}
         <form
-          className="w-full md:w-7/12 p-8 md:p-12 bg-secondary flex flex-col md:justify-center overflow-y-auto custom-scrollbar"
+          className="w-full md:w-7/12 p-8 md:p-12 bg-secondary flex flex-col overflow-y-auto custom-scrollbar"
           onSubmit={(e) => {
             e.preventDefault();
             if (!otpSent) {
