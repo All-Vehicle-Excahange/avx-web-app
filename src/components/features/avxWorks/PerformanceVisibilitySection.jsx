@@ -93,7 +93,7 @@ function Metric({ icon, title, desc }) {
   return (
     <motion.div
       whileHover={{ y: -4 }}
-      className="p-5 rounded-xl border hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] border-primary/10 bg-secondary/80 backdrop-blur-xl hover:border-blue-400/40 transition hover:bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)]"
+      className="p-5 rounded-xl border  border-primary/10 bg-secondary/80 backdrop-blur-xl hover:border-primary/40"
     >
       <div className="text-3xl mb-3">{icon}</div>
 

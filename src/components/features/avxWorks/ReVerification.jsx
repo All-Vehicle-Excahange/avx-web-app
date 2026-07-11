@@ -39,8 +39,6 @@ const ReVerification = () => {
           <div className="lg:col-span-7 space-y-5">
             {/* CARD 1 - Fresh Inspection */}
             <motion.div
-              whileHover={{ y: -3 }}
-              transition={{ duration: 0.2 }}
               className="group relative rounded-2xl border border-white/5 bg-white/2 hover:bg-white/4 hover:border-fourth/30 p-6 md:p-8 flex flex-col md:flex-row gap-6 items-start md:items-center transition-all duration-300"
             >
               {/* Icon container */}
@@ -79,8 +77,7 @@ const ReVerification = () => {
 
             {/* CARD 2 - Video Walkthrough */}
             <motion.div
-              whileHover={{ y: -3 }}
-              transition={{ duration: 0.2 }}
+              
               className="group relative rounded-2xl border border-white/5 bg-white/2 hover:bg-white/4 hover:border-fourth/30 p-6 md:p-8 flex flex-col md:flex-row gap-6 items-start md:items-center transition-all duration-300"
             >
               {/* Icon container */}

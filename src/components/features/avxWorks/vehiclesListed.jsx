@@ -91,10 +91,9 @@ export default function VehiclesListed() {
               whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
               viewport={{ once: true }}
-              className="relative flex justify-center lg:justify-end perspective-1000"
+              className="relative flex justify-center lg:justify-center perspective-1000"
             >
               {/* Multi-layered Ambient Glow for depth */}
-              <div className="absolute inset-0 bg-fourth/20 blur-[120px] rounded-full scale-75 animate-pulse" />
 
               <div className="relative group">
                 {/* ✨ THE MASTER BADGE */}

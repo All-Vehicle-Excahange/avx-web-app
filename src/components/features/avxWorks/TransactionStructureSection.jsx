@@ -71,7 +71,7 @@ export default function TransactionStructureSection() {
             className="
             rounded-2xl border border-primary/10
              p-6 backdrop-blur-xl
-            text-left hover:border-blue-400/30 transition hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]
+            text-left hover:border-primary/40  ]
           "
           >
             <Users className="text-2xl text-fourth mb-4" />
@@ -88,7 +88,7 @@ export default function TransactionStructureSection() {
             className="
             rounded-2xl border border-primary/10
              p-6 backdrop-blur-xl
-            text-left hover:border-blue-400/30 transition hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]
+            text-left hover:border-primary/40  ]
           "
           >
             <Scale className="text-2xl text-fourth mb-4" />
@@ -105,7 +105,7 @@ export default function TransactionStructureSection() {
             className="
             rounded-2xl border border-primary/10
              p-6 backdrop-blur-xl
-            text-left hover:border-blue-400/30 transition hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]
+            text-left hover:border-primary/40  ]
           "
           >
             <CreditCard className="text-2xl text-fourth mb-4" />
