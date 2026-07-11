@@ -38,7 +38,7 @@ export default function TierCta() {
             {/* CTA */}
             <div className="mt-10">
               <Button
-                href="/consultant/register?plan=basic"
+                href="/consult/pricing"
                 variant="outline"
                 size="sm"
                 showIcon
@@ -113,7 +113,7 @@ export default function TierCta() {
             {/* CTA */}
             <div className="mt-10">
               <Button
-                href="/consultant/register?plan=premium"
+                href="/consult/pricing"
                 variant="outline"
                 size="sm"
                 showIcon

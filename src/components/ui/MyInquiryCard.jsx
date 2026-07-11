@@ -8,10 +8,12 @@ import { useState } from "react";
 import { generateVehicleSlug } from "@/lib/helper";
 import FeedbackPopup from "./FeedbackPopup";
 import { getAndCheckEligbleForReview } from "@/services/user.service";
+import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 
 export default function MyInquiryCard({ inquiry, onStatusChange }) {
   const [showClosePopup, setShowClosePopup] = useState(false);
   const [showFeedbackPopup, setShowFeedbackPopup] = useState(false);
+  const [showDownloadPopup, setShowDownloadPopup] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingFeedback, setLoadingFeedback] = useState(false);
   const [reviewData, setReviewData] = useState(null);
@@ -203,7 +205,11 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
                 Close Inquiry
               </Button>
 
-              <Button showIcon={false} variant="ghost">
+              <Button
+                showIcon={false}
+                variant="ghost"
+                onClick={() => setShowDownloadPopup(true)}
+              >
                 <MessageCircle size={16} className="mr-2" />
                 Open Chat
               </Button>
@@ -258,6 +264,14 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
             inquiry?.inquirer?.username ||
             "unknown"
           }
+        />
+      )}
+
+      {/* ✅ Download App Popup */}
+      {showDownloadPopup && (
+        <DownloadAppPopup
+          isOpen={showDownloadPopup}
+          onClose={() => setShowDownloadPopup(false)}
         />
       )}
     </div>

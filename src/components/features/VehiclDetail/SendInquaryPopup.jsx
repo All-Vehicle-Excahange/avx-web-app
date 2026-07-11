@@ -126,7 +126,7 @@ function SendInquaryPopup({
         <div className="hidden md:block w-5/12 relative z-10">
           {isSuccess ? (
             <Image
-              src="/leftDownlaodImage.webp"
+              src="/realistic-smartphone-screen-mockup-17.png"
               alt="Reecomm App"
               fill
               className="object-cover"
@@ -159,17 +159,17 @@ function SendInquaryPopup({
                 Inquiry Sent.
               </h3>
               <p className="text-third text-sm leading-relaxed mb-6">
-                The consultant has been notified and will respond to your
+                The Consultant has been notified and will respond to your
                 request.
               </p>
-              <p className="text-third font-bold text-sm leading-relaxed mb-6">
-                Replies happen inside the Reecomm app. Download it so you don't
+              <p className="text-third text-sm leading-relaxed mb-6">
+                Replies happen inside the <span className="font-bold text-primary">Reecomm app</span>. Download it so you don't
                 miss their response.
               </p>
 
               {/* QR Code Container */}
-              <div className="flex items-center gap-5 mb-6 p-4 rounded-2xl bg-white/[0.03] border border-third/10 shadow-inner w-fit">
-                <div className="p-2 bg-white rounded-xl shadow-lg flex items-center justify-center shrink-0">
+              <div className="flex items-center gap-5 mb-6 p-4 rounded-2xl bg-[#222222] border border-neutral-800 shadow-inner w-fit">
+                <div className="p-2 bg-white rounded-xl flex items-center justify-center shrink-0">
                   <Image
                     src="/app_qr.png"
                     alt="App QR Code"
@@ -178,8 +178,10 @@ function SendInquaryPopup({
                     className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
                   />
                 </div>
-                <span className="text-xs sm:text-sm font-bold text-third uppercase tracking-wider text-left leading-normal max-w-[120px]">
-                  Scan to download
+                <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider text-left leading-tight">
+                  SCAN TO
+                  <br />
+                  DOWNLOAD
                 </span>
               </div>
 
@@ -194,7 +196,7 @@ function SendInquaryPopup({
                       "_blank",
                     )
                   }
-                  className="flex-1 sm:flex-none sm:w-auto min-w-[120px] sm:min-w-[180px] flex items-center justify-center px-2 sm:px-3 py-1.5 sm:py-2 bg-[#000000] text-white rounded-lg border border-neutral-800 hover:bg-neutral-900 transition-all duration-300 cursor-pointer group/btn shadow-md"
+                  className="flex-1 sm:flex-none sm:w-auto min-w-[120px] sm:min-w-[180px] flex items-center justify-center px-2 sm:px-3 py-1.5 sm:py-2 bg-white text-black rounded-lg hover:bg-neutral-100 transition-all duration-300 cursor-pointer group/btn shadow-md border-none"
                 >
                   <div className="mr-2 sm:mr-3 transition-transform duration-300">
                     <svg
@@ -220,11 +222,11 @@ function SendInquaryPopup({
                     </svg>
                   </div>
                   <div className="text-left">
-                    <div className="text-[8px] sm:text-[9px] font-semibold uppercase tracking-wider text-white/60 transition-colors whitespace-nowrap">
-                      Get it on
+                    <div className="text-[8px] sm:text-[9px] font-semibold uppercase tracking-wider text-black/60 transition-colors whitespace-nowrap">
+                      ANDROID APP ON
                     </div>
-                    <div className="text-[12px] sm:text-base font-semibold leading-none tracking-tight whitespace-nowrap text-white">
-                      Google Play
+                    <div className="text-[12px] sm:text-base font-semibold leading-none tracking-tight whitespace-nowrap text-black">
+                      Google play
                     </div>
                   </div>
                 </button>
@@ -432,7 +434,7 @@ function SendInquaryPopup({
           priority
         />
         <Image
-          src="/leftDownlaodImage.webp"
+          src="/realistic-smartphone-screen-mockup-17.png"
           alt="preload success mockup"
           width={6}
           height={6}

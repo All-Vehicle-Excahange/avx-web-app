@@ -426,7 +426,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                       My Inquiries
                     </Item>
                     <Item
-                      href="/user/details/inspection"
+                      href="/user/details/inspections"
                       onClick={onClosePopup}
                     >
                       Inspection Requests
