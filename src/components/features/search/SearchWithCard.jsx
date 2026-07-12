@@ -74,7 +74,7 @@ export default function SearchWithCard({
   const { replace } = useRouter();
   const pathname = usePathname();
 
-  const vehicleType = searchParams.get("vehicleType");
+  const vehicleType = searchParams.get("vehicleType") || initialFilters.vehicleType;
   const bodyType = searchParams.get("bodyType");
   const apiBodyType = useMemo(() => {
     if (!vehicleType) return "FOUR_WHEELER";
@@ -84,7 +84,7 @@ export default function SearchWithCard({
     }
     return "FOUR_WHEELER";
   }, [vehicleType]);
-  const fuelType = searchParams.get("fuelType");
+  const fuelType = searchParams.get("fuelType") || initialFilters.fuelType;
 
   const rawBrand = searchParams.get("brand") || initialFilters.brand;
   const rawMakerId = searchParams.get("makerId") || initialFilters.makerId;
@@ -97,7 +97,16 @@ export default function SearchWithCard({
       makerId = rawBrand;
     } else if (rawBrand) {
       // Reverse lookup: Name -> ID
-      const entries = Object.entries(MAKER_NAME_MAPPING);
+      const TWO_WHEELER_MAKERS = {
+        15005: "Bajaj",
+        15010: "Hero",
+        15017: "OLA",
+        15019: "Royal Enfield",
+        15021: "TVS",
+        15024: "Yamaha",
+      };
+      const allMakers = { ...MAKER_NAME_MAPPING, ...TWO_WHEELER_MAKERS };
+      const entries = Object.entries(allMakers);
       const found = entries.find(
         ([id, name]) => name.toLowerCase() === rawBrand.toLowerCase(),
       );
@@ -109,7 +118,16 @@ export default function SearchWithCard({
   let brandParam = searchParams.get("brandName") || initialFilters.brandName;
   if (!brandParam) {
     if (isNumeric(rawBrand)) {
-      brandParam = MAKER_NAME_MAPPING[rawBrand];
+      const TWO_WHEELER_MAKERS = {
+        15005: "Bajaj",
+        15010: "Hero",
+        15017: "OLA",
+        15019: "Royal Enfield",
+        15021: "TVS",
+        15024: "Yamaha",
+      };
+      const allMakers = { ...MAKER_NAME_MAPPING, ...TWO_WHEELER_MAKERS };
+      brandParam = allMakers[rawBrand];
     } else {
       brandParam = rawBrand;
     }
@@ -144,9 +162,11 @@ export default function SearchWithCard({
     return searchParams.get("reccomInspected") === "true";
   });
 
-  const [minPrice, setMinPrice] = useState(() => (mPrice > 0 ? mPrice : 50000));
+  const [minPrice, setMinPrice] = useState(() =>
+    budget ? mPrice : 50000
+  );
   const [maxPrice, setMaxPrice] = useState(() =>
-    mxPrice > 0 ? mxPrice : 2000000,
+    budget ? mxPrice : 2000000
   );
   const [kmDistance, setKmDistance] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -236,6 +256,65 @@ export default function SearchWithCard({
     { value: "manual", label: "Manual" },
   ]);
   const [transmissionLoading, setTransmissionLoading] = useState(false);
+
+  // Synchronously update selected filters from initialFilters prop during render
+  const [prevInitialFilters, setPrevInitialFilters] = useState(initialFilters);
+  if (
+    initialFilters.budget !== prevInitialFilters.budget ||
+    initialFilters.makerId !== prevInitialFilters.makerId ||
+    initialFilters.modelId !== prevInitialFilters.modelId ||
+    initialFilters.cityId !== prevInitialFilters.cityId ||
+    initialFilters.stateId !== prevInitialFilters.stateId ||
+    initialFilters.stateName !== prevInitialFilters.stateName ||
+    initialFilters.cityName !== prevInitialFilters.cityName ||
+    initialFilters.vehicleType !== prevInitialFilters.vehicleType ||
+    initialFilters.fuelType !== prevInitialFilters.fuelType ||
+    initialFilters.transmission !== prevInitialFilters.transmission ||
+    initialFilters.bodyType !== prevInitialFilters.bodyType
+  ) {
+    setPrevInitialFilters(initialFilters);
+
+    // Fuel Type
+    setSelectedFuelTypes(initialFilters.fuelType ? [initialFilters.fuelType] : []);
+
+    // Transmission
+    setSelectedTransmissionTypes(initialFilters.transmission ? [initialFilters.transmission.toLowerCase()] : []);
+
+    // Brand
+    setSelectedBrands(initialFilters.makerId ? [initialFilters.makerId] : []);
+
+    // Model
+    setSelectedModels(initialFilters.modelId ? [initialFilters.modelId] : []);
+
+    // Body Type
+    setSelectedBodyType(initialFilters.bodyType ? [initialFilters.bodyType.toLowerCase()] : []);
+
+    // Location
+    if (initialFilters.stateId) {
+      setSelectedStateId(Number(initialFilters.stateId));
+      setSelectedStateName(initialFilters.stateName || "");
+    } else {
+      setSelectedStateId(null);
+      setSelectedStateName("");
+    }
+    if (initialFilters.cityId) {
+      setSelectedCityId(Number(initialFilters.cityId));
+      setSelectedCityName(initialFilters.cityName || "");
+    } else {
+      setSelectedCityId(null);
+      setSelectedCityName("");
+    }
+
+    // Budget
+    if (initialFilters.budget) {
+      const [min, max] = initialFilters.budget.replace(/\s/g, "").split("-");
+      setMinPrice(parseFloat(min) * 100000);
+      setMaxPrice(parseFloat(max) * 100000);
+    } else {
+      setMinPrice(50000);
+      setMaxPrice(2000000);
+    }
+  }
 
   // ── Variant states ──
   const [variants, setVariants] = useState([]);
@@ -397,19 +476,38 @@ export default function SearchWithCard({
   const resolvedBrandName = useMemo(() => {
     if (selectedBrands.length === 0) return "";
     const makerId = selectedBrands[0];
-    if (MAKER_NAME_MAPPING[makerId]) {
-      return MAKER_NAME_MAPPING[makerId];
+    const TWO_WHEELER_MAKERS = {
+      15005: "Bajaj",
+      15010: "Hero",
+      15017: "OLA",
+      15019: "Royal Enfield",
+      15021: "TVS",
+      15024: "Yamaha",
+    };
+    const allMakers = { ...MAKER_NAME_MAPPING, ...TWO_WHEELER_MAKERS };
+    if (allMakers[makerId]) {
+      return allMakers[makerId];
     }
     const found = brands.find((b) => String(b.value) === String(makerId));
-    return found ? found.label : "";
-  }, [selectedBrands, brands]);
+    if (found) return found.label;
+
+    if (initialFilters.makerId && String(initialFilters.makerId) === String(makerId)) {
+      return initialFilters.brandName || brandParam || "";
+    }
+    return brandParam || "";
+  }, [selectedBrands, brands, brandParam, initialFilters.brandName, initialFilters.makerId]);
 
   const resolvedModelName = useMemo(() => {
     if (selectedModels.length === 0) return "";
     const modelId = selectedModels[0];
     const found = models.find((m) => String(m.value) === String(modelId));
-    return found ? found.label : "";
-  }, [selectedModels, models]);
+    if (found) return found.label;
+
+    if (initialFilters.modelId && String(initialFilters.modelId) === String(modelId)) {
+      return initialFilters.model || "";
+    }
+    return "";
+  }, [selectedModels, models, initialFilters.model, initialFilters.modelId]);
 
   const mappedVehicleTypeForAds = useMemo(() => {
     if (!vehicleType) return "FOUR_WHEELER";
@@ -473,15 +571,38 @@ export default function SearchWithCard({
     const modelName = resolvedModelName;
     const locationName = selectedCityName || selectedStateName;
 
+    let budgetParam = null;
+    const currentMinLakh = minPrice / 100000;
+    const currentMaxLakh = maxPrice / 100000;
+
+    const isUnder = Math.round(minPrice) === 0 && [2, 5, 10, 15, 20, 25, 30, 50].includes(Math.round(currentMaxLakh));
+    const isAbove = Math.round(currentMinLakh) === 50 && maxPrice >= 20000000;
+
+    if (isUnder) {
+      budgetParam = `0-${currentMaxLakh}`;
+    } else if (isAbove) {
+      budgetParam = `50-200`;
+    }
+
+    const isTwoWheeler = vehicleType && (vehicleType.toLowerCase().includes("2") || vehicleType.toLowerCase().includes("two"));
+    const fuel = selectedFuelTypes.length === 1 ? selectedFuelTypes[0] : null;
+    const trans = selectedTransmissionTypes.length === 1 ? selectedTransmissionTypes[0] : null;
+    const body = selectedBodyType.length === 1 ? selectedBodyType[0] : null;
+
     // Build the target SEO slug
     const targetSlug = generateSeoSlug({
       brandName,
       modelName,
       cityName: locationName,
+      budget: budgetParam,
+      vehicleType,
+      fuelType: fuel,
+      transmission: trans,
+      bodyType: body,
     });
     const currentSlug = pathname.split("/").pop();
 
-    if (!brandName && !locationName) {
+    if (!brandName && !locationName && !budgetParam && !isTwoWheeler && !fuel && !trans && !body) {
       // If we are currently on an SEO slug page but filters are empty, go back to base search
       if (currentSlug && currentSlug.startsWith("buy-used-")) {
         replace("/search", { scroll: false });
@@ -497,8 +618,16 @@ export default function SearchWithCard({
     resolvedModelName,
     selectedCityName,
     selectedStateName,
+    minPrice,
+    maxPrice,
     pathname,
+    vehicleType,
+    selectedFuelTypes,
+    selectedTransmissionTypes,
+    selectedBodyType,
   ]);
+
+
 
   useEffect(() => {
     if (onLoadingChange) onLoadingChange(vehiclesLoading);

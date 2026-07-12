@@ -124,7 +124,7 @@ export default function VehicleSummaryRight({
                   </span>
                   {summary?.consultationName && (
                     <a
-                      href={`/store-front/${summary?.username || 1}`}
+                      href={`/auto-consultant/${summary?.username || 1}`}
                       className="text-xs text-white font-semibold underline underline-offset-2 decoration-blue-400/70 hover:decoration-blue-400 transition-all flex items-center gap-0.5 shrink-0"
                     >
                       Visit Storefront
@@ -135,7 +135,7 @@ export default function VehicleSummaryRight({
 
                 {/* Consultant name — clickable → storefront */}
                 <a
-                  href={`/store-front/${summary?.username || 1}`}
+                  href={`/auto-consultant/${summary?.username || 1}`}
                   className="text-xl font-bold text-primary leading-tight -mt-1 hover:underline underline-offset-2 decoration-primary/50 transition-all"
                 >
                   {summary?.consultationName || "Auto Consultant"}

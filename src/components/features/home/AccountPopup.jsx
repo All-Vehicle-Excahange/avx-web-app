@@ -520,7 +520,7 @@ export default function AccountPopup({ open, onClosePopup }) {
 
                   <div className="space-y-4">
                     <Section title="Storefront">
-                      <Item href="/store-front" onClick={onClosePopup}>
+                      <Item href={`/auto-consultant/${user?.username || ""}`} onClick={onClosePopup}>
                         View Storefront
                       </Item>
                       <Item

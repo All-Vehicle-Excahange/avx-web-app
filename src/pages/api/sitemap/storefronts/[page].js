@@ -28,7 +28,7 @@ export default async function handler(req, res) {
     for (const store of storefronts) {
       if (!store.username) continue;
 
-      const loc = `${BASE_URL}/store-front/${store.username}`;
+      const loc = `${BASE_URL}/auto-consultant/${store.username}`;
       const lastmod = store.updatedAt || store.createdAt || new Date().toISOString();
 
       xml += `  <url>\n`;

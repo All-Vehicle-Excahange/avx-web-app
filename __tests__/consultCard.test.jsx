@@ -104,6 +104,6 @@ describe("ConsultantCard Component Tests", () => {
 
     const link = screen.getByRole("link", { name: /view storefront/i });
     expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute("href", "/store-front/royal-motors");
+    expect(link).toHaveAttribute("href", "/auto-consultant/royal-motors");
   });
 });

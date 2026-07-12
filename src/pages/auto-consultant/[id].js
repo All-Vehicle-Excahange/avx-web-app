@@ -86,7 +86,7 @@ export async function getStaticProps(context) {
   // Construct the full current URL dynamically using params
   const protocol = process.env.NEXT_PUBLIC_API_URL?.includes("localhost") ? "http" : "https";
   const host = process.env.NEXT_PUBLIC_DOMAIN || "www.reecomm.com";
-  const currentUrl = `${protocol}://${host}/store-front/${id}`;
+  const currentUrl = `${protocol}://${host}/auto-consultant/${id}`;
 
   // Fallback slug formatting (fast and synchronous)
   let finalTitle = id
@@ -124,7 +124,7 @@ export async function getStaticProps(context) {
         description: `View the ${finalTitle} storefront, certified inventory, and customer reviews on Reecomm.`,
         image: storefrontImageUrl,
         url: currentUrl,
-        canonical: `https://www.reecomm.com/store-front/${id}`,
+        canonical: `https://www.reecomm.com/auto-consultant/${id}`,
       },
     },
     revalidate: 60,

@@ -58,6 +58,65 @@ export default async function handler(req, res) {
       });
     });
 
+    // 4. Add Generic Two-Wheelers URLs
+    xml += `  <url>\n`;
+    xml += `    <loc>${BASE_URL}/search/buy-used-two-wheelers</loc>\n`;
+    xml += `    <lastmod>${now}</lastmod>\n`;
+    xml += `    <changefreq>daily</changefreq>\n`;
+    xml += `    <priority>0.8</priority>\n`;
+    xml += `  </url>\n`;
+
+    cities.forEach((city) => {
+      xml += `  <url>\n`;
+      xml += `    <loc>${BASE_URL}/search/buy-used-two-wheelers-${city}</loc>\n`;
+      xml += `    <lastmod>${now}</lastmod>\n`;
+      xml += `    <changefreq>weekly</changefreq>\n`;
+      xml += `    <priority>0.6</priority>\n`;
+      xml += `  </url>\n`;
+    });
+
+    states.forEach((state) => {
+      xml += `  <url>\n`;
+      xml += `    <loc>${BASE_URL}/search/buy-used-two-wheelers-${state}</loc>\n`;
+      xml += `    <lastmod>${now}</lastmod>\n`;
+      xml += `    <changefreq>weekly</changefreq>\n`;
+      xml += `    <priority>0.6</priority>\n`;
+      xml += `  </url>\n`;
+    });
+
+    // 5. Add Two-Wheeler Brands URLs (e.g. buy-used-hero-two-wheelers)
+    const twoWheelerBrands = ["hero", "tvs", "bajaj", "royal-enfield", "yamaha", "ola"];
+    twoWheelerBrands.forEach((brand) => {
+      xml += `  <url>\n`;
+      xml += `    <loc>${BASE_URL}/search/buy-used-${brand}-two-wheelers</loc>\n`;
+      xml += `    <lastmod>${now}</lastmod>\n`;
+      xml += `    <changefreq>daily</changefreq>\n`;
+      xml += `    <priority>0.8</priority>\n`;
+      xml += `  </url>\n`;
+    });
+
+    twoWheelerBrands.forEach((brand) => {
+      cities.forEach((city) => {
+        xml += `  <url>\n`;
+        xml += `    <loc>${BASE_URL}/search/buy-used-${brand}-two-wheelers-${city}</loc>\n`;
+        xml += `    <lastmod>${now}</lastmod>\n`;
+        xml += `    <changefreq>weekly</changefreq>\n`;
+        xml += `    <priority>0.6</priority>\n`;
+        xml += `  </url>\n`;
+      });
+    });
+
+    twoWheelerBrands.forEach((brand) => {
+      states.forEach((state) => {
+        xml += `  <url>\n`;
+        xml += `    <loc>${BASE_URL}/search/buy-used-${brand}-two-wheelers-${state}</loc>\n`;
+        xml += `    <lastmod>${now}</lastmod>\n`;
+        xml += `    <changefreq>weekly</changefreq>\n`;
+        xml += `    <priority>0.6</priority>\n`;
+        xml += `  </url>\n`;
+      });
+    });
+
     xml += `</urlset>`;
 
     res.setHeader("Content-Type", "application/xml; charset=utf-8");

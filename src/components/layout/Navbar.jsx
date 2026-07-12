@@ -131,11 +131,42 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
     if (isSuggestionsLoaded) return;
     try {
       const data = await import("@/data/searchSuggestions.json");
-      const loadedSuggestions = data.default || data;
-      setSuggestionsData(loadedSuggestions);
+      const rawSuggestions = data.default || data;
+      const loadedSuggestions = rawSuggestions.map((s) => {
+        if (s.type === "brand" || s.type === "model") {
+          const prefix = s.label.toLowerCase().startsWith("used") ? "" : "Used ";
+          return { ...s, rawLabel: s.label, label: `${prefix}${s.label}` };
+        }
+        return s;
+      });
+
+      // Dynamically fetch registered auto consultants / storefronts
+      let consultantsList = [];
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.reecomm.online/api/v1/website";
+        const cleanApiUrl = apiUrl.replace(/\/$/, "");
+        const consultRes = await fetch(`${cleanApiUrl}/homefeed/consultations/seo?pageNo=1&size=100`);
+        if (consultRes.ok) {
+          const consultData = await consultRes.json();
+          if (consultData?.data && Array.isArray(consultData.data)) {
+            consultantsList = consultData.data.map((store) => ({
+              id: `consult-${store.id}`,
+              label: store.consultationName || store.username || "",
+              username: store.username || "",
+              type: "consultant",
+              link: `/auto-consultant/${store.username}`,
+            })).filter((c) => c.label && c.username);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load storefront/consultants list in suggestions", err);
+      }
+
+      setSuggestionsData([...loadedSuggestions, ...consultantsList]);
 
       const rawBrands = loadedSuggestions.reduce((acc, s) => {
-        if (s.type === "brand") acc.push(s.label);
+        const originalLabel = s.rawLabel || s.label;
+        if (s.type === "brand") acc.push(originalLabel);
         if (s.brand) acc.push(s.brand);
         if (s.makerId && MAKER_NAME_MAPPING[s.makerId])
           acc.push(MAKER_NAME_MAPPING[s.makerId]);
@@ -232,12 +263,13 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
           MAKER_NAME_MAPPING[s.makerId] &&
           MAKER_NAME_MAPPING[s.makerId].toLowerCase() ===
           selectedBrand.toLowerCase();
+        const originalLabel = s.rawLabel || s.label;
         // If it's a model of the selected brand, or the brand itself
         return (
           brandMatch ||
           makerIdMatch ||
           (s.type === "brand" &&
-            s.label.toLowerCase() === selectedBrand.toLowerCase())
+            originalLabel.toLowerCase() === selectedBrand.toLowerCase())
         );
       });
     }
@@ -249,10 +281,22 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
 
     const query = searchQuery.toLowerCase().trim();
 
-    // 1. Direct matches from JSON
+    // 1. Direct matches from JSON (matches label or consultant username, sorts priorities, and shows up to 10 results)
     const directMatches = baseSuggestions
-      .filter((s) => s.label.toLowerCase().includes(query))
-      .slice(0, 5);
+      .filter((s) => {
+        const labelMatch = s.label.toLowerCase().includes(query);
+        const usernameMatch = s.username && s.username.toLowerCase().includes(query);
+        return labelMatch || usernameMatch;
+      })
+      .sort((a, b) => {
+        const getTypePriority = (type) => {
+          if (type === "brand" || type === "model") return 0;
+          if (type === "consultant") return 1;
+          return 2;
+        };
+        return getTypePriority(a.type) - getTypePriority(b.type);
+      })
+      .slice(0, 10);
 
     // 2. Generate Dynamic Related Searches
     const dynamicRelated = [];
@@ -377,7 +421,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
     }
 
     // Combine and remove duplicates by label
-    const combined = [...directMatches, ...dynamicRelated];
+    const combined = [...directMatches];
     const unique = Array.from(
       new Map(
         combined.map((item) => [item.label.toLowerCase(), item]),
@@ -491,7 +535,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                 className="absolute left-1/2 -translate-x-1/2 hidden lg:flex"
               >
                 <div className="relative flex items-center h-12 w-[420px] xl:w-[520px] rounded-full bg-secondary/10 border border-gray-200">
-                  <div className="relative h-full flex items-center bg-gray-100/50 rounded-l-full border-r border-gray-200 hover:bg-gray-200/50 transition-colors">
+                  <div className="relative h-full w-[88px] flex items-center bg-gray-100/50 rounded-l-full border-r border-gray-200 hover:bg-gray-200/50 transition-colors shrink-0">
                     <select
                       value={selectedBrand}
                       onMouseEnter={loadSuggestions}
@@ -500,7 +544,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                         setSelectedBrand(e.target.value);
                         setShowDropdown(true);
                       }}
-                      className="h-full w-full bg-transparent text-sm text-gray-700 font-medium pl-4 pr-6 cursor-pointer focus:outline-none appearance-none z-10"
+                      className="h-full w-full bg-transparent text-sm text-gray-700 font-medium pl-4 pr-6 cursor-pointer focus:outline-none appearance-none z-10 truncate"
                     >
                       <option value="All">All</option>
                       {brandsList.map((brand, idx) => (
@@ -541,7 +585,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                             push(selected.link);
                             setSearchQuery(selected.label);
                           } else if (selected.username) {
-                            push(`/store-front/${selected.username}`);
+                            push(`/auto-consultant/${selected.username}`);
                           }
                           setShowDropdown(false);
                           setSelectedIndex(-1);
@@ -651,6 +695,10 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                                       return (
                                         <Star className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
                                       );
+                                    if (s.type === "consultant")
+                                      return (
+                                        <User className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
+                                      );
                                     return (
                                       <Search className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
                                     );
@@ -663,6 +711,11 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                                   {s.type === "related" && (
                                     <span className="text-[10px] text-fourth/80 font-bold uppercase tracking-wider">
                                       Related Search
+                                    </span>
+                                  )}
+                                  {s.type === "consultant" && (
+                                    <span className="text-[10px] text-fourth/80 font-bold uppercase tracking-wider">
+                                      Auto Consultant
                                     </span>
                                   )}
                                 </div>

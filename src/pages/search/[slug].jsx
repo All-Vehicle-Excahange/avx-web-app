@@ -134,22 +134,121 @@ export async function getServerSideProps(context) {
     return { notFound: true };
   }
 
-  const regex = /^buy-used-(?:(.+)-)?cars(?:-(.+))?$/;
-  const match = slug.match(regex);
+  let normalizedSlug = slug;
+  let budgetFilter = null;
+
+  if (slug.includes("-under-")) {
+    const budgetMatch = slug.match(/-under-(\d+(?:\.\d+)?)-(lakhs|lakh|k)/);
+    if (budgetMatch) {
+      let value = parseFloat(budgetMatch[1]);
+      if (budgetMatch[2] === "k") {
+        value = value / 100; // e.g. 30k -> 0.3 Lakh
+      }
+      budgetFilter = `0-${value}`;
+      normalizedSlug = slug.replace(/-under-\d+(?:\.\d+)?-(?:lakhs|lakh|k)/, "");
+    }
+  } else if (slug.includes("-above-")) {
+    const budgetMatch = slug.match(/-above-(\d+)-lakhs/);
+    if (budgetMatch) {
+      budgetFilter = `${budgetMatch[1]}-200`;
+      normalizedSlug = slug.replace(/-above-\d+-lakhs/, "");
+    }
+  }
+
+  const regex = /^buy-used-(?:(.+)-)?(cars|two-wheelers)(?:-(.+))?$/;
+  const match = normalizedSlug.match(regex);
 
   if (!match) {
     return { notFound: true };
   }
 
-  const details = match[1] || "";
-  const city = match[2] || "";
+  const detailsRaw = match[1] || "";
+  const vehicleTypeParam = match[2];
+  const city = match[3] || "";
 
   const initialFilters = {
-    vehicleType: "cars",
+    vehicleType: vehicleTypeParam,
   };
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.reecomm.com/api/v1";
-  const nodeApiUrl = process.env.NEXT_PUBLIC_NODE_API_URL || "https://api.reecomm.com/api/v1";
+  if (budgetFilter) {
+    initialFilters.budget = budgetFilter;
+  }
+
+  // Parse fuelType, transmission, and bodyType from detailsRaw
+  let fuelTypeFilter = "";
+  let transmissionFilter = "";
+  let bodyTypeFilter = "";
+  let details = detailsRaw;
+
+  if (detailsRaw.includes("petrol")) {
+    fuelTypeFilter = "Petrol";
+    details = details.replace("petrol", "").replace(/^-+|-+$/g, "");
+  } else if (detailsRaw.includes("diesel")) {
+    fuelTypeFilter = "Diesel";
+    details = details.replace("diesel", "").replace(/^-+|-+$/g, "");
+  } else if (detailsRaw.includes("cng")) {
+    fuelTypeFilter = "CNG";
+    details = details.replace("cng", "").replace(/^-+|-+$/g, "");
+  } else if (detailsRaw.includes("electric")) {
+    fuelTypeFilter = "Electric";
+    details = details.replace("electric", "").replace(/^-+|-+$/g, "");
+  }
+
+  if (detailsRaw.includes("automatic")) {
+    transmissionFilter = "Automatic";
+    details = details.replace("automatic", "").replace(/^-+|-+$/g, "");
+  } else if (detailsRaw.includes("manual")) {
+    transmissionFilter = "Manual";
+    details = details.replace("manual", "").replace(/^-+|-+$/g, "");
+  }
+
+  if (detailsRaw.includes("hatchback")) {
+    bodyTypeFilter = "Hatchback";
+    details = details.replace("hatchback", "").replace(/^-+|-+$/g, "");
+  } else if (detailsRaw.includes("sedan")) {
+    bodyTypeFilter = "Sedan";
+    details = details.replace("sedan", "").replace(/^-+|-+$/g, "");
+  } else if (detailsRaw.includes("suv")) {
+    bodyTypeFilter = "SUV";
+    details = details.replace("suv", "").replace(/^-+|-+$/g, "");
+  } else if (detailsRaw.includes("muv")) {
+    bodyTypeFilter = "MUV";
+    details = details.replace("muv", "").replace(/^-+|-+$/g, "");
+  } else if (detailsRaw.includes("luxury")) {
+    bodyTypeFilter = "Luxury";
+    details = details.replace("luxury", "").replace(/^-+|-+$/g, "");
+  } else if (detailsRaw.includes("scooter")) {
+    bodyTypeFilter = "scooter";
+    details = details.replace("scooter", "").replace(/^-+|-+$/g, "");
+  } else if (detailsRaw.includes("commuter-bikes")) {
+    bodyTypeFilter = "commuter_bikes";
+    details = details.replace("commuter-bikes", "").replace(/^-+|-+$/g, "");
+  } else if (detailsRaw.includes("sports-bikes")) {
+    bodyTypeFilter = "sports_bikes";
+    details = details.replace("sports-bikes", "").replace(/^-+|-+$/g, "");
+  } else if (detailsRaw.includes("cruiser-retro")) {
+    bodyTypeFilter = "cruiser_retro";
+    details = details.replace("cruiser-retro", "").replace(/^-+|-+$/g, "");
+  } else if (detailsRaw.includes("adventure-touring")) {
+    bodyTypeFilter = "adventure_touring";
+    details = details.replace("adventure-touring", "").replace(/^-+|-+$/g, "");
+  } else if (detailsRaw.includes("electric-2w")) {
+    bodyTypeFilter = "electric_2w";
+    details = details.replace("electric-2w", "").replace(/^-+|-+$/g, "");
+  }
+
+  if (fuelTypeFilter) {
+    initialFilters.fuelType = fuelTypeFilter;
+  }
+  if (transmissionFilter) {
+    initialFilters.transmission = transmissionFilter;
+  }
+  if (bodyTypeFilter) {
+    initialFilters.bodyType = bodyTypeFilter;
+  }
+
+  const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "https://api.reecomm.com/api/v1").replace(/\/$/, "");
+  const nodeApiUrl = (process.env.NEXT_PUBLIC_NODE_API_URL || "https://api.reecomm.com/api/v1").replace(/\/$/, "");
 
   // 1. Resolve City ID / State ID
   if (city) {
@@ -189,7 +288,16 @@ export async function getServerSideProps(context) {
     const normalize = (s) => s.toLowerCase().replace(/[\s-]/g, "");
     const detailsNormalized = normalize(details);
 
-    const brandEntries = Object.entries(MAKER_NAME_MAPPING).sort((a, b) => b[1].length - a[1].length);
+    const TWO_WHEELER_MAKERS = {
+      15005: "Bajaj",
+      15010: "Hero",
+      15017: "OLA",
+      15019: "Royal Enfield",
+      15021: "TVS",
+      15024: "Yamaha",
+    };
+    const allMakers = { ...MAKER_NAME_MAPPING, ...TWO_WHEELER_MAKERS };
+    const brandEntries = Object.entries(allMakers).sort((a, b) => b[1].length - a[1].length);
     const brandEntry = brandEntries.find(([id, name]) => {
       const nameNorm = normalize(name);
       return detailsNormalized === nameNorm || detailsNormalized.startsWith(nameNorm);
@@ -218,13 +326,17 @@ export async function getServerSideProps(context) {
           
           // 2. Resolve Model ID
           try {
-            const modelRes = await fetch(`${nodeApiUrl}/search/models?search=${rawModelName}&makerId=${id}`);
+            const bodyTypeParam = initialFilters.vehicleType === "two-wheelers" ? "TWO_WHEELER" : "";
+            const modelRes = await fetch(`${nodeApiUrl}/search/models?search=${rawModelName}&makerId=${id}&bodyType=${bodyTypeParam}`);
             if (modelRes.ok) {
               const modelJson = await modelRes.json();
-              const foundModel = modelJson?.data?.find(m => m.model_name.toLowerCase() === rawModelName.toLowerCase());
+              const foundModel = modelJson?.data?.find(m => {
+                const name = m.modelName || m.modelDisplayName || m.model_name || "";
+                return name.toLowerCase().replace(/[\s-]/g, "") === rawModelName.toLowerCase().replace(/[\s-]/g, "");
+              });
               if (foundModel) {
-                initialFilters.modelId = foundModel.model_id;
-                initialFilters.model = foundModel.model_name;
+                initialFilters.modelId = foundModel.modelId || foundModel.model_id;
+                initialFilters.model = foundModel.modelName || foundModel.modelDisplayName || foundModel.model_name;
               }
             }
           } catch (e) {
@@ -242,8 +354,21 @@ export async function getServerSideProps(context) {
   const modelPart = initialFilters.model ? `${initialFilters.model} ` : (modelName ? `${modelName} ` : "");
   const cityPart = initialFilters.cityName ? ` in ${initialFilters.cityName}` : "";
   
-  const dynamicTitle = `Used ${brandPart}${modelPart}Cars${cityPart} | Reecomm`;
-  const dynamicDescription = `Browse verified used ${brandPart}${modelPart}cars${cityPart}. Every Reecomm listing is certified, inspected, and fairly priced.`;
+  let budgetPart = "";
+  if (budgetFilter) {
+    const [min, max] = budgetFilter.split("-");
+    if (min === "0") {
+      budgetPart = ` under ${max} Lakh`;
+    } else {
+      budgetPart = ` above ${min} Lakh`;
+    }
+  }
+
+  const vehicleWord = initialFilters.vehicleType === "two-wheelers" ? "Two Wheelers" : "Cars";
+  const typePart = (fuelTypeFilter || transmissionFilter) ? `${fuelTypeFilter || transmissionFilter} ` : "";
+
+  const dynamicTitle = `Used ${typePart}${brandPart}${modelPart}${vehicleWord}${budgetPart}${cityPart} | Reecomm`;
+  const dynamicDescription = `Browse verified used ${typePart}${brandPart}${modelPart}${vehicleWord.toLowerCase()}${budgetPart}${cityPart}. Every Reecomm listing is certified, inspected, and fairly priced.`;
 
   return {
     props: {

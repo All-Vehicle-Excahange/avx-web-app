@@ -181,7 +181,7 @@ export default function ConsultantCard(props) {
 
           <div className="shrink-0">
             <Button
-              href={`/store-front/${username || "#"}`}
+              href={`/auto-consultant/${username || "#"}`}
               variant="outline"
               size="sm"
               className="whitespace-nowrap"

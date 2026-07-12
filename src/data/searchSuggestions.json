@@ -3,55 +3,55 @@
     "id": "p2",
     "label": "Cars under 2 Lakh",
     "type": "price",
-    "link": "/search/buy-used-cars?budget=0-2"
+    "link": "/search/buy-used-cars-under-2-lakhs"
   },
   {
     "id": "p5",
     "label": "Cars under 5 Lakh",
     "type": "price",
-    "link": "/search/buy-used-cars?budget=0-5"
+    "link": "/search/buy-used-cars-under-5-lakhs"
   },
   {
     "id": "p10",
     "label": "Cars under 10 Lakh",
     "type": "price",
-    "link": "/search/buy-used-cars?budget=0-10"
+    "link": "/search/buy-used-cars-under-10-lakhs"
   },
   {
     "id": "p15",
     "label": "Cars under 15 Lakh",
     "type": "price",
-    "link": "/search/buy-used-cars?budget=0-15"
+    "link": "/search/buy-used-cars-under-15-lakhs"
   },
   {
     "id": "p20",
     "label": "Cars under 20 Lakh",
     "type": "price",
-    "link": "/search/buy-used-cars?budget=0-20"
+    "link": "/search/buy-used-cars-under-20-lakhs"
   },
   {
     "id": "p25",
     "label": "Cars under 25 Lakh",
     "type": "price",
-    "link": "/search/buy-used-cars?budget=0-25"
+    "link": "/search/buy-used-cars-under-25-lakhs"
   },
   {
     "id": "p30",
     "label": "Cars under 30 Lakh",
     "type": "price",
-    "link": "/search/buy-used-cars?budget=0-30"
+    "link": "/search/buy-used-cars-under-30-lakhs"
   },
   {
     "id": "p50",
     "label": "Cars under 50 Lakh",
     "type": "price",
-    "link": "/search/buy-used-cars?budget=0-50"
+    "link": "/search/buy-used-cars-under-50-lakhs"
   },
   {
     "id": "p6",
     "label": "Luxury Cars above 50 Lakh",
     "type": "price",
-    "link": "/search/buy-used-cars?budget=50-200"
+    "link": "/search/buy-used-cars-above-50-lakhs"
   },
   {
     "id": "l0",
@@ -16692,5 +16692,239 @@
     "modelId": 716,
     "link": "/search/buy-used-kia-ev9-cars",
     "makerId": 51
+  },
+  {
+    "id": "b_15010",
+    "label": "Hero",
+    "type": "brand",
+    "link": "/search/buy-used-hero-two-wheelers"
+  },
+  {
+    "id": "b_15021",
+    "label": "TVS",
+    "type": "brand",
+    "link": "/search/buy-used-tvs-two-wheelers"
+  },
+  {
+    "id": "b_15005",
+    "label": "Bajaj",
+    "type": "brand",
+    "link": "/search/buy-used-bajaj-two-wheelers"
+  },
+  {
+    "id": "b_15019",
+    "label": "Royal Enfield",
+    "type": "brand",
+    "link": "/search/buy-used-royal-enfield-two-wheelers"
+  },
+  {
+    "id": "b_15024",
+    "label": "Yamaha",
+    "type": "brand",
+    "link": "/search/buy-used-yamaha-two-wheelers"
+  },
+  {
+    "id": "b_15017",
+    "label": "OLA",
+    "type": "brand",
+    "link": "/search/buy-used-ola-two-wheelers"
+  },
+  {
+    "id": "m_tw_1",
+    "label": "Royal Enfield Classic 350",
+    "type": "model",
+    "brand": "Royal Enfield",
+    "model": "Classic 350",
+    "link": "/search/buy-used-royal-enfield-classic-350-two-wheelers",
+    "makerId": 15019
+  },
+  {
+    "id": "m_tw_2",
+    "label": "Royal Enfield Bullet 350",
+    "type": "model",
+    "brand": "Royal Enfield",
+    "model": "Bullet 350",
+    "link": "/search/buy-used-royal-enfield-bullet-350-two-wheelers",
+    "makerId": 15019
+  },
+  {
+    "id": "m_tw_3",
+    "label": "Royal Enfield Hunter 350",
+    "type": "model",
+    "brand": "Royal Enfield",
+    "model": "Hunter 350",
+    "link": "/search/buy-used-royal-enfield-hunter-350-two-wheelers",
+    "makerId": 15019
+  },
+  {
+    "id": "m_tw_4",
+    "label": "Royal Enfield Meteor 350",
+    "type": "model",
+    "brand": "Royal Enfield",
+    "model": "Meteor 350",
+    "link": "/search/buy-used-royal-enfield-meteor-350-two-wheelers",
+    "makerId": 15019
+  },
+  {
+    "id": "m_tw_5",
+    "label": "Royal Enfield Himalayan",
+    "type": "model",
+    "brand": "Royal Enfield",
+    "model": "Himalayan",
+    "link": "/search/buy-used-royal-enfield-himalayan-two-wheelers",
+    "makerId": 15019
+  },
+  {
+    "id": "m_tw_6",
+    "label": "TVS Jupiter",
+    "type": "model",
+    "brand": "TVS",
+    "model": "Jupiter",
+    "link": "/search/buy-used-tvs-jupiter-two-wheelers",
+    "makerId": 15021
+  },
+  {
+    "id": "m_tw_7",
+    "label": "TVS Apache",
+    "type": "model",
+    "brand": "TVS",
+    "model": "Apache",
+    "link": "/search/buy-used-tvs-apache-two-wheelers",
+    "makerId": 15021
+  },
+  {
+    "id": "m_tw_8",
+    "label": "TVS Ntorq",
+    "type": "model",
+    "brand": "TVS",
+    "model": "Ntorq",
+    "link": "/search/buy-used-tvs-ntorq-two-wheelers",
+    "makerId": 15021
+  },
+  {
+    "id": "m_tw_9",
+    "label": "TVS Raider",
+    "type": "model",
+    "brand": "TVS",
+    "model": "Raider",
+    "link": "/search/buy-used-tvs-raider-two-wheelers",
+    "makerId": 15021
+  },
+  {
+    "id": "m_tw_10",
+    "label": "Hero Splendor",
+    "type": "model",
+    "brand": "Hero",
+    "model": "Splendor",
+    "link": "/search/buy-used-hero-splendor-two-wheelers",
+    "makerId": 15010
+  },
+  {
+    "id": "m_tw_11",
+    "label": "Hero Passion",
+    "type": "model",
+    "brand": "Hero",
+    "model": "Passion",
+    "link": "/search/buy-used-hero-passion-two-wheelers",
+    "makerId": 15010
+  },
+  {
+    "id": "m_tw_12",
+    "label": "Hero Glamour",
+    "type": "model",
+    "brand": "Hero",
+    "model": "Glamour",
+    "link": "/search/buy-used-hero-glamour-two-wheelers",
+    "makerId": 15010
+  },
+  {
+    "id": "m_tw_13",
+    "label": "Hero HF Deluxe",
+    "type": "model",
+    "brand": "Hero",
+    "model": "HF Deluxe",
+    "link": "/search/buy-used-hero-hf-deluxe-two-wheelers",
+    "makerId": 15010
+  },
+  {
+    "id": "m_tw_14",
+    "label": "Bajaj Pulsar",
+    "type": "model",
+    "brand": "Bajaj",
+    "model": "Pulsar",
+    "link": "/search/buy-used-bajaj-pulsar-two-wheelers",
+    "makerId": 15005
+  },
+  {
+    "id": "m_tw_15",
+    "label": "Bajaj Platina",
+    "type": "model",
+    "brand": "Bajaj",
+    "model": "Platina",
+    "link": "/search/buy-used-bajaj-platina-two-wheelers",
+    "makerId": 15005
+  },
+  {
+    "id": "m_tw_16",
+    "label": "Bajaj Avenger",
+    "type": "model",
+    "brand": "Bajaj",
+    "model": "Avenger",
+    "link": "/search/buy-used-bajaj-avenger-two-wheelers",
+    "makerId": 15005
+  },
+  {
+    "id": "m_tw_17",
+    "label": "Yamaha R15",
+    "type": "model",
+    "brand": "Yamaha",
+    "model": "R15",
+    "link": "/search/buy-used-yamaha-r15-two-wheelers",
+    "makerId": 15024
+  },
+  {
+    "id": "m_tw_18",
+    "label": "Yamaha MT 15",
+    "type": "model",
+    "brand": "Yamaha",
+    "model": "MT 15",
+    "link": "/search/buy-used-yamaha-mt-15-two-wheelers",
+    "makerId": 15024
+  },
+  {
+    "id": "m_tw_19",
+    "label": "Yamaha FZ",
+    "type": "model",
+    "brand": "Yamaha",
+    "model": "FZ",
+    "link": "/search/buy-used-yamaha-fz-two-wheelers",
+    "makerId": 15024
+  },
+  {
+    "id": "m_tw_20",
+    "label": "OLA S1 Pro",
+    "type": "model",
+    "brand": "OLA",
+    "model": "S1 Pro",
+    "link": "/search/buy-used-ola-s1-pro-two-wheelers",
+    "makerId": 15017
+  },
+  {
+    "id": "m_tw_21",
+    "label": "OLA S1 Air",
+    "type": "model",
+    "brand": "OLA",
+    "model": "S1 Air",
+    "link": "/search/buy-used-ola-s1-air-two-wheelers",
+    "makerId": 15017
+  },
+  {
+    "id": "m_tw_22",
+    "label": "OLA S1 X",
+    "type": "model",
+    "brand": "OLA",
+    "model": "S1 X",
+    "link": "/search/buy-used-ola-s1-x-two-wheelers",
+    "makerId": 15017
   }
 ]
