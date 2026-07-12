@@ -45,11 +45,10 @@ function Inquiries() {
           <button
             key={type.id}
             onClick={() => setActiveType(type.id)}
-            className={`px-4 py-2 rounded-full text-sm font-medium border transition whitespace-nowrap
-              ${
-                activeType === type.id
-                  ? "bg-primary text-secondary border-primary"
-                  : "border-third/50 text-primary hover:bg-third/20"
+            className={`px-4 py-2 rounded-full text-sm font-medium border transition whitespace-nowrap 
+              ${activeType === type.id
+                ? "bg-primary text-secondary border-primary"
+                : "border-third/50 text-primary hover:bg-third/20"
               }`}
           >
             {type.label}

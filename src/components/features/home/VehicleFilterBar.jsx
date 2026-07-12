@@ -511,9 +511,19 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     <>
       <style>{`
         .dropdown-active button:focus {
-          background-color: #262626 !important;
-          outline: 1px solid #525252 !important;
+          background-color: rgba(255, 255, 255, 0.1) !important;
+          outline: 1px solid rgba(255, 255, 255, 0.2) !important;
           outline-offset: -1px;
+        }
+
+        .lg-glass-dropdown {
+          background: rgba(20, 20, 20, 0.75);
+          backdrop-filter: blur(32px) saturate(180%);
+          -webkit-backdrop-filter: blur(32px) saturate(180%);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          box-shadow:
+            0 24px 64px rgba(0,0,0,0.5),
+            inset 0 1px 0 rgba(255,255,255,0.08);
         }
 
         /* ====== LIQUID GLASS SEARCH BAR – DESKTOP ====== */
@@ -722,7 +732,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   onChange={handleLocationChange}
                 />
                 {activeTab === "location" && (
-                  <div className="absolute top-[110%] left-0 z-50 dropdown-active w-[360px] bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                  <div className="absolute top-[110%] left-0 z-50 dropdown-active w-[360px] lg-glass-dropdown rounded-xl p-2">
                     <div className="flex flex-col gap-1 max-h-[300px] overflow-y-auto custom-scrollbar">
                       {locationSuggestions.length > 0 ? (
                         locationSuggestions.map((item) => (
@@ -743,18 +753,18 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                               }
                               openNextAvailableTab("location");
                             }}
-                            className="flex items-center justify-between gap-4 py-2 px-3 hover:bg-neutral-800 rounded-lg text-left cursor-pointer"
+                            className="flex items-center justify-between gap-4 py-2 px-3 hover:bg-white/10 rounded-lg text-left cursor-pointer"
                           >
                             <span className="text-sm font-semibold text-white">
                               {item.isStateOnly ? item.stateName : item.cityName}
                             </span>
-                            <span className="text-xs text-gray-400">
+                            <span className="text-xs text-white/60">
                               {item.isStateOnly ? "State" : item.stateName}
                             </span>
                           </button>
                         ))
                       ) : (
-                        <div className="py-3 px-3 text-sm text-gray-400 text-center">
+                        <div className="py-3 px-3 text-sm text-white/60 text-center">
                           {location.length > 0
                             ? "No cities found"
                             : "Loading..."}
@@ -777,7 +787,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   {vehicleTypeError ? "* Required" : vehicleType || "Add type"}
                 </div>
                 {activeTab === "vehicle" && (
-                  <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                  <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 lg-glass-dropdown rounded-xl p-2">
                     {VEHICLE_TYPES.map((type) => (
                       <button
                         key={type.id}
@@ -789,7 +799,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                           setBodyType("");
                           openNextAvailableTab("vehicle");
                         }}
-                        className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold cursor-pointer"
+                        className="w-full py-2 px-3 hover:bg-white/10 rounded-lg text-left text-sm font-semibold cursor-pointer"
                       >
                         {type.label}
                       </button>
@@ -813,7 +823,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       {priceRange || "Select price"}
                     </div>
                     {activeTab === "priceRange" && (
-                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 lg-glass-dropdown rounded-xl p-2">
                         {CONSULT_PRICE_RANGE.map((range) => (
                           <button
                             key={range}
@@ -822,7 +832,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                               setPriceRange(range);
                               openNextAvailableTab("priceRange");
                             }}
-                            className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold cursor-pointer"
+                            className="w-full py-2 px-3 hover:bg-white/10 rounded-lg text-left text-sm font-semibold cursor-pointer"
                           >
                             {range}
                           </button>
@@ -841,7 +851,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       {service || "Select service"}
                     </div>
                     {activeTab === "service" && (
-                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-[280px] bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-[280px] lg-glass-dropdown rounded-xl p-2">
                         <div className="flex flex-col max-h-[250px] overflow-y-auto custom-scrollbar">
                           {serviceOptions.length > 0 ? (
                             serviceOptions.map((svc) => (
@@ -852,13 +862,13 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                                   setService(svc.value);
                                   openNextAvailableTab("service");
                                 }}
-                                className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold cursor-pointer"
+                                className="w-full py-2 px-3 hover:bg-white/10 rounded-lg text-left text-sm font-semibold cursor-pointer"
                               >
                                 {svc.label}
                               </button>
                             ))
                           ) : (
-                            <div className="py-3 px-3 text-sm text-gray-400 text-center">
+                            <div className="py-3 px-3 text-sm text-white/60 text-center">
                               Loading...
                             </div>
                           )}
@@ -877,7 +887,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       {availability || "Select availability"}
                     </div>
                     {activeTab === "availability" && (
-                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 lg-glass-dropdown rounded-xl p-2">
                         {AVAILABILITY_OPTIONS.map((opt) => (
                           <button
                             key={opt.value}
@@ -886,7 +896,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                               setAvailability(opt.label);
                               openNextAvailableTab("availability");
                             }}
-                            className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold cursor-pointer"
+                            className="w-full py-2 px-3 hover:bg-white/10 rounded-lg text-left text-sm font-semibold cursor-pointer"
                           >
                             {opt.label}
                           </button>
@@ -913,7 +923,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       {bodyType || "Add type"}
                     </div>
                     {activeTab === "bodyType" && (
-                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800 max-h-[250px] overflow-y-auto custom-scrollbar">
+                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 lg-glass-dropdown rounded-xl p-2 max-h-[250px] overflow-y-auto custom-scrollbar">
                         {(vehicleType === "4 Wheeler"
                           ? FOUR_WHEELER_TYPES
                           : TWO_WHEELER_TYPES
@@ -925,7 +935,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                               setBodyType(type.label);
                               openNextAvailableTab("bodyType", type.label);
                             }}
-                            className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold cursor-pointer"
+                            className="w-full py-2 px-3 hover:bg-white/10 rounded-lg text-left text-sm font-semibold cursor-pointer"
                           >
                             {type.label}
                           </button>
@@ -944,7 +954,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       {fuelType || "Select fuel"}
                     </div>
                     {activeTab === "fuel" && (
-                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 lg-glass-dropdown rounded-xl p-2">
                         {availableFuelTypes.map((f) => (
                           <button
                             key={f}
@@ -953,7 +963,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                               setFuelType(f);
                               openNextAvailableTab("fuel", f);
                             }}
-                            className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold cursor-pointer"
+                            className="w-full py-2 px-3 hover:bg-white/10 rounded-lg text-left text-sm font-semibold cursor-pointer"
                           >
                             {f}
                           </button>
@@ -981,7 +991,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       }}
                     />
                     {activeTab === "brand" && (
-                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-[300px] bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-[300px] lg-glass-dropdown rounded-xl p-2">
                         <div className="flex flex-col max-h-[250px] overflow-y-auto custom-scrollbar">
                           {filteredBrands.map((b) => (
                             <button
@@ -993,7 +1003,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                                 setBrandSearch("");
                                 openNextAvailableTab("brand");
                               }}
-                              className="w-full py-1.5 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold cursor-pointer"
+                              className="w-full py-1.5 px-3 hover:bg-white/10 rounded-lg text-left text-sm font-semibold cursor-pointer"
                             >
                               {b.makeDisplay}
                             </button>
@@ -1013,7 +1023,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       {budget || "Select budget"}
                     </div>
                     {activeTab === "budget" && (
-                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 bg-neutral-900 rounded-xl shadow-2xl p-2 border border-neutral-800">
+                      <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 lg-glass-dropdown rounded-xl p-2">
                         {BUDGET_RANGE.map((range) => (
                           <button
                             key={range}
@@ -1022,7 +1032,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                               setBudget(range);
                               openNextAvailableTab("budget");
                             }}
-                            className="w-full py-2 px-3 hover:bg-neutral-800 rounded-lg text-left text-sm font-semibold cursor-pointer"
+                            className="w-full py-2 px-3 hover:bg-white/10 rounded-lg text-left text-sm font-semibold cursor-pointer"
                           >
                             {range}
                           </button>
