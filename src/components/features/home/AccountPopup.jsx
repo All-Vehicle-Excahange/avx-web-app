@@ -174,11 +174,10 @@ export default function AccountPopup({ open, onClosePopup }) {
         rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.45)]
         border border-white/10
         transition-all duration-150 ease-out z-50
-        ${
-          open && !isLoginOpen && !isSignupOpen
+        ${open && !isLoginOpen && !isSignupOpen
             ? "opacity-100 visible translate-y-0"
             : "opacity-0 invisible translate-y-1"
-        }`}
+          }`}
       >
         <div className="hidden sm:block absolute -top-2 right-10 w-4 h-4 rotate-45 bg-secondary border-l border-t border-white/10" />
 
@@ -402,7 +401,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                 <Item href="/help" onClick={onClosePopup}>
                   Help Center
                 </Item>
-                <Item href="/contact" onClick={onClosePopup}>
+                <Item href="/contactus" onClick={onClosePopup}>
                   Contact Reecomm
                 </Item>
               </Section>
@@ -470,7 +469,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                     <Item href="/help" onClick={onClosePopup}>
                       Help Center
                     </Item>
-                    <Item href="/contact" onClick={onClosePopup}>
+                    <Item href="/contactus" onClick={onClosePopup}>
                       Contact Reecomm
                     </Item>
                   </Section>
