@@ -65,21 +65,21 @@ export default function TopPerformingCard({ vehicle, rank }) {
               {/* Always visible */}
               <Link
                 href={`/vehicle/details/consualt/${generateVehicleSlug(vehicle)}/${vehicle.id}`}
-                className="block px-4 py-2 text-sm hover:bg-primary/5 text-primary"
+                className="block w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
               >
                 View Listing
               </Link>
               {tier !== "BASIC" && (
                 <>
                   <Link
-                    className="w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
+                    className="block w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
                     href={`/consult/dashboard/ads/create?vehicleId=${vehicle.id}`}
                   >
                     Boost Listing
                   </Link>
 
                   <button
-                    className="w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
+                    className="block w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
                     onClick={() => setIsListingOpen(true)}
                   >
                     Improve Listing
@@ -88,7 +88,7 @@ export default function TopPerformingCard({ vehicle, rank }) {
               )}
               {vehicle?.inspectionStatus === "NOT_INSPECTED" && (
                 <button
-                  className="w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
+                  className="block w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
                   onClick={() => {
                     setOpen(false);
                   }}

@@ -284,7 +284,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         setIsScrolled(false);
       }
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -343,15 +343,15 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   }, [mobileOpen, setMobileBannerTempHidden]);
 
   // Close desktop dropdown tabs when user scrolls
-  useEffect(() => {
-    const handleScrollClose = () => {
-      if (activeTab !== null) {
-        setActiveTab(null);
-      }
-    };
-    window.addEventListener("scroll", handleScrollClose);
-    return () => window.removeEventListener("scroll", handleScrollClose);
-  }, [activeTab]);
+  // useEffect(() => {
+  //   const handleScrollClose = () => {
+  //     if (activeTab !== null) {
+  //       setActiveTab(null);
+  //     }
+  //   };
+  //   window.addEventListener("scroll", handleScrollClose);
+  //   return () => window.removeEventListener("scroll", handleScrollClose);
+  // }, [activeTab]);
 
   // Handle keyboard navigation for dropdowns
   useEffect(() => {
