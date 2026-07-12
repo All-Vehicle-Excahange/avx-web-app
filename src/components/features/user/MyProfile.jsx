@@ -22,6 +22,8 @@ import {
   Calendar,
   MapPin,
   Map,
+  SquarePen,
+  Plus,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { ProfileSkeleton } from "@/components/ui/skeleton";
@@ -478,7 +480,7 @@ function MyProfile() {
                           <span className="font-bold">
                             {new Date(
                               suspendData.suspendUntil ||
-                                suspendData.expiryDate,
+                              suspendData.expiryDate,
                             ).toLocaleDateString("en-IN", {
                               year: "numeric",
                               month: "long",
@@ -516,60 +518,58 @@ function MyProfile() {
             {/* Admin Remark Box for REQUEST_CHANGES or REJECTED */}
             {(sellerData.verificationStatus === "REQUEST_CHANGES" ||
               sellerData.verificationStatus === "REJECTED") && (
-              <div
-                className={`rounded-2xl p-6 space-y-4 shadow-sm
-              ${
-                sellerData.verificationStatus === "REQUEST_CHANGES"
-                  ? "bg-amber-500/5 border border-amber-500/20"
-                  : "bg-red-500/5 border border-red-500/20"
-              }`}
-              >
-                <div className="flex items-start gap-3">
-                  <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0
-                  ${
-                    sellerData.verificationStatus === "REQUEST_CHANGES"
-                      ? "bg-amber-500/10 text-amber-500"
-                      : "bg-red-500/10 text-red-500"
-                  }`}
-                  >
-                    <AlertCircle className="w-5 h-5" />
+                <div
+                  className={`rounded-2xl p-6 space-y-4 shadow-sm
+              ${sellerData.verificationStatus === "REQUEST_CHANGES"
+                      ? "bg-amber-500/5 border border-amber-500/20"
+                      : "bg-red-500/5 border border-red-500/20"
+                    }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0
+                  ${sellerData.verificationStatus === "REQUEST_CHANGES"
+                          ? "bg-amber-500/10 text-amber-500"
+                          : "bg-red-500/10 text-red-500"
+                        }`}
+                    >
+                      <AlertCircle className="w-5 h-5" />
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="font-bold text-lg tracking-tight text-primary">
+                        {sellerData.verificationStatus === "REQUEST_CHANGES"
+                          ? "Updates Needed"
+                          : "Reason for Rejection"}
+                      </h3>
+                      <p className="text-third text-xs leading-relaxed">
+                        {sellerData.verificationStatus === "REQUEST_CHANGES"
+                          ? "The Reecomm verification team has requested some changes to your application."
+                          : "Your application was not approved for the following reason:"}
+                      </p>
+                    </div>
                   </div>
-                  <div className="space-y-1">
-                    <h3 className="font-bold text-lg tracking-tight text-primary">
-                      {sellerData.verificationStatus === "REQUEST_CHANGES"
-                        ? "Updates Needed"
-                        : "Reason for Rejection"}
-                    </h3>
-                    <p className="text-third text-xs leading-relaxed">
-                      {sellerData.verificationStatus === "REQUEST_CHANGES"
-                        ? "The Reecomm verification team has requested some changes to your application."
-                        : "Your application was not approved for the following reason:"}
+
+                  <div className="bg-primary/5 rounded-xl border border-primary/5 p-4 mx-0 md:ml-13">
+                    <p className="text-sm font-medium leading-relaxed text-primary">
+                      <span className="font-bold">Remark:</span>{" "}
+                      {sellerData.adminRemark || "No specific remark provided."}
                     </p>
                   </div>
-                </div>
 
-                <div className="bg-primary/5 rounded-xl border border-primary/5 p-4 mx-0 md:ml-13">
-                  <p className="text-sm font-medium leading-relaxed text-primary">
-                    <span className="font-bold">Remark:</span>{" "}
-                    {sellerData.adminRemark || "No specific remark provided."}
-                  </p>
+                  {sellerData.verificationStatus === "REQUEST_CHANGES" && (
+                    <div className="flex justify-end pt-2">
+                      <Button
+                        onClick={() => setIsSellerPopupOpen(true)}
+                        variant="ghost"
+                        size="sm"
+                        className="gap-2"
+                      >
+                        Edit & Re-submit
+                      </Button>
+                    </div>
+                  )}
                 </div>
-
-                {sellerData.verificationStatus === "REQUEST_CHANGES" && (
-                  <div className="flex justify-end pt-2">
-                    <Button
-                      onClick={() => setIsSellerPopupOpen(true)}
-                      variant="ghost"
-                      size="sm"
-                      className="gap-2"
-                    >
-                      Edit & Re-submit
-                    </Button>
-                  </div>
-                )}
-              </div>
-            )}
+              )}
 
             {/* Header & Main Status */}
             <div className="border border-primary/30 rounded-2xl overflow-hidden bg-primary/5">
@@ -577,13 +577,12 @@ function MyProfile() {
                 <div className="flex items-center gap-4">
                   <div
                     className={`w-12 h-12 rounded-2xl flex items-center justify-center
-                  ${
-                    sellerData.verificationStatus === "REQUEST_CHANGES"
-                      ? "bg-amber-500/10 text-amber-500"
-                      : sellerData.verificationStatus === "REJECTED"
-                        ? "bg-red-500/10 text-red-500"
-                        : "bg-primary/10 text-primary"
-                  }`}
+                  ${sellerData.verificationStatus === "REQUEST_CHANGES"
+                        ? "bg-amber-500/10 text-amber-500"
+                        : sellerData.verificationStatus === "REJECTED"
+                          ? "bg-red-500/10 text-red-500"
+                          : "bg-primary/10 text-primary"
+                      }`}
                   >
                     {sellerData.verificationStatus === "REJECTED" ? (
                       <AlertCircle className="w-6 h-6" />
@@ -659,15 +658,14 @@ function MyProfile() {
                         <div className="flex items-center gap-3">
                           <div
                             className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-transform relative z-10
-                          ${
-                            step.isDone
-                              ? "bg-green-500/20 text-green-500"
-                              : step.isWarning
-                                ? "bg-amber-500/20 text-amber-500"
-                                : step.isError
-                                  ? "bg-red-500/20 text-red-500"
-                                  : "bg-primary/20 text-primary"
-                          }`}
+                          ${step.isDone
+                                ? "bg-green-500/20 text-green-500"
+                                : step.isWarning
+                                  ? "bg-amber-500/20 text-amber-500"
+                                  : step.isError
+                                    ? "bg-red-500/20 text-red-500"
+                                    : "bg-primary/20 text-primary"
+                              }`}
                           >
                             {step.isDone ? (
                               <CheckCircle2 className="w-5 h-5" />
@@ -685,15 +683,14 @@ function MyProfile() {
                         <div className="flex flex-col items-end">
                           <span
                             className={`text-xs font-bold
-                          ${
-                            step.isDone
-                              ? "text-green-500"
-                              : step.isWarning
-                                ? "text-yellow-500"
-                                : step.isError
-                                  ? "text-red-500"
-                                  : "text-primary"
-                          }`}
+                          ${step.isDone
+                                ? "text-green-500"
+                                : step.isWarning
+                                  ? "text-yellow-500"
+                                  : step.isError
+                                    ? "text-red-500"
+                                    : "text-primary"
+                              }`}
                           >
                             {step.status}
                           </span>
@@ -724,20 +721,20 @@ function MyProfile() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
         {/*  PROFILE INFO SECTION */}
-        <div className="bg-third/5 rounded-3xl border border-white/10 p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.37)] hover:border-fourth/30 transition-all duration-300 relative group overflow-hidden">
-          
+        <div className="bg-third/5 rounded-3xl border border-white/10 p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.37)] text-white/60 transition-all duration-300 relative group overflow-hidden">
+
           <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-fourth/10 flex items-center justify-center text-fourth border border-fourth/20">
+              <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white border border-white/10">
                 <User size={20} />
               </div>
               <h2 className="text-xl font-bold text-primary tracking-tight">Profile Info</h2>
             </div>
 
             {!isEditingProfile && profile.role !== "USER_SELLER_APPLICANT" && (
-              <Button variant="ghost" onClick={handleEditProfile}>
-                Edit
-              </Button>
+              <button onClick={handleEditProfile} className="text-third hover:text-white transition-colors p-2 rounded-full hover:bg-white/5 cursor-pointer">
+                <SquarePen size={18} />
+              </button>
             )}
           </div>
 
@@ -844,10 +841,9 @@ function MyProfile() {
                   disabled={!isProfileFormValid}
                   onClick={handleSaveProfile}
                   className={`flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-bold transition-all duration-300 text-sm hover:cursor-pointer
-                    ${
-                      !isProfileFormValid
-                        ? "bg-white/10 text-white/40 border border-white/5 cursor-not-allowed"
-                        : "bg-fourth text-white border border-fourth hover:bg-transparent hover:text-fourth shadow-[0_4px_12px_rgba(0,123,255,0.2)]"
+                    ${!isProfileFormValid
+                      ? "bg-white/10 text-white/40 border border-white/5 cursor-not-allowed"
+                      : "bg-fourth text-white border border-fourth hover:bg-transparent hover:text-fourth shadow-[0_4px_12px_rgba(0,123,255,0.2)]"
                     }`}
                 >
                   {!isProfileFormValid ? (
@@ -865,11 +861,11 @@ function MyProfile() {
         </div>
 
         {/* ✅ PROFILE META SECTION */}
-        <div className="relative overflow-visible bg-third/5 rounded-3xl border border-white/10 p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.37)] hover:border-fourth/30 transition-all duration-300 group">
-          
+        <div className="relative overflow-visible bg-third/5 rounded-3xl border border-white/10 p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.37)] text-white/60 transition-all duration-300 group">
+
           <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-fourth/10 flex items-center justify-center text-fourth border border-fourth/20">
+              <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white border border-white/10">
                 <MapPin size={20} />
               </div>
               <h2 className="text-xl font-bold text-primary tracking-tight">Profile Meta</h2>
@@ -878,12 +874,13 @@ function MyProfile() {
             {!isEditingMeta &&
               !isCreatingMeta &&
               profile.role !== "USER_SELLER_APPLICANT" && (
-                <Button
-                  variant="ghost"
+                <button
                   onClick={isMetaExist ? handleEditMeta : handleCreateMeta}
+                  className="text-third hover:text-white transition-colors p-2 rounded-full hover:bg-white/5 cursor-pointer"
+                  title={isMetaExist ? "Edit Meta" : "Create Meta"}
                 >
-                  {isMetaExist ? "Edit" : "Create"}
-                </Button>
+                  {isMetaExist ? <SquarePen size={18} /> : <Plus size={18} />}
+                </button>
               )}
           </div>
 
@@ -1101,10 +1098,9 @@ function MyProfile() {
                   disabled={!isMetaFormValid}
                   onClick={handleSaveMeta}
                   className={`flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-bold transition-all duration-300 text-sm hover:cursor-pointer
-                    ${
-                      !isMetaFormValid
-                        ? "bg-white/10 text-white/40 border border-white/5 cursor-not-allowed"
-                        : "bg-fourth text-white border border-fourth hover:bg-transparent hover:text-fourth shadow-[0_4px_12px_rgba(0,123,255,0.2)]"
+                    ${!isMetaFormValid
+                      ? "bg-white/10 text-white/40 border border-white/5 cursor-not-allowed"
+                      : "bg-fourth text-white border border-fourth hover:bg-transparent hover:text-fourth shadow-[0_4px_12px_rgba(0,123,255,0.2)]"
                     }`}
                 >
                   {isCreatingMeta ? "Complete Profile" : "Save Changes"}
@@ -1130,13 +1126,13 @@ export default MyProfile;
 
 function ProfileItem({ label, value, icon: Icon, className = "" }) {
   return (
-    <div className={`flex items-center gap-4 bg-white/5 border border-white/5 rounded-2xl p-5 hover:bg-white/10 hover:border-white/10 transition-all duration-300 ${className}`}>
+    <div className={`flex items-center gap-4 py-2 px-1 ${className}`}>
       {Icon && (
-        <Icon size={20} className="text-fourth shrink-0" />
+        <Icon size={20} className="text-white shrink-0" />
       )}
       <div className="flex flex-col gap-0.5">
-        <span className="text-xs text-third font-semibold uppercase tracking-wider">{label}</span>
-        <span className="font-semibold text-primary text-base">{value || "—"}</span>
+        <span className="text-xs text-third font-medium capitalize tracking-wide">{label}</span>
+        <span className="font-semibold text-primary text-[15px] break-all">{value || "—"}</span>
       </div>
     </div>
   );

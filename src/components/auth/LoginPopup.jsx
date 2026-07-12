@@ -19,8 +19,8 @@ import 'swiper/css/pagination';
 function LoginPopup({
   isOpen,
   onClose,
-  onSignup = () => {},
-  onSuccess = () => {},
+  onSignup = () => { },
+  onSuccess = () => { },
 }) {
   const {
     register,
@@ -47,6 +47,13 @@ function LoginPopup({
   // Check for active block on mount or when popup opens
   useEffect(() => {
     if (isOpen) {
+      reset();
+      setOtp(Array(6).fill(""));
+      setOtpSent(false);
+      setOtpError("");
+      setIsLoading(false);
+      setIsGoogleLoading(false);
+
       const blockUntil = localStorage.getItem("otpBlockUntil");
       if (blockUntil) {
         const remaining = Math.ceil((Number(blockUntil) - Date.now()) / 1000);
@@ -173,9 +180,9 @@ function LoginPopup({
 
       if (res?.success || res?.status) {
         setOtpSent(true);
-        const blockTime = Date.now() + 60 * 1000;
+        const blockTime = Date.now() + 30 * 1000;
         localStorage.setItem("otpBlockUntil", String(blockTime));
-        setCountdown(60);
+        setCountdown(30);
         setTimeout(() => otpRefs.current[0]?.focus(), 200);
       }
     } catch (err) {
@@ -189,9 +196,9 @@ function LoginPopup({
 
       if (msg.toLowerCase().includes("otp already sent")) {
         setOtpSent(true);
-        const blockTime = Date.now() + 60 * 1000;
+        const blockTime = Date.now() + 30 * 1000;
         localStorage.setItem("otpBlockUntil", String(blockTime));
-        setCountdown(60);
+        setCountdown(30);
         setTimeout(() => otpRefs.current[0]?.focus(), 200);
         return;
       }
@@ -247,7 +254,9 @@ function LoginPopup({
       if (res?.success || res?.status) {
         localStorage.removeItem("otpBlockUntil");
         setCountdown(0);
-        onSuccess();
+        if (accountType !== "consultant") {
+          await onSuccess();
+        }
         handleClose();
       }
     } catch (err) {
@@ -319,7 +328,7 @@ function LoginPopup({
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-black/80" />
-                
+
                 <div className="absolute bottom-12 right-8 z-10 flex flex-col items-end text-right">
                   <div className="flex items-center gap-2 mb-1">
                     <div className="w-10 h-10 bg-fourth rounded-full flex items-center justify-center">
@@ -346,7 +355,7 @@ function LoginPopup({
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-black/80" />
-                
+
                 <div className="absolute bottom-12 right-8 z-10 flex flex-col items-end text-right">
                   <div className="flex items-center gap-2 mb-1">
                     <div className="w-10 h-10 bg-fourth rounded-full flex items-center justify-center">
@@ -373,7 +382,7 @@ function LoginPopup({
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-black/80" />
-                
+
                 <div className="absolute bottom-12 right-8 z-10 flex flex-col items-end text-right">
                   <div className="flex items-center gap-2 mb-1">
                     <div className="w-10 h-10 bg-fourth rounded-full flex items-center justify-center">

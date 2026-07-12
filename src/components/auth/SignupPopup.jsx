@@ -48,7 +48,14 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
   // Check for active block on mount or when popup opens
   useEffect(() => {
     if (isOpen) {
+      reset();
+      setOtp(Array(6).fill(""));
+      setOtpSent(false);
+      setAcceptedTerms(false);
+      setIsLoading(false);
+      setIsGoogleLoading(false);
       setAccountType(defaultTab || "personal");
+
       const blockUntil = localStorage.getItem("otpBlockUntil");
       if (blockUntil) {
         const remaining = Math.ceil((Number(blockUntil) - Date.now()) / 1000);
@@ -182,9 +189,9 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
       // Check error flag first, then success
       if (!res?.error && (res?.success || res?.status)) {
         setOtpSent(true);
-        const blockTime = Date.now() + 60 * 1000;
+        const blockTime = Date.now() + 30 * 1000;
         localStorage.setItem("otpBlockUntil", String(blockTime));
-        setCountdown(60);
+        setCountdown(30);
         setTimeout(() => otpRefs.current[0]?.focus(), 200);
       } else if (res?.error) {
         // Handle API errors returned in response
@@ -192,9 +199,9 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
 
         if (msg?.includes("otp already sent")) {
           setOtpSent(true);
-          const blockTime = Date.now() + 60 * 1000;
+          const blockTime = Date.now() + 30 * 1000;
           localStorage.setItem("otpBlockUntil", String(blockTime));
-          setCountdown(60);
+          setCountdown(30);
           setTimeout(() => otpRefs.current[0]?.focus(), 200);
           return;
         }
@@ -226,9 +233,9 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
 
       if (msg?.includes("otp already sent")) {
         setOtpSent(true);
-        const blockTime = Date.now() + 60 * 1000;
+        const blockTime = Date.now() + 30 * 1000;
         localStorage.setItem("otpBlockUntil", String(blockTime));
-        setCountdown(60);
+        setCountdown(30);
         setTimeout(() => otpRefs.current[0]?.focus(), 200);
         return;
       }
@@ -299,7 +306,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
           // Wait for onSuccess to complete (which might open CompleteProfilePopup)
           await onSuccess();
         } else {
-          // For consultants, do not open complete profile. Redirect to pricing so they can checkout/open Razorpay.
+          // For consultants, do not open Didn't receive OTP?. Redirect to pricing so they can checkout/open Razorpay.
           if (window.location.pathname !== "/consult") {
             push("/consult");
           }
@@ -308,6 +315,21 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         handleClosePopup();
       } else if (res?.error) {
         const msg = res?.message?.toLowerCase();
+
+        if (res?.data?.validationErrors) {
+          setOtpSent(false);
+          const errors = res.data.validationErrors;
+          const fieldMap = { firstname: "firstName", lastname: "lastName", phonenumber: "phone", mobile: "phone" };
+          Object.entries(errors).forEach(([field, message]) => {
+            const formField = fieldMap[field.toLowerCase()] || field;
+            setError(formField, { type: "server", message });
+          });
+          if (Object.keys(errors).length > 0) {
+            setIsLoading(false);
+            return;
+          }
+        }
+
         if (
           msg?.includes("blocked") ||
           msg?.includes("too many attempts") ||
@@ -319,8 +341,10 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         }
 
         if (msg?.includes("email")) {
+          setOtpSent(false);
           setError("email", { type: "server", message: res.message });
         } else if (msg?.includes("phone")) {
+          setOtpSent(false);
           setError("phone", { type: "server", message: res.message });
         } else {
           setError("root", {
@@ -333,6 +357,20 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
       const api = err?.response?.data;
       const msg = api?.message?.toLowerCase();
 
+      if (api?.data?.validationErrors) {
+        setOtpSent(false);
+        const errors = api.data.validationErrors;
+        const fieldMap = { firstname: "firstName", lastname: "lastName", phonenumber: "phone", mobile: "phone" };
+        Object.entries(errors).forEach(([field, message]) => {
+          const formField = fieldMap[field.toLowerCase()] || field;
+          setError(formField, { type: "server", message });
+        });
+        if (Object.keys(errors).length > 0) {
+          setIsLoading(false);
+          return;
+        }
+      }
+
       if (
         msg?.includes("blocked") ||
         msg?.includes("too many attempts") ||
@@ -344,8 +382,10 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
       }
 
       if (msg?.includes("email")) {
+        setOtpSent(false);
         setError("email", { type: "server", message: api.message });
       } else if (msg?.includes("phone")) {
+        setOtpSent(false);
         setError("phone", { type: "server", message: api.message });
       } else {
         setError("root", {

@@ -58,12 +58,21 @@ export default function ConsultantCard(props) {
             fill
             className="object-cover"
           />
-          {String(data?.tierTitle).toUpperCase() === "PREMIUM" && (
-            <div className="absolute top-[14px] -left-[35px] w-[140px] -rotate-45 bg-fourth text-white text-[10px] font-bold py-1 text-center shadow-lg tracking-widest z-[100] pointer-events-none border-y border-white/20">
-              VERIFIED 
-            </div>
-          )}
         </div>
+        {String(data?.tierTitle).toUpperCase() === "PREMIUM" && (
+          <div className="absolute top-[2px] right-5 z-[100]">
+            {/* Curved 3D Fold on the back side */}
+            <div className="absolute top-0 -right-[4px] w-[4px] h-[6px] bg-[#05468E] rounded-tr-[4px]"></div>
+
+            {/* Main Ribbon */}
+            <div className="bg-[#0D87FF] w-[52px] pt-1 pb-1.5 rounded-b-[10px] flex flex-col items-center justify-center shadow-md relative rounded-tl-[4px]">
+              <BadgeCheck size={15} strokeWidth={2.5} className="fill-white text-[#0D87FF] mb-[2px]" />
+              <span className="text-white text-[7px] font-black leading-[1.1] text-center font-semibold tracking-wider">
+                VERIFIED
+              </span>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="px-5 pb-5 pt-0 relative flex flex-col flex-1">
