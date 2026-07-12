@@ -45,7 +45,7 @@ export default function HamburgerDrawer({ open, onClose }) {
     : "Guest";
 
   const getSellVehicleLink = () => {
-    if (!isLoggedIn) return "/became-seller";
+    if (!isLoggedIn) return "/become-seller";
     if (isConsultant) return "/consult/dashboard/inventory";
     return "/user/details/myvehicle";
   };
@@ -563,7 +563,7 @@ export default function HamburgerDrawer({ open, onClose }) {
                       >
                         Register
                       </button>
-                      <MenuLink href="/became-seller" onClick={onClose}>
+                       <MenuLink href="/become-seller" onClick={onClose}>
                         Sell Vehicle
                       </MenuLink>
                       <MenuLink href="/consult" onClick={onClose}>
@@ -620,11 +620,12 @@ export default function HamburgerDrawer({ open, onClose }) {
                       <MenuLink href="/user/details/wishlist" onClick={onClose}>
                         Saved Vehicles
                       </MenuLink>
-                      <MenuLink href="/compare" onClick={onClose}>
-                        Compare Vehicles
-                      </MenuLink>
                       <MenuLink
-                        href="/user/details/inquaries"
+                        href={
+                          ["USER_SELLER", "USER_SELLER_APPLICANT"].includes(user?.userRole)
+                            ? "/user/details/received-inquiries"
+                            : "/user/details/sent-inquiries"
+                        }
                         onClick={onClose}
                       >
                         Inquiries

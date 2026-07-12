@@ -713,7 +713,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                       if (!isLoggedIn) {
                         return {
                           label: "Sell Your Vehicle",
-                          href: "/became-seller",
+                          href: "/become-seller",
                         };
                       }
 

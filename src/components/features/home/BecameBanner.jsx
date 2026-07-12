@@ -13,7 +13,7 @@ function BecameBanner() {
         "
         >
           <Link
-            href="/became-seller"
+            href="/become-seller"
             className="
               group
               flex-1

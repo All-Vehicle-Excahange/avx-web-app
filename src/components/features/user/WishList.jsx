@@ -1,6 +1,7 @@
 import ConsultantCard from "@/components/ui/const/ConsultCard";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 import Button from "@/components/ui/button";
 import {
   Settings2,
@@ -25,9 +26,16 @@ import {
 } from "@/queries/user.queries";
 
 function Wishlist() {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("wishlist");
   const [editMode, setEditMode] = useState(false);
+
+  React.useEffect(() => {
+    if (router.query.tab) {
+      setActiveTab(router.query.tab);
+    }
+  }, [router.query.tab]);
 
   const tabs = [
     { id: "wishlist", label: "Wishlist" },

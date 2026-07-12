@@ -21,7 +21,7 @@ function UserDetails() {
 
   React.useEffect(() => {
     if (isConsultant && activeTab === "myvehicle") {
-      push("/user/details/myinquary");
+      push("/user/details/sent-inquiries");
     }
   }, [isConsultant, activeTab, push]);
 
@@ -32,19 +32,19 @@ function UserDetails() {
       <div className="flex  gap-10 border-b border-third/30 overflow-x-auto no-scrollbar whitespace-nowrap">
         {[
           { id: "myvehicle", label: "My Vehicles" },
-          { id: "inquaries", label: "Recive Inquiries" },
-          { id: "myinquary", label: "Send Inquiry" },
+          { id: "received-inquiries", label: "Receive Inquiries" },
+          { id: "sent-inquiries", label: "Send Inquiry" },
           { id: "inspections", label: "Reecomm Inspections" },
           { id: "wishlist", label: "My Activity & Preference" },
           { id: "myprofile", label: "My Profile" },
         ]
           .filter((tab) => {
             if (isConsultant) {
-              if (tab.id === "myvehicle" || tab.id === "inquaries") {
+              if (tab.id === "myvehicle" || tab.id === "received-inquiries") {
                 return false;
               }
             }
-            if (tab.id === "inquaries") {
+            if (tab.id === "received-inquiries") {
               const allowedRoles = ["USER_SELLER", "USER_SELLER_APPLICANT", "CONSULTATION"];
               return allowedRoles.includes(user?.userRole);
             }
@@ -70,8 +70,8 @@ function UserDetails() {
 
       {/* TAB CONTENT */}
       {resolvedTab === "myvehicle" && <MyVehicle />}
-      {resolvedTab === "inquaries" && <Inquiries />}
-      {resolvedTab === "myinquary" && <MyInquary />}
+      {resolvedTab === "received-inquiries" && <Inquiries />}
+      {resolvedTab === "sent-inquiries" && <MyInquary />}
       {resolvedTab === "inspections" && <Inspection />}
       {resolvedTab === "wishlist" && <Wishlist />}
       {resolvedTab === "myprofile" && <MyProfile />}

@@ -28,7 +28,7 @@ function index() {
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://reecomm.com/became-seller" />
+        <meta property="og:url" content="https://reecomm.com/become-seller" />
         <meta property="og:title" content="Become a Reecomm Seller — Sell Your Used Vehicle with Zero Commission" />
         <meta
           property="og:description"

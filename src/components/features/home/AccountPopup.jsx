@@ -419,10 +419,14 @@ export default function AccountPopup({ open, onClosePopup }) {
                       Saved Vehicles
                     </Item>
                     {/*<Item href="/" onClick={onClosePopup}>Recently Viewed</Item>*/}
-                    <Item href="/compare" onClick={onClosePopup}>
-                      Compare List
-                    </Item>
-                    <Item href="/user/details/inquaries" onClick={onClosePopup}>
+                    <Item
+                      href={
+                        ["USER_SELLER", "USER_SELLER_APPLICANT"].includes(user?.userRole)
+                          ? "/user/details/received-inquiries"
+                          : "/user/details/sent-inquiries"
+                      }
+                      onClick={onClosePopup}
+                    >
                       My Inquiries
                     </Item>
                     <Item
@@ -435,24 +439,29 @@ export default function AccountPopup({ open, onClosePopup }) {
 
                   <Section title="Buying Tools">
                     <Item href="/inspection-process" onClick={onClosePopup}>
-                      Request Reecomm Inspection
+                      How reecomm inspection work
                     </Item>
-                    <Item href="/track-bookings" onClick={onClosePopup}>
-                      Track Bookings
+                    <Item href="/user/details/inspections" onClick={onClosePopup}>
+                      Track Inspection
                     </Item>
+                    {["USER_SELLER", "USER_SELLER_APPLICANT"].includes(user?.userRole) && (
+                      <Item href="/user/details/inspections?tab=received" onClick={onClosePopup}>
+                        Inspection Requests
+                      </Item>
+                    )}
                   </Section>
 
                   <Section title="Selling">
-                    <Item href="/user/details/myvehicle" onClick={onClosePopup}>
-                      Sell Your Vehicle (MY Garage)
+                    <Item href="/become-seller" onClick={onClosePopup}>
+                      Sell your personal vehicle
                     </Item>
                     <Item href="/user/details/myvehicle" onClick={onClosePopup}>
-                      My Listing
+                      My Vehicle
                     </Item>
                   </Section>
 
                   <Section title="Subscriptions">
-                    <Item href="/user/details/wishlist" onClick={onClosePopup}>
+                    <Item href="/user/details/wishlist?tab=subscribed" onClick={onClosePopup}>
                       Followed Consultants
                     </Item>
                   </Section>
@@ -530,7 +539,7 @@ export default function AccountPopup({ open, onClosePopup }) {
 
                     <Section title="Buyer">
                       <Item
-                        href="/user/details/myinquary"
+                        href="/user/details/sent-inquiries"
                         onClick={onClosePopup}
                       >
                         My Activity
@@ -703,7 +712,7 @@ function Section({ title, children }) {
   return (
     <div>
       <p className="font-bold mb-2 text-primary">{title}</p>
-      <ul className="space-y-1 text-primary/70">{children}</ul>
+      <ul className="space-y-2.5 text-primary/70">{children}</ul>
     </div>
   );
 }
@@ -711,7 +720,7 @@ function Section({ title, children }) {
 function Item({ children, onClick, href }) {
   if (href) {
     return (
-      <li className="hover:text-third cursor-pointer hover:underline">
+      <li className="hover:text-third cursor-pointer hover:underline leading-tight py-0.5">
         <Link href={href} onClick={onClick}>
           {children}
         </Link>
@@ -721,7 +730,7 @@ function Item({ children, onClick, href }) {
   return (
     <li
       onClick={onClick}
-      className="hover:text-third cursor-pointer hover:underline"
+      className="hover:text-third cursor-pointer hover:underline leading-tight py-0.5"
     >
       {children}
     </li>

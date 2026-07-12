@@ -23,6 +23,12 @@ function Inspection() {
   const [selectedInspection, setSelectedInspection] = useState(null);
   const [animateModal, setAnimateModal] = useState(false);
 
+  React.useEffect(() => {
+    if (router.query.tab) {
+      setActiveTab(router.query.tab);
+    }
+  }, [router.query.tab]);
+
   const handleOpenTracking = (item) => {
     setSelectedInspection(item);
     setTimeout(() => setAnimateModal(true), 10);
@@ -121,10 +127,10 @@ function Inspection() {
               </p>
             </div>
             <button
-              onClick={() => router.push("/search")}
+              onClick={() => router.push("/inspection-process")}
               className="px-6 py-3 border border-white rounded-xl text-white font-medium hover:bg-white/10 transition-all duration-300 shadow-sm cursor-pointer whitespace-nowrap"
             >
-              Get this vehicle inspected
+              Learn how inspection works
             </button>
           </div>
         </div>
