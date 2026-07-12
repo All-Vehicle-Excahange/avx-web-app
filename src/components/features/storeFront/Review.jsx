@@ -175,11 +175,10 @@ export default function Review() {
                   {[1, 2, 3, 4, 5].map((i) => (
                     <Star
                       key={i}
-                      className={`w-4 h-4 ${
-                        i <= Math.round(reviewSummary.averageRating)
-                          ? "fill-yellow-400 text-yellow-400"
-                          : "text-gray-300"
-                      }`}
+                      className={`w-4 h-4 ${i <= Math.round(reviewSummary.averageRating)
+                        ? "fill-yellow-400 text-yellow-400"
+                        : "text-gray-300"
+                        }`}
                     />
                   ))}
 
@@ -251,9 +250,8 @@ export default function Review() {
                     <Star
                       key={i}
                       onClick={() => setRating(i)}
-                      className={`w-6 h-6 cursor-pointer transition ${
-                        i <= rating ? "fill-primary text-primary" : "text-third"
-                      }`}
+                      className={`w-6 h-6 cursor-pointer transition ${i <= rating ? "fill-primary text-primary" : "text-third"
+                        }`}
                     />
                   ))}
                 </div>
@@ -385,17 +383,19 @@ export default function Review() {
         {/* ================= RIGHT ================= */}
         <div className="space-y-6">
           {reviews.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-10 sm:py-16 px-0 sm:px-6 border-0 sm:border-2 border-dashed border-third/40 rounded-none sm:rounded-2xl text-center">
-              <div className="w-16 h-16 bg-third/10 rounded-full flex items-center justify-center mb-4">
-                <MessageSquare className="w-8 h-8 text-third" />
+            <div className="h-full flex justify-center items-center">
+              <div className="flex flex-col justify-center items-center">
+                <div className="w-16 h-16 bg-third/10 rounded-full flex items-center justify-center mb-4">
+                  <MessageSquare className="w-8 h-8 text-third" />
+                </div>
+                <h3 className="text-lg font-semibold text-primary mb-2">
+                  No reviews yet
+                </h3>
+                <p className="text-sm text-third max-w-sm mx-auto">
+                  Be the first to review this item. Share your experience to help
+                  others make better choices.
+                </p>
               </div>
-              <h3 className="text-lg font-semibold text-primary mb-2">
-                No reviews yet
-              </h3>
-              <p className="text-sm text-third max-w-sm mx-auto">
-                Be the first to review this item. Share your experience to help
-                others make better choices.
-              </p>
             </div>
           ) : (
             reviews.map((review) => {
@@ -444,11 +444,10 @@ export default function Review() {
                     {[1, 2, 3, 4, 5].map((i) => (
                       <Star
                         key={i}
-                        className={`w-4 h-4 ${
-                          i <= review.rating
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "text-gray-300"
-                        }`}
+                        className={`w-4 h-4 ${i <= review.rating
+                          ? "fill-yellow-400 text-yellow-400"
+                          : "text-gray-300"
+                          }`}
                       />
                     ))}
                   </div>

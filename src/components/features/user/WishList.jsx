@@ -13,6 +13,7 @@ import {
   Edit3,
 } from "lucide-react";
 import { updatePreference, addUserPefrence } from "@/services/user.service";
+import Image from "next/image";
 import {
   VehicleCardSkeleton,
   ConsultantCardSkeleton,
@@ -136,11 +137,10 @@ function Wishlist() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2 rounded-full text-sm font-medium border transition whitespace-nowrap
-                ${
-                  activeTab === tab.id
-                    ? "bg-primary text-secondary border-primary"
-                    : "border-third/50 text-primary hover:bg-third/20"
+              className={`px-4 py-2 rounded-full text-sm font-medium border cursor-pointer transition whitespace-nowrap
+                ${activeTab === tab.id
+                  ? "bg-primary text-secondary border-primary"
+                  : "border-third/50 text-primary hover:bg-third/20"
                 }`}
             >
               {tab.label}
@@ -176,18 +176,26 @@ function Wishlist() {
                   </div>
                 ))
               ) : (
-                <div className="col-span-full py-16 flex flex-col items-center justify-center text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5 mt-4">
+                <div className="col-span-full flex flex-col items-center justify-center py-8 sm:py-15 text-center w-full">
+                  <div className="relative w-32 h-32 mb-2 opacity-60">
+                    <Image
+                      src="/empty2.svg"
+                      alt="Empty State"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
                   <h3 className="text-xl font-bold mb-2 text-primary">
                     Your wishlist is empty.
                   </h3>
-                  <p className="text-third text-sm max-w-sm">
+                  <p className="text-third text-sm max-w-sm px-4">
                     Browse our vehicle marketplace and add your favorites to
                     your wishlist.
                   </p>
                 </div>
               )}
             </div>
-             {hasNextPageWishlist && cardData.length > 0 && !isLoadingWishlist && (
+            {hasNextPageWishlist && cardData.length > 0 && !isLoadingWishlist && (
               <div className="flex justify-end mt-6">
                 <Button
                   variant="outline"
@@ -221,11 +229,19 @@ function Wishlist() {
                   />
                 ))
               ) : (
-                <div className="col-span-full py-16 flex flex-col items-center justify-center text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5 mt-4">
+                <div className="col-span-full flex flex-col items-center justify-center py-8 sm:py-15 text-center w-full">
+                  <div className="relative w-32 h-32 mb-2 opacity-60">
+                    <Image
+                      src="/empty2.svg"
+                      alt="Empty State"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
                   <h3 className="text-xl font-bold mb-2 text-primary">
                     You haven&apos;t subscribed to any consultants yet.
                   </h3>
-                  <p className="text-third text-sm max-w-sm">
+                  <p className="text-third text-sm max-w-sm px-4">
                     Follow consultants to get expert advice and exclusive deal
                     updates.
                   </p>
@@ -296,34 +312,34 @@ function Wishlist() {
                 {/* Brands & Models */}
                 {(userPref.makerDetails?.length > 0 ||
                   userPref.modelDetails?.length > 0) && (
-                  <div className="p-6 rounded-2xl border border-third/20 bg-primary/2 hover:bg-primary/4 transition-colors group">
-                    <Car
-                      className="text-third mb-3 group-hover:scale-110 transition-transform"
-                      size={24}
-                    />
-                    <h3 className="font-semibold text-primary mb-4">
-                      Brands & Models
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {userPref.makerDetails?.map((m) => (
-                        <span
-                          key={m.makerId}
-                          className="px-3 py-1.5 text-xs font-medium bg-primary/10 text-primary rounded-full"
-                        >
-                          {m.makerName}
-                        </span>
-                      ))}
-                      {userPref.modelDetails?.map((m) => (
-                        <span
-                          key={m.modelId}
-                          className="px-3 py-1.5 text-xs font-medium border border-primary/20 text-primary/70 rounded-full"
-                        >
-                          {m.modelName}
-                        </span>
-                      ))}
+                    <div className="p-6 rounded-2xl border border-third/20 bg-primary/2 hover:bg-primary/4 transition-colors group">
+                      <Car
+                        className="text-third mb-3 group-hover:scale-110 transition-transform"
+                        size={24}
+                      />
+                      <h3 className="font-semibold text-primary mb-4">
+                        Brands & Models
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {userPref.makerDetails?.map((m) => (
+                          <span
+                            key={m.makerId}
+                            className="px-3 py-1.5 text-xs font-medium bg-primary/10 text-primary rounded-full"
+                          >
+                            {m.makerName}
+                          </span>
+                        ))}
+                        {userPref.modelDetails?.map((m) => (
+                          <span
+                            key={m.modelId}
+                            className="px-3 py-1.5 text-xs font-medium border border-primary/20 text-primary/70 rounded-full"
+                          >
+                            {m.modelName}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 {/* Vehicle Types */}
                 {userPref.vehicleTypes?.length > 0 && (
@@ -351,32 +367,32 @@ function Wishlist() {
                 {/* Fuel & Transmission */}
                 {(userPref.fuelTypes?.length > 0 ||
                   userPref.transmissionTypes?.length > 0) && (
-                  <div className="p-6 rounded-2xl border border-third/20 bg-primary/2 hover:bg-primary/4 transition-colors group">
-                    <Fuel
-                      className="text-third mb-3 group-hover:scale-110 transition-transform"
-                      size={24}
-                    />
-                    <h3 className="font-semibold text-primary mb-4">Specs</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {userPref.fuelTypes?.map((f) => (
-                        <span
-                          key={f}
-                          className="px-3 py-1.5 text-xs font-medium bg-secondary text-primary border border-primary/10 rounded-full capitalize"
-                        >
-                          {f.toLowerCase()}
-                        </span>
-                      ))}
-                      {userPref.transmissionTypes?.map((t) => (
-                        <span
-                          key={t}
-                          className="px-3 py-1.5 text-xs font-medium bg-secondary text-primary border border-primary/10 rounded-full capitalize"
-                        >
-                          {t.toLowerCase()}
-                        </span>
-                      ))}
+                    <div className="p-6 rounded-2xl border border-third/20 bg-primary/2 hover:bg-primary/4 transition-colors group">
+                      <Fuel
+                        className="text-third mb-3 group-hover:scale-110 transition-transform"
+                        size={24}
+                      />
+                      <h3 className="font-semibold text-primary mb-4">Specs</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {userPref.fuelTypes?.map((f) => (
+                          <span
+                            key={f}
+                            className="px-3 py-1.5 text-xs font-medium bg-secondary text-primary border border-primary/10 rounded-full capitalize"
+                          >
+                            {f.toLowerCase()}
+                          </span>
+                        ))}
+                        {userPref.transmissionTypes?.map((t) => (
+                          <span
+                            key={t}
+                            className="px-3 py-1.5 text-xs font-medium bg-secondary text-primary border border-primary/10 rounded-full capitalize"
+                          >
+                            {t.toLowerCase()}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 {/* Budget */}
                 {(userPref.minPrice || userPref.maxPrice) && (
@@ -428,12 +444,19 @@ function Wishlist() {
                 )}
               </div>
             ) : (
-              <div className="w-full py-20 flex flex-col items-center justify-center text-center rounded-3xl border border-dashed border-third/30 bg-primary/2">
-                <Settings2 size={48} className="text-third/40 mb-4" />
+              <div className="w-full flex flex-col items-center justify-center py-8 sm:py-15 text-center">
+                <div className="relative w-32 h-32 mb-2 opacity-60">
+                  <Image
+                    src="/empty2.svg"
+                    alt="Empty State"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
                 <h3 className="text-xl font-bold mb-2 text-primary">
                   No preferences set
                 </h3>
-                <p className="text-primary/50 text-sm max-w-sm mb-6">
+                <p className="text-third text-sm max-w-sm px-4 mb-6">
                   Tell us what kind of vehicles you&apos;re looking for, and
                   we&apos;ll personalize your experience.
                 </p>

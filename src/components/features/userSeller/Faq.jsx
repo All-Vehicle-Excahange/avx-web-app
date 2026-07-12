@@ -169,9 +169,9 @@ export default function FAQSection() {
                   <Button
                     onClick={handleStartSelling}
                     variant="ghost"
-                    className="py-3  bg-primary text-secondary text-sm font-black tracking-[0.2em] hover:bg-primary hover:scale-105 transition-all rounded-full border-none shadow-2xl flex items-center group/btn"
+                    className="py-3 bg-primary text-secondary text-sm font-semibold hover:bg-primary hover:scale-105 transition-all rounded-full border-none shadow-2xl flex items-center group/btn"
                   >
-                    CONTINUE TO KYC
+                    Continue To KYC
                     <ArrowRight
                       className="ml-3 group-hover/btn:translate-x-1 transition-transform"
                       size={18}

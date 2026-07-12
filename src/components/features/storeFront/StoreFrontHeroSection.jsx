@@ -62,15 +62,15 @@ export default function StoreFrontHeroSection() {
   const localFollowersCount = Math.max(
     0,
     (storeDetails?.followersCount || 0) +
-      (optimisticFollowState === null
-        ? 0
-        : optimisticFollowState
-          ? storeDetails?.isFollower
-            ? 0
-            : 1
-          : storeDetails?.isFollower
-            ? -1
-            : 0),
+    (optimisticFollowState === null
+      ? 0
+      : optimisticFollowState
+        ? storeDetails?.isFollower
+          ? 0
+          : 1
+        : storeDetails?.isFollower
+          ? -1
+          : 0),
   );
 
   const debouncedSyncFollow = useDebouncedCallback(async (nextState) => {
@@ -143,8 +143,8 @@ export default function StoreFrontHeroSection() {
   const formattedPrice =
     storeDetails.minVehiclePrice && storeDetails.maxVehiclePrice
       ? `₹${Number(storeDetails.minVehiclePrice).toLocaleString()} - ₹${Number(
-          storeDetails.maxVehiclePrice,
-        ).toLocaleString()}`
+        storeDetails.maxVehiclePrice,
+      ).toLocaleString()}`
       : "-";
 
   const formatFollowerCount = (count) => {
@@ -204,22 +204,20 @@ export default function StoreFrontHeroSection() {
                   <button
                     onClick={handleFollowToggle}
                     type="button"
-                    className={`group w-full rounded-full px-4 py-1.5 lg:py-2 border flex items-center justify-center gap-2 text-sm lg:text-base font-medium cursor-pointer transition-all duration-300 ease-in-out ${
-                      isFollower
-                        ? "bg-fourth text-primary border-fourth hover:bg-transparent hover:text-fourth"
-                        : "bg-primary text-secondary border-primary hover:bg-transparent hover:text-primary"
-                    }`}
+                    className={`group w-full rounded-full px-4 py-1.5 lg:py-2 border flex items-center justify-center gap-2 text-sm lg:text-base font-medium cursor-pointer transition-all duration-300 ease-in-out ${isFollower
+                      ? "bg-fourth text-primary border-fourth hover:bg-transparent hover:text-fourth"
+                      : "bg-primary text-secondary border-primary hover:bg-transparent hover:text-primary"
+                      }`}
                   >
                     <span className="transition-colors duration-300">
                       {isFollower ? "Unsubscribe" : "Subscribe"}
                     </span>
 
                     <span
-                      className={`px-2 py-0.5 rounded-full text-[10px] lg:text-xs font-semibold transition-all duration-300 ${
-                        isFollower
-                          ? "bg-primary/10 text-primary group-hover:bg-fourth/10 group-hover:text-primary"
-                          : "bg-secondary/10 text-secondary group-hover:bg-primary/10 group-hover:text-primary"
-                      }`}
+                      className={`px-2 py-0.5 rounded-full text-[10px] lg:text-xs font-semibold transition-all duration-300 ${isFollower
+                        ? "bg-primary/10 text-primary group-hover:bg-fourth/10 group-hover:text-primary"
+                        : "bg-secondary/10 text-secondary group-hover:bg-primary/10 group-hover:text-primary"
+                        }`}
                     >
                       {formatFollowerCount(localFollowersCount)}
                     </span>
@@ -270,7 +268,7 @@ export default function StoreFrontHeroSection() {
               </div>
 
               {/* STATS GRID */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 gap-y-5 gap-x-6 py-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-y-5 gap-x-6 py-4">
                 {[
                   {
                     label: "Rating",

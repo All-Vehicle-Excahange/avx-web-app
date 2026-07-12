@@ -264,7 +264,7 @@ function InspectionTab() {
       <div className="flex flex-col lg:flex-row sm:items-start justify-between gap-4">
         <div>
           <h1 className="text-xl md:text-2xl font-bold">
-            Inspection Tab — Consultant Panel
+            Inspection
           </h1>
           <p className="text-xs md:text-sm text-third">
             Manage vehicle inspections and maintain trust score
@@ -316,24 +316,24 @@ function InspectionTab() {
       {/* ================= TRUST SCORE BANNER ================= */}
 
       {/* ================= HOW INSPECTION AFFECTS RANKING ================= */}
-      <div className="rounded-xl bg-primary/5 p-6 space-y-4 shadow-sm transition-colors duration-200">
-        <h3 className="font-semibold flex items-center gap-2">
+      <div className="rounded-xl bg-fourth p-6 space-y-4 shadow-sm transition-colors duration-200">
+        <h3 className="text-lg font-semibold flex items-center gap-2">
           <TrendingUp size={18} className="text-primary" />
           How inspection affects ranking:
         </h3>
 
         <div className="space-y-3 text-sm">
-          <p className="flex items-center gap-2 text-third">
+          <p className="flex items-center gap-2 text-primary/80">
             <CheckCircle2 size={16} />
             Fresh inspection boosts visibility
           </p>
 
-          <p className="flex items-center gap-2 text-third">
+          <p className="flex items-center gap-2 text-primary/80">
             <CheckCircle2 size={16} />
             Higher inspection score increases buyer trust
           </p>
 
-          <p className="flex items-center gap-2 text-third">
+          <p className="flex items-center gap-2 text-primary/80">
             <CheckCircle2 size={16} />
             Re-inspection improves conversion
           </p>
@@ -851,7 +851,7 @@ function InspectionTab() {
                       {/* Score */}
                       <td className="font-semibold flex items-center gap-2 pr-6">
                         {report.inspectionScore !== undefined &&
-                        report.inspectionScore !== null
+                          report.inspectionScore !== null
                           ? `${report.inspectionScore}/${maxScore}`
                           : "N/A"}
                         {report.inspectionScore !== undefined &&
@@ -1085,9 +1085,8 @@ function VehicleScore({ name, score, orange }) {
       {/* Progress Bar */}
       <div className="w-full h-3 rounded-full bg-third/20 overflow-hidden">
         <div
-          className={`h-full rounded-full ${
-            showOrange ? "bg-orange-400" : "bg-green-500"
-          }`}
+          className={`h-full rounded-full ${showOrange ? "bg-orange-400" : "bg-green-500"
+            }`}
           style={{ width: `${percentage}%` }}
         />
       </div>

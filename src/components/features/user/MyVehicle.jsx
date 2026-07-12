@@ -11,6 +11,7 @@ import { UserVehicleCardSkeleton } from "@/components/ui/skeleton";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getSellerInventoryInfiniteQuery } from "@/queries/user.queries";
 import { getSusPendedVehiclesInfiniteQuery } from "@/queries/Seller.queries";
+import Image from "next/image";
 
 function MyVehicle() {
   const [activeType, setActiveType] = useState("all");
@@ -238,13 +239,21 @@ function MyVehicle() {
 
       {/* EMPTY STATE */}
       {!isLoading && mappedVehicles.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-16 text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5">
+        <div className="flex flex-col items-center justify-center py-8 sm:py-15 text-center w-full">
           {activeType === "all" ? (
             <>
-              <h3 className="text-xl font-bold mb-2">
+              <div className="relative w-32 h-32 mb-2 opacity-60">
+                <Image
+                  src="/empty2.svg"
+                  alt="Empty State"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <h3 className="text-xl font-bold mb-2 text-primary">
                 Ready to sell your vehicle?
               </h3>
-              <p className="text-third mb-6">
+              <p className="text-third max-w-sm px-4 mb-6">
                 Reach verified buyers, list for free, and sell directly — no
                 middlemen, no broker fees. You can have 1 active listing at a
                 time, up to 3 vehicles total.
@@ -265,7 +274,15 @@ function MyVehicle() {
             </>
           ) : (
             <>
-              <h3 className="text-xl font-bold mb-2">
+              <div className="relative w-32 h-32 mb-2 opacity-60">
+                <Image
+                  src="/empty2.svg"
+                  alt="Empty State"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <h3 className="text-xl font-bold mb-2 text-primary">
                 No {activeType.replaceAll("_", " ")} vehicles found
               </h3>
               <p className="text-third max-w-sm px-4">
