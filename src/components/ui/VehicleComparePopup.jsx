@@ -8,6 +8,7 @@ import Button from "@/components/ui/button";
 import { getWishList } from "@/services/user.service";
 import { getVehicleOverview } from "@/services/vehicle.service";
 import { useCompareStore } from "@/stores/useCompareStore";
+import { useAuthStore } from "@/stores/useAuthStore";
 import CompareSkeleton from "@/components/ui/skeleton/CompareSkeleton";
 
 export default function VehicleComparePopup({
@@ -16,6 +17,7 @@ export default function VehicleComparePopup({
     selectedVehicle
 }) {
     const { isVehicleDetails, compareVehicles } = useCompareStore();
+    const { isLoggedIn, openLoginPopup } = useAuthStore();
     const [isClosing, setIsClosing] = useState(false);
 
     // Independent state for both sides
@@ -54,6 +56,12 @@ export default function VehicleComparePopup({
 
     useEffect(() => {
         if (isOpen) {
+            if (!isLoggedIn) {
+                onClose();
+                openLoginPopup();
+                return;
+            }
+
             // Reset states
             if (compareVehicles.length > 0) {
                 setLeftVehicle(compareVehicles[0]);
@@ -162,15 +170,15 @@ export default function VehicleComparePopup({
                     <div className="flex-1 overflow-y-auto space-y-2 pr-1 max-h-[225px] sm:max-h-[350px] custom-scrollbar">
                         {isLoading ? (
                             <div className="space-y-2">
-                              {[...Array(3)].map((_, i) => (
-                                <div key={i} className="p-1.5 sm:p-3 rounded-lg border border-primary/10 flex items-center gap-2 sm:gap-3">
-                                  <div className="skeleton-shimmer w-8 h-8 sm:w-12 sm:h-12 rounded-md shrink-0" />
-                                  <div className="flex-1 space-y-1.5">
-                                    <div className="skeleton-shimmer h-3 sm:h-4 w-[70%] rounded-md" />
-                                    <div className="skeleton-shimmer h-2.5 sm:h-3 w-[45%] rounded-md" />
-                                  </div>
-                                </div>
-                              ))}
+                                {[...Array(3)].map((_, i) => (
+                                    <div key={i} className="p-1.5 sm:p-3 rounded-lg border border-primary/10 flex items-center gap-2 sm:gap-3">
+                                        <div className="skeleton-shimmer w-8 h-8 sm:w-12 sm:h-12 rounded-md shrink-0" />
+                                        <div className="flex-1 space-y-1.5">
+                                            <div className="skeleton-shimmer h-3 sm:h-4 w-[70%] rounded-md" />
+                                            <div className="skeleton-shimmer h-2.5 sm:h-3 w-[45%] rounded-md" />
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         ) : searchResults.length > 0 ? (
                             searchResults.map((v, i) => (
@@ -391,6 +399,8 @@ export default function VehicleComparePopup({
             </div>
         </div>
     );
+
+    if (!isOpen || !isLoggedIn) return null;
 
     return typeof document !== "undefined"
         ? createPortal(modalContent, document.body)

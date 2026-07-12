@@ -7,6 +7,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import InspectionTrackingModal from "./InspectionTrackingModal";
 import { useRouter } from "next/router";
 import { FileText, UserCheck, Video } from "lucide-react";
+import Image from "next/image";
 import {
   getAllRequestedInspectionInfiniteQuery,
   getAllInsprectionRequestInfiniteQuery,
@@ -74,7 +75,7 @@ function Inspection() {
 
   const receivedRequests =
     receivedInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
-
+  console.log(user?.userRole, "user")
   return (
     <>
       <section className="w-full container rounded-2xl p-6 space-y-6">
@@ -140,24 +141,28 @@ function Inspection() {
           {[
             { id: "sent", label: "Sent Inspections" },
             { id: "received", label: "Received Inspection Requests" },
-          ].filter(tab => !(user?.userRole === "CONSULTATION" && tab.id === "received"))
-          .map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`relative py-4 text-sm font-medium transition hover:cursor-pointer ${
-                activeTab === tab.id
+          ].filter(tab => {
+            if (tab.id === "received") {
+              return user?.userRole === "USER_SELLER" || user?.userRole === "CONSULTATION";
+            }
+            return true;
+          })
+            .map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`relative py-4 text-sm font-medium transition hover:cursor-pointer ${activeTab === tab.id
                   ? "text-primary"
                   : "text-third hover:text-primary"
-              }`}
-            >
-              {tab.label}
+                  }`}
+              >
+                {tab.label}
 
-              {activeTab === tab.id && (
-                <span className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full" />
-              )}
-            </button>
-          ))}
+                {activeTab === tab.id && (
+                  <span className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full" />
+                )}
+              </button>
+            ))}
         </div>
 
         <div className="grid grid-cols-1 gap-6">
@@ -175,7 +180,7 @@ function Inspection() {
               ))
             ) : inspections.length > 0 ? (
               <>
-                 {inspections.map((item) => (
+                {inspections.map((item) => (
                   <InspectionCard
                     key={item.id}
                     onClick={() => handleOpenTracking(item)}
@@ -194,9 +199,9 @@ function Inspection() {
                     date={
                       item.createdAt
                         ? new Date(item.createdAt).toLocaleDateString("en-IN", {
-                            day: "2-digit",
-                            month: "short",
-                          })
+                          day: "2-digit",
+                          month: "short",
+                        })
                         : "-"
                     }
                     onViewReport={() => {
@@ -221,11 +226,19 @@ function Inspection() {
                 )}
               </>
             ) : (
-              <div className="flex flex-col items-center justify-center py-16 text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5">
-                <h3 className="text-xl font-bold mb-2">
+              <div className="flex flex-col items-center justify-center py-8 sm:py-15 text-center w-full">
+                <div className="relative w-32 h-32 mb-2 opacity-60">
+                  <Image
+                    src="/empty2.svg"
+                    alt="Empty State"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <h3 className="text-xl font-bold mb-2 text-primary">
                   No sent inspection requests.
                 </h3>
-                <p className="text-third max-w-sm">
+                <p className="text-third max-w-sm px-4">
                   You haven&apos;t requested any vehicle inspections yet.
                 </p>
               </div>
@@ -256,9 +269,9 @@ function Inspection() {
                   date={
                     item.createdAt
                       ? new Date(item.createdAt).toLocaleDateString("en-IN", {
-                          day: "2-digit",
-                          month: "short",
-                        })
+                        day: "2-digit",
+                        month: "short",
+                      })
                       : "-"
                   }
                   onAccept={async () => {
@@ -300,11 +313,19 @@ function Inspection() {
               )}
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center py-16 text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5">
-              <h3 className="text-xl font-bold mb-2">
+            <div className="flex flex-col items-center justify-center py-8 sm:py-15 text-center w-full">
+              <div className="relative w-32 h-32 mb-2 opacity-60">
+                <Image
+                  src="/empty2.svg"
+                  alt="Empty State"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <h3 className="text-xl font-bold mb-2 text-primary">
                 No received inspection requests.
               </h3>
-              <p className="text-third max-w-sm">
+              <p className="text-third max-w-sm px-4">
                 You haven&apos;t received any vehicle inspection requests yet.
               </p>
             </div>

@@ -53,6 +53,7 @@ function PreferencesPopup({
 }) {
   const [activeStep, setActiveStep] = useState(0);
   const [isClosing, setIsClosing] = useState(false);
+  const [modelError, setModelError] = useState("");
 
   const [selectedStates, setSelectedStates] = useState([]);
   const [selectedCities, setSelectedCities] = useState([]);
@@ -374,8 +375,8 @@ function PreferencesPopup({
   const stepCounts = [
     selectedBrands.length + selectedModels.length,
     selectedFuelTypes.length +
-      selectedTransmissionTypes.length +
-      selectedVehicleTypes.length,
+    selectedTransmissionTypes.length +
+    selectedVehicleTypes.length,
     selectedStates.length + selectedCities.length + selectedTowns.length,
     (minPrice ? 1 : 0) + (maxPrice ? 1 : 0),
   ];
@@ -407,7 +408,15 @@ function PreferencesPopup({
           onLoadMore={loadMoreModels}
           searchable={true}
           selected={selectedModels}
-          onChange={(values) => setSelectedModels(values)}
+          onChange={(values) => {
+            if (values.length > 5) {
+              setModelError("You can select max 5 models");
+              setTimeout(() => setModelError(""), 3000);
+              return;
+            }
+            setModelError("");
+            setSelectedModels(values);
+          }}
           customEmptyMessage={
             selectedBrands.length === 0 ? "Select a brand first" : undefined
           }
@@ -760,13 +769,12 @@ function PreferencesPopup({
               <button
                 key={s.id}
                 onClick={() => setActiveStep(i)}
-                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                  activeStep === i
-                    ? "w-8 bg-white"
-                    : stepCounts[i] > 0
-                      ? "w-4 bg-white/60"
-                      : "w-4 bg-white/25"
-                }`}
+                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${activeStep === i
+                  ? "w-8 bg-white"
+                  : stepCounts[i] > 0
+                    ? "w-4 bg-white/60"
+                    : "w-4 bg-white/25"
+                  }`}
               />
             ))}
           </div>
@@ -808,11 +816,10 @@ function PreferencesPopup({
                 <button
                   key={step.id}
                   onClick={() => setActiveStep(i)}
-                  className={`relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all cursor-pointer ${
-                    isActive
-                      ? "text-third"
-                      : "text-primary/40 hover:text-primary/70"
-                  }`}
+                  className={`relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all cursor-pointer ${isActive
+                    ? "text-third"
+                    : "text-primary/40 hover:text-primary/70"
+                    }`}
                 >
                   <Icon size={16} />
                   <span className="hidden sm:inline">{step.label}</span>
@@ -846,7 +853,7 @@ function PreferencesPopup({
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between gap-3 px-6 py-4 border-t border-primary/5 bg-secondary">
+          <div className="flex items-center justify-between px-6 py-4 border-t border-primary/5 bg-secondary">
             {!isFirstStep ? (
               <Button
                 onClick={() => setActiveStep((s) => Math.max(0, s - 1))}
@@ -858,6 +865,12 @@ function PreferencesPopup({
               </Button>
             ) : (
               <div />
+            )}
+
+            {modelError && (
+              <div className="text-center text-red-500 text-sm font-medium animate-pulse flex-1 mx-4">
+                {modelError}
+              </div>
             )}
 
             <div className="flex items-center gap-3">

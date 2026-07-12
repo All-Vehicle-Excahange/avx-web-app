@@ -44,14 +44,14 @@ function BecameBanner() {
                     </p>
 
                     <p className="text-2xl sm:text-3xl font-bold font-primary text-primary mt-4">
-                      Sell Your <br /> Vehicles
+                      Sell Your Personal <br /> Vehicles
                     </p>
                   </div>
                 </div>
               </div>
 
               <p className="mt-4 max-w-lg text-base text-left text-primary/80 mx-auto leading-relaxed">
-                Stop settling for lowball offers. List your car on Reecomm and
+                Stop settling for lowball offers. List your vehicle on Reecomm and
                 reach thousands of genuine buyers across all India — for free.
               </p>
             </div>

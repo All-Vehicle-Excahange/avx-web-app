@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
-import Select from "react-select";
+import Select, { components } from "react-select";
 import { useRouter } from "next/router";
 import Button from "@/components/ui/button";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getStoreFrontInventoryInfiniteQuery } from "@/queries/user.queries";
+import { ArrowUpDown } from "lucide-react";
+import Image from "next/image";
 
 export default function Inventory() {
     const router = useRouter();
@@ -22,8 +24,8 @@ export default function Inventory() {
     ];
 
     const sortOptions = [
-        { value: { sortBy: "listingDate", direction: "desc" }, label: "Sort : Newest" },
-        { value: { sortBy: "listingDate", direction: "asc" }, label: "Sort : Oldest" },
+        { value: { sortBy: "listingDate", direction: "desc" }, label: "Newest" },
+        { value: { sortBy: "listingDate", direction: "asc" }, label: "Oldest" },
         { value: { sortBy: "price", direction: "asc" }, label: "Price: Low to High" },
         { value: { sortBy: "price", direction: "desc" }, label: "Price: High to Low" },
         { value: { sortBy: "avxInspectionRating", direction: "desc" }, label: "Rating: High to Low" },
@@ -84,6 +86,16 @@ export default function Inventory() {
                         }}
                         isSearchable={false}
                         className="text-sm"
+                        components={{
+                            SingleValue: (props) => (
+                                <components.SingleValue {...props}>
+                                    <div className="flex items-center gap-2">
+                                        <ArrowUpDown size={14} className="text-[#aaaaaa]" />
+                                        <span>{props.data.label}</span>
+                                    </div>
+                                </components.SingleValue>
+                            )
+                        }}
                         styles={{
                             control: (base, state) => ({
                                 ...base,
@@ -145,7 +157,15 @@ export default function Inventory() {
                             <VehicleCard key={`${car.id}-${index}`} data={car} />
                         ))
                     ) : (
-                        <div className="flex flex-col items-center justify-center py-10 sm:py-20 text-center rounded-none sm:rounded-2xl border-0 sm:border-2 border-dashed border-third/20 bg-transparent sm:bg-primary/5 w-full">
+                        <div className="flex flex-col items-center justify-center py-8 sm:py-15 text-center w-full">
+                            <div className="relative w-32 h-32 mb-2 opacity-60">
+                                <Image
+                                    src="/empty2.svg"
+                                    alt="Empty State"
+                                    fill
+                                    className="object-contain"
+                                />
+                            </div>
                             <h3 className="text-xl font-bold mb-2 text-primary">
                                 No {activeType === "all" ? "" : vehicleTypes.find(t => t.id === activeType)?.label} vehicles found
                             </h3>

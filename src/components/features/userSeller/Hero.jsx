@@ -140,9 +140,8 @@ function Hero() {
         <div className="relative z-20 flex-1 flex flex-col items-center justify-center px-6 py-16 text-center">
           {/* Eyebrow */}
           <div
-            className={`flex items-center gap-3 mb-10 transition-all duration-700 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
+            className={`flex items-center gap-3 mb-10 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
           >
             <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Premium Vehicle Exchange
@@ -167,9 +166,8 @@ function Hero() {
 
           {/* Descriptor */}
           <p
-            className={`font-[Poppins] text-sm text-third leading-relaxed max-w-xl mb-12 transition-all duration-700 delay-200 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
+            className={`font-[Poppins] text-sm text-third leading-relaxed max-w-xl mb-12 transition-all duration-700 delay-200 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
           >
             Reecomm is the only place where individual sellers list vehicles
             alongside verified consultants — with the same structure, the same
@@ -179,34 +177,31 @@ function Hero() {
 
           {/* CTAs */}
           <div
-            className={`flex flex-col sm:flex-row items-center gap-4 mb-12 transition-all duration-700 delay-300 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
+            className={`flex flex-col sm:flex-row items-center gap-4 mb-12 transition-all duration-700 delay-300 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
           >
             {!(mounted && isLoggedIn && role === "CONSULTATION") && (
               <Button variant="ghost" size="md" onClick={handleStartSelling}>
-                START SELLING
+                Start Selling
               </Button>
             )}
             <Button variant="ghost" size="md" href={"/search"}>
-              EXPLORE MARKET
+              Explore Market
             </Button>
           </div>
 
           {/* ── TRUST BADGES ── */}
           <div
-            className={`flex flex-col sm:flex-row items-center gap-0 border border-primary/10 transition-all duration-700 delay-500 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
+            className={`flex flex-col sm:flex-row items-center gap-0 border border-primary/10 transition-all duration-700 delay-500 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
           >
             {TRUST_BADGES.map((badge, i) => (
               <div
                 key={i}
-                className={`px-10 py-5 flex flex-col items-center gap-1 ${
-                  i !== TRUST_BADGES.length - 1
-                    ? "border-b sm:border-b-0 sm:border-r border-primary/10"
-                    : ""
-                }`}
+                className={`px-10 py-5 flex flex-col items-center gap-1 ${i !== TRUST_BADGES.length - 1
+                  ? "border-b sm:border-b-0 sm:border-r border-primary/10"
+                  : ""
+                  }`}
               >
                 <span className="font-[Montserrat] font-black text-2xl text-primary leading-none">
                   {badge.value}

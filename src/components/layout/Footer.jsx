@@ -1,6 +1,6 @@
-import { Facebook, Instagram, X, Youtube, ArrowUp, Linkedin } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { FaXTwitter, FaLinkedinIn, FaInstagram, FaYoutube, FaFacebookF } from "react-icons/fa6";
 import Image from "next/image";
 
 const footerLinks = {
@@ -229,7 +229,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 className="text-primary/60 hover:text-white transition-colors flex items-center justify-center"
               >
-                <Linkedin size={18} />
+                <FaLinkedinIn size={18} />
               </Link>
               <Link
                 href="https://www.instagram.com/reecommindia"
@@ -237,7 +237,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 className="text-primary/60 hover:text-white transition-colors"
               >
-                <Instagram size={18} />
+                <FaInstagram size={18} />
               </Link>
               <Link
                 href="https://www.facebook.com/reecommindia/"
@@ -245,19 +245,20 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 className="text-primary/60 hover:text-white transition-colors"
               >
-                <Facebook size={18} />
+                <FaFacebookF size={18} />
               </Link>
               <Link
                 href="#"
                 className="text-primary/60 hover:text-white transition-colors"
               >
-                <X size={18} />
+                {/* <X size={18} /> */}
+                <FaXTwitter size={18} />
               </Link>
               <Link
                 href="#"
                 className="text-primary/60 hover:text-white transition-colors"
               >
-                <Youtube size={18} />
+                <FaYoutube size={18} />
               </Link>
             </div>
             {/* <button
