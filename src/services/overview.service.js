@@ -7,12 +7,13 @@ const ENDPOINT = {
   getInventoryOverview: "/consultation/dashboard/overview/inventory-data",
   getOverviewSummaryData: "/consultation/dashboard/overview/summary-data",
   getInspectionStatus: "/consultation/dashboard/overview/inspection-status",
-  getRecentActivity: "/consultation/dashboard/overview/recent-activity",
+  getLowDemandVehicles: "/consultation/dashboard/inventory/low-demand-vehicles",
 };
 
 export const getInventoryOverview = async () => {
   try {
     const res = await axiosInstance.get(ENDPOINT.getInventoryOverview);
+    
     return handleResponse(res);
   } catch (error) {
     handleError(error);
@@ -40,9 +41,11 @@ export const getInspectionStatus = async () => {
   }
 };
 
-export const getRecentActivity = async () => {
+export const getLowDemandVehicles = async (params) => {
   try {
-    const res = await axiosInstance.get(ENDPOINT.getRecentActivity);
+    const res = await axiosInstance.get(ENDPOINT.getLowDemandVehicles, {
+      params,
+    });
     return handleResponse(res);
   } catch (error) {
     handleError(error);

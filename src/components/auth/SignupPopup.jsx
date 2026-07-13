@@ -689,7 +689,11 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
               </div>
               <button
                 type="button"
-                onClick={() => setOtpSent(false)}
+                onClick={() => {
+                  setOtpSent(false);
+                  setCountdown(0);
+                  localStorage.removeItem("otpBlockUntil");
+                }}
                 className="text-xs font-semibold text-primary hover:underline cursor-pointer bg-transparent border-none outline-none self-center"
               >
                 Change
@@ -709,8 +713,6 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
             >
               {isLoading ? (
                 <Loader2 size={20} className="animate-spin" />
-              ) : countdown > 0 ? (
-                `GET OTP (${countdown}s)`
               ) : (
                 "GET OTP"
               )}

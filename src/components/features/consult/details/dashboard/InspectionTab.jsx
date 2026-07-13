@@ -22,6 +22,7 @@ import {
 import StatCard from "./components/StateCard";
 import Button from "@/components/ui/button";
 import CustomSelect from "@/components/ui/custom-select";
+import Pagination from "@/components/ui/Pagination";
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { InspectionSkeleton } from "@/components/ui/skeleton";
@@ -31,21 +32,45 @@ import {
   getVehiclesRequiringAttentionQuery,
   getRequestedFromBuyersQuary,
   getScoreBreakdownInfiniteQuery,
-  getReportHistoryInfiniteQuery,
+  getReportHistoryQuery,
 } from "@/queries/inspection.queries";
 import {
   acceptInspectionRequest,
   rejectInspectionRequest,
 } from "@/services/inspection.service";
+import InspectionTrackingModal from "@/components/features/user/InspectionTrackingModal";
 
 function InspectionTab() {
   const { push } = useRouter();
   const [range, setRange] = React.useState("");
   const [statusFilter, setStatusFilter] = React.useState("");
   const [searchQuery, setSearchQuery] = React.useState("");
+  const [historyPage, setHistoryPage] = React.useState(1);
   const [hasLoadedOnce, setHasLoadedOnce] = React.useState(false);
   const [localRequestStatuses, setLocalRequestStatuses] = React.useState({});
   const [loadingRequests, setLoadingRequests] = React.useState({});
+  const [selectedInspection, setSelectedInspection] = React.useState(null);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [animateModal, setAnimateModal] = React.useState(false);
+
+  const openInspectionModal = (inspectionData) => {
+    const mappedInspection = {
+      ...inspectionData,
+      inspectionRequestStatus:
+        inspectionData.inspectionRequestStatus || inspectionData.status,
+    };
+    setSelectedInspection(mappedInspection);
+    setIsModalOpen(true);
+    setTimeout(() => setAnimateModal(true), 10);
+  };
+
+  const closeInspectionModal = () => {
+    setAnimateModal(false);
+    setTimeout(() => {
+      setIsModalOpen(false);
+      setSelectedInspection(null);
+    }, 300);
+  };
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "N/A";
@@ -145,21 +170,18 @@ function InspectionTab() {
   };
 
   const {
-    data: historyInfiniteData,
+    data: historyData,
     isFetching: historyLoading,
-    isFetchingNextPage: historyFetchingNextPage,
-    fetchNextPage: fetchNextHistoryPage,
-    hasNextPage: hasNextHistoryPage,
-  } = useInfiniteQuery(
-    getReportHistoryInfiniteQuery({
+  } = useQuery(
+    getReportHistoryQuery({
+      pageNo: historyPage,
       pageSize: 10,
       daysRange: range,
       overallRiskLevel: statusFilter || undefined,
     }),
   );
 
-  const reports =
-    historyInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
+  const reports = historyData?.data || [];
 
   const filteredReports = reports.filter((r) => {
     if (!searchQuery) return true;
@@ -175,18 +197,6 @@ function InspectionTab() {
       inspector.includes(q)
     );
   });
-
-  const handleHistoryScroll = (e) => {
-    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-    if (
-      scrollHeight - scrollTop - clientHeight < 10 &&
-      hasNextHistoryPage &&
-      !historyLoading &&
-      !historyFetchingNextPage
-    ) {
-      fetchNextHistoryPage();
-    }
-  };
 
   const getAgeStatus = (dateStr) => {
     if (!dateStr) return { label: "Unknown", styles: "bg-third/10 text-third" };
@@ -283,7 +293,7 @@ function InspectionTab() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
           <StatCard
             icon={<Car className="text-primary" size={20} />}
-            label="Vehicles with Reecomm Inspection"
+            label="Reecomm Inspection"
             value={snapShotData?.vehiclesWithAvxInspection}
           />
 
@@ -437,7 +447,11 @@ function InspectionTab() {
                     </td>
 
                     <td className="text-right">
-                      <Button variant="ghost" className="px-5 text-xs h-8">
+                      <Button
+                        variant="ghost"
+                        className="px-5 text-xs h-8"
+                        onClick={() => openInspectionModal(vehicle)}
+                      >
                         {vehicle.action || "View Details"}
                       </Button>
                     </td>
@@ -748,10 +762,7 @@ function InspectionTab() {
         </div>
 
         {/* Table */}
-        <div
-          className="overflow-auto max-h-[400px] custom-scrollbar pr-2"
-          onScroll={handleHistoryScroll}
-        >
+        <div className="overflow-auto custom-scrollbar pr-2 pb-4">
           <table className="w-full text-sm">
             {/* Table Head */}
             <thead className="border-b border-third/30 text-third text-left whitespace-nowrap sticky top-0  backdrop-blur-sm z-10">
@@ -908,19 +919,21 @@ function InspectionTab() {
                 })
               )}
 
-              {historyFetchingNextPage && (
-                <tr>
-                  <td
-                    colSpan={7}
-                    className="py-4 text-center text-xs text-third animate-pulse"
-                  >
-                    Loading more...
-                  </td>
-                </tr>
-              )}
             </tbody>
           </table>
         </div>
+
+        {(historyData?.pageResponse?.totalPages > 1 || historyData?.pagination?.totalPages > 1) && (
+          <div className="flex justify-end mt-2 pr-2">
+            <div className="transform scale-[0.8] origin-right -mt-2">
+              <Pagination
+                currentPage={historyPage}
+                totalPages={historyData?.pageResponse?.totalPages || historyData?.pagination?.totalPages || 1}
+                onPageChange={setHistoryPage}
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ================= RE-INSPECTION CONTROL PANEL ================= */}
@@ -1046,12 +1059,6 @@ function InspectionTab() {
               )}
             </div>
 
-            {/* Insight Box */}
-            <div className="rounded-xl border border-primary/20 bg-primary/5 px-4 py-4 text-sm text-primary">
-              Below marketplace average. Consider addressing{" "}
-              <span className="font-semibold">low-score vehicles</span> before
-              listing.
-            </div>
           </div>
         </div>
       </div>
@@ -1059,6 +1066,15 @@ function InspectionTab() {
       {/* ================= DISPUTE & ISSUE CENTER ================= */}
 
       {/* ================= UPGRADE YOUR TRUST VISIBILITY ================= */}
+
+      {isModalOpen && (
+        <InspectionTrackingModal
+          inspection={selectedInspection}
+          vehicle={selectedInspection}
+          onClose={closeInspectionModal}
+          animateModal={animateModal}
+        />
+      )}
     </section>
   );
 }

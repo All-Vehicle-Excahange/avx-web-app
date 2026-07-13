@@ -195,11 +195,10 @@ export default function VehicleDetails({
                           key={tab.id}
                           onClick={() => scrollToSection(tab.ref, tab.id)}
                           className={`relative cursor-pointer py-3 text-sm font-medium whitespace-nowrap transition-colors
-          ${
-            activeTab === tab.id
-              ? "text-primary"
-              : "text-third hover:text-primary"
-          }`}
+          ${activeTab === tab.id
+                              ? "text-primary"
+                              : "text-third hover:text-primary"
+                            }`}
                         >
                           {tab.label}
 
@@ -242,7 +241,7 @@ export default function VehicleDetails({
                 </div>
               </div>
 
-              <aside 
+              <aside
                 className="flex flex-col gap-6 lg:sticky h-fit"
                 style={{ top: `${64 + headerHeight}px` }}
               >

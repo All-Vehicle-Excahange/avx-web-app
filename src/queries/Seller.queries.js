@@ -58,12 +58,12 @@ export const getSusPendedVehiclesQuery = (payload) => {
   });
 };
 
-export const getTopPerformingVehiclesQuery = () => {
+export const getTopPerformingVehiclesQuery = (payload) => {
   return queryOptions({
-    queryKey: ["seller-top-performing-vehicles"],
+    queryKey: ["seller-top-performing-vehicles", payload],
     queryFn: async () => {
-      const res = await getTopPerformingVehicles();
-      return res?.data;
+      const res = await getTopPerformingVehicles(payload);
+      return res;
     },
     staleTime: 10 * 60 * 1000,
   });

@@ -4,6 +4,7 @@ import {
   getInventoryOverview,
   getOverviewSummaryData,
   getRecentActivity,
+  getLowDemandVehicles,
 } from "@/services/overview.service";
 
 export const getInventoryOverviewQuery = () => {
@@ -39,12 +40,12 @@ export const getInspectionStatusQuery = () => {
   });
 };
 
-export const getRecentActivityQuery = () => {
+export const getLowDemandVehiclesQuery = (params) => {
   return queryOptions({
-    queryKey: ["overview-recent-activity"],
+    queryKey: ["overview-low-demand-vehicles", params],
     queryFn: async () => {
-      const res = await getRecentActivity();
-      return res?.data;
+      const res = await getLowDemandVehicles(params);
+      return res;
     },
     staleTime: 10 * 60 * 1000,
   });
