@@ -43,6 +43,8 @@ function LoginPopup({
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [googleToken, setGoogleToken] = useState(null);
   const [isGoogleSignupFlow, setIsGoogleSignupFlow] = useState(false);
+  const [accountType, setAccountType] = useState("personal");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   // Check for active block on mount or when popup opens
   useEffect(() => {
@@ -53,6 +55,8 @@ function LoginPopup({
       setOtpError("");
       setIsLoading(false);
       setIsGoogleLoading(false);
+      setAccountType("personal");
+      setAcceptedTerms(false);
 
       const blockUntil = localStorage.getItem("otpBlockUntil");
       if (blockUntil) {
@@ -94,6 +98,8 @@ function LoginPopup({
       setGoogleToken(null);
       setIsGoogleSignupFlow(false);
       setIsGoogleLoading(false);
+      setAccountType("personal");
+      setAcceptedTerms(false);
       localStorage.removeItem("otpBlockUntil");
       onClose();
     }, 250);
@@ -241,7 +247,7 @@ function LoginPopup({
           phoneNumber: phone,
           countryCode: "+91",
           otp: finalOtp,
-          isApplyForConsultation: false,
+          isApplyForConsultation: accountType === "consultant",
         });
       } else {
         res = await login({
@@ -254,7 +260,11 @@ function LoginPopup({
       if (res?.success || res?.status) {
         localStorage.removeItem("otpBlockUntil");
         setCountdown(0);
-        if (accountType !== "consultant") {
+
+        const currentUser = useAuthStore.getState().user;
+        const currentAccountType = currentUser?.accountType;
+
+        if (currentAccountType !== "consultant") {
           await onSuccess();
         }
         handleClose();
@@ -426,44 +436,101 @@ function LoginPopup({
           {/* Google Sign In moved below */}
 
           {isGoogleSignupFlow && !otpSent && (
-            <div className="mb-4 text-center">
-              <p className="text-sm text-primary/70 mb-2">Almost there! Please verify mobile number to complete sign-in.</p>
-            </div>
+            <>
+              <div className="flex justify-center gap-10 mb-8 ">
+                <button
+                  type="button"
+                  onClick={() => setAccountType("personal")}
+                  className={`flex cursor-pointer items-center gap-2 pb-3 transition-all relative ${accountType === "personal"
+                    ? "text-primary font-bold"
+                    : "text-primary/40 hover:text-primary/70"
+                    }`}
+                >
+                  <span className="text-sm uppercase tracking-wide">Personal</span>
+                  {accountType === "personal" && (
+                    <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-full" />
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAccountType("consultant")}
+                  className={`flex cursor-pointer items-center gap-2 pb-3 transition-all relative ${accountType === "consultant"
+                    ? "text-primary font-bold"
+                    : "text-primary/40 hover:text-primary/70"
+                    }`}
+                >
+                  <span className="text-sm uppercase tracking-wide">
+                    Consultant
+                  </span>
+                  {accountType === "consultant" && (
+                    <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-full" />
+                  )}
+                </button>
+              </div>
+
+
+            </>
           )}
 
           {/* ✅ MOBILE INPUT */}
           {!otpSent ? (
-            <div className="mb-4">
-              <label className="block text-sm mb-2 text-primary/70">
-                Mobile number
-              </label>
+            <>
+              <div className="mb-4">
+                {!isGoogleSignupFlow && (
+                  <label className="block text-sm mb-2 text-primary/70">
+                    Mobile Number
+                  </label>
+                )}
 
-              <div className="flex items-center border rounded-md border-accent-primary">
-                <span className="pl-4 pr-2 text-primary/60">+91-</span>
+                <div className={`flex items-center border rounded-md ${isGoogleSignupFlow ? "border-accent-gray text-primary" : "border-accent-primary"}`}>
+                  <span className={`pl-4 pr-2 ${isGoogleSignupFlow ? "text-text-black/60" : "text-primary/60"}`}>+91-</span>
 
-                <input
-                  maxLength={10}
-                  placeholder="9999999999"
-                  onInput={(e) => {
-                    e.target.value = e.target.value.replace(/\D/g, "");
-                  }}
-                  {...register("phoneNumber", {
-                    required: "Mobile number is required",
-                    minLength: {
-                      value: 10,
-                      message: "Mobile must be 10 digits",
-                    },
-                  })}
-                  className="w-full text-primary py-3 px-2 outline-none bg-transparent"
-                />
+                  <input
+                    maxLength={10}
+                    placeholder="9999999999"
+                    onInput={(e) => {
+                      e.target.value = e.target.value.replace(/\D/g, "");
+                    }}
+                    {...register("phoneNumber", {
+                      required: "Mobile number is required",
+                      minLength: {
+                        value: 10,
+                        message: "Mobile must be 10 digits",
+                      },
+                    })}
+                    className={`w-full text-primary py-3 px-2 outline-none bg-transparent ${isGoogleSignupFlow ? "border-l border-accent-gray" : ""}`}
+                  />
+                </div>
+
+                {errors.phoneNumber && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.phoneNumber.message}
+                  </p>
+                )}
               </div>
 
-              {errors.phoneNumber && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.phoneNumber.message}
-                </p>
+              {isGoogleSignupFlow && (
+                <div className="flex items-start gap-2 mb-4">
+                  <input
+                    type="checkbox"
+                    id="termsCheckbox"
+                    className="mt-1 cursor-pointer"
+                    checked={acceptedTerms}
+                    onChange={(e) => setAcceptedTerms(e.target.checked)}
+                  />
+                  <label htmlFor="termsCheckbox" className="text-sm text-primary/60 cursor-pointer">
+                    I agree to the{" "}
+                    <a href="/terms-and-conditions" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                      Terms and Conditions
+                    </a>{" "}
+                    and{" "}
+                    <a href="/privacy-policy" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                      Privacy Policy
+                    </a>
+                  </label>
+                </div>
               )}
-            </div>
+            </>
           ) : (
             <div className="mb-4 flex items-center justify-between bg-primary/5 border border-primary/10 rounded-lg p-3">
               <div>
@@ -474,7 +541,11 @@ function LoginPopup({
               </div>
               <button
                 type="button"
-                onClick={() => setOtpSent(false)}
+                onClick={() => {
+                  setOtpSent(false);
+                  setCountdown(0);
+                  localStorage.removeItem("otpBlockUntil");
+                }}
                 className="text-xs font-semibold text-primary hover:underline cursor-pointer bg-transparent border-none outline-none"
               >
                 Change
@@ -529,14 +600,12 @@ function LoginPopup({
             <Button
               type="submit"
               variant="ghost"
-              locked={isLoading || countdown > 0}
-              disabled={countdown > 0}
-              className="w-full h-11 text-sm font-bold flex items-center justify-center gap-2"
+              locked={isLoading || countdown > 0 || (isGoogleSignupFlow && !acceptedTerms)}
+              disabled={countdown > 0 || (isGoogleSignupFlow && !acceptedTerms)}
+              className={`w-full h-11 text-sm font-bold flex items-center justify-center gap-2 ${isGoogleSignupFlow && !acceptedTerms ? "opacity-50 cursor-not-allowed" : ""}`}
             >
               {isLoading ? (
                 <Loader2 size={20} className="animate-spin" />
-              ) : countdown > 0 ? (
-                `GET OTP (${countdown}s)`
               ) : (
                 "GET OTP"
               )}

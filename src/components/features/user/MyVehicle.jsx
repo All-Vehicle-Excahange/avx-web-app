@@ -155,7 +155,7 @@ function MyVehicle() {
                 Vehicle Listing Limit
               </h3>
               <p className="text-third text-xs mt-1">
-                You can post up to 3 vehicles as a normal seller.
+                Only 1 vehicle can be listed on the marketplace at a time. Once it's sold or removed, you can list another—up to 3 total listings.
               </p>
             </div>
             <div className="text-right">
