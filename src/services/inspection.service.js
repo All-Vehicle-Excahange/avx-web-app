@@ -131,7 +131,8 @@ export const getReportHistory = async (payload) => {
     }
 
     if (payload?.pageNo !== undefined) {
-      params.pageNo = payload.pageNo;
+      params.page = payload.pageNo;
+
     }
     if (payload?.pageSize !== undefined) {
       params.size = payload.pageSize;

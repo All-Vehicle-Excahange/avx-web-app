@@ -285,7 +285,7 @@ export default function AnalyticsComponent() {
         <div>
           <h2 className="text-xl font-bold text-white">Analytics</h2>
           <p className="text-sm text-third">
-            Strategic insights to justify Premium pricing
+            Track performance, identify opportunities, and grow your business
           </p>
         </div>
 
@@ -305,319 +305,317 @@ export default function AnalyticsComponent() {
       ) : (
         <>
           {/* Top Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-        <StatCard
-          icon={<Car size={20} />}
-          label="Vehicle Views"
-          value={analyticsData?.totalVehicleView || 0}
-          trend={analyticsData?.totalVehicleViewChange}
-        />
-        <StatCard
-          icon={<StoreIcon size={20} />}
-          label="Storefront Visits"
-          value={analyticsData?.totalProfileVisit || 0}
-          trend={analyticsData?.totalProfileVisitChange}
-        />
-        <StatCard
-          icon={<SquareMousePointer size={20} />}
-          label="Total Inquiries"
-          value={analyticsData?.totalInquiry || 0}
-          trend={analyticsData?.totalInquiryChange}
-        />
-        <StatCard
-          icon={<BadgePercent size={20} />}
-          label="Conversion Rate"
-          value={analyticsData?.conversionRate || 0}
-          trend={analyticsData?.conversionRateChange}
-        />
-      </div>
-      {/* Traffic */}
-      <div className="bg-primary/5 rounded-xl p-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-8 shadow-sm transition-colors duration-200">
-        <div className="space-y-4">
-          <h3 className="font-semibold text-white">Traffic & Conversion</h3>
-
-          <div>
-            <div className="flex justify-between text-xs text-third">
-              <span>Inquiry Conversion Rate</span>
-              <span>{trafficData?.inquiryConversionRate || 0}%</span>
-            </div>
-            <div className="h-2 bg-white/10 rounded-full mt-1">
-              <div
-                className="h-full bg-white rounded-full transition-all duration-500"
-                style={{
-                  width: `${Math.min(trafficData?.inquiryConversionRate || 0, 100)}%`,
-                }}
-              ></div>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
+            <StatCard
+              icon={<Car size={20} />}
+              label="Vehicle Views"
+              value={analyticsData?.totalVehicleView || 0}
+              trend={analyticsData?.totalVehicleViewChange}
+            />
+            <StatCard
+              icon={<StoreIcon size={20} />}
+              label="Storefront Visits"
+              value={analyticsData?.totalProfileVisit || 0}
+              trend={analyticsData?.totalProfileVisitChange}
+            />
+            <StatCard
+              icon={<SquareMousePointer size={20} />}
+              label="Total Inquiries"
+              value={analyticsData?.totalInquiry || 0}
+              trend={analyticsData?.totalInquiryChange}
+            />
+            <StatCard
+              icon={<BadgePercent size={20} />}
+              label="Conversion Rate"
+              value={analyticsData?.conversionRate || 0}
+              trend={analyticsData?.conversionRateChange}
+            />
           </div>
+          {/* Traffic */}
+          <div className="bg-primary/5 rounded-xl p-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-8 shadow-sm transition-colors duration-200">
+            <div className="space-y-4">
+              <h3 className="font-semibold text-white">Traffic & Conversion</h3>
 
-          <div>
-            <div className="flex justify-between text-xs text-third">
-              <span>Chat Conversion Rate</span>
-              <span>{trafficData?.chatConversionRate || 0}%</span>
-            </div>
-            <div className="h-2 bg-white/10 rounded-full mt-1">
-              <div
-                className="h-full bg-white rounded-full transition-all duration-500"
-                style={{
-                  width: `${Math.min(trafficData?.chatConversionRate || 0, 100)}%`,
-                }}
-              ></div>
-            </div>
-          </div>
-
-          <div>
-            <div className="flex justify-between text-xs text-third">
-              <span>Visit to Inquiry Rate</span>
-              <span>{trafficData?.visitToInquiryRate || 0}%</span>
-            </div>
-            <div className="h-2 bg-white/10 rounded-full mt-1">
-              <div
-                className="h-full bg-white rounded-full transition-all duration-500"
-                style={{
-                  width: `${Math.min(trafficData?.visitToInquiryRate || 0, 100)}%`,
-                }}
-              ></div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-green-500/10 border border-green-400/20 rounded-xl p-4 text-green-300 text-sm">
-          <b>Inspection Impact</b>
-
-          <p className="text-xs mt-1 text-green-200">
-            Vehicles with Reecomm inspection:
-          </p>
-
-          <ul className="text-xs mt-2 space-y-1 list-disc list-inside text-green-200">
-            <li>+31% more inquiries</li>
-            <li>+22% faster closure</li>
-            <li>Higher buyer trust</li>
-          </ul>
-
-          <Button className="mt-4 px-4 py-2 rounded-lg bg-green-500/20 border border-green-400/30 text-green-200 text-xs font-semibold hover:bg-green-500/30 transition cursor-pointer">
-            Inspect more vehicles
-          </Button>
-        </div>
-      </div>
-      <div className="bg-primary/5 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200">
-        <h3 className="font-semibold text-white">Performance Overview</h3>
-
-        {currentPerformance.labels.length > 0 ? (
-          currentPerformance.labels.map((label, i) => (
-            <div key={i} className="flex items-center gap-4">
-              <span className="w-12 text-xs text-third">{label}</span>
-
-              <div className="flex-1 h-3 bg-white/10 rounded-full">
-                <div
-                  className="h-full bg-fourth rounded-full transition-all duration-500"
-                  style={{ width: `${currentPerformance.percentages[i]}%` }}
-                ></div>
+              <div>
+                <div className="flex justify-between text-xs text-third">
+                  <span>Inquiry Conversion Rate</span>
+                  <span>{trafficData?.inquiryConversionRate || 0}%</span>
+                </div>
+                <div className="h-2 bg-white/10 rounded-full mt-1">
+                  <div
+                    className="h-full bg-white rounded-full transition-all duration-500"
+                    style={{
+                      width: `${Math.min(trafficData?.inquiryConversionRate || 0, 100)}%`,
+                    }}
+                  ></div>
+                </div>
               </div>
 
-              <span className="text-xs text-third w-20 text-right">
-                {currentPerformance.inquiries[i]} inquiries
-              </span>
+              <div>
+                <div className="flex justify-between text-xs text-third">
+                  <span>Chat Conversion Rate</span>
+                  <span>{trafficData?.chatConversionRate || 0}%</span>
+                </div>
+                <div className="h-2 bg-white/10 rounded-full mt-1">
+                  <div
+                    className="h-full bg-white rounded-full transition-all duration-500"
+                    style={{
+                      width: `${Math.min(trafficData?.chatConversionRate || 0, 100)}%`,
+                    }}
+                  ></div>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between text-xs text-third">
+                  <span>Visit to Inquiry Rate</span>
+                  <span>{trafficData?.visitToInquiryRate || 0}%</span>
+                </div>
+                <div className="h-2 bg-white/10 rounded-full mt-1">
+                  <div
+                    className="h-full bg-white rounded-full transition-all duration-500"
+                    style={{
+                      width: `${Math.min(trafficData?.visitToInquiryRate || 0, 100)}%`,
+                    }}
+                  ></div>
+                </div>
+              </div>
             </div>
-          ))
-        ) : (
-          <div className="text-xs text-third italic py-4">
-            No performance data available for this range.
+
+            <div className="bg-green-500/10 border border-green-400/20 rounded-xl p-4 text-green-300 text-sm">
+              <b>Inspection Impact</b>
+
+              <p className="text-xs mt-1 text-green-200">
+                Vehicles with Reecomm inspection:
+              </p>
+
+              <ul className="text-xs mt-2 space-y-1 list-disc list-inside text-green-200">
+                <li>+31% more inquiries</li>
+                <li>+22% faster closure</li>
+                <li>Higher buyer trust</li>
+              </ul>
+
+              <Button className="mt-4 px-4 py-2 rounded-lg bg-green-500/20 border border-green-400/30 text-green-200 text-xs font-semibold hover:bg-green-500/30 transition cursor-pointer">
+                Inspect more vehicles
+              </Button>
+            </div>
           </div>
-        )}
+          <div className="bg-primary/5 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200">
+            <h3 className="font-semibold text-white">Performance Overview</h3>
 
-        <p className="text-xs text-third pt-4 border-t border-third/20">
-          <span className="text-primary font-semibold">Insight:</span> Demand
-          peaks Fri–Sun. Boosting listings on weekends improves visibility.
-        </p>
+            {currentPerformance.labels.length > 0 ? (
+              currentPerformance.labels.map((label, i) => (
+                <div key={i} className="flex items-center gap-4">
+                  <span className="w-12 text-xs text-third">{label}</span>
 
-        {isPro && (
-          <Button className="w-fit px-4 py-2 rounded-lg bg-primary/10 border border-primary/20 text-primary text-xs font-semibold hover:bg-primary/20 transition">
-            Boost listings
-          </Button>
-        )}
-      </div>
-      <div
-        className="grid gap-6 md:grid-cols-2"
-      >
-        {/* ✅ Demand Breakdown (Show for everyone now as per request for basic) */}
-        <div className="bg-primary/5 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200">
-          <h3 className="font-semibold text-white">Demand Breakdown</h3>
-
-          {currentDemand.length > 0 ? (
-            <div
-              className={`space-y-4 ${
-                currentDemand.length > 4
-                  ? "max-h-[320px] overflow-y-auto custom-scrollbar pr-2"
-                  : ""
-              }`}
-            >
-              {currentDemand.map((item, i) => (
-                <div key={item.subtype || i}>
-                  <div className="flex justify-between text-xs text-third">
-                    <span>{(item.subtype || "").replace(/_/g, " ")}</span>
-                    <span>
-                      {parseFloat(item.demandPercentage || 0).toFixed(1)}%
-                    </span>
-                  </div>
-
-                  <div className="h-2 bg-white/10 rounded-full mt-1">
+                  <div className="flex-1 h-3 bg-white/10 rounded-full">
                     <div
-                      className="h-full bg-white rounded-full transition-all duration-500"
-                      style={{
-                        width: `${Math.min(item.demandPercentage || 0, 100)}%`,
-                      }}
+                      className="h-full bg-fourth rounded-full transition-all duration-500"
+                      style={{ width: `${currentPerformance.percentages[i]}%` }}
                     ></div>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-xs text-third italic py-4">
-              No demand data available.
-            </div>
-          )}
-        </div>
 
-        {/* ✅ City-wise Demand (Locked for BASIC, Unlocked for PRO/PREMIUM) */}
-        <div className="relative bg-primary/5 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200 overflow-hidden">
-          {isBasic && (
-            <div className="absolute inset-0 z-10 bg-black/75 backdrop-blur-[2px] flex flex-col items-center justify-center text-center p-4">
-              <div className="flex flex-col items-center gap-2.5 max-w-[280px]">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <Lock size={18} />
+                  <span className="text-xs text-third w-20 text-right">
+                    {currentPerformance.inquiries[i]} inquiries
+                  </span>
                 </div>
-                <h4 className="font-semibold text-white text-sm">City-wise Demand</h4>
-                <p className="text-xs text-third leading-relaxed">
-                  Upgrade to Pro or Premium to unlock detailed city-wise demand analytics for your listings.
-                </p>
-                <button className="mt-2 px-4 py-2 w-full rounded-lg border border-yellow-400/30 bg-yellow-400/10 text-yellow-300 text-xs font-semibold hover:bg-yellow-400/20 transition cursor-pointer">
-                  Upgrade to Pro
+              ))
+            ) : (
+              <div className="text-xs text-third italic py-4">
+                No performance data available for this range.
+              </div>
+            )}
+
+            <p className="text-xs text-third pt-4 border-t border-third/20">
+              <span className="text-primary font-semibold">Insight:</span> Demand
+              peaks Fri–Sun. Boosting listings on weekends improves visibility.
+            </p>
+
+            {isPro && (
+              <Button className="w-fit px-4 py-2 rounded-lg bg-primary/10 border border-primary/20 text-primary text-xs font-semibold hover:bg-primary/20 transition">
+                Boost listings
+              </Button>
+            )}
+          </div>
+          <div
+            className="grid gap-6 md:grid-cols-2"
+          >
+            {/* ✅ Demand Breakdown (Show for everyone now as per request for basic) */}
+            <div className="bg-primary/5 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200">
+              <h3 className="font-semibold text-white">Demand Breakdown</h3>
+
+              {currentDemand.length > 0 ? (
+                <div
+                  className={`space-y-4 ${currentDemand.length > 4
+                    ? "max-h-[320px] overflow-y-auto custom-scrollbar pr-2"
+                    : ""
+                    }`}
+                >
+                  {currentDemand.map((item, i) => (
+                    <div key={item.subtype || i}>
+                      <div className="flex justify-between text-xs text-third">
+                        <span>{(item.subtype || "").replace(/_/g, " ")}</span>
+                        <span>
+                          {parseFloat(item.demandPercentage || 0).toFixed(1)}%
+                        </span>
+                      </div>
+
+                      <div className="h-2 bg-white/10 rounded-full mt-1">
+                        <div
+                          className="h-full bg-white rounded-full transition-all duration-500"
+                          style={{
+                            width: `${Math.min(item.demandPercentage || 0, 100)}%`,
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-xs text-third italic py-4">
+                  No demand data available.
+                </div>
+              )}
+            </div>
+
+            {/* ✅ City-wise Demand (Locked for BASIC, Unlocked for PRO/PREMIUM) */}
+            <div className="relative bg-primary/5 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200 overflow-hidden">
+              {isBasic && (
+                <div className="absolute inset-0 z-10 bg-black/75 backdrop-blur-[2px] flex flex-col items-center justify-center text-center p-4">
+                  <div className="flex flex-col items-center gap-2.5 max-w-[280px]">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                      <Lock size={18} />
+                    </div>
+                    <h4 className="font-semibold text-white text-sm">City-wise Demand</h4>
+                    <p className="text-xs text-third leading-relaxed">
+                      Upgrade to Pro or Premium to unlock detailed city-wise demand analytics for your listings.
+                    </p>
+                    <button className="mt-2 px-4 py-2 w-full rounded-lg border border-yellow-400/30 bg-yellow-400/10 text-yellow-300 text-xs font-semibold hover:bg-yellow-400/20 transition cursor-pointer">
+                      Upgrade to Pro
+                    </button>
+                  </div>
+                </div>
+              )}
+              <h3 className="font-semibold text-white">City-wise Demand</h3>
+
+              {currentCityDemand.length > 0 ? (
+                <div
+                  className={`space-y-4 ${currentCityDemand.length > 4
+                    ? "max-h-[320px] overflow-y-auto custom-scrollbar pr-2"
+                    : ""
+                    }`}
+                >
+                  {currentCityDemand.map((item, i) => (
+                    <div key={item.city || i}>
+                      <div className="flex justify-between text-xs text-third">
+                        <span>{item.city}</span>
+                        <span>
+                          {parseFloat(item.demandPercentage || 0).toFixed(1)}%
+                        </span>
+                      </div>
+
+                      <div className="h-2 bg-white/10 rounded-full mt-1">
+                        <div
+                          className="h-full bg-white rounded-full transition-all duration-500"
+                          style={{
+                            width: `${Math.min(item.demandPercentage || 0, 100)}%`,
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-xs text-third italic py-4">
+                  No city demand data available.
+                </div>
+              )}
+            </div>
+          </div>
+          {/* Insights */}
+          <div className="bg-primary/5 rounded-xl p-7 space-y-5 shadow-sm transition-colors duration-200">
+            <h3 className="font-semibold text-lg text-fourth">Key Insights</h3>
+
+            <ul className="grid md:grid-cols-2 gap-4 text-sm">
+              {currentInsights.map((insight, idx) => (
+                <li key={idx} className="flex items-start gap-3">
+                  {insight.icon}
+                  {insight.text}
+                </li>
+              ))}
+            </ul>
+          </div>{" "}
+          {/* Recommended Actions (Only BASIC Users) */}
+          {isBasic && (
+            <div className="bg-primary/5 rounded-xl p-7 space-y-5 shadow-sm transition-colors duration-200">
+              <h3 className="font-semibold text-lg text-blue-300">
+                Recommended Actions
+              </h3>
+
+              <ul className="grid md:grid-cols-2 gap-4 text-sm">
+                <li className="flex items-start gap-3">
+                  <TrendingUp className="text-blue-400 mt-0.5" size={18} />
+                  <span>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
+                    repellat. Adipisci
+                  </span>
+                </li>
+
+                <li className="flex items-start gap-3">
+                  <Zap className="text-blue-400 mt-0.5" size={18} />
+                  <span>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
+                    repellat. Adipisci
+                  </span>
+                </li>
+
+                <li className="flex items-start gap-3">
+                  <Calendar className="text-blue-400 mt-0.5" size={18} />
+                  <span>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
+                    repellat. Adipisci
+                  </span>
+                </li>
+
+                <li className="flex items-start gap-3">
+                  <Car className="text-blue-400 mt-0.5" size={18} />
+                  <span>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
+                    repellat. Adipisci
+                  </span>
+                </li>
+
+                <li className="flex items-start gap-3">
+                  <MessageCircle className="text-blue-400 mt-0.5" size={18} />
+                  <span>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
+                    repellat. Adipisci
+                  </span>
+                </li>
+
+                <li className="flex items-start gap-3">
+                  <Tag className="text-blue-400 mt-0.5" size={18} />
+                  <span>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
+                    repellat. Adipisci
+                  </span>
+                </li>
+              </ul>
+
+              {/* ✅ CTA Buttons Bottom Right */}
+              <div className="flex justify-end gap-3 pt-5 border-t border-third/20">
+                <button className="px-4 py-2 rounded-lg border border-third/30 bg-primary/5 text-primary text-xs font-semibold hover:bg-primary/10 transition">
+                  Inspect 2 high-interest listings
+                </button>
+
+                <button className="px-4 py-2 rounded-lg border border-yellow-400/30 bg-yellow-400/10 text-yellow-300 text-xs font-semibold hover:bg-yellow-400/20 transition">
+                  Upgrade to Premium
                 </button>
               </div>
             </div>
           )}
-          <h3 className="font-semibold text-white">City-wise Demand</h3>
-
-          {currentCityDemand.length > 0 ? (
-            <div
-              className={`space-y-4 ${
-                currentCityDemand.length > 4
-                  ? "max-h-[320px] overflow-y-auto custom-scrollbar pr-2"
-                  : ""
-              }`}
-            >
-              {currentCityDemand.map((item, i) => (
-                <div key={item.city || i}>
-                  <div className="flex justify-between text-xs text-third">
-                    <span>{item.city}</span>
-                    <span>
-                      {parseFloat(item.demandPercentage || 0).toFixed(1)}%
-                    </span>
-                  </div>
-
-                  <div className="h-2 bg-white/10 rounded-full mt-1">
-                    <div
-                      className="h-full bg-white rounded-full transition-all duration-500"
-                      style={{
-                        width: `${Math.min(item.demandPercentage || 0, 100)}%`,
-                      }}
-                    ></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-xs text-third italic py-4">
-              No city demand data available.
-            </div>
-          )}
-        </div>
-      </div>
-      {/* Insights */}
-      <div className="bg-primary/5 rounded-xl p-7 space-y-5 shadow-sm transition-colors duration-200">
-        <h3 className="font-semibold text-lg text-fourth">Key Insights</h3>
-
-        <ul className="grid md:grid-cols-2 gap-4 text-sm">
-          {currentInsights.map((insight, idx) => (
-            <li key={idx} className="flex items-start gap-3">
-              {insight.icon}
-              {insight.text}
-            </li>
-          ))}
-        </ul>
-      </div>{" "}
-      {/* Recommended Actions (Only BASIC Users) */}
-      {isBasic && (
-        <div className="bg-primary/5 rounded-xl p-7 space-y-5 shadow-sm transition-colors duration-200">
-          <h3 className="font-semibold text-lg text-blue-300">
-            Recommended Actions
-          </h3>
-
-          <ul className="grid md:grid-cols-2 gap-4 text-sm">
-            <li className="flex items-start gap-3">
-              <TrendingUp className="text-blue-400 mt-0.5" size={18} />
-              <span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
-                repellat. Adipisci
-              </span>
-            </li>
-
-            <li className="flex items-start gap-3">
-              <Zap className="text-blue-400 mt-0.5" size={18} />
-              <span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
-                repellat. Adipisci
-              </span>
-            </li>
-
-            <li className="flex items-start gap-3">
-              <Calendar className="text-blue-400 mt-0.5" size={18} />
-              <span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
-                repellat. Adipisci
-              </span>
-            </li>
-
-            <li className="flex items-start gap-3">
-              <Car className="text-blue-400 mt-0.5" size={18} />
-              <span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
-                repellat. Adipisci
-              </span>
-            </li>
-
-            <li className="flex items-start gap-3">
-              <MessageCircle className="text-blue-400 mt-0.5" size={18} />
-              <span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
-                repellat. Adipisci
-              </span>
-            </li>
-
-            <li className="flex items-start gap-3">
-              <Tag className="text-blue-400 mt-0.5" size={18} />
-              <span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
-                repellat. Adipisci
-              </span>
-            </li>
-          </ul>
-
-          {/* ✅ CTA Buttons Bottom Right */}
-          <div className="flex justify-end gap-3 pt-5 border-t border-third/20">
-            <button className="px-4 py-2 rounded-lg border border-third/30 bg-primary/5 text-primary text-xs font-semibold hover:bg-primary/10 transition">
-              Inspect 2 high-interest listings
-            </button>
-
-            <button className="px-4 py-2 rounded-lg border border-yellow-400/30 bg-yellow-400/10 text-yellow-300 text-xs font-semibold hover:bg-yellow-400/20 transition">
-              Upgrade to Premium
-            </button>
-          </div>
-        </div>
+        </>
       )}
-    </>
-  )}
-</section>
+    </section>
   );
 }

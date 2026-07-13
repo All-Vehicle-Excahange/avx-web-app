@@ -57,9 +57,11 @@ export const getSusPendedVehicles = async (payload) => {
   }
 };
 
-export const getTopPerformingVehicles = async () => {
+export const getTopPerformingVehicles = async (payload) => {
   try {
-    const res = await axiosInstance.get(ENDPOINT.getTopPerformingVehicles);
+    const res = await axiosInstance.get(ENDPOINT.getTopPerformingVehicles, {
+      params: payload,
+    });
     return handleResponse(res);
   } catch (error) {
     handleError(error);

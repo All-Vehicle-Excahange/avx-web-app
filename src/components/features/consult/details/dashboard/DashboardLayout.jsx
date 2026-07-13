@@ -98,7 +98,7 @@ export default function DashboardLayout({ children }) {
           )}
 
           {/* MAIN CONTENT */}
-          <main className="flex-1 p-1 md:p-8 overflow-y-auto">
+          <main className="flex-1 p-1 md:p-5 overflow-y-auto">
             {isPending ? (
               <div className="space-y-6 animate-pulse">
                 <div className="flex items-center justify-between">

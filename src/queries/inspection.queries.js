@@ -65,6 +65,16 @@ export const getScoreBreakdownInfiniteQuery = (payload) => {
   };
 };
 
+export const getReportHistoryQuery = (payload) => {
+  return queryOptions({
+    queryKey: ["report-history", payload],
+    queryFn: async () => {
+      const res = await getReportHistory(payload);
+      return res;
+    },
+  });
+};
+
 export const getReportHistoryInfiniteQuery = (payload) => {
   return {
     queryKey: ["report-history-infinite", payload],

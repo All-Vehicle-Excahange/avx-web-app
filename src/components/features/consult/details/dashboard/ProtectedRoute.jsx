@@ -25,7 +25,7 @@ export default function ProtectedRoute({ children }) {
     if (!hasAccess) {
       try {
         sessionStorage.setItem("triggerLoginPopup", "true");
-      } catch (e) {}
+      } catch (e) { }
       replace("/consult");
       return;
     }
@@ -35,11 +35,7 @@ export default function ProtectedRoute({ children }) {
   }, [authInitialized, isLoggedIn, token, user]);
 
   if (checking) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading...
-      </div>
-    );
+    return children;
   }
 
   return children;

@@ -95,7 +95,7 @@ const VehicleSpecsConsualt = forwardRef(function VehicleSpecsConsualt(
           className="flex justify-between items-center px-6 py-3 text-primary cursor-pointer"
           onClick={() => setOpen((prev) => !prev)}
         >
-          <h3 className="text-xl font-semibold">Know Before You Buy</h3>
+          <h3 className="text-xl font-semibold">Inspect Before You Buy</h3>
           <div className="text-xl">
             <ChevronDown
               size={20}

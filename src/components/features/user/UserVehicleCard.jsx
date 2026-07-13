@@ -100,7 +100,7 @@ export default function UserVehicleCard({
     <>
       <div className="group/card relative flex flex-row md:flex-col rounded-2xl overflow-hidden text-primary w-full border-2 border-third/30 hover:shadow-[0_20px_60px_rgba(255,255,255,0.25)] transition-shadow duration-300">
         {/* STATUS PILL */}
-        <div className="absolute top-2 left-2 z-30">
+        <div className="absolute top-4 left-4 z-30">
           <div
             className={`py-1 px-3 rounded-full text-[11px] font-bold text-white shadow-sm ${statusBg[status] || "bg-gray-600"}`}
           >

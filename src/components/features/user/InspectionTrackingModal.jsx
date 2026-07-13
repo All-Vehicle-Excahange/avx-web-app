@@ -1,4 +1,5 @@
 import React from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import {
   ChevronLeft,
@@ -476,10 +477,10 @@ export default function InspectionTrackingModal({
     ];
   };
 
-  return (
+  const modalContent = (
     <div
       onClick={onClose}
-      className={`fixed inset-0 z-999 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4 transition-opacity duration-300 ${
+      className={`fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 transition-opacity duration-300 ${
         animateModal ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
     >
@@ -650,4 +651,8 @@ export default function InspectionTrackingModal({
       </div>
     </div>
   );
+
+  return typeof document !== "undefined"
+    ? createPortal(modalContent, document.body)
+    : null;
 }

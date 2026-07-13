@@ -23,6 +23,7 @@ import Activity from "./components/Activity";
 import Button from "@/components/ui/button";
 import TopPerformingCard from "./components/TopPerformingCard";
 import { useState } from "react";
+import Pagination from "@/components/ui/Pagination";
 import CustomSelect from "@/components/ui/custom-select";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -36,7 +37,7 @@ import {
   getInspectionStatusQuery,
   getInventoryOverviewQuery,
   getOverviewSummaryDataQuery,
-  getRecentActivityQuery,
+  getLowDemandVehiclesQuery,
 } from "@/queries/overview.queries";
 import { getAnalyticsKipsQuery } from "@/queries/analytics.queries";
 import TopPerformingCardSkeleton from "@/components/ui/skeleton/TopPerformingCardSkeleton";
@@ -80,6 +81,8 @@ export default function OverviewComponent() {
   const user = useAuthStore((state) => state.user);
   const [range, setRange] = useState("30");
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+  const [lowDemandPage, setLowDemandPage] = useState(1);
+  const [needAttentionPage, setNeedAttentionPage] = useState(1);
   const queryClient = useQueryClient();
 
   const handleRangeChange = (newRange) => {
@@ -101,9 +104,12 @@ export default function OverviewComponent() {
     getInventoryOverviewQuery(),
   );
   const { data: topPerformingVehiclesData, isLoading: topPerformingLoading } =
-    useQuery(getTopPerformingVehiclesQuery());
+    useQuery(getTopPerformingVehiclesQuery({ pageNo: 1, size: 3 }));
   const { data: needAttentionData, isLoading: needAttentionLoading } = useQuery(
-    getNeedAttenctionVehiclesQuery({ pageNo: 1, size: 5 }),
+    getNeedAttenctionVehiclesQuery({ pageNo: needAttentionPage, size: 3 }),
+  );
+  const { data: lowDemandVehiclesData, isLoading: lowDemandLoading } = useQuery(
+    getLowDemandVehiclesQuery({ pageNo: lowDemandPage, size: 3 }),
   );
   const { data: summaryData, isLoading: summaryLoading } = useQuery(
     getOverviewSummaryDataQuery(),
@@ -112,9 +118,6 @@ export default function OverviewComponent() {
 
   const { data: inspectionStatusData, isLoading: inspectionStatusLoading } =
     useQuery(getInspectionStatusQuery());
-
-  const { data: recentActivityData, isLoading: recentActivityLoading } =
-    useQuery(getRecentActivityQuery());
 
   let daysParam = "LAST_7_DAYS";
   if (range === "30") {
@@ -127,8 +130,9 @@ export default function OverviewComponent() {
   );
 
   // Mapped/Derived variables
-  const topPerforming = topPerformingVehiclesData?.slice(0, 5) || [];
+  const topPerforming = topPerformingVehiclesData?.data || [];
   const needAttention = needAttentionData?.data || [];
+  const lowDemandVehicles = lowDemandVehiclesData?.data || [];
   const sellerTier =
     sellerTierData?.tierTitle ||
     (typeof window !== "undefined" ? localStorage.getItem("sellerTier") : null);
@@ -136,12 +140,12 @@ export default function OverviewComponent() {
   const isInitialLoading =
     topPerformingLoading ||
     needAttentionLoading ||
+    lowDemandLoading ||
     overviewLoading ||
     inquiryLoading ||
     summaryLoading ||
     analyticsLoading ||
-    inspectionStatusLoading ||
-    recentActivityLoading;
+    inspectionStatusLoading
 
   const avgTime = inquiryKpis?.averageResponseTime;
   const formattedTime = formatResponseTime(avgTime);
@@ -153,49 +157,41 @@ export default function OverviewComponent() {
 
   return (
     <>
-      <div className="space-y-8">
+      <div className="space-y-6">
         {/* HEADER */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center flex-wrap gap-3">
               <h1 className="text-xl lg:text-2xl font-bold">
                 Welcome,{" "}
                 {user?.consultationName ||
                   `${user?.firstname || ""} ${user?.lastname || ""}`.trim() ||
                   "Guest"}
               </h1>
-              <span className="flex items-center gap-1 text-green-400 font-medium text-xs md:text-sm">
-                <BadgeCheck size={16} />
-                Verified
-              </span>
-            </div>
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs md:text-sm text-third mt-2">
+
               {sellerTier || user?.sellerTier ? (
-              <span
-  className="relative inline-flex items-center gap-1.5 px-3 py-[5px] rounded-full text-[10px] md:text-xs font-bold tracking-widest uppercase text-[#e0e0e0]"
-  style={{
-    fontFamily: 'var(--font-exo), sans-serif',
-    background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 35%, #3a3a3a 50%, #2d2d2d 65%, #1a1a1a 100%)',
-  }}
->
-  {/* Chrome animated border */}
-  <span
-    className="absolute inset-[-1px] rounded-full -z-10 animated-gradient-border-inner"
-    style={{
-      background: 'linear-gradient(120deg, #0b0b0b, #8f8f8f, #ffffff, #bdbdbd, #3a3a3a, #e0e0e0, #0b0b0b)',
-      backgroundSize: '300% 300%',
-      animation: 'rotateGradient 6s linear infinite',
-    }}
-  />
-  <i className="ti ti-star text-[#b0b0b0] text-[12px]" aria-hidden="true" />
-  {sellerTier || user?.sellerTier} Consultant
-</span>
+                <span
+                  className="relative inline-flex items-center gap-1.5 px-3 py-[5px] rounded-full text-[10px] md:text-xs font-bold tracking-widest uppercase text-[#e0e0e0]"
+                  style={{
+                    fontFamily: 'var(--font-exo), sans-serif',
+                    background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 35%, #3a3a3a 50%, #2d2d2d 65%, #1a1a1a 100%)',
+                  }}
+                >
+                  {/* Chrome animated border */}
+                  <span
+                    className="absolute inset-[-1px] rounded-full -z-10 animated-gradient-border-inner"
+                    style={{
+                      background: 'linear-gradient(120deg, #0b0b0b, #8f8f8f, #ffffff, #bdbdbd, #3a3a3a, #e0e0e0, #0b0b0b)',
+                      backgroundSize: '300% 300%',
+                      animation: 'rotateGradient 6s linear infinite',
+                    }}
+                  />
+                  <i className="ti ti-star text-[#b0b0b0] text-[12px]" aria-hidden="true" />
+                  {sellerTier || user?.sellerTier} Consultant
+                </span>
               ) : null}
-              {/* <span className="flex items-center gap-2">
-                <MapPin size={16} />
-                City: Ahmedabad
-              </span> */}
             </div>
+
           </div>
 
           <div className="flex items-center gap-3 flex-wrap">
@@ -312,27 +308,59 @@ export default function OverviewComponent() {
           </div>
 
           {/* Action 3: Fix Listings */}
-          <div className="rounded-2xl bg-primary/5 p-6 flex flex-col justify-between transition  group">
-            <div className="space-y-4">
-              <div className="flex items-center gap-4">
-                <div className="h-11 w-11 shrink-0 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-500 border border-amber-500/20">
-                  <AlertCircle size={22} strokeWidth={2.5} />
-                </div>
-                <h4 className="font-bold text-white text-lg tracking-tight">
-                  {summaryData?.lowVisibilityVehicleCount ?? 0} Fix Listings
-                </h4>
+          <div className="rounded-2xl bg-primary/5 p-6 flex flex-col gap-4 transition group">
+            <div className="flex items-center gap-4">
+              <div className="h-11 w-11 shrink-0 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-500 border border-amber-500/20">
+                <AlertCircle size={22} strokeWidth={2.5} />
               </div>
-              <p className="mb-4 text-xs text-third leading-relaxed font-medium">
-                Low visibility detected
-              </p>
+              <div>
+                <h4 className="font-bold text-white text-lg tracking-tight">
+                  Fix Listings
+                </h4>
+                <p className="text-xs text-third leading-relaxed font-medium">
+                  Low visibility detected
+                </p>
+              </div>
             </div>
-            <Button
-              href={"/consult/dashboard/inventory"}
-              variant="ghost"
-              className="self-end px-4 py-1.5 text-sm"
-            >
-              Fix Listings
-            </Button>
+
+            <div className="flex-1 mt-2">
+              <div className="flex flex-col gap-4">
+                {lowDemandLoading ? (
+                  <>
+                    <TopPerformingCardSkeleton />
+                    <TopPerformingCardSkeleton />
+                  </>
+                ) : lowDemandVehicles.length > 0 ? (
+                  lowDemandVehicles.map((vehicle, index) => (
+                    <TopPerformingCard key={vehicle.id} rank={index + 1} vehicle={vehicle} />
+                  ))
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full text-center py-4">
+                    <p className="text-sm text-third">
+                      No low demand vehicles.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between mt-2 pt-2 ">
+              <Button
+                href={"/consult/dashboard/inventory"}
+                variant="ghost"
+                className="px-3 py-1.5 text-xs"
+              >
+                View All
+              </Button>
+              <div className="transform scale-[0.8] origin-right -mt-4 -mr-2">
+                <Pagination
+                  currentPage={lowDemandPage}
+                  totalPages={lowDemandVehiclesData?.pageResponse?.totalPages || 1}
+                  onPageChange={setLowDemandPage}
+                />
+              </div>
+
+            </div>
           </div>
         </div>
 
@@ -532,10 +560,10 @@ export default function OverviewComponent() {
         {/* TOP PERFORMING LISTINGS + NEEDS ATTENTION */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* TOP PERFORMING LISTINGS */}
-          <div className="rounded-xl bg-primary/5 p-6 flex flex-col gap-4">
+          <div className="rounded-xl bg-primary/5 p-6 flex flex-col gap-4 transition group">
             <h3 className="font-semibold">Top Performing Listings</h3>
 
-            <div className="flex-1 h-[380px] overflow-y-auto custom-scrollbar pr-1">
+            <div className="flex-1 mt-2">
               <div className="flex flex-col gap-4">
                 {topPerformingLoading ? (
                   <>
@@ -560,11 +588,11 @@ export default function OverviewComponent() {
               </div>
             </div>
 
-            <div className="pt-3 border-t border-third/10 self-end w-full flex justify-end">
+            <div className="flex items-center justify-start mt-2 pt-2">
               <Button
                 href={"/consult/dashboard/inventory"}
                 variant="ghost"
-                className="px-4 py-1.5 text-sm"
+                className="px-3 py-1.5 text-xs"
               >
                 View All
               </Button>
@@ -572,10 +600,10 @@ export default function OverviewComponent() {
           </div>
 
           {/* NEEDS ATTENTION */}
-          <div className="rounded-xl bg-primary/5 p-6 flex flex-col gap-4">
+          <div className="rounded-xl bg-primary/5 p-6 flex flex-col gap-4 transition group">
             <h3 className="font-semibold text-primary">Needs Attention</h3>
 
-            <div className="flex-1 h-[380px] overflow-y-auto custom-scrollbar pr-1">
+            <div className="flex-1 mt-2">
               <div className="flex flex-col gap-4">
                 {needAttentionLoading ? (
                   <>
@@ -596,14 +624,15 @@ export default function OverviewComponent() {
               </div>
             </div>
 
-            <div className="pt-3 border-t border-amber-500/20 self-end w-full flex justify-end">
-              <Button
-                href={"/consult/dashboard/inventory"}
-                variant="outlineSecondary"
-                className="px-4 py-1.5 text-sm"
-              >
-                Improve Listing
-              </Button>
+            <div className="flex items-center justify-between mt-2 pt-2">
+
+              <div className="transform scale-[0.8] origin-right -mt-4 -mr-2">
+                <Pagination
+                  currentPage={needAttentionPage}
+                  totalPages={needAttentionData?.pageResponse?.totalPages || 1}
+                  onPageChange={setNeedAttentionPage}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -699,24 +728,6 @@ export default function OverviewComponent() {
           </div>
         </div>
 
-        {/* RECENT ACTIVITY */}
-        <div className="rounded-xl bg-primary/5 p-6 space-y-3">
-          <h3 className="font-semibold">Recent Activity</h3>
-          {recentActivityData && recentActivityData.length > 0 ? (
-            recentActivityData
-              .slice(0, 4)
-              .map((item, idx) => (
-                <Activity
-                  key={idx}
-                  text={item.activity}
-                  time={formatRelativeTime(item.createdAt)}
-                />
-              ))
-          ) : (
-            <p className="text-sm text-third">No recent activity.</p>
-          )}
-        </div>
-
         {/* RECOMMENDED ACTIONS */}
         <div className="rounded-xl bg-primary/5 p-6 flex flex-col gap-5 transition-colors duration-200 ">
           {/* Header */}
@@ -779,7 +790,7 @@ export default function OverviewComponent() {
 
 function OverviewSkeleton() {
   return (
-    <div className="space-y-8 animate-pulse">
+    <div className="space-y-6 animate-pulse">
       {/* HEADER SKELETON */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="space-y-2">

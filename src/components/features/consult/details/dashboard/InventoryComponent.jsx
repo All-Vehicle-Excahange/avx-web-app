@@ -10,12 +10,12 @@ import {
   TrendingUp,
   Flame,
   EyeOff,
-  AlertTriangle,
   BarChart3,
   ArrowRight,
   Ban,
   ChevronDown,
   Info,
+  AlertTriangle,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import {
@@ -27,7 +27,6 @@ import {
   getInventoryVehicleInfiniteQuery,
   getTopPerformingVehiclesQuery,
   getInventorySnapShotCountQuery,
-  getNeedAttenctionVehiclesInfiniteQuery,
   getSusPendedVehiclesInfiniteQuery,
   getSellerTierQuery,
   getListingLimitsQuery,
@@ -40,6 +39,7 @@ import StatCardSkeleton from "@/components/ui/skeleton/StatCardSkeleton";
 import TopPerformingCardSkeleton from "@/components/ui/skeleton/TopPerformingCardSkeleton";
 import UserVehicleCardSkeleton from "@/components/ui/skeleton/UserVehicleCardSkeleton";
 import { useRouter } from "next/navigation";
+import Pagination from "@/components/ui/Pagination";
 
 export default function InventoryComponent() {
   const vehicleTypes = [
@@ -80,6 +80,7 @@ export default function InventoryComponent() {
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isAddSlotOpen, setIsAddSlotOpen] = useState(false);
   const [isListingOpen, setIsListingOpen] = useState(false);
+  const [topPerformingPage, setTopPerformingPage] = useState(1);
 
   const queryClient = useQueryClient();
   const { push } = useRouter();
@@ -113,10 +114,10 @@ export default function InventoryComponent() {
 
   // 2. Top Performing Vehicles Query
   const { data: topPerformingData, isLoading: topPerformingLoading } = useQuery(
-    getTopPerformingVehiclesQuery(),
+    getTopPerformingVehiclesQuery({ pageNo: topPerformingPage, size: 3 }),
   );
 
-  const topPerforming = topPerformingData || [];
+  const topPerforming = topPerformingData?.data || [];
 
   // 3. Inventory Snapshot Count Query
   const {
@@ -142,22 +143,6 @@ export default function InventoryComponent() {
     maxLimit > 0 ? Math.min((currentCount / maxLimit) * 100, 100) : 0;
   const isNearLimit = maxLimit > 0 && maxLimit - currentCount <= 2;
 
-  // 4. Need Attention Vehicles Query (Paginated / Load More via Infinite Query)
-  const {
-    data: needAttentionInfiniteData,
-    isFetching: needAttentionLoading,
-    fetchNextPage: fetchNextNeedAttentionPage,
-    hasNextPage: hasNextNeedAttentionPage,
-  } = useInfiniteQuery(getNeedAttenctionVehiclesInfiniteQuery({ pageSize: 6 }));
-
-  const needAttentionVehicles =
-    needAttentionInfiniteData?.pages.flatMap((page) => page.data || []) || [];
-
-  const handleViewMoreNeedAttention = () => {
-    if (hasNextNeedAttentionPage) {
-      fetchNextNeedAttentionPage();
-    }
-  };
 
   // 5. Suspended Vehicles Query (Paginated / Load More via Infinite Query)
   const {
@@ -372,39 +357,58 @@ export default function InventoryComponent() {
                 </div>
               )}
             </div>
-          </div>
-          <div className="rounded-xl  border-third/30 bg-primary/5 p-6 flex flex-col h-[400px]">
-            {/* HEADER (fixed) */}
-            <div className="flex items-center justify-between mb-4 w-full">
-              <div className="flex items-center gap-2">
-                <BarChart3 className="text-primary" size={18} />
-                <h3 className="font-semibold">Market Insight</h3>
-              </div>
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-green-500/10 border border-green-500/20 shadow-sm">
-                <span className="text-xs font-bold text-green-600 tracking-wide">
-                  +2.3x Conversion
-                </span>
-              </div>
-            </div>
 
-            {/* CONTENT & FOOTER CENTERED */}
-            <div className="flex-1 flex flex-col items-center justify-center text-center gap-4 py-8">
-              <p className="text-xs md:text-base leading-relaxed text-third ">
-                Reecomm inspected vehicles are converting significantly better
-                than regular listings.
-              </p>
+            <div className="flex items-center justify-between mt-2 pt-2 border-t border-third/10">
               <Button
                 variant="ghost"
-                href={"/consult/dashboard/inspection"}
-                showIcon={false}
-                className="text-sm"
-                size="md"
+                onClick={() => {
+                  push("/consult/dashboard/ppc");
+                }}
+                className="px-3 py-1.5 text-xs"
               >
-                Inspect More Vehicles
-                <ArrowRight className="w-4 h-4 ml-2" />
+                Boost your vehicles
+              </Button>
+              <div className="transform scale-[0.8] origin-right -mt-4 -mr-2">
+                <Pagination
+                  currentPage={topPerformingPage}
+                  totalPages={topPerformingData?.pageResponse?.totalPages || 1}
+                  onPageChange={setTopPerformingPage}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="rounded-xl overflow-hidden h-[400px] bg-fourth flex relative">
+            <div className="z-10 flex flex-col justify-center pl-6 sm:pl-10 xl:pl-6 2xl:pl-10 h-full text-white">
+              <h2 className="text-3xl md:text-[38px] lg:text-[42px] xl:text-3xl 2xl:text-[42px] font-black tracking-wide relative z-20">
+                Book<br />
+                Vehicle<br />
+                Inspection
+              </h2>
+
+              <div className="w-[80%] max-w-[220px] xl:max-w-[160px] 2xl:max-w-[220px] h-[2px] bg-gradient-to-r from-white to-transparent my-4 2xl:my-6"></div>
+
+              <p className="text-sm md:text-[15px] xl:text-[13px] 2xl:text-[15px] font-medium leading-relaxed max-w-[220px] xl:max-w-[180px] 2xl:max-w-[220px] mb-6 2xl:mb-8 relative z-20">
+                verified vehicles receive more buyer attention.
+              </p>
+
+              <Button
+                variant="ghost"
+                className="w-fit text-fourth"
+                onClick={() => push("/consult/dashboard/inspection")}
+                showIcon={false}
+              >
+                Inspect now
               </Button>
             </div>
-          </div>{" "}
+
+            <div className="absolute inset-y-0 right-0 h-full flex justify-end pointer-events-none overflow-hidden">
+              <img
+                src="/recomm/market.png"
+                alt="Market Insight"
+                className="h-full w-auto max-w-none object-right"
+              />
+            </div>
+          </div>
         </div>
 
         {/* LISTING LIMIT PROGRESS */}
@@ -560,42 +564,7 @@ export default function InventoryComponent() {
             )}
           </div>
         )}
-        <div className="rounded-xl bg-primary/5 p-6 space-y-4">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="text-yellow-500" size={18} />
-            <h3 className="font-semibold">Vehicles Needing Attention</h3>
-          </div>
 
-          {needAttentionLoading && needAttentionVehicles.length === 0 ? (
-            <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
-              <TopPerformingCardSkeleton />
-              <TopPerformingCardSkeleton />
-            </div>
-          ) : needAttentionVehicles.length > 0 ? (
-            <>
-              <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
-                {needAttentionVehicles.map((v) => (
-                  <TopPerformingCard key={v.id} vehicle={v} />
-                ))}
-              </div>
-
-              {hasNextNeedAttentionPage && (
-                <div className="flex justify-center mt-4">
-                  <Button
-                    variant="outline"
-                    onClick={handleViewMoreNeedAttention}
-                    disabled={needAttentionLoading}
-                    className="px-6 py-2 rounded-full text-sm font-semibold shadow-md"
-                  >
-                    {needAttentionLoading ? "Loading..." : "View More"}
-                  </Button>
-                </div>
-              )}
-            </>
-          ) : (
-            <p className="text-sm text-third">No vehicles needing attention.</p>
-          )}
-        </div>
       </section>
       <DownloadAppPopup
         isOpen={isDownloadOpen}
