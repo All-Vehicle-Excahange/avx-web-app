@@ -152,7 +152,7 @@ export default function PrivacyPolicy() {
             Privacy <spam className="text-fourth/80">Policy</spam>
           </h1>
           <p className="text-lg font-light text-primary/50 leading-[1.85] max-w-[480px] mb-7">
-           {"Reecomm is a product of Quba Infotech, a sole proprietorship founded and operated by Loriya Anas. The mobile applications of Reecomm on the Apple App Store are published under the individual developer account name Loriya Anas. This policy describes how Reecomm, Quba Infotech, and Loriya Anas (collectively 'we', 'our', or 'us') collect, use, and protect your information."}
+           {"Reecomm is a product of Quba Infotech, a sole proprietorship founded and operated by Loriya Anas. The mobile applications of Reecomm on the Apple App Store and Google Play Store are published under the individual developer account name Loriya Anas. This policy describes how Reecomm, Quba Infotech, and Loriya Anas (collectively 'we', 'our', or 'us') collect, use, and protect your information."}
           </p>
           <div className="flex items-center gap-5 text-sm tracking-wide text-primary/45">
             <span>Last Updated: January 2026</span>

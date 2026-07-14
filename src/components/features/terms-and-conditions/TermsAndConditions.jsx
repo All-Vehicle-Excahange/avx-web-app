@@ -286,9 +286,9 @@ export default function TermsAndConditions() {
                 "Reecomm is a product of Quba Infotech, a registered proprietorship firm founded and operated by Loriya Anas.",
                 "All operational decisions, product management, and commercial operations of Reecomm are managed by Quba Infotech."
               ]} />
-              <SubLabel>App Store Publication</SubLabel>
+              <SubLabel>App Store & Play Store Publication</SubLabel>
               <BulletList items={[
-                "Due to Apple App Store publisher verification rules for sole proprietorships, our iOS applications are published under the individual developer account name 'Loriya Anas'.",
+                "Due to developer verification rules on the Apple App Store and Google Play Store for sole proprietorships, our mobile applications are published under the individual developer account name 'Loriya Anas'.",
                 "Loriya Anas is the founder and sole proprietor of Quba Infotech. References to 'Reecomm', 'we', 'our', or 'us' refer collectively to the Reecomm marketplace, Quba Infotech, and Loriya Anas."
               ]} />
             </div>
