@@ -152,10 +152,10 @@ export default function PrivacyPolicy() {
             Privacy <spam className="text-fourth/80">Policy</spam>
           </h1>
           <p className="text-lg font-light text-primary/50 leading-[1.85] max-w-[480px] mb-7">
-           {" Your data, your control. Here's how Reecomm collects, uses, and protects your information — plain language, no legal maze."}
+           {"Reecomm is a product of Quba Infotech, a sole proprietorship founded and operated by Loriya Anas. The mobile applications of Reecomm on the Apple App Store are published under the individual developer account name Loriya Anas. This policy describes how Reecomm, Quba Infotech, and Loriya Anas (collectively 'we', 'our', or 'us') collect, use, and protect your information."}
           </p>
           <div className="flex items-center gap-5 text-sm tracking-wide text-primary/45">
-            <span>Last Updated: January 2025</span>
+            <span>Last Updated: January 2026</span>
             <span className="w-px h-3 bg-primary/15" />
             <span>Effective Immediately</span>
           </div>
@@ -271,6 +271,14 @@ export default function PrivacyPolicy() {
               <BulletList items={["Listings you create or manage", "Inquiries sent and received", "Inspection requests and history"]} />
               <SubLabel>Device & Usage</SubLabel>
               <BulletList items={["IP address, browser type", "Pages visited and interaction patterns"]} />
+              <SubLabel>Mobile Device Permissions (iOS & Android)</SubLabel>
+              <BulletList items={[
+                "Location Services (Always / When In Use): To show nearby vehicle listings, calculate distances, and improve local vehicle search recommendations.",
+                "Camera: To capture vehicle photos and upload documentation during the vehicle listing or inspection process.",
+                "Microphone: To record audio when you capture vehicle walkaround videos.",
+                "Photo Library / Gallery (Read & Write / Add Only): To upload existing vehicle images and documents from your gallery, and to save edited/cropped photos back to your device library.",
+                "Push Notifications: To send real-time alerts regarding buyer inquiries, system messages, inspection statuses, and sponsored PPC updates."
+              ]} />
             </div>
 
             <div id="use" className="py-11 border-b border-primary/7">
@@ -294,7 +302,7 @@ export default function PrivacyPolicy() {
               <SubLabel>Other Users</SubLabel>
               <BulletList items={["When you send or receive inquiries", "When listing vehicles publicly"]} />
               <SubLabel>Service Providers</SubLabel>
-              <BulletList items={["Hosting and infrastructure", "Analytics (aggregated and anonymised)", "Communication tools"]} />
+              <BulletList items={["Hosting and infrastructure", "Payment processing (securely processed via Razorpay under Quba Infotech's merchant account, with GST invoices issued by Quba Infotech where required)", "Analytics (aggregated and anonymised)", "Communication tools"]} />
               <SubLabel>Legal Requirements</SubLabel>
               <BulletList items={["When required by applicable law", "To protect platform integrity and user safety"]} />
             </div>
@@ -323,7 +331,7 @@ export default function PrivacyPolicy() {
               ]} />
               <Body className="mt-5">
                 For requests, reach us at{" "}
-                <span className="text-primary/65">support@reecomm.com</span>
+                <span className="text-primary/65">info@reecomm.com</span>
               </Body>
             </div>
 
@@ -345,6 +353,7 @@ export default function PrivacyPolicy() {
               <Body className="mb-5">Reecomm uses third-party tools for core infrastructure only.</Body>
               <BulletList items={[
                 "Hosting and content delivery",
+                "Payment processing (securely handled by Razorpay under the merchant account of Quba Infotech, issuing GST invoices where required)",
                 "Analytics and performance monitoring",
                 "Communication and notification services",
               ]} />
@@ -387,8 +396,12 @@ export default function PrivacyPolicy() {
               <Body className="mb-4">{"Questions? We're reachable."}</Body>
               <div className="border border-primary/8 rounded-md overflow-hidden">
                 <div className="flex items-center gap-5 px-5 py-4 border-b border-primary/7">
+                  <span className="text-[11px] tracking-[0.15em] uppercase text-primary/22 min-w-[68px]">Entity</span>
+                  <span className="text-lg text-primary/55 font-light">Quba Infotech (Proprietor: Loriya Anas)</span>
+                </div>
+                <div className="flex items-center gap-5 px-5 py-4 border-b border-primary/7">
                   <span className="text-[11px] tracking-[0.15em] uppercase text-primary/22 min-w-[68px]">Email</span>
-                  <span className="text-lg text-primary/55 font-light">support@reecomm.com</span>
+                  <span className="text-lg text-primary/55 font-light">info@reecomm.com</span>
                 </div>
                 <div className="flex items-center gap-5 px-5 py-4">
                   <span className="text-[11px] tracking-[0.15em] uppercase text-primary/22 min-w-[68px]">Address</span>

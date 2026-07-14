@@ -498,11 +498,12 @@ function MyProfile() {
                   If you believe this enforcement is an error or wish to appeal
                   the decision, please contact our support team at{" "}
                   <a
-                    href="mailto:support@reecomm.com"
+                    href="mailto:info@reecomm.com"
                     className="text-primary font-bold hover:underline ml-1"
                   >
-                    support@reecomm.com
+                    info@reecomm.com
                   </a>
+
                 </p>
               </div>
             </div>

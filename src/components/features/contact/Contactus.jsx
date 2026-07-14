@@ -156,10 +156,10 @@ function Contactus() {
                         General Support
                       </p>
                       <a
-                        href="mailto:support@reecomm.com"
+                        href="mailto:info@reecomm.com"
                         className="text-primary hover:text-fourth font-medium text-sm transition-colors break-all"
                       >
-                        support@reecomm.com
+                        info@reecomm.com
                       </a>
                       <p className="text-[11px] text-third/50 mt-0.5">
                         For listing details, subscription and account help.
