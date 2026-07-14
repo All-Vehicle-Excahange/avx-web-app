@@ -16,6 +16,7 @@ import {
   ChevronDown,
   Info,
   AlertTriangle,
+  Download,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import {
@@ -181,46 +182,52 @@ export default function InventoryComponent() {
           </div>
         </div>
 
-        {/* 2️ NOTE */}
-        <div className="relative overflow-hidden rounded-xl bg-fourth text-white p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-6 shadow-lg shadow-fourth/20">
-          {/* Abstract elements for a premium feel */}
-          <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white opacity-5 rounded-full blur-2xl pointer-events-none"></div>
-          <div className="absolute bottom-0 left-10 -mb-10 w-32 h-32 bg-black opacity-10 rounded-full blur-xl pointer-events-none"></div>
+        {/* 2️ NOTE / MANAGE INVENTORY BANNER */}
+        <div className="relative overflow-hidden rounded-2xl flex flex-col lg:flex-row items-center justify-between min-h-[280px] shadow-sm border border-third/10 bg-[#0A58F9]  ">
+          {/* Background Image */}
+          <img
+            src="/seller/chatsbg.png"
+            alt="Background"
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+          />
 
           {/* Left Content */}
-          <div className="flex items-center gap-4 relative z-10 max-w-2xl">
-            <div className="hidden sm:flex shrink-0 w-12 h-12 rounded-full bg-white/10 items-center justify-center backdrop-blur-sm border border-white/10">
-              <Info size={24} className="text-white" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold mb-1 flex items-center gap-2">
-                <span className="sm:hidden">
-                  <Info size={18} />
-                </span>{" "}
-                Note
-              </h3>
-              <p className="text-sm md:text-base text-white/80 leading-relaxed font-medium">
-                Adding and editing vehicles is available on the{" "}
-                <span className="text-white font-semibold">
-                  Reecomm mobile app
-                </span>
-                . You can still view listings and mark vehicles as sold here.
-              </p>
+          <div className="relative z-10 flex flex-col p-6 md:p-10 w-full lg:w-3/5">
+            <h2 className="text-3xl md:text-4xl font-normal text-white mb-3 tracking-tight leading-[1.1] drop-shadow-sm">
+              Manage Your Inventory<br />On the <span className="font-extrabold">Go</span>
+            </h2>
+            <p className="text-sm md:text-[15px] text-white/90 leading-relaxed font-medium mb-6 max-w-[500px] drop-shadow-sm">
+              Adding and improve vehicle listing is available on the <span className="font-bold">Reecomm mobile app</span>. You can still view listings and mark vehicles as sold here.
+            </p>
+            <div className="flex flex-wrap items-center gap-4">
+              <Button
+                variant="ghost"
+                className="w-fit"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsListingOpen(true); // Or download link
+                }}
+              >
+                <Download size={20} strokeWidth={2.5} />
+                Download App
+              </Button>
             </div>
           </div>
 
-          {/* Right Button */}
-          <div className="w-full lg:w-auto shrink-0 relative z-10">
-            <Button
-              variant="ghost"
-              size="md"
-              onClick={() => setIsListingOpen(true)}
-              showIcon={false}
-              className="w-auto md:w-auto justify-center"
-            >
-              <Smartphone className="mr-2" size={18} />
-              Add Vehicle
-            </Button>
+          {/* Right Content - Dual Phones */}
+          <div className="absolute inset-y-0 right-0 w-full lg:w-1/2 pointer-events-none z-10 opacity-30 lg:opacity-100">
+            {/* Phone 1 (Back) */}
+            <img
+              src="/seller/mobile.png"
+              alt="Mobile App View"
+              className="absolute right-[20%] lg:right-[42%] bottom-[-10%] lg:bottom-[-50%] h-[90%] lg:h-[120%] w-auto object-contain drop-shadow-2xl rotate-12 scale-90 brightness-75 transition-transform duration-700"
+            />
+            {/* Phone 2 (Front) */}
+            <img
+              src="/seller/mobile.png"
+              alt="Mobile App View"
+              className="absolute right-[-10%] lg:right-[-5%] bottom-[-5%] lg:bottom-[-1%] h-[100%] lg:h-[130%] w-auto object-contain drop-shadow-2xl rotate-[20deg] z-10 transition-transform duration-700 "
+            />
           </div>
         </div>
 
@@ -403,7 +410,7 @@ export default function InventoryComponent() {
 
             <div className="absolute inset-y-0 right-0 h-full flex justify-end pointer-events-none overflow-hidden">
               <img
-                src="/recomm/market.png"
+                src="/seller/market.png"
                 alt="Market Insight"
                 className="h-full w-auto max-w-none object-right"
               />

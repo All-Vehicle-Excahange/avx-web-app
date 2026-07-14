@@ -49,18 +49,17 @@ export default function StatCard({ icon, label, value, trend }) {
   return (
     <div className="flex items-center justify-between gap-2 rounded-xl border border-third/30 p-3 sm:p-4 transition hover:border-third/40 min-w-0">
       {/* Left Section */}
-      <div className="flex items-center gap-3 min-w-0">
+      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
         {/* Added shrink-0 to prevent icon box from squishing */}
-        <div className="h-10 w-10 shrink-0 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+        <div className="h-9 w-9 sm:h-10 sm:w-10 shrink-0 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
           {icon}
         </div>
 
-        {/* Removed whitespace-nowrap and added min-w-0 */}
-        <div className="flex flex-col min-w-0">
-          <p className="text-[10px] sm:text-sm font-bold  text-third leading-tight break-words">
+        <div className="flex flex-col min-w-0 flex-1">
+          <p className="text-[10px] sm:text-xs 2xl:text-sm font-bold text-third leading-tight whitespace-nowrap truncate">
             {label}
           </p>
-          <p className="text-base sm:text-lg font-bold text-primary leading-tight">
+          <p className="text-sm sm:text-base md:text-lg font-bold text-primary leading-tight mt-0.5">
             {value}
           </p>
         </div>

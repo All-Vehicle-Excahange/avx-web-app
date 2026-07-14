@@ -68,7 +68,7 @@ export default function ConsultantCard(props) {
             <div className="bg-[#0D87FF] w-[52px] pt-1 pb-1.5 rounded-b-[10px] flex flex-col items-center justify-center shadow-md relative rounded-tl-[4px]">
               <BadgeCheck size={15} strokeWidth={2.5} className="fill-white text-[#0D87FF] mb-[2px]" />
               <span className="text-white text-[7px] font-black leading-[1.1] text-center font-semibold tracking-wider">
-                VERIFIED
+                TRUSTED
               </span>
             </div>
           </div>

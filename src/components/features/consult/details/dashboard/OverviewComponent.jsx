@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   Car,
   MessageCircle,
@@ -17,6 +18,7 @@ import {
   BadgeDollarSign,
   User,
   Smartphone,
+  Crown,
 } from "lucide-react";
 import StatCard from "./components/StateCard";
 import Activity from "./components/Activity";
@@ -169,27 +171,29 @@ export default function OverviewComponent() {
                   "Guest"}
               </h1>
 
-              {sellerTier || user?.sellerTier ? (
-                <span
-                  className="relative inline-flex items-center gap-1.5 px-3 py-[5px] rounded-full text-[10px] md:text-xs font-bold tracking-widest uppercase text-[#e0e0e0]"
-                  style={{
-                    fontFamily: 'var(--font-exo), sans-serif',
-                    background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 35%, #3a3a3a 50%, #2d2d2d 65%, #1a1a1a 100%)',
-                  }}
-                >
-                  {/* Chrome animated border */}
+              {(() => {
+                const tierVal = sellerTier || user?.sellerTier;
+                if (!tierVal) return null;
+
+                const tierTitle = typeof tierVal === "string" ? tierVal.toUpperCase() : "CONSULTANT";
+                const badgeText = tierTitle === "CONSULTANT" ? "CONSULTANT" : `${tierTitle} CONSULTANT`;
+                let badgeClasses = "";
+
+                if (tierTitle === "PRO" || tierTitle === "PREMIUM") {
+                  badgeClasses = "bg-amber-400/15 text-amber-400 border border-amber-500/30 shadow-[0_2px_12px_rgba(245,158,11,0.1)]";
+                } else {
+                  badgeClasses = "bg-blue-500/15 text-blue-400 border border-blue-500/30";
+                }
+
+                return (
                   <span
-                    className="absolute inset-[-1px] rounded-full -z-10 animated-gradient-border-inner"
-                    style={{
-                      background: 'linear-gradient(120deg, #0b0b0b, #8f8f8f, #ffffff, #bdbdbd, #3a3a3a, #e0e0e0, #0b0b0b)',
-                      backgroundSize: '300% 300%',
-                      animation: 'rotateGradient 6s linear infinite',
-                    }}
-                  />
-                  <i className="ti ti-star text-[#b0b0b0] text-[12px]" aria-hidden="true" />
-                  {sellerTier || user?.sellerTier} Consultant
-                </span>
-              ) : null}
+                    className={`inline-flex items-center gap-1.5 px-3 py-[5px] rounded-full text-[10px] md:text-xs font-bold tracking-widest uppercase ${badgeClasses}`}
+                  >
+                    <Crown size={14} className="fill-current" />
+                    {badgeText}
+                  </span>
+                );
+              })()}
             </div>
 
           </div>
@@ -267,44 +271,33 @@ export default function OverviewComponent() {
             </Button>
           </div> */}
 
-          {/* Action 2: Chats Pending */}
-          <div className="rounded-2xl bg-primary/5 p-6 flex flex-col justify-between transition  group">
-            <div className="space-y-4">
-              <div className="flex items-center gap-4">
-                <div className="h-11 w-11 shrink-0 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-500 border border-orange-500/20">
-                  <MessageSquare size={22} strokeWidth={2.5} />
-                </div>
-                <h4 className="font-bold text-white text-lg tracking-tight">
-                  N/A Chats Pending
-                </h4>
-              </div>
+          <div
+            className="relative rounded-2xl overflow-hidden transition shadow-sm border border-third/10 min-h-[320px] flex items-center bg-[#0A58F9]"
+          >
+            {/* Background Image */}
+            <img
+              src="/seller/chatsbg.png"
+              alt="Background"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+
+            {/* Mobile Phone Image */}
+            <img
+              src="/seller/mobile.png"
+              alt="Mobile App"
+              className="absolute right-[-10%] md:right-4 bottom-0 h-[85%] md:h-[95%] w-auto object-right-bottom drop-shadow-2xl opacity-20 md:opacity-100 transition-transform duration-500 pointer-events-none"
+            />
+
+            {/* Content */}
+            <div className="relative z-10 flex flex-col p-6 md:p-8 md:pr-[45%]">
+              <h3 className="text-3xl md:text-4xl font-extrabold text-white leading-[1.1] tracking-tight mb-4 drop-shadow-md">
+                Chats are<br />Mobile Only
+              </h3>
+              <p className="text-[13px] md:text-sm text-white/95 leading-relaxed font-medium mb-6 drop-shadow-md">
+                Download the Reecomm mobile app to chat with buyers in real time and receive instant notifications. All conversations are managed through the mobile app.
+              </p>
 
             </div>
-
-            <div className="flex-1 my-4 flex flex-col justify-center">
-              <div className="flex flex-col items-center justify-center text-center p-6  bg-white/2 space-y-3 my-auto">
-                <div className="p-3 bg-primary/5 rounded-full text-primary">
-                  <Smartphone size={24} />
-                </div>
-                <div className="space-y-1">
-                  <h4 className="font-semibold text-sm text-white">
-                    Chats are Mobile Only
-                  </h4>
-                  <p className="text-xs text-third max-w-[280px] leading-relaxed mx-auto">
-                    Download the Reecomm mobile app to chat with buyers in
-                    real-time and get instant notifications.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <Button
-              onClick={() => setIsDownloadOpen(true)}
-              variant="ghost"
-              className="self-end px-4 py-1.5 text-sm"
-            >
-              View Chats
-            </Button>
           </div>
 
           {/* Action 3: Fix Listings */}
@@ -331,8 +324,8 @@ export default function OverviewComponent() {
                     <TopPerformingCardSkeleton />
                   </>
                 ) : lowDemandVehicles.length > 0 ? (
-                  lowDemandVehicles.map((vehicle, index) => (
-                    <TopPerformingCard key={vehicle.id} rank={index + 1} vehicle={vehicle} />
+                  lowDemandVehicles.map((vehicle) => (
+                    <TopPerformingCard key={vehicle.id} vehicle={vehicle} />
                   ))
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full text-center py-4">

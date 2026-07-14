@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { Search, X } from "lucide-react";
+import { Search, X, Loader2 } from "lucide-react";
 import { useRouter } from "next/router";
 import {
   getMakersByFuelOrBodyType,
@@ -64,6 +64,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
   /* ================= SHARED STATE ================= */
   const [activeTab, setActiveTab] = useState(null);
+  const [isSearching, setIsSearching] = useState(false);
   const [location, setLocation] = useState("");
   const [cityId, setCityId] = useState(null);
   const [stateId, setStateId] = useState(null);
@@ -399,13 +400,15 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [activeTab, showTypeDropdown]);
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!vehicleType) {
       setVehicleTypeError(true);
       return;
     }
 
-    const isConsult = internalActiveType === "consult";
+    setIsSearching(true);
+    try {
+      const isConsult = internalActiveType === "consult";
 
     // Save/overwrite selected location to localStorage
     if (stateId && cityId && location) {
@@ -457,7 +460,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       }).toString();
       setActiveTab(null);
       setMobileOpen(false);
-      push(`/consult/discovery${query ? `?${query}` : ""}`);
+      await push(`/consult/discovery${query ? `?${query}` : ""}`);
     } else {
       const vtLower = vehicleType.toLowerCase().replace(/_/g, " ");
       const isCar = vtLower.includes("car") || vtLower.includes("4 wheeler") || vtLower.includes("four wheeler") || vtLower.includes("4-wheeler") || vtLower.includes("four-wheeler");
@@ -487,7 +490,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
         setActiveTab(null);
         setMobileOpen(false);
-        push(`/search/${slug}${queryParams ? `?${queryParams}` : ""}`);
+        await push(`/search/${slug}${queryParams ? `?${queryParams}` : ""}`);
       } else {
         const query = new URLSearchParams({
           ...(location && { location }),
@@ -502,8 +505,11 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         }).toString();
         setActiveTab(null);
         setMobileOpen(false);
-        push(`/search?${query}`);
+        await push(`/search?${query}`);
       }
+    }
+    } finally {
+      setIsSearching(false);
     }
   };
 
@@ -685,10 +691,14 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         }
 
         .lg-search-btn:hover {
+          background: rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          color: #fff;
           transform: scale(1.05);
           box-shadow:
             0 8px 28px rgba(0,0,0,0.30),
-            0 1px 0 rgba(255,255,255,0.9) inset;
+            0 1px 0 rgba(255,255,255,0.5) inset;
         }
 
         .lg-search-btn:active {
@@ -1047,8 +1057,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 <button
                   onClick={handleSearch}
                   className="lg-search-btn"
+                  disabled={isSearching}
                 >
-                  <Search size={20} strokeWidth={2.5} />
+                  {isSearching ? <Loader2 className="animate-spin" size={20} strokeWidth={2.5} /> : <Search size={20} strokeWidth={2.5} />}
                 </button>
               </div>
             </div>
@@ -1600,10 +1611,20 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           <div className="p-4 border-t border-neutral-800 shrink-0 bg-secondary sm:rounded-b-3xl">
             <button
               onClick={handleSearch}
-              className="w-full bg-primary text-secondary font-bold text-lg py-4 rounded-full flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-95 transition-transform cursor-pointer"
+              disabled={isSearching}
+              className="w-full bg-primary text-secondary font-bold text-lg py-4 rounded-full flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-95 transition-transform cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              <Search size={20} />
-              Search Vehicles
+              {isSearching ? (
+                <>
+                  <Loader2 className="animate-spin" size={20} />
+                  Searching...
+                </>
+              ) : (
+                <>
+                  <Search size={20} />
+                  Search Vehicles
+                </>
+              )}
             </button>
           </div>
         </div>

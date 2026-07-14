@@ -290,7 +290,7 @@ function InspectionTab() {
 
         {/* Stat Cards */}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <StatCard
             icon={<Car className="text-primary" size={20} />}
             label="Reecomm Inspection"
@@ -326,28 +326,12 @@ function InspectionTab() {
       {/* ================= TRUST SCORE BANNER ================= */}
 
       {/* ================= HOW INSPECTION AFFECTS RANKING ================= */}
-      <div className="rounded-xl bg-fourth p-6 space-y-4 shadow-sm transition-colors duration-200">
-        <h3 className="text-lg font-semibold flex items-center gap-2">
-          <TrendingUp size={18} className="text-primary" />
-          How inspection affects ranking:
-        </h3>
-
-        <div className="space-y-3 text-sm">
-          <p className="flex items-center gap-2 text-primary/80">
-            <CheckCircle2 size={16} />
-            Fresh inspection boosts visibility
-          </p>
-
-          <p className="flex items-center gap-2 text-primary/80">
-            <CheckCircle2 size={16} />
-            Higher inspection score increases buyer trust
-          </p>
-
-          <p className="flex items-center gap-2 text-primary/80">
-            <CheckCircle2 size={16} />
-            Re-inspection improves conversion
-          </p>
-        </div>
+      <div className="rounded-2xl overflow-hidden shadow-sm border border-third/10 my-4 transition">
+        <img
+          src="/seller/inspection.png"
+          alt="How inspection affects ranking"
+          className="w-full h-auto object-cover"
+        />
       </div>
 
       {/* ================= VEHICLES REQUIRING ATTENTION ================= */}

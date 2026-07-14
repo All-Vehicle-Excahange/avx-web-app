@@ -5,7 +5,7 @@
 import { useEffect, useState } from "react";
 import InquiryCard from "@/components/ui/InquiryCard";
 import StatCard from "./components/StateCard";
-import { AlertTriangle, EyeOff, Flame, TrendingUp } from "lucide-react";
+import { AlertTriangle, EyeOff, Flame, TrendingUp, Clock } from "lucide-react";
 import { useQuery, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { getInquiryKpisQuery } from "@/queries/Seller.queries";
 import { getInquiriesInfiniteQuery } from "@/queries/inquiry.queries";
@@ -72,26 +72,36 @@ export default function InquiriesComponent() {
         </div>
 
         {kpiLoading ? (
-          <div className="rounded-xl bg-transparent p-3 space-y-2 min-w-[200px]">
+          <div className="rounded-xl bg-primary/5 px-4 py-2.5 space-y-2 min-w-[200px] border border-transparent">
             <SkeletonBox className="h-4 w-3/4 opacity-20" rounded="rounded-md" />
-            <SkeletonBox className="h-4 w-full opacity-20" rounded="rounded-md" />
+            <SkeletonBox className="h-3 w-full opacity-20" rounded="rounded-md" />
           </div>
         ) : (
-          <div className="rounded-xl border border-primary/20 bg-primary/5 p-3 space-y-2">
-            <p className={`text-sm ${status.color}`}>
-              Avg response time: {formattedTime} ({status.label})
-            </p>
-
-            <p className="text-sm text-primary/70">
-              Fast responses increase chances of closing.
-            </p>
+          <div className="flex items-center gap-3 bg-primary/5 border border-third/20 rounded-xl px-4 py-2.5 shadow-sm backdrop-blur-sm w-full md:w-auto">
+            <div className="flex items-center justify-center w-9 h-9 rounded-full bg-secondary shadow-inner shrink-0">
+              <Clock className={status.color} size={18} strokeWidth={2.5} />
+            </div>
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2 mb-0.5">
+                <span className="text-xs font-semibold text-primary tracking-tight">Avg Response Time</span>
+                <span className={`px-1.5 rounded text-[9px] font-semibold uppercase tracking-wider bg-secondary shadow-sm ${status.color}`}>
+                  {status.label}
+                </span>
+              </div>
+              <div className="flex items-baseline gap-2">
+                <span className="font-semibold text-base font-black tracking-tight">{formattedTime}</span>
+                <span className="text-[10px] text-third font-medium leading-tight hidden sm:block">
+                  Fast responses increase closing rate.
+                </span>
+              </div>
+            </div>
           </div>
         )}
 
       </div>
 
       <div className="rounded-xl bg-primary/5 p-6 space-y-5">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-5 gap-4">
           {kpiLoading ? (
             <>
               <StatCardSkeleton />
@@ -102,18 +112,14 @@ export default function InquiriesComponent() {
             </>
           ) : (
             <>
-              <div
-                className="cursor-pointer"
-              >
+              <div>
                 <StatCard
                   icon={<Flame className="text-primary" size={20} />}
                   label="All Inquiries "
                   value={`${inquiryKpis?.totalInquiries || 0} `}
                 />
               </div>
-              <div
-                className="cursor-pointer"
-              >
+              <div>
                 <StatCard
                   icon={<Flame className="text-green-500" size={20} />}
                   label="Accepted Inquiries"
@@ -121,9 +127,7 @@ export default function InquiriesComponent() {
                 />
               </div>
 
-              <div
-                className="cursor-pointer"
-              >
+              <div>
                 <StatCard
                   icon={<EyeOff className="text-yellow-500" size={20} />}
                   label="Pending Inquiries"
@@ -131,9 +135,7 @@ export default function InquiriesComponent() {
                 />
               </div>
 
-              <div
-                className="cursor-pointer"
-              >
+              <div>
                 <StatCard
                   icon={<AlertTriangle className="text-blue-500" size={20} />}
                   label="Closed Inquiries"
@@ -141,9 +143,7 @@ export default function InquiriesComponent() {
                 />
               </div>
 
-              <div
-                className="cursor-pointer"
-              >
+              <div>
                 <StatCard
                   icon={<AlertTriangle className="text-red-500" size={20} />}
                   label="Rejected Inquiries"
