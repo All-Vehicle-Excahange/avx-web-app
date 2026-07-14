@@ -156,8 +156,17 @@ function LoginPopup({
         } else {
           localStorage.removeItem("otpBlockUntil");
           setCountdown(0);
+          // Close popup immediately (sync) before onSuccess API calls
+          reset();
+          setOtp(Array(6).fill(""));
+          setOtpSent(false);
+          setOtpError("");
+          setGoogleToken(null);
+          setIsGoogleSignupFlow(false);
+          setAccountType("personal");
+          setAcceptedTerms(false);
+          onClose();
           onSuccess();
-          handleClose();
         }
       } else if (res?.error) {
         setError("root", { type: "server", message: res.message || "Google sign-in failed" });
@@ -264,10 +273,23 @@ function LoginPopup({
         const currentUser = useAuthStore.getState().user;
         const currentAccountType = currentUser?.accountType;
 
+        // Close popup immediately (sync) to prevent race conditions
+        // where onSuccess API calls could trigger a re-open via interceptors
+        setIsClosing(true);
+        reset();
+        setOtp(Array(6).fill(""));
+        setOtpSent(false);
+        setOtpError("");
+        setGoogleToken(null);
+        setIsGoogleSignupFlow(false);
+        setIsGoogleLoading(false);
+        setAccountType("personal");
+        setAcceptedTerms(false);
+        onClose();
+
         if (currentAccountType !== "consultant") {
           await onSuccess();
         }
-        handleClose();
       }
     } catch (err) {
       const api = err?.response?.data;

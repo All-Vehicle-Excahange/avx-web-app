@@ -232,7 +232,7 @@ export default function UserVehicleCard({
             {/* SOLD — closing price */}
             {status === "sold" && data?.closingPrice && (
               <p className="text-xs text-green-400 font-semibold">
-                Closed at: ₹ {data.closingPrice}
+                Closed at: ₹ {Number(data.closingPrice).toLocaleString("en-IN")}
               </p>
             )}
 
@@ -325,7 +325,7 @@ export default function UserVehicleCard({
             <div className="mt-auto space-y-2">
               <div className="flex items-center justify-between gap-2 border-t border-white/5 pt-2">
                 <h3 className="text-sm md:text-lg font-bold text-third">
-                  ₹ {data?.price || "-"}
+                  ₹ {data?.price ? Number(data.price).toLocaleString("en-IN") : "-"}
                 </h3>
                 <Button
                   href={`/vehicle/details/consualt/${generateVehicleSlug(data)}/${data.id}`}

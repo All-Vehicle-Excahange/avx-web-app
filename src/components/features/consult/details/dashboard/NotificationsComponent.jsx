@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/router";
 import {
   MailOpen,
   X,
@@ -7,13 +8,13 @@ import { useNotifications } from "@/hooks/useNotifications";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { getAllNotifications } from "@/services/notification.service";
 
-const NotificationItem = ({ data, onMarkAsRead }) => {
+const NotificationItem = ({ data, onClick }) => {
   const isUnread =
     data.read === false || data.unread === true || data.isRead === false;
 
   return (
     <div
-      onClick={() => isUnread && onMarkAsRead(data.id || data._id)}
+      onClick={() => onClick(data)}
       className="flex items-start gap-3 px-3 py-3 hover:bg-white/5 rounded-lg cursor-pointer transition-colors relative border-b border-third/10 last:border-0"
     >
       {/* Content */}
@@ -30,8 +31,8 @@ const NotificationItem = ({ data, onMarkAsRead }) => {
           {data.sentAt
             ? new Date(data.sentAt).toLocaleDateString()
             : data.time ||
-              new Date(data.createdAt).toLocaleDateString() ||
-              "Just now"}
+            new Date(data.createdAt).toLocaleDateString() ||
+            "Just now"}
         </span>
       </div>
 
@@ -52,6 +53,7 @@ export default function NotificationsComponent({
   isConnected,
 }) {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const [filter, setFilter] = useState("ALL");
   const observerRef = useRef(null);
 
@@ -141,6 +143,44 @@ export default function NotificationsComponent({
     queryClient.invalidateQueries(["notificationsList"]);
   };
 
+  const handleNotificationClick = async (data) => {
+    const isUnread = data.read === false || data.unread === true || data.isRead === false;
+    if (isUnread) {
+      handleMarkAsRead(data.id || data._id);
+    }
+
+    if (data.referenceType) {
+      switch (data.referenceType) {
+        case "CONSULTATION":
+          router.push("/consult/dashboard/overview");
+          break;
+        case "CONSULTATION_REVIEW":
+          router.push("/consult/dashboard/review");
+          break;
+        case "VEHICLE_INQUIRY":
+          router.push("/consult/dashboard/inquiries");
+          break;
+        case "VEHICLE_INSPECTION":
+          router.push("/consult/dashboard/inspection");
+          break;
+        case "VEHICLE_DETAIL":
+        case "VEHICLE":
+          router.push("/consult/dashboard/inventory");
+          break;
+        case "PPC_CAMPAIGN":
+          router.push("/consult/dashboard/ppc");
+          break;
+        case "SUBSCRIPTION":
+        case "WALLET":
+          router.push("/consult/dashboard/billing");
+          break;
+        default:
+          break;
+      }
+    }
+    if (onClose) onClose();
+  };
+
   return (
     <>
       {/* Backdrop */}
@@ -150,9 +190,8 @@ export default function NotificationsComponent({
 
       {/* Slide-out panel */}
       <div
-        className={`fixed top-16 left-0 md:left-16 h-[calc(100vh-64px)] w-full max-w-sm bg-secondary border-r border-third/30 z-60 shadow-[4px_0_24px_rgba(0,0,0,0.5)] md:rounded-r-2xl transition-transform duration-300 ease-in-out ${
-          isOpen ? "translate-x-0" : "-translate-x-full md:-translate-x-[150%]"
-        }`}
+        className={`fixed top-16 left-0 md:left-16 h-[calc(100vh-64px)] w-full max-w-sm bg-secondary border-r border-third/30 z-60 shadow-[4px_0_24px_rgba(0,0,0,0.5)] md:rounded-r-2xl transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full md:-translate-x-[150%]"
+          }`}
       >
         <div
           ref={containerRef}
@@ -222,7 +261,7 @@ export default function NotificationsComponent({
                     <NotificationItem
                       key={item.id || item._id || index}
                       data={item}
-                      onMarkAsRead={handleMarkAsRead}
+                      onClick={handleNotificationClick}
                     />
                   ))}
 
