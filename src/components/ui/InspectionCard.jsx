@@ -108,7 +108,7 @@ export default function InspectionCard({
         )}
 
         {isAccepted && !(type === "received" && lowerStatus === "accepted") && (
-          <div className="pt-3">
+          <div className="pt-3 flex flex-wrap items-center gap-3">
             <Button
               variant="outline"
               showIcon={false}
@@ -116,6 +116,17 @@ export default function InspectionCard({
               locked={true}
             >
               In Progress
+            </Button>
+            <Button
+              variant="ghost"
+              showIcon={false}
+              onClick={(e) => {
+                if (e) e.stopPropagation();
+                if (onClick) onClick();
+              }}
+              className="hidden md:inline-flex py-1.5 px-4 text-sm"
+            >
+              Track Inspection
             </Button>
           </div>
         )}
