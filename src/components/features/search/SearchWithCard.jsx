@@ -762,6 +762,7 @@ export default function SearchWithCard({
         .map((item) => ({
           value: item.makeId.toString(),
           label: item.makeDisplay || item.makeName,
+          logo: item.logo,
         }))
         .filter((item) => item.label && item.label.trim() !== "");
 

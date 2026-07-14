@@ -14,6 +14,8 @@ import {
   CircleDashed,
   Cpu,
   Wrench,
+  Shield,
+  Lock,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
@@ -171,7 +173,7 @@ export default function VehicleSpec({
       } else {
         toast.error(
           error?.response?.data?.message ||
-          "Failed to check inspection status.",
+            "Failed to check inspection status.",
         );
       }
     } finally {
@@ -230,13 +232,13 @@ export default function VehicleSpec({
       const payload =
         inspectionType === "video"
           ? {
-            inspectionType: "VIDEO_CALL_WITH_REPORT",
-            whatsappNumber: mobileNumber,
-            videoCallScheduledAt: formatLocalDateTime(
-              inspectionDate,
-              inspectionTime,
-            ),
-          }
+              inspectionType: "VIDEO_CALL_WITH_REPORT",
+              whatsappNumber: mobileNumber,
+              videoCallScheduledAt: formatLocalDateTime(
+                inspectionDate,
+                inspectionTime,
+              ),
+            }
           : { inspectionType: "REPORT_ONLY" };
       const response = await createInpection(vehicle.id, payload);
       if (response?.success) {
@@ -412,8 +414,9 @@ export default function VehicleSpec({
           <div className="text-xl">
             <ChevronDown
               size={20}
-              className={`transition-transform duration-300 ${open ? "rotate-180" : "rotate-0"
-                }`}
+              className={`transition-transform duration-300 ${
+                open ? "rotate-180" : "rotate-0"
+              }`}
             />
           </div>
         </div>
@@ -480,10 +483,11 @@ export default function VehicleSpec({
                           className={`
         flex items-start gap-3 p-4 rounded-xl border cursor-pointer
         transition-all
-        ${inspectionType === "report"
-                              ? "border-primary bg-primary/5"
-                              : "border-third/40 hover:bg-secondary/80"
-                            }
+        ${
+          inspectionType === "report"
+            ? "border-primary bg-primary/5"
+            : "border-third/40 hover:bg-secondary/80"
+        }
       `}
                         >
                           <input
@@ -512,10 +516,11 @@ export default function VehicleSpec({
                           className={`
         flex items-start gap-3 p-4 rounded-xl border cursor-pointer
         transition-all
-        ${inspectionType === "video"
-                              ? "border-primary bg-primary/5"
-                              : "border-third/40 hover:bg-secondary/80"
-                            }
+        ${
+          inspectionType === "video"
+            ? "border-primary bg-primary/5"
+            : "border-third/40 hover:bg-secondary/80"
+        }
       `}
                         >
                           <input
@@ -640,31 +645,30 @@ export default function VehicleSpec({
           <div
             className={`
         relative z-50 mx-3
-        w-full md:w-[85%] lg:w-[70%]  
-        max-w-md md:max-w-none
-        h-[70vh] md:h-auto  
-        md:max-h-[62%]
-        flex md:flex
-        rounded-2xl md:rounded-2xl
+        w-full md:w-[85%] lg:w-[70%] max-w-3xl
+        h-auto max-h-[80vh] md:max-h-[540px]
+        flex flex-col md:flex-row items-stretch
+        rounded-2xl
         bg-secondary overflow-hidden text-primary
         border border-third/50 shadow-2xl
         transition-all duration-300 ease-out
-        ${animateModal
-                ? "opacity-100 scale-100 translate-y-0"
-                : "opacity-0 scale-95 translate-y-4"
-              }
+        ${
+          animateModal
+            ? "opacity-100 scale-100 translate-y-0"
+            : "opacity-0 scale-95 translate-y-4"
+        }
       `}
           >
             {/* CLOSE */}
             <div
-              className="absolute right-3 top-3 cursor-pointer bg-primary text-secondary md:bg-secondary md:text-primary w-8 h-8 rounded-full flex items-center justify-center z-10"
+              className="absolute right-4 top-4 cursor-pointer border border-white/10 bg-zinc-900/50 hover:bg-zinc-900 text-zinc-400 hover:text-white w-9 h-9 rounded-full flex items-center justify-center transition-all z-10"
               onClick={closeModal}
             >
-              <X size={20} />
+              <X size={18} />
             </div>
 
             {/* IMAGE (LEFT SIDE) */}
-            <div className="hidden md:block md:w-[40%]">
+            <div className="hidden md:block md:w-[40%] shrink-0">
               <Image
                 width={500}
                 height={500}
@@ -675,7 +679,7 @@ export default function VehicleSpec({
             </div>
 
             {/* CONTENT (RIGHT SIDE) */}
-            <div className="p-4 md:p-6 space-y-5 w-full md:w-[60%] overflow-y-auto custom-scrollbar">
+            <div className="p-5 sm:p-6 space-y-5 w-full md:w-[60%] overflow-y-auto custom-scrollbar">
               {/* ---- STEP 0: Already Submitted ---- */}
               {step === 0 && existingInspection && (
                 <>
@@ -709,32 +713,32 @@ export default function VehicleSpec({
                       <span className="text-third">Inspection Type</span>
                       <span className="font-semibold">
                         {existingInspection.inspectionType ===
-                          "VIDEO_CALL_WITH_REPORT"
+                        "VIDEO_CALL_WITH_REPORT"
                           ? "Video Call + Report"
                           : "Report Only"}
                       </span>
                     </div>
                     {existingInspection.inspectionType ===
                       "VIDEO_CALL_WITH_REPORT" && (
-                        <>
+                      <>
+                        <div className="flex justify-between items-center text-sm">
+                          <span className="text-third">WhatsApp Number</span>
+                          <span className="font-semibold">
+                            {existingInspection.whatsappNumber}
+                          </span>
+                        </div>
+                        {existingInspection.videoCallScheduledAt && (
                           <div className="flex justify-between items-center text-sm">
-                            <span className="text-third">WhatsApp Number</span>
+                            <span className="text-third">Scheduled At</span>
                             <span className="font-semibold">
-                              {existingInspection.whatsappNumber}
+                              {new Date(existingInspection.videoCallScheduledAt)
+                                .toLocaleDateString("en-GB")
+                                .replace(/\//g, "/")}
                             </span>
                           </div>
-                          {existingInspection.videoCallScheduledAt && (
-                            <div className="flex justify-between items-center text-sm">
-                              <span className="text-third">Scheduled At</span>
-                              <span className="font-semibold">
-                                {new Date(existingInspection.videoCallScheduledAt)
-                                  .toLocaleDateString("en-GB")
-                                  .replace(/\//g, "/")}
-                              </span>
-                            </div>
-                          )}
-                        </>
-                      )}
+                        )}
+                      </>
+                    )}
                     <div className="flex justify-between items-center text-sm">
                       <span className="text-third">Status</span>
                       <span className="px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400 font-medium text-xs">
@@ -954,14 +958,25 @@ export default function VehicleSpec({
 
               {/* ---- STEP 2: Payment ---- */}
               {step === 2 && (
-                <>
-                  <h2 className="text-2xl font-bold text-center">
-                    Complete your payment
-                  </h2>
-                  <div className="border border-third/30 rounded-2xl p-5 space-y-4 bg-secondary/80">
-                    <div className="flex justify-between items-center text-sm">
+                <div className="space-y-6">
+                  {/* Header with Shield Icon */}
+                  <div className="flex items-start gap-4">
+                    <div className="flex-1">
+                      <h2 className="text-xl font-bold text-white">
+                        Complete your payment
+                      </h2>
+                      <p className="text-xs text-zinc-400 mt-1">
+                        Please review your details and confirm to complete the
+                        payment.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Details Box */}
+                  <div className="border border-third/30 rounded-2xl p-5 space-y-4 bg-secondary/80 divide-y divide-third/20">
+                    <div className="flex justify-between items-center text-sm pb-3">
                       <span className="text-third">Inspection Type</span>
-                      <span className="font-semibold">
+                      <span className="font-semibold text-white">
                         {inspectionType === "video"
                           ? "Video Call + Report"
                           : "Inspection Report Only"}
@@ -969,54 +984,68 @@ export default function VehicleSpec({
                     </div>
                     {inspectionType === "video" && (
                       <>
-                        <div className="flex justify-between items-center text-sm">
+                        <div className="flex justify-between items-center text-sm py-3">
                           <span className="text-third">WhatsApp Number</span>
-                          <span className="font-semibold">{mobileNumber}</span>
-                        </div>
-                        <div className="flex justify-between items-center text-sm">
-                          <span className="text-third">Scheduled Slot</span>
-                          <span className="font-semibold">
-                            {inspectionDate?.toLocaleDateString()} at{" "}
-                            {inspectionTime?.label}
+                          <span className="font-semibold text-white">
+                            {mobileNumber}
                           </span>
+                        </div>
+                        <div className="flex justify-between items-center text-sm py-3">
+                          <span className="text-third">Scheduled Slot</span>
+                          <div className="flex items-center gap-1.5 text-xs text-white font-semibold">
+                            <Calendar size={14} className="text-third" />
+                            <span>
+                              {inspectionDate?.toLocaleDateString("en-GB", {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric",
+                              })}
+                            </span>
+                            <span className="text-third/50 mx-0.5">|</span>
+                            <Clock size={14} className="text-third" />
+                            <span>{inspectionTime?.label}</span>
+                          </div>
                         </div>
                       </>
                     )}
-                    <div className="border-t border-third/30 my-2" />
-                    <div className="flex justify-between items-center text-lg font-bold">
+                    <div className="flex justify-between items-center pt-4 text-base font-bold">
                       <span>Total Amount</span>
-                      <span>
+                      <span className="text-white text-xl font-extrabold">
                         {inspectionType === "video"
                           ? `₹${videoCallWithReportPrice.toLocaleString("en-IN")}`
                           : `₹${reportOnlyPrice.toLocaleString("en-IN")}`}
                       </span>
                     </div>
                   </div>
-                  <p className="text-xs text-third text-center">
-                    By clicking Confirm Payment, you agree to complete the
-                    payment workflow.
-                  </p>
+
+                  {/* Agree Text with Lock Icon */}
+                  <div className="flex items-start gap-2.5 px-1 py-1 text-zinc-400">
+                    <Lock size={14} className="text-zinc-500 shrink-0 mt-0.5" />
+                    <p className="text-xs leading-normal">
+                      By clicking Confirm Payment, you agree to complete the
+                      payment workflow.
+                    </p>
+                  </div>
+
+                  {/* Footer Buttons */}
                   <div className="flex justify-end gap-3 pt-2">
                     <Button
-                      variant="ghost"
-                      size="md"
                       onClick={() => setStep(1)}
-                      showIcon={false}
-                      locked={isSubmitting}
+                      disabled={isSubmitting}
+                      variant="outlineSecondary"
                     >
                       Back
                     </Button>
                     <Button
-                      variant="outline"
-                      size="md"
                       onClick={() => handlePayment()}
-                      showIcon={false}
+                      disabled={isSubmitting}
                       loading={isSubmitting}
+                      variant="ghost"
                     >
-                      Confirm Payment
+                      <span className="mt-0.5">Confirm Payment</span>
                     </Button>
                   </div>
-                </>
+                </div>
               )}
 
               {/* ---- STEP 3: Success ---- */}

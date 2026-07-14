@@ -5,9 +5,10 @@ export default function Chip({
   selected,
   onClick,
   variant = "outline",
+  logo,
 }) {
   const base =
-    "px-4 py-2 rounded-xl cursor-pointer text-sm font-medium transition select-none whitespace-nowrap";
+    "flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer text-sm font-medium transition select-none whitespace-nowrap";
 
   const styles = {
     // OUTLINE (light background use-case)
@@ -28,7 +29,14 @@ export default function Chip({
 
   return (
     <div className={`${base} ${styles[variant]}`} onClick={onClick}>
-      {label}
+      {logo && (
+        <img
+          src={logo}
+          alt={label}
+          className="w-5 h-5 object-contain rounded bg-white p-0.5 shrink-0"
+        />
+      )}
+      <span>{label}</span>
     </div>
   );
 }

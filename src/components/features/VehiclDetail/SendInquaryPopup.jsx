@@ -152,117 +152,108 @@ function SendInquaryPopup({
           }`}
         >
           {isSuccess ? (
-            <div className="flex flex-col h-full justify-center text-left">
+            <div className="flex flex-col h-full justify-center text-center">
               {/* Headlines */}
-              <h3 className="text-3xl font-bold text-primary tracking-tight mb-3 flex items-center gap-3">
-                <CheckCircle2 className="text-green-500 w-8 h-8 shrink-0 animate-in zoom-in duration-500" />
+              <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center text-green-500 border border-green-500/20 mb-5 self-center animate-in zoom-in duration-500">
+                <CheckCircle2 size={32} />
+              </div>
+              <h3 className="text-3xl font-extrabold text-white tracking-tight mb-3">
                 Inquiry Sent.
               </h3>
-              <p className="text-third text-sm leading-relaxed mb-6">
-                The Consultant has been notified and will respond to your
-                request.
-              </p>
-              <p className="text-third text-sm leading-relaxed mb-6">
-                Replies happen inside the <span className="font-bold text-primary">Reecomm app</span>. Download it so you don't
-                miss their response.
-              </p>
-
-              {/* QR Code Container */}
-              <div className="flex items-center gap-5 mb-6 p-4 rounded-2xl bg-[#222222] border border-neutral-800 shadow-inner w-fit">
-                <div className="p-2 bg-white rounded-xl flex items-center justify-center shrink-0">
-                  <Image
-                    src="/app_qr.png"
-                    alt="App QR Code"
-                    width={80}
-                    height={80}
-                    className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
-                  />
-                </div>
-                <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider text-left leading-tight">
-                  SCAN TO
-                  <br />
-                  DOWNLOAD
-                </span>
+              <div className="space-y-3 text-zinc-300 text-sm leading-relaxed mb-8 max-w-md mx-auto">
+                <p>
+                  The Consultant has been notified and will respond to your
+                  request.
+                </p>
+                <p>
+                  Replies happen inside the <span className="font-bold text-white">Reecomm app</span>. Download the app to track your inquiry and chat directly.
+                </p>
               </div>
 
-              {/* App Buttons */}
-              <div className="flex flex-row items-center gap-2 sm:gap-4 w-full sm:px-0">
-                {/* Google Play Button */}
-                <button
-                  type="button"
-                  onClick={() =>
-                    window.open(
-                      "https://play.google.com/store/apps/details?id=com.reecomm.vehicle.marketplace",
-                      "_blank",
-                    )
-                  }
-                  className="flex-1 sm:flex-none sm:w-auto min-w-[120px] sm:min-w-[180px] flex items-center justify-center px-2 sm:px-3 py-1.5 sm:py-2 bg-white text-black rounded-lg hover:bg-neutral-100 transition-all duration-300 cursor-pointer group/btn shadow-md border-none"
-                >
-                  <div className="mr-2 sm:mr-3 transition-transform duration-300">
-                    <svg
-                      viewBox="30 336.7 120.9 129.2"
-                      className="w-[16px] sm:w-5"
+              {/* Unified QR & Store Download Dashboard */}
+              <div className="border border-white/10 rounded-2xl p-5 bg-white/5 backdrop-blur-md max-w-lg mx-auto space-y-4 shadow-xl text-left">
+                <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest leading-none">
+                  Get the app now
+                </p>
+                
+                <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-6">
+                  {/* QR Code */}
+                  <div className="flex items-center gap-4 bg-zinc-950/40 border border-white/5 rounded-xl p-3 shrink-0 shadow-inner">
+                    <div className="p-1.5 bg-white rounded-lg flex items-center justify-center shrink-0">
+                      <Image
+                        src="/app_qr.png"
+                        alt="App QR Code"
+                        width={64}
+                        height={64}
+                        className="w-16 h-16 object-contain"
+                      />
+                    </div>
+                    <div className="text-left">
+                      <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">
+                        Scan to
+                      </span>
+                      <span className="text-sm font-extrabold text-white uppercase tracking-wider leading-none">
+                        Download
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Divider Line */}
+                  <div className="hidden sm:block w-[1px] h-16 bg-white/10 self-center" />
+                  <div className="block sm:hidden w-full h-[1px] bg-white/10" />
+
+                  {/* Store Download Buttons */}
+                  <div className="flex flex-col gap-2.5 w-full sm:flex-1">
+                    {/* Google Play */}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        window.open(
+                          "https://play.google.com/store/apps/details?id=com.reecomm.vehicle.marketplace",
+                          "_blank",
+                        )
+                      }
+                      className="w-full flex items-center justify-center px-3 py-2 bg-[#000000] text-white rounded-lg border border-neutral-800 hover:bg-neutral-900 transition-all duration-300 cursor-pointer group/btn shadow-md gap-3"
                     >
-                      <path
-                        fill="#FFD400"
-                        d="M119.2,421.2c15.3-8.4,27-14.8,28-15.3c3.2-1.7,6.5-6.2,0-9.7  c-2.1-1.1-13.4-7.3-28-15.3l-20.1,20.2L119.2,421.2z"
-                      ></path>
-                      <path
-                        fill="#FF3333"
-                        d="M99.1,401.1l-64.2,64.7c1.5,0.2,3.2-0.2,5.2-1.3  c4.2-2.3,48.8-26.7,79.1-43.3L99.1,401.1L99.1,401.1z"
-                      ></path>
-                      <path
-                        fill="#48FF48"
-                        d="M99.1,401.1l20.1-20.2c0,0-74.6-40.7-79.1-43.1  c-1.7-1-3.6-1.3-5.3-1L99.1,401.1z"
-                      ></path>
-                      <path
-                        fill="#3BCCFF"
-                        d="M99.1,401.1l-64.3-64.3c-2.6,0.6-4.8,2.9-4.8,7.6  c0,7.5,0,107.5,0,113.8c0,4.3,1.7,7.4,4.9,7.7L99.1,401.1z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div className="text-left">
-                    <div className="text-[8px] sm:text-[9px] font-semibold uppercase tracking-wider text-black/60 transition-colors whitespace-nowrap">
-                      ANDROID APP ON
-                    </div>
-                    <div className="text-[12px] sm:text-base font-semibold leading-none tracking-tight whitespace-nowrap text-black">
-                      Google play
-                    </div>
-                  </div>
-                </button>
+                      <svg viewBox="30 336.7 120.9 129.2" className="w-[18px] sm:w-6 shrink-0">
+                        <path fill="#FFD400" d="M119.2,421.2c15.3-8.4,27-14.8,28-15.3c3.2-1.7,6.5-6.2,0-9.7 c-2.1-1.1-13.4-7.3-28-15.3l-20.1,20.2L119.2,421.2z" />
+                        <path fill="#FF3333" d="M99.1,401.1l-64.2,64.7c1.5,0.2,3.2-0.2,5.2-1.3 c4.2-2.3,48.8-26.7,79.1-43.3L99.1,401.1L99.1,401.1z" />
+                        <path fill="#48FF48" d="M99.1,401.1l20.1-20.2c0,0-74.6-40.7-79.1-43.1 c-1.7-1-3.6-1.3-5.3-1L99.1,401.1z" />
+                        <path fill="#3BCCFF" d="M99.1,401.1l-64.3-64.3c-2.6,0.6-4.8,2.9-4.8,7.6 c0,7.5,0,107.5,0,113.8c0,4.3,1.7,7.4,4.9,7.7L99.1,401.1z" />
+                      </svg>
+                      <div className="text-left">
+                        <div className="text-[8px] sm:text-[10px] font-semibold uppercase tracking-wider text-white/60 transition-colors whitespace-nowrap">
+                          Get it on
+                        </div>
+                        <div className="text-[14px] sm:text-lg font-semibold leading-none tracking-tight whitespace-nowrap text-white">
+                          Google Play
+                        </div>
+                      </div>
+                    </button>
 
-                {/* App Store Button */}
-                <button
-                  type="button"
-                  onClick={() =>
-                    window.open("https://www.apple.com/app-store", "_blank")
-                  }
-                  className="flex-1 sm:flex-none sm:w-auto min-w-[120px] sm:min-w-[180px] flex items-center justify-center px-2 sm:px-3 py-1.5 sm:py-2 bg-[#000000] text-white rounded-lg border border-neutral-800 hover:bg-neutral-900 transition-all duration-300 cursor-pointer group/btn shadow-md"
-                >
-                  <div className="mr-2 sm:mr-3 transition-transform text-white">
-                    <svg viewBox="0 0 384 512" className="w-3.5 sm:w-4">
-                      <path
-                        fill="currentColor"
-                        d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"
-                      ></path>
-                    </svg>
+                    {/* App Store */}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        window.open("https://www.apple.com/app-store", "_blank")
+                      }
+                      className="w-full flex items-center justify-center px-3 py-2 bg-[#000000] text-white rounded-lg border border-neutral-800 hover:bg-neutral-900 transition-all duration-300 cursor-pointer group/btn shadow-md gap-3"
+                    >
+                      <svg viewBox="0 0 384 512" className="w-4 sm:w-[22px] shrink-0 text-white fill-current">
+                        <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" />
+                      </svg>
+                      <div className="text-left">
+                        <div className="text-[8px] sm:text-[10px] font-semibold uppercase tracking-wider text-white/60 transition-colors whitespace-nowrap">
+                          Download on the
+                        </div>
+                        <div className="text-[14px] sm:text-lg font-semibold leading-none tracking-tight whitespace-nowrap text-white">
+                          App Store
+                        </div>
+                      </div>
+                    </button>
                   </div>
-                  <div className="text-left">
-                    <div className="text-[8px] sm:text-[9px] font-semibold uppercase tracking-wider text-white/60 transition-colors whitespace-nowrap">
-                      Download on the
-                    </div>
-                    <div className="text-[12px] sm:text-base font-semibold leading-none tracking-tight whitespace-nowrap text-white">
-                      App Store
-                    </div>
-                  </div>
-                </button>
+                </div>
               </div>
-
-              {/* FOOTNOTE */}
-              {/* <div className="text-[10px] text-third/50 mt-8">
-                By downloading, you agree to Reecomm&apos;s Terms & Privacy
-                Policy.
-              </div> */}
             </div>
           ) : (
             <>

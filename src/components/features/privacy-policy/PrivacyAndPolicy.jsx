@@ -1,4 +1,5 @@
 "use client";
+import Button from "@/components/ui/button";
 import {
   ShieldCheck,
   EyeOff,
@@ -425,11 +426,12 @@ export default function PrivacyPolicy() {
                   </div>
                 </div>
 
-                <button
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] uppercase tracking-[0.15em] font-black font-primary text-secondary bg-primary shadow-lg shadow-fourth/25 transition-all duration-300 hover:-translate-y-0.5"
+                <Button
+                  variant="ghost"
+                  href={"/help"}
                 >
                   Contact Support <ArrowUpRight size={11} />
-                </button>
+                </Button>
               </div>
             </div>
 
