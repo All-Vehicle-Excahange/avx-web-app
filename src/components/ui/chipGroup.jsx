@@ -121,6 +121,7 @@ export default function ChipGroup({
           <Chip
             key={item.value}
             label={item.label}
+            logo={item.logo}
             selected={selected.includes(item.value)}
             variant={variant}
             onClick={() => toggleSelect(item.value)}

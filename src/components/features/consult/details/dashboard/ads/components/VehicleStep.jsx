@@ -36,6 +36,17 @@ export default function VehicleStep({ selected, onChange }) {
     v.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  const sortedVehicles = React.useMemo(() => {
+    if (!selected?.id) return filteredVehicles;
+    return [...filteredVehicles].sort((a, b) => {
+      const aSelected = selected.id === a.id;
+      const bSelected = selected.id === b.id;
+      if (aSelected && !bSelected) return -1;
+      if (!aSelected && bSelected) return 1;
+      return 0;
+    });
+  }, [filteredVehicles, selected]);
+
   return (
     <div className="space-y-6">
       <div>
@@ -63,9 +74,9 @@ export default function VehicleStep({ selected, onChange }) {
           <div className="py-8 text-center text-third text-sm">
             Loading your active inventory...
           </div>
-        ) : filteredVehicles.length > 0 ? (
+        ) : sortedVehicles.length > 0 ? (
           <>
-            {filteredVehicles.map((vehicle) => {
+            {sortedVehicles.map((vehicle) => {
               const isSelected = selected?.id === vehicle.id;
 
               return (
