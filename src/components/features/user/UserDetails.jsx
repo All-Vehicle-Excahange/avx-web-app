@@ -45,7 +45,7 @@ function UserDetails() {
               }
             }
             if (tab.id === "received-inquiries") {
-              const allowedRoles = ["USER_SELLER", "USER_SELLER_APPLICANT", "CONSULTATION"];
+              const allowedRoles = ["USER_SELLER", "CONSULTATION"];
               return allowedRoles.includes(user?.userRole);
             }
             return true;
