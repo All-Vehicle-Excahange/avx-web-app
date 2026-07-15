@@ -220,13 +220,13 @@ export default function InventoryComponent() {
             <img
               src="/seller/mobile.png"
               alt="Mobile App View"
-              className="absolute right-[20%] lg:right-[42%] bottom-[-10%] lg:bottom-[-50%] h-[90%] lg:h-[120%] w-auto object-contain drop-shadow-2xl rotate-12 scale-90 brightness-75 transition-transform duration-700"
+              className="absolute right-[20%] lg:right-[42%] bottom-[-10%] lg:bottom-[-50%] h-[90%] lg:h-[120%] w-auto object-contain drop-shadow-2xl rotate-[15deg] scale-90 brightness-75 transition-transform duration-700"
             />
             {/* Phone 2 (Front) */}
             <img
               src="/seller/mobile.png"
               alt="Mobile App View"
-              className="absolute right-[-10%] lg:right-[-5%] bottom-[-5%] lg:bottom-[-1%] h-[100%] lg:h-[130%] w-auto object-contain drop-shadow-2xl rotate-[20deg] z-10 transition-transform duration-700 "
+              className="absolute right-[-10%] lg:right-[-5%] bottom-[-5%] lg:bottom-[-1%] h-[100%] lg:h-[130%] w-auto object-contain drop-shadow-2xl rotate-[15deg] z-10 transition-transform duration-700 "
             />
           </div>
         </div>

@@ -113,8 +113,15 @@ export default function VehicleCard({
     }
   }, [isLoggedIn]);
 
-  const formatText = (text) =>
-    text ? text.charAt(0).toUpperCase() + text.slice(1).toLowerCase() : "";
+  const formatText = (text) => {
+    if (!text) return "";
+    if (text.toUpperCase() === "PETROL_PLUS_CNG") return "Petrol + CNG";
+    if (text.toUpperCase() === "PETROL_PLUS_LPG") return "Petrol + LPG";
+    return text
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  };
 
   const baseFuel = formatText(data.fuelType) || formatText(data.fuel);
   const mapped = {
@@ -128,7 +135,10 @@ export default function VehicleCard({
     transmission:
       formatText(data.transmissionType) || formatText(data.transmission),
     fuel:
-      data.cngType && data.cngType !== "NONE" && data.cngType !== "null"
+      data.cngType &&
+      data.cngType !== "NONE" &&
+      data.cngType !== "null" &&
+      !baseFuel.includes("CNG")
         ? `${baseFuel} + CNG`
         : baseFuel,
     seats: data.ownership || data.seats,
@@ -195,11 +205,11 @@ export default function VehicleCard({
         border-2 border-third/30
         hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]
         transition-shadow duration-300
-        h-full md:h-[500px] cursor-pointer"
+        h-full md:min-h-[420px] cursor-pointer"
       >
         <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
           {/* IMAGE */}
-          <div className="relative w-42 sm:w-40 min-h-45 md:min-h-0 md:h-62 md:w-full shrink-0 p-2">
+          <div className="relative w-42 sm:w-40 min-h-45 md:min-h-0 md:h-52 md:w-full shrink-0 p-2">
             <div className="relative w-full h-full overflow-hidden rounded-xl">
               {/* Inspection Badge */}
               {data?.inspectionBadgeUrl && (
@@ -228,10 +238,9 @@ export default function VehicleCard({
                   handleCompare();
                 }}
                 className={`absolute bottom-12 right-2 shrink-0 flex items-center justify-center w-8 h-8 rounded-full transition-all cursor-pointer z-20 
-                  ${
-                    isComparing
-                      ? "bg-fourth text-secondary shadow-lg scale-110"
-                      : "bg-black/50 text-white hover:bg-black/70"
+                  ${isComparing
+                    ? "bg-fourth text-secondary shadow-lg scale-110"
+                    : "bg-black/50 text-white hover:bg-black/70"
                   }`}
                 title="Add to compare"
               >
@@ -278,7 +287,7 @@ export default function VehicleCard({
           </div>
 
           {/* CONTENT */}
-          <div className="flex flex-col flex-1 p-2.5 md:p-4 space-y-2 md:space-y-4 justify-between h-full relative">
+          <div className="flex flex-col flex-1 p-2.5 md:p-4 space-y-2 md:space-y-3 justify-between min-h-0 overflow-hidden relative">
             {/* TITLE + HEART */}
             <div className="flex justify-between items-start gap-2">
               <div className="min-w-0 flex-1">
@@ -301,9 +310,12 @@ export default function VehicleCard({
                 </p>
 
                 {/* LOCATION */}
-                <p className="text-xs md:text-sm text-primary/90 mt-1 flex items-center gap-1.5">
-                  <MapPinned className="w-3.5 h-3.5" />
-                  {mapped.location || "Chhapi, Gujarat"}
+                <p 
+                  className="text-xs md:text-sm text-primary/90 mt-1 flex items-center gap-1.5"
+                  title={mapped.location || "Chhapi, Gujarat"}
+                >
+                  <MapPinned className="w-3.5 h-3.5 shrink-0" />
+                  <span className="truncate">{mapped.location || "Chhapi, Gujarat"}</span>
                 </p>
               </div>
             </div>
@@ -333,11 +345,10 @@ export default function VehicleCard({
 
               <div className="hidden md:block">
                 <Button
-                  href={`/vehicle/details/${slug}/${data.id}?source=${source}${
-                    data?.sponsored
-                      ? `&sponsored=true&adId=${data.adId || ""}&billingType=${data.billingType || ""}`
-                      : ""
-                  }`}
+                  href={`/vehicle/details/${slug}/${data.id}?source=${source}${data?.sponsored
+                    ? `&sponsored=true&adId=${data.adId || ""}&billingType=${data.billingType || ""}`
+                    : ""
+                    }`}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleAdClick();

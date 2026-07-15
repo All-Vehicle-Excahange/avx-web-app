@@ -10,14 +10,6 @@ const SayHello = () => {
         "Book a Test Drive",
     ];
 
-    const images = {
-        "Download the Mobile App":
-            "https://a.hwstatic.com/image/upload/f_auto,h_656,w_375,q_50/v1645433308/pwa/chat/chat-hostel.png",
-        "Chat With the Seller":
-            "https://a.hwstatic.com/image/upload/f_auto,h_656,w_375,q_50/v1645433308/pwa/chat/chat-city.png",
-        "Book a Test Drive":
-            "https://a.hwstatic.com/image/upload/f_auto,h_656,w_375,q_50/v1645433308/pwa/chat/chat-direct.png",
-    };
     const leftOffset = {
         "Download the Mobile App": "translate-y-0",
         "Chat With the Seller": "-translate-y-6",
@@ -134,12 +126,12 @@ const SayHello = () => {
                 <div className="relative flex justify-center items-start gap-4 lg:gap-8">
                     <div className="flex flex-col items-start gap-12">
                         <Image
-                            src="https://a.hwstatic.com/image/upload/f_auto,h_480,w_320,q_50/v1644506520/pwa/chat/chat-image-1.jpg"
+                            src="/hello1.webp"
                             alt="Chat feature preview"
                             width={320}
                             height={480}
                             className={`
-                            rounded-xl lg:rounded-2xl shadow-2xl lg:shadow-3xl w-[80px] sm:w-[130px] md:w-[180px] lg:w-[250px] h-auto
+                            rounded-xl lg:rounded-2xl shadow-2xl lg:shadow-3xl w-[80px] sm:w-[130px] md:w-[180px] lg:w-[250px] aspect-[2/3] object-cover
                             transform transition-all duration-500 ease-out
                             ${activeTab === "Download the Mobile App" ? "translate-y-0" : activeTab === "Chat With the Seller" ? "-translate-y-6" : "-translate-y-12"}
                         `}
@@ -149,18 +141,17 @@ const SayHello = () => {
                     {/* Center Image (Mobile Phone View) */}
                     <div className="flex shrink-0 relative w-[130px] sm:w-[180px] md:w-[240px] lg:w-[300px] h-[260px] sm:h-[360px] md:h-[480px] lg:h-[550px] top-4 lg:top-8 ">
                         <Image
-                                key={activeTab}
-                                src={images[activeTab]}
-                                alt="App screen preview"
-                                width={375}
-                                height={656}
-                                className="
+                            src="/chat.webp"
+                            alt="App screen preview"
+                            width={375}
+                            height={656}
+                            className="
                                     absolute inset-0
                                     rounded-2xl lg:rounded-3xl shadow-xl lg:shadow-2xl
                                     w-full h-auto
                                     animate-fade-slide
                                 "
-                            />
+                        />
                     </div>
 
                     {/* Right Stepper & Image Group */}
@@ -224,12 +215,12 @@ const SayHello = () => {
 
                         {/* Right Image */}
                         <Image
-                            src="https://a.hwstatic.com/image/upload/f_auto,h_480,w_320,q_50/v1644506518/pwa/chat/chat-image-2.jpg"
+                            src="/hello2.webp"
                             alt="Chat feature preview"
                             width={320}
                             height={480}
                             className={`
-                                rounded-xl lg:rounded-2xl shadow-2xl lg:shadow-3xl w-[80px] sm:w-[130px] md:w-[180px] lg:w-[250px] h-auto
+                                rounded-xl lg:rounded-2xl shadow-2xl lg:shadow-3xl w-[80px] sm:w-[130px] md:w-[180px] lg:w-[250px] aspect-[2/3] object-cover
                                 transform transition-all duration-500 ease-out
                                 ${activeTab === "Download the Mobile App" ? "translate-y-0" : activeTab === "Chat With the Seller" ? "translate-y-6" : "translate-y-12"}
                             `}

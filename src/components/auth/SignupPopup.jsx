@@ -25,6 +25,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
     register,
     handleSubmit,
     setError,
+    clearErrors,
     getValues,
     setValue,
     reset,
@@ -108,9 +109,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
     };
   }, [isOpen]);
 
-  if (!isOpen && !isClosing) return null;
-
-  const handleClosePopup = () => {
+  const handleClosePopup = useCallback(() => {
     setIsClosing(true);
     setTimeout(() => {
       setIsClosing(false);
@@ -123,10 +122,12 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
       setIsGoogleSignupFlow(false);
       setIsGoogleLoading(false);
       localStorage.removeItem("otpBlockUntil");
-      useAuthStore.setState({ prefilledPhoneNumber: "" });
+      useAuthStore.setState({ prefilledPhoneNumber: "", isSignupPopupOpen: false });
       onClose();
     }, 250);
-  };
+  }, [onClose, reset]);
+
+  if (!isOpen && !isClosing) return null;
 
   const handleOtpChange = (index, value) => {
     if (!/^\d?$/.test(value)) return;
@@ -216,7 +217,11 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
           setCountdown(120);
         }
 
-        if (msg?.includes("email")) {
+        if (msg?.includes("first name") || msg?.includes("firstname")) {
+          setError("firstName", { type: "server", message: res.message });
+        } else if (msg?.includes("last name") || msg?.includes("lastname")) {
+          setError("lastName", { type: "server", message: res.message });
+        } else if (msg?.includes("email")) {
           setError("email", { type: "server", message: res.message });
         } else if (msg?.includes("phone")) {
           setError("phone", { type: "server", message: res.message });
@@ -250,7 +255,11 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         setCountdown(120);
       }
 
-      if (msg?.includes("email")) {
+      if (msg?.includes("first name") || msg?.includes("firstname")) {
+        setError("firstName", { type: "server", message: api.message });
+      } else if (msg?.includes("last name") || msg?.includes("lastname")) {
+        setError("lastName", { type: "server", message: api.message });
+      } else if (msg?.includes("email")) {
         setError("email", { type: "server", message: api.message });
       } else if (msg?.includes("phone")) {
         setError("phone", { type: "server", message: api.message });
@@ -302,17 +311,23 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         localStorage.removeItem("otpBlockUntil");
         setCountdown(0);
 
+        // Close popup immediately before calling onSuccess to prevent reopening
+        useAuthStore.setState({ isSignupPopupOpen: false, prefilledPhoneNumber: "" });
+        onClose();
+        reset();
+        setOtp(Array(6).fill(""));
+        setOtpSent(false);
+        setIsLoading(false);
+
         if (accountType !== "consultant") {
           // Wait for onSuccess to complete (which might open CompleteProfilePopup)
           await onSuccess();
         } else {
-          // For consultants, do not open Didn't receive OTP?. Redirect to pricing so they can checkout/open Razorpay.
+          // For consultants, redirect to pricing
           if (window.location.pathname !== "/consult") {
             push("/consult");
           }
         }
-
-        handleClosePopup();
       } else if (res?.error) {
         const msg = res?.message?.toLowerCase();
 
@@ -509,6 +524,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
           className="w-full md:w-7/12 p-8 md:p-12 bg-secondary flex flex-col overflow-y-auto custom-scrollbar"
           onSubmit={(e) => {
             e.preventDefault();
+            clearErrors("root");
             if (!otpSent) {
               handleSubmit(onSendOtp)();
             } else {
@@ -584,6 +600,8 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
                         placeholder="First Name"
                         {...register("firstName", {
                           required: "First Name is required",
+                          minLength: { value: 3, message: "First name must be between 3 and 35 characters" },
+                          maxLength: { value: 35, message: "First name must be between 3 and 35 characters" },
                         })}
                         className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
                       />
@@ -596,7 +614,11 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
                     <div>
                       <input
                         placeholder="Last Name"
-                        {...register("lastName", { required: "Last Name is required" })}
+                        {...register("lastName", {
+                          required: "Last Name is required",
+                          minLength: { value: 3, message: "Last name must be between 3 and 35 characters" },
+                          maxLength: { value: 35, message: "Last name must be between 3 and 35 characters" },
+                        })}
                         className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
                       />
                       {errors.lastName && (

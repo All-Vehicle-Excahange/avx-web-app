@@ -101,11 +101,10 @@ function SendInquaryPopup({
     >
       {/* Popup Box */}
       <div
-        className={`relative flex w-full ${
-          isSuccess
+        className={`relative flex w-full ${isSuccess
             ? "max-w-[1050px] min-h-[450px] bg-cover bg-center bg-no-repeat border border-third/20"
             : "max-w-[900px] bg-secondary"
-        } overflow-hidden rounded-2xl shadow-2xl`}
+          } overflow-hidden rounded-2xl shadow-2xl`}
         onClick={(e) => e.stopPropagation()}
         style={{
           animation: isClosing
@@ -126,14 +125,14 @@ function SendInquaryPopup({
         <div className="hidden md:block w-5/12 relative z-10">
           {isSuccess ? (
             <Image
-              src="/realistic-smartphone-screen-mockup-17.png"
+              src="/inquiry.webp"
               alt="Reecomm App"
               fill
               className="object-cover"
             />
           ) : (
             <>
-              <Image src="/cs.webp" alt="Cars" fill className="object-cover" />
+              <Image src="/request.webp" alt="Cars" fill className="object-cover" />
               <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
               <div className="absolute bottom-8 left-8 pr-4">
                 <h2 className="text-3xl font-bold text-primary leading-tight">
@@ -147,9 +146,8 @@ function SendInquaryPopup({
         </div>
 
         <div
-          className={`w-full md:w-7/12 p-8 md:p-12 flex flex-col justify-center relative z-10 ${
-            isSuccess ? "bg-transparent" : "bg-secondary"
-          }`}
+          className={`w-full md:w-7/12 p-8 md:p-12 flex flex-col justify-center relative z-10 ${isSuccess ? "bg-transparent" : "bg-secondary"
+            }`}
         >
           {isSuccess ? (
             <div className="flex flex-col h-full justify-center text-center">
@@ -175,7 +173,7 @@ function SendInquaryPopup({
                 <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest leading-none">
                   Get the app now
                 </p>
-                
+
                 <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-6">
                   {/* QR Code */}
                   <div className="flex items-center gap-4 bg-zinc-950/40 border border-white/5 rounded-xl p-3 shrink-0 shadow-inner">
@@ -376,11 +374,10 @@ function SendInquaryPopup({
                     }
                     rows={4}
                     className={`w-full rounded-xl border px-4 py-3 outline-none transition resize-none
-                                            ${
-                                              !title
-                                                ? "bg-secondary/50 border-third/20 text-third/50 cursor-not-allowed"
-                                                : "bg-secondary border-third/40 text-primary focus:border-primary"
-                                            }
+                                            ${!title
+                        ? "bg-secondary/50 border-third/20 text-third/50 cursor-not-allowed"
+                        : "bg-secondary border-third/40 text-primary focus:border-primary"
+                      }
                                         `}
                   />
                 </div>
@@ -425,8 +422,15 @@ function SendInquaryPopup({
           priority
         />
         <Image
-          src="/realistic-smartphone-screen-mockup-17.png"
+          src="/inquiry.webp"
           alt="preload success mockup"
+          width={6}
+          height={6}
+          priority
+        />
+        <Image
+          src="/request.webp"
+          alt="preload request img"
           width={6}
           height={6}
           priority

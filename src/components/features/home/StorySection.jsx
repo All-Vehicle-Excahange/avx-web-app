@@ -312,7 +312,7 @@ export default function StorySection() {
             {/* Custom Drag Carousel */}
             <div
               ref={scrollRef}
-              className="flex gap-4 overflow-x-auto scroll-smooth pb-4"
+              className="flex gap-4 overflow-x-auto scroll-smooth rounded-2xl"
               style={{
                 cursor: "grab",
                 scrollbarWidth: "none",
@@ -343,3 +343,4 @@ export default function StorySection() {
     </section>
   );
 }
+
