@@ -99,24 +99,6 @@ export async function getStaticProps(context) {
 
   let storefrontImageUrl = `${protocol}://${host}/logo/logo.webp`;
 
-  // Fetch actual storefront data for SEO accuracy
-  try {
-    if (id) {
-      const res = await getStoreFrontByUsername(id);
-      const storeData = res?.data;
-      if (storeData) {
-        if (storeData.consultationName) {
-          finalTitle = storeData.consultationName;
-        }
-        if (storeData.logoUrl) {
-          storefrontImageUrl = storeData.logoUrl;
-        }
-      }
-    }
-  } catch (error) {
-    console.error("Error fetching storefront for SEO:", error?.message);
-  }
-
   return {
     props: {
       seo: {

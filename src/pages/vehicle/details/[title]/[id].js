@@ -239,45 +239,29 @@ export async function getStaticProps(context) {
   const protocol = process.env.NEXT_PUBLIC_API_URL?.includes("localhost") ? "http" : "https";
   const host = process.env.NEXT_PUBLIC_DOMAIN || "www.reecomm.com";
   const canonicalUrl = `${protocol}://${host}/vehicle/details/${title}/${id}`;
-  const currentUrl = canonicalUrl;
 
-  // Simple, fast conversion from slug title to clean words
-  const cleanTitle = title
-    ? title
-        .replace(/-/g, " ")
-        .replace(/\b\w/g, (c) => c.toUpperCase())
-    : "Vehicle Details";
-
-  let finalTitle = `${cleanTitle} | Reecomm`;
-  let finalDescription = `Buy ${cleanTitle} at Reecomm. View detailed vehicle information, specs, price, and more.`;
+  let finalTitle = "Vehicle Details | Reecomm";
+  let finalDescription = "Buy used vehicles at Reecomm. View detailed specs, photos, price, and contact information.";
   let finalImageUrl = `${protocol}://${host}/logo/logo.webp`;
 
-  try {
-    if (id) {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      if (apiUrl) {
-        const response = await fetch(`${apiUrl}/vehicle/detail-page/${id}`);
-        if (response.ok) {
-          const resJson = await response.json();
-          const vehicle = resJson?.data;
-          if (vehicle) {
-            finalImageUrl = vehicle.thumbnailUrl || vehicle.imageUrls?.[0] || finalImageUrl;
-            
-            const year = vehicle.yearOfMfg || vehicle.year || "";
-            const make = vehicle.makerName || "";
-            const model = vehicle.modelName || "";
-            const variant = vehicle.variantName || "";
-            const city = vehicle.address?.city || vehicle.location || "India";
-            
-            if (make || model) {
-              finalTitle = `${year} ${make} ${model} ${variant} for Sale in ${city} | Reecomm`.replace(/\s+/g, " ").trim();
-            }
-          }
-        }
-      }
+  if (title) {
+    // Regex matches slugs like: buy-used-[brand-model]-[year]-[type]-[city]
+    const pattern = /^buy-used-(.+?)-(\d{4})-(?:cars|two-wheelers|vehicles)-(.+)$/i;
+    const match = title.match(pattern);
+
+    if (match) {
+      const brandModel = match[1].replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+      const year = match[2];
+      const city = match[3].replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+      finalTitle = `${year} ${brandModel} for Sale in ${city} | Reecomm`;
+      finalDescription = `Buy used ${year} ${brandModel} in ${city} at Reecomm. View detailed specs, inspection report, photos, and price details.`;
+    } else {
+      // Fallback parser if slug doesn't match standard regex template
+      const cleanTitle = title.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+      finalTitle = `${cleanTitle} | Reecomm`;
+      finalDescription = `Buy ${cleanTitle} at Reecomm. View specs, photos, price, and contact details.`;
     }
-  } catch (error) {
-    console.error("Failed to fetch vehicle SEO data:", error);
   }
 
   return {
@@ -288,7 +272,7 @@ export async function getStaticProps(context) {
         ogTitle: finalTitle,
         ogDescription: finalDescription,
         image: finalImageUrl,
-        url: currentUrl,
+        url: canonicalUrl,
         canonical: canonicalUrl,
       },
     },
