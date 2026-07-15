@@ -143,17 +143,24 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         {/* LEFT SIDE */}
         <div className="flex-1 min-w-0">
-          <div className="flex flex-row items-end justify-between gap-3">
-            <h1 className="text-2xl text-primary sm:text-3xl 3xl:text-4xl font-bold leading-tight">
-              {[
-                vehicle?.makerName,
-                vehicle?.modelName,
-                vehicle?.variantName,
-                vehicle?.yearOfMfg,
-              ]
-                .filter(Boolean)
-                .join(" ") || "-"}
-            </h1>
+          <div className="flex flex-row items-end justify-between gap-3 flex-wrap">
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl text-primary sm:text-3xl 3xl:text-4xl font-bold leading-tight">
+                {[
+                  vehicle?.makerName,
+                  vehicle?.modelName,
+                  vehicle?.variantName,
+                  vehicle?.yearOfMfg,
+                ]
+                  .filter(Boolean)
+                  .join(" ") || "-"}
+              </h1>
+              {vehicle?.isVehicleSold && (
+                <span className="bg-fourth text-white text-xs sm:text-sm font-semibold px-2 py-1 rounded uppercase tracking-wider">
+                  Sold
+                </span>
+              )}
+            </div>
             <button
               onClick={() => setIsShareOpen(true)}
               className="sm:hidden bg-primary/20 flex h-8 w-8 items-center justify-center rounded-full p-0 text-primary/80 hover:text-primary shrink-0 cursor-pointer mb-1"

@@ -52,13 +52,13 @@ export default function VehicleSummaryRight({
 
   const handleInquirySuccess = () => {
     setLocalInquiryCount((prev) => prev + 1);
-    
+
     // Invalidate inquiry caches to reflect the new inquiry elsewhere immediately
     queryClient.invalidateQueries({ queryKey: ["inquiries"] });
     queryClient.invalidateQueries({ queryKey: ["my-inquiries"] });
     queryClient.invalidateQueries({ queryKey: ["inquiries-infinite"] });
     queryClient.invalidateQueries({ queryKey: ["my-inquiries-infinite"] });
-    
+
     // Refresh eligibility state so it knows we have an active inquiry
     refetchEligibility();
   };
@@ -256,16 +256,15 @@ export default function VehicleSummaryRight({
                     />
                   </div>
 
-                  <p 
-                    className={`text-sm font-medium ${
-                      inquiries >= MAX_INQUIRIES
-                        ? "text-red-500"
-                        : inquiries > 10
-                          ? "text-orange-500"
-                          : inquiries > 0
-                            ? "text-green-500"
-                            : "text-primary"
-                    }`}
+                  <p
+                    className={`text-sm font-medium ${inquiries >= MAX_INQUIRIES
+                      ? "text-red-500"
+                      : inquiries > 10
+                        ? "text-orange-500"
+                        : inquiries > 0
+                          ? "text-green-500"
+                          : "text-primary"
+                      }`}
                   >
                     {inquiries >= MAX_INQUIRIES
                       ? "Very high demand – Almost booked!"
@@ -283,13 +282,14 @@ export default function VehicleSummaryRight({
           <div className="border-t border-third/40" />
 
           {/* ACTION BUTTONS (DESKTOP) */}
-          <div className="hidden lg:grid grid-cols-2 gap-3 pt-2">
+          <div className="hidden lg:grid grid-cols-2 gap-2 pt-2">
             <Button
               variant="ghost"
               size="sm"
               showIcon={false}
               className="rounded-full"
               loading={loading || isCheckingInquiry}
+              disabled={vehicle?.isVehicleSold}
               onClick={() => {
                 if (!isLoggedIn) {
                   pendingAction.current = "request";
@@ -299,7 +299,7 @@ export default function VehicleSummaryRight({
                 }
               }}
             >
-              Send Inquiry 
+              {vehicle?.isVehicleSold ? "Sold Out" : "Send Inquiry"}
             </Button>
 
             <Button

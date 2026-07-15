@@ -275,7 +275,6 @@ function LoginPopup({
 
         // Close popup immediately (sync) to prevent race conditions
         // where onSuccess API calls could trigger a re-open via interceptors
-        setIsClosing(true);
         reset();
         setOtp(Array(6).fill(""));
         setOtpSent(false);

@@ -2,15 +2,14 @@ import React from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import { getSimularVehiclesQuery } from "@/queries/vehicle.queries";
 
 function SimulerVehicle({ vehicleOverview }) {
-
-    const params = useParams();
-    const { push } = useRouter();
-    const id = params.id;
+    const router = useRouter();
+    const { push, query } = router;
+    const id = query?.id;
 
     const { data: vehicle = [], isLoading: loading } = useQuery({
         ...getSimularVehiclesQuery(id),

@@ -8,7 +8,8 @@ export default function Chip({
   logo,
 }) {
   const base =
-    "flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer text-sm font-medium transition select-none whitespace-nowrap";
+    `flex items-center cursor-pointer text-sm font-medium transition select-none whitespace-nowrap overflow-hidden rounded-xl ${logo ? "pr-4" : "px-4 py-2 gap-2"
+    }`;
 
   const styles = {
     // OUTLINE (light background use-case)
@@ -30,13 +31,15 @@ export default function Chip({
   return (
     <div className={`${base} ${styles[variant]}`} onClick={onClick}>
       {logo && (
-        <img
-          src={logo}
-          alt={label}
-          className="w-5 h-5 object-contain rounded bg-white p-0.5 shrink-0"
-        />
+        <div className="bg-white flex items-center justify-center self-stretch px-2 mr-3 border-r border-white/10">
+          <img
+            src={logo}
+            alt={label}
+            className="w-5 h-5 object-contain"
+          />
+        </div>
       )}
-      <span>{label}</span>
+      <span className={logo ? "py-2" : ""}>{label}</span>
     </div>
   );
 }

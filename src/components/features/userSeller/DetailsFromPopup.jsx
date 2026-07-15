@@ -7,6 +7,10 @@ import { postBecameSeller, updateBecameSeller } from "@/services/user.service";
 import Button from "@/components/ui/button";
 import Image from "next/image";
 import { X, CheckCircle2, Loader2 } from "lucide-react";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
   const { push } = useRouter();
@@ -269,30 +273,66 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
           <X size={20} />
         </button>
 
-        {/* LEFT IMAGE */}
+        {/* LEFT IMAGE SLIDER */}
         <div className="hidden md:block w-5/12 relative bg-black shrink-0">
-          <Image
-            src="/cs.webp"
-            alt="Document Verification"
-            fill
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
-          <div className="absolute bottom-8 left-8">
-            <h2 className="text-4xl font-bold text-white leading-tight">
-              Become a
-              <br />
-              Seller
-            </h2>
-          </div>
+          <Swiper
+            modules={[Pagination, Autoplay]}
+            pagination={{ clickable: true }}
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            speed={800}
+            grabCursor={true}
+            rewind={true}
+            className="w-full h-full auth-swiper"
+          >
+            {/* Slide 1 */}
+            <SwiperSlide>
+              <div className="relative w-full h-full">
+                <Image
+                  src="/seller1.webp"
+                  priority
+                  alt="Become a Seller"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-black/40" />
+                <div className="absolute bottom-12 left-8 z-10 flex flex-col text-left">
+                  <h2 className="text-4xl font-bold text-white leading-tight">
+                    Become a
+                    <br />
+                    Seller
+                  </h2>
+                </div>
+              </div>
+            </SwiperSlide>
+
+            {/* Slide 2 */}
+            <SwiperSlide>
+              <div className="relative w-full h-full">
+                <Image
+                  src="/seller2.webp"
+                  priority
+                  alt="Become a Seller"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-black/40" />
+                <div className="absolute bottom-12 left-8 z-10 flex flex-col text-left">
+                  <h2 className="text-4xl font-bold text-white leading-tight">
+                    Become a
+                    <br />
+                    Seller
+                  </h2>
+                </div>
+              </div>
+            </SwiperSlide>
+          </Swiper>
         </div>
 
         {/* RIGHT CONTENT (FORM) */}
         <div
           id="form-container"
-          className={`w-full md:w-7/12 p-8 md:p-12 bg-secondary overflow-y-auto custom-scrollbar ${
-            isSuccess ? "flex flex-col justify-center" : ""
-          }`}
+          className={`w-full md:w-7/12 p-8 md:p-12 bg-secondary overflow-y-auto custom-scrollbar ${isSuccess ? "flex flex-col justify-center" : ""
+            }`}
         >
           {isSuccess ? (
             <div className="flex flex-col items-center justify-center h-full space-y-6">
