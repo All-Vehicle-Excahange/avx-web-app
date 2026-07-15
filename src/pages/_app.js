@@ -26,11 +26,10 @@ import {
   raleway,
   roboto,
 } from "@/lib/fonts";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { checkIsMetaExist } from "@/services/user.service";
-
-const queryClient = new QueryClient();
+import { queryClient } from "@/lib/queryClient";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();

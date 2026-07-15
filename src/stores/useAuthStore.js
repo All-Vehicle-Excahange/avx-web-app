@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+import { queryClient } from "@/lib/queryClient";
 
 export const useAuthStore = create((set) => ({
   //  AUTH DATA
@@ -82,6 +83,7 @@ export const useAuthStore = create((set) => ({
 
   //  LOGOUT FUNCTION
   logout: () => {
+    queryClient.clear();
     set({
       user: null,
       token: null,
