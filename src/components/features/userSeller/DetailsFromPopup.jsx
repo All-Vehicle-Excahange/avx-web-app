@@ -8,7 +8,7 @@ import Button from "@/components/ui/button";
 import Image from "next/image";
 import { X, CheckCircle2, Loader2 } from "lucide-react";
 
-function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
+function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = false }) {
   const { push } = useRouter();
   const [form, setForm] = useState({
     panCardNumber: "",
@@ -125,24 +125,57 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
     // Local validation
     const errors = {};
     const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
-    const aadharRegex = /^\d{4}\s?\d{4}\s?\d{4}$/; // allows spaces or just 12 digits directly if we also test ^[0-9]{12}$
 
-    if (
-      form.panCardNumber &&
-      !panRegex.test(form.panCardNumber.toUpperCase())
-    ) {
-      errors.panCardNumber = "Invalid PAN format. Must be like ABCDE1234F";
+    const hasPanNum = !!form.panCardNumber?.trim();
+    const hasPanImg = !!(form.panCardFrontImage || preview.pan);
+    const hasAadharNum = !!form.aadharCardNumber?.trim();
+    const hasAadharFront = !!(form.aadharCardFrontImage || preview.aadhaarFront);
+    const hasAadharBack = !!(form.aadharCardBackImage || preview.aadhaarBack);
+    const hasAllAadharImg = hasAadharFront && hasAadharBack;
+
+    // 1. PAN Validation
+    if (hasPanNum && !hasPanImg) {
+      errors.panCardFrontImage = "PAN front image is required.";
+    }
+    if (!hasPanNum && hasPanImg) {
+      errors.panCardNumber = "PAN Card Number is required.";
+    }
+    if (hasPanNum) {
+      if (!panRegex.test(form.panCardNumber.toUpperCase())) {
+        errors.panCardNumber = "Invalid PAN format. Must be like ABCDE1234F";
+      }
     }
 
-    if (form.aadharCardNumber) {
+    // 2. Aadhaar Validation
+    if (hasAadharNum && !hasAadharFront) {
+      errors.aadharCardFrontImage = "Aadhaar front image is required.";
+    }
+    if (hasAadharNum && !hasAadharBack) {
+      errors.aadharCardBackImage = "Aadhaar back image is required.";
+    }
+    if (!hasAadharNum && (hasAadharFront || hasAadharBack)) {
+      errors.aadharCardNumber = "Aadhaar Card Number is required.";
+      if (!hasAadharFront) errors.aadharCardFrontImage = "Aadhaar front image is required.";
+      if (!hasAadharBack) errors.aadharCardBackImage = "Aadhaar back image is required.";
+    }
+    if (hasAadharNum) {
       const cleanAadhar = form.aadharCardNumber.replace(/\s/g, "");
       if (!/^[0-9]{12}$/.test(cleanAadhar)) {
         errors.aadharCardNumber = "Aadhaar must be exactly 12 digits";
       }
     }
 
+    // 3. At-least-one Validation (only triggered if both are completely untouched)
+    const isPanEmpty = !hasPanNum && !hasPanImg;
+    const isAadharEmpty = !hasAadharNum && !hasAadharFront && !hasAadharBack;
+
+    if (isPanEmpty && isAadharEmpty) {
+      errors.panCardNumber = "Either PAN Card or Aadhaar Card details are required.";
+      errors.aadharCardNumber = "Either PAN Card or Aadhaar Card details are required.";
+    }
+
     if (Object.keys(errors).length > 0) {
-      setValidationErrors((prev) => ({ ...prev, ...errors }));
+      setValidationErrors(errors);
       return;
     }
 
@@ -242,6 +275,24 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
     }
   };
 
+  const isFormChanged = (() => {
+    if (!existing) return true;
+
+    const panNumChanged = (form.panCardNumber || "").trim() !== (existing.panCardNumber || "").trim();
+    const aadharNumChanged = (form.aadharCardNumber || "").trim() !== (existing.aadharCardNumber || "").trim();
+    
+    const panImgChanged = form.panCardFrontImage !== null || 
+      (existing.panCardFrontUrl && preview.pan === null);
+      
+    const aadharFrontImgChanged = form.aadharCardFrontImage !== null || 
+      (existing.aadharCardFrontUrl && preview.aadhaarFront === null);
+      
+    const aadharBackImgChanged = form.aadharCardBackImage !== null || 
+      (existing.aadharCardBackUrl && preview.aadhaarBack === null);
+
+    return panNumChanged || aadharNumChanged || panImgChanged || aadharFrontImgChanged || aadharBackImgChanged;
+  })();
+
   const modalContent = (
     <div
       className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60  backdrop-blur-sm p-4"
@@ -339,6 +390,7 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
                     label="PAN Card Number"
                     variant="colored"
                     value={form.panCardNumber}
+                    readOnly={viewOnly}
                     onChange={(e) =>
                       handleInput("panCardNumber", e.target.value)
                     }
@@ -354,7 +406,18 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
                   <DropzoneUpload
                     label="PAN Card Front Image"
                     preview={preview.pan}
+                    accept=".jpg,.jpeg,.png,.webp"
+                    supportedText="Supports: JPG, JPEG, PNG, WEBP"
+                    readOnly={viewOnly}
                     onChange={(file) => {
+                      if (!file) {
+                        setPreview((p) => ({
+                          ...p,
+                          pan: null,
+                        }));
+                        handleInput("panCardFrontImage", null);
+                        return;
+                      }
                       const f = Array.isArray(file) ? file[0] : file;
                       if (f) {
                         setPreview((p) => ({
@@ -373,11 +436,24 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
                   )}
                 </div>
 
+                {/* OR Divider */}
+                <div className="relative my-6">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-white/10" />
+                  </div>
+                  <div className="relative flex justify-center">
+                    <span className="bg-secondary px-4 text-xs font-semibold text-third/50 uppercase tracking-widest py-1 rounded-full border border-white/10 backdrop-blur-sm">
+                      OR
+                    </span>
+                  </div>
+                </div>
+
                 <div id="field-aadharCardNumber">
                   <InputField
                     label="Aadhaar Card Number"
                     variant="colored"
                     value={form.aadharCardNumber}
+                    readOnly={viewOnly}
                     onChange={(e) =>
                       handleInput("aadharCardNumber", e.target.value)
                     }
@@ -393,7 +469,18 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
                   <DropzoneUpload
                     label="Aadhaar Front Image"
                     preview={preview.aadhaarFront}
+                    accept=".jpg,.jpeg,.png,.webp"
+                    supportedText="Supports: JPG, JPEG, PNG, WEBP"
+                    readOnly={viewOnly}
                     onChange={(file) => {
+                      if (!file) {
+                        setPreview((p) => ({
+                          ...p,
+                          aadhaarFront: null,
+                        }));
+                        handleInput("aadharCardFrontImage", null);
+                        return;
+                      }
                       const f = Array.isArray(file) ? file[0] : file;
                       if (f) {
                         setPreview((p) => ({
@@ -416,7 +503,18 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
                   <DropzoneUpload
                     label="Aadhaar Back Image"
                     preview={preview.aadhaarBack}
+                    accept=".jpg,.jpeg,.png,.webp"
+                    supportedText="Supports: JPG, JPEG, PNG, WEBP"
+                    readOnly={viewOnly}
                     onChange={(file) => {
+                      if (!file) {
+                        setPreview((p) => ({
+                          ...p,
+                          aadhaarBack: null,
+                        }));
+                        handleInput("aadharCardBackImage", null);
+                        return;
+                      }
                       const f = Array.isArray(file) ? file[0] : file;
                       if (f) {
                         setPreview((p) => ({
@@ -436,30 +534,44 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing }) {
                 </div>
                 {/* 🔥 Buttons */}
                 <div className="flex justify-end gap-4 pt-6">
-                  <Button
-                    onClick={handleClose}
-                    variant="outlineSecondary"
-                    className=""
-                  >
-                    Cancel
-                  </Button>
+                  {viewOnly ? (
+                    <Button
+                      onClick={handleClose}
+                      variant="ghost"
+                      className="px-8"
+                    >
+                      Close
+                    </Button>
+                  ) : (
+                    <>
+                      <Button
+                        onClick={handleClose}
+                        variant="outlineSecondary"
+                        className=""
+                      >
+                        Cancel
+                      </Button>
 
-                  <Button
-                    onClick={handleSubmit}
-                    variant="ghost"
-                    showIcon={false}
-                    locked={loading}
-                    className="flex items-center gap-2"
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        <span>Submitting...</span>
-                      </>
-                    ) : (
-                      "Submit"
-                    )}
-                  </Button>
+                      {(!existing || existing.verificationStatus !== "REQUEST_CHANGES" || isFormChanged) && (
+                        <Button
+                          onClick={handleSubmit}
+                          variant="ghost"
+                          showIcon={false}
+                          locked={loading}
+                          className="flex items-center gap-2 animate-in fade-in zoom-in-95 duration-200"
+                        >
+                          {loading ? (
+                            <>
+                              <Loader2 className="w-5 h-5 animate-spin" />
+                              <span>Submitting...</span>
+                            </>
+                          ) : (
+                            "Submit"
+                          )}
+                        </Button>
+                      )}
+                    </>
+                  )}
                 </div>
               </div>
             </>

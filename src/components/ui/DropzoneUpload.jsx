@@ -10,6 +10,7 @@ export default function DropzoneUpload({
   preview,
   accept = "image/*,application/pdf",
   supportedText = "Supports: JPG, PNG, PDF",
+  readOnly = false,
 }) {
   const inputRef = useRef();
   const [localFile, setLocalFile] = useState(null);
@@ -31,6 +32,7 @@ export default function DropzoneUpload({
   }, [currentFile]);
 
   const handleFile = (f) => {
+    if (readOnly) return;
     if (!f) return;
 
     if (f instanceof File && accept) {
@@ -69,32 +71,36 @@ export default function DropzoneUpload({
       </label>
 
       <div
-        onClick={() => inputRef.current.click()}
-        className="cursor-pointer rounded-xl border-2 border-dashed border-third/40 bg-primary/5 hover:border-primary transition p-6 text-center w-full relative"
+        onClick={() => !readOnly && inputRef.current.click()}
+        className={`rounded-xl border-2 border-dashed border-third/40 bg-primary/5 p-6 text-center w-full relative transition ${
+          readOnly ? "cursor-default" : "cursor-pointer hover:border-primary"
+        }`}
       >
         {!currentFile ? (
           <div className="flex flex-col items-center justify-center space-y-3 py-4">
             <UploadCloud className="w-10 h-10 text-primary/40" />
             <p className="text-third text-sm tracking-wide">
-              Drop your image here, or click to browse
+              {readOnly ? "No document uploaded" : "Drop your image here, or click to browse"}
             </p>
-            <p className="text-xs text-third/70">{supportedText}</p>
+            {!readOnly && <p className="text-xs text-third/70">{supportedText}</p>}
           </div>
         ) : (
           <div className="flex flex-col items-center gap-4 w-full relative ">
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setLocalFile(null);
-                if (onChange) onChange(null);
-                if (inputRef.current) inputRef.current.value = "";
-              }}
-              className="cursor-pointer absolute -top-4 -right-4 p-2 bg-red-500/40 hover:bg-red-600 text-white rounded-full transition-colors z-10 shadow-md"
-              title="Clear"
-            >
-              <Trash2 size={16} />
-            </button>
+            {!readOnly && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLocalFile(null);
+                  if (onChange) onChange(null);
+                  if (inputRef.current) inputRef.current.value = "";
+                }}
+                className="cursor-pointer absolute -top-4 -right-4 p-2 bg-red-500/40 hover:bg-red-600 text-white rounded-full transition-colors z-10 shadow-md"
+                title="Clear"
+              >
+                <Trash2 size={16} />
+              </button>
+            )}
 
             <div className="relative w-full max-w-sm h-48 rounded-lg overflow-hidden bg-black/5 shadow-inner">
               <Image
@@ -115,9 +121,11 @@ export default function DropzoneUpload({
                     : currentFile.name}
                 </p>
               </div>
-              <p className="text-xs text-third/80">
-                Click anywhere here to change
-              </p>
+              {!readOnly && (
+                <p className="text-xs text-third/80">
+                  Click anywhere here to change
+                </p>
+              )}
             </div>
           </div>
         )}

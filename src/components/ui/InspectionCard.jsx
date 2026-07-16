@@ -3,12 +3,12 @@ import Button from "@/components/ui/button";
 import { Check, File } from "lucide-react";
 
 export default function InspectionCard({
-  status = "processing",
-  type = "received", // "received" or "sent"
-  inspectionType = "Report Only", // "Video + Report" or "Report Only"
-  vehicleName = "Maruti Baleno 2021",
-  fromName = "Rahul (Buyer)",
-  date = "12 Aug",
+  status = "",
+  type = "", // "received" or "sent"
+  inspectionType = "", // "Video + Report" or "Report Only"
+  vehicleName = "",
+  fromName = "",
+  date = "",
   onAccept,
   onReject,
   onViewReport,
@@ -109,14 +109,14 @@ export default function InspectionCard({
 
         {isAccepted && !(type === "received" && lowerStatus === "accepted") && (
           <div className="pt-3 flex flex-wrap items-center gap-3">
-            <Button
+            {/* <Button
               variant="outline"
               showIcon={false}
               className="pointer-events-none opacity-50 cursor-not-allowed text-yellow-500 border-yellow-500/30 py-1.5 px-4 text-sm"
               locked={true}
             >
               In Progress
-            </Button>
+            </Button> */}
             <Button
               variant="ghost"
               showIcon={false}
