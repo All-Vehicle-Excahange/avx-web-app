@@ -8,8 +8,8 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import Button from "@/components/ui/button";
 import { Clock, Ban } from "lucide-react";
 import { UserVehicleCardSkeleton } from "@/components/ui/skeleton";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { getSellerInventoryInfiniteQuery } from "@/queries/user.queries";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { getSellerInventoryInfiniteQuery, getBecameSellerQuery, getUserProfileQuery } from "@/queries/user.queries";
 import { getSusPendedVehiclesInfiniteQuery } from "@/queries/Seller.queries";
 import Image from "next/image";
 
@@ -18,6 +18,17 @@ function MyVehicle() {
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const user = useAuthStore((state) => state.user);
+
+  const { data: sellerRes } = useQuery(getBecameSellerQuery());
+  const { data: profileRes } = useQuery(getUserProfileQuery());
+
+  const sellerStatus = sellerRes?.data?.verificationStatus;
+  const userRole = profileRes?.data?.userRole || user?.userRole;
+
+  const hasAppliedOrIsSeller =
+    userRole === "USER_SELLER" ||
+    userRole === "USER_SELLER_APPLICANT" ||
+    ["REQUESTED", "VERIFIED", "REJECTED", "REQUEST_CHANGES", "APPROVED", "ACCEPTED"].includes(sellerStatus);
 
   const vehicleTypes = [
     { id: "all", label: "All" },
@@ -260,7 +271,7 @@ function MyVehicle() {
               </p>
               <Button
                 onClick={() => {
-                  if (user?.userRole === "USER") {
+                  if (userRole === "USER" && !hasAppliedOrIsSeller) {
                     setIsDetailsOpen(true);
                   } else {
                     setIsDownloadOpen(true);
