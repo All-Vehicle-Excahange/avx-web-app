@@ -712,19 +712,19 @@ export default function SearchWithCard({
     const brandLabel =
       selectedBrands.length > 0
         ? brands.find((b) => safeStr(b.value) === safeStr(selectedBrands[0]))
-            ?.label || ""
+          ?.label || ""
         : "";
 
     const modelLabel =
       selectedModels.length > 0
         ? models.find((m) => safeStr(m.value) === safeStr(selectedModels[0]))
-            ?.label || ""
+          ?.label || ""
         : "";
 
     const bodyTypeLabel =
       selectedBodyType.length > 0
         ? selectedBodyType[0].charAt(0).toUpperCase() +
-          selectedBodyType[0].slice(1).toLowerCase()
+        selectedBodyType[0].slice(1).toLowerCase()
         : "";
 
     onConsultPayloadChange({
@@ -1911,11 +1911,11 @@ export default function SearchWithCard({
                 "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)",
             }}
           >
-            <div className="flex lg:hidden items-center gap-3 overflow-x-auto scrollbar-hide">
-              <div className="shrink-0">
+            <div className="flex lg:hidden items-center gap-3 overflow-x-auto scrollbar-hide [&>*]:shrink-0">
+              <div className="shrink-0 h-10">
                 <Button
                   variant="ghost"
-                  className="rounded-lg"
+                  className="rounded-xl h-full py-0"
                   showIcon={false}
                   onClick={() => setMobileFilterOpen(true)}
                 >
@@ -1924,7 +1924,7 @@ export default function SearchWithCard({
                 </Button>
               </div>
 
-              <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-third/40 shrink-0">
+              <div className="flex items-center gap-2 px-3 h-10 rounded-xl border border-third/40 shrink-0">
                 <span className="text-sm text-primary font-semibold">
                   Reecomm Inspected
                 </span>
@@ -1939,6 +1939,7 @@ export default function SearchWithCard({
               </div>
 
               <Chip
+                className="h-10"
                 label="Under ₹5L"
                 selected={maxPrice <= 500000}
                 variant="outline"
@@ -1958,6 +1959,7 @@ export default function SearchWithCard({
                 }}
               />
               <Chip
+                className="h-10"
                 label="SUV"
                 selected={selectedBodyType.includes("suv")}
                 variant="outline"
@@ -1970,6 +1972,7 @@ export default function SearchWithCard({
                 }}
               />
               <Chip
+                className="h-10"
                 label="Diesel"
                 selected={selectedFuelTypes.includes("Diesel")}
                 variant="outline"
@@ -1982,6 +1985,7 @@ export default function SearchWithCard({
                 }}
               />
               <Chip
+                className="h-10"
                 label="⭐ 4+"
                 selected={selectedRating.includes("4.0")}
                 variant="outline"
@@ -2023,23 +2027,23 @@ export default function SearchWithCard({
               const brandLabel =
                 selectedBrands.length > 0
                   ? brands.find(
-                      (b) => safeStr(b.value) === safeStr(selectedBrands[0]),
-                    )?.label || ""
+                    (b) => safeStr(b.value) === safeStr(selectedBrands[0]),
+                  )?.label || ""
                   : "";
 
               // Resolve model label from selected model id
               const modelLabel =
                 selectedModels.length > 0
                   ? models.find(
-                      (m) => safeStr(m.value) === safeStr(selectedModels[0]),
-                    )?.label || ""
+                    (m) => safeStr(m.value) === safeStr(selectedModels[0]),
+                  )?.label || ""
                   : "";
 
               // Resolve body type label (capitalise first letter)
               const bodyTypeLabel =
                 selectedBodyType.length > 0
                   ? selectedBodyType[0].charAt(0).toUpperCase() +
-                    selectedBodyType[0].slice(1).toLowerCase()
+                  selectedBodyType[0].slice(1).toLowerCase()
                   : "";
 
               let subject = "Vehicles";
@@ -2131,9 +2135,8 @@ export default function SearchWithCard({
 
       {/* MOBILE FILTER DRAWER */}
       <div
-        className={`fixed top-16 inset-x-0 bottom-0 z-100 bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${
-          mobileFilterOpen ? "translate-y-0" : "translate-y-full"
-        }`}
+        className={`fixed top-16 inset-x-0 bottom-0 z-100 bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${mobileFilterOpen ? "translate-y-0" : "translate-y-full"
+          }`}
       >
         {/* ── Header ── */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-third/40 shrink-0">
@@ -2172,11 +2175,10 @@ export default function SearchWithCard({
               <div
                 key={tab.name}
                 onClick={() => setActiveFilterTab(tab.name)}
-                className={`px-4 py-3 cursor-pointer text-sm flex items-center justify-between ${
-                  activeFilterTab === tab.name
-                    ? "bg-secondary/10 font-semibold"
-                    : "hover:bg-secondary/5"
-                }`}
+                className={`px-4 py-3 cursor-pointer text-sm flex items-center justify-between ${activeFilterTab === tab.name
+                  ? "bg-secondary/10 font-semibold"
+                  : "hover:bg-secondary/5"
+                  }`}
               >
                 <span>{tab.name}</span>
                 {tab.count > 0 && (

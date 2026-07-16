@@ -6,10 +6,11 @@ export default function Chip({
   onClick,
   variant = "outline",
   logo,
+  className = "",
 }) {
   const base =
-    `flex items-center cursor-pointer text-sm font-medium transition select-none whitespace-nowrap overflow-hidden rounded-xl ${logo ? "pr-4" : "px-4 py-2 gap-2"
-    }`;
+    `flex items-center justify-center cursor-pointer text-sm font-medium transition select-none whitespace-nowrap overflow-hidden rounded-xl ${logo ? "pr-4" : "px-4 py-1.5 gap-2"
+    } ${className}`;
 
   const styles = {
     // OUTLINE (light background use-case)

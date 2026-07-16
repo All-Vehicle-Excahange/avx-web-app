@@ -6,19 +6,22 @@ import { ArrowLeftRight } from "lucide-react";
 import { useRouter } from "next/router";
 import { useCompareStore } from "@/stores/useCompareStore";
 import VehicleComparePopup from "@/components/ui/VehicleComparePopup";
+import { useUIStore } from "@/stores/useUIStore";
 
 export default function GlobalCompareButton() {
   const router = useRouter();
   const dragConstraintsRef = useRef(null);
   const { isOpen, closeCompare, openCompare, selectedVehicle } =
     useCompareStore();
+  const { isSearchDropdownOpen } = useUIStore();
 
   const isDetailPage = router.pathname.includes("/vehicle/details/");
 
   return (
     <>
       {/* Draggable Button Wrapper */}
-      <div
+      {!isSearchDropdownOpen && (
+        <div
         className="fixed inset-x-0  sm:top-2 sm:buttom-30 bottom-12 top-16 pointer-events-none z-2000"
         ref={dragConstraintsRef}
       >
@@ -33,8 +36,9 @@ export default function GlobalCompareButton() {
           title="Compare Vehicles (Drag me!)"
         >
           <ArrowLeftRight size={24} />
-        </motion.button>
-      </div>
+          </motion.button>
+        </div>
+      )}
 
       {/* Global Popup */}
       <VehicleComparePopup

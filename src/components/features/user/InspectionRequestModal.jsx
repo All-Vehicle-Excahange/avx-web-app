@@ -418,7 +418,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
       {/* Backdrop */}
       <div
         className={`
@@ -442,10 +442,9 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
           bg-secondary overflow-hidden text-primary
           border border-third/50 shadow-2xl
           transition-all duration-300 ease-out
-          ${
-            animate
-              ? "opacity-100 scale-100 translate-y-0"
-              : "opacity-0 scale-95 translate-y-4"
+          ${animate
+            ? "opacity-100 scale-100 translate-y-0"
+            : "opacity-0 scale-95 translate-y-4"
           }
         `}
       >
@@ -490,32 +489,32 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
                   <span className="text-third">Inspection Type</span>
                   <span className="font-semibold">
                     {existingInspection.inspectionType ===
-                    "VIDEO_CALL_WITH_REPORT"
+                      "VIDEO_CALL_WITH_REPORT"
                       ? "Video Call + Report"
                       : "Report Only"}
                   </span>
                 </div>
                 {existingInspection.inspectionType ===
                   "VIDEO_CALL_WITH_REPORT" && (
-                  <>
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-third">WhatsApp Number</span>
-                      <span className="font-semibold">
-                        {existingInspection.whatsappNumber}
-                      </span>
-                    </div>
-                    {existingInspection.videoCallScheduledAt && (
+                    <>
                       <div className="flex justify-between items-center text-sm">
-                        <span className="text-third">Scheduled At</span>
+                        <span className="text-third">WhatsApp Number</span>
                         <span className="font-semibold">
-                          {new Date(existingInspection.videoCallScheduledAt)
-                            .toLocaleDateString("en-GB")
-                            .replace(/\//g, "/")}
+                          {existingInspection.whatsappNumber}
                         </span>
                       </div>
-                    )}
-                  </>
-                )}
+                      {existingInspection.videoCallScheduledAt && (
+                        <div className="flex justify-between items-center text-sm">
+                          <span className="text-third">Scheduled At</span>
+                          <span className="font-semibold">
+                            {new Date(existingInspection.videoCallScheduledAt)
+                              .toLocaleDateString("en-GB")
+                              .replace(/\//g, "/")}
+                          </span>
+                        </div>
+                      )}
+                    </>
+                  )}
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-third">Status</span>
                   <span className="px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400 font-medium text-xs">
@@ -707,8 +706,8 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
                 {isFree
                   ? "By clicking Confirm Request, you agree to submit the inspection request."
                   : paymentMethod === "WALLET" && isConsultant
-                  ? "Confirm payment from your Reecomm Wallet to register inspection."
-                  : "By clicking Confirm Payment, you agree to complete the payment workflow."}
+                    ? "Confirm payment from your Reecomm Wallet to register inspection."
+                    : "By clicking Confirm Payment, you agree to complete the payment workflow."}
               </p>
               <div className="flex justify-end gap-3 pt-2">
                 <Button
@@ -730,10 +729,10 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
                   {isFree
                     ? "Confirm Request"
                     : isConsultant && paymentMethod === "WALLET"
-                    ? walletBalance < discountPrice
-                      ? "Top-up Wallet"
-                      : "Pay with Wallet"
-                    : "Confirm Payment"}
+                      ? walletBalance < discountPrice
+                        ? "Top-up Wallet"
+                        : "Pay with Wallet"
+                      : "Confirm Payment"}
                 </Button>
               </div>
             </>
@@ -774,7 +773,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
           <Image
             width={500}
             height={500}
-            src="/bg.jpg"
+            src="/payment.webp"
             alt="reecomm-payment"
             className="w-full h-full object-cover"
           />

@@ -12,6 +12,9 @@ export const useUIStore = create(
       isMobileBannerTempHidden: false,
       setMobileBannerTempHidden: (isHidden) =>
         set({ isMobileBannerTempHidden: isHidden }),
+
+      isSearchDropdownOpen: false,
+      setIsSearchDropdownOpen: (isOpen) => set({ isSearchDropdownOpen: isOpen }),
     }),
     {
       name: "ui-storage",
