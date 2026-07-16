@@ -175,22 +175,7 @@ export default function FilterWithCard({
     };
   }, [mobileFilterOpen]);
 
-  // Close dropdowns on outside click
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (stateRef.current && !stateRef.current.contains(e.target)) {
-        setStateOpen(false);
-        setStateSearch("");
-      }
-      if (cityRef.current && !cityRef.current.contains(e.target)) {
-        setCityOpen(false);
-        setCitySearch("");
-      }
-    };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   // Load states
   useEffect(() => {

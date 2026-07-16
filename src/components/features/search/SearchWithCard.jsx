@@ -257,6 +257,34 @@ export default function SearchWithCard({
   ]);
   const [transmissionLoading, setTransmissionLoading] = useState(false);
 
+  const isSelfTriggered = useRef(false);
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
+    }
+    isSelfTriggered.current = true;
+  }, [
+    selectedBrands,
+    selectedModels,
+    selectedVariants,
+    selectedFuelTypes,
+    selectedTransmissionTypes,
+    selectedBodyType,
+    selectedYear,
+    selectedCityId,
+    selectedStateId,
+    selectedTownId,
+    selectedRating,
+    selectedSellerType,
+    avxAssumed,
+    minPrice,
+    maxPrice,
+    kmDistance,
+  ]);
+
   // Synchronously update selected filters from initialFilters prop during render
   const [prevInitialFilters, setPrevInitialFilters] = useState(initialFilters);
   if (
@@ -274,45 +302,49 @@ export default function SearchWithCard({
   ) {
     setPrevInitialFilters(initialFilters);
 
-    // Fuel Type
-    setSelectedFuelTypes(initialFilters.fuelType ? [initialFilters.fuelType] : []);
-
-    // Transmission
-    setSelectedTransmissionTypes(initialFilters.transmission ? [initialFilters.transmission.toLowerCase()] : []);
-
-    // Brand
-    setSelectedBrands(initialFilters.makerId ? [initialFilters.makerId] : []);
-
-    // Model
-    setSelectedModels(initialFilters.modelId ? [initialFilters.modelId] : []);
-
-    // Body Type
-    setSelectedBodyType(initialFilters.bodyType ? [initialFilters.bodyType.toLowerCase()] : []);
-
-    // Location
-    if (initialFilters.stateId) {
-      setSelectedStateId(Number(initialFilters.stateId));
-      setSelectedStateName(initialFilters.stateName || "");
+    if (isSelfTriggered.current) {
+      isSelfTriggered.current = false;
     } else {
-      setSelectedStateId(null);
-      setSelectedStateName("");
-    }
-    if (initialFilters.cityId) {
-      setSelectedCityId(Number(initialFilters.cityId));
-      setSelectedCityName(initialFilters.cityName || "");
-    } else {
-      setSelectedCityId(null);
-      setSelectedCityName("");
-    }
+      // Fuel Type
+      setSelectedFuelTypes(initialFilters.fuelType ? [initialFilters.fuelType] : []);
 
-    // Budget
-    if (initialFilters.budget) {
-      const [min, max] = initialFilters.budget.replace(/\s/g, "").split("-");
-      setMinPrice(parseFloat(min) * 100000);
-      setMaxPrice(parseFloat(max) * 100000);
-    } else {
-      setMinPrice(50000);
-      setMaxPrice(2000000);
+      // Transmission
+      setSelectedTransmissionTypes(initialFilters.transmission ? [initialFilters.transmission.toLowerCase()] : []);
+
+      // Brand
+      setSelectedBrands(initialFilters.makerId ? [initialFilters.makerId] : []);
+
+      // Model
+      setSelectedModels(initialFilters.modelId ? [initialFilters.modelId] : []);
+
+      // Body Type
+      setSelectedBodyType(initialFilters.bodyType ? [initialFilters.bodyType.toLowerCase()] : []);
+
+      // Location
+      if (initialFilters.stateId) {
+        setSelectedStateId(Number(initialFilters.stateId));
+        setSelectedStateName(initialFilters.stateName || "");
+      } else {
+        setSelectedStateId(null);
+        setSelectedStateName("");
+      }
+      if (initialFilters.cityId) {
+        setSelectedCityId(Number(initialFilters.cityId));
+        setSelectedCityName(initialFilters.cityName || "");
+      } else {
+        setSelectedCityId(null);
+        setSelectedCityName("");
+      }
+
+      // Budget
+      if (initialFilters.budget) {
+        const [min, max] = initialFilters.budget.replace(/\s/g, "").split("-");
+        setMinPrice(parseFloat(min) * 100000);
+        setMaxPrice(parseFloat(max) * 100000);
+      } else {
+        setMinPrice(50000);
+        setMaxPrice(2000000);
+      }
     }
   }
 
@@ -1478,15 +1510,6 @@ export default function SearchWithCard({
     setSelectedTownId(null);
     setSelectedTownName("");
     setTowns([]);
-
-    setStateSearch("");
-    setCitySearch("");
-
-    setStateOpen(false);
-    setCityOpen(false);
-
-    setHighlightedStateIndex(-1);
-    setHighlightedCityIndex(-1);
 
     setCities([]);
 
