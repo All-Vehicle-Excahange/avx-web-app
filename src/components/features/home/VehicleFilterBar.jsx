@@ -339,8 +339,16 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       }
     }
 
-    // Cleanup to ensure banner comes back if unmounted unexpectedly
-    return () => setMobileBannerTempHidden(false);
+    // Cleanup to ensure banner comes back and body scroll unlocks if unmounted unexpectedly
+    return () => {
+      setMobileBannerTempHidden(false);
+      if (typeof window !== "undefined") {
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+        document.body.style.overflow = "";
+      }
+    };
   }, [mobileOpen, setMobileBannerTempHidden]);
 
   // Close desktop dropdown tabs when user scrolls
@@ -410,104 +418,104 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     try {
       const isConsult = internalActiveType === "consult";
 
-    // Save/overwrite selected location to localStorage
-    if (stateId && cityId && location) {
-      const [cityName, stateName] = location
-        .split(", ")
-        .map((str) => str.trim());
-      if (cityName && stateName) {
-        const locationData = {
-          stateId,
-          stateName,
-          cityId,
-          cityName,
-        };
-        localStorage.setItem(
-          "avx_saved_location",
-          JSON.stringify(locationData),
-        );
-      }
-    } else if (locationSuggestions?.length > 0 && location) {
-      // In case they just typed an exact match but didn't click the dropdown
-      const locMatch = locationSuggestions.find(
-        (l) =>
-          `${l.cityName}, ${l.stateName}`.toLowerCase() ===
-          location.toLowerCase(),
-      );
-      if (locMatch) {
-        const locationData = {
-          stateId: locMatch.stateId,
-          stateName: locMatch.stateName,
-          cityId: locMatch.cityId,
-          cityName: locMatch.cityName,
-        };
-        localStorage.setItem(
-          "avx_saved_location",
-          JSON.stringify(locationData),
-        );
-      }
-    }
-
-    if (internalActiveType === "consult") {
-      const query = new URLSearchParams({
-        ...(location && { location }),
-        ...(cityId && { cityId }),
-        ...(stateId && { stateId }),
-        ...(vehicleType && { vehicleType }),
-        ...(priceRange && { priceRange }),
-        ...(service && { service }),
-        ...(availability && { availability }),
-      }).toString();
-      setActiveTab(null);
-      setMobileOpen(false);
-      await push(`/consult/discovery${query ? `?${query}` : ""}`);
-    } else {
-      const vtLower = vehicleType.toLowerCase().replace(/_/g, " ");
-      const isCar = vtLower.includes("car") || vtLower.includes("4 wheeler") || vtLower.includes("four wheeler") || vtLower.includes("4-wheeler") || vtLower.includes("four-wheeler");
-
-      if (isCar) {
-        // Generate SEO-friendly slug
-        let slug = "buy-used-";
-        if (brand) {
-          slug += brand.toLowerCase().replace(/\s+/g, "-") + "-";
+      // Save/overwrite selected location to localStorage
+      if (stateId && cityId && location) {
+        const [cityName, stateName] = location
+          .split(", ")
+          .map((str) => str.trim());
+        if (cityName && stateName) {
+          const locationData = {
+            stateId,
+            stateName,
+            cityId,
+            cityName,
+          };
+          localStorage.setItem(
+            "avx_saved_location",
+            JSON.stringify(locationData),
+          );
         }
-        slug += "cars";
-        if (location) {
-          const cityName = location
-            .split(",")[0]
-            .trim()
-            .toLowerCase()
-            .replace(/\s+/g, "-");
-          slug += "-" + cityName;
+      } else if (locationSuggestions?.length > 0 && location) {
+        // In case they just typed an exact match but didn't click the dropdown
+        const locMatch = locationSuggestions.find(
+          (l) =>
+            `${l.cityName}, ${l.stateName}`.toLowerCase() ===
+            location.toLowerCase(),
+        );
+        if (locMatch) {
+          const locationData = {
+            stateId: locMatch.stateId,
+            stateName: locMatch.stateName,
+            cityId: locMatch.cityId,
+            cityName: locMatch.cityName,
+          };
+          localStorage.setItem(
+            "avx_saved_location",
+            JSON.stringify(locationData),
+          );
         }
+      }
 
-        // Other filters as query params (excluding brand/model/city IDs as they are resolved from the slug)
-        const queryParams = new URLSearchParams({
-          ...(bodyType && { bodyType: bodyType.toUpperCase() }),
-          ...(fuelType && { fuelType: fuelType.toUpperCase() }),
-          ...(budget && { budget }),
-        }).toString();
-
-        setActiveTab(null);
-        setMobileOpen(false);
-        await push(`/search/${slug}${queryParams ? `?${queryParams}` : ""}`);
-      } else {
+      if (internalActiveType === "consult") {
         const query = new URLSearchParams({
           ...(location && { location }),
           ...(cityId && { cityId }),
           ...(stateId && { stateId }),
           ...(vehicleType && { vehicleType }),
-          ...(bodyType && { bodyType: bodyType.toUpperCase() }),
-          ...(fuelType && { fuelType: fuelType.toUpperCase() }),
-          ...(brand && { brand }),
-          ...(makerId && { makerId }),
-          ...(budget && { budget }),
+          ...(priceRange && { priceRange }),
+          ...(service && { service }),
+          ...(availability && { availability }),
         }).toString();
+        await push(`/consult/discovery${query ? `?${query}` : ""}`);
         setActiveTab(null);
         setMobileOpen(false);
-        await push(`/search?${query}`);
+      } else {
+        const vtLower = vehicleType.toLowerCase().replace(/_/g, " ");
+        const isCar = vtLower.includes("car") || vtLower.includes("4 wheeler") || vtLower.includes("four wheeler") || vtLower.includes("4-wheeler") || vtLower.includes("four-wheeler");
+
+        if (isCar) {
+          // Generate SEO-friendly slug
+          let slug = "buy-used-";
+          if (brand) {
+            slug += brand.toLowerCase().replace(/\s+/g, "-") + "-";
+          }
+          slug += "cars";
+          if (location) {
+            const cityName = location
+              .split(",")[0]
+              .trim()
+              .toLowerCase()
+              .replace(/\s+/g, "-");
+            slug += "-" + cityName;
+          }
+
+          // Other filters as query params (excluding brand/model/city IDs as they are resolved from the slug)
+          const queryParams = new URLSearchParams({
+            ...(bodyType && { bodyType: bodyType.toUpperCase() }),
+            ...(fuelType && { fuelType: fuelType.toUpperCase() }),
+            ...(budget && { budget }),
+          }).toString();
+
+          await push(`/search/${slug}${queryParams ? `?${queryParams}` : ""}`);
+          setActiveTab(null);
+          setMobileOpen(false);
+        } else {
+          const query = new URLSearchParams({
+            ...(location && { location }),
+            ...(cityId && { cityId }),
+            ...(stateId && { stateId }),
+            ...(vehicleType && { vehicleType }),
+            ...(bodyType && { bodyType: bodyType.toUpperCase() }),
+            ...(fuelType && { fuelType: fuelType.toUpperCase() }),
+            ...(brand && { brand }),
+            ...(makerId && { makerId }),
+            ...(budget && { budget }),
+          }).toString();
+          await push(`/search?${query}`);
+          setActiveTab(null);
+          setMobileOpen(false);
+        }
       }
-    }
     } finally {
       setIsSearching(false);
     }
@@ -1921,7 +1929,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
             <button
               onClick={handleSearch}
               disabled={isSearching}
-              className="w-full bg-primary text-secondary font-bold text-lg py-4 rounded-full flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-95 transition-transform cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full bg-primary text-secondary font-semibold text-md py-3 rounded-full flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-95 transition-transform cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isSearching ? (
                 <>
@@ -1931,7 +1939,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
               ) : (
                 <>
                   <Search size={20} />
-                  Search Vehicles
+                  {internalActiveType === "consult" ? "Search Consultation" : "Search Vehicles"}
                 </>
               )}
             </button>

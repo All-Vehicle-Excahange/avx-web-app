@@ -12,6 +12,13 @@ import {
   Zap,
   Star,
   X,
+  Flame,
+  CarFront,
+  TrendingUp,
+  Clock,
+  History,
+  LayoutGrid,
+  ArrowRight,
 } from "lucide-react";
 import { FaUserCircle } from "react-icons/fa";
 import { useState, useEffect, useRef, useMemo } from "react";
@@ -27,6 +34,8 @@ import { useUIStore } from "@/stores/useUIStore";
 import MobileAppDownloadBanner from "../ui/MobileAppDownloadBanner";
 import { useQuery } from "@tanstack/react-query";
 import { getUserProfileStrengthQuery } from "@/queries/user.queries";
+import { getAndSearchMakers } from "@/services/filter";
+
 const MAKER_NAME_MAPPING = {
   1: "Ashok Leyland",
   2: "Aston Martin",
@@ -97,6 +106,11 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
   const { user, isLoggedIn } = useAuthStore();
   const { push } = useRouter();
   const pathname = usePathname();
+
+  /* ================= BANNER STATES & UI STATES ================= */
+  const { isMobileBannerVisible, hideMobileBanner, isMobileBannerTempHidden, setIsSearchDropdownOpen } =
+    useUIStore();
+
   /* ================= SEARCH STATES ================= */
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("All");
@@ -112,7 +126,35 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
     setSelectedIndex(-1);
   }, [searchQuery, showDropdown, combinedItems]);
 
+  // Lock body scroll when mega menu is open and sync global state
+  useEffect(() => {
+    if (showDropdown) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    // Update global state for other components like Compare Button
+    setIsSearchDropdownOpen(showDropdown);
+    return () => {
+      document.body.style.overflow = "unset";
+      setIsSearchDropdownOpen(false);
+    };
+  }, [showDropdown]);
+
   const searchRef = useRef(null);
+
+  // Click outside to close search dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showDropdown && searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDropdown]);
   const accountRef = useRef(null);
   const accountTimeoutRef = useRef(null);
   const [persisAccountOpen, setPersisAccountOpen] = useState(false);
@@ -125,6 +167,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
   // Dynamic Import States for Search Suggestions
   const [suggestionsData, setSuggestionsData] = useState([]);
   const [brandsList, setBrandsList] = useState([]);
+  const [apiBrandsList, setApiBrandsList] = useState([]);
   const [isSuggestionsLoaded, setIsSuggestionsLoaded] = useState(false);
 
   const loadSuggestions = async () => {
@@ -183,6 +226,21 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
       });
 
       setBrandsList(Array.from(bMap.values()).sort());
+
+      // Fetch brands from API for logos
+      try {
+        const makersRes = await getAndSearchMakers({ page: 1, limit: 100 });
+        if (makersRes?.data && Array.isArray(makersRes.data)) {
+          // Sort alphabetically by makeDisplay
+          const sortedMakers = makersRes.data.sort((a, b) =>
+            (a.makeDisplay || a.makeName || "").localeCompare(b.makeDisplay || b.makeName || "")
+          );
+          setApiBrandsList(sortedMakers);
+        }
+      } catch (err) {
+        console.error("Failed to load makers API", err);
+      }
+
       setIsSuggestionsLoaded(true);
     } catch (e) {
       console.error("Failed to load search suggestions", e);
@@ -197,9 +255,6 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
     return () => clearTimeout(timer);
   }, []);
 
-  /* ================= BANNER STATES ================= */
-  const { isMobileBannerVisible, hideMobileBanner, isMobileBannerTempHidden } =
-    useUIStore();
   const [scrollY, setScrollY] = useState(0);
 
   /* ================= SCROLL DETECTION ================= */
@@ -532,86 +587,81 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
             {heroMode && scrolled && (
               <div
                 ref={searchRef}
-                className="absolute left-1/2 -translate-x-1/2 hidden lg:flex"
+                className="absolute left-1/2 -translate-x-1/2 hidden lg:flex z-50"
               >
-                <div className="relative flex items-center h-12 w-[420px] xl:w-[520px] rounded-full bg-secondary/10 border border-gray-200">
-                  <div className="relative h-full w-[88px] flex items-center bg-gray-100/50 rounded-l-full border-r border-gray-200 hover:bg-gray-200/50 transition-colors shrink-0">
-                    <select
-                      value={selectedBrand}
+                {/* Search Bar Container */}
+                <div className="relative flex items-center h-[52px] w-[450px] xl:w-[600px] rounded-full bg-gray-100 border border-gray-200/80 focus-within:border-gray-300 focus-within:shadow-sm transition-all duration-300 group">
+
+                  {/* Search Input */}
+                  <div className="flex-1 flex items-center h-full relative pl-2">
+                    <Search className="w-4 h-4 ml-4 mr-2 text-gray-400 shrink-0" />
+                    <input
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
                       onMouseEnter={loadSuggestions}
-                      onClick={loadSuggestions}
-                      onChange={(e) => {
-                        setSelectedBrand(e.target.value);
+                      onFocus={() => {
+                        loadSuggestions();
                         setShowDropdown(true);
                       }}
-                      className="h-full w-full bg-transparent text-sm text-gray-700 font-medium pl-4 pr-6 cursor-pointer focus:outline-none appearance-none z-10 truncate"
-                    >
-                      <option value="All">All</option>
-                      {brandsList.map((brand, idx) => (
-                        <option key={idx} value={brand}>
-                          {brand}
-                        </option>
-                      ))}
-                    </select>
-                    <ChevronRight className="w-3 h-3 text-gray-500 absolute right-2 top-1/2 -translate-y-1/2 rotate-90 pointer-events-none" />
-                  </div>
-
-                  <Search className="w-4 h-4 ml-3 mr-2 text-gray-600 shrink-0" />
-
-                  <input
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onMouseEnter={loadSuggestions}
-                    onFocus={() => {
-                      loadSuggestions();
-                      setShowDropdown(true);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "ArrowDown") {
-                        e.preventDefault();
-                        setSelectedIndex((prev) =>
-                          prev < combinedItems.length - 1 ? prev + 1 : prev,
-                        );
-                      } else if (e.key === "ArrowUp") {
-                        e.preventDefault();
-                        setSelectedIndex((prev) => (prev > -1 ? prev - 1 : -1));
-                      } else if (e.key === "Enter") {
-                        if (
-                          selectedIndex >= 0 &&
-                          combinedItems[selectedIndex]
-                        ) {
-                          const selected = combinedItems[selectedIndex];
-                          if (selected.link) {
-                            push(selected.link);
-                            setSearchQuery(selected.label);
-                          } else if (selected.username) {
-                            push(`/auto-consultant/${selected.username}`);
+                      onKeyDown={(e) => {
+                        if (e.key === "ArrowDown") {
+                          e.preventDefault();
+                          setSelectedIndex((prev) =>
+                            prev < combinedItems.length - 1 ? prev + 1 : prev,
+                          );
+                        } else if (e.key === "ArrowUp") {
+                          e.preventDefault();
+                          setSelectedIndex((prev) => (prev > -1 ? prev - 1 : -1));
+                        } else if (e.key === "Enter") {
+                          if (
+                            selectedIndex >= 0 &&
+                            combinedItems[selectedIndex]
+                          ) {
+                            const selected = combinedItems[selectedIndex];
+                            if (selected.link) {
+                              push(selected.link);
+                              setSearchQuery(selected.label);
+                            } else if (selected.username) {
+                              push(`/auto-consultant/${selected.username}`);
+                            }
+                            setShowDropdown(false);
+                            setSelectedIndex(-1);
+                          } else if (searchQuery.trim()) {
+                            const brandParam =
+                              selectedBrand !== "All"
+                                ? `&brand=${encodeURIComponent(selectedBrand)}`
+                                : "";
+                            push(
+                              `/search?q=${encodeURIComponent(searchQuery)}${brandParam}`,
+                            );
+                            setShowDropdown(false);
+                          } else if (selectedBrand !== "All") {
+                            push(
+                              `/search?brand=${encodeURIComponent(selectedBrand)}`,
+                            );
+                            setShowDropdown(false);
                           }
-                          setShowDropdown(false);
-                          setSelectedIndex(-1);
-                        } else if (searchQuery.trim()) {
-                          const brandParam =
-                            selectedBrand !== "All"
-                              ? `&brand=${encodeURIComponent(selectedBrand)}`
-                              : "";
-                          push(
-                            `/search?q=${encodeURIComponent(searchQuery)}${brandParam}`,
-                          );
-                          setShowDropdown(false);
-                        } else if (selectedBrand !== "All") {
-                          push(
-                            `/search?brand=${encodeURIComponent(selectedBrand)}`,
-                          );
+                        } else if (e.key === "Escape") {
                           setShowDropdown(false);
                         }
-                      } else if (e.key === "Escape") {
-                        setShowDropdown(false);
-                      }
-                    }}
-                    className="w-full bg-transparent focus:outline-none text-black placeholder:text-gray-400 text-sm"
-                    placeholder="Search vehicles, brands..."
-                  />
+                      }}
+                      className="w-full h-full bg-transparent focus:outline-none text-gray-800 placeholder:text-gray-400 text-[14px] font-medium"
+                      placeholder="Search for vehicles or consultants..."
+                    />
+                    {searchQuery && (
+                      <button
+                        onClick={() => {
+                          setSearchQuery('');
+                          setSelectedIndex(-1);
+                        }}
+                        className="mr-2 p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors absolute right-0 cursor"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
 
+                  {/* Search Button */}
                   <div
                     onClick={() => {
                       if (searchQuery.trim()) {
@@ -630,111 +680,223 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                         setShowDropdown(false);
                       }
                     }}
-                    className="ml-auto p-2 mr-1 rounded-full bg-primary text-secondary cursor-pointer hover:bg-primary/90 transition-colors shrink-0"
+                    className="ml-auto mr-1.5 w-[40px] h-[40px] rounded-full bg-fourth text-white flex items-center justify-center cursor-pointer hover:bg-fourth/90 hover:shadow-md transition-all shrink-0"
                   >
-                    <Search size={14} />
+                    <Search size={16} />
                   </div>
 
-                  {showDropdown && (
-                    <div className="absolute top-14 left-0 w-full bg-[#e8e8e8] shadow-2xl  border border-gray-100 max-h-[350px] overflow-y-auto z-50 p-2 scrollbar-hide">
-                      {/* Suggestions Section */}
-                      {filteredSuggestions.length > 0 && (
-                        <div className="mb-3">
-                          <div className="px-3 py-2 flex items-center justify-between">
-                            <span className="text-[12px] font-bold text-gray-600 ">
-                              {searchQuery
-                                ? "Matching & Related Searches"
-                                : "Trending Searches"}
-                            </span>
-                          </div>
-                          <div className="grid grid-cols-1 gap-0.5">
-                            {filteredSuggestions.map((s, idx) => (
-                              <div
-                                key={s.id}
-                                onClick={() => {
-                                  push(s.link);
-                                  setShowDropdown(false);
-                                  setSearchQuery(s.label);
-                                }}
-                                className={`group flex items-center gap-3 p-1 cursor-pointer text-sm transition-all duration-200 rounded-sm
-                                  ${selectedIndex === idx ? "bg-fourth/10 border-l-4 border-fourth pl-2" : "hover:bg-fourth/5"}`}
-                              >
-                                <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-fourth/10 transition-colors">
-                                  {(() => {
-                                    if (s.type === "related")
-                                      return (
-                                        <Search className="w-3.5 h-3.5 text-fourth" />
-                                      );
-                                    if (s.type === "price")
-                                      return (
-                                        <Tag className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
-                                      );
-                                    if (s.type === "location")
-                                      return (
-                                        <MapPin className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
-                                      );
-                                    if (
-                                      s.type === "brand" ||
-                                      s.type === "model"
-                                    )
-                                      return (
-                                        <Car className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
-                                      );
-                                    if (s.type === "fuel")
-                                      return (
-                                        <Fuel className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
-                                      );
-                                    if (
-                                      s.type === "feature" ||
-                                      s.type === "bodyType"
-                                    )
-                                      return (
-                                        <Zap className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
-                                      );
-                                    if (s.type === "popular")
-                                      return (
-                                        <Star className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
-                                      );
-                                    if (s.type === "consultant")
-                                      return (
-                                        <User className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
-                                      );
-                                    return (
-                                      <Search className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />
-                                    );
-                                  })()}
-                                </div>
-                                <div className="flex flex-col">
-                                  <span className="text-gray-900 group-hover:text-fourth font-medium transition-colors">
-                                    {s.label}
-                                  </span>
-                                  {s.type === "related" && (
-                                    <span className="text-[10px] text-fourth/80 font-bold uppercase tracking-wider">
-                                      Related Search
-                                    </span>
-                                  )}
-                                  {s.type === "consultant" && (
-                                    <span className="text-[10px] text-fourth/80 font-bold uppercase tracking-wider">
-                                      Auto Consultant
-                                    </span>
-                                  )}
-                                </div>
+                  {/* Search Mega Menu Dropdown */}
+                  <div
+                    className={`absolute top-[120%] left-1/2 -translate-x-1/2 bg-white shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] border border-gray-100 rounded-3xl overflow-hidden
+                    transition-all duration-300 origin-top
+                    ${showDropdown ? "opacity-100 scale-y-100 translate-y-0" : "opacity-0 scale-y-95 -translate-y-2 pointer-events-none"}
+                    ${!searchQuery ? "w-[95vw] lg:w-[750px] xl:w-[900px] 2xl:w-[1000px] h-[420px] xl:h-[480px] 2xl:h-[520px]" : "w-[420px] xl:w-[520px] max-h-[350px]"}
+                    `}
+                  >
+                    {!searchQuery ? (
+                      /* Mega Menu Layout for Empty State (NEW DESIGN) */
+                      <div className="flex flex-col md:flex-row w-full h-full bg-white">
+                        {/* Left Side - Brands */}
+                        <div className="flex-[2.2] border-r border-gray-100 flex flex-col overflow-hidden shrink-0">
+                          <div className="p-5 pb-0 flex-1 overflow-y-auto scrollbar-hide relative">
+                            {/* Popular Brands Header */}
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center gap-2 text-fourth font-bold">
+                                <Flame className="w-4 h-4 text-fourth" />
+                                <span className="text-[13px]">Popular Brands</span>
                               </div>
-                            ))}
+
+                            </div>
+
+                            {/* Popular Brands Grid */}
+                            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-4">
+                              {apiBrandsList.slice(0, 6).map((brand, idx) => (
+                                <div
+                                  key={`popular-${idx}`}
+                                  onClick={() => {
+                                    push(`/search?brand=${encodeURIComponent(brand.makeName)}`);
+                                    setShowDropdown(false);
+                                  }}
+                                  className="flex flex-col items-center justify-center gap-1 p-1.5 rounded-xl border border-gray-100 cursor-pointer hover:border-fourth hover:shadow-sm transition-all group"
+                                >
+                                  {brand.logo ? (
+                                    <div className="h-9 w-12 flex items-center justify-center">
+                                      <img src={brand.logo} alt={brand.makeDisplay} className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform" />
+                                    </div>
+                                  ) : (
+                                    <div className="h-9 w-12 flex items-center justify-center bg-gray-50 rounded text-gray-400">
+                                      <CarFront className="w-4 h-4" />
+                                    </div>
+                                  )}
+                                  <span className="text-[10px] font-bold text-gray-900 text-center leading-tight transition-colors">{brand.makeDisplay}</span>
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* All Brands Header */}
+                            <div className="flex items-center gap-2 text-fourth font-bold mb-2">
+                              <CarFront className="w-4 h-4 text-fourth" />
+                              <span className="text-[13px]">All Brands</span>
+                            </div>
+
+                            {/* All Brands List */}
+                            <div className="flex flex-col pb-2">
+                              {apiBrandsList.map((brand, idx) => {
+                                const currentLetter = (brand.makeDisplay || brand.makeName || "A").charAt(0).toUpperCase();
+                                const prevLetter = idx > 0 ? (apiBrandsList[idx - 1].makeDisplay || apiBrandsList[idx - 1].makeName || "A").charAt(0).toUpperCase() : "";
+                                const showLetter = currentLetter !== prevLetter;
+
+                                return (
+                                  <div
+                                    key={`all-${idx}`}
+                                    onClick={() => {
+                                      push(`/search?brand=${encodeURIComponent(brand.makeName)}`);
+                                      setShowDropdown(false);
+                                    }}
+                                    className="flex items-center justify-between py-1 px-2 border-b border-gray-50 hover:bg-fourth/5 cursor-pointer group transition-colors"
+                                  >
+                                    <div className="flex items-center gap-3 flex-1">
+                                      {/* Letter indicator */}
+                                      <div className={`w-6 h-6 flex items-center justify-center text-[11px] font-bold rounded ${showLetter ? "bg-gray-100 text-gray-600" : "opacity-0"}`}>
+                                        {currentLetter}
+                                      </div>
+
+                                      {/* Brand Logo */}
+                                      {brand.logo ? (
+                                        <div className="w-9 h-9 flex items-center justify-center bg-white rounded-full border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)] p-1.5 shrink-0 group-hover:border-gray-300 transition-colors">
+                                          <img src={brand.logo} alt={brand.makeDisplay} className="max-w-full max-h-full object-contain" />
+                                        </div>
+                                      ) : (
+                                        <div className="w-9 h-9 flex items-center justify-center bg-gray-50 rounded-full text-gray-400 shrink-0">
+                                          <CarFront className="w-4 h-4" />
+                                        </div>
+                                      )}
+
+                                      {/* Brand Name */}
+                                      <span className="font-semibold text-gray-900 text-[13px] transition-colors">{brand.makeDisplay || brand.makeName}</span>
+                                    </div>
+
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-[11px] text-gray-400 font-medium group-hover:text-gray-600 transition-colors">Explore</span>
+                                      <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-600 transition-colors" />
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
                           </div>
                         </div>
-                      )}
 
-                      {filteredSuggestions.length === 0 && searchQuery && (
-                        <div className="p-8 text-center text-gray-400">
-                          <Search className="w-10 h-10 mx-auto mb-3 opacity-20" />
-                          <p className="text-sm">
-                            No results found for &quot;{searchQuery}&quot;
-                          </p>
+                        {/* Right Side - Recent & Trending */}
+                        <div className="flex-1 flex flex-col overflow-y-auto scrollbar-hide relative border-l border-gray-100/50">
+                          <div className="p-5 space-y-5 flex-1">
+                            {/* Recent Searches */}
+                            <div>
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-2 text-fourth font-bold">
+                                  <History className="w-4 h-4 text-fourth" />
+                                  <span className="text-[12px]">Recent Searches</span>
+                                </div>
+                                <button className="text-fourth text-[10px] font-semibold hover:text-fourth/80 cursor-pointer">Clear all</button>
+                              </div>
+                              <div className="flex flex-col gap-0.5">
+                                {['BMW', 'Hyundai', 'Tata Nexon', 'Maruti Swift', 'Mahindra Thar'].map((term, idx) => (
+                                  <div key={`recent-${idx}`} className="flex items-center gap-2 p-1.5 hover:bg-gray-50  cursor-pointer rounded-lg transition-all text-[11px] font-semibold text-gray-700">
+                                    <Clock className="w-3.5 h-3.5 text-gray-400" />
+                                    <span className="flex-1 truncate">{term}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Trending Brands */}
+                            <div>
+                              <div className="flex items-center gap-2 text-fourth font-bold mb-2">
+                                <TrendingUp className="w-4 h-4 text-fourth" />
+                                <span className="text-[12px]">Trending Brands</span>
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                {apiBrandsList.slice(0, 5).map((brand, idx) => (
+                                  <div key={`trending-${idx}`} onClick={() => { push(`/search?brand=${encodeURIComponent(brand.makeName)}`); setShowDropdown(false); }} className="flex items-center justify-between p-1.5 hover:bg-gray-50  cursor-pointer rounded-lg transition-all group">
+                                    <div className="flex items-center gap-3">
+                                      {brand.logo ? (
+                                        <div className="w-8 h-8 flex items-center justify-center p-1.5 bg-white rounded-full border border-gray-100 shadow-[0_2px_6px_rgba(0,0,0,0.03)] shrink-0 group-hover:border-gray-200 transition-colors">
+                                          <img src={brand.logo} alt={brand.makeDisplay} className="max-w-full max-h-full object-contain" />
+                                        </div>
+                                      ) : (
+                                        <div className="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm text-gray-400 shrink-0">
+                                          <CarFront className="w-4 h-4" />
+                                        </div>
+                                      )}
+                                      <span className="font-semibold text-gray-900 text-[12px] transition-colors">{brand.makeDisplay}</span>
+                                    </div>
+                                    <span className="text-[10px] text-gray-400 font-medium group-hover:text-gray-600 transition-colors">Explore</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      )}
-                    </div>
-                  )}
+                      </div>
+                    ) : (
+                      /* Suggestions Section for Active Search */
+                      <div className="w-full bg-white overflow-y-auto max-h-[350px] p-4 scrollbar-hide h-full">
+                        {filteredSuggestions.length > 0 && (
+                          <div className="mb-2">
+                            <div className="px-3 py-2 flex items-center justify-between">
+                              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                                {searchQuery ? "Suggestions" : "Trending Searches"}
+                              </span>
+                            </div>
+                            <div className="flex flex-col gap-0.5">
+                              {filteredSuggestions.map((s, idx) => (
+                                <div
+                                  key={s.id}
+                                  onClick={() => {
+                                    push(s.link);
+                                    setShowDropdown(false);
+                                    setSearchQuery(s.label);
+                                  }}
+                                  className={`group flex items-center gap-3 p-2 cursor-pointer text-sm transition-all duration-200 rounded-lg
+                                    ${selectedIndex === idx ? "bg-fourth/10 border-l-2 border-fourth pl-3" : "hover:bg-gray-50 pl-2"}`}
+                                >
+                                  <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-fourth/10 transition-colors shadow-sm">
+                                    {(() => {
+                                      if (s.type === "related") return <Search className="w-3.5 h-3.5 text-fourth" />;
+                                      if (s.type === "price") return <Tag className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
+                                      if (s.type === "location") return <MapPin className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
+                                      if (s.type === "brand" || s.type === "model") return <Car className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
+                                      if (s.type === "fuel") return <Fuel className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
+                                      if (s.type === "feature" || s.type === "bodyType") return <Zap className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
+                                      if (s.type === "popular") return <Star className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
+                                      if (s.type === "consultant") return <User className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
+                                      return <Search className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
+                                    })()}
+                                  </div>
+                                  <div className="flex flex-col">
+                                    <span className="text-gray-900 group-hover:text-fourth font-bold text-[12px] transition-colors">
+                                      {s.label}
+                                    </span>
+                                    {s.type === "related" && <span className="text-[9px] text-fourth/80 font-bold uppercase tracking-wider mt-0.5">Related Search</span>}
+                                    {s.type === "consultant" && <span className="text-[9px] text-fourth/80 font-bold uppercase tracking-wider mt-0.5">Auto Consultant</span>}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {filteredSuggestions.length === 0 && searchQuery && (
+                          <div className="p-6 text-center text-gray-400">
+                            <Search className="w-8 h-8 mx-auto mb-2 opacity-20" />
+                            <p className="text-[12px] font-medium">
+                              No results found for &quot;{searchQuery}&quot;
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             )}

@@ -173,7 +173,7 @@ export default function VehicleSpec({
       } else {
         toast.error(
           error?.response?.data?.message ||
-            "Failed to check inspection status.",
+          "Failed to check inspection status.",
         );
       }
     } finally {
@@ -232,13 +232,13 @@ export default function VehicleSpec({
       const payload =
         inspectionType === "video"
           ? {
-              inspectionType: "VIDEO_CALL_WITH_REPORT",
-              whatsappNumber: mobileNumber,
-              videoCallScheduledAt: formatLocalDateTime(
-                inspectionDate,
-                inspectionTime,
-              ),
-            }
+            inspectionType: "VIDEO_CALL_WITH_REPORT",
+            whatsappNumber: mobileNumber,
+            videoCallScheduledAt: formatLocalDateTime(
+              inspectionDate,
+              inspectionTime,
+            ),
+          }
           : { inspectionType: "REPORT_ONLY" };
       const response = await createInpection(vehicle.id, payload);
       if (response?.success) {
@@ -414,9 +414,8 @@ export default function VehicleSpec({
           <div className="text-xl">
             <ChevronDown
               size={20}
-              className={`transition-transform duration-300 ${
-                open ? "rotate-180" : "rotate-0"
-              }`}
+              className={`transition-transform duration-300 ${open ? "rotate-180" : "rotate-0"
+                }`}
             />
           </div>
         </div>
@@ -483,11 +482,10 @@ export default function VehicleSpec({
                           className={`
         flex items-start gap-3 p-4 rounded-xl border cursor-pointer
         transition-all
-        ${
-          inspectionType === "report"
-            ? "border-primary bg-primary/5"
-            : "border-third/40 hover:bg-secondary/80"
-        }
+        ${inspectionType === "report"
+                              ? "border-primary bg-primary/5"
+                              : "border-third/40 hover:bg-secondary/80"
+                            }
       `}
                         >
                           <input
@@ -516,11 +514,10 @@ export default function VehicleSpec({
                           className={`
         flex items-start gap-3 p-4 rounded-xl border cursor-pointer
         transition-all
-        ${
-          inspectionType === "video"
-            ? "border-primary bg-primary/5"
-            : "border-third/40 hover:bg-secondary/80"
-        }
+        ${inspectionType === "video"
+                              ? "border-primary bg-primary/5"
+                              : "border-third/40 hover:bg-secondary/80"
+                            }
       `}
                         >
                           <input
@@ -630,7 +627,7 @@ export default function VehicleSpec({
       </div>
       {/* ================= MODAL ================= */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center">
           {/* Backdrop */}
           <div
             className={`
@@ -652,11 +649,10 @@ export default function VehicleSpec({
         bg-secondary overflow-hidden text-primary
         border border-third/50 shadow-2xl
         transition-all duration-300 ease-out
-        ${
-          animateModal
-            ? "opacity-100 scale-100 translate-y-0"
-            : "opacity-0 scale-95 translate-y-4"
-        }
+        ${animateModal
+                ? "opacity-100 scale-100 translate-y-0"
+                : "opacity-0 scale-95 translate-y-4"
+              }
       `}
           >
             {/* CLOSE */}
@@ -672,7 +668,7 @@ export default function VehicleSpec({
               <Image
                 width={500}
                 height={500}
-                src="/bg.jpg"
+                src="/payment.webp"
                 alt="reecomm-payment"
                 className="w-full h-full object-cover"
               />
@@ -713,32 +709,32 @@ export default function VehicleSpec({
                       <span className="text-third">Inspection Type</span>
                       <span className="font-semibold">
                         {existingInspection.inspectionType ===
-                        "VIDEO_CALL_WITH_REPORT"
+                          "VIDEO_CALL_WITH_REPORT"
                           ? "Video Call + Report"
                           : "Report Only"}
                       </span>
                     </div>
                     {existingInspection.inspectionType ===
                       "VIDEO_CALL_WITH_REPORT" && (
-                      <>
-                        <div className="flex justify-between items-center text-sm">
-                          <span className="text-third">WhatsApp Number</span>
-                          <span className="font-semibold">
-                            {existingInspection.whatsappNumber}
-                          </span>
-                        </div>
-                        {existingInspection.videoCallScheduledAt && (
+                        <>
                           <div className="flex justify-between items-center text-sm">
-                            <span className="text-third">Scheduled At</span>
+                            <span className="text-third">WhatsApp Number</span>
                             <span className="font-semibold">
-                              {new Date(existingInspection.videoCallScheduledAt)
-                                .toLocaleDateString("en-GB")
-                                .replace(/\//g, "/")}
+                              {existingInspection.whatsappNumber}
                             </span>
                           </div>
-                        )}
-                      </>
-                    )}
+                          {existingInspection.videoCallScheduledAt && (
+                            <div className="flex justify-between items-center text-sm">
+                              <span className="text-third">Scheduled At</span>
+                              <span className="font-semibold">
+                                {new Date(existingInspection.videoCallScheduledAt)
+                                  .toLocaleDateString("en-GB")
+                                  .replace(/\//g, "/")}
+                              </span>
+                            </div>
+                          )}
+                        </>
+                      )}
                     <div className="flex justify-between items-center text-sm">
                       <span className="text-third">Status</span>
                       <span className="px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400 font-medium text-xs">
