@@ -590,7 +590,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                 className="absolute left-1/2 -translate-x-1/2 hidden lg:flex z-50"
               >
                 {/* Search Bar Container */}
-                <div className="relative flex items-center h-[52px] w-[450px] xl:w-[600px] rounded-full bg-gray-100 border border-gray-200/80 focus-within:border-gray-300 focus-within:shadow-sm transition-all duration-300 group">
+                <div className="relative flex items-center h-[52px] w-[600px] rounded-full bg-gray-100 border border-gray-200/80 focus-within:border-gray-300 focus-within:shadow-sm transition-all duration-300 group">
 
                   {/* Search Input */}
                   <div className="flex-1 flex items-center h-full relative pl-2">
@@ -654,7 +654,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                           setSearchQuery('');
                           setSelectedIndex(-1);
                         }}
-                        className="mr-2 p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors absolute right-0 cursor"
+                        className="mr-2 p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors absolute right-0 cursor-pointer"
                       >
                         <X className="w-3.5 h-3.5" />
                       </button>
@@ -690,8 +690,9 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                     className={`absolute top-[120%] left-1/2 -translate-x-1/2 bg-white shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] border border-gray-100 rounded-3xl overflow-hidden
                     transition-all duration-300 origin-top
                     ${showDropdown ? "opacity-100 scale-y-100 translate-y-0" : "opacity-0 scale-y-95 -translate-y-2 pointer-events-none"}
-                    ${!searchQuery ? "w-[95vw] lg:w-[750px] xl:w-[900px] 2xl:w-[1000px] h-[420px] xl:h-[480px] 2xl:h-[520px]" : "w-[420px] xl:w-[520px] max-h-[350px]"}
+                    ${!searchQuery ? "h-[480px]" : "max-h-[400px]"}
                     `}
+                    style={{ width: !searchQuery ? '1000px' : '600px', maxWidth: '95vw' }}
                   >
                     {!searchQuery ? (
                       /* Mega Menu Layout for Empty State (NEW DESIGN) */
