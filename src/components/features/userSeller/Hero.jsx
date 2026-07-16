@@ -7,6 +7,7 @@ import DetailsFromPopup from "@/components/features/userSeller/DetailsFromPopup"
 import { useAuthStore } from "@/stores/useAuthStore";
 import LoginPopup from "@/components/auth/LoginPopup";
 import SignupPopup from "@/components/auth/SignupPopup";
+import { getBecameSeller } from "@/services/user.service";
 
 const TRUST_BADGES = [
   { value: "4,300+", label: "Active Listings" },
@@ -32,6 +33,7 @@ function Hero() {
   const [signupPopup, setSignupPopup] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [role, setRole] = useState(null);
+  const [checkingStatus, setCheckingStatus] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 100);
@@ -55,13 +57,7 @@ function Hero() {
     }
   }, [isLoggedIn, user]);
 
-  const handleStartSelling = () => {
-    if (!isLoggedIn) {
-      setLoginPopup(true);
-      return;
-    }
-
-    // Go to localStorage to check what is the role
+  const checkSellerStatusAndProceed = async () => {
     let currentRole = null;
     if (typeof window !== "undefined") {
       try {
@@ -71,51 +67,51 @@ function Hero() {
           currentRole = parsed?.userRole;
         }
       } catch (err) {
-        console.error("Failed to parse user role on button click:", err);
+        console.error("Failed to parse user role:", err);
       }
     }
 
     const finalRole = currentRole || user?.userRole;
 
     if (finalRole === "CONSULTATION") {
-      // Hide the button or do nothing (normally hidden)
       return;
     }
 
-    if (finalRole === "USER_SELLER") {
-      router.push("/user/details/inventory");
-    } else if (finalRole === "USER_SELLER_APPLICANT") {
-      router.push("/user/details/myprofile");
-    } else {
+    try {
+      setCheckingStatus(true);
+      const res = await getBecameSeller();
+      const status = res?.data?.verificationStatus;
+
+      if (
+        status === "REQUESTED" ||
+        status === "VERIFIED" ||
+        status === "REJECTED" ||
+        status === "REQUEST_CHANGES" ||
+        status === "APPROVED" ||
+        status === "ACCEPTED"
+      ) {
+        router.push("/user/details/myprofile");
+      } else {
+        setOpen(true);
+      }
+    } catch (err) {
+      // 404 or any other error -> open the registration popup
       setOpen(true);
+    } finally {
+      setCheckingStatus(false);
     }
   };
 
+  const handleStartSelling = () => {
+    if (!isLoggedIn) {
+      setLoginPopup(true);
+      return;
+    }
+    checkSellerStatusAndProceed();
+  };
+
   const handleLoginSuccess = () => {
-    let currentRole = null;
-    if (typeof window !== "undefined") {
-      try {
-        const savedUser = localStorage.getItem("user");
-        if (savedUser) {
-          const parsed = JSON.parse(savedUser);
-          currentRole = parsed?.userRole;
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    const finalRole = currentRole || user?.userRole;
-
-    if (finalRole === "USER_SELLER") {
-      router.push("/user/details/inventory");
-    } else if (finalRole === "USER_SELLER_APPLICANT") {
-      router.push("/user/details/myprofile");
-    } else if (finalRole === "CONSULTATION") {
-      // Consultant - button will disappear, no popup
-    } else {
-      setOpen(true);
-    }
+    checkSellerStatusAndProceed();
   };
 
   return (
@@ -181,7 +177,7 @@ function Hero() {
               }`}
           >
             {!(mounted && isLoggedIn && role === "CONSULTATION") && (
-              <Button variant="ghost" size="md" onClick={handleStartSelling}>
+              <Button variant="ghost" size="md" onClick={handleStartSelling} loading={checkingStatus}>
                 Start Selling
               </Button>
             )}

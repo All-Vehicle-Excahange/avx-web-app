@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Button from "@/components/ui/button";
 import InputField from "@/components/ui/inputField";
 import {
@@ -24,6 +25,9 @@ import {
   Map,
   SquarePen,
   Plus,
+  CreditCard,
+  Fingerprint,
+  Briefcase,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { ProfileSkeleton } from "@/components/ui/skeleton";
@@ -47,6 +51,7 @@ function MyProfile() {
   const [isEditingMeta, setIsEditingMeta] = useState(false);
   const [isCreatingMeta, setIsCreatingMeta] = useState(false);
   const [isSellerPopupOpen, setIsSellerPopupOpen] = useState(false);
+  const [isSellerPopupViewOnly, setIsSellerPopupViewOnly] = useState(false);
 
   const [profileForm, setProfileForm] = useState({});
   const [metaForm, setMetaForm] = useState({});
@@ -306,6 +311,11 @@ function MyProfile() {
     try {
       setMetaErrors({});
 
+      if (metaForm.profession && /[0-9]/.test(metaForm.profession)) {
+        setMetaErrors({ profession: "Profession cannot contain numbers." });
+        return;
+      }
+
       const payload = {};
 
       const addIfChanged = (key, newValue, oldValue) => {
@@ -560,12 +570,31 @@ function MyProfile() {
                   {sellerData.verificationStatus === "REQUEST_CHANGES" && (
                     <div className="flex justify-end pt-2">
                       <Button
-                        onClick={() => setIsSellerPopupOpen(true)}
+                        onClick={() => {
+                          setIsSellerPopupViewOnly(false);
+                          setIsSellerPopupOpen(true);
+                        }}
                         variant="ghost"
                         size="sm"
                         className="gap-2"
                       >
                         Edit & Re-submit
+                      </Button>
+                    </div>
+                  )}
+
+                  {sellerData.verificationStatus === "REJECTED" && (
+                    <div className="flex justify-end pt-2">
+                      <Button
+                        onClick={() => {
+                          setIsSellerPopupViewOnly(true);
+                          setIsSellerPopupOpen(true);
+                        }}
+                        variant="ghost"
+                        size="sm"
+                        className="gap-2"
+                      >
+                        View Application
                       </Button>
                     </div>
                   )}
@@ -706,13 +735,29 @@ function MyProfile() {
 
                 {/* Footer */}
                 {sellerData.verificationStatus !== "REJECTED" && (
-                  <div className="pt-6 border-t border-third/10 flex items-center justify-between text-sm">
-                    <span className="text-third font-medium tracking-tight">
-                      Estimated Review Time
-                    </span>
-                    <span className="text-primary font-black uppercase text-lg">
-                      24 – 48 Hours
-                    </span>
+                  <div className="pt-6 border-t border-third/10 flex items-center justify-between text-sm flex-wrap gap-4">
+                    <div className="flex flex-col">
+                      <span className="text-third font-medium tracking-tight text-xs">
+                        Estimated Review Time
+                      </span>
+                      <span className="text-primary font-black uppercase text-lg mt-0.5">
+                        24 – 48 Hours
+                      </span>
+                    </div>
+
+                    {sellerData.verificationStatus === "REQUESTED" && (
+                      <Button
+                        onClick={() => {
+                          setIsSellerPopupViewOnly(true);
+                          setIsSellerPopupOpen(true);
+                        }}
+                        variant="ghost"
+                        size="sm"
+                        className="gap-2"
+                      >
+                        View Application
+                      </Button>
+                    )}
                   </div>
                 )}
               </div>
@@ -838,24 +883,13 @@ function MyProfile() {
                   Cancel
                 </Button>
 
-                <button
+                <Button
+                  variant="ghost"
                   disabled={!isProfileFormValid}
                   onClick={handleSaveProfile}
-                  className={`flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-bold transition-all duration-300 text-sm hover:cursor-pointer
-                    ${!isProfileFormValid
-                      ? "bg-white/10 text-white/40 border border-white/5 cursor-not-allowed"
-                      : "bg-fourth text-white border border-fourth hover:bg-transparent hover:text-fourth shadow-[0_4px_12px_rgba(0,123,255,0.2)]"
-                    }`}
                 >
-                  {!isProfileFormValid ? (
-                    <>
-                      <Lock size={16} />
-                      Locked
-                    </>
-                  ) : (
-                    "Save Changes"
-                  )}
-                </button>
+                  Save Changes
+                </Button>
               </div>
             </>
           )}
@@ -890,6 +924,7 @@ function MyProfile() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
               <ProfileItem label="Age" value={profileMetaData.age} icon={Calendar} />
               <ProfileItem label="Gender" value={profileMetaData.gender} icon={User} />
+              <ProfileItem label="Profession" value={profileMetaData.profession} icon={Briefcase} />
               <ProfileItem label="City" value={profileMetaData.city?.name} icon={MapPin} />
               <ProfileItem label="State" value={profileMetaData.state?.name} icon={Map} />
               <ProfileItem label="Town" value={profileMetaData.town?.name} icon={MapPin} />
@@ -963,7 +998,8 @@ function MyProfile() {
                     variant="colored"
                     value={metaForm.profession || ""}
                     onChange={(e) => {
-                      setMetaForm({ ...metaForm, profession: e.target.value });
+                      const cleanVal = e.target.value.replace(/[0-9]/g, "");
+                      setMetaForm({ ...metaForm, profession: cleanVal });
                       if (metaErrors.profession) {
                         setMetaErrors((prev) => ({ ...prev, profession: "" }));
                       }
@@ -1095,29 +1131,119 @@ function MyProfile() {
                   Cancel
                 </Button>
 
-                <button
+                <Button
+                  variant="ghost"
                   disabled={!isMetaFormValid}
                   onClick={handleSaveMeta}
-                  className={`flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-bold transition-all duration-300 text-sm hover:cursor-pointer
-                    ${!isMetaFormValid
-                      ? "bg-white/10 text-white/40 border border-white/5 cursor-not-allowed"
-                      : "bg-fourth text-white border border-fourth hover:bg-transparent hover:text-fourth shadow-[0_4px_12px_rgba(0,123,255,0.2)]"
-                    }`}
                 >
                   {isCreatingMeta ? "Complete Profile" : "Save Changes"}
-                </button>
+                </Button>
               </div>
             </>
           )}
         </div>
+
+        {sellerData && sellerData.verificationStatus === "VERIFIED" && (
+          <div className="lg:col-span-2 bg-third/5 rounded-3xl border border-white/10 p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.37)] text-white/60 transition-all duration-300 relative group overflow-hidden">
+            <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white border border-white/10">
+                  <ShieldCheck size={20} className="text-emerald-500" />
+                </div>
+                <h2 className="text-xl font-bold text-primary tracking-tight">Seller Verification Documents</h2>
+              </div>
+              <div className="px-3 py-1 bg-green-500/10 border border-green-500/20 text-green-500 text-xs font-bold rounded-full">
+                VERIFIED SELLER
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
+              {/* PAN Card Section */}
+              {sellerData.panCardNumber && (
+                <div className="space-y-4 border-r border-white/5 pr-0 md:pr-8">
+                  <h3 className="font-bold text-primary text-base flex items-center gap-2">
+                    <CreditCard size={18} className="text-third" />
+                    PAN Card Details
+                  </h3>
+                  <div className="flex flex-col gap-1 py-2 px-1">
+                    <span className="text-xs text-third font-medium capitalize tracking-wide">PAN Card Number</span>
+                    <span className="font-semibold text-primary text-[15px] break-all">{sellerData.panCardNumber}</span>
+                  </div>
+                  {sellerData.panCardFrontUrl && (
+                    <div className="flex flex-col gap-2">
+                      <span className="text-xs text-third font-medium capitalize tracking-wide">PAN Front Photo</span>
+                      <div className="relative w-full max-w-sm h-48 rounded-lg overflow-hidden bg-black/5 border border-white/5">
+                        <Image
+                          src={sellerData.panCardFrontUrl}
+                          alt="PAN Card Front"
+                          fill
+                          className="object-contain p-2"
+                          unoptimized
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Aadhaar Card Section */}
+              {sellerData.aadharCardNumber && (
+                <div className="space-y-4">
+                  <h3 className="font-bold text-primary text-base flex items-center gap-2">
+                    <Fingerprint size={18} className="text-third" />
+                    Aadhaar Card Details
+                  </h3>
+                  <div className="flex flex-col gap-1 py-2 px-1">
+                    <span className="text-xs text-third font-medium capitalize tracking-wide">Aadhaar Card Number</span>
+                    <span className="font-semibold text-primary text-[15px] break-all">
+                      {sellerData.aadharCardNumber.replace(/(\d{4})(?=\d)/g, "$1-")}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {sellerData.aadharCardFrontUrl && (
+                      <div className="flex flex-col gap-2">
+                        <span className="text-xs text-third font-medium capitalize tracking-wide">Aadhaar Front Photo</span>
+                        <div className="relative w-full h-36 rounded-lg overflow-hidden bg-black/5 border border-white/5">
+                          <Image
+                            src={sellerData.aadharCardFrontUrl}
+                            alt="Aadhaar Front"
+                            fill
+                            className="object-contain p-2"
+                            unoptimized
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {sellerData.aadharCardBackUrl && (
+                      <div className="flex flex-col gap-2">
+                        <span className="text-xs text-third font-medium capitalize tracking-wide">Aadhaar Back Photo</span>
+                        <div className="relative w-full h-36 rounded-lg overflow-hidden bg-black/5 border border-white/5">
+                          <Image
+                            src={sellerData.aadharCardBackUrl}
+                            alt="Aadhaar Back"
+                            fill
+                            className="object-contain p-2"
+                            unoptimized
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
       <DetailsFromPopup
         isOpen={isSellerPopupOpen}
         onClose={() => {
           setIsSellerPopupOpen(false);
+          setIsSellerPopupViewOnly(false);
           queryClient.invalidateQueries({ queryKey: ["user-became-seller"] });
         }}
         existing={sellerData}
+        viewOnly={isSellerPopupViewOnly}
       />
     </section>
   );
