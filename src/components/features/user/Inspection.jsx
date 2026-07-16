@@ -19,6 +19,7 @@ import {
 
 function Inspection() {
   const router = useRouter();
+  const user = useAuthStore((state) => state.user);
   const [activeTab, setActiveTab] = useState("sent");
   const [localStatuses, setLocalStatuses] = useState({});
   const [selectedInspection, setSelectedInspection] = useState(null);
@@ -26,9 +27,13 @@ function Inspection() {
 
   React.useEffect(() => {
     if (router.query.tab) {
-      setActiveTab(router.query.tab);
+      if (router.query.tab === "received" && user?.userRole !== "USER_SELLER") {
+        setActiveTab("sent");
+      } else {
+        setActiveTab(router.query.tab);
+      }
     }
-  }, [router.query.tab]);
+  }, [router.query.tab, user?.userRole]);
 
   const handleOpenTracking = (item) => {
     setSelectedInspection(item);
@@ -41,8 +46,6 @@ function Inspection() {
       setSelectedInspection(null);
     }, 300);
   };
-
-  const user = useAuthStore((state) => state.user);
 
   // Sent Inspections Query
   const {
@@ -143,7 +146,7 @@ function Inspection() {
             { id: "received", label: "Received Inspection Requests" },
           ].filter(tab => {
             if (tab.id === "received") {
-              return user?.userRole === "USER_SELLER" || user?.userRole === "CONSULTATION";
+              return user?.userRole === "USER_SELLER";
             }
             return true;
           })
