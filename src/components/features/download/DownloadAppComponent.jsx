@@ -168,13 +168,11 @@ function DownloadAppComponent() {
     <div className="bg-transparent min-h-screen text-primary font-[Poppins] overflow-hidden">
       {/* SECTION 1 — HERO */}
       <section className="relative py-20 lg:py-28 overflow-hidden bg-transparent">
-        {/* Decorative corner glows */}
-        <div className="absolute top-0 left-0 -z-10 w-[400px] h-[400px] rounded-full bg-fourth/5 blur-[120px] pointer-events-none" />
         <div className="container mx-auto px-6 max-w-7xl relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             {/* Left Column: Mockup Image with pulsating radial glow */}
             <div className="lg:col-span-5 relative flex justify-center items-center">
-              <div className="absolute -z-10 w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] rounded-full bg-fourth/15 blur-[100px] opacity-75 animate-pulse pointer-events-none" />
+              <div className="absolute -z-10 w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] rounded-full  blur-[100px] opacity-75 animate-pulse pointer-events-none" />
               <Image
                 src="/moblie_app_banner.gif"
                 width={420}
@@ -187,9 +185,7 @@ function DownloadAppComponent() {
 
             {/* Right Column: Copy */}
             <div className="lg:col-span-7 flex flex-col items-start text-left space-y-6">
-              <span className="px-4 py-1.5 bg-fourth/10 border border-fourth/20 text-fourth text-xs font-bold rounded-full uppercase tracking-wider select-none">
-                Reecomm Mobile App
-              </span>
+              
               <h1 className="text-4xl sm:text-6xl font-black leading-[1.08] tracking-tight text-primary font-[Montserrat]">
                 Chat. Track. Manage. <br />
                 <span className="text-fourth drop-shadow-[0_2px_10px_rgba(0,123,255,0.15)]">

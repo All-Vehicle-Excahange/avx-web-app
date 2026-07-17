@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import {
-  MailOpen,
-  X,
-} from "lucide-react";
+import { MailOpen, X } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { getAllNotifications } from "@/services/notification.service";
@@ -19,21 +16,21 @@ const NotificationItem = ({ data, onClick }) => {
     >
       {/* Content */}
       <div className="flex-1 pr-5">
-        <div className="flex items-center gap-2 mb-0.5">
+        <div className="flex items-start justify-between gap-2 mb-0.5">
           <h3 className="text-[13px] font-semibold text-primary leading-snug">
             {data.title || "Notification"}
           </h3>
+          <span className="shrink-0 text-[11px] font-medium text-third/60">
+            {data.sentAt
+              ? new Date(data.sentAt).toLocaleDateString()
+              : data.time ||
+                new Date(data.createdAt).toLocaleDateString() ||
+                "Just now"}
+          </span>
         </div>
         <p className="text-[12px] text-primary/60 leading-snug mb-1">
           {data.body || data.content || data.message}
         </p>
-        <span className="text-[11px] font-medium text-third/60">
-          {data.sentAt
-            ? new Date(data.sentAt).toLocaleDateString()
-            : data.time ||
-            new Date(data.createdAt).toLocaleDateString() ||
-            "Just now"}
-        </span>
       </div>
 
       {/* Unread Dot */}
@@ -144,7 +141,8 @@ export default function NotificationsComponent({
   };
 
   const handleNotificationClick = async (data) => {
-    const isUnread = data.read === false || data.unread === true || data.isRead === false;
+    const isUnread =
+      data.read === false || data.unread === true || data.isRead === false;
     if (isUnread) {
       handleMarkAsRead(data.id || data._id);
     }
@@ -190,8 +188,9 @@ export default function NotificationsComponent({
 
       {/* Slide-out panel */}
       <div
-        className={`fixed top-16 left-0 md:left-16 h-[calc(100vh-64px)] w-full max-w-sm bg-secondary border-r border-third/30 z-60 shadow-[4px_0_24px_rgba(0,0,0,0.5)] md:rounded-r-2xl transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full md:-translate-x-[150%]"
-          }`}
+        className={`fixed top-16 left-0 md:left-16 h-[calc(100vh-64px)] w-full max-w-sm bg-secondary border-r border-third/30 z-60 shadow-[4px_0_24px_rgba(0,0,0,0.5)] md:rounded-r-2xl transition-transform duration-300 ease-in-out ${
+          isOpen ? "translate-x-0" : "-translate-x-full md:-translate-x-[150%]"
+        }`}
       >
         <div
           ref={containerRef}

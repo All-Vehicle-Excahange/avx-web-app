@@ -47,6 +47,24 @@ import {
 function MyProfile() {
   const queryClient = useQueryClient();
 
+  const invalidateAllUserQueries = () => {
+    queryClient.invalidateQueries({ queryKey: ["user-profile"] });
+    queryClient.invalidateQueries({ queryKey: ["user-profile-meta"] });
+    queryClient.invalidateQueries({ queryKey: ["user-profile-strength"] });
+    queryClient.invalidateQueries({ queryKey: ["user-meta-exists"] });
+    queryClient.invalidateQueries({ queryKey: ["user-became-seller"] });
+    queryClient.invalidateQueries({ queryKey: ["user-seller-suspend"] });
+    queryClient.invalidateQueries({ queryKey: ["user-wishlist-infinite"] });
+    queryClient.invalidateQueries({ queryKey: ["user-followed-consultants-infinite"] });
+    queryClient.invalidateQueries({ queryKey: ["user-preferences"] });
+    queryClient.invalidateQueries({ queryKey: ["my-inquiries-infinite"] });
+    queryClient.invalidateQueries({ queryKey: ["inquiries-infinite"] });
+    queryClient.invalidateQueries({ queryKey: ["seller-inventory-infinite"] });
+    queryClient.invalidateQueries({ queryKey: ["seller-suspended-vehicles-infinite"] });
+    queryClient.invalidateQueries({ queryKey: ["all-requested-inspection-infinite"] });
+    queryClient.invalidateQueries({ queryKey: ["all-inspection-request-infinite"] });
+  };
+
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [isEditingMeta, setIsEditingMeta] = useState(false);
   const [isCreatingMeta, setIsCreatingMeta] = useState(false);
@@ -83,9 +101,13 @@ function MyProfile() {
   const { data: suspendRes, isLoading: isLoadingSuspend } = useQuery(
     getUserSellerSuspendQuery(),
   );
-  const { data: sellerRes, isLoading: isLoadingSeller } = useQuery(
-    getBecameSellerQuery(),
-  );
+  const userRole = profileRes?.data?.userRole;
+  const isSellerOrApplicant = userRole === "USER_SELLER" || userRole === "USER_SELLER_APPLICANT";
+
+  const { data: sellerRes, isLoading: isLoadingSeller } = useQuery({
+    ...getBecameSellerQuery(),
+    enabled: !!userRole && isSellerOrApplicant,
+  });
   const { data: statesRes, isLoading: isLoadingStates } =
     useQuery(getStatesQuery());
 
@@ -274,8 +296,7 @@ function MyProfile() {
       };
 
       await updateuserProfile(payload);
-      queryClient.invalidateQueries({ queryKey: ["user-profile"] });
-      queryClient.invalidateQueries({ queryKey: ["user-profile-strength"] });
+      invalidateAllUserQueries();
 
       setIsEditingProfile(false);
     } catch (error) {
@@ -366,12 +387,10 @@ function MyProfile() {
       // Call create or update based on isCreatingMeta
       if (isCreatingMeta) {
         await createUserMeta(payload);
-        queryClient.invalidateQueries({ queryKey: ["user-meta-exists"] });
       } else {
         await updateuserProfileMeta(payload);
       }
-      queryClient.invalidateQueries({ queryKey: ["user-profile-meta"] });
-      queryClient.invalidateQueries({ queryKey: ["user-profile-strength"] });
+      invalidateAllUserQueries();
 
       setIsEditingMeta(false);
       setIsCreatingMeta(false);
@@ -1240,7 +1259,7 @@ function MyProfile() {
         onClose={() => {
           setIsSellerPopupOpen(false);
           setIsSellerPopupViewOnly(false);
-          queryClient.invalidateQueries({ queryKey: ["user-became-seller"] });
+          invalidateAllUserQueries();
         }}
         existing={sellerData}
         viewOnly={isSellerPopupViewOnly}
