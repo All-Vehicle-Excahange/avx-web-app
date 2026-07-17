@@ -429,6 +429,7 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
                   <InputField
                     label="PAN Card Number"
                     variant="colored"
+                    placeholder="Enter PAN Number"
                     value={form.panCardNumber}
                     readOnly={viewOnly}
                     onChange={(e) =>
@@ -492,6 +493,7 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
                   <InputField
                     label="Aadhaar Card Number"
                     variant="colored"
+                    placeholder="Enter Aadhaar Number"
                     value={form.aadharCardNumber}
                     readOnly={viewOnly}
                     onChange={(e) =>
