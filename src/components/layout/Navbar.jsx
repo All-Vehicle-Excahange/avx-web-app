@@ -98,6 +98,13 @@ const MAKER_NAME_MAPPING = {
   64: "PMV",
 };
 
+// Global cache to prevent multiple API calls across remounts
+let globalSuggestionsData = [];
+let globalBrandsList = [];
+let globalApiBrandsList = [];
+let isGlobalSuggestionsLoaded = false;
+let globalLoadPromise = null;
+
 export default function Navbar({ heroMode = false, scrolled = false, insideDrawer = false, onClose = () => { } }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
@@ -191,82 +198,110 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
   const [suggestionsData, setSuggestionsData] = useState([]);
   const [brandsList, setBrandsList] = useState([]);
   const [apiBrandsList, setApiBrandsList] = useState([]);
-  const [isSuggestionsLoaded, setIsSuggestionsLoaded] = useState(false);
+  const [isSuggestionsLoaded, setIsSuggestionsLoaded] = useState(isGlobalSuggestionsLoaded);
 
   const loadSuggestions = async () => {
-    if (isSuggestionsLoaded) return;
-    try {
-      const data = await import("@/data/searchSuggestions.json");
-      const rawSuggestions = data.default || data;
-      const loadedSuggestions = rawSuggestions.map((s) => {
-        if (s.type === "brand" || s.type === "model") {
-          const prefix = s.label.toLowerCase().startsWith("used") ? "" : "Used ";
-          return { ...s, rawLabel: s.label, label: `${prefix}${s.label}` };
-        }
-        return s;
-      });
-
-      // Dynamically fetch registered auto consultants / storefronts
-      let consultantsList = [];
-      try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.reecomm.online/api/v1/website";
-        const cleanApiUrl = apiUrl.replace(/\/$/, "");
-        const consultRes = await fetch(`${cleanApiUrl}/homefeed/consultations/seo?pageNo=1&size=100`);
-        if (consultRes.ok) {
-          const consultData = await consultRes.json();
-          if (consultData?.data && Array.isArray(consultData.data)) {
-            consultantsList = consultData.data.map((store) => ({
-              id: `consult-${store.id}`,
-              label: store.consultationName || store.username || "",
-              username: store.username || "",
-              type: "consultant",
-              link: `/auto-consultant/${store.username}`,
-            })).filter((c) => c.label && c.username);
-          }
-        }
-      } catch (err) {
-        console.error("Failed to load storefront/consultants list in suggestions", err);
-      }
-
-      setSuggestionsData([...loadedSuggestions, ...consultantsList]);
-
-      const rawBrands = loadedSuggestions.reduce((acc, s) => {
-        const originalLabel = s.rawLabel || s.label;
-        if (s.type === "brand") acc.push(originalLabel);
-        if (s.brand) acc.push(s.brand);
-        if (s.makerId && MAKER_NAME_MAPPING[s.makerId])
-          acc.push(MAKER_NAME_MAPPING[s.makerId]);
-        return acc;
-      }, []);
-
-      const bMap = new Map();
-      rawBrands.forEach((b) => {
-        const normalized = b.toLowerCase();
-        if (normalized === "kia") bMap.set("kia", "Kia");
-        else if (normalized === "mercedes benz" || normalized === "mercedes")
-          bMap.set("mercedes", "Mercedes Benz");
-        else if (!bMap.has(normalized)) bMap.set(normalized, b);
-      });
-
-      setBrandsList(Array.from(bMap.values()).sort());
-
-      // Fetch brands from API for logos
-      try {
-        const makersRes = await getAndSearchMakers({ page: 1, limit: 100 });
-        if (makersRes?.data && Array.isArray(makersRes.data)) {
-          // Sort alphabetically by makeDisplay
-          const sortedMakers = makersRes.data.sort((a, b) =>
-            (a.makeDisplay || a.makeName || "").localeCompare(b.makeDisplay || b.makeName || "")
-          );
-          setApiBrandsList(sortedMakers);
-        }
-      } catch (err) {
-        console.error("Failed to load makers API", err);
-      }
-
+    if (isSuggestionsLoaded || isGlobalSuggestionsLoaded) {
+      if (suggestionsData.length === 0) setSuggestionsData(globalSuggestionsData);
+      if (brandsList.length === 0) setBrandsList(globalBrandsList);
+      if (apiBrandsList.length === 0) setApiBrandsList(globalApiBrandsList);
       setIsSuggestionsLoaded(true);
-    } catch (e) {
-      console.error("Failed to load search suggestions", e);
+      return;
+    }
+
+    if (globalLoadPromise) {
+      await globalLoadPromise;
+      if (isGlobalSuggestionsLoaded) {
+        setSuggestionsData(globalSuggestionsData);
+        setBrandsList(globalBrandsList);
+        setApiBrandsList(globalApiBrandsList);
+        setIsSuggestionsLoaded(true);
+      }
+      return;
+    }
+
+    globalLoadPromise = (async () => {
+      try {
+        const data = await import("@/data/searchSuggestions.json");
+        const rawSuggestions = data.default || data;
+        const loadedSuggestions = rawSuggestions.map((s) => {
+          if (s.type === "brand" || s.type === "model") {
+            const prefix = s.label.toLowerCase().startsWith("used") ? "" : "Used ";
+            return { ...s, rawLabel: s.label, label: `${prefix}${s.label}` };
+          }
+          return s;
+        });
+
+        // Dynamically fetch registered auto consultants / storefronts
+        let consultantsList = [];
+        try {
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.reecomm.online/api/v1/website";
+          const cleanApiUrl = apiUrl.replace(/\/$/, "");
+          const consultRes = await fetch(`${cleanApiUrl}/homefeed/consultations/seo?pageNo=1&size=100`);
+          if (consultRes.ok) {
+            const consultData = await consultRes.json();
+            if (consultData?.data && Array.isArray(consultData.data)) {
+              consultantsList = consultData.data.map((store) => ({
+                id: `consult-${store.id}`,
+                label: store.consultationName || store.username || "",
+                username: store.username || "",
+                type: "consultant",
+                link: `/auto-consultant/${store.username}`,
+              })).filter((c) => c.label && c.username);
+            }
+          }
+        } catch (err) {
+          console.error("Failed to load storefront/consultants list in suggestions", err);
+        }
+
+        globalSuggestionsData = [...loadedSuggestions, ...consultantsList];
+
+        const rawBrands = loadedSuggestions.reduce((acc, s) => {
+          const originalLabel = s.rawLabel || s.label;
+          if (s.type === "brand") acc.push(originalLabel);
+          if (s.brand) acc.push(s.brand);
+          if (s.makerId && MAKER_NAME_MAPPING[s.makerId])
+            acc.push(MAKER_NAME_MAPPING[s.makerId]);
+          return acc;
+        }, []);
+
+        const bMap = new Map();
+        rawBrands.forEach((b) => {
+          const normalized = b.toLowerCase();
+          if (normalized === "kia") bMap.set("kia", "Kia");
+          else if (normalized === "mercedes benz" || normalized === "mercedes")
+            bMap.set("mercedes", "Mercedes Benz");
+          else if (!bMap.has(normalized)) bMap.set(normalized, b);
+        });
+
+        globalBrandsList = Array.from(bMap.values()).sort();
+
+        // Fetch brands from API for logos
+        try {
+          const makersRes = await getAndSearchMakers({ page: 1, limit: 100 });
+          if (makersRes?.data && Array.isArray(makersRes.data)) {
+            // Sort alphabetically by makeDisplay
+            const sortedMakers = makersRes.data.sort((a, b) =>
+              (a.makeDisplay || a.makeName || "").localeCompare(b.makeDisplay || b.makeName || "")
+            );
+            globalApiBrandsList = sortedMakers;
+          }
+        } catch (err) {
+          console.error("Failed to load makers API", err);
+        }
+
+        isGlobalSuggestionsLoaded = true;
+      } catch (e) {
+        console.error("Failed to load search suggestions", e);
+      }
+    })();
+
+    await globalLoadPromise;
+    if (isGlobalSuggestionsLoaded) {
+      setSuggestionsData(globalSuggestionsData);
+      setBrandsList(globalBrandsList);
+      setApiBrandsList(globalApiBrandsList);
+      setIsSuggestionsLoaded(true);
     }
   };
 
