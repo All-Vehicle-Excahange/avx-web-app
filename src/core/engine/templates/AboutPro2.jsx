@@ -579,7 +579,7 @@ export default function AboutPro2({
         {data.aboutHeroTemplate1?.imageUrl ? (
           <>
             <div className="absolute inset-0">
-              <Image src={data.aboutHeroTemplate1.imageUrl} alt="Our story" width={800} height={500} unoptimized className="w-full h-full object-cover object-center" />
+              <Image src={data.aboutHeroTemplate1.imageUrl} loading="lazy" alt="Our story" width={800} height={500} unoptimized className="w-full h-full object-cover object-center" />
               <div className="absolute inset-0 bg-black/50" />
             </div>
           </>
@@ -646,7 +646,7 @@ export default function AboutPro2({
                     {/* image side */}
                     {item.image && (
                       <div className="relative overflow-hidden h-80 lg:h-auto">
-                        <Image src={item.image} alt={item.keyword} fill unoptimized className="w-full h-full object-cover lg:absolute lg:inset-0 transition-transform duration-700 hover:scale-105" />
+                        <Image src={item.image} loading="lazy" alt={item.keyword} fill unoptimized className="w-full h-full object-cover lg:absolute lg:inset-0 transition-transform duration-700 hover:scale-105" />
                         <div className="absolute inset-0 bg-linear-to-t from-secondary/60 to-transparent" />
                         <div className="absolute bottom-5 left-5 flex items-center gap-3">
                           <div className="w-9 h-9 rounded-xl border border-fourth/50 bg-secondary/60 backdrop-blur-sm flex items-center justify-center">

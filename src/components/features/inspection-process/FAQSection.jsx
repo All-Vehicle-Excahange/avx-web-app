@@ -43,7 +43,7 @@ export default function FAQSection() {
 
             {/* LEFT IMAGE */}
             <div className="lg:col-span-5 lg:sticky lg:top-10">
-              <Image src="/FAQ2.jpeg" alt="Frequently asked questions illustration" width={800} height={500} className="
+              <Image src="/FAQ2.jpeg" loading="lazy" alt="Frequently asked questions illustration" width={800} height={500} className="
                   w-full h-auto object-contain
                   rounded-xl
                   shadow-lg
@@ -93,10 +93,9 @@ export default function FAQSection() {
                             border border-primary/20
                             transition-transform duration-300
                             hover:bg-fourth text-primary
-                            ${
-                              isOpen
-                                ? "bg-fourth border-fourth text-primary"
-                                : "text-third"
+                            ${isOpen
+                              ? "bg-fourth border-fourth text-primary"
+                              : "text-third"
                             }
                           `}
                         >
@@ -110,11 +109,10 @@ export default function FAQSection() {
 
                       {/* ANSWER - CSS Grid transition to prevent jumping */}
                       <div
-                        className={`grid transition-all duration-300 ease-in-out ${
-                          isOpen 
-                            ? "grid-rows-[1fr] opacity-100" 
-                            : "grid-rows-[0fr] opacity-0"
-                        }`}
+                        className={`grid transition-all duration-300 ease-in-out ${isOpen
+                          ? "grid-rows-[1fr] opacity-100"
+                          : "grid-rows-[0fr] opacity-0"
+                          }`}
                       >
                         <div className="overflow-hidden">
                           <div className="px-6 pb-6 text-sm sm:text-[15px] text-third leading-relaxed">

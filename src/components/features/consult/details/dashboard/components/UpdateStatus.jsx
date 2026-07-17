@@ -338,7 +338,7 @@ export default function UpdateStatus() {
           {/* LEFT PANEL */}
           <div className="hidden lg:flex w-[30%] sticky top-[66px] h-[calc(100vh-66px)] relative flex-col justify-between text-white overflow-hidden">
             <div className="absolute inset-0 z-0">
-              <Image src="/homeBanner.jpg" alt="Update Tracker" width={800} height={500} className="w-full h-full object-cover object-center" />
+              <Image src="/homeBanner.jpg" loading="lazy" alt="Update Tracker" width={800} height={500} className="w-full h-full object-cover object-center" />
               <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" />
             </div>
 
@@ -388,11 +388,10 @@ export default function UpdateStatus() {
                       </h2>
                       <div className="flex items-center gap-3">
                         <span
-                          className={`px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest ${
-                            isRequested
-                              ? "bg-yellow-500/10 text-yellow-600"
-                              : "bg-orange-500/10 text-orange-500"
-                          }`}
+                          className={`px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest ${isRequested
+                            ? "bg-yellow-500/10 text-yellow-600"
+                            : "bg-orange-500/10 text-orange-500"
+                            }`}
                         >
                           {verificationStatus === "REQUESTED"
                             ? "PENDING"
@@ -420,88 +419,88 @@ export default function UpdateStatus() {
 
                     {/* BUSINESS SECTION */}
                     <div className="border border-primary/30 rounded-xl p-6">
-                        <div className="flex justify-between mb-4">
-                          <h3 className="font-semibold text-primary">
-                            Business Details
-                          </h3>
-                          {isChangesRequested && (
-                            <SectionControls
-                              editMode={editMode.business}
-                              setEditMode={(val) =>
-                                setEditMode((p) => ({ ...p, business: val }))
-                              }
-                              onUpdate={updateBusiness}
-                              loading={loadingStates.business}
-                            />
-                          )}
-                        </div>
-                        <div
-                          className={`${!editMode.business ? "pointer-events-none opacity-60" : ""}`}
-                        >
-                          <Step1Business
-                            initialData={data.business}
-                            readOnly={!editMode.business}
-                            onChange={handleBusinessChange}
-                            isUpdateMode={true}
+                      <div className="flex justify-between mb-4">
+                        <h3 className="font-semibold text-primary">
+                          Business Details
+                        </h3>
+                        {isChangesRequested && (
+                          <SectionControls
+                            editMode={editMode.business}
+                            setEditMode={(val) =>
+                              setEditMode((p) => ({ ...p, business: val }))
+                            }
+                            onUpdate={updateBusiness}
+                            loading={loadingStates.business}
                           />
-                        </div>
+                        )}
                       </div>
+                      <div
+                        className={`${!editMode.business ? "pointer-events-none opacity-60" : ""}`}
+                      >
+                        <Step1Business
+                          initialData={data.business}
+                          readOnly={!editMode.business}
+                          onChange={handleBusinessChange}
+                          isUpdateMode={true}
+                        />
+                      </div>
+                    </div>
 
                     {/* ADDRESS SECTION */}
                     <div className="border border-primary/30 rounded-xl p-6">
-                        <div className="flex justify-between mb-4">
-                          <h3 className="font-semibold text-primary">
-                            Location Information
-                          </h3>
-                          {isChangesRequested && (
-                            <SectionControls
-                              editMode={editMode.address}
-                              setEditMode={(val) =>
-                                setEditMode((p) => ({ ...p, address: val }))
-                              }
-                              onUpdate={updateAddress}
-                              loading={loadingStates.address}
-                            />
-                          )}
-                        </div>
-                        <div
-                          className={`${!editMode.address ? "pointer-events-none opacity-60" : ""}`}
-                        >
-                          <Step2Address
-                            initialData={data.address}
-                            readOnly={!editMode.address}
-                            onChange={handleAddressChange}
+                      <div className="flex justify-between mb-4">
+                        <h3 className="font-semibold text-primary">
+                          Location Information
+                        </h3>
+                        {isChangesRequested && (
+                          <SectionControls
+                            editMode={editMode.address}
+                            setEditMode={(val) =>
+                              setEditMode((p) => ({ ...p, address: val }))
+                            }
+                            onUpdate={updateAddress}
+                            loading={loadingStates.address}
                           />
-                        </div>
+                        )}
                       </div>
+                      <div
+                        className={`${!editMode.address ? "pointer-events-none opacity-60" : ""}`}
+                      >
+                        <Step2Address
+                          initialData={data.address}
+                          readOnly={!editMode.address}
+                          onChange={handleAddressChange}
+                        />
+                      </div>
+                    </div>
 
                     {/* KYC SECTION */}
                     <div className="border border-primary/30 rounded-xl p-6">
-                        <div className="flex justify-between mb-4">
-                          <h3 className="font-semibold text-primary">
-                            KYC Documents
-                          </h3>
-                          {isChangesRequested && (
-                            <SectionControls
-                              editMode={editMode.kyc}
-                              setEditMode={(val) =>
-                                setEditMode((p) => ({ ...p, kyc: val }))
-                              }
-                              onUpdate={updateKyc}
-                              loading={loadingStates.kyc}
-                            />
-                          )}
-                        </div>
-                        <div
-                          className={`${!editMode.kyc ? "pointer-events-none opacity-60" : ""}`}
-                        >
-                          <Step3KYC
-                            initialData={data.kyc}
-                            readOnly={!editMode.kyc}
-                            onChange={handleKycChange}
+                      <div className="flex justify-between mb-4">
+                        <h3 className="font-semibold text-primary">
+                          KYC Documents
+                        </h3>
+                        {isChangesRequested && (
+                          <SectionControls
+                            editMode={editMode.kyc}
+                            setEditMode={(val) =>
+                              setEditMode((p) => ({ ...p, kyc: val }))
+                            }
+                            onUpdate={updateKyc}
+                            loading={loadingStates.kyc}
                           />
-                        </div>
+                        )}
                       </div>
+                      <div
+                        className={`${!editMode.kyc ? "pointer-events-none opacity-60" : ""}`}
+                      >
+                        <Step3KYC
+                          initialData={data.kyc}
+                          readOnly={!editMode.kyc}
+                          onChange={handleKycChange}
+                        />
+                      </div>
+                    </div>
 
                     {isChangesRequested && (
                       <div className="pt-10">

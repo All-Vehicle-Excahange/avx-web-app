@@ -193,9 +193,9 @@ export default function UpdateProfile() {
     try {
       setErrors((p) => ({ ...p, submit: "" }));
       setLoadingStates((p) => ({ ...p, submit: true }));
-      
+
       let currentId = updateId;
-      
+
       const b = form.business || {};
       const origB = data.business || {};
       let bChanged = false;
@@ -244,9 +244,9 @@ export default function UpdateProfile() {
 
         const res = await updateBasicDetails(payload, currentId);
         if (!res.success) {
-           setErrors((p) => ({ ...p, submit: res.message || "Failed to update business details" }));
-           setLoadingStates((p) => ({ ...p, submit: false }));
-           return;
+          setErrors((p) => ({ ...p, submit: res.message || "Failed to update business details" }));
+          setLoadingStates((p) => ({ ...p, submit: false }));
+          return;
         }
       }
 
@@ -260,9 +260,9 @@ export default function UpdateProfile() {
 
         const res = await updateAddressDetails(payload, currentId);
         if (!res.success) {
-           setErrors((p) => ({ ...p, submit: res.message || "Failed to update address details" }));
-           setLoadingStates((p) => ({ ...p, submit: false }));
-           return;
+          setErrors((p) => ({ ...p, submit: res.message || "Failed to update address details" }));
+          setLoadingStates((p) => ({ ...p, submit: false }));
+          return;
         }
       }
 
@@ -278,9 +278,9 @@ export default function UpdateProfile() {
 
         const res = await updateKycDocuments(payload, currentId);
         if (!res.success) {
-           setErrors((p) => ({ ...p, submit: res.message || "Failed to update KYC documents" }));
-           setLoadingStates((p) => ({ ...p, submit: false }));
-           return;
+          setErrors((p) => ({ ...p, submit: res.message || "Failed to update KYC documents" }));
+          setLoadingStates((p) => ({ ...p, submit: false }));
+          return;
         }
       }
 
@@ -318,7 +318,7 @@ export default function UpdateProfile() {
           {/* LEFT PANEL */}
           <div className="hidden lg:flex w-[30%] sticky top-[66px] h-[calc(100vh-66px)]  flex-col justify-between text-white overflow-hidden">
             <div className="absolute inset-0 z-0">
-              <Image src="/homeBanner.jpg" alt="Partner Program" width={800} height={500} className="w-full h-full object-cover object-center" />
+              <Image src="/homeBanner.jpg" loading="lazy" alt="Partner Program" width={800} height={500} className="w-full h-full object-cover object-center" />
               <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" />
             </div>
 
