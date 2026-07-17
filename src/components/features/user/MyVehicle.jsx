@@ -19,11 +19,16 @@ function MyVehicle() {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const user = useAuthStore((state) => state.user);
 
-  const { data: sellerRes } = useQuery(getBecameSellerQuery());
   const { data: profileRes } = useQuery(getUserProfileQuery());
+  const userRole = profileRes?.data?.userRole || user?.userRole;
+  const isSellerOrApplicant = userRole === "USER_SELLER" || userRole === "USER_SELLER_APPLICANT";
+
+  const { data: sellerRes } = useQuery({
+    ...getBecameSellerQuery(),
+    enabled: !!userRole && isSellerOrApplicant,
+  });
 
   const sellerStatus = sellerRes?.data?.verificationStatus;
-  const userRole = profileRes?.data?.userRole || user?.userRole;
 
   const hasAppliedOrIsSeller =
     userRole === "USER_SELLER" ||

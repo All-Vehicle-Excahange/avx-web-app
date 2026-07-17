@@ -217,9 +217,11 @@ export default function AccountPopup({ open, onClosePopup }) {
                 <div className="flex flex-col items-center justify-center gap-1.5 pt-1">
                   <Link
                     href={
-                      pathname?.includes("/user/details")
-                        ? "/user/details"
-                        : "/user/details/myprofile"
+                      user?.userRole === "CONSULTATION"
+                        ? "/consult/dashboard/profile"
+                        : pathname?.includes("/user/details")
+                          ? "/user/details"
+                          : "/user/details/myprofile"
                     }
                     onClick={onClosePopup}
                     className="text-lg font-bold text-primary hover:text-third transition-colors block text-center"
