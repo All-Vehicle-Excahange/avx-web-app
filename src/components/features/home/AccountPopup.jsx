@@ -62,6 +62,12 @@ export default function AccountPopup({ open, onClosePopup }) {
   );
   const isUserSeller = user?.userRole === "USER_SELLER";
 
+  const profileHref = user?.userRole === "CONSULTATION"
+    ? "/consult/dashboard/profile"
+    : "/user/details/myprofile";
+
+  const isCurrentPage = pathname === profileHref || (profileHref === "/user/details/myprofile" && pathname?.includes("/user/details"));
+
   const { data: strengthRes, isLoading: isLoadingStrength } = useQuery({
     ...getUserProfileStrengthQuery(),
     enabled: !!(open && isLoggedIn),
@@ -216,14 +222,13 @@ export default function AccountPopup({ open, onClosePopup }) {
               {isConsultant ? (
                 <div className="flex flex-col items-center justify-center gap-1.5 pt-1">
                   <Link
-                    href={
-                      user?.userRole === "CONSULTATION"
-                        ? "/consult/dashboard/profile"
-                        : pathname?.includes("/user/details")
-                          ? "/user/details"
-                          : "/user/details/myprofile"
-                    }
-                    onClick={onClosePopup}
+                    href={isCurrentPage ? "#" : profileHref}
+                    onClick={(e) => {
+                      if (isCurrentPage) {
+                        e.preventDefault();
+                      }
+                      onClosePopup();
+                    }}
                     className="text-lg font-bold text-primary hover:text-third transition-colors block text-center"
                   >
                     Hello,{" "}
@@ -260,12 +265,13 @@ export default function AccountPopup({ open, onClosePopup }) {
               ) : (
                 <div className="flex items-center justify-center">
                   <Link
-                    href={
-                      pathname?.includes("/user/details")
-                        ? "/user/details"
-                        : "/user/details/myprofile"
-                    }
-                    onClick={onClosePopup}
+                    href={isCurrentPage ? "#" : profileHref}
+                    onClick={(e) => {
+                      if (isCurrentPage) {
+                        e.preventDefault();
+                      }
+                      onClosePopup();
+                    }}
                     className="text-lg font-bold text-primary hover:text-third transition-colors inline-flex items-center gap-2"
                   >
                     <span>
