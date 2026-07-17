@@ -19,6 +19,8 @@ import {
   History,
   LayoutGrid,
   ArrowRight,
+  Store,
+  Smartphone,
 } from "lucide-react";
 import { FaUserCircle } from "react-icons/fa";
 import { useState, useEffect, useRef, useMemo } from "react";
@@ -29,7 +31,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useAuthStore } from "@/stores/useAuthStore";
 import PreferencesPopup from "../features/user/PreferencesPopup";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useUIStore } from "@/stores/useUIStore";
 import MobileAppDownloadBanner from "../ui/MobileAppDownloadBanner";
 import { useQuery } from "@tanstack/react-query";
@@ -102,10 +104,16 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
   const [open, setOpen] = useState(false);
   const [atTop, setAtTop] = useState(true);
   const [isComeFromPhone, setIsComeFromPhone] = useState(false);
+  const [sellDropdownOpen, setSellDropdownOpen] = useState(false);
 
   const { user, isLoggedIn } = useAuthStore();
   const { push } = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    setIsSearching(false);
+  }, [pathname, searchParams]);
 
   /* ================= BANNER STATES & UI STATES ================= */
   const { isMobileBannerVisible, hideMobileBanner, isMobileBannerTempHidden, setIsSearchDropdownOpen } =
@@ -117,6 +125,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [isSearching, setIsSearching] = useState(false);
 
   const combinedItems = useMemo(() => {
     return filteredSuggestions;
@@ -155,6 +164,20 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showDropdown]);
+
+  const sellDropdownRef = useRef(null);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sellDropdownOpen && sellDropdownRef.current && !sellDropdownRef.current.contains(event.target)) {
+        setSellDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [sellDropdownOpen]);
+
   const accountRef = useRef(null);
   const accountTimeoutRef = useRef(null);
   const [persisAccountOpen, setPersisAccountOpen] = useState(false);
@@ -584,7 +607,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
             </Link>
 
             {/* ================= CENTER SEARCH ================= */}
-            {heroMode && scrolled && (
+            {(!heroMode || scrolled) && (
               <div
                 ref={searchRef}
                 className="absolute left-1/2 -translate-x-1/2 hidden lg:flex z-50"
@@ -618,6 +641,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                             combinedItems[selectedIndex]
                           ) {
                             const selected = combinedItems[selectedIndex];
+                            setIsSearching(true);
                             if (selected.link) {
                               push(selected.link);
                               setSearchQuery(selected.label);
@@ -627,6 +651,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                             setShowDropdown(false);
                             setSelectedIndex(-1);
                           } else if (searchQuery.trim()) {
+                            setIsSearching(true);
                             const brandParam =
                               selectedBrand !== "All"
                                 ? `&brand=${encodeURIComponent(selectedBrand)}`
@@ -636,6 +661,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                             );
                             setShowDropdown(false);
                           } else if (selectedBrand !== "All") {
+                            setIsSearching(true);
                             push(
                               `/search?brand=${encodeURIComponent(selectedBrand)}`,
                             );
@@ -665,6 +691,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                   <div
                     onClick={() => {
                       if (searchQuery.trim()) {
+                        setIsSearching(true);
                         const brandParam =
                           selectedBrand !== "All"
                             ? `&brand=${encodeURIComponent(selectedBrand)}`
@@ -674,6 +701,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                         );
                         setShowDropdown(false);
                       } else if (selectedBrand !== "All") {
+                        setIsSearching(true);
                         push(
                           `/search?brand=${encodeURIComponent(selectedBrand)}`,
                         );
@@ -682,7 +710,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                     }}
                     className="ml-auto mr-1.5 w-[40px] h-[40px] rounded-full bg-fourth text-white flex items-center justify-center cursor-pointer hover:bg-fourth/90 hover:shadow-md transition-all shrink-0"
                   >
-                    <Search size={16} />
+                    {isSearching ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Search size={16} />}
                   </div>
 
                   {/* Search Mega Menu Dropdown */}
@@ -858,28 +886,35 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                                     setShowDropdown(false);
                                     setSearchQuery(s.label);
                                   }}
-                                  className={`group flex items-center gap-3 p-2 cursor-pointer text-sm transition-all duration-200 rounded-lg
-                                    ${selectedIndex === idx ? "bg-fourth/10 border-l-2 border-fourth pl-3" : "hover:bg-gray-50 pl-2"}`}
+                                  className={`group flex items-center justify-between py-1 px-2 cursor-pointer transition-colors border-b border-gray-50
+                                    ${selectedIndex === idx ? "bg-fourth/5 border-l-2 border-fourth" : "hover:bg-fourth/5"}`}
                                 >
-                                  <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-fourth/10 transition-colors shadow-sm">
-                                    {(() => {
-                                      if (s.type === "related") return <Search className="w-3.5 h-3.5 text-fourth" />;
-                                      if (s.type === "price") return <Tag className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
-                                      if (s.type === "location") return <MapPin className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
-                                      if (s.type === "brand" || s.type === "model") return <Car className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
-                                      if (s.type === "fuel") return <Fuel className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
-                                      if (s.type === "feature" || s.type === "bodyType") return <Zap className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
-                                      if (s.type === "popular") return <Star className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
-                                      if (s.type === "consultant") return <User className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
-                                      return <Search className="w-3.5 h-3.5 text-gray-400 group-hover:text-fourth" />;
-                                    })()}
+                                  <div className="flex items-center gap-3 flex-1">
+                                    <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center transition-colors shadow-sm">
+                                      {(() => {
+                                        if (s.type === "related") return <Search className="w-3.5 h-3.5 text-gray-400" />;
+                                        if (s.type === "price") return <Tag className="w-3.5 h-3.5 text-gray-400" />;
+                                        if (s.type === "location") return <MapPin className="w-3.5 h-3.5 text-gray-400" />;
+                                        if (s.type === "brand" || s.type === "model") return <Car className="w-3.5 h-3.5 text-gray-400" />;
+                                        if (s.type === "fuel") return <Fuel className="w-3.5 h-3.5 text-gray-400" />;
+                                        if (s.type === "feature" || s.type === "bodyType") return <Zap className="w-3.5 h-3.5 text-gray-400" />;
+                                        if (s.type === "popular") return <Star className="w-3.5 h-3.5 text-gray-400" />;
+                                        if (s.type === "consultant") return <User className="w-3.5 h-3.5 text-gray-400" />;
+                                        return <Search className="w-3.5 h-3.5 text-gray-400" />;
+                                      })()}
+                                    </div>
+                                    <div className="flex flex-col">
+                                      <span className="font-semibold text-gray-900 text-[13px] transition-colors">
+                                        {s.label}
+                                      </span>
+                                      {s.type === "related" && <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider mt-0.5">Related Search</span>}
+                                      {s.type === "consultant" && <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider mt-0.5">Auto Consultant</span>}
+                                    </div>
                                   </div>
-                                  <div className="flex flex-col">
-                                    <span className="text-gray-900 group-hover:text-fourth font-bold text-[12px] transition-colors">
-                                      {s.label}
-                                    </span>
-                                    {s.type === "related" && <span className="text-[9px] text-fourth/80 font-bold uppercase tracking-wider mt-0.5">Related Search</span>}
-                                    {s.type === "consultant" && <span className="text-[9px] text-fourth/80 font-bold uppercase tracking-wider mt-0.5">Auto Consultant</span>}
+
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-[11px] text-gray-400 font-medium group-hover:text-gray-600 transition-colors">Explore</span>
+                                    <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-600 transition-colors" />
                                   </div>
                                 </div>
                               ))}
@@ -928,7 +963,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                     const getCTA = () => {
                       if (!isLoggedIn) {
                         return {
-                          label: "Sell Your Vehicle",
+                          label: "Join reecomm",
                           href: "/become-seller",
                         };
                       }
@@ -1011,8 +1046,8 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                       }
 
                       return {
-                        label: "My Activity",
-                        href: "/user/details/myprofile",
+                        label: "Join reecomm",
+                        href: "/become-seller",
                       };
                     };
 
@@ -1026,16 +1061,75 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                     }
 
                     return (
-                      <Button
-                        onClick={() => push(cta.href)}
-                        size="sm"
-                        className={`hidden md:block text-xs md:text-sm whitespace-nowrap transition-all duration-500 ease-in-out ${heroMode && !scrolled
-                          ? "bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl rounded-full border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-primary hover:bg-transparent hover:text-primary hover:border-white/30"
-                          : "text-primary border border-primary hover:bg-primary hover:text-secondary"
-                          }`}
-                      >
-                        {cta.label}
-                      </Button>
+                      <div className="relative" ref={sellDropdownRef}>
+                        <Button
+                          onClick={() => {
+                            if (cta.label === "Join reecomm") {
+                              setSellDropdownOpen(!sellDropdownOpen);
+                            } else {
+                              push(cta.href);
+                            }
+                          }}
+                          size="sm"
+                          className={`hidden md:block text-xs md:text-sm whitespace-nowrap transition-all duration-500 ease-in-out ${heroMode && !scrolled
+                            ? "bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl rounded-full border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-primary hover:bg-transparent hover:text-primary hover:border-white/30"
+                            : "text-primary border border-primary hover:bg-primary hover:text-secondary"
+                            }`}
+                        >
+                          {cta.label}
+                        </Button>
+
+                        {cta.label === "Join reecomm" && (
+                          <div
+                            className={`absolute top-[calc(100%+8px)] right-0 min-w-[320px] bg-secondary text-primary shadow-[0_20px_40px_rgba(0,0,0,0.45)] border border-white/10 rounded-xl overflow-hidden z-[9999] flex flex-col transition-all duration-300 origin-top-right ${sellDropdownOpen ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+                              }`}
+                          >
+                            <Link
+                              href="/become-seller"
+                              onClick={() => setSellDropdownOpen(false)}
+                              className="px-4 py-4 flex items-center justify-between gap-4 group hover:bg-white/5 transition-colors"
+                            >
+                              <div className="flex items-start gap-3">
+                                <CarFront className="w-5 h-5 text-third shrink-0 mt-0.5" />
+                                <div className="flex flex-col">
+                                  <span className="text-[14px] font-semibold text-primary group-hover:text-third transition-colors whitespace-nowrap">Sell Your Vehicle</span>
+                                  <span className="text-[11px] text-primary/60 font-medium whitespace-nowrap mt-0.5">Get the best price from real buyers</span>
+                                </div>
+                              </div>
+                              <ArrowRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 group-hover:text-third transition-all shrink-0" />
+                            </Link>
+
+                            <Link
+                              href="/consult"
+                              onClick={() => setSellDropdownOpen(false)}
+                              className="px-4 py-4 flex items-center justify-between gap-4 group hover:bg-white/5 transition-colors"
+                            >
+                              <div className="flex items-start gap-3">
+                                <Store className="w-5 h-5 text-third shrink-0 mt-0.5" />
+                                <div className="flex flex-col">
+                                  <span className="text-[14px] font-semibold text-primary group-hover:text-third transition-colors whitespace-nowrap">List as a Consultant</span>
+                                  <span className="text-[11px] text-primary/60 font-medium whitespace-nowrap mt-0.5">Bring your dealership online</span>
+                                </div>
+                              </div>
+                              <ArrowRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 group-hover:text-third transition-all shrink-0" />
+                            </Link>
+
+                            <Link
+                              href="/download"
+                              onClick={() => setSellDropdownOpen(false)}
+                              className="px-4 py-3 flex items-center justify-between gap-4 group bg-fourth hover:bg-fourth/90 transition-colors mt-1"
+                            >
+                              <div className="flex items-center gap-3">
+                                <Smartphone className="w-5 h-5 text-white shrink-0" />
+                                <span className="text-[13px] font-semibold text-white whitespace-nowrap">
+                                  Prefer the app? Get the Reecomm App
+                                </span>
+                              </div>
+                              <ArrowRight className="w-4 h-4 text-white opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all shrink-0" />
+                            </Link>
+                          </div>
+                        )}
+                      </div>
                     );
                   })()}
 
