@@ -29,19 +29,46 @@ const SayHello = () => {
 
   const stepIcons = {
     "Download the Mobile App": (isActive) => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`w-5 h-5 sm:w-6 sm:h-6 ${isActive ? "text-fourth" : "text-gray-400"}`}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={`w-5 h-5 sm:w-6 sm:h-6 ${isActive ? "text-fourth" : "text-gray-400"}`}
+      >
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
         <polyline points="7 10 12 15 17 10" />
         <line x1="12" y1="15" x2="12" y2="3" />
       </svg>
     ),
     "Chat With the Seller": (isActive) => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`w-5 h-5 sm:w-6 sm:h-6 ${isActive ? "text-fourth" : "text-gray-400"}`}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={`w-5 h-5 sm:w-6 sm:h-6 ${isActive ? "text-fourth" : "text-gray-400"}`}
+      >
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
       </svg>
     ),
     "Book a Test Drive": (isActive) => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`w-5 h-5 sm:w-6 sm:h-6 ${isActive ? "text-fourth" : "text-gray-400"}`}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={`w-5 h-5 sm:w-6 sm:h-6 ${isActive ? "text-fourth" : "text-gray-400"}`}
+      >
         <circle cx="12" cy="12" r="10" />
         <circle cx="12" cy="12" r="3" />
         <path d="M12 12L7.5 7.5" />
@@ -50,7 +77,16 @@ const SayHello = () => {
       </svg>
     ),
     "Get Your Dream Vehicle": (isActive) => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`w-5 h-5 sm:w-6 sm:h-6 ${isActive ? "text-fourth" : "text-gray-400"}`}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={`w-5 h-5 sm:w-6 sm:h-6 ${isActive ? "text-fourth" : "text-gray-400"}`}
+      >
         <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9C2 11.1 2 11.3 2 11.5V16c0 .6.4 1 1 1h2m10 0h4" />
         <circle cx="7" cy="17" r="2" />
         <circle cx="17" cy="17" r="2" />
@@ -59,7 +95,10 @@ const SayHello = () => {
   };
 
   const stepTexts = {
-    "Download the Mobile App": { title: "Download", subtitle: "the Mobile App" },
+    "Download the Mobile App": {
+      title: "Download",
+      subtitle: "the Mobile App",
+    },
     "Chat With the Seller": { title: "Chat", subtitle: "With the Seller" },
     "Book a Test Drive": { title: "Book", subtitle: "a Test Drive" },
     "Get Your Dream Vehicle": { title: "Get Your", subtitle: "Dream Vehicle" },
@@ -98,10 +137,6 @@ const SayHello = () => {
               <span className="ml-0">before you buy!</span>
             </h2>
           </div>
-          <p className="max-w-xl text-base md:text-lg text-secondary opacity-80 lg:pt-4">
-            Plan a test drive with seller, negotiate price, ask questions and
-            more - all within the app.
-          </p>
         </div>
 
         {/* Image Composition Section */}
@@ -151,7 +186,7 @@ const SayHello = () => {
           {/* Center Image (Mobile Phone View) */}
           <div className="flex shrink-0 relative w-[130px] sm:w-[180px] md:w-[240px] lg:w-[300px] h-[260px] sm:h-[360px] md:h-[480px] lg:h-[550px] top-4 lg:top-8 z-0">
             <Image
-              src="/chat.webp"
+              src="/Chatscreensa.webp"
               alt="App screen preview"
               width={375}
               height={656}
@@ -254,9 +289,11 @@ const SayHello = () => {
                   {/* Icon Box */}
                   <div
                     className={`flex items-center justify-center w-10 h-10 rounded-xl border shrink-0 transition-all duration-300
-                      ${activeIndex >= index
-                        ? "bg-fourth/5 border-fourth/20"
-                        : "bg-gray-50 border-gray-100"}`}
+                      ${
+                        activeIndex >= index
+                          ? "bg-fourth/5 border-fourth/20"
+                          : "bg-gray-50 border-gray-100"
+                      }`}
                   >
                     {stepIcons[item] && stepIcons[item](activeIndex >= index)}
                   </div>

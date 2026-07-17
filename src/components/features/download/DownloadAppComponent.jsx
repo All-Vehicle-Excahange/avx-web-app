@@ -24,7 +24,7 @@ import {
 
 // Native sharp SVG QR Code generator styled for dark theme with premium container
 const QRCodeMock = () => (
-  <div className="w-24 h-24 p-2 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/10 flex items-center justify-center shrink-0 hover:scale-105 active:scale-95 transition-all duration-300">
+  <div className="w-24 h-24 p-2 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/10 flex items-center justify-center shrink-0">
     <svg viewBox="0 0 100 100" className="w-full h-full text-secondary">
       <rect
         x="0"
@@ -135,7 +135,7 @@ const AppStoreButton = () => (
 );
 
 function DownloadAppComponent() {
-  const [openFaq, setOpenFaq] = useState(null);
+  const [openFaq, setOpenFaq] = useState(0);
 
   const toggleFaq = (index) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -174,7 +174,7 @@ function DownloadAppComponent() {
             <div className="lg:col-span-5 relative flex justify-center items-center">
               <div className="absolute -z-10 w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] rounded-full  blur-[100px] opacity-75 animate-pulse pointer-events-none" />
               <Image
-                src="/moblie_app_banner.gif"
+                src="/downloadpagemockup.webp"
                 width={420}
                 height={630}
                 alt="Reecomm app mockup"
@@ -185,7 +185,6 @@ function DownloadAppComponent() {
 
             {/* Right Column: Copy */}
             <div className="lg:col-span-7 flex flex-col items-start text-left space-y-6">
-              
               <h1 className="text-4xl sm:text-6xl font-black leading-[1.08] tracking-tight text-primary font-[Montserrat]">
                 Chat. Track. Manage. <br />
                 <span className="text-fourth drop-shadow-[0_2px_10px_rgba(0,123,255,0.15)]">
@@ -231,24 +230,24 @@ function DownloadAppComponent() {
                 </div>
               </div>
 
-              {/* QR and Active Store Buttons */}
-              <div className="flex flex-col sm:flex-row items-center gap-6 pt-2 w-full sm:w-auto">
-                <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+              {/* QR and Active Store Buttons Grouped by Platform */}
+              <div className="flex flex-col sm:flex-row items-center gap-6 pt-4 w-full sm:w-auto">
+                {/* Android Group */}
+                <div className="flex flex-row items-center gap-4 w-full sm:w-auto">
                   <PlayStoreButton />
-                  <AppStoreButton />
-                </div>
-                <div className="hidden sm:flex items-center gap-6 border-l border-third/15 pl-6">
-                  <div className="flex flex-col items-center gap-1.5 group">
+                  <div className="hidden sm:flex flex-col items-center gap-1.5 group shrink-0">
                     <QRCodeMock />
-                    <span className="text-[10px] text-third/75 font-bold uppercase tracking-wider transition-colors group-hover:text-fourth">
-                      Android
-                    </span>
                   </div>
-                  <div className="flex flex-col items-center gap-1.5 group">
+                </div>
+
+                {/* Vertical Divider Line */}
+                <div className="hidden sm:block w-px h-16 bg-white/10 mx-2" />
+
+                {/* iOS Group */}
+                <div className="flex flex-row items-center gap-4 w-full sm:w-auto">
+                  <AppStoreButton />
+                  <div className="hidden sm:flex flex-col items-center gap-1.5 group shrink-0">
                     <QRCodeMock />
-                    <span className="text-[10px] text-third/75 font-bold uppercase tracking-wider transition-colors group-hover:text-fourth">
-                      iOS App
-                    </span>
                   </div>
                 </div>
               </div>
@@ -260,9 +259,6 @@ function DownloadAppComponent() {
           </div>
         </div>
       </section>
-
-      {/* Decorative separator line */}
-      <div className="h-px bg-gradient-to-r from-transparent via-third/10 to-transparent max-w-7xl mx-auto w-full" />
 
       {/* SECTION 2 — WHO IT IS FOR */}
       <section className="py-20 bg-transparent">
@@ -332,9 +328,6 @@ function DownloadAppComponent() {
           </div>
         </div>
       </section>
-
-      {/* Decorative separator line */}
-      <div className="h-px bg-gradient-to-r from-transparent via-third/10 to-transparent max-w-7xl mx-auto w-full" />
 
       {/* SECTION 3 — FEATURE BREAKDOWN */}
       <section className="py-20 bg-transparent">
@@ -440,9 +433,6 @@ function DownloadAppComponent() {
         </div>
       </section>
 
-      {/* Decorative separator line */}
-      <div className="h-px bg-gradient-to-r from-transparent via-third/10 to-transparent max-w-7xl mx-auto w-full" />
-
       {/* SECTION 4 — INSPECTION TRACKING (Deep Dive) */}
       <section className="py-20 bg-transparent">
         <div className="container mx-auto px-6 max-w-5xl text-center">
@@ -526,22 +516,19 @@ function DownloadAppComponent() {
         </div>
       </section>
 
-      {/* Decorative separator line */}
-      <div className="h-px bg-gradient-to-r from-transparent via-third/10 to-transparent max-w-7xl mx-auto w-full" />
-
       {/* SECTION 5 — CHAT FEATURE (Deep Dive) */}
       <section className="py-20 bg-transparent">
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Left Column: Mockup Image of chat.webp simulating the seller screen */}
             <div className="flex justify-center items-center w-full">
-              <div className="relative mx-auto w-[250px] h-[500px] rounded-[2.5rem] border-8 border-slate-950 bg-slate-955 shadow-2xl flex-shrink-0 select-none overflow-hidden ring-4 ring-white/5 hover:scale-[1.03] transition-transform duration-500 ease-out">
+              <div className="relative mx-auto w-[250px] rounded-2xl shadow-2xl flex-shrink-0 select-none overflow-hidden hover:scale-[1.03] transition-transform duration-500 ease-out">
                 <Image
-                  src="/chat.webp"
+                  src="/Chatscreensa.webp"
                   width={300}
                   height={550}
                   alt="Direct chat between buyer and verified seller on Reecomm app"
-                  className="w-full h-full object-cover"
+                  className="w-full h-auto"
                 />
               </div>
             </div>
@@ -585,49 +572,7 @@ function DownloadAppComponent() {
         </div>
       </section>
 
-      {/* Decorative separator line */}
-      <div className="h-px bg-gradient-to-r from-transparent via-third/10 to-transparent max-w-7xl mx-auto w-full" />
-
       {/* SECTION 6 — DOWNLOAD CTA (MID PAGE) */}
-      <section className="py-16 bg-transparent">
-        <div className="container mx-auto px-6 max-w-4xl text-center flex flex-col items-center gap-6">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-primary font-[Montserrat]">
-            Ready to get started?
-          </h2>
-          <p className="text-base text-third max-w-md">
-            Everything you need to buy, sell, or grow your vehicle business — in
-            your pocket.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center gap-8 pt-4">
-            <div className="flex items-center gap-6">
-              <div className="flex flex-col items-center gap-1.5">
-                <QRCodeMock />
-                <span className="text-[10px] text-third/75 font-bold uppercase tracking-wider">
-                  Android
-                </span>
-              </div>
-              <div className="flex flex-col items-center gap-1.5">
-                <QRCodeMock />
-                <span className="text-[10px] text-third/75 font-bold uppercase tracking-wider">
-                  iOS App
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-col gap-3">
-              <span className="text-xs text-third font-bold uppercase tracking-wider sm:text-left">
-                Scan QR to download
-              </span>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <PlayStoreButton />
-                <AppStoreButton />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Decorative separator line */}
-      <div className="h-px bg-gradient-to-r from-transparent via-third/10 to-transparent max-w-7xl mx-auto w-full" />
 
       {/* SECTION 7 — WHY THE APP, NOT JUST THE WEBSITE */}
       <section className="py-20 bg-transparent">
@@ -653,9 +598,6 @@ function DownloadAppComponent() {
                       Website
                     </th>
                     <th className="py-4.5 px-6 text-center w-36 bg-fourth/10 text-primary relative">
-                      <div className="absolute top-1 left-1/2 -translate-x-1/2 bg-fourth text-white text-[8px] font-black px-2 py-0.5 rounded-full shadow">
-                        RECOMMENDED
-                      </div>
                       <span className="block pt-3 font-extrabold">App</span>
                     </th>
                   </tr>
@@ -694,9 +636,6 @@ function DownloadAppComponent() {
         </div>
       </section>
 
-      {/* Decorative separator line */}
-      <div className="h-px bg-gradient-to-r from-transparent via-third/10 to-transparent max-w-7xl mx-auto w-full" />
-
       {/* SECTION 8 — FAQ SECTION (Accordion) */}
       <section className="py-20 bg-transparent">
         <div className="container mx-auto px-6 max-w-4xl text-left">
@@ -723,17 +662,29 @@ function DownloadAppComponent() {
                     className="w-full py-5 px-6 flex justify-between items-center text-left font-bold text-primary hover:bg-white/[0.04] hover:text-fourth transition cursor-pointer gap-4"
                   >
                     <span>{faq.q}</span>
-                    {isOpen ? (
-                      <ChevronUp className="w-5 h-5 text-fourth shrink-0" />
-                    ) : (
-                      <ChevronDown className="w-5 h-5 text-third/50 shrink-0" />
-                    )}
-                  </button>
-                  {isOpen && (
-                    <div className="py-5 px-6 bg-white/[0.01] border-t border-white/5 text-sm text-third leading-relaxed font-medium">
-                      {faq.a}
+                    <div className="shrink-0 transition-transform duration-300">
+                      {isOpen ? (
+                        <ChevronUp className="w-5 h-5 text-fourth" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-third/50" />
+                      )}
                     </div>
-                  )}
+                  </button>
+
+                  {/* Smooth height/opacity collapse transition */}
+                  <div
+                    className={`grid transition-all duration-300 ease-in-out ${
+                      isOpen
+                        ? "grid-rows-[1fr] opacity-100"
+                        : "grid-rows-[0fr] opacity-0 pointer-events-none"
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="py-5 px-6 bg-white/[0.01] border-t border-white/5 text-sm text-third leading-relaxed font-medium">
+                        {faq.a}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               );
             })}
@@ -741,44 +692,36 @@ function DownloadAppComponent() {
         </div>
       </section>
 
-      {/* Decorative separator line */}
-      <div className="h-px bg-gradient-to-r from-transparent via-third/10 to-transparent max-w-7xl mx-auto w-full" />
-
       {/* SECTION 9 — BOTTOM DOWNLOAD CTA */}
-      <section className="py-24 bg-transparent text-primary">
+      <section className="py-24 bg-fourth text-primary">
         <div className="container mx-auto px-6 max-w-5xl text-center flex flex-col items-center gap-8">
           <h2 className="text-3xl sm:text-5xl font-black font-[Montserrat] leading-tight tracking-tight">
             Download Reecomm. <br />
-            <span className="text-fourth">
+            <span className="text-primary">
               Buy smart. Sell fair. Move forward.
             </span>
           </h2>
-          <div className="flex flex-col sm:flex-row items-center gap-8 pt-4">
-            <div className="flex items-center gap-6">
-              <div className="flex flex-col items-center gap-1.5">
+          <div className="flex flex-col sm:flex-row items-center gap-6 pt-4">
+            {/* Android Group */}
+            <div className="flex flex-row items-center gap-4 w-full sm:w-auto">
+              <PlayStoreButton />
+              <div className="hidden sm:flex flex-col items-center gap-1.5 group shrink-0">
                 <QRCodeMock />
-                <span className="text-[10px] text-third/75 font-bold uppercase tracking-wider">
-                  Android
-                </span>
-              </div>
-              <div className="flex flex-col items-center gap-1.5">
-                <QRCodeMock />
-                <span className="text-[10px] text-third/75 font-bold uppercase tracking-wider">
-                  iOS App
-                </span>
               </div>
             </div>
-            <div className="flex flex-col gap-3 items-center sm:items-start">
-              <span className="text-xs text-third/75 font-bold uppercase tracking-wider">
-                Scan to download instantly
-              </span>
-              <div className="flex flex-row gap-4">
-                <PlayStoreButton />
-                <AppStoreButton />
+
+            {/* Vertical Divider Line */}
+            <div className="hidden sm:block w-px h-16 bg-white/10 mx-2" />
+
+            {/* iOS Group */}
+            <div className="flex flex-row items-center gap-4 w-full sm:w-auto">
+              <AppStoreButton />
+              <div className="hidden sm:flex flex-col items-center gap-1.5 group shrink-0">
+                <QRCodeMock />
               </div>
             </div>
           </div>
-          <p className="text-xs text-third/40 max-w-md leading-relaxed pt-4">
+          <p className="text-xs text-primary/80 max-w-md leading-relaxed pt-4">
             By downloading, you agree to Reecomm's{" "}
             <a
               href="/terms-and-conditions"
