@@ -7,17 +7,57 @@ import Inquiries from "./Inquiries";
 import MyInquary from "./MyInquary";
 import Inspection from "./Inspection";
 import Wishlist from "./WishList";
-import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useAuthStore } from "@/stores/useAuthStore";
+import { getuserProfile } from "@/services/user.service";
+import { queryClient } from "@/lib/queryClient";
 
-function UserDetails() {
-  const params = useParams();
-  const { push } = useRouter();
+function UserDetails({ initialTab }) {
+  const router = useRouter();
+  const { query, isReady, asPath, push } = router;
   const user = useAuthStore((state) => state.user);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const isConsultant = user?.userRole === "CONSULTATION";
-  const activeTab = params?.id || (isConsultant ? "myprofile" : "myvehicle");
+
+  // Extract the tab ID from asPath during initial render to prevent hydration mismatches
+  const urlTab = React.useMemo(() => {
+    if (!asPath) return null;
+    const cleanPath = asPath.split("?")[0];
+    const parts = cleanPath.split("/");
+    // path pattern: /user/details/[id]
+    // parts will be: ["", "user", "details", "tabId"]
+    const tabFromUrl = parts[3];
+    return tabFromUrl && tabFromUrl !== "[id]" ? tabFromUrl : null;
+  }, [asPath]);
+
+  const activeTab = (isReady && query.id)
+    ? query.id
+    : (initialTab || urlTab || (isConsultant ? "myprofile" : "myvehicle"));
   const resolvedTab = activeTab === "inventory" ? "myvehicle" : activeTab;
+
+  React.useEffect(() => {
+    if (!isLoggedIn) return;
+
+    const fetchLatestProfile = async () => {
+      try {
+        const res = await getuserProfile();
+        if (res.success && res.data) {
+          const storedUser = useAuthStore.getState().user;
+          const updatedUser = {
+            ...storedUser,
+            ...res.data,
+          };
+          useAuthStore.setState({ user: updatedUser });
+          localStorage.setItem("user", JSON.stringify(updatedUser));
+          queryClient.setQueryData(["user-profile"], res);
+        }
+      } catch (err) {
+        console.error("Failed to fetch latest user profile:", err);
+      }
+    };
+
+    fetchLatestProfile();
+  }, [isLoggedIn]);
 
   React.useEffect(() => {
     if (isConsultant && activeTab === "myvehicle") {

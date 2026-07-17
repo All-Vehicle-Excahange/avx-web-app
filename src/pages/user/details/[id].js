@@ -4,9 +4,10 @@ import React from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-function Index() {
+function Index({ initialTab }) {
     const router = useRouter();
-    const { id } = router.query || {};
+    const { query, isReady } = router;
+    const id = (isReady && query.id) ? query.id : (initialTab || "");
 
     const tabTitles = {
         myvehicle: "My Vehicles",
@@ -26,9 +27,19 @@ function Index() {
                 <title>{title} | Reecomm</title>
             </Head>
             <Navbar heroMode scrolled />
-            <UserDetails />
+            <UserDetails initialTab={id} />
         </>
     );
+}
+
+export async function getServerSideProps(context) {
+    const { params } = context;
+    const { id } = params || {};
+    return {
+        props: {
+            initialTab: id || null,
+        },
+    };
 }
 
 export default Index;

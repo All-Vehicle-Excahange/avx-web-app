@@ -14,7 +14,7 @@ import VehicleCondition from "../../VehiclDetail/VehicleCondition";
 import Navbar from "@/components/layout/Navbar";
 import VehicleOverviewMain from "../../VehiclDetail/VehicleOverviewMain";
 
-import { useParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getVehicleOverviewQuery,
@@ -142,8 +142,8 @@ export default function ConsualtVehicleDetails({
     }
   };
 
-  const params = useParams();
-  const id = params.id;
+  const router = useRouter();
+  const id = router.query.id;
 
   const { data: vehicleOverview, isLoading: isOverviewLoading } = useQuery({
     ...getVehicleOverviewQuery(id),
