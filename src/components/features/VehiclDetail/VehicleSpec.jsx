@@ -858,7 +858,7 @@ export default function VehicleSpec({
                             <label className="text-xs font-medium text-third">
                               Preferred Date
                             </label>
-                            <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-third/40 bg-secondary focus-within:border-primary">
+                            <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-third/40 bg-secondary focus-within:border-primary cursor-pointer">
                               <Calendar size={14} className="text-third" />
                               <DatePicker
                                 selected={inspectionDate}
@@ -867,7 +867,9 @@ export default function VehicleSpec({
                                 minDate={new Date()}
                                 placeholderText="Select Date"
                                 className="w-full text-sm bg-transparent focus:outline-none text-primary cursor-pointer"
+                                wrapperClassName="w-full"
                                 calendarClassName="dark-datepicker"
+                                popperStrategy="fixed"
                               />
                             </div>
                           </div>
@@ -875,7 +877,7 @@ export default function VehicleSpec({
                             <label className="text-xs font-medium text-third">
                               Preferred Time
                             </label>
-                            <div className="flex items-center gap-2 px-3 py-1 rounded-lg border border-third/40 bg-secondary focus-within:border-primary">
+                            <div className="flex items-center gap-2 px-3 py-1 rounded-lg border border-third/40 bg-secondary focus-within:border-primary cursor-pointer">
                               <Clock size={14} className="text-third" />
                               <Select
                                 options={timeOptions}
@@ -890,6 +892,7 @@ export default function VehicleSpec({
                                     border: "none",
                                     boxShadow: "none",
                                     minHeight: "auto",
+                                    cursor: "pointer",
                                   }),
                                   singleValue: (b) => ({
                                     ...b,
@@ -905,17 +908,45 @@ export default function VehicleSpec({
                                     borderRadius: "12px",
                                     border: "1px solid #2f2e2e",
                                     zIndex: 100,
+                                    width: "calc(100% + 46px)", // Matches outer wrapper (34px left + 12px right padding offset)
+                                    marginLeft: "-34px", // Pulls it left to align with the outer border
+                                    marginTop: "12px", // Spacing from the wrapper
+                                    boxShadow: "0 4px 24px rgba(0,0,0,0.6)",
                                   }),
-                                  menuList: (b) => ({ ...b, padding: "0" }),
+                                  menuList: (b) => ({
+                                    ...b,
+                                    padding: "4px",
+                                    maxHeight: "160px",
+                                    "::-webkit-scrollbar": {
+                                      width: "4px",
+                                      height: "0px",
+                                    },
+                                    "::-webkit-scrollbar-track": {
+                                      background: "transparent",
+                                    },
+                                    "::-webkit-scrollbar-thumb": {
+                                      background: "#3f3e3e",
+                                      borderRadius: "10px",
+                                    },
+                                    "::-webkit-scrollbar-thumb:hover": {
+                                      background: "#555555",
+                                    },
+                                  }),
                                   option: (b, s) => ({
                                     ...b,
-                                    backgroundColor: s.isFocused
-                                      ? "rgba(255,255,255,0.1)"
-                                      : s.isSelected
-                                        ? "rgba(255,255,255,0.2)"
+                                    backgroundColor: s.isSelected
+                                      ? "var(--color-fourth)" // Uses brand color for selected
+                                      : s.isFocused
+                                        ? "rgba(255,255,255,0.05)"
                                         : "transparent",
-                                    color: "#ffffff",
+                                    color: s.isSelected ? "#ffffff" : "#e5e5e5",
                                     cursor: "pointer",
+                                    borderRadius: "6px",
+                                    padding: "6px 12px",
+                                    margin: "1px 0",
+                                    ":active": {
+                                      backgroundColor: "rgba(255,255,255,0.1)",
+                                    }
                                   }),
                                   indicatorSeparator: () => ({
                                     display: "none",

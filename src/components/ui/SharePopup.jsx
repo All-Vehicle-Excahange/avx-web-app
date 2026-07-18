@@ -175,7 +175,7 @@ export default function SharePopup({
             onClick={handleCopyLink}
             aria-label="Copy link"
             className={`shrink-0 cursor-pointer rounded-lg p-2.5 transition-all duration-300 border-none flex items-center justify-center ${copied
-              ? "bg-fourth text-white shadow-[0_0_15px_rgba(34,197,94,0.4)]"
+              ? "bg-fourth text-white"
               : "bg-white text-black hover:bg-gray-100 hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]"
               }`}
           >

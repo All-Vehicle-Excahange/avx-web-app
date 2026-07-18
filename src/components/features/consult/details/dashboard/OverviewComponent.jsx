@@ -275,16 +275,21 @@ export default function OverviewComponent() {
             className="relative rounded-2xl overflow-hidden transition shadow-sm border border-third/10 min-h-[320px] flex items-center bg-[#0A58F9]"
           >
             {/* Background Image */}
-            <img
-              src="/seller/chatsbg.png"
+            <Image
+              src="/seller/chatsbg.webp"
               alt="Background"
-              className="absolute inset-0 w-full h-full object-cover"
+              loading="lazy"
+              fill
+              className="object-cover"
             />
 
             {/* Mobile Phone Image */}
-            <img
-              src="/seller/mobile.png"
+            <Image
+              src="/seller/mobile.webp"
               alt="Mobile App"
+              loading="lazy"
+              width={400}
+              height={700}
               className="absolute right-[-10%] md:right-4 bottom-0 h-[85%] md:h-[95%] w-auto object-right-bottom drop-shadow-2xl opacity-20 md:opacity-100 transition-transform duration-500 pointer-events-none"
             />
 
