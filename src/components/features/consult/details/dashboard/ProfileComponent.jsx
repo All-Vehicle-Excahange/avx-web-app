@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Button from "@/components/ui/button";
 import { ProfileSkeleton } from "@/components/ui/skeleton";
 import InputField from "@/components/ui/inputField";
+import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import {
   ShieldCheck,
   FileText,
@@ -50,6 +51,7 @@ export default function ProfileComponent() {
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingLocation, setIsEditingLocation] = useState(false);
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
+  const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
   // TanStack Queries
   const { data: verificationDataRaw, isFetching: verificationLoading } =
@@ -795,38 +797,60 @@ export default function ProfileComponent() {
           </p>
         </div>
 
-        {/* Capabilities List */}
-        <div className="space-y-3 text-sm">
-          {/* Allowed */}
-          <p className="flex items-center gap-2 text-green-400">
-            <CheckCircle2 size={16} />
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam
-            dignissimos repellendus{" "}
-          </p>
+        <div className="space-y-4 text-sm">
+          {/* Rule 1 */}
+          <div className="flex items-start gap-2.5 text-third/90">
+            <AlertCircle size={18} className="text-yellow-500 shrink-0 mt-0.5" />
+            <div>
+              <h4 className="font-semibold text-primary">Listing Rejection & Slot Loss</h4>
+              <p className="text-xs text-third mt-1 leading-relaxed">
+                If a vehicle listing is rejected for inaccurate information, misrepresentation, or policy violation, that listing slot is permanently consumed. It does not reset.
+              </p>
+            </div>
+          </div>
 
-          <p className="flex items-center gap-2 text-green-400">
-            <CheckCircle2 size={16} />
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam
-            dignissimos repellendus{" "}
-          </p>
+          {/* Rule 2 */}
+          <div className="flex items-start gap-2.5 text-third/90">
+            <AlertCircle size={18} className="text-yellow-500 shrink-0 mt-0.5" />
+            <div>
+              <h4 className="font-semibold text-primary">Misrepresentation</h4>
+              <p className="text-xs text-third mt-1 leading-relaxed">
+                Listing a vehicle with false details — incorrect mileage, undisclosed accident history, or fabricated inspection data — will result in immediate listing removal and may lead to storefront suspension.
+              </p>
+            </div>
+          </div>
 
-          {/* Restricted */}
-          <p className="flex items-center gap-2 text-red-400">
-            <XCircle size={16} />
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam
-            dignissimos repellendus{" "}
-          </p>
+          {/* Rule 3 */}
+          <div className="flex items-start gap-2.5 text-third/90">
+            <AlertCircle size={18} className="text-yellow-500 shrink-0 mt-0.5" />
+            <div>
+              <h4 className="font-semibold text-primary">Buyer Communication Standards</h4>
+              <p className="text-xs text-third mt-1 leading-relaxed">
+                All buyer communication must remain within the Reecomm platform. Sharing personal contact details to bypass platform accountability is a conduct violation and grounds for account review.
+              </p>
+            </div>
+          </div>
 
-          <p className="flex items-center gap-2 text-red-400">
-            <XCircle size={16} />
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam
-            dignissimos repellendus{" "}
-          </p>
+          {/* Rule 4 */}
+          <div className="flex items-start gap-2.5 text-third/90">
+            <AlertCircle size={18} className="text-yellow-500 shrink-0 mt-0.5" />
+            <div>
+              <h4 className="font-semibold text-primary">Verification Maintenance</h4>
+              <p className="text-xs text-third mt-1 leading-relaxed">
+                Your verified status requires up-to-date KYC documents. Expired or missing documents (including GST where applicable) will restrict your ability to publish new listings until resolved.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* CTA */}
         <div className="pt-2">
-          <Button variant="ghost" size="sm" className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="flex items-center gap-2"
+            onClick={() => setIsDownloadOpen(true)}
+          >
             <Smartphone size={16} className="mr-1" />
             Open Mobile App
           </Button>
@@ -867,6 +891,7 @@ export default function ProfileComponent() {
           </Button>
         </div>
       </div>  
+      <DownloadAppPopup isOpen={isDownloadOpen} onClose={() => setIsDownloadOpen(false)} />
     </section>
   );
 }

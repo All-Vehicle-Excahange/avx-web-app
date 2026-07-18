@@ -175,8 +175,6 @@ export default function FilterWithCard({
     };
   }, [mobileFilterOpen]);
 
-
-
   // Load states
   useEffect(() => {
     const fetchStates = async () => {
@@ -925,7 +923,10 @@ export default function FilterWithCard({
           </div>
 
           <div className="space-y-4">
-            <FilterSection title={"Distance"} selectedCount={selectedDistance.length}>
+            <FilterSection
+              title={"Distance"}
+              selectedCount={selectedDistance.length}
+            >
               <ChipGroup
                 title=""
                 items={distances}
@@ -935,7 +936,10 @@ export default function FilterWithCard({
               />
             </FilterSection>
 
-            <FilterSection title="Inventory Size" selectedCount={selectedInventory.length}>
+            <FilterSection
+              title="Inventory Size"
+              selectedCount={selectedInventory.length}
+            >
               <ChipGroup
                 title=""
                 items={inventorySizes}
@@ -945,7 +949,10 @@ export default function FilterWithCard({
               />
             </FilterSection>
 
-            <FilterSection title="Vehicle Type" selectedCount={selectedVehicleTypes.length}>
+            <FilterSection
+              title="Vehicle Type"
+              selectedCount={selectedVehicleTypes.length}
+            >
               <ChipGroup
                 title=""
                 items={vehicleTypes}
@@ -964,7 +971,10 @@ export default function FilterWithCard({
               />
             </FilterSection>
 
-            <FilterSection title={"Services Provided"} selectedCount={selectedServices.length}>
+            <FilterSection
+              title={"Services Provided"}
+              selectedCount={selectedServices.length}
+            >
               <ChipGroup
                 title=""
                 items={services}
@@ -1040,14 +1050,16 @@ export default function FilterWithCard({
             if (selectedCityName) {
               contextStr = `in ${selectedCityName}`;
             } else if (selectedServices && selectedServices.length > 0) {
-              const serviceName = services.find(s => s.value === selectedServices[0])?.label || selectedServices[0];
+              const serviceName =
+                services.find((s) => s.value === selectedServices[0])?.label ||
+                selectedServices[0];
               contextStr = `for ${serviceName}`;
             } else if (minPrice > 0 || maxPrice < 5000000) {
               contextStr = `in this price range`;
             }
 
             return {
-              emptyTitle: contextStr 
+              emptyTitle: contextStr
                 ? `No ${baseTitle.toLowerCase()} found ${contextStr}`
                 : `No ${baseTitle.toLowerCase()} found`,
               emptyDescription: contextStr
@@ -1058,110 +1070,117 @@ export default function FilterWithCard({
 
           return (
             <>
-              <div className="lg:hidden sticky top-16 z-40 py-2 mb-4" style={{ background: "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)" }}>
-          <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide pb-2">
-          <div className="shrink-0">
-            <Button
-              variant="ghost"
-              className="rounded-lg"
-              showIcon={false}
-              onClick={() => setMobileFilterOpen(true)}
-            >
-              <FilterIcon className="h-4 w-4 mr-1" />
-              Filter
-            </Button>
-          </div>
+              <div
+                className="lg:hidden sticky top-16 z-40 py-2 mb-4"
+                style={{
+                  background:
+                    "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)",
+                }}
+              >
+                <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide pb-2">
+                  <div className="shrink-0">
+                    <Button
+                      variant="ghost"
+                      className="rounded-lg"
+                      showIcon={false}
+                      onClick={() => setMobileFilterOpen(true)}
+                    >
+                      <FilterIcon className="h-4 w-4 mr-1" />
+                      Filter
+                    </Button>
+                  </div>
 
-          <div className="shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg border border-white/20 bg-white/5">
-            <span className="text-xs text-white font-semibold whitespace-nowrap">
-              Reecomm Premium Consultants
-            </span>
-            <button
-              onClick={() => setAvxAssumed(!avxAssumed)}
-              className={`relative w-9 h-5 rounded-full cursor-pointer ${avxAssumed ? "bg-primary" : "bg-white/20"}`}
-            >
-              <span
-                className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-secondary transition-transform ${avxAssumed ? "translate-x-4" : ""}`}
+                  <div className="shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg border border-white/20 bg-white/5">
+                    <span className="text-xs text-white font-semibold whitespace-nowrap">
+                      Reecomm Premium Consultants
+                    </span>
+                    <button
+                      onClick={() => setAvxAssumed(!avxAssumed)}
+                      className={`relative w-9 h-5 rounded-full cursor-pointer ${avxAssumed ? "bg-primary" : "bg-white/20"}`}
+                    >
+                      <span
+                        className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-secondary transition-transform ${avxAssumed ? "translate-x-4" : ""}`}
+                      />
+                    </button>
+                  </div>
+
+                  <div className="shrink-0">
+                    <Chip
+                      label="Four-Wheeler"
+                      selected={selectedVehicleTypes.includes("FOUR_WHEELER")}
+                      variant="outline"
+                      onClick={() => {
+                        setSelectedVehicleTypes((prev) =>
+                          prev.includes("FOUR_WHEELER")
+                            ? prev.filter((v) => v !== "FOUR_WHEELER")
+                            : [...prev, "FOUR_WHEELER"],
+                        );
+                      }}
+                    />
+                  </div>
+                  <div className="shrink-0">
+                    <Chip
+                      label="⭐ 4.5+ Rating"
+                      selected={selectedRating.includes("4.5")}
+                      variant="outline"
+                      onClick={() => {
+                        setSelectedRating((prev) =>
+                          prev.includes("4.5")
+                            ? prev.filter((r) => r !== "4.5")
+                            : ["4.5"],
+                        );
+                      }}
+                    />
+                  </div>
+                  <div className="shrink-0">
+                    <Chip
+                      label="30+ Vehicles"
+                      selected={selectedInventory.includes("30+")}
+                      variant="outline"
+                      onClick={() => {
+                        setSelectedInventory((prev) =>
+                          prev.includes("30+")
+                            ? prev.filter((i) => i !== "30+")
+                            : ["30+"],
+                        );
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <ConsultantGridSection
+                title="Featured Premium Consultant"
+                data={premiumConsultants}
+                showViewAll
+                i={3}
+                loading={consultantsLoading}
+                {...getEmptyStateProps("featured premium consultants")}
               />
-            </button>
-          </div>
 
-          <div className="shrink-0">
-            <Chip
-              label="Four-Wheeler"
-              selected={selectedVehicleTypes.includes("FOUR_WHEELER")}
-              variant="outline"
-              onClick={() => {
-                setSelectedVehicleTypes((prev) =>
-                  prev.includes("FOUR_WHEELER")
-                    ? prev.filter((v) => v !== "FOUR_WHEELER")
-                    : [...prev, "FOUR_WHEELER"],
-                );
-              }}
-            />
-          </div>
-          <div className="shrink-0">
-            <Chip
-              label="⭐ 4.5+ Rating"
-              selected={selectedRating.includes("4.5")}
-              variant="outline"
-              onClick={() => {
-                setSelectedRating((prev) =>
-                  prev.includes("4.5")
-                    ? prev.filter((r) => r !== "4.5")
-                    : ["4.5"],
-                );
-              }}
-            />
-          </div>
-          <div className="shrink-0">
-            <Chip
-              label="30+ Vehicles"
-              selected={selectedInventory.includes("30+")}
-              variant="outline"
-              onClick={() => {
-                setSelectedInventory((prev) =>
-                  prev.includes("30+")
-                    ? prev.filter((i) => i !== "30+")
-                    : ["30+"],
-                );
-              }}
-            />
-          </div>
-        </div>
-        </div>
+              <ConsultantSliderSection
+                title="Activity-led (Recommended)"
+                description="Consultants getting the most inquiries from buyers right now — verified, active, and ready to connect."
+                showIsSponsored={true}
+                data={[]}
+                loading={consultantsLoading}
+                {...getEmptyStateProps("trending consultants")}
+              />
 
-        <ConsultantGridSection
-          title="Featured Premium Consultant"
-          data={premiumConsultants}
-          showIsSponsored={true}
-          showViewAll
-          i={3}
-          loading={consultantsLoading}
-          {...getEmptyStateProps("featured premium consultants")}
-        />
+              <ConsultantGridSection
+                title="Consult near you "
+                data={consultants}
+                i={6}
+                loading={consultantsLoading}
+                {...getEmptyStateProps("consultants")}
+              />
 
-        <ConsultantSliderSection
-          title="Sponsored Consultant"
-          data={[]}
-          loading={consultantsLoading}
-          {...getEmptyStateProps("sponsored consultants")}
-        />
-
-        <ConsultantGridSection
-          title="Consult near you "
-          data={consultants}
-          i={6}
-          loading={consultantsLoading}
-          {...getEmptyStateProps("consultants")}
-        />
-
-        {/* Pagination Controls */}
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
+              {/* Pagination Controls */}
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
             </>
           );
         })()}
@@ -1191,7 +1210,10 @@ export default function FilterWithCard({
           {/* ── Left Tabs ── */}
           <div className="w-[40%] border-r border-third/40 overflow-y-auto">
             {[
-              { name: "Location", count: selectedStateId ? (selectedCityId ? 2 : 1) : 0 },
+              {
+                name: "Location",
+                count: selectedStateId ? (selectedCityId ? 2 : 1) : 0,
+              },
               { name: "Vehicle Type", count: selectedVehicleTypes.length },
               { name: "Distance", count: selectedDistance.length },
               { name: "Inventory Size", count: selectedInventory.length },

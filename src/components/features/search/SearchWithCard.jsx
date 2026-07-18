@@ -74,7 +74,8 @@ export default function SearchWithCard({
   const { replace } = useRouter();
   const pathname = usePathname();
 
-  const vehicleType = searchParams.get("vehicleType") || initialFilters.vehicleType;
+  const vehicleType =
+    searchParams.get("vehicleType") || initialFilters.vehicleType;
   const bodyType = searchParams.get("bodyType");
   const apiBodyType = useMemo(() => {
     if (!vehicleType) return "FOUR_WHEELER";
@@ -162,12 +163,8 @@ export default function SearchWithCard({
     return searchParams.get("reccomInspected") === "true";
   });
 
-  const [minPrice, setMinPrice] = useState(() =>
-    budget ? mPrice : 50000
-  );
-  const [maxPrice, setMaxPrice] = useState(() =>
-    budget ? mxPrice : 2000000
-  );
+  const [minPrice, setMinPrice] = useState(() => (budget ? mPrice : 50000));
+  const [maxPrice, setMaxPrice] = useState(() => (budget ? mxPrice : 2000000));
   const [kmDistance, setKmDistance] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -306,10 +303,16 @@ export default function SearchWithCard({
       isSelfTriggered.current = false;
     } else {
       // Fuel Type
-      setSelectedFuelTypes(initialFilters.fuelType ? [initialFilters.fuelType] : []);
+      setSelectedFuelTypes(
+        initialFilters.fuelType ? [initialFilters.fuelType] : [],
+      );
 
       // Transmission
-      setSelectedTransmissionTypes(initialFilters.transmission ? [initialFilters.transmission.toLowerCase()] : []);
+      setSelectedTransmissionTypes(
+        initialFilters.transmission
+          ? [initialFilters.transmission.toLowerCase()]
+          : [],
+      );
 
       // Brand
       setSelectedBrands(initialFilters.makerId ? [initialFilters.makerId] : []);
@@ -318,7 +321,9 @@ export default function SearchWithCard({
       setSelectedModels(initialFilters.modelId ? [initialFilters.modelId] : []);
 
       // Body Type
-      setSelectedBodyType(initialFilters.bodyType ? [initialFilters.bodyType.toLowerCase()] : []);
+      setSelectedBodyType(
+        initialFilters.bodyType ? [initialFilters.bodyType.toLowerCase()] : [],
+      );
 
       // Location
       if (initialFilters.stateId) {
@@ -523,11 +528,20 @@ export default function SearchWithCard({
     const found = brands.find((b) => String(b.value) === String(makerId));
     if (found) return found.label;
 
-    if (initialFilters.makerId && String(initialFilters.makerId) === String(makerId)) {
+    if (
+      initialFilters.makerId &&
+      String(initialFilters.makerId) === String(makerId)
+    ) {
       return initialFilters.brandName || brandParam || "";
     }
     return brandParam || "";
-  }, [selectedBrands, brands, brandParam, initialFilters.brandName, initialFilters.makerId]);
+  }, [
+    selectedBrands,
+    brands,
+    brandParam,
+    initialFilters.brandName,
+    initialFilters.makerId,
+  ]);
 
   const resolvedModelName = useMemo(() => {
     if (selectedModels.length === 0) return "";
@@ -535,7 +549,10 @@ export default function SearchWithCard({
     const found = models.find((m) => String(m.value) === String(modelId));
     if (found) return found.label;
 
-    if (initialFilters.modelId && String(initialFilters.modelId) === String(modelId)) {
+    if (
+      initialFilters.modelId &&
+      String(initialFilters.modelId) === String(modelId)
+    ) {
       return initialFilters.model || "";
     }
     return "";
@@ -607,7 +624,9 @@ export default function SearchWithCard({
     const currentMinLakh = minPrice / 100000;
     const currentMaxLakh = maxPrice / 100000;
 
-    const isUnder = Math.round(minPrice) === 0 && [2, 5, 10, 15, 20, 25, 30, 50].includes(Math.round(currentMaxLakh));
+    const isUnder =
+      Math.round(minPrice) === 0 &&
+      [2, 5, 10, 15, 20, 25, 30, 50].includes(Math.round(currentMaxLakh));
     const isAbove = Math.round(currentMinLakh) === 50 && maxPrice >= 20000000;
 
     if (isUnder) {
@@ -616,9 +635,15 @@ export default function SearchWithCard({
       budgetParam = `50-200`;
     }
 
-    const isTwoWheeler = vehicleType && (vehicleType.toLowerCase().includes("2") || vehicleType.toLowerCase().includes("two"));
+    const isTwoWheeler =
+      vehicleType &&
+      (vehicleType.toLowerCase().includes("2") ||
+        vehicleType.toLowerCase().includes("two"));
     const fuel = selectedFuelTypes.length === 1 ? selectedFuelTypes[0] : null;
-    const trans = selectedTransmissionTypes.length === 1 ? selectedTransmissionTypes[0] : null;
+    const trans =
+      selectedTransmissionTypes.length === 1
+        ? selectedTransmissionTypes[0]
+        : null;
     const body = selectedBodyType.length === 1 ? selectedBodyType[0] : null;
 
     // Build the target SEO slug
@@ -634,7 +659,15 @@ export default function SearchWithCard({
     });
     const currentSlug = pathname.split("/").pop();
 
-    if (!brandName && !locationName && !budgetParam && !isTwoWheeler && !fuel && !trans && !body) {
+    if (
+      !brandName &&
+      !locationName &&
+      !budgetParam &&
+      !isTwoWheeler &&
+      !fuel &&
+      !trans &&
+      !body
+    ) {
       // If we are currently on an SEO slug page but filters are empty, go back to base search
       if (currentSlug && currentSlug.startsWith("buy-used-")) {
         replace("/search", { scroll: false });
@@ -658,8 +691,6 @@ export default function SearchWithCard({
     selectedTransmissionTypes,
     selectedBodyType,
   ]);
-
-
 
   useEffect(() => {
     if (onLoadingChange) onLoadingChange(vehiclesLoading);
@@ -744,19 +775,19 @@ export default function SearchWithCard({
     const brandLabel =
       selectedBrands.length > 0
         ? brands.find((b) => safeStr(b.value) === safeStr(selectedBrands[0]))
-          ?.label || ""
+            ?.label || ""
         : "";
 
     const modelLabel =
       selectedModels.length > 0
         ? models.find((m) => safeStr(m.value) === safeStr(selectedModels[0]))
-          ?.label || ""
+            ?.label || ""
         : "";
 
     const bodyTypeLabel =
       selectedBodyType.length > 0
         ? selectedBodyType[0].charAt(0).toUpperCase() +
-        selectedBodyType[0].slice(1).toLowerCase()
+          selectedBodyType[0].slice(1).toLowerCase()
         : "";
 
     onConsultPayloadChange({
@@ -2050,23 +2081,23 @@ export default function SearchWithCard({
               const brandLabel =
                 selectedBrands.length > 0
                   ? brands.find(
-                    (b) => safeStr(b.value) === safeStr(selectedBrands[0]),
-                  )?.label || ""
+                      (b) => safeStr(b.value) === safeStr(selectedBrands[0]),
+                    )?.label || ""
                   : "";
 
               // Resolve model label from selected model id
               const modelLabel =
                 selectedModels.length > 0
                   ? models.find(
-                    (m) => safeStr(m.value) === safeStr(selectedModels[0]),
-                  )?.label || ""
+                      (m) => safeStr(m.value) === safeStr(selectedModels[0]),
+                    )?.label || ""
                   : "";
 
               // Resolve body type label (capitalise first letter)
               const bodyTypeLabel =
                 selectedBodyType.length > 0
                   ? selectedBodyType[0].charAt(0).toUpperCase() +
-                  selectedBodyType[0].slice(1).toLowerCase()
+                    selectedBodyType[0].slice(1).toLowerCase()
                   : "";
 
               let subject = "Vehicles";
@@ -2119,12 +2150,13 @@ export default function SearchWithCard({
                   </p>
 
                   <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-                    <span className="text-fourth"> Top Vehicle</span> For You
+                    <span className="text-fourth"> Personalised</span>{" "}
+                    (Recommended)
                   </h2>
 
                   <p className="text-third">
-                    Lorem ipsum dolor sit amet consectetur dolor sit amet
-                    consectetur..
+                    Handpicked based on your search — verified listings that
+                    match your budget and preferences.
                   </p>
                 </div>
               </div>
@@ -2158,8 +2190,9 @@ export default function SearchWithCard({
 
       {/* MOBILE FILTER DRAWER */}
       <div
-        className={`fixed top-16 inset-x-0 bottom-0 z-100 bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${mobileFilterOpen ? "translate-y-0" : "translate-y-full"
-          }`}
+        className={`fixed top-16 inset-x-0 bottom-0 z-100 bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${
+          mobileFilterOpen ? "translate-y-0" : "translate-y-full"
+        }`}
       >
         {/* ── Header ── */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-third/40 shrink-0">
@@ -2198,10 +2231,11 @@ export default function SearchWithCard({
               <div
                 key={tab.name}
                 onClick={() => setActiveFilterTab(tab.name)}
-                className={`px-4 py-3 cursor-pointer text-sm flex items-center justify-between ${activeFilterTab === tab.name
-                  ? "bg-secondary/10 font-semibold"
-                  : "hover:bg-secondary/5"
-                  }`}
+                className={`px-4 py-3 cursor-pointer text-sm flex items-center justify-between ${
+                  activeFilterTab === tab.name
+                    ? "bg-secondary/10 font-semibold"
+                    : "hover:bg-secondary/5"
+                }`}
               >
                 <span>{tab.name}</span>
                 {tab.count > 0 && (
