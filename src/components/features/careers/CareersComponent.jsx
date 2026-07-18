@@ -114,9 +114,11 @@ export default function CareersComponent() {
   ];
 
   const handleApplyClick = (roleName) => {
-    const subject = encodeURIComponent(`Application for ${roleName} at Reecomm`);
+    const subject = encodeURIComponent(
+      `Application for ${roleName} at Reecomm`,
+    );
     const body = encodeURIComponent(
-      `Hi Reecomm Team,\n\nI am interested in applying for the ${roleName} role. Here is a link to my work/CV:\n\n[Link]\n\nLooking forward to hearing from you!`
+      `Hi Reecomm Team,\n\nI am interested in applying for the ${roleName} role. Here is a link to my work/CV:\n\n[Link]\n\nLooking forward to hearing from you!`,
     );
     window.location.href = `mailto:careers@reecomm.com?subject=${subject}&body=${body}`;
   };
@@ -127,13 +129,10 @@ export default function CareersComponent() {
 
   return (
     <div className="w-full text-primary font-secondary bg-transparent overflow-x-hidden">
-      <section className="relative flex flex-col justify-center py-8">
-
+      <section className="relative flex flex-col justify-center pt-20 pb-8">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10 w-full">
           {/* Hero Content */}
           <div className="lg:col-span-7 flex flex-col items-start text-left">
-           
-
             <motion.h1
               className="text-[40px] sm:text-[50px] md:text-[60px] font-bold leading-[1.05] tracking-tight text-primary mb-6"
               initial={{ opacity: 0, y: 20 }}
@@ -153,10 +152,10 @@ export default function CareersComponent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              We're a small team solving a large problem. India's used vehicle market
-              runs on WhatsApp, referrals, and guesswork — and we're building the
-              infrastructure to change that. If you want your work to matter from
-              day one, Reecomm is where you build it.
+              We're a small team solving a large problem. India's used vehicle
+              market runs on WhatsApp, referrals, and guesswork — and we're
+              building the infrastructure to change that. If you want your work
+              to matter from day one, Reecomm is where you build it.
             </motion.p>
 
             <motion.div
@@ -167,9 +166,11 @@ export default function CareersComponent() {
             >
               <Button href="#open-roles" variant="ghost" showIcon={false}>
                 View Open Roles
-                <ArrowRight size={16} className="ml-2 inline group-hover:translate-x-1 transition-transform" />
+                <ArrowRight
+                  size={16}
+                  className="ml-2 inline group-hover:translate-x-1 transition-transform"
+                />
               </Button>
-             
             </motion.div>
           </div>
 
@@ -186,8 +187,12 @@ export default function CareersComponent() {
                   R
                 </div>
                 <div>
-                  <h3 className="font-semibold text-primary text-sm">Reecomm Storefront</h3>
-                  <p className="text-[10px] text-third">Storefront Status: Active</p>
+                  <h3 className="font-semibold text-primary text-sm">
+                    Reecomm Storefront
+                  </h3>
+                  <p className="text-[10px] text-third">
+                    Storefront Status: Active
+                  </p>
                 </div>
                 <div className="ml-auto flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 text-[10px] font-semibold border border-green-500/30">
                   <ShieldCheck size={11} /> Verified
@@ -298,7 +303,8 @@ export default function CareersComponent() {
                           {role.department}
                         </td>
                         <td className="py-5 px-6 text-third text-sm flex items-center gap-1">
-                          <MapPin size={13} className="text-third/80" /> {role.location}
+                          <MapPin size={13} className="text-third/80" />{" "}
+                          {role.location}
                         </td>
                         <td className="py-5 px-6 text-third text-sm">
                           <span className="px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-[11px] font-medium">
@@ -362,15 +368,15 @@ export default function CareersComponent() {
             {howWeWorkPrinciples.map((item, idx) => (
               <motion.div
                 key={idx}
-                className="relative pl-8 border-l border-white/10 hover:border-fourth transition-colors duration-300"
+                className="relative pl-6 border-l border-white/10 hover:border-fourth transition-colors duration-300"
                 initial={{ opacity: 0, x: -10 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
               >
-                <span className="absolute left-0 top-1 text-[11px] font-mono text-fourth font-bold -translate-x-[50%] bg-[#1a1919] px-1">
-                  0{idx + 1}
-                </span>
+                <div className="text-[11px] font-mono text-fourth font-bold mb-1">
+                  {String(idx + 1).padStart(2, "0")}
+                </div>
                 <h3 className="text-[18px] font-semibold text-primary mb-2">
                   {item.title}
                 </h3>
@@ -426,7 +432,6 @@ export default function CareersComponent() {
 
       {/* SECTION 6 — BOTTOM CTA */}
       <section className="py-10 relative overflow-hidden">
-
         <div className="max-w-4xl mx-auto text-center relative z-10 w-full">
           <motion.h2
             className="text-[36px] sm:text-[46px] md:text-[52px] font-bold text-primary mb-6"
@@ -445,9 +450,9 @@ export default function CareersComponent() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            We don't care where you went to college. We care what you've built, how
-            you think, and whether you take ownership. Send us your work and tell
-            us what you'd build at Reecomm.
+            We don't care where you went to college. We care what you've built,
+            how you think, and whether you take ownership. Send us your work and
+            tell us what you'd build at Reecomm.
           </motion.p>
 
           <motion.div

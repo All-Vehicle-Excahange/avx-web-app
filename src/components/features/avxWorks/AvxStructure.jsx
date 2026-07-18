@@ -23,40 +23,33 @@ export default function AvxStructure() {
         </div>
 
         {/* SYSTEM CORE */}
-        <div className="relative flex flex-col items-center min-h-190">
+        <div className="relative flex flex-col items-center min-h-fit lg:min-h-190">
           {/* FLOW LINES */}
-          <FlowLines />
+          <div className="hidden lg:block">
+            <FlowLines />
+          </div>
 
           {/* TOP NODE */}
           <TrustNode
             icon={<UserCheck size={22} />}
             title="Identity verification"
             desc="Personal identity must be verified before platform access."
-            className="mb-28"
+            className="mb-10 lg:mb-28"
           />
 
           {/* MIDDLE */}
-          <div className="relative flex items-center gap-36">
+          <div className="relative flex flex-col lg:flex-row items-center gap-10 lg:gap-36">
             {/* LEFT */}
             <TrustNode
               icon={<Building2 size={22} />}
               title="Business validation"
               desc="Only legitimate businesses are approved to operate."
+              className="mb-10 lg:mb-0"
             />
 
             {/* CORE */}
-            <div
-              className="relative z-20 flex items-center justify-center h-85 w-80 rounded-[130px]
-              border border-neutral-500
-            "
-            >
-              {/* Outer containment ring */}
-              <div className="absolute -inset-5 rounded-full border border-neutral-700 opacity-50" />
-
-              {/* Inner pressure ring */}
-              <div className="absolute inset-4 rounded-full border border-neutral-800 opacity-60" />
-
-              <div className="text-center px-10">
+            <div className="relative z-20 flex items-center justify-center h-fit w-full lg:h-85 lg:w-80 mb-10 lg:mb-0">
+              <div className="text-center px-6 lg:px-10">
                 <p className="text-xs tracking-[0.35em] uppercase text-neutral-500">
                   Reecomm Core
                 </p>
@@ -86,7 +79,7 @@ export default function AvxStructure() {
             icon={<ShieldCheck size={22} />}
             title="Structured participation"
             desc="Posting, visibility, and performance are governed by platform rules."
-            className="mt-28"
+            className="mt-10 lg:mt-28"
           />
         </div>
       </div>

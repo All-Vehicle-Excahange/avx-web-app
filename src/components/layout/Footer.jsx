@@ -1,30 +1,49 @@
 import Link from "next/link";
 import React from "react";
-import { FaXTwitter, FaLinkedinIn, FaInstagram, FaYoutube, FaFacebookF } from "react-icons/fa6";
+import {
+  FaXTwitter,
+  FaLinkedinIn,
+  FaInstagram,
+  FaYoutube,
+  FaFacebookF,
+} from "react-icons/fa6";
 import Image from "next/image";
 
 const footerLinks = {
   buy: [
     { label: "Browse all vehicles", href: "/search" },
-    { label: "Cars", href: "/search?vehicleType=4 Wheeler" },
-    { label: "Two-wheelers", href: "/search?vehicleType=2 Wheeler" },
-    { label: "Reecomm Inspected", href: "/search?reccomInspected=true" },
+    { label: "Browse Cars", href: "/search?vehicleType=4 Wheeler" },
+    { label: "Browse Two-wheelers", href: "/search?vehicleType=2 Wheeler" },
+    {
+      label: "Reecomm Inspected Vehicles",
+      href: "/search?reccomInspected=true",
+    },
     { label: "Budget under ₹3 lakh", href: "/search?budget=0-3" },
     { label: "Budget ₹3L – ₹8L", href: "/search?budget=3-8" },
-    { label: "Used car buying guide", href: "/blog/how-to-buy-used-car-safely-india" },
+    {
+      label: "Used car buying guide",
+      href: "/blog/how-to-buy-used-car-safely-india",
+    },
   ],
   sell: [
     { label: "List your car", href: "/consult" },
     { label: "List your two-wheeler", href: "/consult" },
     { label: "Request an inspection", href: "/inspection-process" },
-    { label: "RC transfer service", href: "/blog/rc-transfer-process-used-car-india-2026" },
+    {
+      label: "RC transfer service",
+      href: "/blog/rc-transfer-process-used-car-india-2026",
+    },
     { label: "Doorstep inspection", href: "/inspection-process" },
+    { label: "Become Seller", href: "/become-seller" },
   ],
   consultants: [
     { label: "Become a consultant", href: "/consult" },
     { label: "Consultant pricing", href: "/consult/pricing" },
     { label: "Manage my inventory", href: "/consult/subscription" },
-    { label: "Consultant success guide", href: "/blog/consultant-success-guide" },
+    {
+      label: "Consultant success guide",
+      href: "/blog/consultant-success-guide",
+    },
   ],
   company: [
     { label: "About us", href: "/aboutus" },

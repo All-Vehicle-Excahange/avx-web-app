@@ -76,10 +76,10 @@ export default function WhatYouGetSpotlight() {
         </motion.div>
 
         {/* MAIN */}
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 lg:h-[400px] lg:items-stretch">
           {/* LEFT */}
-          <div className="lg:w-[360] shrink-0">
-            <div className="flex flex-col gap-2.5">
+          <div className="lg:w-[360px] shrink-0 h-full">
+            <div className="flex flex-col gap-2.5 h-full">
               {features.map((f, i) => {
                 const isActive = activeFeature === i;
 
@@ -87,7 +87,7 @@ export default function WhatYouGetSpotlight() {
                   <button
                     key={i}
                     onClick={() => setActiveFeature(i)}
-                    className={`relative group text-left rounded-xl px-5 py-4 transition-all duration-300 border overflow-hidden hover:cursor-pointer
+                    className={`relative flex-1 group text-left rounded-xl px-5 py-2 transition-all duration-300 border overflow-hidden hover:cursor-pointer
               ${
                 isActive
                   ? "border-primary/20 bg-primary/5 "
@@ -125,7 +125,7 @@ export default function WhatYouGetSpotlight() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="flex-1 min-h-[300]"
+            className="flex-1 h-full min-h-[400px] lg:min-h-0"
           >
             <div className="relative h-full rounded-2xl border border-[#1f2937] overflow-hidden">
               {/* Dynamic Background */}
@@ -133,7 +133,7 @@ export default function WhatYouGetSpotlight() {
                 className="absolute inset-0 bg-cover bg-center"
                 style={{
                   backgroundImage: `url(${active.bgImage})`,
-                  filter: "grayscale(100%) brightness(0.2) contrast(0.85)",
+                  filter: "grayscale(40%) brightness(0.2) contrast(0.85)",
                 }}
               />
 

@@ -86,7 +86,7 @@ export default function DocumentsRequired() {
                 <Image src={doc.bg} loading="lazy" alt={doc.name} fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
 
                 {/* 🌑 DARK OVERLAY */}
-                <div className="absolute inset-0 bg-black/70 group-hover:bg-black/50 transition duration-300" />
+                <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition duration-300" />
 
                 {/* ✨ CONTENT */}
                 <div className="relative z-10 h-full flex flex-col justify-end">

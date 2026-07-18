@@ -1,6 +1,4 @@
 "use client";
-import Image from "next/image";
-
 import { useState } from "react";
 import { Plus, Minus } from "lucide-react"; // Fixed the import here
 
@@ -9,23 +7,23 @@ export default function FAQSection() {
 
   const faqs = [
     {
-      q: "Is inspection mandatory?",
-      a: "No. It is optional but recommended.",
+      q: "What does the Reecomm inspection report include?",
+      a: "The report includes a 150+ point evaluation covering engine health, transmission, suspension, brake wear, electrical systems, body panels, exterior paint depth, interior cabin quality, and an on-road test summary.",
     },
     {
-      q: "Who pays for inspection?",
-      a: "The party requesting inspection.",
+      q: "Who performs the vehicle inspections?",
+      a: "Inspections are performed by certified, independent Reecomm inspectors with extensive training in automotive mechanics and diagnostics. They use digital tools and standardized templates to guarantee objective reports.",
     },
     {
-      q: "How long does inspection take?",
-      a: "Typically 24–72 hours depending on city.",
+      q: "How long does a vehicle inspection take?",
+      a: "A standard comprehensive inspection takes between 45 to 60 minutes, depending on the vehicle class, condition, and configuration.",
     },
     {
-      q: "Can I see inspection before contacting seller?",
-      a: "Yes, if already available on listing.",
+      q: "Can I inspect the vehicle before buying?",
+      a: "Yes. The Reecomm report is a resource to help you verify condition before making an offer. We strongly encourage buyers to review the digital report, schedule a call with the consultant, and view the vehicle in person.",
     },
     {
-      q: "Can inspection be edited?",
+      q: "Are the reports updated if a repair is completed?",
       a: "No. Reports are locked after publication.",
     },
   ];
@@ -56,35 +54,36 @@ export default function FAQSection() {
                 Frequently Asked Questions
               </h2>
 
-              <p className="text-third mb-10 max-w-xl text-sm sm:text-base">
-                Quick answers to the most common questions about inspections and reports.
-              </p>
+            <p className="text-third mb-10 max-w-xl mx-auto text-sm sm:text-base">
+              Quick answers to the most common questions about inspections and
+              reports.
+            </p>
 
-              <div className="space-y-4 h-120.25 overflow-hidden">
-                {faqs.map((item, i) => {
-                  const isOpen = openIndex === i;
+            <div className="space-y-4 text-left">
+              {faqs.map((item, i) => {
+                const isOpen = openIndex === i;
 
-                  return (
-                    <div
-                      key={i}
-                      className={`
-                        rounded-xl
-                        border border-primary/10
-                        bg-primary/2
-                        transition-all duration-300 ease-in-out
-                        hover:border-primary/20 
-                        
-                        ${isOpen ? "shadow-md bg-primary/4" : ""}
-                      `}
+                return (
+                  <div
+                    key={i}
+                    className={`
+                      rounded-xl
+                      border border-primary/10
+                      bg-primary/2
+                      transition-all duration-300 ease-in-out
+                      hover:border-primary/20 
+                      
+                      ${isOpen ? "shadow-md bg-primary/4" : ""}
+                    `}
+                  >
+                    {/* QUESTION */}
+                    <button
+                      onClick={() => toggle(i)}
+                      className="w-full flex items-center justify-between text-left px-6 py-5 focus:outline-none"
                     >
-                      {/* QUESTION */}
-                      <button
-                        onClick={() => toggle(i)}
-                        className="w-full flex items-center justify-between text-left px-6 py-5 focus:outline-none"
-                      >
-                        <span className="text-base sm:text-lg font-medium text-primary  pr-4  ">
-                          {item.q}
-                        </span>
+                      <span className="text-base sm:text-lg font-medium text-primary  pr-4  ">
+                        {item.q}
+                      </span>
 
                         <div
                           className={`
@@ -114,18 +113,32 @@ export default function FAQSection() {
                           : "grid-rows-[0fr] opacity-0"
                           }`}
                       >
-                        <div className="overflow-hidden">
-                          <div className="px-6 pb-6 text-sm sm:text-[15px] text-third leading-relaxed">
-                            {item.a}
-                          </div>
+                        {isOpen ? (
+                          <Minus className="w-4 h-4" />
+                        ) : (
+                          <Plus className="w-4 h-4" />
+                        )}
+                      </div>
+                    </button>
+
+                    {/* ANSWER - CSS Grid transition to prevent jumping */}
+                    <div
+                      className={`grid transition-all duration-300 ease-in-out ${
+                        isOpen
+                          ? "grid-rows-[1fr] opacity-100"
+                          : "grid-rows-[0fr] opacity-0"
+                      }`}
+                    >
+                      <div className="overflow-hidden">
+                        <div className="px-6 pb-6 text-sm sm:text-[15px] text-third leading-relaxed">
+                          {item.a}
                         </div>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
-
           </div>
         </div>
       </div>

@@ -7,8 +7,8 @@ import { FiCheck } from "react-icons/fi";
 const tiers = [
   {
     name: "Basic",
-    subtitle: "Entry-level presence",
-    desc: "Best for small consultants & entry-level sellers.",
+    subtitle: "",
+    desc: "",
     highlight: false,
     features: [
       "Up to 8 active listings",
@@ -19,8 +19,8 @@ const tiers = [
   },
   {
     name: "Pro",
-    subtitle: "Growth-focused visibility",
-    desc: "Ideal for growing dealerships expanding reach.",
+    subtitle: "",
+    desc: "",
     highlight: true,
     features: [
       "25–40 active listings",
@@ -31,8 +31,8 @@ const tiers = [
   },
   {
     name: "Premium",
-    subtitle: "Brand-level dominance",
-    desc: "For large inventory dealers & city-level brands.",
+    subtitle: "",
+    desc: "",
     highlight: false,
     features: [
       "75+ active listings",
@@ -93,7 +93,12 @@ export default function TierStructure() {
 
               {/* Most Popular badge */}
               {tier.highlight && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary/40 border border-primary/20 text-[10px] font-semibold px-3 py-1 rounded-full text-primary/80 tracking-widest uppercase">
+                <div
+                  className="absolute -top-3 left-1/2 -translate-x-1/2 border border-primary/20 text-[10px] font-semibold px-3 py-1 rounded-full text-primary/80 tracking-widest uppercase"
+                  style={{
+                    background: "linear-gradient(rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15)), linear-gradient(#1a1919, #1a1919)",
+                  }}
+                >
                   Most Popular
                 </div>
               )}

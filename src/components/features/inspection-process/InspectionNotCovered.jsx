@@ -15,25 +15,25 @@ export default function InspectionNotCovered() {
       title: "Future Performance",
       desc: "The inspection documents condition at the time of assessment. It does not predict future mechanical behaviour, component lifespan, or failure probability.",
       icon: <History className="w-5 h-5 text-primary" />,
-      tag: "NON_PREDICTIVE",
+      tag: "NON PREDICTIVE",
     },
     {
       title: "Transaction Outcome",
       desc: "An inspection report is a condition assessment tool. Reecomm does not mediate, guarantee, or participate in the financial transaction between buyer and consultant.",
       icon: <ShieldAlert className="w-5 h-5 text-primary" />,
-      tag: "NEUTRAL_ENTITY",
+      tag: "NEUTRAL ENTITY",
     },
     {
       title: "Ownership & Logistics",
       desc: "The inspection does not verify ownership history, outstanding finance, insurance claims, or legal encumbrances on the vehicle.",
       icon: <FileX2 className="w-5 h-5 text-primary" />,
-      tag: "EVAL_ONLY",
+      tag: "EVAL ONLY",
     },
     {
       title: "Warranty Provision",
       desc: "A Reecomm inspection is not a warranty. It does not create any liability for Reecomm or the inspector regarding future vehicle condition.",
       icon: <Lock className="w-5 h-5 text-primary" />,
-      tag: "NO_INSURANCE",
+      tag: "NO INSURANCE",
     },
   ];
 
@@ -98,7 +98,7 @@ export default function InspectionNotCovered() {
                         {item.title}
                       </h4>
 
-                      <span className="text-[14px] font-mono text-third/60 whitespace-nowrap">
+                      <span className="text-[9px] font-bold font-mono tracking-widest text-primary/70 bg-white/5 border border-white/10 px-2.5 py-1 rounded-full whitespace-nowrap uppercase">
                         {item.tag}
                       </span>
                     </div>
