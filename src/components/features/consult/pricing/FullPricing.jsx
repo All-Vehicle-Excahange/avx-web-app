@@ -511,7 +511,7 @@ export default function FullPricing() {
                     buttonText = "Go to Dashboard";
                   }
                 } else if (isTierDisabled) {
-                  buttonText = "Unavailable";
+                  buttonText = "Get Started";
                 }
 
                 return (

@@ -18,8 +18,9 @@ export default function InteractionSection() {
 
           <p className="mt-6 w-4xl text-lg text-third leading-relaxed">
             All buyer-consultant communication on Reecomm happens within the
-            platform. This isn&apos;t just convenience — it&apos;s accountability. Every
-            conversation is logged, structured, and tied to a verified profile.
+            platform. This isn&apos;t just convenience — it&apos;s
+            accountability. Every conversation is logged, structured, and tied
+            to a verified profile.
           </p>
         </div>
 
@@ -64,7 +65,7 @@ export default function InteractionSection() {
             {/* chat UI image */}
 
             <Image
-              src="/chat-image2.jpeg"
+              src="/Chatscreensa.webp"
               alt="Chat UI"
               width={800}
               height={500}

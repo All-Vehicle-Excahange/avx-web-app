@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Minus, MessageCircle, ArrowRight } from "lucide-react";
 import Button from "@/components/ui/button";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -7,6 +7,7 @@ import LoginPopup from "@/components/auth/LoginPopup";
 import SignupPopup from "@/components/auth/SignupPopup";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { getBecameSeller } from "@/services/user.service";
 
 const faqData = [
   {
@@ -40,13 +41,27 @@ export default function FAQSection() {
   const user = useAuthStore((state) => state.user);
   const [loginPopup, setLoginPopup] = useState(false);
   const [signupPopup, setSignupPopup] = useState(false);
+  const [role, setRole] = useState(null);
+  const [checkingStatus, setCheckingStatus] = useState(false);
 
-  const handleStartSelling = () => {
-    if (!isLoggedIn) {
-      setLoginPopup(true);
-      return;
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const savedUser = localStorage.getItem("user");
+        if (savedUser) {
+          const parsed = JSON.parse(savedUser);
+          setRole(parsed?.userRole || null);
+        } else {
+          setRole(null);
+        }
+      } catch (err) {
+        console.error("Failed to read user role in Faq:", err);
+        setRole(null);
+      }
     }
+  }, [isLoggedIn, user]);
 
+  const checkSellerStatusAndProceed = async () => {
     let currentRole = null;
     if (typeof window !== "undefined") {
       try {
@@ -56,7 +71,7 @@ export default function FAQSection() {
           currentRole = parsed?.userRole;
         }
       } catch (err) {
-        console.error("Failed to parse user role on button click:", err);
+        console.error("Failed to parse user role:", err);
       }
     }
 
@@ -66,14 +81,47 @@ export default function FAQSection() {
       return;
     }
 
-    if (finalRole === "USER_SELLER") {
-      router.push("/user/details/inventory");
-    } else if (finalRole === "USER_SELLER_APPLICANT") {
-      router.push("/user/details/myprofile");
-    } else {
+    try {
+      setCheckingStatus(true);
+      const res = await getBecameSeller();
+      const status = res?.data?.verificationStatus;
+
+      if (
+        status === "REQUESTED" ||
+        status === "VERIFIED" ||
+        status === "REJECTED" ||
+        status === "REQUEST_CHANGES" ||
+        status === "APPROVED" ||
+        status === "ACCEPTED"
+      ) {
+        router.push("/user/details/myprofile");
+      } else {
+        setOpen(true);
+      }
+    } catch (err) {
       setOpen(true);
+    } finally {
+      setCheckingStatus(false);
     }
   };
+
+  const handleStartSelling = () => {
+    if (!isLoggedIn) {
+      setLoginPopup(true);
+      return;
+    }
+    checkSellerStatusAndProceed();
+  };
+
+  const handleLoginSuccess = () => {
+    checkSellerStatusAndProceed();
+  };
+
+  const isNormalUser =
+    !isLoggedIn ||
+    (role !== "CONSULTATION" &&
+      role !== "USER_SELLER" &&
+      role !== "USER_SELLER_APPLICANT");
 
   return (
     <>
@@ -149,36 +197,39 @@ export default function FAQSection() {
               ))}
 
               {/* PRIMARY CTA SECTION: THE DARK STRIP */}
-              <div className="mt-16 relative overflow-hidden  border border-primary/10 p-4 lg:p-8 rounded-xl shadow-2xl group">
-                {/* Subtle Background Glow */}
-                <div className="absolute top-0 right-0 w-64 h-64 blur-[100px] pointer-events-none" />
+              {isNormalUser && (
+                <div className="mt-16 relative overflow-hidden  border border-primary/10 p-4 lg:p-8 rounded-xl shadow-2xl group">
+                  {/* Subtle Background Glow */}
+                  <div className="absolute top-0 right-0 w-64 h-64 blur-[100px] pointer-events-none" />
 
-                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
-                  <div className="text-center md:text-left">
-                    <h3 className="text-primary text-2xl font-semibold font-[Montserrat] mb-3 tracking-tight">
-                      Ready to list your vehicle?
-                    </h3>
-                    <div className="flex items-center justify-center md:justify-start gap-2 opacity-40">
-                      <div className="w-1.5 h-1.5 rounded-full bg-fourth animate-pulse" />
-                      <span className="text-primary text-[10px] uppercase font-bold tracking-[0.4em]">
-                        Identity Verification Required
-                      </span>
+                  <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
+                    <div className="text-center md:text-left">
+                      <h3 className="text-primary text-2xl font-semibold font-[Montserrat] mb-3 tracking-tight">
+                        Ready to list your vehicle?
+                      </h3>
+                      <div className="flex items-center justify-center md:justify-start gap-2 opacity-40">
+                        <div className="w-1.5 h-1.5 rounded-full bg-fourth animate-pulse" />
+                        <span className="text-primary text-[10px] uppercase font-bold tracking-[0.4em]">
+                          Identity Verification Required
+                        </span>
+                      </div>
                     </div>
-                  </div>
 
-                  <Button
-                    onClick={handleStartSelling}
-                    variant="ghost"
-                    className="py-3 bg-primary text-secondary text-sm font-semibold hover:bg-primary hover:scale-105 transition-all rounded-full border-none shadow-2xl flex items-center group/btn"
-                  >
-                    Continue To KYC
-                    <ArrowRight
-                      className="ml-3 group-hover/btn:translate-x-1 transition-transform"
-                      size={18}
-                    />
-                  </Button>
+                    <Button
+                      onClick={handleStartSelling}
+                      loading={checkingStatus}
+                      variant="ghost"
+                      className="py-3 bg-primary text-secondary text-sm font-semibold hover:bg-primary hover:scale-105 transition-all rounded-full border-none shadow-2xl flex items-center group/btn"
+                    >
+                      Continue To KYC
+                      <ArrowRight
+                        className="ml-3 group-hover/btn:translate-x-1 transition-transform"
+                        size={18}
+                      />
+                    </Button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -192,6 +243,7 @@ export default function FAQSection() {
           setLoginPopup(false);
           setSignupPopup(true);
         }}
+        onSuccess={handleLoginSuccess}
       />
       <SignupPopup
         isOpen={signupPopup}
@@ -200,6 +252,7 @@ export default function FAQSection() {
           setSignupPopup(false);
           setLoginPopup(true);
         }}
+        onSuccess={handleLoginSuccess}
       />
     </>
   );

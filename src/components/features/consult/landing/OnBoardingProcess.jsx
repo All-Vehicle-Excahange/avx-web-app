@@ -116,12 +116,12 @@ export default function OnboardingProcess() {
                         ? "#10b981"
                         : isActive
                           ? step.color
-                          : "var(--color-primary/20)",
+                          : "rgba(255, 255, 255, 0.15)",
                       background: isDone
                         ? "#10b981"
                         : isActive
-                          ? `${step.color}15`
-                          : "transparent",
+                          ? `linear-gradient(${step.color}15, ${step.color}15), linear-gradient(#1a1919, #1a1919)`
+                          : "#1a1919",
                       color: isDone
                         ? "#ffffff"
                         : isActive
@@ -164,13 +164,13 @@ export default function OnboardingProcess() {
                         background: isDone
                           ? "#10b981"
                           : isActive
-                            ? `${step.color}15`
-                            : "transparent",
+                            ? `linear-gradient(${step.color}15, ${step.color}15), linear-gradient(#1a1919, #1a1919)`
+                            : "#1a1919",
                         borderColor: isDone
                           ? "#10b981"
                           : isActive
                             ? step.color
-                            : "var(--color-primary/20)",
+                            : "rgba(255, 255, 255, 0.15)",
                         color: isDone
                           ? "#ffffff"
                           : isActive
