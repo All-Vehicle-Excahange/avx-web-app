@@ -784,7 +784,7 @@ function MyProfile() {
           </div>
         )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-6">
         {/*  PROFILE INFO SECTION */}
         <div className="bg-third/5 rounded-3xl border border-white/10 p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.37)] text-white/60 transition-all duration-300 relative group overflow-hidden">
 
