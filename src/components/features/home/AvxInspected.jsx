@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
 import { Bike, Car } from "lucide-react";
@@ -42,28 +43,42 @@ export default function AvxInspected() {
           {/* Toggle Buttons */}
           <div className="flex p-0.5 bg-neutral-950/80 border border-white/10 rounded-full w-fit mt-auto ml-auto sm:ml-0 shrink-0">
             <button
-              onClick={() => setActiveType("4-Wheeler")}
-              className={cn(
-                "px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full cursor-pointer flex items-center justify-center gap-1.5 transition-all duration-300 whitespace-nowrap shrink-0",
-                activeType === "4-Wheeler"
-                  ? "bg-fourth text-white shadow-md"
-                  : "text-third hover:text-primary",
-              )}
-            >
-              <Car size={18} /> 4-Wheeler
-            </button>
+            onClick={() => setActiveType("4-Wheeler")}
+            className={cn(
+              "relative px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full cursor-pointer flex items-center justify-center gap-1.5 transition-all duration-300 whitespace-nowrap shrink-0",
+              activeType === "4-Wheeler"
+                ? "text-white shadow-md"
+                : "text-third hover:text-primary",
+            )}
+          >
+            {activeType === "4-Wheeler" && (
+              <motion.div
+                layoutId="avxTabBg"
+                className="absolute inset-0 bg-fourth rounded-full"
+                transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
+              />
+            )}
+            <span className="relative z-10 flex items-center gap-1.5"><Car size={18} /> 4-Wheeler</span>
+          </button>
   
-            <button
-              onClick={() => setActiveType("2-Wheeler")}
-              className={cn(
-                "px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full cursor-pointer flex items-center justify-center gap-1.5 transition-all duration-300 whitespace-nowrap shrink-0",
-                activeType === "2-Wheeler"
-                  ? "bg-fourth text-white shadow-md"
-                  : "text-third hover:text-primary",
-              )}
-            >
-              <Bike size={18} /> 2-Wheeler
-            </button>
+          <button
+            onClick={() => setActiveType("2-Wheeler")}
+            className={cn(
+              "relative px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full cursor-pointer flex items-center justify-center gap-1.5 transition-all duration-300 whitespace-nowrap shrink-0",
+              activeType === "2-Wheeler"
+                ? "text-white shadow-md"
+                : "text-third hover:text-primary",
+            )}
+          >
+            {activeType === "2-Wheeler" && (
+              <motion.div
+                layoutId="avxTabBg"
+                className="absolute inset-0 bg-fourth rounded-full"
+                transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
+              />
+            )}
+            <span className="relative z-10 flex items-center gap-1.5"><Bike size={18} /> 2-Wheeler</span>
+          </button>
           </div>
         </div>
 

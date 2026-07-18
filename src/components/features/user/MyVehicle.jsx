@@ -200,10 +200,9 @@ function MyVehicle() {
               key={type.id}
               onClick={() => setActiveType(type.id)}
               className={`px-6 py-2 rounded-full border text-sm font-semibold transition-all duration-300 cursor-pointer flex items-center gap-2
-                ${
-                  activeType === type.id
-                    ? "bg-primary text-secondary border-primary "
-                    : "bg-third/5 text-primary border-third/20 hover:bg-third/10"
+                ${activeType === type.id
+                  ? "bg-primary text-secondary border-primary "
+                  : "bg-third/5 text-primary border-third/20 hover:bg-third/10"
                 }`}
             >
               {type.id === "suspended" && <Ban size={14} />}
@@ -214,7 +213,7 @@ function MyVehicle() {
       )}
 
       {/* GRID or EMPTY STATE */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
         {isLoading ? (
           Array.from({ length: 4 }).map((_, i) => (
             <UserVehicleCardSkeleton key={i} />

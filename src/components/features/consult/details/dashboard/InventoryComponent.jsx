@@ -3,6 +3,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import UserVehicleCard from "@/components/features/user/UserVehicleCard";
 import StatCard from "./components/StateCard";
 import {
@@ -185,10 +186,12 @@ export default function InventoryComponent() {
         {/* 2️ NOTE / MANAGE INVENTORY BANNER */}
         <div className="relative overflow-hidden rounded-2xl flex flex-col lg:flex-row items-center justify-between min-h-[280px] shadow-sm border border-third/10 bg-[#0A58F9]  ">
           {/* Background Image */}
-          <img
-            src="/seller/chatsbg.png"
+          <Image
+            src="/seller/chatsbg.webp"
+            loading="lazy"
             alt="Background"
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+            fill
+            className="object-cover pointer-events-none"
           />
 
           {/* Left Content */}
@@ -217,15 +220,19 @@ export default function InventoryComponent() {
           {/* Right Content - Dual Phones */}
           <div className="absolute inset-y-0 right-0 w-full lg:w-1/2 pointer-events-none z-10 opacity-30 lg:opacity-100">
             {/* Phone 1 (Back) */}
-            <img
-              src="/seller/mobile.png"
+            <Image
+              src="/seller/mobile.webp"
               alt="Mobile App View"
+              width={400}
+              height={700}
               className="absolute right-[20%] lg:right-[42%] bottom-[-10%] lg:bottom-[-50%] h-[90%] lg:h-[120%] w-auto object-contain drop-shadow-2xl rotate-[15deg] scale-90 brightness-75 transition-transform duration-700"
             />
             {/* Phone 2 (Front) */}
-            <img
-              src="/seller/mobile.png"
+            <Image
+              src="/seller/mobile.webp"
               alt="Mobile App View"
+              width={400}
+              height={700}
               className="absolute right-[-10%] lg:right-[-5%] bottom-[-5%] lg:bottom-[-1%] h-[100%] lg:h-[130%] w-auto object-contain drop-shadow-2xl rotate-[15deg] z-10 transition-transform duration-700 "
             />
           </div>
@@ -409,9 +416,11 @@ export default function InventoryComponent() {
             </div>
 
             <div className="absolute inset-y-0 right-0 h-full flex justify-end pointer-events-none overflow-hidden">
-              <img
-                src="/seller/market.png"
+              <Image
+                src="/seller/market.webp"
                 alt="Market Insight"
+                width={400}
+                height={400}
                 className="h-full w-auto max-w-none object-right"
               />
             </div>

@@ -378,7 +378,7 @@ function AboutPro1({
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {(data.stats || []).map((s, i) => (
               <div key={i} className="space-y-2">
-                 <EditorInput
+                <EditorInput
                   bold
                   value={s.number}
                   onInput={(e) => {
@@ -567,7 +567,7 @@ function AboutPro1({
             {/* MISSION */}
             <div className="relative min-h-80 rounded-2xl overflow-hidden border border-third/10 shadow-2xl">
               {data.missionTemplate1?.imageUrl ? (
-                <Image src={data.missionTemplate1.imageUrl} alt="Mission" fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
+                <Image src={data.missionTemplate1.imageUrl} loading="lazy" alt="Mission" fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
               ) : (
                 <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-sm">Mission image not set</span>
@@ -591,7 +591,7 @@ function AboutPro1({
             {/* VISION */}
             <div className="relative min-h-80 rounded-2xl overflow-hidden border border-third/10 shadow-2xl">
               {data.visionTemplate1?.imageUrl ? (
-                <Image src={data.visionTemplate1.imageUrl} alt="Vision" fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
+                <Image src={data.visionTemplate1.imageUrl} loading="lazy" alt="Vision" fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
               ) : (
                 <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-sm">Vision image not set</span>
@@ -695,7 +695,7 @@ function AboutPro1({
                   >
                     <div className="flex flex-col gap-6">
                       {typeof service.icon === "string" &&
-                      service.icon.startsWith("<svg") ? (
+                        service.icon.startsWith("<svg") ? (
                         <div
                           className="text-third [&>svg]:w-10 [&>svg]:h-10 transition-colors duration-300"
                           dangerouslySetInnerHTML={{ __html: service.icon }}

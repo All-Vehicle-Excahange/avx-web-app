@@ -7,7 +7,7 @@ export default function ProfessionalHero() {
     return (
         /* Change 1: Move bg-secondary to the root section to ensure the whole page is black */
         <section className="relative min-h-screen flex flex-col  overflow-hidden font-secondary">
-            
+
             {/* 1. TECHNICAL BACKGROUND */}
             <div className="absolute inset-0 z-0 pointer-events-none bg-secondary">
                 <div
@@ -56,7 +56,7 @@ export default function ProfessionalHero() {
                 {/* RIGHT: IMAGE CONTAINER (6 Cols) */}
                 <div className="lg:col-span-6 p-10">
                     <div className="relative aspect-square w-full bg-zinc-900 border border-white/10 shadow-xl overflow-hidden group">
-                        <Image src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=2070&auto=format&fit=crop" alt="Premium Vehicle" width={800} height={500} unoptimized className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0" />
+                        <Image src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=2070&auto=format&fit=crop" alt="Premium Vehicle" loading="lazy" width={800} height={500} unoptimized className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0" />
 
                         {/* Discrete HUD Overlays */}
                         <div className="absolute top-4 right-4 bg-secondary/90 px-3 py-2 border border-white/10 flex items-center gap-2">

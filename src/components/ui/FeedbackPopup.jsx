@@ -215,7 +215,8 @@ export default function FeedbackPopup({
                   <div className="flex flex-wrap gap-4 mt-6">
                     {dataToShow.images.map((img, idx) => (
                       <div key={idx} className="relative w-24 h-24 rounded-xl overflow-hidden border border-white/10 shrink-0">
-                        <Image src={img.imageUrl || img} alt="review image" fill className="object-cover" />
+                        <Image src={img.imageUrl || img}
+                          loading="lazy" alt="review image" fill className="object-cover" />
                       </div>
                     ))}
                   </div>
@@ -229,137 +230,136 @@ export default function FeedbackPopup({
                 <h3 className="text-2xl font-bold mb-2 text-primary">
                   {isReview ? "Write a review" : "Send Feedback"}
                 </h3>
-            {isReview && (
-              <div className="flex items-center gap-1 mt-3">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star
-                    key={star}
-                    size={28}
-                    className={`cursor-pointer transition-colors ${
-                      rating >= star ? "fill-primary/90" : "text-third/40"
-                    }`}
-                    onClick={() => setRating(star)}
-                  />
-                ))}
+                {isReview && (
+                  <div className="flex items-center gap-1 mt-3">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        size={28}
+                        className={`cursor-pointer transition-colors ${rating >= star ? "fill-primary/90" : "text-third/40"
+                          }`}
+                        onClick={() => setRating(star)}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          <form
-            className="flex flex-col flex-1 overflow-hidden"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            {/* Scrollable Fields Container */}
-            <div className="flex-1 overflow-y-auto custom-scrollbar px-8 md:px-12 pb-4 flex flex-col gap-6">
-              {/* Review Fields */}
-              <>
-                  <div>
-                    <label className="block text-sm mb-1 text-primary/80">
-                      What's most important to know?
-                    </label>
-                    <textarea
-                      placeholder="Enter your response"
-                      rows={2}
-                      value={reviewTitle}
-                      onChange={(e) => setReviewTitle(e.target.value)}
-                      className="w-full text-primary py-3 px-4 border rounded-md border-white/20 bg-transparent outline-none focus:border-white/60 transition-colors resize-none"
-                    />
-                  </div>
+              <form
+                className="flex flex-col flex-1 overflow-hidden"
+                onSubmit={(e) => e.preventDefault()}
+              >
+                {/* Scrollable Fields Container */}
+                <div className="flex-1 overflow-y-auto custom-scrollbar px-8 md:px-12 pb-4 flex flex-col gap-6">
+                  {/* Review Fields */}
+                  <>
+                    <div>
+                      <label className="block text-sm mb-1 text-primary/80">
+                        What's most important to know?
+                      </label>
+                      <textarea
+                        placeholder="Enter your response"
+                        rows={2}
+                        value={reviewTitle}
+                        onChange={(e) => setReviewTitle(e.target.value)}
+                        className="w-full text-primary py-3 px-4 border rounded-md border-white/20 bg-transparent outline-none focus:border-white/60 transition-colors resize-none"
+                      />
+                    </div>
 
-                  <div>
-                    <label className="block text-sm mb-1 text-primary/80">
-                      What should other customers know?
-                    </label>
-                    <textarea
-                      placeholder="Enter your response"
-                      rows={4}
-                      value={reviewText}
-                      onChange={(e) => setReviewText(e.target.value)}
-                      className="w-full text-primary py-3 px-4 border rounded-md border-white/20 bg-transparent outline-none focus:border-white/60 transition-colors resize-none"
-                    />
-                  </div>
+                    <div>
+                      <label className="block text-sm mb-1 text-primary/80">
+                        What should other customers know?
+                      </label>
+                      <textarea
+                        placeholder="Enter your response"
+                        rows={4}
+                        value={reviewText}
+                        onChange={(e) => setReviewText(e.target.value)}
+                        className="w-full text-primary py-3 px-4 border rounded-md border-white/20 bg-transparent outline-none focus:border-white/60 transition-colors resize-none"
+                      />
+                    </div>
 
-                  <div>
-                    <label className="block text-sm mb-2 text-primary/80">
-                      Share a video or photo (optional)
-                    </label>
-                    <div className="flex flex-col gap-4">
-                      <div className="space-y-3">
-                        {media.map((item, index) => (
-                          <label
-                            key={index}
-                            className="relative flex flex-col items-center justify-center gap-1 border border-dashed border-third/50 rounded-xl h-24 sm:h-28 cursor-pointer hover:border-primary transition overflow-hidden group"
-                          >
-                            {item.preview ? (
-                              <>
-                                <Image
-                                  src={item.preview}
-                                  alt="preview"
-                                  fill
-                                  className="object-cover"
-                                />
-                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                  <Camera className="w-6 h-6 text-white" />
-                                </div>
-                              </>
-                            ) : (
-                              <>
-                                <Camera className="w-5 h-5 text-third" />
-                                <span className="text-xs text-third px-2 text-center">
-                                  {`Upload Image ${index + 1}`}
-                                </span>
-                              </>
-                            )}
-
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={(e) =>
-                                handleMediaUpload(index, e.target.files?.[0])
-                              }
-                              className="hidden"
-                            />
-                          </label>
-                        ))}
-
-                        {media.length < 4 && (
-                          <div className="flex mt-2">
-                            <Button
-                              type="button"
-                              variant="outlineSecondary"
-                              className="text-sm text-primary font-medium"
-                              onClick={addMoreImageInput}
+                    <div>
+                      <label className="block text-sm mb-2 text-primary/80">
+                        Share a video or photo (optional)
+                      </label>
+                      <div className="flex flex-col gap-4">
+                        <div className="space-y-3">
+                          {media.map((item, index) => (
+                            <label
+                              key={index}
+                              className="relative flex flex-col items-center justify-center gap-1 border border-dashed border-third/50 rounded-xl h-24 sm:h-28 cursor-pointer hover:border-primary transition overflow-hidden group"
                             >
-                              <Plus className="w-4 mr-1 h-4" /> Add Media
-                            </Button>
-                          </div>
-                        )}
+                              {item.preview ? (
+                                <>
+                                  <Image
+                                    src={item.preview}
+                                    alt="preview"
+                                    fill
+                                    className="object-cover"
+                                  />
+                                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <Camera className="w-6 h-6 text-white" />
+                                  </div>
+                                </>
+                              ) : (
+                                <>
+                                  <Camera className="w-5 h-5 text-third" />
+                                  <span className="text-xs text-third px-2 text-center">
+                                    {`Upload Image ${index + 1}`}
+                                  </span>
+                                </>
+                              )}
+
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) =>
+                                  handleMediaUpload(index, e.target.files?.[0])
+                                }
+                                className="hidden"
+                              />
+                            </label>
+                          ))}
+
+                          {media.length < 4 && (
+                            <div className="flex mt-2">
+                              <Button
+                                type="button"
+                                variant="outlineSecondary"
+                                className="text-sm text-primary font-medium"
+                                onClick={addMoreImageInput}
+                              >
+                                <Plus className="w-4 mr-1 h-4" /> Add Media
+                              </Button>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </>
-            </div>
+                  </>
+                </div>
 
-            {/* ACTION BUTTONS - Sticky Footer */}
-            <div className="p-4 md:p-6 flex gap-4 flex-shrink-0">
-              <Button
-                type="button"
-                variant="ghost"
-                loading={submitting}
-                locked={
-                  isReview
-                    ? rating === 0 ||
-                      (!reviewTitle.trim() && !reviewText.trim())
-                    : !reviewText.trim()
-                }
-                className="w-full h-11 text-sm font-bold flex items-center justify-center gap-2"
-                onClick={handleSubmitReview}
-              >
-                {isReview ? "Submit Review" : "Submit Feedback"}
-              </Button>
-            </div>
-          </form>
-          </>
+                {/* ACTION BUTTONS - Sticky Footer */}
+                <div className="p-4 md:p-6 flex gap-4 flex-shrink-0">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    loading={submitting}
+                    locked={
+                      isReview
+                        ? rating === 0 ||
+                        (!reviewTitle.trim() && !reviewText.trim())
+                        : !reviewText.trim()
+                    }
+                    className="w-full h-11 text-sm font-bold flex items-center justify-center gap-2"
+                    onClick={handleSubmitReview}
+                  >
+                    {isReview ? "Submit Review" : "Submit Feedback"}
+                  </Button>
+                </div>
+              </form>
+            </>
           )}
         </div>
       </div>

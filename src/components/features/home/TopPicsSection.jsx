@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
 import { Bike, Car } from "lucide-react";
@@ -45,24 +46,38 @@ export default function TopPicsSection() {
           <button
             onClick={() => setActiveType("4-Wheeler")}
             className={cn(
-              "px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full cursor-pointer flex items-center justify-center gap-1.5 transition-all duration-300 whitespace-nowrap shrink-0",
+              "relative px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full cursor-pointer flex items-center justify-center gap-1.5 transition-all duration-300 whitespace-nowrap shrink-0",
               activeType === "4-Wheeler"
-                ? "bg-fourth text-white shadow-md"
+                ? "text-white shadow-md"
                 : "text-third hover:text-primary",
             )}
           >
-            <Car size={18} /> 4-Wheeler
+            {activeType === "4-Wheeler" && (
+              <motion.div
+                layoutId="topPicsTabBg"
+                className="absolute inset-0 bg-fourth rounded-full"
+                transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
+              />
+            )}
+            <span className="relative z-10 flex items-center gap-1.5"><Car size={18} /> 4-Wheeler</span>
           </button>
           <button
             onClick={() => setActiveType("2-Wheeler")}
             className={cn(
-              "px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full cursor-pointer flex items-center justify-center gap-1.5 transition-all duration-300 whitespace-nowrap shrink-0",
+              "relative px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full cursor-pointer flex items-center justify-center gap-1.5 transition-all duration-300 whitespace-nowrap shrink-0",
               activeType === "2-Wheeler"
-                ? "bg-fourth text-white shadow-md"
+                ? "text-white shadow-md"
                 : "text-third hover:text-primary",
             )}
           >
-            <Bike size={18} /> 2-Wheeler
+            {activeType === "2-Wheeler" && (
+              <motion.div
+                layoutId="topPicsTabBg"
+                className="absolute inset-0 bg-fourth rounded-full"
+                transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
+              />
+            )}
+            <span className="relative z-10 flex items-center gap-1.5"><Bike size={18} /> 2-Wheeler</span>
           </button>
         </div>
       </div>

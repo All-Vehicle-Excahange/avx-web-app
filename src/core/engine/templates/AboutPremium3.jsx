@@ -580,10 +580,10 @@ export default function AboutPremium3({
       <section className="relative w-full min-h-screen flex flex-col overflow-hidden py-12">
         <div className="absolute inset-0 z-0">
           <Image src={
-              d.customHeroImage1 ||
-              d.customHeroImageUrl1 ||
-              d.heroTemplate1?.imageUrl
-            } alt="Background" width={800} height={500} unoptimized className="w-full h-full object-cover" />
+            d.customHeroImage1 ||
+            d.customHeroImageUrl1 ||
+            d.heroTemplate1?.imageUrl
+          } loading="lazy" alt="Background" width={800} height={500} unoptimized className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-secondary/60" />
         </div>
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 text-center pt-16 pb-8">
@@ -619,10 +619,10 @@ export default function AboutPremium3({
             <div className="relative mb-32">
               <div className="w-[85%] lg:w-[70%] md:w-[75%] h-80 rounded-2xl overflow-hidden shadow-2xl">
                 <Image src={
-                    d.customMissionImage1 ||
-                    d.customMissionUrl1 ||
-                    d.missionTemplate1?.imageUrl
-                  } alt="" width={800} height={500} unoptimized className="w-full h-full object-cover opacity-60" />
+                  d.customMissionImage1 ||
+                  d.customMissionUrl1 ||
+                  d.missionTemplate1?.imageUrl
+                } loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover opacity-60" />
               </div>
               <div className="absolute right-0 -bottom-16 w-[90%] md:w-[75%] lg:w-[45%] backdrop-blur-md bg-secondary/40 border border-third/10 rounded-2xl p-6 shadow-xl">
                 <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-primary font-[Montserrat] mb-3">
@@ -637,10 +637,10 @@ export default function AboutPremium3({
             <div className="relative">
               <div className="ml-auto w-[85%] lg:w-[70%] md:w-[75%] h-80 rounded-2xl overflow-hidden shadow-2xl">
                 <Image src={
-                    d.customVisionImage1 ||
-                    d.customVisionUrl1 ||
-                    d.visionTemplate1?.imageUrl
-                  } alt="" width={800} height={500} unoptimized className="w-full h-full object-cover opacity-60" />
+                  d.customVisionImage1 ||
+                  d.customVisionUrl1 ||
+                  d.visionTemplate1?.imageUrl
+                } loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover opacity-60" />
               </div>
               <div className="absolute left-0 -bottom-16 w-[90%] md:w-[75%] lg:w-[45%] backdrop-blur-md bg-secondary/40 border border-third/10 rounded-2xl p-6 shadow-xl">
                 <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-primary font-[Montserrat] mb-3">

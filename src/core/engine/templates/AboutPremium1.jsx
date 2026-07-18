@@ -600,9 +600,9 @@ export default function AboutPremium1({
           <div className="relative">
             <div className="relative rounded-2xl overflow-hidden border border-primary/20">
               {(d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl) ? (
-                <Image src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl} alt="Hero" width={800} height={500} unoptimized className="w-full h-[300px] sm:h-[400px] lg:h-[400px] object-cover" />
+                <Image src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl} loading="lazy" alt="Hero" width={800} height={500} unoptimized className="w-full h-[300px] sm:h-[400px] lg:h-[400px] object-cover" />
               ) : (
-                <div className="w-full h-[300px] sm:h-[400px] lg:h-[400px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                <div className="w-full h-[300p x] sm:h-[400px] lg:h-[400px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-sm">Hero image not set</span>
                 </div>
               )}
@@ -630,10 +630,10 @@ export default function AboutPremium1({
               <div className="lg:w-1/2 relative group">
                 <div className="relative h-[800px] lg:h-[600px] w-full lg:w-[95%] overflow-hidden rounded-tr-[100px] lg:rounded-tr-[200px] border-r border-t border-primary/10">
                   <Image src={
-                      d.customMissionImage1 ||
-                      d.customMissionUrl1 ||
-                      d.missionTemplate1?.imageUrl
-                    } alt="Mission" width={800} height={500} unoptimized className="w-full h-full object-cover grayscale transition-all duration-800 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:grayscale-0 group-hover:-translate-y-5 group-hover:brightness-110 group-hover:saturate-125" />
+                    d.customMissionImage1 ||
+                    d.customMissionUrl1 ||
+                    d.missionTemplate1?.imageUrl
+                  } loading="lazy" alt="Mission" width={800} height={500} unoptimized className="w-full h-full object-cover grayscale transition-all duration-800 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:grayscale-0 group-hover:-translate-y-5 group-hover:brightness-110 group-hover:saturate-125" />
                   <div className="absolute inset-0 bg-linear-to-t from-secondary via-transparent to-transparent" />
                 </div>
                 {/* CONTENT */}
@@ -651,10 +651,10 @@ export default function AboutPremium1({
               <div className="lg:w-1/2 lg:mt-64 relative group">
                 <div className="relative h-[400px] lg:h-[550px] w-full overflow-hidden rounded-bl-[100px] lg:rounded-bl-[200px] border-b border-l border-primary/10">
                   <Image src={
-                      d.customVisionImage1 ||
-                      d.customVisionUrl1 ||
-                      d.visionTemplate1?.imageUrl
-                    } alt="Vision" width={800} height={500} unoptimized className="w-full h-full object-cover transition-all duration-800 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-105" />
+                    d.customVisionImage1 ||
+                    d.customVisionUrl1 ||
+                    d.visionTemplate1?.imageUrl
+                  } loading="lazy" alt="Vision" width={800} height={500} unoptimized className="w-full h-full object-cover transition-all duration-800 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-105" />
                   <div className="absolute inset-0 bg-linear-to-b from-secondary via-transparent to-transparent" />
                 </div>
                 {/* CONTENT */}
@@ -748,11 +748,10 @@ export default function AboutPremium1({
                     onMouseEnter={() => setHovered(i)}
                     onMouseLeave={() => setHovered(null)}
                     className={`cursor-pointer rounded-2xl p-6 border transition-all duration-300 
-                    ${
-                      isActive
+                    ${isActive
                         ? "border-primary/40 bg-primary/5"
                         : "border-primary/20 hover:border-primary/40 hover:bg-primary/5"
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-4 mb-4">
                       <div
