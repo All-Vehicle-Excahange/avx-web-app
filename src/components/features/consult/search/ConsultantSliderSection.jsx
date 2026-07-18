@@ -1,13 +1,21 @@
 "use client";
 
 import { useRef } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Info } from "lucide-react";
 import ConsultantCard from "@/components/ui/const/ConsultCard";
 import Button from "@/components/ui/button";
 import ConsultantCardSkeleton from "@/components/ui/skeleton/ConsultantCardSkeleton";
 import EmptyState from "@/components/ui/EmptyState";
 
-export default function ConsultantSliderSection({ title, data, loading = false, emptyTitle, emptyDescription }) {
+export default function ConsultantSliderSection({
+  title,
+  data,
+  loading = false,
+  emptyTitle,
+  emptyDescription,
+  showIsSponsored = false,
+  description,
+}) {
   const sliderRef = useRef(null);
 
   const scroll = (dir) => {
@@ -31,9 +39,21 @@ export default function ConsultantSliderSection({ title, data, loading = false, 
             <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
               {title}
             </h2>
-            <p className="text-third">
-              Lorem ipsum dolor sit amet consectetur dolor sit amet
-              consectetur..
+            {showIsSponsored && (
+              <div className="flex items-center gap-1 mt-1 text-xs text-third">
+                <span>Sponsored</span>
+
+                <button
+                  type="button"
+                  className="w-4 h-4 flex items-center justify-center rounded-full border border-third/40 hover:bg-third/10 transition"
+                  aria-label="Sponsored info"
+                >
+                  <Info className="w-3 h-3" />
+                </button>
+              </div>
+            )}
+            <p className="text-third mt-1">
+              {description || "Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur.."}
             </p>
           </div>
         </div>
