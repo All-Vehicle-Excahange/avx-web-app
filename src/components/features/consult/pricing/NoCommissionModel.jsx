@@ -35,7 +35,7 @@ export default function NoCommissionModel() {
                         </div>
 
                         <p className="text-third text-[15px] leading-[1.8] max-w-sm mb-8">
-                            Every sale you close is entirely yours. AVX earns through
+                            Every sale you close is entirely yours. Reecomm earns through
                             subscription — not by taking a cut of your work.
                         </p>
 
@@ -55,12 +55,12 @@ export default function NoCommissionModel() {
                             {
                                 label: "01",
                                 title: "Full Pricing Control",
-                                body: "Set your own prices and negotiate on your terms. AVX never interferes with how you close deals.",
+                                body: "Set your own prices and negotiate on your terms. Reecomm never interferes with how you close deals.",
                             },
                             {
                                 label: "02",
                                 title: "Direct Transactions",
-                                body: "All payments happen independently. AVX connects buyers and sellers without sitting in the middle.",
+                                body: "All payments happen independently. Reecomm connects buyers and sellers without sitting in the middle.",
                             },
                             {
                                 label: "03",
