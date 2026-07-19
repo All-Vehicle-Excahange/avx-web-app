@@ -20,8 +20,8 @@ import LoginPopup from "@/components/auth/LoginPopup";
 import { createSlug } from "@/lib/helper";
 import SignupPopup from "@/components/auth/SignupPopup";
 import { useDebouncedCallback } from "@/hooks/useDebounce";
-
 import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 export default function VehicleCard({
   data,
@@ -44,7 +44,7 @@ export default function VehicleCard({
   const lastSyncedValue = useRef(data?.isWishlisted || false);
   const pendingAction = useRef(null);
 
-  const debouncedSyncWishlist = useDebouncedCallback(async (nextState) => {
+  const syncWishlist = async (nextState) => {
     try {
       if (!nextState) {
         const res = await removeWishList(data.id);
@@ -59,13 +59,17 @@ export default function VehicleCard({
       }
       lastSyncedValue.current = nextState;
       queryClient.invalidateQueries({ queryKey: ["user-wishlist-infinite"] });
-      onWishlistChange?.();
     } catch (err) {
       console.log("Wishlist sync error:", err);
       // Revert if API fails
       setIsFavorite(!nextState);
+      onWishlistChange?.(data.id, !nextState);
+      queryClient.invalidateQueries({ queryKey: ["user-wishlist-infinite"] });
+      toast.error("Failed to update wishlist. Please try again.");
     }
-  }, 1000);
+  };
+
+  const debouncedSyncWishlist = useDebouncedCallback(syncWishlist, 1000);
 
   const handleWishlist = () => {
     if (!isLoggedIn) {
@@ -77,10 +81,22 @@ export default function VehicleCard({
     const nextState = !isFavorite;
     setIsFavorite(nextState);
 
+    console.log("VehicleCard: handleWishlist clicked. Vehicle ID:", data.id, "nextState:", nextState);
+
+    // Call onWishlistChange immediately to allow immediate/optimistic updates in parent page
+    onWishlistChange?.(data.id, nextState);
+
     if (nextState === lastSyncedValue.current) {
       debouncedSyncWishlist.cancel();
     } else {
-      debouncedSyncWishlist(nextState);
+      if (!nextState) {
+        // Bypass debounce and sync immediately when unliking
+        debouncedSyncWishlist.cancel();
+        syncWishlist(nextState);
+      } else {
+        // Use debounce when liking (adding to wishlist) to prevent rapid spam clicks
+        debouncedSyncWishlist(nextState);
+      }
     }
   };
 
