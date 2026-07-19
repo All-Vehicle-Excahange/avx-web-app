@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 import { Plus, Minus } from "lucide-react"; // Fixed the import here
 
 export default function FAQSection() {
@@ -127,6 +128,7 @@ export default function FAQSection() {
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
   );
 }
