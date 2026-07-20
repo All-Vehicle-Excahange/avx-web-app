@@ -58,13 +58,11 @@ export const useAuthStore = create((set) => ({
 
   //  LOGIN FUNCTION
   login: (userData, token) => {
-    const userWithRefresh = {
-      ...userData.userMaster,
-      refreshToken: userData.refreshToken,
-    };
+    // Only use the user master data, never store the refresh token
+    const userMaster = userData.userMaster || userData;
 
     set({
-      user: userWithRefresh,
+      user: userMaster,
       token,
       isLoggedIn: true,
       authInitialized: true,
@@ -76,8 +74,7 @@ export const useAuthStore = create((set) => ({
 
     //  Persist in LocalStorage
     if (typeof window !== "undefined") {
-      localStorage.setItem("user", JSON.stringify(userWithRefresh));
-      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(userMaster));
     }
   },
 
@@ -97,32 +94,66 @@ export const useAuthStore = create((set) => ({
 
     if (typeof window !== "undefined") {
       localStorage.removeItem("user");
-      localStorage.removeItem("token");
       localStorage.removeItem("sellerTierData");
       localStorage.removeItem("sellerTier");
     }
   },
 
   //  INITIALIZE AUTH ON APP LOAD
-  initializeAuth: () => {
+  initializeAuth: async () => {
     if (typeof window !== "undefined") {
       const savedUser = localStorage.getItem("user");
-      const savedToken = localStorage.getItem("token");
 
-      if (savedUser && savedToken) {
-        set({
-          user: JSON.parse(savedUser),
-          token: savedToken,
-          isLoggedIn: true,
-          authInitialized: true,
-        });
-      } else {
+      if (!savedUser) {
+        // The user has never logged in (or logged out). 
+        // Skip the API call completely to avoid a 401 error for guests!
         set({
           user: null,
           token: null,
           isLoggedIn: false,
           authInitialized: true,
         });
+        return;
+      }
+
+      // Pre-fill user to prevent UI flicker for returning users
+      set({ user: JSON.parse(savedUser) });
+
+      try {
+        // We import axios dynamically or use standard fetch to avoid circular deps
+        const axios = require("axios").default;
+        
+        // Attempt to refresh token using the HttpOnly cookie
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
+          {},
+          { withCredentials: true }
+        );
+
+        if (res.data?.data?.accessToken) {
+          const userMaster = res.data.data.userMaster || (savedUser ? JSON.parse(savedUser) : null);
+          set({
+            user: userMaster,
+            token: res.data.data.accessToken,
+            isLoggedIn: true,
+            authInitialized: true,
+          });
+          if (userMaster) {
+            localStorage.setItem("user", JSON.stringify(userMaster));
+          }
+        } else {
+          throw new Error("No access token in response");
+        }
+      } catch (error) {
+        // Refresh failed (cookie expired, missing, etc.)
+        set({
+          user: null,
+          token: null,
+          isLoggedIn: false,
+          authInitialized: true,
+          isLoginPopupOpen: !!savedUser, // Open popup if their session expired
+        });
+        localStorage.removeItem("user");
       }
     }
   },

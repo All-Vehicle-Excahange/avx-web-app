@@ -22,12 +22,6 @@ export const axiosNodeInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const token = useAuthStore.getState().token;
-
-    if (token && !config.url?.includes("/auth/refresh")) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
     try {
       const guestId = await setupGuestUser();
 
@@ -62,7 +56,7 @@ axiosInstance.interceptors.response.use(
       const { user, isLoggedIn } = useAuthStore.getState();
 
       // Not logged in — just reject silently; don't pop the login dialog.
-      if (!isLoggedIn || !user?.refreshToken) {
+      if (!isLoggedIn) {
         return Promise.reject(error);
       }
 
@@ -80,7 +74,7 @@ axiosInstance.interceptors.response.use(
           refreshPromise = axios
             .post(
               `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
-              { refreshToken: user.refreshToken },
+              {},
               { withCredentials: true },
             )
             .then((res) => {
@@ -93,11 +87,12 @@ axiosInstance.interceptors.response.use(
                     ...currentUser,
                     ...(res.data.data.userMaster || {}),
                   },
-                  refreshToken: res.data.data.refreshToken || currentUser.refreshToken,
                 };
                 useAuthStore
                   .getState()
                   .login(newUserData, res.data.data.accessToken);
+              } else {
+                 throw new Error("No access token in refresh response");
               }
 
               return res;
@@ -187,13 +182,13 @@ export const showBackendError = (error) => {
 };
 
 export const refreshUserToken = async () => {
-  const { user, isLoggedIn } = useAuthStore.getState();
-  if (!isLoggedIn || !user?.refreshToken) return;
+  const { isLoggedIn } = useAuthStore.getState();
+  if (!isLoggedIn) return;
 
   try {
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
-      { refreshToken: user.refreshToken },
+      {},
       { withCredentials: true },
     );
     if (res.data?.data?.accessToken) {
@@ -203,7 +198,6 @@ export const refreshUserToken = async () => {
           ...currentUser,
           ...(res.data.data.userMaster || {}),
         },
-        refreshToken: res.data.data.refreshToken || currentUser.refreshToken,
       };
       useAuthStore.getState().login(newUserData, res.data.data.accessToken);
     }
