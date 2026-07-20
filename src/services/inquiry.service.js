@@ -71,9 +71,11 @@ export const approveInquiry = async (id) => {
   }
 };
 
-export const rejectInquiry = async (id) => {
+export const rejectInquiry = async (id, reason) => {
   try {
-    const res = await axiosInstance.patch(`${ENDPOINT.rejectInquiry}/${id}`);
+    const res = await axiosInstance.patch(`${ENDPOINT.rejectInquiry}/${id}`, {
+      rejectReason: reason,
+    });
     return handleResponse(res);
   } catch (error) {
     handleError(error);

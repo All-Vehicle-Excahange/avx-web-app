@@ -136,6 +136,7 @@ export default function DropzoneUpload({
         type="file"
         accept={accept}
         hidden
+        disabled={readOnly}
         onChange={(e) => handleFile(e.target.files[0])}
       />
     </div>
