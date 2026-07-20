@@ -138,14 +138,14 @@ export async function getServerSideProps(context) {
   let budgetFilter = null;
 
   if (slug.includes("-under-")) {
-    const budgetMatch = slug.match(/-under-(\d+(?:\.\d+)?)-(lakhs|lakh|k)/);
+    const budgetMatch = slug.match(/-under-(\d+(?:\.\d+)?)-?(lakhs|lakh|k)/);
     if (budgetMatch) {
       let value = parseFloat(budgetMatch[1]);
       if (budgetMatch[2] === "k") {
-        value = value / 100; // e.g. 30k -> 0.3 Lakh
+        value = value / 100; // e.g. 50k -> 0.5 Lakh (50,000 Rs)
       }
       budgetFilter = `0-${value}`;
-      normalizedSlug = slug.replace(/-under-\d+(?:\.\d+)?-(?:lakhs|lakh|k)/, "");
+      normalizedSlug = slug.replace(/-under-\d+(?:\.\d+)?-?(?:lakhs|lakh|k)/, "");
     }
   } else if (slug.includes("-above-")) {
     const budgetMatch = slug.match(/-above-(\d+)-lakhs/);
