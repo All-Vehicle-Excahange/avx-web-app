@@ -602,47 +602,93 @@ export default function HamburgerDrawer({ open, onClose }) {
                   </div>
 
                   {/* TRENDING LOCATION SEARCHES (HIGH-INTENT SEO KEYWORDS) */}
-                  <div className="sm:col-span-2 pt-4 border-t border-white/10 space-y-3">
-                    <span className="text-[11px] uppercase font-black tracking-widest text-primary/80 block">
-                      Trending Location Searches
-                    </span>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2 text-xs">
-                      <MenuLink href="/search/buy-used-cars-delhi" onClick={onClose} compact>
-                        Used Cars in Delhi
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-cars-mumbai" onClick={onClose} compact>
-                        Used Cars in Mumbai
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-cars-ahmedabad" onClick={onClose} compact>
-                        Used Cars in Ahmedabad
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-cars-bangalore" onClick={onClose} compact>
-                        Used Cars in Bangalore
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-cars-pune" onClick={onClose} compact>
-                        Used Cars in Pune
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-cars-surat" onClick={onClose} compact>
-                        Used Cars in Surat
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-cars-hyderabad" onClick={onClose} compact>
-                        Used Cars in Hyderabad
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-cars-jaipur" onClick={onClose} compact>
-                        Used Cars in Jaipur
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-cars-vadodara" onClick={onClose} compact>
-                        Used Cars in Vadodara
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-cars-chennai" onClick={onClose} compact>
-                        Used Cars in Chennai
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-cars-kolkata" onClick={onClose} compact>
-                        Used Cars in Kolkata
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-cars-rajkot" onClick={onClose} compact>
-                        Used Cars in Rajkot
-                      </MenuLink>
+                  <div className="sm:col-span-2 pt-4 border-t border-white/10 space-y-4">
+                    <div>
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary/80 mb-2.5 block">
+                        Trending City Searches
+                      </span>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2 text-xs">
+                        <MenuLink href="/search/buy-used-cars-delhi" onClick={onClose} compact>
+                          Used Cars in Delhi
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-mumbai" onClick={onClose} compact>
+                          Used Cars in Mumbai
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-ahmedabad" onClick={onClose} compact>
+                          Used Cars in Ahmedabad
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-bangalore" onClick={onClose} compact>
+                          Used Cars in Bangalore
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-pune" onClick={onClose} compact>
+                          Used Cars in Pune
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-surat" onClick={onClose} compact>
+                          Used Cars in Surat
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-hyderabad" onClick={onClose} compact>
+                          Used Cars in Hyderabad
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-jaipur" onClick={onClose} compact>
+                          Used Cars in Jaipur
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-vadodara" onClick={onClose} compact>
+                          Used Cars in Vadodara
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-chennai" onClick={onClose} compact>
+                          Used Cars in Chennai
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-kolkata" onClick={onClose} compact>
+                          Used Cars in Kolkata
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-rajkot" onClick={onClose} compact>
+                          Used Cars in Rajkot
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-ludhiana" onClick={onClose} compact>
+                          Used Cars in Ludhiana
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-nashik" onClick={onClose} compact>
+                          Used Cars in Nashik
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-chandigarh" onClick={onClose} compact>
+                          Used Cars in Chandigarh
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-lucknow" onClick={onClose} compact>
+                          Used Cars in Lucknow
+                        </MenuLink>
+                      </div>
+                    </div>
+
+                    <div>
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary/80 mb-2.5 block">
+                        Trending State Searches
+                      </span>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2 text-xs">
+                        <MenuLink href="/search/buy-used-cars-gujarat" onClick={onClose} compact>
+                          Used Cars in Gujarat
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-maharashtra" onClick={onClose} compact>
+                          Used Cars in Maharashtra
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-punjab" onClick={onClose} compact>
+                          Used Cars in Punjab
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-rajasthan" onClick={onClose} compact>
+                          Used Cars in Rajasthan
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-haryana" onClick={onClose} compact>
+                          Used Cars in Haryana
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-karnataka" onClick={onClose} compact>
+                          Used Cars in Karnataka
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-tamil-nadu" onClick={onClose} compact>
+                          Used Cars in Tamil Nadu
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-two-wheelers-delhi" onClick={onClose} compact>
+                          Used Bikes in Delhi
+                        </MenuLink>
+                      </div>
                     </div>
                   </div>
                 </div>

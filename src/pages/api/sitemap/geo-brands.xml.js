@@ -134,6 +134,66 @@ export default async function handler(req, res) {
       }
     });
 
+    // 7. Add Category, Body Type, Budget, Fuel & Location Landing Pages
+    const staticSeoUrls = [
+      "/search/buy-used-cars",
+      "/search/buy-used-two-wheelers",
+      "/search/buy-used-suv-cars",
+      "/search/buy-used-sedan-cars",
+      "/search/buy-used-hatchback-cars",
+      "/search/buy-used-luxury-cars",
+      "/search/buy-used-electric-cars",
+      "/search/buy-used-petrol-cars",
+      "/search/buy-used-diesel-cars",
+      "/search/buy-used-cng-cars",
+      "/search/buy-used-cars-under-3-lakhs",
+      "/search/buy-used-cars-under-5-lakhs",
+      "/search/buy-used-cars-under-10-lakhs",
+      "/search/buy-used-cars-under-15-lakhs",
+      "/search/buy-used-electric-two-wheelers",
+      "/search/buy-used-scooter-two-wheelers",
+      "/search/buy-used-sports-bikes-two-wheelers",
+      "/search/buy-used-two-wheelers-under-50k",
+      "/search/buy-used-two-wheelers-under-1-lakh",
+      "/search/buy-used-two-wheelers-under-2-lakh",
+      "/search/buy-used-cars-delhi",
+      "/search/buy-used-cars-mumbai",
+      "/search/buy-used-cars-ahmedabad",
+      "/search/buy-used-cars-bangalore",
+      "/search/buy-used-cars-pune",
+      "/search/buy-used-cars-surat",
+      "/search/buy-used-cars-hyderabad",
+      "/search/buy-used-cars-jaipur",
+      "/search/buy-used-cars-vadodara",
+      "/search/buy-used-cars-chennai",
+      "/search/buy-used-cars-kolkata",
+      "/search/buy-used-cars-rajkot",
+      "/search/buy-used-cars-ludhiana",
+      "/search/buy-used-cars-nashik",
+      "/search/buy-used-cars-chandigarh",
+      "/search/buy-used-cars-lucknow",
+      "/search/buy-used-cars-gujarat",
+      "/search/buy-used-cars-maharashtra",
+      "/search/buy-used-cars-punjab",
+      "/search/buy-used-cars-rajasthan",
+      "/search/buy-used-cars-haryana",
+      "/search/buy-used-cars-karnataka",
+      "/search/buy-used-cars-tamil-nadu",
+      "/search/buy-used-two-wheelers-delhi"
+    ];
+
+    staticSeoUrls.forEach((url) => {
+      if (!addedLinks.has(url)) {
+        addedLinks.add(url);
+        xml += `  <url>\n`;
+        xml += `    <loc>${BASE_URL}${url}</loc>\n`;
+        xml += `    <lastmod>${now}</lastmod>\n`;
+        xml += `    <changefreq>daily</changefreq>\n`;
+        xml += `    <priority>0.8</priority>\n`;
+        xml += `  </url>\n`;
+      }
+    });
+
     xml += `</urlset>`;
 
     res.setHeader("Content-Type", "application/xml; charset=utf-8");
