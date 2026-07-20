@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
-import { Plus, Minus } from "lucide-react"; // Fixed the import here
+import { Plus, Minus } from "lucide-react";
+import Image from "next/image";
 
 export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState(2);
@@ -106,21 +107,6 @@ export default function FAQSection() {
                         </div>
                       </button>
 
-                      {/* ANSWER - CSS Grid transition to prevent jumping */}
-                      <div
-                        className={`grid transition-all duration-300 ease-in-out ${isOpen
-                          ? "grid-rows-[1fr] opacity-100"
-                          : "grid-rows-[0fr] opacity-0"
-                          }`}
-                      >
-                        {isOpen ? (
-                          <Minus className="w-4 h-4" />
-                        ) : (
-                          <Plus className="w-4 h-4" />
-                        )}
-                      </div>
-                    </button>
-
                     {/* ANSWER - CSS Grid transition to prevent jumping */}
                     <div
                       className={`grid transition-all duration-300 ease-in-out ${
@@ -142,6 +128,7 @@ export default function FAQSection() {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </div>
+  </section>
+);
 }
