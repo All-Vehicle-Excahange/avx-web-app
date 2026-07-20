@@ -209,8 +209,8 @@ export default function HamburgerDrawer({ open, onClose }) {
                         <MenuLink href="/search/buy-used-honda-cars" onClick={onClose}>
                           Used Honda Cars
                         </MenuLink>
-                        <MenuLink href="/search/buy-used-bmw-cars" onClick={onClose}>
-                          Used BMW Cars
+                        <MenuLink href="/search/buy-used-kia-cars" onClick={onClose}>
+                          Used Kia Cars
                         </MenuLink>
                       </div>
                     </div>
@@ -914,11 +914,11 @@ export default function HamburgerDrawer({ open, onClose }) {
                     Used Toyota Cars
                   </MenuLink>
                   <MenuLink
-                    href="/search/buy-used-bmw-cars"
+                    href="/search/buy-used-kia-cars"
                     onClick={onClose}
                     compact
                   >
-                    Used BMW Cars
+                    Used Kia Cars
                   </MenuLink>
                 </div>
               </div>
