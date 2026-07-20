@@ -624,7 +624,7 @@ export default function SearchWithCard({
     const isUnder =
       Math.round(minPrice) === 0 &&
       currentMaxLakh > 0 &&
-      currentMaxLakh < 200;
+      maxPrice < MAX;
     const isAbove = Math.round(currentMinLakh) >= 50 && maxPrice >= 20000000;
 
     if (isUnder) {
