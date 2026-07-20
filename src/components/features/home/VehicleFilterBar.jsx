@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { Search, X, Loader2 } from "lucide-react";
+import { Search, X, Loader2, Car, User, Mic, Bike, Fuel, Zap, Flame, Sparkles } from "lucide-react";
 import { useRouter } from "next/router";
 import {
   getMakersByFuelOrBodyType,
@@ -11,6 +11,7 @@ import {
 } from "@/services/filter";
 import { getAllConsultService } from "@/services/consult.filter.service";
 import { useUIStore } from "@/stores/useUIStore";
+import CustomSelect from "@/components/ui/custom-select";
 
 /* ================= CONSTANTS ================= */
 
@@ -36,6 +37,10 @@ export const TWO_WHEELER_TYPES = [
 ];
 
 const FUEL_TYPES = ["Petrol", "Diesel", "CNG", "Electric", "Hybrid", "LPG"];
+
+const MIN = 50000;
+const MAX = 2000000;
+
 const BUDGET_RANGE = [
   "0 - 1 L",
   "1 L - 2 L",
@@ -80,6 +85,10 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const [brandSearch, setBrandSearch] = useState("");
 
   const [priceRange, setPriceRange] = useState("");
+  const [minPrice, setMinPrice] = useState(50000);
+  const [maxPrice, setMaxPrice] = useState(2000000);
+  const [consultMinPrice, setConsultMinPrice] = useState(50000);
+  const [consultMaxPrice, setConsultMaxPrice] = useState(2000000);
   const [service, setService] = useState("");
   const [availability, setAvailability] = useState("");
   const [serviceOptions, setServiceOptions] = useState([]);
@@ -90,8 +99,48 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const searchTimerRef = useRef(null);
   const mobileTriggerRef = useRef(null);
 
+  const getTrackBackground = () => {
+    const minPercent = ((minPrice - MIN) / (MAX - MIN)) * 100;
+    const maxPercent = ((maxPrice - MIN) / (MAX - MIN)) * 100;
+    return `linear-gradient(
+      to right,
+      #333333 0%,
+      #333333 ${minPercent}%,
+      #3b82f6 ${minPercent}%,
+      #3b82f6 ${maxPercent}%,
+      #333333 ${maxPercent}%,
+      #333333 100%
+    )`;
+  };
+
+  const getConsultTrackBackground = () => {
+    const minPercent = ((consultMinPrice - MIN) / (MAX - MIN)) * 100;
+    const maxPercent = ((consultMaxPrice - MIN) / (MAX - MIN)) * 100;
+    return `linear-gradient(
+      to right,
+      #333333 0%,
+      #333333 ${minPercent}%,
+      #3b82f6 ${minPercent}%,
+      #3b82f6 ${maxPercent}%,
+      #333333 ${maxPercent}%,
+      #333333 100%
+    )`;
+  };
+
+  // Sync range slider state to search budget state
+  useEffect(() => {
+    setBudget(`${minPrice / 100000} - ${maxPrice / 100000}`);
+  }, [minPrice, maxPrice]);
+
+  useEffect(() => {
+    setPriceRange(`${consultMinPrice / 100000} - ${consultMaxPrice / 100000}`);
+  }, [consultMinPrice, consultMaxPrice]);
+
   const availableFuelTypes = useMemo(() => {
-    const isTwoWheeler = vehicleType && (vehicleType.toLowerCase().includes("2") || vehicleType.toLowerCase().includes("two"));
+    const isTwoWheeler =
+      vehicleType &&
+      (vehicleType.toLowerCase().includes("2") ||
+        vehicleType.toLowerCase().includes("two"));
     if (isTwoWheeler) {
       return ["Petrol", "Diesel", "CNG", "Electric"];
     }
@@ -122,18 +171,12 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         const seenStates = new Set();
 
         res.data.forEach((item) => {
-          if (
-            item.stateName &&
-            item.stateId &&
-            !seenStates.has(item.stateId)
-          ) {
+          if (item.stateName && item.stateId && !seenStates.has(item.stateId)) {
             seenStates.add(item.stateId);
 
             // Check if search term matches the state name (e.g. "harya" matches "Haryana")
             if (
-              item.stateName
-                .toLowerCase()
-                .includes(term.toLowerCase().trim())
+              item.stateName.toLowerCase().includes(term.toLowerCase().trim())
             ) {
               // Add the State as a top suggestion
               suggestions.unshift({
@@ -171,6 +214,60 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     };
   }, []);
 
+  useEffect(() => {
+    fetchBrands(fuelType, bodyType);
+  }, [fuelType, bodyType, vehicleType]);
+
+  const locationOptions = useMemo(() => {
+    return locationSuggestions.map((item, idx) => ({
+      label: item.isStateOnly ? item.stateName : `${item.cityName}, ${item.stateName}`,
+      value: item.isStateOnly ? `state-${item.stateId}-${idx}` : `city-${item.cityId}-${idx}`
+    }));
+  }, [locationSuggestions]);
+
+  const currentLocationValue = useMemo(() => {
+    if (!location) return "";
+    const foundOpt = locationOptions.find(opt => opt.label === location);
+    return foundOpt ? foundOpt.value : "";
+  }, [location, locationOptions]);
+
+  const handleLocationSelect = (val) => {
+    if (!val) {
+      setLocation("");
+      setCityId(null);
+      setStateId(null);
+      return;
+    }
+    if (val.startsWith("state-")) {
+      const parts = val.split("-");
+      const idx = parseInt(parts[2]);
+      const item = locationSuggestions[idx];
+      if (item) {
+        setLocation(item.stateName);
+        setCityId(null);
+        setStateId(item.stateId);
+      }
+    } else if (val.startsWith("city-")) {
+      const parts = val.split("-");
+      const idx = parseInt(parts[2]);
+      const item = locationSuggestions[idx];
+      if (item) {
+        setLocation(`${item.cityName}, ${item.stateName}`);
+        setCityId(item.cityId);
+        setStateId(item.stateId);
+      }
+    }
+  };
+
+  const bodyTypeOptions = useMemo(() => {
+    const types = vehicleType === "4 Wheeler" ? FOUR_WHEELER_TYPES : TWO_WHEELER_TYPES;
+    return types.map(t => ({ label: t.label, value: t.label }));
+  }, [vehicleType]);
+
+  const brandOptionsList = useMemo(() => {
+    return brandOptions.map(b => ({ label: b.makeDisplay, value: b.makeName }));
+  }, [brandOptions]);
+
   /* ================= LOGIC HELPERS ================= */
   const fetchBrands = async (
     currentFuel = fuelType,
@@ -186,9 +283,12 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         });
         setBrandOptions(res.data || []);
       } else {
-        const mappedBodyType = vehicleType && (vehicleType.toLowerCase().includes("2") || vehicleType.toLowerCase().includes("two"))
-          ? "TWO_WHEELER"
-          : "FOUR_WHEELER";
+        const mappedBodyType =
+          vehicleType &&
+          (vehicleType.toLowerCase().includes("2") ||
+            vehicleType.toLowerCase().includes("two"))
+            ? "TWO_WHEELER"
+            : "FOUR_WHEELER";
         const res = await getAndSearchMakers({
           searchTerm: "",
           page: 1,
@@ -269,12 +369,23 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   /* ================= NAVIGATION LOGIC ================= */
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileTab, setMobileTab] = useState("location");
-  const [internalActiveType, setInternalActiveType] = useState(activeType);
+  const getNormalizedType = (type) => {
+    if (!type) return "vehicle";
+    return type.toLowerCase().startsWith("consult") ? "consult" : "vehicle";
+  };
+
+  const [internalActiveType, setInternalActiveType] = useState(() => getNormalizedType(activeType));
   const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    if (mobileOpen) {
+      setActiveTab("location");
+    }
+  }, [mobileOpen]);
 
   // Keep internalActiveType in sync when the parent changes the activeType prop
   useEffect(() => {
-    setInternalActiveType(activeType);
+    setInternalActiveType(getNormalizedType(activeType));
   }, [activeType]);
 
   useEffect(() => {
@@ -471,7 +582,12 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         setMobileOpen(false);
       } else {
         const vtLower = vehicleType.toLowerCase().replace(/_/g, " ");
-        const isCar = vtLower.includes("car") || vtLower.includes("4 wheeler") || vtLower.includes("four wheeler") || vtLower.includes("4-wheeler") || vtLower.includes("four-wheeler");
+        const isCar =
+          vtLower.includes("car") ||
+          vtLower.includes("4 wheeler") ||
+          vtLower.includes("four wheeler") ||
+          vtLower.includes("4-wheeler") ||
+          vtLower.includes("four-wheeler");
 
         if (isCar) {
           // Generate SEO-friendly slug
@@ -746,10 +862,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       `}</style>
       <div className="hidden lg:flex absolute bottom-[20vh] left-0 right-0 z-30 justify-center items-center px-4">
         <div className="lg-glass-bar">
-          <div
-            ref={containerRef}
-            className="lg-glass-inner"
-          >
+          <div ref={containerRef} className="lg-glass-inner">
             <div className="relative z-10 flex items-center w-full h-full pr-2 pl-0 text-primary gap-0">
               {/* SECTION: LOCATION */}
               <div
@@ -767,7 +880,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 {activeTab === "location" && (
                   <div className="absolute top-[110%] left-0 z-50 dropdown-active w-[360px] lg-glass-dropdown rounded-xl p-2">
                     <div className="flex justify-between items-center px-2 py-1 mb-1 border-b border-white/10">
-                      <span className="text-xs font-semibold text-white/50">Location</span>
+                      <span className="text-xs font-semibold text-white/50">
+                        Location
+                      </span>
                       {location && (
                         <button
                           onClick={(e) => {
@@ -786,7 +901,11 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       {locationSuggestions.length > 0 ? (
                         locationSuggestions.map((item) => (
                           <button
-                            key={item.isStateOnly ? `state-${item.stateId}` : item.cityId}
+                            key={
+                              item.isStateOnly
+                                ? `state-${item.stateId}`
+                                : item.cityId
+                            }
                             onClick={(e) => {
                               e.stopPropagation();
                               if (item.isStateOnly) {
@@ -805,7 +924,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                             className="flex items-center justify-between gap-4 py-2 px-3 hover:bg-white/10 rounded-lg text-left cursor-pointer"
                           >
                             <span className="text-sm font-semibold text-white">
-                              {item.isStateOnly ? item.stateName : item.cityName}
+                              {item.isStateOnly
+                                ? item.stateName
+                                : item.cityName}
                             </span>
                             <span className="text-xs text-white/60">
                               {item.isStateOnly ? "State" : item.stateName}
@@ -832,13 +953,23 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 onClick={() => handleActiveTabChange("vehicle")}
               >
                 <div className="lg-label">Vehicle Type</div>
-                <div className={vehicleTypeError ? "lg-value error" : (vehicleType ? "lg-value" : "lg-value placeholder")}>
-                  {vehicleTypeError ? "* Required" : vehicleType || "Add type"}
+                <div
+                  className={
+                    vehicleTypeError
+                      ? "lg-value error"
+                      : vehicleType
+                        ? "lg-value"
+                        : "lg-value placeholder"
+                  }
+                >
+                  {vehicleTypeError ? "* Required" : vehicleType || ""}
                 </div>
                 {activeTab === "vehicle" && (
                   <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 lg-glass-dropdown rounded-xl p-2">
                     <div className="flex justify-between items-center px-2 py-1 mb-1 border-b border-white/10">
-                      <span className="text-xs font-semibold text-white/50">Vehicle Type</span>
+                      <span className="text-xs font-semibold text-white/50">
+                        Vehicle Type
+                      </span>
                       {vehicleType && (
                         <button
                           onClick={(e) => {
@@ -887,13 +1018,19 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     onClick={() => handleActiveTabChange("priceRange")}
                   >
                     <div className="lg-label">Price Range</div>
-                    <div className={priceRange ? "lg-value" : "lg-value placeholder"}>
+                    <div
+                      className={
+                        priceRange ? "lg-value" : "lg-value placeholder"
+                      }
+                    >
                       {priceRange || "Select price"}
                     </div>
                     {activeTab === "priceRange" && (
                       <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 lg-glass-dropdown rounded-xl p-2">
                         <div className="flex justify-between items-center px-2 py-1 mb-1 border-b border-white/10">
-                          <span className="text-xs font-semibold text-white/50">Price Range</span>
+                          <span className="text-xs font-semibold text-white/50">
+                            Price Range
+                          </span>
                           {priceRange && (
                             <button
                               onClick={(e) => {
@@ -929,13 +1066,17 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     onClick={() => handleActiveTabChange("service")}
                   >
                     <div className="lg-label">Service</div>
-                    <div className={service ? "lg-value" : "lg-value placeholder"}>
+                    <div
+                      className={service ? "lg-value" : "lg-value placeholder"}
+                    >
                       {service || "Select service"}
                     </div>
                     {activeTab === "service" && (
                       <div className="absolute top-[110%] left-0 z-50 dropdown-active w-[280px] lg-glass-dropdown rounded-xl p-2">
                         <div className="flex justify-between items-center px-2 py-1 mb-1 border-b border-white/10">
-                          <span className="text-xs font-semibold text-white/50">Service</span>
+                          <span className="text-xs font-semibold text-white/50">
+                            Service
+                          </span>
                           {service && (
                             <button
                               onClick={(e) => {
@@ -979,13 +1120,19 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     onClick={() => handleActiveTabChange("availability")}
                   >
                     <div className="lg-label">Availability</div>
-                    <div className={availability ? "lg-value" : "lg-value placeholder"}>
+                    <div
+                      className={
+                        availability ? "lg-value" : "lg-value placeholder"
+                      }
+                    >
                       {availability || "Select availability"}
                     </div>
                     {activeTab === "availability" && (
                       <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 lg-glass-dropdown rounded-xl p-2">
                         <div className="flex justify-between items-center px-2 py-1 mb-1 border-b border-white/10">
-                          <span className="text-xs font-semibold text-white/50">Availability</span>
+                          <span className="text-xs font-semibold text-white/50">
+                            Availability
+                          </span>
                           {availability && (
                             <button
                               onClick={(e) => {
@@ -1029,13 +1176,17 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     }}
                   >
                     <div className="lg-label">Body Type</div>
-                    <div className={bodyType ? "lg-value" : "lg-value placeholder"}>
+                    <div
+                      className={bodyType ? "lg-value" : "lg-value placeholder"}
+                    >
                       {bodyType || "Add type"}
                     </div>
                     {activeTab === "bodyType" && (
                       <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 lg-glass-dropdown rounded-xl p-2">
                         <div className="flex justify-between items-center px-2 py-1 mb-1 border-b border-white/10">
-                          <span className="text-xs font-semibold text-white/50">Body Type</span>
+                          <span className="text-xs font-semibold text-white/50">
+                            Body Type
+                          </span>
                           {bodyType && (
                             <button
                               onClick={(e) => {
@@ -1076,13 +1227,17 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     onClick={() => handleActiveTabChange("fuel")}
                   >
                     <div className="lg-label">Fuel Type</div>
-                    <div className={fuelType ? "lg-value" : "lg-value placeholder"}>
-                      {fuelType || "Select fuel"}
+                    <div
+                      className={fuelType ? "lg-value" : "lg-value placeholder"}
+                    >
+                      {fuelType || ""}
                     </div>
                     {activeTab === "fuel" && (
                       <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 lg-glass-dropdown rounded-xl p-2">
                         <div className="flex justify-between items-center px-2 py-1 mb-1 border-b border-white/10">
-                          <span className="text-xs font-semibold text-white/50">Fuel Type</span>
+                          <span className="text-xs font-semibold text-white/50">
+                            Fuel Type
+                          </span>
                           {fuelType && (
                             <button
                               onClick={(e) => {
@@ -1133,7 +1288,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     {activeTab === "brand" && (
                       <div className="absolute top-[110%] left-0 z-50 dropdown-active w-[300px] lg-glass-dropdown rounded-xl p-2">
                         <div className="flex justify-between items-center px-2 py-1 mb-1 border-b border-white/10">
-                          <span className="text-xs font-semibold text-white/50">Brand</span>
+                          <span className="text-xs font-semibold text-white/50">
+                            Brand
+                          </span>
                           {(brand || brandSearch) && (
                             <button
                               onClick={(e) => {
@@ -1182,13 +1339,17 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     onClick={() => handleActiveTabChange("budget")}
                   >
                     <div className="lg-label">Budget</div>
-                    <div className={budget ? "lg-value" : "lg-value placeholder"}>
+                    <div
+                      className={budget ? "lg-value" : "lg-value placeholder"}
+                    >
                       {budget || "Select budget"}
                     </div>
                     {activeTab === "budget" && (
                       <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 lg-glass-dropdown rounded-xl p-2">
                         <div className="flex justify-between items-center px-2 py-1 mb-1 border-b border-white/10">
-                          <span className="text-xs font-semibold text-white/50">Budget</span>
+                          <span className="text-xs font-semibold text-white/50">
+                            Budget
+                          </span>
                           {budget && (
                             <button
                               onClick={(e) => {
@@ -1226,7 +1387,15 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   className="lg-search-btn"
                   disabled={isSearching}
                 >
-                  {isSearching ? <Loader2 className="animate-spin" size={20} strokeWidth={2.5} /> : <Search size={20} strokeWidth={2.5} />}
+                  {isSearching ? (
+                    <Loader2
+                      className="animate-spin"
+                      size={20}
+                      strokeWidth={2.5}
+                    />
+                  ) : (
+                    <Search size={20} strokeWidth={2.5} />
+                  )}
                 </button>
               </div>
             </div>
@@ -1236,73 +1405,31 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       {/* MOBILE FILTER SEARCH BAR */}
       <div
         ref={mobileTriggerRef}
-        className={`lg:hidden fixed z-40 transition-all duration-500 ease-in-out ${isScrolled
-          ? "bottom-4 right-4 w-14"
-          : "bottom-4 right-4 w-[calc(100%-2rem)] md:right-[calc(50%-14rem)] md:w-[28rem]"
-          }`}
+        className={`lg:hidden fixed z-40 transition-all duration-500 ease-in-out ${
+          isScrolled
+            ? "bottom-4 right-4 w-14"
+            : "bottom-4 right-4 w-[calc(100%-2rem)] md:right-[calc(50%-14rem)] md:w-[28rem]"
+        }`}
       >
         <div className="relative">
-          {showTypeDropdown && (
-            <div
-              className={`absolute bottom-[110%] mb-4 backdrop-blur-2xl rounded-2xl p-2 animate-in slide-in-from-bottom-4 duration-300 dropdown-active ${isScrolled
-                ? "right-0 w-[280px] bg-black/70 border border-white/10 shadow-2xl"
-                : "left-0 right-0 bg-gradient-to-br from-white/20 to-white/5 border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)]"
-                }`}
-            >
-              <button
-                onClick={() => {
-                  setInternalActiveType("vehicle");
-                  setMobileOpen(true);
-                  setShowTypeDropdown(false);
-                }}
-                className="w-full flex items-center gap-3 p-4 hover:bg-white/10 transition-colors rounded-xl text-left cursor-pointer"
-              >
-                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-primary">
-                  <Search size={18} />
-                </div>
-                <div>
-                  <div className="text-white font-bold">Search Vehicle</div>
-                  <div className="text-gray-400 text-xs mt-0.5">
-                    Find your dream car or bike
-                  </div>
-                </div>
-              </button>
-              <div className="h-px bg-white/20 mx-2 my-1" />
-              <button
-                onClick={() => {
-                  setInternalActiveType("consult");
-                  setMobileOpen(true);
-                  setShowTypeDropdown(false);
-                }}
-                className="w-full flex items-center gap-3 p-4 hover:bg-white/10 transition-colors rounded-xl text-left cursor-pointer"
-              >
-                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-primary">
-                  <Search size={18} />
-                </div>
-                <div>
-                  <div className="text-white font-bold">
-                    Search Consultation
-                  </div>
-                  <div className="text-gray-400 text-xs mt-0.5">
-                    Expert advice for your vehicle
-                  </div>
-                </div>
-              </button>
-            </div>
-          )}
           <button
-            onClick={() => setShowTypeDropdown(!showTypeDropdown)}
-            className={`w-full flex items-center justify-center transition-all duration-500 ease-in-out cursor-pointer whitespace-nowrap overflow-hidden rounded-full ${isScrolled
-              ? "h-14 bg-fourth shadow-lg"
-              : "h-14 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)]"
-              }`}
+            onClick={() => {
+              setMobileOpen(true);
+              setActiveTab("location");
+            }}
+            className={`w-full flex items-center justify-center transition-all duration-500 ease-in-out cursor-pointer whitespace-nowrap overflow-hidden rounded-full ${
+              isScrolled
+                ? "h-14 bg-fourth shadow-lg"
+                : "h-14 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)]"
+            }`}
           >
             <Search size={22} className="text-white shrink-0" />
             <span
-              className={`font-medium text-white transition-all duration-500 ease-in-out overflow-hidden ${isScrolled
-                ? "max-w-0 opacity-0 ml-0 pointer-events-none"
-                : "max-w-[150px] opacity-100 ml-2"
-                }`}
+              className={`font-medium text-white transition-all duration-500 ease-in-out overflow-hidden ${
+                isScrolled
+                  ? "max-w-0 opacity-0 ml-0 pointer-events-none"
+                  : "max-w-[150px] opacity-100 ml-2"
+              }`}
             >
               Start your search
             </span>
@@ -1323,623 +1450,486 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           }}
         />
 
-        {/* Proper Box */}
         <div
           id="mobile-drawer"
-          className={`relative w-full sm:w-[90%] max-w-md bg-secondary rounded-t-3xl sm:rounded-3xl flex flex-col transition-transform duration-300 ${mobileOpen ? "translate-y-0" : "translate-y-full sm:scale-95"} max-h-[85vh]`}
+          className={`relative w-full sm:w-[90%] max-w-md bg-[#111111] rounded-t-3xl sm:rounded-3xl flex flex-col transition-transform duration-300 ${mobileOpen ? "translate-y-0" : "translate-y-full sm:scale-95"} h-[calc(100dvh-70px)] sm:h-[95vh] overflow-y-auto custom-scrollbar pb-6`}
         >
           {/* Header */}
-          <div className="p-4 border-b border-neutral-800 flex justify-between items-center bg-secondary rounded-t-3xl sm:rounded-3xl shrink-0">
-            <h2 className="text-xl font-bold text-primary">Search Filters</h2>
+          <div className="p-5 pb-1 flex justify-between items-start">
+            <div>
+              <h2 className="text-xl font-bold text-white tracking-tight">
+                Search Vehicles
+              </h2>
+              <p className="text-gray-400 text-sm mt-1">
+                Filter inventory and find vehicles instantly
+              </p>
+            </div>
             <button
               onClick={() => {
                 setMobileOpen(false);
                 setActiveTab(null);
               }}
-              className="p-1 bg-white cursor-pointer rounded-full hover:opacity-70 text-secondary"
+              className="p-2 bg-[#222] text-gray-400 hover:text-white cursor-pointer rounded-full transition-colors"
             >
               <X size={20} />
             </button>
           </div>
 
-          <div className="p-4 space-y-3 overflow-y-auto flex-1 text-primary custom-scrollbar pb-6">
-            {/* Location */}
-            <div
-              className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "location" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
+          {/* Tab Switcher (Vehicle / Consultant) */}
+          <div className="flex px-5 mt-3 border-b border-[#222]">
+            <button
+              onClick={() => {
+                setInternalActiveType("vehicle");
+                setActiveTab("location");
+              }}
+              className={`flex-1 pb-2.5 text-[15px] font-semibold flex flex-col items-center gap-1.5 transition-colors relative cursor-pointer ${internalActiveType === "vehicle" ? "text-white" : "text-gray-500 hover:text-gray-300"}`}
             >
-              <div
-                onClick={() =>
-                  handleActiveTabChange(
-                    activeTab === "location" ? null : "location",
-                  )
-                }
-                className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
-              >
-                <div className="flex flex-col items-start min-w-0 flex-1">
-                  <span className="text-xs font-semibold text-primary">
-                    Location
-                  </span>
-                  <span
-                    className={`font-medium text-sm mt-1 truncate w-full ${location ? "text-white" : "text-gray-500"}`}
-                  >
-                    {location || "Search destinations"}
-                  </span>
-                </div>
-              </div>
-              {activeTab === "location" && (
-                <div className="p-4 pt-0 border-t border-neutral-800 border-opacity-50 dropdown-active">
-                  <div className="flex justify-between items-center pt-3 pb-1">
-                    <span className="text-xs text-gray-500 font-semibold">Select Location</span>
-                    {location && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setLocation("");
-                          setCityId(null);
-                          setStateId(null);
-                        }}
-                        className="text-xs underline text-white hover:text-white/80 font-semibold cursor-pointer"
-                      >
-                        Clear
-                      </button>
-                    )}
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Search destinations"
-                    className="w-full bg-neutral-800 outline-none text-white py-3 px-4 rounded-xl mt-3 text-sm"
-                    value={location}
-                    onChange={handleLocationChange}
-                    autoFocus
-                  />
-                  {locationSuggestions.length > 0 && location && (
-                    <div className="mt-2 bg-neutral-800 rounded-xl overflow-hidden border border-neutral-700">
-                      {locationSuggestions.map((item) => (
-                        <button
-                          key={item.isStateOnly ? `state-${item.stateId}` : item.cityId}
-                          onClick={() => {
-                            if (item.isStateOnly) {
-                              setLocation(item.stateName);
-                              setCityId(null);
-                              setStateId(item.stateId);
-                            } else {
-                              setLocation(`${item.cityName}, ${item.stateName}`);
-                              setCityId(item.cityId);
-                              setStateId(item.stateId);
-                            }
-                            setLocationSuggestions([]);
-                            openNextAvailableTab("location");
-                          }}
-                          className="w-full flex items-center justify-between gap-4 py-3 px-4 border-b border-neutral-700 last:border-0 hover:bg-neutral-700 text-left cursor-pointer"
-                        >
-                          <span className="text-sm font-semibold text-white">
-                            {item.isStateOnly ? item.stateName : item.cityName}
-                          </span>
-                          <span className="text-xs text-gray-400">
-                            {item.isStateOnly ? "State" : item.stateName}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+              <Car size={20} strokeWidth={1.5} />
+              Vehicle
+              {internalActiveType === "vehicle" && (
+                <div className="absolute bottom-0 left-1/4 right-1/4 h-[3px] bg-blue-500 rounded-t-full" />
               )}
-            </div>
-
-            {/* Vehicle Type */}
-            <div
-              className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "vehicle" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
+            </button>
+            <button
+              onClick={() => {
+                setInternalActiveType("consult");
+                setActiveTab("location");
+              }}
+              className={`flex-1 pb-2.5 text-[15px] font-semibold flex flex-col items-center gap-1.5 transition-colors relative cursor-pointer ${internalActiveType === "consult" ? "text-white" : "text-gray-500 hover:text-gray-300"}`}
             >
-              <div
-                onClick={() =>
-                  handleActiveTabChange(
-                    activeTab === "vehicle" ? null : "vehicle",
-                  )
-                }
-                className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
-              >
-                <div className="flex flex-col items-start min-w-0 flex-1">
-                  <span className="text-xs font-semibold text-primary">
-                    Vehicle Type
-                  </span>
-                  <span
-                    className={`font-medium text-sm mt-1 truncate w-full ${vehicleTypeError ? "text-red-500" : vehicleType ? "text-white" : "text-gray-500"}`}
-                  >
-                    {vehicleTypeError ? "*Required" : vehicleType || "Add type"}
-                  </span>
-                </div>
-              </div>
-              {activeTab === "vehicle" && (
-                <div className="p-4 pt-0 border-t border-neutral-800 border-opacity-50 dropdown-active">
-                  <div className="flex justify-between items-center pt-3 pb-1">
-                    <span className="text-xs text-gray-500 font-semibold">Select Type</span>
-                    {vehicleType && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setVehicleType("");
-                          setVehicleTypeError(false);
-                          setFuelType("");
-                          setBodyType("");
-                          setBrand("");
-                          setMakerId(null);
-                        }}
-                        className="text-xs underline text-white hover:text-white/80 font-semibold cursor-pointer"
-                      >
-                        Clear
-                      </button>
-                    )}
-                  </div>
-                  <div className="flex gap-2 mt-2">
-                    {VEHICLE_TYPES.map((type) => (
-                      <button
-                        key={type.id}
-                        onClick={() => {
-                          setVehicleType(type.label);
-                          setVehicleTypeError(false);
-                          setFuelType("");
-                          setBodyType("");
-                          openNextAvailableTab("vehicle");
-                        }}
-                        className={`flex-1 mt-3 py-3 text-sm font-bold rounded-lg transition-colors cursor-pointer ${vehicleType === type.label ? "bg-white text-black" : "bg-neutral-800 text-gray-400 hover:text-white"}`}
-                      >
-                        {type.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+              <User size={20} strokeWidth={1.5} />
+              Consultant
+              {internalActiveType === "consult" && (
+                <div className="absolute bottom-0 left-1/4 right-1/4 h-[3px] bg-blue-500 rounded-t-full" />
               )}
+            </button>
+          </div>
+
+          {/* Search Bar */}
+          <div className="px-5 mt-4">
+            <div className="relative flex items-center w-full bg-[#1A1A1A] border border-[#2A2A2A] rounded-full overflow-hidden focus-within:border-[#444] transition-colors py-0.5">
+              <div className="pl-4 text-blue-500">
+                <Search size={18} strokeWidth={2} />
+              </div>
+              <input
+                type="text"
+                placeholder="Search"
+                className="flex-1 bg-transparent border-none outline-none text-white py-2.5 px-3 text-[15px] placeholder-gray-500"
+              />
+              <div className="pr-4 text-blue-500 cursor-pointer">
+                <Mic size={18} strokeWidth={2} />
+              </div>
             </div>
+          </div>
 
-            {internalActiveType === "consult" ? (
-              <>
-                {/* Price Range */}
-                <div
-                  className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "priceRange" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
+          {/* Recent Searches */}
+          <div className="px-5 mt-5">
+            <div className="flex justify-between items-center mb-2.5">
+              <span className="text-sm font-semibold text-white/90">Recent Searches</span>
+              <button className="text-xs text-blue-500 hover:underline font-semibold cursor-pointer">
+                Clear All
+              </button>
+            </div>
+            <div className="flex gap-2.5 overflow-x-auto no-scrollbar pb-1">
+              {[
+                "Hyundai Creta",
+                "Swift VXI",
+                "SUV under 10L"
+              ].map((term, index) => (
+                <button
+                  key={index}
+                  className="flex items-center gap-1.5 px-3.5 py-2 bg-[#1A1A1A] hover:bg-[#252525] border border-neutral-800 rounded-full text-xs text-gray-300 font-medium shrink-0 cursor-pointer transition-colors"
                 >
-                  <div
-                    onClick={() =>
-                      handleActiveTabChange(
-                        activeTab === "priceRange" ? null : "priceRange",
-                      )
-                    }
-                    className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
-                  >
-                    <div className="flex flex-col items-start min-w-0 flex-1">
-                      <span className="text-xs font-semibold text-primary">
-                        Price Range
-                      </span>
-                      <span
-                        className={`font-medium text-sm mt-1 truncate w-full ${priceRange ? "text-white" : "text-gray-500"}`}
-                      >
-                        {priceRange || "Select price"}
-                      </span>
-                    </div>
-                  </div>
-                  {activeTab === "priceRange" && (
-                    <div className="p-2 border-t border-neutral-800 border-opacity-50 dropdown-active">
-                      <div className="flex justify-between items-center px-2 py-1 mb-1">
-                        <span className="text-xs text-gray-500 font-semibold">Select Price</span>
-                        {priceRange && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setPriceRange("");
-                            }}
-                            className="text-xs underline text-white hover:text-white/80 font-semibold cursor-pointer"
-                          >
-                            Clear
-                          </button>
-                        )}
-                      </div>
-                      {CONSULT_PRICE_RANGE.map((range) => (
-                        <button
-                          key={range}
-                          onClick={() => {
-                            setPriceRange(range);
-                            openNextAvailableTab("priceRange");
-                          }}
-                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${priceRange === range ? "bg-white text-black" : "hover:bg-neutral-800 text-white"}`}
-                        >
-                          {range}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                  <span className="text-gray-500">🕒</span>
+                  {term}
+                </button>
+              ))}
+            </div>
+          </div>
 
-                {/* Service */}
-                <div
-                  className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "service" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
-                >
-                  <div
-                    onClick={() =>
-                      handleActiveTabChange(
-                        activeTab === "service" ? null : "service",
-                      )
-                    }
-                    className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
+          {/* Popular Searches */}
+          <div className="px-5 mt-5">
+            <h3 className="text-sm font-semibold text-white/90 mb-3">Popular Searches</h3>
+            <div className="grid grid-cols-4 gap-2.5">
+              {[
+                { label: "SUV", icon: Car },
+                { label: "Under ₹10L", icon: Sparkles },
+                { label: "Electric", icon: Zap },
+                { label: "Petrol", icon: Fuel }
+              ].map((item, index) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      if (item.label === "Electric" || item.label === "Petrol") {
+                        setFuelType(item.label);
+                      } else if (item.label === "SUV") {
+                        setBodyType("SUV");
+                      } else if (item.label === "Under ₹10L") {
+                        setMinPrice(50000);
+                        setMaxPrice(1000000);
+                      }
+                    }}
+                    className="flex flex-col items-center justify-center p-3 bg-[#161616] hover:bg-[#202020] border border-neutral-800/80 rounded-2xl cursor-pointer transition-colors text-center aspect-square"
                   >
-                    <div className="flex flex-col items-start min-w-0 flex-1">
-                      <span className="text-xs font-semibold text-primary">
-                        Service
-                      </span>
-                      <span
-                        className={`font-medium text-sm mt-1 truncate w-full ${service ? "text-white" : "text-gray-500"}`}
-                      >
-                        {service || "Select service"}
-                      </span>
+                    <div className="p-2 bg-neutral-900 border border-neutral-800 rounded-xl text-gray-400 mb-2">
+                      <Icon size={18} />
                     </div>
-                  </div>
-                  {activeTab === "service" && (
-                    <div className="border-t border-neutral-800 border-opacity-50 dropdown-active">
-                      <div className="flex justify-between items-center px-4 py-2 border-b border-neutral-800">
-                        <span className="text-xs text-gray-500 font-semibold">Select Service</span>
-                        {service && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setService("");
-                            }}
-                            className="text-xs underline text-white hover:text-white/80 font-semibold cursor-pointer"
-                          >
-                            Clear
-                          </button>
-                        )}
-                      </div>
-                      <div className="p-2 max-h-48 overflow-y-auto custom-scrollbar">
-                        {serviceOptions.length > 0 ? (
-                          serviceOptions.map((opt) => (
-                            <button
-                              key={opt.value}
-                              onClick={() => {
-                                setService(opt.value);
-                                openNextAvailableTab("service");
-                              }}
-                              className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${service === opt.value ? "bg-white text-black" : "hover:bg-neutral-800 text-white"}`}
-                            >
-                              {opt.label}
-                            </button>
-                          ))
-                        ) : (
-                          <div className="p-4 text-sm text-center text-gray-400">
-                            Loading...
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
+                    <span className="text-[10px] font-bold text-gray-300 leading-tight">
+                      {item.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
-                {/* Availability */}
-                <div
-                  className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "availability" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
-                >
-                  <div
-                    onClick={() =>
-                      handleActiveTabChange(
-                        activeTab === "availability" ? null : "availability",
-                      )
-                    }
-                    className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
-                  >
-                    <div className="flex flex-col items-start min-w-0 flex-1">
-                      <span className="text-xs font-semibold text-primary">
-                        Availability
-                      </span>
-                      <span
-                        className={`font-medium text-sm mt-1 truncate w-full ${availability ? "text-white" : "text-gray-500"}`}
-                      >
-                        {availability || "Select availability"}
-                      </span>
-                    </div>
-                  </div>
-                  {activeTab === "availability" && (
-                    <div className="p-2 border-t border-neutral-800 border-opacity-50 dropdown-active">
-                      <div className="flex justify-between items-center px-2 py-1 mb-1">
-                        <span className="text-xs text-gray-500 font-semibold">Select Availability</span>
-                        {availability && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setAvailability("");
-                            }}
-                            className="text-xs underline text-white hover:text-white/80 font-semibold cursor-pointer"
-                          >
-                            Clear
-                          </button>
-                        )}
-                      </div>
-                      {AVAILABILITY_OPTIONS.map((opt) => (
-                        <button
-                          key={opt.value}
-                          onClick={() => {
-                            setAvailability(opt.label);
-                            openNextAvailableTab("availability");
-                          }}
-                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${availability === opt.label ? "bg-white text-black" : "hover:bg-neutral-800 text-white"}`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </>
-            ) : (
-              <>
-                {/* Body Type */}
-                <div
-                  className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "bodyType" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
-                >
-                  <div
-                    onClick={() =>
-                      handleActiveTabChange(
-                        activeTab === "bodyType" ? null : "bodyType",
-                      )
-                    }
-                    className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
-                  >
-                    <div className="flex flex-col items-start min-w-0 flex-1">
-                      <span className="text-xs font-semibold text-primary">
-                        Body Type
-                      </span>
-                      <span
-                        className={`font-medium text-sm mt-1 truncate w-full ${bodyType ? "text-white" : "text-gray-500"}`}
-                      >
-                        {bodyType || "Add type"}
-                      </span>
-                    </div>
-                  </div>
-                  {activeTab === "bodyType" && (
-                    <div className="border-t border-neutral-800 border-opacity-50 dropdown-active">
-                      <div className="flex justify-between items-center px-4 py-2 border-b border-neutral-800">
-                        <span className="text-xs text-gray-500 font-semibold">Select Body Type</span>
-                        {bodyType && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setBodyType("");
-                            }}
-                            className="text-xs underline text-white hover:text-white/80 font-semibold cursor-pointer"
-                          >
-                            Clear
-                          </button>
-                        )}
-                      </div>
-                      <div className="p-2 max-h-48 overflow-y-auto custom-scrollbar">
-                        {(vehicleType === "4 Wheeler"
-                          ? FOUR_WHEELER_TYPES
-                          : TWO_WHEELER_TYPES
-                        ).map((type) => (
-                          <button
-                            key={type.key}
-                            onClick={() => {
-                              setBodyType(type.label);
-                              openNextAvailableTab("bodyType", type.label);
-                            }}
-                            className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${bodyType === type.label ? "bg-white text-black" : "hover:bg-neutral-800 text-white"}`}
-                          >
-                            {type.label}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
+          {/* Location */}
+          <div className="px-5 mt-5">
+            <label className="block text-sm font-semibold text-white/90 mb-2">Location</label>
+            <CustomSelect
+              value={currentLocationValue}
+              options={locationOptions}
+              placeholder="Search destinations"
+              variant="transparent"
+              onSearch={(val) => {
+                if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+                searchTimerRef.current = setTimeout(() => searchCities(val), 350);
+              }}
+              onChange={handleLocationSelect}
+            />
+          </div>
 
-                {/* Fuel Type */}
-                <div
-                  className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "fuel" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
-                >
+          {/* Vehicle Type */}
+          <div className="px-5 mt-5">
+            <label className="block text-sm font-semibold text-white/90 mb-3">Vehicle Type</label>
+            <div className="grid grid-cols-2 gap-3.5">
+              {/* 2 Wheeler Card */}
+              <button
+                type="button"
+                onClick={() => {
+                  setVehicleType("2 Wheeler");
+                  setVehicleTypeError(false);
+                  setFuelType("");
+                  setBodyType("");
+                }}
+                className={`relative flex flex-col items-start p-4 rounded-2xl border text-left cursor-pointer transition-all duration-200 ${
+                  vehicleType === "2 Wheeler"
+                    ? "border-blue-500 bg-blue-500/10 text-white"
+                    : "border-neutral-800 bg-[#161616] text-gray-400 hover:text-white"
+                }`}
+              >
+                <div className="flex items-center justify-between w-full">
                   <div
-                    onClick={() =>
-                      handleActiveTabChange(
-                        activeTab === "fuel" ? null : "fuel",
-                      )
-                    }
-                    className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
+                    className={`p-2 rounded-xl flex items-center justify-center ${vehicleType === "2 Wheeler" ? "bg-blue-500/20 text-blue-500" : "bg-neutral-800 text-gray-400"}`}
                   >
-                    <div className="flex flex-col items-start min-w-0 flex-1">
-                      <span className="text-xs font-semibold text-primary">
-                        Fuel Type
-                      </span>
-                      <span
-                        className={`font-medium text-sm mt-1 truncate w-full ${fuelType ? "text-white" : "text-gray-500"}`}
-                      >
-                        {fuelType || "Select fuel"}
-                      </span>
-                    </div>
+                    <Bike className="w-5 h-5" />
                   </div>
-                  {activeTab === "fuel" && (
-                    <div className="p-2 border-t border-neutral-800 border-opacity-50 dropdown-active">
-                      <div className="flex justify-between items-center px-2 py-1 mb-1">
-                        <span className="text-xs text-gray-500 font-semibold">Select Fuel Type</span>
-                        {fuelType && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setFuelType("");
-                            }}
-                            className="text-xs underline text-white hover:text-white/80 font-semibold cursor-pointer"
-                          >
-                            Clear
-                          </button>
-                        )}
-                      </div>
-                      {availableFuelTypes.map((fuel) => (
-                        <button
-                          key={fuel}
-                          onClick={() => {
-                            setFuelType(fuel);
-                            openNextAvailableTab("fuel", fuel);
-                          }}
-                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${fuelType === fuel ? "bg-white text-black" : "hover:bg-neutral-800 text-white"}`}
-                        >
-                          {fuel}
-                        </button>
-                      ))}
-                    </div>
-                  )}
+                  <span
+                    className={`w-4.5 h-4.5 rounded-full border flex items-center justify-center transition-colors ${
+                      vehicleType === "2 Wheeler"
+                        ? "border-blue-500 bg-blue-500"
+                        : "border-neutral-700"
+                    }`}
+                  >
+                    {vehicleType === "2 Wheeler" && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-white" />
+                    )}
+                  </span>
                 </div>
+                <span className="text-[15px] font-bold mt-4 leading-tight">
+                  2 Wheeler
+                </span>
+                <span className="text-[11px] text-gray-500 mt-1">
+                  Bike • Scooter
+                </span>
+              </button>
 
-                {/* Brand Search */}
-                <div
-                  className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "brand" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
-                >
+              {/* 4 Wheeler Card */}
+              <button
+                type="button"
+                onClick={() => {
+                  setVehicleType("4 Wheeler");
+                  setVehicleTypeError(false);
+                  setFuelType("");
+                  setBodyType("");
+                }}
+                className={`relative flex flex-col items-start p-4 rounded-2xl border text-left cursor-pointer transition-all duration-200 ${
+                  vehicleType === "4 Wheeler"
+                    ? "border-blue-500 bg-blue-500/10 text-white"
+                    : "border-neutral-800 bg-[#161616] text-gray-400 hover:text-white"
+                }`}
+              >
+                <div className="flex items-center justify-between w-full">
                   <div
-                    onClick={() =>
-                      handleActiveTabChange(
-                        activeTab === "brand" ? null : "brand",
-                      )
-                    }
-                    className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
+                    className={`p-2 rounded-xl flex items-center justify-center ${vehicleType === "4 Wheeler" ? "bg-blue-500/20 text-blue-500" : "bg-neutral-800 text-gray-400"}`}
                   >
-                    <div className="flex flex-col items-start min-w-0 flex-1">
-                      <span className="text-xs font-semibold text-primary">
-                        Brand
-                      </span>
-                      <span
-                        className={`font-medium text-sm mt-1 truncate w-full ${brand ? "text-white" : "text-gray-500"}`}
-                      >
-                        {brand || "Search brand"}
-                      </span>
-                    </div>
+                    <Car className="w-5 h-5" />
                   </div>
-                  {activeTab === "brand" && (
-                    <div className="border-t border-neutral-800 border-opacity-50 dropdown-active">
-                      <div className="flex justify-between items-center px-4 py-2 border-b border-neutral-800">
-                        <span className="text-xs text-gray-500 font-semibold">Select Brand</span>
-                        {(brand || brandSearch) && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setBrand("");
-                              setMakerId(null);
-                              setBrandSearch("");
-                            }}
-                            className="text-xs underline text-white hover:text-white/80 font-semibold cursor-pointer"
-                          >
-                            Clear
-                          </button>
-                        )}
-                      </div>
-                      <div className="p-4 pt-2 flex flex-col items-center">
-                        <input
-                          type="text"
-                          placeholder="Search brand"
-                          className="w-full bg-neutral-800 outline-none text-white py-3 px-4 rounded-xl mt-3 text-sm"
-                          value={brandSearch || brand}
-                          onChange={(e) => {
-                            setBrandSearch(e.target.value);
-                            if (!e.target.value) {
-                              setBrand("");
-                              setMakerId(null);
-                            }
-                          }}
-                        />
-                        <div className="mt-2 w-full max-h-48 overflow-y-auto rounded-xl">
-                          {filteredBrands.map((b) => (
-                            <button
-                              key={b.makeId}
-                              onClick={() => {
-                                setBrand(b.makeName);
-                                setMakerId(b.makeId);
-                                setBrandSearch("");
-                                openNextAvailableTab("brand");
-                              }}
-                              className={`w-full py-3 px-4 border-b border-neutral-700 last:border-none text-left text-sm font-semibold cursor-pointer flex items-center gap-2 ${brand === b.makeName ? "bg-white text-black" : "hover:bg-neutral-800 text-white"}`}
-                            >
-                              {b.logo && (
-                                <img
-                                  src={b.logo}
-                                  alt={b.makeDisplay}
-                                  className="w-5 h-5 object-contain rounded bg-white p-0.5 shrink-0"
-                                />
-                              )}
-                              <span>{b.makeDisplay}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Budget */}
-                <div
-                  className={`border rounded-xl overflow-hidden transition-colors ${activeTab === "budget" ? "border-primary bg-neutral-900" : "border-neutral-800 bg-neutral-900/50"}`}
-                >
-                  <div
-                    onClick={() =>
-                      handleActiveTabChange(
-                        activeTab === "budget" ? null : "budget",
-                      )
-                    }
-                    className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
+                  <span
+                    className={`w-4.5 h-4.5 rounded-full border flex items-center justify-center transition-colors ${
+                      vehicleType === "4 Wheeler"
+                        ? "border-blue-500 bg-blue-500"
+                        : "border-neutral-700"
+                    }`}
                   >
-                    <div className="flex flex-col items-start min-w-0 flex-1">
-                      <span className="text-xs font-semibold text-primary">
-                        Budget
-                      </span>
-                      <span
-                        className={`font-medium text-sm mt-1 truncate w-full ${budget ? "text-white" : "text-gray-500"}`}
-                      >
-                        {budget || "Select budget"}
-                      </span>
-                    </div>
-                  </div>
-                  {activeTab === "budget" && (
-                    <div className="p-2 border-t border-neutral-800 border-opacity-50 dropdown-active">
-                      <div className="flex justify-between items-center px-2 py-1 mb-1">
-                        <span className="text-xs text-gray-500 font-semibold">Select Budget</span>
-                        {budget && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setBudget("");
-                            }}
-                            className="text-xs underline text-white hover:text-white/80 font-semibold cursor-pointer"
-                          >
-                            Clear
-                          </button>
-                        )}
-                      </div>
-                      {BUDGET_RANGE.map((range) => (
-                        <button
-                          key={range}
-                          onClick={() => {
-                            setBudget(range);
-                            openNextAvailableTab("budget");
-                          }}
-                          className={`w-full py-3 px-4 rounded-lg text-left text-sm font-semibold mt-1 cursor-pointer ${budget === range ? "bg-white text-black" : "hover:bg-neutral-800 text-white"}`}
-                        >
-                          {range}
-                        </button>
-                      ))}
-                    </div>
-                  )}
+                    {vehicleType === "4 Wheeler" && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-white" />
+                    )}
+                  </span>
                 </div>
-              </>
+                <span className="text-[15px] font-bold mt-4 leading-tight">
+                  4 Wheeler
+                </span>
+                <span className="text-[11px] text-gray-500 mt-1">
+                  Cars • SUVs • EV
+                </span>
+              </button>
+            </div>
+            {vehicleTypeError && (
+              <span className="text-xs text-red-500 font-medium mt-1.5 block">* Please select a vehicle type</span>
             )}
           </div>
 
-          {/* Bottom Search Button inside the proper box */}
-          <div className="p-4 border-t border-neutral-800 shrink-0 bg-secondary sm:rounded-b-3xl">
+          {/* CONDITIONAL SECTIONS */}
+          {internalActiveType === "consult" ? (
+            <>
+              {/* Consultant Price Range */}
+              <div className="px-5 mt-5">
+                <div className="flex justify-between items-center mb-3">
+                  <label className="text-sm font-semibold text-white/90">Price Range</label>
+                  <div className="flex gap-1.5 text-xs font-bold text-white bg-[#1A1A1A] border border-neutral-800 px-2.5 py-1 rounded-lg">
+                    <span>₹{(consultMinPrice / 100000).toFixed(1)} L</span>
+                    <span className="text-gray-500">-</span>
+                    <span>₹{(consultMaxPrice / 100000).toFixed(1)} L</span>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-[#161616] border border-neutral-800/80 rounded-2xl">
+                  <div className="relative h-6 flex items-center mt-1">
+                    <div
+                      className="absolute w-full h-1.5 rounded-full"
+                      style={{ background: getConsultTrackBackground() }}
+                    />
+                    <input
+                      type="range"
+                      min={MIN}
+                      max={MAX}
+                      step={50000}
+                      value={consultMinPrice}
+                      onChange={(e) =>
+                        setConsultMinPrice(
+                          Math.min(+e.target.value, consultMaxPrice - 50000),
+                        )
+                      }
+                      className="dual-range z-30"
+                    />
+                    <input
+                      type="range"
+                      min={MIN}
+                      max={MAX}
+                      step={50000}
+                      value={consultMaxPrice}
+                      onChange={(e) =>
+                        setConsultMaxPrice(
+                          Math.max(+e.target.value, consultMinPrice + 50000),
+                        )
+                      }
+                      className="dual-range z-40"
+                    />
+                  </div>
+                  <div className="flex justify-between text-[10px] text-gray-500 font-semibold mt-1">
+                    <span>₹{(MIN / 100000).toFixed(1)}L</span>
+                    <span>₹{(MAX / 100000).toFixed(1)}L</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Service */}
+              <div className="px-5 mt-5">
+                <label className="block text-sm font-semibold text-white/90 mb-2">Service</label>
+                <CustomSelect
+                  value={service}
+                  options={serviceOptions}
+                  placeholder="Select Service"
+                  variant="transparent"
+                  onChange={(val) => setService(val)}
+                />
+              </div>
+
+              {/* Availability */}
+              <div className="px-5 mt-5">
+                <label className="block text-sm font-semibold text-white/90 mb-2">Availability</label>
+                <CustomSelect
+                  value={availability}
+                  options={AVAILABILITY_OPTIONS}
+                  placeholder="Select Availability"
+                  variant="transparent"
+                  onChange={(val) => setAvailability(val)}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Body Type */}
+              <div className="px-5 mt-5">
+                <label className="block text-sm font-semibold text-white/90 mb-2">Body Type</label>
+                <CustomSelect
+                  value={bodyType}
+                  options={bodyTypeOptions}
+                  placeholder={vehicleType ? "Select Body Type" : "Select vehicle type first"}
+                  variant="transparent"
+                  disabled={!vehicleType}
+                  onChange={(val) => setBodyType(val)}
+                />
+              </div>
+
+              {/* Fuel Type */}
+              <div className="px-5 mt-5">
+                <label className="block text-sm font-semibold text-white/90 mb-3">Fuel Type</label>
+                <div className="grid grid-cols-4 gap-2.5">
+                  {availableFuelTypes.map((fuel) => {
+                    const isSelected = fuelType === fuel;
+                    let Icon = Fuel;
+                    if (fuel.toLowerCase() === "electric") {
+                      Icon = Zap;
+                    } else if (fuel.toLowerCase() === "cng" || fuel.toLowerCase() === "lpg") {
+                      Icon = Flame;
+                    } else if (fuel.toLowerCase() === "hybrid") {
+                      Icon = Sparkles;
+                    }
+
+                    return (
+                      <button
+                        key={fuel}
+                        type="button"
+                        onClick={() => {
+                          setFuelType(isSelected ? "" : fuel);
+                        }}
+                        className={`relative flex flex-col items-center justify-center p-3 rounded-2xl border text-center aspect-square cursor-pointer transition-all duration-200 ${
+                          isSelected
+                            ? "border-blue-500 bg-blue-500/10 text-white"
+                            : "border-neutral-800 bg-[#161616] text-gray-400 hover:text-white"
+                        }`}
+                      >
+                        <div className={`p-2 rounded-xl flex items-center justify-center mb-1.5 ${isSelected ? "bg-blue-500/20 text-blue-500" : "bg-neutral-900 border border-neutral-800 text-gray-400"}`}>
+                          <Icon className="w-4.5 h-4.5" />
+                        </div>
+                        <span className="text-[10px] font-bold mt-1 leading-tight text-gray-300">
+                          {fuel}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Brand */}
+              <div className="px-5 mt-5">
+                <label className="block text-sm font-semibold text-white/90 mb-2">Brand</label>
+                <CustomSelect
+                  value={brand}
+                  options={brandOptionsList}
+                  placeholder="Select Brand"
+                  variant="transparent"
+                  onChange={(val) => {
+                    const b = brandOptions.find(opt => opt.makeName === val);
+                    setBrand(val);
+                    setMakerId(b ? b.makeId : null);
+                  }}
+                />
+              </div>
+
+              {/* Budget */}
+              <div className="px-5 mt-5">
+                <div className="flex justify-between items-center mb-3">
+                  <label className="text-sm font-semibold text-white/90">Budget</label>
+                  <div className="flex gap-1.5 text-xs font-bold text-white bg-[#1A1A1A] border border-neutral-800 px-2.5 py-1 rounded-lg">
+                    <span>₹{(minPrice / 100000).toFixed(1)} L</span>
+                    <span className="text-gray-500">-</span>
+                    <span>₹{(maxPrice / 100000).toFixed(1)} L</span>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-[#161616] border border-neutral-800/80 rounded-2xl">
+                  <div className="relative h-6 flex items-center mt-1">
+                    <div
+                      className="absolute w-full h-1.5 rounded-full"
+                      style={{ background: getTrackBackground() }}
+                    />
+                    <input
+                      type="range"
+                      min={MIN}
+                      max={MAX}
+                      step={50000}
+                      value={minPrice}
+                      onChange={(e) =>
+                        setMinPrice(
+                          Math.min(+e.target.value, maxPrice - 50000),
+                        )
+                      }
+                      className="dual-range z-30"
+                    />
+                    <input
+                      type="range"
+                      min={MIN}
+                      max={MAX}
+                      step={50000}
+                      value={maxPrice}
+                      onChange={(e) =>
+                        setMaxPrice(
+                          Math.max(+e.target.value, minPrice + 50000),
+                        )
+                      }
+                      className="dual-range z-40"
+                    />
+                  </div>
+                  <div className="flex justify-between text-[10px] text-gray-500 font-semibold mt-1">
+                    <span>₹{(MIN / 100000).toFixed(1)}L</span>
+                    <span>₹{(MAX / 100000).toFixed(1)}L</span>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Bottom Actions */}
+          <div className="px-5 py-6 mt-6 border-t border-neutral-900 flex gap-3.5">
+            <button
+              onClick={() => {
+                setVehicleType("");
+                setFuelType("");
+                setBodyType("");
+                setBrand("");
+                setLocation("");
+                setBudget("");
+                setPriceRange("");
+                setMinPrice(50000);
+                setMaxPrice(2000000);
+                setConsultMinPrice(50000);
+                setConsultMaxPrice(2000000);
+                setService("");
+                setAvailability("");
+              }}
+              className="flex-1 py-3.5 border border-neutral-800 hover:bg-[#1A1A1A] rounded-full text-sm font-bold text-white transition-colors cursor-pointer flex items-center justify-center"
+            >
+              Reset All
+            </button>
             <button
               onClick={handleSearch}
               disabled={isSearching}
-              className="w-full bg-primary text-secondary font-semibold text-md py-3 rounded-full flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-95 transition-transform cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+              className="flex-[2] bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white font-bold text-sm py-3.5 rounded-full flex items-center justify-center gap-2 shadow-lg transition-colors cursor-pointer"
             >
               {isSearching ? (
                 <>
-                  <Loader2 className="animate-spin" size={20} />
+                  <Loader2 className="animate-spin" size={18} />
                   Searching...
                 </>
               ) : (
                 <>
-                  <Search size={20} />
-                  {internalActiveType === "consult" ? "Search Consultation" : "Search Vehicles"}
+                  <Search size={18} />
+                  Search Vehicles
                 </>
               )}
             </button>

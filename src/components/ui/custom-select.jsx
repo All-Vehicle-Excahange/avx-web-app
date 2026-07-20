@@ -27,6 +27,7 @@ export default function CustomSelect({
   isCreating = false,
   className,
   dropdownClassName,
+  onSearch,
 }) {
   const isMatch = (optValue, val) => {
     if (optValue === val) return true;
@@ -147,7 +148,7 @@ export default function CustomSelect({
   };
 
   return (
-    <div className="relative w-full" ref={wrapperRef}>
+    <div className={cn("relative w-full", open && "z-50")} ref={wrapperRef}>
       {/* Input */}
       <div
         className={cn(
@@ -167,6 +168,7 @@ export default function CustomSelect({
             if (disabled || readOnly) return;
             setSearch(e.target.value);
             setOpen(true);
+            if (onSearch) onSearch(e.target.value);
           }}
           onKeyDown={handleKeyDown}
           readOnly={readOnly || disabled}
@@ -184,7 +186,7 @@ export default function CustomSelect({
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute left-0 right-0 mt-1 z-30">
+        <div className="absolute left-0 right-0 mt-1 z-50">
           <div
             ref={listRef}
             className={cn(
