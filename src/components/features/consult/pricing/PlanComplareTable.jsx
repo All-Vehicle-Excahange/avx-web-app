@@ -4,7 +4,7 @@ import { FiCheck, FiX } from "react-icons/fi";
 const rows = [
   { feature: "Active vehicles", basic: "Up to 8", pro: "High / flexible", premium: "High / flexible" },
   { feature: "Storefront", basic: "Yes (basic)", pro: "Yes (enhanced)", premium: "Yes (full branding)" },
-  { feature: "AVX Inspection", basic: "✅", pro: "✅", premium: "✅" },
+  { feature: "Reecomm Inspection", basic: "✅", pro: "✅", premium: "✅" },
   { feature: "Buyer inquiries", basic: "Limited", pro: "Unlimited", premium: "Unlimited + priority" },
   { feature: "Chat", basic: "✅ (app)", pro: "✅ (app)", premium: "✅ (app)" },
   { feature: "Listing PPC (CPC)", basic: "✅", pro: "✅", premium: "✅" },

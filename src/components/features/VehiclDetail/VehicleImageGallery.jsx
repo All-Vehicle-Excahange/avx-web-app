@@ -11,6 +11,20 @@ import SignupPopup from "@/components/auth/SignupPopup";
 import { useDebouncedCallback } from "@/hooks/useDebounce";
 import { useQueryClient } from "@tanstack/react-query";
 
+const optimizeVideoUrl = (src) => {
+  if (!src) return "";
+  if (src.startsWith('/')) return src;
+
+  const s3UrlPattern = /https?:\/\/[^\/]+\.s3\.[^\/]+\.amazonaws\.com\//;
+  if (s3UrlPattern.test(src)) {
+    const path = src.replace(s3UrlPattern, '');
+    const endpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT || '/cdn-image';
+    const cleanEndpoint = endpoint.replace(/\/$/, '');
+    return `${cleanEndpoint}/${path}?tr=w-1280,q-70,f-auto`;
+  }
+  return src;
+};
+
 const slideVariants = {
   enter: (direction) => ({
     x: direction > 0 ? "100%" : "-100%",
@@ -243,7 +257,8 @@ export default function VehicleImageGallery({ vehicle }) {
                   onPointerDown={(e) => e.stopPropagation()}
                 >
                   <video
-                    src={currentItem.src}
+                    src={optimizeVideoUrl(currentItem.src)}
+                    preload="metadata"
                     controls
                     className="w-full h-full object-contain"
                   />

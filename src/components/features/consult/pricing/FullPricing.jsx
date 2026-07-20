@@ -26,7 +26,7 @@ import {
 const staticTierDetails = {
   BASIC: {
     name: "Basic",
-    tagline: "Start building your presence on AVX.",
+    tagline: "Start building your presence on Reecomm.",
     color: "#6b7280",
     bestFor: "Small consultants & entry-level sellers",
     cta: "Get Started",

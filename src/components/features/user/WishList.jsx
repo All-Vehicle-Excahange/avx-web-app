@@ -31,6 +31,7 @@ function Wishlist() {
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("wishlist");
   const [editMode, setEditMode] = useState(false);
+  const [removedWishlistIds, setRemovedWishlistIds] = useState([]);
 
   React.useEffect(() => {
     if (router.query.tab) {
@@ -103,6 +104,7 @@ function Wishlist() {
 
   // Extract / Map Data
   const cardData = wishlistInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
+  const visibleCardData = cardData.filter((vehicle) => !removedWishlistIds.includes(vehicle.id));
 
   const rawConsultants = consultantsInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
 
@@ -159,18 +161,31 @@ function Wishlist() {
                 Array.from({ length: 4 }).map((_, i) => (
                   <VehicleCardSkeleton key={i} />
                 ))
-              ) : cardData.length > 0 ? (
-                cardData.map((vehicle) => (
+              ) : visibleCardData.length > 0 ? (
+                visibleCardData.map((vehicle) => (
                   <div
                     key={vehicle.id}
                     className="lg:col-span-1 lg:row-span-1 h-full"
                   >
                     <VehicleCard
                       data={vehicle}
-                      onWishlistChange={() => {
-                        queryClient.invalidateQueries({
-                          queryKey: ["user-wishlist-infinite"],
-                        });
+                      onWishlistChange={(id, isWishlisted) => {
+                        console.log("WishList: onWishlistChange callback. ID:", id, "isWishlisted:", isWishlisted);
+                        if (isWishlisted === false) {
+                          // Immediately filter from UI
+                          setRemovedWishlistIds((prev) => {
+                            const next = [...prev, id];
+                            console.log("WishList: new removed IDs:", next);
+                            return next;
+                          });
+                        } else {
+                          // Restore to UI if sync fails and state is reverted
+                          setRemovedWishlistIds((prev) => {
+                            const next = prev.filter((x) => x !== id);
+                            console.log("WishList: restored IDs:", next);
+                            return next;
+                          });
+                        }
                       }}
                     />
                   </div>
@@ -195,7 +210,7 @@ function Wishlist() {
                 </div>
               )}
             </div>
-            {hasNextPageWishlist && cardData.length > 0 && !isLoadingWishlist && (
+            {hasNextPageWishlist && visibleCardData.length > 0 && !isLoadingWishlist && (
               <div className="flex justify-end mt-6">
                 <Button
                   variant="outline"

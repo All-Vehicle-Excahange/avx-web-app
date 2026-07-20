@@ -14,12 +14,12 @@ const faqs = [
     a: "If your subscription lapses, your storefront and all active listings will be hidden from the marketplace immediately. No data is lost — everything is restored as soon as you renew.",
   },
   {
-    q: "Is the AVX inspection mandatory?",
+    q: "Is the Reecomm inspection mandatory?",
     a: "No, inspection is optional. However, vehicles with verified inspection badges consistently rank higher in search and attract more serious buyers. We recommend it for competitive listings.",
   },
   {
-    q: "Are transactions processed through AVX?",
-    a: "No. AVX is a visibility and connection platform — all payments, negotiations, and transactions happen directly between you and the buyer. We never sit in the middle of your money.",
+    q: "Are transactions processed through Reecomm?",
+    a: "No. Reecomm is a visibility and connection platform — all payments, negotiations, and transactions happen directly between you and the buyer. We never sit in the middle of your money.",
   },
 ];
 

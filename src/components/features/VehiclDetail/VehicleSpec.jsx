@@ -570,7 +570,7 @@ export default function VehicleSpec({
                         Inspection not available
                       </span>
                       {/* <span className="text-third">
-                    No recent AVX report found for this vehicle
+                    No recent Reecomm report found for this vehicle
                   </span> */}
                     </div>
 

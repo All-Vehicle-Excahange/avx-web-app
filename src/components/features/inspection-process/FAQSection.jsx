@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { Plus, Minus } from "lucide-react";
 import Image from "next/image";
+import { Plus, Minus } from "lucide-react"; // Fixed the import here
 
 export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState(2);
@@ -130,5 +130,5 @@ export default function FAQSection() {
       </div>
     </div>
   </section>
-);
+  );
 }
