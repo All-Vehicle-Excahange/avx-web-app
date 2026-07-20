@@ -6,6 +6,8 @@ function InputField({
   variant = "default",
   onChange,
   value,
+  readOnly,
+  disabled,
   ...props
 }) {
   const baseStyle =
@@ -17,13 +19,15 @@ function InputField({
     search: "h-8 px-3",
   };
 
+  const isReadOnlyOrDisabled = readOnly || disabled;
+
   const styleVariants = {
     default:
-      "border border-secondary/60  text-black focus:border-third focus:ring-1 focus:ring-third",
+      `border border-secondary/60 text-black ${isReadOnlyOrDisabled ? "" : "focus:border-third focus:ring-1 focus:ring-third"}`,
     colored:
-      "border border-primary/20  text-primary placeholder:text-primary/40 focus:border-primary/40 focus:ring-1 focus:ring-primary/40",
+      `border border-primary/20 text-primary placeholder:text-primary/40 ${isReadOnlyOrDisabled ? "" : "focus:border-primary/40 focus:ring-1 focus:ring-primary/40"}`,
     search:
-      "border border-secondary/60  text-text-black focus:border-primary/50 focus:ring-1 focus:ring-primary/50",
+      `border border-secondary/60 text-text-black ${isReadOnlyOrDisabled ? "" : "focus:border-primary/50 focus:ring-1 focus:ring-primary/50"}`,
   };
 
   return (
@@ -40,7 +44,11 @@ function InputField({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className={`${baseStyle} ${sizeVariants[variant]} ${styleVariants[variant]}`}
+        readOnly={readOnly}
+        disabled={disabled}
+        className={`${baseStyle} ${sizeVariants[variant]} ${styleVariants[variant]} ${
+          isReadOnlyOrDisabled ? "opacity-60 cursor-not-allowed select-none bg-black/5" : ""
+        }`}
         {...props}
       />
     </div>

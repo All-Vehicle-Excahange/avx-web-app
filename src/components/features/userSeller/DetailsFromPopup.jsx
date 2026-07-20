@@ -6,14 +6,21 @@ import DropzoneUpload from "@/components/ui/DropzoneUpload";
 import { postBecameSeller, updateBecameSeller } from "@/services/user.service";
 import Button from "@/components/ui/button";
 import Image from "next/image";
-import { X, CheckCircle2, Loader2 } from "lucide-react";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Autoplay } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/pagination';
+import { X, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 
-function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = false }) {
+function DetailsFromPopup({
+  isOpen,
+  onClose,
+  onSubmit,
+  existing,
+  viewOnly = false,
+}) {
   const { push } = useRouter();
+  const isViewOnly = viewOnly || existing?.verificationStatus === "REJECTED";
   const [form, setForm] = useState({
     panCardNumber: "",
     panCardFrontImage: null,
@@ -88,6 +95,7 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
   if (!isOpen && !isClosing) return null;
 
   const handleInput = (key, value) => {
+    if (isViewOnly) return;
     setError("");
 
     let finalValue = value;
@@ -126,6 +134,7 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
   };
 
   const handleSubmit = async () => {
+    if (isViewOnly) return;
     // Local validation
     const errors = {};
     const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
@@ -133,7 +142,9 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
     const hasPanNum = !!form.panCardNumber?.trim();
     const hasPanImg = !!(form.panCardFrontImage || preview.pan);
     const hasAadharNum = !!form.aadharCardNumber?.trim();
-    const hasAadharFront = !!(form.aadharCardFrontImage || preview.aadhaarFront);
+    const hasAadharFront = !!(
+      form.aadharCardFrontImage || preview.aadhaarFront
+    );
     const hasAadharBack = !!(form.aadharCardBackImage || preview.aadhaarBack);
     const hasAllAadharImg = hasAadharFront && hasAadharBack;
 
@@ -159,8 +170,10 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
     }
     if (!hasAadharNum && (hasAadharFront || hasAadharBack)) {
       errors.aadharCardNumber = "Aadhaar Card Number is required.";
-      if (!hasAadharFront) errors.aadharCardFrontImage = "Aadhaar front image is required.";
-      if (!hasAadharBack) errors.aadharCardBackImage = "Aadhaar back image is required.";
+      if (!hasAadharFront)
+        errors.aadharCardFrontImage = "Aadhaar front image is required.";
+      if (!hasAadharBack)
+        errors.aadharCardBackImage = "Aadhaar back image is required.";
     }
     if (hasAadharNum) {
       const cleanAadhar = form.aadharCardNumber.replace(/\s/g, "");
@@ -174,8 +187,10 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
     const isAadharEmpty = !hasAadharNum && !hasAadharFront && !hasAadharBack;
 
     if (isPanEmpty && isAadharEmpty) {
-      errors.panCardNumber = "Either PAN Card or Aadhaar Card details are required.";
-      errors.aadharCardNumber = "Either PAN Card or Aadhaar Card details are required.";
+      errors.panCardNumber =
+        "Either PAN Card or Aadhaar Card details are required.";
+      errors.aadharCardNumber =
+        "Either PAN Card or Aadhaar Card details are required.";
     }
 
     if (Object.keys(errors).length > 0) {
@@ -183,7 +198,7 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
       return;
     }
 
-    try {
+  try {
       setLoading(true);
       setError("");
 
@@ -282,19 +297,32 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
   const isFormChanged = (() => {
     if (!existing) return true;
 
-    const panNumChanged = (form.panCardNumber || "").trim() !== (existing.panCardNumber || "").trim();
-    const aadharNumChanged = (form.aadharCardNumber || "").trim() !== (existing.aadharCardNumber || "").trim();
-    
-    const panImgChanged = form.panCardFrontImage !== null || 
+    const panNumChanged =
+      (form.panCardNumber || "").trim() !==
+      (existing.panCardNumber || "").trim();
+    const aadharNumChanged =
+      (form.aadharCardNumber || "").trim() !==
+      (existing.aadharCardNumber || "").trim();
+
+    const panImgChanged =
+      form.panCardFrontImage !== null ||
       (existing.panCardFrontUrl && preview.pan === null);
-      
-    const aadharFrontImgChanged = form.aadharCardFrontImage !== null || 
+
+    const aadharFrontImgChanged =
+      form.aadharCardFrontImage !== null ||
       (existing.aadharCardFrontUrl && preview.aadhaarFront === null);
-      
-    const aadharBackImgChanged = form.aadharCardBackImage !== null || 
+
+    const aadharBackImgChanged =
+      form.aadharCardBackImage !== null ||
       (existing.aadharCardBackUrl && preview.aadhaarBack === null);
 
-    return panNumChanged || aadharNumChanged || panImgChanged || aadharFrontImgChanged || aadharBackImgChanged;
+    return (
+      panNumChanged ||
+      aadharNumChanged ||
+      panImgChanged ||
+      aadharFrontImgChanged ||
+      aadharBackImgChanged
+    );
   })();
 
   const modalContent = (
@@ -382,8 +410,9 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
         {/* RIGHT CONTENT (FORM) */}
         <div
           id="form-container"
-          className={`w-full md:w-7/12 p-8 md:p-12 bg-secondary overflow-y-auto custom-scrollbar ${isSuccess ? "flex flex-col justify-center" : ""
-            }`}
+          className={`w-full md:w-7/12 p-8 md:p-12 bg-secondary overflow-y-auto custom-scrollbar ${
+            isSuccess ? "flex flex-col justify-center" : ""
+          }`}
         >
           {isSuccess ? (
             <div className="flex flex-col items-center justify-center h-full space-y-6">
@@ -418,6 +447,22 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
               <h3 className="text-2xl font-bold mb-6 text-primary">
                 Document Verification
               </h3>
+              {existing?.verificationStatus === "REJECTED" && (
+                <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-start gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
+                  <div className="mt-0.5 text-red-500 shrink-0">
+                    <AlertCircle className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-red-500 font-semibold text-sm">
+                      Application Rejected
+                    </h4>
+                    <p className="text-third text-xs mt-1 leading-relaxed">
+                      You cannot become a seller with this number. Please change
+                      your document number to proceed.
+                    </p>
+                  </div>
+                </div>
+              )}
               {error && Object.keys(validationErrors).length === 0 && (
                 <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl">
                   <p className="text-red-500 text-sm">{error}</p>
@@ -431,7 +476,7 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
                     variant="colored"
                     placeholder="Enter PAN Number"
                     value={form.panCardNumber}
-                    readOnly={viewOnly}
+                    disabled={isViewOnly}
                     onChange={(e) =>
                       handleInput("panCardNumber", e.target.value)
                     }
@@ -449,8 +494,9 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
                     preview={preview.pan}
                     accept=".jpg,.jpeg,.png,.webp"
                     supportedText="Supports: JPG, JPEG, PNG, WEBP"
-                    readOnly={viewOnly}
+                    readOnly={isViewOnly}
                     onChange={(file) => {
+                      if (isViewOnly) return;
                       if (!file) {
                         setPreview((p) => ({
                           ...p,
@@ -495,7 +541,7 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
                     variant="colored"
                     placeholder="Enter Aadhaar Number"
                     value={form.aadharCardNumber}
-                    readOnly={viewOnly}
+                    disabled={isViewOnly}
                     onChange={(e) =>
                       handleInput("aadharCardNumber", e.target.value)
                     }
@@ -513,8 +559,9 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
                     preview={preview.aadhaarFront}
                     accept=".jpg,.jpeg,.png,.webp"
                     supportedText="Supports: JPG, JPEG, PNG, WEBP"
-                    readOnly={viewOnly}
+                    readOnly={isViewOnly}
                     onChange={(file) => {
+                      if (isViewOnly) return;
                       if (!file) {
                         setPreview((p) => ({
                           ...p,
@@ -547,8 +594,9 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
                     preview={preview.aadhaarBack}
                     accept=".jpg,.jpeg,.png,.webp"
                     supportedText="Supports: JPG, JPEG, PNG, WEBP"
-                    readOnly={viewOnly}
+                    readOnly={isViewOnly}
                     onChange={(file) => {
+                      if (isViewOnly) return;
                       if (!file) {
                         setPreview((p) => ({
                           ...p,
@@ -576,7 +624,7 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
                 </div>
                 {/* 🔥 Buttons */}
                 <div className="flex justify-end gap-4 pt-6">
-                  {viewOnly ? (
+                  {isViewOnly ? (
                     <Button
                       onClick={handleClose}
                       variant="ghost"
@@ -594,7 +642,10 @@ function DetailsFromPopup({ isOpen, onClose, onSubmit, existing, viewOnly = fals
                         Cancel
                       </Button>
 
-                      {(!existing || existing.verificationStatus !== "REQUEST_CHANGES" || isFormChanged) && (
+                      {(!existing ||
+                        (existing.verificationStatus !== "REQUEST_CHANGES" &&
+                          existing.verificationStatus !== "REJECTED") ||
+                        isFormChanged) && (
                         <Button
                           onClick={handleSubmit}
                           variant="ghost"

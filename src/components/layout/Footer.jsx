@@ -1,5 +1,6 @@
 import Link from "next/link";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import {
   FaXTwitter,
   FaLinkedinIn,
@@ -62,6 +63,41 @@ const footerLinks = {
 };
 
 const Footer = () => {
+  const router = useRouter();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+    };
+  }, []);
+
+  const handlePlayStoreClick = (e) => {
+    e.preventDefault();
+    if (isMobile) {
+      window.open(
+        "https://play.google.com/store/apps/details?id=com.reecomm.vehicle.marketplace",
+        "_blank"
+      );
+    } else {
+      router.push("/download");
+    }
+  };
+
+  const handleAppStoreClick = (e) => {
+    e.preventDefault();
+    if (isMobile) {
+      window.open("https://www.apple.com/app-store", "_blank");
+    } else {
+      router.push("/download");
+    }
+  };
+
   return (
     <footer className=" text-white font-secondary">
       <div className="container mx-auto ">
@@ -95,6 +131,7 @@ const Footer = () => {
               {/* Google Play */}
               <Link
                 href="#"
+                onClick={handlePlayStoreClick}
                 className="flex items-center gap-2 px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors rounded-lg w-fit"
               >
                 <svg viewBox="30 336.7 120.9 129.2" width="16">
@@ -128,6 +165,7 @@ const Footer = () => {
               {/* App Store */}
               <Link
                 href="#"
+                onClick={handleAppStoreClick}
                 className="flex items-center gap-2 px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors rounded-lg w-fit"
               >
                 <svg viewBox="0 0 384 512" width="14" fill="currentColor">

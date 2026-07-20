@@ -34,6 +34,7 @@ function Hero() {
   const [mounted, setMounted] = useState(false);
   const [role, setRole] = useState(null);
   const [checkingStatus, setCheckingStatus] = useState(false);
+  const [sellerData, setSellerData] = useState(null);
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 100);
@@ -82,20 +83,24 @@ function Hero() {
       const res = await getBecameSeller();
       const status = res?.data?.verificationStatus;
 
-      if (
+      if (status === "REJECTED") {
+        setSellerData(res?.data || null);
+        setOpen(true);
+      } else if (
         status === "REQUESTED" ||
         status === "VERIFIED" ||
-        status === "REJECTED" ||
         status === "REQUEST_CHANGES" ||
         status === "APPROVED" ||
         status === "ACCEPTED"
       ) {
         router.push("/user/details/myprofile");
       } else {
+        setSellerData(null);
         setOpen(true);
       }
     } catch (err) {
       // 404 or any other error -> open the registration popup
+      setSellerData(null);
       setOpen(true);
     } finally {
       setCheckingStatus(false);
@@ -212,7 +217,7 @@ function Hero() {
       </section>
 
       {/* Popups */}
-      <DetailsFromPopup isOpen={open} onClose={() => setOpen(false)} />
+      <DetailsFromPopup isOpen={open} onClose={() => setOpen(false)} existing={sellerData} />
       <LoginPopup
         isOpen={loginPopup}
         onClose={() => setLoginPopup(false)}

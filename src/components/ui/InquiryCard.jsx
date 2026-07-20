@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import CloseInqPopup from "../features/consult/details/dashboard/components/CloseInqPopup";
+import RejectInqPopup from "./RejectInqPopup";
 import { useState } from "react";
 import { generateVehicleSlug } from "@/lib/helper";
 import { markAsSoldVehicle } from "@/services/vehicle.service";
@@ -26,6 +27,7 @@ import { getAndCheckEligbleForReview } from "@/services/user.service";
 
 export default function InquiryCard({ inquiry, onStatusChange, hideReviewButton = false }) {
   const [showClosePopup, setShowClosePopup] = useState(false);
+  const [showRejectPopup, setShowRejectPopup] = useState(false);
   const [showMarkSoldPopup, setShowMarkSoldPopup] = useState(false);
   const [showDownloadPopup, setShowDownloadPopup] = useState(false);
   const [showFeedbackPopup, setShowFeedbackPopup] = useState(false);
@@ -78,11 +80,11 @@ export default function InquiryCard({ inquiry, onStatusChange, hideReviewButton 
     }
   };
 
-  const handleReject = async () => {
+  const handleReject = async (rejectReason) => {
     if (loadingAction) return;
     try {
       setLoadingAction("REJECT");
-      await rejectInquiry(inquiry.id);
+      await rejectInquiry(inquiry.id, rejectReason);
       onStatusChange(inquiry.id, "REJECTED");
     } catch (error) {
       console.error("Reject error:", error);
@@ -279,7 +281,7 @@ export default function InquiryCard({ inquiry, onStatusChange, hideReviewButton 
                 <Button
                   showIcon={false}
                   variant="outlineSecondary"
-                  onClick={handleReject}
+                  onClick={() => setShowRejectPopup(true)}
                   loading={loadingAction === "REJECT"}
                 >
                   <X size={16} className="mr-2" />
@@ -386,6 +388,19 @@ export default function InquiryCard({ inquiry, onStatusChange, hideReviewButton 
             const closeReason = reason === "Other" ? comment : reason;
             await handleClose(closeReason);
             setShowClosePopup(false);
+          }}
+        />
+      )}
+
+      {/*   Reject Popup */}
+      {showRejectPopup && (
+        <RejectInqPopup
+          loading={loadingAction === "REJECT"}
+          onClose={() => setShowRejectPopup(false)}
+          onConfirm={async ({ reason, comment }) => {
+            const rejectReason = reason === "Other" ? comment : reason;
+            await handleReject(rejectReason);
+            setShowRejectPopup(false);
           }}
         />
       )}

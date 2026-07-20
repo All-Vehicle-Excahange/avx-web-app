@@ -192,7 +192,7 @@ const SayHello = () => {
               height={656}
               className="
                                      absolute inset-0
-                                     rounded-2xl lg:rounded-3xl shadow-xl lg:shadow-2xl
+                                     rounded-2xl lg:rounded-3xl 
                                      w-full h-auto
                                      animate-fade-slide
                                  "
@@ -209,7 +209,7 @@ const SayHello = () => {
                 alt="Chat feature preview"
                 width={320}
                 height={480}
-                className="rounded-xl lg:rounded-2xl shadow-2xl lg:shadow-3xl w-[100px] sm:w-[160px] md:w-[220px] lg:w-[290px] aspect-[2/3] object-cover"
+                className="rounded-xl lg:rounded-2xl w-[100px] sm:w-[160px] md:w-[220px] lg:w-[290px] aspect-[2/3] object-cover"
               />
               {/* Glassmorphic Card (Book a Test Drive) */}
               <div className="absolute left-1/2 -translate-x-[60%] lg:left-[100%] lg:-translate-x-1/2 bottom-1 sm:bottom-2 w-[95px] sm:w-[160px] md:w-[200px] backdrop-blur-md bg-white/70 border border-white/40 shadow-xl rounded-lg sm:rounded-2xl p-1.5 sm:p-3 transition-all duration-300 z-20">
