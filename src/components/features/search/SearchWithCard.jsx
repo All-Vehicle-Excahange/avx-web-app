@@ -2077,8 +2077,14 @@ export default function SearchWithCard({
                 priceMax = Math.max(...prices);
               }
 
-              const toL = (v) => `₹${(v / 100000).toFixed(0)}L`;
-              const priceLabel = `Between ${toL(priceMin)} – ${toL(priceMax)}`;
+              const formatPriceLabel = (v) => {
+                if (!v || isNaN(v)) return "₹0";
+                if (v < 100000) {
+                  return `₹${Math.round(v / 1000)}k`;
+                }
+                const inLakhs = v / 100000;
+                return Number.isInteger(inLakhs) ? `₹${inLakhs}L` : `₹${inLakhs.toFixed(1)}L`;
+              };
 
               // --- Subject label ---
               const safeStr = (v) => (v != null ? String(v) : "");
@@ -2117,7 +2123,7 @@ export default function SearchWithCard({
                 <>
                   {subject} Between{" "}
                   <span className="text-fourth font-semibold">
-                    {toL(priceMin)} – {toL(priceMax)}
+                    {formatPriceLabel(priceMin)} – {formatPriceLabel(priceMax)}
                   </span>
                 </>
               );
