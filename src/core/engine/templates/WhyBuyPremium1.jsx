@@ -1330,7 +1330,7 @@ export default function WhyBuyPremium1({
             {/* IMAGE/VIDEO */}
             <div className="group relative rounded-2xl overflow-hidden border border-secondary/20 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(184,150,62,0.25)]">
               {(data.customWhyBuyHero1 || data.whyBuyHeroTemplate1?.imageUrl) ? (
-                <Image src={data.customWhyBuyHero1 || data.whyBuyHeroTemplate1?.imageUrl} alt="" width={800} height={500} unoptimized className="w-full h-[220px] sm:h-[260px] object-cover transition-transform duration-700 group-hover:scale-105" />
+                <Image src={data.customWhyBuyHero1 || data.whyBuyHeroTemplate1?.imageUrl} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-[220px] sm:h-[260px] object-cover transition-transform duration-700 group-hover:scale-105" />
               ) : (
                 <div className="w-full h-[220px] sm:h-[260px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-sm">Hero image not set</span>
@@ -1346,7 +1346,7 @@ export default function WhyBuyPremium1({
               ].map((item, i) => (
                 <div key={i} className="group relative rounded-xl overflow-hidden border border-secondary/15 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(0,0,0,0.6)]">
                   {(item.custom || item.tmpl?.imageUrl) ? (
-                    <Image src={item.custom || item.tmpl?.imageUrl} alt="" width={800} height={500} unoptimized className="w-full h-[110px] sm:h-[130px] object-cover transition-transform duration-700 group-hover:scale-110" />
+                    <Image src={item.custom || item.tmpl?.imageUrl} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-[110px] sm:h-[130px] object-cover transition-transform duration-700 group-hover:scale-110" />
                   ) : (
                     <div className="w-full h-[110px] sm:h-[130px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                       <span className="text-third/40 text-xs">Image {i + 2}</span>
@@ -1416,7 +1416,7 @@ export default function WhyBuyPremium1({
                             : "rotate(-1deg)",
                   }}
                 >
-                  <Image src={src} alt="" width={800} height={500} unoptimized className={`
+                  <Image src={src} loading="lazy" alt="" width={800} height={500} unoptimized className={`
                     w-full h-full object-cover
                     transition-all duration-700
                     ${hovered === i ? "brightness-105 saturate-110 scale-105" : "brightness-90 saturate-90"}
@@ -1461,7 +1461,7 @@ export default function WhyBuyPremium1({
                   key={i}
                   className="min-w-[350px] h-full overflow-hidden rounded-2xl opacity-[0.3]"
                 >
-                  <Image src={img} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover grayscale" />
+                  <Image src={img} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover grayscale" />
                 </div>
               );
             })}
@@ -1573,7 +1573,7 @@ export default function WhyBuyPremium1({
               {/* 1. The "Base" Image */}
               <div className="absolute top-0 left-0 w-[75%] h-[70%] rounded-4xl overflow-hidden shadow-2xl z-10 group">
                 {(data.customWhyBuyInspection1 || data.inspectionTemplate1?.imageUrl) ? (
-                  <Image src={data.customWhyBuyInspection1 || data.inspectionTemplate1?.imageUrl} alt="Main" width={800} height={500} unoptimized className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                  <Image src={data.customWhyBuyInspection1 || data.inspectionTemplate1?.imageUrl} loading="lazy" alt="Main" width={800} height={500} unoptimized className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                 ) : (
                   <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                     <span className="text-third/40 text-sm">Main image not set</span>
@@ -1584,7 +1584,7 @@ export default function WhyBuyPremium1({
               {/* 2. The "Focus" Image */}
               <div className="absolute top-[20%] right-0 w-[45%] h-[60%] rounded-4xl overflow-hidden border-12 border-white shadow-[-20px_20px_60px_rgba(0,0,0,0.15)] z-20 group">
                 {(data.customWhyBuyInspection2 || data.inspectionTemplate2?.imageUrl) ? (
-                  <Image src={data.customWhyBuyInspection2 || data.inspectionTemplate2?.imageUrl} alt="Detail" width={800} height={500} unoptimized className="w-full h-full object-cover" />
+                  <Image src={data.customWhyBuyInspection2 || data.inspectionTemplate2?.imageUrl} loading="lazy" alt="Detail" width={800} height={500} unoptimized className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                     <span className="text-third/40 text-sm">Focus image not set</span>
@@ -1628,7 +1628,7 @@ export default function WhyBuyPremium1({
         {/* BACKGROUND */}
         <div className="absolute inset-0 z-0">
           {(data.customWhyBuyCustomerCommitment1 || data.customerCommitmentTemplate1?.imageUrl) ? (
-            <Image src={data.customWhyBuyCustomerCommitment1 || data.customerCommitmentTemplate1?.imageUrl} alt="Main Background" width={800} height={500} unoptimized className="w-full h-full object-cover opacity-40" />
+            <Image src={data.customWhyBuyCustomerCommitment1 || data.customerCommitmentTemplate1?.imageUrl} loading="lazy" alt="Main Background" width={800} height={500} unoptimized className="w-full h-full object-cover opacity-40" />
           ) : null}
           <div className="absolute inset-0 bg-linear-to-b from-secondary via-transparent to-secondary" />
         </div>
@@ -1658,7 +1658,7 @@ export default function WhyBuyPremium1({
             {/* Main image */}
             <div className="absolute top-0 left-0 w-4/5 h-[350px] rounded-2xl overflow-hidden border-4 border-primary shadow-2xl z-20 group">
               {(data.customWhyBuyCustomerCommitment2 || data.customerCommitmentTemplate2?.imageUrl) ? (
-                <Image src={data.customWhyBuyCustomerCommitment2 || data.customerCommitmentTemplate2?.imageUrl} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <Image src={data.customWhyBuyCustomerCommitment2 || data.customerCommitmentTemplate2?.imageUrl} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               ) : (
                 <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-sm">Main image not set</span>
@@ -1668,7 +1668,7 @@ export default function WhyBuyPremium1({
             {/* Offset image */}
             <div className="absolute bottom-0 right-0 w-3/5 h-[280px] rounded-2xl overflow-hidden border-4 border-primary shadow-2xl z-30 transform translate-x-4 -translate-y-10">
               {(data.customWhyBuyCustomerCommitment3 || data.customerCommitmentTemplate3?.imageUrl) ? (
-                <Image src={data.customWhyBuyCustomerCommitment3 || data.customerCommitmentTemplate3?.imageUrl} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
+                <Image src={data.customWhyBuyCustomerCommitment3 || data.customerCommitmentTemplate3?.imageUrl} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-sm">Offset image not set</span>
@@ -1715,7 +1715,7 @@ export default function WhyBuyPremium1({
                     }}
                     className={`absolute rounded-2xl overflow-hidden shadow-2xl transition-all duration-600 ease-in-out will-change-transform ${positionStyles[pos]}`}
                   >
-                    <Image src={src} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
+                    <Image src={src} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
                   </div>
                 );
               })}

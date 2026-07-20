@@ -755,7 +755,7 @@ function PreferencesPopup({
                 className="absolute inset-0 transition-opacity duration-500"
                 style={{ opacity: activeStep === i ? 1 : 0 }}
               >
-                <Image src={src} alt="" fill className="object-cover" />
+                <Image src={src} loading="lazy" alt="" fill className="object-cover" />
               </div>
             ))}
           </div>

@@ -508,7 +508,7 @@ export default function AboutPro3({
       <section className="relative min-h-screen py-12 flex flex-col overflow-hidden">
         {data.aboutHeroTemplate1?.imageUrl && (
           <>
-            <Image src={data.aboutHeroTemplate1.imageUrl} alt="Hero" fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
+            <Image src={data.aboutHeroTemplate1.imageUrl} loading="lazy" alt="Hero" fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
             <div className="absolute inset-0 bg-secondary/65" />
             <div className="absolute inset-0 bg-linear-to-b from-secondary/20 via-secondary/40 to-secondary" />
           </>
@@ -544,7 +544,7 @@ export default function AboutPro3({
             <div className="mv-card relative rounded-2xl overflow-hidden shadow-2xl border border-third/10 py-14">
               {data.aboutMissionTemplate1?.imageUrl && (
                 <>
-                  <Image src={data.aboutMissionTemplate1.imageUrl} alt="Mission" fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
+                  <Image src={data.aboutMissionTemplate1.imageUrl} loading="lazy" alt="Mission" fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-linear-to-r from-secondary/95 via-secondary/85 to-secondary/70" />
                 </>
               )}
@@ -566,7 +566,7 @@ export default function AboutPro3({
             <div className="mv-card relative rounded-2xl overflow-hidden shadow-2xl border border-third/10 py-14">
               {data.aboutVisionTemplate1?.imageUrl && (
                 <>
-                  <Image src={data.aboutVisionTemplate1.imageUrl} alt="Vision" fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
+                  <Image src={data.aboutVisionTemplate1.imageUrl} loading="lazy" alt="Vision" fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-linear-to-l from-secondary/95 via-secondary/85 to-secondary/70" />
                 </>
               )}

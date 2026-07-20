@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Image from "next/image";
 import InquiryCard from "@/components/ui/InquiryCard";
 import Button from "@/components/ui/button";
 import { InquiryCardSkeleton } from "@/components/ui/skeleton";
@@ -45,7 +46,7 @@ function Inquiries() {
           <button
             key={type.id}
             onClick={() => setActiveType(type.id)}
-            className={`px-4 py-2 rounded-full text-sm font-medium border transition whitespace-nowrap 
+            className={`px-4 py-2 rounded-full text-sm font-medium border transition whitespace-nowrap cursor-pointer
               ${activeType === type.id
                 ? "bg-primary text-secondary border-primary"
                 : "border-third/50 text-primary hover:bg-third/20"
@@ -86,16 +87,24 @@ function Inquiries() {
             )}
           </>
         ) : (
-          <div className="flex flex-col items-center justify-center py-16 text-center rounded-2xl border-2 border-dashed border-third/20 bg-third/5">
+          <div className="flex flex-col items-center justify-center py-8 sm:py-15 text-center w-full">
             {activeType === "all" ? (
               <>
-                <h3 className="text-xl font-bold mb-2">No inquiries yet.</h3>
-                <p className="text-third mb-6 max-w-sm">
+                <div className="relative w-32 h-32 mb-2 opacity-60">
+                  <Image
+                    src="/empty2.svg"
+                    alt="Empty State"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <h3 className="text-xl font-bold mb-2 text-primary">No inquiries yet.</h3>
+                <p className="text-third mb-6 max-w-sm px-4">
                   Once buyers show interest in your vehicle,
                   <br />
                   their requests will appear here.
                 </p>
-                <p className="text-sm text-third/70 max-w-sm font-medium">
+                <p className="text-sm text-third/70 max-w-sm font-medium px-4">
                   Tip:
                   <br />
                   Listings with more photos receive 3x more inquiries.
@@ -103,10 +112,18 @@ function Inquiries() {
               </>
             ) : (
               <>
-                <h3 className="text-xl font-bold mb-2">
+                <div className="relative w-32 h-32 mb-2 opacity-60">
+                  <Image
+                    src="/empty2.svg"
+                    alt="Empty State"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <h3 className="text-xl font-bold mb-2 text-primary">
                   No {activeType.replace(/_/g, " ").toLowerCase()} inquiries found.
                 </h3>
-                <p className="text-third max-w-sm">
+                <p className="text-third max-w-sm px-4">
                   There are currently no inquiries with this status.
                 </p>
               </>

@@ -1045,7 +1045,7 @@ export default function WhyBuyPremium2({
             return src.includes(".mp4") ? (
               <video src={src} autoPlay muted loop playsInline className="w-full h-full object-cover" />
             ) : (
-              <Image src={src} alt="Hero Background" width={800} height={500} unoptimized className="w-full h-full object-cover" />
+              <Image src={src} loading="lazy" alt="Hero Background" width={800} height={500} unoptimized className="w-full h-full object-cover" />
             );
           })()}
         </div>
@@ -1243,16 +1243,16 @@ export default function WhyBuyPremium2({
                   <div className="flex items-start gap-4">
                     <span
                       className={`text-[14px] font-bold ${i === activeInspection
-                          ? "text-fourth"
-                          : "text-primary/40 group-hover:text-primary"
+                        ? "text-fourth"
+                        : "text-primary/40 group-hover:text-primary"
                         }`}
                     >
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span
                       className={`text-[16px] leading-[1.6] transition ${i === activeInspection
-                          ? "text-primary font-medium"
-                          : "text-primary/60 group-hover:text-primary"
+                        ? "text-primary font-medium"
+                        : "text-primary/60 group-hover:text-primary"
                         }`}
                     >
                       {item}
@@ -1260,8 +1260,8 @@ export default function WhyBuyPremium2({
                   </div>
                   <div
                     className={`mt-3 h-px transition-all duration-300 ${i === activeInspection
-                        ? "bg-fourth w-full"
-                        : "bg-primary/10 w-0 group-hover:w-full"
+                      ? "bg-fourth w-full"
+                      : "bg-primary/10 w-0 group-hover:w-full"
                       }`}
                   />
                 </div>

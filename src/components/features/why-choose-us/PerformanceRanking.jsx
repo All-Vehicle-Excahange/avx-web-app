@@ -87,7 +87,7 @@ export default function RankingDiagram() {
               {/* <div className="absolute w-40 h-40 rounded-full bg-fourth/5 blur-2xl animate-pulse"></div> */}
 
               <div className="group relative w-28 h-28 rounded-2xl overflow-hidden border border-fourth/20">
-                <Image src="engine-core.jpg" alt="Ranking system core" width={800} height={500} className="w-full h-full object-cover transition-all duration-500 group-hover:filter-[blur(0px)_grayscale(0)] filter-[blur(1px)_grayscale(100%)]" />
+                <Image src="engine-core.jpg" loading="lazy" alt="Ranking system core" width={800} height={500} className="w-full h-full object-cover transition-all duration-500 group-hover:filter-[blur(0px)_grayscale(0)] filter-[blur(1px)_grayscale(100%)]" />
               </div>
 
               <h3 className="text-sm font-bold uppercase tracking-[0.3em] mt-6">
@@ -160,11 +160,10 @@ export default function RankingDiagram() {
                 {/* TOP STATUS BAR */}
                 <div className="flex items-center gap-3 mb-6">
                   <div
-                    className={`text-[10px] font-black px-2 py-1 rounded-md uppercase tracking-tighter ${
-                      def.isPremium
-                        ? "bg-primary/10 text-primary/90"
-                        : "bg-primary/5 text-third"
-                    }`}
+                    className={`text-[10px] font-black px-2 py-1 rounded-md uppercase tracking-tighter ${def.isPremium
+                      ? "bg-primary/10 text-primary/90"
+                      : "bg-primary/5 text-third"
+                      }`}
                   >
                     {def.highlight}
                   </div>
@@ -176,17 +175,15 @@ export default function RankingDiagram() {
                 {/* CONTENT */}
                 <div className="flex-1">
                   <h5
-                    className={`text-[13px] font-bold uppercase tracking-widest mb-3 font-primary ${
-                      def.isPremium ? "text-fourth" : "text-primary"
-                    }`}
+                    className={`text-[13px] font-bold uppercase tracking-widest mb-3 font-primary ${def.isPremium ? "text-fourth" : "text-primary"
+                      }`}
                   >
                     {def.title}
                   </h5>
 
                   <p
-                    className={`text-sm leading-relaxed ${
-                      def.isPremium ? "text-primary/90" : "text-third/70"
-                    }`}
+                    className={`text-sm leading-relaxed ${def.isPremium ? "text-primary/90" : "text-third/70"
+                      }`}
                   >
                     {def.info}
                   </p>
@@ -214,17 +211,15 @@ export default function RankingDiagram() {
 function Result({ score, label, highlight, faded }) {
   return (
     <div
-      className={`relative p-3 rounded-xl border transition-all duration-500 ${
-        highlight
-          ? "border-third/30 bg-fourth/5 scale-105  z-10"
-          : "border-white/5 bg-white/5"
-      } ${faded ? "opacity-30" : "opacity-100"}`}
+      className={`relative p-3 rounded-xl border transition-all duration-500 ${highlight
+        ? "border-third/30 bg-fourth/5 scale-105  z-10"
+        : "border-white/5 bg-white/5"
+        } ${faded ? "opacity-30" : "opacity-100"}`}
     >
       <div className="flex gap-4 items-center">
         <div
-          className={`w-12 h-10 rounded flex flex-col items-center justify-center font-black transition-colors ${
-            highlight ? "bg-fourth/30 text-primary" : "bg-white/10 text-third"
-          }`}
+          className={`w-12 h-10 rounded flex flex-col items-center justify-center font-black transition-colors ${highlight ? "bg-fourth/30 text-primary" : "bg-white/10 text-third"
+            }`}
         >
           <span className="text-[10px] leading-none">{score}</span>
           <span className="text-[6px] uppercase tracking-tighter mt-0.5">

@@ -102,8 +102,8 @@ function SendInquaryPopup({
       {/* Popup Box */}
       <div
         className={`relative flex w-full ${isSuccess
-            ? "max-w-[1050px] min-h-[450px] bg-cover bg-center bg-no-repeat border border-third/20"
-            : "max-w-[900px] bg-secondary"
+          ? "max-w-[1050px] min-h-[450px] bg-cover bg-center bg-no-repeat border border-third/20"
+          : "max-w-[900px] bg-secondary"
           } overflow-hidden rounded-2xl shadow-2xl`}
         onClick={(e) => e.stopPropagation()}
         style={{
@@ -132,7 +132,7 @@ function SendInquaryPopup({
             />
           ) : (
             <>
-              <Image src="/request.webp" alt="Cars" fill className="object-cover" />
+              <Image src="/request.webp" loading="lazy" alt="Cars" fill className="object-cover" />
               <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
               <div className="absolute bottom-8 left-8 pr-4">
                 <h2 className="text-3xl font-bold text-primary leading-tight">

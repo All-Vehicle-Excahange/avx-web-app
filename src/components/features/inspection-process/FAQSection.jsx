@@ -35,12 +35,24 @@ export default function FAQSection() {
   return (
     <section>
       <div className="relative pt-14 pb-10 lg:pt-10 overflow-hidden">
-        <div className="max-w-3xl mx-auto w-full">
-          {/* FAQ Container centered */}
-          <div className="text-center">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary mb-4 leading-tight">
-              Frequently Asked <span className="text-fourth">Questions</span>
-            </h2>
+        <div className="w-full mx-auto">
+          {/* Changed items-center to items-start so the image stays put when height changes */}
+          <div className="grid lg:grid-cols-12 gap-12 items-start">
+
+            {/* LEFT IMAGE */}
+            <div className="lg:col-span-5 lg:sticky lg:top-10">
+              <Image src="/FAQ2.jpeg" loading="lazy" alt="Frequently asked questions illustration" width={800} height={500} className="
+                  w-full h-auto object-contain
+                  rounded-xl
+                  shadow-lg
+                " />
+            </div>
+
+            {/* RIGHT FAQ */}
+            <div className="lg:col-span-7">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary mb-4 leading-tight">
+                Frequently Asked Questions
+              </h2>
 
             <p className="text-third mb-10 max-w-xl mx-auto text-sm sm:text-base">
               Quick answers to the most common questions about inspections and
@@ -73,19 +85,33 @@ export default function FAQSection() {
                         {item.q}
                       </span>
 
-                      <div
-                        className={`
-                          flex items-center justify-center
-                          w-8 h-8 rounded-full
-                          border border-primary/20
-                          transition-transform duration-300
-                          hover:bg-fourth text-primary
-                          ${
-                            isOpen
+                        <div
+                          className={`
+                            flex items-center justify-center
+                            w-8 h-8 rounded-full
+                            border border-primary/20
+                            transition-transform duration-300
+                            hover:bg-fourth text-primary
+                            ${isOpen
                               ? "bg-fourth border-fourth text-primary"
                               : "text-third"
-                          }
-                        `}
+                            }
+                          `}
+                        >
+                          {isOpen ? (
+                            <Minus className="w-4 h-4" />
+                          ) : (
+                            <Plus className="w-4 h-4" />
+                          )}
+                        </div>
+                      </button>
+
+                      {/* ANSWER - CSS Grid transition to prevent jumping */}
+                      <div
+                        className={`grid transition-all duration-300 ease-in-out ${isOpen
+                          ? "grid-rows-[1fr] opacity-100"
+                          : "grid-rows-[0fr] opacity-0"
+                          }`}
                       >
                         {isOpen ? (
                           <Minus className="w-4 h-4" />

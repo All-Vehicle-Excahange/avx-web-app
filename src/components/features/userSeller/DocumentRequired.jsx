@@ -50,15 +50,14 @@ export default function DocumentsRequired() {
 
   return (
     <section ref={sectionRef} className="relative overflow-hidden py-16">
-      
+
       {/* CONTENT */}
       <div className="relative z-10 max-w-[1200px] mx-auto px-4">
-        
+
         {/* Heading */}
         <div
-          className={`mb-16 transition-all duration-1000 ${
-            inView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
-          }`}
+          className={`mb-16 transition-all duration-1000 ${inView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
+            }`}
         >
           <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
             Verification Protocol
@@ -67,7 +66,7 @@ export default function DocumentsRequired() {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-montserrat mt-4">
             Documents <span className="text-fourth/80">Required.</span>
           </h2>
-          
+
           <p className="mt-4 text-third/75 text-sm md:text-base font-[Poppins] max-w-xl">
             KYC helps Reecomm maintain listing authenticity and ensures a secure environment for all sellers.
           </p>
@@ -84,14 +83,14 @@ export default function DocumentsRequired() {
                 className="group relative min-h-[250px] p-6 rounded-2xl overflow-hidden border border-white/10 hover:border-white/30 transition duration-300 flex flex-col justify-end"
               >
                 {/* 🖼 FULL IMAGE */}
-                <Image src={doc.bg} alt={doc.name} fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
+                <Image src={doc.bg} loading="lazy" alt={doc.name} fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
 
                 {/* 🌑 DARK OVERLAY */}
                 <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition duration-300" />
 
                 {/* ✨ CONTENT */}
                 <div className="relative z-10 h-full flex flex-col justify-end">
-                  
+
                   {/* icon */}
                   <div className="mb-3 w-10 h-10 flex items-center justify-center rounded-lg bg-white/10 backdrop-blur-md text-white border border-white/20">
                     <Icon className="w-4 h-4" />
@@ -119,9 +118,8 @@ export default function DocumentsRequired() {
 
         {/* FOOTER */}
         <div
-          className={`mt-14 p-6 rounded-xl border-l-2 border-primary flex items-center justify-between flex-wrap gap-4 transition-all duration-1000 delay-700 ${
-            inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-          }`}
+          className={`mt-14 p-6 rounded-xl border-l-2 border-primary flex items-center justify-between flex-wrap gap-4 transition-all duration-1000 delay-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+            }`}
         >
           <p className="text-third text-sm md:text-base italic max-w-2xl font-[Poppins]">
             KYC helps Reecomm maintain listing authenticity and ensures a secure environment for all sellers.

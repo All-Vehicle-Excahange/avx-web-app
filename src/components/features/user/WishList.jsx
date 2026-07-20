@@ -154,7 +154,7 @@ function Wishlist() {
             <h1 className="text-3xl font-extrabold mb-6 hidden">
               Vehicle Wishlist
             </h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
               {isLoadingWishlist ? (
                 Array.from({ length: 4 }).map((_, i) => (
                   <VehicleCardSkeleton key={i} />
@@ -216,7 +216,7 @@ function Wishlist() {
             <h1 className="text-3xl font-extrabold mb-6 hidden">
               Subscribed Consultant
             </h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {isLoadingConsultants ? (
                 Array.from({ length: 4 }).map((_, i) => (
                   <ConsultantCardSkeleton key={i} />

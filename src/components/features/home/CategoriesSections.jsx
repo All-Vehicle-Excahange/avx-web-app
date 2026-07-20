@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { Car, Bike } from "lucide-react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
@@ -152,13 +153,20 @@ const CategoriesSections = () => {
                 }
               }}
               className={cn(
-                "px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full cursor-pointer flex items-center justify-center gap-1.5 transition-all duration-300 whitespace-nowrap shrink-0",
+                "relative px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full cursor-pointer flex items-center justify-center gap-1.5 transition-all duration-300 whitespace-nowrap shrink-0",
                 activeType === "4-Wheeler"
-                  ? "bg-fourth text-white shadow-md"
+                  ? "text-white shadow-md"
                   : "text-third hover:text-primary",
               )}
             >
-              <Car size={16} /> 4-Wheeler
+              {activeType === "4-Wheeler" && (
+                <motion.div
+                  layoutId="activeTabBg"
+                  className="absolute inset-0 bg-fourth rounded-full"
+                  transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
+                />
+              )}
+              <span className="relative z-10 flex items-center gap-1.5"><Car size={16} /> 4-Wheeler</span>
             </button>
 
             <button
@@ -172,13 +180,20 @@ const CategoriesSections = () => {
                 }
               }}
               className={cn(
-                "px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full cursor-pointer flex items-center justify-center gap-1.5 transition-all duration-300 whitespace-nowrap shrink-0",
+                "relative px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full cursor-pointer flex items-center justify-center gap-1.5 transition-all duration-300 whitespace-nowrap shrink-0",
                 activeType === "2-Wheeler"
-                  ? "bg-fourth text-white shadow-md"
+                  ? "text-white shadow-md"
                   : "text-third hover:text-primary",
               )}
             >
-              <Bike size={16} /> 2-Wheeler
+              {activeType === "2-Wheeler" && (
+                <motion.div
+                  layoutId="activeTabBg"
+                  className="absolute inset-0 bg-fourth rounded-full"
+                  transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
+                />
+              )}
+              <span className="relative z-10 flex items-center gap-1.5"><Bike size={16} /> 2-Wheeler</span>
             </button>
           </div>
         </div>
@@ -197,18 +212,27 @@ const CategoriesSections = () => {
                     setActive(cat.id);
                   }}
                   className={cn(
-                    "flex items-center gap-2 shrink-0 px-5 py-1 text-sm font-semibold rounded-full border transition-all cursor-pointer",
+                    "relative flex items-center gap-2 shrink-0 px-5 py-1 text-sm font-semibold rounded-full border transition-all cursor-pointer",
                     isActive
-                      ? "bg-fourth text-primary border-fourth shadow-sm"
-                      : "text-primary border-white/20 hover:border-primary/40",
+                      ? "text-primary border-transparent shadow-sm"
+                      : "text-primary border-white/20 hover:border-primary/40 bg-transparent",
                   )}
                 >
-                  {cat.iconUrl ? (
-                    <img src={cat.iconUrl} alt={cat.label} className={`w-8 h-7 object-contain ${isActive ? "" : ""}`} />
-                  ) : cat.icon ? (
-                    <cat.icon size={18} />
-                  ) : null}
-                  {cat.label}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeCategoryBg"
+                      className="absolute inset-0 bg-fourth rounded-full border border-fourth"
+                      transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
+                    />
+                  )}
+                  <div className="relative z-10 flex items-center gap-2">
+                    {cat.iconUrl ? (
+                      <img src={cat.iconUrl} alt={cat.label} className={`w-8 h-7 object-contain ${isActive ? "" : ""}`} />
+                    ) : cat.icon ? (
+                      <cat.icon size={18} />
+                    ) : null}
+                    {cat.label}
+                  </div>
                 </button>
               );
             })}

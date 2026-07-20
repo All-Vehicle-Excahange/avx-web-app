@@ -12,6 +12,7 @@ import { getInquiryEligibilityQuery } from "@/queries/vehicle.queries";
 import SignupPopup from "@/components/auth/SignupPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import RequestAlredySentPopup from "./RequestAlredySentPopup";
+import Link from "next/link";
 
 export default function VehicleSummaryRight({
   vehicle,
@@ -123,23 +124,23 @@ export default function VehicleSummaryRight({
                     Listed By Auto Consult
                   </span>
                   {summary?.consultationName && (
-                    <a
+                    <Link
                       href={`/auto-consultant/${summary?.username || 1}`}
                       className="text-xs text-white font-semibold underline underline-offset-2 decoration-blue-400/70 hover:decoration-blue-400 transition-all flex items-center gap-0.5 shrink-0"
                     >
                       Visit Storefront
                       <ExternalLink size={11} className="inline" />
-                    </a>
+                    </Link>
                   )}
                 </div>
 
                 {/* Consultant name — clickable → storefront */}
-                <a
+                <Link
                   href={`/auto-consultant/${summary?.username || 1}`}
                   className="text-xl font-bold text-primary leading-tight -mt-1 hover:underline underline-offset-2 decoration-primary/50 transition-all"
                 >
                   {summary?.consultationName || "Auto Consultant"}
-                </a>
+                </Link>
 
                 {/* Stats row */}
                 <div className="space-y-1">

@@ -1022,7 +1022,7 @@ export default function WhyBuyPro1({
                 (img, i) => (
                   <div key={i} className="w-full h-36 rounded-xl overflow-hidden">
                     {img?.imageUrl ? (
-                      <Image src={img.imageUrl} alt={`car-${i}`} width={800} height={500} unoptimized className="w-full h-full object-cover" />
+                      <Image src={img.imageUrl} loading="lazy" alt={`car-${i}`} width={800} height={500} unoptimized className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                         <span className="text-third/40 text-xs">Image {i + 1}</span>
@@ -1039,7 +1039,7 @@ export default function WhyBuyPro1({
             {/* center main */}
             <div className="absolute top-[10%] left-[20%] w-[55%] h-[60%] rounded-2xl overflow-hidden shadow-xl z-10">
               {data.whyBuyHeroTemplate1?.imageUrl ? (
-                <Image src={data.whyBuyHeroTemplate1.imageUrl} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
+                <Image src={data.whyBuyHeroTemplate1.imageUrl} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-xs">Image 1</span>
@@ -1049,7 +1049,7 @@ export default function WhyBuyPro1({
             {/* tilted right */}
             <div className="absolute top-[5%] right-[0%] w-[38%] h-[42%] rounded-2xl overflow-hidden rotate-6 opacity-90">
               {data.whyBuyHeroTemplate2?.imageUrl ? (
-                <Image src={data.whyBuyHeroTemplate2.imageUrl} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
+                <Image src={data.whyBuyHeroTemplate2.imageUrl} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-xs">Image 2</span>
@@ -1059,7 +1059,7 @@ export default function WhyBuyPro1({
             {/* bottom left */}
             <div className="absolute bottom-[0%] left-[10%] w-[40%] h-[35%] rounded-2xl overflow-hidden rotate-[4deg] opacity-90">
               {data.whyBuyHeroTemplate3?.imageUrl ? (
-                <Image src={data.whyBuyHeroTemplate3.imageUrl} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
+                <Image src={data.whyBuyHeroTemplate3.imageUrl} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-xs">Image 3</span>
@@ -1092,7 +1092,7 @@ export default function WhyBuyPro1({
             {/* big image */}
             <div className="col-span-2 h-60 overflow-hidden rounded-xl border border-secondary/10">
               {data.storyTemplate1?.imageUrl ? (
-                <Image src={data.storyTemplate1.imageUrl} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
+                <Image src={data.storyTemplate1.imageUrl} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full bg-secondary/10 border-2 border-dashed border-secondary/20 flex items-center justify-center">
                   <span className="text-secondary/30 text-sm">Story image 1</span>
@@ -1102,7 +1102,7 @@ export default function WhyBuyPro1({
             {/* small images */}
             <div className="h-40 overflow-hidden rounded-xl border border-secondary/10">
               {data.storyTemplate2?.imageUrl ? (
-                <Image src={data.storyTemplate2.imageUrl} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
+                <Image src={data.storyTemplate2.imageUrl} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full bg-secondary/10 border-2 border-dashed border-secondary/20 flex items-center justify-center">
                   <span className="text-secondary/30 text-sm">Story image 2</span>
@@ -1111,7 +1111,7 @@ export default function WhyBuyPro1({
             </div>
             <div className="h-40 overflow-hidden rounded-xl border border-secondary/10">
               {data.storyTemplate3?.imageUrl ? (
-                <Image src={data.storyTemplate3.imageUrl} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
+                <Image src={data.storyTemplate3.imageUrl} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full bg-secondary/10 border-2 border-dashed border-secondary/20 flex items-center justify-center">
                   <span className="text-secondary/30 text-sm">Story image 3</span>
@@ -1160,7 +1160,7 @@ export default function WhyBuyPro1({
                     className="min-w-[180px] h-[220px] overflow-hidden rounded-lg border border-third/10 shrink-0"
                   >
                     {img ? (
-                      <Image src={img} alt="selection" width={800} height={500} unoptimized className="w-full h-full object-cover" />
+                      <Image src={img} loading="lazy" alt="selection" width={800} height={500} unoptimized className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                         <span className="text-third/40 text-xs">Image</span>
@@ -1272,7 +1272,7 @@ export default function WhyBuyPro1({
             {/* main image */}
             <div className="absolute inset-0 rounded-2xl overflow-hidden border border-third/10 shadow-sm">
               {data.inspectionTemplate1?.imageUrl ? (
-                <Image src={data.inspectionTemplate1.imageUrl} alt="" width={800} height={500} unoptimized className="w-full h-full object-cover transition duration-500 hover:scale-105" />
+                <Image src={data.inspectionTemplate1.imageUrl} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover transition duration-500 hover:scale-105" />
               ) : (
                 <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-sm">Inspection image not set</span>
@@ -1289,7 +1289,7 @@ export default function WhyBuyPro1({
         <div className="absolute inset-0">
           {/* image */}
           {data.customerCommitmentTemplate1?.imageUrl ? (
-            <Image src={data.customerCommitmentTemplate1.imageUrl} alt="background" width={800} height={500} unoptimized className="w-full h-full object-cover scale-105" />
+            <Image src={data.customerCommitmentTemplate1.imageUrl} loading="lazy" alt="background" width={800} height={500} unoptimized className="w-full h-full object-cover scale-105" />
           ) : (
             <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
               <span className="text-third/40 text-sm">Background image not set</span>
@@ -1345,7 +1345,7 @@ export default function WhyBuyPro1({
             {/* Image 1: The Tall Vertical Anchor (Left) */}
             <div className="md:col-span-3 md:row-span-2 group relative overflow-hidden rounded-2xl border border-third/10">
               {(data.customGallery1 || data.galleryTemplate1?.imageUrl) ? (
-                <Image src={data.customGallery1 || data.galleryTemplate1.imageUrl} alt="Showroom Vertical" width={800} height={500} unoptimized className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <Image src={data.customGallery1 || data.galleryTemplate1.imageUrl} loading="lazy" alt="Showroom Vertical" width={800} height={500} unoptimized className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
               ) : (
                 <div className="w-full h-full min-h-[200px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-xs">Gallery 1</span>
@@ -1356,7 +1356,7 @@ export default function WhyBuyPro1({
             {/* Image 2: The Main Landscape Feature (Top Right) */}
             <div className="md:col-span-9 md:row-span-1 group relative overflow-hidden rounded-2xl border border-third/10">
               {(data.customGallery2 || data.galleryTemplate2?.imageUrl) ? (
-                <Image src={data.customGallery2 || data.galleryTemplate2.imageUrl} alt="Main Showroom" width={800} height={500} unoptimized className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <Image src={data.customGallery2 || data.galleryTemplate2.imageUrl} loading="lazy" alt="Main Showroom" width={800} height={500} unoptimized className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               ) : (
                 <div className="w-full h-full min-h-[200px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-xs">Gallery 2</span>
@@ -1367,7 +1367,7 @@ export default function WhyBuyPro1({
             {/* Image 3: Detail Shot (Bottom Middle) */}
             <div className="md:col-span-5 md:row-span-1 group relative overflow-hidden rounded-2xl border border-third/10">
               {(data.customGallery3 || data.galleryTemplate3?.imageUrl) ? (
-                <Image src={data.customGallery3 || data.galleryTemplate3.imageUrl} alt="Team Detail" width={800} height={500} unoptimized className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <Image src={data.customGallery3 || data.galleryTemplate3.imageUrl} loading="lazy" alt="Team Detail" width={800} height={500} unoptimized className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
               ) : (
                 <div className="w-full h-full min-h-[200px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-xs">Gallery 3</span>
@@ -1377,7 +1377,7 @@ export default function WhyBuyPro1({
             {/* Image 4: The Wide End Cap (Bottom Right) */}
             <div className="md:col-span-4 md:row-span-1 group relative overflow-hidden rounded-2xl border border-third/10">
               {(data.customGallery4 || data.galleryTemplate4?.imageUrl) ? (
-                <Image src={data.customGallery4 || data.galleryTemplate4.imageUrl} alt="Interior View" width={800} height={500} unoptimized className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <Image src={data.customGallery4 || data.galleryTemplate4.imageUrl} loading="lazy" alt="Interior View" width={800} height={500} unoptimized className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
               ) : (
                 <div className="w-full h-full min-h-[200px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                   <span className="text-third/40 text-xs">Gallery 4</span>

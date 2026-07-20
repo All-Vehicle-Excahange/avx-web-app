@@ -631,7 +631,7 @@ export default function AboutPremium2({
         {/* HERO BACKGROUND (VIDEO/IMAGE) */}
         <div className="absolute inset-0 h-screen overflow-hidden">
           {(d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl) ? (
-            <Image src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl} alt="Background" width={800} height={500} unoptimized className="w-full h-full object-cover" />
+            <Image src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl} loading="lazy" alt="Background" width={800} height={500} unoptimized className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
               <span className="text-third/40 text-sm">Hero background not set</span>
@@ -661,7 +661,7 @@ export default function AboutPremium2({
               <div className="relative group">
                 <div className="relative rounded-2xl overflow-hidden hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] bg-primary/5">
                   {(d.customHeroImage2 || d.customHeroImageUrl2 || d.heroTemplate2?.imageUrl) ? (
-                    <Image src={d.customHeroImage2 || d.customHeroImageUrl2 || d.heroTemplate2?.imageUrl} alt="Hero side" width={800} height={500} unoptimized className="w-full h-[450px] object-cover transition-transform duration-700 group-hover:scale-110" />
+                    <Image src={d.customHeroImage2 || d.customHeroImageUrl2 || d.heroTemplate2?.imageUrl} loading="lazy" alt="Hero side" width={800} height={500} unoptimized className="w-full h-[450px] object-cover transition-transform duration-700 group-hover:scale-110" />
                   ) : (
                     <div className="w-full h-[450px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                       <span className="text-third/40 text-sm">Side image not set</span>
@@ -703,7 +703,7 @@ export default function AboutPremium2({
               <div className="relative group">
                 <div className="relative rounded-2xl overflow-hidden hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] bg-primary/5">
                   {(d.customMissionImage1 || d.customMissionUrl1 || d.missionTemplate1?.imageUrl) ? (
-                    <Image src={d.customMissionImage1 || d.customMissionUrl1 || d.missionTemplate1?.imageUrl} alt={d.missionTitle} width={800} height={500} unoptimized className="w-full h-80 lg:h-[380px] object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110" />
+                    <Image src={d.customMissionImage1 || d.customMissionUrl1 || d.missionTemplate1?.imageUrl} loading="lazy" alt={d.missionTitle} width={800} height={500} unoptimized className="w-full h-80 lg:h-[380px] object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110" />
                   ) : (
                     <div className="w-full h-80 lg:h-[380px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                       <span className="text-third/40 text-sm">Mission image not set</span>
@@ -733,7 +733,7 @@ export default function AboutPremium2({
               <div className="relative group">
                 <div className="relative rounded-2xl overflow-hidden hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)] bg-primary/5">
                   {(d.customVisionImage1 || d.customVisionUrl1 || d.visionTemplate1?.imageUrl) ? (
-                    <Image src={d.customVisionImage1 || d.customVisionUrl1 || d.visionTemplate1?.imageUrl} alt={d.visionTitle} width={800} height={500} unoptimized className="w-full h-80 lg:h-[380px] object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110" />
+                    <Image src={d.customVisionImage1 || d.customVisionUrl1 || d.visionTemplate1?.imageUrl} loading="lazy" alt={d.visionTitle} width={800} height={500} unoptimized className="w-full h-80 lg:h-[380px] object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110" />
                   ) : (
                     <div className="w-full h-80 lg:h-[380px] bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
                       <span className="text-third/40 text-sm">Vision image not set</span>
@@ -845,7 +845,7 @@ export default function AboutPremium2({
                     {/* icon */}
                     <div className="absolute top-5 left-5 lg:top-6 lg:left-6 w-11 h-11 lg:w-12 lg:h-12 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 lg:group-hover:scale-110 transition duration-300">
                       {typeof svc.icon === "string" &&
-                      svc.icon.startsWith("<svg") ? (
+                        svc.icon.startsWith("<svg") ? (
                         <div
                           className="lg:group-hover:text-fourth text-primary [&>svg]:w-4 [&>svg]:h-4 lg:[&>svg]:w-[18px] lg:[&>svg]:h-[18px]"
                           dangerouslySetInnerHTML={{ __html: svc.icon }}
