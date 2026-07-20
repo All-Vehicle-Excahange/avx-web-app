@@ -25,9 +25,17 @@ export function generateSeoSlug({ brandName, modelName, cityName, budget, vehicl
   let budgetPart = "";
   if (budget) {
     const [min, max] = budget.split("-");
-    if (min === "0") {
-      budgetPart = `-under-${max}-lakhs`;
-    } else {
+    const numMax = parseFloat(max);
+    if (min === "0" && !isNaN(numMax)) {
+      let suffix = "lakhs";
+      if (numMax === 1) {
+        suffix = "lakh";
+      } else if (numMax < 1) {
+        suffix = "k";
+      }
+      const valStr = numMax < 1 ? Math.round(numMax * 100) : numMax;
+      budgetPart = `-under-${valStr}-${suffix}`;
+    } else if (min) {
       budgetPart = `-above-${min}-lakhs`;
     }
   }

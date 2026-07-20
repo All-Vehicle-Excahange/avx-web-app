@@ -626,8 +626,9 @@ export default function SearchWithCard({
 
     const isUnder =
       Math.round(minPrice) === 0 &&
-      [2, 5, 10, 15, 20, 25, 30, 50].includes(Math.round(currentMaxLakh));
-    const isAbove = Math.round(currentMinLakh) === 50 && maxPrice >= 20000000;
+      currentMaxLakh > 0 &&
+      currentMaxLakh < 200;
+    const isAbove = Math.round(currentMinLakh) >= 50 && maxPrice >= 20000000;
 
     if (isUnder) {
       budgetParam = `0-${currentMaxLakh}`;
