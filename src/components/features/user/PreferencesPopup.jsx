@@ -737,7 +737,7 @@ function PreferencesPopup({
     >
       {/* ─── Main Card ─── */}
       <div
-        className="relative flex w-full max-w-[1000px] h-[90vh] md:h-[650px] overflow-hidden rounded-3xl shadow-2xl bg-secondary"
+        className="relative flex w-full max-w-[1000px] h-[90vh] md:h-[650px] max-h-[90vh] overflow-hidden rounded-3xl shadow-2xl bg-secondary"
         onClick={(e) => e.stopPropagation()}
         style={{
           animation: isClosing
@@ -798,7 +798,7 @@ function PreferencesPopup({
           {/* Close button */}
           <button
             onClick={handleClose}
-            className="absolute bg-white cursor-pointer top-4 right-4 z-30 p-2 rounded-full text-secondary hover:opacity-70 transition-all shadow-md group"
+            className="absolute bg-white cursor-pointer top-4 right-4 z-20 p-1 rounded-full hover:opacity-70 text-secondary group"
           >
             <X
               size={20}
@@ -807,7 +807,7 @@ function PreferencesPopup({
           </button>
 
           {/* Step tabs */}
-          <div className="flex items-center border-b border-primary/5 px-4 pt-4">
+          <div className="flex items-center border-b border-primary/5 px-4 pt-4 overflow-x-auto custom-scrollbar scrollbar-hide">
             {STEPS.map((step, i) => {
               const Icon = step.icon;
               const isActive = activeStep === i;
