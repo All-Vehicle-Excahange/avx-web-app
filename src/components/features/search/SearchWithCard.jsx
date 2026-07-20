@@ -2119,14 +2119,22 @@ export default function SearchWithCard({
                 subject = `${brandLabel} Cars`;
               }
 
-              const dynamicTitle = (
-                <>
-                  {subject} Between{" "}
-                  <span className="text-fourth font-semibold">
-                    {formatPriceLabel(priceMin)} – {formatPriceLabel(priceMax)}
-                  </span>
-                </>
-              );
+              const dynamicTitle =
+                priceMin === 0 || priceMin <= 1000 ? (
+                  <>
+                    {subject} Under{" "}
+                    <span className="text-fourth font-semibold">
+                      {formatPriceLabel(priceMax)}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    {subject} Between{" "}
+                    <span className="text-fourth font-semibold">
+                      {formatPriceLabel(priceMin)} – {formatPriceLabel(priceMax)}
+                    </span>
+                  </>
+                );
               return (
                 <PriceBased
                   data={priceBasedVehicles}
