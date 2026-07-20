@@ -119,14 +119,6 @@ export default function HamburgerDrawer({ open, onClose }) {
                     href="/search/buy-used-cars?sort=trending"
                     onClose={onClose}
                   />
-                  <TabItem
-                    id="picks"
-                    label="Top Picks For You"
-                    hoveredTab={hoveredTab}
-                    setHoveredTab={setHoveredTab}
-                    href="/search/buy-used-cars?sort=recommended"
-                    onClose={onClose}
-                  />
                 </div>
               </div>
 
