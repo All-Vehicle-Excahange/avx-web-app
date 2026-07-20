@@ -25,7 +25,7 @@ const nextConfig = {
       {
         // Proxy API requests to backend during local development to fix SameSite Cookie issues
         source: "/api/v1/:path*",
-        destination: `${process.env.BACKEND_URL}/api/v1/:path*`,
+        destination: `${process.env.BACKEND_URL || "https://api.reecomm.online"}/api/v1/:path*`,
       },
       {
         // Local dev environment proxy

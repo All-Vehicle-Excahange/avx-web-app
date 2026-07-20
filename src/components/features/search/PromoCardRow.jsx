@@ -22,15 +22,15 @@ export default function PromoBanner() {
                 className="w-full h-full promo-swiper"
             >
                 <SwiperSlide>
-                    <BannerImage src="/banner_Basic.jpeg" />
+                    <BannerImage src="/banner 1.webp" />
                 </SwiperSlide>
 
                 <SwiperSlide>
-                    <BannerImage src="/about2.png" />
+                    <BannerImage src="/banner 2.webp" />
                 </SwiperSlide>
 
                 <SwiperSlide>
-                    <BannerImage src="/about3.png" />
+                    <BannerImage src="/banner 3.webp" />
                 </SwiperSlide>
             </Swiper>
         </div>
@@ -47,9 +47,6 @@ function BannerImage({ src }) {
                 className="object-cover"
                 priority
             />
-
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-black/20 z-10" />
         </div>
     );
 }

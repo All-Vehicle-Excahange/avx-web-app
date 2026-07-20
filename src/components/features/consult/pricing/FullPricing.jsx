@@ -96,7 +96,7 @@ export default function FullPricing() {
     try {
       const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
       userRole = savedUser?.userRole || savedUser?.role;
-    } catch (e) { }
+    } catch (e) {}
   }
 
   const {
@@ -113,13 +113,13 @@ export default function FullPricing() {
 
   const currentTier = isLoggedIn
     ? (
-      sellerTierData?.tierTitle ||
-      user?.sellerTier ||
-      (typeof window !== "undefined"
-        ? localStorage.getItem("sellerTier")
-        : null) ||
-      ""
-    ).toUpperCase()
+        sellerTierData?.tierTitle ||
+        user?.sellerTier ||
+        (typeof window !== "undefined"
+          ? localStorage.getItem("sellerTier")
+          : null) ||
+        ""
+      ).toUpperCase()
     : "";
 
   useEffect(() => {
@@ -144,11 +144,7 @@ export default function FullPricing() {
 
     // Case 2: CONSULTANT_APPLICANT who already has an ACTIVE subscription
     // → send them to KYC (with redirect preserved so they end up in the right place after)
-    if (
-      userRole !== "CONSULTATION" &&
-      hasTier &&
-      tierStatus === "ACTIVE"
-    ) {
+    if (userRole !== "CONSULTATION" && hasTier && tierStatus === "ACTIVE") {
       router.replace(
         redirect ? `/consult/kyc?redirect=${redirect}` : "/consult/kyc",
       );
@@ -338,9 +334,9 @@ export default function FullPricing() {
       console.error("Payment error:", error);
       alert(
         "Error initiating payment: " +
-        (error?.response?.data?.message ||
-          error?.message ||
-          "Something went wrong"),
+          (error?.response?.data?.message ||
+            error?.message ||
+            "Something went wrong"),
       );
     } finally {
       setPaymentLoading(false);
@@ -403,217 +399,218 @@ export default function FullPricing() {
       <div
         id="pricing-table"
         className="relative z-10 -mt-64 mb-0"
-      // style={{ background: "#ffffff" }}
+        // style={{ background: "#ffffff" }}
       >
         <div className=" relative -top-40 max-w-7xl mx-auto px-5 sm:px-6 pt-0">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             {loading
               ? // SKELETON CARDS
-              Array.from({ length: 3 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="animate-pulse flex flex-col rounded-2xl overflow-hidden border border-primary/10 bg-secondary/5 h-[550px]"
-                  style={{
-                    background:
-                      "linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)",
-                    boxShadow: "0 8px 30px rgba(0,0,0,0.08)",
-                  }}
-                >
-                  <div className="p-7 flex flex-col flex-1 space-y-6">
-                    <div className="space-y-2">
-                      <div className="h-6 bg-primary/10 rounded w-1/3" />
-                      <div className="h-4 bg-primary/10 rounded w-2/3" />
-                    </div>
-                    <div className="h-10 bg-primary/10 rounded w-1/2" />
-                    <div className="h-1px bg-primary/10" />
-                    <div className="space-y-3 flex-1">
-                      {Array.from({ length: 5 }).map((_, j) => (
-                        <div key={j} className="flex items-center gap-3">
-                          <div className="w-5 h-5 rounded-full bg-primary/10 shrink-0" />
-                          <div className="h-4 bg-primary/10 rounded w-full" />
-                        </div>
-                      ))}
-                    </div>
-                    <div className="h-11 bg-primary/10 rounded-full w-full" />
-                  </div>
-                </div>
-              ))
-              : tiers.map((tier, i) => {
-                const key = (tier.title || "").toUpperCase();
-                const staticDetails = staticTierDetails[key] || {
-                  name: tier.title,
-                  tagline:
-                    tier.description || "Start competing in our marketplace.",
-                  color: "#6b7280",
-                  bestFor: "Consultants & Sellers",
-                  note: "",
-                  cta: "Get Started",
-                  ctaStyle:
-                    "border border-[#d1d5db] text-[#111827] hover:bg-[#f9fafb]",
-                  highlight: false,
-                };
-
-                const isCurrentTier = currentTier === key;
-                let isTierDisabled = false;
-                if (currentTier === "PREMIUM") {
-                  isTierDisabled = true;
-                } else if (currentTier === "PRO") {
-                  isTierDisabled = key === "BASIC" || key === "PRO";
-                } else if (currentTier === "BASIC") {
-                  isTierDisabled = key === "BASIC";
-                }
-
-                const price = yearly ? tier.yearlyPrice : tier.monthlyPrice;
-                const formattedPrice = formatPrice(price);
-
-                const monthlyVal = Number(tier.monthlyPrice) || 0;
-                const yearlyVal = Number(tier.yearlyPrice) || 0;
-                const totalMonthlyCostForYear = monthlyVal * 12;
-                let savingsPercent = 0;
-                if (
-                  totalMonthlyCostForYear > 0 &&
-                  yearlyVal < totalMonthlyCostForYear
-                ) {
-                  savingsPercent = Math.round(
-                    ((totalMonthlyCostForYear - yearlyVal) /
-                      totalMonthlyCostForYear) *
-                    100,
-                  );
-                }
-
-                const features = (
-                  (yearly ? tier.yearlyFeatures : tier.monthlyFeatures) ||
-                  tier.features ||
-                  []
-                ).map((f) => {
-                  const titleVal =
-                    typeof f === "string"
-                      ? f
-                      : f?.title || f?.featureName || f?.name || "";
-                  const descVal =
-                    typeof f === "string"
-                      ? ""
-                      : f?.description || f?.featureDescription || "";
-                  return descVal ? `${titleVal} (${descVal})` : titleVal;
-                });
-
-                const isButtonDisabled =
-                  (isTierDisabled && !isCurrentTier) ||
-                  (paymentLoading && upgradingTierId === tier.id);
-
-                let buttonText = staticDetails.cta;
-                if (paymentLoading && upgradingTierId === tier.id) {
-                  buttonText = "Processing...";
-                } else if (isCurrentTier) {
-                  if (userRole !== "CONSULTATION") {
-                    buttonText = "Complete KYC";
-                  } else {
-                    buttonText = "Go to Dashboard";
-                  }
-                } else if (isTierDisabled) {
-                  buttonText = "Get Started";
-                }
-
-                return (
-                  <motion.div
+                Array.from({ length: 3 }).map((_, i) => (
+                  <div
                     key={i}
-                    initial={{ opacity: 0, y: 32 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: i * 0.1 }}
-                    viewport={{ once: true }}
-                    className="group/card relative flex flex-col h-full rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 border border-primary/10"
-                    style={{ background: "transparent" }}
+                    className="animate-pulse flex flex-col rounded-2xl overflow-hidden border border-primary/10 bg-secondary/5 h-[550px]"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)",
+                      boxShadow: "0 8px 30px rgba(0,0,0,0.08)",
+                    }}
                   >
-                    <div className="relative p-8 sm:p-10 flex flex-col flex-1 pt-12">
-                      {/* Plan name and pills */}
-                      <div className="flex items-center gap-3 mb-5">
-                        <h3 className="text-[24px] font-bold text-primary tracking-tight">
-                          {staticDetails.name}
-                        </h3>
-                        {isCurrentTier && (
-                          <span className="border border-emerald-500/30 text-emerald-500 text-[10px] font-bold tracking-widest uppercase px-3 py-0.5 rounded-full">
-                            Active
-                          </span>
-                        )}
+                    <div className="p-7 flex flex-col flex-1 space-y-6">
+                      <div className="space-y-2">
+                        <div className="h-6 bg-primary/10 rounded w-1/3" />
+                        <div className="h-4 bg-primary/10 rounded w-2/3" />
                       </div>
-
-                      {/* Price */}
-                      <div className="mb-2">
-                        <div className="flex items-baseline gap-1">
-                          <span className="text-[32px] font-bold text-primary tracking-tight leading-none">
-                            {formattedPrice}
-                          </span>
-                          <span className="text-[13px] font-medium text-primary/40">
-                            / {yearly ? "year" : "month"}
-                          </span>
-                        </div>
-
-                        {!yearly && savingsPercent > 0 && (
-                          <div className="mt-2 flex items-center gap-2">
-                            <span className="text-[15px] font-medium text-primary/40 line-through">
-                              {formatPrice(tier.yearlyPrice)} / yr
-                            </span>
-                            <span className="text-[10px] px-2.5 py-0.5 rounded-full font-bold border border-emerald-500/25 text-emerald-500 bg-emerald-500/5">
-                              Save {savingsPercent}%
-                            </span>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Description */}
-                      <p className="text-[13px] mb-6 mt-3 text-primary/60 leading-relaxed min-h-10">
-                        {tier.description || staticDetails.tagline}
-                      </p>
-
-                      <div className="h-px bg-primary/10 mb-6" />
-
-                      {/* Features */}
-                      <ul className="flex-1 flex flex-col">
-                        {features.map((f, idx) => (
-                          <div key={idx}>
-                            <li className="flex items-start gap-3 py-3">
-                              <FiCheck
-                                className={`text-[14px] mt-0.5 shrink-0 ${staticDetails.highlight
-                                    ? "text-primary/40"
-                                    : "text-primary/40"
-                                  }`}
-                              />
-                              <span className="text-[13px] text-primary/70 leading-relaxed">
-                                {f}
-                              </span>
-                            </li>
-                            {idx < features.length - 1 && (
-                              <div className="h-px bg-primary/5 ml-6" />
-                            )}
+                      <div className="h-10 bg-primary/10 rounded w-1/2" />
+                      <div className="h-1px bg-primary/10" />
+                      <div className="space-y-3 flex-1">
+                        {Array.from({ length: 5 }).map((_, j) => (
+                          <div key={j} className="flex items-center gap-3">
+                            <div className="w-5 h-5 rounded-full bg-primary/10 shrink-0" />
+                            <div className="h-4 bg-primary/10 rounded w-full" />
                           </div>
                         ))}
-                      </ul>
-
-                      {/* Note */}
-                      {staticDetails.note && (
-                        <p className="text-[12px] mt-6 mb-2 text-primary/40 text-left">
-                          {staticDetails.note}
-                        </p>
-                      )}
-
-                      {/* Button */}
-                      <div className="mt-6 pt-2 flex justify-start">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          disabled={isButtonDisabled}
-                          loading={
-                            paymentLoading && upgradingTierId === tier.id
-                          }
-                          onClick={() => handleUpgrade(tier)}
-                        >
-                          {buttonText}
-                        </Button>
                       </div>
+                      <div className="h-11 bg-primary/10 rounded-full w-full" />
                     </div>
-                  </motion.div>
-                );
-              })}
+                  </div>
+                ))
+              : tiers.map((tier, i) => {
+                  const key = (tier.title || "").toUpperCase();
+                  const staticDetails = staticTierDetails[key] || {
+                    name: tier.title,
+                    tagline:
+                      tier.description || "Start competing in our marketplace.",
+                    color: "#6b7280",
+                    bestFor: "Consultants & Sellers",
+                    note: "",
+                    cta: "Get Started",
+                    ctaStyle:
+                      "border border-[#d1d5db] text-[#111827] hover:bg-[#f9fafb]",
+                    highlight: false,
+                  };
+
+                  const isCurrentTier = currentTier === key;
+                  let isTierDisabled = false;
+                  if (currentTier === "PREMIUM") {
+                    isTierDisabled = true;
+                  } else if (currentTier === "PRO") {
+                    isTierDisabled = key === "BASIC" || key === "PRO";
+                  } else if (currentTier === "BASIC") {
+                    isTierDisabled = key === "BASIC";
+                  }
+
+                  const price = yearly ? tier.yearlyPrice : tier.monthlyPrice;
+                  const formattedPrice = formatPrice(price);
+
+                  const monthlyVal = Number(tier.monthlyPrice) || 0;
+                  const yearlyVal = Number(tier.yearlyPrice) || 0;
+                  const totalMonthlyCostForYear = monthlyVal * 12;
+                  let savingsPercent = 0;
+                  if (
+                    totalMonthlyCostForYear > 0 &&
+                    yearlyVal < totalMonthlyCostForYear
+                  ) {
+                    savingsPercent = Math.round(
+                      ((totalMonthlyCostForYear - yearlyVal) /
+                        totalMonthlyCostForYear) *
+                        100,
+                    );
+                  }
+
+                  const features = (
+                    (yearly ? tier.yearlyFeatures : tier.monthlyFeatures) ||
+                    tier.features ||
+                    []
+                  ).map((f) => {
+                    const titleVal =
+                      typeof f === "string"
+                        ? f
+                        : f?.title || f?.featureName || f?.name || "";
+                    const descVal =
+                      typeof f === "string"
+                        ? ""
+                        : f?.description || f?.featureDescription || "";
+                    return descVal ? `${titleVal} (${descVal})` : titleVal;
+                  });
+
+                  const isButtonDisabled =
+                    (isTierDisabled && !isCurrentTier) ||
+                    (paymentLoading && upgradingTierId === tier.id);
+
+                  let buttonText = staticDetails.cta;
+                  if (paymentLoading && upgradingTierId === tier.id) {
+                    buttonText = "Processing...";
+                  } else if (isCurrentTier) {
+                    if (userRole !== "CONSULTATION") {
+                      buttonText = "Complete KYC";
+                    } else {
+                      buttonText = "Go to Dashboard";
+                    }
+                  } else if (isTierDisabled) {
+                    buttonText = "Get Started";
+                  }
+
+                  return (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 32 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: i * 0.1 }}
+                      viewport={{ once: true }}
+                      className="group/card relative flex flex-col h-full rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 border border-primary/10"
+                      style={{ background: "transparent" }}
+                    >
+                      <div className="relative p-8 sm:p-10 flex flex-col flex-1 pt-12">
+                        {/* Plan name and pills */}
+                        <div className="flex items-center gap-3 mb-5">
+                          <h3 className="text-[24px] font-bold text-primary tracking-tight">
+                            {staticDetails.name}
+                          </h3>
+                          {isCurrentTier && (
+                            <span className="border border-emerald-500/30 text-emerald-500 text-[10px] font-bold tracking-widest uppercase px-3 py-0.5 rounded-full">
+                              Active
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Price */}
+                        <div className="mb-2">
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-[32px] font-bold text-primary tracking-tight leading-none">
+                              {formattedPrice}
+                            </span>
+                            <span className="text-[13px] font-medium text-primary/40">
+                              / {yearly ? "year" : "month"}
+                            </span>
+                          </div>
+
+                          {/* {!yearly && savingsPercent > 0 && (
+                            <div className="mt-2 flex items-center gap-2">
+                              <span className="text-[15px] font-medium text-primary/40 line-through">
+                                {formatPrice(tier.yearlyPrice)} / yr
+                              </span>
+                              <span className="text-[10px] px-2.5 py-0.5 rounded-full font-bold border border-emerald-500/25 text-emerald-500 bg-emerald-500/5">
+                                Save {savingsPercent}%
+                              </span>
+                            </div>
+                          )} */}
+                        </div>
+
+                        {/* Description */}
+                        <p className="text-[13px] mb-6 mt-3 text-primary/60 leading-relaxed min-h-10">
+                          {tier.description || staticDetails.tagline}
+                        </p>
+
+                        <div className="h-px bg-primary/10 mb-6" />
+
+                        {/* Features */}
+                        <ul className="flex-1 flex flex-col">
+                          {features.map((f, idx) => (
+                            <div key={idx}>
+                              <li className="flex items-start gap-3 py-3">
+                                <FiCheck
+                                  className={`text-[14px] mt-0.5 shrink-0 ${
+                                    staticDetails.highlight
+                                      ? "text-primary/40"
+                                      : "text-primary/40"
+                                  }`}
+                                />
+                                <span className="text-[13px] text-primary/70 leading-relaxed">
+                                  {f}
+                                </span>
+                              </li>
+                              {idx < features.length - 1 && (
+                                <div className="h-px bg-primary/5 ml-6" />
+                              )}
+                            </div>
+                          ))}
+                        </ul>
+
+                        {/* Note */}
+                        {staticDetails.note && (
+                          <p className="text-[12px] mt-6 mb-2 text-primary/40 text-left">
+                            {staticDetails.note}
+                          </p>
+                        )}
+
+                        {/* Button */}
+                        <div className="mt-6 pt-2 flex justify-start">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            disabled={isButtonDisabled}
+                            loading={
+                              paymentLoading && upgradingTierId === tier.id
+                            }
+                            onClick={() => handleUpgrade(tier)}
+                          >
+                            {buttonText}
+                          </Button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
           </div>
         </div>
       </div>
