@@ -88,8 +88,24 @@ export default function HamburgerDrawer({ open, onClose }) {
                 </span>
                 <div className="space-y-2 flex flex-col">
                   <TabItem
+                    id="cars"
+                    label="Buy Used Cars"
+                    hoveredTab={hoveredTab}
+                    setHoveredTab={setHoveredTab}
+                    href="/search/buy-used-cars"
+                    onClose={onClose}
+                  />
+                  <TabItem
+                    id="bikes"
+                    label="Buy Used Bikes"
+                    hoveredTab={hoveredTab}
+                    setHoveredTab={setHoveredTab}
+                    href="/search/buy-used-two-wheelers"
+                    onClose={onClose}
+                  />
+                  <TabItem
                     id="browse"
-                    label="Browse Vehicles"
+                    label="All Vehicles"
                     hoveredTab={hoveredTab}
                     setHoveredTab={setHoveredTab}
                     href="/search/buy-used-cars"
@@ -175,150 +191,162 @@ export default function HamburgerDrawer({ open, onClose }) {
 
             {/* 2. MIDDLE DYNAMIC CONTENT (5 cols) */}
             <div className="lg:col-span-5 border-r border-white/10 px-0 lg:px-4 pr-4 lg:pr-8">
-              {hoveredTab === "browse" && (
+              {(hoveredTab === "cars" || hoveredTab === "browse") && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 fade-in-fast">
-                  <div className="space-y-8">
+                  <div className="space-y-6">
                     <div>
-                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
-                        Browse Vehicles
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3 block">
+                        Buy Used Cars by Brand
                       </span>
-                      <div className="space-y-2 flex flex-col">
-                        <MenuLink
-                          href="/search/buy-used-cars"
-                          onClick={onClose}
-                        >
-                          Used Cars
+                      <div className="space-y-1.5 flex flex-col">
+                        <MenuLink href="/search/buy-used-maruti-suzuki-cars" onClick={onClose}>
+                          Used Maruti Suzuki Cars
                         </MenuLink>
-                        <MenuLink
-                          href="/search?vehicleType=2 Wheeler"
-                          onClick={onClose}
-                        >
-                          Used Bikes
+                        <MenuLink href="/search/buy-used-hyundai-cars" onClick={onClose}>
+                          Used Hyundai Cars
                         </MenuLink>
-                        <MenuLink
-                          href="/search?vehicleType=4 Wheeler&bodyType=truck"
-                          onClick={onClose}
-                        >
-                          Used Trucks
+                        <MenuLink href="/search/buy-used-tata-cars" onClick={onClose}>
+                          Used Tata Cars
                         </MenuLink>
-                        <MenuLink
-                          href="/search/buy-used-cars?fuelType=Electric"
-                          onClick={onClose}
-                        >
-                          Used EVs
+                        <MenuLink href="/search/buy-used-mahindra-cars" onClick={onClose}>
+                          Used Mahindra Cars
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-toyota-cars" onClick={onClose}>
+                          Used Toyota Cars
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-honda-cars" onClick={onClose}>
+                          Used Honda Cars
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-bmw-cars" onClick={onClose}>
+                          Used BMW Cars
                         </MenuLink>
                       </div>
                     </div>
                     <div>
-                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
-                        Browse by Brand
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3 block">
+                        Car Body Types
                       </span>
-                      <div className="space-y-2 flex flex-col">
-                        <MenuLink
-                          href="/search/buy-used-maruti-suzuki-cars"
-                          onClick={onClose}
-                        >
-                          Maruti Suzuki
+                      <div className="space-y-1.5 flex flex-col">
+                        <MenuLink href="/search/buy-used-suv-cars" onClick={onClose}>
+                          Used SUVs
                         </MenuLink>
-                        <MenuLink
-                          href="/search/buy-used-hyundai-cars"
-                          onClick={onClose}
-                        >
-                          Hyundai
+                        <MenuLink href="/search/buy-used-sedan-cars" onClick={onClose}>
+                          Used Sedans
                         </MenuLink>
-                        <MenuLink
-                          href="/search/buy-used-tata-cars"
-                          onClick={onClose}
-                        >
-                          Tata
+                        <MenuLink href="/search/buy-used-hatchback-cars" onClick={onClose}>
+                          Used Hatchbacks
                         </MenuLink>
-                        <MenuLink
-                          href="/search/buy-used-mahindra-cars"
-                          onClick={onClose}
-                        >
-                          Mahindra
-                        </MenuLink>
-                        <MenuLink
-                          href="/search/buy-used-honda-cars"
-                          onClick={onClose}
-                        >
-                          Honda
-                        </MenuLink>
-                        <MenuLink
-                          href="/search/buy-used-toyota-cars"
-                          onClick={onClose}
-                        >
-                          Toyota
+                        <MenuLink href="/search/buy-used-luxury-cars" onClick={onClose}>
+                          Used Luxury Cars
                         </MenuLink>
                       </div>
                     </div>
                   </div>
-                  <div className="space-y-8">
+                  <div className="space-y-6">
                     <div>
-                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
-                        Browse by Budget
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3 block">
+                        Cars by Budget
                       </span>
-                      <div className="space-y-2 flex flex-col">
-                        <MenuLink
-                          href="/search/buy-used-cars?budget=0-3"
-                          onClick={onClose}
-                        >
-                          Under ₹3L
+                      <div className="space-y-1.5 flex flex-col">
+                        <MenuLink href="/search/buy-used-cars-under-3-lakhs" onClick={onClose}>
+                          Cars under ₹3 Lakh
                         </MenuLink>
-                        <MenuLink
-                          href="/search/buy-used-cars?budget=0-5"
-                          onClick={onClose}
-                        >
-                          Under ₹5L
+                        <MenuLink href="/search/buy-used-cars-under-5-lakhs" onClick={onClose}>
+                          Cars under ₹5 Lakh
                         </MenuLink>
-                        <MenuLink
-                          href="/search/buy-used-cars?budget=0-10"
-                          onClick={onClose}
-                        >
-                          Under ₹10L
+                        <MenuLink href="/search/buy-used-cars-under-10-lakhs" onClick={onClose}>
+                          Cars under ₹10 Lakh
                         </MenuLink>
-                        <MenuLink
-                          href="/search/buy-used-cars?budget=50-200"
-                          onClick={onClose}
-                        >
-                          Luxury Cars
+                        <MenuLink href="/search/buy-used-cars-under-15-lakhs" onClick={onClose}>
+                          Cars under ₹15 Lakh
                         </MenuLink>
                       </div>
                     </div>
                     <div>
-                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3.5 block">
-                        Browse by Fuel
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3 block">
+                        Cars by Fuel
                       </span>
-                      <div className="space-y-2 flex flex-col">
-                        <MenuLink
-                          href="/search/buy-used-cars?fuelType=Petrol"
-                          onClick={onClose}
-                        >
-                          Petrol
+                      <div className="space-y-1.5 flex flex-col">
+                        <MenuLink href="/search/buy-used-electric-cars" onClick={onClose}>
+                          Used Electric Cars
                         </MenuLink>
-                        <MenuLink
-                          href="/search/buy-used-cars?fuelType=Diesel"
-                          onClick={onClose}
-                        >
-                          Diesel
+                        <MenuLink href="/search/buy-used-petrol-cars" onClick={onClose}>
+                          Used Petrol Cars
                         </MenuLink>
-                        <MenuLink
-                          href="/search/buy-used-cars?fuelType=Electric"
-                          onClick={onClose}
-                        >
-                          Electric
+                        <MenuLink href="/search/buy-used-diesel-cars" onClick={onClose}>
+                          Used Diesel Cars
                         </MenuLink>
-                        <MenuLink
-                          href="/search/buy-used-cars?fuelType=Hybrid"
-                          onClick={onClose}
-                        >
-                          Hybrid
+                        <MenuLink href="/search/buy-used-cng-cars" onClick={onClose}>
+                          Used CNG Cars
                         </MenuLink>
-                        <MenuLink
-                          href="/search/buy-used-cars?fuelType=CNG"
-                          onClick={onClose}
-                        >
-                          CNG
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {hoveredTab === "bikes" && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 fade-in-fast">
+                  <div className="space-y-6">
+                    <div>
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3 block">
+                        Buy Used Bikes by Brand
+                      </span>
+                      <div className="space-y-1.5 flex flex-col">
+                        <MenuLink href="/search/buy-used-royal-enfield-two-wheelers" onClick={onClose}>
+                          Used Royal Enfield
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-hero-two-wheelers" onClick={onClose}>
+                          Used Hero Bikes
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-tvs-two-wheelers" onClick={onClose}>
+                          Used TVS Bikes
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-bajaj-two-wheelers" onClick={onClose}>
+                          Used Bajaj Bikes
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-yamaha-two-wheelers" onClick={onClose}>
+                          Used Yamaha Bikes
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-ola-two-wheelers" onClick={onClose}>
+                          Used OLA Electric
+                        </MenuLink>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-6">
+                    <div>
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3 block">
+                        Bike Categories
+                      </span>
+                      <div className="space-y-1.5 flex flex-col">
+                        <MenuLink href="/search/buy-used-two-wheelers" onClick={onClose}>
+                          All Used Two-Wheelers
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-electric-two-wheelers" onClick={onClose}>
+                          Electric 2-Wheelers
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-scooter-two-wheelers" onClick={onClose}>
+                          Used Scooters
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-sports-bikes-two-wheelers" onClick={onClose}>
+                          Sports Bikes
+                        </MenuLink>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary mb-3 block">
+                        Bikes by Budget
+                      </span>
+                      <div className="space-y-1.5 flex flex-col">
+                        <MenuLink href="/search/buy-used-two-wheelers-under-50k" onClick={onClose}>
+                          Bikes under ₹50,000
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-two-wheelers-under-1-lakh" onClick={onClose}>
+                          Bikes under ₹1 Lakh
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-two-wheelers-under-2-lakh" onClick={onClose}>
+                          Bikes under ₹2 Lakh
                         </MenuLink>
                       </div>
                     </div>
@@ -495,15 +523,132 @@ export default function HamburgerDrawer({ open, onClose }) {
 
               {/* Default view when nothing specific is hovered */}
               {(!hoveredTab ||
-                !["browse", "consult", "sell"].includes(hoveredTab)) && (
-                <div className="flex flex-col items-center justify-center h-full min-h-[400px] text-center space-y-4 fade-in-fast">
-                  <h3 className="text-xl md:text-2xl font-medium text-primary">
-                    Trusted by 10,000+ Dealers
-                  </h3>
-                  <p className="text-sm text-third max-w-md">
-                    Reecomm is India's fastest growing verified automotive
-                    marketplace.
-                  </p>
+                !["cars", "bikes", "browse", "consult", "sell"].includes(hoveredTab)) && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 fade-in-fast py-2">
+                  <div className="space-y-6">
+                    {/* BUY USED CARS QUICK HUB */}
+                    <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs uppercase font-bold tracking-wider text-primary flex items-center gap-2">
+                          <span>🚘</span> Buy Used Cars
+                        </span>
+                        <Link
+                          href="/search/buy-used-cars"
+                          onClick={onClose}
+                          className="text-[11px] text-third hover:text-primary transition-colors flex items-center gap-1 font-medium"
+                        >
+                          View All <ChevronRight size={12} />
+                        </Link>
+                      </div>
+                      <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 text-xs">
+                        <MenuLink href="/search/buy-used-maruti-suzuki-cars" onClick={onClose} compact>
+                          Maruti Suzuki
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-hyundai-cars" onClick={onClose} compact>
+                          Hyundai
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-tata-cars" onClick={onClose} compact>
+                          Tata
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-mahindra-cars" onClick={onClose} compact>
+                          Mahindra
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-toyota-cars" onClick={onClose} compact>
+                          Toyota
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-honda-cars" onClick={onClose} compact>
+                          Honda
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-suv-cars" onClick={onClose} compact>
+                          Used SUVs
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-luxury-cars" onClick={onClose} compact>
+                          Luxury Cars
+                        </MenuLink>
+                      </div>
+                    </div>
+
+                    {/* TOP CITIES SEO LINKS */}
+                    <div>
+                      <span className="text-[11px] uppercase font-black tracking-widest text-primary/70 mb-2.5 block">
+                        Popular City Searches
+                      </span>
+                      <div className="grid grid-cols-2 gap-x-2 gap-y-1 text-xs">
+                        <MenuLink href="/search/buy-used-cars-ahmedabad" onClick={onClose} compact>
+                          Cars in Ahmedabad
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-mumbai" onClick={onClose} compact>
+                          Cars in Mumbai
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-delhi" onClick={onClose} compact>
+                          Cars in Delhi
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-surat" onClick={onClose} compact>
+                          Cars in Surat
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-pune" onClick={onClose} compact>
+                          Cars in Pune
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-cars-bangalore" onClick={onClose} compact>
+                          Cars in Bangalore
+                        </MenuLink>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    {/* BUY USED BIKES QUICK HUB */}
+                    <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs uppercase font-bold tracking-wider text-primary flex items-center gap-2">
+                          <span>🏍️</span> Buy Used Bikes
+                        </span>
+                        <Link
+                          href="/search/buy-used-two-wheelers"
+                          onClick={onClose}
+                          className="text-[11px] text-third hover:text-primary transition-colors flex items-center gap-1 font-medium"
+                        >
+                          View All <ChevronRight size={12} />
+                        </Link>
+                      </div>
+                      <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 text-xs">
+                        <MenuLink href="/search/buy-used-royal-enfield-two-wheelers" onClick={onClose} compact>
+                          Royal Enfield
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-hero-two-wheelers" onClick={onClose} compact>
+                          Hero Bikes
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-tvs-two-wheelers" onClick={onClose} compact>
+                          TVS Bikes
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-bajaj-two-wheelers" onClick={onClose} compact>
+                          Bajaj Bikes
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-yamaha-two-wheelers" onClick={onClose} compact>
+                          Yamaha Bikes
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-ola-two-wheelers" onClick={onClose} compact>
+                          OLA Electric
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-electric-two-wheelers" onClick={onClose} compact>
+                          Electric 2W
+                        </MenuLink>
+                        <MenuLink href="/search/buy-used-scooter-two-wheelers" onClick={onClose} compact>
+                          Scooters
+                        </MenuLink>
+                      </div>
+                    </div>
+
+                    {/* MARKETPLACE TRUST BADGE */}
+                    <div className="pt-2 text-center sm:text-left space-y-1">
+                      <p className="text-xs font-semibold text-primary/80">
+                        100% Certified & Inspected Marketplace
+                      </p>
+                      <p className="text-[11px] text-third">
+                        Verified cars & bikes from 10,000+ trusted dealers & sellers across India.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
