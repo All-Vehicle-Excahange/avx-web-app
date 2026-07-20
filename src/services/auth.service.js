@@ -49,10 +49,7 @@ export const signup = async ({
   if (normalizedResponse.success && normalizedResponse.data?.accessToken) {
     const user = normalizedResponse.data.userMaster || normalizedResponse.data;
     useAuthStore.getState().login(
-      {
-        userMaster: user,
-        refreshToken: normalizedResponse.data.refreshToken,
-      },
+      user,
       normalizedResponse.data.accessToken,
     );
   }
@@ -75,7 +72,9 @@ export const login = async ({ phoneNumber, countryCode, otp }) => {
 };
 
 export const refreshToken = async () => {
-  const res = await axiosInstance.post(ENDPOINT.refresh);
+  // Use plain axios to avoid triggering the interceptor if this fails (e.g. invalid cookie)
+  const axios = require("axios").default;
+  const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}${ENDPOINT.refresh}`, {}, { withCredentials: true });
   return res.data;
 };
 
@@ -94,10 +93,7 @@ export const googleVerify = async ({ googleIdToken }) => {
     const authData = normalizedResponse.data.authResponse;
     const user = authData.userMaster || authData;
     useAuthStore.getState().login(
-      {
-        userMaster: user,
-        refreshToken: authData.refreshToken,
-      },
+      user,
       authData.accessToken,
     );
   }
@@ -124,10 +120,7 @@ export const googleSignupVerify = async ({
   if (normalizedResponse.success && normalizedResponse.data?.accessToken) {
     const user = normalizedResponse.data.userMaster || normalizedResponse.data;
     useAuthStore.getState().login(
-      {
-        userMaster: user,
-        refreshToken: normalizedResponse.data.refreshToken,
-      },
+      user,
       normalizedResponse.data.accessToken,
     );
   }
