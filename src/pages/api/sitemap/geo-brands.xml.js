@@ -1,4 +1,5 @@
 import { MAKER_NAME_MAPPING } from "@/data/makers";
+import searchSuggestions from "@/data/searchSuggestions.json";
 
 const BASE_URL = "https://www.reecomm.com";
 
@@ -115,6 +116,22 @@ export default async function handler(req, res) {
         xml += `    <priority>0.6</priority>\n`;
         xml += `  </url>\n`;
       });
+    });
+
+    // 6. Add Brand Model URLs from searchSuggestions.json
+    const modelSuggestions = searchSuggestions.filter((s) => s.type === "model" && s.link);
+    const addedLinks = new Set();
+
+    modelSuggestions.forEach((item) => {
+      if (!addedLinks.has(item.link)) {
+        addedLinks.add(item.link);
+        xml += `  <url>\n`;
+        xml += `    <loc>${BASE_URL}${item.link}</loc>\n`;
+        xml += `    <lastmod>${now}</lastmod>\n`;
+        xml += `    <changefreq>weekly</changefreq>\n`;
+        xml += `    <priority>0.7</priority>\n`;
+        xml += `  </url>\n`;
+      }
     });
 
     xml += `</urlset>`;

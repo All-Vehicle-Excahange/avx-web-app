@@ -57,8 +57,8 @@ export default function ReletedConsualt(props) {
             services: item.services || [],
             vehicleTypes: item.vehicleTypes || [],
             location:
-                item.address?.city && item.address?.country
-                    ? `${item.address.city}, ${item.address.country}`
+                item.address?.city && (item.address?.state || item.address?.country)
+                    ? `${item.address.city}, ${item.address.state || item.address.country}`
                     : "-",
             priceRange:
                 item.minVehiclePrice && item.maxVehiclePrice

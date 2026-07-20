@@ -165,9 +165,20 @@ export default function VehicleCard({
         ? `${data.vehicleOwner.firstname ?? ""} ${data.vehicleOwner.lastname ?? ""}`.trim()
         : data.userName,
 
-    location: data.address
-      ? `${data.address.town ?? ""} ${" "}  ${data.address.city ?? ""}${data.address.city && data.address.country ? ", " : ""}${data.address.country ?? ""}`.trim()
-      : data.location || "-",
+    location: (() => {
+      if (data.address && typeof data.address === "object") {
+        const townCity = [data.address.town, data.address.city]
+          .map((s) => s?.trim())
+          .filter(Boolean)
+          .join(" ");
+        const stateOrCountry = (data.address.state || data.address.country)?.trim();
+        if (townCity && stateOrCountry) {
+          return `${townCity}, ${stateOrCountry}`;
+        }
+        return townCity || stateOrCountry || data.location || "-";
+      }
+      return data.location || "-";
+    })(),
 
     price: data.price ? Number(data.price).toLocaleString("en-IN") : data.price,
 

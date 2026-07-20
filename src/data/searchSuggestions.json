@@ -16926,5 +16926,462 @@
     "model": "S1 X",
     "link": "/search/buy-used-ola-s1-x-two-wheelers",
     "makerId": 15017
+  },
+  {
+    "id": "b_20",
+    "label": "Mahindra",
+    "type": "brand",
+    "link": "/search/buy-used-mahindra-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_434",
+    "label": "Mahindra ALTURAS G4",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "ALTURAS G4",
+    "modelId": 434,
+    "link": "/search/buy-used-mahindra-alturas-g4-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_315",
+    "label": "Mahindra Armada",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Armada",
+    "modelId": 315,
+    "link": "/search/buy-used-mahindra-armada-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_720",
+    "label": "Mahindra BE 6e",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "BE 6e",
+    "modelId": 720,
+    "link": "/search/buy-used-mahindra-be-6e-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_602",
+    "label": "Mahindra BOLERO NEO",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "BOLERO NEO",
+    "modelId": 602,
+    "link": "/search/buy-used-mahindra-bolero-neo-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_123",
+    "label": "Mahindra Bolero",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Bolero",
+    "modelId": 123,
+    "link": "/search/buy-used-mahindra-bolero-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_711",
+    "label": "Mahindra Bolero Neo Plus",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Bolero Neo Plus",
+    "modelId": 711,
+    "link": "/search/buy-used-mahindra-bolero-neo-plus-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_400",
+    "label": "Mahindra COMMANDER",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "COMMANDER",
+    "modelId": 400,
+    "link": "/search/buy-used-mahindra-commander-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_502",
+    "label": "Mahindra E VERITO",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "E VERITO",
+    "modelId": 502,
+    "link": "/search/buy-used-mahindra-e-verito-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_349",
+    "label": "Mahindra E20 Plus",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "E20 Plus",
+    "modelId": 349,
+    "link": "/search/buy-used-mahindra-e20-plus-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_124",
+    "label": "Mahindra E2O",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "E2O",
+    "modelId": 124,
+    "link": "/search/buy-used-mahindra-e2o-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_458",
+    "label": "Mahindra Genio",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Genio",
+    "modelId": 458,
+    "link": "/search/buy-used-mahindra-genio-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_419",
+    "label": "Mahindra Imperio",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Imperio",
+    "modelId": 419,
+    "link": "/search/buy-used-mahindra-imperio-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_361",
+    "label": "Mahindra JEEP",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "JEEP",
+    "modelId": 361,
+    "link": "/search/buy-used-mahindra-jeep-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_572",
+    "label": "Mahindra JEETO MINIVAN",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "JEETO MINIVAN",
+    "modelId": 572,
+    "link": "/search/buy-used-mahindra-jeeto-minivan-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_390",
+    "label": "Mahindra KUV 100 NXT",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "KUV 100 NXT",
+    "modelId": 390,
+    "link": "/search/buy-used-mahindra-kuv-100-nxt-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_341",
+    "label": "Mahindra Kuv100",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Kuv100",
+    "modelId": 341,
+    "link": "/search/buy-used-mahindra-kuv100-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_408",
+    "label": "Mahindra MARAZZO",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "MARAZZO",
+    "modelId": 408,
+    "link": "/search/buy-used-mahindra-marazzo-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_384",
+    "label": "Mahindra MAXX",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "MAXX",
+    "modelId": 384,
+    "link": "/search/buy-used-mahindra-maxx-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_368",
+    "label": "Mahindra Marshal",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Marshal",
+    "modelId": 368,
+    "link": "/search/buy-used-mahindra-marshal-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_356",
+    "label": "Mahindra Maxximo",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Maxximo",
+    "modelId": 356,
+    "link": "/search/buy-used-mahindra-maxximo-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_344",
+    "label": "Mahindra NUVOSPORT",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "NUVOSPORT",
+    "modelId": 344,
+    "link": "/search/buy-used-mahindra-nuvosport-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_125",
+    "label": "Mahindra Quanto",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Quanto",
+    "modelId": 125,
+    "link": "/search/buy-used-mahindra-quanto-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_126",
+    "label": "Mahindra Reva",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Reva",
+    "modelId": 126,
+    "link": "/search/buy-used-mahindra-reva-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_638",
+    "label": "Mahindra SCORPIO CLASSIC",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "SCORPIO CLASSIC",
+    "modelId": 638,
+    "link": "/search/buy-used-mahindra-scorpio-classic-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_642",
+    "label": "Mahindra SCORPIO-N",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "SCORPIO-N",
+    "modelId": 642,
+    "link": "/search/buy-used-mahindra-scorpio-n-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_376",
+    "label": "Mahindra SUPRO",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "SUPRO",
+    "modelId": 376,
+    "link": "/search/buy-used-mahindra-supro-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_725",
+    "label": "Mahindra Savari",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Savari",
+    "modelId": 725,
+    "link": "/search/buy-used-mahindra-savari-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_127",
+    "label": "Mahindra Scorpio",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Scorpio",
+    "modelId": 127,
+    "link": "/search/buy-used-mahindra-scorpio-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_394",
+    "label": "Mahindra TUV 300 PLUS",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "TUV 300 PLUS",
+    "modelId": 394,
+    "link": "/search/buy-used-mahindra-tuv-300-plus-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_329",
+    "label": "Mahindra TUV300",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "TUV300",
+    "modelId": 329,
+    "link": "/search/buy-used-mahindra-tuv300-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_128",
+    "label": "Mahindra Thar",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Thar",
+    "modelId": 128,
+    "link": "/search/buy-used-mahindra-thar-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_714",
+    "label": "Mahindra Thar Roxx",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Thar Roxx",
+    "modelId": 714,
+    "link": "/search/buy-used-mahindra-thar-roxx-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_129",
+    "label": "Mahindra Verito",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Verito",
+    "modelId": 129,
+    "link": "/search/buy-used-mahindra-verito-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_130",
+    "label": "Mahindra Verito Vibe CS",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Verito Vibe CS",
+    "modelId": 130,
+    "link": "/search/buy-used-mahindra-verito-vibe-cs-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_312",
+    "label": "Mahindra Voyeger",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Voyeger",
+    "modelId": 312,
+    "link": "/search/buy-used-mahindra-voyeger-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_751",
+    "label": "Mahindra XEV 9S",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "XEV 9S",
+    "modelId": 751,
+    "link": "/search/buy-used-mahindra-xev-9s-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_721",
+    "label": "Mahindra XEV 9e",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "XEV 9e",
+    "modelId": 721,
+    "link": "/search/buy-used-mahindra-xev-9e-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_678",
+    "label": "Mahindra XUV 3XO",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "XUV 3XO",
+    "modelId": 678,
+    "link": "/search/buy-used-mahindra-xuv-3xo-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_756",
+    "label": "Mahindra XUV 3XO EV",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "XUV 3XO EV",
+    "modelId": 756,
+    "link": "/search/buy-used-mahindra-xuv-3xo-ev-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_755",
+    "label": "Mahindra XUV 7XO",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "XUV 7XO",
+    "modelId": 755,
+    "link": "/search/buy-used-mahindra-xuv-7xo-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_454",
+    "label": "Mahindra XUV300",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "XUV300",
+    "modelId": 454,
+    "link": "/search/buy-used-mahindra-xuv300-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_652",
+    "label": "Mahindra XUV400",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "XUV400",
+    "modelId": 652,
+    "link": "/search/buy-used-mahindra-xuv400-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_131",
+    "label": "Mahindra XUV500",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "XUV500",
+    "modelId": 131,
+    "link": "/search/buy-used-mahindra-xuv500-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_611",
+    "label": "Mahindra XUV700",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "XUV700",
+    "modelId": 611,
+    "link": "/search/buy-used-mahindra-xuv700-cars",
+    "makerId": 20
+  },
+  {
+    "id": "m_132",
+    "label": "Mahindra Xylo",
+    "type": "model",
+    "brand": "Mahindra",
+    "model": "Xylo",
+    "modelId": 132,
+    "link": "/search/buy-used-mahindra-xylo-cars",
+    "makerId": 20
   }
 ]
