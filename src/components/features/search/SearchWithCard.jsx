@@ -65,7 +65,7 @@ export default function SearchWithCard({
   onLoadingChange,
   initialFilters = {},
 }) {
-  const MIN = 50000;
+  const MIN = 0;
   const MAX = 2000000;
   const MAX_KM = 200000;
 
@@ -163,7 +163,7 @@ export default function SearchWithCard({
     return searchParams.get("reccomInspected") === "true";
   });
 
-  const [minPrice, setMinPrice] = useState(() => (budget ? mPrice : 50000));
+  const [minPrice, setMinPrice] = useState(() => (budget ? mPrice : 0));
   const [maxPrice, setMaxPrice] = useState(() => (budget ? mxPrice : 2000000));
   const [kmDistance, setKmDistance] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -298,58 +298,55 @@ export default function SearchWithCard({
     initialFilters.bodyType !== prevInitialFilters.bodyType
   ) {
     setPrevInitialFilters(initialFilters);
+    isSelfTriggered.current = false;
 
-    if (isSelfTriggered.current) {
-      isSelfTriggered.current = false;
+    // Fuel Type
+    setSelectedFuelTypes(
+      initialFilters.fuelType ? [initialFilters.fuelType] : [],
+    );
+
+    // Transmission
+    setSelectedTransmissionTypes(
+      initialFilters.transmission
+        ? [initialFilters.transmission.toLowerCase()]
+        : [],
+    );
+
+    // Brand
+    setSelectedBrands(initialFilters.makerId ? [initialFilters.makerId] : []);
+
+    // Model
+    setSelectedModels(initialFilters.modelId ? [initialFilters.modelId] : []);
+
+    // Body Type
+    setSelectedBodyType(
+      initialFilters.bodyType ? [initialFilters.bodyType.toLowerCase()] : [],
+    );
+
+    // Location
+    if (initialFilters.stateId) {
+      setSelectedStateId(Number(initialFilters.stateId));
+      setSelectedStateName(initialFilters.stateName || "");
     } else {
-      // Fuel Type
-      setSelectedFuelTypes(
-        initialFilters.fuelType ? [initialFilters.fuelType] : [],
-      );
+      setSelectedStateId(null);
+      setSelectedStateName("");
+    }
+    if (initialFilters.cityId) {
+      setSelectedCityId(Number(initialFilters.cityId));
+      setSelectedCityName(initialFilters.cityName || "");
+    } else {
+      setSelectedCityId(null);
+      setSelectedCityName("");
+    }
 
-      // Transmission
-      setSelectedTransmissionTypes(
-        initialFilters.transmission
-          ? [initialFilters.transmission.toLowerCase()]
-          : [],
-      );
-
-      // Brand
-      setSelectedBrands(initialFilters.makerId ? [initialFilters.makerId] : []);
-
-      // Model
-      setSelectedModels(initialFilters.modelId ? [initialFilters.modelId] : []);
-
-      // Body Type
-      setSelectedBodyType(
-        initialFilters.bodyType ? [initialFilters.bodyType.toLowerCase()] : [],
-      );
-
-      // Location
-      if (initialFilters.stateId) {
-        setSelectedStateId(Number(initialFilters.stateId));
-        setSelectedStateName(initialFilters.stateName || "");
-      } else {
-        setSelectedStateId(null);
-        setSelectedStateName("");
-      }
-      if (initialFilters.cityId) {
-        setSelectedCityId(Number(initialFilters.cityId));
-        setSelectedCityName(initialFilters.cityName || "");
-      } else {
-        setSelectedCityId(null);
-        setSelectedCityName("");
-      }
-
-      // Budget
-      if (initialFilters.budget) {
-        const [min, max] = initialFilters.budget.replace(/\s/g, "").split("-");
-        setMinPrice(parseFloat(min) * 100000);
-        setMaxPrice(parseFloat(max) * 100000);
-      } else {
-        setMinPrice(50000);
-        setMaxPrice(2000000);
-      }
+    // Budget
+    if (initialFilters.budget) {
+      const [min, max] = initialFilters.budget.replace(/\s/g, "").split("-");
+      setMinPrice(parseFloat(min) * 100000);
+      setMaxPrice(parseFloat(max) * 100000);
+    } else {
+      setMinPrice(0);
+      setMaxPrice(2000000);
     }
   }
 
@@ -1461,10 +1458,16 @@ export default function SearchWithCard({
     if (selectedStateName) locationParts.push(selectedStateName);
     if (selectedTownName) locationParts.push(selectedTownName);
     if (locationParts.length > 0) tags.push(locationParts.join(", "));
-    if (minPrice > MIN || maxPrice < MAX)
-      tags.push(
-        `₹${(minPrice / 100000).toFixed(1)}L–₹${(maxPrice / 100000).toFixed(1)}L`,
-      );
+    if (minPrice > 0 || maxPrice < MAX) {
+      if (minPrice === 0 && maxPrice < MAX) {
+        const label = maxPrice < 100000 ? `₹${Math.round(maxPrice / 1000)}k` : `₹${(maxPrice / 100000).toFixed(1)}L`;
+        tags.push(`Under ${label}`);
+      } else {
+        tags.push(
+          `₹${(minPrice / 100000).toFixed(1)}L–₹${(maxPrice / 100000).toFixed(1)}L`,
+        );
+      }
+    }
     if (kmDistance > 0) tags.push(`≤${kmDistance.toLocaleString()} km`);
     if (selectedRating.length > 0) tags.push(`${selectedRating[0]}+ ⭐`);
     if (selectedSellerType.length > 0)
@@ -1725,10 +1728,10 @@ export default function SearchWithCard({
                       type="range"
                       min={MIN}
                       max={MAX}
-                      step={1}
+                      step={1000}
                       value={minPrice}
                       onChange={(e) =>
-                        setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
+                        setMinPrice(Math.min(+e.target.value, maxPrice - 5000))
                       }
                       onMouseUp={handlePriceChangeRelease}
                       onTouchEnd={handlePriceChangeRelease}
@@ -1739,10 +1742,10 @@ export default function SearchWithCard({
                       type="range"
                       min={MIN}
                       max={MAX}
-                      step={1}
+                      step={1000}
                       value={maxPrice}
                       onChange={(e) =>
-                        setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
+                        setMaxPrice(Math.max(+e.target.value, minPrice + 5000))
                       }
                       onMouseUp={handlePriceChangeRelease}
                       onTouchEnd={handlePriceChangeRelease}
@@ -1751,8 +1754,8 @@ export default function SearchWithCard({
                   </div>
 
                   <div className="flex justify-between text-xs text-primary/70 mb-1">
-                    <span>₹{minPrice}</span>
-                    <span>₹{maxPrice}</span>
+                    <span>₹{minPrice.toLocaleString("en-IN")}</span>
+                    <span>₹{maxPrice.toLocaleString("en-IN")}</span>
                   </div>
                 </div>
               </FilterSection>
@@ -2322,10 +2325,10 @@ export default function SearchWithCard({
                     type="range"
                     min={MIN}
                     max={MAX}
-                    step={1}
+                    step={1000}
                     value={minPrice}
                     onChange={(e) =>
-                      setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
+                      setMinPrice(Math.min(+e.target.value, maxPrice - 5000))
                     }
                     onTouchEnd={handlePriceChangeRelease}
                     className="dual-range z-30"
@@ -2334,18 +2337,18 @@ export default function SearchWithCard({
                     type="range"
                     min={MIN}
                     max={MAX}
-                    step={1}
+                    step={1000}
                     value={maxPrice}
                     onChange={(e) =>
-                      setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
+                      setMaxPrice(Math.max(+e.target.value, minPrice + 5000))
                     }
                     onTouchEnd={handlePriceChangeRelease}
                     className="dual-range z-40"
                   />
                 </div>
                 <div className="flex justify-between text-xs text-secondary/70 mb-1">
-                  <span>₹{minPrice.toLocaleString()}</span>
-                  <span>₹{maxPrice.toLocaleString()}</span>
+                  <span>₹{minPrice.toLocaleString("en-IN")}</span>
+                  <span>₹{maxPrice.toLocaleString("en-IN")}</span>
                 </div>
               </div>
             )}
