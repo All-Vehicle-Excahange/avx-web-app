@@ -270,6 +270,9 @@ function LoginPopup({
         localStorage.removeItem("otpBlockUntil");
         setCountdown(0);
 
+        // Capture the selected account type BEFORE resetting state
+        // (accountType state gets reset to "personal" below)
+        const selectedAccountType = accountType;
         const currentUser = useAuthStore.getState().user;
         const currentAccountType = currentUser?.accountType;
 
@@ -286,7 +289,12 @@ function LoginPopup({
         setAcceptedTerms(false);
         onClose();
 
-        if (currentAccountType !== "consultant") {
+        // Don't show CompleteProfile popup for consultants —
+        // covers both: new signups (selectedAccountType) and returning logins (currentAccountType)
+        const isConsultant =
+          selectedAccountType === "consultant" ||
+          currentAccountType === "consultant";
+        if (!isConsultant) {
           await onSuccess();
         }
       }

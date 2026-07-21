@@ -16,7 +16,7 @@ import { getSellerTier } from "@/services/Seller.service";
 import PricingHero from "./PricingHero";
 import Button from "@/components/ui/button";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getSellerTierQuery } from "@/queries/Seller.queries";
 import {
   upgradeSubscription,
@@ -90,6 +90,7 @@ export default function FullPricing() {
   const [upgradingTierId, setUpgradingTierId] = useState(null);
 
   const { user, isLoggedIn, openLoginPopup } = useAuthStore();
+  const queryClient = useQueryClient();
   const pendingTier = useRef(null);
   let userRole = user?.userRole || user?.role;
   if (!userRole && typeof window !== "undefined") {
@@ -309,6 +310,26 @@ export default function FullPricing() {
           contact: prefillContact,
         },
         handler: async function (paymentResponse) {
+          // Fetch fresh tier data and persist it so UI shows "Active" correctly
+          try {
+            const tierRes = await getSellerTier();
+            const tierData = tierRes?.data;
+            if (tierData) {
+              if (typeof window !== "undefined") {
+                localStorage.setItem("sellerTierData", JSON.stringify(tierData));
+                localStorage.setItem("sellerTier", tierData.tierTitle || "");
+              }
+              // Update the React Query cache immediately
+              queryClient.setQueryData(["seller-tier"], tierData);
+            }
+          } catch (e) {
+            // Non-blocking — still navigate even if this fails
+            console.error("Could not refresh tier after payment:", e);
+          } finally {
+            // Invalidate so it refetches fresh in the background
+            queryClient.invalidateQueries({ queryKey: ["seller-tier"] });
+          }
+
           if (userRole !== "CONSULTATION") {
             const redirect = router.query?.redirect;
             router.push(
