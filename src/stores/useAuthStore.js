@@ -104,20 +104,10 @@ export const useAuthStore = create((set) => ({
     if (typeof window !== "undefined") {
       const savedUser = localStorage.getItem("user");
 
-      if (!savedUser) {
-        // The user has never logged in (or logged out). 
-        // Skip the API call completely to avoid a 401 error for guests!
-        set({
-          user: null,
-          token: null,
-          isLoggedIn: false,
-          authInitialized: true,
-        });
-        return;
-      }
-
       // Pre-fill user to prevent UI flicker for returning users
-      set({ user: JSON.parse(savedUser) });
+      if (savedUser) {
+        set({ user: JSON.parse(savedUser) });
+      }
 
       try {
         // We import axios dynamically or use standard fetch to avoid circular deps
