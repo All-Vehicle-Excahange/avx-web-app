@@ -135,12 +135,12 @@ export default function FilterWithCard({
 
       location: item.address
         ? [
-            item.address.town || "",
-            item.address.city || "",
-            item.address.state || "",
-          ]
-            .filter(Boolean)
-            .join(", ") || "-"
+          item.address.town || "",
+          item.address.city || "",
+          item.address.state || "",
+        ]
+          .filter(Boolean)
+          .join(", ") || "-"
         : "-",
 
       rating: item.averageRating || 0,
@@ -783,12 +783,12 @@ export default function FilterWithCard({
     if (selectedInventory.length > 0)
       tags.push(
         inventorySizes.find((d) => d.value === selectedInventory[0])?.label ||
-          selectedInventory[0],
+        selectedInventory[0],
       );
     if (selectedDistance.length > 0)
       tags.push(
         distances.find((d) => d.value === selectedDistance[0])?.label ||
-          selectedDistance[0],
+        selectedDistance[0],
       );
     if (selectedCityName || selectedStateName || selectedTownName) {
       const locationParts = [];
@@ -1150,7 +1150,7 @@ export default function FilterWithCard({
               </div>
 
               <ConsultantGridSection
-                title="Featured Premium Consultant"
+                title="Featured Premium Consultants"
                 data={premiumConsultants}
                 showViewAll
                 i={3}
@@ -1159,7 +1159,7 @@ export default function FilterWithCard({
               />
 
               <ConsultantSliderSection
-                title="Activity-led (Recommended)"
+                title="Trending Consultants"
                 description="Consultants getting the most inquiries from buyers right now — verified, active, and ready to connect."
                 showIsSponsored={true}
                 data={[]}
@@ -1168,7 +1168,7 @@ export default function FilterWithCard({
               />
 
               <ConsultantGridSection
-                title="Consult near you "
+                title="Auto Consultants near you "
                 data={consultants}
                 i={6}
                 loading={consultantsLoading}
@@ -1188,9 +1188,8 @@ export default function FilterWithCard({
 
       {/* ================= MOBILE FILTER DRAWER ================= */}
       <div
-        className={`fixed top-16 inset-x-0 bottom-0 z-100 bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${
-          mobileFilterOpen ? "translate-y-0" : "translate-y-full"
-        }`}
+        className={`fixed top-16 inset-x-0 bottom-0 z-100 bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${mobileFilterOpen ? "translate-y-0" : "translate-y-full"
+          }`}
       >
         {/* ── Header ── */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-third/40 shrink-0">
@@ -1224,11 +1223,10 @@ export default function FilterWithCard({
               <div
                 key={tab.name}
                 onClick={() => setActiveFilterTab(tab.name)}
-                className={`px-4 py-3 cursor-pointer text-sm flex items-center justify-between ${
-                  activeFilterTab === tab.name
-                    ? "bg-secondary/10 font-semibold"
-                    : "hover:bg-secondary/5"
-                }`}
+                className={`px-4 py-3 cursor-pointer text-sm flex items-center justify-between ${activeFilterTab === tab.name
+                  ? "bg-secondary/10 font-semibold"
+                  : "hover:bg-secondary/5"
+                  }`}
               >
                 <span>{tab.name}</span>
                 {tab.count > 0 && (

@@ -773,19 +773,19 @@ export default function SearchWithCard({
     const brandLabel =
       selectedBrands.length > 0
         ? brands.find((b) => safeStr(b.value) === safeStr(selectedBrands[0]))
-            ?.label || ""
+          ?.label || ""
         : "";
 
     const modelLabel =
       selectedModels.length > 0
         ? models.find((m) => safeStr(m.value) === safeStr(selectedModels[0]))
-            ?.label || ""
+          ?.label || ""
         : "";
 
     const bodyTypeLabel =
       selectedBodyType.length > 0
         ? selectedBodyType[0].charAt(0).toUpperCase() +
-          selectedBodyType[0].slice(1).toLowerCase()
+        selectedBodyType[0].slice(1).toLowerCase()
         : "";
 
     onConsultPayloadChange({
@@ -2091,23 +2091,23 @@ export default function SearchWithCard({
               const brandLabel =
                 selectedBrands.length > 0
                   ? brands.find(
-                      (b) => safeStr(b.value) === safeStr(selectedBrands[0]),
-                    )?.label || ""
+                    (b) => safeStr(b.value) === safeStr(selectedBrands[0]),
+                  )?.label || ""
                   : "";
 
               // Resolve model label from selected model id
               const modelLabel =
                 selectedModels.length > 0
                   ? models.find(
-                      (m) => safeStr(m.value) === safeStr(selectedModels[0]),
-                    )?.label || ""
+                    (m) => safeStr(m.value) === safeStr(selectedModels[0]),
+                  )?.label || ""
                   : "";
 
               // Resolve body type label (capitalise first letter)
               const bodyTypeLabel =
                 selectedBodyType.length > 0
                   ? selectedBodyType[0].charAt(0).toUpperCase() +
-                    selectedBodyType[0].slice(1).toLowerCase()
+                  selectedBodyType[0].slice(1).toLowerCase()
                   : "";
 
               let subject = "Vehicles";
@@ -2168,8 +2168,7 @@ export default function SearchWithCard({
                   </p>
 
                   <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-                    <span className="text-fourth"> Personalised</span>{" "}
-                    (Recommended)
+                    <span className="text-fourth"> Top Vehicle</span> For You
                   </h2>
 
                   <p className="text-third">
@@ -2208,9 +2207,8 @@ export default function SearchWithCard({
 
       {/* MOBILE FILTER DRAWER */}
       <div
-        className={`fixed top-16 inset-x-0 bottom-0 z-100 bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${
-          mobileFilterOpen ? "translate-y-0" : "translate-y-full"
-        }`}
+        className={`fixed top-16 inset-x-0 bottom-0 z-100 bg-primary text-secondary flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${mobileFilterOpen ? "translate-y-0" : "translate-y-full"
+          }`}
       >
         {/* ── Header ── */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-third/40 shrink-0">
@@ -2249,11 +2247,10 @@ export default function SearchWithCard({
               <div
                 key={tab.name}
                 onClick={() => setActiveFilterTab(tab.name)}
-                className={`px-4 py-3 cursor-pointer text-sm flex items-center justify-between ${
-                  activeFilterTab === tab.name
+                className={`px-4 py-3 cursor-pointer text-sm flex items-center justify-between ${activeFilterTab === tab.name
                     ? "bg-secondary/10 font-semibold"
                     : "hover:bg-secondary/5"
-                }`}
+                  }`}
               >
                 <span>{tab.name}</span>
                 {tab.count > 0 && (
