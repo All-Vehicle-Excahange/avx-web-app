@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 const teamMembers = [
   {
@@ -58,10 +59,11 @@ function OurTeam() {
               <div className="w-full aspect-square rounded-2xl overflow-hidden bg-neutral-900 border border-white/10 mb-6 relative">
                 {/* Image overlay to blend in */}
                 <div className="absolute inset-0 bg-neutral-950/10 group-hover:bg-transparent transition-colors duration-300 z-10" />
-                <img
+                <Image
                   src={member.avatar}
                   alt={member.name}
-                  className="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 scale-100 group-hover:scale-105"
+                  fill
+                  className="object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 scale-100 group-hover:scale-105"
                 />
               </div>
 
