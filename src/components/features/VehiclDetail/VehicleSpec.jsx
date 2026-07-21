@@ -57,6 +57,8 @@ export default function VehicleSpec({
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const openLoginPopup = useAuthStore((state) => state.openLoginPopup);
   const pendingAction = useRef(null);
+  const datePickerRef = useRef(null);
+  const timeSelectRef = useRef(null);
 
   const { data: existingInspection, isFetching: isCheckingInspection } =
     useQuery({
@@ -858,9 +860,13 @@ export default function VehicleSpec({
                             <label className="text-xs font-medium text-third">
                               Preferred Date
                             </label>
-                            <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-third/40 bg-secondary focus-within:border-primary cursor-pointer">
+                            <div
+                              className="flex items-center gap-2 px-3 py-2 rounded-lg border border-third/40 bg-secondary focus-within:border-primary cursor-pointer"
+                              onClick={() => datePickerRef.current?.setOpen(true)}
+                            >
                               <Calendar size={14} className="text-third" />
                               <DatePicker
+                                ref={datePickerRef}
                                 selected={inspectionDate}
                                 onChange={(date) => setInspectionDate(date)}
                                 dateFormat="MMMM d, yyyy"
@@ -877,9 +883,14 @@ export default function VehicleSpec({
                             <label className="text-xs font-medium text-third">
                               Preferred Time
                             </label>
-                            <div className="flex items-center gap-2 px-3 py-1 rounded-lg border border-third/40 bg-secondary focus-within:border-primary cursor-pointer">
+                            <div
+                              className="flex items-center gap-2 px-3 py-1 rounded-lg border border-third/40 bg-secondary focus-within:border-primary cursor-pointer"
+                              onClick={() => timeSelectRef.current?.focus()}
+                            >
                               <Clock size={14} className="text-third" />
                               <Select
+                                ref={timeSelectRef}
+                                openMenuOnFocus={true}
                                 options={timeOptions}
                                 value={inspectionTime}
                                 onChange={(option) => setInspectionTime(option)}
