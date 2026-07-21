@@ -141,7 +141,7 @@ export const useAuthStore = create((set) => ({
           token: null,
           isLoggedIn: false,
           authInitialized: true,
-          isLoginPopupOpen: !!savedUser, // Open popup if their session expired
+          isLoginPopupOpen: true, // Always open popup when refresh fails (e.g. 401)
         });
         localStorage.removeItem("user");
       }

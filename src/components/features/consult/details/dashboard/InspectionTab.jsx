@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 
 import {
   Car,
@@ -327,9 +328,11 @@ function InspectionTab() {
 
       {/* ================= HOW INSPECTION AFFECTS RANKING ================= */}
       <div className="rounded-2xl overflow-hidden shadow-sm border border-third/10 my-4 transition">
-        <img
+        <Image
           src="/seller/inspection.png"
           alt="How inspection affects ranking"
+          width={1200}
+          height={400}
           className="w-full h-auto object-cover"
         />
       </div>
