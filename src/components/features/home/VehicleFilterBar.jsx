@@ -98,6 +98,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const brandInputRef = useRef(null);
   const searchTimerRef = useRef(null);
   const mobileTriggerRef = useRef(null);
+  const isFirstRender = useRef(true);
+  const isConsultFirstRender = useRef(true);
 
   const getTrackBackground = () => {
     const minPercent = ((minPrice - MIN) / (MAX - MIN)) * 100;
@@ -129,11 +131,27 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
   // Sync range slider state to search budget state
   useEffect(() => {
-    setBudget(`${minPrice / 100000} - ${maxPrice / 100000}`);
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (minPrice === MIN && maxPrice === MAX) {
+      setBudget("");
+    } else {
+      setBudget(`${minPrice / 100000} - ${maxPrice / 100000}`);
+    }
   }, [minPrice, maxPrice]);
 
   useEffect(() => {
-    setPriceRange(`${consultMinPrice / 100000} - ${consultMaxPrice / 100000}`);
+    if (isConsultFirstRender.current) {
+      isConsultFirstRender.current = false;
+      return;
+    }
+    if (consultMinPrice === MIN && consultMaxPrice === MAX) {
+      setPriceRange("");
+    } else {
+      setPriceRange(`${consultMinPrice / 100000} - ${consultMaxPrice / 100000}`);
+    }
   }, [consultMinPrice, consultMaxPrice]);
 
   const availableFuelTypes = useMemo(() => {
@@ -962,7 +980,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                         : "lg-value placeholder"
                   }
                 >
-                  {vehicleTypeError ? "* Required" : vehicleType || ""}
+                  {vehicleTypeError ? "* Required" : vehicleType || "Select vehicle type"}
                 </div>
                 {activeTab === "vehicle" && (
                   <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 lg-glass-dropdown rounded-xl p-2">
@@ -1179,7 +1197,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     <div
                       className={bodyType ? "lg-value" : "lg-value placeholder"}
                     >
-                      {bodyType || "Add type"}
+                      {bodyType || "Select body type"}
                     </div>
                     {activeTab === "bodyType" && (
                       <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 lg-glass-dropdown rounded-xl p-2">
@@ -1230,7 +1248,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     <div
                       className={fuelType ? "lg-value" : "lg-value placeholder"}
                     >
-                      {fuelType || ""}
+                      {fuelType || "Select fuel type"}
                     </div>
                     {activeTab === "fuel" && (
                       <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 lg-glass-dropdown rounded-xl p-2">
