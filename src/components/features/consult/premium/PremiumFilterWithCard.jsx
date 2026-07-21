@@ -162,8 +162,6 @@ export default function FilterWithCard({ onFilterChange }) {
     };
   }, [mobileFilterOpen]);
 
-
-
   // Load states
   useEffect(() => {
     const fetchStates = async () => {
@@ -814,83 +812,89 @@ export default function FilterWithCard({ onFilterChange }) {
 
       {/* ================= MAIN CONTENT ================= */}
       <main className="flex-1 min-w-0">
-        <div className="lg:hidden sticky top-16 z-40 py-2 mb-4" style={{ background: "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)" }}>
+        <div
+          className="lg:hidden sticky top-16 z-40 py-2 mb-4"
+          style={{
+            background:
+              "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)",
+          }}
+        >
           <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide pb-2">
-          <div className="shrink-0">
-            <Button
-              variant="ghost"
-              className="rounded-lg"
-              showIcon={false}
-              onClick={() => setMobileFilterOpen(true)}
-            >
-              <FilterIcon className="h-4 w-4 mr-1" />
-              Filter
-            </Button>
-          </div>
+            <div className="shrink-0">
+              <Button
+                variant="ghost"
+                className="rounded-lg"
+                showIcon={false}
+                onClick={() => setMobileFilterOpen(true)}
+              >
+                <FilterIcon className="h-4 w-4 mr-1" />
+                Filter
+              </Button>
+            </div>
 
-          <div className="shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg border border-white/20 bg-white/5">
-            <span className="text-xs text-white font-semibold whitespace-nowrap">
-              Reecomm Premium Consultants
-            </span>
-            <button
-              onClick={() => setAvxAssumed(!avxAssumed)}
-              className={`relative w-9 h-5 rounded-full cursor-pointer ${avxAssumed ? "bg-primary" : "bg-white/20"}`}
-            >
-              <span
-                className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-secondary transition-transform ${avxAssumed ? "translate-x-4" : ""}`}
+            <div className="shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg border border-white/20 bg-white/5">
+              <span className="text-xs text-white font-semibold whitespace-nowrap">
+                Reecomm Premium Consultants
+              </span>
+              <button
+                onClick={() => setAvxAssumed(!avxAssumed)}
+                className={`relative w-9 h-5 rounded-full cursor-pointer ${avxAssumed ? "bg-primary" : "bg-white/20"}`}
+              >
+                <span
+                  className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-secondary transition-transform ${avxAssumed ? "translate-x-4" : ""}`}
+                />
+              </button>
+            </div>
+
+            <div className="shrink-0">
+              <Chip
+                label="Four-Wheeler"
+                selected={selectedVehicleTypes.includes("FOUR_WHEELER")}
+                variant="outline"
+                onClick={() => {
+                  setSelectedVehicleTypes((prev) =>
+                    prev.includes("FOUR_WHEELER")
+                      ? prev.filter((v) => v !== "FOUR_WHEELER")
+                      : [...prev, "FOUR_WHEELER"],
+                  );
+                }}
               />
-            </button>
+            </div>
+            <div className="shrink-0">
+              <Chip
+                label="⭐ 4.5+ Rating"
+                selected={selectedRating.includes("4.5")}
+                variant="outline"
+                onClick={() => {
+                  setSelectedRating((prev) =>
+                    prev.includes("4.5")
+                      ? prev.filter((r) => r !== "4.5")
+                      : ["4.5"],
+                  );
+                }}
+              />
+            </div>
+            <div className="shrink-0">
+              <Chip
+                label="30+ Vehicles"
+                selected={selectedInventory.includes("30+")}
+                variant="outline"
+                onClick={() => {
+                  setSelectedInventory((prev) =>
+                    prev.includes("30+")
+                      ? prev.filter((i) => i !== "30+")
+                      : ["30+"],
+                  );
+                }}
+              />
+            </div>
           </div>
-
-          <div className="shrink-0">
-            <Chip
-              label="Four-Wheeler"
-              selected={selectedVehicleTypes.includes("FOUR_WHEELER")}
-              variant="outline"
-              onClick={() => {
-                setSelectedVehicleTypes((prev) =>
-                  prev.includes("FOUR_WHEELER")
-                    ? prev.filter((v) => v !== "FOUR_WHEELER")
-                    : [...prev, "FOUR_WHEELER"],
-                );
-              }}
-            />
-          </div>
-          <div className="shrink-0">
-            <Chip
-              label="⭐ 4.5+ Rating"
-              selected={selectedRating.includes("4.5")}
-              variant="outline"
-              onClick={() => {
-                setSelectedRating((prev) =>
-                  prev.includes("4.5")
-                    ? prev.filter((r) => r !== "4.5")
-                    : ["4.5"],
-                );
-              }}
-            />
-          </div>
-          <div className="shrink-0">
-            <Chip
-              label="30+ Vehicles"
-              selected={selectedInventory.includes("30+")}
-              variant="outline"
-              onClick={() => {
-                setSelectedInventory((prev) =>
-                  prev.includes("30+")
-                    ? prev.filter((i) => i !== "30+")
-                    : ["30+"],
-                );
-              }}
-            />
-          </div>
-        </div>
         </div>
 
         <ConsultantGridSection
           title="Featured Premium Consultant"
           data={premiumConsultants}
-          showIsSponsored={true}
+          showIsSponsored={false}
           i={itemsPerPage}
           loading={consultantsLoading}
         />
