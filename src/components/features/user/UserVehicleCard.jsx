@@ -15,6 +15,7 @@ import {
   ShieldAlert,
   Ban,
   Star,
+  ImageOff,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
@@ -118,14 +119,30 @@ export default function UserVehicleCard({
         <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
           {/* IMAGE */}
           <div className="relative w-40 sm:w-48 h-auto min-h-40 md:h-56 md:w-full shrink-0 p-2">
-            <div className="relative w-full h-full overflow-hidden rounded-xl">
+            <div className="relative w-full h-full overflow-hidden rounded-xl bg-neutral-900">
               {data?.sponsored && <SponsoredRibbon />}
-              <Image
-                src={data?.image || "/big_card_car.jpg"}
-                alt={data?.title || "Vehicle"}
-                fill
-                className="object-cover transition-transform duration-500 group-hover/card:scale-110"
-              />
+              {Boolean(
+                data?.image &&
+                  data.image !== "/big_card_car.jpg" &&
+                  data.image !== "null" &&
+                  data.image !== "undefined"
+              ) ? (
+                <Image
+                  src={data.image}
+                  alt={data?.title || "Vehicle"}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover/card:scale-110"
+                />
+              ) : (
+                <div className="w-full h-full min-h-36 bg-gradient-to-br from-[#1c1c1e] via-[#161618] to-[#0e0e10] flex flex-col items-center justify-center p-3 text-center transition-colors">
+                  <div className="p-3 rounded-2xl bg-white/5 border border-white/10 mb-1.5 text-white/40 group-hover/card:text-white/60 group-hover/card:scale-110 transition-all">
+                    <ImageOff className="w-6 h-6" />
+                  </div>
+                  <span className="text-[11px] font-semibold text-white/40 tracking-wide">
+                    No Image Available
+                  </span>
+                </div>
+              )}
 
               {/* ✅ Rating Badge (Bottom-Left of Image) */}
               {(data?.avxInspectionRating || data?.rating) ? (

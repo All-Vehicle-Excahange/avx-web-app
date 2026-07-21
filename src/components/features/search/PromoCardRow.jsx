@@ -10,10 +10,10 @@ import "swiper/css/pagination";
 export default function PromoBanner() {
 
     return (
-        <div className="relative w-full  h-48 sm:h-[280px]  rounded-xl overflow-hidden">
+        <div className="relative w-full h-[140px] sm:h-[200px] md:h-[240px] lg:h-[280px] rounded-xl sm:rounded-2xl overflow-hidden shadow-md bg-neutral-900">
             <Swiper
                 modules={[Autoplay, Pagination]}
-                autoplay={{ delay: 3000, disableOnInteraction: false }}
+                autoplay={{ delay: 3500, disableOnInteraction: false }}
                 pagination={{
                     clickable: true,
                     dynamicBullets: false,
@@ -44,7 +44,7 @@ function BannerImage({ src }) {
                 src={src}
                 alt="banner"
                 fill
-                className="object-cover"
+                className="object-cover object-center"
                 priority
             />
         </div>

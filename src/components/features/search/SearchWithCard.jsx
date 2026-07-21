@@ -1957,7 +1957,7 @@ export default function SearchWithCard({
       {/* ================= MAIN CONTENT ================= */}
       <main className="flex-1">
         <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-4 auto-rows-max py-4 sm:py-5 lg:py-0">
-          <div className="col-span-full mb-10">
+          <div className="col-span-full mb-4 sm:mb-6 lg:mb-10">
             <PromoCardRow />
           </div>
 
