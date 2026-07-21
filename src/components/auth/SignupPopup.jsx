@@ -323,8 +323,9 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
           // Wait for onSuccess to complete (which might open CompleteProfilePopup)
           await onSuccess();
         } else {
-          // For consultants, redirect to pricing
-          if (window.location.pathname !== "/consult") {
+          // For consultants, redirect to /consult only if not already in the consult section
+          // (e.g. /consult/pricing, /consult/kyc — don't navigate away from those)
+          if (!window.location.pathname.startsWith("/consult")) {
             push("/consult");
           }
         }

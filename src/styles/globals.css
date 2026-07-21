@@ -426,19 +426,35 @@ html {
 
 
 .promo-swiper .swiper-pagination {
-  bottom: 14px !important;
+  bottom: 6px !important;
   z-index: 20;
+}
+
+@media (min-width: 640px) {
+  .promo-swiper .swiper-pagination {
+    bottom: 14px !important;
+  }
 }
 
 .promo-swiper .swiper-pagination-bullet {
   background: white !important;
   opacity: 0.6;
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
+  transition: all 0.2s ease;
+}
+
+@media (min-width: 640px) {
+  .promo-swiper .swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+  }
 }
 
 .promo-swiper .swiper-pagination-bullet-active {
   opacity: 1;
+  width: 16px !important;
+  border-radius: 4px !important;
 }
 
 .no-scrollbar::-webkit-scrollbar {

@@ -127,7 +127,7 @@ function MyVehicle() {
     closingPrice: v.closingPrice
       ? new Intl.NumberFormat("en-IN").format(v.closingPrice)
       : null,
-    image: v.thumbnailUrl || "/big_card_car.jpg",
+    image: v.thumbnailUrl || null,
     inspectionBadgeUrl: v.inspectionBadgeUrl || null,
     status: v.listingStatus?.toLowerCase() || "draft",
     verificationStatus: v.verificationStatus || null,
