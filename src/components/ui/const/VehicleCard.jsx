@@ -152,9 +152,9 @@ export default function VehicleCard({
       formatText(data.transmissionType) || formatText(data.transmission),
     fuel:
       data.cngType &&
-      data.cngType !== "NONE" &&
-      data.cngType !== "null" &&
-      !baseFuel.includes("CNG")
+        data.cngType !== "NONE" &&
+        data.cngType !== "null" &&
+        !baseFuel.includes("CNG")
         ? `${baseFuel} + CNG`
         : baseFuel,
     seats: data.ownership || data.seats,
@@ -290,14 +290,14 @@ export default function VehicleCard({
               {/* ✅ Rating Badge (Bottom-Left of Image) */}
               {mapped?.rating ? (
                 data?.inspectionStatus === "AVX_INSPECTED" ? (
-                  <div className="absolute -bottom-1.5 left-2.5 shrink-0 z-20 flex items-center justify-center w-14 h-14">
+                  <div className="absolute -bottom-1.5 left-2.5 shrink-0 z-20 flex items-center justify-center w-16 h-16">
                     <Image
                       src="/inspection_vector.svg"
-                      alt="AVX Inspected"
+                      alt="Reecomm Inspected"
                       fill
                       className="object-contain drop-shadow-lg z-20"
                     />
-                    <span className="absolute left-6 z-30 text-white font-bold text-xs pb-0.5">
+                    <span className="absolute left-[33px] top-[24px] z-30 text-white font-semibold text-xs">
                       {mapped.rating}
                     </span>
                   </div>
@@ -331,13 +331,25 @@ export default function VehicleCard({
                 </div>
 
                 {/* USER */}
-                <p className="text-xs md:text-sm text-primary/90 mt-1 flex items-center gap-1.5">
-                  <User className="w-3.5 h-3.5" />{" "}
-                  {mapped.userName || "Nihal Chaudhary"}
-                </p>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <p className="text-xs md:text-sm text-primary/90 flex items-center gap-1.5 truncate">
+                    <User className="w-3.5 h-3.5 shrink-0" />{" "}
+                    <span className="truncate">{mapped.userName || "john doe"}</span>
+                  </p>
+                  {data?.tierTitle === "PREMIUM" && (
+                    <Image
+                      src="/icons/trusted-icon.svg"
+                      alt="Premium Consultant"
+                      width={16}
+                      height={16}
+                      className="shrink-0"
+                      title="Premium Consultant"
+                    />
+                  )}
+                </div>
 
                 {/* LOCATION */}
-                <p 
+                <p
                   className="text-xs md:text-sm text-primary/90 mt-1 flex items-center gap-1.5"
                   title={mapped.location || "Chhapi, Gujarat"}
                 >
