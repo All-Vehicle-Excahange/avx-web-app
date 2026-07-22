@@ -105,7 +105,7 @@ const Footer = () => {
           {/* Brand & Description Column */}
           <div className="lg:w-[25%] flex flex-col gap-6">
             <div>
-              <Link href="/" className="flex items-center  gap-2">
+              <Link href="/" className="flex items-center gap-2">
                 <div className="pb-2">
                   <Image
                     src="/logo/logo.webp"
@@ -267,7 +267,7 @@ const Footer = () => {
 
         {/* Bottom Section */}
         <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-[#ffffff20] text-[13px] text-primary/60">
-          <div className="flex gap-6 mb-4 md:mb-0">
+          <div className="flex-1 flex gap-6 mb-4 md:mb-0 justify-center md:justify-start">
             {footerLinks.legal.map((item) => (
               <Link
                 key={item.label}
@@ -279,7 +279,23 @@ const Footer = () => {
             ))}
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="text-center text-[12px] text-primary/40 flex flex-col gap-1 mb-6 md:mb-0 shrink-0 mx-4">
+            <p>&copy; 2026 Reecomm. All Rights Reserved.</p>
+            <p>
+              Reecomm is a product owned and operated by{" "}
+              <Link
+                href="https://www.qubainfotech.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors hover:underline"
+              >
+                Quba Infotech
+              </Link>
+              .
+            </p>
+          </div>
+
+          <div className="flex-1 flex items-center gap-6 justify-center md:justify-end">
             <div className="flex gap-4">
               <Link
                 href="https://www.linkedin.com/company/reecomm/"
@@ -328,6 +344,8 @@ const Footer = () => {
                         </button> */}
           </div>
         </div>
+
+
       </div>
     </footer>
   );

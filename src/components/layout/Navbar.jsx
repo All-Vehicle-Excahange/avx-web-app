@@ -662,13 +662,18 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                   <div className="w-px h-5 bg-current opacity-30" />
                 </>
               )}
-              <Image
-                src="/logo/logo.webp"
-                alt="Reecomm Logo"
-                width={120}
-                height={24}
-                className="h-6 md:h-6 w-auto object-contain block"
-              />
+              <div className="flex flex-col items-start justify-center">
+                <Image
+                  src="/logo/logo.webp"
+                  alt="Reecomm Logo"
+                  width={120}
+                  height={24}
+                  className="h-5 md:h-6 w-auto object-contain block"
+                />
+                <span className="text-[7px] font-medium opacity-60 uppercase tracking-wider pl-0.5 mt-0.5">
+                  Product by Quba Infotech
+                </span>
+              </div>
             </Link>
 
             {/* ================= CENTER SEARCH ================= */}

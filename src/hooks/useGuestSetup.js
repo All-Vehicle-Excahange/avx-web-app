@@ -15,7 +15,7 @@ export default function useGuestSetup() {
       (async () => {
         const existingId = await getGuestId();
         if (!existingId) {
-          openLoginPopup();
+          // openLoginPopup(); // Temporarily disabled
         }
         setupGuestUser();
       })();
