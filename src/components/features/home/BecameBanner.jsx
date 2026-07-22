@@ -79,7 +79,7 @@ function BecameBanner() {
           </Link>
 
           <Link
-            href="/consult"
+            href="/become-consultant"
             className="
               group
               flex-1

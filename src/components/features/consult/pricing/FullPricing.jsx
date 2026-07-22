@@ -316,7 +316,10 @@ export default function FullPricing() {
             const tierData = tierRes?.data;
             if (tierData) {
               if (typeof window !== "undefined") {
-                localStorage.setItem("sellerTierData", JSON.stringify(tierData));
+                localStorage.setItem(
+                  "sellerTierData",
+                  JSON.stringify(tierData),
+                );
                 localStorage.setItem("sellerTier", tierData.tierTitle || "");
               }
               // Update the React Query cache immediately
@@ -565,16 +568,16 @@ export default function FullPricing() {
                             </span>
                           </div>
 
-                          {/* {!yearly && savingsPercent > 0 && (
+                          {!yearly && savingsPercent > 0 && (
                             <div className="mt-2 flex items-center gap-2">
-                              <span className="text-[15px] font-medium text-primary/40 line-through">
+                              <span className="text-[15px] font-medium text-primary/40 ">
                                 {formatPrice(tier.yearlyPrice)} / yr
                               </span>
                               <span className="text-[10px] px-2.5 py-0.5 rounded-full font-bold border border-emerald-500/25 text-emerald-500 bg-emerald-500/5">
                                 Save {savingsPercent}%
                               </span>
                             </div>
-                          )} */}
+                          )}
                         </div>
 
                         {/* Description */}
@@ -675,13 +678,6 @@ export default function FullPricing() {
                     <p className="text-[14px] text-white/60 mt-1 leading-relaxed max-w-2xl">
                       {addon.desc}
                     </p>
-                  </div>
-
-                  {/* BADGE */}
-                  <div className="shrink-0 mt-3 sm:mt-0">
-                    <span className="text-[10px] font-bold tracking-widest uppercase text-fourth border border-fourth/20 bg-fourth/10 px-4 py-1.5 rounded-full whitespace-nowrap">
-                      Optional
-                    </span>
                   </div>
                 </div>
               ))}

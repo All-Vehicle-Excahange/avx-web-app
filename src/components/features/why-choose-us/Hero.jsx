@@ -54,7 +54,7 @@ export default function AvxHero() {
 
             <div className="mt-10 flex flex-col sm:flex-row gap-4">
               <Button href={"/search"} variant="ghost">Browse Vehicles</Button>
-              <Button href={"/consult"} variant="outlineSecondary">Become a Consultant</Button>
+              <Button href={"/become-consultant"} variant="outlineSecondary">Become a Consultant</Button>
             </div>
           </div>
 

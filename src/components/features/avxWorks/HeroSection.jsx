@@ -76,7 +76,7 @@ export default function HeroSection() {
                 Find a Vehicle
               </Button>
 
-              <Button href="/consult" variant="outlineSecondary">
+              <Button href="/become-consultant" variant="outlineSecondary">
                 Become a Consultant
               </Button>
             </div>

@@ -2,17 +2,23 @@ import React from "react";
 import { FiCheck, FiX } from "react-icons/fi";
 
 const rows = [
-  { feature: "Active vehicles", basic: "Up to 8", pro: "High / flexible", premium: "High / flexible" },
-  { feature: "Storefront", basic: "Yes (basic)", pro: "Yes (enhanced)", premium: "Yes (full branding)" },
-  { feature: "Reecomm Inspection", basic: "✅", pro: "✅", premium: "✅" },
-  { feature: "Buyer inquiries", basic: "Limited", pro: "Unlimited", premium: "Unlimited + priority" },
-  { feature: "Chat", basic: "✅ (app)", pro: "✅ (app)", premium: "✅ (app)" },
-  { feature: "Listing PPC (CPC)", basic: "✅", pro: "✅", premium: "✅" },
-  { feature: "Storefront PPC (CPV)", basic: "❌", pro: "✅", premium: "✅" },
-  { feature: "Featured placements", basic: "❌", pro: "❌", premium: "✅" },
-  { feature: "Analytics depth", basic: "Basic", pro: "Advanced", premium: "Strategic" },
-  { feature: "Branding control", basic: "❌", pro: "❌", premium: "✅" },
-  { feature: "Ranking boost", basic: "Base", pro: "Medium", premium: "Highest (trust-gated)" },
+  { feature: "Active Listings", basic: "6", pro: "15", premium: "Unlimited" },
+  { feature: "Storefront Customization", basic: "Basic Theme", pro: "Multiple Themes", premium: "Premium Themes + Full Branding" },
+  { feature: "Marketplace Visibility", basic: "Standard", pro: "Featured", premium: "Premium Priority" },
+  { feature: "Buyer Inquiry Management", basic: "✅", pro: "✅", premium: "✅" },
+  { feature: "Customer Reviews", basic: "✅", pro: "✅", premium: "✅" },
+  { feature: "Verified Consultant Badge", basic: "—", pro: "✅", premium: "Premium Verified" },
+  { feature: "Listing Analytics", basic: "Basic", pro: "Advanced", premium: "Advanced" },
+  { feature: "Business Dashboard", basic: "—", pro: "✅", premium: "✅" },
+  { feature: "Market Benchmarking", basic: "—", pro: "Category Level", premium: "Category + City Level" },
+  { feature: "Category Performance Analysis", basic: "—", pro: "Basic", premium: "Detailed" },
+  { feature: "Growth Insights", basic: "—", pro: "—", premium: "✅" },
+  { feature: "Boost Campaigns", basic: "—", pro: "✅", premium: "✅" },
+  { feature: "Monthly Boost Credits", basic: "—", pro: "200", premium: "500" },
+  { feature: "Inspection Discount", basic: "—", pro: "10%", premium: "20%" },
+  { feature: "Free Vehicle Inspections", basic: "—", pro: "1 / Month", premium: "3 / Month" },
+  { feature: "Priority Support", basic: "—", pro: "✅", premium: "Highest Priority" },
+  { feature: "Early Access to Features", basic: "—", pro: "—", premium: "✅" },
 ];
 
 function PlanComplareTable() {

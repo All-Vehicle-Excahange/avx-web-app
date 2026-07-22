@@ -27,8 +27,8 @@ const footerLinks = {
     },
   ],
   sell: [
-    { label: "List your car", href: "/consult" },
-    { label: "List your two-wheeler", href: "/consult" },
+    { label: "List your car", href: "/become-consultant" },
+    { label: "List your two-wheeler", href: "/become-consultant" },
     { label: "Request an inspection", href: "/inspection-process" },
     {
       label: "RC transfer service",
@@ -38,7 +38,7 @@ const footerLinks = {
     { label: "Become Seller", href: "/become-seller" },
   ],
   consultants: [
-    { label: "Become a consultant", href: "/consult" },
+    { label: "Become a consultant", href: "/become-consultant" },
     { label: "Consultant pricing", href: "/consult/pricing" },
     { label: "Manage my inventory", href: "/consult/subscription" },
     {

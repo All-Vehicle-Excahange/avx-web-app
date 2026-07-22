@@ -1194,7 +1194,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                             </Link>
 
                             <Link
-                              href="/consult"
+                              href="/become-consultant"
                               onClick={() => setSellDropdownOpen(false)}
                               className="px-4 py-4 flex items-center justify-between gap-4 group hover:bg-white/5 transition-colors"
                             >

@@ -397,10 +397,10 @@ export default function AccountPopup({ open, onClosePopup }) {
               </Section>
 
               <Section title="Business">
-                <Item href="/consult" onClick={onClosePopup}>
+                <Item href="/become-consultant" onClick={onClosePopup}>
                   Become a Consultant
                 </Item>
-                <Item href="/consult" onClick={onClosePopup}>
+                <Item href="/consult/pricing" onClick={onClosePopup}>
                   Consultant Pricing
                 </Item>
               </Section>

@@ -325,8 +325,11 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         } else {
           // For consultants, redirect to /consult only if not already in the consult section
           // (e.g. /consult/pricing, /consult/kyc — don't navigate away from those)
-          if (!window.location.pathname.startsWith("/consult")) {
-            push("/consult");
+          if (
+            !window.location.pathname.startsWith("/consult") &&
+            !window.location.pathname.startsWith("/become-consultant")
+          ) {
+            push("/become-consultant");
           }
         }
       } else if (res?.error) {
