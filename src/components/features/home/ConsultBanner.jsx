@@ -12,7 +12,7 @@ export default function ConsultBanner() {
             title="Already in the car business? Bring it online."
             description="If you're an auto consultant running your business on calls and WhatsApp, Reecomm gives you a digital storefront — list your inventory, manage inquiries, and reach buyers you'd never find offline."
             buttonText="Become a consultant"
-            navigationPath={"/consult"}
+            navigationPath={"/become-consultant"}
           />
         </div>
       </div>

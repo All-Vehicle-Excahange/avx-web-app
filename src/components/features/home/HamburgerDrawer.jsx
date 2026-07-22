@@ -174,7 +174,7 @@ export default function HamburgerDrawer({ open, onClose }) {
                     label="Become a Consultant"
                     hoveredTab={hoveredTab}
                     setHoveredTab={setHoveredTab}
-                    href="/consult"
+                    href="/become-consultant"
                     onClose={onClose}
                   />
                 </div>
@@ -465,7 +465,7 @@ export default function HamburgerDrawer({ open, onClose }) {
                         <MenuLink href="/inspection-request" onClick={onClose}>
                           Get Vehicle Inspection
                         </MenuLink>
-                        <MenuLink href="/consult" onClick={onClose}>
+                        <MenuLink href="/become-consultant" onClick={onClose}>
                           Become Consultant
                         </MenuLink>
                       </div>
@@ -753,7 +753,7 @@ export default function HamburgerDrawer({ open, onClose }) {
                        <MenuLink href="/become-seller" onClick={onClose}>
                         Sell Vehicle
                       </MenuLink>
-                      <MenuLink href="/consult" onClick={onClose}>
+                      <MenuLink href="/become-consultant" onClick={onClose}>
                         Become Consultant
                       </MenuLink>
                     </>

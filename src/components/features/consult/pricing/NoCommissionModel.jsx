@@ -40,12 +40,7 @@ export default function NoCommissionModel() {
                         </p>
 
 
-                        <div className="flex flex-col sm:flex-row gap-4 pt-3 w-fit">
-                            <Button variant="ghost" href={"/consult/pricing"}>
-                                View Pricing
-                                <FiArrowRight className="ml-2 transition-transform duration-200 group-hover:translate-x-1" />
-                            </Button>
-                        </div>
+                      
                     </div>
 
                     <div className="hidden lg:block w-px bg-linear-to-b from-transparent via-[#1f2937] to-transparent mx-8 self-stretch" />

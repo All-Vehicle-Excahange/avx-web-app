@@ -84,83 +84,92 @@ const FooterLink = () => {
 
           {/* COLUMN 2: BY BRAND */}
           <div className="flex flex-col gap-6">
-            <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white">
-              By Brand
-            </h2>
-            <div className="flex flex-col gap-2">
-              <Link
-                href="/search/buy-used-maruti-suzuki-cars"
-                className="text-[12px] text-white/60 hover:text-white transition-all"
-              >
-                Maruti Suzuki
-              </Link>
-              <Link
-                href="/search/buy-used-hyundai-cars"
-                className="text-[12px] text-white/60 hover:text-white transition-all"
-              >
-                Hyundai
-              </Link>
-              <Link
-                href="/search/buy-used-honda-cars"
-                className="text-[12px] text-white/60 hover:text-white transition-all"
-              >
-                Honda
-              </Link>
-              <Link
-                href="/search/buy-used-tata-cars"
-                className="text-[12px] text-white/60 hover:text-white transition-all"
-              >
-                Tata
-              </Link>
-              <Link
-                href="/search/buy-used-toyota-cars"
-                className="text-[12px] text-white/60 hover:text-white transition-all"
-              >
-                Toyota
-              </Link>
-              <Link
-                href="/search/buy-used-mahindra-cars"
-                className="text-[12px] text-white/60 hover:text-white transition-all"
-              >
-                Mahindra
-              </Link>
+            <div>
+              <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white mb-2">
+                Four Wheeler by Brand
+              </h2>
+              <div className="flex flex-col gap-2">
+                <Link
+                  href="/search/buy-used-maruti-suzuki-cars"
+                  className="text-[12px] text-white/60 hover:text-white transition-all"
+                >
+                  Maruti Suzuki
+                </Link>
+                <Link
+                  href="/search/buy-used-hyundai-cars"
+                  className="text-[12px] text-white/60 hover:text-white transition-all"
+                >
+                  Hyundai
+                </Link>
+                <Link
+                  href="/search/buy-used-honda-cars"
+                  className="text-[12px] text-white/60 hover:text-white transition-all"
+                >
+                  Honda
+                </Link>
+                <Link
+                  href="/search/buy-used-tata-cars"
+                  className="text-[12px] text-white/60 hover:text-white transition-all"
+                >
+                  Tata
+                </Link>
+                <Link
+                  href="/search/buy-used-toyota-cars"
+                  className="text-[12px] text-white/60 hover:text-white transition-all"
+                >
+                  Toyota
+                </Link>
+                <Link
+                  href="/search/buy-used-mahindra-cars"
+                  className="text-[12px] text-white/60 hover:text-white transition-all"
+                >
+                  Mahindra
+                </Link>
+              </div>
+            </div>
 
-              <Link
-                href="/search/buy-used-hero-two-wheelers"
-                className="text-[12px] text-white/60 hover:text-white transition-all"
-              >
-                Hero
-              </Link>
-              <Link
-                href="/search/buy-used-tvs-two-wheelers"
-                className="text-[12px] text-white/60 hover:text-white transition-all"
-              >
-                TVS
-              </Link>
-              <Link
-                href="/search/buy-used-bajaj-two-wheelers"
-                className="text-[12px] text-white/60 hover:text-white transition-all"
-              >
-                Bajaj
-              </Link>
-              <Link
-                href="/search/buy-used-royal-enfield-two-wheelers"
-                className="text-[12px] text-white/60 hover:text-white transition-all"
-              >
-                Royal Enfield
-              </Link>
-              <Link
-                href="/search/buy-used-yamaha-two-wheelers"
-                className="text-[12px] text-white/60 hover:text-white transition-all"
-              >
-                Yamaha
-              </Link>
-              <Link
-                href="/search/buy-used-ola-two-wheelers"
-                className="text-[12px] text-white/60 hover:text-white transition-all"
-              >
-                OLA
-              </Link>
+            <div>
+              <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white mb-2">
+                Two Wheeler by Brand
+              </h2>
+              <div className="flex flex-col gap-2">
+                <Link
+                  href="/search/buy-used-hero-two-wheelers"
+                  className="text-[12px] text-white/60 hover:text-white transition-all"
+                >
+                  Hero
+                </Link>
+                <Link
+                  href="/search/buy-used-tvs-two-wheelers"
+                  className="text-[12px] text-white/60 hover:text-white transition-all"
+                >
+                  TVS
+                </Link>
+                <Link
+                  href="/search/buy-used-bajaj-two-wheelers"
+                  className="text-[12px] text-white/60 hover:text-white transition-all"
+                >
+                  Bajaj
+                </Link>
+                <Link
+                  href="/search/buy-used-royal-enfield-two-wheelers"
+                  className="text-[12px] text-white/60 hover:text-white transition-all"
+                >
+                  Royal Enfield
+                </Link>
+                <Link
+                  href="/search/buy-used-yamaha-two-wheelers"
+                  className="text-[12px] text-white/60 hover:text-white transition-all"
+                >
+                  Yamaha
+                </Link>
+                <Link
+                  href="/search/buy-used-ola-two-wheelers"
+                  className="text-[12px] text-white/60 hover:text-white transition-all"
+                >
+                  OLA
+                </Link>
+              </div>
             </div>
           </div>
 

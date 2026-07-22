@@ -13,7 +13,7 @@ export default function Banner({
   const { push } = useRouter();
 
   const handleClick = () => {
-    push("/consult");
+    push("/become-consultant");
   };
 
   return (
