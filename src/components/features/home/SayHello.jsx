@@ -108,7 +108,7 @@ const SayHello = () => {
     <section className="bg-white py-6">
       <div className="container mx-auto px-4">
         {/* Heading */}
-        <div className="flex flex-col lg:flex-row justify-between items-start mb-10 lg:mb-16 gap-6">
+        <div className="flex flex-col lg:flex-row justify-between items-start mb-7 lg:mb-10 gap-6">
           <div className="text-left w-fit shrink-0">
             <h2 className="text-3xl md:text-5xl text-secondary font-extrabold leading-tight">
               Say{" "}
@@ -140,7 +140,7 @@ const SayHello = () => {
         </div>
 
         {/* Image Composition Section */}
-        <div className="relative flex justify-center items-start gap-4 lg:gap-8 pt-16 sm:pt-20 pb-16 sm:pb-20">
+        <div className="relative flex justify-center items-start gap-4 lg:gap-8 pt-3 sm:pt-5 pb-3 sm:pb-15">
           {/* Left Image Wrapper */}
           <div className="flex flex-col items-start gap-12 z-10">
             <div
@@ -276,11 +276,10 @@ const SayHello = () => {
                     className={`
                                         relative z-10 rounded-full shrink-0 flex items-center justify-center text-xs font-bold
                                         transition-all duration-300 ease-out border-2
-                                        ${
-                                          isActive
-                                            ? "w-8 h-8 bg-fourth text-white border-fourth shadow-lg scale-110 ring-4 ring-fourth/20"
-                                            : "w-8 h-8 bg-white text-gray-400 border-gray-300 scale-100 hover:border-gray-400"
-                                        }
+                                        ${isActive
+                        ? "w-8 h-8 bg-fourth text-white border-fourth shadow-lg scale-110 ring-4 ring-fourth/20"
+                        : "w-8 h-8 bg-white text-gray-400 border-gray-300 scale-100 hover:border-gray-400"
+                      }
                                     `}
                   >
                     {index + 1}
@@ -289,10 +288,9 @@ const SayHello = () => {
                   {/* Icon Box */}
                   <div
                     className={`flex items-center justify-center w-10 h-10 rounded-xl border shrink-0 transition-all duration-300
-                      ${
-                        activeIndex >= index
-                          ? "bg-fourth/5 border-fourth/20"
-                          : "bg-gray-50 border-gray-100"
+                      ${activeIndex >= index
+                        ? "bg-fourth/5 border-fourth/20"
+                        : "bg-gray-50 border-gray-100"
                       }`}
                   >
                     {stepIcons[item] && stepIcons[item](activeIndex >= index)}
@@ -335,11 +333,10 @@ const SayHello = () => {
                     className={`
                                         relative z-10 rounded-full shrink-0 flex items-center justify-center text-xs font-bold
                                         transition-all duration-300 ease-out border-2
-                                        ${
-                                          isActive
-                                            ? "w-8 h-8 sm:w-9 sm:h-9 bg-fourth text-white border-fourth shadow-lg scale-110 ring-4 ring-fourth/20"
-                                            : "w-8 h-8 sm:w-9 sm:h-9 bg-white text-gray-400 border-gray-300 scale-100 hover:border-gray-400"
-                                        }
+                                        ${isActive
+                        ? "w-8 h-8 sm:w-9 sm:h-9 bg-fourth text-white border-fourth shadow-lg scale-110 ring-4 ring-fourth/20"
+                        : "w-8 h-8 sm:w-9 sm:h-9 bg-white text-gray-400 border-gray-300 scale-100 hover:border-gray-400"
+                      }
                                     `}
                   >
                     {index + 1}
@@ -348,11 +345,10 @@ const SayHello = () => {
                   <span
                     className={`
                                         text-xs font-bold uppercase tracking-wider transition-all duration-300
-                                        ${
-                                          isActive
-                                            ? "text-fourth"
-                                            : "text-gray-500 group-hover:text-gray-700"
-                                        }
+                                        ${isActive
+                        ? "text-fourth"
+                        : "text-gray-500 group-hover:text-gray-700"
+                      }
                                     `}
                   >
                     {item}

@@ -115,16 +115,18 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
             <span className="text-sm text-primary font-medium">
               Reecomm Inspection Rating:
             </span>
-            <div className="relative w-18 h-10 my-[-8px] flex items-center justify-center">
-              <Image
-                src="/inspection_vector.svg"
-                alt="Reecomm Inspected"
-                fill
-                className="object-contain"
-              />
-              <span className="absolute left-[54px] top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 text-white font-bold text-xs">
-                {vehicle?.avxInspectionRating || "-"}
-              </span>
+            <div className="relative w-16 h-6 shrink-0">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16">
+                <Image
+                  src="/inspection_vector.svg"
+                  alt="Reecomm Inspected"
+                  fill
+                  className="object-contain drop-shadow-lg z-20"
+                />
+                <span className="absolute left-[33px] top-[24px] z-30 text-white font-semibold text-xs">
+                  {vehicle?.avxInspectionRating || "-"}
+                </span>
+              </div>
             </div>
           </>
         ) : vehicle?.avxInspectionRating ? (

@@ -60,6 +60,22 @@ export default function VehicleSpec({
   const datePickerRef = useRef(null);
   const timeSelectRef = useRef(null);
 
+  const minAllowedDate = new Date();
+  minAllowedDate.setDate(minAllowedDate.getDate() + 2);
+  minAllowedDate.setHours(0, 0, 0, 0);
+
+  const renderDayContents = (day, date) => {
+    const isDisabled = date < minAllowedDate;
+    if (isDisabled) {
+      return (
+        <span title="You can schedule from 2 days ahead.">
+          {day}
+        </span>
+      );
+    }
+    return <span>{day}</span>;
+  };
+
   const { data: existingInspection, isFetching: isCheckingInspection } =
     useQuery({
       ...getInspectionByVehicleIdQuery(vehicle?.id),
@@ -842,7 +858,11 @@ export default function VehicleSpec({
                           <input
                             type="tel"
                             value={mobileNumber}
-                            onChange={(e) => setMobileNumber(e.target.value)}
+                            onChange={(e) => {
+                              const digitsOnly = e.target.value.replace(/\D/g, "").slice(0, 10);
+                              setMobileNumber(digitsOnly);
+                            }}
+                            maxLength={10}
                             placeholder="Enter WhatsApp number"
                             className="w-full text-sm bg-transparent focus:outline-none text-primary"
                           />
@@ -862,15 +882,31 @@ export default function VehicleSpec({
                             </label>
                             <div
                               className="flex items-center gap-2 px-3 py-2 rounded-lg border border-third/40 bg-secondary focus-within:border-primary cursor-pointer"
-                              onClick={() => datePickerRef.current?.setOpen(true)}
+                              onClick={(e) => {
+                                // Prevent bubbling from calendar clicks re-opening the picker
+                                if (e.target.tagName !== 'INPUT' && !e.target.closest('.react-datepicker')) {
+                                  datePickerRef.current?.setOpen(true);
+                                }
+                              }}
                             >
                               <Calendar size={14} className="text-third" />
                               <DatePicker
                                 ref={datePickerRef}
                                 selected={inspectionDate}
-                                onChange={(date) => setInspectionDate(date)}
+                                onChange={(date) => {
+                                  setInspectionDate(date);
+                                  datePickerRef.current?.setOpen(false);
+                                }}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    datePickerRef.current?.setOpen(false);
+                                  }
+                                }}
+                                shouldCloseOnSelect={true}
                                 dateFormat="MMMM d, yyyy"
-                                minDate={new Date()}
+                                minDate={minAllowedDate}
+                                renderDayContents={renderDayContents}
                                 placeholderText="Select Date"
                                 className="w-full text-sm bg-transparent focus:outline-none text-primary cursor-pointer"
                                 wrapperClassName="w-full"
