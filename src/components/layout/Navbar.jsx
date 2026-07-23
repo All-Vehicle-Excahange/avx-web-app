@@ -34,7 +34,8 @@ import PreferencesPopup from "../features/user/PreferencesPopup";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useUIStore } from "@/stores/useUIStore";
 import MobileAppDownloadBanner from "../ui/MobileAppDownloadBanner";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { saveRecentSearch, getRecentSearches, deleteAllRecentSearches } from "@/services/user.service";
 import { getUserProfileStrengthQuery } from "@/queries/user.queries";
 import { getAndSearchMakers } from "@/services/filter";
 
@@ -137,6 +138,31 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
   const combinedItems = useMemo(() => {
     return filteredSuggestions;
   }, [filteredSuggestions]);
+
+  const queryClient = useQueryClient();
+
+  const { data: recentSearchesData } = useQuery({
+    queryKey: ['recentSearches'],
+    queryFn: getRecentSearches,
+    enabled: showDropdown,
+    retry: false,
+  });
+
+  const recentSearches = Array.isArray(recentSearchesData?.data) ? recentSearchesData.data : [];
+
+  const saveSearchMutation = useMutation({
+    mutationFn: saveRecentSearch,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['recentSearches'] });
+    },
+  });
+
+  const clearSearchesMutation = useMutation({
+    mutationFn: deleteAllRecentSearches,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['recentSearches'] });
+    },
+  });
 
   useEffect(() => {
     setSelectedIndex(-1);
@@ -683,8 +709,8 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
             >
               {/* Search Bar Container */}
               <div className={`relative flex items-center h-[52px] w-[560px] rounded-full transition-all duration-300 group ${heroMode && !scrolled
-                  ? 'bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-white'
-                  : 'bg-gray-100 border border-gray-200/80 focus-within:border-gray-300 focus-within:shadow-sm'
+                ? 'bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-white'
+                : 'bg-gray-100 border border-gray-200/80 focus-within:border-gray-300 focus-within:shadow-sm'
                 }`}>
 
                 {/* Search Input */}
@@ -694,16 +720,15 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                   {/* Animated Vertical Slider Placeholder */}
                   {!searchQuery && (
                     <div className="absolute inset-y-0 left-[48px] right-[40px] pointer-events-none overflow-hidden">
-                      <div 
+                      <div
                         className={`flex flex-col ${isTransitioning ? 'transition-transform duration-500 ease-in-out' : ''}`}
                         style={{ transform: `translateY(-${placeholderIdx * 52}px)` }}
                       >
                         {placeholderTexts.map((text, idx) => (
-                          <span 
+                          <span
                             key={idx}
-                            className={`flex items-center h-[52px] shrink-0 text-[14px] font-medium ${
-                              heroMode && !scrolled ? 'text-white/70' : 'text-gray-400'
-                            }`}
+                            className={`flex items-center h-[52px] shrink-0 text-[14px] font-medium ${heroMode && !scrolled ? 'text-white/70' : 'text-gray-400'
+                              }`}
                           >
                             {text}
                           </span>
@@ -736,6 +761,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                         ) {
                           const selected = combinedItems[selectedIndex];
                           setIsSearching(true);
+                          saveSearchMutation.mutate(selected.label || selected.username || searchQuery.trim());
                           if (selected.link) {
                             push(selected.link);
                             setSearchQuery(selected.label);
@@ -746,6 +772,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                           setSelectedIndex(-1);
                         } else if (searchQuery.trim()) {
                           setIsSearching(true);
+                          saveSearchMutation.mutate(searchQuery.trim());
                           const brandParam =
                             selectedBrand !== "All"
                               ? `&brand=${encodeURIComponent(selectedBrand)}`
@@ -766,8 +793,8 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                       }
                     }}
                     className={`w-full h-full bg-transparent focus:outline-none text-[14px] font-medium z-10 relative ${heroMode && !scrolled
-                        ? 'text-white'
-                        : 'text-gray-800'
+                      ? 'text-white'
+                      : 'text-gray-800'
                       }`}
                     placeholder=""
                   />
@@ -778,8 +805,8 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                         setSelectedIndex(-1);
                       }}
                       className={`mr-2 p-1.5 rounded-full transition-colors absolute right-0 cursor-pointer ${heroMode && !scrolled
-                          ? 'text-white/80 hover:text-white hover:bg-white/20'
-                          : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
+                        ? 'text-white/80 hover:text-white hover:bg-white/20'
+                        : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
                         }`}
                     >
                       <X className="w-3.5 h-3.5" />
@@ -792,6 +819,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                   onClick={() => {
                     if (searchQuery.trim()) {
                       setIsSearching(true);
+                      saveSearchMutation.mutate(searchQuery.trim());
                       const brandParam =
                         selectedBrand !== "All"
                           ? `&brand=${encodeURIComponent(selectedBrand)}`
@@ -843,6 +871,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                               <div
                                 key={`popular-${idx}`}
                                 onClick={() => {
+                                  saveSearchMutation.mutate(brand.makeName);
                                   push(`/search?brand=${encodeURIComponent(brand.makeName)}`);
                                   setShowDropdown(false);
                                 }}
@@ -879,6 +908,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                                 <div
                                   key={`all-${idx}`}
                                   onClick={() => {
+                                    saveSearchMutation.mutate(brand.makeName);
                                     push(`/search?brand=${encodeURIComponent(brand.makeName)}`);
                                     setShowDropdown(false);
                                   }}
@@ -926,15 +956,29 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                                 <History className="w-4 h-4 text-fourth" />
                                 <span className="text-[12px]">Recent Searches</span>
                               </div>
-                              <button className="text-fourth text-[10px] font-semibold hover:text-fourth/80 cursor-pointer">Clear all</button>
+                              {recentSearches.length > 0 && (
+                                <button onClick={() => clearSearchesMutation.mutate()} className="text-fourth text-[10px] font-semibold hover:text-fourth/80 cursor-pointer">Clear all</button>
+                              )}
                             </div>
                             <div className="flex flex-col gap-0.5">
-                              {['BMW', 'Hyundai', 'Tata Nexon', 'Maruti Swift', 'Mahindra Thar'].map((term, idx) => (
-                                <div key={`recent-${idx}`} className="flex items-center gap-2 p-1.5 hover:bg-gray-50  cursor-pointer rounded-lg transition-all text-[11px] font-semibold text-gray-700">
+                              {recentSearches.map((item, idx) => (
+                                <div key={item.id || `recent-${idx}`} onClick={() => {
+                                  setIsSearching(true);
+                                  saveSearchMutation.mutate(item.search);
+                                  
+                                  let searchSlug = item.search.toLowerCase().replace(/\bused\b/g, '').trim().replace(/\s+/g, '-');
+                                  let finalUrl = searchSlug ? `/search/buy-used-${searchSlug}-cars` : `/search/buy-used-cars`;
+                                  push(finalUrl.replace(/-+/g, '-'));
+
+                                  setShowDropdown(false);
+                                }} className="flex items-center gap-2 p-1.5 hover:bg-gray-50  cursor-pointer rounded-lg transition-all text-[11px] font-semibold text-gray-700">
                                   <Clock className="w-3.5 h-3.5 text-gray-400" />
-                                  <span className="flex-1 truncate">{term}</span>
+                                  <span className="flex-1 truncate">{item.search}</span>
                                 </div>
                               ))}
+                              {recentSearches.length === 0 && (
+                                <span className="text-[11px] text-gray-400 p-1.5">No recent searches</span>
+                              )}
                             </div>
                           </div>
 
@@ -946,7 +990,11 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                             </div>
                             <div className="flex flex-col gap-1">
                               {apiBrandsList.slice(0, 5).map((brand, idx) => (
-                                <div key={`trending-${idx}`} onClick={() => { push(`/search?brand=${encodeURIComponent(brand.makeName)}`); setShowDropdown(false); }} className="flex items-center justify-between p-1.5 hover:bg-gray-50  cursor-pointer rounded-lg transition-all group">
+                                <div key={`trending-${idx}`} onClick={() => {
+                                  saveSearchMutation.mutate(brand.makeName);
+                                  push(`/search?brand=${encodeURIComponent(brand.makeName)}`);
+                                  setShowDropdown(false);
+                                }} className="flex items-center justify-between p-1.5 hover:bg-gray-50  cursor-pointer rounded-lg transition-all group">
                                   <div className="flex items-center gap-3">
                                     {brand.logo ? (
                                       <div className="w-8 h-8 flex items-center justify-center p-1.5 bg-white rounded-full border border-gray-100 shadow-[0_2px_6px_rgba(0,0,0,0.03)] shrink-0 group-hover:border-gray-200 transition-colors">
@@ -982,9 +1030,13 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                               <div
                                 key={s.id}
                                 onClick={() => {
-                                  push(s.link);
-                                  setShowDropdown(false);
-                                  setSearchQuery(s.label);
+                                  setIsSearching(true);
+                                  saveSearchMutation.mutate(s.label || s.username);
+                                  if (s.link) {
+                                    push(s.link);
+                                    setShowDropdown(false);
+                                    setSearchQuery(s.label);
+                                  }
                                 }}
                                 className={`group flex items-center justify-between py-1 px-2 cursor-pointer transition-colors border-b border-gray-50
                                     ${selectedIndex === idx ? "bg-fourth/5 border-l-2 border-fourth" : "hover:bg-fourth/5"}`}

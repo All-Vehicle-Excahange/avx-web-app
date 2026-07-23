@@ -44,6 +44,7 @@ const ENDPOINT = {
   getAllTown: "/util/address/town",
   addNewTown: "/util/address/town",
   getAndCheckEligbleForReview: "/vehicles/inquiry/review-details",
+  recentSearch: "/users/recent-search",
 };
 
 export const getUserHomeFeed = async (data) => {
@@ -556,6 +557,33 @@ export const getAndCheckEligbleForReview = async (inquiryId) => {
     const res = await axiosInstance.get(
       `${ENDPOINT.getAndCheckEligbleForReview}/${inquiryId}`,
     );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const saveRecentSearch = async (searchStr) => {
+  try {
+    const res = await axiosInstance.post(`${ENDPOINT.recentSearch}/${encodeURIComponent(searchStr)}`);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getRecentSearches = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.recentSearch);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteAllRecentSearches = async () => {
+  try {
+    const res = await axiosInstance.delete(ENDPOINT.recentSearch);
     return handleResponse(res);
   } catch (error) {
     throw error;

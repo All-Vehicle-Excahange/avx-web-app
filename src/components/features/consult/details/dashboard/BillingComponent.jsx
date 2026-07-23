@@ -523,7 +523,7 @@ export default function BillingComponent() {
       </div>
 
       {/* WALLET USAGE */}
-      <div className="rounded-2xl bg-primary/5 p-6 space-y-4 shadow-sm transition-colors duration-200">
+      {/* <div className="rounded-2xl bg-primary/5 p-6 space-y-4 shadow-sm transition-colors duration-200">
         <div className="flex items-center gap-2 font-semibold">
           <TrendingUp size={16} />
           Wallet Usage (Last 30 Days)
@@ -555,7 +555,7 @@ export default function BillingComponent() {
           <span>Total Spent</span>
           <span>₹ 2,840</span>
         </div>
-      </div>
+      </div> */}
 
       {/* TRANSACTION HISTORY */}
       <div className="rounded-2xl bg-primary/5 p-6 space-y-4 shadow-sm transition-colors duration-200">
