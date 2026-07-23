@@ -1,4 +1,4 @@
-import axiosInstance, { handleResponse } from "@/lib/axiosInstance";
+import axiosInstance, { handleResponse, handleError } from "@/lib/axiosInstance";
 
 const ENDPOINT = {
   createUpdateRequest: "/consultation/updation/request",
@@ -24,7 +24,7 @@ export const createUpdateRequest = async (data) => {
     );
     return handleResponse(response);
   } catch (error) {
-    return handleResponse(error);
+    return handleError(error);
   }
 };
 
@@ -41,7 +41,7 @@ export const updateBasicDetails = async (data, updateId) => {
     );
     return handleResponse(response);
   } catch (error) {
-    return handleResponse(error);
+    return handleError(error);
   }
 };
 
@@ -53,7 +53,7 @@ export const updateAddressDetails = async (data, updateId) => {
     );
     return handleResponse(response);
   } catch (error) {
-    return handleResponse(error);
+    return handleError(error);
   }
 };
 
@@ -70,7 +70,7 @@ export const updateKycDocuments = async (data, updateId) => {
     );
     return handleResponse(response);
   } catch (error) {
-    return handleResponse(error);
+    return handleError(error);
   }
 };
 
@@ -81,7 +81,7 @@ export const finalSubmit = async (updateId) => {
     );
     return handleResponse(response);
   } catch (error) {
-    return handleResponse(error);
+    return handleError(error);
   }
 };
 
@@ -90,7 +90,7 @@ export const getActiveBasicUpdate = async () => {
     const response = await axiosInstance.get(ENDPOINT.getActiveBasicUpdate);
     return handleResponse(response);
   } catch (error) {
-    return handleResponse(error);
+    return handleError(error);
   }
 };
 
@@ -101,7 +101,7 @@ export const getActiveAddressUpdate = async () => {
     const response = await axiosInstance.get(ENDPOINT.getActiveAddressUpdate);
     return handleResponse(response);
   } catch (error) {
-    return handleResponse(error);
+    return handleError(error);
   }
 };
 
@@ -110,7 +110,7 @@ export const getActiveKycUpdate = async () => {
     const response = await axiosInstance.get(ENDPOINT.getActiveKycUpdate);
     return handleResponse(response);
   } catch (error) {
-    return handleResponse(error);
+    return handleError(error);
   }
 };
 
@@ -126,6 +126,6 @@ export const checkIsUserNameAvailbale = async (username) => {
     );
     return handleResponse(response);
   } catch (error) {
-    return handleResponse(error);
+    return handleError(error);
   }
 };

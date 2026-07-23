@@ -1,4 +1,4 @@
-import axiosInstance, { handleResponse } from "@/lib/axiosInstance";
+import axiosInstance, { handleResponse, handleError } from "@/lib/axiosInstance";
 
 const ENDPOINT = {
   getAnalyticsKips: "/consultation/dashboard/analytics/kpis",
@@ -21,7 +21,7 @@ export const getAnalyticsKips = async (days) => {
     });
     return handleResponse(response);
   } catch (error) {
-    return handleResponse(error);
+    return handleError(error);
   }
 };
 
@@ -34,7 +34,7 @@ export const getTrafficConversion = async (days) => {
     });
     return handleResponse(response);
   } catch (error) {
-    return handleResponse(error);
+    return handleError(error);
   }
 };
 
@@ -47,7 +47,7 @@ export const getWeeklyAnalytics = async (days) => {
     });
     return handleResponse(response);
   } catch (error) {
-    return handleResponse(error);
+    return handleError(error);
   }
 };
 
@@ -60,7 +60,7 @@ export const getSubTypeDemandBreakdown = async (days) => {
     });
     return handleResponse(response);
   } catch (error) {
-    return handleResponse(error);
+    return handleError(error);
   }
 };
 
@@ -73,7 +73,7 @@ export const getCityDemandBreakdown = async (days) => {
     });
     return handleResponse(response);
   } catch (error) {
-    return handleResponse(error);
+    return handleError(error);
   }
 };
 
@@ -86,6 +86,6 @@ export const getKeyInsights = async (days) => {
     });
     return handleResponse(response);
   } catch (error) {
-    return handleResponse(error);
+    return handleError(error);
   }
 };

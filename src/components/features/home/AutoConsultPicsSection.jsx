@@ -36,7 +36,7 @@ export default function AutoConsultPicsSection(props) {
           Top <span className="text-fourth">Auto Consultants</span> Picks For You
         </h2>
         <p className="text-third w-4xl">
-         Explore vehicles from trusted auto consultants — all through their digital storefronts on Reecomm.
+          Explore vehicles from trusted auto consultants — all through their digital storefronts on Reecomm.
         </p>
       </div>
 

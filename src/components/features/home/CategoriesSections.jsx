@@ -67,7 +67,12 @@ const categoriesByType = {
       icon: Bike,
       iconUrl: "/icons/bike_Cruiser & Retro.svg",
     },
-    { id: "adventure-touring", label: "Adventure & Touring", icon: Bike },
+    {
+      id: "adventure-touring",
+      label: "Adventure & Touring",
+      icon: Bike,
+      iconUrl: "/icons/bike_Adventure.svg",
+    },
     {
       id: "electric-2w",
       label: "Electric 2W",
