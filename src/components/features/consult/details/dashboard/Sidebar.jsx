@@ -23,6 +23,11 @@ import NotificationsComponent from "./NotificationsComponent";
 import { useNotifications } from "@/hooks/useNotifications";
 
 const menu = [
+  {
+    label: "Notifications",
+    icon: Bell,
+    href: "/consult/dashboard/notifications",
+  },
   { label: "Overview", icon: LayoutGrid, href: "/consult/dashboard/overview" },
   { label: "Storefront", icon: Store, href: "/consult/dashboard/storefront" },
   { label: "Inventory", icon: Car, href: "/consult/dashboard/inventory" },
@@ -48,11 +53,6 @@ const menu = [
     label: "Wallet & Billing",
     icon: CreditCard,
     href: "/consult/dashboard/billing",
-  },
-  {
-    label: "Notifications",
-    icon: Bell,
-    href: "/consult/dashboard/notifications",
   },
 ];
 

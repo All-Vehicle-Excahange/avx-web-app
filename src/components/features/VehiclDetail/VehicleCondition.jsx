@@ -533,93 +533,427 @@ function BikeTyreDiagram({ front, rear }) {
   const hasAny = [front, rear].some((v) => v && v.toUpperCase() !== "NA");
   if (!hasAny) return null;
 
+  const frontColor = condColor(front);
+  const rearColor = condColor(rear);
+
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
         <Disc size={16} />
         <h4 className="text-sm font-semibold text-primary/80 uppercase tracking-wide">
-          Tyre Condition
+          Tyre Condition (2-Wheeler)
         </h4>
       </div>
 
       <svg
-        viewBox="0 0 400 180"
+        viewBox="0 0 400 185"
         width="100%"
         height="100%"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-auto max-h-48 ml-0 mr-auto"
+        className="w-full h-auto max-h-52 ml-0 mr-auto"
       >
         <defs>
           <filter id="bike-shadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="6" stdDeviation="6" floodColor="#000000" floodOpacity="0.3" />
+            <feDropShadow
+              dx="0"
+              dy="6"
+              stdDeviation="6"
+              floodColor="#000000"
+              floodOpacity="0.35"
+            />
           </filter>
         </defs>
 
-        {/* ── ARROWS & CONNECTORS ── */}
-        {/* Front */}
-        <text x="100" y="20" textAnchor="middle" fontSize="11" fill="currentColor" fillOpacity="0.5" fontWeight="600">Front</text>
+        {/* ── TOP LABELS & CONNECTORS ── */}
+        {/* Front Tyre Label */}
+        <text
+          x="90"
+          y="20"
+          textAnchor="middle"
+          fontSize="11"
+          fill="currentColor"
+          fillOpacity="0.5"
+          fontWeight="600"
+        >
+          Front Tyre
+        </text>
         {condLabel(front) && (
-          <text x="100" y="38" textAnchor="middle" fontSize="13" fontWeight="700" fill={condColor(front)}>{condLabel(front)}</text>
+          <text
+            x="90"
+            y="38"
+            textAnchor="middle"
+            fontSize="13"
+            fontWeight="700"
+            fill={frontColor}
+          >
+            {condLabel(front)}
+          </text>
         )}
-        <line x1="100" y1="48" x2="100" y2="75" stroke="currentColor" strokeOpacity="0.25" strokeWidth="1.5" />
-        <polygon points="100,80 96,73 104,73" fill="currentColor" fillOpacity="0.6" />
+        <line
+          x1="90"
+          y1="44"
+          x2="90"
+          y2="78"
+          stroke="currentColor"
+          strokeOpacity="0.3"
+          strokeWidth="1.5"
+          strokeDasharray="3 3"
+        />
+        <polygon
+          points="90,83 86,76 94,76"
+          fill="currentColor"
+          fillOpacity="0.6"
+        />
 
-        {/* Rear */}
-        <text x="300" y="20" textAnchor="middle" fontSize="11" fill="currentColor" fillOpacity="0.5" fontWeight="600">Rear</text>
+        {/* Rear Tyre Label */}
+        <text
+          x="310"
+          y="20"
+          textAnchor="middle"
+          fontSize="11"
+          fill="currentColor"
+          fillOpacity="0.5"
+          fontWeight="600"
+        >
+          Rear Tyre
+        </text>
         {condLabel(rear) && (
-          <text x="300" y="38" textAnchor="middle" fontSize="13" fontWeight="700" fill={condColor(rear)}>{condLabel(rear)}</text>
+          <text
+            x="310"
+            y="38"
+            textAnchor="middle"
+            fontSize="13"
+            fontWeight="700"
+            fill={rearColor}
+          >
+            {condLabel(rear)}
+          </text>
         )}
-        <line x1="300" y1="48" x2="300" y2="75" stroke="currentColor" strokeOpacity="0.25" strokeWidth="1.5" />
-        <polygon points="300,80 296,73 304,73" fill="currentColor" fillOpacity="0.6" />
+        <line
+          x1="310"
+          y1="44"
+          x2="310"
+          y2="78"
+          stroke="currentColor"
+          strokeOpacity="0.3"
+          strokeWidth="1.5"
+          strokeDasharray="3 3"
+        />
+        <polygon
+          points="310,83 306,76 314,76"
+          fill="currentColor"
+          fillOpacity="0.6"
+        />
 
-        {/* ── BIKE DIAGRAM ── */}
+        {/* ── MOTORCYCLE SILHOUETTE ── */}
         <g filter="url(#bike-shadow)">
-          {/* Engine / Lower Body */}
-          <path d="M 160 130 L 220 130 L 230 90 L 170 90 Z" fill="currentColor" fillOpacity="0.1" stroke="currentColor" strokeOpacity="0.3" strokeWidth="2" strokeLinejoin="round" />
-          
-          {/* Exhaust */}
-          <line x1="200" y1="130" x2="280" y2="120" stroke="currentColor" strokeOpacity="0.4" strokeWidth="8" strokeLinecap="round" />
-          
-          {/* Swingarm */}
-          <line x1="200" y1="110" x2="300" y2="120" stroke="currentColor" strokeOpacity="0.5" strokeWidth="6" strokeLinecap="round" />
-          
-          {/* Front Forks */}
-          <line x1="100" y1="120" x2="140" y2="50" stroke="currentColor" strokeOpacity="0.5" strokeWidth="6" strokeLinecap="round" />
-          
-          {/* Headlight & Fairing */}
-          <path d="M 135 50 L 150 40 L 160 80 L 120 90 Z" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeOpacity="0.3" strokeWidth="2" strokeLinejoin="round" />
-          
-          {/* Tank */}
-          <path d="M 150 50 Q 190 30 210 70" fill="none" stroke="currentColor" strokeOpacity="0.2" strokeWidth="24" strokeLinecap="round" />
-          
-          {/* Seat & Tail */}
-          <path d="M 200 70 L 260 60 L 280 50 L 290 60 L 240 80 Z" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeOpacity="0.5" strokeWidth="2" strokeLinejoin="round" />
-          
-          {/* Handlebars */}
-          <line x1="140" y1="50" x2="130" y2="35" stroke="currentColor" strokeOpacity="0.8" strokeWidth="4" strokeLinecap="round" />
-          
-          {/* Front Tyre */}
-          <circle cx="100" cy="120" r="28" fill="none" stroke={condColor(front)} strokeWidth="10" />
-          <circle cx="100" cy="120" r="23" fill="none" stroke="currentColor" strokeOpacity="0.2" strokeWidth="1" />
-          <circle cx="100" cy="120" r="16" fill="currentColor" fillOpacity="0.1" />
-          <path d="M100 97 L100 143 M77 120 L123 120 M84 104 L116 136 M84 136 L116 104" stroke="currentColor" strokeOpacity="0.2" strokeWidth="2" />
-          <circle cx="100" cy="120" r="6" fill="none" stroke="currentColor" strokeOpacity="0.3" strokeWidth="2" />
-          <circle cx="100" cy="120" r="2" fill="currentColor" fillOpacity="0.5" />
-          
-          {/* Rear Tyre */}
-          <circle cx="300" cy="120" r="28" fill="none" stroke={condColor(rear)} strokeWidth="10" />
-          <circle cx="300" cy="120" r="23" fill="none" stroke="currentColor" strokeOpacity="0.2" strokeWidth="1" />
-          <circle cx="300" cy="120" r="16" fill="currentColor" fillOpacity="0.1" />
-          <path d="M300 97 L300 143 M277 120 L323 120 M284 104 L316 136 M284 136 L316 104" stroke="currentColor" strokeOpacity="0.2" strokeWidth="2" />
-          <circle cx="300" cy="120" r="6" fill="none" stroke="currentColor" strokeOpacity="0.3" strokeWidth="2" />
-          <circle cx="300" cy="120" r="2" fill="currentColor" fillOpacity="0.5" />
+          {/* Main Body Fairing & Fuel Tank */}
+          <path
+            d="M 125 105 L 140 75 Q 165 55 195 62 Q 220 68 235 80 L 290 68 Q 305 65 315 72 L 320 85 Q 300 95 270 95 Q 240 95 210 98 L 180 120 Q 155 130 140 120 Z"
+            fill="currentColor"
+            fillOpacity="0.15"
+            stroke="currentColor"
+            strokeOpacity="0.4"
+            strokeWidth="2"
+            strokeLinejoin="round"
+          />
+
+          {/* Windshield & Headlight Mask */}
+          <path
+            d="M 125 105 L 132 65 L 145 55 L 152 75 Z"
+            fill="currentColor"
+            fillOpacity="0.25"
+            stroke="currentColor"
+            strokeOpacity="0.5"
+            strokeWidth="1.5"
+          />
+
+          {/* ── ENHANCED STEERING ASSEMBLY & HANDLEBAR ── */}
+          {/* Steering Riser & Bar Stem */}
+          <path
+            d="M 136 60 L 140 48 L 126 44"
+            fill="none"
+            stroke="currentColor"
+            strokeOpacity="0.9"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+
+          {/* Rubber Handlebar Grip */}
+          <rect
+            x="118"
+            y="41"
+            width="10"
+            height="5"
+            rx="1.5"
+            transform="rotate(-12 123 43.5)"
+            fill="currentColor"
+            fillOpacity="0.8"
+          />
+
+          {/* Brake Lever */}
+          <line
+            x1="124"
+            y1="45"
+            x2="114"
+            y2="47"
+            stroke="currentColor"
+            strokeOpacity="0.9"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+
+          {/* Digital Instrument Cluster / Speedometer Meter Pod */}
+          <rect
+            x="134"
+            y="45"
+            width="12"
+            height="8"
+            rx="2.5"
+            transform="rotate(-15 140 49)"
+            fill="currentColor"
+            fillOpacity="0.35"
+            stroke="currentColor"
+            strokeOpacity="0.7"
+            strokeWidth="1.2"
+          />
+
+          {/* Seat Cushion */}
+          <path
+            d="M 215 82 Q 245 80 270 85 Q 285 78 298 74 L 275 92 Q 245 92 215 82 Z"
+            fill="currentColor"
+            fillOpacity="0.4"
+          />
+
+          {/* Engine & Transmission Block */}
+          <path
+            d="M 165 110 L 215 105 L 225 135 L 175 140 Z"
+            fill="currentColor"
+            fillOpacity="0.2"
+            stroke="currentColor"
+            strokeOpacity="0.4"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+          {/* Engine Cooling Fins */}
+          <line
+            x1="172"
+            y1="118"
+            x2="218"
+            y2="114"
+            stroke="currentColor"
+            strokeOpacity="0.3"
+            strokeWidth="1.5"
+          />
+          <line
+            x1="174"
+            y1="124"
+            x2="220"
+            y2="120"
+            stroke="currentColor"
+            strokeOpacity="0.3"
+            strokeWidth="1.5"
+          />
+          <line
+            x1="176"
+            y1="130"
+            x2="222"
+            y2="126"
+            stroke="currentColor"
+            strokeOpacity="0.3"
+            strokeWidth="1.5"
+          />
+
+          {/* Front Telescopic Forks */}
+          <line
+            x1="90"
+            y1="130"
+            x2="136"
+            y2="60"
+            stroke="currentColor"
+            strokeOpacity="0.6"
+            strokeWidth="4.5"
+            strokeLinecap="round"
+          />
+          <line
+            x1="94"
+            y1="130"
+            x2="140"
+            y2="60"
+            stroke="currentColor"
+            strokeOpacity="0.4"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+
+          {/* Front Fender / Mudguard */}
+          <path
+            d="M 64 125 A 32 32 0 0 1 115 110"
+            fill="none"
+            stroke="currentColor"
+            strokeOpacity="0.5"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+          />
+
+          {/* Rear Swingarm */}
+          <line
+            x1="205"
+            y1="128"
+            x2="310"
+            y2="130"
+            stroke="currentColor"
+            strokeOpacity="0.6"
+            strokeWidth="5"
+            strokeLinecap="round"
+          />
+
+          {/* Rear Shock Absorber */}
+          <line
+            x1="245"
+            y1="92"
+            x2="285"
+            y2="128"
+            stroke="currentColor"
+            strokeOpacity="0.5"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+          />
+
+          {/* Exhaust Pipe & Muffler */}
+          <path
+            d="M 190 135 L 240 142 L 315 132"
+            fill="none"
+            stroke="currentColor"
+            strokeOpacity="0.45"
+            strokeWidth="6"
+            strokeLinecap="round"
+          />
+          <path
+            d="M 260 140 L 320 128"
+            fill="none"
+            stroke="currentColor"
+            strokeOpacity="0.7"
+            strokeWidth="9"
+            strokeLinecap="round"
+          />
+
+          {/* ── FRONT TYRE ── */}
+          <g transform="translate(90, 130)">
+            {/* Outer Tread */}
+            <circle
+              cx="0"
+              cy="0"
+              r="32"
+              fill="none"
+              stroke={frontColor}
+              strokeWidth="10"
+            />
+            <circle
+              cx="0"
+              cy="0"
+              r="27"
+              fill="none"
+              stroke="currentColor"
+              strokeOpacity="0.2"
+              strokeWidth="1"
+            />
+            {/* Inner Hub / Rim */}
+            <circle
+              cx="0"
+              cy="0"
+              r="19"
+              fill="currentColor"
+              fillOpacity="0.12"
+              stroke="currentColor"
+              strokeOpacity="0.3"
+              strokeWidth="1.5"
+            />
+            {/* Alloy Spokes (6-spoke design) */}
+            <path
+              d="M 0 -19 L 0 19 M -16 -9 L 16 9 M -16 9 L 16 -9"
+              stroke="currentColor"
+              strokeOpacity="0.35"
+              strokeWidth="2"
+            />
+            {/* Brake Disc Rotors */}
+            <circle
+              cx="0"
+              cy="0"
+              r="12"
+              fill="none"
+              stroke="currentColor"
+              strokeOpacity="0.4"
+              strokeWidth="1.5"
+              strokeDasharray="3 2"
+            />
+            <circle cx="0" cy="0" r="5" fill="currentColor" fillOpacity="0.6" />
+          </g>
+
+          {/* ── REAR TYRE ── */}
+          <g transform="translate(310, 130)">
+            {/* Outer Tread */}
+            <circle
+              cx="0"
+              cy="0"
+              r="32"
+              fill="none"
+              stroke={rearColor}
+              strokeWidth="11"
+            />
+            <circle
+              cx="0"
+              cy="0"
+              r="26.5"
+              fill="none"
+              stroke="currentColor"
+              strokeOpacity="0.2"
+              strokeWidth="1"
+            />
+            {/* Inner Hub / Rim */}
+            <circle
+              cx="0"
+              cy="0"
+              r="18"
+              fill="currentColor"
+              fillOpacity="0.12"
+              stroke="currentColor"
+              strokeOpacity="0.3"
+              strokeWidth="1.5"
+            />
+            {/* Alloy Spokes (6-spoke design) */}
+            <path
+              d="M 0 -18 L 0 18 M -15 -9 L 15 9 M -15 9 L 15 -9"
+              stroke="currentColor"
+              strokeOpacity="0.35"
+              strokeWidth="2"
+            />
+            {/* Rear Sprocket / Disc */}
+            <circle
+              cx="0"
+              cy="0"
+              r="11"
+              fill="none"
+              stroke="currentColor"
+              strokeOpacity="0.4"
+              strokeWidth="1.5"
+              strokeDasharray="3 2"
+            />
+            <circle cx="0" cy="0" r="5" fill="currentColor" fillOpacity="0.6" />
+          </g>
         </g>
       </svg>
     </div>
   );
 }
 
-export default function VehicleCondition({ vehicle, open, setOpen, inspectionDetails }) {
+export default function VehicleCondition({
+  vehicle,
+  open,
+  setOpen,
+  inspectionDetails,
+}) {
   // handleResponse already unwraps api.data, so inspectionDetails IS the inspection object directly
   const d = inspectionDetails ?? null;
 
@@ -684,11 +1018,14 @@ export default function VehicleCondition({ vehicle, open, setOpen, inspectionDet
           {/* LEFT SIDE */}
           <div className="flex items-center gap-2 min-w-0">
             <CheckCircle size={20} className="shrink-0" />
-            <h3 className="text-lg md:text-xl font-semibold truncate">Vehicle Condition</h3>
-            
+            <h3 className="text-lg md:text-xl font-semibold truncate">
+              Vehicle Condition
+            </h3>
+
             {/* Desktop Badge: shown next to title on large screens */}
             <div className="hidden md:flex items-center gap-2">
-              {(d?.inspectionStatus || vehicle?.inspectionStatus) === "AVX_INSPECTED" ? (
+              {(d?.inspectionStatus || vehicle?.inspectionStatus) ===
+              "AVX_INSPECTED" ? (
                 <div className="relative w-28 h-6 ml-1">
                   <Image
                     src="/inspection_small.svg"
@@ -697,9 +1034,14 @@ export default function VehicleCondition({ vehicle, open, setOpen, inspectionDet
                     className="object-contain object-left"
                   />
                 </div>
-              ) : (d?.inspectionStatus || vehicle?.inspectionStatus) && (d?.inspectionStatus || vehicle?.inspectionStatus) !== "NOT_INSPECTED" ? (
+              ) : (d?.inspectionStatus || vehicle?.inspectionStatus) &&
+                (d?.inspectionStatus || vehicle?.inspectionStatus) !==
+                  "NOT_INSPECTED" ? (
                 <span className="text-xs font-bold px-2.5 py-0.5 rounded-full ml-1.5 border border-fourth text-white bg-fourth shadow-sm whitespace-nowrap">
-                  {(d?.inspectionStatus || vehicle?.inspectionStatus).replace(/_/g, " ")}
+                  {(d?.inspectionStatus || vehicle?.inspectionStatus).replace(
+                    /_/g,
+                    " ",
+                  )}
                 </span>
               ) : null}
             </div>
@@ -709,7 +1051,8 @@ export default function VehicleCondition({ vehicle, open, setOpen, inspectionDet
           <div className="flex items-center gap-2 shrink-0">
             {/* Mobile Badge: shown next to arrow on small screens */}
             <div className="md:hidden flex items-center gap-1.5">
-              {(d?.inspectionStatus || vehicle?.inspectionStatus) === "AVX_INSPECTED" ? (
+              {(d?.inspectionStatus || vehicle?.inspectionStatus) ===
+              "AVX_INSPECTED" ? (
                 <div className="relative w-24 h-6">
                   <Image
                     src="/inspection_small.svg"
@@ -718,9 +1061,14 @@ export default function VehicleCondition({ vehicle, open, setOpen, inspectionDet
                     className="object-contain object-right"
                   />
                 </div>
-              ) : (d?.inspectionStatus || vehicle?.inspectionStatus) && (d?.inspectionStatus || vehicle?.inspectionStatus) !== "NOT_INSPECTED" ? (
+              ) : (d?.inspectionStatus || vehicle?.inspectionStatus) &&
+                (d?.inspectionStatus || vehicle?.inspectionStatus) !==
+                  "NOT_INSPECTED" ? (
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full border border-fourth text-white bg-fourth shadow-sm whitespace-nowrap">
-                  {(d?.inspectionStatus || vehicle?.inspectionStatus).replace(/_/g, " ")}
+                  {(d?.inspectionStatus || vehicle?.inspectionStatus).replace(
+                    /_/g,
+                    " ",
+                  )}
                 </span>
               ) : null}
             </div>
@@ -744,7 +1092,10 @@ export default function VehicleCondition({ vehicle, open, setOpen, inspectionDet
             <div className="mt-3 pb-6 space-y-6 px-6">
               {!d ? (
                 <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
-                  <FileSearch className="w-10 h-10 text-third/50 mb-3" strokeWidth={1.5} />
+                  <FileSearch
+                    className="w-10 h-10 text-third/50 mb-3"
+                    strokeWidth={1.5}
+                  />
                   <p className="text-sm font-semibold text-primary">
                     No condition data available for this vehicle.
                   </p>
@@ -805,20 +1156,17 @@ export default function VehicleCondition({ vehicle, open, setOpen, inspectionDet
                   )}
 
                   {/* ===== VIEW INSPECTION REPORT BUTTON ===== */}
-                  <div className="flex justify-end mt-6">
-                    <Button
-                      variant="outline"
-                      showIcon={true}
-                      locked={!d?.reportUrl}
-                      onClick={
-                        d?.reportUrl
-                          ? () => window.open(d.reportUrl, "_blank")
-                          : undefined
-                      }
-                    >
-                      View Inspection Report
-                    </Button>
-                  </div>
+                  {d?.reportUrl && (
+                    <div className="flex justify-end mt-6">
+                      <Button
+                        variant="outline"
+                        showIcon={true}
+                        onClick={() => window.open(d.reportUrl, "_blank")}
+                      >
+                        View Inspection Report
+                      </Button>
+                    </div>
+                  )}
                 </>
               )}
             </div>
