@@ -8,6 +8,14 @@ import { getActiveBasicUpdate } from "@/services/consult.profile.service";
 import { getUserProfileStrength } from "@/services/user.service";
 import { queryOptions } from "@tanstack/react-query";
 
+// Skip retries for status codes that are definitive (no-profile / token invalid).
+// 494 = custom "profile not found / not eligible", 404 = not found.
+const shouldRetry = (failureCount, error) => {
+  const status = error?.response?.status ?? error?.status;
+  if (status === 494 || status === 404 || status === 403) return false;
+  return failureCount < 2; // allow at most 1 retry for transient errors
+};
+
 export const getVerificationStatusQuery = () => {
   return queryOptions({
     queryKey: ["profile-verification-status"],
@@ -16,6 +24,7 @@ export const getVerificationStatusQuery = () => {
       return res?.data;
     },
     staleTime: 10 * 60 * 1000,
+    retry: shouldRetry,
   });
 };
 
@@ -27,6 +36,7 @@ export const getDocumentStatusQuery = () => {
       return res?.data;
     },
     staleTime: 10 * 60 * 1000,
+    retry: shouldRetry,
   });
 };
 
@@ -38,6 +48,7 @@ export const getConsultantAddressQuery = () => {
       return res?.data;
     },
     staleTime: 10 * 60 * 1000,
+    retry: shouldRetry,
   });
 };
 
@@ -49,6 +60,7 @@ export const getConsultantProfileQuery = () => {
       return res?.data;
     },
     staleTime: 10 * 60 * 1000,
+    retry: shouldRetry,
   });
 };
 
@@ -60,6 +72,7 @@ export const getActiveBasicUpdateQuery = () => {
       return res?.data;
     },
     staleTime: 10 * 60 * 1000,
+    retry: shouldRetry,
   });
 };
 
@@ -71,5 +84,6 @@ export const getUserProfileStrengthQuery = () => {
       return res?.data;
     },
     staleTime: 10 * 60 * 1000,
+    retry: shouldRetry,
   });
 };

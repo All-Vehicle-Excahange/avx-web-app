@@ -54,26 +54,26 @@ export default function ProfileComponent() {
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
   // TanStack Queries
-  const { data: verificationDataRaw, isFetching: verificationLoading } =
+  const { data: verificationDataRaw, isLoading: verificationLoading } =
     useQuery(getVerificationStatusQuery());
 
-  const { data: documentDataRaw, isFetching: documentLoading } = useQuery(
+  const { data: documentDataRaw, isLoading: documentLoading } = useQuery(
     getDocumentStatusQuery(),
   );
 
-  const { data: addressDataRaw, isFetching: addressLoading } = useQuery(
+  const { data: addressDataRaw, isLoading: addressLoading } = useQuery(
     getConsultantAddressQuery(),
   );
 
-  const { data: profileDataRaw, isFetching: profileLoading } = useQuery(
+  const { data: profileDataRaw, isLoading: profileLoading } = useQuery(
     getConsultantProfileQuery(),
   );
 
-  const { data: basicUpdateDataRaw, isFetching: basicUpdateLoading } = useQuery(
+  const { data: basicUpdateDataRaw } = useQuery(
     getActiveBasicUpdateQuery(),
   );
 
-  const { data: strengthDataRaw, isFetching: strengthLoading } = useQuery(
+  const { data: strengthDataRaw, isLoading: strengthLoading } = useQuery(
     getUserProfileStrengthQuery(),
   );
 
@@ -82,7 +82,6 @@ export default function ProfileComponent() {
     (!documentDataRaw && documentLoading) ||
     (!addressDataRaw && addressLoading) ||
     (!profileDataRaw && profileLoading) ||
-    (!basicUpdateDataRaw && basicUpdateLoading) ||
     (!strengthDataRaw && strengthLoading);
 
   React.useEffect(() => {

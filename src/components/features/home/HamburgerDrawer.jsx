@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAuthStore } from "@/stores/useAuthStore";
 import Navbar from "@/components/layout/Navbar";
+import { logoutUser } from "@/services/auth.service";
 
 export default function HamburgerDrawer({ open, onClose }) {
   const { isLoggedIn, user, openLoginPopup, openSignupPopup, logout } =
@@ -60,9 +61,15 @@ export default function HamburgerDrawer({ open, onClose }) {
     openSignupPopup();
   };
 
-  const handleLogoutClick = () => {
-    logout();
-    onClose();
+  const handleLogoutClick = async () => {
+    try {
+      await logoutUser();
+    } catch (err) {
+      console.error("Logout API error:", err);
+    } finally {
+      logout();
+      onClose();
+    }
   };
 
   return (

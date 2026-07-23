@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { Search, X, Loader2, Car, User, Mic, Bike, Fuel, Zap, Flame, Sparkles } from "lucide-react";
+import { Search, X, Loader2, Car, User, Bike, Fuel, Zap, Flame, Sparkles, MapPin, Tag } from "lucide-react";
 import { useRouter } from "next/router";
 import {
   getMakersByFuelOrBodyType,
@@ -83,6 +83,131 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const [budget, setBudget] = useState("");
   const [brandOptions, setBrandOptions] = useState([]);
   const [brandSearch, setBrandSearch] = useState("");
+
+  /* ================= VEHICLE & BRAND SEARCH SUGGESTIONS (NAVBAR EQUIVALENT) ================= */
+  const [vehicleSearchQuery, setVehicleSearchQuery] = useState("");
+  const [suggestionsData, setSuggestionsData] = useState([]);
+  const [filteredVehicleSuggestions, setFilteredVehicleSuggestions] = useState([]);
+  const [isSuggestionsLoaded, setIsSuggestionsLoaded] = useState(false);
+  const [recentSearches, setRecentSearches] = useState([
+    "Hyundai Creta",
+    "Swift VXI",
+    "SUV under 10L"
+  ]);
+
+  const loadSearchSuggestions = async () => {
+    if (isSuggestionsLoaded) return;
+    try {
+      const data = await import("@/data/searchSuggestions.json");
+      const rawSuggestions = data.default || data;
+      const loadedSuggestions = rawSuggestions.map((s) => {
+        if (s.type === "brand" || s.type === "model") {
+          const prefix = s.label.toLowerCase().startsWith("used") ? "" : "Used ";
+          return { ...s, rawLabel: s.label, label: `${prefix}${s.label}` };
+        }
+        return s;
+      });
+
+      let consultantsList = [];
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.reecomm.online/api/v1/website";
+        const cleanApiUrl = apiUrl.replace(/\/$/, "");
+        const consultRes = await fetch(`${cleanApiUrl}/homefeed/consultations/seo?pageNo=1&size=100`);
+        if (consultRes.ok) {
+          const consultData = await consultRes.json();
+          if (consultData?.data && Array.isArray(consultData.data)) {
+            consultantsList = consultData.data.map((store) => ({
+              id: `consult-${store.id}`,
+              label: store.consultationName || store.username || "",
+              username: store.username || "",
+              type: "consultant",
+              link: `/auto-consultant/${store.username}`,
+            })).filter((c) => c.label && c.username);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load consultants list in filter bar", err);
+      }
+
+      setSuggestionsData([...loadedSuggestions, ...consultantsList]);
+      setIsSuggestionsLoaded(true);
+    } catch (err) {
+      console.error("Failed to load search suggestions in filter bar", err);
+    }
+  };
+
+  useEffect(() => {
+    loadSearchSuggestions();
+  }, []);
+
+  useEffect(() => {
+    if (!vehicleSearchQuery.trim()) {
+      setFilteredVehicleSuggestions([]);
+      return;
+    }
+    const q = vehicleSearchQuery.toLowerCase().trim();
+    const matches = suggestionsData
+      .filter((s) => {
+        const labelMatch = s.label.toLowerCase().includes(q);
+        const usernameMatch = s.username && s.username.toLowerCase().includes(q);
+        return labelMatch || usernameMatch;
+      })
+      .slice(0, 8);
+
+    setFilteredVehicleSuggestions(matches);
+  }, [vehicleSearchQuery, suggestionsData]);
+
+  const handleSelectVehicleSuggestion = (item) => {
+    const searchLabel = item.label || item.rawLabel || vehicleSearchQuery;
+    
+    // Save to recent searches
+    if (searchLabel) {
+      setRecentSearches((prev) => {
+        const filtered = prev.filter((term) => term.toLowerCase() !== searchLabel.toLowerCase());
+        return [searchLabel, ...filtered].slice(0, 5);
+      });
+    }
+
+    setMobileOpen(false);
+    setActiveTab(null);
+    setVehicleSearchQuery("");
+
+    if (item.link) {
+      push(item.link);
+      return;
+    }
+    if (item.username) {
+      push(`/auto-consultant/${item.username}`);
+      return;
+    }
+    if (item.type === "brand") {
+      const brandName = item.rawLabel || item.brand || item.label;
+      push(`/search?brand=${encodeURIComponent(brandName)}`);
+      return;
+    }
+    if (item.type === "model") {
+      const brandParam = item.brand ? `&brand=${encodeURIComponent(item.brand)}` : "";
+      const modelIdParam = item.modelId ? `&modelId=${item.modelId}&model=${encodeURIComponent(item.model || item.rawLabel)}` : "";
+      push(`/search?q=${encodeURIComponent(item.label || item.rawLabel)}${brandParam}${modelIdParam}`);
+      return;
+    }
+    push(`/search?q=${encodeURIComponent(searchLabel)}`);
+  };
+
+  const handleVehicleSearchSubmit = (queryStr = vehicleSearchQuery) => {
+    if (!queryStr || !queryStr.trim()) return;
+    const cleanQuery = queryStr.trim();
+    
+    setRecentSearches((prev) => {
+      const filtered = prev.filter((term) => term.toLowerCase() !== cleanQuery.toLowerCase());
+      return [cleanQuery, ...filtered].slice(0, 5);
+    });
+
+    setMobileOpen(false);
+    setActiveTab(null);
+    setVehicleSearchQuery("");
+    push(`/search?q=${encodeURIComponent(cleanQuery)}`);
+  };
 
   const [priceRange, setPriceRange] = useState("");
   const [minPrice, setMinPrice] = useState(50000);
@@ -1523,20 +1648,109 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
             </button>
           </div>
 
-          {/* Search Bar */}
+          {/* Search Bar with live vehicle & city suggestions */}
           <div className="px-5 mt-4">
-            <div className="relative flex items-center w-full bg-[#1A1A1A] border border-[#2A2A2A] rounded-full overflow-hidden focus-within:border-[#444] transition-colors py-0.5">
-              <div className="pl-4 text-blue-500">
-                <Search size={18} strokeWidth={2} />
+            <div className="relative">
+              <div className="flex items-center w-full bg-[#1A1A1A] border border-[#2A2A2A] rounded-full overflow-hidden focus-within:border-blue-500/60 transition-colors py-0.5">
+                <div className="pl-4 text-blue-500 shrink-0">
+                  <Search size={18} strokeWidth={2} />
+                </div>
+                <input
+                  type="text"
+                  placeholder="Search vehicles, brands, models, consultants..."
+                  value={vehicleSearchQuery || location}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setVehicleSearchQuery(val);
+                    handleLocationChange(e);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleVehicleSearchSubmit(vehicleSearchQuery || location);
+                    }
+                  }}
+                  onFocus={() => {
+                    loadSearchSuggestions();
+                    if (locationSuggestions.length === 0) fetchPopularCities();
+                  }}
+                  className="flex-1 bg-transparent border-none outline-none text-white py-2.5 px-3 text-[15px] placeholder-gray-500"
+                />
+                {(vehicleSearchQuery || location) && (
+                  <button
+                    onClick={() => {
+                      setVehicleSearchQuery("");
+                      setLocation("");
+                      setCityId(null);
+                      setStateId(null);
+                      fetchPopularCities();
+                    }}
+                    className="pr-4 text-gray-500 hover:text-white transition-colors cursor-pointer shrink-0"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
               </div>
-              <input
-                type="text"
-                placeholder="Search"
-                className="flex-1 bg-transparent border-none outline-none text-white py-2.5 px-3 text-[15px] placeholder-gray-500"
-              />
-              <div className="pr-4 text-blue-500 cursor-pointer">
-                <Mic size={18} strokeWidth={2} />
-              </div>
+
+              {/* Combined Suggestions dropdown (Vehicles, Brands, Models, Consultants, Cities) */}
+              {((vehicleSearchQuery.trim() && filteredVehicleSuggestions.length > 0) || (location.trim() && locationSuggestions.length > 0)) && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-[#161616] border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl z-[60] max-h-64 overflow-y-auto custom-scrollbar">
+                  {/* Vehicle / Brand / Model / Consultant Suggestions */}
+                  {filteredVehicleSuggestions.map((item, idx) => (
+                    <button
+                      key={item.id || `veh-${idx}`}
+                      onClick={() => handleSelectVehicleSuggestion(item)}
+                      className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/5 text-left border-b border-neutral-800/40 last:border-none transition-colors"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        {item.type === "consultant" ? (
+                          <User size={16} className="text-purple-400 shrink-0" />
+                        ) : item.type === "brand" ? (
+                          <Car size={16} className="text-blue-400 shrink-0" />
+                        ) : (
+                          <Tag size={16} className="text-gray-400 shrink-0" />
+                        )}
+                        <span className="text-sm font-semibold text-white truncate">
+                          {item.label}
+                        </span>
+                      </div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white/10 text-gray-400 shrink-0 ml-2">
+                        {item.type || "search"}
+                      </span>
+                    </button>
+                  ))}
+
+                  {/* City / State Suggestions */}
+                  {locationSuggestions.slice(0, 5).map((item, idx) => (
+                    <button
+                      key={item.isStateOnly ? `state-${item.stateId}-${idx}` : `city-${item.cityId}-${idx}`}
+                      onClick={() => {
+                        if (item.isStateOnly) {
+                          setLocation(item.stateName);
+                          setCityId(null);
+                          setStateId(item.stateId);
+                        } else {
+                          setLocation(`${item.cityName}, ${item.stateName}`);
+                          setCityId(item.cityId);
+                          setStateId(item.stateId);
+                        }
+                        setVehicleSearchQuery("");
+                      }}
+                      className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/5 text-left border-b border-neutral-800/40 last:border-none transition-colors"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <MapPin size={16} className="text-emerald-400 shrink-0" />
+                        <span className="text-sm font-semibold text-white truncate">
+                          {item.isStateOnly ? item.stateName : item.cityName}
+                        </span>
+                      </div>
+                      <span className="text-xs text-gray-500 shrink-0">
+                        {item.isStateOnly ? "State" : item.stateName}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
@@ -1544,18 +1758,18 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           <div className="px-5 mt-5">
             <div className="flex justify-between items-center mb-2.5">
               <span className="text-sm font-semibold text-white/90">Recent Searches</span>
-              <button className="text-xs text-blue-500 hover:underline font-semibold cursor-pointer">
+              <button
+                onClick={() => setRecentSearches([])}
+                className="text-xs text-blue-500 hover:underline font-semibold cursor-pointer"
+              >
                 Clear All
               </button>
             </div>
             <div className="flex gap-2.5 overflow-x-auto no-scrollbar pb-1">
-              {[
-                "Hyundai Creta",
-                "Swift VXI",
-                "SUV under 10L"
-              ].map((term, index) => (
+              {recentSearches.map((term, index) => (
                 <button
                   key={index}
+                  onClick={() => handleVehicleSearchSubmit(term)}
                   className="flex items-center gap-1.5 px-3.5 py-2 bg-[#1A1A1A] hover:bg-[#252525] border border-neutral-800 rounded-full text-xs text-gray-300 font-medium shrink-0 cursor-pointer transition-colors"
                 >
                   <span className="text-gray-500">🕒</span>

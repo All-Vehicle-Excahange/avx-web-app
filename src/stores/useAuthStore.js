@@ -80,7 +80,12 @@ export const useAuthStore = create((set) => ({
 
   //  LOGOUT FUNCTION
   logout: () => {
-    queryClient.clear();
+    try {
+      queryClient.clear();
+      queryClient.invalidateQueries();
+    } catch (e) {
+      console.error("Error clearing query cache on logout:", e);
+    }
     set({
       user: null,
       token: null,
