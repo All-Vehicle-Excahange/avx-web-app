@@ -181,7 +181,18 @@ export default function CustomSelect({
               : "text-secondary placeholder:text-secondary/60",
           )}
         />
-        <ChevronDown className="w-4 h-4" />
+        <ChevronDown 
+          className={cn(
+            "w-4 h-4 cursor-pointer transition-transform duration-200",
+            open && "rotate-180"
+          )}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (!disabled && !readOnly) {
+              setOpen(!open);
+            }
+          }}
+        />
       </div>
 
       {/* Dropdown */}
@@ -190,7 +201,7 @@ export default function CustomSelect({
           <div
             ref={listRef}
             className={cn(
-              "rounded-xl shadow-xl max-h-40 overflow-y-auto border",
+              "rounded-xl shadow-xl max-h-40 overflow-y-auto custom-scrollbar border",
               variant === "transparent" || variant === "colored"
                 ? "bg-neutral-950 border-white/10 backdrop-blur-xl"
                 : "bg-primary border border-third/40",

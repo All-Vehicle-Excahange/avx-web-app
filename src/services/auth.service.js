@@ -6,7 +6,7 @@ const ENDPOINT = {
   signup: "/auth/signup",
   login: "/auth/login",
   refresh: "/auth/refresh",
-  logout: "/auth/logout",
+  logout: "/users/profile/logout",
   googleVerify: "/auth/google/verify",
   googleSignupVerify: "/auth/google/signup/verify",
 };
