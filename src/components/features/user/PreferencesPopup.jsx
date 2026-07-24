@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import {
@@ -19,8 +19,13 @@ import {
 import ChipGroup from "@/components/ui/chipGroup";
 import Button from "@/components/ui/button";
 
-import { getMakers, getModelByMakerId } from "@/services/preference.service";
-import { addUserPefrence, getCities, getState, getAllTown } from "@/services/user.service";
+import { getAndSearchMakers, getAndSearchModel } from "@/services/filter";
+import {
+  addUserPefrence,
+  getCities,
+  getState,
+  getAllTown,
+} from "@/services/user.service";
 
 /* ─── step config ─── */
 const STEPS = [
@@ -32,10 +37,10 @@ const STEPS = [
 
 /* ─── hero images per step ─── */
 const STEP_IMAGES = [
-  "/hero-back.webp",
-  "/engine-core.jpg",
-  "/big_card_car.jpg",
-  "/homeBanner.jpg",
+  "/final-location.webp",
+  "/car_inspection.webp",
+  "/vehicle_and_men.webp",
+  "/budget-final.webp",
 ];
 
 const STEP_TAGLINES = [
@@ -67,6 +72,10 @@ function PreferencesPopup({
   const [stateSearch, setStateSearch] = useState("");
   const [citySearch, setCitySearch] = useState("");
   const [townSearch, setTownSearch] = useState("");
+  const [brandSearch, setBrandSearch] = useState("");
+  const [modelSearch, setModelSearch] = useState("");
+  const brandSearchTimeoutRef = useRef(null);
+  const modelSearchTimeoutRef = useRef(null);
   const [makers, setMakers] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -167,16 +176,18 @@ function PreferencesPopup({
     const fetchAllTowns = async () => {
       try {
         const responses = await Promise.all(
-          selectedCities.map((cityId) => getAllTown(cityId))
+          selectedCities.map((cityId) => getAllTown(cityId)),
         );
         const allTowns = responses.flatMap((res) => res.data || []);
         const uniqueTowns = Array.from(
-          new Map(allTowns.map((t) => [t.id, t])).values()
+          new Map(allTowns.map((t) => [t.id, t])).values(),
         );
         setTowns(uniqueTowns);
 
         const validTownIds = new Set(uniqueTowns.map((t) => String(t.id)));
-        setSelectedTowns((prev) => prev.filter((id) => validTownIds.has(String(id))));
+        setSelectedTowns((prev) =>
+          prev.filter((id) => validTownIds.has(String(id))),
+        );
       } catch (err) {
         console.error("Error fetching towns for preferences:", err);
       }
@@ -185,17 +196,35 @@ function PreferencesPopup({
   }, [selectedCities]);
 
   /* ─── fetch makers ─── */
-  const fetchMakers = async (pageNumber = 1) => {
+  const fetchMakers = async (pageNumber = 1, search = brandSearch) => {
     try {
       setLoadingMakers(true);
-      const response = await getMakers({ page: pageNumber, limit: 10 });
-      setMakers((prev) => {
-        const merged = [...prev, ...response.data];
-        return Array.from(
-          new Map(merged.map((m) => [m.makeId || m.id, m])).values(),
-        );
+      const response = await getAndSearchMakers({
+        searchTerm: search.trim() || undefined,
+        page: pageNumber,
+        limit: 10,
       });
-      setTotalPages(response.meta.totalPages);
+      if (response.success && response.data) {
+        setMakers((prev) => {
+          if (pageNumber === 1) {
+            const keep = prev.filter((p) =>
+              selectedBrands.includes(p.makeId || p.id),
+            );
+            const filteredNew = response.data.filter(
+              (nb) =>
+                !keep.some((k) => (k.makeId || k.id) === (nb.makeId || nb.id)),
+            );
+            return [...keep, ...filteredNew];
+          }
+          const merged = [...prev, ...response.data];
+          return Array.from(
+            new Map(merged.map((m) => [m.makeId || m.id, m])).values(),
+          );
+        });
+        const meta = response.pagination || response.meta;
+        setTotalPages(meta ? meta.totalPages : 1);
+        setPage(pageNumber);
+      }
     } catch (error) {
       console.error("Failed to fetch makers:", error);
     } finally {
@@ -204,50 +233,82 @@ function PreferencesPopup({
   };
 
   useEffect(() => {
-    if (isOpen) {
-      setMakers([]);
+    if (!isOpen) return;
+    if (brandSearchTimeoutRef.current)
+      clearTimeout(brandSearchTimeoutRef.current);
+
+    brandSearchTimeoutRef.current = setTimeout(() => {
       setPage(1);
-      fetchMakers(1);
+      fetchMakers(1, brandSearch);
+    }, 400);
+
+    return () => clearTimeout(brandSearchTimeoutRef.current);
+  }, [brandSearch, isOpen]);
+
+  useEffect(() => {
+    if (isOpen) {
+      setBrandSearch("");
+      setModelSearch("");
+      setMakers([]);
+      setModels([]);
+      setPage(1);
+      fetchMakers(1, "");
     }
   }, [isOpen]);
 
   const loadMoreMakers = () => {
     if (page < totalPages && !loadingMakers) {
       const nextPage = page + 1;
-      setPage(nextPage);
-      fetchMakers(nextPage);
+      fetchMakers(nextPage, brandSearch);
     }
   };
 
   /* ─── fetch models ─── */
-  const fetchModels = async (pageNumber = 1) => {
+  const fetchModels = async (pageNumber = 1, search = modelSearch) => {
+    if (selectedBrands.length === 0) {
+      setModels([]);
+      return;
+    }
     try {
       setLoadingModels(true);
-      if (pageNumber === 1) setModels([]);
 
       let allModels = [];
       let maxPages = 1;
 
       for (let makerId of selectedBrands) {
-        const response = await getModelByMakerId({
-          makerId,
+        const response = await getAndSearchModel({
+          maker_id: makerId,
+          searchTerm: search.trim() || undefined,
           page: pageNumber,
-          limit: 50,
+          limit: 10,
         });
-        allModels = [...allModels, ...response.data];
-
-        if (response.meta && response.meta.totalPages > maxPages) {
-          maxPages = response.meta.totalPages;
+        if (response.success && response.data) {
+          allModels = [...allModels, ...response.data];
+          const meta = response.pagination || response.meta;
+          if (meta && meta.totalPages > maxPages) {
+            maxPages = meta.totalPages;
+          }
         }
       }
 
       setModels((prev) => {
-        const merged = pageNumber === 1 ? allModels : [...prev, ...allModels];
+        if (pageNumber === 1) {
+          const keep = prev.filter((p) =>
+            selectedModels.includes(p.modelId || p.id),
+          );
+          const filteredNew = allModels.filter(
+            (nm) =>
+              !keep.some((k) => (k.modelId || k.id) === (nm.modelId || nm.id)),
+          );
+          return [...keep, ...filteredNew];
+        }
+        const merged = [...prev, ...allModels];
         return Array.from(
           new Map(merged.map((m) => [m.modelId || m.id, m])).values(),
         );
       });
       setModelTotalPages(maxPages);
+      setModelPage(pageNumber);
     } catch (error) {
       console.error("Failed to fetch models:", error);
     } finally {
@@ -256,19 +317,22 @@ function PreferencesPopup({
   };
 
   useEffect(() => {
-    if (selectedBrands.length === 0) {
-      setModels([]);
-      return;
-    }
-    setModelPage(1);
-    fetchModels(1);
-  }, [selectedBrands]);
+    if (!isOpen || selectedBrands.length === 0) return;
+    if (modelSearchTimeoutRef.current)
+      clearTimeout(modelSearchTimeoutRef.current);
+
+    modelSearchTimeoutRef.current = setTimeout(() => {
+      setModelPage(1);
+      fetchModels(1, modelSearch);
+    }, 400);
+
+    return () => clearTimeout(modelSearchTimeoutRef.current);
+  }, [modelSearch, selectedBrands, isOpen]);
 
   const loadMoreModels = () => {
     if (modelPage < modelTotalPages && !loadingModels) {
       const nextPage = modelPage + 1;
-      setModelPage(nextPage);
-      fetchModels(nextPage);
+      fetchModels(nextPage, modelSearch);
     }
   };
 
@@ -279,7 +343,11 @@ function PreferencesPopup({
     new Map(
       makers.map((m) => [
         m.makeId || m.id,
-        { value: m.makeId || m.id, label: m.makeDisplay },
+        {
+          value: m.makeId || m.id,
+          label: m.makeDisplay || m.makeName,
+          logo: m.logo,
+        },
       ]),
     ).values(),
   );
@@ -287,7 +355,10 @@ function PreferencesPopup({
     new Map(
       models.map((m) => [
         m.modelId || m.id,
-        { value: m.modelId || m.id, label: m.modelName },
+        {
+          value: m.modelId || m.id,
+          label: m.modelDisplayName || m.modelName,
+        },
       ]),
     ).values(),
   );
@@ -305,8 +376,6 @@ function PreferencesPopup({
   ];
 
   const vehicleTypes = [
-    { value: "OTHER", label: "Other" },
-    { value: "COMMERCIAL", label: "Commercial" },
     { value: "TWO_WHEELER", label: "Two Wheeler" },
     { value: "FOUR_WHEELER", label: "Four Wheeler" },
   ];
@@ -346,12 +415,26 @@ function PreferencesPopup({
       fuelTypes: selectedFuelTypes,
       transmissionTypes: selectedTransmissionTypes,
       makerDetails: selectedBrands.map((id) => {
-        const maker = makers.find((m) => m.makeId === id);
-        return { makerId: id, makerName: maker?.makeDisplay || "" };
+        const maker = makers.find(
+          (m) =>
+            (m.makeId || m.id) === id ||
+            String(m.makeId || m.id) === String(id),
+        );
+        return {
+          makerId: id,
+          makerName: maker?.makeDisplay || maker?.makeName || "",
+        };
       }),
       modelDetails: selectedModels.map((id) => {
-        const model = models.find((m) => m.modelId === id);
-        return { modelId: id, modelName: model?.modelName || "" };
+        const model = models.find(
+          (m) =>
+            (m.modelId || m.id) === id ||
+            String(m.modelId || m.id) === String(id),
+        );
+        return {
+          modelId: id,
+          modelName: model?.modelDisplayName || model?.modelName || "",
+        };
       }),
       minPrice: minPrice ? Number(minPrice) : null,
       maxPrice: maxPrice ? Number(maxPrice) : null,
@@ -375,8 +458,8 @@ function PreferencesPopup({
   const stepCounts = [
     selectedBrands.length + selectedModels.length,
     selectedFuelTypes.length +
-    selectedTransmissionTypes.length +
-    selectedVehicleTypes.length,
+      selectedTransmissionTypes.length +
+      selectedVehicleTypes.length,
     selectedStates.length + selectedCities.length + selectedTowns.length,
     (minPrice ? 1 : 0) + (maxPrice ? 1 : 0),
   ];
@@ -392,6 +475,9 @@ function PreferencesPopup({
         onLoadMore={loadMoreMakers}
         selected={selectedBrands}
         searchable={true}
+        searchValue={brandSearch}
+        onSearchChange={setBrandSearch}
+        isLoading={loadingMakers}
         onChange={(values) => setSelectedBrands(values)}
       />
       <div className="pt-2 border-t border-primary/5">
@@ -407,6 +493,9 @@ function PreferencesPopup({
           hasMore={modelPage < modelTotalPages}
           onLoadMore={loadMoreModels}
           searchable={true}
+          searchValue={modelSearch}
+          onSearchChange={setModelSearch}
+          isLoading={loadingModels}
           selected={selectedModels}
           onChange={(values) => {
             if (values.length > 5) {
@@ -614,7 +703,9 @@ function PreferencesPopup({
           </div>
           <input
             type="text"
-            placeholder={selectedCities.length > 0 ? "Search town..." : "Select city first"}
+            placeholder={
+              selectedCities.length > 0 ? "Search town..." : "Select city first"
+            }
             value={townSearch}
             disabled={selectedCities.length === 0}
             onFocus={() => setShowTownDropdown(true)}
@@ -755,7 +846,13 @@ function PreferencesPopup({
                 className="absolute inset-0 transition-opacity duration-500"
                 style={{ opacity: activeStep === i ? 1 : 0 }}
               >
-                <Image src={src} loading="lazy" alt="" fill className="object-cover" />
+                <Image
+                  src={src}
+                  loading="lazy"
+                  alt=""
+                  fill
+                  className="object-cover"
+                />
               </div>
             ))}
           </div>
@@ -769,12 +866,13 @@ function PreferencesPopup({
               <button
                 key={s.id}
                 onClick={() => setActiveStep(i)}
-                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${activeStep === i
-                  ? "w-8 bg-white"
-                  : stepCounts[i] > 0
-                    ? "w-4 bg-white/60"
-                    : "w-4 bg-white/25"
-                  }`}
+                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                  activeStep === i
+                    ? "w-8 bg-white"
+                    : stepCounts[i] > 0
+                      ? "w-4 bg-white/60"
+                      : "w-4 bg-white/25"
+                }`}
               />
             ))}
           </div>
@@ -816,10 +914,11 @@ function PreferencesPopup({
                 <button
                   key={step.id}
                   onClick={() => setActiveStep(i)}
-                  className={`relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all cursor-pointer ${isActive
-                    ? "text-third"
-                    : "text-primary/40 hover:text-primary/70"
-                    }`}
+                  className={`relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all cursor-pointer ${
+                    isActive
+                      ? "text-third"
+                      : "text-primary/40 hover:text-primary/70"
+                  }`}
                 >
                   <Icon size={16} />
                   <span className="hidden sm:inline">{step.label}</span>

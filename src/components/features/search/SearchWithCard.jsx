@@ -285,20 +285,20 @@ export default function SearchWithCard({
   // Synchronously update selected filters from initialFilters prop during render
   const [prevInitialFilters, setPrevInitialFilters] = useState(initialFilters);
   if (
-    initialFilters.budget !== prevInitialFilters.budget ||
-    initialFilters.makerId !== prevInitialFilters.makerId ||
-    initialFilters.modelId !== prevInitialFilters.modelId ||
-    initialFilters.cityId !== prevInitialFilters.cityId ||
-    initialFilters.stateId !== prevInitialFilters.stateId ||
-    initialFilters.stateName !== prevInitialFilters.stateName ||
-    initialFilters.cityName !== prevInitialFilters.cityName ||
-    initialFilters.vehicleType !== prevInitialFilters.vehicleType ||
-    initialFilters.fuelType !== prevInitialFilters.fuelType ||
-    initialFilters.transmission !== prevInitialFilters.transmission ||
-    initialFilters.bodyType !== prevInitialFilters.bodyType
+    !isSelfTriggered.current &&
+    (initialFilters.budget !== prevInitialFilters.budget ||
+      initialFilters.makerId !== prevInitialFilters.makerId ||
+      initialFilters.modelId !== prevInitialFilters.modelId ||
+      initialFilters.cityId !== prevInitialFilters.cityId ||
+      initialFilters.stateId !== prevInitialFilters.stateId ||
+      initialFilters.stateName !== prevInitialFilters.stateName ||
+      initialFilters.cityName !== prevInitialFilters.cityName ||
+      initialFilters.vehicleType !== prevInitialFilters.vehicleType ||
+      initialFilters.fuelType !== prevInitialFilters.fuelType ||
+      initialFilters.transmission !== prevInitialFilters.transmission ||
+      initialFilters.bodyType !== prevInitialFilters.bodyType)
   ) {
     setPrevInitialFilters(initialFilters);
-    isSelfTriggered.current = false;
 
     // Fuel Type
     setSelectedFuelTypes(
@@ -668,13 +668,13 @@ export default function SearchWithCard({
     ) {
       // If we are currently on an SEO slug page but filters are empty, go back to base search
       if (currentSlug && currentSlug.startsWith("buy-used-")) {
-        replace("/search", { scroll: false });
+        window.history.replaceState(null, "", "/search");
       }
       return;
     }
 
     if (targetSlug !== currentSlug) {
-      replace(`/search/${targetSlug}`, { scroll: false });
+      window.history.replaceState(null, "", `/search/${targetSlug}`);
     }
   }, [
     resolvedBrandName,
@@ -1520,8 +1520,9 @@ export default function SearchWithCard({
   };
 
   const handleClearFilters = async () => {
+    isSelfTriggered.current = false;
     // Remove query parameters from URL to clear top search bar
-    replace(pathname, { scroll: false });
+    window.history.replaceState(null, "", "/search");
 
     // Remove saved location from localStorage
     localStorage.removeItem("avx_saved_location");
@@ -1649,11 +1650,24 @@ export default function SearchWithCard({
                   placeholder="Select State"
                   variant="transparent"
                   onChange={(val) => {
-                    const s = states.find((st) => st.value === val);
-                    setSelectedStateId(val);
+                    if (!val) {
+                      setSelectedStateId(null);
+                      setSelectedStateName("");
+                      setSelectedCityId(null);
+                      setSelectedCityName("");
+                      setSelectedTownId(null);
+                      setSelectedTownName("");
+                      return;
+                    }
+                    const s = states.find(
+                      (st) => String(st.value) === String(val),
+                    );
+                    setSelectedStateId(Number(val));
                     setSelectedStateName(s ? s.label : "");
                     setSelectedCityId(null);
                     setSelectedCityName("");
+                    setSelectedTownId(null);
+                    setSelectedTownName("");
                   }}
                 />
               </div>
@@ -1670,9 +1684,20 @@ export default function SearchWithCard({
                   variant="transparent"
                   disabled={!selectedStateId}
                   onChange={(val) => {
-                    const c = cities.find((ct) => ct.value === val);
-                    setSelectedCityId(val);
+                    if (!val) {
+                      setSelectedCityId(null);
+                      setSelectedCityName("");
+                      setSelectedTownId(null);
+                      setSelectedTownName("");
+                      return;
+                    }
+                    const c = cities.find(
+                      (ct) => String(ct.value) === String(val),
+                    );
+                    setSelectedCityId(Number(val));
                     setSelectedCityName(c ? c.label : "");
+                    setSelectedTownId(null);
+                    setSelectedTownName("");
                   }}
                 />
               </div>
@@ -1689,8 +1714,15 @@ export default function SearchWithCard({
                   variant="transparent"
                   disabled={!selectedCityId}
                   onChange={(val) => {
-                    const t = towns.find((tn) => tn.value === val);
-                    setSelectedTownId(val);
+                    if (!val) {
+                      setSelectedTownId(null);
+                      setSelectedTownName("");
+                      return;
+                    }
+                    const t = towns.find(
+                      (tn) => String(tn.value) === String(val),
+                    );
+                    setSelectedTownId(Number(val));
                     setSelectedTownName(t ? t.label : "");
                   }}
                 />
@@ -2230,7 +2262,13 @@ export default function SearchWithCard({
             {[
               {
                 name: "Location",
-                count: selectedStateId ? (selectedCityId ? 2 : 1) : 0,
+                count: selectedStateId
+                  ? selectedCityId
+                    ? selectedTownId
+                      ? 3
+                      : 2
+                    : 1
+                  : 0,
               },
               { name: "Budget", count: 0 },
               { name: "Brand", count: selectedBrands.length },
@@ -2288,11 +2326,24 @@ export default function SearchWithCard({
                     placeholder="Select State"
                     variant="default"
                     onChange={(val) => {
-                      const s = states.find((st) => st.value === val);
-                      setSelectedStateId(val);
+                      if (!val) {
+                        setSelectedStateId(null);
+                        setSelectedStateName("");
+                        setSelectedCityId(null);
+                        setSelectedCityName("");
+                        setSelectedTownId(null);
+                        setSelectedTownName("");
+                        return;
+                      }
+                      const s = states.find(
+                        (st) => String(st.value) === String(val),
+                      );
+                      setSelectedStateId(Number(val));
                       setSelectedStateName(s ? s.label : "");
                       setSelectedCityId(null);
                       setSelectedCityName("");
+                      setSelectedTownId(null);
+                      setSelectedTownName("");
                     }}
                   />
                 </div>
@@ -2311,9 +2362,48 @@ export default function SearchWithCard({
                     variant="default"
                     disabled={!selectedStateId}
                     onChange={(val) => {
-                      const c = cities.find((ct) => ct.value === val);
-                      setSelectedCityId(val);
+                      if (!val) {
+                        setSelectedCityId(null);
+                        setSelectedCityName("");
+                        setSelectedTownId(null);
+                        setSelectedTownName("");
+                        return;
+                      }
+                      const c = cities.find(
+                        (ct) => String(ct.value) === String(val),
+                      );
+                      setSelectedCityId(Number(val));
                       setSelectedCityName(c ? c.label : "");
+                      setSelectedTownId(null);
+                      setSelectedTownName("");
+                    }}
+                  />
+                </div>
+
+                {/* Town */}
+                <div className="relative">
+                  <label className="text-xs text-secondary/60 block mb-1">
+                    Town
+                  </label>
+                  <CustomSelect
+                    value={selectedTownId}
+                    options={towns}
+                    placeholder={
+                      selectedCityId ? "Select Town" : "Select city first"
+                    }
+                    variant="default"
+                    disabled={!selectedCityId}
+                    onChange={(val) => {
+                      if (!val) {
+                        setSelectedTownId(null);
+                        setSelectedTownName("");
+                        return;
+                      }
+                      const t = towns.find(
+                        (tn) => String(tn.value) === String(val),
+                      );
+                      setSelectedTownId(Number(val));
+                      setSelectedTownName(t ? t.label : "");
                     }}
                   />
                 </div>

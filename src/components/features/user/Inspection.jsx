@@ -191,6 +191,9 @@ function Inspection() {
                       localStatuses[item.id] || item.inspectionRequestStatus
                     }
                     type="sent"
+                    thumbnailUrl={item.thumbnailUrl || item.vehicle?.thumbnailUrl}
+                    vehicleId={item.vehicleId || item.vehicle?.id}
+                    vehicleData={item.vehicle || item}
                     inspectionType={
                       item.inspectionType === "VIDEO_CALL_WITH_REPORT"
                         ? "Video + Report"
@@ -267,6 +270,9 @@ function Inspection() {
                     localStatuses[item.id] || item.inspectionRequestStatus
                   }
                   type="received"
+                  thumbnailUrl={item.thumbnailUrl || item.vehicle?.thumbnailUrl}
+                  vehicleId={item.vehicleId || item.vehicle?.id}
+                  vehicleData={item.vehicle || item}
                   vehicleName={`${item.makerName} ${item.modelName} ${item.variantName || ""}`}
                   fromName={item.requestedUserName || "Buyer"}
                   date={
