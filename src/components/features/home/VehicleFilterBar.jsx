@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Search, X, Loader2, Car, User, Bike, Fuel, Zap, Flame, Sparkles, MapPin, Tag } from "lucide-react";
 import { useRouter } from "next/router";
-import {
+import { 
   getMakersByFuelOrBodyType,
   getAndSearchMakers,
   SearchCityAndState,
