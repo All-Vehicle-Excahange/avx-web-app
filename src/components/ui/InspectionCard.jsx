@@ -1,6 +1,8 @@
 import { useState } from "react";
+import Link from "next/link";
 import Button from "@/components/ui/button";
-import { Check, File } from "lucide-react";
+import { Check, File, Car } from "lucide-react";
+import { generateVehicleSlug } from "@/lib/helper";
 
 export default function InspectionCard({
   status = "",
@@ -9,12 +11,25 @@ export default function InspectionCard({
   vehicleName = "",
   fromName = "",
   date = "",
+  thumbnailUrl = "",
+  vehicleId = "",
+  vehicleData = null,
   onAccept,
   onReject,
   onViewReport,
   onClick,
 }) {
   const [activeLoading, setActiveLoading] = useState(null);
+
+  const targetVehicleId = vehicleId || vehicleData?.id || vehicleData?.vehicleId;
+  const slugData = vehicleData || {
+    makerName: vehicleName?.split(" ")[0] || "",
+    modelName: vehicleName?.split(" ").slice(1).join(" ") || "",
+  };
+  const slug = generateVehicleSlug(slugData);
+  const vehicleDetailsUrl = targetVehicleId
+    ? `/vehicle/details/${slug}/${targetVehicleId}`
+    : null;
 
   const handleAccept = async (e) => {
     if (e) e.stopPropagation();
@@ -60,109 +75,139 @@ export default function InspectionCard({
     // lowerStatus === "rejected_by_owner" ||
     lowerStatus === "cancelled";
 
+  const ThumbnailInner = (
+    <div className="relative w-full sm:w-52 md:w-60 h-48 sm:h-36 rounded-xl overflow-hidden border border-third/30 bg-primary/5 flex items-center justify-center">
+      {thumbnailUrl ? (
+        <img
+          src={thumbnailUrl}
+          alt={vehicleName || "Vehicle thumbnail"}
+          className="w-full h-full object-cover object-center"
+        />
+      ) : (
+        <Car className="w-12 h-12 text-third/40" />
+      )}
+    </div>
+  );
+
   return (
     <div
       onClick={onClick}
-      className={`rounded-2xl border border-third/40 px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-6 min-h-34 cursor-pointer hover:border-third/65 transition-colors`}
+      className={`rounded-2xl border border-third/40 p-4 sm:p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-6 min-h-34 cursor-pointer hover:border-third/65 transition-colors`}
     >
-      {/* LEFT INFO */}
-      <div className="space-y-2">
-        <p className="text-sm text-third">
-          Vehicle:{" "}
-          <span className="text-primary font-semibold">{vehicleName}</span>
-        </p>
-        {type === "sent" ? (
-          <p className="text-sm text-third">
-            Inspection Type:{" "}
-            <span className="text-primary font-semibold">{inspectionType}</span>
-          </p>
+      {/* LEFT CONTENT CONTAINER (Thumbnail + Details) */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 w-full flex-1">
+        {/* THUMBNAIL IMAGE */}
+        {vehicleDetailsUrl ? (
+          <Link
+            href={vehicleDetailsUrl}
+            onClick={(e) => e.stopPropagation()}
+            className="block w-full sm:w-auto shrink-0 transition-transform duration-200 hover:scale-[1.01]"
+          >
+            {ThumbnailInner}
+          </Link>
         ) : (
+          <div className="shrink-0 w-full sm:w-auto">{ThumbnailInner}</div>
+        )}
+
+        {/* LEFT INFO */}
+        <div className="space-y-2 flex-1">
           <p className="text-sm text-third">
-            From: <span className="text-primary font-semibold">{fromName}</span>
+            Vehicle:{" "}
+            <span className="text-primary font-semibold">{vehicleName}</span>
           </p>
-        )}
-        <p className="text-sm text-third">Date: {date}</p>
+          {type === "sent" ? (
+            <p className="text-sm text-third">
+              Inspection Type:{" "}
+              <span className="text-primary font-semibold">{inspectionType}</span>
+            </p>
+          ) : (
+            <p className="text-sm text-third">
+              From: <span className="text-primary font-semibold">{fromName}</span>
+            </p>
+          )}
+          <p className="text-sm text-third">Date: {date}</p>
 
-        {/* ACTIONS */}
-        {isPending && type !== "sent" && (
-          <div className="pt-3 flex flex-wrap items-center gap-3">
-            <Button
-              variant="ghost"
-              showIcon={false}
-              onClick={(e) => handleAccept(e)}
-              loading={activeLoading === "accept"}
-              locked={!!activeLoading}
-            >
-              Accept
-            </Button>
-            <Button
-              variant="outlineSecondary"
-              showIcon={false}
-              onClick={(e) => handleReject(e)}
-              loading={activeLoading === "reject"}
-              locked={!!activeLoading}
-            >
-              Reject
-            </Button>
-          </div>
-        )}
+          {/* ACTIONS */}
+          {isPending && type !== "sent" && (
+            <div className="pt-3 flex flex-wrap items-center gap-3">
+              <Button
+                variant="ghost"
+                showIcon={false}
+                onClick={(e) => handleAccept(e)}
+                loading={activeLoading === "accept"}
+                locked={!!activeLoading}
+              >
+                Accept
+              </Button>
+              <Button
+                variant="outlineSecondary"
+                showIcon={false}
+                onClick={(e) => handleReject(e)}
+                loading={activeLoading === "reject"}
+                locked={!!activeLoading}
+              >
+                Reject
+              </Button>
+            </div>
+          )}
 
-        {isAccepted && !(type === "received" && lowerStatus === "accepted") && (
-          <div className="pt-3 flex flex-wrap items-center gap-3">
-            {/* <Button
-              variant="outline"
-              showIcon={false}
-              className="pointer-events-none opacity-50 cursor-not-allowed text-yellow-500 border-yellow-500/30 py-1.5 px-4 text-sm"
-              locked={true}
-            >
-              In Progress
-            </Button> */}
-            <Button
-              variant="ghost"
-              showIcon={false}
-              onClick={(e) => {
-                if (e) e.stopPropagation();
-                if (onClick) onClick();
-              }}
-              className="hidden md:inline-flex py-1.5 px-4 text-sm"
-            >
-              Track Inspection
-            </Button>
-          </div>
-        )}
+          {isAccepted && !(type === "received" && lowerStatus === "accepted") && (
+            <div className="pt-3 flex flex-wrap items-center gap-3">
+              {/* <Button
+                variant="outline"
+                showIcon={false}
+                className="pointer-events-none opacity-50 cursor-not-allowed text-yellow-500 border-yellow-500/30 py-1.5 px-4 text-sm"
+                locked={true}
+              >
+                In Progress
+              </Button> */}
+              <Button
+                variant="ghost"
+                showIcon={false}
+                onClick={(e) => {
+                  if (e) e.stopPropagation();
+                  if (onClick) onClick();
+                }}
+                className="hidden md:inline-flex py-1.5 px-4 text-sm"
+              >
+                Track Inspection
+              </Button>
+            </div>
+          )}
 
-        {isInspected && type === "sent" && (
-          <div className="pt-3">
-            <Button
-              variant="ghost"
-              showIcon={false}
-              onClick={(e) => {
-                if (e) e.stopPropagation();
-                onViewReport();
-              }}
-              className="py-1.5 px-4 text-sm"
-            >
-              <File size={16} className="mr-2" />
-              View Report
-            </Button>
-          </div>
-        )}
+          {isInspected && type === "sent" && (
+            <div className="pt-3">
+              <Button
+                variant="ghost"
+                showIcon={false}
+                onClick={(e) => {
+                  if (e) e.stopPropagation();
+                  onViewReport();
+                }}
+                className="py-1.5 px-4 text-sm"
+              >
+                <File size={16} className="mr-2" />
+                View Report
+              </Button>
+            </div>
+          )}
 
-        {isNotInspected && type !== "received" && (
-          <div className="pt-3">
-            <Button
-              variant="ghost"
-              showIcon={false}
-              onClick={(e) => {
-                if (e) e.stopPropagation();
-              }}
-              className="py-1.5 px-4 text-sm"
-            >
-              <Check size={16} className="mr-2" />
-              Request Reecomm Inspection
-            </Button>
-          </div>
-        )}
+          {isNotInspected && type !== "received" && (
+            <div className="pt-3">
+              <Button
+                variant="ghost"
+                showIcon={false}
+                onClick={(e) => {
+                  if (e) e.stopPropagation();
+                }}
+                className="py-1.5 px-4 text-sm"
+              >
+                <Check size={16} className="mr-2" />
+                Request Reecomm Inspection
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* RIGHT SIDE */}

@@ -705,7 +705,7 @@ export default function VehicleSpec({
               <Image
                 width={500}
                 height={500}
-                src="/payment.webp"
+                src="/inspection-payment.webp"
                 alt="reecomm-payment"
                 className="w-full h-full object-cover"
               />

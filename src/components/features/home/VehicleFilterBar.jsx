@@ -12,6 +12,12 @@ import {
 import { getAllConsultService } from "@/services/consult.filter.service";
 import { useUIStore } from "@/stores/useUIStore";
 import CustomSelect from "@/components/ui/custom-select";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  saveRecentSearch,
+  getRecentSearches,
+  deleteAllRecentSearches,
+} from "@/services/user.service";
 
 /* ================= CONSTANTS ================= */
 
@@ -84,16 +90,65 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const [brandOptions, setBrandOptions] = useState([]);
   const [brandSearch, setBrandSearch] = useState("");
 
+  /* ================= RECENT SEARCHES API (NAVBAR EQUIVALENT) ================= */
+  const queryClient = useQueryClient();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const { data: recentSearchesData } = useQuery({
+    queryKey: ["recentSearches"],
+    queryFn: getRecentSearches,
+    enabled: mobileOpen || activeTab !== null,
+    retry: false,
+  });
+
+  const apiRecentSearches = useMemo(() => {
+    if (Array.isArray(recentSearchesData?.data)) {
+      return recentSearchesData.data.map((item) =>
+        typeof item === "string"
+          ? item
+          : item.searchTerm || item.searchQuery || item.label || String(item),
+      );
+    }
+    if (Array.isArray(recentSearchesData)) {
+      return recentSearchesData.map((item) =>
+        typeof item === "string"
+          ? item
+          : item.searchTerm || item.searchQuery || item.label || String(item),
+      );
+    }
+    return [];
+  }, [recentSearchesData]);
+
+  const [localRecentSearches, setLocalRecentSearches] = useState([
+    "Hyundai Creta",
+    "Swift VXI",
+    "SUV under 10L",
+  ]);
+
+  const displayRecentSearches = useMemo(() => {
+    if (apiRecentSearches.length > 0) return apiRecentSearches;
+    return localRecentSearches;
+  }, [apiRecentSearches, localRecentSearches]);
+
+  const saveSearchMutation = useMutation({
+    mutationFn: saveRecentSearch,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["recentSearches"] });
+    },
+  });
+
+  const clearSearchesMutation = useMutation({
+    mutationFn: deleteAllRecentSearches,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["recentSearches"] });
+    },
+  });
+
   /* ================= VEHICLE & BRAND SEARCH SUGGESTIONS (NAVBAR EQUIVALENT) ================= */
   const [vehicleSearchQuery, setVehicleSearchQuery] = useState("");
   const [suggestionsData, setSuggestionsData] = useState([]);
   const [filteredVehicleSuggestions, setFilteredVehicleSuggestions] = useState([]);
   const [isSuggestionsLoaded, setIsSuggestionsLoaded] = useState(false);
-  const [recentSearches, setRecentSearches] = useState([
-    "Hyundai Creta",
-    "Swift VXI",
-    "SUV under 10L"
-  ]);
 
   const loadSearchSuggestions = async () => {
     if (isSuggestionsLoaded) return;
@@ -160,9 +215,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const handleSelectVehicleSuggestion = (item) => {
     const searchLabel = item.label || item.rawLabel || vehicleSearchQuery;
     
-    // Save to recent searches
     if (searchLabel) {
-      setRecentSearches((prev) => {
+      saveSearchMutation.mutate(searchLabel);
+      setLocalRecentSearches((prev) => {
         const filtered = prev.filter((term) => term.toLowerCase() !== searchLabel.toLowerCase());
         return [searchLabel, ...filtered].slice(0, 5);
       });
@@ -198,7 +253,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     if (!queryStr || !queryStr.trim()) return;
     const cleanQuery = queryStr.trim();
     
-    setRecentSearches((prev) => {
+    saveSearchMutation.mutate(cleanQuery);
+    setLocalRecentSearches((prev) => {
       const filtered = prev.filter((term) => term.toLowerCase() !== cleanQuery.toLowerCase());
       return [cleanQuery, ...filtered].slice(0, 5);
     });
@@ -510,7 +566,6 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   }, []);
 
   /* ================= NAVIGATION LOGIC ================= */
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileTab, setMobileTab] = useState("location");
   const getNormalizedType = (type) => {
     if (!type) return "vehicle";
@@ -666,6 +721,10 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     if (!vehicleType) {
       setVehicleTypeError(true);
       return;
+    }
+
+    if (vehicleSearchQuery && vehicleSearchQuery.trim()) {
+      saveSearchMutation.mutate(vehicleSearchQuery.trim());
     }
 
     setIsSearching(true);
@@ -1759,14 +1818,17 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
             <div className="flex justify-between items-center mb-2.5">
               <span className="text-sm font-semibold text-white/90">Recent Searches</span>
               <button
-                onClick={() => setRecentSearches([])}
+                onClick={() => {
+                  clearSearchesMutation.mutate();
+                  setLocalRecentSearches([]);
+                }}
                 className="text-xs text-blue-500 hover:underline font-semibold cursor-pointer"
               >
                 Clear All
               </button>
             </div>
             <div className="flex gap-2.5 overflow-x-auto no-scrollbar pb-1">
-              {recentSearches.map((term, index) => (
+              {displayRecentSearches.map((term, index) => (
                 <button
                   key={index}
                   onClick={() => handleVehicleSearchSubmit(term)}

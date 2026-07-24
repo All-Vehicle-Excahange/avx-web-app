@@ -31,7 +31,7 @@ export default function InteractionSection() {
             <div className="w-65 h-auto rounded-3xl overflow-hidden -translate-y-27.5 ">
               {/* left image */}
               <Image
-                src="/chat-image-1.webp"
+                src="/hello1.webp"
                 alt="Chat UI"
                 width={800}
                 height={500}
@@ -77,7 +77,7 @@ export default function InteractionSection() {
           <div className="w-65 h-auto rounded-3xl overflow-hidden translate-y-10">
             {/* right image */}
             <Image
-              src="/chat-image-3.webp"
+              src="/hello2.webp"
               alt="Chat UI"
               width={800}
               height={500}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useMemo, useEffect } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const baseStyles =
@@ -181,7 +181,23 @@ export default function CustomSelect({
               : "text-secondary placeholder:text-secondary/60",
           )}
         />
-        <ChevronDown className="w-4 h-4" />
+        <div className="flex items-center gap-1 shrink-0">
+          {value != null && value !== "" && !disabled && !readOnly && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSearch("");
+                if (onChange) onChange(null);
+              }}
+              className="p-0.5 text-primary/60 hover:text-primary rounded-full transition-colors cursor-pointer"
+              title="Clear selection"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+          <ChevronDown className="w-4 h-4 shrink-0" />
+        </div>
       </div>
 
       {/* Dropdown */}
