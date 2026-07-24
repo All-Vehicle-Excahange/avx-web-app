@@ -71,12 +71,12 @@ export default function VehicleOverview({ vehicle }) {
               label: "Reg. Date",
               value: vehicle?.vehicleDocument?.regDate
                 ? new Date(vehicle.vehicleDocument.regDate)
-                    .toLocaleDateString("en-US", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    })
-                    .replace(" ", "-")
+                  .toLocaleDateString("en-US", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })
+                  .replace(" ", "-")
                 : "-",
             },
             {
@@ -124,10 +124,25 @@ export default function VehicleOverview({ vehicle }) {
             {
               icon: <Fuel />,
               label: "Fuel",
-              value:
-                vehicle?.isCngFitted && vehicle?.fuelType
-                  ? `${vehicle.fuelType} + CNG`
-                  : vehicle?.fuelType || "CNG",
+              value: (() => {
+                let res =
+                  vehicle?.isCngFitted && vehicle?.fuelType
+                    ? `${vehicle.fuelType} + CNG`
+                    : vehicle?.fuelType || "CNG";
+                
+                res = res.replace(/_/g, " ");
+                let base = res.replace(/plus\s+cng/i, "").replace(/\+\s*cng/i, "").trim();
+                let capitalizedBase = base.charAt(0).toUpperCase() + base.slice(1).toLowerCase();
+                
+                if (vehicle?.isCngFitted || vehicle?.fuelType?.toLowerCase().includes("cng")) {
+                  if (!capitalizedBase || capitalizedBase.toUpperCase() === "CNG") {
+                    return "CNG";
+                  }
+                  return `${capitalizedBase} + CNG`;
+                }
+                
+                return capitalizedBase || "CNG";
+              })(),
             },
             {
               icon: <Users />,
@@ -144,7 +159,7 @@ export default function VehicleOverview({ vehicle }) {
               label: "Reg number",
               value:
                 vehicle?.fuelType === "ELECTRIC" ||
-                vehicle?.fuelType === "EV" ? (
+                  vehicle?.fuelType === "EV" ? (
                   <span className="text-green-600 dark:text-green-400 font-semibold  ">
                     {vehicle?.vehicleDocument?.regNumber || "NA"}
                   </span>
@@ -173,12 +188,12 @@ export default function VehicleOverview({ vehicle }) {
               label: "Insurance Expiry",
               value: vehicle?.vehicleDocument?.insuranceExpiryDate
                 ? new Date(vehicle.vehicleDocument.insuranceExpiryDate)
-                    .toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })
-                    .replace(" ", "-")
+                  .toLocaleDateString("en-US", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })
+                  .replace(" ", "-")
                 : "-",
             },
             {
@@ -211,12 +226,12 @@ export default function VehicleOverview({ vehicle }) {
               label: "Permit Expiry",
               value: vehicle?.vehicleDocument?.permitExpiryDate
                 ? new Date(vehicle.vehicleDocument.permitExpiryDate)
-                    .toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })
-                    .replace(" ", "-")
+                  .toLocaleDateString("en-US", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })
+                  .replace(" ", "-")
                 : "-",
             },
             vehicle?.vehicleDocument?.puc && {
@@ -224,12 +239,12 @@ export default function VehicleOverview({ vehicle }) {
               label: "PUC Expiry",
               value: vehicle?.vehicleDocument?.pucExpiryDate
                 ? new Date(vehicle.vehicleDocument.pucExpiryDate)
-                    .toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })
-                    .replace(" ", "-")
+                  .toLocaleDateString("en-US", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })
+                  .replace(" ", "-")
                 : "-",
             },
             vehicle?.isCngFitted && {

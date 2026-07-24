@@ -206,7 +206,7 @@ export default function CustomSelect({
           <div
             ref={listRef}
             className={cn(
-              "rounded-xl shadow-xl max-h-40 overflow-y-auto border",
+              "rounded-xl shadow-xl max-h-40 overflow-y-auto custom-scrollbar border",
               variant === "transparent" || variant === "colored"
                 ? "bg-neutral-950 border-white/10 backdrop-blur-xl"
                 : "bg-primary border border-third/40",

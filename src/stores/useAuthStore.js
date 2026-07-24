@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { queryClient } from "@/lib/queryClient";
+import { sendDeviceInfo } from "@/lib/device.util";
 
 export const useAuthStore = create((set) => ({
   //  AUTH DATA
@@ -76,6 +77,9 @@ export const useAuthStore = create((set) => ({
     if (typeof window !== "undefined") {
       localStorage.setItem("user", JSON.stringify(userMaster));
     }
+
+    // Force sending device info on login
+    sendDeviceInfo(true);
   },
 
   //  LOGOUT FUNCTION

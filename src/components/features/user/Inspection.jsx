@@ -142,8 +142,8 @@ function Inspection() {
         {/* TABS */}
         <div className="flex gap-10   overflow-x-auto no-scrollbar whitespace-nowrap">
           {[
-            { id: "sent", label: "Sent Inspections" },
-            { id: "received", label: "Received Inspection Requests" },
+            { id: "sent", label: "Sent Inspection Request" },
+            { id: "received", label: "Received Inspection Request" },
           ].filter(tab => {
             if (tab.id === "received") {
               return user?.userRole === "USER_SELLER";
