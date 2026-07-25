@@ -136,7 +136,7 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
               {vehicle?.inspectionStatus === "SELF_INSPECTED"
                 ? "Self Inspection Rating:"
                 : "Inspection Rating:"}{" "}
-              {vehicle?.avxInspectionRating}
+              <span className="font-bold ">{vehicle?.avxInspectionRating}</span>
             </span>
           </>
         ) : null}

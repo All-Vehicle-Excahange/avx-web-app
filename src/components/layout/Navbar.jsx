@@ -800,11 +800,12 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                   />
                   {searchQuery && (
                     <button
+                      type="button"
                       onClick={() => {
                         setSearchQuery('');
                         setSelectedIndex(-1);
                       }}
-                      className={`mr-2 p-1.5 rounded-full transition-colors absolute right-0 cursor-pointer ${heroMode && !scrolled
+                      className={`mr-2 p-1.5 rounded-full transition-colors absolute right-0 cursor-pointer z-20 ${heroMode && !scrolled
                         ? 'text-white/80 hover:text-white hover:bg-white/20'
                         : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
                         }`}

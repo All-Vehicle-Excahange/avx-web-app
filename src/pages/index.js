@@ -83,9 +83,7 @@ function Home() {
       </Layout>
 
       <CategoriesSections />
-      <Layout>
-        <TopPicsSection />
-      </Layout>
+      <AvxInspected />
 
       <Layout>
         {/* right now added dummy data We need to update data with real apis */}
@@ -97,7 +95,9 @@ function Home() {
       </div>
       {/* <Layout> */}
 
-      <AvxInspected />
+      <Layout>
+        <TopPicsSection />
+      </Layout>
 
       {/* </Layout> */}
 
