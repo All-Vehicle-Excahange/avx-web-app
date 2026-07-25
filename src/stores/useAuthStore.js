@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { queryClient } from "@/lib/queryClient";
+import { sendDeviceInfo } from "@/lib/device.util";
 
 export const useAuthStore = create((set) => ({
   //  AUTH DATA
@@ -76,6 +77,9 @@ export const useAuthStore = create((set) => ({
     if (typeof window !== "undefined") {
       localStorage.setItem("user", JSON.stringify(userMaster));
     }
+
+    // Force sending device info on login
+    sendDeviceInfo(true);
   },
 
   //  LOGOUT FUNCTION
@@ -117,7 +121,7 @@ export const useAuthStore = create((set) => ({
       try {
         // We import axios dynamically or use standard fetch to avoid circular deps
         const axios = require("axios").default;
-        
+
         // Attempt to refresh token using the HttpOnly cookie
         const res = await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,

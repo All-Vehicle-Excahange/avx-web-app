@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useMemo, useEffect } from "react";
-import { ChevronDown, X } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const baseStyles =
@@ -67,8 +67,8 @@ export default function CustomSelect({
     selectedOption && search === selectedOption.label
       ? options
       : options.filter((opt) =>
-          opt.label.toLowerCase().includes(search.toLowerCase()),
-        );
+        opt.label.toLowerCase().includes(search.toLowerCase()),
+      );
 
   const [prevSelectedOption, setPrevSelectedOption] = useState(selectedOption);
   const [prevSearch, setPrevSearch] = useState(search);
@@ -181,23 +181,18 @@ export default function CustomSelect({
               : "text-secondary placeholder:text-secondary/60",
           )}
         />
-        <div className="flex items-center gap-1 shrink-0">
-          {value != null && value !== "" && !disabled && !readOnly && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setSearch("");
-                if (onChange) onChange(null);
-              }}
-              className="p-0.5 text-primary/60 hover:text-primary rounded-full transition-colors cursor-pointer"
-              title="Clear selection"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
+        <ChevronDown
+          className={cn(
+            "w-4 h-4 cursor-pointer transition-transform duration-200",
+            open && "rotate-180"
           )}
-          <ChevronDown className="w-4 h-4 shrink-0" />
-        </div>
+          onClick={(e) => {
+            e.stopPropagation();
+            if (!disabled && !readOnly) {
+              setOpen(!open);
+            }
+          }}
+        />
       </div>
 
       {/* Dropdown */}
@@ -206,7 +201,7 @@ export default function CustomSelect({
           <div
             ref={listRef}
             className={cn(
-              "rounded-xl shadow-xl max-h-40 overflow-y-auto border",
+              "rounded-xl shadow-xl max-h-40 overflow-y-auto custom-scrollbar border",
               variant === "transparent" || variant === "colored"
                 ? "bg-neutral-950 border-white/10 backdrop-blur-xl"
                 : "bg-primary border border-third/40",
@@ -229,9 +224,9 @@ export default function CustomSelect({
                       ? "text-primary hover:bg-white/20"
                       : "text-secondary hover:bg-third/20",
                     focusedIndex === index &&
-                      (variant === "transparent" || variant === "colored"
-                        ? "bg-white/20"
-                        : "bg-third/20"),
+                    (variant === "transparent" || variant === "colored"
+                      ? "bg-white/20"
+                      : "bg-third/20"),
                   )}
                 >
                   {opt.label}
