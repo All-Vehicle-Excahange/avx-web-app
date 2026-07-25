@@ -301,15 +301,9 @@ export default function VehicleCard({
                       {mapped.rating}
                     </span>
                   </div>
-                ) : data?.inspectionStatus === "SELF_INSPECTED" ? (
-                  <div className="absolute bottom-2 left-2 shrink-0 flex items-center justify-center rounded-full bg-black/60 backdrop-blur-sm px-2.5 py-1.5 z-20">
-                    <span className="text-white text-[11px] leading-none font-bold">
-                      {mapped.rating}
-                    </span>
-                  </div>
                 ) : (
                   <div className="absolute bottom-2 left-2 shrink-0 flex items-center justify-center gap-1 rounded-full bg-black/60 backdrop-blur-sm px-2.5 py-1.5 z-20">
-                    <Star className="w-3.5 h-3.5 fill-primary text-primary" />
+                    <Star className="w-3.5 h-3.5 text-yellow-400" />
                     <span className="text-white text-[11px] leading-none font-bold">
                       {mapped.rating}
                     </span>

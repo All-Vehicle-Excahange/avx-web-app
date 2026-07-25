@@ -142,9 +142,9 @@ export default function StoreFrontHeroSection() {
 
   const formattedPrice =
     storeDetails.minVehiclePrice && storeDetails.maxVehiclePrice
-      ? `₹${Number(storeDetails.minVehiclePrice).toLocaleString()} - ₹${Number(
+      ? `₹${Number(storeDetails.minVehiclePrice).toLocaleString("en-IN")} - ₹${Number(
         storeDetails.maxVehiclePrice,
-      ).toLocaleString()}`
+      ).toLocaleString("en-IN")}`
       : "-";
 
   const formatFollowerCount = (count) => {

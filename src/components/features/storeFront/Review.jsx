@@ -160,8 +160,8 @@ export default function Review() {
   if (reviewsLoading) return <StoreFrontReviewSkeleton />;
 
   return (
-    <section className="container mt-4 text-primary py-6 sm:py-10 pl-0! sm:pl-0!">
-      <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-6 lg:gap-12">
+    <section className="w-full container mt-2! border-0 rounded-none sm:rounded-2xl pl-0! pr-0 py-4 sm:pt-6 sm:pb-6 sm:pr-6 sm:pl-0! space-y-6 text-primary">
+      <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-6 lg:gap-12 px-1 sm:px-0">
         {/* ================= LEFT ================= */}
         <div className="space-y-6 lg:sticky lg:top-24 h-fit">
           {/*  RATING SUMMARY */}
@@ -391,7 +391,7 @@ export default function Review() {
                 <h3 className="text-lg font-semibold text-primary mb-2">
                   No reviews yet
                 </h3>
-                <p className="text-sm text-third max-w-sm mx-auto">
+                <p className="text-sm text-third text-center max-w-sm mx-auto">
                   Be the first to review this item. Share your experience to help
                   others make better choices.
                 </p>

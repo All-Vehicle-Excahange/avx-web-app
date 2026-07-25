@@ -54,10 +54,9 @@ export default function Inventory() {
         inventoryInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
 
 
-
     return (
         <section className="w-full container mt-2! border-0  rounded-none sm:rounded-2xl pl-0! pr-0 py-4 sm:pt-6 sm:pb-6 sm:pr-6 sm:pl-0! space-y-6">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 px-1 sm:px-0">
                 <div className="flex flex-wrap gap-2">
                     {vehicleTypes.map((type) => (
                         <button
@@ -104,6 +103,7 @@ export default function Inventory() {
                                 borderRadius: "12px",
                                 padding: "2px 6px",
                                 boxShadow: "none",
+                                cursor: "pointer",
                                 "&:hover": {
                                     borderColor: "#555",
                                 },

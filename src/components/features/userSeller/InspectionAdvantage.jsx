@@ -27,7 +27,7 @@ export default function InspectionAdvantage() {
             viewport={{ once: true }}
           >
             <Image
-              src="./increase-buyer-confide.webp"
+              src="/increase-buyer-confide.webp"
               alt="Increase Buyer Confidence"
               width={800}
               height={500}

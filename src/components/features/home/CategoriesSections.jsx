@@ -38,7 +38,7 @@ const categoriesByType = {
     { id: "city-compact", label: "City Compact", icon: Car, iconUrl: "/icons/car_CITY COMPACT.svg" },
     { id: "comfort-sedans", label: "Comfort Sedans", icon: Car, iconUrl: "/icons/car_COMFERT SEDAN.svg" },
     { id: "compact-suvs", label: "Compact SUVs", icon: Car, iconUrl: "/icons/car_COMPACT SUVS.svg" },
-    { id: "fullsize-suvs-muvs", label: "Full-Size SUVs & MUVs", icon: Car, iconUrl: "/icons/car_FULL SIZE SUV.svg" },
+    { id: "fullsize-suvs-muvs", label: "SUVs & MUVs", icon: Car, iconUrl: "/icons/car_FULL SIZE SUV.svg" },
     { id: "premium-luxury", label: "Premium & Luxury", icon: Car, iconUrl: "/icons/car_PREMIUM LUXURY.svg" },
 
   ],

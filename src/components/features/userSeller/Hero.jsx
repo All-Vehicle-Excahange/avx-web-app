@@ -125,7 +125,7 @@ function Hero() {
         {/* ── FULL BLEED BACKGROUND IMAGE ── */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="./hero-section-image.webp"
+            src="/hero-section-image.webp"
             alt="Reecomm Premium Vehicle"
             fill
             className="object-cover object-center scale-105"
