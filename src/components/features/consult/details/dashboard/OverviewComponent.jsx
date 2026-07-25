@@ -12,7 +12,6 @@ import {
   AlertTriangle,
   AlertCircle,
   Inbox,
-  Shield,
   Rocket,
   Lightbulb,
   BadgeDollarSign,
@@ -147,7 +146,7 @@ export default function OverviewComponent() {
     inquiryLoading ||
     summaryLoading ||
     analyticsLoading ||
-    inspectionStatusLoading
+    inspectionStatusLoading;
 
   const avgTime = inquiryKpis?.averageResponseTime;
   const formattedTime = formatResponseTime(avgTime);
@@ -175,14 +174,22 @@ export default function OverviewComponent() {
                 const tierVal = sellerTier || user?.sellerTier;
                 if (!tierVal) return null;
 
-                const tierTitle = typeof tierVal === "string" ? tierVal.toUpperCase() : "CONSULTANT";
-                const badgeText = tierTitle === "CONSULTANT" ? "CONSULTANT" : `${tierTitle} CONSULTANT`;
+                const tierTitle =
+                  typeof tierVal === "string"
+                    ? tierVal.toUpperCase()
+                    : "CONSULTANT";
+                const badgeText =
+                  tierTitle === "CONSULTANT"
+                    ? "CONSULTANT"
+                    : `${tierTitle} CONSULTANT`;
                 let badgeClasses = "";
 
                 if (tierTitle === "PRO" || tierTitle === "PREMIUM") {
-                  badgeClasses = "bg-amber-400/15 text-amber-400 border border-amber-500/30 shadow-[0_2px_12px_rgba(245,158,11,0.1)]";
+                  badgeClasses =
+                    "bg-amber-400/15 text-amber-400 border border-amber-500/30 shadow-[0_2px_12px_rgba(245,158,11,0.1)]";
                 } else {
-                  badgeClasses = "bg-blue-500/15 text-blue-400 border border-blue-500/30";
+                  badgeClasses =
+                    "bg-blue-500/15 text-blue-400 border border-blue-500/30";
                 }
 
                 return (
@@ -195,7 +202,6 @@ export default function OverviewComponent() {
                 );
               })()}
             </div>
-
           </div>
 
           <div className="flex items-center gap-3 flex-wrap">
@@ -214,9 +220,7 @@ export default function OverviewComponent() {
 
         {/* PERFORMANCE */}
         <div className="rounded-xl bg-primary/5 p-6">
-          <h3 className="font-semibold mb-5">
-            Performance Snapshot
-          </h3>
+          <h3 className="font-semibold mb-5">Performance Snapshot</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <StatCard
               icon={<Eye />}
@@ -271,9 +275,7 @@ export default function OverviewComponent() {
             </Button>
           </div> */}
 
-          <div
-            className="relative rounded-2xl overflow-hidden transition shadow-sm border border-third/10 min-h-[320px] flex items-center bg-[#0A58F9]"
-          >
+          <div className="relative rounded-2xl overflow-hidden transition shadow-sm border border-third/10 min-h-[320px] flex items-center bg-[#0A58F9]">
             {/* Background Image */}
             <Image
               src="/seller/chatsbg.webp"
@@ -296,12 +298,15 @@ export default function OverviewComponent() {
             {/* Content */}
             <div className="relative z-10 flex flex-col p-6 md:p-8 md:pr-[45%]">
               <h3 className="text-3xl md:text-4xl font-extrabold text-white leading-[1.1] tracking-tight mb-4 drop-shadow-md">
-                Chats are<br />Mobile Only
+                Chats are
+                <br />
+                Mobile Only
               </h3>
               <p className="text-[13px] md:text-sm text-white/95 leading-relaxed font-medium mb-6 drop-shadow-md">
-                Download the Reecomm mobile app to chat with buyers in real time and receive instant notifications. All conversations are managed through the mobile app.
+                Download the Reecomm mobile app to chat with buyers in real time
+                and receive instant notifications. All conversations are managed
+                through the mobile app.
               </p>
-
             </div>
           </div>
 
@@ -353,11 +358,12 @@ export default function OverviewComponent() {
               <div className="transform scale-[0.8] origin-right -mt-4 -mr-2">
                 <Pagination
                   currentPage={lowDemandPage}
-                  totalPages={lowDemandVehiclesData?.pageResponse?.totalPages || 1}
+                  totalPages={
+                    lowDemandVehiclesData?.pageResponse?.totalPages || 1
+                  }
                   onPageChange={setLowDemandPage}
                 />
               </div>
-
             </div>
           </div>
         </div>
@@ -376,14 +382,15 @@ export default function OverviewComponent() {
 
               {/* Response Time Badge */}
               <div
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wider ${responseStatus.color.includes("green")
-                  ? "text-green-400 border-green-500/25 bg-green-500/10"
-                  : responseStatus.color.includes("yellow")
-                    ? "text-amber-400 border-amber-500/25 bg-amber-500/10"
-                    : responseStatus.color.includes("red")
-                      ? "text-red-400 border-red-500/25 bg-red-500/10"
-                      : "text-third border-third/25 bg-third/10"
-                  }`}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wider ${
+                  responseStatus.color.includes("green")
+                    ? "text-green-400 border-green-500/25 bg-green-500/10"
+                    : responseStatus.color.includes("yellow")
+                      ? "text-amber-400 border-amber-500/25 bg-amber-500/10"
+                      : responseStatus.color.includes("red")
+                        ? "text-red-400 border-red-500/25 bg-red-500/10"
+                        : "text-third border-third/25 bg-third/10"
+                }`}
               >
                 <Zap
                   size={12}
@@ -623,7 +630,6 @@ export default function OverviewComponent() {
             </div>
 
             <div className="flex items-center justify-between mt-2 pt-2">
-
               <div className="transform scale-[0.8] origin-right -mt-4 -mr-2">
                 <Pagination
                   currentPage={needAttentionPage}
@@ -640,8 +646,8 @@ export default function OverviewComponent() {
           {/* INSPECTION STATUS */}
           <div className="rounded-xl bg-primary/5 p-6 flex flex-col gap-5">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-primary/5 rounded-lg text-primary">
-                <Shield size={20} />
+              <div className="p-2.5 bg-primary/5 rounded-lg text-primary flex items-center justify-center">
+                <Image src="/inspection_small.svg" alt="Inspection Status" width={20} height={20} className="w-5 h-5 object-contain" />
               </div>
               <h3 className="font-bold text-lg tracking-tight">
                 Inspection Status
@@ -675,7 +681,8 @@ export default function OverviewComponent() {
               <div className="bg-primary/5 border border-primary/20 p-3 rounded-xl flex items-center gap-2">
                 <TrendingUp size={15} className="text-green-500" />
                 <span className="text-xs font-bold text-green-500">
-                  +30% better performance
+                  Inspected listings often perform better than non-inspected
+                  ones.
                 </span>
               </div>
             </div>
@@ -904,10 +911,7 @@ function OverviewSkeleton() {
       {/* LISTINGS SKELETON */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {[...Array(2)].map((_, i) => (
-          <div
-            key={i}
-            className="rounded-xl bg-primary/5 p-6 space-y-4"
-          >
+          <div key={i} className="rounded-xl bg-primary/5 p-6 space-y-4">
             <SkeletonBox className="h-6 w-48" />
             <div className="space-y-3">
               <TopPerformingCardSkeleton />

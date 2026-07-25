@@ -23,11 +23,6 @@ import NotificationsComponent from "./NotificationsComponent";
 import { useNotifications } from "@/hooks/useNotifications";
 
 const menu = [
-  {
-    label: "Notifications",
-    icon: Bell,
-    href: "/consult/dashboard/notifications",
-  },
   { label: "Overview", icon: LayoutGrid, href: "/consult/dashboard/overview" },
   { label: "Storefront", icon: Store, href: "/consult/dashboard/storefront" },
   { label: "Inventory", icon: Car, href: "/consult/dashboard/inventory" },
@@ -113,32 +108,6 @@ export default function Sidebar({ isOpen, onClose }) {
                 (router.pathname === "/consult/dashboard" &&
                   m.href === "/consult/dashboard/overview"));
 
-            if (m.label === "Notifications") {
-              return (
-                <button
-                  key={i}
-                  onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-                  className={`flex cursor-pointer items-center w-full text-left p-3 md:p-2 rounded-lg transition-all duration-300
-          ${isNotificationsOpen
-                      ? "bg-primary text-secondary shadow-lg"
-                      : "hover:bg-primary/10 text-primary"
-                    }`}
-                >
-                  <div className="relative shrink-0 flex items-center justify-center w-6 h-6">
-                    <m.icon size={18} />
-                    {unreadCount > 0 && (
-                      <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-fourth text-[10px] font-bold text-white">
-                        {unreadCount > 99 ? "99+" : unreadCount}
-                      </span>
-                    )}
-                  </div>
-                  <span className="ml-3 md:ml-0 md:group-hover:ml-3 md:opacity-0 md:group-hover:opacity-100 max-w-full md:max-w-0 md:group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden">
-                    {m.label}
-                  </span>
-                </button>
-              );
-            }
-
             return (
               <Link
                 key={i}
@@ -164,7 +133,28 @@ export default function Sidebar({ isOpen, onClose }) {
           })}
         </div>
 
-        <div className="pt-2 border-t border-third/30">
+        <div className="pt-2 border-t border-third/30 space-y-1">
+          <button
+            onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+            className={`flex cursor-pointer items-center w-full text-left p-3 md:p-2 rounded-lg transition-all duration-300
+          ${isNotificationsOpen
+                ? "bg-primary text-secondary shadow-lg"
+                : "hover:bg-primary/10 text-primary"
+              }`}
+          >
+            <div className="relative shrink-0 flex items-center justify-center w-6 h-6">
+              <Bell size={18} />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-fourth text-[10px] font-bold text-white">
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              )}
+            </div>
+            <span className="ml-3 md:ml-0 md:group-hover:ml-3 md:opacity-0 md:group-hover:opacity-100 max-w-full md:max-w-0 md:group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden">
+              Notifications
+            </span>
+          </button>
+
           <Link
             href="/help"
             onClick={onClose}
@@ -174,6 +164,9 @@ export default function Sidebar({ isOpen, onClose }) {
             <div className="shrink-0 flex items-center justify-center w-6 h-6">
               <HelpCircle size={18} />
             </div>
+            <span className="ml-3 md:ml-0 md:group-hover:ml-3 md:opacity-0 md:group-hover:opacity-100 max-w-full md:max-w-0 md:group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden">
+              Help
+            </span>
           </Link>
         </div>
       </aside>

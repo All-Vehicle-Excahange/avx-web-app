@@ -1,9 +1,22 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { Search, X, Loader2, Car, User, Bike, Fuel, Zap, Flame, Sparkles, MapPin, Tag } from "lucide-react";
+import {
+  Search,
+  X,
+  Loader2,
+  Car,
+  User,
+  Bike,
+  Fuel,
+  Zap,
+  Flame,
+  Sparkles,
+  MapPin,
+  Tag,
+} from "lucide-react";
 import { useRouter } from "next/router";
-import { 
+import {
   getMakersByFuelOrBodyType,
   getAndSearchMakers,
   SearchCityAndState,
@@ -102,21 +115,28 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   });
 
   const apiRecentSearches = useMemo(() => {
-    if (Array.isArray(recentSearchesData?.data)) {
-      return recentSearchesData.data.map((item) =>
-        typeof item === "string"
-          ? item
-          : item.searchTerm || item.searchQuery || item.label || String(item),
-      );
-    }
-    if (Array.isArray(recentSearchesData)) {
-      return recentSearchesData.map((item) =>
-        typeof item === "string"
-          ? item
-          : item.searchTerm || item.searchQuery || item.label || String(item),
-      );
-    }
-    return [];
+    const rawData = Array.isArray(recentSearchesData?.data)
+      ? recentSearchesData.data
+      : Array.isArray(recentSearchesData)
+        ? recentSearchesData
+        : [];
+
+    return rawData
+      .map((item) => {
+        if (!item) return "";
+        if (typeof item === "string") return item;
+        if (typeof item === "object") {
+          return (
+            item.search ||
+            item.searchTerm ||
+            item.searchQuery ||
+            item.label ||
+            ""
+          );
+        }
+        return String(item);
+      })
+      .filter((term) => Boolean(term) && term !== "[object Object]");
   }, [recentSearchesData]);
 
   const [localRecentSearches, setLocalRecentSearches] = useState([
@@ -147,7 +167,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   /* ================= VEHICLE & BRAND SEARCH SUGGESTIONS (NAVBAR EQUIVALENT) ================= */
   const [vehicleSearchQuery, setVehicleSearchQuery] = useState("");
   const [suggestionsData, setSuggestionsData] = useState([]);
-  const [filteredVehicleSuggestions, setFilteredVehicleSuggestions] = useState([]);
+  const [filteredVehicleSuggestions, setFilteredVehicleSuggestions] = useState(
+    [],
+  );
   const [isSuggestionsLoaded, setIsSuggestionsLoaded] = useState(false);
 
   const loadSearchSuggestions = async () => {
@@ -157,7 +179,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       const rawSuggestions = data.default || data;
       const loadedSuggestions = rawSuggestions.map((s) => {
         if (s.type === "brand" || s.type === "model") {
-          const prefix = s.label.toLowerCase().startsWith("used") ? "" : "Used ";
+          const prefix = s.label.toLowerCase().startsWith("used")
+            ? ""
+            : "Used ";
           return { ...s, rawLabel: s.label, label: `${prefix}${s.label}` };
         }
         return s;
@@ -165,19 +189,25 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
       let consultantsList = [];
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.reecomm.online/api/v1/website";
+        const apiUrl =
+          process.env.NEXT_PUBLIC_API_URL ||
+          "https://api.reecomm.online/api/v1/website";
         const cleanApiUrl = apiUrl.replace(/\/$/, "");
-        const consultRes = await fetch(`${cleanApiUrl}/homefeed/consultations/seo?pageNo=1&size=100`);
+        const consultRes = await fetch(
+          `${cleanApiUrl}/homefeed/consultations/seo?pageNo=1&size=100`,
+        );
         if (consultRes.ok) {
           const consultData = await consultRes.json();
           if (consultData?.data && Array.isArray(consultData.data)) {
-            consultantsList = consultData.data.map((store) => ({
-              id: `consult-${store.id}`,
-              label: store.consultationName || store.username || "",
-              username: store.username || "",
-              type: "consultant",
-              link: `/auto-consultant/${store.username}`,
-            })).filter((c) => c.label && c.username);
+            consultantsList = consultData.data
+              .map((store) => ({
+                id: `consult-${store.id}`,
+                label: store.consultationName || store.username || "",
+                username: store.username || "",
+                type: "consultant",
+                link: `/auto-consultant/${store.username}`,
+              }))
+              .filter((c) => c.label && c.username);
           }
         }
       } catch (err) {
@@ -204,7 +234,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     const matches = suggestionsData
       .filter((s) => {
         const labelMatch = s.label.toLowerCase().includes(q);
-        const usernameMatch = s.username && s.username.toLowerCase().includes(q);
+        const usernameMatch =
+          s.username && s.username.toLowerCase().includes(q);
         return labelMatch || usernameMatch;
       })
       .slice(0, 8);
@@ -214,11 +245,13 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
   const handleSelectVehicleSuggestion = (item) => {
     const searchLabel = item.label || item.rawLabel || vehicleSearchQuery;
-    
+
     if (searchLabel) {
       saveSearchMutation.mutate(searchLabel);
       setLocalRecentSearches((prev) => {
-        const filtered = prev.filter((term) => term.toLowerCase() !== searchLabel.toLowerCase());
+        const filtered = prev.filter(
+          (term) => term.toLowerCase() !== searchLabel.toLowerCase(),
+        );
         return [searchLabel, ...filtered].slice(0, 5);
       });
     }
@@ -241,9 +274,15 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       return;
     }
     if (item.type === "model") {
-      const brandParam = item.brand ? `&brand=${encodeURIComponent(item.brand)}` : "";
-      const modelIdParam = item.modelId ? `&modelId=${item.modelId}&model=${encodeURIComponent(item.model || item.rawLabel)}` : "";
-      push(`/search?q=${encodeURIComponent(item.label || item.rawLabel)}${brandParam}${modelIdParam}`);
+      const brandParam = item.brand
+        ? `&brand=${encodeURIComponent(item.brand)}`
+        : "";
+      const modelIdParam = item.modelId
+        ? `&modelId=${item.modelId}&model=${encodeURIComponent(item.model || item.rawLabel)}`
+        : "";
+      push(
+        `/search?q=${encodeURIComponent(item.label || item.rawLabel)}${brandParam}${modelIdParam}`,
+      );
       return;
     }
     push(`/search?q=${encodeURIComponent(searchLabel)}`);
@@ -252,10 +291,12 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const handleVehicleSearchSubmit = (queryStr = vehicleSearchQuery) => {
     if (!queryStr || !queryStr.trim()) return;
     const cleanQuery = queryStr.trim();
-    
+
     saveSearchMutation.mutate(cleanQuery);
     setLocalRecentSearches((prev) => {
-      const filtered = prev.filter((term) => term.toLowerCase() !== cleanQuery.toLowerCase());
+      const filtered = prev.filter(
+        (term) => term.toLowerCase() !== cleanQuery.toLowerCase(),
+      );
       return [cleanQuery, ...filtered].slice(0, 5);
     });
 
@@ -331,7 +372,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     if (consultMinPrice === MIN && consultMaxPrice === MAX) {
       setPriceRange("");
     } else {
-      setPriceRange(`${consultMinPrice / 100000} - ${consultMaxPrice / 100000}`);
+      setPriceRange(
+        `${consultMinPrice / 100000} - ${consultMaxPrice / 100000}`,
+      );
     }
   }, [consultMinPrice, consultMaxPrice]);
 
@@ -419,14 +462,18 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
   const locationOptions = useMemo(() => {
     return locationSuggestions.map((item, idx) => ({
-      label: item.isStateOnly ? item.stateName : `${item.cityName}, ${item.stateName}`,
-      value: item.isStateOnly ? `state-${item.stateId}-${idx}` : `city-${item.cityId}-${idx}`
+      label: item.isStateOnly
+        ? item.stateName
+        : `${item.cityName}, ${item.stateName}`,
+      value: item.isStateOnly
+        ? `state-${item.stateId}-${idx}`
+        : `city-${item.cityId}-${idx}`,
     }));
   }, [locationSuggestions]);
 
   const currentLocationValue = useMemo(() => {
     if (!location) return "";
-    const foundOpt = locationOptions.find(opt => opt.label === location);
+    const foundOpt = locationOptions.find((opt) => opt.label === location);
     return foundOpt ? foundOpt.value : "";
   }, [location, locationOptions]);
 
@@ -459,12 +506,16 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   };
 
   const bodyTypeOptions = useMemo(() => {
-    const types = vehicleType === "4 Wheeler" ? FOUR_WHEELER_TYPES : TWO_WHEELER_TYPES;
-    return types.map(t => ({ label: t.label, value: t.label }));
+    const types =
+      vehicleType === "4 Wheeler" ? FOUR_WHEELER_TYPES : TWO_WHEELER_TYPES;
+    return types.map((t) => ({ label: t.label, value: t.label }));
   }, [vehicleType]);
 
   const brandOptionsList = useMemo(() => {
-    return brandOptions.map(b => ({ label: b.makeDisplay, value: b.makeName }));
+    return brandOptions.map((b) => ({
+      label: b.makeDisplay,
+      value: b.makeName,
+    }));
   }, [brandOptions]);
 
   /* ================= LOGIC HELPERS ================= */
@@ -572,7 +623,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     return type.toLowerCase().startsWith("consult") ? "consult" : "vehicle";
   };
 
-  const [internalActiveType, setInternalActiveType] = useState(() => getNormalizedType(activeType));
+  const [internalActiveType, setInternalActiveType] = useState(() =>
+    getNormalizedType(activeType),
+  );
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -1164,7 +1217,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                         : "lg-value placeholder"
                   }
                 >
-                  {vehicleTypeError ? "* Required" : vehicleType || "Select vehicle type"}
+                  {vehicleTypeError
+                    ? "* Required"
+                    : vehicleType || "Select vehicle type"}
                 </div>
                 {activeTab === "vehicle" && (
                   <div className="absolute top-[110%] left-0 z-50 dropdown-active w-60 lg-glass-dropdown rounded-xl p-2">
@@ -1752,7 +1807,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
               </div>
 
               {/* Combined Suggestions dropdown (Vehicles, Brands, Models, Consultants, Cities) */}
-              {((vehicleSearchQuery.trim() && filteredVehicleSuggestions.length > 0) || (location.trim() && locationSuggestions.length > 0)) && (
+              {((vehicleSearchQuery.trim() &&
+                filteredVehicleSuggestions.length > 0) ||
+                (location.trim() && locationSuggestions.length > 0)) && (
                 <div className="absolute top-full left-0 right-0 mt-2 bg-[#161616] border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl z-[60] max-h-64 overflow-y-auto custom-scrollbar">
                   {/* Vehicle / Brand / Model / Consultant Suggestions */}
                   {filteredVehicleSuggestions.map((item, idx) => (
@@ -1763,7 +1820,10 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
                         {item.type === "consultant" ? (
-                          <User size={16} className="text-purple-400 shrink-0" />
+                          <User
+                            size={16}
+                            className="text-purple-400 shrink-0"
+                          />
                         ) : item.type === "brand" ? (
                           <Car size={16} className="text-blue-400 shrink-0" />
                         ) : (
@@ -1782,7 +1842,11 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   {/* City / State Suggestions */}
                   {locationSuggestions.slice(0, 5).map((item, idx) => (
                     <button
-                      key={item.isStateOnly ? `state-${item.stateId}-${idx}` : `city-${item.cityId}-${idx}`}
+                      key={
+                        item.isStateOnly
+                          ? `state-${item.stateId}-${idx}`
+                          : `city-${item.cityId}-${idx}`
+                      }
                       onClick={() => {
                         if (item.isStateOnly) {
                           setLocation(item.stateName);
@@ -1798,7 +1862,10 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/5 text-left border-b border-neutral-800/40 last:border-none transition-colors"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <MapPin size={16} className="text-emerald-400 shrink-0" />
+                        <MapPin
+                          size={16}
+                          className="text-emerald-400 shrink-0"
+                        />
                         <span className="text-sm font-semibold text-white truncate">
                           {item.isStateOnly ? item.stateName : item.cityName}
                         </span>
@@ -1816,7 +1883,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           {/* Recent Searches */}
           <div className="px-5 mt-5">
             <div className="flex justify-between items-center mb-2.5">
-              <span className="text-sm font-semibold text-white/90">Recent Searches</span>
+              <span className="text-sm font-semibold text-white/90">
+                Recent Searches
+              </span>
               <button
                 onClick={() => {
                   clearSearchesMutation.mutate();
@@ -1843,20 +1912,25 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
           {/* Popular Searches */}
           <div className="px-5 mt-5">
-            <h3 className="text-sm font-semibold text-white/90 mb-3">Popular Searches</h3>
+            <h3 className="text-sm font-semibold text-white/90 mb-3">
+              Popular Searches
+            </h3>
             <div className="grid grid-cols-4 gap-2.5">
               {[
                 { label: "SUV", icon: Car },
                 { label: "Under ₹10L", icon: Sparkles },
                 { label: "Electric", icon: Zap },
-                { label: "Petrol", icon: Fuel }
+                { label: "Petrol", icon: Fuel },
               ].map((item, index) => {
                 const Icon = item.icon;
                 return (
                   <button
                     key={index}
                     onClick={() => {
-                      if (item.label === "Electric" || item.label === "Petrol") {
+                      if (
+                        item.label === "Electric" ||
+                        item.label === "Petrol"
+                      ) {
                         setFuelType(item.label);
                       } else if (item.label === "SUV") {
                         setBodyType("SUV");
@@ -1881,15 +1955,21 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
           {/* Location */}
           <div className="px-5 mt-5">
-            <label className="block text-sm font-semibold text-white/90 mb-2">Location</label>
+            <label className="block text-sm font-semibold text-white/90 mb-2">
+              Location
+            </label>
             <CustomSelect
               value={currentLocationValue}
               options={locationOptions}
               placeholder="Search destinations"
               variant="transparent"
               onSearch={(val) => {
-                if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
-                searchTimerRef.current = setTimeout(() => searchCities(val), 350);
+                if (searchTimerRef.current)
+                  clearTimeout(searchTimerRef.current);
+                searchTimerRef.current = setTimeout(
+                  () => searchCities(val),
+                  350,
+                );
               }}
               onChange={handleLocationSelect}
             />
@@ -1897,7 +1977,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
           {/* Vehicle Type */}
           <div className="px-5 mt-5">
-            <label className="block text-sm font-semibold text-white/90 mb-3">Vehicle Type</label>
+            <label className="block text-sm font-semibold text-white/90 mb-3">
+              Vehicle Type
+            </label>
             <div className="grid grid-cols-2 gap-3.5">
               {/* 2 Wheeler Card */}
               <button
@@ -1982,7 +2064,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
               </button>
             </div>
             {vehicleTypeError && (
-              <span className="text-xs text-red-500 font-medium mt-1.5 block">* Please select a vehicle type</span>
+              <span className="text-xs text-red-500 font-medium mt-1.5 block">
+                * Please select a vehicle type
+              </span>
             )}
           </div>
 
@@ -1992,7 +2076,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
               {/* Consultant Price Range */}
               <div className="px-5 mt-5">
                 <div className="flex justify-between items-center mb-3">
-                  <label className="text-sm font-semibold text-white/90">Price Range</label>
+                  <label className="text-sm font-semibold text-white/90">
+                    Price Range
+                  </label>
                   <div className="flex gap-1.5 text-xs font-bold text-white bg-[#1A1A1A] border border-neutral-800 px-2.5 py-1 rounded-lg">
                     <span>₹{(consultMinPrice / 100000).toFixed(1)} L</span>
                     <span className="text-gray-500">-</span>
@@ -2042,7 +2128,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
               {/* Service */}
               <div className="px-5 mt-5">
-                <label className="block text-sm font-semibold text-white/90 mb-2">Service</label>
+                <label className="block text-sm font-semibold text-white/90 mb-2">
+                  Service
+                </label>
                 <CustomSelect
                   value={service}
                   options={serviceOptions}
@@ -2054,7 +2142,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
               {/* Availability */}
               <div className="px-5 mt-5">
-                <label className="block text-sm font-semibold text-white/90 mb-2">Availability</label>
+                <label className="block text-sm font-semibold text-white/90 mb-2">
+                  Availability
+                </label>
                 <CustomSelect
                   value={availability}
                   options={AVAILABILITY_OPTIONS}
@@ -2068,11 +2158,17 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
             <>
               {/* Body Type */}
               <div className="px-5 mt-5">
-                <label className="block text-sm font-semibold text-white/90 mb-2">Body Type</label>
+                <label className="block text-sm font-semibold text-white/90 mb-2">
+                  Body Type
+                </label>
                 <CustomSelect
                   value={bodyType}
                   options={bodyTypeOptions}
-                  placeholder={vehicleType ? "Select Body Type" : "Select vehicle type first"}
+                  placeholder={
+                    vehicleType
+                      ? "Select Body Type"
+                      : "Select vehicle type first"
+                  }
                   variant="transparent"
                   disabled={!vehicleType}
                   onChange={(val) => setBodyType(val)}
@@ -2081,14 +2177,19 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
               {/* Fuel Type */}
               <div className="px-5 mt-5">
-                <label className="block text-sm font-semibold text-white/90 mb-3">Fuel Type</label>
+                <label className="block text-sm font-semibold text-white/90 mb-3">
+                  Fuel Type
+                </label>
                 <div className="grid grid-cols-4 gap-2.5">
                   {availableFuelTypes.map((fuel) => {
                     const isSelected = fuelType === fuel;
                     let Icon = Fuel;
                     if (fuel.toLowerCase() === "electric") {
                       Icon = Zap;
-                    } else if (fuel.toLowerCase() === "cng" || fuel.toLowerCase() === "lpg") {
+                    } else if (
+                      fuel.toLowerCase() === "cng" ||
+                      fuel.toLowerCase() === "lpg"
+                    ) {
                       Icon = Flame;
                     } else if (fuel.toLowerCase() === "hybrid") {
                       Icon = Sparkles;
@@ -2107,7 +2208,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                             : "border-neutral-800 bg-[#161616] text-gray-400 hover:text-white"
                         }`}
                       >
-                        <div className={`p-2 rounded-xl flex items-center justify-center mb-1.5 ${isSelected ? "bg-blue-500/20 text-blue-500" : "bg-neutral-900 border border-neutral-800 text-gray-400"}`}>
+                        <div
+                          className={`p-2 rounded-xl flex items-center justify-center mb-1.5 ${isSelected ? "bg-blue-500/20 text-blue-500" : "bg-neutral-900 border border-neutral-800 text-gray-400"}`}
+                        >
                           <Icon className="w-4.5 h-4.5" />
                         </div>
                         <span className="text-[10px] font-bold mt-1 leading-tight text-gray-300">
@@ -2121,14 +2224,16 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
               {/* Brand */}
               <div className="px-5 mt-5">
-                <label className="block text-sm font-semibold text-white/90 mb-2">Brand</label>
+                <label className="block text-sm font-semibold text-white/90 mb-2">
+                  Brand
+                </label>
                 <CustomSelect
                   value={brand}
                   options={brandOptionsList}
                   placeholder="Select Brand"
                   variant="transparent"
                   onChange={(val) => {
-                    const b = brandOptions.find(opt => opt.makeName === val);
+                    const b = brandOptions.find((opt) => opt.makeName === val);
                     setBrand(val);
                     setMakerId(b ? b.makeId : null);
                   }}
@@ -2138,7 +2243,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
               {/* Budget */}
               <div className="px-5 mt-5">
                 <div className="flex justify-between items-center mb-3">
-                  <label className="text-sm font-semibold text-white/90">Budget</label>
+                  <label className="text-sm font-semibold text-white/90">
+                    Budget
+                  </label>
                   <div className="flex gap-1.5 text-xs font-bold text-white bg-[#1A1A1A] border border-neutral-800 px-2.5 py-1 rounded-lg">
                     <span>₹{(minPrice / 100000).toFixed(1)} L</span>
                     <span className="text-gray-500">-</span>
@@ -2159,9 +2266,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       step={50000}
                       value={minPrice}
                       onChange={(e) =>
-                        setMinPrice(
-                          Math.min(+e.target.value, maxPrice - 50000),
-                        )
+                        setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
                       }
                       className="dual-range z-30"
                     />
@@ -2172,9 +2277,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                       step={50000}
                       value={maxPrice}
                       onChange={(e) =>
-                        setMaxPrice(
-                          Math.max(+e.target.value, minPrice + 50000),
-                        )
+                        setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
                       }
                       className="dual-range z-40"
                     />
