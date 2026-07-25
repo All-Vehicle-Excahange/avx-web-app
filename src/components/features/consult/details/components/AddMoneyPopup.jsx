@@ -204,10 +204,11 @@ export default function AddMoneyPopup({
                       key={amt}
                       type="button"
                       onClick={() => handleQuickSelect(amt)}
-                      className={`py-3 rounded-xl text-[11px] font-bold border transition-all duration-300 cursor-pointer text-center relative overflow-hidden ${isSelected
+                      className={`py-3 rounded-xl text-[11px] font-bold border transition-all duration-300 cursor-pointer text-center relative overflow-hidden ${
+                        isSelected
                           ? "bg-white border-white text-[#121214] font-extrabold shadow-[0_4px_20px_rgba(255,255,255,0.25)] scale-[1.03]"
                           : "bg-white/[0.02] border-white/5 text-zinc-300 hover:bg-white/[0.06] hover:border-white/15 hover:text-white"
-                        }`}
+                      }`}
                     >
                       ₹{amt.toLocaleString("en-IN")}
                     </button>

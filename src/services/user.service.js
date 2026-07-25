@@ -17,7 +17,6 @@ const ENDPOINT = {
   updateuserProfileMeta: "/users/metadata",
   checkIsMetaExist: "/users/metadata/exists",
   createUserMeta: "/users/metadata",
-  postDeviceInfo: "/users/profile/device-info",
   addUserPefrence: "/users/preference",
   followConsultant: "/consultation/follow",
   unFollowConsultant: "/consultation/follow",
@@ -238,18 +237,6 @@ export const updateuserProfile = async (payload) => {
     throw error;
   }
 };
-
-export const deleteUserProfile = async (reason) => {
-  try {
-    const res = await axiosInstance.delete(ENDPOINT.updateuserProfile, {
-      params: { reason }
-    });
-    return handleResponse(res);
-  } catch (error) {
-    throw error;
-  }
-};
-
 export const updateuserProfileMeta = async (payload) => {
   try {
     const res = await axiosInstance.put(
@@ -274,15 +261,6 @@ export const checkIsMetaExist = async () => {
 export const createUserMeta = async (payload) => {
   try {
     const res = await axiosInstance.post(ENDPOINT.createUserMeta, payload);
-    return handleResponse(res);
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const postDeviceInfo = async (payload) => {
-  try {
-    const res = await axiosInstance.post(ENDPOINT.postDeviceInfo, payload);
     return handleResponse(res);
   } catch (error) {
     throw error;
