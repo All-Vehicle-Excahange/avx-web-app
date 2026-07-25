@@ -150,7 +150,7 @@ export const useAuthStore = create((set) => ({
           token: null,
           isLoggedIn: false,
           authInitialized: true,
-          isLoginPopupOpen: false, // Temporarily disabled auto-open when refresh fails
+          isLoginPopupOpen: true,
         });
         localStorage.removeItem("user");
       }
