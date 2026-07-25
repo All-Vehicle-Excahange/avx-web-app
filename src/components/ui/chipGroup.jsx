@@ -37,13 +37,13 @@ export default function ChipGroup({
     setKnownSelectedItems((prev) => {
       const newKnown = items.filter((i) => selected.includes(i.value));
       const merged = [...prev];
-      
+
       newKnown.forEach((nk) => {
         if (!merged.some((m) => m.value === nk.value)) {
           merged.push(nk);
         }
       });
-      
+
       // Only keep the ones that are STILL selected
       const finalKnown = merged.filter((m) => selected.includes(m.value));
 
@@ -142,7 +142,7 @@ export default function ChipGroup({
       {showMore && !serverPagination && filteredItems.length > limit && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="mt-3 text-third font-medium text-sm underline hover:text-primary/70 self-end"
+          className="mt-3 text-third font-medium text-sm underline hover:text-primary/70 self-end cursor-pointer"
         >
           {expanded ? "View Less" : "View More"}
         </button>
@@ -153,7 +153,7 @@ export default function ChipGroup({
         <button
           onClick={onLoadMore}
           disabled={isLoading}
-          className="mt-3 text-third font-medium text-sm underline hover:text-primary/70 self-end disabled:opacity-50"
+          className="mt-3 text-third font-medium text-sm underline hover:text-primary/70 self-end disabled:opacity-50 cursor-pointer"
         >
           {isLoading ? "Loading..." : "View More"}
         </button>

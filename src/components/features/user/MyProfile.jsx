@@ -8,6 +8,7 @@ import {
   updateuserProfile,
   updateuserProfileMeta,
   getAllTown,
+  deleteUserProfile,
 } from "@/services/user.service";
 import {
   ChevronDown,
@@ -28,10 +29,13 @@ import {
   CreditCard,
   Fingerprint,
   Briefcase,
+  Trash2,
+  X,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { ProfileSkeleton } from "@/components/ui/skeleton";
 import DetailsFromPopup from "../userSeller/DetailsFromPopup";
+import DeleteProfilePopup from "./DeleteProfilePopup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import CustomSelect from "@/components/ui/custom-select";
 import {
@@ -70,6 +74,8 @@ function MyProfile() {
   const [isCreatingMeta, setIsCreatingMeta] = useState(false);
   const [isSellerPopupOpen, setIsSellerPopupOpen] = useState(false);
   const [isSellerPopupViewOnly, setIsSellerPopupViewOnly] = useState(false);
+  const [isDeleteProfileOpen, setIsDeleteProfileOpen] = useState(false);
+  const [isDeletingProfile, setIsDeletingProfile] = useState(false);
 
   const [profileForm, setProfileForm] = useState({});
   const [metaForm, setMetaForm] = useState({});
@@ -284,6 +290,24 @@ function MyProfile() {
     metaForm.cityId ||
     metaForm.townId
   );
+
+  const handleDeleteProfile = async (reason) => {
+    if (!reason.trim()) return;
+    try {
+      setIsDeletingProfile(true);
+      await deleteUserProfile(reason.trim());
+      setIsDeleteProfileOpen(false);
+
+      localStorage.removeItem("user");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Failed to delete profile:", error);
+    } finally {
+      setIsDeletingProfile(false);
+    }
+  };
 
   const handleSaveProfile = async () => {
     try {
@@ -797,9 +821,14 @@ function MyProfile() {
             </div>
 
             {!isEditingProfile && profile.role !== "USER_SELLER_APPLICANT" && (
-              <button onClick={handleEditProfile} className="text-third hover:text-white transition-colors p-2 rounded-full hover:bg-white/5 cursor-pointer">
-                <SquarePen size={18} />
-              </button>
+              <div className="flex items-center gap-2">
+                <button onClick={handleEditProfile} className="text-third hover:text-white transition-colors p-2 rounded-full hover:bg-white/5 cursor-pointer" title="Edit Profile">
+                  <SquarePen size={18} />
+                </button>
+                <button onClick={() => setIsDeleteProfileOpen(true)} className="text-red-500/80 hover:text-red-500 transition-colors p-2 rounded-full hover:bg-red-500/10 cursor-pointer" title="Delete Profile">
+                  <Trash2 size={18} />
+                </button>
+              </div>
             )}
           </div>
 
@@ -1263,6 +1292,13 @@ function MyProfile() {
         }}
         existing={sellerData}
         viewOnly={isSellerPopupViewOnly}
+      />
+      {/* Delete Profile Popup */}
+      <DeleteProfilePopup
+        isOpen={isDeleteProfileOpen}
+        onClose={() => setIsDeleteProfileOpen(false)}
+        onSubmit={handleDeleteProfile}
+        loading={isDeletingProfile}
       />
     </section>
   );

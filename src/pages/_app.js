@@ -16,6 +16,7 @@ import SplashScreen from "@/components/ui/SplashScreen";
 import GlobalCompareButton from "@/components/ui/GlobalCompareButton";
 
 import * as gtag from "@/lib/gtag";
+import { sendDeviceInfo } from "@/lib/device.util";
 
 import {
   exo,
@@ -92,6 +93,7 @@ export default function App({ Component, pageProps }) {
     checkSplash();
 
     initializeAuth();
+    sendDeviceInfo();
   }, [initializeAuth]);
 
   // CROSS TAB SPLASH SYNC
