@@ -1,8 +1,7 @@
 /**
  * Next.js Edge Middleware — Universal Vehicle Link Redirect
  *
- * Handles /c/{uuid_or_short_id}, /car/{uuid}, and /vehicle/details/{uuid} share links:
- *   - Supports ultra-short 8-character IDs (e.g., https://reecomm.com/c/9549f745)
+ * Handles /c/{id}, /car/{id}, and /vehicle/details/{uuid} share links:
  *   - If opened on Web Browser (or app not installed):
  *       Fetches vehicle metadata to build slug and redirects to canonical web URL:
  *       /vehicle/details/{slug}/{id}
@@ -10,9 +9,8 @@
 
 import { NextResponse } from "next/server";
 
-// Matches 8-character short IDs (e.g. 9549f745) OR full UUIDs
 const UUID_REGEX =
-  /^[0-9a-f]{8}(-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?$/i;
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 function buildVehicleSlug(v) {
   const toSlug = (s) =>
@@ -75,17 +73,25 @@ export async function middleware(request) {
             const slug = buildVehicleSlug(vehicle) || "vehicle";
             const canonicalUrl = request.nextUrl.clone();
             canonicalUrl.pathname = `/vehicle/details/${slug}/${vehicle.id}`;
-            return NextResponse.redirect(canonicalUrl, { status: 301 });
+
+            // Prevent infinite redirect loop if already on canonical URL
+            if (canonicalUrl.pathname !== pathname) {
+              return NextResponse.redirect(canonicalUrl, { status: 301 });
+            }
+            return NextResponse.next();
           }
         }
       } catch {
         // Continue fallback below
       }
 
-      // Fallback: If API fails, redirect to generic web details path
-      const fallbackUrl = request.nextUrl.clone();
-      fallbackUrl.pathname = `/vehicle/details/${maybeId}`;
-      return NextResponse.redirect(fallbackUrl, { status: 302 });
+      // Safe fallback: redirect to generic web details path if not already there
+      const targetPath = `/vehicle/details/${maybeId}`;
+      if (pathname !== targetPath) {
+        const fallbackUrl = request.nextUrl.clone();
+        fallbackUrl.pathname = targetPath;
+        return NextResponse.redirect(fallbackUrl, { status: 302 });
+      }
     }
   }
 
