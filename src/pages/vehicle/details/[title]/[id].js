@@ -218,13 +218,13 @@ function formatPrice(num) {
   return val.toLocaleString("en-IN");
 }
 
-// ─── Server-Side Props (slug-based SEO — no API call needed) ────────────────
+// ─── Server-Side Props (slug-based SEO + live thumbnail fetch) ──────────────
 
 export async function getStaticPaths() {
   return {
     // Generate pages on-demand rather than at build time
-    paths: [], 
-    // 'blocking' will wait for the HTML to be generated on the first request 
+    paths: [],
+    // 'blocking' will wait for the HTML to be generated on the first request
     // before sending it to the browser, ensuring perfect SEO for the first hit
     fallback: 'blocking',
   };
@@ -234,12 +234,11 @@ export async function getStaticProps(context) {
   const { params } = context;
   const { title, id } = params || {};
 
-  // Construct the full current URL dynamically using params
-  // Since 'req' is not available in getStaticProps, we build it directly
   const protocol = process.env.NEXT_PUBLIC_API_URL?.includes("localhost") ? "http" : "https";
   const host = process.env.NEXT_PUBLIC_DOMAIN || "www.reecomm.com";
   const canonicalUrl = `${protocol}://${host}/vehicle/details/${title}/${id}`;
 
+  // ── Fallback SEO from slug ──────────────────────────────────────────────
   let finalTitle = "Vehicle Details | Reecomm";
   let finalDescription = "Buy used vehicles at Reecomm. View detailed specs, photos, price, and contact information.";
   let finalImageUrl = `${protocol}://${host}/logo/logo.webp`;
@@ -257,10 +256,74 @@ export async function getStaticProps(context) {
       finalTitle = `${year} ${brandModel} for Sale in ${city} | Reecomm`;
       finalDescription = `Buy used ${year} ${brandModel} in ${city} at Reecomm. View detailed specs, inspection report, photos, and price details.`;
     } else {
-      // Fallback parser if slug doesn't match standard regex template
       const cleanTitle = title.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
       finalTitle = `${cleanTitle} | Reecomm`;
       finalDescription = `Buy ${cleanTitle} at Reecomm. View specs, photos, price, and contact details.`;
+    }
+  }
+
+  // ── Live API fetch: get real vehicle thumbnail for og:image ────────────
+  // WhatsApp / Telegram crawl the initial SSR HTML — client-side updates are
+  // invisible to them, so we MUST resolve the image server-side.
+  if (id) {
+    try {
+      const backendUrl = process.env.BACKEND_URL || "https://api.reecomm.online";
+      const res = await fetch(
+        `${backendUrl}/api/v1/website/vehicle/detail-page/${id}`,
+        {
+          headers: { Accept: "application/json" },
+          // 4-second timeout — if the API is slow, fall back gracefully
+          signal: AbortSignal.timeout(4000),
+        }
+      );
+
+      if (res.ok) {
+        const json = await res.json();
+        const v = json?.data;
+
+        if (v) {
+          // Real thumbnail from the vehicle record
+          const thumbnail =
+            v.thumbnailUrl ||
+            v.vehicleImages?.[0]?.imageUrl ||
+            "";
+
+          if (thumbnail) finalImageUrl = thumbnail;
+
+          // If slug parse failed earlier, build richer title from API data
+          const year = v.yearOfMfg || "";
+          const make = v.makerName || "";
+          const model = v.modelName || "";
+          const variant = v.variantName || "";
+          const city =
+            v.vehicleAddress?.city ||
+            v.address?.city ||
+            "India";
+          const priceRaw = v.price;
+          const price = priceRaw
+            ? priceRaw >= 100000
+              ? `₹${(priceRaw / 100000).toFixed(2).replace(/\.00$/, "")}L`
+              : `₹${Number(priceRaw).toLocaleString("en-IN")}`
+            : "";
+
+          const apiTitle =
+            `${year} ${make} ${model}${variant ? ` ${variant}` : ""} for Sale in ${city} | Reecomm`
+              .replace(/\s+/g, " ")
+              .trim();
+          const apiDescription =
+            `Buy used ${year} ${make} ${model} in ${city}${price ? ` for ${price}` : ""}. View detailed specs, inspection report, photos, and price details.`
+              .replace(/\s+/g, " ")
+              .trim();
+
+          // Only override slug-derived text if we got real data
+          if (make && model) {
+            finalTitle = apiTitle;
+            finalDescription = apiDescription;
+          }
+        }
+      }
+    } catch {
+      // API unavailable — slug-derived fallbacks remain active
     }
   }
 
@@ -276,9 +339,7 @@ export async function getStaticProps(context) {
         canonical: canonicalUrl,
       },
     },
-    // Next.js will attempt to re-generate the page in the background:
-    // - When a request comes in
-    // - At most once every 60 seconds
+    // ISR: re-generate at most once per 60 s on incoming requests
     revalidate: 60,
   };
 }
