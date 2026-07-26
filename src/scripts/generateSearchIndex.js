@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const SITEMAP_URL = process.env.SITEMAP_URL || 'https://www.reecomm.com/sitemap.xml';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.reecomm.online/api/v1/website';
 const PUBLIC_DIR = path.join(process.cwd(), 'public');
 const DATA_DIR = path.join(process.cwd(), 'src', 'data');
 const OUTPUT_FILE = path.join(PUBLIC_DIR, 'search_index.json');
@@ -45,7 +46,7 @@ function parseUrlPath(urlStr) {
     return {
       id: `consultant_${username}`,
       title: cleanName,
-      keywords: cleanName.toLowerCase().split(' ').concat(['consultant', 'dealer', 'storefront']),
+      keywords: cleanName.toLowerCase().split(' ').concat([username.toLowerCase(), 'consultant', 'dealer', 'storefront']),
       type: 'consultant',
       params: {
         username: username
@@ -200,8 +201,59 @@ function parseUrlPath(urlStr) {
     };
   }
 
-  // Generic non-search URLs (e.g. /about, /terms, /privacy) return null
   return null;
+}
+
+/**
+ * Fetch auto consultants / storefronts from backend API
+ */
+async function fetchAutoConsultants() {
+  const consultants = [];
+  try {
+    const cleanApiUrl = API_BASE_URL.replace(/\/$/, '');
+    let pageNo = 1;
+    let totalPages = 1;
+
+    console.log(`[Cron] Fetching auto consultants from ${cleanApiUrl}/homefeed/consultations/seo...`);
+
+    while (pageNo <= totalPages) {
+      const res = await fetch(`${cleanApiUrl}/homefeed/consultations/seo?pageNo=${pageNo}&size=100`);
+      if (!res.ok) break;
+
+      const data = await res.json();
+      const list = data?.data || [];
+
+      for (const store of list) {
+        if (!store.username) continue;
+        const title = store.consultationName || toTitleCase(store.username);
+
+        const keywords = new Set([
+          store.username.toLowerCase(),
+          ...(title.toLowerCase().split(' ')),
+          ...(store.cityName ? [store.cityName.toLowerCase()] : []),
+          ...(store.stateName ? [store.stateName.toLowerCase()] : []),
+          'consultant', 'auto consultant', 'dealer', 'storefront'
+        ]);
+
+        consultants.push({
+          id: `consultant_${store.username}`,
+          title: title,
+          keywords: Array.from(keywords).filter(Boolean),
+          type: 'consultant',
+          params: {
+            username: store.username
+          }
+        });
+      }
+
+      totalPages = data?.pageResponse?.totalPages || 1;
+      pageNo++;
+    }
+    console.log(`[Cron] Successfully loaded ${consultants.length} auto-consultants.`);
+  } catch (err) {
+    console.warn('[Cron] Warning fetching auto consultants:', err.message);
+  }
+  return consultants;
 }
 
 /**
@@ -236,7 +288,7 @@ async function fetchSitemapLocs(sitemapUrlOrPath) {
  * Main sitemap index generator function
  */
 async function generateSearchIndex() {
-  console.log('[Cron] Generating search index from sitemaps and GEO + Brand suggestions...');
+  console.log('[Cron] Generating search index from sitemaps, auto-consultants, and GEO + Brand suggestions...');
 
   const itemsMap = new Map();
 
@@ -290,7 +342,13 @@ async function generateSearchIndex() {
     itemsMap.set(item.id, item);
   }
 
-  // 2. Load GEO + Brand + Model search combinations from searchSuggestions.json
+  // 2. Fetch all registered Auto Consultants / Storefronts from Backend API
+  const consultantItems = await fetchAutoConsultants();
+  for (const item of consultantItems) {
+    itemsMap.set(item.id, item);
+  }
+
+  // 3. Load GEO + Brand + Model search combinations from searchSuggestions.json
   try {
     const suggestionsPath = path.join(DATA_DIR, 'searchSuggestions.json');
     if (fs.existsSync(suggestionsPath)) {
@@ -302,7 +360,6 @@ async function generateSearchIndex() {
         if (!item.link) continue;
         const parsed = parseUrlPath(item.link);
         if (parsed) {
-          // Enrich parsed item with suggestion data if present
           if (item.brand) parsed.params.makerName = item.brand;
           if (item.model) parsed.params.modelName = item.model;
           if (item.label) parsed.title = item.label;
@@ -320,7 +377,7 @@ async function generateSearchIndex() {
     console.warn('[Cron] Warning processing searchSuggestions.json:', err.message);
   }
 
-  // 3. Parse main public/sitemap.xml and all state XML files in public/sitemaps
+  // 4. Parse main public/sitemap.xml and all state XML files in public/sitemaps
   const sitemapsToProcess = [];
 
   const mainSitemapPath = path.join(PUBLIC_DIR, 'sitemap.xml');
