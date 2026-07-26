@@ -8,7 +8,8 @@
     "start": "next start",
     "test:jest": "jest",
     "test:jest:watch": "jest --watch",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate:search-index": "node src/scripts/generateSearchIndex.js"
   },
   "dependencies": {
     "@microsoft/fetch-event-source": "^2.0.1",

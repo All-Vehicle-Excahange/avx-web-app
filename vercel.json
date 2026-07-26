@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/generate-search-index",
+      "schedule": "0 2 * * *"
+    }
+  ]
+}
