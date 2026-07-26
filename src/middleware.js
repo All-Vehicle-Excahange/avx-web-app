@@ -1,14 +1,10 @@
 /**
- * Next.js Edge Middleware — Vehicle share link & App Store redirect
+ * Next.js Edge Middleware — Universal Vehicle Link Redirect
  *
- * 1. Handles /car/{id}:
- *    - If opened on mobile browser (App Not Installed):
- *        • Android -> Play Store search for "reecomm"
- *        • iOS -> App Store search for "reecomm"
- *        • Desktop -> Web vehicle details page
- *
- * 2. Handles /vehicle/details/{uuid}:
- *    - Redirects UUID-only share link to canonical /vehicle/details/{slug}/{uuid}
+ * Handles /c/{uuid}, /car/{uuid}, and /vehicle/details/{uuid} share links:
+ *   - If opened on Web Browser (or app not installed):
+ *       Fetches vehicle metadata to build slug and redirects to canonical web URL:
+ *       /vehicle/details/{slug}/{uuid}
  */
 
 import { NextResponse } from "next/server";
@@ -51,33 +47,12 @@ export async function middleware(request) {
 
   if (parts.length === 0) return NextResponse.next();
 
-  const userAgent = request.headers.get("user-agent") || "";
-  const isAndroid = /android/i.test(userAgent);
-  const isIOS = /iphone|ipad|ipod/i.test(userAgent);
+  const isShortRoute = (parts[0] === "c" || parts[0] === "car") && parts.length >= 2;
+  const isUuidDetailsRoute = parts.length === 3 && parts[0] === "vehicle" && parts[1] === "details";
 
-  // Handle /car/{id} share links when opened in browser (App NOT Installed)
-  if (parts[0] === "car" && parts.length >= 2) {
-    if (isAndroid) {
-      return NextResponse.redirect(
-        "https://play.google.com/store/search?q=reecomm&c=apps",
-        { status: 302 }
-      );
-    }
-    if (isIOS) {
-      return NextResponse.redirect(
-        "https://apps.apple.com/us/search?term=reecomm",
-        { status: 302 }
-      );
-    }
-    // Desktop browser fallback
-    const webUrl = request.nextUrl.clone();
-    webUrl.pathname = `/vehicle/details/${parts[1]}`;
-    return NextResponse.redirect(webUrl, { status: 302 });
-  }
+  if (isShortRoute || isUuidDetailsRoute) {
+    const maybeId = isShortRoute ? parts[1] : parts[2];
 
-  // Handle /vehicle/details/{uuid} UUID-only redirects
-  if (parts.length === 3 && parts[0] === "vehicle" && parts[1] === "details") {
-    const maybeId = parts[2];
     if (UUID_REGEX.test(maybeId)) {
       try {
         const backendUrl =
@@ -102,8 +77,13 @@ export async function middleware(request) {
           }
         }
       } catch {
-        // Continue naturally
+        // Continue fallback below
       }
+
+      // Fallback: If API fails, redirect to generic web details path
+      const fallbackUrl = request.nextUrl.clone();
+      fallbackUrl.pathname = `/vehicle/details/${maybeId}`;
+      return NextResponse.redirect(fallbackUrl, { status: 302 });
     }
   }
 
@@ -111,5 +91,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/vehicle/details/:id*", "/car/:id*"],
+  matcher: ["/vehicle/details/:id*", "/car/:id*", "/c/:id*"],
 };
