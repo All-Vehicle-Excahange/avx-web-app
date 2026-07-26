@@ -7,6 +7,17 @@ const PUBLIC_DIR = path.join(process.cwd(), 'public');
 const DATA_DIR = path.join(process.cwd(), 'src', 'data');
 const OUTPUT_FILE = path.join(PUBLIC_DIR, 'search_index.json');
 
+// List of known car & bike makers for accurate brand & model extraction
+const KNOWN_MAKERS = [
+  'ashok leyland', 'aston martin', 'audi', 'bentley', 'bmw', 'bugatti', 'chevrolet',
+  'datsun', 'ferrari', 'fiat', 'force motors', 'ford', 'hindustan motors', 'honda',
+  'hyundai', 'icml', 'jaguar', 'lamborghini', 'land rover', 'mahindra', 'maruti suzuki',
+  'maserati', 'maybach', 'mercedes benz', 'mitsubishi', 'nissan', 'porsche', 'premier',
+  'renault', 'rolls royce', 'san', 'skoda', 'ssangyong', 'tata', 'toyota', 'volkswagen',
+  'volvo', 'opel', 'daewoo', 'jeep', 'isuzu', 'dc', 'subaru', 'chrysler', 'mg', 'kia',
+  'bajaj', 'eicher', 'cadillac', 'citroen', 'byd', 'hero', 'tvs', 'royal enfield', 'yamaha', 'ola', 'suzuki', 'ktm', 'ather'
+].sort((a, b) => b.length - a.length); // sort longest first for exact matching
+
 /**
  * Format string into Title Case
  */
@@ -174,17 +185,31 @@ function parseUrlPath(urlStr) {
       keywords.push('inspected', 'verified', 'quality checked');
     }
 
-    // Brand and City extraction from buy-used-{brand}-cars-{city}
+    // Brand and City extraction from buy-used-{brand/model}-cars-{city}
     const matchGeoBrand = searchSlug.match(/^buy-used-(.+?)-(cars|two-wheelers)(?:-(.+))?$/);
     if (matchGeoBrand) {
-      const brandRaw = matchGeoBrand[1];
+      const rawBrandModel = matchGeoBrand[1].replace(/-/g, ' ');
       const cityOrStateRaw = matchGeoBrand[3];
 
-      if (brandRaw && !['suv', 'sedan', 'hatchback', 'luxury', 'electric', 'petrol', 'diesel', 'cng'].includes(brandRaw)) {
-        params.makerName = toTitleCase(brandRaw);
-        title = `${params.makerName} ${isTwoWheeler ? 'Two-Wheelers' : 'Cars'}`;
-        keywords.push(brandRaw.replace(/-/g, ' '));
+      // Match against known maker list
+      const matchedMaker = KNOWN_MAKERS.find(m => rawBrandModel.startsWith(m));
+
+      if (matchedMaker) {
+        params.makerName = toTitleCase(matchedMaker);
+        const remainingModel = rawBrandModel.slice(matchedMaker.length).trim();
+        if (remainingModel) {
+          params.modelName = toTitleCase(remainingModel);
+        }
+
+        title = `Used ${params.makerName}${params.modelName ? ' ' + params.modelName : ''} ${isTwoWheeler ? 'Two-Wheelers' : 'Cars'}`;
+        keywords.push(matchedMaker);
+        if (params.modelName) keywords.push(params.modelName.toLowerCase());
+      } else if (!['suv', 'sedan', 'hatchback', 'luxury', 'electric', 'petrol', 'diesel', 'cng'].includes(matchGeoBrand[1])) {
+        params.makerName = toTitleCase(matchGeoBrand[1]);
+        title = `Used ${params.makerName} ${isTwoWheeler ? 'Two-Wheelers' : 'Cars'}`;
+        keywords.push(matchGeoBrand[1].replace(/-/g, ' '));
       }
+
       if (cityOrStateRaw && !cityOrStateRaw.startsWith('under-')) {
         params.city = toTitleCase(cityOrStateRaw);
         title += ` in ${params.city}`;
@@ -195,13 +220,48 @@ function parseUrlPath(urlStr) {
     return {
       id: `filter_${searchSlug.replace(/-/g, '_')}`,
       title: title,
-      keywords: Array.from(new Set(keywords)),
+      keywords: Array.from(new Set(keywords.map(k => String(k).toLowerCase()))),
       type: 'vehicle_filter',
       params: params
     };
   }
 
   return null;
+}
+
+/**
+ * Generate synthetic Brand + Location & Brand + Model + Location combinations
+ */
+function generateBrandLocationCombinations() {
+  const items = [];
+  const popularCities = [
+    'Ahmedabad', 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai', 'Kolkata',
+    'Pune', 'Jaipur', 'Surat', 'Rajkot', 'Vadodara', 'Palanpur', 'Lucknow', 'Indore', 'Chandigarh'
+  ];
+
+  const topBrands = ['Kia', 'Hyundai', 'Maruti Suzuki', 'Honda', 'Tata', 'Toyota', 'Mahindra', 'BMW', 'Audi', 'Mercedes Benz', 'MG', 'Skoda', 'Volkswagen'];
+
+  for (const brand of topBrands) {
+    for (const city of popularCities) {
+      const brandSlug = brand.toLowerCase().replace(/\s+/g, '-');
+      const citySlug = city.toLowerCase().replace(/\s+/g, '-');
+      const slug = `buy-used-${brandSlug}-cars-${citySlug}`;
+
+      items.push({
+        id: `filter_${slug.replace(/-/g, '_')}`,
+        title: `Used ${brand} Cars in ${city}`,
+        keywords: [brand.toLowerCase(), city.toLowerCase(), 'used car', `${brand.toLowerCase()} cars in ${city.toLowerCase()}`, `used ${brand.toLowerCase()} cars in ${city.toLowerCase()}`],
+        type: 'vehicle_filter',
+        params: {
+          makerName: brand,
+          city: city,
+          vehicleType: 'FOUR_WHEELER'
+        }
+      });
+    }
+  }
+
+  return items;
 }
 
 /**
@@ -288,7 +348,7 @@ async function fetchSitemapLocs(sitemapUrlOrPath) {
  * Main sitemap index generator function
  */
 async function generateSearchIndex() {
-  console.log('[Cron] Generating search index from sitemaps, auto-consultants, and GEO + Brand suggestions...');
+  console.log('[Cron] Generating search index from sitemaps, auto-consultants, Brand + Location combinations, and GEO suggestions...');
 
   const itemsMap = new Map();
 
@@ -342,13 +402,19 @@ async function generateSearchIndex() {
     itemsMap.set(item.id, item);
   }
 
-  // 2. Fetch all registered Auto Consultants / Storefronts from Backend API
+  // 2. Add Brand + Location (e.g. Used Kia Cars in Ahmedabad)
+  const brandGeoItems = generateBrandLocationCombinations();
+  for (const item of brandGeoItems) {
+    itemsMap.set(item.id, item);
+  }
+
+  // 3. Fetch all registered Auto Consultants / Storefronts from Backend API
   const consultantItems = await fetchAutoConsultants();
   for (const item of consultantItems) {
     itemsMap.set(item.id, item);
   }
 
-  // 3. Load GEO + Brand + Model search combinations from searchSuggestions.json
+  // 4. Load GEO + Brand + Model search combinations from searchSuggestions.json
   try {
     const suggestionsPath = path.join(DATA_DIR, 'searchSuggestions.json');
     if (fs.existsSync(suggestionsPath)) {
@@ -377,7 +443,7 @@ async function generateSearchIndex() {
     console.warn('[Cron] Warning processing searchSuggestions.json:', err.message);
   }
 
-  // 4. Parse main public/sitemap.xml and all state XML files in public/sitemaps
+  // 5. Parse main public/sitemap.xml and all state XML files in public/sitemaps
   const sitemapsToProcess = [];
 
   const mainSitemapPath = path.join(PUBLIC_DIR, 'sitemap.xml');
