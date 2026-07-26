@@ -1,16 +1,18 @@
 /**
  * Next.js Edge Middleware — Universal Vehicle Link Redirect
  *
- * Handles /c/{uuid}, /car/{uuid}, and /vehicle/details/{uuid} share links:
+ * Handles /c/{uuid_or_short_id}, /car/{uuid}, and /vehicle/details/{uuid} share links:
+ *   - Supports ultra-short 8-character IDs (e.g., https://reecomm.com/c/9549f745)
  *   - If opened on Web Browser (or app not installed):
  *       Fetches vehicle metadata to build slug and redirects to canonical web URL:
- *       /vehicle/details/{slug}/{uuid}
+ *       /vehicle/details/{slug}/{id}
  */
 
 import { NextResponse } from "next/server";
 
+// Matches 8-character short IDs (e.g. 9549f745) OR full UUIDs
 const UUID_REGEX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  /^[0-9a-f]{8}(-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?$/i;
 
 function buildVehicleSlug(v) {
   const toSlug = (s) =>
@@ -72,7 +74,7 @@ export async function middleware(request) {
           if (vehicle?.id) {
             const slug = buildVehicleSlug(vehicle) || "vehicle";
             const canonicalUrl = request.nextUrl.clone();
-            canonicalUrl.pathname = `/vehicle/details/${slug}/${maybeId}`;
+            canonicalUrl.pathname = `/vehicle/details/${slug}/${vehicle.id}`;
             return NextResponse.redirect(canonicalUrl, { status: 301 });
           }
         }
