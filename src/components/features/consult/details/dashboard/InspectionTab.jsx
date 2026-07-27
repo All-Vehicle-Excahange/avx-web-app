@@ -329,7 +329,7 @@ function InspectionTab() {
       {/* ================= HOW INSPECTION AFFECTS RANKING ================= */}
       <div className="rounded-2xl overflow-hidden shadow-sm border border-third/10 my-4 transition">
         <Image
-          src="/seller/inspection.png"
+          src="/seller/inspection.webp"
           alt="How inspection affects ranking"
           width={1200}
           height={400}

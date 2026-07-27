@@ -23,6 +23,10 @@ export default function AutoConsultPicsSection(props) {
   // ✅ FINAL DATA SOURCE
   const finalConsultants = consultants;
 
+  if (!isLoading && (!Array.isArray(finalConsultants) || finalConsultants.length === 0)) {
+    return null;
+  }
+
   return (
     <div className="w-full py-10 ">
       {/* Header */}

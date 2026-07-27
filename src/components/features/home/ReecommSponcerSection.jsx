@@ -48,6 +48,10 @@ export default function ReecommSponcerSection() {
 
   const showSkeleton = isAdsLoading;
 
+  if (!isAdsLoading && (!Array.isArray(cardData) || cardData.length === 0)) {
+    return null;
+  }
+
   return (
     <div className="w-full h-full flex flex-col  text-primary">
       {/* Header Section */}

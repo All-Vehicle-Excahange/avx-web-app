@@ -15,6 +15,7 @@ import {
   Truck,
   Sparkles,
   ChevronRight,
+  ChevronDown,
 } from "lucide-react";
 import ChipGroup from "@/components/ui/chipGroup";
 import Button from "@/components/ui/button";
@@ -108,9 +109,93 @@ function PreferencesPopup({
   /* ─── sync initialData ─── */
   useEffect(() => {
     if (isOpen && initialData) {
-      setSelectedStates(initialData.stateIds?.map(String) || []);
-      setSelectedCities(initialData.cityIds?.map(String) || []);
-      setSelectedTowns(initialData.townIds?.map(String) || []);
+      const sIds =
+        initialData.states?.map((s) => String(s.id || s.stateId || s)) ||
+        initialData.stateIds?.map(String) ||
+        [];
+      const cIds =
+        initialData.cities?.map((c) => String(c.id || c.cityId || c)) ||
+        initialData.cityIds?.map(String) ||
+        [];
+      const tIds =
+        initialData.towns?.map((t) => String(t.id || t.townId || t)) ||
+        initialData.townIds?.map(String) ||
+        [];
+
+      setSelectedStates(sIds);
+      setSelectedCities(cIds);
+      setSelectedTowns(tIds);
+
+      if (initialData.states?.length > 0) {
+        setStates((prev) => {
+          const map = new Map(prev.map((item) => [Number(item.id), item]));
+          initialData.states.forEach((s) =>
+            map.set(Number(s.id || s.stateId), {
+              id: Number(s.id || s.stateId),
+              name: s.name || s.stateName,
+            })
+          );
+          return Array.from(map.values());
+        });
+      }
+      if (initialData.cities?.length > 0) {
+        setCities((prev) => {
+          const map = new Map(prev.map((item) => [Number(item.id), item]));
+          initialData.cities.forEach((c) =>
+            map.set(Number(c.id || c.cityId), {
+              id: Number(c.id || c.cityId),
+              name: c.name || c.cityName,
+            })
+          );
+          return Array.from(map.values());
+        });
+      }
+      if (initialData.towns?.length > 0) {
+        setTowns((prev) => {
+          const map = new Map(prev.map((item) => [Number(item.id), item]));
+          initialData.towns.forEach((t) =>
+            map.set(Number(t.id || t.townId), {
+              id: Number(t.id || t.townId),
+              name: t.name || t.townName,
+            })
+          );
+          return Array.from(map.values());
+        });
+      }
+
+      if (initialData.makerDetails?.length > 0) {
+        setMakers((prev) => {
+          const map = new Map(
+            prev.map((item) => [item.makeId || item.id, item])
+          );
+          initialData.makerDetails.forEach((m) =>
+            map.set(m.makerId, {
+              makeId: m.makerId,
+              id: m.makerId,
+              makeDisplay: m.makerName,
+              makeName: m.makerName,
+            })
+          );
+          return Array.from(map.values());
+        });
+      }
+      if (initialData.modelDetails?.length > 0) {
+        setModels((prev) => {
+          const map = new Map(
+            prev.map((item) => [item.modelId || item.id, item])
+          );
+          initialData.modelDetails.forEach((m) =>
+            map.set(m.modelId, {
+              modelId: m.modelId,
+              id: m.modelId,
+              modelDisplayName: m.modelName,
+              modelName: m.modelName,
+            })
+          );
+          return Array.from(map.values());
+        });
+      }
+
       setSelectedBrands(initialData.makerDetails?.map((m) => m.makerId) || []);
       setSelectedModels(initialData.modelDetails?.map((m) => m.modelId) || []);
       setSelectedFuelTypes(initialData.fuelTypes || []);
@@ -166,11 +251,36 @@ function PreferencesPopup({
     fetchStates();
   }, [isOpen]);
 
+  /* ─── fetch cities for selected states ─── */
+  useEffect(() => {
+    if (selectedStates.length === 0) {
+      return;
+    }
+    const fetchAllCities = async () => {
+      try {
+        const responses = await Promise.all(
+          selectedStates.map((stateId) => getCities(stateId)),
+        );
+        const allCities = responses.flatMap((res) => res.data || []);
+        const uniqueCities = Array.from(
+          new Map(allCities.map((c) => [Number(c.id), c])).values(),
+        );
+        setCities((prev) => {
+          const merged = [...prev, ...uniqueCities];
+          return Array.from(
+            new Map(merged.map((c) => [Number(c.id), c])).values(),
+          );
+        });
+      } catch (err) {
+        console.error("Error fetching cities for preferences:", err);
+      }
+    };
+    fetchAllCities();
+  }, [selectedStates]);
+
   /* ─── fetch towns for selected cities ─── */
   useEffect(() => {
     if (selectedCities.length === 0) {
-      setTowns([]);
-      setSelectedTowns([]);
       return;
     }
     const fetchAllTowns = async () => {
@@ -180,14 +290,14 @@ function PreferencesPopup({
         );
         const allTowns = responses.flatMap((res) => res.data || []);
         const uniqueTowns = Array.from(
-          new Map(allTowns.map((t) => [t.id, t])).values(),
+          new Map(allTowns.map((t) => [Number(t.id), t])).values(),
         );
-        setTowns(uniqueTowns);
-
-        const validTownIds = new Set(uniqueTowns.map((t) => String(t.id)));
-        setSelectedTowns((prev) =>
-          prev.filter((id) => validTownIds.has(String(id))),
-        );
+        setTowns((prev) => {
+          const merged = [...prev, ...uniqueTowns];
+          return Array.from(
+            new Map(merged.map((t) => [Number(t.id), t])).values(),
+          );
+        });
       } catch (err) {
         console.error("Error fetching towns for preferences:", err);
       }
@@ -402,11 +512,11 @@ function PreferencesPopup({
 
   const removeChip = (id, type) => {
     if (type === "state")
-      setSelectedStates(selectedStates.filter((s) => s !== id));
+      setSelectedStates(selectedStates.filter((s) => String(s) !== String(id)));
     if (type === "city")
-      setSelectedCities(selectedCities.filter((c) => c !== id));
+      setSelectedCities(selectedCities.filter((c) => String(c) !== String(id)));
     if (type === "town")
-      setSelectedTowns(selectedTowns.filter((t) => t !== id));
+      setSelectedTowns(selectedTowns.filter((t) => String(t) !== String(id)));
   };
 
   const handleApplyPreferences = async () => {
@@ -542,7 +652,7 @@ function PreferencesPopup({
     <div className="space-y-6">
       {/* State */}
       <div className="space-y-2">
-        <label className="text-xs font-semibold uppercase tracking-widest text-primary/50">
+        <label className="text-xs font-semibold text-primary/50">
           Select State
         </label>
         <div className="relative group" onClick={(e) => e.stopPropagation()}>
@@ -556,13 +666,32 @@ function PreferencesPopup({
             type="text"
             placeholder="Search state..."
             value={stateSearch}
-            onFocus={() => setShowStateDropdown(true)}
+            onFocus={() => {
+              setShowStateDropdown(true);
+              setShowCityDropdown(false);
+              setShowTownDropdown(false);
+            }}
             onChange={(e) => {
               setStateSearch(e.target.value);
               setShowStateDropdown(true);
+              setShowCityDropdown(false);
+              setShowTownDropdown(false);
             }}
-            className="w-full pl-11 pr-4 py-3 text-sm rounded-xl bg-primary/3 border border-primary/10 focus:border-third focus:ring-2 focus:ring-third/10 outline-none transition-all placeholder:text-primary/30 text-primary"
+            className="w-full pl-11 pr-10 py-3 text-sm rounded-xl bg-primary/3 border border-primary/10 focus:border-third focus:ring-2 focus:ring-third/10 outline-none transition-all placeholder:text-primary/30 text-primary"
           />
+          <div
+            className="absolute inset-y-0 right-0 pr-4 flex items-center cursor-pointer"
+            onClick={() => {
+              setShowStateDropdown(!showStateDropdown);
+              setShowCityDropdown(false);
+              setShowTownDropdown(false);
+            }}
+          >
+            <ChevronDown
+              size={18}
+              className="text-primary/50 hover:text-primary transition-colors"
+            />
+          </div>
           {showStateDropdown && (
             <div className="absolute z-50 mt-2 w-full max-h-52 overflow-y-auto rounded-xl border border-primary/10 bg-secondary shadow-2xl custom-scrollbar py-1">
               {states.filter((s) =>
@@ -580,8 +709,11 @@ function PreferencesPopup({
                     <div
                       key={state.id}
                       onClick={() => {
-                        if (!selectedStates.includes(state.id)) {
-                          setSelectedStates([...selectedStates, state.id]);
+                        if (!selectedStates.includes(String(state.id))) {
+                          setSelectedStates([
+                            ...selectedStates,
+                            String(state.id),
+                          ]);
                         }
                         handleSelectState({ target: { value: state.id } });
                         setStateSearch("");
@@ -599,14 +731,16 @@ function PreferencesPopup({
         {selectedStates.length > 0 && (
           <div className="flex flex-wrap gap-2 pt-1">
             {selectedStates.map((stateId) => {
-              const stateObj = states.find((s) => s.id === Number(stateId));
+              const stateObj = states.find(
+                (s) => Number(s.id) === Number(stateId),
+              );
               return (
                 <div
                   key={stateId}
                   onClick={() => removeChip(stateId, "state")}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-third/10 text-third text-xs font-semibold hover:bg-red-500/10 hover:text-red-500 transition-colors cursor-pointer group"
                 >
-                  {stateObj?.name}
+                  {stateObj?.name || `State #${stateId}`}
                   <X size={12} className="group-hover:text-red-500" />
                 </div>
               );
@@ -617,7 +751,7 @@ function PreferencesPopup({
 
       {/* City */}
       <div className="space-y-2">
-        <label className="text-xs font-semibold uppercase tracking-widest text-primary/50">
+        <label className="text-xs font-semibold text-primary/50">
           Select City
         </label>
         <div className="relative group" onClick={(e) => e.stopPropagation()}>
@@ -631,13 +765,32 @@ function PreferencesPopup({
             type="text"
             placeholder="Search city..."
             value={citySearch}
-            onFocus={() => setShowCityDropdown(true)}
+            onFocus={() => {
+              setShowCityDropdown(true);
+              setShowStateDropdown(false);
+              setShowTownDropdown(false);
+            }}
             onChange={(e) => {
               setCitySearch(e.target.value);
               setShowCityDropdown(true);
+              setShowStateDropdown(false);
+              setShowTownDropdown(false);
             }}
-            className="w-full pl-11 pr-4 py-3 text-sm rounded-xl bg-primary/3 border border-primary/10 focus:border-third focus:ring-2 focus:ring-third/10 outline-none transition-all placeholder:text-primary/30 text-primary"
+            className="w-full pl-11 pr-10 py-3 text-sm rounded-xl bg-primary/3 border border-primary/10 focus:border-third focus:ring-2 focus:ring-third/10 outline-none transition-all placeholder:text-primary/30 text-primary"
           />
+          <div
+            className="absolute inset-y-0 right-0 pr-4 flex items-center cursor-pointer"
+            onClick={() => {
+              setShowCityDropdown(!showCityDropdown);
+              setShowStateDropdown(false);
+              setShowTownDropdown(false);
+            }}
+          >
+            <ChevronDown
+              size={18}
+              className="text-primary/50 hover:text-primary transition-colors"
+            />
+          </div>
           {showCityDropdown && (
             <div className="absolute z-50 mt-2 w-full max-h-52 overflow-y-auto rounded-xl border border-primary/10 bg-secondary shadow-2xl custom-scrollbar py-1">
               {cities.filter((c) =>
@@ -655,8 +808,11 @@ function PreferencesPopup({
                     <div
                       key={city.id}
                       onClick={() => {
-                        if (!selectedCities.includes(city.id)) {
-                          setSelectedCities([...selectedCities, city.id]);
+                        if (!selectedCities.includes(String(city.id))) {
+                          setSelectedCities([
+                            ...selectedCities,
+                            String(city.id),
+                          ]);
                         }
                         setCitySearch("");
                         setShowCityDropdown(false);
@@ -673,14 +829,16 @@ function PreferencesPopup({
         {selectedCities.length > 0 && (
           <div className="flex flex-wrap gap-2 pt-1">
             {selectedCities.map((cityId) => {
-              const cityObj = cities.find((c) => c.id === Number(cityId));
+              const cityObj = cities.find(
+                (c) => Number(c.id) === Number(cityId),
+              );
               return (
                 <div
                   key={cityId}
                   onClick={() => removeChip(cityId, "city")}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-third/10 text-third text-xs font-semibold hover:bg-red-500/10 hover:text-red-500 transition-colors cursor-pointer group"
                 >
-                  {cityObj?.name}
+                  {cityObj?.name || `City #${cityId}`}
                   <X size={12} className="group-hover:text-red-500" />
                 </div>
               );
@@ -691,7 +849,7 @@ function PreferencesPopup({
 
       {/* Town */}
       <div className="space-y-2">
-        <label className="text-xs font-semibold uppercase tracking-widest text-primary/50">
+        <label className="text-xs font-semibold text-primary/50">
           Select Town
         </label>
         <div className="relative group" onClick={(e) => e.stopPropagation()}>
@@ -708,13 +866,34 @@ function PreferencesPopup({
             }
             value={townSearch}
             disabled={selectedCities.length === 0}
-            onFocus={() => setShowTownDropdown(true)}
+            onFocus={() => {
+              setShowTownDropdown(true);
+              setShowStateDropdown(false);
+              setShowCityDropdown(false);
+            }}
             onChange={(e) => {
               setTownSearch(e.target.value);
               setShowTownDropdown(true);
+              setShowStateDropdown(false);
+              setShowCityDropdown(false);
             }}
-            className="w-full pl-11 pr-4 py-3 text-sm rounded-xl bg-primary/3 border border-primary/10 focus:border-third focus:ring-2 focus:ring-third/10 outline-none transition-all placeholder:text-primary/30 text-primary disabled:opacity-50"
+            className="w-full pl-11 pr-10 py-3 text-sm rounded-xl bg-primary/3 border border-primary/10 focus:border-third focus:ring-2 focus:ring-third/10 outline-none transition-all placeholder:text-primary/30 text-primary disabled:opacity-50"
           />
+          <div
+            className="absolute inset-y-0 right-0 pr-4 flex items-center cursor-pointer"
+            onClick={() => {
+              if (selectedCities.length > 0) {
+                setShowTownDropdown(!showTownDropdown);
+                setShowStateDropdown(false);
+                setShowCityDropdown(false);
+              }
+            }}
+          >
+            <ChevronDown
+              size={18}
+              className="text-primary/50 hover:text-primary transition-colors"
+            />
+          </div>
           {showTownDropdown && selectedCities.length > 0 && (
             <div className="absolute z-50 mt-2 w-full max-h-52 overflow-y-auto rounded-xl border border-primary/10 bg-secondary shadow-2xl custom-scrollbar py-1">
               {towns.filter((t) =>
@@ -750,7 +929,9 @@ function PreferencesPopup({
         {selectedTowns.length > 0 && (
           <div className="flex flex-wrap gap-2 pt-1">
             {selectedTowns.map((townId) => {
-              const townObj = towns.find((t) => t.id === Number(townId));
+              const townObj = towns.find(
+                (t) => Number(t.id) === Number(townId),
+              );
               return (
                 <div
                   key={townId}
@@ -829,7 +1010,12 @@ function PreferencesPopup({
       {/* ─── Main Card ─── */}
       <div
         className="relative flex w-full max-w-[1000px] h-[90vh] md:h-[650px] max-h-[90vh] overflow-hidden rounded-3xl shadow-2xl bg-secondary"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          e.stopPropagation();
+          setShowStateDropdown(false);
+          setShowCityDropdown(false);
+          setShowTownDropdown(false);
+        }}
         style={{
           animation: isClosing
             ? "modalCardOut 0.25s ease-in forwards"

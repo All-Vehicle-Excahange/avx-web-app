@@ -16,7 +16,9 @@ const RecentrlySold = () => {
     getRecentlySoldQuery(queryPayload)
   );
 
-  if (!isLoading && !vehicle.length) return null;
+  if (!isLoading && (!Array.isArray(vehicle) || vehicle.length === 0)) {
+    return null;
+  }
 
   return (
     <div className="w-full py-10">

@@ -322,7 +322,7 @@ const Footer = () => {
                 <FaFacebookF size={18} />
               </Link>
               <Link
-                href="#"
+                href="https://www.x.com/Reecommindia"
                 className="text-primary/60 hover:text-white transition-colors"
               >
                 {/* <X size={18} /> */}

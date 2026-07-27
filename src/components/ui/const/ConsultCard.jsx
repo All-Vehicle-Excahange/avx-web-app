@@ -7,44 +7,87 @@ export default function ConsultantCard(props) {
   const data = props.data || props;
   const username = data.username;
   const containerRef = useRef(null);
-  const [visibleCount, setVisibleCount] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(
+    data?.services?.length || 0
+  );
+
   useEffect(() => {
-    if (!containerRef.current || !data?.services) return;
+    if (!containerRef.current || !data?.services || !data.services.length)
+      return;
 
-    const containerWidth = containerRef.current.offsetWidth;
-    let totalWidth = 0;
-    let count = 0;
+    const calculateVisibleCount = () => {
+      const container = containerRef.current;
+      if (!container) return;
+      const containerWidth = container.offsetWidth;
+      if (!containerWidth) return;
 
-    const temp = document.createElement("div");
-    temp.style.position = "absolute";
-    temp.style.visibility = "hidden";
-    temp.style.display = "flex";
-    temp.style.gap = "8px";
-    document.body.appendChild(temp);
+      const temp = document.createElement("div");
+      temp.style.position = "absolute";
+      temp.style.visibility = "hidden";
+      temp.style.display = "flex";
+      temp.style.gap = "8px";
+      temp.style.fontSize = "12px";
+      temp.style.fontFamily = window.getComputedStyle(container).fontFamily;
+      document.body.appendChild(temp);
 
-    data.services.forEach((service) => {
-      const span = document.createElement("span");
-      span.className =
-        "text-xs py-1 px-3 rounded-full border whitespace-nowrap font-medium";
-      span.innerText = service
-        .replaceAll("_", " ")
-        .toLowerCase()
-        .replace(/\b\w/g, (c) => c.toUpperCase());
+      let totalWidth = 0;
+      let count = 0;
+      const moreBadgeReserve = 42;
 
-      temp.appendChild(span);
-      totalWidth += span.offsetWidth + 8;
+      const widths = data.services.map((service) => {
+        const span = document.createElement("span");
+        span.className =
+          "text-xs py-1 px-3 rounded-full border whitespace-nowrap font-medium";
+        span.innerText = service
+          .replaceAll("_", " ")
+          .toLowerCase()
+          .replace(/\b\w/g, (c) => c.toUpperCase());
+        temp.appendChild(span);
+        return span.offsetWidth + 8;
+      });
 
-      if (totalWidth < containerWidth) {
-        count++;
+      const allFitWidth = widths.reduce((sum, w) => sum + w, 0);
+
+      if (allFitWidth - 8 <= containerWidth) {
+        count = data.services.length;
+      } else {
+        for (let i = 0; i < widths.length; i++) {
+          if (
+            totalWidth +
+            widths[i] +
+            (i < widths.length - 1 ? moreBadgeReserve : 0) <=
+            containerWidth
+          ) {
+            totalWidth += widths[i];
+            count++;
+          } else {
+            break;
+          }
+        }
+        if (count === 0 && data.services.length > 0) {
+          count = 1;
+        }
       }
+
+      document.body.removeChild(temp);
+      setVisibleCount(count);
+    };
+
+    calculateVisibleCount();
+
+    const resizeObserver = new ResizeObserver(() => {
+      calculateVisibleCount();
     });
 
-    document.body.removeChild(temp);
-    setVisibleCount(count);
+    resizeObserver.observe(containerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
   }, [data?.services]);
 
   return (
-    <div className="w-[360px] rounded-2xl overflow-hidden border border-third/40 shadow-lg mx-auto flex flex-col">
+    <div className="w-full max-w-[380px] rounded-2xl overflow-hidden border border-third/40 shadow-lg mx-auto flex flex-col h-full">
       {/* COVER IMAGE */}
       <div className="relative h-[168px] w-full p-2">
         <div className="relative w-full h-full rounded-xl overflow-hidden">
@@ -128,19 +171,21 @@ export default function ConsultantCard(props) {
             </p>
           </div>
         </div>
-        {/* SERVICES */}
+
         {/* SERVICES */}
         <div className="pt-4">
           <p className="text-sm font-semibold text-primary mb-3">Services</p>
 
-          <div className="flex items-center gap-2 w-full">
-            <div ref={containerRef} className="flex gap-2 overflow-hidden flex-1">
-              {data?.services?.length > 0 ? (
-                <>
-                  {data.services.slice(0, visibleCount).map((service, index) => (
-                    <span
-                      key={index}
-                      className="
+          <div
+            ref={containerRef}
+            className="flex items-center gap-2 overflow-hidden w-full"
+          >
+            {data?.services?.length > 0 ? (
+              <>
+                {data.services.slice(0, visibleCount).map((service, index) => (
+                  <span
+                    key={index}
+                    className="
               text-xs
               py-1
               rounded-full
@@ -151,31 +196,29 @@ export default function ConsultantCard(props) {
               whitespace-nowrap
               px-3
             "
-                    >
-                      {service
-                        .replaceAll("_", " ")
-                        .toLowerCase()
-                        .replace(/\b\w/g, (c) => c.toUpperCase())}
-                    </span>
-                  ))}
-                </>
-              ) : (
-                <span className="text-xs text-third">-</span>
-              )}
-            </div>
-
-            {data?.services?.length > 0 && visibleCount < data.services.length && (
-              <span
-                className="
+                  >
+                    {service
+                      .replaceAll("_", " ")
+                      .toLowerCase()
+                      .replace(/\b\w/g, (c) => c.toUpperCase())}
+                  </span>
+                ))}
+                {visibleCount < data.services.length && (
+                  <span
+                    className="
               text-xs
               text-primary
               font-semibold
               whitespace-nowrap
               shrink-0
             "
-              >
-                +{data.services.length - visibleCount}
-              </span>
+                  >
+                    +{data.services.length - visibleCount}
+                  </span>
+                )}
+              </>
+            ) : (
+              <span className="text-xs text-third">-</span>
             )}
           </div>
         </div>

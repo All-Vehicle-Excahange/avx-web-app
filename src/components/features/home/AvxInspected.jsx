@@ -22,6 +22,10 @@ export default function AvxInspected() {
     getAvxInspectedQuery(activeType, queryPayload)
   );
 
+  if (!isLoading && (!Array.isArray(vehicles) || vehicles.length === 0)) {
+    return null;
+  }
+
   return (
     <div className="w-full h-full flex flex-col text-secondary">
       <div className="container">
