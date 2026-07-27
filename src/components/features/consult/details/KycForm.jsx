@@ -500,7 +500,8 @@ export default function KycForm() {
     if (targetStep === step) return;
     if (targetStep === 2 && !existing?.business) return;
     if (targetStep === 3 && !existing?.address) return;
-    if (targetStep === 4 && !existing?.kyc && !existing?.business?.isSubmitted) return;
+    if (targetStep === 4 && !existing?.kyc && !existing?.business?.isSubmitted)
+      return;
 
     // Bump the version so the child with that step remounts with fresh initialData
     setDataVersion((p) => ({ ...p, [targetStep]: (p[targetStep] || 0) + 1 }));
@@ -546,8 +547,7 @@ export default function KycForm() {
                   {[
                     "Your own storefront",
                     "Secure payments",
-                    "Transparent commission",
-                    "No upfront cost",
+                    "No commission",
                   ].map((text, i) => (
                     <div key={i} className="flex items-center gap-3">
                       <div className="w-5 h-5 rounded-full border border-white/25 flex items-center justify-center shrink-0">
@@ -593,35 +593,41 @@ export default function KycForm() {
                     desc: "Account activation status",
                   },
                 ].map((item, i, arr) => {
-                  const isFullySubmitted = existing?.business?.isSubmitted && existing?.business?.verificationStatus !== "REQUEST_CHANGES";
-                  const isClickable = isFullySubmitted ? item.num === 4 : (
-                    item.num === 1 ||
-                    (item.num === 2 && !!existing?.business) ||
-                    (item.num === 3 && !!existing?.address) ||
-                    (item.num === 4 && (!!existing?.kyc || existing?.business?.isSubmitted))
-                  );
+                  const isFullySubmitted =
+                    existing?.business?.isSubmitted &&
+                    existing?.business?.verificationStatus !==
+                      "REQUEST_CHANGES";
+                  const isClickable = isFullySubmitted
+                    ? item.num === 4
+                    : item.num === 1 ||
+                      (item.num === 2 && !!existing?.business) ||
+                      (item.num === 3 && !!existing?.address) ||
+                      (item.num === 4 &&
+                        (!!existing?.kyc || existing?.business?.isSubmitted));
 
                   return (
-                  <div
-                    key={item.num}
-                    onClick={() => isClickable && handleSidebarStepClick(item.num)}
-                    className={`flex items-start gap-3 relative ${isClickable ? "cursor-pointer hover:brightness-110 transition-all" : "cursor-not-allowed"}`}
-                  >
-                    {/* Vertical line connecting steps */}
-                    {i < arr.length - 1 && (
-                      <div className="absolute left-[15px] top-8 -bottom-10 w-0.5 bg-white/10">
-                        <div
-                          className="w-full bg-white transition-all duration-550"
-                          style={{
-                            height: step > item.num ? "100%" : "0%",
-                          }}
-                        />
-                      </div>
-                    )}
-
-                    {/* Circle Indicator */}
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-350 shrink-0 border text-xs font-bold relative z-10
+                      key={item.num}
+                      onClick={() =>
+                        isClickable && handleSidebarStepClick(item.num)
+                      }
+                      className={`flex items-start gap-3 relative ${isClickable ? "cursor-pointer hover:brightness-110 transition-all" : "cursor-not-allowed"}`}
+                    >
+                      {/* Vertical line connecting steps */}
+                      {i < arr.length - 1 && (
+                        <div className="absolute left-[15px] top-8 -bottom-10 w-0.5 bg-white/10">
+                          <div
+                            className="w-full bg-white transition-all duration-550"
+                            style={{
+                              height: step > item.num ? "100%" : "0%",
+                            }}
+                          />
+                        </div>
+                      )}
+
+                      {/* Circle Indicator */}
+                      <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-350 shrink-0 border text-xs font-bold relative z-10
                         ${
                           step > item.num
                             ? "bg-white text-secondary border-white"
@@ -630,42 +636,42 @@ export default function KycForm() {
                               : "bg-transparent border-white/20 text-white/40"
                         }
                       `}
-                    >
-                      {step > item.num ? (
-                        <svg
-                          className="w-4 h-4 text-secondary"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="3.5"
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                      ) : (
-                        <span>{item.num}</span>
-                      )}
-                    </div>
+                      >
+                        {step > item.num ? (
+                          <svg
+                            className="w-4 h-4 text-secondary"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="3.5"
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                        ) : (
+                          <span>{item.num}</span>
+                        )}
+                      </div>
 
-                    {/* Label Details */}
-                    <div className="flex flex-col pt-0.5">
-                      <span
-                        className={`text-xs font-semibold tracking-wide transition-colors duration-300
+                      {/* Label Details */}
+                      <div className="flex flex-col pt-0.5">
+                        <span
+                          className={`text-xs font-semibold tracking-wide transition-colors duration-300
                           ${step >= item.num ? "text-white" : "text-white/35"}`}
-                      >
-                        {item.label}
-                      </span>
-                      <span
-                        className={`text-[10px] transition-colors duration-300 mt-0.5
+                        >
+                          {item.label}
+                        </span>
+                        <span
+                          className={`text-[10px] transition-colors duration-300 mt-0.5
                           ${step >= item.num ? "text-white/60" : "text-white/20"}`}
-                      >
-                        {item.desc}
-                      </span>
+                        >
+                          {item.desc}
+                        </span>
+                      </div>
                     </div>
-                  </div>
                   );
                 })}
               </div>

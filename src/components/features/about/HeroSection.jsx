@@ -53,7 +53,7 @@ export default function HeroSection() {
           {/* RIGHT IMAGE */}
           <div className="w-full lg:w-[48%] relative h-[260px] sm:h-[340px] md:h-[420px] lg:h-[480px]">
             <Image
-              src="https://images.pexels.com/photos/35917021/pexels-photo-35917021.jpeg"
+              src="/about_hero_img.webp"
               alt="Vehicle"
               fill
               className="object-cover rounded-2xl shadow-xl hover:shadow-2xl border border-white/5 transition-all duration-300"
