@@ -199,18 +199,57 @@ export default function UpdateProfile() {
       const b = form.business || {};
       const origB = data.business || {};
       let bChanged = false;
-      if (b.logo instanceof File || b.banner instanceof File || b.consultationName !== (origB.consultationName || "") || b.username !== (origB.username || "") || b.ownerName !== (origB.ownerName || "") || b.companyEmail !== (origB.companyEmail || "") || String(b.establishmentYear || "") !== String(origB.establishmentYear || "") || JSON.stringify(origB.vehicleTypes || []) !== JSON.stringify(origB.vehicleTypes || []) || JSON.stringify(origB.services || []) !== JSON.stringify(origB.services || [])) bChanged = true;
-      if (JSON.stringify(origB.vehicleTypes || []) !== JSON.stringify(b.vehicleTypes || []) || JSON.stringify(origB.services || []) !== JSON.stringify(b.services || [])) bChanged = true;
+      if (
+        b.logo instanceof File ||
+        b.banner instanceof File ||
+        b.consultationName !== (origB.consultationName || "") ||
+        b.username !== (origB.username || "") ||
+        b.ownerName !== (origB.ownerName || "") ||
+        b.companyEmail !== (origB.companyEmail || "") ||
+        String(b.establishmentYear || "") !==
+          String(origB.establishmentYear || "") ||
+        JSON.stringify(origB.vehicleTypes || []) !==
+          JSON.stringify(origB.vehicleTypes || []) ||
+        JSON.stringify(origB.services || []) !==
+          JSON.stringify(origB.services || [])
+      )
+        bChanged = true;
+      if (
+        JSON.stringify(origB.vehicleTypes || []) !==
+          JSON.stringify(b.vehicleTypes || []) ||
+        JSON.stringify(origB.services || []) !==
+          JSON.stringify(b.services || [])
+      )
+        bChanged = true;
 
       const a = form.address || {};
       const origA = data.address || {};
       let aChanged = false;
-      if (a.address !== (origA.address || "") || String(a.stateId || "") !== String(origA.state?.id || origA.stateId || "") || String(a.cityId || "") !== String(origA.city?.id || origA.cityId || "") || String(a.townId || "") !== String(origA.town?.id || origA.townId || "") || a.mapUrl !== (origA.mapUrl || "")) aChanged = true;
+      if (
+        a.address !== (origA.address || "") ||
+        String(a.stateId || "") !==
+          String(origA.state?.id || origA.stateId || "") ||
+        String(a.cityId || "") !==
+          String(origA.city?.id || origA.cityId || "") ||
+        String(a.townId || "") !==
+          String(origA.town?.id || origA.townId || "") ||
+        a.mapUrl !== (origA.mapUrl || "")
+      )
+        aChanged = true;
 
       const k = form.kyc || {};
       const origK = data.kyc || {};
       let kChanged = false;
-      if (k.gstNumber !== (origK.gstNumber || "") || k.panNumber !== (origK.panCardNumber || "") || k.aadharNumber !== (origK.aadharCardNumber || "") || k.gstPhoto instanceof File || k.panPhoto instanceof File || k.aadharFront instanceof File || k.aadharBack instanceof File) kChanged = true;
+      if (
+        k.gstNumber !== (origK.gstNumber || "") ||
+        k.panNumber !== (origK.panCardNumber || "") ||
+        k.aadharNumber !== (origK.aadharCardNumber || "") ||
+        k.gstPhoto instanceof File ||
+        k.panPhoto instanceof File ||
+        k.aadharFront instanceof File ||
+        k.aadharBack instanceof File
+      )
+        kChanged = true;
 
       if (!bChanged && !aChanged && !kChanged && !currentId) {
         setErrors((p) => ({ ...p, submit: "No changes detected to update." }));
@@ -224,7 +263,10 @@ export default function UpdateProfile() {
           currentId = createRes.data?._id || createRes.data?.id;
           saveUpdateId(currentId);
         } else {
-          setErrors((p) => ({ ...p, submit: createRes.message || "Failed to initiate update request" }));
+          setErrors((p) => ({
+            ...p,
+            submit: createRes.message || "Failed to initiate update request",
+          }));
           setLoadingStates((p) => ({ ...p, submit: false }));
           return;
         }
@@ -239,12 +281,19 @@ export default function UpdateProfile() {
         payload.append("ownerName", b.ownerName || "");
         payload.append("companyEmail", b.companyEmail || "");
         payload.append("establishmentYear", b.establishmentYear || "");
-        (b.vehicleTypes || []).forEach((v, i) => payload.append(`vehicleTypes[${i}]`, v));
-        (b.services || []).forEach((s, i) => payload.append(`services[${i}]`, s));
+        (b.vehicleTypes || []).forEach((v, i) =>
+          payload.append(`vehicleTypes[${i}]`, v),
+        );
+        (b.services || []).forEach((s, i) =>
+          payload.append(`services[${i}]`, s),
+        );
 
         const res = await updateBasicDetails(payload, currentId);
         if (!res.success) {
-          setErrors((p) => ({ ...p, submit: res.message || "Failed to update business details" }));
+          setErrors((p) => ({
+            ...p,
+            submit: res.message || "Failed to update business details",
+          }));
           setLoadingStates((p) => ({ ...p, submit: false }));
           return;
         }
@@ -260,7 +309,10 @@ export default function UpdateProfile() {
 
         const res = await updateAddressDetails(payload, currentId);
         if (!res.success) {
-          setErrors((p) => ({ ...p, submit: res.message || "Failed to update address details" }));
+          setErrors((p) => ({
+            ...p,
+            submit: res.message || "Failed to update address details",
+          }));
           setLoadingStates((p) => ({ ...p, submit: false }));
           return;
         }
@@ -271,14 +323,21 @@ export default function UpdateProfile() {
         payload.append("gstNumber", k.gstNumber || "");
         payload.append("panCardNumber", k.panNumber || "");
         payload.append("aadharCardNumber", k.aadharNumber || "");
-        if (k.gstPhoto instanceof File) payload.append("gstCertificateImage", k.gstPhoto);
-        if (k.panPhoto instanceof File) payload.append("panCardFrontImage", k.panPhoto);
-        if (k.aadharFront instanceof File) payload.append("aadharCardFrontImage", k.aadharFront);
-        if (k.aadharBack instanceof File) payload.append("aadharCardBackImage", k.aadharBack);
+        if (k.gstPhoto instanceof File)
+          payload.append("gstCertificateImage", k.gstPhoto);
+        if (k.panPhoto instanceof File)
+          payload.append("panCardFrontImage", k.panPhoto);
+        if (k.aadharFront instanceof File)
+          payload.append("aadharCardFrontImage", k.aadharFront);
+        if (k.aadharBack instanceof File)
+          payload.append("aadharCardBackImage", k.aadharBack);
 
         const res = await updateKycDocuments(payload, currentId);
         if (!res.success) {
-          setErrors((p) => ({ ...p, submit: res.message || "Failed to update KYC documents" }));
+          setErrors((p) => ({
+            ...p,
+            submit: res.message || "Failed to update KYC documents",
+          }));
           setLoadingStates((p) => ({ ...p, submit: false }));
           return;
         }
@@ -292,7 +351,10 @@ export default function UpdateProfile() {
         push("/consult/dashboard/profile");
         return;
       } else {
-        setErrors((p) => ({ ...p, submit: res.message || "Submission failed" }));
+        setErrors((p) => ({
+          ...p,
+          submit: res.message || "Submission failed",
+        }));
       }
     } catch (error) {
       console.error("Submission failed", error);
@@ -304,7 +366,8 @@ export default function UpdateProfile() {
 
   const verificationStatus = data.business?.verificationStatus;
   const isSubmitted = data.business?.isSubmitted;
-  const isRequested = isSubmitted === true && verificationStatus === "REQUESTED";
+  const isRequested =
+    isSubmitted === true && verificationStatus === "REQUESTED";
   const isChangesRequested = verificationStatus === "REQUEST_CHANGES";
   const isRejected = verificationStatus === "REJECTED";
   const adminRemark = data.business?.adminRemark;
@@ -318,7 +381,14 @@ export default function UpdateProfile() {
           {/* LEFT PANEL */}
           <div className="hidden lg:flex w-[30%] sticky top-[66px] h-[calc(100vh-66px)]  flex-col justify-between text-white overflow-hidden">
             <div className="absolute inset-0 z-0">
-              <Image src="/homeBanner.jpg" loading="lazy" alt="Partner Program" width={800} height={500} className="w-full h-full object-cover object-center" />
+              <Image
+                src="/homeBanner.jpg"
+                loading="lazy"
+                alt="Partner Program"
+                width={800}
+                height={500}
+                className="w-full h-full object-cover object-center"
+              />
               <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" />
             </div>
 
@@ -337,8 +407,7 @@ export default function UpdateProfile() {
                 {[
                   "Your own storefront",
                   "Secure payments",
-                  "Transparent commission",
-                  "No upfront cost",
+                  "No commission",
                 ].map((text, i) => (
                   <div key={i} className="flex items-center gap-4">
                     <div className="w-6 h-6 rounded-full border border-white/30 flex items-center justify-center shrink-0">

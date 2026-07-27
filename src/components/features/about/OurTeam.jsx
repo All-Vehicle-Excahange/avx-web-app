@@ -1,89 +1,211 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 
-const teamMembers = [
+const founderParagraphs = [
+  "Every marketplace changes one thing.\nAmazon changed availability.\nUber changed transportation.\nAirbnb changed accommodation.",
+  "Yet one of the largest purchases people make still depends on guesswork.",
+  "I kept seeing the same problems.\nBuyers couldn't tell who to trust.\nConsultants with genuine businesses looked exactly like everyone else.\nGood vehicles disappeared among poor listings.",
+  "The industry didn't need another marketplace.\nIt needed infrastructure.\nThat became Reecomm.",
+  "Everything we build starts with one question.\nDoes this make buying and selling used vehicles more trustworthy?",
+  "If the answer is no,\nwe don't build it.",
+];
+
+const timelineEvents = [
+  "Observed the market",
+  "Talked to buyers",
+  "Met consultants",
+  "Found one common problem",
+  "Started Reecomm",
+];
+
+const pillarCards = [
   {
-    name: "Amit Sharma",
-    role: "Founder & CEO, Reecomm",
-    bio: "I've watched talented vehicle consultants build real expertise and struggle to show it beyond phone contacts. Reecomm exists to build the trust infrastructure India's market has needed for years.",
-    avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&h=400&q=80",
+    num: "01",
+    title: "For Buyers",
+    desc: "Reduce uncertainty before making one of life's biggest purchases.",
   },
   {
-    name: "Ashwin Santiago",
-    role: "Engineering Manager",
-    bio: "Lead engineering teams building high-performance marketplace services, secure APIs, and real-time search engine indexers.",
-    avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&h=400&q=80",
+    num: "02",
+    title: "For Consultants",
+    desc: "Help honest businesses build digital credibility and grow online.",
   },
   {
-    name: "Caitlyn King",
-    role: "Product Manager",
-    bio: "Founding design team. Specializes in building clean, trust-first user experiences and intuitive consultant storefronts.",
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&h=400&q=80",
-  },
-  {
-    name: "Owen Garcia",
-    role: "Frontend Developer",
-    bio: "Focused on implementing responsive layouts, fluid animations, and highly performant search discovery dashboards.",
-    avatar:
-      "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=400&h=400&q=80",
+    num: "03",
+    title: "For The Market",
+    desc: "Build transparent infrastructure that raises trust across the entire ecosystem.",
   },
 ];
 
-function OurTeam() {
+export default function OurTeam() {
   return (
-    <section className="py-24 text-primary bg-transparent">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <p className="mb-4 text-sm tracking-[0.4em] uppercase text-third font-semibold">
-            Built by people who understand the market
-          </p>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-[Montserrat] mb-6 leading-tight text-primary">
-            Meet Our <span className="text-fourth/80">Team</span>
-          </h2>
-          <p className="text-third text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-            Reecomm was founded by people who saw the gap between the scale of
-            India&apos;s used vehicle industry and the quality of infrastructure
-            serving it — and decided to do something about it.
-          </p>
-        </div>
+    <section className="bg-transparent text-white w-full overflow-hidden">
+      <div className="max-w-[1440px] mx-auto px-6 md:px-[80px] pt-[100px] lg:pt-[140px] pb-[100px] lg:pb-[140px]">
+        {/* CONTAINER 1280px */}
+        <div className="max-w-[1280px] mx-auto">
+          {/* SECTION HEADER */}
+          <div className="mb-[24px] pt-4">
+            <p className="text-[12px] tracking-[4px] font-medium text-[#8B8B8B] uppercase">
+              ABOUT THE FOUNDER
+            </p>
+          </div>
 
-        {/* Team Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {teamMembers.map((member, index) => (
-            <div key={index} className="group flex flex-col items-start">
-              {/* Photo Frame */}
-              <div className="w-full aspect-square rounded-2xl overflow-hidden bg-neutral-900 border border-white/10 mb-6 relative">
-                {/* Image overlay to blend in */}
-                <div className="absolute inset-0 bg-neutral-950/10 group-hover:bg-transparent transition-colors duration-300 z-10" />
-                <Image
-                  src={member.avatar}
-                  alt={member.name}
-                  fill
-                  className="object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 scale-100 group-hover:scale-105"
-                />
+          {/* HEADLINE */}
+          <h2 className="max-w-[760px] text-3xl sm:text-5xl lg:text-[64px] font-bold leading-tight lg:leading-[74px] text-white mb-[32px]">
+            We didn&apos;t build another marketplace.{" "}
+            <span className="text-[#2F80FF] block sm:inline">
+              We rebuilt trust.
+            </span>
+          </h2>
+
+          {/* INTRO PARAGRAPH */}
+          <div className="max-w-[700px] text-lg lg:text-[22px] leading-relaxed lg:leading-[38px] text-[#BDBDBD] mb-[60px] lg:mb-[80px]">
+            <p className="mb-4">
+              The idea behind Reecomm wasn&apos;t to create another place to
+              list vehicles.
+            </p>
+            <p>
+              It came from watching buyers struggle with uncertainty,
+              consultants struggle to earn credibility, and an industry that had
+              grown without the infrastructure needed to create trust.
+            </p>
+          </div>
+
+          {/* MAIN CONTENT: TWO COLUMNS (LEFT 720px, RIGHT 420px, GAP 140px) */}
+          <div className="flex flex-col lg:flex-row items-start justify-between gap-12 lg:gap-[140px] mb-[100px] lg:mb-[120px]">
+            {/* LEFT COLUMN - 720px */}
+            <div className="w-full lg:w-[720px] shrink-0">
+              {/* LARGE QUOTATION MARK */}
+              <div className="text-[90px] lg:text-[110px] leading-none text-[#2F80FF]/15 select-none font-serif -mb-8 lg:-mb-12 -ml-1">
+                &ldquo;
               </div>
 
-              {/* Identity */}
-              <h3 className="text-xl font-bold text-primary mb-1 group-hover:text-fourth transition-colors duration-300">
-                {member.name}
-              </h3>
+              {/* FOUNDER LETTER PARAGRAPHS */}
+              <div className="space-y-6 lg:space-y-8 text-base lg:text-[20px] font-normal leading-relaxed lg:leading-[40px] text-[#E5E5E5]">
+                {founderParagraphs.map((para, idx) => (
+                  <p key={idx} className="whitespace-pre-line">
+                    {para}
+                  </p>
+                ))}
+              </div>
 
-              <h4 className="text-sm font-semibold text-fourth/90 mb-3 uppercase tracking-wider">
-                {member.role}
-              </h4>
-
-              {/* Bio */}
-              <p className="text-third text-sm leading-relaxed">{member.bio}</p>
+              {/* FOUNDER SIGNATURE */}
+              <div className="mt-12 pt-8  max-w-[320px]">
+                <h4 className="text-[24px] font-semibold text-white tracking-wide">
+                  Anas Loriya
+                </h4>
+                <p className="text-[16px] text-[#8B8B8B] mt-1 font-medium">
+                  Founder, Reecomm
+                </p>
+              </div>
             </div>
-          ))}
+
+            {/* RIGHT COLUMN - 420px */}
+            <div className="w-full lg:w-[420px] shrink-0 flex flex-col items-center lg:items-start">
+              {/* LARGE PORTRAIT */}
+              <div className="w-full lg:w-[420px] h-[460px] sm:h-[520px] lg:h-[560px] rounded-[18px] overflow-hidden relative border border-[#1D1D1D] bg-[#111111] shadow-2xl">
+                <Image
+                  src="/founder_img.webp"
+                  alt="Anas Loriya - Founder Reecomm"
+                  fill
+                  className="object-cover object-top"
+                  sizes="(max-width: 768px) 100vw, 420px"
+                  priority
+                />
+                {/* Soft shadow overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
+              </div>
+
+              {/* SMALL CARD UNDER IMAGE */}
+              <div className="w-full p-[24px] bg-transparent border border-primary/10 rounded-[16px] mt-6 backdrop-blur-sm">
+                <div className="flex items-center justify-between pb-3 mb-3 border-b border-primary/10">
+                  <span className="text-xs uppercase tracking-widest text-[#8B8B8B] font-medium">
+                    Founded Reecomm
+                  </span>
+                  <span className="text-sm font-bold text-[#2F80FF] bg-[#2F80FF]/10 px-2.5 py-0.5 rounded-full">
+                    2026
+                  </span>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs text-[#8B8B8B] uppercase tracking-wider font-semibold">
+                    One belief
+                  </p>
+                  <p className="text-base font-semibold text-white">
+                    Trust should never be optional.
+                  </p>
+                </div>
+              </div>
+
+              {/* VERTICAL TIMELINE */}
+              <div className="w-full lg:w-[260px] mt-10 px-2">
+                <p className="text-xs tracking-[2px] uppercase text-[#8B8B8B] font-semibold mb-6">
+                  Journey Timeline
+                </p>
+                <div className="space-y-6">
+                  {timelineEvents.map((evt, idx) => (
+                    <div key={idx} className="relative flex items-center">
+                      {/* Connecting Line Segment from dot 1 to dot 2, etc. */}
+                      {idx < timelineEvents.length - 1 && (
+                        <div className="absolute left-[4px] top-[10px] bottom-[-24px] w-[2px] bg-[#2F80FF]" />
+                      )}
+
+                      {/* Centered Bullet Dot */}
+                      <div className="relative z-10 w-2.5 h-2.5 rounded-full bg-[#2F80FF] shrink-0" />
+
+                      {/* Text Label */}
+                      <span className="ml-4 text-sm font-medium text-[#D1D1D1]">
+                        {evt}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* SECTION TWO */}
+          <div>
+            {/* LARGE CENTERED STATEMENT */}
+            <h3 className="max-w-[920px] mx-auto text-center text-2xl sm:text-3xl lg:text-[42px] font-semibold leading-snug lg:leading-[52px] text-white mb-[60px]">
+              Every feature in Reecomm exists because of this story.
+            </h3>
+
+            {/* THREE CARDS (Equal Width ~390px, Height 220px, Radius 18px, Border primary/10) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-[35px] max-w-[1280px] mx-auto mb-[100px] lg:mb-[140px]">
+              {pillarCards.map((card, idx) => (
+                <div
+                  key={idx}
+                  className="w-full lg:w-[390px] h-[220px] rounded-[18px] border border-primary/10 bg-transparent p-8 flex flex-col justify-between"
+                >
+                  <div>
+                    <span className="text-2xl font-bold text-[#2F80FF] block mb-2 font-mono">
+                      {card.num}
+                    </span>
+                    <h4 className="text-xl font-bold text-white mb-2">
+                      {card.title}
+                    </h4>
+                  </div>
+                  <p className="text-[#A8A8A8] text-sm leading-relaxed">
+                    {card.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* FINAL CLOSING */}
+          <div className="text-center max-w-[900px] mx-auto">
+            <h2 className="text-3xl sm:text-4xl lg:text-[56px] font-bold text-white leading-tight mb-4">
+              Building India&apos;s{" "}
+              <span className="text-[#2F80FF]">trust infrastructure</span> for
+              used vehicles.
+            </h2>
+            <p className="text-[18px] text-[#A8A8A8] font-medium">
+              The marketplace is only the beginning.
+            </p>
+          </div>
         </div>
       </div>
     </section>
   );
 }
-
-export default OurTeam;
