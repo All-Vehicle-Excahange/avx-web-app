@@ -116,13 +116,16 @@ const CategoriesSections = () => {
       const nextCategory = categories[nextCategoryIndex];
       const nextTag = vehicleTagMap[activeType]?.[nextCategory.id];
 
-      // If we haven't checked the next tag yet, switch to it
       if (nextTag && !checkedCategories.current.has(nextTag)) {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setActive(nextCategory.id);
       }
     }
   }, [vehicles, isLoading, active, activeType, selectedTag]);
+
+  if (!isLoading && (!Array.isArray(vehicles) || vehicles.length === 0)) {
+    return null;
+  }
 
   return (
     <section className="w-full h-full flex flex-col text-primary">

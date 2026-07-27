@@ -22,6 +22,10 @@ export default function TopPicsSection() {
     getTopPicsQuery(activeType, queryPayload),
   );
 
+  if (!isLoading && (!Array.isArray(cardData) || cardData.length === 0)) {
+    return null;
+  }
+
   return (
     <div className="w-full h-full flex flex-col  text-primary">
       {/* Header Section */}

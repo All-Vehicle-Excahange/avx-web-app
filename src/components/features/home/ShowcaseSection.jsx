@@ -20,9 +20,13 @@ const ShowcaseSection = () => {
 
         const res = await getWhereYouLeftOff(data);
 
-        // Ensure state always receives an array
-        setVehicle(res?.data || []);
-        setTotalCount(res?.pagination?.totalElements || res?.pagination?.total || (res?.data || []).length);
+        const list = Array.isArray(res?.data?.content)
+          ? res.data.content
+          : Array.isArray(res?.data)
+          ? res.data
+          : [];
+        setVehicle(list);
+        setTotalCount(res?.pagination?.totalElements || res?.pagination?.total || list.length);
       } catch (error) {
         console.error("Error fetching vehicles:", error);
         setVehicle([]);

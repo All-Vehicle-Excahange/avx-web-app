@@ -414,7 +414,7 @@ function LoginPopup({
             <SwiperSlide>
               <div className="relative w-full h-full">
                 <Image
-                  src="/auth-image-2.webp"
+                  src="/auth-image-3.webp"
                   priority
                   alt="Private Seller"
                   fill

@@ -436,7 +436,12 @@ function Wishlist() {
                 )}
 
                 {/* Locations */}
-                {userPref.cityDetails?.length > 0 && (
+                {((userPref.states?.length > 0 ||
+                  userPref.stateDetails?.length > 0) ||
+                  (userPref.cities?.length > 0 ||
+                    userPref.cityDetails?.length > 0) ||
+                  (userPref.towns?.length > 0 ||
+                    userPref.townDetails?.length > 0)) && (
                   <div className="p-6 rounded-2xl border border-third/20 bg-primary/2 hover:bg-primary/4 transition-colors group md:col-span-2 lg:col-span-1">
                     <MapPin
                       className="text-third mb-3 group-hover:scale-110 transition-transform"
@@ -446,12 +451,28 @@ function Wishlist() {
                       Locations
                     </h3>
                     <div className="flex flex-wrap gap-2">
-                      {userPref.cityDetails.map((c) => (
+                      {(userPref.states || userPref.stateDetails)?.map((s) => (
                         <span
-                          key={c.cityId || c.cityName}
-                          className="px-3 py-1.5 text-xs font-medium bg-third/5 text-third border border-third/20 rounded-full"
+                          key={s.stateId || s.id || s.stateName || s.name || s}
+                          className="px-3 py-1.5 text-xs font-medium bg-primary/10 text-primary rounded-full"
                         >
-                          {c.cityName}
+                          {s.stateName || s.name || s}
+                        </span>
+                      ))}
+                      {(userPref.cities || userPref.cityDetails)?.map((c) => (
+                        <span
+                          key={c.cityId || c.id || c.cityName || c.name || c}
+                          className="px-3 py-1.5 text-xs font-medium border border-primary/20 text-primary/70 rounded-full"
+                        >
+                          {c.cityName || c.name || c}
+                        </span>
+                      ))}
+                      {(userPref.towns || userPref.townDetails)?.map((t) => (
+                        <span
+                          key={t.townId || t.id || t.townName || t.name || t}
+                          className="px-3 py-1.5 text-xs font-medium border border-primary/20 text-primary/70 rounded-full"
+                        >
+                          {t.townName || t.name || t}
                         </span>
                       ))}
                     </div>

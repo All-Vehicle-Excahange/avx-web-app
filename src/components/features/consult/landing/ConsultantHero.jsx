@@ -135,7 +135,7 @@ export default function ConsultantHeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-5">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-5 pt-15 pb-12 lg:py-0">
       {showConsultPopup && (
         <ConsualtPopup onClose={() => setShowConsultPopup(false)} />
       )}
@@ -151,15 +151,15 @@ export default function ConsultantHeroSection() {
         className="absolute -bottom-40 -right-40 w-150 h-150 bg-fourth/10 blur-[160px] rounded-full"
       />
 
-      <div className="relative z-10 mx-auto py-15 w-full max-w-7xl">
+      <div className="relative z-10 mx-auto py-8 sm:py-12 lg:py-20 w-full max-w-7xl">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* ── LEFT ── */}
-          <div className="max-w-6xl space-y-8 justify-evenly">
-            <span className="text-sm tracking-[0.4em] py-3 uppercase text-third font-semibold">
+          <div className="max-w-6xl space-y-6 lg:space-y-8 justify-evenly">
+            <span className="inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Consultant Program
             </span>
             <div className="space-y-3">
-              <h1 className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl  text-primary font-semibold leading-[1.05] mt-5">
+              <h1 className=" text-3xl sm:text-4xl lg:text-5xl text-primary font-semibold leading-[1.05]">
                 Digitize Your Vehicle Business in Under
               </h1>
               <h1 className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl text-fourth/80 font-semibold leading-[1.05]">
@@ -173,8 +173,8 @@ export default function ConsultantHeroSection() {
             </p>
             <div className="w-24 h-0.5 bg-fourth rounded-full" />
             <div className="flex flex-col sm:flex-row gap-4 pt-3">
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="md"
                 onClick={() => {
                   if (!user) {
@@ -245,11 +245,10 @@ export default function ConsultantHeroSection() {
                   <button
                     key={tab}
                     onClick={() => setActiveTab(i)}
-                    className={`relative px-3.5 py-1.5 text-[11px] font-semibold rounded-lg transition-colors duration-200 ${
-                      activeTab === i
-                        ? "text-primary"
-                        : "text-third hover:text-primary/70"
-                    }`}
+                    className={`relative px-3.5 py-1.5 text-[11px] font-semibold rounded-lg transition-colors duration-200 ${activeTab === i
+                      ? "text-primary"
+                      : "text-third hover:text-primary/70"
+                      }`}
                   >
                     {activeTab === i && (
                       <motion.div
