@@ -75,7 +75,7 @@ const PlayStoreButton = () => (
         "_blank",
       )
     }
-    className="px-3 sm:px-6 py-2 flex items-center justify-center bg-secondary text-primary hover:bg-primary hover:text-secondary transition-all duration-300 rounded-lg cursor-pointer border border-primary/10 w-full sm:w-auto"
+    className="px-3 sm:px-6 py-2 flex items-center justify-center bg-white text-zinc-950 hover:bg-transparent hover:text-white transition-all duration-300 rounded-lg cursor-pointer border border-transparent hover:border-white/30 shadow-md w-full sm:w-auto"
   >
     <div className="mr-2 sm:mr-3 shrink-0">
       <svg viewBox="30 336.7 120.9 129.2" className="w-[18px] sm:w-[25px]">
@@ -111,7 +111,7 @@ const AppStoreButton = () => (
   <button
     type="button"
     onClick={() => window.open("https://www.apple.com/app-store", "_blank")}
-    className="px-3 sm:px-6 py-2 flex items-center justify-center bg-secondary text-primary hover:bg-primary hover:text-secondary transition-all duration-300 rounded-lg cursor-pointer border border-primary/10 w-full sm:w-auto"
+    className="px-3 sm:px-6 py-2 flex items-center justify-center bg-white text-zinc-950 hover:bg-transparent hover:text-white transition-all duration-300 rounded-lg cursor-pointer border border-transparent hover:border-white/30 shadow-md w-full sm:w-auto"
   >
     <div className="mr-2 sm:mr-3 shrink-0">
       <svg viewBox="0 0 384 512" className="w-[16px] sm:w-[23px]">

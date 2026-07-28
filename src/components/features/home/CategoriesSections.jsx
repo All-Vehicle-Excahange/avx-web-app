@@ -87,6 +87,7 @@ const CategoriesSections = () => {
   const [active, setActive] = useState("urban-rides");
   const checkedCategories = React.useRef(new Set());
   const hasManuallySelected = React.useRef(false);
+  const checkedFourWheelerEmpty = React.useRef(false);
 
   const selectedTag = vehicleTagMap[activeType]?.[active];
   const queryPayload = {
@@ -106,24 +107,28 @@ const CategoriesSections = () => {
     if (!isLoading && vehicles.length === 0 && selectedTag) {
       checkedCategories.current.add(selectedTag);
 
-      // Find next category based on the category that just completed
       const categories = categoriesByType[activeType];
-      const currentIndex = categories.findIndex((c) => c.id === active);
+      const nextCat = categories.find(
+        (c) => !checkedCategories.current.has(vehicleTagMap[activeType]?.[c.id])
+      );
 
-      if (currentIndex === -1) return;
-
-      const nextCategoryIndex = (currentIndex + 1) % categories.length;
-      const nextCategory = categories[nextCategoryIndex];
-      const nextTag = vehicleTagMap[activeType]?.[nextCategory.id];
-
-      if (nextTag && !checkedCategories.current.has(nextTag)) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setActive(nextCategory.id);
+      if (nextCat) {
+        setActive(nextCat.id);
+      } else if (activeType === "4-Wheeler") {
+        checkedFourWheelerEmpty.current = true;
+        setActiveType("2-Wheeler");
+        setActive("scooters");
       }
     }
   }, [vehicles, isLoading, active, activeType, selectedTag]);
 
-  if (!isLoading && (!Array.isArray(vehicles) || vehicles.length === 0)) {
+  if (
+    !isLoading &&
+    (!Array.isArray(vehicles) || vehicles.length === 0) &&
+    activeType === "2-Wheeler" &&
+    checkedFourWheelerEmpty.current &&
+    !hasManuallySelected.current
+  ) {
     return null;
   }
 

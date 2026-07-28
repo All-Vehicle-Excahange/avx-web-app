@@ -708,7 +708,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
               className="absolute left-1/2 -translate-x-1/2 hidden lg:flex z-50"
             >
               {/* Search Bar Container */}
-              <div className={`relative flex items-center h-[52px] w-[560px] rounded-full transition-all duration-300 group ${heroMode && !scrolled
+              <div className={`relative flex items-center h-[52px] w-[440px] xl:w-[530px] rounded-full transition-all duration-300 group ${heroMode && !scrolled
                 ? 'bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-white'
                 : 'bg-gray-100 border border-gray-200/80 focus-within:border-gray-300 focus-within:shadow-sm'
                 }`}>
@@ -966,7 +966,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                                 <div key={item.id || `recent-${idx}`} onClick={() => {
                                   setIsSearching(true);
                                   saveSearchMutation.mutate(item.search);
-                                  
+
                                   let searchSlug = item.search.toLowerCase().replace(/\bused\b/g, '').trim().replace(/\s+/g, '-');
                                   let finalUrl = searchSlug ? `/search/buy-used-${searchSlug}-cars` : `/search/buy-used-cars`;
                                   push(finalUrl.replace(/-+/g, '-'));
@@ -1223,7 +1223,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                             }
                           }}
                           size="sm"
-                          className={`hidden md:block text-xs md:text-sm whitespace-nowrap transition-all duration-500 ease-in-out ${heroMode && !scrolled
+                          className={`hidden md:block text-xs xl:text-sm whitespace-nowrap transition-all duration-500 ease-in-out ${heroMode && !scrolled
                             ? "bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl rounded-full border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-primary hover:bg-transparent hover:text-primary hover:border-white/30"
                             : "text-primary border border-primary hover:bg-primary hover:text-secondary"
                             }`}
@@ -1306,7 +1306,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                         setPersisAccountOpen(nextPersis);
                         setAccountOpen(nextPersis);
                       }}
-                      className={`flex cursor-pointer items-center gap-1 px-3 py-1 rounded-full transition-all outline outline-2 outline-transparent text-xs md:text-sm
+                      className={`flex cursor-pointer items-center gap-1 px-3 py-1 rounded-full transition-all outline outline-2 outline-transparent text-xs xl:text-sm
                     ${heroMode && !scrolled
                           ? `text-white hover:outline-white/40 ${accountOpen ? "!outline-white/40" : ""}`
                           : `text-black hover:outline-black/20 ${accountOpen ? "!outline-black/20" : ""}`
@@ -1332,7 +1332,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                           {!isLoggedIn ? (
                             <span className="font-bold">Sign in</span>
                           ) : (
-                            <span className="font-bold">
+                            <span className="font-bold block truncate max-w-[110px] xl:max-w-[160px]">
                               Hello, {user?.consultationName || user?.firstname}
                             </span>
                           )}

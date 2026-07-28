@@ -12,6 +12,8 @@ const cn = (...classes) => classes.filter(Boolean).join(" ");
 
 export default function ReecommSponcerSection() {
   const [activeType, setActiveType] = useState("4-Wheeler");
+  const hasManuallySelected = React.useRef(false);
+  const checkedFourWheelerEmpty = React.useRef(false);
 
   const mappedVehicleType =
     activeType === "4-Wheeler" ? "FOUR_WHEELER" : "TWO_WHEELER";
@@ -48,7 +50,21 @@ export default function ReecommSponcerSection() {
 
   const showSkeleton = isAdsLoading;
 
-  if (!isAdsLoading && (!Array.isArray(cardData) || cardData.length === 0)) {
+  React.useEffect(() => {
+    if (hasManuallySelected.current) return;
+    if (!isAdsLoading && (!Array.isArray(cardData) || cardData.length === 0) && activeType === "4-Wheeler") {
+      checkedFourWheelerEmpty.current = true;
+      setActiveType("2-Wheeler");
+    }
+  }, [cardData, isAdsLoading, activeType]);
+
+  if (
+    !isAdsLoading &&
+    (!Array.isArray(cardData) || cardData.length === 0) &&
+    activeType === "2-Wheeler" &&
+    checkedFourWheelerEmpty.current &&
+    !hasManuallySelected.current
+  ) {
     return null;
   }
 
@@ -74,7 +90,10 @@ export default function ReecommSponcerSection() {
         {/* Toggle Switch */}
         <div className="flex p-0.5 bg-neutral-950/80 border border-white/10 rounded-full w-fit mt-auto ml-auto sm:ml-0 shrink-0">
           <button
-            onClick={() => setActiveType("4-Wheeler")}
+            onClick={() => {
+              hasManuallySelected.current = true;
+              setActiveType("4-Wheeler");
+            }}
             className={cn(
               "relative px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full cursor-pointer flex items-center justify-center gap-1.5 transition-all duration-300 whitespace-nowrap shrink-0",
               activeType === "4-Wheeler"
@@ -92,7 +111,10 @@ export default function ReecommSponcerSection() {
             <span className="relative z-10 flex items-center gap-1.5"><Car size={18} /> 4-Wheeler</span>
           </button>
           <button
-            onClick={() => setActiveType("2-Wheeler")}
+            onClick={() => {
+              hasManuallySelected.current = true;
+              setActiveType("2-Wheeler");
+            }}
             className={cn(
               "relative px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full cursor-pointer flex items-center justify-center gap-1.5 transition-all duration-300 whitespace-nowrap shrink-0",
               activeType === "2-Wheeler"
@@ -126,7 +148,7 @@ export default function ReecommSponcerSection() {
         ) : cardData.length === 0 ? (
           <div className="col-span-full flex justify-center py-16">
             <h3 className="text-lg font-semibold text-primary/40">
-              No data found
+              No Vehicles Found
             </h3>
           </div>
         ) : (
