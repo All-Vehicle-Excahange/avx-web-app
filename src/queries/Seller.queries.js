@@ -9,6 +9,7 @@ import {
   getInquiryKpis,
   getListingCreditPrice,
   getLisitingLimits,
+  getCurrentTierRemains,
 } from "@/services/Seller.service";
 
 export const getInventoryVehicleQuery = (listingStatus) => {
@@ -95,8 +96,12 @@ export const getSellerTierQuery = () => {
   return queryOptions({
     queryKey: ["seller-tier"],
     queryFn: async () => {
-      const res = await getSellerTier();
-      return res?.data;
+      try {
+        const res = await getSellerTier();
+        return res?.data || null;
+      } catch (error) {
+        return null;
+      }
     },
     staleTime: 10 * 60 * 1000,
   });
@@ -182,5 +187,16 @@ export const getListingLimitsQuery = () => {
       return res?.data;
     },
     staleTime: 10 * 60 * 1000,
+  });
+};
+
+export const getCurrentTierRemainsQuery = () => {
+  return queryOptions({
+    queryKey: ["current-tier-remains"],
+    queryFn: async () => {
+      const res = await getCurrentTierRemains();
+      return res?.data;
+    },
+    staleTime: 5 * 60 * 1000,
   });
 };

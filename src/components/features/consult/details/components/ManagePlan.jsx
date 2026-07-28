@@ -4,20 +4,63 @@ import { X, Check, Wallet, ArrowRight, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/router";
 import Button from "@/components/ui/button";
 import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
+import { getCurrentTierRemainsQuery } from "@/queries/Seller.queries";
 
 export default function ManagePlan({ isOpen, onClose, currentPlan = "BASIC" }) {
   const { push } = useRouter();
   const [isClosing, setIsClosing] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
-  // Normalize currentPlan to title case (e.g. Basic, Pro, Premium)
+  // Fetch current tier remains API when popup is open
+  const { data: tierRemainsData, isLoading: isRemainsLoading } = useQuery({
+    ...getCurrentTierRemainsQuery(),
+    enabled: !!isOpen,
+  });
+
+  // Normalize plan name to title case (e.g. Basic, Pro, Premium)
   const formatPlanName = (plan) => {
     if (!plan) return "Basic";
-    const lower = plan.toLowerCase();
+    const lower = String(plan).toLowerCase();
     return lower.charAt(0).toUpperCase() + lower.slice(1);
   };
 
-  const currentPlanName = formatPlanName(currentPlan);
+  const activePlanName =
+    tierRemainsData?.tierTitle ||
+    tierRemainsData?.tierName ||
+    tierRemainsData?.planName ||
+    currentPlan;
+
+  const currentPlanName = formatPlanName(activePlanName);
+
+  const daysRemaining =
+    tierRemainsData?.remainingDays ??
+    tierRemainsData?.daysRemaining ??
+    tierRemainsData?.days ??
+    tierRemainsData?.validityDays ??
+    tierRemainsData?.remainingTime;
+
+  const paidAmount = tierRemainsData?.paidAmount;
+  const refundableAmount = tierRemainsData?.refundableAmount;
+
+  const promoWalletAmount =
+    refundableAmount ??
+    paidAmount ??
+    tierRemainsData?.promotionalWallet ??
+    tierRemainsData?.walletCredit ??
+    tierRemainsData?.creditAmount ??
+    tierRemainsData?.amount ??
+    500;
+
+  const formattedAmount =
+    typeof promoWalletAmount === "number"
+      ? promoWalletAmount.toLocaleString("en-IN", { maximumFractionDigits: 2 })
+      : promoWalletAmount;
+
+  const creditValidityDays =
+    tierRemainsData?.creditValidityDays ??
+    tierRemainsData?.validityDays ??
+    30;
 
   const handleClose = useCallback(() => {
     setIsClosing(true);
@@ -73,7 +116,6 @@ export default function ManagePlan({ isOpen, onClose, currentPlan = "BASIC" }) {
           />
           <div className="absolute inset-0 bg-linear-to-t from-[#141416] via-[#141416]/40 to-transparent" />
           <div className="absolute bottom-8 left-8 right-6 space-y-2 text-left">
-            
             <h2 className="text-2xl font-extrabold text-white leading-tight">
               Unlock
               <br />
@@ -106,7 +148,17 @@ export default function ManagePlan({ isOpen, onClose, currentPlan = "BASIC" }) {
               Upgrade to Premium Consultant
             </h3>
             <p className="text-gray-400 text-xs mt-1.5 font-medium leading-relaxed">
-              Your current <span className="text-white font-semibold">{currentPlanName}</span> subscription has 15 days remaining.
+              Your current <span className="text-white font-semibold">{currentPlanName}</span> subscription has{" "}
+              {isRemainsLoading ? (
+                <span className="inline-block w-8 h-3.5 bg-white/10 animate-pulse rounded align-middle mx-1" />
+              ) : (
+                <span className="text-white font-semibold">
+                  {daysRemaining !== undefined && daysRemaining !== null
+                    ? `${daysRemaining} days`
+                    : "15 days"}
+                </span>
+              )}{" "}
+              remaining.
             </p>
           </div>
 
@@ -114,10 +166,24 @@ export default function ManagePlan({ isOpen, onClose, currentPlan = "BASIC" }) {
           <div className="rounded-xl border border-dashed border-yellow-500/30 bg-yellow-500/5 p-4 mb-4">
             <div className="flex items-start gap-2.5">
               <Wallet className="w-4 h-4 text-yellow-500 shrink-0 mt-0.5" />
-              <div>
+              <div className="space-y-1">
                 <p className="text-xs font-semibold text-yellow-500 leading-snug">
-                  ₹500 equivalent value will be credited to your Reecomm Promotional Wallet.
+                  ₹{formattedAmount} equivalent value will be credited to your Reecomm Promotional Wallet.
                 </p>
+                {(refundableAmount !== undefined || paidAmount !== undefined) && (
+                  <div className="flex items-center gap-3 text-[11px] text-zinc-400 font-medium">
+                    {paidAmount !== undefined && (
+                      <span>
+                        Paid: <strong className="text-white">₹{Number(paidAmount).toLocaleString("en-IN")}</strong>
+                      </span>
+                    )}
+                    {refundableAmount !== undefined && (
+                      <span>
+                        Refundable Credit: <strong className="text-green-400">₹{Number(refundableAmount).toLocaleString("en-IN")}</strong>
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -154,7 +220,7 @@ export default function ManagePlan({ isOpen, onClose, currentPlan = "BASIC" }) {
               onChange={(e) => setAcceptedTerms(e.target.checked)}
               className="rounded border-[#23262F] bg-transparent text-primary focus:ring-primary w-4 h-4 cursor-pointer"
             />
-            <span>Credits are non-refundable and valid for 30 days.</span>
+            <span>Credits are non-refundable and valid for {creditValidityDays} days.</span>
           </label>
 
           {/* ACTION BUTTON */}

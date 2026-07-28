@@ -5,6 +5,7 @@ import axiosInstance, {
 
 const ENDPOINT = {
   getSellerTier: "/consultation/dashboard/profile/current-tier",
+  getCurrentTierRemains: "/tier/current/remains",
   getInventoryVehicle: "/consultation/dashboard/inventory/vehicles",
   getTopPerformingVehicles:
     "/consultation/dashboard/inventory/top-performing-vehicles",
@@ -98,12 +99,30 @@ export const getSellerTier = async () => {
 
     const tierData = response?.data;
     if (tierData) {
-      localStorage.setItem("sellerTier", tierData.tierTitle);
+      localStorage.setItem("sellerTier", tierData.tierTitle || "");
       localStorage.setItem("sellerTierData", JSON.stringify(tierData));
+    } else {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("sellerTier");
+        localStorage.removeItem("sellerTierData");
+      }
     }
 
     return response;
   } catch (error) {
+    if (error?.response?.status === 404 || error?.response?.data?.statusCode === 404) {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("sellerTier");
+        localStorage.removeItem("sellerTierData");
+      }
+      return {
+        success: false,
+        statusCode: 404,
+        message: "User tier not found",
+        data: null,
+      };
+    }
+    handleError(error);
     throw error;
   }
 };
@@ -155,6 +174,16 @@ export const purchaseListingCreditRazorpay = async (quantity) => {
 export const getLisitingLimits = async () => {
   try {
     const res = await axiosInstance.get(ENDPOINT.getLisitingLimits);
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const getCurrentTierRemains = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getCurrentTierRemains);
     return handleResponse(res);
   } catch (error) {
     handleError(error);
