@@ -38,6 +38,7 @@ import DetailsFromPopup from "../userSeller/DetailsFromPopup";
 import DeleteProfilePopup from "./DeleteProfilePopup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import CustomSelect from "@/components/ui/custom-select";
+import { useAuthStore } from "@/stores/useAuthStore";
 import {
   getUserProfileQuery,
   checkIsMetaExistQuery,
@@ -312,6 +313,15 @@ function MyProfile() {
   const handleSaveProfile = async () => {
     try {
       setProfileErrors({});
+      const nameRegex = /^[A-Za-z\s]+$/;
+      if (!nameRegex.test(profileForm.firstName || "")) {
+        setProfileErrors((prev) => ({ ...prev, firstName: "Cannot contain digits (0-9) or special characters (@, #, %, &, etc.)" }));
+        return;
+      }
+      if (!nameRegex.test(profileForm.lastName || "")) {
+        setProfileErrors((prev) => ({ ...prev, lastName: "Cannot contain digits (0-9) or special characters (@, #, %, &, etc.)" }));
+        return;
+      }
 
       const payload = {
         firstname: profileForm.firstName,
@@ -320,6 +330,19 @@ function MyProfile() {
       };
 
       await updateuserProfile(payload);
+
+      const storedUser = useAuthStore.getState().user || {};
+      const updatedUser = {
+        ...storedUser,
+        firstname: profileForm.firstName,
+        lastname: profileForm.lastName,
+        email: profileForm.email,
+      };
+      useAuthStore.setState({ user: updatedUser });
+      if (typeof window !== "undefined") {
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+      }
+
       invalidateAllUserQueries();
 
       setIsEditingProfile(false);
@@ -860,9 +883,10 @@ function MyProfile() {
                       variant="colored"
                       value={profileForm.firstName || ""}
                       onChange={(e) => {
+                        const cleaned = e.target.value.replace(/[^A-Za-z\s]/g, "");
                         setProfileForm({
                           ...profileForm,
-                          firstName: e.target.value,
+                          firstName: cleaned,
                         });
                         if (profileErrors.firstName) {
                           setProfileErrors((prev) => ({ ...prev, firstName: "" }));
@@ -880,9 +904,10 @@ function MyProfile() {
                       variant="colored"
                       value={profileForm.lastName || ""}
                       onChange={(e) => {
+                        const cleaned = e.target.value.replace(/[^A-Za-z\s]/g, "");
                         setProfileForm({
                           ...profileForm,
-                          lastName: e.target.value,
+                          lastName: cleaned,
                         });
                         if (profileErrors.lastName) {
                           setProfileErrors((prev) => ({ ...prev, lastName: "" }));
@@ -920,9 +945,11 @@ function MyProfile() {
                 <p className="text-red-500 text-sm mt-4">{profileErrors.general}</p>
               )}
 
-              <div className="flex justify-end gap-4 mt-8">
+              <div className="flex justify-end gap-3 mt-6">
                 <Button
+                  size="sm"
                   variant="outlineSecondary"
+                  className="!text-sm font-normal"
                   onClick={() => {
                     setIsEditingProfile(false);
                     setProfileErrors({});
@@ -932,7 +959,9 @@ function MyProfile() {
                 </Button>
 
                 <Button
+                  size="sm"
                   variant="ghost"
+                  className="!text-sm font-normal"
                   disabled={!isProfileFormValid}
                   onClick={handleSaveProfile}
                 >
@@ -1167,9 +1196,11 @@ function MyProfile() {
                 <p className="text-red-500 text-sm mt-4">{metaErrors.general}</p>
               )}
 
-              <div className="flex justify-end gap-4 mt-8">
+              <div className="flex justify-end gap-3 mt-6">
                 <Button
+                  size="sm"
                   variant="outlineSecondary"
+                  className="!text-sm font-normal"
                   onClick={() => {
                     setIsEditingMeta(false);
                     setIsCreatingMeta(false);
@@ -1180,7 +1211,9 @@ function MyProfile() {
                 </Button>
 
                 <Button
+                  size="sm"
                   variant="ghost"
+                  className="!text-sm font-normal"
                   disabled={!isMetaFormValid}
                   onClick={handleSaveMeta}
                 >
