@@ -12,7 +12,7 @@ const variants = {
   transparent:
     "bg-white/10 border border-white/20 text-primary backdrop-blur-md hover:bg-white/20",
   colored:
-    "border border-primary bg-primary/10 text-primary hover:bg-primary/20",
+    "border border-primary/20 bg-primary/5 text-primary hover:bg-primary/10 hover:border-primary/30",
 };
 
 export default function CustomSelect({

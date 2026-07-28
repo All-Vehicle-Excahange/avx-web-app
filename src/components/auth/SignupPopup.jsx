@@ -606,7 +606,16 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
                           required: "First Name is required",
                           minLength: { value: 3, message: "First name must be between 3 and 35 characters" },
                           maxLength: { value: 35, message: "First name must be between 3 and 35 characters" },
+                          pattern: {
+                            value: /^[A-Za-z\s]+$/,
+                            message: "Cannot contain digits (0-9) or special characters (@, #, %, &, etc.)",
+                          },
                         })}
+                        onInput={(e) => {
+                          const cleaned = e.target.value.replace(/[^A-Za-z\s]/g, "");
+                          e.target.value = cleaned;
+                          setValue("firstName", cleaned, { shouldValidate: true });
+                        }}
                         className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
                       />
                       {errors.firstName && (
@@ -622,7 +631,16 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
                           required: "Last Name is required",
                           minLength: { value: 3, message: "Last name must be between 3 and 35 characters" },
                           maxLength: { value: 35, message: "Last name must be between 3 and 35 characters" },
+                          pattern: {
+                            value: /^[A-Za-z\s]+$/,
+                            message: "Cannot contain digits (0-9) or special characters (@, #, %, &, etc.)",
+                          },
                         })}
+                        onInput={(e) => {
+                          const cleaned = e.target.value.replace(/[^A-Za-z\s]/g, "");
+                          e.target.value = cleaned;
+                          setValue("lastName", cleaned, { shouldValidate: true });
+                        }}
                         className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"
                       />
                       {errors.lastName && (

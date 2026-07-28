@@ -13,15 +13,17 @@ const REASON_OPTIONS = [
     { label: "Other", value: "Other" },
 ];
 
-function DeleteProfilePopup({ isOpen, onClose, onSubmit, loading }) {
+function DeleteProfilePopup({ isOpen, onClose, onSubmit, loading, username = "delete my account" }) {
     const [selectedReason, setSelectedReason] = useState("");
     const [customReason, setCustomReason] = useState("");
+    const [confirmInput, setConfirmInput] = useState("");
     const [isClosing, setIsClosing] = useState(false);
 
     useEffect(() => {
         if (isOpen) {
             setSelectedReason("");
             setCustomReason("");
+            setConfirmInput("");
         }
     }, [isOpen]);
 
@@ -53,7 +55,11 @@ function DeleteProfilePopup({ isOpen, onClose, onSubmit, loading }) {
 
     if (!isOpen && !isClosing) return null;
 
+    const confirmText = "delete my account";
+    const isConfirmValid = confirmInput.trim().toLowerCase() === confirmText.trim().toLowerCase();
+
     const handleSubmit = () => {
+        if (!isConfirmValid) return;
         const finalReason = selectedReason === "Other" ? customReason : selectedReason;
         if (!finalReason.trim()) return;
         onSubmit(finalReason.trim());
@@ -85,15 +91,24 @@ function DeleteProfilePopup({ isOpen, onClose, onSubmit, loading }) {
                         </h3>
                         <button
                             onClick={handleClose}
-                            className="text-third hover:text-white transition-colors p-1 rounded-full hover:bg-white/5"
+                            className="text-third hover:text-white transition-colors p-1 rounded-full hover:bg-white/5 cursor-pointer"
                         >
                             <X size={20} />
                         </button>
                     </div>
 
                     <div className="space-y-4">
+                        {/* Compact Warning Callout */}
+                        <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs leading-normal flex items-start gap-2.5">
+                            <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                            <div>
+                                <span className="font-semibold">This action cannot be undone.</span>
+                                {" "}This will permanently delete your profile, listings, and account data.
+                            </div>
+                        </div>
+
                         <p className="text-sm text-third">
-                            Are you sure you want to delete your profile? This action cannot be undone. Please select a reason for deleting your profile.
+                            Please select a reason for deleting your profile:
                         </p>
                         <div className="relative z-50">
                             <label className="text-xs text-third mb-1.5 block">Reason</label>
@@ -117,6 +132,19 @@ function DeleteProfilePopup({ isOpen, onClose, onSubmit, loading }) {
                                 />
                             </div>
                         )}
+
+                        {/* GitHub-style Text Confirmation Prompt */}
+                        <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-2 pt-3">
+                            <p className="text-xs text-third leading-relaxed">
+                                To confirm, type <span className="font-mono font-bold text-red-400 select-all bg-red-500/10 px-1.5 py-0.5 rounded">{confirmText}</span> in the box below:
+                            </p>
+                            <InputField
+                                variant="colored"
+                                value={confirmInput}
+                                onChange={(e) => setConfirmInput(e.target.value)}
+                                placeholder={`type "${confirmText}"`}
+                            />
+                        </div>
                     </div>
 
                     <div className="flex justify-end gap-4 mt-8">
@@ -134,7 +162,8 @@ function DeleteProfilePopup({ isOpen, onClose, onSubmit, loading }) {
                             disabled={
                                 loading ||
                                 !selectedReason ||
-                                (selectedReason === "Other" && !customReason.trim())
+                                (selectedReason === "Other" && !customReason.trim()) ||
+                                !isConfirmValid
                             }
                         >
                             {loading ? (
