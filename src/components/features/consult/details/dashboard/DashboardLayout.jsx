@@ -5,11 +5,13 @@ import { LayoutDashboard } from "lucide-react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import SuspendedAccount from "./SuspendedAccount";
+import NoActivePlan from "./NoActivePlan";
 import ProtectedRoute from "./ProtectedRoute";
 
 import { useQuery } from "@tanstack/react-query";
 
 import getIsAccountSuspendedQuery from "@/queries/consualt.queries";
+import { getSellerTierQuery } from "@/queries/Seller.queries";
 
 export default function DashboardLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -25,9 +27,14 @@ export default function DashboardLayout({ children }) {
   const isStorefrontPage = router.pathname?.startsWith("/consult/dashboard/storefront");
   const hideHeaders = isComeFromPhone && isStorefrontPage;
 
-  // REACT QUERY
+  // REACT QUERY - SUSPENSION STATUS
   const { data, isPending, error } = useQuery(
     getIsAccountSuspendedQuery()
+  );
+
+  // REACT QUERY - SELLER TIER STATUS
+  const { data: tierData, isPending: isTierPending } = useQuery(
+    getSellerTierQuery()
   );
 
   // SUSPENSION LOGIC
@@ -39,6 +46,14 @@ export default function DashboardLayout({ children }) {
       : false;
 
   const suspensionData = isSuspended ? data : null;
+
+  // CHECK IF USER HAS NO TIER
+  const hasNoTier =
+    !isTierPending &&
+    !tierData &&
+    (typeof window !== "undefined"
+      ? !localStorage.getItem("sellerTier")
+      : true);
 
   // PAGE TITLE
   const pathParts = router.pathname.split("/");
@@ -57,7 +72,9 @@ export default function DashboardLayout({ children }) {
           <title>
             {isSuspended
               ? "Account Suspended"
-              : pageTitle}{" "}
+              : hasNoTier
+                ? "No Active Plan"
+                : pageTitle}{" "}
             | Reecomm Dashboard
           </title>
         </Head>
@@ -99,7 +116,7 @@ export default function DashboardLayout({ children }) {
 
           {/* MAIN CONTENT */}
           <main className="flex-1 p-3 md:p-5 overflow-y-auto">
-            {isPending ? (
+            {isPending || isTierPending ? (
               <div className="space-y-6 animate-pulse">
                 <div className="flex items-center justify-between">
                   <div className="h-8 w-48 bg-third/10 rounded-lg" />
@@ -127,6 +144,8 @@ export default function DashboardLayout({ children }) {
               <div className="min-h-[70vh] flex items-center justify-center">
                 <SuspendedAccount data={suspensionData} />
               </div>
+            ) : hasNoTier ? (
+              <NoActivePlan />
             ) : (
               children
             )}

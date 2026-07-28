@@ -69,12 +69,19 @@ export default function Sidebar({ isOpen, onClose }) {
 
   useEffect(() => {
     const initializeTier = async () => {
-      const tier = getSellerTierTitle();
-      if (!tier) {
-        try {
-          await getSellerTier();
-        } catch (error) {
-          console.error("Error fetching seller tier on sidebar load:", error);
+      try {
+        const res = await getSellerTier();
+        if (!res?.success || !res?.data) {
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("sellerTier");
+            localStorage.removeItem("sellerTierData");
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching seller tier on sidebar load:", error);
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("sellerTier");
+          localStorage.removeItem("sellerTierData");
         }
       }
     };
