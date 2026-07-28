@@ -160,7 +160,7 @@ export default function ListingPopup({ isOpen, onClose }) {
               <button
                 type="button"
                 onClick={() => {
-                  window.open("https://play.google.com/store", "_blank");
+                  window.open("https://play.google.com/store/apps/details?id=com.reecomm.vehicle.marketplace&pcampaignid=web_share", "_blank");
                 }}
                 className="px-6 py-2 flex items-center justify-center bg-white text-zinc-950 hover:bg-transparent hover:text-white transition-all duration-300 rounded-lg cursor-pointer border border-transparent hover:border-white/30 shadow-md"
               >

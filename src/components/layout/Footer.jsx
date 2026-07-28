@@ -81,7 +81,7 @@ const Footer = () => {
     e.preventDefault();
     if (isMobile) {
       window.open(
-        "https://play.google.com/store/apps/details?id=com.reecomm.vehicle.marketplace",
+        "https://play.google.com/store/apps/details?id=com.reecomm.vehicle.marketplace&pcampaignid=web_share",
         "_blank"
       );
     } else {
@@ -323,6 +323,8 @@ const Footer = () => {
               </Link>
               <Link
                 href="https://www.x.com/Reecommindia"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-primary/60 hover:text-white transition-colors"
               >
                 {/* <X size={18} /> */}

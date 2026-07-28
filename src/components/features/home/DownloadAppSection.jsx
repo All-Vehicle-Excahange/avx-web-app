@@ -27,6 +27,12 @@ export default function DownloadAppSection() {
               {/* Google Play Button */}
               <button
                 type="button"
+                onClick={() =>
+                  window.open(
+                    "https://play.google.com/store/apps/details?id=com.reecomm.vehicle.marketplace&pcampaignid=web_share",
+                    "_blank"
+                  )
+                }
                 className="px-6 py-2 flex items-center justify-center bg-secondary text-primary hover:bg-primary hover:text-secondary transition-all duration-300 rounded-lg cursor-pointer border border-primary/10"
               >
                 <div className="mr-3">

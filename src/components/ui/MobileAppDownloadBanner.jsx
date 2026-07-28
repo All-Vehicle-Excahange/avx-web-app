@@ -27,8 +27,16 @@ export default function MobileAppDownloadBanner({ onClose }) {
 
       {/* Action Buttons */}
       <div className="mt-3 flex flex-row gap-2">
-        {/* Google Play Button */}
-        <button type="button" className="flex-1 flex items-center justify-center px-2 py-1.5 bg-secondary text-primary hover:bg-primary hover:text-secondary transition-all duration-300 rounded-lg">
+        <button
+          type="button"
+          onClick={() =>
+            window.open(
+              "https://play.google.com/store/apps/details?id=com.reecomm.vehicle.marketplace&pcampaignid=web_share",
+              "_blank"
+            )
+          }
+          className="flex-1 flex items-center justify-center px-2 py-1.5 bg-secondary text-primary hover:bg-primary hover:text-secondary transition-all duration-300 rounded-lg cursor-pointer"
+        >
           <div className="mr-1.5 md:mr-3">
             <svg viewBox="30 336.7 120.9 129.2" width="16" className="md:w-[25px]">
               <path fill="#FFD400" d="M119.2,421.2c15.3-8.4,27-14.8,28-15.3c3.2-1.7,6.5-6.2,0-9.7  c-2.1-1.1-13.4-7.3-28-15.3l-20.1,20.2L119.2,421.2z"></path>

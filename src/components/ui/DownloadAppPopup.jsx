@@ -73,7 +73,7 @@ export default function DownloadAppPopup({ isOpen, onClose }) {
   const handleGooglePlayClick = () => {
     if (isMobile) {
       window.open(
-        "https://play.google.com/store/apps/details?id=com.reecomm.vehicle.marketplace",
+        "https://play.google.com/store/apps/details?id=com.reecomm.vehicle.marketplace&pcampaignid=web_share",
         "_blank",
       );
     } else {

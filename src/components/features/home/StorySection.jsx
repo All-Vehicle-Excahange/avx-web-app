@@ -198,6 +198,12 @@ export default function StorySection() {
               {/* Google Play Button */}
               <button
                 type="button"
+                onClick={() =>
+                  window.open(
+                    "https://play.google.com/store/apps/details?id=com.reecomm.vehicle.marketplace&pcampaignid=web_share",
+                    "_blank"
+                  )
+                }
                 className="flex-1 sm:flex-none sm:w-auto min-w-[130px] sm:min-w-[200px] flex items-center justify-center px-2 sm:px-3 py-2 sm:py-2 bg-secondary text-primary rounded-lg border border-gray-600 hover:border-gray-900 hover:bg-primary hover:text-secondary transition-all duration-300 cursor-pointer group/btn"
               >
                 <div className="mr-2 sm:mr-3 transition-transform duration-300 ">

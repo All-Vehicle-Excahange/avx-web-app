@@ -71,7 +71,7 @@ const PlayStoreButton = () => (
     type="button"
     onClick={() =>
       window.open(
-        "https://play.google.com/store/apps/details?id=com.reecomm.vehicle.marketplace",
+        "https://play.google.com/store/apps/details?id=com.reecomm.vehicle.marketplace&pcampaignid=web_share",
         "_blank",
       )
     }
