@@ -25,30 +25,33 @@ export default function ConsultantCard(props) {
       temp.style.position = "absolute";
       temp.style.visibility = "hidden";
       temp.style.display = "flex";
-      temp.style.gap = "8px";
+      temp.style.gap = "6px";
       temp.style.fontSize = "12px";
       temp.style.fontFamily = window.getComputedStyle(container).fontFamily;
       document.body.appendChild(temp);
 
       let totalWidth = 0;
       let count = 0;
-      const moreBadgeReserve = 42;
+      const moreBadgeReserve = 22;
 
       const widths = data.services.map((service) => {
         const span = document.createElement("span");
         span.className =
-          "text-xs py-1 px-3 rounded-full border whitespace-nowrap font-medium";
+          "text-xs py-0.5 px-2.5 rounded-full border whitespace-nowrap font-medium";
+        span.style.maxWidth = "130px";
+        span.style.overflow = "hidden";
+        span.style.textOverflow = "ellipsis";
         span.innerText = service
           .replaceAll("_", " ")
           .toLowerCase()
           .replace(/\b\w/g, (c) => c.toUpperCase());
         temp.appendChild(span);
-        return span.offsetWidth + 8;
+        return span.offsetWidth + 6;
       });
 
       const allFitWidth = widths.reduce((sum, w) => sum + w, 0);
 
-      if (allFitWidth - 8 <= containerWidth) {
+      if (allFitWidth - 6 <= containerWidth) {
         count = data.services.length;
       } else {
         for (let i = 0; i < widths.length; i++) {
@@ -178,7 +181,7 @@ export default function ConsultantCard(props) {
 
           <div
             ref={containerRef}
-            className="flex items-center gap-2 overflow-hidden w-full"
+            className="flex items-center gap-1.5 overflow-hidden w-full"
           >
             {data?.services?.length > 0 ? (
               <>
@@ -187,14 +190,17 @@ export default function ConsultantCard(props) {
                     key={index}
                     className="
               text-xs
-              py-1
+              py-0.5
               rounded-full
               border border-third/40
               bg-primary/5
               text-third
               font-medium
               whitespace-nowrap
-              px-3
+              px-2.5
+              max-w-[130px]
+              truncate
+              shrink-0
             "
                   >
                     {service
@@ -211,6 +217,7 @@ export default function ConsultantCard(props) {
               font-semibold
               whitespace-nowrap
               shrink-0
+              pl-0.5
             "
                   >
                     +{data.services.length - visibleCount}
