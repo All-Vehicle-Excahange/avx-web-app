@@ -5,6 +5,7 @@ import axiosInstance, {
 
 const ENDPOINT = {
   getSellerTier: "/consultation/dashboard/profile/current-tier",
+  getLatestExpiredTier: "/tier/latest-expired",
   getCurrentTierRemains: "/tier/current/remains",
   getInventoryVehicle: "/consultation/dashboard/inventory/vehicles",
   getTopPerformingVehicles:
@@ -119,6 +120,27 @@ export const getSellerTier = async () => {
         success: false,
         statusCode: 404,
         message: "User tier not found",
+        data: null,
+      };
+    }
+    handleError(error);
+    throw error;
+  }
+};
+
+export const getLatestExpiredTier = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getLatestExpiredTier);
+    return handleResponse(res);
+  } catch (error) {
+    if (
+      error?.response?.status === 404 ||
+      error?.response?.data?.statusCode === 404
+    ) {
+      return {
+        success: false,
+        statusCode: 404,
+        message: "No expired tier found",
         data: null,
       };
     }

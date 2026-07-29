@@ -48,6 +48,7 @@ const footerLinks = {
   ],
   company: [
     { label: "About us", href: "/aboutus" },
+    { label: "Introducing Reecomm", href: "/introducing-reecomm" },
     { label: "How Reecomm works", href: "/reecomm-works" },
     { label: "Inspection process", href: "/inspection-process" },
     { label: "Careers", href: "/careers" },
