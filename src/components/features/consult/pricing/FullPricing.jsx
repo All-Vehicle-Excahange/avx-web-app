@@ -12,7 +12,7 @@ import {
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { getAllTier } from "@/services/user.service";
-import { getSellerTier } from "@/services/Seller.service";
+import { getSellerTier, getLatestExpiredTier } from "@/services/Seller.service";
 import PricingHero from "./PricingHero";
 import Button from "@/components/ui/button";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -22,6 +22,15 @@ import {
   upgradeSubscription,
   createSubscription,
 } from "@/services/subscription.service";
+import DowngradeModal from "./DowngradeModal";
+
+const getTierRank = (tierName) => {
+  const name = (tierName || "").toUpperCase();
+  if (name === "PREMIUM") return 3;
+  if (name === "PRO") return 2;
+  if (name === "BASIC") return 1;
+  return 0;
+};
 
 const staticTierDetails = {
   BASIC: {
@@ -88,6 +97,8 @@ export default function FullPricing() {
   const [loading, setLoading] = useState(true);
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [upgradingTierId, setUpgradingTierId] = useState(null);
+  const [downgradeModalOpen, setDowngradeModalOpen] = useState(false);
+  const [downgradeData, setDowngradeData] = useState(null);
 
   const { user, isLoggedIn, openLoginPopup } = useAuthStore();
   const queryClient = useQueryClient();
@@ -110,7 +121,10 @@ export default function FullPricing() {
   });
 
   const isTier404 =
-    tierError?.response?.status === 404 || tierError?.status === 404;
+    tierError?.response?.status === 404 ||
+    tierError?.status === 404 ||
+    sellerTierData?.statusCode === 404 ||
+    !sellerTierData;
 
   const currentTier = isLoggedIn
     ? (
@@ -177,33 +191,7 @@ export default function FullPricing() {
     });
   };
 
-  const handleUpgrade = async (tier) => {
-    if (!isLoggedIn) {
-      // Store which tier the user wanted, then show login popup
-      pendingTier.current = tier;
-      openLoginPopup();
-      return;
-    }
-
-    const currentKey = (tier.title || "").toUpperCase();
-    if (currentTier === currentKey) {
-      const redirect = router.query?.redirect;
-      if (userRole !== "CONSULTATION") {
-        router.push(
-          redirect ? `/consult/kyc?redirect=${redirect}` : "/consult/kyc",
-        );
-      } else {
-        router.push(
-          redirect
-            ? decodeURIComponent(redirect)
-            : "/consult/dashboard/overview",
-        );
-      }
-      return;
-    }
-
-    if (!tier?.id) return;
-
+  const executePayment = async (tier, is404) => {
     try {
       setPaymentLoading(true);
       setUpgradingTierId(tier.id);
@@ -214,27 +202,33 @@ export default function FullPricing() {
         return;
       }
 
-      let is404 = isTier404;
-      try {
-        await getSellerTier();
-      } catch (err) {
-        if (err?.response?.status === 404 || err?.status === 404) {
-          is404 = true;
-        }
-      }
-
       const payload = {
         planId: tier.id,
         billingCycle: yearly ? "YEARLY" : "MONTHLY",
       };
 
-      const response = is404
-        ? await createSubscription(payload)
-        : await upgradeSubscription(payload);
+      let response;
+      if (is404) {
+        response = await createSubscription(payload);
+      } else {
+        try {
+          response = await upgradeSubscription(payload);
+        } catch (upgradeErr) {
+          if (
+            upgradeErr?.response?.status === 404 ||
+            upgradeErr?.status === 404 ||
+            upgradeErr?.response?.data?.statusCode === 404
+          ) {
+            response = await createSubscription(payload);
+          } else {
+            throw upgradeErr;
+          }
+        }
+      }
 
-      if (!response.success) {
+      if (!response?.success) {
         throw new Error(
-          response.message || "Failed to upgrade subscription order.",
+          response?.message || "Failed to process subscription order.",
         );
       }
 
@@ -303,7 +297,7 @@ export default function FullPricing() {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         subscription_id: razorpaySubscriptionId,
         name: "Reecomm",
-        description: `Upgrade to ${tier.title} plan`,
+        description: `Subscription for ${tier.title} plan`,
         prefill: {
           name: prefillName,
           email: prefillEmail,
@@ -322,14 +316,11 @@ export default function FullPricing() {
                 );
                 localStorage.setItem("sellerTier", tierData.tierTitle || "");
               }
-              // Update the React Query cache immediately
               queryClient.setQueryData(["seller-tier"], tierData);
             }
           } catch (e) {
-            // Non-blocking — still navigate even if this fails
             console.error("Could not refresh tier after payment:", e);
           } finally {
-            // Invalidate so it refetches fresh in the background
             queryClient.invalidateQueries({ queryKey: ["seller-tier"] });
           }
 
@@ -366,6 +357,113 @@ export default function FullPricing() {
       setPaymentLoading(false);
       setUpgradingTierId(null);
     }
+  };
+
+  const handleUpgrade = async (tier) => {
+    if (!isLoggedIn) {
+      // Store which tier the user wanted, then show login popup
+      pendingTier.current = tier;
+      openLoginPopup();
+      return;
+    }
+
+    const currentKey = (tier.title || "").toUpperCase();
+    if (currentTier === currentKey) {
+      const redirect = router.query?.redirect;
+      if (userRole !== "CONSULTATION") {
+        router.push(
+          redirect ? `/consult/kyc?redirect=${redirect}` : "/consult/kyc",
+        );
+      } else {
+        router.push(
+          redirect
+            ? decodeURIComponent(redirect)
+            : "/consult/dashboard/overview",
+        );
+      }
+      return;
+    }
+
+    if (!tier?.id) return;
+
+    try {
+      setPaymentLoading(true);
+      setUpgradingTierId(tier.id);
+
+      let is404 = !currentTier || isTier404;
+      let activeTierTitle = currentTier;
+      let expiredTierTitle = "";
+
+      try {
+        const tierRes = await getSellerTier();
+        if (
+          !tierRes ||
+          !tierRes.success ||
+          tierRes.statusCode === 404 ||
+          !tierRes.data
+        ) {
+          is404 = true;
+          activeTierTitle = "";
+        } else {
+          is404 = false;
+          activeTierTitle = (tierRes.data.tierTitle || "").toUpperCase();
+        }
+      } catch (err) {
+        if (err?.response?.status === 404 || err?.status === 404) {
+          is404 = true;
+          activeTierTitle = "";
+        }
+      }
+
+      // If no active tier found (404), fetch latest expired tier
+      if (is404) {
+        try {
+          const expiredRes = await getLatestExpiredTier();
+          if (expiredRes?.success && expiredRes?.data?.tierTitle) {
+            expiredTierTitle = (expiredRes.data.tierTitle || "").toUpperCase();
+          }
+        } catch (e) {
+          console.error("Error fetching latest expired tier:", e);
+        }
+      }
+
+      const sourceTier = activeTierTitle || expiredTierTitle;
+      const targetTier = (tier.title || "").toUpperCase();
+
+      const sourceRank = getTierRank(sourceTier);
+      const targetRank = getTierRank(targetTier);
+
+      // If user is attempting to downgrade (source rank > target rank)
+      if (sourceRank > 0 && sourceRank > targetRank) {
+        const fromTierObj = tiers.find(
+          (t) => (t.title || "").toUpperCase() === sourceTier,
+        );
+        setDowngradeData({
+          fromTier: sourceTier,
+          toTier: targetTier,
+          fromTierObj: fromTierObj,
+          targetTierObj: tier,
+          is404NoActive: is404,
+        });
+        setDowngradeModalOpen(true);
+        setPaymentLoading(false);
+        setUpgradingTierId(null);
+        return;
+      }
+
+      await executePayment(tier, is404);
+    } catch (error) {
+      console.error("Payment setup error:", error);
+      setPaymentLoading(false);
+      setUpgradingTierId(null);
+    }
+  };
+
+  const handleConfirmDowngrade = async () => {
+    if (!downgradeData?.targetTierObj) return;
+    const { targetTierObj, is404NoActive } = downgradeData;
+    setDowngradeModalOpen(false);
+    await executePayment(targetTierObj, is404NoActive);
   };
 
   // After login: resume the pending upgrade automatically
@@ -685,6 +783,19 @@ export default function FullPricing() {
           </div>
         </div>
       </div>
+
+      <DowngradeModal
+        isOpen={downgradeModalOpen}
+        onClose={() => setDowngradeModalOpen(false)}
+        onConfirm={handleConfirmDowngrade}
+        fromTier={downgradeData?.fromTier}
+        toTier={downgradeData?.toTier}
+        fromTierObj={downgradeData?.fromTierObj}
+        toTierObj={downgradeData?.targetTierObj}
+        allTiers={tiers}
+        yearly={yearly}
+        isLoading={paymentLoading}
+      />
     </div>
   );
 }
