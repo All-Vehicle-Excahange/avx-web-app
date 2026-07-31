@@ -145,12 +145,17 @@ export const useAuthStore = create((set) => ({
         }
       } catch (error) {
         // Refresh failed (cookie expired, missing, etc.)
+        const hasTokenInUrl =
+          typeof window !== "undefined" &&
+          (window.location.search?.includes("token=") ||
+            new URLSearchParams(window.location.search).has("token"));
+
         set({
           user: null,
           token: null,
           isLoggedIn: false,
           authInitialized: true,
-          isLoginPopupOpen: true,
+          isLoginPopupOpen: hasTokenInUrl ? false : true,
         });
         localStorage.removeItem("user");
       }

@@ -157,7 +157,23 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         } else {
           localStorage.removeItem("otpBlockUntil");
           setCountdown(0);
-          await onSuccess();
+          const currentUser = useAuthStore.getState().user;
+          const isConsultantUser =
+            accountType === "consultant" ||
+            currentUser?.accountType === "consultant" ||
+            ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(
+              currentUser?.userRole || currentUser?.role
+            );
+          if (!isConsultantUser) {
+            await onSuccess();
+          } else {
+            if (
+              !window.location.pathname.startsWith("/consult") &&
+              !window.location.pathname.startsWith("/become-consultant")
+            ) {
+              push("/become-consultant");
+            }
+          }
           handleClosePopup();
         }
       } else if (res?.error) {
@@ -182,7 +198,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
 
       const res = await getOtp({
         phoneNumber: phone,
-        email,
+        email: email || undefined,
         countryCode: "+91",
         requestType: "SIGNUP",
       });
@@ -299,7 +315,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         res = await signup({
           firstname: values.firstName,
           lastname: values.lastName,
-          email: values.email,
+          email: values.email || undefined,
           phoneNumber: values.phone,
           countryCode: "+91",
           isApplyForConsultation: accountType === "consultant",
@@ -319,7 +335,15 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         setOtpSent(false);
         setIsLoading(false);
 
-        if (accountType !== "consultant") {
+        const currentUser = useAuthStore.getState().user;
+        const isConsultantUser =
+          accountType === "consultant" ||
+          currentUser?.accountType === "consultant" ||
+          ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(
+            currentUser?.userRole || currentUser?.role
+          );
+
+        if (!isConsultantUser) {
           // Wait for onSuccess to complete (which might open CompleteProfilePopup)
           await onSuccess();
         } else {
@@ -550,7 +574,10 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
           <div className="flex justify-center gap-10 mb-8 border-b border-accent-gray/20">
             <button
               type="button"
-              onClick={() => setAccountType("personal")}
+              onClick={() => {
+                setAccountType("personal");
+                clearErrors("email");
+              }}
               className={`flex cursor-pointer items-center gap-2 pb-3 transition-all relative ${accountType === "personal"
                 ? "text-primary font-bold"
                 : "text-primary/40 hover:text-primary/70"
@@ -564,7 +591,10 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
 
             <button
               type="button"
-              onClick={() => setAccountType("consultant")}
+              onClick={() => {
+                setAccountType("consultant");
+                clearErrors("email");
+              }}
               className={`flex cursor-pointer items-center gap-2 pb-3 transition-all relative ${accountType === "consultant"
                 ? "text-primary font-bold"
                 : "text-primary/40 hover:text-primary/70"
@@ -654,12 +684,26 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
                   <div className="mb-4">
                     <input
                       type="email"
-                      placeholder="Email address"
+                      placeholder={
+                        accountType === "personal"
+                          ? "Email address (Optional)"
+                          : "Email address *"
+                      }
                       {...register("email", {
-                        required: "Email is required",
-                        pattern: {
-                          value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
-                          message: "Email must be in lowercase only",
+                        required:
+                          accountType === "personal"
+                            ? false
+                            : "Email is required",
+                        validate: (value) => {
+                          if (!value && accountType === "personal") return true;
+                          if (!value && accountType !== "personal")
+                            return "Email is required";
+                          if (
+                            !/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(value)
+                          ) {
+                            return "Email must be in lowercase only";
+                          }
+                          return true;
                         },
                       })}
                       className="w-full text-primary py-3 px-4 border rounded-md border-accent-gray bg-transparent outline-none"

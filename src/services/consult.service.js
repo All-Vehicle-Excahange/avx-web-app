@@ -16,6 +16,7 @@ const ENDPOINT = {
   finalSubmit: "/consultation/owner/final-submit",
   checkIsAccountSuspended:
     "/consultation/dashboard/profile/account-suspend-status",
+  verifySignupEmail: "/consultation/owner/signup-email/verify",
 };
 
 export const postbasicDetials = async (payload) => {
@@ -143,6 +144,18 @@ export const finalSubmit = async () => {
 export const checkIsAccountSuspended = async () => {
   try {
     const res = await axiosInstance.get(ENDPOINT.checkIsAccountSuspended);
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const verifyOwnerSignupEmail = async (token) => {
+  try {
+    const res = await axiosInstance.post(
+      `${ENDPOINT.verifySignupEmail}?token=${encodeURIComponent(token)}`
+    );
     return handleResponse(res);
   } catch (error) {
     handleError(error);
