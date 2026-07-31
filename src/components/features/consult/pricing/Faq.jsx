@@ -2,6 +2,14 @@ import { useState } from "react";
 
 const faqs = [
   {
+    q: "Is GST included in the displayed price?",
+    a: "No. All plan prices are exclusive of 18% GST.",
+  },
+  {
+    q: "Can I switch plans later?",
+    a: "Yes. Upgrade or downgrade anytime from your account.",
+  },
+  {
     q: "Can I upgrade my subscription anytime?",
     a: "Yes — you can upgrade your plan at any time from your consultant dashboard. The new tier activates immediately and you'll only be charged the difference for the remaining billing period.",
   },

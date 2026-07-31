@@ -23,6 +23,12 @@ import {
   createSubscription,
 } from "@/services/subscription.service";
 import DowngradeModal from "./DowngradeModal";
+import BillingSummaryModal from "./BillingSummaryModal";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/pagination";
 
 const getTierRank = (tierName) => {
   const name = (tierName || "").toUpperCase();
@@ -99,6 +105,9 @@ export default function FullPricing() {
   const [upgradingTierId, setUpgradingTierId] = useState(null);
   const [downgradeModalOpen, setDowngradeModalOpen] = useState(false);
   const [downgradeData, setDowngradeData] = useState(null);
+  const [billingModalOpen, setBillingModalOpen] = useState(false);
+  const [billingTier, setBillingTier] = useState(null);
+  const [billingIs404, setBillingIs404] = useState(false);
 
   const { user, isLoggedIn, openLoginPopup } = useAuthStore();
   const queryClient = useQueryClient();
@@ -108,7 +117,7 @@ export default function FullPricing() {
     try {
       const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
       userRole = savedUser?.userRole || savedUser?.role;
-    } catch (e) {}
+    } catch (e) { }
   }
 
   const {
@@ -128,13 +137,13 @@ export default function FullPricing() {
 
   const currentTier = isLoggedIn
     ? (
-        sellerTierData?.tierTitle ||
-        user?.sellerTier ||
-        (typeof window !== "undefined"
-          ? localStorage.getItem("sellerTier")
-          : null) ||
-        ""
-      ).toUpperCase()
+      sellerTierData?.tierTitle ||
+      user?.sellerTier ||
+      (typeof window !== "undefined"
+        ? localStorage.getItem("sellerTier")
+        : null) ||
+      ""
+    ).toUpperCase()
     : "";
 
   useEffect(() => {
@@ -349,9 +358,9 @@ export default function FullPricing() {
       console.error("Payment error:", error);
       alert(
         "Error initiating payment: " +
-          (error?.response?.data?.message ||
-            error?.message ||
-            "Something went wrong"),
+        (error?.response?.data?.message ||
+          error?.message ||
+          "Something went wrong"),
       );
     } finally {
       setPaymentLoading(false);
@@ -367,23 +376,6 @@ export default function FullPricing() {
       return;
     }
 
-    const currentKey = (tier.title || "").toUpperCase();
-    if (currentTier === currentKey) {
-      const redirect = router.query?.redirect;
-      if (userRole !== "CONSULTATION") {
-        router.push(
-          redirect ? `/consult/kyc?redirect=${redirect}` : "/consult/kyc",
-        );
-      } else {
-        router.push(
-          redirect
-            ? decodeURIComponent(redirect)
-            : "/consult/dashboard/overview",
-        );
-      }
-      return;
-    }
-
     if (!tier?.id) return;
 
     try {
@@ -391,9 +383,6 @@ export default function FullPricing() {
       setUpgradingTierId(tier.id);
 
       let is404 = !currentTier || isTier404;
-      let activeTierTitle = currentTier;
-      let expiredTierTitle = "";
-
       try {
         const tierRes = await getSellerTier();
         if (
@@ -403,55 +392,20 @@ export default function FullPricing() {
           !tierRes.data
         ) {
           is404 = true;
-          activeTierTitle = "";
         } else {
           is404 = false;
-          activeTierTitle = (tierRes.data.tierTitle || "").toUpperCase();
         }
       } catch (err) {
         if (err?.response?.status === 404 || err?.status === 404) {
           is404 = true;
-          activeTierTitle = "";
         }
       }
 
-      // If no active tier found (404), fetch latest expired tier
-      if (is404) {
-        try {
-          const expiredRes = await getLatestExpiredTier();
-          if (expiredRes?.success && expiredRes?.data?.tierTitle) {
-            expiredTierTitle = (expiredRes.data.tierTitle || "").toUpperCase();
-          }
-        } catch (e) {
-          console.error("Error fetching latest expired tier:", e);
-        }
-      }
-
-      const sourceTier = activeTierTitle || expiredTierTitle;
-      const targetTier = (tier.title || "").toUpperCase();
-
-      const sourceRank = getTierRank(sourceTier);
-      const targetRank = getTierRank(targetTier);
-
-      // If user is attempting to downgrade (source rank > target rank)
-      if (sourceRank > 0 && sourceRank > targetRank) {
-        const fromTierObj = tiers.find(
-          (t) => (t.title || "").toUpperCase() === sourceTier,
-        );
-        setDowngradeData({
-          fromTier: sourceTier,
-          toTier: targetTier,
-          fromTierObj: fromTierObj,
-          targetTierObj: tier,
-          is404NoActive: is404,
-        });
-        setDowngradeModalOpen(true);
-        setPaymentLoading(false);
-        setUpgradingTierId(null);
-        return;
-      }
-
-      await executePayment(tier, is404);
+      setBillingTier(tier);
+      setBillingIs404(is404);
+      setBillingModalOpen(true);
+      setPaymentLoading(false);
+      setUpgradingTierId(null);
     } catch (error) {
       console.error("Payment setup error:", error);
       setPaymentLoading(false);
@@ -464,6 +418,13 @@ export default function FullPricing() {
     const { targetTierObj, is404NoActive } = downgradeData;
     setDowngradeModalOpen(false);
     await executePayment(targetTierObj, is404NoActive);
+  };
+
+  const handleConfirmBilling = async (tierToPay) => {
+    const target = tierToPay || billingTier;
+    if (!target) return;
+    setBillingModalOpen(false);
+    await executePayment(target, billingIs404);
   };
 
   // After login: resume the pending upgrade automatically
@@ -501,6 +462,16 @@ export default function FullPricing() {
     fetchTiers();
   }, []);
 
+  const calculateBaseWithoutGst = (val) => {
+    const num = Number(val) || 0;
+    const base = num / 1.18;
+    const rounded = Math.round(base);
+    if (rounded > 0 && rounded % 10 === 8) {
+      return rounded + 1;
+    }
+    return rounded;
+  };
+
   const formatPrice = (price) => {
     if (price === undefined || price === null) return "";
     if (typeof price === "number") {
@@ -512,6 +483,209 @@ export default function FullPricing() {
     return price;
   };
 
+  const renderSkeletonCard = (key) => (
+    <div
+      key={key}
+      className="animate-pulse flex flex-col rounded-2xl overflow-hidden border border-primary/10 bg-secondary/5 h-auto min-h-[440px] w-full"
+      style={{
+        background:
+          "linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)",
+        boxShadow: "0 8px 30px rgba(0,0,0,0.08)",
+      }}
+    >
+      <div className="p-5 sm:p-7 flex flex-col flex-1 space-y-5">
+        <div className="space-y-2">
+          <div className="h-6 bg-primary/10 rounded w-1/3" />
+          <div className="h-4 bg-primary/10 rounded w-2/3" />
+        </div>
+        <div className="h-10 bg-primary/10 rounded w-1/2" />
+        <div className="h-1px bg-primary/10" />
+        <div className="space-y-3 flex-1">
+          {Array.from({ length: 5 }).map((_, j) => (
+            <div key={j} className="flex items-center gap-3">
+              <div className="w-5 h-5 rounded-full bg-primary/10 shrink-0" />
+              <div className="h-4 bg-primary/10 rounded w-full" />
+            </div>
+          ))}
+        </div>
+        <div className="h-11 bg-primary/10 rounded-full w-full" />
+      </div>
+    </div>
+  );
+
+  const renderTierCard = (tier, i) => {
+    const key = (tier.title || "").toUpperCase();
+    const staticDetails = staticTierDetails[key] || {
+      name: tier.title,
+      tagline: tier.description || "Start competing in our marketplace.",
+      color: "#6b7280",
+      bestFor: "Consultants & Sellers",
+      note: "",
+      cta: "Get Started",
+      ctaStyle: "border border-[#d1d5db] text-[#111827] hover:bg-[#f9fafb]",
+      highlight: false,
+    };
+
+    const isCurrentTier = currentTier === key;
+    let isTierDisabled = false;
+    if (currentTier === "PREMIUM") {
+      isTierDisabled = true;
+    } else if (currentTier === "PRO") {
+      isTierDisabled = key === "BASIC" || key === "PRO";
+    } else if (currentTier === "BASIC") {
+      isTierDisabled = key === "BASIC";
+    }
+
+    const rawPrice =
+      Number(yearly ? tier.yearlyPrice : tier.monthlyPrice) || 0;
+    const basePriceOnCard = calculateBaseWithoutGst(rawPrice);
+    const formattedPrice = formatPrice(basePriceOnCard);
+
+    const monthlyVal = Number(tier.monthlyPrice) || 0;
+    const yearlyVal = Number(tier.yearlyPrice) || 0;
+    const totalMonthlyCostForYear = monthlyVal * 12;
+    let savingsPercent = 0;
+    if (
+      totalMonthlyCostForYear > 0 &&
+      yearlyVal < totalMonthlyCostForYear
+    ) {
+      savingsPercent = Math.round(
+        ((totalMonthlyCostForYear - yearlyVal) /
+          totalMonthlyCostForYear) *
+          100
+      );
+    }
+
+    const features = (
+      (yearly ? tier.yearlyFeatures : tier.monthlyFeatures) ||
+      tier.features ||
+      []
+    ).map((f) => {
+      const titleVal =
+        typeof f === "string"
+          ? f
+          : f?.title || f?.featureName || f?.name || "";
+      const descVal =
+        typeof f === "string"
+          ? ""
+          : f?.description || f?.featureDescription || "";
+      return descVal ? `${titleVal} (${descVal})` : titleVal;
+    });
+
+    const isButtonDisabled = paymentLoading && upgradingTierId === tier.id;
+
+    let buttonText = staticDetails.cta;
+    if (paymentLoading && upgradingTierId === tier.id) {
+      buttonText = "Processing...";
+    } else if (isCurrentTier) {
+      if (userRole !== "CONSULTATION") {
+        buttonText = "Complete KYC";
+      } else {
+        buttonText = "Go to Dashboard";
+      }
+    } else if (isTierDisabled) {
+      buttonText = "Get Started";
+    }
+
+    return (
+      <div
+        key={i}
+        className="group/card relative flex flex-col h-full w-full rounded-2xl sm:rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 border border-primary/10"
+        style={{ background: "transparent" }}
+      >
+        <div className="relative p-5 sm:p-7 flex flex-col flex-1">
+          {/* Plan name and pills */}
+          <div className="flex items-center gap-2.5 sm:gap-3 mb-3 sm:mb-4">
+            <h3 className="text-[22px] sm:text-[24px] font-bold text-primary tracking-tight">
+              {staticDetails.name}
+            </h3>
+            {isCurrentTier && (
+              <span className="border border-emerald-500/30 text-emerald-500 text-[10px] font-bold tracking-widest uppercase px-3 py-0.5 rounded-full">
+                Active
+              </span>
+            )}
+          </div>
+
+          {/* Price */}
+          <div className="mb-2">
+            <div className="flex items-baseline gap-1">
+              <span className="text-[28px] sm:text-[32px] font-bold text-primary tracking-tight leading-none">
+                {formattedPrice}
+              </span>
+              <span className="text-[13px] font-medium text-primary/40">
+                / {yearly ? "year" : "month"}
+              </span>
+              <span className="text-[11px] font-semibold text-primary/50 ml-1">
+                (+18% GST)
+              </span>
+            </div>
+
+            {!yearly && savingsPercent > 0 && (
+              <div className="mt-2 flex items-center gap-2">
+                <span className="text-[15px] font-medium text-primary/40 ">
+                  {formatPrice(calculateBaseWithoutGst(tier.yearlyPrice))} / yr
+                </span>
+                <span className="text-[10px] px-2.5 py-0.5 rounded-full font-bold border border-emerald-500/25 text-emerald-500 bg-emerald-500/5">
+                  Save {savingsPercent}%
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Description */}
+          <p className="text-[13px] mb-4 mt-2 text-primary/60 leading-relaxed min-h-8">
+            {tier.description || staticDetails.tagline}
+          </p>
+
+          <div className="h-px bg-primary/10 mb-4" />
+
+          {/* Features */}
+          <ul className="flex-1 flex flex-col">
+            {features.map((f, idx) => (
+              <div key={idx}>
+                <li className="flex items-start gap-2.5 sm:gap-3 py-2 sm:py-2.5">
+                  <FiCheck
+                    className={`text-[14px] mt-0.5 shrink-0 ${
+                      staticDetails.highlight
+                        ? "text-primary/40"
+                        : "text-primary/40"
+                    }`}
+                  />
+                  <span className="text-[13px] text-primary/70 leading-relaxed">
+                    {f}
+                  </span>
+                </li>
+                {idx < features.length - 1 && (
+                  <div className="h-px bg-primary/5 ml-6" />
+                )}
+              </div>
+            ))}
+          </ul>
+
+          {/* Note */}
+          {staticDetails.note && (
+            <p className="text-[12px] mt-4 mb-2 text-primary/40 text-left">
+              {staticDetails.note}
+            </p>
+          )}
+
+          {/* Button */}
+          <div className="mt-4 sm:mt-6 pt-1 sm:pt-2 flex justify-start">
+            <Button
+              variant="ghost"
+              size="sm"
+              disabled={isButtonDisabled}
+              loading={paymentLoading && upgradingTierId === tier.id}
+              onClick={() => handleUpgrade(tier)}
+            >
+              {buttonText}
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div>
       {/* HERO */}
@@ -520,219 +694,54 @@ export default function FullPricing() {
       {/* CARDS — div NOT section, inline style beats global CSS */}
       <div
         id="pricing-table"
-        className="relative z-10 -mt-64 mb-0"
+        className="relative z-10 mt-0 mb-0"
         // style={{ background: "#ffffff" }}
       >
-        <div className=" relative -top-40 max-w-7xl mx-auto px-5 sm:px-6 pt-0">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+        <div className="container mx-auto px-5 sm:px-6 pt-0">
+          {/* DESKTOP GRID */}
+          <div className="hidden lg:grid lg:grid-cols-3 gap-6 items-stretch">
             {loading
-              ? // SKELETON CARDS
-                Array.from({ length: 3 }).map((_, i) => (
-                  <div
+              ? Array.from({ length: 3 }).map((_, i) => renderSkeletonCard(i))
+              : tiers.map((tier, i) => renderTierCard(tier, i))}
+          </div>
+
+          {/* MOBILE & TABLET SWIPER */}
+          <div className="block lg:hidden w-full">
+            {loading ? (
+              <Swiper
+                modules={[FreeMode, Pagination]}
+                spaceBetween={20}
+                slidesPerView={"auto"}
+                pagination={{ clickable: true }}
+                className="w-full !pb-12"
+              >
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <SwiperSlide
                     key={i}
-                    className="animate-pulse flex flex-col rounded-2xl overflow-hidden border border-primary/10 bg-secondary/5 h-[550px]"
-                    style={{
-                      background:
-                        "linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)",
-                      boxShadow: "0 8px 30px rgba(0,0,0,0.08)",
-                    }}
+                    className="!w-[88%] sm:!w-[380px] md:!w-[420px] !h-auto flex"
                   >
-                    <div className="p-7 flex flex-col flex-1 space-y-6">
-                      <div className="space-y-2">
-                        <div className="h-6 bg-primary/10 rounded w-1/3" />
-                        <div className="h-4 bg-primary/10 rounded w-2/3" />
-                      </div>
-                      <div className="h-10 bg-primary/10 rounded w-1/2" />
-                      <div className="h-1px bg-primary/10" />
-                      <div className="space-y-3 flex-1">
-                        {Array.from({ length: 5 }).map((_, j) => (
-                          <div key={j} className="flex items-center gap-3">
-                            <div className="w-5 h-5 rounded-full bg-primary/10 shrink-0" />
-                            <div className="h-4 bg-primary/10 rounded w-full" />
-                          </div>
-                        ))}
-                      </div>
-                      <div className="h-11 bg-primary/10 rounded-full w-full" />
-                    </div>
-                  </div>
-                ))
-              : tiers.map((tier, i) => {
-                  const key = (tier.title || "").toUpperCase();
-                  const staticDetails = staticTierDetails[key] || {
-                    name: tier.title,
-                    tagline:
-                      tier.description || "Start competing in our marketplace.",
-                    color: "#6b7280",
-                    bestFor: "Consultants & Sellers",
-                    note: "",
-                    cta: "Get Started",
-                    ctaStyle:
-                      "border border-[#d1d5db] text-[#111827] hover:bg-[#f9fafb]",
-                    highlight: false,
-                  };
-
-                  const isCurrentTier = currentTier === key;
-                  let isTierDisabled = false;
-                  if (currentTier === "PREMIUM") {
-                    isTierDisabled = true;
-                  } else if (currentTier === "PRO") {
-                    isTierDisabled = key === "BASIC" || key === "PRO";
-                  } else if (currentTier === "BASIC") {
-                    isTierDisabled = key === "BASIC";
-                  }
-
-                  const price = yearly ? tier.yearlyPrice : tier.monthlyPrice;
-                  const formattedPrice = formatPrice(price);
-
-                  const monthlyVal = Number(tier.monthlyPrice) || 0;
-                  const yearlyVal = Number(tier.yearlyPrice) || 0;
-                  const totalMonthlyCostForYear = monthlyVal * 12;
-                  let savingsPercent = 0;
-                  if (
-                    totalMonthlyCostForYear > 0 &&
-                    yearlyVal < totalMonthlyCostForYear
-                  ) {
-                    savingsPercent = Math.round(
-                      ((totalMonthlyCostForYear - yearlyVal) /
-                        totalMonthlyCostForYear) *
-                        100,
-                    );
-                  }
-
-                  const features = (
-                    (yearly ? tier.yearlyFeatures : tier.monthlyFeatures) ||
-                    tier.features ||
-                    []
-                  ).map((f) => {
-                    const titleVal =
-                      typeof f === "string"
-                        ? f
-                        : f?.title || f?.featureName || f?.name || "";
-                    const descVal =
-                      typeof f === "string"
-                        ? ""
-                        : f?.description || f?.featureDescription || "";
-                    return descVal ? `${titleVal} (${descVal})` : titleVal;
-                  });
-
-                  const isButtonDisabled =
-                    (isTierDisabled && !isCurrentTier) ||
-                    (paymentLoading && upgradingTierId === tier.id);
-
-                  let buttonText = staticDetails.cta;
-                  if (paymentLoading && upgradingTierId === tier.id) {
-                    buttonText = "Processing...";
-                  } else if (isCurrentTier) {
-                    if (userRole !== "CONSULTATION") {
-                      buttonText = "Complete KYC";
-                    } else {
-                      buttonText = "Go to Dashboard";
-                    }
-                  } else if (isTierDisabled) {
-                    buttonText = "Get Started";
-                  }
-
-                  return (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, y: 32 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: i * 0.1 }}
-                      viewport={{ once: true }}
-                      className="group/card relative flex flex-col h-full rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 border border-primary/10"
-                      style={{ background: "transparent" }}
-                    >
-                      <div className="relative p-8 sm:p-10 flex flex-col flex-1 pt-12">
-                        {/* Plan name and pills */}
-                        <div className="flex items-center gap-3 mb-5">
-                          <h3 className="text-[24px] font-bold text-primary tracking-tight">
-                            {staticDetails.name}
-                          </h3>
-                          {isCurrentTier && (
-                            <span className="border border-emerald-500/30 text-emerald-500 text-[10px] font-bold tracking-widest uppercase px-3 py-0.5 rounded-full">
-                              Active
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Price */}
-                        <div className="mb-2">
-                          <div className="flex items-baseline gap-1">
-                            <span className="text-[32px] font-bold text-primary tracking-tight leading-none">
-                              {formattedPrice}
-                            </span>
-                            <span className="text-[13px] font-medium text-primary/40">
-                              / {yearly ? "year" : "month"}
-                            </span>
-                          </div>
-
-                          {!yearly && savingsPercent > 0 && (
-                            <div className="mt-2 flex items-center gap-2">
-                              <span className="text-[15px] font-medium text-primary/40 ">
-                                {formatPrice(tier.yearlyPrice)} / yr
-                              </span>
-                              <span className="text-[10px] px-2.5 py-0.5 rounded-full font-bold border border-emerald-500/25 text-emerald-500 bg-emerald-500/5">
-                                Save {savingsPercent}%
-                              </span>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Description */}
-                        <p className="text-[13px] mb-6 mt-3 text-primary/60 leading-relaxed min-h-10">
-                          {tier.description || staticDetails.tagline}
-                        </p>
-
-                        <div className="h-px bg-primary/10 mb-6" />
-
-                        {/* Features */}
-                        <ul className="flex-1 flex flex-col">
-                          {features.map((f, idx) => (
-                            <div key={idx}>
-                              <li className="flex items-start gap-3 py-3">
-                                <FiCheck
-                                  className={`text-[14px] mt-0.5 shrink-0 ${
-                                    staticDetails.highlight
-                                      ? "text-primary/40"
-                                      : "text-primary/40"
-                                  }`}
-                                />
-                                <span className="text-[13px] text-primary/70 leading-relaxed">
-                                  {f}
-                                </span>
-                              </li>
-                              {idx < features.length - 1 && (
-                                <div className="h-px bg-primary/5 ml-6" />
-                              )}
-                            </div>
-                          ))}
-                        </ul>
-
-                        {/* Note */}
-                        {staticDetails.note && (
-                          <p className="text-[12px] mt-6 mb-2 text-primary/40 text-left">
-                            {staticDetails.note}
-                          </p>
-                        )}
-
-                        {/* Button */}
-                        <div className="mt-6 pt-2 flex justify-start">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            disabled={isButtonDisabled}
-                            loading={
-                              paymentLoading && upgradingTierId === tier.id
-                            }
-                            onClick={() => handleUpgrade(tier)}
-                          >
-                            {buttonText}
-                          </Button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  );
-                })}
+                    {renderSkeletonCard(i)}
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            ) : (
+              <Swiper
+                modules={[FreeMode, Pagination]}
+                spaceBetween={20}
+                slidesPerView={"auto"}
+                pagination={{ clickable: true }}
+                className="w-full !pb-12"
+              >
+                {tiers.map((tier, i) => (
+                  <SwiperSlide
+                    key={i}
+                    className="!w-[88%] sm:!w-[380px] md:!w-[420px] !h-auto flex"
+                  >
+                    {renderTierCard(tier, i)}
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            )}
           </div>
         </div>
       </div>
@@ -793,6 +802,15 @@ export default function FullPricing() {
         fromTierObj={downgradeData?.fromTierObj}
         toTierObj={downgradeData?.targetTierObj}
         allTiers={tiers}
+        yearly={yearly}
+        isLoading={paymentLoading}
+      />
+
+      <BillingSummaryModal
+        isOpen={billingModalOpen}
+        onClose={() => setBillingModalOpen(false)}
+        onConfirm={handleConfirmBilling}
+        tier={billingTier}
         yearly={yearly}
         isLoading={paymentLoading}
       />
