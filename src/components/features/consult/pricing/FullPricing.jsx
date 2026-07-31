@@ -8,6 +8,7 @@ import {
   FiStar,
   FiTarget,
   FiVideo,
+  FiAlertCircle,
 } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
@@ -22,6 +23,8 @@ import {
   upgradeSubscription,
   createSubscription,
 } from "@/services/subscription.service";
+import { verifyOwnerSignupEmail } from "@/services/consult.service";
+import { logoutUser } from "@/services/auth.service";
 import DowngradeModal from "./DowngradeModal";
 import BillingSummaryModal from "./BillingSummaryModal";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -108,6 +111,8 @@ export default function FullPricing() {
   const [billingModalOpen, setBillingModalOpen] = useState(false);
   const [billingTier, setBillingTier] = useState(null);
   const [billingIs404, setBillingIs404] = useState(false);
+  const [verifyingToken, setVerifyingToken] = useState(false);
+  const [verifyError, setVerifyError] = useState(null);
 
   const { user, isLoggedIn, openLoginPopup } = useAuthStore();
   const queryClient = useQueryClient();
@@ -185,6 +190,61 @@ export default function FullPricing() {
     isLoggedIn,
     router,
   ]);
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    const tokenFromUrl = router.query?.token;
+    if (tokenFromUrl) {
+      useAuthStore.setState({ isLoginPopupOpen: false });
+      setVerifyingToken(true);
+      setVerifyError(null);
+
+      // First call logout API and clear client session so old session cookies do not interfere
+      logoutUser()
+        .catch(() => {})
+        .finally(() => {
+          useAuthStore.getState().logout();
+          useAuthStore.setState({ isLoginPopupOpen: false });
+
+          verifyOwnerSignupEmail(tokenFromUrl)
+            .then(async (res) => {
+              if (res.success) {
+                if (res.data?.accessToken || res.data?.token) {
+                  const tokenVal = res.data.accessToken || res.data.token;
+                  const userMaster =
+                    res.data.userMaster || res.data.user || res.data;
+                  useAuthStore.getState().login(userMaster, tokenVal);
+                } else {
+                  await useAuthStore.getState().initializeAuth();
+                }
+                queryClient.invalidateQueries({ queryKey: ["seller-tier"] });
+                const { token: _, ...restQuery } = router.query;
+                router.replace(
+                  { pathname: router.pathname, query: restQuery },
+                  undefined,
+                  { shallow: true }
+                );
+              } else {
+                useAuthStore.setState({ isLoginPopupOpen: false });
+                setVerifyError(
+                  res.message || "The verification link is invalid or has expired."
+                );
+              }
+            })
+            .catch((err) => {
+              useAuthStore.setState({ isLoginPopupOpen: false });
+              const errorMsg =
+                err?.response?.data?.message ||
+                err?.message ||
+                "The verification link is invalid or has expired.";
+              setVerifyError(errorMsg);
+            })
+            .finally(() => {
+              setVerifyingToken(false);
+            });
+        });
+    }
+  }, [router.isReady, router.query?.token, queryClient]);
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -685,6 +745,35 @@ export default function FullPricing() {
       </div>
     );
   };
+
+  if (verifyingToken) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center px-5 sm:px-6">
+        <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-sm font-medium text-primary/70">
+          Verifying your link...
+        </p>
+      </div>
+    );
+  }
+
+  if (verifyError) {
+    return (
+      <div className="min-h-[70vh] flex items-center justify-center px-5 sm:px-6 py-12">
+        <div className="max-w-md w-full bg-secondary/5 border border-red-500/30 rounded-2xl p-8 text-center flex flex-col items-center shadow-xl">
+          <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 mb-5">
+            <FiAlertCircle className="w-8 h-8" />
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">
+            Invalid or Expired Link
+          </h2>
+          <p className="text-sm text-primary/70 leading-relaxed">
+            {verifyError}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>

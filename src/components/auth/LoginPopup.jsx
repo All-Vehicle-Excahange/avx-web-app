@@ -289,11 +289,12 @@ function LoginPopup({
         setAcceptedTerms(false);
         onClose();
 
-        // Don't show CompleteProfile popup for consultants —
-        // covers both: new signups (selectedAccountType) and returning logins (currentAccountType)
         const isConsultant =
           selectedAccountType === "consultant" ||
-          currentAccountType === "consultant";
+          currentAccountType === "consultant" ||
+          ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(
+            currentUser?.userRole || currentUser?.role
+          );
         if (!isConsultant) {
           await onSuccess();
         }
