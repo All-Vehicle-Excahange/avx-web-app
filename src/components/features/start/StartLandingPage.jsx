@@ -34,7 +34,7 @@ export default function StartLandingPage() {
   const cardsData = [
     {
       id: "sell-personal",
-      badgeIcon: <User className="h-5 w-5 text-primary" />,
+      badgeIcon: <User className="h-5 w-5 text-white" />,
       badgeLabel: "Personal",
       title: "Sell My Personal Vehicle",
       description:
@@ -51,7 +51,7 @@ export default function StartLandingPage() {
     },
     {
       id: "dealer-consultant",
-      badgeIcon: <Store className="h-5 w-5 text-fourth" />,
+      badgeIcon: <Store className="h-5 w-5 text-white" />,
       badgeLabel: "Business",
       title: "I'm a Dealer / Consultant",
       description:
@@ -68,7 +68,7 @@ export default function StartLandingPage() {
     },
     {
       id: "buy-vehicle",
-      badgeIcon: <Search className="h-5 w-5 text-primary" />,
+      badgeIcon: <Search className="h-5 w-5 text-white" />,
       badgeLabel: "Buyer",
       title: "Buy a Vehicle",
       description:
@@ -85,7 +85,7 @@ export default function StartLandingPage() {
     },
     {
       id: "join-community",
-      badgeIcon: <FaWhatsapp className="h-5 w-5 text-[#25D366]" />,
+      badgeIcon: <FaWhatsapp className="h-5 w-5 text-white" />,
       badgeLabel: "Community",
       title: "Join the Reecomm Community",
       description:
@@ -105,7 +105,7 @@ export default function StartLandingPage() {
   ];
 
   return (
-    <div className="relative min-h-screen bg-secondary text-primary overflow-x-hidden font-secondary selection:bg-fourth selection:text-white">
+    <div className="relative min-h-screen bg-transparent text-primary overflow-x-hidden font-secondary selection:bg-fourth selection:text-white">
       {/* Subtle Ambient Background Glows */}
       <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-r from-fourth/15 via-white/5 to-fourth/15 blur-[120px] rounded-full opacity-70" />
       <div className="pointer-events-none absolute bottom-0 right-0 w-[500px] h-[500px] bg-fourth/10 blur-[140px] rounded-full opacity-50" />
@@ -250,7 +250,7 @@ export default function StartLandingPage() {
 
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-4 mt-6">
               <a
-                href="https://wa.me/919876543210"
+                href="https://wa.me/918460160697"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full border border-[#333] bg-[#1c1d22] text-primary hover:bg-[#25D366]/20 hover:border-[#25D366] hover:text-[#25D366] transition-all duration-300 cursor-pointer font-medium text-sm sm:text-base shadow-md group"
