@@ -4,6 +4,7 @@ import React, { useState, useRef, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { X, Loader2, User, UserCheck } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import Button from "@/components/ui/button";
 import { getOtp, login, googleVerify, googleSignupVerify } from "@/services/auth.service";
 import { useForm } from "react-hook-form";
@@ -550,13 +551,13 @@ function LoginPopup({
                   />
                   <label htmlFor="termsCheckbox" className="text-sm text-primary/60 cursor-pointer">
                     I agree to the{" "}
-                    <a href="/terms-and-conditions" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                    <Link href="/terms-and-conditions" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
                       Terms and Conditions
-                    </a>{" "}
+                    </Link>{" "}
                     and{" "}
-                    <a href="/privacy-policy" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                    <Link href="/privacy-policy" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
                       Privacy Policy
-                    </a>
+                    </Link>
                   </label>
                 </div>
               )}

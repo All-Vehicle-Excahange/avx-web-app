@@ -299,7 +299,7 @@ const Footer = () => {
           <div className="flex-1 flex items-center gap-6 justify-center md:justify-end">
             <div className="flex gap-4">
               <Link
-                href="https://www.linkedin.com/company/reecomm/"
+                href="https://www.linkedin.com/company/reecomm"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary/60 hover:text-white transition-colors flex items-center justify-center"
@@ -315,7 +315,7 @@ const Footer = () => {
                 <FaInstagram size={18} />
               </Link>
               <Link
-                href="https://www.facebook.com/reecommindia/"
+                href="https://www.facebook.com/reecommindia"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary/60 hover:text-white transition-colors"

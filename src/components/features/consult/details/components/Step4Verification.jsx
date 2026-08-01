@@ -17,6 +17,7 @@ import {
   Ban,
 } from "lucide-react";
 import Button from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Step4Verification({ existing, onEdit }) {
   useEffect(() => {
@@ -209,18 +210,17 @@ export default function Step4Verification({ existing, onEdit }) {
                   <div className="flex items-center gap-4">
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform group-hover:scale-110
-                      ${
-                        step.isDone
+                      ${step.isDone
                           ? "bg-green-500/20 text-green-500"
                           : step.isWarning ||
-                              (step.id === "rev" && !isVerified && !isRejected)
+                            (step.id === "rev" && !isVerified && !isRejected)
                             ? "bg-amber-500/20 text-amber-500"
                             : step.isError
                               ? "bg-red-500/20 text-red-500"
                               : step.isPending
                                 ? "bg-third/10 text-third/30"
                                 : "bg-primary/20 text-primary"
-                      }`}
+                        }`}
                     >
                       {step.isDone ? (
                         <CheckCircle2 className="w-5 h-5" />
@@ -240,8 +240,7 @@ export default function Step4Verification({ existing, onEdit }) {
                   <div className="flex flex-col items-end">
                     <span
                       className={`text-sm font-bold
-                      ${
-                        step.isDone
+                      ${step.isDone
                           ? "text-green-500"
                           : step.isWarning
                             ? "text-yellow-500"
@@ -250,7 +249,7 @@ export default function Step4Verification({ existing, onEdit }) {
                               : step.isPending
                                 ? "text-third/20"
                                 : "text-primary"
-                      }`}
+                        }`}
                     >
                       {step.status}
                     </span>
@@ -420,9 +419,9 @@ export default function Step4Verification({ existing, onEdit }) {
         {/* Verification Help Link */}
         <div className="mt-6 pt-4 flex flex-col items-center text-center">
           <p className="text-sm text-third/70">Need help with verification?</p>
-          <a href="/help" className="text-primary font-bold text-base hover:underline mt-1 inline-block">
+          <Link href="/help" className="text-primary font-bold text-base hover:underline mt-1 inline-block">
             Contact Partner Support
-          </a>
+          </Link>
         </div>
       </div>
     </div>
