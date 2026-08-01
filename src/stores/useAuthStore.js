@@ -18,13 +18,30 @@ export const useAuthStore = create((set) => ({
   prefilledPhoneNumber: "",
   authPopupDefaultTab: "personal",
 
-  openLoginPopup: (defaultTab = "personal") =>
+  openLoginPopup: (defaultTab = "personal") => {
+    const isLinkExpiredPage =
+      typeof window !== "undefined" &&
+      window.location.pathname === "/link-expired";
+
+    const hasTokenInUrl =
+      typeof window !== "undefined" &&
+      !isLinkExpiredPage &&
+      (window.location.search?.includes("magicToken=") ||
+        window.location.search?.includes("token=") ||
+        new URLSearchParams(window.location.search).has("magicToken") ||
+        new URLSearchParams(window.location.search).has("token"));
+
+    if (hasTokenInUrl) {
+      return;
+    }
+
     set({
       isLoginPopupOpen: true,
       isSignupPopupOpen: false,
       isCompleteProfilePopupOpen: false,
       authPopupDefaultTab: defaultTab,
-    }),
+    });
+  },
 
   closeLoginPopup: () =>
     set({
@@ -109,8 +126,20 @@ export const useAuthStore = create((set) => ({
   },
 
   //  INITIALIZE AUTH ON APP LOAD
-  initializeAuth: async () => {
+  initializeAuth: async (force = false) => {
     if (typeof window !== "undefined") {
+      const hasTokenInUrl =
+        !force &&
+        (window.location.search?.includes("token=") ||
+          window.location.search?.includes("magicToken=") ||
+          new URLSearchParams(window.location.search).has("token") ||
+          new URLSearchParams(window.location.search).has("magicToken"));
+
+      if (hasTokenInUrl) {
+        set({ authInitialized: true });
+        return;
+      }
+
       const savedUser = localStorage.getItem("user");
 
       // Pre-fill user to prevent UI flicker for returning users
@@ -148,7 +177,9 @@ export const useAuthStore = create((set) => ({
         const hasTokenInUrl =
           typeof window !== "undefined" &&
           (window.location.search?.includes("token=") ||
-            new URLSearchParams(window.location.search).has("token"));
+            window.location.search?.includes("magicToken=") ||
+            new URLSearchParams(window.location.search).has("token") ||
+            new URLSearchParams(window.location.search).has("magicToken"));
 
         set({
           user: null,

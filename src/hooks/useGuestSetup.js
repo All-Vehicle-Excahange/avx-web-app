@@ -11,7 +11,14 @@ export default function useGuestSetup() {
   useEffect(() => {
     if (!authInitialized) return;
 
-    if (!isLoggedIn) {
+    const hasTokenInUrl =
+      typeof window !== "undefined" &&
+      (window.location.search?.includes("magicToken=") ||
+        window.location.search?.includes("token=") ||
+        new URLSearchParams(window.location.search).has("magicToken") ||
+        new URLSearchParams(window.location.search).has("token"));
+
+    if (!isLoggedIn && !hasTokenInUrl) {
       (async () => {
         const existingId = await getGuestId();
         if (!existingId) {

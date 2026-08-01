@@ -18,10 +18,21 @@ export default function ProtectedRoute({ children }) {
   useEffect(() => {
     if (!authInitialized) return;
 
+    const hasTokenInUrl =
+      typeof window !== "undefined" &&
+      (window.location.search?.includes("magicToken=") ||
+        window.location.search?.includes("token=") ||
+        new URLSearchParams(window.location.search).has("magicToken") ||
+        new URLSearchParams(window.location.search).has("token"));
+
+    if (hasTokenInUrl) {
+      return;
+    }
+
     //  ONLY CHECK LOGIN HERE
     const hasAccess = isLoggedIn && token && user;
 
-    // ❌ NOT LOGGED IN
+    //  NOT LOGGED IN
     if (!hasAccess) {
       try {
         sessionStorage.setItem("triggerLoginPopup", "true");
