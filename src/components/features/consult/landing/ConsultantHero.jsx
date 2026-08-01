@@ -172,7 +172,7 @@ export default function ConsultantHeroSection() {
               professional online — in the time it takes to fill out a form.
             </p>
             <div className="w-24 h-0.5 bg-fourth rounded-full" />
-            <div className="flex flex-col sm:flex-row gap-4 pt-3">
+            <div className="flex flex-row items-center gap-3 sm:gap-4 pt-3">
               <Button
                 variant="ghost"
                 size="md"
@@ -183,6 +183,7 @@ export default function ConsultantHeroSection() {
                     router.push("/consult/subscription");
                   }
                 }}
+                className="text-sm sm:text-base px-4 sm:px-6 whitespace-nowrap"
               >
                 Become a Consultant
               </Button>
@@ -191,7 +192,7 @@ export default function ConsultantHeroSection() {
                 <Button
                   variant="outlineSecondary"
                   size="md"
-                  className="border-third/30 text-primary"
+                  className="border-third/30 text-primary text-sm sm:text-base px-4 sm:px-6 whitespace-nowrap"
                 >
                   View Pricing
                 </Button>

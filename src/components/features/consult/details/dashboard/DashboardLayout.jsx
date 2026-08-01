@@ -12,12 +12,14 @@ import { useQuery } from "@tanstack/react-query";
 
 import getIsAccountSuspendedQuery from "@/queries/consualt.queries";
 import { getSellerTierQuery } from "@/queries/Seller.queries";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function DashboardLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isComeFromPhone, setIsComeFromPhone] = useState(false);
 
   const router = useRouter();
+  const { isLoggedIn, token } = useAuthStore();
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -28,14 +30,16 @@ export default function DashboardLayout({ children }) {
   const hideHeaders = isComeFromPhone && isStorefrontPage;
 
   // REACT QUERY - SUSPENSION STATUS
-  const { data, isPending, error } = useQuery(
-    getIsAccountSuspendedQuery()
-  );
+  const { data, isPending, error } = useQuery({
+    ...getIsAccountSuspendedQuery(),
+    enabled: !!(isLoggedIn && token),
+  });
 
   // REACT QUERY - SELLER TIER STATUS
-  const { data: tierData, isPending: isTierPending } = useQuery(
-    getSellerTierQuery()
-  );
+  const { data: tierData, isPending: isTierPending } = useQuery({
+    ...getSellerTierQuery(),
+    enabled: !!(isLoggedIn && token),
+  });
 
   // SUSPENSION LOGIC
   const isSuspended =

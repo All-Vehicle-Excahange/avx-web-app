@@ -8,6 +8,8 @@ import "@/styles/globals.css";
 
 import { useAuthStore } from "@/stores/useAuthStore";
 import useGuestSetup from "@/hooks/useGuestSetup";
+import useMagicTokenVerification from "@/hooks/useMagicTokenVerification";
+import useSplash from "@/hooks/useSplash";
 import LoginPopup from "@/components/auth/LoginPopup";
 import SignupPopup from "@/components/auth/SignupPopup";
 import CompleteProfilePopup from "@/components/auth/CompleteProfilePopup";
@@ -34,18 +36,16 @@ import { queryClient } from "@/lib/queryClient";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
-
   const hasFullWidth = Component.fullWidth;
 
+  // Global Auth & Popup Store Actions
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
-
   const isLoginPopupOpen = useAuthStore((state) => state.isLoginPopupOpen);
   const closeLoginPopup = useAuthStore((state) => state.closeLoginPopup);
   const openLoginPopup = useAuthStore((state) => state.openLoginPopup);
   const isSignupPopupOpen = useAuthStore((state) => state.isSignupPopupOpen);
   const openSignupPopup = useAuthStore((state) => state.openSignupPopup);
   const closeSignupPopup = useAuthStore((state) => state.closeSignupPopup);
-
   const isCompleteProfilePopupOpen = useAuthStore(
     (state) => state.isCompleteProfilePopupOpen,
   );
@@ -56,121 +56,59 @@ export default function App({ Component, pageProps }) {
     (state) => state.closeCompleteProfilePopup,
   );
 
+  // Global Loader State
   const [loading, setLoading] = useState(false);
 
-  // Splash Screen State
-  const [showSplash, setShowSplash] = useState(false);
+  // Custom Hooks for Modularized Functionality
+  const { showSplash, handleSplashComplete } = useSplash();
+  useMagicTokenVerification();
+  useGuestSetup();
 
-  // INITIAL SETUP
+  // INITIAL SETUP: Initialize Auth & Send Device Info
   useEffect(() => {
-    const checkSplash = () => {
-      // Bypass splash screen for search engine crawlers and performance tools to ensure correct indexing
-      if (typeof window !== "undefined" && typeof navigator !== "undefined") {
-        const isCrawler =
-          /bot|google|baidu|bing|msn|duckduckbot|teoma|slurp|yandex|lighthouse/i.test(
-            navigator.userAgent,
-          );
-        if (isCrawler) {
-          setShowSplash(false);
-          return;
-        }
-      }
-
-      try {
-        const hasSeenSplash = localStorage.getItem("splashSeen");
-        const sessionSeen = sessionStorage.getItem("splashSession");
-
-        if (hasSeenSplash || sessionSeen) {
-          setShowSplash(false);
-        } else {
-          setShowSplash(true);
-        }
-      } catch (e) {
-        setShowSplash(false);
-      }
-    };
-
-    checkSplash();
-
     initializeAuth();
     sendDeviceInfo();
   }, [initializeAuth]);
 
-  // CROSS TAB SPLASH SYNC
+  // ROUTE LOADER + GOOGLE ANALYTICS TRACKING
   useEffect(() => {
-    const channel = new BroadcastChannel("splash_channel");
-
-    channel.onmessage = (event) => {
-      if (event.data === "SPLASH_DONE") {
-        setShowSplash(false);
-      }
-    };
-
-    return () => channel.close();
-  }, []);
-
-  // SPLASH COMPLETE
-  const handleSplashComplete = () => {
-    try {
-      localStorage.setItem("splashSeen", "true");
-      sessionStorage.setItem("splashSession", "true");
-    } catch (e) { }
-
-    const channel = new BroadcastChannel("splash_channel");
-
-    channel.postMessage("SPLASH_DONE");
-
-    channel.close();
-
-    setShowSplash(false);
-  };
-
-  useGuestSetup();
-
-  // ROUTE LOADER + GOOGLE ANALYTICS
-  useEffect(() => {
-    const handleStart = () => {
-      setLoading(true);
-    };
-
+    const handleStart = () => setLoading(true);
     const handleStop = (url) => {
       setLoading(false);
-
-      // Track page views
       gtag.pageview(url);
     };
 
     Router.events.on("routeChangeStart", handleStart);
-
     Router.events.on("routeChangeComplete", handleStop);
-
     Router.events.on("routeChangeError", handleStop);
 
     return () => {
       Router.events.off("routeChangeStart", handleStart);
-
       Router.events.off("routeChangeComplete", handleStop);
-
       Router.events.off("routeChangeError", handleStop);
     };
   }, []);
 
-  // Handle cross-page login popup triggering
+  // CROSS-PAGE LOGIN POPUP TRIGGER
   useEffect(() => {
     if (typeof window !== "undefined") {
+      const hasTokenInUrl =
+        window.location.search?.includes("magicToken=") ||
+        window.location.search?.includes("token=") ||
+        new URLSearchParams(window.location.search).has("magicToken") ||
+        new URLSearchParams(window.location.search).has("token");
+
       const trigger = sessionStorage.getItem("triggerLoginPopup");
       if (trigger === "true") {
         sessionStorage.removeItem("triggerLoginPopup");
-        setTimeout(() => {
-          openLoginPopup();
-        }, 150);
+        if (!hasTokenInUrl) {
+          setTimeout(() => {
+             openLoginPopup();
+          }, 150);
+        }
       }
     }
   }, [router.asPath, openLoginPopup]);
-
-  // Prevent hydration flashing
-  if (showSplash === null) {
-  }
 
   return (
     <>
@@ -280,6 +218,7 @@ export default function App({ Component, pageProps }) {
 
           {/* GLOBAL COMPARE BUTTON */}
           {!showSplash &&
+            !router.asPath.includes("link-expired") &&
             !router.asPath.startsWith("/consult/dashboard/") &&
             !router.asPath.startsWith("/consult/kyc") && (
               <GlobalCompareButton />
