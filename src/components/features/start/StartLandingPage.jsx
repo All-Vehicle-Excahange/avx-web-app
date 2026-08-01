@@ -92,7 +92,7 @@ export default function StartLandingPage() {
         "Connect with dealers, consultants, and industry pros. Get exclusive business tips, updates, and early access to Reecomm.",
       image: "/growing-business.webp",
       buttonText: "Join on WhatsApp",
-      href: "https://wa.me/919876543210",
+      href: "https://whatsapp.com/channel/0029Vb8nchQDuMRksRpT4Y1B",
       target: "_blank",
       rel: "noopener noreferrer",
       buttonVariant: "ghost",
@@ -249,7 +249,7 @@ export default function StartLandingPage() {
             </p>
 
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-4 mt-6">
-              <a
+              <Link
                 href="https://wa.me/918460160697"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -257,23 +257,23 @@ export default function StartLandingPage() {
               >
                 <FaWhatsapp className="text-lg text-[#25D366] group-hover:scale-110 transition-transform" />
                 <span>Chat on WhatsApp</span>
-              </a>
+              </Link>
 
-              <a
+              <Link
                 href="tel:+919876543210"
-                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full border border-[#333] bg-[#1c1d22] text-primary hover:bg-fourth/20 hover:border-fourth hover:text-fourth transition-all duration-300 cursor-pointer font-medium text-sm sm:text-base shadow-md group"
+                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full border border-[#333] bg-[#1c1d22] text-primary hover:bg-fourth/20 hover:border-[#FACC15] hover:text-fourth transition-all duration-300 cursor-pointer font-medium text-sm sm:text-base shadow-md group"
               >
                 <PhoneCall className="h-4 w-4 text-fourth group-hover:scale-110 transition-transform" />
                 <span>Call Us</span>
-              </a>
+              </Link>
 
-              <a
+              <Link
                 href="mailto:support@reecomm.com"
                 className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full border border-[#333] bg-[#1c1d22] text-primary hover:bg-white/15 hover:border-white hover:text-white transition-all duration-300 cursor-pointer font-medium text-sm sm:text-base shadow-md group"
               >
                 <Mail className="h-4 w-4 text-third group-hover:text-white group-hover:scale-110 transition-transform" />
                 <span>Email Us</span>
-              </a>
+              </Link>
 
               <Link
                 href="/help"
@@ -392,27 +392,27 @@ export default function StartLandingPage() {
             Follow us on
           </p>
           <div className="flex items-center justify-center gap-3 sm:gap-4">
-            <a
-              href="https://instagram.com/reecomm"
+            <Link
+              href="https://www.instagram.com/reecommindia"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
               className="h-11 w-11 rounded-full border border-[#2e2e2e] bg-[#1a1a1a] flex items-center justify-center text-white hover:border-[#E4405F] hover:bg-[#E4405F] hover:text-white transition-all duration-300 cursor-pointer shadow-md hover:scale-110"
             >
               <FaInstagram className="text-lg" />
-            </a>
+            </Link>
 
-            <a
-              href="https://facebook.com/reecomm"
+            <Link
+              href="https://www.facebook.com/reecommindia"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
               className="h-11 w-11 rounded-full border border-[#2e2e2e] bg-[#1a1a1a] flex items-center justify-center text-white hover:border-[#1877F2] hover:bg-[#1877F2] hover:text-white transition-all duration-300 cursor-pointer shadow-md hover:scale-110"
             >
               <FaFacebookF className="text-lg" />
-            </a>
+            </Link>
 
-            <a
+            <Link
               href="https://youtube.com/@reecomm"
               target="_blank"
               rel="noopener noreferrer"
@@ -420,27 +420,27 @@ export default function StartLandingPage() {
               className="h-11 w-11 rounded-full border border-[#2e2e2e] bg-[#1a1a1a] flex items-center justify-center text-white hover:border-[#FF0000] hover:bg-[#FF0000] hover:text-white transition-all duration-300 cursor-pointer shadow-md hover:scale-110"
             >
               <FaYoutube className="text-lg" />
-            </a>
+            </Link>
 
-            <a
-              href="https://linkedin.com/company/reecomm"
+            <Link
+              href="https://www.linkedin.com/company/reecomm"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
               className="h-11 w-11 rounded-full border border-[#2e2e2e] bg-[#1a1a1a] flex items-center justify-center text-white hover:border-[#0A66C2] hover:bg-[#0A66C2] hover:text-white transition-all duration-300 cursor-pointer shadow-md hover:scale-110"
             >
               <FaLinkedinIn className="text-lg" />
-            </a>
+            </Link>
 
-            <a
-              href="https://twitter.com/reecomm"
+            <Link
+              href="https://www.x.com/Reecommindia"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="X (Twitter)"
               className="h-11 w-11 rounded-full border border-[#2e2e2e] bg-[#1a1a1a] flex items-center justify-center text-white hover:border-white hover:bg-white hover:text-secondary transition-all duration-300 cursor-pointer shadow-md hover:scale-110"
             >
               <FaXTwitter className="text-lg" />
-            </a>
+            </Link>
           </div>
         </div>
 
