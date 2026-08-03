@@ -249,18 +249,32 @@ export default function PpcComponent() {
       statusText = toggledStatuses[campId];
     }
 
+    const rawSpent = c.totalSpent ?? c.spentAmount ?? c.spent ?? 0;
+    const rawImpressions = c.impressions ?? c.impressionsCount ?? 0;
+    const rawClicks = c.clicks ?? c.clicksCount ?? c.results ?? 0;
+
+    let ctrValueStr = "0%";
+    if (c.ctr !== undefined && c.ctr !== null) {
+      ctrValueStr = `${c.ctr}%`;
+    } else if (c.CTR !== undefined && c.CTR !== null) {
+      ctrValueStr = `${c.CTR}%`;
+    } else if (Number(rawImpressions) > 0) {
+      const computedCtr = (Number(rawClicks) / Number(rawImpressions)) * 100;
+      ctrValueStr = `${Number.isInteger(computedCtr) ? computedCtr : computedCtr.toFixed(1)}%`;
+    }
+
     return {
       id: c.campaignId || c.id,
       title: c.name || "Untitled Campaign",
       placement: placementStr,
       model: c.billingType || "—",
       rate: rateVal,
-      spent: c.spentAmount !== undefined ? `₹${c.spentAmount}` : "₹0",
+      spent: `₹${rawSpent}`,
       budget: c.dailyBudget ? `₹${c.dailyBudget}/day` : "—",
-      impressions: c.impressionsCount !== undefined ? c.impressionsCount : "0",
-      clicksValue: c.clicksCount !== undefined ? c.clicksCount : "0",
+      impressions: rawImpressions,
+      clicksValue: rawClicks,
       clicksLabel: c.billingType === "CPI" ? "Inquiries" : "Clicks",
-      ctrValue: c.ctr !== undefined ? `${c.ctr}%` : "0%",
+      ctrValue: ctrValueStr,
       ctrLabel: c.billingType === "CPI" ? "INQ rate" : "CTR",
       status: statusText,
       isDraft: c.status === "DRAFT" || c.ppcStatus === "DRAFT",
@@ -411,7 +425,7 @@ export default function PpcComponent() {
           <div>
             <h3 className="font-semibold">Advertising Summary</h3>
             <p className="text-xs text-third">
-              ₹{summaryData?.totalSpent ?? 0} spent on {summaryData?.totalAdsInRange ?? 0} ads in the last {range} days
+              ₹{summaryData?.totalSpent ?? summaryData?.spentAmount ?? 0} spent on {summaryData?.totalAdsInRange ?? summaryData?.totalAds ?? 0} ads in the last {range} days
             </p>
           </div>
 
@@ -445,13 +459,17 @@ export default function PpcComponent() {
           <StatCard
             icon={<TrendingUp size={20} />}
             label="Active Campaigns"
-            value={summaryData?.activeCampaigns ?? 0}
+            value={summaryData?.activeCampaigns ?? summaryData?.activeCount ?? 0}
           />
-          <StatCard icon={<Eye size={20} />} label="Spent Today" value={`₹${summaryData?.speedToday ?? 0}`} />
+          <StatCard
+            icon={<Eye size={20} />}
+            label="Spent Today"
+            value={`₹${summaryData?.spentToday ?? summaryData?.speedToday ?? 0}`}
+          />
           <StatCard
             icon={<MousePointerClick size={20} />}
             label="Total Clicks"
-            value={summaryData?.totalClicks ?? 0}
+            value={summaryData?.totalClicks ?? summaryData?.clicks ?? 0}
           />
           <StatCard
             icon={<CheckCircle size={20} />}
