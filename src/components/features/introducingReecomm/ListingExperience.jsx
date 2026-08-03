@@ -50,22 +50,17 @@ export default function ListingExperience() {
           })}
         </div>
 
-        {/* Phone Mockup Row */}
-        <div className="flex flex-wrap items-center justify-center gap-8">
-          <div className="w-[200px] sm:w-[240px] aspect-[9/19] rounded-[32px] border-4 border-white/20 bg-black p-2 shadow-2xl relative">
-            <div className="relative w-full h-full rounded-[24px] overflow-hidden border border-white/10">
-              <Image src="/card4.webp" alt="Listing Step 1" fill className="object-cover" />
-            </div>
-          </div>
-          <div className="w-[200px] sm:w-[240px] aspect-[9/19] rounded-[32px] border-4 border-white/20 bg-black p-2 shadow-2xl relative">
-            <div className="relative w-full h-full rounded-[24px] overflow-hidden border border-white/10">
-              <Image src="/card5.webp" alt="Listing Step 2" fill className="object-cover" />
-            </div>
-          </div>
-          <div className="w-[200px] sm:w-[240px] aspect-[9/19] rounded-[32px] border-4 border-white/20 bg-black p-2 shadow-2xl relative">
-            <div className="relative w-full h-full rounded-[24px] overflow-hidden border border-white/10">
-              <Image src="/card6.webp" alt="Listing Step 3" fill className="object-cover" />
-            </div>
+        {/* Single Image Display (Listing Experience) */}
+        <div className="flex justify-center">
+          <div className="relative w-full max-w-[380px] sm:max-w-[440px] rounded-2xl overflow-hidden shadow-2xl transition-transform hover:scale-[1.005]">
+            <Image
+              src="/Chat-crop.webp"
+              alt="Vehicle Listing Experience Interface"
+              width={800}
+              height={1200}
+              className="w-full h-auto object-contain rounded-2xl"
+              priority
+            />
           </div>
         </div>
 

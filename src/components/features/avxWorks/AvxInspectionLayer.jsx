@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Settings,
   Layers,
@@ -16,6 +16,11 @@ import {
   CircleDashed,
   Activity,
   Search,
+  Maximize2,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  ZoomIn,
 } from "lucide-react";
 
 const ITEMS = [
@@ -86,6 +91,38 @@ const ITEMS = [
 
 export default function AvxInspectionLayer() {
   const [active, setActive] = useState(ITEMS[0]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const currentIndex = ITEMS.findIndex((i) => i.id === active.id);
+
+  const handlePrev = (e) => {
+    e?.stopPropagation();
+    const prevIndex = (currentIndex - 1 + ITEMS.length) % ITEMS.length;
+    setActive(ITEMS[prevIndex]);
+  };
+
+  const handleNext = (e) => {
+    e?.stopPropagation();
+    const nextIndex = (currentIndex + 1) % ITEMS.length;
+    setActive(ITEMS[nextIndex]);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!isModalOpen) return;
+      if (e.key === "Escape") setIsModalOpen(false);
+      if (e.key === "ArrowLeft") handlePrev();
+      if (e.key === "ArrowRight") handleNext();
+    };
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden";
+      window.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isModalOpen, active]);
 
   return (
     <section>
@@ -107,17 +144,9 @@ export default function AvxInspectionLayer() {
             moves. You see the real condition of the vehicle, not just the
             seller&apos;s version of it.
           </p>
-          {/* <div className="mt-6">
-            <Link
-              href="/inspections"
-              className="inline-flex items-center text-fourth hover:underline font-semibold tracking-wide"
-            >
-              → Learn how inspections work
-            </Link>
-          </div> */}
         </div>
 
-        {/* KEY PRINCIPLES — THIS WAS MISSING */}
+        {/* KEY PRINCIPLES */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-10">
           <SignalPoint
             index="01"
@@ -140,7 +169,7 @@ export default function AvxInspectionLayer() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* STEPS LIST */}
           <div className="lg:col-span-5 flex flex-col gap-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
-            {ITEMS.map((item, index) => {
+            {ITEMS.map((item) => {
               const isActive = active.id === item.id;
               const Icon = item.icon;
               return (
@@ -183,23 +212,44 @@ export default function AvxInspectionLayer() {
 
           {/* CONTEXT PANEL & IMAGE */}
           <div className="lg:col-span-7 sticky top-24">
-            <div className="relative rounded-3xl overflow-hidden border border-primary/20 aspect-video lg:aspect-auto lg:h-[600px]">
+            <div
+              onClick={() => setIsModalOpen(true)}
+              className="relative rounded-3xl overflow-hidden border border-primary/20 aspect-video lg:aspect-auto lg:h-[600px] cursor-pointer group/img select-none"
+            >
               {/* IMAGE */}
               <Image
                 src={active.image}
                 alt={active.title}
                 width={800}
                 height={500}
-                className="w-full h-full object-cover scale-105"
+                className="w-full h-full object-cover scale-105 group-hover/img:scale-110 transition-transform duration-700 ease-out"
               />
 
-              {/* DARK OVERLAY */}
+              {/* HOVER OVERLAY */}
+              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <span className="px-4 py-2 rounded-full bg-black/60 backdrop-blur-md text-white text-sm font-medium flex items-center gap-2 border border-white/20 transform translate-y-2 group-hover/img:translate-y-0 transition-all duration-300">
+                  <ZoomIn size={16} /> Click to view full photo
+                </span>
+              </div>
+
+              {/* EXPAND BUTTON TOP RIGHT */}
+              <div className="absolute top-4 right-4 z-10">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsModalOpen(true);
+                  }}
+                  className="p-3 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md border border-white/20 transition-all duration-300 hover:scale-110"
+                  title="Enlarge Image"
+                >
+                  <Maximize2 size={18} />
+                </button>
+              </div>
 
               {/* OVERLAY CONTENT */}
-              <div className="absolute bottom-0 left-0 w-full p-8 lg:p-12">
+              <div className="absolute bottom-0 left-0 w-full p-8 lg:p-12 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-fourth/20 border border-fourth/30 text-fourth text-xs uppercase tracking-widest font-semibold mb-4 backdrop-blur-md">
-                  <CheckCircle size={14} /> Step{" "}
-                  {ITEMS.findIndex((i) => i.id === active.id) + 1} of{" "}
+                  <CheckCircle size={14} /> Step {currentIndex + 1} of{" "}
                   {ITEMS.length}
                 </div>
                 <h3 className="text-3xl lg:text-4xl font-bold text-white mb-3 shadow-black/50 drop-shadow-md">
@@ -213,6 +263,85 @@ export default function AvxInspectionLayer() {
           </div>
         </div>
       </div>
+
+      {/* FULLSCREEN LIGHTBOX MODAL */}
+      {isModalOpen && (
+        <div
+          onClick={() => setIsModalOpen(false)}
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-lg flex flex-col justify-between p-4 md:p-8 animate-in fade-in duration-300 select-none"
+        >
+          {/* MODAL HEADER */}
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="flex items-center justify-between w-full max-w-6xl mx-auto z-10"
+          >
+            <div className="flex items-center gap-3">
+              <span className="px-3 py-1 rounded-full bg-fourth/20 border border-fourth/30 text-fourth text-xs uppercase tracking-widest font-semibold backdrop-blur-md">
+                Step {currentIndex + 1} of {ITEMS.length}
+              </span>
+              <h3 className="text-xl font-bold text-white hidden sm:block">
+                {active.title}
+              </h3>
+            </div>
+
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border border-white/20 transition-all duration-200 hover:rotate-90"
+              title="Close (Esc)"
+            >
+              <X size={24} />
+            </button>
+          </div>
+
+          {/* MODAL IMAGE & NAVIGATION */}
+          <div className="relative flex-1 flex items-center justify-center my-4 max-w-6xl w-full mx-auto">
+            {/* PREVIOUS BUTTON */}
+            <button
+              onClick={handlePrev}
+              className="absolute left-2 md:left-4 z-20 p-3 md:p-4 rounded-full bg-black/50 hover:bg-fourth hover:text-black text-white backdrop-blur-md border border-white/20 transition-all duration-200 transform hover:scale-110"
+              title="Previous Image"
+            >
+              <ChevronLeft size={28} />
+            </button>
+
+            {/* IMAGE CONTAINER */}
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full h-full max-h-[75vh] rounded-2xl overflow-hidden border border-white/10 flex items-center justify-center bg-black/40"
+            >
+              <Image
+                src={active.image}
+                alt={active.title}
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+
+            {/* NEXT BUTTON */}
+            <button
+              onClick={handleNext}
+              className="absolute right-2 md:right-4 z-20 p-3 md:p-4 rounded-full bg-black/50 hover:bg-fourth hover:text-black text-white backdrop-blur-md border border-white/20 transition-all duration-200 transform hover:scale-110"
+              title="Next Image"
+            >
+              <ChevronRight size={28} />
+            </button>
+          </div>
+
+          {/* MODAL FOOTER */}
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="max-w-3xl mx-auto text-center z-10"
+          >
+            <h4 className="text-2xl font-bold text-white mb-2 sm:hidden">
+              {active.title}
+            </h4>
+            <p className="text-base md:text-lg text-white/80 leading-relaxed">
+              {active.desc}
+            </p>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
