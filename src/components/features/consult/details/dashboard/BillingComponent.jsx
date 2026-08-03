@@ -328,10 +328,10 @@ export default function BillingComponent() {
 
   const nextBillingDateText = activeSubData?.nextBillingDate
     ? new Date(activeSubData.nextBillingDate).toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      })
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    })
     : isBasic
       ? "Never"
       : "12 Oct 2024";
@@ -375,7 +375,7 @@ export default function BillingComponent() {
             </div>
           </div>
         ) : (
-          <div className="relative overflow-hidden rounded-2xl bg-primary/5 backdrop-blur-xl p-8 shadow-sm flex flex-col transition-colors duration-200">
+          <div className="relative overflow-hidden rounded-2xl bg-primary/5 backdrop-blur-xl p-4 sm:p-6 md:p-8 shadow-sm flex flex-col transition-colors duration-200">
             {/* Top */}
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-3">
@@ -389,58 +389,56 @@ export default function BillingComponent() {
               </div>
 
               <span
-                className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                  isSubActive
-                    ? "bg-green-500/20 text-green-400"
-                    : "bg-red-500/20 text-red-400"
-                }`}
+                className={`px-3 py-1 rounded-full text-xs font-semibold ${isSubActive
+                  ? "bg-green-500/20 text-green-400"
+                  : "bg-red-500/20 text-red-400"
+                  }`}
               >
                 {isSubActive ? "Active" : "Inactive"}
               </span>
             </div>
 
             {/* Middle */}
-            <div className="grid md:grid-cols-2 gap-6 mt-6">
-              <div className="bg-white/10 rounded-xl p-4">
+            <div className="grid sm:grid-cols-2 gap-3 sm:gap-6 mt-4 sm:mt-6">
+              <div className="bg-white/10 rounded-xl p-3 sm:p-4">
                 <p className="text-xs opacity-70">Plan Value</p>
-                <p className="font-semibold">{priceText}</p>
+                <p className="font-semibold text-sm sm:text-base">{priceText}</p>
               </div>
 
-              <div className="bg-white/10 rounded-xl p-4">
+              <div className="bg-white/10 rounded-xl p-3 sm:p-4">
                 <p className="text-xs opacity-70">Next Renewal</p>
-                <p className="font-semibold">{nextBillingDateText}</p>
+                <p className="font-semibold text-sm sm:text-base">{nextBillingDateText}</p>
               </div>
             </div>
 
             {/* Bottom */}
-            <div className="flex justify-between items-center mt-auto pt-6">
-              <span className="text-xs opacity-90"></span>
-              <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-auto pt-4 sm:pt-6">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="flex-1 sm:flex-none text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 whitespace-nowrap"
+                onClick={() => setIsManageOpen(true)}
+              >
+                Upgrade Subscription
+              </Button>
+              {activeSubData?.shortUrl && (
                 <Button
-                  variant="ghost"
+                  variant="outlineSecondary"
                   size="sm"
-                  onClick={() => setIsManageOpen(true)}
+                  className="flex-1 sm:flex-none text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 whitespace-nowrap"
+                  onClick={() =>
+                    window.open(activeSubData.shortUrl, "_blank")
+                  }
                 >
-                  Upgrade Subscription
+                  Manage Subscription
                 </Button>
-                {activeSubData?.shortUrl && (
-                  <Button
-                    variant="outlineSecondary"
-                    size="sm"
-                    onClick={() =>
-                      window.open(activeSubData.shortUrl, "_blank")
-                    }
-                  >
-                    Manage Subscription
-                  </Button>
-                )}
-              </div>
+              )}
             </div>
           </div>
         )}
 
         {/* ✅ WALLET */}
-        <div className="relative rounded-2xl bg-primary/5 p-6 overflow-hidden shadow-sm transition-colors duration-200">
+        <div className="relative rounded-2xl bg-primary/5 p-4 sm:p-6 overflow-hidden shadow-sm transition-colors duration-200">
           {/* Status Pill */}
           <div className="absolute top-4 right-4">
             <span className="px-4 py-1 rounded-full bg-green-500/20 text-green-400 text-xs font-medium backdrop-blur-md">
@@ -465,10 +463,11 @@ export default function BillingComponent() {
           </div>
 
           {/* Buttons */}
-          <div className="flex gap-3 mt-6">
+          <div className="flex gap-3 mt-4 sm:mt-6">
             <Button
               size="sm"
               variant="ghost"
+              className="text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2"
               onClick={() => setIsAddMoneyOpen(true)}
             >
               + Add Money
@@ -478,7 +477,7 @@ export default function BillingComponent() {
       </div>
 
       {/* BENEFITS */}
-      <div className="rounded-2xl bg-primary/5 p-6 space-y-4 shadow-sm transition-colors duration-200">
+      <div className="rounded-2xl bg-primary/5 p-4 sm:p-6 space-y-4 shadow-sm transition-colors duration-200">
         <h2 className="font-semibold">Benefits Active</h2>
 
         <div className="grid md:grid-cols-2 gap-4">
@@ -558,15 +557,15 @@ export default function BillingComponent() {
       </div> */}
 
       {/* TRANSACTION HISTORY */}
-      <div className="rounded-2xl bg-primary/5 p-6 space-y-4 shadow-sm transition-colors duration-200">
+      <div className="rounded-2xl bg-primary/5 p-4 sm:p-6 space-y-4 shadow-sm transition-colors duration-200">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 font-semibold">
-            <IndianRupee size={16} />
-            Wallet Transaction Hiistory
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2 font-semibold text-sm sm:text-base">
+            <IndianRupee size={16} className="shrink-0" />
+            <span>Wallet Transaction History</span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 self-start sm:self-auto">
             <CustomSelect
               value={range}
               onChange={setRange}
@@ -591,7 +590,7 @@ export default function BillingComponent() {
 
             <tbody className="divide-y divide-third/20">
               {isTxnLoading ||
-              (isFetchingNextTxnPage && currentTxnPageData.length === 0) ? (
+                (isFetchingNextTxnPage && currentTxnPageData.length === 0) ? (
                 Array.from({ length: 5 }).map((_, index) => (
                   <tr key={index}>
                     <td className="py-4">
@@ -628,9 +627,8 @@ export default function BillingComponent() {
                     </td>
                     <td className="text-primary">{item.transactionNumber}</td>
                     <td
-                      className={`text-right ${
-                        item.type === "CREDIT" ? "text-green-400" : ""
-                      }`}
+                      className={`text-right ${item.type === "CREDIT" ? "text-green-400" : ""
+                        }`}
                     >
                       {item.type === "CREDIT" ? "+" : "-"}₹
                       {Number(item.amount).toLocaleString("en-IN", {
@@ -658,7 +656,7 @@ export default function BillingComponent() {
       </div>
 
       {/* PAYMENT HISTORY */}
-      <div className="rounded-2xl bg-primary/5 p-6 space-y-4 shadow-sm transition-colors duration-200">
+      <div className="rounded-2xl bg-primary/5 p-4 sm:p-6 space-y-4 shadow-sm transition-colors duration-200">
         <h2 className="font-semibold">Payment History</h2>
 
         <div className="overflow-x-auto custom-scrollbar pb-2">
@@ -674,7 +672,7 @@ export default function BillingComponent() {
             </thead>
             <tbody className="divide-y divide-third/20">
               {isHistoryLoading ||
-              (isFetchingNextPage && currentHistoryPageData.length === 0) ? (
+                (isFetchingNextPage && currentHistoryPageData.length === 0) ? (
                 Array.from({ length: 5 }).map((_, index) => (
                   <tr key={index}>
                     <td className="py-4">

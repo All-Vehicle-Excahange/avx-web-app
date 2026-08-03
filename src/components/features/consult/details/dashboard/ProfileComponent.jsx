@@ -213,7 +213,7 @@ export default function ProfileComponent() {
           const userData = JSON.parse(savedUser);
           accountType = userData.role
             ? userData.role.charAt(0).toUpperCase() +
-              userData.role.slice(1).toLowerCase()
+            userData.role.slice(1).toLowerCase()
             : "Consultant";
         } catch (e) {
           console.error("Failed to parse user from localStorage", e);
@@ -256,35 +256,32 @@ export default function ProfileComponent() {
           <p className="text-third text-sm">
             Profile Completion:{" "}
             <span
-              className={`font-bold ${
-                profileStrengthData.profileStrength >= 75
+              className={`font-bold ${profileStrengthData.profileStrength >= 75
                   ? "text-green-400"
                   : profileStrengthData.profileStrength >= 40
                     ? "text-yellow-400"
                     : "text-red-400"
-              }`}
+                }`}
             >
               {Math.round(profileStrengthData.profileStrength)}%
             </span>
           </p>
 
           <span
-            className={`flex items-center gap-2 text-sm font-semibold ${
-              profileStrengthData.profileStrength >= 75
+            className={`flex items-center gap-2 text-sm font-semibold ${profileStrengthData.profileStrength >= 75
                 ? "text-green-400"
                 : profileStrengthData.profileStrength >= 40
                   ? "text-yellow-400"
                   : "text-red-400"
-            }`}
+              }`}
           >
             <span
-              className={`w-2.5 h-2.5 rounded-full ${
-                profileStrengthData.profileStrength >= 75
+              className={`w-2.5 h-2.5 rounded-full ${profileStrengthData.profileStrength >= 75
                   ? "bg-green-400"
                   : profileStrengthData.profileStrength >= 40
                     ? "bg-yellow-400"
                     : "bg-red-400"
-              }`}
+                }`}
             ></span>
             {profileStrengthData.profileStrength >= 75
               ? "Strong"
@@ -311,12 +308,12 @@ export default function ProfileComponent() {
           )}
         </div>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <Button
             href={"/consult/dashboard/profile/update"}
             variant="outlineSecondary"
             size="sm"
-            className="flex-1 sm:flex-none"
+            className="flex-1 sm:flex-none text-xs sm:text-sm px-2.5 py-1.5 sm:px-4 sm:py-2 whitespace-nowrap min-w-fit"
           >
             Update Profile
           </Button>
@@ -381,7 +378,7 @@ export default function ProfileComponent() {
                 href={action.href}
                 variant="ghost"
                 size="sm"
-                className="flex-1 sm:flex-none border border-primary/20 hover:border-primary/50"
+                className="flex-1 sm:flex-none text-xs sm:text-sm px-2.5 py-1.5 sm:px-4 sm:py-2 whitespace-nowrap min-w-fit border border-primary/20 hover:border-primary/50"
               >
                 {action.label}
               </Button>
@@ -471,12 +468,12 @@ export default function ProfileComponent() {
                     <td className="py-4 px-4 text-third whitespace-nowrap">
                       {basicUpdateData.createdAt
                         ? new Date(
-                            basicUpdateData.createdAt,
-                          ).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          })
+                          basicUpdateData.createdAt,
+                        ).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })
                         : "—"}
                     </td>
                     <td className="py-4 px-4 text-third min-w-[150px]">
@@ -485,14 +482,14 @@ export default function ProfileComponent() {
                     <td className="py-4 px-4">
                       {basicUpdateData.verificationStatus ===
                         "REQUEST_CHANGES" && (
-                        <Button
-                          href="/consult/dashboard/profile/update"
-                          variant="outlineSecondary"
-                          size="sm"
-                        >
-                          View
-                        </Button>
-                      )}
+                          <Button
+                            href="/consult/dashboard/profile/update"
+                            variant="outlineSecondary"
+                            size="sm"
+                          >
+                            View
+                          </Button>
+                        )}
                     </td>
                   </tr>
                 </tbody>
@@ -761,11 +758,10 @@ export default function ProfileComponent() {
             <div>
               <p className="text-xs text-third">Storefront Status</p>
               <span
-                className={`inline-flex items-center px-3 py-1 mt-1 rounded-full text-xs font-medium ${
-                  accountDetails.storefrontStatus === "Live"
+                className={`inline-flex items-center px-3 py-1 mt-1 rounded-full text-xs font-medium ${accountDetails.storefrontStatus === "Live"
                     ? "bg-green-500/20 text-green-400"
                     : "bg-yellow-500/20 text-yellow-400"
-                }`}
+                  }`}
               >
                 {accountDetails.storefrontStatus}
               </span>
@@ -867,15 +863,15 @@ export default function ProfileComponent() {
           </p>
         </div>
 
-        {/* ✅ Actions Section: Always one line */}
-        <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+        {/* Actions Section */}
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <Button
             variant="outlineSecondary"
             size="sm"
             href={"/help"}
-            className="flex items-center justify-center gap-2 whitespace-nowrap shrink-0 px-4"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm px-2.5 py-1.5 sm:px-4 sm:py-2 whitespace-nowrap"
           >
-            <Headphones size={16} className="mr-1" />
+            <Headphones className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
             <span>Contact Support</span>
           </Button>
 
@@ -883,13 +879,13 @@ export default function ProfileComponent() {
             variant="ghost"
             size="sm"
             href={"/help"}
-            className="flex items-center justify-center gap-2 whitespace-nowrap shrink-0 px-4"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm px-2.5 py-1.5 sm:px-4 sm:py-2 whitespace-nowrap"
           >
-            <FileText size={16} className="mr-1" />
+            <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
             <span>View Guidelines</span>
           </Button>
         </div>
-      </div>  
+      </div>
       <DownloadAppPopup isOpen={isDownloadOpen} onClose={() => setIsDownloadOpen(false)} />
     </section>
   );
@@ -909,16 +905,14 @@ export function ProfileItem({ label, value }) {
 function StatusCard({ title, value, icon, green }) {
   return (
     <div
-      className={`flex items-center gap-4 rounded-xl p-5 ${
-        green ? "bg-green-500/10" : "bg-primary/5"
-      }`}
+      className={`flex items-center gap-4 rounded-xl p-5 ${green ? "bg-green-500/10" : "bg-primary/5"
+        }`}
     >
       <div
-        className={`w-10 h-10 rounded-full flex items-center justify-center ${
-          green
+        className={`w-10 h-10 rounded-full flex items-center justify-center ${green
             ? "bg-green-500/20 text-green-400"
             : "bg-primary/10 text-primary"
-        }`}
+          }`}
       >
         {icon}
       </div>

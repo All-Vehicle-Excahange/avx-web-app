@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
 import ChipGroup from "@/components/ui/chipGroup";
@@ -59,6 +59,7 @@ function useIsMobile() {
 export default function SearchWithCard({
   onPageResponseChange,
   onFilterChange,
+  onRemoveFilterHandlerChange,
   onRelatedChange,
   onConsultChange,
   onConsultPayloadChange,
@@ -253,6 +254,7 @@ export default function SearchWithCard({
     { value: "manual", label: "Manual" },
   ]);
   const [transmissionLoading, setTransmissionLoading] = useState(false);
+  const [activeTagCount, setActiveTagCount] = useState(0);
 
   const isSelfTriggered = useRef(false);
   const isMounted = useRef(false);
@@ -732,11 +734,15 @@ export default function SearchWithCard({
   };
 
   // Synchronize options lists from URL params on mount/change
+  // Synchronize options lists and filter states from URL params on change
   useEffect(() => {
     const reccomInspectedVal = searchParams.get("reccomInspected");
     if (reccomInspectedVal === "true") {
       setAvxAssumed(true);
+    } else if (reccomInspectedVal === null) {
+      setAvxAssumed(false);
     }
+
     if (makerId && brandParam) {
       setBrands((prev) => {
         if (!prev.find((b) => b.value === makerId)) {
@@ -761,6 +767,56 @@ export default function SearchWithCard({
         return prev;
       });
     }
+
+    // Synchronize active filters when removed via SearchHeader chips or Clear All
+    const qBrand = searchParams.get("brand") || searchParams.get("makerId");
+    if (!qBrand) setSelectedBrands([]);
+
+    const qBodyType = searchParams.get("bodyType");
+    if (!qBodyType) setSelectedBodyType([]);
+
+    const qFuelType = searchParams.get("fuelType");
+    if (!qFuelType) setSelectedFuelTypes([]);
+
+    const qBudget = searchParams.get("budget");
+    const qMinPrice = searchParams.get("minPrice");
+    const qMaxPrice = searchParams.get("maxPrice");
+    if (!qBudget && !qMinPrice && !qMaxPrice && !searchParams.get("price")) {
+      setMinPrice(0);
+      setMaxPrice(MAX);
+    }
+
+    const qRating = searchParams.get("rating");
+    if (!qRating) setSelectedRating([]);
+
+    const qKm = searchParams.get("kmDistance") || searchParams.get("km");
+    if (!qKm) setKmDistance(0);
+
+    const qSeller = searchParams.get("sellerType");
+    if (!qSeller) setSelectedSellerType([]);
+
+    const qStateId = searchParams.get("stateId");
+    const qCityId = searchParams.get("cityId");
+    const qTownId = searchParams.get("townId");
+    const qLocation = searchParams.get("location");
+    if (!qStateId && !qCityId && !qTownId && !qLocation) {
+      setSelectedStateId(null);
+      setSelectedStateName("");
+      setSelectedCityId(null);
+      setSelectedCityName("");
+      setSelectedTownId(null);
+      setSelectedTownName("");
+    }
+
+    const qModel = searchParams.get("model") || searchParams.get("modelId");
+    if (!qModel) setSelectedModels([]);
+
+    const qVariant =
+      searchParams.get("variant") || searchParams.get("variantId");
+    if (!qVariant) setSelectedVariants([]);
+
+    const qYear = searchParams.get("year");
+    if (!qYear) setSelectedYear([]);
   }, [searchParams]);
 
   /* ================= SYNC CONSULT PAYLOAD FOR AUTO-CONSULT ================= */
@@ -1475,6 +1531,7 @@ export default function SearchWithCard({
         selectedSellerType[0] === "CONSULTANT" ? "Consultant" : "Individual",
       );
     onFilterChange?.(tags);
+    setActiveTagCount(tags.length);
   }, [
     selectedBrands,
     selectedModels,
@@ -1495,6 +1552,136 @@ export default function SearchWithCard({
     models,
     variants,
   ]);
+
+  const handleRemoveFilter = useCallback(
+    (chipLabel) => {
+      if (!chipLabel) return;
+      const lower = chipLabel.toLowerCase();
+
+      // 1. Transmission
+      if (selectedTransmissionTypes.some((t) => t.toLowerCase() === lower)) {
+        setSelectedTransmissionTypes((prev) =>
+          prev.filter((t) => t.toLowerCase() !== lower),
+        );
+        return;
+      }
+      // 2. Fuel Type
+      if (selectedFuelTypes.some((f) => f.toLowerCase() === lower)) {
+        setSelectedFuelTypes((prev) =>
+          prev.filter((f) => f.toLowerCase() !== lower),
+        );
+        return;
+      }
+      // 3. Body Type
+      if (selectedBodyType.some((b) => b.toLowerCase() === lower)) {
+        setSelectedBodyType((prev) =>
+          prev.filter((b) => b.toLowerCase() !== lower),
+        );
+        return;
+      }
+      // 4. Year
+      if (selectedYear.some((y) => String(y).toLowerCase() === lower)) {
+        setSelectedYear((prev) =>
+          prev.filter((y) => String(y).toLowerCase() !== lower),
+        );
+        return;
+      }
+      // 5. Brand
+      const brandObj = brands.find(
+        (b) => String(b.label || "").toLowerCase() === lower,
+      );
+      if (brandObj && selectedBrands.includes(brandObj.value)) {
+        setSelectedBrands((prev) =>
+          prev.filter((val) => val !== brandObj.value),
+        );
+        return;
+      }
+      // 6. Model
+      const modelObj = models.find(
+        (m) => String(m.label || "").toLowerCase() === lower,
+      );
+      if (modelObj && selectedModels.includes(modelObj.value)) {
+        setSelectedModels((prev) =>
+          prev.filter((val) => val !== modelObj.value),
+        );
+        return;
+      }
+      // 7. Variant
+      const variantObj = variants.find(
+        (v) => String(v.label || "").toLowerCase() === lower,
+      );
+      if (variantObj && selectedVariants.includes(variantObj.value)) {
+        setSelectedVariants((prev) =>
+          prev.filter((val) => val !== variantObj.value),
+        );
+        return;
+      }
+      // 8. Price range / Budget
+      if (
+        lower.includes("₹") ||
+        lower.includes("under") ||
+        lower.includes("l–")
+      ) {
+        setMinPrice(0);
+        setMaxPrice(MAX);
+        return;
+      }
+      // 9. KM Distance
+      if (lower.includes("km") || lower.includes("≤")) {
+        setKmDistance(0);
+        return;
+      }
+      // 10. Rating
+      if (lower.includes("⭐") || lower.includes("rating")) {
+        setSelectedRating([]);
+        return;
+      }
+      // 11. Seller Type
+      if (lower === "consultant" || lower === "individual") {
+        setSelectedSellerType([]);
+        return;
+      }
+      // 12. Location (City / State / Town)
+      if (
+        lower.includes(",") ||
+        (selectedCityName &&
+          lower.includes(selectedCityName.toLowerCase())) ||
+        (selectedStateName &&
+          lower.includes(selectedStateName.toLowerCase())) ||
+        (selectedTownName &&
+          lower.includes(selectedTownName.toLowerCase()))
+      ) {
+        setSelectedCityId(null);
+        setSelectedCityName("");
+        setSelectedStateId(null);
+        setSelectedStateName("");
+        setSelectedTownId(null);
+        setSelectedTownName("");
+        return;
+      }
+    },
+    [
+      selectedTransmissionTypes,
+      selectedFuelTypes,
+      selectedBodyType,
+      selectedYear,
+      selectedBrands,
+      selectedModels,
+      selectedVariants,
+      brands,
+      models,
+      variants,
+      selectedCityName,
+      selectedStateName,
+      selectedTownName,
+    ],
+  );
+
+  useEffect(() => {
+    if (onRemoveFilterHandlerChange) {
+      onRemoveFilterHandlerChange(() => handleRemoveFilter);
+    }
+  }, [onRemoveFilterHandlerChange, handleRemoveFilter]);
 
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
@@ -2010,7 +2197,7 @@ export default function SearchWithCard({
                   onClick={() => setMobileFilterOpen(true)}
                 >
                   <FilterIcon className="h-4 w-4 mr-1" />
-                  Filter
+                  Filter{activeTagCount > 0 ? ` (${activeTagCount})` : ""}
                 </Button>
               </div>
 
@@ -2244,7 +2431,9 @@ export default function SearchWithCard({
       >
         {/* ── Header ── */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-third/40 shrink-0">
-          <h2 className="text-lg font-semibold">Filters</h2>
+          <h2 className="text-lg font-semibold">
+            Filters{activeTagCount > 0 ? ` (${activeTagCount})` : ""}
+          </h2>
           <Button
             variant="ghost"
             showIcon={false}
