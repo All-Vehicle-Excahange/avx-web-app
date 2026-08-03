@@ -37,41 +37,41 @@ function CountUp({ end, suffix = "" }) {
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center  overflow-hidden">
+    <section className="relative min-h-[90vh] flex items-center overflow-hidden py-12 sm:py-16 lg:py-24">
       {/* animated orb */}
       <motion.div
         animate={{ y: [0, -20, 0] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -top-40 -right-40 w-150 h-150 bg-fourth/10 blur-[160px] rounded-full"
+        className="absolute -top-40 -right-40 w-72 h-72 sm:w-96 sm:h-96 md:w-[500px] md:h-[500px] bg-fourth/10 blur-[140px] rounded-full"
       />
 
-      <div className="relative z-10 mx-auto  py-16 w-full">
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
+      <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 w-full">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
           {/* ================= LEFT ================= */}
 
-          <div className="max-w-xl space-y-8">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#60a5fa]/30 text-sm tracking-[0.4em] uppercase text-third font-semibold bg-[#044596]/10 backdrop-blur-md">
+          <div className="max-w-xl space-y-6 sm:space-y-8">
+            <span className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full border border-[#60a5fa]/30 text-xs sm:text-sm tracking-[0.2em] sm:tracking-[0.4em] uppercase text-third font-semibold bg-[#044596]/10 backdrop-blur-md">
               For Buyers & Consultants
             </span>
 
-            <div className="space-y-3">
-              <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-bold leading-[1.05] text-[#f8fafc] tracking-tight">
+            <div className="space-y-2 sm:space-y-3">
+              <h1 className="text-3xl sm:text-5xl lg:text-[56px] font-bold leading-[1.1] text-[#f8fafc] tracking-tight">
                 How Reecomm
               </h1>
-              <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-bold leading-[1.05] tracking-tight text-fourth">
+              <h1 className="text-3xl sm:text-5xl lg:text-[56px] font-bold leading-[1.1] tracking-tight text-fourth">
                 Works
               </h1>
             </div>
 
-            <p className="text-[15px] text-third leading-relaxed max-w-lg">
+            <p className="text-sm sm:text-[15px] text-third leading-relaxed max-w-lg">
               We connect verified vehicle consultants with serious buyers
               through a structured, inspection-backed process that removes
               guesswork and builds confidence.
             </p>
 
-            <div className="w-24 h-0.5 bg-fourth rounded-full" />
+            <div className="w-20 sm:w-24 h-0.5 bg-fourth rounded-full" />
 
-            <div className="flex flex-col sm:flex-row gap-4 pt-3">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 sm:pt-3">
               <Button href="/search" variant="ghost">
                 Find a Vehicle
               </Button>
@@ -84,54 +84,64 @@ export default function HeroSection() {
 
           {/* ================= RIGHT ================= */}
 
-          <div className="relative h-115">
-            {/* glow layer */}
-            <div className="absolute inset-0  rounded-3xl" />
-
+          <div className="flex flex-col gap-6 lg:block lg:relative lg:h-[480px] w-full">
             {/* MAIN CARD */}
             <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="absolute left-[20%] top-0 w-[72%] h-[70%] rounded-2xl border border-[#1f2937] bg-[#0f1117]/95 backdrop-blur-xl shadow-[0_40px_100px_rgba(0,0,0,0.8)] p-6 z-20 overflow-hidden"
+              className="w-full lg:absolute lg:left-[18%] lg:top-0 lg:w-[76%] lg:h-[68%] rounded-2xl border-0 lg:border lg:border-[#1f2937] bg-transparent lg:bg-[#0f1117]/95 lg:backdrop-blur-xl lg:shadow-[0_40px_100px_rgba(0,0,0,0.8)] p-0 lg:p-6 z-20 overflow-hidden"
             >
               <HeroGraph />
 
+              {/* Mobile Image Inside First Card (Decreased Height & No BG) */}
+              <div className="lg:hidden my-3 relative w-full h-24 sm:h-32 rounded-xl overflow-hidden border border-[#1f2937]/50">
+                <Image
+                  src="/car-hero-21.jpg"
+                  alt="Reecomm Vehicle Marketplace Showcase"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
               {/* Animated metrics */}
-              <div className="grid grid-cols-3 text-center gap-4 mt-4">
+              <div className="grid grid-cols-3 text-center gap-2 sm:gap-4 mt-4">
                 <div>
-                  <p className="text-lg font-bold text-fourth">
+                  <p className="text-base sm:text-lg font-bold text-fourth">
                     <CountUp end={100} suffix="+" />
                   </p>
-                  <p className="text-[11px] text-third uppercase">
+                  <p className="text-[10px] sm:text-[11px] text-third uppercase tracking-wider">
                     Consultants
                   </p>
                 </div>
                 <div>
-                  <p className="text-lg font-bold text-fourth">
+                  <p className="text-base sm:text-lg font-bold text-fourth">
                     <CountUp end={500} suffix="+" />
                   </p>
-                  <p className="text-[11px] text-third uppercase">Listings</p>
+                  <p className="text-[10px] sm:text-[11px] text-third uppercase tracking-wider">
+                    Listings
+                  </p>
                 </div>
                 <div>
-                  <p className="text-lg font-bold text-fourth">
+                  <p className="text-base sm:text-lg font-bold text-fourth">
                     <CountUp end={98} suffix="%" />
                   </p>
-                  <p className="text-[11px] text-third uppercase">Visibility</p>
+                  <p className="text-[10px] sm:text-[11px] text-third uppercase tracking-wider">
+                    Visibility
+                  </p>
                 </div>
               </div>
             </motion.div>
 
-            {/* IMAGE */}
-            <div className="absolute left-0 top-[55%] w-[88%] h-[30%] rounded-xl overflow-hidden border border-[#1f2937] shadow-[0_30px_80px_rgba(0,0,0,0.8)] z-30">
+            {/* DESKTOP FLOATING IMAGE */}
+            <div className="hidden lg:block lg:h-[32%] lg:w-[88%] lg:absolute lg:left-0 lg:top-[52%] rounded-xl overflow-hidden border border-[#1f2937] shadow-[0_30px_80px_rgba(0,0,0,0.8)] z-30 relative">
               <Image
                 src="/car-hero-21.jpg"
-                alt=""
-                width={800}
-                height={500}
-                className="w-full h-full object-cover"
+                alt="Reecomm Vehicle Marketplace Showcase"
+                fill
+                className="object-cover"
               />
-              <div className="absolute inset-0 bg-linear-to-t from-secondary/80 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-secondary/80 to-transparent" />
             </div>
 
             {/* PERFORMANCE CARD */}
@@ -139,13 +149,13 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="absolute right-10 -bottom-2.5 w-[58%] rounded-xl border border-[#1f2937] bg-[#0b0e13]/95 backdrop-blur-xl p-5 shadow-xl z-30"
+              className="w-full lg:w-[62%] lg:absolute lg:right-4 lg:-bottom-2.5 rounded-xl border-0 lg:border lg:border-[#1f2937] bg-transparent lg:bg-[#0b0e13]/95 lg:backdrop-blur-xl p-0 lg:p-5 shadow-none lg:shadow-xl z-30"
             >
-              <p className="text-xs text-third mb-4 tracking-wide uppercase">
+              <p className="text-xs text-third mb-3 tracking-wide uppercase font-semibold">
                 Performance Snapshot
               </p>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
                 {[
                   { v: "500+", l: "Verified Consultants" },
                   { v: "98%", l: "Buyer Satisfaction" },
@@ -153,10 +163,12 @@ export default function HeroSection() {
                 ].map((item, i) => (
                   <div
                     key={i}
-                    className="bg-[#0f1117] rounded-lg p-3 border border-[#1f2937] text-center hover:border-[#60a5fa]/40 transition"
+                    className="bg-transparent lg:bg-[#0f1117] rounded-lg p-1 sm:p-3 border-0 lg:border lg:border-[#1f2937] text-center hover:border-[#60a5fa]/40 transition"
                   >
-                    <p className="text-lg font-bold tex-fourth">{item.v}</p>
-                    <p className="text-[10px] text-third uppercase tracking-wide">
+                    <p className="text-sm sm:text-lg font-bold text-fourth">
+                      {item.v}
+                    </p>
+                    <p className="text-[9px] sm:text-[10px] text-third uppercase tracking-wide leading-tight">
                       {item.l}
                     </p>
                   </div>

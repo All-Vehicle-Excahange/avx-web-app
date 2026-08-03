@@ -29,33 +29,18 @@ export default function StorefrontShowcase() {
           </p>
         </div>
 
-        {/* Airbnb-Style Media Container (2 Floating Phones Side-by-Side) */}
-        <div className="rounded-3xl border border-white/15 bg-white/5 p-8 sm:p-14 backdrop-blur-xl shadow-2xl overflow-hidden mb-10 flex flex-wrap items-center justify-center gap-8 sm:gap-12">
-          
-          {/* Phone Mockup 1 */}
-          <div className="w-[220px] sm:w-[270px] aspect-[9/19] rounded-[38px] border-6 border-white/20 bg-black p-2 shadow-2xl relative hover:scale-[1.02] transition-transform">
-            <div className="relative w-full h-full rounded-[30px] overflow-hidden border border-white/10">
-              <Image
-                src="/card3.webp"
-                alt="Consultant Digital Showroom Screen"
-                fill
-                className="object-cover"
-              />
-            </div>
+        {/* Single Image Display (Compact & Perfectly Scaled) */}
+        <div className="flex justify-center mb-10">
+          <div className="relative w-full max-w-[480px] rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-[1.005] flex justify-center">
+            <Image
+              src="/Storefront create_crop.webp"
+              alt="Consultant Digital Showroom"
+              width={600}
+              height={500}
+              className="w-full max-h-[420px] object-contain rounded-2xl"
+              priority
+            />
           </div>
-
-          {/* Phone Mockup 2 */}
-          <div className="w-[220px] sm:w-[270px] aspect-[9/19] rounded-[38px] border-6 border-white/20 bg-black p-2 shadow-2xl relative hover:scale-[1.02] transition-transform">
-            <div className="relative w-full h-full rounded-[30px] overflow-hidden border border-white/10">
-              <Image
-                src="/card4.webp"
-                alt="Consultant Inventory Catalog Screen"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </div>
-
         </div>
 
         {/* Feature Highlights List */}

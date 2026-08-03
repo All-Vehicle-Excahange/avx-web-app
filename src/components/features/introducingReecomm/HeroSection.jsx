@@ -63,20 +63,17 @@ export default function LaunchHero() {
           </p>
         </div>
 
-        {/* Huge Airbnb-Style Rounded Media Card (Centered Phone Mockup) */}
-        <div className="relative rounded-3xl border border-white/15 bg-white/5 p-8 sm:p-16 backdrop-blur-2xl shadow-2xl overflow-hidden flex items-center justify-center mb-10">
-
-          {/* Centered Phone Display */}
-          <div className="relative w-[260px] sm:w-[320px] md:w-[360px] aspect-[9/19] rounded-[44px] border-8 border-white/20 bg-black p-2.5 shadow-2xl z-10 hover:scale-[1.01] transition-transform">
-            <div className="relative w-full h-full rounded-[34px] overflow-hidden border border-white/10">
-              <Image
-                src="/hero_main_image.png"
-                alt="Reecomm Mobile App Interface"
-                fill
-                className="object-cover object-top"
-                priority
-              />
-            </div>
+        {/* Sticky Image Display (Natural Aspect Ratio - No Cropping) */}
+        <div className="sticky top-24 flex justify-center mb-10 z-20">
+          <div className="relative w-full max-w-[340px] sm:max-w-[400px] md:max-w-[440px] rounded-2xl overflow-hidden shadow-2xl transition-transform hover:scale-[1.01]">
+            <Image
+              src="/Chat-crop.webp"
+              alt="Reecomm Mobile App Interface"
+              width={800}
+              height={1600}
+              className="w-full h-auto object-contain rounded-2xl"
+              priority
+            />
           </div>
         </div>
 

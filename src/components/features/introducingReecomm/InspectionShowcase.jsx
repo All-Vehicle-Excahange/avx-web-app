@@ -29,43 +29,43 @@ export default function InspectionShowcase() {
           </p>
         </div>
 
-        {/* Airbnb-Style Media Container (3 Floating Phones Side-by-Side) */}
-        <div className="rounded-3xl border border-white/15 bg-white/5 p-8 sm:p-14 backdrop-blur-xl shadow-2xl overflow-hidden mb-10 flex flex-wrap items-center justify-center gap-6 sm:gap-8">
+        {/* 3 Inspection Showcase Images */}
+        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 mb-10">
           
-          {/* Phone Mockup 1 */}
-          <div className="w-[200px] sm:w-[240px] aspect-[9/19] rounded-[36px] border-6 border-white/20 bg-black p-2 shadow-2xl relative hover:scale-[1.02] transition-transform">
-            <div className="relative w-full h-full rounded-[28px] overflow-hidden border border-white/10">
-              <Image
-                src="/card4.webp"
-                alt="Inspection Audit Checklist"
-                fill
-                className="object-cover"
-              />
-            </div>
+          {/* Inspection Image 1 */}
+          <div className="relative w-[220px] sm:w-[260px] md:w-[290px] rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-[1.01]">
+            <Image
+              src="/Inspection 1_crop.png"
+              alt="Inspection Technical Audit"
+              width={600}
+              height={1000}
+              className="w-full h-auto object-contain rounded-2xl"
+              priority
+            />
           </div>
 
-          {/* Phone Mockup 2 */}
-          <div className="w-[200px] sm:w-[240px] aspect-[9/19] rounded-[36px] border-6 border-white/20 bg-black p-2 shadow-2xl relative hover:scale-[1.02] transition-transform">
-            <div className="relative w-full h-full rounded-[28px] overflow-hidden border border-white/10">
-              <Image
-                src="/card5.webp"
-                alt="Inspection Rating Scorecard"
-                fill
-                className="object-cover"
-              />
-            </div>
+          {/* Inspection Image 2 */}
+          <div className="relative w-[220px] sm:w-[260px] md:w-[290px] rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-[1.01]">
+            <Image
+              src="/Inspection 2_crop.png"
+              alt="Inspection Checklist Report"
+              width={600}
+              height={1000}
+              className="w-full h-auto object-contain rounded-2xl"
+              priority
+            />
           </div>
 
-          {/* Phone Mockup 3 */}
-          <div className="w-[200px] sm:w-[240px] aspect-[9/19] rounded-[36px] border-6 border-white/20 bg-black p-2 shadow-2xl relative hover:scale-[1.02] transition-transform">
-            <div className="relative w-full h-full rounded-[28px] overflow-hidden border border-white/10">
-              <Image
-                src="/card6.webp"
-                alt="Verified Inspection Badge"
-                fill
-                className="object-cover"
-              />
-            </div>
+          {/* Inspection Image 3 */}
+          <div className="relative w-[220px] sm:w-[260px] md:w-[290px] rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-[1.01]">
+            <Image
+              src="/Inspection 3_crop.png"
+              alt="Inspection Rating Scorecard"
+              width={600}
+              height={1000}
+              className="w-full h-auto object-contain rounded-2xl"
+              priority
+            />
           </div>
 
         </div>

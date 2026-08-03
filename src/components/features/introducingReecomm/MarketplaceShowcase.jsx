@@ -30,31 +30,31 @@ export default function MarketplaceShowcase() {
           </p>
         </div>
 
-        {/* Airbnb-Style Media Container (2 Floating Phones Side-by-Side) */}
-        <div className="rounded-3xl border border-white/15 bg-white/5 p-8 sm:p-14 backdrop-blur-xl shadow-2xl overflow-hidden mb-10 flex flex-wrap items-center justify-center gap-8 sm:gap-12">
+        {/* Marketplace Image Showcase (No Container Box or Phone Frames) */}
+        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 mb-10">
           
-          {/* Phone Mockup 1 */}
-          <div className="w-[220px] sm:w-[270px] aspect-[9/19] rounded-[38px] border-6 border-white/20 bg-black p-2 shadow-2xl relative hover:scale-[1.02] transition-transform">
-            <div className="relative w-full h-full rounded-[30px] overflow-hidden border border-white/10">
-              <Image
-                src="/card1.webp"
-                alt="Marketplace Search Screen"
-                fill
-                className="object-cover"
-              />
-            </div>
+          {/* Marketplace Search Screen */}
+          <div className="relative w-[230px] sm:w-[270px] md:w-[290px] rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-[1.01]">
+            <Image
+              src="/card1.webp"
+              alt="Vehicle Marketplace Search Screen"
+              width={600}
+              height={1000}
+              className="w-full h-auto object-contain rounded-2xl"
+              priority
+            />
           </div>
 
-          {/* Phone Mockup 2 */}
-          <div className="w-[220px] sm:w-[270px] aspect-[9/19] rounded-[38px] border-6 border-white/20 bg-black p-2 shadow-2xl relative hover:scale-[1.02] transition-transform">
-            <div className="relative w-full h-full rounded-[30px] overflow-hidden border border-white/10">
-              <Image
-                src="/card2.webp"
-                alt="Marketplace Listing Details Screen"
-                fill
-                className="object-cover"
-              />
-            </div>
+          {/* Vehicle Details Screen */}
+          <div className="relative w-[230px] sm:w-[270px] md:w-[290px] rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-[1.01]">
+            <Image
+              src="/card2.webp"
+              alt="Vehicle Listing Details Screen"
+              width={600}
+              height={1000}
+              className="w-full h-auto object-contain rounded-2xl"
+              priority
+            />
           </div>
 
         </div>

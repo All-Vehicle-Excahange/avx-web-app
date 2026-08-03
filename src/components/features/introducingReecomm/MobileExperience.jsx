@@ -22,42 +22,18 @@ export default function MobileExperience() {
           </p>
         </div>
 
-        {/* 3 Phones Animated Display */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-[1000px] mx-auto mb-16">
-          
-          {/* Phone 1: Buyer App */}
-          <div className="flex flex-col items-center">
-            <div className="w-full max-w-[260px] aspect-[9/19] rounded-[36px] border-4 border-white/20 bg-black p-2 shadow-2xl relative mb-4">
-              <div className="relative w-full h-full rounded-[28px] overflow-hidden border border-white/10">
-                <Image src="/card1.webp" alt="Buyer App Screen" fill className="object-cover" />
-              </div>
-            </div>
-            <h3 className="text-lg font-bold text-primary mb-1">Buyer Mobile App</h3>
-            <p className="text-xs text-third text-center">Instant Search, Saved Favorites & Direct Chat</p>
+        {/* Single Image Display (Smart Section Crop) */}
+        <div className="flex justify-center mb-16">
+          <div className="relative w-full max-w-[850px] rounded-2xl overflow-hidden shadow-2xl transition-transform hover:scale-[1.005]">
+            <Image
+              src="/Smart section_crop.webp"
+              alt="Reecomm Mobile & Multi-Device Experience"
+              width={1200}
+              height={700}
+              className="w-full h-auto object-contain rounded-2xl"
+              priority
+            />
           </div>
-
-          {/* Phone 2: Consultant App */}
-          <div className="flex flex-col items-center">
-            <div className="w-full max-w-[260px] aspect-[9/19] rounded-[36px] border-4 border-white/20 bg-black p-2 shadow-2xl relative mb-4">
-              <div className="relative w-full h-full rounded-[28px] overflow-hidden border border-white/10">
-                <Image src="/card2.webp" alt="Consultant App Screen" fill className="object-cover" />
-              </div>
-            </div>
-            <h3 className="text-lg font-bold text-primary mb-1">Consultant Storefront App</h3>
-            <p className="text-xs text-third text-center">Manage Inventory, Lead Alerts & Customer Ratings</p>
-          </div>
-
-          {/* Phone 3: Inspector App */}
-          <div className="flex flex-col items-center">
-            <div className="w-full max-w-[260px] aspect-[9/19] rounded-[36px] border-4 border-white/20 bg-black p-2 shadow-2xl relative mb-4">
-              <div className="relative w-full h-full rounded-[28px] overflow-hidden border border-white/10">
-                <Image src="/card3.webp" alt="Inspector App Screen" fill className="object-cover" />
-              </div>
-            </div>
-            <h3 className="text-lg font-bold text-primary mb-1">Inspector Audit App</h3>
-            <p className="text-xs text-third text-center">Multi-Point Checklists, Media Upload & Audit PDF</p>
-          </div>
-
         </div>
 
         {/* Section 12: Device Matrix Grid */}

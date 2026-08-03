@@ -145,7 +145,6 @@ export default function InventoryComponent() {
     maxLimit > 0 ? Math.min((currentCount / maxLimit) * 100, 100) : 0;
   const isNearLimit = maxLimit > 0 && maxLimit - currentCount <= 2;
 
-
   // 5. Suspended Vehicles Query (Paginated / Load More via Infinite Query)
   const {
     data: suspendedInfiniteData,
@@ -197,10 +196,14 @@ export default function InventoryComponent() {
           {/* Left Content */}
           <div className="relative z-10 flex flex-col p-6 md:p-10 w-full lg:w-3/5">
             <h2 className="text-3xl md:text-4xl font-normal text-white mb-3 tracking-tight leading-[1.1] drop-shadow-sm">
-              Manage Your Inventory<br />On the <span className="font-extrabold">Go</span>
+              Manage Your Inventory
+              <br />
+              On the <span className="font-extrabold">Go</span>
             </h2>
             <p className="text-sm md:text-[15px] text-white/90 leading-relaxed font-medium mb-6 max-w-[500px] drop-shadow-sm">
-              Adding and improve vehicle listing is available on the <span className="font-bold">Reecomm mobile app</span>. You can still view listings and mark vehicles as sold here.
+              Adding and improve vehicle listing is available on the{" "}
+              <span className="font-bold">Reecomm mobile app</span>. You can
+              still view listings and mark vehicles as sold here.
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <Button
@@ -313,21 +316,25 @@ export default function InventoryComponent() {
             </div>
             <div className="w-full h-2 bg-third/20 rounded-full overflow-hidden shadow-inner">
               <div
-                className={`h-full rounded-full transition-all duration-700 ease-out ${isNearLimit ? "bg-red-500" : "bg-primary"
-                  }`}
+                className={`h-full rounded-full transition-all duration-700 ease-out ${
+                  isNearLimit ? "bg-red-500" : "bg-primary"
+                }`}
                 style={{ width: `${percentage}%` }}
               ></div>
             </div>
           </div>
 
-          {/* <Button
-            variant="ghost"
-            showIcon={false}
-            onClick={() => setIsAddSlotOpen(true)}
-            className="w-full sm:w-auto shrink-0 shadow-md hover:shadow-lg transition-all"
-          >
-            Add Top-up
-          </Button> */}
+          {isNearLimit && (
+            <Button
+              variant="ghost"
+              size="sm"
+              showIcon={false}
+              onClick={() => push("/consult/subscription")}
+              className="w-full sm:w-auto shrink-0 shadow-md hover:shadow-lg transition-all cursor-pointer text-xs md:text-sm whitespace-nowrap"
+            >
+              Get More Slots
+            </Button>
+          )}
         </div>
 
         {/* 3️⃣ TOP PERFORMING VEHICLES */}
@@ -394,8 +401,10 @@ export default function InventoryComponent() {
           <div className="rounded-xl overflow-hidden h-[400px] bg-fourth flex relative">
             <div className="z-10 flex flex-col justify-center pl-6 sm:pl-10 xl:pl-6 2xl:pl-10 h-full text-white">
               <h2 className="text-3xl md:text-[38px] lg:text-[42px] xl:text-3xl 2xl:text-[42px] font-black tracking-wide relative z-20">
-                Book<br />
-                Vehicle<br />
+                Book
+                <br />
+                Vehicle
+                <br />
                 Inspection
               </h2>
 
@@ -437,9 +446,10 @@ export default function InventoryComponent() {
                 key={type.id}
                 onClick={() => setActiveType(type.id)}
                 className={`px-4 py-2 cursor-pointer rounded-full border text-sm transition
-                  ${activeType === type.id
-                    ? "bg-primary text-secondary border-primary"
-                    : "border-third/40 hover:bg-primary/10"
+                  ${
+                    activeType === type.id
+                      ? "bg-primary text-secondary border-primary"
+                      : "border-third/40 hover:bg-primary/10"
                   }`}
               >
                 {type.id === "SUSPENDED" && (
@@ -580,7 +590,6 @@ export default function InventoryComponent() {
             )}
           </div>
         )}
-
       </section>
       <DownloadAppPopup
         isOpen={isDownloadOpen}
