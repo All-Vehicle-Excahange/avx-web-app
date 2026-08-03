@@ -654,12 +654,12 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
               : "bg-primary text-secondary h-16"
             }`}
         >
-          <div className="relative w-full px-4 md:px-8 mx-auto h-full flex items-center justify-between">
+          <div className="relative w-full px-2.5 sm:px-4 md:px-8 mx-auto h-full flex items-center justify-between">
             {/* LEFT */}
             <Link
               href="/"
               onClick={insideDrawer ? onClose : undefined}
-              className={`flex items-center px-4 md:px-5 gap-3 transition-all duration-500 ease-in-out ${heroMode && !scrolled
+              className={`flex items-center px-2.5 sm:px-4 md:px-5 gap-2 sm:gap-3 transition-all duration-500 ease-in-out ${heroMode && !scrolled
                 ? "h-11 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl rounded-full border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-primary"
                 : "h-10 md:h-11 bg-secondary rounded-full text-primary"
                 }`}
@@ -1306,7 +1306,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                         setPersisAccountOpen(nextPersis);
                         setAccountOpen(nextPersis);
                       }}
-                      className={`flex cursor-pointer items-center gap-1 px-3 py-1 rounded-full transition-all outline outline-2 outline-transparent text-xs xl:text-sm
+                      className={`flex cursor-pointer items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 rounded-full transition-all outline outline-2 outline-transparent text-xs xl:text-sm
                     ${heroMode && !scrolled
                           ? `text-white hover:outline-white/40 ${accountOpen ? "!outline-white/40" : ""}`
                           : `text-black hover:outline-black/20 ${accountOpen ? "!outline-black/20" : ""}`
@@ -1332,7 +1332,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                           {!isLoggedIn ? (
                             <span className="font-bold">Sign in</span>
                           ) : (
-                            <span className="font-bold block truncate max-w-[110px] xl:max-w-[160px]">
+                            <span className="font-bold block truncate max-w-[115px] sm:max-w-[130px] lg:max-w-[95px]">
                               Hello, {user?.consultationName || user?.firstname}
                             </span>
                           )}

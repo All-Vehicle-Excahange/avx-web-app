@@ -94,15 +94,21 @@ function SearchContent({
   setConsultPayload,
 }) {
   const [isLoading, setIsLoading] = useState(true);
+  const [removeFilterHandler, setRemoveFilterHandler] = useState(null);
 
   return (
     <>
-      <SearchHeader pageResponse={pageResponse} activeFilters={activeFilters} />
+      <SearchHeader
+        pageResponse={pageResponse}
+        activeFilters={activeFilters}
+        onRemoveFilter={removeFilterHandler}
+      />
 
       <Layout>
         <SearchWithCard
           onPageResponseChange={setPageResponse}
           onFilterChange={setActiveFilters}
+          onRemoveFilterHandlerChange={setRemoveFilterHandler}
           onRelatedChange={setRelatedVehicles}
           onConsultChange={setConsultants}
           onConsultPayloadChange={setConsultPayload}
