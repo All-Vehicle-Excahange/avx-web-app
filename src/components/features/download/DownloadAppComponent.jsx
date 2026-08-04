@@ -45,8 +45,8 @@ import {
   AppStoreButton as AppStoreButtonComponent,
 } from "@/components/ui/AppDownloadButtons";
 
-const PlayStoreButton = () => <PlayStoreButtonComponent variant="white" />;
-const AppStoreButton = () => <AppStoreButtonComponent variant="white" />;
+const PlayStoreButton = () => <PlayStoreButtonComponent variant="white" disableRedirect />;
+const AppStoreButton = () => <AppStoreButtonComponent variant="white" disableRedirect />;
 
 function DownloadAppComponent() {
   const [openFaq, setOpenFaq] = useState(0);
