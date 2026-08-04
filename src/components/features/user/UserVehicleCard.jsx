@@ -24,6 +24,21 @@ import { markAsSoldVehicle } from "@/services/vehicle.service";
 import { generateVehicleSlug } from "@/lib/helper";
 import MarkSoldPopup from "@/components/ui/MarkSoldPopup";
 
+const formatCurrency = (val) => {
+  if (val === null || val === undefined || val === "" || val === "-")
+    return null;
+  if (typeof val === "number" && !isNaN(val)) {
+    return val.toLocaleString("en-IN");
+  }
+  const strVal = String(val).trim();
+  if (strVal.includes(",")) {
+    return strVal;
+  }
+  const num = Number(strVal.replace(/[^0-9.]/g, ""));
+  if (isNaN(num)) return strVal;
+  return num.toLocaleString("en-IN");
+};
+
 export default function UserVehicleCard({
   data,
   status = "live",
@@ -247,9 +262,9 @@ export default function UserVehicleCard({
             )}
 
             {/* SOLD — closing price */}
-            {status === "sold" && data?.closingPrice && (
+            {status === "sold" && formatCurrency(data?.closingPrice) && (
               <p className="text-xs text-green-400 font-semibold">
-                Closed at: ₹ {Number(data.closingPrice).toLocaleString("en-IN")}
+                Closed at: ₹ {formatCurrency(data?.closingPrice)}
               </p>
             )}
 
@@ -342,7 +357,7 @@ export default function UserVehicleCard({
             <div className="mt-auto space-y-2">
               <div className="flex items-center justify-between gap-2 border-t border-white/5 pt-2">
                 <h3 className="text-sm md:text-lg font-bold text-third">
-                  ₹ {data?.price ? Number(data.price).toLocaleString("en-IN") : "-"}
+                  ₹ {formatCurrency(data?.price) || "-"}
                 </h3>
                 <Button
                   href={`/vehicle/details/consualt/${generateVehicleSlug(data)}/${data.id}`}
