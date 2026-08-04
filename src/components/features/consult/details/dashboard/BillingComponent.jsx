@@ -133,6 +133,27 @@ export default function BillingComponent() {
     );
   };
 
+  const getPlanDisplay = (item) => {
+    if (item.paymentType === "SUBSCRIPTION") {
+      return item.tierPlanName || "Subscription";
+    }
+    if (item.paymentType === "WALLET_TOPUP") {
+      return "Wallet Top-up";
+    }
+    if (item.paymentType === "INSPECTION_PAYMENT") {
+      return "Inspection Payment";
+    }
+    if (item.paymentType) {
+      return item.paymentType
+        .split("_")
+        .map(
+          (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+        )
+        .join(" ");
+    }
+    return item.tierPlanName || "N/A";
+  };
+
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
       if (window.Razorpay) {
@@ -706,12 +727,7 @@ export default function BillingComponent() {
                   <tr key={item.id}>
                     <td className="py-4">{formatDate(item.createdAt)}</td>
                     <td className="py-4">
-                      {item.tierPlanName ||
-                        (item.paymentType === "WALLET_TOPUP"
-                          ? "Wallet Top-up"
-                          : item.paymentType === "SUBSCRIPTION"
-                            ? "Subscription"
-                            : "N/A")}
+                      {getPlanDisplay(item)}
                     </td>
                     <td className="py-4 font-medium">
                       {item.currency === "INR" ? "₹" : item.currency || "₹"}{" "}

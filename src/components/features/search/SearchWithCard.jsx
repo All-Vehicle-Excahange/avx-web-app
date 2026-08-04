@@ -466,6 +466,7 @@ export default function SearchWithCard({
     const handler = setTimeout(() => {
       setDebouncedPayload(buildPayload());
       setDebouncedConsultPayload(buildConsultPayload());
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }, 300);
 
     return () => {
@@ -1862,7 +1863,9 @@ export default function SearchWithCard({
           gap-6
           shrink-0
           rounded-xl
-          h-fit
+          max-h-[calc(100vh-100px)]
+          overflow-y-auto
+          custom-scrollbar
           sticky
           top-[84px]
           self-start

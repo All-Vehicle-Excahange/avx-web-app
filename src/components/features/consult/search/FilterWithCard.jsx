@@ -681,6 +681,7 @@ export default function FilterWithCard({
       const payload = buildPayload();
       setCurrentPage(1);
       fetchConsultants(1, payload);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }, 300);
     return () => {
       if (autoFetchTimerRef.current) clearTimeout(autoFetchTimerRef.current);
@@ -934,7 +935,9 @@ export default function FilterWithCard({
           gap-6
           shrink-0
           rounded-xl
-          h-fit
+          max-h-[calc(100vh-100px)]
+          overflow-y-auto
+          custom-scrollbar
           sticky
           top-[84px]
           self-start
