@@ -41,6 +41,8 @@ function SearchContent({
   const searchParams = useSearchParams();
   const location = searchParams.get("location");
   const serviceParam = searchParams.get("service");
+  const [removeFilterHandler, setRemoveFilterHandler] = useState(null);
+  const [clearAllHandler, setClearAllHandler] = useState(null);
 
   const getDynamicTitle = () => {
     let serviceText = "";
@@ -73,12 +75,16 @@ function SearchContent({
       <SearchWithHeader
         activeFilters={activeFilters}
         pageResponse={pageResponse}
+        onRemoveFilter={removeFilterHandler}
+        onClearAll={clearAllHandler}
       />
 
       <Layout>
         <PremiumFilterWithCard
           onFilterChange={setActiveFilters}
           onPageResponseChange={setPageResponse}
+          onRemoveFilterHandlerChange={setRemoveFilterHandler}
+          onClearAllHandlerChange={setClearAllHandler}
         />
       </Layout>
 

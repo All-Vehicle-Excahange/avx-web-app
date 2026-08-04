@@ -594,9 +594,8 @@ export default function SearchWithCard({
   });
 
   const recommendedVehicles = useMemo(() => {
-    const data = recommendedAdsData?.data;
-    const list = Array.isArray(data) ? data : [];
-    return list.map((item) => ({
+    const list = recommendedAdsData?.data?.content || recommendedAdsData?.data || [];
+    return (Array.isArray(list) ? list : []).map((item) => ({
       ...item.vehicle,
       sponsored: item.sponsored,
       adId: item.adId,
@@ -768,15 +767,34 @@ export default function SearchWithCard({
       });
     }
 
-    // Synchronize active filters when removed via SearchHeader chips or Clear All
+    // Synchronize active filters when removed via SearchHeader chips, Clear All, or when navigating via global search
     const qBrand = searchParams.get("brand") || searchParams.get("makerId");
-    if (!qBrand) setSelectedBrands([]);
+    if (!qBrand || qBrand.toLowerCase() === "all") {
+      setSelectedBrands([]);
+    } else if (makerId) {
+      setSelectedBrands([String(makerId)]);
+    }
 
     const qBodyType = searchParams.get("bodyType");
-    if (!qBodyType) setSelectedBodyType([]);
+    if (!qBodyType || qBodyType.toLowerCase() === "all") {
+      setSelectedBodyType([]);
+    } else {
+      setSelectedBodyType([qBodyType.toLowerCase()]);
+    }
 
     const qFuelType = searchParams.get("fuelType");
-    if (!qFuelType) setSelectedFuelTypes([]);
+    if (!qFuelType || qFuelType.toLowerCase() === "all") {
+      setSelectedFuelTypes([]);
+    } else {
+      setSelectedFuelTypes([qFuelType]);
+    }
+
+    const qTransmission = searchParams.get("transmission");
+    if (!qTransmission || qTransmission.toLowerCase() === "all") {
+      setSelectedTransmissionTypes([]);
+    } else {
+      setSelectedTransmissionTypes([qTransmission.toLowerCase()]);
+    }
 
     const qBudget = searchParams.get("budget");
     const qMinPrice = searchParams.get("minPrice");
@@ -784,16 +802,34 @@ export default function SearchWithCard({
     if (!qBudget && !qMinPrice && !qMaxPrice && !searchParams.get("price")) {
       setMinPrice(0);
       setMaxPrice(MAX);
+    } else if (qBudget) {
+      const [min, max] = qBudget.replace(/\s/g, "").split("-");
+      if (min && max) {
+        setMinPrice(parseFloat(min) * 100000);
+        setMaxPrice(parseFloat(max) * 100000);
+      }
     }
 
     const qRating = searchParams.get("rating");
-    if (!qRating) setSelectedRating([]);
+    if (!qRating) {
+      setSelectedRating([]);
+    } else {
+      setSelectedRating([qRating]);
+    }
 
     const qKm = searchParams.get("kmDistance") || searchParams.get("km");
-    if (!qKm) setKmDistance(0);
+    if (!qKm) {
+      setKmDistance(0);
+    } else {
+      setKmDistance(Number(qKm));
+    }
 
     const qSeller = searchParams.get("sellerType");
-    if (!qSeller) setSelectedSellerType([]);
+    if (!qSeller) {
+      setSelectedSellerType([]);
+    } else {
+      setSelectedSellerType([qSeller]);
+    }
 
     const qStateId = searchParams.get("stateId");
     const qCityId = searchParams.get("cityId");
@@ -806,18 +842,54 @@ export default function SearchWithCard({
       setSelectedCityName("");
       setSelectedTownId(null);
       setSelectedTownName("");
+    } else {
+      if (qStateId) {
+        setSelectedStateId(Number(qStateId));
+        setSelectedStateName(searchParams.get("stateName") || "");
+      } else {
+        setSelectedStateId(null);
+        setSelectedStateName("");
+      }
+      if (qCityId) {
+        setSelectedCityId(Number(qCityId));
+        setSelectedCityName(searchParams.get("cityName") || "");
+      } else {
+        setSelectedCityId(null);
+        setSelectedCityName("");
+      }
+      if (qTownId) {
+        setSelectedTownId(Number(qTownId));
+        setSelectedTownName(searchParams.get("townName") || "");
+      } else {
+        setSelectedTownId(null);
+        setSelectedTownName("");
+      }
     }
 
     const qModel = searchParams.get("model") || searchParams.get("modelId");
-    if (!qModel) setSelectedModels([]);
+    if (!qModel) {
+      setSelectedModels([]);
+    } else if (modelIdParam) {
+      setSelectedModels([String(modelIdParam)]);
+    }
 
     const qVariant =
       searchParams.get("variant") || searchParams.get("variantId");
-    if (!qVariant) setSelectedVariants([]);
+    if (!qVariant) {
+      setSelectedVariants([]);
+    } else if (variantIdParam) {
+      setSelectedVariants([String(variantIdParam)]);
+    }
 
     const qYear = searchParams.get("year");
-    if (!qYear) setSelectedYear([]);
-  }, [searchParams]);
+    if (!qYear) {
+      setSelectedYear([]);
+    } else {
+      setSelectedYear([qYear]);
+    }
+
+    setCurrentPage(1);
+  }, [searchParams, makerId, modelIdParam, variantIdParam]);
 
   /* ================= SYNC CONSULT PAYLOAD FOR AUTO-CONSULT ================= */
   useEffect(() => {
@@ -1147,7 +1219,7 @@ export default function SearchWithCard({
     }, 400);
 
     return () => clearTimeout(modelSearchTimeoutRef.current);
-  }, [modelSearch, selectedBrands, apiBodyType]);
+  }, [modelSearch]);
 
   useEffect(() => {
     setModelPage(1);

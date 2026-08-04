@@ -42,6 +42,8 @@ function useIsMobile() {
 export default function FilterWithCard({
   onFilterChange,
   onPageResponseChange,
+  onRemoveFilterHandlerChange,
+  onClearAllHandlerChange,
 }) {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [activeFilterTab, setActiveFilterTab] = useState("Location");
@@ -736,6 +738,12 @@ export default function FilterWithCard({
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  useEffect(() => {
+    if (onClearAllHandlerChange) {
+      onClearAllHandlerChange(() => handleClearFilters);
+    }
+  }, [onClearAllHandlerChange]);
+
   /* ================= FILTER CHIP DATA ================= */
   const distances = [
     { value: "0-10", label: "0–10 Km" },
@@ -814,6 +822,104 @@ export default function FilterWithCard({
     minPrice,
     maxPrice,
   ]);
+
+  const handleRemoveFilter = (tag) => {
+    if (!tag) return;
+    const lower = tag.toLowerCase();
+
+    // 1. Price
+    if (lower.includes("₹") || lower.includes("l–")) {
+      setMinPrice(MIN);
+      setMaxPrice(MAX);
+      return;
+    }
+    // 2. Rating
+    if (lower.includes("⭐") || lower.includes("rating")) {
+      setSelectedRating([]);
+      return;
+    }
+    // 3. Distance
+    if (
+      lower.includes("km") ||
+      lower.includes("≤") ||
+      lower.includes("distance")
+    ) {
+      setSelectedDistance([]);
+      return;
+    }
+    // 4. Inventory
+    if (inventorySizes.some((s) => s.label.toLowerCase() === lower)) {
+      setSelectedInventory([]);
+      return;
+    }
+    // 5. Location
+    if (
+      lower.includes(",") ||
+      (selectedCityName && lower.includes(selectedCityName.toLowerCase())) ||
+      (selectedStateName && lower.includes(selectedStateName.toLowerCase())) ||
+      (selectedTownName && lower.includes(selectedTownName.toLowerCase()))
+    ) {
+      setSelectedCityId(null);
+      setSelectedCityName("");
+      setSelectedStateId(null);
+      setSelectedStateName("");
+      setSelectedTownId(null);
+      setSelectedTownName("");
+      return;
+    }
+    // 6. Vehicle Type
+    const vtLabels = {
+      TWO_WHEELER: "Two-Wheeler",
+      FOUR_WHEELER: "Four-Wheeler",
+    };
+    const foundVt = Object.entries(vtLabels).find(
+      ([k, v]) => v.toLowerCase() === lower || k.toLowerCase() === lower,
+    );
+    if (foundVt) {
+      setSelectedVehicleTypes((prev) =>
+        prev.filter((item) => item !== foundVt[0]),
+      );
+      return;
+    }
+    // 7. Services
+    setSelectedServices((prev) =>
+      prev.filter(
+        (s) =>
+          s
+            .split("_")
+            .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+            .join(" ")
+            .toLowerCase() !== lower,
+      ),
+    );
+  };
+
+  useEffect(() => {
+    if (onRemoveFilterHandlerChange) {
+      onRemoveFilterHandlerChange(() => handleRemoveFilter);
+    }
+  }, [
+    onRemoveFilterHandlerChange,
+    selectedVehicleTypes,
+    selectedServices,
+    selectedRating,
+    selectedInventory,
+    selectedDistance,
+    selectedCityName,
+    selectedStateName,
+    selectedTownName,
+    minPrice,
+    maxPrice,
+  ]);
+
+  const activeFilterCount =
+    selectedVehicleTypes.length +
+    selectedServices.length +
+    selectedRating.length +
+    selectedInventory.length +
+    selectedDistance.length +
+    (selectedCityName || selectedStateName || selectedTownName ? 1 : 0) +
+    (minPrice !== MIN || maxPrice !== MAX ? 1 : 0);
 
   return (
     <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-5 gap-4">
@@ -1077,21 +1183,21 @@ export default function FilterWithCard({
                     "linear-gradient(90deg, #313131 0%, #1a1919 45%, #000000 100%)",
                 }}
               >
-                <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide pb-2">
-                  <div className="shrink-0">
+                <div className="flex lg:hidden items-center gap-3 overflow-x-auto scrollbar-hide [&>*]:shrink-0">
+                  <div className="shrink-0 h-10">
                     <Button
                       variant="ghost"
-                      className="rounded-lg"
+                      className="rounded-xl h-full py-0"
                       showIcon={false}
                       onClick={() => setMobileFilterOpen(true)}
                     >
                       <FilterIcon className="h-4 w-4 mr-1" />
-                      Filter
+                      Filter{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
                     </Button>
                   </div>
 
-                  <div className="shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg border border-white/20 bg-white/5">
-                    <span className="text-xs text-white font-semibold whitespace-nowrap">
+                  <div className="flex items-center gap-2 px-3 h-10 rounded-xl border border-third/40 shrink-0">
+                    <span className="text-sm text-primary font-semibold whitespace-nowrap">
                       Reecomm Premium Consultants
                     </span>
                     <button
@@ -1106,6 +1212,7 @@ export default function FilterWithCard({
 
                   <div className="shrink-0">
                     <Chip
+                      className="h-10"
                       label="Four-Wheeler"
                       selected={selectedVehicleTypes.includes("FOUR_WHEELER")}
                       variant="outline"
@@ -1120,6 +1227,7 @@ export default function FilterWithCard({
                   </div>
                   <div className="shrink-0">
                     <Chip
+                      className="h-10"
                       label="⭐ 4.5+ Rating"
                       selected={selectedRating.includes("4.5")}
                       variant="outline"
@@ -1134,6 +1242,7 @@ export default function FilterWithCard({
                   </div>
                   <div className="shrink-0">
                     <Chip
+                      className="h-10"
                       label="30+ Vehicles"
                       selected={selectedInventory.includes("30+")}
                       variant="outline"
@@ -1193,7 +1302,9 @@ export default function FilterWithCard({
       >
         {/* ── Header ── */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-third/40 shrink-0">
-          <h2 className="text-lg font-semibold">Filters</h2>
+          <h2 className="text-lg font-semibold">
+            Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
+          </h2>
           <Button
             variant="ghost"
             showIcon={false}

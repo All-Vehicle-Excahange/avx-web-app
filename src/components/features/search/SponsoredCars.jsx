@@ -10,6 +10,8 @@ const SponsoredCars = ({ loading = false, data = [] }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
+  const vehicles = Array.isArray(data) ? data : data?.content || [];
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -56,9 +58,9 @@ const SponsoredCars = ({ loading = false, data = [] }) => {
           prevRef={prevRef}
           nextRef={nextRef}
         />
-      ) : data && data.length > 0 ? (
+      ) : vehicles.length > 0 ? (
         <CommonSwiper
-          data={data}
+          data={vehicles}
           CardComponent={VehicleCard}
           prevRef={prevRef}
           nextRef={nextRef}

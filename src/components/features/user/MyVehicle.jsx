@@ -94,7 +94,7 @@ function MyVehicle() {
         page.totalElements ||
         (page.data && page.data.length) ||
         0;
-      setTotalPosted(total);
+      setTimeout(() => setTotalPosted(total), 0);
     }
   }, [activeType, inventoryData]);
 
@@ -123,10 +123,8 @@ function MyVehicle() {
     ownership: v.ownership
       ? `${v.ownership}${v.ownership === 1 ? "st" : v.ownership === 2 ? "nd" : "rd"} Owner`
       : "-",
-    price: v.price ? new Intl.NumberFormat("en-IN").format(v.price) : "-",
-    closingPrice: v.closingPrice
-      ? new Intl.NumberFormat("en-IN").format(v.closingPrice)
-      : null,
+    price: v.price || null,
+    closingPrice: v.closingPrice || null,
     image: v.thumbnailUrl || null,
     inspectionBadgeUrl: v.inspectionBadgeUrl || null,
     status: v.listingStatus?.toLowerCase() || "draft",
@@ -171,7 +169,7 @@ function MyVehicle() {
                 Vehicle Listing Limit
               </h3>
               <p className="text-third text-xs mt-1">
-                Only 1 vehicle can be listed on the marketplace at a time. Once it's sold or removed, you can list another—up to 3 total listings.
+                Only 1 vehicle can be listed on the marketplace at a time. Once it&apos;s sold or removed, you can list another—up to 3 total listings.
               </p>
             </div>
             <div className="text-right">
