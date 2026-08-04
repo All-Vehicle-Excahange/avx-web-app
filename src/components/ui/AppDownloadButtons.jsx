@@ -1,6 +1,12 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/router";
+
+const PLAY_STORE_URL =
+  "https://play.google.com/store/apps/details?id=com.reecomm.vehicle.marketplace&pcampaignid=web_share";
+const APP_STORE_URL =
+  "https://apps.apple.com/in/app/reecomm/id6789502528";
 
 const getButtonBaseClass = (variant) => {
   if (variant === "white" || variant === "light") {
@@ -12,18 +18,46 @@ const getButtonBaseClass = (variant) => {
   return "px-3 sm:px-6 py-2 flex items-center justify-center bg-secondary text-primary hover:bg-primary hover:text-secondary transition-all duration-300 rounded-lg cursor-pointer border border-primary/10 hover:border-white/40 shadow-sm w-full sm:w-auto";
 };
 
-export function GooglePlayButton({ variant = "dark", className = "", ...props }) {
+function useDownloadClick(targetUrl, disableRedirect) {
+  const router = useRouter();
+
+  return (e) => {
+    if (typeof window !== "undefined") {
+      const isBigScreen = window.innerWidth >= 1024;
+      const isDownloadPage = router?.pathname === "/download";
+
+      if (!disableRedirect && isBigScreen && !isDownloadPage) {
+        router.push("/download");
+      } else {
+        window.open(targetUrl, "_blank");
+      }
+    }
+  };
+}
+
+export function GooglePlayButton({
+  variant = "dark",
+  className = "",
+  disableRedirect = false,
+  onClick,
+  ...props
+}) {
   const baseClass = getButtonBaseClass(variant);
+  const handleDefaultClick = useDownloadClick(PLAY_STORE_URL, disableRedirect);
+
+  const handleClick = (e) => {
+    if (onClick) {
+      onClick(e);
+    }
+    if (!e?.defaultPrevented) {
+      handleDefaultClick(e);
+    }
+  };
 
   return (
     <button
       type="button"
-      onClick={() =>
-        window.open(
-          "https://play.google.com/store/apps/details?id=com.reecomm.vehicle.marketplace&pcampaignid=web_share",
-          "_blank"
-        )
-      }
+      onClick={handleClick}
       className={`${baseClass} ${className}`}
       {...props}
     >
@@ -57,13 +91,29 @@ export function GooglePlayButton({ variant = "dark", className = "", ...props })
   );
 }
 
-export function AppStoreButton({ variant = "dark", className = "", ...props }) {
+export function AppStoreButton({
+  variant = "dark",
+  className = "",
+  disableRedirect = false,
+  onClick,
+  ...props
+}) {
   const baseClass = getButtonBaseClass(variant);
+  const handleDefaultClick = useDownloadClick(APP_STORE_URL, disableRedirect);
+
+  const handleClick = (e) => {
+    if (onClick) {
+      onClick(e);
+    }
+    if (!e?.defaultPrevented) {
+      handleDefaultClick(e);
+    }
+  };
 
   return (
     <button
       type="button"
-      onClick={() => window.open("https://www.apple.com/app-store", "_blank")}
+      onClick={handleClick}
       className={`${baseClass} ${className}`}
       {...props}
     >
@@ -92,6 +142,7 @@ export default function AppDownloadButtons({
   direction = "responsive",
   className = "",
   buttonClassName = "",
+  disableRedirect = false,
   ...props
 }) {
   const directionClass =
@@ -106,8 +157,16 @@ export default function AppDownloadButtons({
       className={`${directionClass} items-center gap-2 sm:gap-4 ${className}`}
       {...props}
     >
-      <GooglePlayButton variant={variant} className={buttonClassName} />
-      <AppStoreButton variant={variant} className={buttonClassName} />
+      <GooglePlayButton
+        variant={variant}
+        className={buttonClassName}
+        disableRedirect={disableRedirect}
+      />
+      <AppStoreButton
+        variant={variant}
+        className={buttonClassName}
+        disableRedirect={disableRedirect}
+      />
     </div>
   );
 }

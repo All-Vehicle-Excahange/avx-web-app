@@ -361,7 +361,7 @@ export default function StartLandingPage() {
                 type="button"
                 onClick={() =>
                   window.open(
-                    "https://www.apple.com/app-store",
+                    "https://apps.apple.com/in/app/reecomm/id6789502528",
                     "_blank"
                   )
                 }

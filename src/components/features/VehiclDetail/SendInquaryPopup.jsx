@@ -233,7 +233,7 @@ function SendInquaryPopup({
                     <button
                       type="button"
                       onClick={() =>
-                        window.open("https://www.apple.com/app-store", "_blank")
+                        window.open("https://apps.apple.com/in/app/reecomm/id6789502528", "_blank")
                       }
                       className="w-full flex items-center justify-center px-3 py-2 bg-[#000000] text-white rounded-lg border border-neutral-800 hover:bg-neutral-900 transition-all duration-300 cursor-pointer group/btn shadow-md gap-3"
                     >

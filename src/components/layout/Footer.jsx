@@ -93,7 +93,7 @@ const Footer = () => {
   const handleAppStoreClick = (e) => {
     e.preventDefault();
     if (isMobile) {
-      window.open("https://www.apple.com/app-store", "_blank");
+      window.open("https://apps.apple.com/in/app/reecomm/id6789502528", "_blank");
     } else {
       router.push("/download");
     }
