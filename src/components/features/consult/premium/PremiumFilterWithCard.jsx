@@ -510,6 +510,7 @@ export default function FilterWithCard({
       const payload = buildPayload();
       setCurrentPage(1);
       fetchConsultants(1, payload);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }, 300);
     return () => {
       if (autoFetchTimerRef.current) clearTimeout(autoFetchTimerRef.current);
@@ -717,7 +718,9 @@ export default function FilterWithCard({
           gap-6
           shrink-0
           rounded-xl
-          h-fit
+          max-h-[calc(100vh-100px)]
+          overflow-y-auto
+          custom-scrollbar
           sticky
           top-[84px]
           self-start
@@ -812,7 +815,10 @@ export default function FilterWithCard({
           </div>
 
           <div className="space-y-4">
-            <FilterSection title={"Distance"}>
+            <FilterSection
+              title={"Distance"}
+              selectedCount={selectedDistance.length}
+            >
               <ChipGroup
                 title=""
                 items={distances}
@@ -822,7 +828,10 @@ export default function FilterWithCard({
               />
             </FilterSection>
 
-            <FilterSection title="Inventory Size">
+            <FilterSection
+              title="Inventory Size"
+              selectedCount={selectedInventory.length}
+            >
               <ChipGroup
                 title=""
                 items={inventorySizes}
@@ -832,7 +841,10 @@ export default function FilterWithCard({
               />
             </FilterSection>
 
-            <FilterSection title="Vehicle Type">
+            <FilterSection
+              title="Vehicle Type"
+              selectedCount={selectedVehicleTypes.length}
+            >
               <ChipGroup
                 title=""
                 items={vehicleTypes}
@@ -841,7 +853,7 @@ export default function FilterWithCard({
               />
             </FilterSection>
 
-            <FilterSection title="Rating">
+            <FilterSection title="Rating" selectedCount={selectedRating.length}>
               <ChipGroup
                 title=""
                 items={ratings}
@@ -851,7 +863,10 @@ export default function FilterWithCard({
               />
             </FilterSection>
 
-            <FilterSection title={"Services Provided"}>
+            <FilterSection
+              title={"Services Provided"}
+              selectedCount={selectedServices.length}
+            >
               <ChipGroup
                 title=""
                 items={services}
@@ -1044,23 +1059,37 @@ export default function FilterWithCard({
           {/* ── Left Tabs ── */}
           <div className="w-[40%] border-r border-third/40 overflow-y-auto">
             {[
-              "Location",
-              "Vehicle Type",
-              "Distance",
-              "Inventory Size",
-              "Rating",
-              "Services",
-              "Budget",
+              {
+                name: "Location",
+                count: selectedStateId
+                  ? selectedCityId
+                    ? selectedTownId
+                      ? 3
+                      : 2
+                    : 1
+                  : 0,
+              },
+              { name: "Vehicle Type", count: selectedVehicleTypes.length },
+              { name: "Distance", count: selectedDistance.length },
+              { name: "Inventory Size", count: selectedInventory.length },
+              { name: "Rating", count: selectedRating.length },
+              { name: "Services", count: selectedServices.length },
+              { name: "Budget", count: 0 },
             ].map((tab) => (
               <div
-                key={tab}
-                onClick={() => setActiveFilterTab(tab)}
-                className={`px-4 py-3 cursor-pointer text-sm ${activeFilterTab === tab
+                key={tab.name}
+                onClick={() => setActiveFilterTab(tab.name)}
+                className={`px-4 py-3 cursor-pointer text-sm flex items-center justify-between ${activeFilterTab === tab.name
                   ? "bg-secondary/10 font-semibold"
                   : "hover:bg-secondary/5"
                   }`}
               >
-                {tab}
+                <span>{tab.name}</span>
+                {tab.count > 0 && (
+                  <span className="flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-primary text-secondary text-[10px] font-bold leading-none">
+                    {tab.count}
+                  </span>
+                )}
               </div>
             ))}
           </div>
