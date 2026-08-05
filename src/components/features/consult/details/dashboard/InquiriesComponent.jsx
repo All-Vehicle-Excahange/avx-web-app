@@ -5,7 +5,7 @@
 import { useEffect, useState } from "react";
 import InquiryCard from "@/components/ui/InquiryCard";
 import StatCard from "./components/StateCard";
-import { AlertTriangle, EyeOff, Flame, TrendingUp, Clock } from "lucide-react";
+import { AlertTriangle, EyeOff, Flame, TrendingUp, Clock, MessageCircle, Rocket } from "lucide-react";
 import { useQuery, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { getInquiryKpisQuery } from "@/queries/Seller.queries";
 import { getInquiriesInfiniteQuery } from "@/queries/inquiry.queries";
@@ -257,14 +257,24 @@ export default function InquiriesComponent() {
             )}
 
             {activeType === "all" && (
-              <>
-                <p className="text-lg font-semibold text-primary">
-                  No inquiries found
+              <div className="flex flex-col items-center justify-center text-center space-y-3 max-w-md mx-auto py-2">
+                <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-1">
+                  <MessageCircle size={20} strokeWidth={2} />
+                </div>
+                <p className="text-base font-semibold text-white">
+                  No inquiries yet
                 </p>
-                <p className="text-sm text-third">
-                  Once buyers contact you, they will appear here.
+                <p className="text-xs text-third leading-relaxed">
+                  Your buyer inquiries will appear here once someone contacts you about a listing. Keep your listings complete and visible to attract more potential buyers.
                 </p>
-              </>
+                <Button
+                  href="/consult/dashboard/ppc"
+                  variant="ghost"
+                  className="px-4 py-2 text-xs gap-2 mt-2"
+                >
+                  <Rocket size={16} strokeWidth={2} /> Boost a listing
+                </Button>
+              </div>
             )}
           </div>
         )}
