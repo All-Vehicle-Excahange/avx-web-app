@@ -13,6 +13,8 @@ import {
   SquareMousePointer,
   BadgePercent,
   Lock,
+  BarChart3,
+  MapPin,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import CustomSelect from "@/components/ui/custom-select";
@@ -472,8 +474,28 @@ export default function AnalyticsComponent() {
                   ))}
                 </div>
               ) : (
-                <div className="text-xs text-third italic py-4">
-                  No demand data available.
+                <div className="flex flex-col items-center justify-center text-center space-y-3 py-2">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-1">
+                    <Car size={20} strokeWidth={2} />
+                  </div>
+                  <div className="space-y-1 max-w-xs">
+                    <p className="text-sm font-semibold text-white">
+                      No demand data yet
+                    </p>
+                    <p className="text-xs text-third leading-relaxed">
+                      Once your listings start receiving inquiries, this section will show which vehicle categories &mdash; SUV, Sedan, Hatchback, MUV, and more &mdash; are getting the most interest from buyers.
+                    </p>
+                  </div>
+                  <div className="pt-3 border-t border-white/10 space-y-2 w-full text-left">
+                    <p className="text-[11px] font-bold tracking-wider text-third uppercase">
+                      WHAT YOU'LL SEE HERE
+                    </p>
+                    <ul className="text-xs text-white/80 space-y-1.5 list-disc list-inside">
+                      <li>Inquiry count by vehicle type</li>
+                      <li>Which categories are trending</li>
+                      <li>Where your inventory has gaps</li>
+                    </ul>
+                  </div>
                 </div>
               )}
             </div>
@@ -526,8 +548,28 @@ export default function AnalyticsComponent() {
                   ))}
                 </div>
               ) : (
-                <div className="text-xs text-third italic py-4">
-                  No city demand data available.
+                <div className="flex flex-col items-center justify-center text-center space-y-3 py-2">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-1">
+                    <MapPin size={20} strokeWidth={2} />
+                  </div>
+                  <div className="space-y-1 max-w-xs">
+                    <p className="text-sm font-semibold text-white">
+                      No city data yet
+                    </p>
+                    <p className="text-xs text-third leading-relaxed">
+                      As buyers from different cities inquire about your listings, this section will show exactly which cities are driving the most interest &mdash; so you know where your buyers are coming from.
+                    </p>
+                  </div>
+                  <div className="pt-3 border-t border-white/10 space-y-2 w-full text-left">
+                    <p className="text-[11px] font-bold tracking-wider text-third uppercase">
+                      WHAT YOU'LL SEE HERE
+                    </p>
+                    <ul className="text-xs text-white/80 space-y-1.5 list-disc list-inside">
+                      <li>Inquiries received per city</li>
+                      <li>Your highest demand locations</li>
+                      <li>Which cities to target more</li>
+                    </ul>
+                  </div>
                 </div>
               )}
             </div>

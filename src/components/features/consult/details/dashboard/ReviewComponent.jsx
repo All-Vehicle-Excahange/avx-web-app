@@ -255,10 +255,18 @@ function ReviewComponent() {
               </div>
             ))
           ) : reviews.length === 0 ? (
-            <div className="text-center py-20 bg-primary/5 rounded-3xl">
-              <MessageSquare className="mx-auto text-white/20 mb-4" size={48} />
-              <p className="text-third">
-                No reviews found for the last {range} days.
+            <div className="flex flex-col items-center justify-center text-center py-16 px-6 space-y-3 bg-primary/5 rounded-3xl border border-third/10">
+              <div className="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-1">
+                <div className="relative flex items-center justify-center">
+                  <MessageSquare size={22} strokeWidth={2} />
+                  
+                </div>
+              </div>
+              <p className="text-base font-semibold text-white">
+                No reviews yet
+              </p>
+              <p className="text-xs text-third leading-relaxed max-w-sm">
+                Customer reviews will appear here after buyers share their experience. Deliver great service and complete successful deals to start building your reputation.
               </p>
             </div>
           ) : (

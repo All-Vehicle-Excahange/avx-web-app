@@ -18,6 +18,8 @@ import {
   Info,
   AlertTriangle,
   Download,
+  Zap,
+  Rocket,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import {
@@ -360,43 +362,50 @@ export default function InventoryComponent() {
                   <TopPerformingCard key={v.id} vehicle={v} rank={index + 1} />
                 ))
               ) : (
-                <div className="flex flex-col items-center justify-center h-full text-center gap-4 py-8">
-                  <p className="text-sm text-third">
-                    No top performing vehicles yet.
+                <div className="flex flex-col items-center justify-center h-full text-center py-6 px-4 space-y-2">
+                  <div className="h-10 w-10 rounded-full bg-amber-500/20 text-amber-500 border border-amber-500/20 flex items-center justify-center mb-1">
+                    <Zap size={14} />
+                  </div>
+                  <p className="text-base font-semibold text-white">
+                    No top performers yet
+                  </p>
+                  <p className="text-xs text-third leading-relaxed max-w-xs">
+                    Listings that receive the most inquiries will appear here.
+                    Add inspection reports and complete your listing details
+                    to get more traction.
                   </p>
                   <Button
+                    href="/consult/dashboard/ppc"
                     variant="ghost"
-                    size="sm"
-                    showIcon={false}
-                    onClick={() => {
-                      push("/consult/dashboard/ppc");
-                    }}
-                    className="cursor-pointer"
+                    className="px-3 py-1.5 text-xs gap-1.5 mt-2"
                   >
+                    <Rocket size={20} strokeWidth={2} />
                     Boost your vehicles
                   </Button>
                 </div>
               )}
             </div>
 
-            <div className="flex items-center justify-between mt-2 pt-2 border-t border-third/10">
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  push("/consult/dashboard/ppc");
-                }}
-                className="px-3 py-1.5 text-xs"
-              >
-                Boost your vehicles
-              </Button>
-              <div className="transform scale-[0.8] origin-right -mt-4 -mr-2">
-                <Pagination
-                  currentPage={topPerformingPage}
-                  totalPages={topPerformingData?.pageResponse?.totalPages || 1}
-                  onPageChange={setTopPerformingPage}
-                />
+            {topPerforming.length > 0 && (
+              <div className="flex items-center justify-between mt-2 pt-2 border-t border-third/10">
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    push("/consult/dashboard/ppc");
+                  }}
+                  className="px-3 py-1.5 text-xs"
+                >
+                  Boost your vehicles
+                </Button>
+                <div className="transform scale-[0.8] origin-right -mt-4 -mr-2">
+                  <Pagination
+                    currentPage={topPerformingPage}
+                    totalPages={topPerformingData?.pageResponse?.totalPages || 1}
+                    onPageChange={setTopPerformingPage}
+                  />
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <div className="rounded-xl overflow-hidden h-[400px] bg-fourth flex relative">
             <div className="z-10 flex flex-col justify-center pl-6 sm:pl-10 xl:pl-6 2xl:pl-10 h-full text-white">

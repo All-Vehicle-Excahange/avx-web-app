@@ -11,6 +11,7 @@ import {
   Zap,
   AlertTriangle,
   AlertCircle,
+  CheckCircle2,
   Inbox,
   Rocket,
   Lightbulb,
@@ -321,7 +322,9 @@ export default function OverviewComponent() {
                   Fix Listings
                 </h4>
                 <p className="text-xs text-third leading-relaxed font-medium">
-                  Low visibility detected
+                  {lowDemandVehicles.length > 0
+                    ? "Low visibility detected"
+                    : ""}
                 </p>
               </div>
             </div>
@@ -338,33 +341,44 @@ export default function OverviewComponent() {
                     <TopPerformingCard key={vehicle.id} vehicle={vehicle} />
                   ))
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-full text-center py-4">
-                    <p className="text-sm text-third">
-                      No low demand vehicles.
+                  <div className="flex flex-col items-center justify-center h-full text-center py-6 px-4 space-y-2">
+                    <div className="h-10 w-10 rounded-full bg-emerald-500/20 text-emerald-500 border border-emerald-500/20 flex items-center justify-center mb-1">
+                      <CheckCircle2 size={22} strokeWidth={2.5} />
+                    </div>
+                    <p className="text-base font-semibold text-white">
+                      All listings are performing well
+                    </p>
+                    <p className="text-xs text-third leading-relaxed max-w-xs">
+                      No vehicles are showing low demand right now. Keep
+                      responding to inquiries and your visibility stays healthy.
                     </p>
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="flex items-center justify-between mt-2 pt-2 ">
-              <Button
-                href={"/consult/dashboard/inventory"}
-                variant="ghost"
-                className="px-3 py-1.5 text-xs"
-              >
-                View All
-              </Button>
-              <div className="transform scale-[0.8] origin-right -mt-4 -mr-2">
-                <Pagination
-                  currentPage={lowDemandPage}
-                  totalPages={
-                    lowDemandVehiclesData?.pageResponse?.totalPages || 1
-                  }
-                  onPageChange={setLowDemandPage}
-                />
+            {lowDemandVehicles.length > 0 && (
+              <div className="flex items-center justify-between mt-2 pt-2 ">
+                {lowDemandVehicles.length <= 1 && (
+                  <Button
+                    href={"/consult/dashboard/inventory"}
+                    variant="ghost"
+                    className="px-3 py-1.5 text-xs"
+                  >
+                    View All
+                  </Button>
+                )}
+                <div className="transform scale-[0.8] origin-right -mt-4 -mr-2 ml-auto">
+                  <Pagination
+                    currentPage={lowDemandPage}
+                    totalPages={
+                      lowDemandVehiclesData?.pageResponse?.totalPages || 1
+                    }
+                    onPageChange={setLowDemandPage}
+                  />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -584,29 +598,54 @@ export default function OverviewComponent() {
                     />
                   ))
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-full text-center py-8">
-                    <p className="text-sm text-third">
-                      No top performing vehicles yet.
+                  <div className="flex flex-col items-center justify-center h-full text-center py-6 px-4 space-y-2">
+                    <div className="h-10 w-10 rounded-full bg-amber-500/20 text-amber-500 border border-amber-500/20 flex items-center justify-center mb-1">
+                      <Zap size={14} />
+                    </div>
+                    <p className="text-base font-semibold text-white">
+                      No top performers yet
                     </p>
+                    <p className="text-xs text-third leading-relaxed max-w-xs">
+                      Listings that receive the most inquiries will appear here.
+                      Add inspection reports and complete your listing details
+                      to get more traction.
+                    </p>
+                    <Button
+                      href="/consult/dashboard/ppc"
+                      variant="ghost"
+                      className="px-3 py-1.5 text-xs  gap-1.5 mt-2"
+                    >
+                      <Rocket size={20} strokeWidth={2} />
+                      Boost your vehicles
+                    </Button>
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="flex items-center justify-start mt-2 pt-2">
-              <Button
-                href={"/consult/dashboard/inventory"}
-                variant="ghost"
-                className="px-3 py-1.5 text-xs"
-              >
-                View All
-              </Button>
-            </div>
+            {topPerforming.length > 0 && (
+              <div className="flex items-center justify-start mt-2 pt-2">
+                <Button
+                  href={"/consult/dashboard/inventory"}
+                  variant="ghost"
+                  className="px-3 py-1.5 text-xs"
+                >
+                  View All
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* NEEDS ATTENTION */}
           <div className="rounded-xl bg-primary/5 p-6 flex flex-col gap-4 transition group">
-            <h3 className="font-semibold text-primary">Needs Attention</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold text-primary">Needs Attention</h3>
+              {/* {needAttention.length === 0 && !needAttentionLoading && (
+                <span className="text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full">
+                  All good
+                </span>
+              )} */}
+            </div>
 
             <div className="flex-1 mt-2">
               <div className="flex flex-col gap-4">
@@ -620,24 +659,36 @@ export default function OverviewComponent() {
                     <TopPerformingCard key={vehicle.id} vehicle={vehicle} />
                   ))
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-full text-center py-8">
-                    <p className="text-sm text-third">
-                      No vehicles need attention.
+                  <div className="flex flex-col items-center justify-center h-full text-center py-6 px-4 space-y-2">
+                    <div className="h-10 w-10 rounded-full bg-emerald-500/20 text-emerald-500 border border-emerald-500/20 flex items-center justify-center mb-1">
+                      <CheckCircle2 size={22} strokeWidth={2.5} />
+                    </div>
+                    <p className="text-base font-semibold text-white">
+                      Nothing needs attention right now
+                    </p>
+                    <p className="text-xs text-third leading-relaxed max-w-xs">
+                      All your active listings are in good shape. We'll flag
+                      anything that needs a fix &mdash; expired inspections, low
+                      visibility.
                     </p>
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="flex items-center justify-between mt-2 pt-2">
-              <div className="transform scale-[0.8] origin-right -mt-4 -mr-2">
-                <Pagination
-                  currentPage={needAttentionPage}
-                  totalPages={needAttentionData?.pageResponse?.totalPages || 1}
-                  onPageChange={setNeedAttentionPage}
-                />
+            {needAttention.length > 0 && (
+              <div className="flex items-center justify-between mt-2 pt-2">
+                <div className="transform scale-[0.8] origin-right -mt-4 -mr-2 ml-auto">
+                  <Pagination
+                    currentPage={needAttentionPage}
+                    totalPages={
+                      needAttentionData?.pageResponse?.totalPages || 1
+                    }
+                    onPageChange={setNeedAttentionPage}
+                  />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -647,7 +698,13 @@ export default function OverviewComponent() {
           <div className="rounded-xl bg-primary/5 p-6 flex flex-col gap-5">
             <div className="flex items-center gap-3">
               <div className="p-2.5 bg-primary/5 rounded-lg text-primary flex items-center justify-center">
-                <Image src="/inspection_small.svg" alt="Inspection Status" width={20} height={20} className="w-5 h-5 object-contain" />
+                <Image
+                  src="/inspection_small.svg"
+                  alt="Inspection Status"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5 object-contain"
+                />
               </div>
               <h3 className="font-bold text-lg tracking-tight">
                 Inspection Status
