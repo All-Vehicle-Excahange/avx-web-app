@@ -1148,9 +1148,17 @@ export default function PpcComponent() {
               <h3 className="font-semibold text-lg sm:text-xl text-white">
                 Campaign performance
               </h3>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 text-xs sm:text-sm hover:bg-white/5 cursor-pointer transition-colors text-zinc-300">
-                Last 7 days <ChevronDown size={14} />
-              </div>
+              <select
+                value={range}
+                onChange={(e) => setRange(e.target.value)}
+                className="bg-zinc-900 text-zinc-300 text-xs sm:text-sm border border-white/10 rounded-lg px-3 py-1.5 outline-none cursor-pointer hover:bg-zinc-800 transition-colors"
+              >
+                <option value="0">Today</option>
+                <option value="7">Last 7 days</option>
+                <option value="14">Last 14 days</option>
+                <option value="30">Last 30 days</option>
+                <option value="90">Last 90 days</option>
+              </select>
             </div>
 
             {/* Grid of 6 Metrics */}
