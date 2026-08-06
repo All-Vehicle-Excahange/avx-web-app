@@ -11,6 +11,7 @@ import {
 } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import { getAllTier } from "@/services/user.service";
 import { getSellerTier, getLatestExpiredTier } from "@/services/Seller.service";
 import PricingHero from "./PricingHero";
@@ -671,15 +672,23 @@ export default function FullPricing() {
 
           {/* Button */}
           <div className="mt-4 sm:mt-6 pt-1 sm:pt-2 flex justify-start">
-            <Button
-              variant="ghost"
-              size="sm"
-              disabled={isButtonDisabled}
-              loading={paymentLoading && upgradingTierId === tier.id}
-              onClick={() => handleUpgrade(tier)}
-            >
-              {buttonText}
-            </Button>
+            {isCurrentTier ? (
+              <Link href={userRole !== "CONSULTATION" ? "/consult/kyc" : "/consult/dashboard"}>
+                <Button variant="ghost" size="sm" disabled={isButtonDisabled}>
+                  {buttonText}
+                </Button>
+              </Link>
+            ) : (
+              <Button
+                variant="ghost"
+                size="sm"
+                disabled={isButtonDisabled}
+                loading={paymentLoading && upgradingTierId === tier.id}
+                onClick={() => handleUpgrade(tier)}
+              >
+                {buttonText}
+              </Button>
+            )}
           </div>
         </div>
       </div>

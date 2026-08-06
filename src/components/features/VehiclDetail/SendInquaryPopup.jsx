@@ -179,7 +179,7 @@ function SendInquaryPopup({
                   <div className="flex items-center gap-4 bg-zinc-950/40 border border-white/5 rounded-xl p-3 shrink-0 shadow-inner">
                     <div className="p-1.5 bg-white rounded-lg flex items-center justify-center shrink-0">
                       <Image
-                        src="/app_qr.png"
+                        src="/app-qr.webp"
                         alt="App QR Code"
                         width={64}
                         height={64}
@@ -436,7 +436,7 @@ function SendInquaryPopup({
           priority
         />
         <Image
-          src="/app_qr.png"
+          src="/app-qr.webp"
           alt="preload success qr"
           width={6}
           height={6}

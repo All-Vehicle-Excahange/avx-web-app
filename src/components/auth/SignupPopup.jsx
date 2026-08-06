@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
+import { useWebOTP } from "@/hooks/useWebOTP";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -40,12 +41,36 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
   const [otpSent, setOtpSent] = useState(false);
   const otpRefs = useRef([]);
   const [isClosing, setIsClosing] = useState(false);
+  const hiddenInputRef = useRef(null);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [googleToken, setGoogleToken] = useState(null);
   const [isGoogleSignupFlow, setIsGoogleSignupFlow] = useState(false);
+
+  // ── WebOTP auto-fill ─────────────────────────────────────────────────────
+  const autoVerifyRef = useRef(null);
+  const { startWebOTP, abortWebOTP } = useWebOTP({
+    onOTPReceived: (digits) => {
+      // Simply fill the OTP boxes — the useEffect below handles auto-verify
+      setOtp(digits.split(""));
+    },
+  });
+
+  // ── Auto-verify when all 6 digits are present ─────────────────────────────
+  // Covers BOTH manual typing (last digit fills) and WebOTP autofill (setOtp fills all at once).
+  // Placed before the early return so it is always called, satisfying Rules of Hooks.
+  useEffect(() => {
+    if (!otpSent) return;
+    const fullOtp = otp.join("");
+    if (fullOtp.length !== 6) return;
+    // Small debounce: cancels if digits change before 150ms (rapid corrections)
+    const timer = setTimeout(() => {
+      autoVerifyRef.current?.(fullOtp);
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [otp, otpSent]);
 
   // Check for active block on mount or when popup opens
   useEffect(() => {
@@ -68,7 +93,18 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         }
       }
     }
-  }, [isOpen]);
+  }, [isOpen, reset, defaultTab]);
+
+  // Focus the first OTP input securely when OTP is sent
+  useEffect(() => {
+    if (otpSent) {
+      // Small delay ensures the DOM has painted the conditional OTP inputs
+      const timer = setTimeout(() => {
+        otpRefs.current[0]?.focus();
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [otpSent]);
 
   // Countdown timer effect
   useEffect(() => {
@@ -91,6 +127,15 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
       document.dispatchEvent(new Event("signuppopup:open"));
     }
   }, [isOpen]);
+
+  // Abort any pending WebOTP request when the popup closes or unmounts
+  useEffect(() => {
+    if (!isOpen) abortWebOTP();
+  }, [isOpen, abortWebOTP]);
+
+  useEffect(() => {
+    return () => abortWebOTP();
+  }, [abortWebOTP]);
 
   useEffect(() => {
     if (isOpen && prefilledPhoneNumber) {
@@ -136,6 +181,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
     newOtp[index] = value;
     setOtp(newOtp);
     if (value && index < 5) otpRefs.current[index + 1]?.focus();
+    // Auto-verify is handled by the useEffect watching otp state
   };
 
   const handleOtpKeyDown = (index, e) => {
@@ -210,7 +256,8 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         const blockTime = Date.now() + 30 * 1000;
         localStorage.setItem("otpBlockUntil", String(blockTime));
         setCountdown(30);
-        setTimeout(() => otpRefs.current[0]?.focus(), 200);
+        // Start WebOTP listener immediately after OTP is dispatched
+        startWebOTP();
       } else if (res?.error) {
         // Handle API errors returned in response
         const msg = res?.message?.toLowerCase();
@@ -220,7 +267,6 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
           const blockTime = Date.now() + 30 * 1000;
           localStorage.setItem("otpBlockUntil", String(blockTime));
           setCountdown(30);
-          setTimeout(() => otpRefs.current[0]?.focus(), 200);
           return;
         }
 
@@ -291,13 +337,16 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
     }
   };
 
-  const onValidateOtp = async () => {
-    const finalOtp = otp.join("");
+  const onValidateOtp = async (overrideOtp) => {
+    const finalOtp = overrideOtp ?? otp.join("");
 
     if (finalOtp.length !== 6) {
       setError("root", { type: "manual", message: "OTP must be 6 digits" });
       return;
     }
+
+    // Stop any pending WebOTP request once user confirms
+    abortWebOTP();
 
     try {
       setIsLoading(true);
@@ -442,6 +491,9 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
     }
   };
 
+  // Keep autoVerifyRef current with each render's closure — plain assignment, not a hook
+  autoVerifyRef.current = onValidateOtp;
+
   const modalContent = (
     <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={handleClosePopup} style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}>
       <div className="relative flex w-full max-w-[900px] max-h-[95vh] overflow-hidden rounded-2xl shadow-2xl bg-primary-white" onClick={(e) => e.stopPropagation()} style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}>
@@ -561,6 +613,9 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
             }
           }}
         >
+          {/* Hidden input to hold iOS keyboard focus during async API calls */}
+          <input ref={hiddenInputRef} type="tel" className="opacity-0 absolute -z-10 w-0 h-0 pointer-events-none" />
+
           <div className="mb-6">
             <h3 className="text-3xl font-extrabold text-primary tracking-tight font-primary">
               {isGoogleSignupFlow ? "Verify Mobile" : "Create Account"}
@@ -795,6 +850,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
             <Button
               type="submit"
               variant="ghost"
+              onClick={() => hiddenInputRef.current?.focus()}
               locked={!acceptedTerms || isLoading || countdown > 0}
               disabled={!acceptedTerms || countdown > 0}
               className={`text-secondary w-full h-11 shrink-0 text-sm font-bold flex items-center justify-center gap-2 ${!acceptedTerms ? "opacity-50 cursor-not-allowed" : ""
@@ -820,8 +876,13 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
                   <input
                     key={index}
                     ref={(el) => (otpRefs.current[index] = el)}
+                    type="tel"
                     maxLength={1}
                     value={digit}
+                    autoFocus={index === 0}
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete={index === 0 ? "one-time-code" : "off"}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
                     className="w-10 h-10 sm:w-12 sm:h-12 text-center text-primary text-xl font-bold border rounded-lg border-accent-primary/20 outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary/50 transition-all p-0 shrink-0"
@@ -849,7 +910,10 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
                 className="text-secondary w-full h-11 shrink-0 text-sm font-bold flex items-center justify-center gap-2"
               >
                 {isLoading ? (
-                  <Loader2 size={20} className="animate-spin" />
+                  <>
+                    <Loader2 size={20} className="animate-spin" />
+                    <span className="text-xs opacity-70">Verifying…</span>
+                  </>
                 ) : (
                   "VALIDATE OTP"
                 )}
