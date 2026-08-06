@@ -7,7 +7,7 @@ import Image from "next/image";
 import Button from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
-export default function UpgradeTierPopup({ isOpen }) {
+export default function UpgradeTierPopup({ isOpen, onClose }) {
   const { back, push } = useRouter();
 
   // Auto-lock body scroll when popup is open
@@ -24,9 +24,23 @@ export default function UpgradeTierPopup({ isOpen }) {
 
   if (!isOpen) return null;
 
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      back();
+    }
+  };
+
   const modalContent = (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-[fadeIn_0.25s_ease-out]">
-      <div className="relative flex w-full max-w-[850px] overflow-hidden rounded-2xl shadow-2xl bg-secondary border border-white/10 animate-[scaleUp_0.3s_ease-out]">
+    <div
+      onClick={handleClose}
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-[fadeIn_0.25s_ease-out]"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative flex w-full max-w-[850px] overflow-hidden rounded-2xl shadow-2xl bg-secondary border border-white/10 animate-[scaleUp_0.3s_ease-out]"
+      >
         {/* LEFT IMAGE SIDE */}
         <div className="hidden md:block w-5/12 relative min-h-[420px]">
           <Image
@@ -75,9 +89,7 @@ export default function UpgradeTierPopup({ isOpen }) {
           {/* Action Buttons */}
           <div className="w-full pt-2 flex flex-col sm:flex-row gap-3">
             <Button
-              onClick={() => {
-                back();
-              }}
+              onClick={handleClose}
               variant="outlineSecondary"
               full
               className="py-3 font-semibold tracking-wide cursor-pointer order-2 sm:order-1"
@@ -92,7 +104,7 @@ export default function UpgradeTierPopup({ isOpen }) {
               full
               className="py-3 font-semibold tracking-wide shadow-lg cursor-pointer order-1 sm:order-2"
             >
-              Update Now
+              Upgrade Now
             </Button>
           </div>
         </div>

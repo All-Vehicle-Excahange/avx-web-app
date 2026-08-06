@@ -30,6 +30,7 @@ import { useRouter } from "next/navigation";
 import StatCard from "./components/StateCard";
 import ResultsModal from "./components/ResultsModal";
 import UpgradeTierPopup from "./components/UpgradeTierPopup";
+import { PpcSkeleton, StatCardSkeleton } from "@/components/ui/skeleton";
 import {
   getAllDraftCampions,
   getAllCampaigns,
@@ -178,7 +179,7 @@ export default function PpcComponent() {
   });
 
   // Fetch Summary
-  const { data: summaryData } = useQuery({
+  const { data: summaryData, isLoading: summaryLoading } = useQuery({
     queryKey: ["dashboard-summary", range],
     queryFn: async () => {
       const res = await getDashboardSummary(`LAST_${range}_DAYS`);
@@ -341,6 +342,10 @@ export default function PpcComponent() {
   const toggleMetric = (key) =>
     setMetrics((prev) => ({ ...prev, [key]: !prev[key] }));
 
+  if (tier === null || (campaignsLoading && campaigns.length === 0 && summaryLoading)) {
+    return <PpcSkeleton />;
+  }
+
   if (tier === "BASIC") {
     return (
       <section className="w-full space-y-8 relative">
@@ -456,26 +461,37 @@ export default function PpcComponent() {
 
         {/* METRICS */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-          <StatCard
-            icon={<TrendingUp size={20} />}
-            label="Active Campaigns"
-            value={summaryData?.activeCampaigns ?? summaryData?.activeCount ?? 0}
-          />
-          <StatCard
-            icon={<Eye size={20} />}
-            label="Spent Today"
-            value={`₹${summaryData?.spentToday ?? summaryData?.speedToday ?? 0}`}
-          />
-          <StatCard
-            icon={<MousePointerClick size={20} />}
-            label="Total Clicks"
-            value={summaryData?.totalClicks ?? summaryData?.clicks ?? 0}
-          />
-          <StatCard
-            icon={<CheckCircle size={20} />}
-            label="Avg.CPC"
-            value={`₹${summaryData?.avgCpc ?? 0}`}
-          />
+          {summaryLoading ? (
+            <>
+              <StatCardSkeleton />
+              <StatCardSkeleton />
+              <StatCardSkeleton />
+              <StatCardSkeleton />
+            </>
+          ) : (
+            <>
+              <StatCard
+                icon={<TrendingUp size={20} />}
+                label="Active Campaigns"
+                value={summaryData?.activeCampaigns ?? summaryData?.activeCount ?? 0}
+              />
+              <StatCard
+                icon={<Eye size={20} />}
+                label="Spent Today"
+                value={`₹${summaryData?.spentToday ?? summaryData?.speedToday ?? 0}`}
+              />
+              <StatCard
+                icon={<MousePointerClick size={20} />}
+                label="Total Clicks"
+                value={summaryData?.totalClicks ?? summaryData?.clicks ?? 0}
+              />
+              <StatCard
+                icon={<CheckCircle size={20} />}
+                label="Avg.CPC"
+                value={`₹${summaryData?.avgCpc ?? 0}`}
+              />
+            </>
+          )}
         </div>
       </div>
 
