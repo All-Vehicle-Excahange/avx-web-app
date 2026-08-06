@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import { X, ShieldCheck, Ghost } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Button from "@/components/ui/button";
 
 function ConsualtPopup({ onClose }) {
@@ -25,11 +26,6 @@ function ConsualtPopup({ onClose }) {
       document.body.style.overflow = "auto";
     };
   }, []);
-
-  const handleGoToDashboard = () => {
-    push("/consult/subscription");
-    handleClose();
-  };
 
   const modalContent = (
     <div
@@ -98,9 +94,11 @@ function ConsualtPopup({ onClose }) {
               </p>
 
               <div className="pt-2">
-                <Button onClick={handleGoToDashboard} full variant="ghost">
-                  Go to Dashboard
-                </Button>
+                <Link href="/consult/dashboard" onClick={handleClose}>
+                  <Button full variant="ghost">
+                    Go to Dashboard
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
