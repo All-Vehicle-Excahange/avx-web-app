@@ -49,14 +49,18 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
   const [googleToken, setGoogleToken] = useState(null);
   const [isGoogleSignupFlow, setIsGoogleSignupFlow] = useState(false);
 
-  // ── WebOTP auto-fill ─────────────────────────────────────────────────────
+  // ── WebOTP auto-fill (TEMPORARILY DISABLED) ──────────────────────────────
   const autoVerifyRef = useRef(null);
+  /*
   const { startWebOTP, abortWebOTP } = useWebOTP({
     onOTPReceived: (digits) => {
       // Simply fill the OTP boxes — the useEffect below handles auto-verify
       setOtp(digits.split(""));
     },
   });
+  */
+  const startWebOTP = () => {};
+  const abortWebOTP = () => {};
 
   // ── Auto-verify when all 6 digits are present ─────────────────────────────
   // Covers BOTH manual typing (last digit fills) and WebOTP autofill (setOtp fills all at once).

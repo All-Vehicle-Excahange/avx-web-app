@@ -43,14 +43,18 @@ function LoginPopup({
   const [isClosing, setIsClosing] = useState(false);
   const hiddenInputRef = useRef(null);
 
-  // ── WebOTP auto-fill ─────────────────────────────────────────────────────
+  // ── WebOTP auto-fill (TEMPORARILY DISABLED) ──────────────────────────────
   const autoVerifyRef = useRef(null);
+  /*
   const { startWebOTP, abortWebOTP } = useWebOTP({
     onOTPReceived: (digits) => {
       // Simply fill the OTP boxes — the useEffect below handles auto-verify
       setOtp(digits.split(""));
     },
   });
+  */
+  const startWebOTP = () => {};
+  const abortWebOTP = () => {};
 
   // ── Auto-verify when all 6 digits are present ─────────────────────────────
   // Covers BOTH manual typing and WebOTP autofill. Before early return = no hooks violation.
