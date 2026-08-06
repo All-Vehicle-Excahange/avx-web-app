@@ -167,6 +167,17 @@ function LoginPopup({
   const handleClose = triggerClose;
 
   const handleOtpChange = (index, value) => {
+    // Handle OTP paste or Android SMS autofill
+    if (value.length > 1) {
+      const pasted = value.replace(/\D/g, "").slice(0, 6);
+      if (pasted.length === 6) {
+        setOtpError("");
+        setOtp(pasted.split(""));
+        otpRefs.current[5]?.focus();
+      }
+      return;
+    }
+
     if (!/^\d?$/.test(value)) return;
 
     setOtpError("");
