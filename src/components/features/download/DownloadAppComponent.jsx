@@ -23,22 +23,23 @@ import {
 } from "lucide-react";
 
 // Premium QR Code component using official scannable QR image
-const QRCodeMock = () => (
-  <div className="flex flex-col items-center gap-1.5 group/qr cursor-pointer">
-    <div className="w-24 h-24 p-2.5 bg-white rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.2)] border border-white/20 flex items-center justify-center shrink-0 transition-all duration-300">
+const QRCodeMock = ({ src = "/app-qr.webp" }) => (
+  <div className="flex flex-col items-center gap-1 group/qr cursor-pointer">
+    <div className="w-28 h-28 p-2 bg-white rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.2)] border border-white/20 flex items-center justify-center shrink-0 transition-all duration-300 group-hover/qr:shadow-[0_6px_20px_rgba(0,123,255,0.2)]">
       <Image
-        src="/app-qr.webp"
+        src={src}
         alt="Reecomm App QR Code"
-        width={96}
-        height={96}
+        width={112}
+        height={112}
         className="w-full h-full object-contain"
       />
     </div>
-    <span className="text-[10px] font-bold text-white/90 uppercase tracking-wider transition-colors">
+    <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">
       Scan QR
     </span>
   </div>
 );
+
 
 import {
   GooglePlayButton as PlayStoreButtonComponent,
@@ -158,7 +159,7 @@ function DownloadAppComponent() {
                 <div className="flex-1 flex items-center gap-4">
                   <AppStoreButton />
                   <div className="hidden sm:flex flex-col items-center gap-1.5 group shrink-0">
-                    <QRCodeMock />
+                    <QRCodeMock src="/ios-qr.webp" />
                   </div>
                 </div>
               </div>
@@ -621,7 +622,7 @@ function DownloadAppComponent() {
             <div className="flex-1 sm:flex-none flex items-center gap-4">
               <AppStoreButton />
               <div className="hidden sm:flex flex-col items-center gap-1.5 group shrink-0">
-                <QRCodeMock />
+                <QRCodeMock src="/ios-qr.webp" />
               </div>
             </div>
           </div>

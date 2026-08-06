@@ -93,7 +93,7 @@ export default function ListingPopup({ isOpen, onClose }) {
             className="object-cover"
           />
           <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-black/80" />
-          
+
           <div className="absolute bottom-12 right-8 z-10 flex flex-col items-end text-right">
             <div className="flex items-center gap-2 mb-1">
               <div className="w-10 h-10 bg-fourth rounded-full flex items-center justify-center">
@@ -142,7 +142,7 @@ export default function ListingPopup({ isOpen, onClose }) {
             <div className="flex items-center gap-5 p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 shadow-inner w-auto">
               <div className="p-3 bg-white rounded-xl shadow-lg flex items-center justify-center shrink-0">
                 <Image
-                  src="/app_qr.png"
+                  src="/app-qr.webp"
                   alt="App QR Code"
                   width={96}
                   height={96}

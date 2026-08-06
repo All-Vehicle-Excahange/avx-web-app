@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useCallback, useEffect } from "react";
+import { useWebOTP } from "@/hooks/useWebOTP";
 import { createPortal } from "react-dom";
 import { X, Loader2, User, UserCheck } from "lucide-react";
 import Image from "next/image";
@@ -40,6 +41,29 @@ function LoginPopup({
 
   const otpRefs = useRef([]);
   const [isClosing, setIsClosing] = useState(false);
+  const hiddenInputRef = useRef(null);
+
+  // ── WebOTP auto-fill ─────────────────────────────────────────────────────
+  const autoVerifyRef = useRef(null);
+  const { startWebOTP, abortWebOTP } = useWebOTP({
+    onOTPReceived: (digits) => {
+      // Simply fill the OTP boxes — the useEffect below handles auto-verify
+      setOtp(digits.split(""));
+    },
+  });
+
+  // ── Auto-verify when all 6 digits are present ─────────────────────────────
+  // Covers BOTH manual typing and WebOTP autofill. Before early return = no hooks violation.
+  useEffect(() => {
+    if (!otpSent) return;
+    const fullOtp = otp.join("");
+    if (fullOtp.length !== 6) return;
+    const timer = setTimeout(() => {
+      autoVerifyRef.current?.(fullOtp);
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [otp, otpSent]);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [googleToken, setGoogleToken] = useState(null);
@@ -69,7 +93,18 @@ function LoginPopup({
         }
       }
     }
-  }, [isOpen]);
+  }, [isOpen, reset]);
+
+  // Focus the first OTP input securely when OTP is sent
+  useEffect(() => {
+    if (otpSent) {
+      // Small delay ensures the DOM has painted the conditional OTP inputs
+      const timer = setTimeout(() => {
+        otpRefs.current[0]?.focus();
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [otpSent]);
 
   // Countdown timer effect
   useEffect(() => {
@@ -86,6 +121,15 @@ function LoginPopup({
     }, 1000);
     return () => clearInterval(timer);
   }, [countdown]);
+
+  // Abort any pending WebOTP request when the popup is closed / unmounted
+  useEffect(() => {
+    if (!isOpen) abortWebOTP();
+  }, [isOpen, abortWebOTP]);
+
+  useEffect(() => {
+    return () => abortWebOTP();
+  }, [abortWebOTP]);
 
   const triggerClose = useCallback(() => {
     setIsClosing(true);
@@ -134,6 +178,7 @@ function LoginPopup({
     if (value && index < 5) {
       otpRefs.current[index + 1]?.focus();
     }
+    // Auto-verify is handled by the useEffect watching otp state
   };
 
   const handleOtpKeyDown = (index, e) => {
@@ -199,7 +244,8 @@ function LoginPopup({
         const blockTime = Date.now() + 30 * 1000;
         localStorage.setItem("otpBlockUntil", String(blockTime));
         setCountdown(30);
-        setTimeout(() => otpRefs.current[0]?.focus(), 200);
+        // Start WebOTP listener immediately so we catch the SMS as soon as it arrives
+        startWebOTP();
       }
     } catch (err) {
       const status = err?.response?.status;
@@ -215,7 +261,6 @@ function LoginPopup({
         const blockTime = Date.now() + 30 * 1000;
         localStorage.setItem("otpBlockUntil", String(blockTime));
         setCountdown(30);
-        setTimeout(() => otpRefs.current[0]?.focus(), 200);
         return;
       }
 
@@ -238,13 +283,16 @@ function LoginPopup({
     }
   };
 
-  const onValidateOtp = async () => {
-    const finalOtp = otp.join("");
+  const onValidateOtp = async (overrideOtp) => {
+    const finalOtp = overrideOtp ?? otp.join("");
 
     if (finalOtp.length !== 6) {
       setOtpError("OTP must be 6 digits");
       return;
     }
+
+    // Once OTP is confirmed, stop any pending WebOTP request
+    abortWebOTP();
 
     try {
       setIsLoading(true);
@@ -319,6 +367,9 @@ function LoginPopup({
       setIsLoading(false);
     }
   };
+
+  // Keep autoVerifyRef current with each render's closure — plain assignment, not a hook
+  autoVerifyRef.current = onValidateOtp;
 
   const modalContent = (
     <div
@@ -447,6 +498,10 @@ function LoginPopup({
           className="w-full md:w-7/12 p-8 md:p-12 bg-secondary flex flex-col justify-center"
           onSubmit={handleSubmit(otpSent ? onValidateOtp : onSendOtp)}
         >
+          {/* Hidden input to hold iOS keyboard focus during async API calls */}
+          <input ref={hiddenInputRef} type="tel" className="opacity-0 absolute -z-10 w-0 h-0 pointer-events-none" />
+
+          {/* User inputs */}
           <div className="mb-6">
             <h3 className="text-3xl font-extrabold text-primary tracking-tight font-primary">
               {isGoogleSignupFlow ? "Verify Mobile" : "Welcome Back"}
@@ -595,8 +650,13 @@ function LoginPopup({
                   <input
                     key={index}
                     ref={(el) => (otpRefs.current[index] = el)}
+                    type="tel"
                     maxLength={1}
                     value={digit}
+                    autoFocus={index === 0}
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete={index === 0 ? "one-time-code" : "off"}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
                     className="w-10 h-10 sm:w-12 sm:h-12 text-center text-primary text-xl font-bold border rounded-lg border-accent-primary/20 outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary/50 transition-all p-0"
@@ -631,6 +691,7 @@ function LoginPopup({
             <Button
               type="submit"
               variant="ghost"
+              onClick={() => hiddenInputRef.current?.focus()}
               locked={isLoading || countdown > 0 || (isGoogleSignupFlow && !acceptedTerms)}
               disabled={countdown > 0 || (isGoogleSignupFlow && !acceptedTerms)}
               className={`w-full h-11 text-sm font-bold flex items-center justify-center gap-2 ${isGoogleSignupFlow && !acceptedTerms ? "opacity-50 cursor-not-allowed" : ""}`}
@@ -649,14 +710,17 @@ function LoginPopup({
               className="w-full h-11 text-sm font-bold flex items-center justify-center gap-2"
             >
               {isLoading ? (
-                <Loader2 size={20} className="animate-spin" />
+                <>
+                  <Loader2 size={20} className="animate-spin" />
+                  <span className="text-xs opacity-70">Verifying…</span>
+                </>
               ) : (
                 "Validate OTP"
               )}
             </Button>
           )}
 
-          {/* ✅ GOOGLE LOGIN BELOW */}
+          {/* GOOGLE LOGIN BELOW */}
           {!otpSent && !isGoogleSignupFlow && (
             <div className="mt-4">
               <div className="flex items-center mb-4">
