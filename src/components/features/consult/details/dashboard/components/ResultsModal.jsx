@@ -96,6 +96,7 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
   const [isLoadingAnalytics, setIsLoadingAnalytics] = useState(false);
 
   const rangeDaysMap = {
+    today: "TODAY",
     "7d": "LAST_7_DAYS",
     "14d": "LAST_14_DAYS",
     "30d": "LAST_30_DAYS",
@@ -595,7 +596,7 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
               Performance Overview
             </h3>
             <div className="bg-secondary p-0.5 rounded-lg border border-third/10 flex items-center gap-0.5">
-              {["7d", "14d", "30d"].map((t) => (
+              {["today", "7d", "14d", "30d"].map((t) => (
                 <button
                   key={t}
                   onClick={() => setRange(t)}
@@ -605,7 +606,13 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                       : "text-third hover:text-primary"
                   }`}
                 >
-                  {t === "7d" ? "7 Days" : t === "14d" ? "14 Days" : "30 Days"}
+                  {t === "today"
+                    ? "Today"
+                    : t === "7d"
+                      ? "7 Days"
+                      : t === "14d"
+                        ? "14 Days"
+                        : "30 Days"}
                 </button>
               ))}
             </div>
@@ -620,9 +627,6 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
               <span className="text-xl sm:text-2xl font-black text-primary block">
                 {currentData.imp_s}
               </span>
-              <span className="text-[11px] text-fourth font-semibold block">
-                ↑ 18% vs last week
-              </span>
             </div>
             <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">
               <span className="text-[10px] text-third uppercase font-bold tracking-wider block opacity-70">
@@ -631,9 +635,6 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
               <span className="text-xl sm:text-2xl font-black text-primary block">
                 {currentData.click_s}
               </span>
-              <span className="text-[11px] text-fourth font-semibold block">
-                ↑ 12% vs last week
-              </span>
             </div>
             <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">
               <span className="text-[10px] text-third uppercase font-bold tracking-wider block opacity-70">
@@ -641,9 +642,6 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
               </span>
               <span className="text-xl sm:text-2xl font-black text-primary block">
                 {currentData.ctr_s}
-              </span>
-              <span className="text-[11px] text-fourth font-semibold block">
-                Above average (2.1%)
               </span>
             </div>
             <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">

@@ -152,6 +152,8 @@ export default function PpcComponent() {
     isDraft: true,
   }));
 
+  const apiDaysRange = range === "0" ? "TODAY" : `LAST_${range}_DAYS`;
+
   // 1. Fetch campaigns using useInfiniteQuery
   const {
     data: campaignsInfiniteData,
@@ -164,7 +166,7 @@ export default function PpcComponent() {
       const res = await getAllCampaigns({
         pageNo: pageParam,
         pageSize: 10,
-        daysRange: `LAST_${range}_DAYS`,
+        daysRange: apiDaysRange,
       });
       return res;
     },
@@ -181,7 +183,7 @@ export default function PpcComponent() {
   const { data: summaryData } = useQuery({
     queryKey: ["dashboard-summary", range],
     queryFn: async () => {
-      const res = await getDashboardSummary(`LAST_${range}_DAYS`);
+      const res = await getDashboardSummary(apiDaysRange);
       return res?.data || {};
     },
   });
@@ -190,7 +192,7 @@ export default function PpcComponent() {
   const { data: performanceData } = useQuery({
     queryKey: ["dashboard-performance", range],
     queryFn: async () => {
-      const res = await getDashboardPerformance(`LAST_${range}_DAYS`);
+      const res = await getDashboardPerformance(apiDaysRange);
       return res?.data || {};
     },
   });
@@ -333,7 +335,9 @@ export default function PpcComponent() {
   };
 
   const rangeOptions = [
+    { label: "Today", value: "0" },
     { label: "Last 7 days", value: "7" },
+    { label: "Last 14 days", value: "14" },
     { label: "Last 30 days", value: "30" },
     { label: "Last 90 days", value: "90" },
   ];
