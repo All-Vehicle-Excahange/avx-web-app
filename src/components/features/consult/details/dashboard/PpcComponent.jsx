@@ -463,8 +463,8 @@ export default function PpcComponent() {
           />
           <StatCard
             icon={<Eye size={20} />}
-            label="Spent Today"
-            value={`₹${summaryData?.spentToday ?? summaryData?.speedToday ?? 0}`}
+            label="Total Impressions"
+            value={summaryData?.totalImpressions ?? summaryData?.impressions ?? 0}
           />
           <StatCard
             icon={<MousePointerClick size={20} />}
@@ -473,8 +473,8 @@ export default function PpcComponent() {
           />
           <StatCard
             icon={<CheckCircle size={20} />}
-            label="Avg.CPC"
-            value={`₹${summaryData?.avgCpc ?? 0}`}
+            label="Total Spent"
+            value={`₹${summaryData?.totalSpent ?? 0}`}
           />
         </div>
       </div>

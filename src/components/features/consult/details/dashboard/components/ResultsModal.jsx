@@ -509,12 +509,13 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                   Day 1 of 30
                 </span>
               </div>
-              <div className="space-y-0.5">
+              {/* Avg Position (Commented out as requested) */}
+              {/* <div className="space-y-0.5">
                 <span className="text-[10px] text-third block uppercase font-bold tracking-wider opacity-60">
                   Avg Position
                 </span>
                 <span className="text-sm font-bold text-fourth block">#2</span>
-              </div>
+              </div> */}
               <div className="space-y-0.5">
                 <span className="text-[10px] text-third block uppercase font-bold tracking-wider opacity-60">
                   Spent
@@ -872,9 +873,8 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
             </div>
           </div>
 
-          {/* Third Two-Column Grid: Recent Activity vs AI Insights */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            {/* Live Activity Timeline */}
+          {/* Third Two-Column Grid: Recent Activity vs AI Insights (Commented out as requested) */}
+          {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-4">
               <div className="flex items-center justify-between">
                 <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
@@ -884,160 +884,18 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                   Live Feed
                 </span>
               </div>
-
               <div className="space-y-4">
-                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-fourth mt-1 shrink-0" />
-                  <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">
-                      New inquiry received
-                    </p>
-                    <p className="text-third">
-                      Buyer asked about service history
-                    </p>
-                  </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
-                    2 min ago
-                  </span>
-                </div>
-                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-fourth mt-1 shrink-0" />
-                  <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">6 new clicks</p>
-                    <p className="text-third">
-                      Homepage featured slot · ₹27 spent
-                    </p>
-                  </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
-                    14 min ago
-                  </span>
-                </div>
-                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-fourth mt-1 shrink-0" />
-                  <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">11 new clicks</p>
-                    <p className="text-third">
-                      Homepage featured slot · ₹49.50 spent
-                    </p>
-                  </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
-                    1 hr ago
-                  </span>
-                </div>
-                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-third mt-1 shrink-0" />
-                  <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">
-                      340 impressions
-                    </p>
-                    <p className="text-third">Morning peak traffic window</p>
-                  </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
-                    3 hrs ago
-                  </span>
-                </div>
-                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-fourth mt-1 shrink-0" />
-                  <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">
-                      New inquiry received
-                    </p>
-                    <p className="text-third">Buyer requested test drive</p>
-                  </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
-                    5 hrs ago
-                  </span>
-                </div>
-                <div className="flex gap-3 items-start text-xs pb-1">
-                  <div className="w-2.5 h-2.5 rounded-full bg-amber-500 mt-1 shrink-0" />
-                  <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">
-                      Ad resumed automatically
-                    </p>
-                    <p className="text-third">
-                      Wallet topped up · budget reset at midnight
-                    </p>
-                  </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
-                    Yesterday
-                  </span>
-                </div>
+                ...
               </div>
             </div>
-
-            {/* AI Insights */}
             <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-4">
               <div className="flex items-center justify-between">
                 <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
                   Insights
                 </h4>
-                <TrendingUp size={16} className="text-amber-500" />
-              </div>
-
-              <div className="space-y-3">
-                <div className="flex gap-3 items-start p-3 rounded-lg bg-fourth/10 border border-fourth/20 text-xs">
-                  <TrendingUp
-                    className="text-fourth shrink-0 mt-0.5"
-                    size={16}
-                  />
-                  <div>
-                    <h5 className="font-bold text-fourth">
-                      CTR is 2× the platform average
-                    </h5>
-                    <p className="text-third mt-0.5 leading-relaxed font-medium">
-                      Homepage placement is working well for this vehicle.
-                      Consider increasing daily budget to ₹750 for more reach.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3 items-start p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs">
-                  <AlertTriangle
-                    className="text-amber-400 shrink-0 mt-0.5"
-                    size={16}
-                  />
-                  <div>
-                    <h5 className="font-bold text-amber-400">
-                      Budget runs out by 4 PM daily
-                    </h5>
-                    <p className="text-amber-200/80 mt-0.5 leading-relaxed font-medium">
-                      You&apos;re missing evening traffic. Raise daily budget or
-                      reduce max CPC bid to stretch further.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3 items-start p-3 rounded-lg bg-fourth/10 border border-fourth/20 text-xs">
-                  <MessageSquare
-                    className="text-fourth shrink-0 mt-0.5"
-                    size={16}
-                  />
-                  <div>
-                    <h5 className="font-bold text-fourth">
-                      8 inquiries in 7 days
-                    </h5>
-                    <p className="text-third mt-0.5 leading-relaxed font-medium">
-                      Effective cost per inquiry is ₹69.75. Switching to CPI
-                      billing could reduce cost if inquiry rate holds.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3 items-start p-3 rounded-lg bg-fourth/10 border border-fourth/20 text-xs">
-                  <Calendar className="text-fourth shrink-0 mt-0.5" size={16} />
-                  <div>
-                    <h5 className="font-bold text-fourth">
-                      Weekends drive 34% more clicks
-                    </h5>
-                    <p className="text-third mt-0.5 leading-relaxed font-medium">
-                      Sat–Sun peak confirmed. You have weekend boosting active —
-                      good.
-                    </p>
-                  </div>
-                </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
