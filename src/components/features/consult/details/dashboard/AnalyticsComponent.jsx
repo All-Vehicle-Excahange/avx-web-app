@@ -30,30 +30,53 @@ import {
   getKeyInsightsQuery,
 } from "@/queries/analytics.queries";
 import AnalyticsSkeleton from "@/components/ui/skeleton/AnalyticsSkeleton";
+import UpgradeTierPopup from "./components/UpgradeTierPopup";
 
 export default function AnalyticsComponent() {
   const [range, setRange] = useState("7");
   const [tier, setTier] = useState(null);
+  const [isUpgradeTierOpen, setIsUpgradeTierOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
-  const daysParam = range === "30" ? "LAST_30_DAYS" : range === "90" ? "LAST_90_DAYS" : "LAST_7_DAYS";
+  const daysParam =
+    range === "30"
+      ? "LAST_30_DAYS"
+      : range === "90"
+        ? "LAST_90_DAYS"
+        : "LAST_7_DAYS";
 
   const isProOrPremium = tier === "PRO" || tier === "PREMIUM";
   const isBasic = tier === "BASIC";
   const isPro = tier === "PRO";
 
-  const { data: analyticsData, isFetching: kpisLoading } = useQuery(getAnalyticsKipsQuery(daysParam));
-  const { data: trafficData, isFetching: trafficLoading } = useQuery(getTrafficConversionQuery(daysParam));
-  const { data: weeklyData = [], isFetching: weeklyLoading } = useQuery(getWeeklyAnalyticsQuery(daysParam));
-  const { data: demandBreakdown = [], isFetching: demandLoading } = useQuery(getSubTypeDemandBreakdownQuery(daysParam));
+  const { data: analyticsData, isFetching: kpisLoading } = useQuery(
+    getAnalyticsKipsQuery(daysParam),
+  );
+  const { data: trafficData, isFetching: trafficLoading } = useQuery(
+    getTrafficConversionQuery(daysParam),
+  );
+  const { data: weeklyData = [], isFetching: weeklyLoading } = useQuery(
+    getWeeklyAnalyticsQuery(daysParam),
+  );
+  const { data: demandBreakdown = [], isFetching: demandLoading } = useQuery(
+    getSubTypeDemandBreakdownQuery(daysParam),
+  );
   const { data: cityDemand = [], isFetching: cityLoading } = useQuery({
     ...getCityDemandBreakdownQuery(daysParam),
     enabled: isProOrPremium,
   });
-  const { data: insights = [], isFetching: insightsLoading } = useQuery(getKeyInsightsQuery(daysParam));
+  const { data: insights = [], isFetching: insightsLoading } = useQuery(
+    getKeyInsightsQuery(daysParam),
+  );
 
-  const isLoading = kpisLoading || trafficLoading || weeklyLoading || demandLoading || cityLoading || insightsLoading;
+  const isLoading =
+    kpisLoading ||
+    trafficLoading ||
+    weeklyLoading ||
+    demandLoading ||
+    cityLoading ||
+    insightsLoading;
 
   const handleRangeChange = (newRange) => {
     setRange(newRange);
@@ -64,12 +87,24 @@ export default function AnalyticsComponent() {
       targetDaysParam = "LAST_90_DAYS";
     }
 
-    queryClient.invalidateQueries({ queryKey: ["analytics-kips", targetDaysParam] });
-    queryClient.invalidateQueries({ queryKey: ["analytics-traffic-conversion", targetDaysParam] });
-    queryClient.invalidateQueries({ queryKey: ["analytics-weekly-performance", targetDaysParam] });
-    queryClient.invalidateQueries({ queryKey: ["analytics-subtype-demand-breakdown", targetDaysParam] });
-    queryClient.invalidateQueries({ queryKey: ["analytics-city-demand-breakdown", targetDaysParam] });
-    queryClient.invalidateQueries({ queryKey: ["analytics-key-insights", targetDaysParam] });
+    queryClient.invalidateQueries({
+      queryKey: ["analytics-kips", targetDaysParam],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["analytics-traffic-conversion", targetDaysParam],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["analytics-weekly-performance", targetDaysParam],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["analytics-subtype-demand-breakdown", targetDaysParam],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["analytics-city-demand-breakdown", targetDaysParam],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["analytics-key-insights", targetDaysParam],
+    });
   };
 
   useEffect(() => {
@@ -429,8 +464,9 @@ export default function AnalyticsComponent() {
             )}
 
             <p className="text-xs text-third pt-4 border-t border-third/20">
-              <span className="text-primary font-semibold">Insight:</span> Demand
-              peaks Fri–Sun. Boosting listings on weekends improves visibility.
+              <span className="text-primary font-semibold">Insight:</span>{" "}
+              Demand peaks Fri–Sun. Boosting listings on weekends improves
+              visibility.
             </p>
 
             {isPro && (
@@ -439,19 +475,18 @@ export default function AnalyticsComponent() {
               </Button>
             )}
           </div>
-          <div
-            className="grid gap-6 md:grid-cols-2"
-          >
+          <div className="grid gap-6 md:grid-cols-2">
             {/* ✅ Demand Breakdown (Show for everyone now as per request for basic) */}
             <div className="bg-primary/5 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200">
               <h3 className="font-semibold text-white">Demand Breakdown</h3>
 
               {currentDemand.length > 0 ? (
                 <div
-                  className={`space-y-4 ${currentDemand.length > 4
-                    ? "max-h-[320px] overflow-y-auto custom-scrollbar pr-2"
-                    : ""
-                    }`}
+                  className={`space-y-4 ${
+                    currentDemand.length > 4
+                      ? "max-h-[320px] overflow-y-auto custom-scrollbar pr-2"
+                      : ""
+                  }`}
                 >
                   {currentDemand.map((item, i) => (
                     <div key={item.subtype || i}>
@@ -483,7 +518,10 @@ export default function AnalyticsComponent() {
                       No demand data yet
                     </p>
                     <p className="text-xs text-third leading-relaxed">
-                      Once your listings start receiving inquiries, this section will show which vehicle categories &mdash; SUV, Sedan, Hatchback, MUV, and more &mdash; are getting the most interest from buyers.
+                      Once your listings start receiving inquiries, this section
+                      will show which vehicle categories &mdash; SUV, Sedan,
+                      Hatchback, MUV, and more &mdash; are getting the most
+                      interest from buyers.
                     </p>
                   </div>
                   <div className="pt-3 border-t border-white/10 space-y-2 w-full text-left">
@@ -503,16 +541,29 @@ export default function AnalyticsComponent() {
             {/* ✅ City-wise Demand (Locked for BASIC, Unlocked for PRO/PREMIUM) */}
             <div className="relative bg-primary/5 rounded-xl p-6 space-y-4 shadow-sm transition-colors duration-200 overflow-hidden">
               {isBasic && (
-                <div className="absolute inset-0 z-10 bg-black/75 backdrop-blur-[2px] flex flex-col items-center justify-center text-center p-4">
+                <div
+                  onClick={() => setIsUpgradeTierOpen(true)}
+                  className="absolute inset-0 z-10 bg-black/75 backdrop-blur-[2px] flex flex-col items-center justify-center text-center p-4 cursor-pointer group"
+                >
                   <div className="flex flex-col items-center gap-2.5 max-w-[280px]">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                       <Lock size={18} />
                     </div>
-                    <h4 className="font-semibold text-white text-sm">City-wise Demand</h4>
+                    <h4 className="font-semibold text-white text-sm">
+                      City-wise Demand
+                    </h4>
                     <p className="text-xs text-third leading-relaxed">
-                      Upgrade to Pro or Premium to unlock detailed city-wise demand analytics for your listings.
+                      Upgrade to Pro or Premium to unlock detailed city-wise
+                      demand analytics for your listings.
                     </p>
-                    <button className="mt-2 px-4 py-2 w-full rounded-lg border border-yellow-400/30 bg-yellow-400/10 text-yellow-300 text-xs font-semibold hover:bg-yellow-400/20 transition cursor-pointer">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsUpgradeTierOpen(true);
+                      }}
+                      className="mt-2 px-4 py-2 w-full rounded-lg border border-yellow-400/30 bg-yellow-400/10 text-yellow-300 text-xs font-semibold hover:bg-yellow-400/20 transition cursor-pointer"
+                    >
                       Upgrade to Pro
                     </button>
                   </div>
@@ -522,10 +573,11 @@ export default function AnalyticsComponent() {
 
               {currentCityDemand.length > 0 ? (
                 <div
-                  className={`space-y-4 ${currentCityDemand.length > 4
-                    ? "max-h-[320px] overflow-y-auto custom-scrollbar pr-2"
-                    : ""
-                    }`}
+                  className={`space-y-4 ${
+                    currentCityDemand.length > 4
+                      ? "max-h-[320px] overflow-y-auto custom-scrollbar pr-2"
+                      : ""
+                  }`}
                 >
                   {currentCityDemand.map((item, i) => (
                     <div key={item.city || i}>
@@ -557,7 +609,10 @@ export default function AnalyticsComponent() {
                       No city data yet
                     </p>
                     <p className="text-xs text-third leading-relaxed">
-                      As buyers from different cities inquire about your listings, this section will show exactly which cities are driving the most interest &mdash; so you know where your buyers are coming from.
+                      As buyers from different cities inquire about your
+                      listings, this section will show exactly which cities are
+                      driving the most interest &mdash; so you know where your
+                      buyers are coming from.
                     </p>
                   </div>
                   <div className="pt-3 border-t border-white/10 space-y-2 w-full text-left">
@@ -586,78 +641,35 @@ export default function AnalyticsComponent() {
                 </li>
               ))}
             </ul>
-          </div>{" "}
-          {/* Recommended Actions (Only BASIC Users) */}
-          {isBasic && (
-            <div className="bg-primary/5 rounded-xl p-7 space-y-5 shadow-sm transition-colors duration-200">
-              <h3 className="font-semibold text-lg text-blue-300">
-                Recommended Actions
-              </h3>
 
-              <ul className="grid md:grid-cols-2 gap-4 text-sm">
-                <li className="flex items-start gap-3">
-                  <TrendingUp className="text-blue-400 mt-0.5" size={18} />
-                  <span>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
-                    repellat. Adipisci
-                  </span>
-                </li>
-
-                <li className="flex items-start gap-3">
-                  <Zap className="text-blue-400 mt-0.5" size={18} />
-                  <span>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
-                    repellat. Adipisci
-                  </span>
-                </li>
-
-                <li className="flex items-start gap-3">
-                  <Calendar className="text-blue-400 mt-0.5" size={18} />
-                  <span>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
-                    repellat. Adipisci
-                  </span>
-                </li>
-
-                <li className="flex items-start gap-3">
-                  <Car className="text-blue-400 mt-0.5" size={18} />
-                  <span>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
-                    repellat. Adipisci
-                  </span>
-                </li>
-
-                <li className="flex items-start gap-3">
-                  <MessageCircle className="text-blue-400 mt-0.5" size={18} />
-                  <span>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
-                    repellat. Adipisci
-                  </span>
-                </li>
-
-                <li className="flex items-start gap-3">
-                  <Tag className="text-blue-400 mt-0.5" size={18} />
-                  <span>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
-                    repellat. Adipisci
-                  </span>
-                </li>
-              </ul>
-
-              {/* ✅ CTA Buttons Bottom Right */}
-              <div className="flex justify-end gap-3 pt-5 border-t border-third/20">
-                <button className="px-4 py-2 rounded-lg border border-third/30 bg-primary/5 text-primary text-xs font-semibold hover:bg-primary/10 transition">
+            {/* ✅ CTA Buttons Bottom Right (Only BASIC Users) */}
+            {isBasic && (
+              <div className="flex flex-wrap justify-end gap-3 pt-5 border-t border-third/20">
+                <Button
+                  href="/consult/dashboard/inspection"
+                  variant="outline"
+                  size="sm"
+                  showIcon={false}
+                  className="px-4 py-2 rounded-lg border border-third/30 bg-primary/5 text-primary text-xs font-semibold hover:bg-primary/10 transition cursor-pointer"
+                >
                   Inspect 2 high-interest listings
-                </button>
+                </Button>
 
-                <button className="px-4 py-2 rounded-lg border border-yellow-400/30 bg-yellow-400/10 text-yellow-300 text-xs font-semibold hover:bg-yellow-400/20 transition">
-                  Upgrade to Premium
+                <button
+                  onClick={() => setIsUpgradeTierOpen(true)}
+                  className="px-4 py-2 rounded-lg border border-yellow-400/30 bg-yellow-400/10 text-yellow-300 text-xs font-semibold hover:bg-yellow-400/20 transition cursor-pointer"
+                >
+                  Upgrade your Plan
                 </button>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </>
       )}
+      <UpgradeTierPopup
+        isOpen={isUpgradeTierOpen}
+        onClose={() => setIsUpgradeTierOpen(false)}
+      />
     </section>
   );
 }

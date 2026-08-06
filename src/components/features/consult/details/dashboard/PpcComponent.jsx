@@ -30,6 +30,7 @@ import { useRouter } from "next/navigation";
 import StatCard from "./components/StateCard";
 import ResultsModal from "./components/ResultsModal";
 import UpgradeTierPopup from "./components/UpgradeTierPopup";
+import { PpcSkeleton, StatCardSkeleton } from "@/components/ui/skeleton";
 import {
   getAllDraftCampions,
   getAllCampaigns,
@@ -180,7 +181,7 @@ export default function PpcComponent() {
   });
 
   // Fetch Summary
-  const { data: summaryData } = useQuery({
+  const { data: summaryData, isLoading: summaryLoading } = useQuery({
     queryKey: ["dashboard-summary", range],
     queryFn: async () => {
       const res = await getDashboardSummary(apiDaysRange);
@@ -344,6 +345,10 @@ export default function PpcComponent() {
 
   const toggleMetric = (key) =>
     setMetrics((prev) => ({ ...prev, [key]: !prev[key] }));
+
+  if (tier === null || (campaignsLoading && campaigns.length === 0 && summaryLoading)) {
+    return <PpcSkeleton />;
+  }
 
   if (tier === "BASIC") {
     return (

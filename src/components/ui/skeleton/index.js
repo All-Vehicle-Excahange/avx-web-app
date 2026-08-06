@@ -16,3 +16,4 @@ export { default as UserVehicleCardSkeleton } from "./UserVehicleCardSkeleton";
 export { default as StatCardSkeleton } from "./StatCardSkeleton";
 export { default as TopPerformingCardSkeleton } from "./TopPerformingCardSkeleton";
 export { default as InspectionSkeleton } from "./InspectionSkeleton";
+export { default as PpcSkeleton } from "./PpcSkeleton";

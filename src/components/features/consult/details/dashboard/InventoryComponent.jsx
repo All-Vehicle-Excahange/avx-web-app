@@ -37,6 +37,7 @@ import {
 } from "@/queries/Seller.queries";
 import TopPerformingCard from "./components/TopPerformingCard";
 import AddSlotPopup from "./components/AddSlotPopup";
+import UpgradeTierPopup from "./components/UpgradeTierPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import ListingPopup from "@/components/ui/const/ListingPopup";
 import StatCardSkeleton from "@/components/ui/skeleton/StatCardSkeleton";
@@ -84,6 +85,7 @@ export default function InventoryComponent() {
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isAddSlotOpen, setIsAddSlotOpen] = useState(false);
   const [isListingOpen, setIsListingOpen] = useState(false);
+  const [isUpgradeTierOpen, setIsUpgradeTierOpen] = useState(false);
   const [topPerformingPage, setTopPerformingPage] = useState(1);
 
   const queryClient = useQueryClient();
@@ -326,17 +328,15 @@ export default function InventoryComponent() {
             </div>
           </div>
 
-          {isNearLimit && (
-            <Button
-              variant="ghost"
-              size="sm"
-              showIcon={false}
-              onClick={() => push("/consult/subscription")}
-              className="w-full sm:w-auto shrink-0 shadow-md hover:shadow-lg transition-all cursor-pointer text-xs md:text-sm whitespace-nowrap"
-            >
-              Get More Slots
-            </Button>
-          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            showIcon={false}
+            onClick={() => setIsUpgradeTierOpen(true)}
+            className="w-full sm:w-auto shrink-0 shadow-md hover:shadow-lg transition-all cursor-pointer text-xs md:text-sm whitespace-nowrap"
+          >
+            Get More Slots
+          </Button>
         </div>
 
         {/* 3️⃣ TOP PERFORMING VEHICLES */}
@@ -611,6 +611,10 @@ export default function InventoryComponent() {
       <AddSlotPopup
         isOpen={isAddSlotOpen}
         onClose={() => setIsAddSlotOpen(false)}
+      />
+      <UpgradeTierPopup
+        isOpen={isUpgradeTierOpen}
+        onClose={() => setIsUpgradeTierOpen(false)}
       />
     </>
   );
