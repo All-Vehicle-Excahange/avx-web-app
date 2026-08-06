@@ -43,14 +43,18 @@ function LoginPopup({
   const [isClosing, setIsClosing] = useState(false);
   const hiddenInputRef = useRef(null);
 
-  // ── WebOTP auto-fill ─────────────────────────────────────────────────────
+  // ── WebOTP auto-fill (TEMPORARILY DISABLED) ──────────────────────────────
   const autoVerifyRef = useRef(null);
+  /*
   const { startWebOTP, abortWebOTP } = useWebOTP({
     onOTPReceived: (digits) => {
       // Simply fill the OTP boxes — the useEffect below handles auto-verify
       setOtp(digits.split(""));
     },
   });
+  */
+  const startWebOTP = () => {};
+  const abortWebOTP = () => {};
 
   // ── Auto-verify when all 6 digits are present ─────────────────────────────
   // Covers BOTH manual typing and WebOTP autofill. Before early return = no hooks violation.
@@ -167,6 +171,17 @@ function LoginPopup({
   const handleClose = triggerClose;
 
   const handleOtpChange = (index, value) => {
+    // Handle OTP paste or Android SMS autofill
+    if (value.length > 1) {
+      const pasted = value.replace(/\D/g, "").slice(0, 6);
+      if (pasted.length === 6) {
+        setOtpError("");
+        setOtp(pasted.split(""));
+        otpRefs.current[5]?.focus();
+      }
+      return;
+    }
+
     if (!/^\d?$/.test(value)) return;
 
     setOtpError("");

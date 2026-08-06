@@ -178,3 +178,15 @@ export const trackInquary = async (vehicleId, body) => {
     throw error;
   }
 };
+
+export const getCampaignAnalyticsDetail = async (campaignId, daysRange = "LAST_7_DAYS") => {
+  try {
+    const res = await axiosInstance.get(`/ppc/dashboard/campaigns/${campaignId}`, {
+      params: { daysRange },
+    });
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};

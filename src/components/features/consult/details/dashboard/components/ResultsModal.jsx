@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   X,
@@ -22,6 +22,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import Button from "@/components/ui/button";
+import { getCampaignAnalyticsDetail } from "@/services/ppc.service";
 
 const rangeData = {
   "7d": {
@@ -91,21 +92,82 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
   const [hoveredLineIndex, setHoveredLineIndex] = useState(null);
   const [hoveredSpendIndex, setHoveredSpendIndex] = useState(null);
 
-  const currentData = rangeData[range];
+  const [analyticsData, setAnalyticsData] = useState(null);
+  const [isLoadingAnalytics, setIsLoadingAnalytics] = useState(false);
+
+  const rangeDaysMap = {
+    today: "TODAY",
+    "7d": "LAST_7_DAYS",
+    "14d": "LAST_14_DAYS",
+    "30d": "LAST_30_DAYS",
+  };
+
+  useEffect(() => {
+    const campaignId = ad?.id || ad?.campaignId;
+    if (campaignId) {
+      setIsLoadingAnalytics(true);
+      const apiDaysRange = rangeDaysMap[range] || "LAST_7_DAYS";
+      getCampaignAnalyticsDetail(campaignId, apiDaysRange)
+        .then((res) => {
+          const detailData = res?.data || res;
+          if (detailData) {
+            setAnalyticsData(detailData);
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to load campaign analytics detail:", err);
+        })
+        .finally(() => {
+          setIsLoadingAnalytics(false);
+        });
+    }
+  }, [ad?.id, ad?.campaignId, range]);
+
+  const defaultData = rangeData[range];
+
+  const currentData = {
+    labels: analyticsData?.dailyImpressionsVsClicksGraph?.length > 0
+      ? analyticsData.dailyImpressionsVsClicksGraph.map((d) => d.dayOfWeek)
+      : defaultData.labels,
+    imp: analyticsData?.dailyImpressionsVsClicksGraph?.length > 0
+      ? analyticsData.dailyImpressionsVsClicksGraph.map((d) => d.impressions)
+      : defaultData.imp,
+    clicks: analyticsData?.dailyImpressionsVsClicksGraph?.length > 0
+      ? analyticsData.dailyImpressionsVsClicksGraph.map((d) => d.clicks)
+      : defaultData.clicks,
+    spend: analyticsData?.spendByDayGraph?.length > 0
+      ? analyticsData.spendByDayGraph.map((d) => d.spent)
+      : defaultData.spend,
+    imp_s: analyticsData?.performanceOverview?.impressions != null
+      ? analyticsData.performanceOverview.impressions.toLocaleString()
+      : defaultData.imp_s,
+    click_s: analyticsData?.performanceOverview?.clicks != null
+      ? analyticsData.performanceOverview.clicks.toLocaleString()
+      : defaultData.click_s,
+    ctr_s: analyticsData?.performanceOverview?.ctr != null
+      ? `${analyticsData.performanceOverview.ctr}%`
+      : defaultData.ctr_s,
+    spend_s: analyticsData?.performanceOverview?.totalSpend != null
+      ? `₹${analyticsData.performanceOverview.totalSpend}`
+      : defaultData.spend_s,
+    cpc_s: analyticsData?.performanceOverview?.avgCpc != null
+      ? `₹${analyticsData.performanceOverview.avgCpc}`
+      : defaultData.cpc_s,
+  };
 
   const handleTogglePause = () => {
     setIsCampaignPaused(!isCampaignPaused);
   };
 
-  // Safe Fallback Values from Clicked Card
-  const campaignName =
-    ad?.placement === "Consultant page"
+  // Safe Fallback Values from Clicked Card / API Data
+  const campaignName = analyticsData?.campaignInfo?.campaignName ||
+    (ad?.placement === "Consultant page"
       ? "Adarsh Auto Consultant"
-      : ad?.title || "BMW X1 — 2023 xDrive20d";
-  const campaignType = ad?.model || "CPC";
-  const campaignPlacement = ad?.placement || "Homepage featured";
-  const campaignBudget = ad?.budget ? `${ad.budget} budget` : "₹500/day budget";
-  const rateValue = ad?.rate || "₹4.50/click";
+      : ad?.title || "BMW X1 — 2023 xDrive20d");
+  const campaignType = analyticsData?.campaignInfo?.billingType || ad?.model || "CPC";
+  const campaignPlacement = analyticsData?.campaignInfo?.placements?.join(", ") || ad?.placement || "Homepage featured";
+  const campaignBudget = analyticsData?.campaignInfo?.dailyBudget ? `₹${analyticsData.campaignInfo.dailyBudget}/day budget` : (ad?.budget ? `${ad.budget} budget` : "₹500/day budget");
+  const rateValue = analyticsData?.budgetUsage?.spendBreakdown?.avgCpcPaid != null ? `₹${analyticsData.budgetUsage.spendBreakdown.avgCpcPaid}/click` : (ad?.rate || "₹4.50/click");
 
   // Build SVG points for Line Chart
   const renderLineChartSVG = () => {
@@ -509,12 +571,13 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                   Day 1 of 30
                 </span>
               </div>
-              <div className="space-y-0.5">
+              {/* Avg Position (Commented out as requested) */}
+              {/* <div className="space-y-0.5">
                 <span className="text-[10px] text-third block uppercase font-bold tracking-wider opacity-60">
                   Avg Position
                 </span>
                 <span className="text-sm font-bold text-fourth block">#2</span>
-              </div>
+              </div> */}
               <div className="space-y-0.5">
                 <span className="text-[10px] text-third block uppercase font-bold tracking-wider opacity-60">
                   Spent
@@ -533,7 +596,7 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
               Performance Overview
             </h3>
             <div className="bg-secondary p-0.5 rounded-lg border border-third/10 flex items-center gap-0.5">
-              {["7d", "14d", "30d"].map((t) => (
+              {["today", "7d", "14d", "30d"].map((t) => (
                 <button
                   key={t}
                   onClick={() => setRange(t)}
@@ -543,7 +606,13 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                       : "text-third hover:text-primary"
                   }`}
                 >
-                  {t === "7d" ? "7 Days" : t === "14d" ? "14 Days" : "30 Days"}
+                  {t === "today"
+                    ? "Today"
+                    : t === "7d"
+                      ? "7 Days"
+                      : t === "14d"
+                        ? "14 Days"
+                        : "30 Days"}
                 </button>
               ))}
             </div>
@@ -558,9 +627,6 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
               <span className="text-xl sm:text-2xl font-black text-primary block">
                 {currentData.imp_s}
               </span>
-              <span className="text-[11px] text-fourth font-semibold block">
-                ↑ 18% vs last week
-              </span>
             </div>
             <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">
               <span className="text-[10px] text-third uppercase font-bold tracking-wider block opacity-70">
@@ -569,9 +635,6 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
               <span className="text-xl sm:text-2xl font-black text-primary block">
                 {currentData.click_s}
               </span>
-              <span className="text-[11px] text-fourth font-semibold block">
-                ↑ 12% vs last week
-              </span>
             </div>
             <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">
               <span className="text-[10px] text-third uppercase font-bold tracking-wider block opacity-70">
@@ -579,9 +642,6 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
               </span>
               <span className="text-xl sm:text-2xl font-black text-primary block">
                 {currentData.ctr_s}
-              </span>
-              <span className="text-[11px] text-fourth font-semibold block">
-                Above average (2.1%)
               </span>
             </div>
             <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">
@@ -767,17 +827,21 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
               <div className="space-y-2">
                 <div className="flex justify-between text-xs text-third font-semibold">
                   <span>₹0</span>
-                  <span className="text-primary">₹340 spent today</span>
-                  <span>₹500 limit</span>
+                  <span className="text-primary">
+                    {analyticsData?.budgetUsage?.spentToday != null ? `₹${analyticsData.budgetUsage.spentToday} spent today` : "₹340 spent today"}
+                  </span>
+                  <span>
+                    {analyticsData?.budgetUsage?.dailyBudgetLimit != null ? `₹${analyticsData.budgetUsage.dailyBudgetLimit} limit` : "₹500 limit"}
+                  </span>
                 </div>
                 <div className="w-full bg-secondary h-2 rounded-full overflow-hidden border border-third/10">
                   <div
                     className="h-full bg-fourth rounded-full"
-                    style={{ width: "68%" }}
+                    style={{ width: `${analyticsData?.budgetUsage?.spentTodayPercentage ?? 68}%` }}
                   />
                 </div>
                 <span className="text-[11px] text-third/60 block font-medium">
-                  68% of daily budget used · resets at midnight
+                  {analyticsData?.budgetUsage?.spentTodayPercentage ?? 68}% of daily budget used · {analyticsData?.budgetUsage?.resetText || "resets at midnight"}
                 </span>
               </div>
 
@@ -793,32 +857,40 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                       Total Spent (Campaign)
                     </span>
                     <span className="text-primary font-bold">
-                      {currentData.spend_s}
+                      {analyticsData?.budgetUsage?.spendBreakdown?.totalSpentCampaign != null ? `₹${analyticsData.budgetUsage.spendBreakdown.totalSpentCampaign}` : currentData.spend_s}
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
                     <span className="text-third font-medium">
                       Remaining Budget
                     </span>
-                    <span className="text-fourth font-bold">₹14,442</span>
+                    <span className="text-fourth font-bold">
+                      {analyticsData?.budgetUsage?.spendBreakdown?.remainingBudget != null ? `₹${analyticsData.budgetUsage.spendBreakdown.remainingBudget}` : "₹14,442"}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
                     <span className="text-third font-medium">
                       Avg. CPC Paid
                     </span>
-                    <span className="text-primary font-bold">{rateValue}</span>
+                    <span className="text-primary font-bold">
+                      {analyticsData?.budgetUsage?.spendBreakdown?.avgCpcPaid != null ? `₹${analyticsData.budgetUsage.spendBreakdown.avgCpcPaid}/click` : rateValue}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
                     <span className="text-third font-medium">
                       Cost Per Inquiry
                     </span>
-                    <span className="text-primary font-bold">₹69.75</span>
+                    <span className="text-primary font-bold">
+                      {analyticsData?.budgetUsage?.spendBreakdown?.costPerInquiry != null ? `₹${analyticsData.budgetUsage.spendBreakdown.costPerInquiry}` : "₹69.75"}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
                     <span className="text-third font-medium">
                       Wallet Balance
                     </span>
-                    <span className="text-fourth font-bold">₹7,682</span>
+                    <span className="text-fourth font-bold">
+                      {analyticsData?.budgetUsage?.spendBreakdown?.walletBalance != null ? `₹${analyticsData.budgetUsage.spendBreakdown.walletBalance}` : "₹7,682"}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -872,9 +944,8 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
             </div>
           </div>
 
-          {/* Third Two-Column Grid: Recent Activity vs AI Insights */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            {/* Live Activity Timeline */}
+          {/* Third Two-Column Grid: Recent Activity vs AI Insights (Commented out as requested) */}
+          {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-4">
               <div className="flex items-center justify-between">
                 <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
@@ -884,160 +955,18 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                   Live Feed
                 </span>
               </div>
-
               <div className="space-y-4">
-                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-fourth mt-1 shrink-0" />
-                  <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">
-                      New inquiry received
-                    </p>
-                    <p className="text-third">
-                      Buyer asked about service history
-                    </p>
-                  </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
-                    2 min ago
-                  </span>
-                </div>
-                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-fourth mt-1 shrink-0" />
-                  <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">6 new clicks</p>
-                    <p className="text-third">
-                      Homepage featured slot · ₹27 spent
-                    </p>
-                  </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
-                    14 min ago
-                  </span>
-                </div>
-                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-fourth mt-1 shrink-0" />
-                  <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">11 new clicks</p>
-                    <p className="text-third">
-                      Homepage featured slot · ₹49.50 spent
-                    </p>
-                  </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
-                    1 hr ago
-                  </span>
-                </div>
-                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-third mt-1 shrink-0" />
-                  <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">
-                      340 impressions
-                    </p>
-                    <p className="text-third">Morning peak traffic window</p>
-                  </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
-                    3 hrs ago
-                  </span>
-                </div>
-                <div className="flex gap-3 items-start text-xs border-b border-third/10 pb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-fourth mt-1 shrink-0" />
-                  <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">
-                      New inquiry received
-                    </p>
-                    <p className="text-third">Buyer requested test drive</p>
-                  </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
-                    5 hrs ago
-                  </span>
-                </div>
-                <div className="flex gap-3 items-start text-xs pb-1">
-                  <div className="w-2.5 h-2.5 rounded-full bg-amber-500 mt-1 shrink-0" />
-                  <div className="flex-1 space-y-0.5">
-                    <p className="font-semibold text-primary">
-                      Ad resumed automatically
-                    </p>
-                    <p className="text-third">
-                      Wallet topped up · budget reset at midnight
-                    </p>
-                  </div>
-                  <span className="text-[10px] text-third font-semibold whitespace-nowrap opacity-70">
-                    Yesterday
-                  </span>
-                </div>
+                ...
               </div>
             </div>
-
-            {/* AI Insights */}
             <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-4">
               <div className="flex items-center justify-between">
                 <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
                   Insights
                 </h4>
-                <TrendingUp size={16} className="text-amber-500" />
-              </div>
-
-              <div className="space-y-3">
-                <div className="flex gap-3 items-start p-3 rounded-lg bg-fourth/10 border border-fourth/20 text-xs">
-                  <TrendingUp
-                    className="text-fourth shrink-0 mt-0.5"
-                    size={16}
-                  />
-                  <div>
-                    <h5 className="font-bold text-fourth">
-                      CTR is 2× the platform average
-                    </h5>
-                    <p className="text-third mt-0.5 leading-relaxed font-medium">
-                      Homepage placement is working well for this vehicle.
-                      Consider increasing daily budget to ₹750 for more reach.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3 items-start p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs">
-                  <AlertTriangle
-                    className="text-amber-400 shrink-0 mt-0.5"
-                    size={16}
-                  />
-                  <div>
-                    <h5 className="font-bold text-amber-400">
-                      Budget runs out by 4 PM daily
-                    </h5>
-                    <p className="text-amber-200/80 mt-0.5 leading-relaxed font-medium">
-                      You&apos;re missing evening traffic. Raise daily budget or
-                      reduce max CPC bid to stretch further.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3 items-start p-3 rounded-lg bg-fourth/10 border border-fourth/20 text-xs">
-                  <MessageSquare
-                    className="text-fourth shrink-0 mt-0.5"
-                    size={16}
-                  />
-                  <div>
-                    <h5 className="font-bold text-fourth">
-                      8 inquiries in 7 days
-                    </h5>
-                    <p className="text-third mt-0.5 leading-relaxed font-medium">
-                      Effective cost per inquiry is ₹69.75. Switching to CPI
-                      billing could reduce cost if inquiry rate holds.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3 items-start p-3 rounded-lg bg-fourth/10 border border-fourth/20 text-xs">
-                  <Calendar className="text-fourth shrink-0 mt-0.5" size={16} />
-                  <div>
-                    <h5 className="font-bold text-fourth">
-                      Weekends drive 34% more clicks
-                    </h5>
-                    <p className="text-third mt-0.5 leading-relaxed font-medium">
-                      Sat–Sun peak confirmed. You have weekend boosting active —
-                      good.
-                    </p>
-                  </div>
-                </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

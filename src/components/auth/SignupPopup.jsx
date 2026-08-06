@@ -49,14 +49,18 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
   const [googleToken, setGoogleToken] = useState(null);
   const [isGoogleSignupFlow, setIsGoogleSignupFlow] = useState(false);
 
-  // ── WebOTP auto-fill ─────────────────────────────────────────────────────
+  // ── WebOTP auto-fill (TEMPORARILY DISABLED) ──────────────────────────────
   const autoVerifyRef = useRef(null);
+  /*
   const { startWebOTP, abortWebOTP } = useWebOTP({
     onOTPReceived: (digits) => {
       // Simply fill the OTP boxes — the useEffect below handles auto-verify
       setOtp(digits.split(""));
     },
   });
+  */
+  const startWebOTP = () => {};
+  const abortWebOTP = () => {};
 
   // ── Auto-verify when all 6 digits are present ─────────────────────────────
   // Covers BOTH manual typing (last digit fills) and WebOTP autofill (setOtp fills all at once).
@@ -176,6 +180,16 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
   if (!isOpen && !isClosing) return null;
 
   const handleOtpChange = (index, value) => {
+    // Handle OTP paste or Android SMS autofill
+    if (value.length > 1) {
+      const pasted = value.replace(/\D/g, "").slice(0, 6);
+      if (pasted.length === 6) {
+        setOtp(pasted.split(""));
+        otpRefs.current[5]?.focus();
+      }
+      return;
+    }
+
     if (!/^\d?$/.test(value)) return;
     const newOtp = [...otp];
     newOtp[index] = value;

@@ -153,6 +153,8 @@ export default function PpcComponent() {
     isDraft: true,
   }));
 
+  const apiDaysRange = range === "0" ? "TODAY" : `LAST_${range}_DAYS`;
+
   // 1. Fetch campaigns using useInfiniteQuery
   const {
     data: campaignsInfiniteData,
@@ -165,7 +167,7 @@ export default function PpcComponent() {
       const res = await getAllCampaigns({
         pageNo: pageParam,
         pageSize: 10,
-        daysRange: `LAST_${range}_DAYS`,
+        daysRange: apiDaysRange,
       });
       return res;
     },
@@ -182,7 +184,7 @@ export default function PpcComponent() {
   const { data: summaryData, isLoading: summaryLoading } = useQuery({
     queryKey: ["dashboard-summary", range],
     queryFn: async () => {
-      const res = await getDashboardSummary(`LAST_${range}_DAYS`);
+      const res = await getDashboardSummary(apiDaysRange);
       return res?.data || {};
     },
   });
@@ -191,7 +193,7 @@ export default function PpcComponent() {
   const { data: performanceData } = useQuery({
     queryKey: ["dashboard-performance", range],
     queryFn: async () => {
-      const res = await getDashboardPerformance(`LAST_${range}_DAYS`);
+      const res = await getDashboardPerformance(apiDaysRange);
       return res?.data || {};
     },
   });
@@ -334,7 +336,9 @@ export default function PpcComponent() {
   };
 
   const rangeOptions = [
+    { label: "Today", value: "0" },
     { label: "Last 7 days", value: "7" },
+    { label: "Last 14 days", value: "14" },
     { label: "Last 30 days", value: "30" },
     { label: "Last 90 days", value: "90" },
   ];
@@ -461,37 +465,26 @@ export default function PpcComponent() {
 
         {/* METRICS */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-          {summaryLoading ? (
-            <>
-              <StatCardSkeleton />
-              <StatCardSkeleton />
-              <StatCardSkeleton />
-              <StatCardSkeleton />
-            </>
-          ) : (
-            <>
-              <StatCard
-                icon={<TrendingUp size={20} />}
-                label="Active Campaigns"
-                value={summaryData?.activeCampaigns ?? summaryData?.activeCount ?? 0}
-              />
-              <StatCard
-                icon={<Eye size={20} />}
-                label="Spent Today"
-                value={`₹${summaryData?.spentToday ?? summaryData?.speedToday ?? 0}`}
-              />
-              <StatCard
-                icon={<MousePointerClick size={20} />}
-                label="Total Clicks"
-                value={summaryData?.totalClicks ?? summaryData?.clicks ?? 0}
-              />
-              <StatCard
-                icon={<CheckCircle size={20} />}
-                label="Avg.CPC"
-                value={`₹${summaryData?.avgCpc ?? 0}`}
-              />
-            </>
-          )}
+          <StatCard
+            icon={<TrendingUp size={20} />}
+            label="Active Campaigns"
+            value={summaryData?.activeCampaigns ?? summaryData?.activeCount ?? 0}
+          />
+          <StatCard
+            icon={<Eye size={20} />}
+            label="Total Impressions"
+            value={summaryData?.totalImpressions ?? summaryData?.impressions ?? 0}
+          />
+          <StatCard
+            icon={<MousePointerClick size={20} />}
+            label="Total Clicks"
+            value={summaryData?.totalClicks ?? summaryData?.clicks ?? 0}
+          />
+          <StatCard
+            icon={<CheckCircle size={20} />}
+            label="Total Spent"
+            value={`₹${summaryData?.totalSpent ?? 0}`}
+          />
         </div>
       </div>
 
@@ -1160,9 +1153,17 @@ export default function PpcComponent() {
               <h3 className="font-semibold text-lg sm:text-xl text-white">
                 Campaign performance
               </h3>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 text-xs sm:text-sm hover:bg-white/5 cursor-pointer transition-colors text-zinc-300">
-                Last 7 days <ChevronDown size={14} />
-              </div>
+              <select
+                value={range}
+                onChange={(e) => setRange(e.target.value)}
+                className="bg-zinc-900 text-zinc-300 text-xs sm:text-sm border border-white/10 rounded-lg px-3 py-1.5 outline-none cursor-pointer hover:bg-zinc-800 transition-colors"
+              >
+                <option value="0">Today</option>
+                <option value="7">Last 7 days</option>
+                <option value="14">Last 14 days</option>
+                <option value="30">Last 30 days</option>
+                <option value="90">Last 90 days</option>
+              </select>
             </div>
 
             {/* Grid of 6 Metrics */}
