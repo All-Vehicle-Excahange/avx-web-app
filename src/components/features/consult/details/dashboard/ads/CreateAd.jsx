@@ -7,6 +7,7 @@ import {
   Check,
   Sparkles,
   Rocket,
+  Info,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import toast from "react-hot-toast";
@@ -18,6 +19,11 @@ import {
 } from "@/services/ppc.service";
 import { getVehicleOverview } from "@/services/vehicle.service";
 import { useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getWalletBalanceQuery } from "@/queries/waller.queries";
+import AddMoneyPopup from "@/components/features/consult/details/components/AddMoneyPopup";
+import { addTopUpPaymemt } from "@/services/waller.service";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 // Step Components
 import TypeStep from "./components/TypeStep";
@@ -37,6 +43,145 @@ export default function CreateAd() {
   const [isLaunched, setIsLaunched] = useState(false);
   const [isLoadingDraft, setIsLoadingDraft] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+
+  const queryClient = useQueryClient();
+  const [showInsufficientFunds, setShowInsufficientFunds] = useState(false);
+  const [isAddMoneyOpen, setIsAddMoneyOpen] = useState(false);
+  const [isPaying, setIsPaying] = useState(false);
+
+  const { data: walletData } = useQuery({
+    ...getWalletBalanceQuery(),
+  });
+  const balance = walletData?.balance ?? 0;
+
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleConfirmAddMoney = async (amount) => {
+    setIsPaying(true);
+    try {
+      const isScriptLoaded = await loadRazorpayScript();
+      if (!isScriptLoaded) {
+        toast.error(
+          "Razorpay SDK failed to load. Please check your connection.",
+        );
+        return;
+      }
+
+      const payload = { amount: Number(amount) };
+      const response = await addTopUpPaymemt(payload);
+
+      if (response && response.success && response.data) {
+        const orderData = response.data;
+
+        const storeUser = useAuthStore.getState().user;
+        let prefillName = "";
+        if (storeUser) {
+          if (storeUser.firstname || storeUser.lastname) {
+            prefillName =
+              `${storeUser.firstname || ""} ${storeUser.lastname || ""}`.trim();
+          } else {
+            prefillName =
+              storeUser.name || storeUser.fullName || storeUser.firstName || "";
+          }
+        }
+        let prefillEmail = storeUser?.email || "";
+        let prefillContact =
+          storeUser?.phoneNumber || storeUser?.phone || storeUser?.mobile || "";
+
+        if (
+          typeof window !== "undefined" &&
+          (!prefillName || !prefillEmail || !prefillContact)
+        ) {
+          try {
+            const savedUser = localStorage.getItem("user");
+            if (savedUser) {
+              const userObj = JSON.parse(savedUser);
+              if (userObj) {
+                if (!prefillName) {
+                  if (userObj.firstname || userObj.lastname) {
+                    prefillName =
+                      `${userObj.firstname || ""} ${userObj.lastname || ""}`.trim();
+                  } else {
+                    prefillName =
+                      userObj.name ||
+                      userObj.fullName ||
+                      userObj.firstName ||
+                      "";
+                  }
+                }
+                if (!prefillEmail) prefillEmail = userObj.email || "";
+                if (!prefillContact)
+                  prefillContact =
+                    userObj.phoneNumber ||
+                    userObj.phone ||
+                    userObj.mobile ||
+                    "";
+              }
+            }
+          } catch (e) {
+            console.error(
+              "Error parsing user from localStorage for prefill",
+              e,
+            );
+          }
+        }
+
+        const options = {
+          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || orderData.keyId,
+          amount: Math.round(orderData.amount * 100),
+          currency: orderData.currency || "INR",
+          name: "Reecomm",
+          description: "Wallet Top-up Payment",
+          order_id: orderData.razorpayOrderId,
+          prefill: {
+            name: prefillName,
+            email: prefillEmail,
+            contact: prefillContact,
+          },
+          handler: async function (paymentResponse) {
+            toast.success(
+              `Successfully added ₹${amount.toLocaleString("en-IN")} to wallet!`,
+            );
+            setIsAddMoneyOpen(false);
+            queryClient.invalidateQueries({ queryKey: ["wallet-balance"] });
+          },
+          theme: {
+            color: "#007bff",
+          },
+          modal: {
+            ondismiss: function () {
+              toast.error("Payment cancelled.");
+            },
+          },
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.on("payment.failed", function (failResponse) {
+          toast.error("Payment failed: " + failResponse.error.description);
+        });
+        rzp.open();
+      } else {
+        toast.error(response?.message || "Failed to initiate payment.");
+      }
+    } catch (error) {
+      console.error("Payment topup error:", error);
+      toast.error(error?.response?.data?.message || "Something went wrong.");
+    } finally {
+      setIsPaying(false);
+    }
+  };
 
   // Campaign State
   const [state, setState] = useState({
@@ -254,6 +399,10 @@ export default function CreateAd() {
       setCurStep(nextStep);
     } else {
       // Launch / Update Campaign
+      if (!isEditMode && balance < state.dailyBudget) {
+        setShowInsufficientFunds(true);
+        return;
+      }
       setIsLaunching(true);
       try {
         const placementMapping = {
@@ -587,6 +736,55 @@ export default function CreateAd() {
           />
         </div>
       </div>
+
+      {showInsufficientFunds && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-secondary/80 backdrop-blur-sm">
+          <div className="relative w-full max-w-md bg-secondary rounded-2xl p-6 space-y-6 shadow-2xl">
+            <button
+              onClick={() => setShowInsufficientFunds(false)}
+              className="absolute top-4 right-4 text-third hover:text-primary transition-colors"
+            >
+              <X size={20} />
+            </button>
+            <div className="space-y-2 text-center">
+              <div className="mx-auto w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 border border-red-500/20">
+                <Info size={24} />
+              </div>
+              <h3 className="text-lg font-bold text-primary">Insufficient Wallet Balance</h3>
+              <p className="text-sm text-third">
+                You don't have enough funds in your wallet to launch this boost. 
+                Required minimum balance is <strong>₹{state.dailyBudget}</strong>, but your current balance is <strong>₹{balance}</strong>.
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <Button
+                variant="outlineSecondary"
+                className="flex-1"
+                onClick={() => setShowInsufficientFunds(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="ghost"
+                className="flex-1"
+                onClick={() => {
+                  setShowInsufficientFunds(false);
+                  setIsAddMoneyOpen(true);
+                }}
+              >
+                Add Funds
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <AddMoneyPopup
+        isOpen={isAddMoneyOpen}
+        onClose={() => setIsAddMoneyOpen(false)}
+        onConfirm={handleConfirmAddMoney}
+        loading={isPaying}
+      />
     </div>
   );
 }

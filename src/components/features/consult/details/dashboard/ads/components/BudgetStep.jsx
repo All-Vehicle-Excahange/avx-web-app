@@ -34,7 +34,8 @@ export default function BudgetStep({
   ];
 
   const getBudgetTrackBackground = () => {
-    const percent = ((dailyBudget - 100) / (10000 - 100)) * 100;
+    const clampedBudget = Math.max(100, Math.min(10000, dailyBudget || 100));
+    const percent = ((clampedBudget - 100) / (10000 - 100)) * 100;
     return `linear-gradient(
       to right,
       var(--color-fourth) 0%,
@@ -45,7 +46,8 @@ export default function BudgetStep({
   };
 
   const getBidTrackBackground = () => {
-    const percent = ((maxBid - 1) / (1000 - 1)) * 100;
+    const clampedBid = Math.max(1, Math.min(1000, maxBid || 1));
+    const percent = ((clampedBid - 1) / (1000 - 1)) * 100;
     return `linear-gradient(
       to right,
       var(--color-fourth) 0%,
@@ -69,14 +71,32 @@ export default function BudgetStep({
         <div className="space-y-2">
           <div className="flex justify-between items-center">
             <label className="text-xs font-semibold text-primary">Daily budget</label>
-            <span className="text-fourth font-bold text-sm">₹{dailyBudget}</span>
+            <div className="flex items-center gap-1 bg-white/5 border border-third/35 rounded-lg px-2 py-1 max-w-[120px]">
+              <span className="text-fourth font-bold text-sm">₹</span>
+              <input
+                type="number"
+                min="100"
+                max="10000"
+                step="100"
+                value={dailyBudget || ""}
+                onChange={(e) => {
+                  const val = e.target.value === "" ? 0 : Number(e.target.value);
+                  setDailyBudget(val);
+                }}
+                onBlur={() => {
+                  if (dailyBudget < 100) setDailyBudget(100);
+                  if (dailyBudget > 10000) setDailyBudget(10000);
+                }}
+                className="w-full bg-transparent text-fourth font-bold text-sm outline-none focus:ring-0 border-0 p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              />
+            </div>
           </div>
           <input
             type="range"
             min="100"
             max="10000"
             step="100"
-            value={dailyBudget}
+            value={dailyBudget || 100}
             onChange={(e) => setDailyBudget(Number(e.target.value))}
             className="w-full h-1 rounded-lg appearance-none cursor-pointer accent-fourth"
             style={{ background: getBudgetTrackBackground() }}
@@ -92,14 +112,32 @@ export default function BudgetStep({
             <label className="text-xs font-semibold text-primary">
               {isCPI ? "Max CPI bid" : "Max CPC bid"}
             </label>
-            <span className="text-fourth font-bold text-sm">₹{maxBid}</span>
+            <div className="flex items-center gap-1 bg-white/5 border border-third/35 rounded-lg px-2 py-1 max-w-[100px]">
+              <span className="text-fourth font-bold text-sm">₹</span>
+              <input
+                type="number"
+                min="1"
+                max="1000"
+                step="1"
+                value={maxBid || ""}
+                onChange={(e) => {
+                  const val = e.target.value === "" ? 0 : Number(e.target.value);
+                  setMaxBid(val);
+                }}
+                onBlur={() => {
+                  if (maxBid < 1) setMaxBid(1);
+                  if (maxBid > 1000) setMaxBid(1000);
+                }}
+                className="w-full bg-transparent text-fourth font-bold text-sm outline-none focus:ring-0 border-0 p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              />
+            </div>
           </div>
           <input
             type="range"
             min="1"
             max="1000"
             step="1"
-            value={maxBid}
+            value={maxBid || 1}
             onChange={(e) => setMaxBid(Number(e.target.value))}
             className="w-full h-1 rounded-lg appearance-none cursor-pointer accent-fourth"
             style={{ background: getBidTrackBackground() }}

@@ -100,7 +100,7 @@ export default function AddMoneyPopup({
       }}
     >
       <div
-        className="relative flex w-full max-w-[780px] overflow-hidden rounded-2xl shadow-2xl bg-[#141416] border border-[#23262F]/80 text-white"
+        className="relative flex w-full max-w-[780px] overflow-hidden rounded-2xl shadow-2xl bg-[#141416] text-white"
         onClick={(e) => e.stopPropagation()}
         style={{
           animation: isClosing

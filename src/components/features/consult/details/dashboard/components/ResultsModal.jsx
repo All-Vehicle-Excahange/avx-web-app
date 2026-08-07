@@ -89,6 +89,25 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
   const [isCampaignPaused, setIsCampaignPaused] = useState(
     ad?.status === "Paused",
   );
+
+  const currentStatus = isCampaignPaused ? "Paused" : (ad?.status || "Active");
+  
+  let statusBadgeClass = "bg-fourth/10 text-fourth";
+  let statusDotClass = "bg-fourth";
+  if (currentStatus === "Paused") {
+    statusBadgeClass = "bg-amber-500/10 text-amber-400";
+    statusDotClass = "bg-amber-400";
+  } else if (currentStatus === "In Review") {
+    statusBadgeClass = "bg-blue-500/10 text-blue-400";
+    statusDotClass = "bg-blue-400";
+  } else if (currentStatus === "Draft") {
+    statusBadgeClass = "bg-yellow-500/10 text-yellow-500";
+    statusDotClass = "bg-yellow-500";
+  } else if (currentStatus === "Completed") {
+    statusBadgeClass = "bg-zinc-500/10 text-zinc-300";
+    statusDotClass = "bg-zinc-400";
+  }
+
   const [hoveredLineIndex, setHoveredLineIndex] = useState(null);
   const [hoveredSpendIndex, setHoveredSpendIndex] = useState(null);
 
@@ -461,41 +480,45 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
             >
               <ArrowLeft size={16} />
             </button>
-            <div className="space-y-0.5">
+            <div className="space-y-1">
               <div className="flex items-center flex-wrap gap-2">
-                <span className="font-semibold text-sm sm:text-base text-primary">
-                  {campaignName}
-                </span>
-                <span
-                  className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                    isCampaignPaused
-                      ? "bg-amber-500/10 text-amber-400"
-                      : "bg-fourth/10 text-fourth"
-                  }`}
-                >
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full ${
-                      isCampaignPaused
-                        ? "bg-amber-400"
-                        : "bg-fourth animate-pulse"
-                    }`}
-                  />
-                  {isCampaignPaused ? "Paused" : "Active"}
-                </span>
+                {isLoadingAnalytics ? (
+                  <div className="h-5 bg-zinc-800 rounded w-48 animate-pulse" />
+                ) : (
+                  <>
+                    <span className="font-semibold text-sm sm:text-base text-primary">
+                      {campaignName}
+                    </span>
+                    <span
+                      className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${statusBadgeClass}`}
+                    >
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${statusDotClass} ${currentStatus === "Active" ? "animate-pulse" : ""}`}
+                      />
+                      {currentStatus}
+                    </span>
+                  </>
+                )}
               </div>
               <div className="flex items-center flex-wrap gap-x-2 gap-y-1 text-xs text-third">
-                <span className="bg-blue-500/15 text-blue-400 font-bold px-1.5 py-0.5 rounded text-[10px] uppercase">
-                  {campaignType}
-                </span>
-                <span className="text-third/80 font-semibold">
-                  {campaignPlacement}
-                </span>
-                <span className="text-third/50 font-semibold">•</span>
-                <span>18 May – 17 Jun 2026</span>
-                <span className="text-third/50 font-semibold">•</span>
-                <span className="text-third/95 font-semibold">
-                  {campaignBudget}
-                </span>
+                {isLoadingAnalytics ? (
+                  <div className="h-4 bg-zinc-800 rounded w-64 animate-pulse" />
+                ) : (
+                  <>
+                    <span className="bg-blue-500/15 text-blue-400 font-bold px-1.5 py-0.5 rounded text-[10px] uppercase">
+                      {campaignType}
+                    </span>
+                    <span className="text-third/80 font-semibold">
+                      {campaignPlacement}
+                    </span>
+                    <span className="text-third/50 font-semibold">•</span>
+                    <span>18 May – 17 Jun 2026</span>
+                    <span className="text-third/50 font-semibold">•</span>
+                    <span className="text-third/95 font-semibold">
+                      {campaignBudget}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -505,7 +528,8 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
             <Button
               variant="outlineSecondary"
               size="sm"
-              onClick={() => push("/consult/dashboard/ads/create")}
+              disabled={currentStatus !== "Active"}
+              onClick={() => push(`/consult/dashboard/ads/create?campaignId=${ad?.id || ad?.campaignId}`)}
               className="h-9 px-4 text-xs font-semibold flex items-center gap-1.5"
             >
               <Edit className="mr-2" size={14} /> Edit
@@ -513,6 +537,7 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
             <Button
               variant="outlineSecondary"
               size="sm"
+              disabled={currentStatus !== "Active" && currentStatus !== "Paused"}
               onClick={handleTogglePause}
               className="h-9 px-4 text-xs font-semibold flex items-center gap-1.5"
             >
@@ -526,15 +551,17 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
                 </>
               )}
             </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => push("/consult/dashboard/ads/create")}
-              className="h-9 px-4 text-xs font-bold flex items-center gap-1.5"
-            >
-              <RefreshCw className="mr-2" size={14} strokeWidth={3} /> Boost
-              again
-            </Button>
+            {(analyticsData?.campaignInfo?.endDate || ad?.endDate) && new Date() > new Date(analyticsData?.campaignInfo?.endDate || ad?.endDate) && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => push(`/consult/dashboard/ads/create?campaignId=${ad?.id || ad?.campaignId}`)}
+                className="h-9 px-4 text-xs font-bold flex items-center gap-1.5"
+              >
+                <RefreshCw className="mr-2" size={14} strokeWidth={3} /> Boost
+                again
+              </Button>
+            )}
             <button
               onClick={onClose}
               className="w-9 h-9 rounded-full border border-third/15 flex items-center justify-center text-third hover:bg-secondary hover:text-primary transition-all cursor-pointer ml-1"
@@ -545,429 +572,465 @@ export default function ResultsModal({ onClose, isClosing, ad }) {
         </div>
 
         {/* Scrollable Layout Body */}
-        <div className="overflow-y-auto p-4 sm:p-5 space-y-5 custom-scrollbar bg-secondary">
-          {/* Vehicle Metadata Header Card */}
-          <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-lg bg-secondary flex items-center justify-center text-third border border-third/10">
-                <Car size={24} />
+        {isLoadingAnalytics ? (
+          <div className="overflow-y-auto p-4 sm:p-5 space-y-5 custom-scrollbar bg-secondary animate-pulse">
+            {/* Header skeleton */}
+            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-lg bg-zinc-800" />
+                <div className="space-y-2">
+                  <div className="h-4 bg-zinc-800 rounded w-48" />
+                  <div className="h-3 bg-zinc-800 rounded w-32" />
+                </div>
               </div>
-              <div>
-                <h4 className="font-semibold text-sm sm:text-base text-primary">
-                  {campaignName}
-                </h4>
-                <p className="text-xs text-third font-medium mt-0.5">
-                  12,400 km · Petrol · Auto · ₹42.0L
-                </p>
+              <div className="flex gap-6 w-full md:w-auto">
+                <div className="space-y-2 flex-1 md:flex-initial">
+                  <div className="h-3 bg-zinc-800 rounded w-16" />
+                  <div className="h-4 bg-zinc-800 rounded w-24" />
+                </div>
+                <div className="space-y-2 flex-1 md:flex-initial">
+                  <div className="h-3 bg-zinc-800 rounded w-16" />
+                  <div className="h-4 bg-zinc-800 rounded w-24" />
+                </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-6 sm:gap-10 border-t border-third/10 md:border-t-0 pt-3 md:pt-0 w-full md:w-auto">
-              <div className="space-y-0.5">
-                <span className="text-[10px] text-third block uppercase font-bold tracking-wider opacity-60">
-                  Campaign
-                </span>
-                <span className="text-sm font-semibold text-primary block">
-                  Day 1 of 30
-                </span>
-              </div>
-              {/* Avg Position (Commented out as requested) */}
-              {/* <div className="space-y-0.5">
-                <span className="text-[10px] text-third block uppercase font-bold tracking-wider opacity-60">
-                  Avg Position
-                </span>
-                <span className="text-sm font-bold text-fourth block">#2</span>
-              </div> */}
-              <div className="space-y-0.5">
-                <span className="text-[10px] text-third block uppercase font-bold tracking-wider opacity-60">
-                  Spent
-                </span>
-                <span className="text-sm font-semibold text-third block">
-                  {currentData.spend_s} /{" "}
-                  <span className="text-third/60">₹15,000</span>
-                </span>
-              </div>
+            {/* Performance tab skeleton */}
+            <div className="flex justify-between items-center">
+              <div className="h-4 bg-zinc-800 rounded w-36" />
+              <div className="h-8 bg-zinc-800 rounded w-48" />
             </div>
-          </div>
 
-          {/* Performance Overview section title and tabs */}
-          <div className="flex items-center justify-between gap-4">
-            <h3 className="text-sm font-bold text-primary uppercase tracking-wider">
-              Performance Overview
-            </h3>
-            <div className="bg-secondary p-0.5 rounded-lg border border-third/10 flex items-center gap-0.5">
-              {["today", "7d", "14d", "30d"].map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setRange(t)}
-                  className={`text-[11px] px-3 py-1 rounded-md font-semibold transition-all cursor-pointer ${
-                    range === t
-                      ? "bg-secondary/80 text-primary shadow-md border border-third/15"
-                      : "text-third hover:text-primary"
-                  }`}
-                >
-                  {t === "today"
-                    ? "Today"
-                    : t === "7d"
-                      ? "7 Days"
-                      : t === "14d"
-                        ? "14 Days"
-                        : "30 Days"}
-                </button>
+            {/* Cards skeleton */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              {Array.from({ length: 4 }).map((_, idx) => (
+                <div key={idx} className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-3">
+                  <div className="h-3 bg-zinc-800 rounded w-16" />
+                  <div className="h-6 bg-zinc-800 rounded w-24" />
+                </div>
               ))}
             </div>
-          </div>
 
-          {/* 4 Cards Stats Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">
-              <span className="text-[10px] text-third uppercase font-bold tracking-wider block opacity-70">
-                Impressions
-              </span>
-              <span className="text-xl sm:text-2xl font-black text-primary block">
-                {currentData.imp_s}
-              </span>
-            </div>
-            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">
-              <span className="text-[10px] text-third uppercase font-bold tracking-wider block opacity-70">
-                {campaignType === "CPI" ? "Inquiries" : "Clicks"}
-              </span>
-              <span className="text-xl sm:text-2xl font-black text-primary block">
-                {currentData.click_s}
-              </span>
-            </div>
-            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">
-              <span className="text-[10px] text-third uppercase font-bold tracking-wider block opacity-70">
-                {campaignType === "CPI" ? "INQ Rate" : "CTR"}
-              </span>
-              <span className="text-xl sm:text-2xl font-black text-primary block">
-                {currentData.ctr_s}
-              </span>
-            </div>
-            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">
-              <span className="text-[10px] text-third uppercase font-bold tracking-wider block opacity-70">
-                Total Spend
-              </span>
-              <span className="text-xl sm:text-2xl font-black text-primary block">
-                {currentData.spend_s}
-              </span>
-              <span className="text-[11px] text-third font-medium block">
-                {currentData.cpc_s} avg CPC
-              </span>
+            {/* Chart & Funnel skeleton */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+              <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 h-64 flex flex-col justify-between">
+                <div className="h-4 bg-zinc-800 rounded w-36" />
+                <div className="h-36 bg-zinc-800 rounded w-full" />
+              </div>
+              <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 h-64 space-y-4">
+                <div className="h-4 bg-zinc-800 rounded w-36" />
+                <div className="space-y-3">
+                  {Array.from({ length: 4 }).map((_, idx) => (
+                    <div key={idx} className="flex items-center gap-3">
+                      <div className="h-3 bg-zinc-800 rounded w-16" />
+                      <div className="h-5 bg-zinc-800 rounded flex-1" />
+                      <div className="h-3 bg-zinc-800 rounded w-8" />
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
+        ) : (
+          <div className="overflow-y-auto p-4 sm:p-5 space-y-5 custom-scrollbar bg-secondary">
+            {/* Vehicle Metadata Header Card */}
+            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-lg bg-secondary flex items-center justify-center text-third border border-third/10">
+                  <Car size={24} />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm sm:text-base text-primary">
+                    {campaignName}
+                  </h4>
+                  <p className="text-xs text-third font-medium mt-0.5">
+                    12,400 km · Petrol · Auto · ₹42.0L
+                  </p>
+                </div>
+              </div>
 
-          {/* First Two-Column Grid: SVG Line Chart & Conversion Funnel */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            {/* Impressions vs Clicks Chart */}
-            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-3">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center gap-6 sm:gap-10 border-t border-third/10 md:border-t-0 pt-3 md:pt-0 w-full md:w-auto">
+                <div className="space-y-0.5">
+                  <span className="text-[10px] text-third block uppercase font-bold tracking-wider opacity-60">
+                    Campaign
+                  </span>
+                  <span className="text-sm font-semibold text-primary block">
+                    Day 1 of 30
+                  </span>
+                </div>
+                {/* Avg Position (Commented out as requested) */}
+                {/* <div className="space-y-0.5">
+                  <span className="text-[10px] text-third block uppercase font-bold tracking-wider opacity-60">
+                    Avg Position
+                  </span>
+                  <span className="text-sm font-bold text-fourth block">#2</span>
+                </div> */}
+                <div className="space-y-0.5">
+                  <span className="text-[10px] text-third block uppercase font-bold tracking-wider opacity-60">
+                    Spent
+                  </span>
+                  <span className="text-sm font-semibold text-third block">
+                    {currentData.spend_s} /{" "}
+                    <span className="text-third/60">₹15,000</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Performance Overview section title and tabs */}
+            <div className="flex items-center justify-between gap-4">
+              <h3 className="text-sm font-bold text-primary uppercase tracking-wider">
+                Performance Overview
+              </h3>
+              <div className="bg-secondary p-0.5 rounded-lg border border-third/10 flex items-center gap-0.5">
+                {["today", "7d", "14d", "30d"].map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setRange(t)}
+                    className={`text-[11px] px-3 py-1 rounded-md font-semibold transition-all cursor-pointer ${
+                      range === t
+                        ? "bg-secondary/80 text-primary shadow-md border border-third/15"
+                        : "text-third hover:text-primary"
+                    }`}
+                  >
+                    {t === "today"
+                      ? "Today"
+                      : t === "7d"
+                        ? "7 Days"
+                        : t === "14d"
+                          ? "14 Days"
+                          : "30 Days"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 4 Cards Stats Grid */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">
+                <span className="text-[10px] text-third uppercase font-bold tracking-wider block opacity-70">
+                  Impressions
+                </span>
+                <span className="text-xl sm:text-2xl font-black text-primary block">
+                  {currentData.imp_s}
+                </span>
+              </div>
+              <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">
+                <span className="text-[10px] text-third uppercase font-bold tracking-wider block opacity-70">
+                  {campaignType === "CPI" ? "Inquiries" : "Clicks"}
+                </span>
+                <span className="text-xl sm:text-2xl font-black text-primary block">
+                  {currentData.click_s}
+                </span>
+              </div>
+              <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">
+                <span className="text-[10px] text-third uppercase font-bold tracking-wider block opacity-70">
+                  {campaignType === "CPI" ? "INQ Rate" : "CTR"}
+                </span>
+                <span className="text-xl sm:text-2xl font-black text-primary block">
+                  {currentData.ctr_s}
+                </span>
+              </div>
+              <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-1 hover:border-third/20 transition-colors">
+                <span className="text-[10px] text-third uppercase font-bold tracking-wider block opacity-70">
+                  Total Spend
+                </span>
+                <span className="text-xl sm:text-2xl font-black text-primary block">
+                  {currentData.spend_s}
+                </span>
+                <span className="text-[11px] text-third font-medium block">
+                  {currentData.cpc_s} avg CPC
+                </span>
+              </div>
+            </div>
+
+            {/* First Two-Column Grid: SVG Line Chart & Conversion Funnel */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+              {/* Impressions vs Clicks Chart */}
+              <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
+                    Daily Impressions vs Clicks
+                  </h4>
+                  {hoveredLineIndex !== null ? (
+                    <div className="text-[10px] font-bold text-third flex items-center gap-2 bg-secondary/20 px-2 py-0.5 rounded border border-third/10 animate-pulse">
+                      <span className="text-third/80 font-semibold">
+                        {currentData.labels[hoveredLineIndex]}:
+                      </span>
+                      <span className="text-[#7cb5ff]">
+                        {currentData.imp[hoveredLineIndex]} Imp
+                      </span>
+                      <span className="text-fourth">
+                        {currentData.clicks[hoveredLineIndex]} Clicks
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-1.5 text-[10px] text-third font-semibold">
+                        <span className="w-2.5 h-2.5 rounded bg-[#7cb5ff] opacity-80 inline-block" />
+                        Impressions
+                      </div>
+                      <div className="flex items-center gap-1.5 text-[10px] text-third font-semibold">
+                        <span className="w-2.5 h-2.5 rounded bg-fourth inline-block" />
+                        Clicks
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div
+                  className="h-44 w-full relative group"
+                  onMouseLeave={() => setHoveredLineIndex(null)}
+                >
+                  {renderLineChartSVG()}
+                  {hoveredLineIndex !== null && (
+                    <div
+                      className="absolute z-20 bg-secondary/95 border border-third/15 p-2.5 rounded-lg shadow-xl text-[10px] space-y-1 pointer-events-none transition-all duration-75"
+                      style={{
+                        left: `${((24 + hoveredLineIndex * ((500 - 48) / (currentData.labels.length - 1 || 1))) / 500) * 100}%`,
+                        top: "10%",
+                        transform: `translateX(-50%)`,
+                      }}
+                    >
+                      <p className="font-bold text-third border-b border-third/10 pb-1 mb-1 text-center">
+                        {currentData.labels[hoveredLineIndex]}
+                      </p>
+                      <div className="flex items-center gap-2 justify-between">
+                        <span className="text-third/80 font-medium">
+                          Impressions:
+                        </span>
+                        <span className="text-[#7cb5ff] font-bold">
+                          {currentData.imp[hoveredLineIndex]}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 justify-between">
+                        <span className="text-third/80 font-medium">Clicks:</span>
+                        <span className="text-fourth font-bold">
+                          {currentData.clicks[hoveredLineIndex]}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Conversion Funnel */}
+              <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-4">
                 <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
-                  Daily Impressions vs Clicks
+                  Conversion Funnel
                 </h4>
-                {hoveredLineIndex !== null ? (
-                  <div className="text-[10px] font-bold text-third flex items-center gap-2 bg-secondary/20 px-2 py-0.5 rounded border border-third/10 animate-pulse">
-                    <span className="text-third/80 font-semibold">
-                      {currentData.labels[hoveredLineIndex]}:
-                    </span>
-                    <span className="text-[#7cb5ff]">
-                      {currentData.imp[hoveredLineIndex]} Imp
-                    </span>
-                    <span className="text-fourth">
-                      {currentData.clicks[hoveredLineIndex]} Clicks
-                    </span>
-                  </div>
-                ) : (
+                <div className="space-y-3">
+                  {/* Imp */}
                   <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1.5 text-[10px] text-third font-semibold">
-                      <span className="w-2.5 h-2.5 rounded bg-[#7cb5ff] opacity-80 inline-block" />
+                    <span className="text-xs text-third w-20 shrink-0 font-medium">
                       Impressions
+                    </span>
+                    <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
+                      <div
+                        className="h-full bg-[#7cb5ff]/15 rounded flex items-center px-2"
+                        style={{ width: "100%" }}
+                      >
+                        <span className="text-[11px] font-bold text-[#7cb5ff]">
+                          {currentData.imp_s}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1.5 text-[10px] text-third font-semibold">
-                      <span className="w-2.5 h-2.5 rounded bg-fourth inline-block" />
+                    <span className="text-[11px] text-third font-bold w-9 text-right shrink-0">
+                      100%
+                    </span>
+                  </div>
+                  {/* Clicks */}
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-third w-20 shrink-0 font-medium">
                       Clicks
+                    </span>
+                    <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
+                      <div
+                        className="h-full bg-fourth/20 rounded flex items-center px-2"
+                        style={{ width: "44%" }}
+                      >
+                        <span className="text-[11px] font-bold text-fourth">
+                          {currentData.click_s}
+                        </span>
+                      </div>
                     </div>
+                    <span className="text-[11px] text-fourth font-bold w-9 text-right shrink-0">
+                      {currentData.ctr_s}
+                    </span>
                   </div>
-                )}
-              </div>
-              <div
-                className="h-44 w-full relative group"
-                onMouseLeave={() => setHoveredLineIndex(null)}
-              >
-                {renderLineChartSVG()}
-                {hoveredLineIndex !== null && (
-                  <div
-                    className="absolute z-20 bg-secondary/95 border border-third/15 p-2.5 rounded-lg shadow-xl text-[10px] space-y-1 pointer-events-none transition-all duration-75"
-                    style={{
-                      left: `${((24 + hoveredLineIndex * ((500 - 48) / (currentData.labels.length - 1 || 1))) / 500) * 100}%`,
-                      top: "10%",
-                      transform: `translateX(-50%)`,
-                    }}
-                  >
-                    <p className="font-bold text-third border-b border-third/10 pb-1 mb-1 text-center">
-                      {currentData.labels[hoveredLineIndex]}
-                    </p>
-                    <div className="flex items-center gap-2 justify-between">
-                      <span className="text-third/80 font-medium">
-                        Impressions:
-                      </span>
-                      <span className="text-[#7cb5ff] font-bold">
-                        {currentData.imp[hoveredLineIndex]}
-                      </span>
+                  {/* Detail views */}
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-third w-20 shrink-0 font-medium">
+                      Detail Views
+                    </span>
+                    <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
+                      <div
+                        className="h-full bg-[#7cb5ff]/35 rounded flex items-center px-2"
+                        style={{ width: "26%" }}
+                      >
+                        <span className="text-[11px] font-bold text-[#7cb5ff]">
+                          {currentData.click_s ? "74" : "0"}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 justify-between">
-                      <span className="text-third/80 font-medium">Clicks:</span>
-                      <span className="text-fourth font-bold">
-                        {currentData.clicks[hoveredLineIndex]}
-                      </span>
-                    </div>
+                    <span className="text-[11px] text-fourth font-bold w-9 text-right shrink-0">
+                      2.6%
+                    </span>
                   </div>
-                )}
+                  {/* Inquiries */}
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-third w-20 shrink-0 font-medium">
+                      Inquiries
+                    </span>
+                    <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
+                      <div
+                        className="h-full bg-fourth rounded flex items-center px-2"
+                        style={{ width: "9%" }}
+                      >
+                        <span className="text-[11px] font-bold text-fourth">
+                          {analyticsData?.performanceOverview?.leads ?? 0}
+                        </span>
+                      </div>
+                    </div>
+                    <span className="text-[11px] text-fourth font-bold w-9 text-right shrink-0">
+                      {analyticsData?.performanceOverview?.leadsPercentage ?? "0.9%"}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Conversion Funnel */}
-            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-4">
-              <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
-                Conversion Funnel
-              </h4>
-              <div className="space-y-3">
-                {/* Imp */}
-                <div className="flex items-center gap-3">
-                  <span className="text-xs text-third w-20 shrink-0 font-medium">
-                    Impressions
-                  </span>
-                  <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
-                    <div
-                      className="h-full bg-[#7cb5ff]/15 rounded flex items-center px-2"
-                      style={{ width: "100%" }}
-                    >
-                      <span className="text-[11px] font-bold text-[#7cb5ff]">
-                        {currentData.imp_s}
-                      </span>
-                    </div>
-                  </div>
-                  <span className="text-[11px] text-third font-bold w-9 text-right shrink-0">
-                    100%
+            {/* Second Two-Column Grid: Budget Tracker & Spend By Day */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+              {/* Daily Budget usage status */}
+              <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
+                    Budget usage status
+                  </h4>
+                  <span className="text-[10px] text-third font-bold uppercase tracking-wider bg-fourth/10 text-fourth px-2 py-0.5 rounded-full">
+                    Active
                   </span>
                 </div>
-                {/* Clicks */}
-                <div className="flex items-center gap-3">
-                  <span className="text-xs text-third w-20 shrink-0 font-medium">
-                    Clicks
-                  </span>
-                  <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
-                    <div
-                      className="h-full bg-fourth/20 rounded flex items-center px-2"
-                      style={{ width: "44%" }}
-                    >
-                      <span className="text-[11px] font-bold text-fourth">
-                        {currentData.click_s}
-                      </span>
-                    </div>
+
+                <div className="space-y-1">
+                  <div className="flex justify-between items-end">
+                    <span className="text-xs text-third font-medium">Spent Today</span>
+                    <span className="text-sm font-bold text-primary">
+                      ₹{analyticsData?.budgetUsage?.spentToday ?? 0} /{" "}
+                      <span className="text-third/60">₹{analyticsData?.campaignInfo?.dailyBudget ?? 500}</span>
+                    </span>
                   </div>
-                  <span className="text-[11px] text-fourth font-bold w-9 text-right shrink-0">
-                    {currentData.ctr_s}
+                  <div className="h-2 bg-secondary border border-third/10 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-fourth rounded-full"
+                      style={{ width: `${analyticsData?.budgetUsage?.spentTodayPercentage ?? 68}%` }}
+                    />
+                  </div>
+                  <span className="text-[11px] text-third/60 block font-medium">
+                    {analyticsData?.budgetUsage?.spentTodayPercentage ?? 68}% of daily budget used · {analyticsData?.budgetUsage?.resetText || "resets at midnight"}
                   </span>
                 </div>
-                {/* Detail views */}
-                <div className="flex items-center gap-3">
-                  <span className="text-xs text-third w-20 shrink-0 font-medium">
-                    Detail Views
+
+                <div className="h-px bg-third/10" />
+
+                <div className="space-y-2.5">
+                  <span className="text-[10px] text-third font-bold uppercase tracking-wider block opacity-70">
+                    Spend Breakdown
                   </span>
-                  <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
-                    <div
-                      className="h-full bg-[#7cb5ff]/35 rounded flex items-center px-2"
-                      style={{ width: "26%" }}
-                    >
-                      <span className="text-[11px] font-bold text-[#7cb5ff]">
-                        {currentData.click_s ? "74" : "0"}
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
+                      <span className="text-third font-medium">
+                        Total Spent (Campaign)
+                      </span>
+                      <span className="text-primary font-bold">
+                        {analyticsData?.budgetUsage?.spendBreakdown?.totalSpentCampaign != null ? `₹${analyticsData.budgetUsage.spendBreakdown.totalSpentCampaign}` : currentData.spend_s}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
+                      <span className="text-third font-medium">
+                        Remaining Budget
+                      </span>
+                      <span className="text-fourth font-bold">
+                        {analyticsData?.budgetUsage?.spendBreakdown?.remainingBudget != null ? `₹${analyticsData.budgetUsage.spendBreakdown.remainingBudget}` : "₹14,442"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
+                      <span className="text-third font-medium">
+                        Avg. CPC Paid
+                      </span>
+                      <span className="text-primary font-bold">
+                        {analyticsData?.budgetUsage?.spendBreakdown?.avgCpcPaid != null ? `₹${analyticsData.budgetUsage.spendBreakdown.avgCpcPaid}/click` : rateValue}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
+                      <span className="text-third font-medium">
+                        Cost Per Inquiry
+                      </span>
+                      <span className="text-primary font-bold">
+                        {analyticsData?.budgetUsage?.spendBreakdown?.costPerInquiry != null ? `₹${analyticsData.budgetUsage.spendBreakdown.costPerInquiry}` : "₹69.75"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
+                      <span className="text-third font-medium">
+                        Wallet Balance
+                      </span>
+                      <span className="text-fourth font-bold">
+                        {analyticsData?.budgetUsage?.spendBreakdown?.walletBalance != null ? `₹${analyticsData.budgetUsage.spendBreakdown.walletBalance}` : "₹7,682"}
                       </span>
                     </div>
                   </div>
-                  <span className="text-[11px] text-fourth font-bold w-9 text-right shrink-0">
-                    2.6%
-                  </span>
                 </div>
-                {/* Inquiries */}
-                <div className="flex items-center gap-3">
-                  <span className="text-xs text-third w-20 shrink-0 font-medium">
-                    Inquiries
-                  </span>
-                  <div className="flex-1 h-5 bg-secondary rounded overflow-hidden relative border border-third/10">
-                    <div
-                      className="h-full bg-fourth rounded flex items-center px-2"
-                      style={{ width: "9%" }}
-                    >
-                      <span className="text-[11px] font-bold text-primary">
-                        8
+              </div>
+
+              {/* Spend by Day Bar Chart */}
+              <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
+                    Spend By Day
+                  </h4>
+                  {hoveredSpendIndex !== null && (
+                    <div className="text-[10px] font-bold text-third flex items-center gap-1.5 bg-secondary/20 px-2 py-0.5 rounded border border-third/10 animate-pulse">
+                      <span className="text-third/80 font-semibold">
+                        {currentData.labels[hoveredSpendIndex]}:
+                      </span>
+                      <span className="text-fourth">
+                        ₹{currentData.spend[hoveredSpendIndex]} spent
                       </span>
                     </div>
-                  </div>
-                  <span className="text-[11px] text-fourth font-bold w-9 text-right shrink-0">
-                    0.3%
-                  </span>
+                  )}
+                </div>
+                <div
+                  className="h-48 w-full relative"
+                  onMouseLeave={() => setHoveredSpendIndex(null)}
+                >
+                  {renderSpendBarChartSVG()}
+                  {hoveredSpendIndex !== null && (
+                    <div
+                      className="absolute z-20 bg-secondary/95 border border-third/15 p-2.5 rounded-lg shadow-xl text-[10px] space-y-1 pointer-events-none transition-all duration-75"
+                      style={{
+                        left: `${((24 + hoveredSpendIndex * ((500 - 48) / (currentData.labels.length - 1 || 1))) / 500) * 100}%`,
+                        bottom: "35%",
+                        transform: `translateX(-50%)`,
+                      }}
+                    >
+                      <p className="font-bold text-third border-b border-third/10 pb-1 mb-1 text-center">
+                        {currentData.labels[hoveredSpendIndex]}
+                      </p>
+                      <div className="flex items-center gap-2 justify-between">
+                        <span className="text-third/80 font-medium">
+                          Daily Spend:
+                        </span>
+                        <span className="text-fourth font-bold">
+                          ₹{currentData.spend[hoveredSpendIndex]}
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Second Two-Column Grid: Budget Usage vs Daily Spend Bar Chart */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            {/* Budget Details & Breakdown */}
-            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-4">
-              <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
-                  Budget Usage
-                </h4>
-                <span className="text-[10px] text-third font-semibold uppercase tracking-wider opacity-85">
-                  Today
-                </span>
-              </div>
-              <div className="space-y-2">
-                <div className="flex justify-between text-xs text-third font-semibold">
-                  <span>₹0</span>
-                  <span className="text-primary">
-                    {analyticsData?.budgetUsage?.spentToday != null ? `₹${analyticsData.budgetUsage.spentToday} spent today` : "₹340 spent today"}
-                  </span>
-                  <span>
-                    {analyticsData?.budgetUsage?.dailyBudgetLimit != null ? `₹${analyticsData.budgetUsage.dailyBudgetLimit} limit` : "₹500 limit"}
-                  </span>
-                </div>
-                <div className="w-full bg-secondary h-2 rounded-full overflow-hidden border border-third/10">
-                  <div
-                    className="h-full bg-fourth rounded-full"
-                    style={{ width: `${analyticsData?.budgetUsage?.spentTodayPercentage ?? 68}%` }}
-                  />
-                </div>
-                <span className="text-[11px] text-third/60 block font-medium">
-                  {analyticsData?.budgetUsage?.spentTodayPercentage ?? 68}% of daily budget used · {analyticsData?.budgetUsage?.resetText || "resets at midnight"}
-                </span>
-              </div>
-
-              <div className="h-px bg-third/10" />
-
-              <div className="space-y-2.5">
-                <span className="text-[10px] text-third font-bold uppercase tracking-wider block opacity-70">
-                  Spend Breakdown
-                </span>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
-                    <span className="text-third font-medium">
-                      Total Spent (Campaign)
-                    </span>
-                    <span className="text-primary font-bold">
-                      {analyticsData?.budgetUsage?.spendBreakdown?.totalSpentCampaign != null ? `₹${analyticsData.budgetUsage.spendBreakdown.totalSpentCampaign}` : currentData.spend_s}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
-                    <span className="text-third font-medium">
-                      Remaining Budget
-                    </span>
-                    <span className="text-fourth font-bold">
-                      {analyticsData?.budgetUsage?.spendBreakdown?.remainingBudget != null ? `₹${analyticsData.budgetUsage.spendBreakdown.remainingBudget}` : "₹14,442"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
-                    <span className="text-third font-medium">
-                      Avg. CPC Paid
-                    </span>
-                    <span className="text-primary font-bold">
-                      {analyticsData?.budgetUsage?.spendBreakdown?.avgCpcPaid != null ? `₹${analyticsData.budgetUsage.spendBreakdown.avgCpcPaid}/click` : rateValue}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
-                    <span className="text-third font-medium">
-                      Cost Per Inquiry
-                    </span>
-                    <span className="text-primary font-bold">
-                      {analyticsData?.budgetUsage?.spendBreakdown?.costPerInquiry != null ? `₹${analyticsData.budgetUsage.spendBreakdown.costPerInquiry}` : "₹69.75"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs py-2 px-3 bg-secondary/40 border border-third/10 rounded-lg">
-                    <span className="text-third font-medium">
-                      Wallet Balance
-                    </span>
-                    <span className="text-fourth font-bold">
-                      {analyticsData?.budgetUsage?.spendBreakdown?.walletBalance != null ? `₹${analyticsData.budgetUsage.spendBreakdown.walletBalance}` : "₹7,682"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Spend by Day Bar Chart */}
-            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
-                  Spend By Day
-                </h4>
-                {hoveredSpendIndex !== null && (
-                  <div className="text-[10px] font-bold text-third flex items-center gap-1.5 bg-secondary/20 px-2 py-0.5 rounded border border-third/10 animate-pulse">
-                    <span className="text-third/80 font-semibold">
-                      {currentData.labels[hoveredSpendIndex]}:
-                    </span>
-                    <span className="text-fourth">
-                      ₹{currentData.spend[hoveredSpendIndex]} spent
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div
-                className="h-48 w-full relative"
-                onMouseLeave={() => setHoveredSpendIndex(null)}
-              >
-                {renderSpendBarChartSVG()}
-                {hoveredSpendIndex !== null && (
-                  <div
-                    className="absolute z-20 bg-secondary/95 border border-third/15 p-2.5 rounded-lg shadow-xl text-[10px] space-y-1 pointer-events-none transition-all duration-75"
-                    style={{
-                      left: `${((24 + hoveredSpendIndex * ((500 - 48) / (currentData.labels.length - 1 || 1))) / 500) * 100}%`,
-                      bottom: "35%",
-                      transform: `translateX(-50%)`,
-                    }}
-                  >
-                    <p className="font-bold text-third border-b border-third/10 pb-1 mb-1 text-center">
-                      {currentData.labels[hoveredSpendIndex]}
-                    </p>
-                    <div className="flex items-center gap-2 justify-between">
-                      <span className="text-third/80 font-medium">
-                        Daily Spend:
-                      </span>
-                      <span className="text-fourth font-bold">
-                        ₹{currentData.spend[hoveredSpendIndex]}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Third Two-Column Grid: Recent Activity vs AI Insights (Commented out as requested) */}
-          {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-4">
-              <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
-                  Recent Activity
-                </h4>
-                <span className="text-[10px] text-third font-bold uppercase tracking-wider opacity-70">
-                  Live Feed
-                </span>
-              </div>
-              <div className="space-y-4">
-                ...
-              </div>
-            </div>
-            <div className="bg-secondary/40 border border-third/10 rounded-xl p-4 space-y-4">
-              <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold text-primary uppercase tracking-wider">
-                  Insights
-                </h4>
-              </div>
-            </div>
-          </div> */}
-        </div>
+        )}
       </div>
     </div>
   );

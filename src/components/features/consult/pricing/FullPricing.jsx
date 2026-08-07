@@ -402,9 +402,24 @@ export default function FullPricing() {
         }
       }
 
-      setBillingTier(tier);
-      setBillingIs404(is404);
-      setBillingModalOpen(true);
+      const targetKey = (tier.title || "").toUpperCase();
+      const currentRank = getTierRank(currentTier);
+      const targetRank = getTierRank(targetKey);
+
+      if (!is404 && currentRank > targetRank) {
+        setDowngradeData({
+          fromTier: currentTier,
+          toTier: targetKey,
+          targetTierObj: tier,
+          is404NoActive: is404,
+        });
+        setDowngradeModalOpen(true);
+      } else {
+        setBillingTier(tier);
+        setBillingIs404(is404);
+        setBillingModalOpen(true);
+      }
+
       setPaymentLoading(false);
       setUpgradingTierId(null);
     } catch (error) {
@@ -529,13 +544,6 @@ export default function FullPricing() {
 
     const isCurrentTier = currentTier === key;
     let isTierDisabled = false;
-    if (currentTier === "PREMIUM") {
-      isTierDisabled = true;
-    } else if (currentTier === "PRO") {
-      isTierDisabled = key === "BASIC" || key === "PRO";
-    } else if (currentTier === "BASIC") {
-      isTierDisabled = key === "BASIC";
-    }
 
     const rawPrice =
       Number(yearly ? tier.yearlyPrice : tier.monthlyPrice) || 0;
@@ -576,6 +584,9 @@ export default function FullPricing() {
     const isButtonDisabled = paymentLoading && upgradingTierId === tier.id;
 
     let buttonText = staticDetails.cta;
+    const currentRank = getTierRank(currentTier);
+    const targetRank = getTierRank(key);
+
     if (paymentLoading && upgradingTierId === tier.id) {
       buttonText = "Processing...";
     } else if (isCurrentTier) {
@@ -584,8 +595,8 @@ export default function FullPricing() {
       } else {
         buttonText = "Go to Dashboard";
       }
-    } else if (isTierDisabled) {
-      buttonText = "Get Started";
+    } else if (currentRank > targetRank) {
+      buttonText = "Downgrade Plan";
     }
 
     return (
