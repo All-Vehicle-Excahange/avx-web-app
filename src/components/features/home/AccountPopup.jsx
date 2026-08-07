@@ -527,7 +527,7 @@ export default function AccountPopup({ open, onClosePopup }) {
 
                   <div className="space-y-4">
                     <Section title="Storefront">
-                      <Item href={`/auto-consultant/${user?.username || ""}`} onClick={onClosePopup}>
+                      <Item href={wrapConsultAuth("/consult/dashboard/storefront")} onClick={onClosePopup}>
                         View Storefront
                       </Item>
                       <Item

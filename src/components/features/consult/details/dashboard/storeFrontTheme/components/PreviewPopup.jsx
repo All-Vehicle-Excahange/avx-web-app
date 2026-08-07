@@ -7,12 +7,22 @@ import {
   setConsualtTheme,
 } from "@/services/theme.service";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { EngineRenderer } from "@/core/engine/Renderer";
 import { THEME_STORE } from "@/core/engine/themeStore";
 
 export default function PreviewPopup({ theme, onClose, onSelect }) {
   const [isEligible, setIsEligible] = useState(false);
   const [activeTab, setActiveTab] = useState("about");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
 
   const matchedTheme = THEME_STORE.find(
     (t) => t.id === theme.themeId || t.id === theme.id,
@@ -47,8 +57,8 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-9999 bg-black/90 backdrop-blur-sm flex flex-col">
+  const modalContent = (
+    <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex flex-col h-screen w-screen overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-third/30 bg-black/95 shrink-0 gap-2">
         <h2 className="text-lg sm:text-xl font-semibold text-primary truncate">{theme.name}</h2>
@@ -69,7 +79,7 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
 
           <button
             onClick={onClose}
-            className="opacity-60 hover:opacity-100 text-primary p-1 shrink-0"
+            className="opacity-60 hover:opacity-100 text-primary p-1 shrink-0 cursor-pointer"
           >
             <X className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
@@ -105,7 +115,7 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
 
       {/* Scrollable Preview Area */}
       <div className="flex-1 overflow-y-auto bg-secondary custom-scrollbar">
-        <div className="w-full h-full mx-auto p-6 max-w-[1400px]">
+        <div className="w-full mx-auto max-w-[1400px]">
           {schema.length > 0 ? (
             <EngineRenderer
               sections={filteredSections}
@@ -128,4 +138,7 @@ export default function PreviewPopup({ theme, onClose, onSelect }) {
       </div>
     </div>
   );
+
+  if (!mounted) return null;
+  return createPortal(modalContent, document.body);
 }

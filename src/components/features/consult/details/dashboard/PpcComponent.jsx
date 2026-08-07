@@ -768,7 +768,7 @@ export default function PpcComponent() {
                             className="p-4 text-center w-12"
                             onClick={(e) => e.stopPropagation()}
                           >
-                            {!ad.isDraft && (
+                            {!ad.isDraft && ad.status?.toLowerCase() !== "in review" && (
                               <button
                                 onClick={() => handleToggleAd(ad.id, ad.status)}
                                 className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden ${
@@ -1017,7 +1017,7 @@ export default function PpcComponent() {
                           className="shrink-0 flex items-center gap-2"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          {!ad.isDraft && (
+                          {!ad.isDraft && ad.status?.toLowerCase() !== "in review" && (
                             <button
                               onClick={() => handleToggleAd(ad.id, ad.status)}
                               className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden ${
