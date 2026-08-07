@@ -160,7 +160,7 @@ export default function ConsultantHeroSection() {
             </span>
             <div className="space-y-3">
               <h1 className=" text-3xl sm:text-4xl lg:text-5xl text-primary font-semibold leading-[1.05]">
-                Digitize Your Vehicle Business in Under
+                Digitilize Your Vehicle Business in Under
               </h1>
               <h1 className="font-[Montserrat] text-3xl sm:text-4xl lg:text-5xl text-fourth/80 font-semibold leading-[1.05]">
                 10 Minutes.
@@ -246,10 +246,11 @@ export default function ConsultantHeroSection() {
                   <button
                     key={tab}
                     onClick={() => setActiveTab(i)}
-                    className={`relative px-3.5 py-1.5 text-[11px] font-semibold rounded-lg transition-colors duration-200 ${activeTab === i
-                      ? "text-primary"
-                      : "text-third hover:text-primary/70"
-                      }`}
+                    className={`relative px-3.5 py-1.5 text-[11px] font-semibold rounded-lg transition-colors duration-200 ${
+                      activeTab === i
+                        ? "text-primary"
+                        : "text-third hover:text-primary/70"
+                    }`}
                   >
                     {activeTab === i && (
                       <motion.div
