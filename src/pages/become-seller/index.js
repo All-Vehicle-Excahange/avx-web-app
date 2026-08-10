@@ -34,7 +34,7 @@ function index() {
           property="og:description"
           content="Reecomm is the marketplace built for serious vehicle owners. List your car, reach verified buyers directly, track real inquiries, and sell with absolute confidence."
         />
-        <meta property="og:image" content="https://reecomm.com/logo/logo.webp" />
+        <meta property="og:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta
           property="og:image:alt"
           content="Reecomm — India's trusted used vehicle marketplace become a seller guide"
@@ -48,7 +48,7 @@ function index() {
           name="twitter:description"
           content="No dealers, no middleman. Verify your ownership, create a listing, get qualified buyer inquiries, and pay zero commission."
         />
-        <meta name="twitter:image" content="https://reecomm.com/logo/logo.webp" />
+        <meta name="twitter:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta name="twitter:image:alt" content="Reecomm — India's trusted used vehicle marketplace" />
       </Head>
       <Navbar heroMod scrolled />

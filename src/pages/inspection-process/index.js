@@ -38,7 +38,7 @@ function index() {
           property="og:description"
           content="Every Reecomm vehicle inspection runs through a strict, transparent multi-point evaluation by independent certified inspectors. Read the full review protocols and what is covered."
         />
-        <meta property="og:image" content="https://reecomm.com/logo/logo.webp" />
+        <meta property="og:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta
           property="og:image:alt"
           content="Reecomm — India's trusted used vehicle marketplace standardized inspection process"
@@ -52,7 +52,7 @@ function index() {
           name="twitter:description"
           content="No guesswork, no bias. Learn about our structured on-site inspection protocol that evaluates engine, powertrain, body panels, mechanics, and modifications."
         />
-        <meta name="twitter:image" content="https://reecomm.com/logo/logo.webp" />
+        <meta name="twitter:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta name="twitter:image:alt" content="Reecomm — India's trusted used vehicle marketplace" />
       </Head>
       <Navbar />

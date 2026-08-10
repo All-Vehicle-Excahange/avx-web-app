@@ -37,6 +37,19 @@ function Home() {
           content="buy used cars, sell used cars, second hand cars, certified pre-owned cars, car inspection, Reecomm"
         />
 
+        {/* Open Graph Meta Tags for Social Sharing (WhatsApp, Facebook, etc.) */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.reecomm.com/" />
+        <meta property="og:title" content="Reecomm - Buy & Sell Used Cars Online in India" />
+        <meta property="og:description" content="Certified and verified second-hand cars for sale. Buy and sell used cars online at best prices with Reecomm." />
+        <meta property="og:image" content="https://www.reecomm.com/logo/logo1.webp" />
+        <meta property="og:image:type" content="image/webp" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="https://www.reecomm.com/logo/logo1.webp" />
+
         {/* Organization Schema */}
         <script
           type="application/ld+json"
@@ -46,7 +59,7 @@ function Home() {
               "@type": "Organization",
               name: "Reecomm",
               url: "https://www.reecomm.com",
-              logo: "https://www.reecomm.com/logo/logo.webp",
+              logo: "https://www.reecomm.com/logo/logo1.webp",
               description:
                 "Certified and verified second-hand cars for sale. Buy and sell used cars online at best prices with Reecomm. Expert inspection and transparent process.",
               sameAs: [

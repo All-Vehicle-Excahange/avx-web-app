@@ -47,7 +47,7 @@ function Index({ seo }) {
           property="og:description"
           content={seo?.description || "Browse verified used vehicles for sale on Reecomm."}
         />
-        <meta property="og:image" content="https://www.reecomm.com/logo/logo.webp" />
+        <meta property="og:image" content="https://www.reecomm.com/logo/logo1.webp" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -57,7 +57,7 @@ function Index({ seo }) {
           name="twitter:description"
           content={seo?.description || "Browse verified used vehicles for sale on Reecomm."}
         />
-        <meta name="twitter:image" content="https://www.reecomm.com/logo/logo.webp" />
+        <meta name="twitter:image" content="https://www.reecomm.com/logo/logo1.webp" />
       </Head>
       <Suspense fallback={null}>
         <SearchContent
