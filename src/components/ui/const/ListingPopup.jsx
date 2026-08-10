@@ -138,18 +138,42 @@ export default function ListingPopup({ isOpen, onClose }) {
 
           {/* MIDDLE SECTION (QR CODE CENTERED + BADGES BELOW IN FLEX ROW) */}
           <div className="flex flex-col items-center gap-6 w-full">
-            {/* QR Code Container centered */}
-            <div className="flex items-center gap-5 p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 shadow-inner w-auto">
-              <div className="p-3 bg-white rounded-xl shadow-lg flex items-center justify-center shrink-0">
-                <Image
-                  src="/app-qr.webp"
-                  alt="App QR Code"
-                  width={96}
-                  height={96}
-                  className="w-20 h-20 sm:w-24 sm:h-24 object-contain"
-                />
+            {/* QR Codes Container centered */}
+            <div className="flex flex-col sm:flex-row items-center gap-6 p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 shadow-inner w-auto">
+              {/* Android QR */}
+              <div className="flex flex-col items-center gap-2">
+                <div className="p-2 bg-white rounded-xl shadow-lg flex items-center justify-center shrink-0">
+                  <Image
+                    src="/app-qr.webp"
+                    alt="Android App QR Code"
+                    width={80}
+                    height={80}
+                    className="w-20 h-20 sm:w-24 sm:h-24 object-contain"
+                  />
+                </div>
+                <span className="text-xs font-bold text-third uppercase tracking-wider">
+                  Android
+                </span>
               </div>
-              <span className="text-xs sm:text-sm font-bold text-third uppercase tracking-wider text-left leading-normal max-w-[140px]">
+              
+              {/* iOS QR */}
+              <div className="flex flex-col items-center gap-2">
+                <div className="p-2 bg-white rounded-xl shadow-lg flex items-center justify-center shrink-0">
+                  <Image
+                    src="/ios-qr.webp"
+                    alt="iOS App QR Code"
+                    width={80}
+                    height={80}
+                    className="w-20 h-20 sm:w-24 sm:h-24 object-contain"
+                  />
+                </div>
+                <span className="text-xs font-bold text-third uppercase tracking-wider">
+                  iOS
+                </span>
+              </div>
+
+              {/* Text instructions */}
+              <span className="hidden sm:block text-xs sm:text-sm font-bold text-third uppercase tracking-wider text-left leading-normal max-w-[140px] pl-2 border-l border-white/10">
                 Scan to start your listing
               </span>
             </div>
